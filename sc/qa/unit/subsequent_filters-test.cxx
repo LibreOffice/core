@@ -239,16 +239,16 @@ void testRangeNameImpl(ScDocument* pDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
-    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("GLOBAL1")));
+    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(OUString("GLOBAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
     double aValue;
     pDoc->GetValue(1,0,0,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Global1 should reference Sheet1.A1", 1.0, aValue);
-    pRangeData = pDoc->GetRangeName(0)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL1")));
+    pRangeData = pDoc->GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
     pDoc->GetValue(1,2,0,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", 3.0, aValue);
-    pRangeData = pDoc->GetRangeName(1)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
+    pRangeData = pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
     pDoc->GetValue(1,1,1,aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", 7.0, aValue);
@@ -323,7 +323,7 @@ void ScFiltersTest::testHardRecalcODS()
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("hard-recalc.")), aCSVFileName);
+    createCSVPath(OUString("hard-recalc."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
 
     xDocSh->DoClose();
@@ -339,16 +339,16 @@ void ScFiltersTest::testFunctionsODS()
     OUString aCSVFileName;
 
     //test logical functions
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
+    createCSVPath(OUString("logical-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
     //test spreadsheet functions
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
+    createCSVPath(OUString("spreadsheet-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 1);
     //test mathematical functions
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
+    createCSVPath(OUString("mathematical-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 2, PureString);
     //test information functions
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
+    createCSVPath(OUString("information-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 3);
 
     xDocSh->DoClose();
@@ -364,16 +364,16 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         OUString aCSVFileName;
 
         //test cached formula results of logical functions
-        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
+        createCSVPath(OUString("logical-functions."), aCSVFileName);
         testFile(aCSVFileName, pDoc, 0);
         //test cached formula results of spreadsheet functions
-        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
+        createCSVPath(OUString("spreadsheet-functions."), aCSVFileName);
         testFile(aCSVFileName, pDoc, 1);
         //test cached formula results of mathematical functions
-        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
+        createCSVPath(OUString("mathematical-functions."), aCSVFileName);
         testFile(aCSVFileName, pDoc, 2, PureString);
         //test cached formula results of information functions
-        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
+        createCSVPath(OUString("information-functions."), aCSVFileName);
         testFile(aCSVFileName, pDoc, 3);
 
         xDocSh->DoClose();
@@ -537,7 +537,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
 {
     //test Sheet1 with csv file
     OUString aCSVFileName;
-    pFiltersTest->createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
+    pFiltersTest->createCSVPath(OUString("numberFormat."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0, PureString);
     //need to test the color of B3
     //it's not a font color!
@@ -609,7 +609,7 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
     //test Sheet3 only for ods
     if ( nFormat == ODS || nFormat == XLSX )
     {
-        pFiltersTest->createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
+        pFiltersTest->createCSVPath(OUString("conditionalFormatting."), aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
         // test parent cell style import ( fdo#55198 )
         if ( nFormat == XLSX )
@@ -692,7 +692,7 @@ void ScFiltersTest::testMatrixODS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     OUString aCSVFileName;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    createCSVPath(OUString("matrix."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
 
     xDocSh->DoClose();
@@ -707,7 +707,7 @@ void ScFiltersTest::testMatrixXLS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     OUString aCSVFileName;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    createCSVPath(OUString("matrix."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
 
     xDocSh->DoClose();
@@ -903,7 +903,7 @@ void ScFiltersTest::testBugFixesODS()
     {
         // fdo#40967
         OUString aCSVFileName;
-        createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
+        createCSVPath(OUString("bugFix_Sheet2."), aCSVFileName);
         testFile(aCSVFileName, pDoc, 1);
     }
 
@@ -976,7 +976,7 @@ void ScFiltersTest::testMergedCellsODS()
 
     //check sheet1 content
     OUString aCSVFileName1;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("merged1.")), aCSVFileName1);
+    createCSVPath(OUString("merged1."), aCSVFileName1);
     testFile(aCSVFileName1, pDoc, 0);
 
     //check sheet1 merged cells
@@ -986,7 +986,7 @@ void ScFiltersTest::testMergedCellsODS()
 
     //check sheet2 content
     OUString aCSVFileName2;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("merged2.")), aCSVFileName2);
+    createCSVPath(OUString("merged2."), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
 
     //check sheet2 merged cells
@@ -1002,12 +1002,12 @@ void ScFiltersTest::testRepeatedColumnsODS()
 
     //text
     OUString aCSVFileName1;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns1.")), aCSVFileName1);
+    createCSVPath(OUString("repeatedColumns1."), aCSVFileName1);
     testFile(aCSVFileName1, pDoc, 0);
 
     //numbers
     OUString aCSVFileName2;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("repeatedColumns2.")), aCSVFileName2);
+    createCSVPath(OUString("repeatedColumns2."), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
 
     xDocSh->DoClose();
@@ -1140,11 +1140,11 @@ void ScFiltersTest::testDataValidityODS()
 
     //check each sheet's content
     OUString aCSVFileName1;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity1.")), aCSVFileName1);
+    createCSVPath(OUString("dataValidity1."), aCSVFileName1);
     testFile(aCSVFileName1, pDoc, 0);
 
     OUString aCSVFileName2;
-    createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("dataValidity2.")), aCSVFileName2);
+    createCSVPath(OUString("dataValidity2."), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
 
     xDocSh->DoClose();
@@ -1251,13 +1251,13 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     SfxFilter* aFilter = new SfxFilter(
         aFilterName,
         OUString(), aFileFormats[0].nFormatType, nFormat, aFilterType, 0, OUString(),
-        OUString(), OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+        OUString(), OUString("private:factory/scalc*") );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocSh = new ScDocShell;
     SfxMedium* pMedium = new SfxMedium(aFileName, STREAM_STD_READWRITE);
     SfxItemSet* pSet = pMedium->GetItemSet();
-    pSet->Put(SfxStringItem(SID_PASSWORD, OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+    pSet->Put(SfxStringItem(SID_PASSWORD, OUString("test")));
     pMedium->SetFilter(aFilter);
     if (!xDocSh->DoLoad(pMedium))
     {
@@ -1795,7 +1795,7 @@ void ScFiltersTest::testColorScaleODS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
+    aBuffer.append(m_aBaseString).append(OUString("/reference/"));
     testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
 
     xDocSh->DoClose();
@@ -1821,7 +1821,7 @@ void ScFiltersTest::testColorScaleXLSX()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
+    aBuffer.append(m_aBaseString).append(OUString("/reference/"));
     testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
 
     xDocSh->DoClose();
@@ -1974,8 +1974,7 @@ void ScFiltersTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
-        getMultiServiceFactory()->createInstance(OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
+        getMultiServiceFactory()->createInstance(OUString("com.sun.star.comp.Calc.SpreadsheetDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 

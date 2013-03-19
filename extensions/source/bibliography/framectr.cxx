@@ -204,7 +204,7 @@ BibFrameController_Impl::~BibFrameController_Impl()
 
 ::rtl::OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.Bibliography"));
+    return ::rtl::OUString("com.sun.star.comp.extensions.Bibliography");
 }
 
 sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
@@ -217,7 +217,7 @@ sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUStrin
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
     ::com::sun::star::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Bibliography"));
+    lNames[0] = ::rtl::OUString("com.sun.star.frame.Bibliography");
     return lNames;
 }
 

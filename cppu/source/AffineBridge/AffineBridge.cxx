@@ -321,18 +321,18 @@ int  AffineBridge::v_isValid(rtl::OUString * pReason)
 {
     int result = m_enterCount > 0;
     if (!result)
-        *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not entered"));
+        *pReason = rtl::OUString("not entered");
 
     else
     {
         result = m_innerThreadId == osl_getThreadIdentifier(NULL);
 
         if (!result)
-            *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wrong thread"));
+            *pReason = rtl::OUString("wrong thread");
     }
 
     if (result)
-        *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OK"));
+        *pReason = rtl::OUString("OK");
 
     return result;
 }

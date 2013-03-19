@@ -65,7 +65,7 @@ ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 rtl::OUString
 ScVbaDialog::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaDialog"));
+    return rtl::OUString("ScVbaDialog");
 }
 
 uno::Sequence< rtl::OUString >
@@ -75,7 +75,7 @@ ScVbaDialog::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Dialog" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Dialog" );
     }
     return aServiceNames;
 }

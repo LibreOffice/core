@@ -445,11 +445,11 @@ namespace
         // create an AWT font
         awt::FontDescriptor aAwtFont;
         lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_POSTURE, ITEMID_WEIGHT);
-        lcl_pushBack( _out_rProperties, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Font")), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, ::rtl::OUString("Font"), uno::makeAny( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontAsian, _rItemSet, aAwtFont,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_POSTURE_ASIAN, ITEMID_WEIGHT_ASIAN);
-        lcl_pushBack( _out_rProperties, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontAsian")), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, ::rtl::OUString("FontAsian"), uno::makeAny( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontComplex, _rItemSet, aAwtFont,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_POSTURE_COMPLEX, ITEMID_WEIGHT_COMPLEX);
-        lcl_pushBack( _out_rProperties, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontComplex")), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, ::rtl::OUString("FontComplex"), uno::makeAny( aAwtFont ) );
 
         // properties which cannot be represented in an AWT font need to be preserved directly
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_SHADOWED,sal_True,&pItem) && pItem->ISA(SvxShadowedItem))
@@ -1023,7 +1023,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
         xServiceFactory.set(xFactory,uno::UNO_QUERY);
         Window* pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
 
-        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.libreoffice.report.pentaho.SOFunctionManager")),_xContext),uno::UNO_QUERY);
+        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(::rtl::OUString("org.libreoffice.report.pentaho.SOFunctionManager"),_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
         {
             ::boost::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
@@ -1036,7 +1036,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
                 xub_StrLen nIndex = 0;
                 if ( sFormula.GetChar(0) == '=' )
                     nIndex = 1;
-                _in_out_rFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFormula.Copy(nIndex);
+                _in_out_rFormula = ::rtl::OUString("rpt:") + sFormula.Copy(nIndex);
             }
         }
     }

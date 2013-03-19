@@ -87,14 +87,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ImportDocumentHandler::getSupportedSer
 //------------------------------------------------------------------------
 ::rtl::OUString ImportDocumentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ImportDocumentHandler"));
+    return ::rtl::OUString("com.sun.star.comp.report.ImportDocumentHandler");
 }
 
 //------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > ImportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ImportDocumentHandler"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.report.ImportDocumentHandler");
     return aSupported;
 }
 
@@ -117,7 +117,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
     {
         // this fills the chart again
         ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "CellRangeRepresentation", ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) );
+        aArgs.put( "CellRangeRepresentation", ::rtl::OUString("all") );
         aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
         aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
         aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
@@ -270,7 +270,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;
         pList->AppendAttributeList(_xAttrList);
-        pList->AddAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("local-table.$A$1:.$Z$65536")));
+        pList->AddAttribute(::rtl::OUString("table:cell-range-address"),::rtl::OUString("local-table.$A$1:.$Z$65536"));
 
     }
 
@@ -328,8 +328,8 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    m_xDelegatee = aArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentHandler")),m_xDelegatee);
-    m_xModel = aArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")),m_xModel);
+    m_xDelegatee = aArgs.getUnpackedValueOrDefault(::rtl::OUString("DocumentHandler"),m_xDelegatee);
+    m_xModel = aArgs.getUnpackedValueOrDefault(::rtl::OUString("Model"),m_xModel);
 
     OSL_ENSURE(m_xDelegatee.is(),"No document handler avialable!");
     if ( !m_xDelegatee.is() || !m_xModel.is() )

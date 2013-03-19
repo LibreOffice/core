@@ -268,13 +268,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 uno::Sequence< beans::PropertyValue > aInfo;
                 if ( !( aValue >>= aInfo ) )
                     throw lang::IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
+                        ::rtl::OUString( "Value of type Sequence<PropertyValue> expected!" ),
                         uno::Reference< uno::XInterface >(),
                         2 );
 
                 if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
                     throw beans::PropertyVetoException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                        ::rtl::OUString( "The hash is not allowed to be changed now!" ),
                         uno::Reference< uno::XInterface >() );
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_EMBED_FONTS ) == 0 )
@@ -461,7 +461,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 rtl::OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScDocumentConfiguration" ));
+    return rtl::OUString( "ScDocumentConfiguration" );
 }
 
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString& rServiceName )

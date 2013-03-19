@@ -74,7 +74,7 @@ GalleryTheme::~GalleryTheme()
 ::rtl::OUString GalleryTheme::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.gallery.GalleryTheme" ) );
+    return ::rtl::OUString( "com.sun.star.comp.gallery.GalleryTheme" );
 }
 
 // ------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ uno::Sequence< ::rtl::OUString > GalleryTheme::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.gallery.GalleryTheme" ) );
+    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.gallery.GalleryTheme" );
 
     return aSeq;
 }

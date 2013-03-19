@@ -122,7 +122,7 @@ SwVbaHeadersFooters::createCollectionObject( const uno::Any& aSource )
 rtl::OUString
 SwVbaHeadersFooters::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaHeadersFooters"));
+    return rtl::OUString("SwVbaHeadersFooters");
 }
 
 uno::Sequence<rtl::OUString>
@@ -132,7 +132,7 @@ SwVbaHeadersFooters::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.HeadersFooters") );
+        sNames[0] = rtl::OUString("ooo.vba.word.HeadersFooters");
     }
     return sNames;
 }

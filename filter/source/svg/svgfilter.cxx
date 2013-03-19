@@ -295,12 +295,12 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
     sal_Int8 aMagic1[] = {'<', 's', 'v', 'g'};
     if( std::search(pBuf, pBuf+nBytes,
                     aMagic1, aMagic1+sizeof(aMagic1)/sizeof(*aMagic1)) != pBuf+nBytes )
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("svg_Scalable_Vector_Graphics") );
+        return rtl::OUString("svg_Scalable_Vector_Graphics");
 
     sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
     if( std::search(pBuf, pBuf+nBytes,
                     aMagic2, aMagic2+sizeof(aMagic2)/sizeof(*aMagic2)) != pBuf+nBytes )
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("svg_Scalable_Vector_Graphics") );
+        return rtl::OUString("svg_Scalable_Vector_Graphics");
 
     return rtl::OUString();
 }

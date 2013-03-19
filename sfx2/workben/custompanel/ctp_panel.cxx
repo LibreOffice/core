@@ -85,7 +85,7 @@ namespace sd { namespace colortoolpanel
 
                 WindowDescriptor aWindow;
                 aWindow.Type = WindowClass_SIMPLE;
-                aWindow.WindowServiceName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "window" ) );
+                aWindow.WindowServiceName = ::rtl::OUString( "window" );
                 aWindow.Parent = i_rParentWindow;
                 aWindow.WindowAttributes = WindowAttribute::BORDER;
 

@@ -174,7 +174,7 @@ namespace ucb { namespace ucp { namespace ext
 
                 // obtain the properties which our result set is set up for from the wrapped content
                 Sequence< ::rtl::OUString > aPropertyNames(1);
-                aPropertyNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                aPropertyNames[0] = ::rtl::OUString( "Title" );
 
                 const Reference< XResultSet > xFolderContent( aWrappedContent.createCursor( aPropertyNames ), UNO_SET_THROW );
                 const Reference< XRow > xContentRow( xFolderContent, UNO_QUERY_THROW );

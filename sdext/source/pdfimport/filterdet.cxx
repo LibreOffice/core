@@ -98,50 +98,50 @@ namespace {
                            const rtl::OUString&                          rFilename )
         {
             m_xListbox.set(xControls->getControl(
-                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ))),
+                           rtl::OUString( "ListBox" )),
                            uno::UNO_QUERY_THROW );
             m_xWriterText.set(xControls->getControl(
-                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InfoWriter" ))),
+                               rtl::OUString( "InfoWriter" )),
                                uno::UNO_QUERY_THROW );
             m_xImpressText.set(xControls->getControl(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InfoImpress" ))),
+                                rtl::OUString( "InfoImpress" )),
                                 uno::UNO_QUERY_THROW );
             m_xDrawText.set(xControls->getControl(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InfoDraw" ))),
+                                rtl::OUString( "InfoDraw" )),
                                 uno::UNO_QUERY_THROW );
 
             uno::Reference<awt::XWindow> xControl;
             xControl.set(xControls->getControl(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBoxWriter" ))),
+                                rtl::OUString( "ListBoxWriter" )),
                                 uno::UNO_QUERY_THROW );
             xControl->setVisible(sal_False);
             xControl.set(xControls->getControl(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBoxImpress" ))),
+                                rtl::OUString( "ListBoxImpress" )),
                                 uno::UNO_QUERY_THROW );
             xControl->setVisible(sal_False);
             xControl.set(xControls->getControl(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBoxDraw" ))),
+                                rtl::OUString( "ListBoxDraw" )),
                                 uno::UNO_QUERY_THROW );
             xControl->setVisible(sal_False);
             uno::Reference<beans::XPropertySet> xPropSet(
                 xControls->getControl(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ComboLabel" )))->getModel(),
+                                rtl::OUString( "ComboLabel" ))->getModel(),
                                 uno::UNO_QUERY_THROW );
             rtl::OUString aFilename( rFilename.copy(rFilename.lastIndexOf('/')+1) );
             rtl::OUString aLabel;
-            xPropSet->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ))) >>= aLabel;
+            xPropSet->getPropertyValue(rtl::OUString( "Label" )) >>= aLabel;
             const char pFileName[] = "%FILENAME";
             aLabel = aLabel.replaceAt(
                 aLabel.indexOfAsciiL(pFileName,SAL_N_ELEMENTS(pFileName)-1),
                 SAL_N_ELEMENTS(pFileName)-1,
                 aFilename );
-            xPropSet->setPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )),
+            xPropSet->setPropertyValue(rtl::OUString( "Label" ),
                                        uno::makeAny(aLabel));
 
             uno::Sequence<rtl::OUString> aListboxItems(3);
-            aListboxItems[DRAW_INDEX]    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Drawing" ));
-            aListboxItems[IMPRESS_INDEX] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Presentation" ));
-            aListboxItems[WRITER_INDEX]  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text Document" ));
+            aListboxItems[DRAW_INDEX]    = rtl::OUString( "Drawing" );
+            aListboxItems[IMPRESS_INDEX] = rtl::OUString( "Presentation" );
+            aListboxItems[WRITER_INDEX]  = rtl::OUString( "Text Document" );
 
             m_xListbox->addItems(aListboxItems,0);
             m_xListbox->selectItemPos(0,sal_True);
@@ -167,7 +167,7 @@ namespace {
         virtual uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedMethodNames(  ) throw (uno::RuntimeException)
         {
             uno::Sequence< ::rtl::OUString > aMethods(1);
-            aMethods[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectionChanged" ));
+            aMethods[0] = rtl::OUString( "SelectionChanged" );
             return aMethods;
         }
     };
@@ -434,14 +434,14 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
         {
             if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text" ) )
                 || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text-master" ) ) )
-                aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_pdf_addstream_import" ) );
+                aOutFilterName = rtl::OUString( "writer_pdf_addstream_import" );
             else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.presentation" )
-                aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_pdf_addstream_import" ) );
+                aOutFilterName = rtl::OUString( "impress_pdf_addstream_import" );
             else if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.graphics" ) )
                      || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.drawing" ) ) )
-                aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw_pdf_addstream_import" ) );
+                aOutFilterName = rtl::OUString( "draw_pdf_addstream_import" );
             else if ( aEmbedMimetype == "application/vnd.oasis.opendocument.spreadsheet" )
-                aOutFilterName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_pdf_addstream_import" ) );
+                aOutFilterName = rtl::OUString( "calc_pdf_addstream_import" );
         }
     }
 
@@ -454,9 +454,9 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                 nFilterNamePos = nAttribs;
                 rFilterData.realloc( ++nAttribs );
                 rFilterData[ nFilterNamePos ].Name =
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                    rtl::OUString( "FilterName" );
             }
-            aOutTypeName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("pdf_Portable_Document_Format") );
+            aOutTypeName = rtl::OUString("pdf_Portable_Document_Format");
 
             OSL_TRACE( "setting filter name %s, input stream %s\n",
                        rtl::OUStringToOString( aOutFilterName, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -466,7 +466,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
             if( xEmbedStream.is() )
             {
                 rFilterData.realloc( ++nAttribs );
-                rFilterData[nAttribs-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedSubstream" ) );
+                rFilterData[nAttribs-1].Name = rtl::OUString( "EmbeddedSubstream" );
                 rFilterData[nAttribs-1].Value <<= xEmbedStream;
             }
             if( !aPwd.isEmpty() )
@@ -475,7 +475,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                 {
                     nPwdPos = nAttribs;
                     rFilterData.realloc( ++nAttribs );
-                    rFilterData[ nPwdPos ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) );
+                    rFilterData[ nPwdPos ].Name = rtl::OUString( "Password" );
                 }
                 rFilterData[ nPwdPos ].Value <<= aPwd;
             }
@@ -486,7 +486,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
             {
                 nFilterNamePos = nAttribs;
                 rFilterData.realloc( ++nAttribs );
-                rFilterData[ nFilterNamePos ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                rFilterData[ nFilterNamePos ].Name = rtl::OUString( "FilterName" );
             }
 
             const sal_Int32 nDocumentType = 0; //const sal_Int32 nDocumentType = queryDocumentTypeDialog(m_xContext,aURL);
@@ -497,22 +497,22 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
             else switch( nDocumentType )
             {
                 case 0:
-                    rFilterData[nFilterNamePos].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw_pdf_import" ) );
+                    rFilterData[nFilterNamePos].Value <<= rtl::OUString( "draw_pdf_import" );
                     break;
 
                 case 1:
-                    rFilterData[nFilterNamePos].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_pdf_import" ) );
+                    rFilterData[nFilterNamePos].Value <<= rtl::OUString( "impress_pdf_import" );
                     break;
 
                 case 2:
-                    rFilterData[nFilterNamePos].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_pdf_import" ) );
+                    rFilterData[nFilterNamePos].Value <<= rtl::OUString( "writer_pdf_import" );
                     break;
 
                 default:
                     OSL_FAIL("Unexpected case");
             }
 
-            aOutTypeName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("pdf_Portable_Document_Format") );
+            aOutTypeName = rtl::OUString("pdf_Portable_Document_Format");
         }
     }
 

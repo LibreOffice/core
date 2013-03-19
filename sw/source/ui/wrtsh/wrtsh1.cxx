@@ -498,7 +498,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
                 {
                     try
                     {
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Formula")), uno::makeAny( ::rtl::OUString( aMathData ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString("Formula"), uno::makeAny( ::rtl::OUString( aMathData ) ) );
                         bActivate = sal_False;
                     }
                     catch (const uno::Exception&)
@@ -551,12 +551,12 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
             if ( xProps.is() &&
-                 ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                 ( xProps->getPropertyValue( ::rtl::OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
                  bDisableDataTableDialog )
             {
-                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                xProps->setPropertyValue( ::rtl::OUString( "DisableDataTableDialog" ),
                     uno::makeAny( sal_False ) );
-                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                xProps->setPropertyValue( ::rtl::OUString( "DisableComplexChartTypes" ),
                     uno::makeAny( sal_False ) );
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                 if ( xModifiable.is() )

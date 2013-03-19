@@ -812,7 +812,7 @@ Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeExcept
 
 OUString SAL_CALL Cell::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.table.Cell" ) );
+    return OUString( "com.sun.star.comp.svx.table.Cell" );
 }
 
 // -----------------------------------------------------------------------------
@@ -835,8 +835,8 @@ Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeE
     Sequence< OUString > aSeq( SvxUnoTextBase::getSupportedServiceNames() );
     sal_Int32 nIndex = aSeq.getLength();
     aSeq.realloc( nIndex + 2 );
-    aSeq[nIndex++] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.table.cell" ) );
-    aSeq[nIndex++] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.cell" ) );
+    aSeq[nIndex++] = OUString( "com.sun.star.table.cell" );
+    aSeq[nIndex++] = OUString( "com.sun.star.drawing.cell" );
     return aSeq;
 }
 

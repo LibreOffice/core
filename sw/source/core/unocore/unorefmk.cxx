@@ -1586,7 +1586,7 @@ getPrefixAndSuffix(
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPrefixAndSuffix: exception")),
+            ::rtl::OUString("getPrefixAndSuffix: exception"),
             0, uno::makeAny(e));
     }
 }

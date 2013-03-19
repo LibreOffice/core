@@ -80,7 +80,7 @@ uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const rtl::OUString&
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xPropSet(xDoc, UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xNameAccess( xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges"))), UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xNameAccess( xPropSet->getPropertyValue(rtl::OUString("DatabaseRanges")), UNO_QUERY_THROW);
     uno::Reference< sheet::XDatabaseRange > xDBRange( xNameAccess->getByName(rDBName), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDBRange.is());
     return xDBRange;

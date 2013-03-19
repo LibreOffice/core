@@ -88,14 +88,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL XSDValidationPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.XSDValidationPropertyHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.XSDValidationPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL XSDValidationPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.XSDValidationPropertyHandler" ) );
+        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.XSDValidationPropertyHandler" );
         return aSupported;
     }
 
@@ -323,8 +323,8 @@ namespace pcr
             aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_ADD_DATA_TYPE);
             aDescriptor.SecondaryButtonId = rtl::OUString::createFromAscii(UID_PROP_REMOVE_DATA_TYPE);;
             aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
-            aDescriptor.PrimaryButtonImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/extensions/res/buttonplus.png" ) );
-            aDescriptor.SecondaryButtonImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/extensions/res/buttonminus.png" ) );
+            aDescriptor.PrimaryButtonImageURL = ::rtl::OUString( "private:graphicrepository/extensions/res/buttonplus.png" );
+            aDescriptor.SecondaryButtonImageURL = ::rtl::OUString( "private:graphicrepository/extensions/res/buttonminus.png" );
             break;
 
         case PROPERTY_ID_XSD_WHITESPACES:
@@ -419,7 +419,7 @@ namespace pcr
             break;
         }
 
-        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
+        aDescriptor.Category = ::rtl::OUString( "Data" );
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
 

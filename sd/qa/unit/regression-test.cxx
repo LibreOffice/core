@@ -134,7 +134,7 @@ FileFormat aFileFormats[] = {
         rtl::OUString(), pFmt->nFormatType, nFormat,
         rtl::OUString::createFromAscii( pFmt->pTypeName ),
         0, rtl::OUString(), rtl::OUString(), /* userdata */
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress*")) );
+        rtl::OUString("private:factory/simpress*") );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
@@ -277,8 +277,7 @@ void SdFiltersTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xDrawComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresentationDocument")));
+        getMultiServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.Draw.PresentationDocument"));
     CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
 }
 

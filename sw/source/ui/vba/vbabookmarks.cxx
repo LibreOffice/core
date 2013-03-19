@@ -140,7 +140,7 @@ void SwVbaBookmarks::removeBookmarkByName( const rtl::OUString& rName ) throw (u
 void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const rtl::OUString& rName, const uno::Reference< text::XTextRange >& rTextRange ) throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xDocMSF( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance(  rtl::OUString("com.sun.star.text.Bookmark") ), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( rName );
     rTextRange->getText()->insertTextContent( rTextRange, xBookmark, sal_False );
@@ -207,7 +207,7 @@ SwVbaBookmarks::Exists( const rtl::OUString& rName ) throw (css::uno::RuntimeExc
 rtl::OUString
 SwVbaBookmarks::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBookmarks"));
+    return rtl::OUString("SwVbaBookmarks");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -217,7 +217,7 @@ SwVbaBookmarks::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Bookmarks") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Bookmarks");
     }
     return sNames;
 }

@@ -423,7 +423,7 @@ namespace
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
+                OUString( "illegal vtable index!" ),
                 (XInterface *)pCppI );
         }
 
@@ -522,7 +522,7 @@ namespace
         default:
         {
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
+                OUString( "no member description found!" ),
                 (XInterface *)pCppI );
         }
         }

@@ -119,7 +119,7 @@ namespace svx
             try
             {
                 Reference< XTablesSupplier > xSupTab;
-                _rxForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupTab;
+                _rxForm->getPropertyValue(::rtl::OUString("SingleSelectQueryComposer")) >>= xSupTab;
 
                 if(xSupTab.is())
                 {

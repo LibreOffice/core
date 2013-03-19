@@ -53,7 +53,7 @@ FormulaDialog::FormulaDialog(Window* pParent
     ,m_pAddField(NULL)
     ,m_xRowSet(_xRowSet)
     ,m_pEdit(NULL)
-    ,m_sFormula(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=")))
+    ,m_sFormula(::rtl::OUString("="))
     ,m_nStart(0)
     ,m_nEnd(1)
 {
@@ -64,7 +64,7 @@ FormulaDialog::FormulaDialog(Window* pParent
         else
             m_sFormula = _sFormula;
     }
-    m_xParser.set(_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.libreoffice.report.pentaho.SOFormulaParser"))),uno::UNO_QUERY);
+    m_xParser.set(_xServiceFactory->createInstance(::rtl::OUString("org.libreoffice.report.pentaho.SOFormulaParser")),uno::UNO_QUERY);
     if ( m_xParser.is() )
         m_xOpCodeMapper = m_xParser->getFormulaOpCodeMapper();
     fill();
@@ -225,7 +225,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
         aDescriptor[ ::svx::daColumnName ] >>= sName;
         if ( !sName.isEmpty() )
         {
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("[")) + sName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+            sName = ::rtl::OUString("[") + sName + ::rtl::OUString("]");
             m_pEdit->SetText(sName);
         }
     }

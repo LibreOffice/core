@@ -73,7 +73,7 @@ uno::Reference< uno::XInterface > ScOutlineObj::init()
 {
     // get the test file
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScOutlineObj.ods")), aFileURL);
+    createFileURL(rtl::OUString("ScOutlineObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());

@@ -194,16 +194,16 @@ const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
     if( aMap.empty() )
     {
         CellStyleNameMap aNewMap;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "first-row" ) ) ] = first_row_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "last-row" ) ) ] = last_row_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "first-column" ) ) ] = first_column_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "last-column" ) ) ] = last_column_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "body" ) ) ] = body_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "even-rows" ) ) ] = even_rows_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "odd-rows" ) ) ] = odd_rows_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "even-columns" ) ) ] = even_columns_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "odd-columns" ) ) ] = odd_columns_style;
-        aNewMap[ OUString( RTL_CONSTASCII_USTRINGPARAM( "background" ) ) ] = background_style;
+        aNewMap[ OUString( "first-row" ) ] = first_row_style;
+        aNewMap[ OUString( "last-row" ) ] = last_row_style;
+        aNewMap[ OUString( "first-column" ) ] = first_column_style;
+        aNewMap[ OUString( "last-column" ) ] = last_column_style;
+        aNewMap[ OUString( "body" ) ] = body_style;
+        aNewMap[ OUString( "even-rows" ) ] = even_rows_style;
+        aNewMap[ OUString( "odd-rows" ) ] = odd_rows_style;
+        aNewMap[ OUString( "even-columns" ) ] = even_columns_style;
+        aNewMap[ OUString( "odd-columns" ) ] = odd_columns_style;
+        aNewMap[ OUString( "background" ) ] = background_style;
         aMap.swap( aNewMap );
     }
 
@@ -216,7 +216,7 @@ const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
 
 OUString SAL_CALL TableDesignStyle::getImplementationName() throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("TableDesignStyle") );
+    return OUString("TableDesignStyle");
 }
 
 // ----------------------------------------------------------
@@ -494,7 +494,7 @@ void SAL_CALL TableDesignStyle::disposing( const ::com::sun::star::lang::EventOb
 
 OUString SAL_CALL TableDesignFamily::getImplementationName() throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("TableDesignFamily") );
+    return OUString("TableDesignFamily");
 }
 
 // ----------------------------------------------------------
@@ -519,7 +519,7 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames() thro
 
 OUString SAL_CALL TableDesignFamily::getName() throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
+    return OUString( "table" );
 }
 
 // ----------------------------------------------------------
@@ -753,7 +753,7 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (U
     }
     else
     {
-        throw UnknownPropertyException( OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property: ") ) + PropertyName, static_cast<OWeakObject *>(this) );
+        throw UnknownPropertyException( OUString("unknown property: ") + PropertyName, static_cast<OWeakObject *>(this) );
     }
 }
 

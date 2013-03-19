@@ -98,24 +98,24 @@ namespace svxform
             Reference< XServiceInfo > xDocumentSI( _rxDocument, UNO_QUERY );
             if ( xDocumentSI.is() )
             {
-                if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) )
-                   || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) )
+                if (  xDocumentSI->supportsService( ::rtl::OUString( "com.sun.star.text.TextDocument" ) )
+                   || xDocumentSI->supportsService( ::rtl::OUString( "com.sun.star.text.WebDocument" ) )
                    )
                 {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParagraphStyles" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                    _rFamilyName = ::rtl::OUString( "ParagraphStyles" );
+                    _rStyleName = ::rtl::OUString( "Standard" );
                 }
-                else if ( xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
+                else if ( xDocumentSI->supportsService( ::rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
                 {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
+                    _rFamilyName = ::rtl::OUString( "CellStyles" );
+                    _rStyleName = ::rtl::OUString( "Default" );
                 }
-                else if (  xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) )
-                        || xDocumentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) )
+                else if (  xDocumentSI->supportsService( ::rtl::OUString( "com.sun.star.drawing.DrawingDocument" ) )
+                        || xDocumentSI->supportsService( ::rtl::OUString( "com.sun.star.presentation.PresentationDocument" ) )
                         )
                 {
-                    _rFamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
-                    _rStyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
+                    _rFamilyName = ::rtl::OUString( "graphics" );
+                    _rStyleName = ::rtl::OUString( "standard" );
                 }
                 else
                     bSuccess = false;
@@ -164,7 +164,7 @@ namespace svxform
                 // fall back to CharLocale property at the style
                 if ( aDocumentCharLocale.Language.isEmpty() )
                 {
-                    sCharLocalePropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) );
+                    sCharLocalePropertyName = ::rtl::OUString( "CharLocale" );
                     if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
                     {
                         OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
@@ -180,7 +180,7 @@ namespace svxform
                 Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, LanguageTag( aDocumentCharLocale ).getLanguageType(), DEFAULTFONT_FLAGS_ONLYONE );
                 FontDescriptor aFontDesc = VCLUnoHelper::CreateFontDescriptor( aFont );
                 _rxModel->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontDescriptor" ) ),
+                    ::rtl::OUString( "FontDescriptor" ),
                     makeAny( aFontDesc )
                 );
             }
@@ -204,7 +204,7 @@ namespace svxform
         // the names of the family, and the style - depends on the document type we live in
         ::rtl::OUString sFamilyName, sStyleName;
         if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName ) )
-            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown document type!" ) ), NULL );
+            throw RuntimeException( ::rtl::OUString( "unknown document type!" ), NULL );
 
         // the concrete style
         Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
@@ -232,7 +232,7 @@ namespace svxform
 
             // let's see what the configuration says about the visual effect
             OConfigurationNode  aConfig = getLayoutSettings( _eDocType );
-            Any aVisualEffect = aConfig.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualEffect" ) ) );
+            Any aVisualEffect = aConfig.getNodeValue( ::rtl::OUString( "VisualEffect" ) );
             if ( aVisualEffect.hasValue() )
             {
                 ::rtl::OUString sVisualEffect;
@@ -283,7 +283,7 @@ namespace svxform
     //--------------------------------------------------------------------
     ::utl::OConfigurationNode ControlLayouter::getLayoutSettings( DocumentType _eDocType )
     {
-        ::rtl::OUString sConfigName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Forms/ControlLayout/" ) );
+        ::rtl::OUString sConfigName = ::rtl::OUString( "/org.openoffice.Office.Common/Forms/ControlLayout/" );
         sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
         return OConfigurationTreeRoot::createWithComponentContext(
             ::comphelper::getProcessComponentContext(),    // TODO
@@ -294,7 +294,7 @@ namespace svxform
     bool ControlLayouter::useDynamicBorderColor( DocumentType _eDocType )
     {
         OConfigurationNode aConfig = getLayoutSettings( _eDocType );
-        Any aDynamicBorderColor = aConfig.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DynamicBorderColors" ) ) );
+        Any aDynamicBorderColor = aConfig.getNodeValue( ::rtl::OUString( "DynamicBorderColors" ) );
         bool bDynamicBorderColor = false;
         OSL_VERIFY( aDynamicBorderColor >>= bDynamicBorderColor );
         return bDynamicBorderColor;
@@ -306,7 +306,7 @@ namespace svxform
         if ( _eDocType == eUnknownDocumentType )
             return false;
         OConfigurationNode aConfig = getLayoutSettings( _eDocType );
-        Any aUseRefDevice = aConfig.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentTextMetrics" ) ) );
+        Any aUseRefDevice = aConfig.getNodeValue( ::rtl::OUString( "UseDocumentTextMetrics" ) );
         bool bUseRefDevice = false;
         OSL_VERIFY( aUseRefDevice >>= bUseRefDevice );
         return bUseRefDevice;

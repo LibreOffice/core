@@ -158,22 +158,22 @@ namespace frm
         switch (m_nControlClass)
         {
             case FormComponentType::RADIOBUTTON:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("radiobutton") );
+                aServiceName = rtl::OUString("radiobutton");
                 break;
             case FormComponentType::CHECKBOX:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("checkbox") );
+                aServiceName = rtl::OUString("checkbox");
                 break;
             case FormComponentType::COMBOBOX:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("combobox") );
+                aServiceName = rtl::OUString("combobox");
                 break;
             case FormComponentType::LISTBOX:
-                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("listbox") );
+                aServiceName = rtl::OUString("listbox");
                 break;
             default:
                 if (m_bMultiLine)
-                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLineEdit") );
+                    aServiceName = rtl::OUString("MultiLineEdit");
                 else
-                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit") );
+                    aServiceName = rtl::OUString("Edit");
         }
         return aServiceName;
     }
@@ -405,7 +405,7 @@ namespace frm
 
             // create a query composer
             Reference< XColumnsSupplier > xSuppColumns;
-            xFormProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSuppColumns;
+            xFormProps->getPropertyValue(::rtl::OUString("SingleSelectQueryComposer")) >>= xSuppColumns;
 
             const Reference< XConnection > xConnection( ::dbtools::getConnection( xForm ), UNO_SET_THROW );
             const Reference< XNameAccess > xFieldNames( xSuppColumns->getColumns(), UNO_SET_THROW );
@@ -899,15 +899,15 @@ namespace frm
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OFilterControl::getImplementationName_Static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms.OFilterControl" ) );
+        return ::rtl::OUString( "com.sun.star.comp.forms.OFilterControl" );
     }
 
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL OFilterControl::getSupportedServiceNames_Static()
     {
         Sequence< ::rtl::OUString > aNames( 2 );
-        aNames[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.control.FilterControl" ) );
-        aNames[ 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControl" ) );
+        aNames[ 0 ] = ::rtl::OUString( "com.sun.star.form.control.FilterControl" );
+        aNames[ 1 ] = ::rtl::OUString( "com.sun.star.awt.UnoControl" );
         return aNames;
     }
 

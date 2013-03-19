@@ -43,11 +43,11 @@ void MacabCatalog::refreshTables()
 {
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
+    aTypes[0] = ::rtl::OUString("%");
     Reference< XResultSet > xResult = m_xMetaData->getTables(
         Any(),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%")),
+        ::rtl::OUString("%"),
+        ::rtl::OUString("%"),
         aTypes);
 
     if (xResult.is())
@@ -84,7 +84,7 @@ void MacabCatalog::refreshUsers()
 // -------------------------------------------------------------------------
 const ::rtl::OUString& MacabCatalog::getDot()
 {
-    static const ::rtl::OUString sDot = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("."));
+    static const ::rtl::OUString sDot = ::rtl::OUString(".");
     return sDot;
 }
 // -----------------------------------------------------------------------------

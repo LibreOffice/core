@@ -324,11 +324,11 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 SfxUInt16Item aItem( SID_PSZ_FUNCTION, nSelect );
 
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusBarFunc" ));
+                aArgs[0].Name  = rtl::OUString( "StatusBarFunc" );
                 aItem.QueryValue( a );
                 aArgs[0].Value = a;
 
-                execute( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StatusBarFunc" )), aArgs );
+                execute( rtl::OUString( ".uno:StatusBarFunc" ), aArgs );
 //              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }

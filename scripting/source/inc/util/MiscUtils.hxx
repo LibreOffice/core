@@ -77,8 +77,7 @@ public:
                 css::frame::XTransientDocumentsDocumentContentFactory >(
                     xMCF->createInstanceWithContext(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.frame.TransientDocumentsDocumentContentFactory" ) ),
+                                "com.sun.star.frame.TransientDocumentsDocumentContentFactory" ),
                         xContext ),
                 css::uno::UNO_QUERY );
     }

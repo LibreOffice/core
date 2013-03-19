@@ -1088,7 +1088,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
         if ( xPropSet.is() )
         {
-            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
             aValue >>= xLayoutManager;
         }
 
@@ -2096,7 +2096,7 @@ namespace {
 rtl::OUString createLocalRangeName(const rtl::OUString& rName, const rtl::OUString& rTableName)
 {
     rtl::OUStringBuffer aString (rName);
-    aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")));
+    aString.append(rtl::OUString(" ("));
     aString.append(rTableName);
     aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
     return aString.makeStringAndClear();

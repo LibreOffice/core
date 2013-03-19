@@ -148,7 +148,7 @@ namespace svt
 
             // let it create a graphic from the given URL
             Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMediaProperties[0].Name = ::rtl::OUString( "URL" );
             aMediaProperties[0].Value <<= _rImageResourceURL;
             Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
             OSL_ENSURE( xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!" );
@@ -163,10 +163,10 @@ namespace svt
             );
 
             aMediaProperties.realloc( 2 );
-            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
+            aMediaProperties[0].Name = ::rtl::OUString( "OutputStream" );
             aMediaProperties[0].Value <<= xBufferAccess;
-            aMediaProperties[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) );
-            aMediaProperties[1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
+            aMediaProperties[1].Name = ::rtl::OUString( "MimeType" );
+            aMediaProperties[1].Value <<= ::rtl::OUString( "image/png" );
             xProvider->storeGraphic( xGraphic, aMediaProperties );
 
             pMemBuffer->Seek( 0 );

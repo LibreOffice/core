@@ -57,7 +57,7 @@ SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException 
 rtl::OUString
 SwVbaParagraph::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraph"));
+    return rtl::OUString("SwVbaParagraph");
 }
 
 uno::Sequence< rtl::OUString >
@@ -67,7 +67,7 @@ SwVbaParagraph::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Paragraph" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Paragraph" );
     }
     return aServiceNames;
 }
@@ -100,7 +100,7 @@ public:
         while( xParEnum->hasMoreElements() )
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xParEnum->nextElement(), uno::UNO_QUERY_THROW );
-            if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph") ) ) )
+            if( xServiceInfo->supportsService( rtl::OUString("com.sun.star.text.Paragraph") ) )
             {
                 nCount++;
             }
@@ -116,7 +116,7 @@ public:
             while( xParEnum->hasMoreElements() )
             {
                 uno::Reference< lang::XServiceInfo > xServiceInfo( xParEnum->nextElement(), uno::UNO_QUERY_THROW );
-                if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph") ) ) )
+                if( xServiceInfo->supportsService( rtl::OUString("com.sun.star.text.Paragraph") ) )
                 {
                     if( Index == nCount )
                         return uno::makeAny( xServiceInfo );
@@ -160,7 +160,7 @@ SwVbaParagraphs::createCollectionObject( const css::uno::Any& aSource )
 rtl::OUString
 SwVbaParagraphs::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraphs"));
+    return rtl::OUString("SwVbaParagraphs");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -170,7 +170,7 @@ SwVbaParagraphs::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Paragraphs") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Paragraphs");
     }
     return sNames;
 }

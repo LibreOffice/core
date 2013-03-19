@@ -73,8 +73,7 @@ FunctionDescription::getExceptions() const {
         } catch (const css::container::NoSuchElementException & e) {
             throw new css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.container.NoSuchElementException: "))
+                        "com.sun.star.container.NoSuchElementException: ")
                  + e.Message),
                 css::uno::Reference< css::uno::XInterface >()); //TODO
         }
@@ -82,8 +81,7 @@ FunctionDescription::getExceptions() const {
             || exceptions[i]->getTypeClass() != css::uno::TypeClass_EXCEPTION)
         {
             throw new css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("not an exception type: "))
+                (rtl::OUString("not an exception type: ")
                  + name),
                 css::uno::Reference< css::uno::XInterface >()); //TODO
         }

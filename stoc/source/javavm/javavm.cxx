@@ -210,8 +210,8 @@ bool SingletonFactory::m_bDisposed = false;
 
 rtl::OUString serviceGetImplementationName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                             "com.sun.star.comp.stoc.JavaVirtualMachine"));
+    return rtl::OUString(
+                             "com.sun.star.comp.stoc.JavaVirtualMachine");
 }
 
 css::uno::Sequence< rtl::OUString > serviceGetSupportedServiceNames()
@@ -268,8 +268,7 @@ bool askForRetry(css::uno::Any const & rException)
     {
         css::uno::Reference< css::task::XInteractionHandler > xHandler;
         xContext->getValueByName(rtl::OUString(
-                                     RTL_CONSTASCII_USTRINGPARAM(
-                                         "java-vm.interaction-handler")))
+                                         "java-vm.interaction-handler"))
             >>= xHandler;
         if (xHandler.is())
         {
@@ -289,30 +288,30 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw (css::uno::Exception)
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")),
+            rtl::OUString("com.sun.star.configuration.ConfigurationRegistry"),
             xCtx );
-    if(!xConfRegistry.is()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), 0);
+    if(!xConfRegistry.is()) throw css::uno::RuntimeException(rtl::OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY);
-    if(!xConfRegistry_simple.is()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), 0);
+    if(!xConfRegistry_simple.is()) throw css::uno::RuntimeException(rtl::OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
-    xConfRegistry_simple->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")), sal_True, sal_False);
+    xConfRegistry_simple->open(rtl::OUString("org.openoffice.Inet"), sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
 //  if ooInetProxyType is not 0 then read the settings
-    css::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetProxyType")));
+    css::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetProxyType"));
     if( proxyEnable.is() && 0 != proxyEnable->getLongValue())
     {
         // read ftp proxy name
-        css::uno::Reference<css::registry::XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyName")));
+        css::uno::Reference<css::registry::XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetFTPProxyName"));
         if(ftpProxy_name.is() && !ftpProxy_name->getStringValue().isEmpty()) {
-            rtl::OUString ftpHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost="));
+            rtl::OUString ftpHost = rtl::OUString("ftp.proxyHost=");
             ftpHost += ftpProxy_name->getStringValue();
 
             // read ftp proxy port
-            css::uno::Reference<css::registry::XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyPort")));
+            css::uno::Reference<css::registry::XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetFTPProxyPort"));
             if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
-                rtl::OUString ftpPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort="));
+                rtl::OUString ftpPort = rtl::OUString("ftp.proxyPort=");
                 ftpPort += rtl::OUString::valueOf(ftpProxy_port->getLongValue());
 
                 pjvm->pushProp(ftpHost);
@@ -321,15 +320,15 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read http proxy name
-        css::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyName")));
+        css::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetHTTPProxyName"));
         if(httpProxy_name.is() && !httpProxy_name->getStringValue().isEmpty()) {
-            rtl::OUString httpHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost="));
+            rtl::OUString httpHost = rtl::OUString("http.proxyHost=");
             httpHost += httpProxy_name->getStringValue();
 
             // read http proxy port
-            css::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyPort")));
+            css::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetHTTPProxyPort"));
             if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
-                rtl::OUString httpPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort="));
+                rtl::OUString httpPort = rtl::OUString("http.proxyPort=");
                 httpPort += rtl::OUString::valueOf(httpProxy_port->getLongValue());
 
                 pjvm->pushProp(httpHost);
@@ -338,15 +337,15 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read https proxy name
-        css::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPSProxyName")));
+        css::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetHTTPSProxyName"));
         if(httpsProxy_name.is() && !httpsProxy_name->getStringValue().isEmpty()) {
-            rtl::OUString httpsHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyHost="));
+            rtl::OUString httpsHost = rtl::OUString("https.proxyHost=");
             httpsHost += httpsProxy_name->getStringValue();
 
             // read https proxy port
-            css::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPSProxyPort")));
+            css::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetHTTPSProxyPort"));
             if(httpsProxy_port.is() && httpsProxy_port->getLongValue()) {
-                rtl::OUString httpsPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyPort="));
+                rtl::OUString httpsPort = rtl::OUString("https.proxyPort=");
                 httpsPort += rtl::OUString::valueOf(httpsProxy_port->getLongValue());
 
                 pjvm->pushProp(httpsHost);
@@ -355,10 +354,10 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read  nonProxyHosts
-        css::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetNoProxy")));
+        css::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(rtl::OUString("Settings/ooInetNoProxy"));
         if(nonProxies_name.is() && !nonProxies_name->getStringValue().isEmpty()) {
-            rtl::OUString httpNonProxyHosts = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.nonProxyHosts="));
-            rtl::OUString ftpNonProxyHosts= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.nonProxyHosts="));
+            rtl::OUString httpNonProxyHosts = rtl::OUString("http.nonProxyHosts=");
+            rtl::OUString ftpNonProxyHosts= rtl::OUString("ftp.nonProxyHosts=");
             rtl::OUString value= nonProxies_name->getStringValue();
             // replace the separator ";" by "|"
             value= value.replace((sal_Unicode)';', (sal_Unicode)'|');
@@ -397,23 +396,23 @@ void getDefaultLocaleFromConfig(
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                          "com.sun.star.configuration.ConfigurationRegistry")), xCtx );
+        rtl::OUString(
+                          "com.sun.star.configuration.ConfigurationRegistry"), xCtx );
     if(!xConfRegistry.is())
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), 0);
+            rtl::OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
         xConfRegistry, css::uno::UNO_QUERY);
     if(!xConfRegistry_simple.is())
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), 0);
+            rtl::OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
-    xConfRegistry_simple->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")), sal_True, sal_False);
+    xConfRegistry_simple->open(rtl::OUString("org.openoffice.Setup"), sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
     // read locale
-    css::uno::Reference<css::registry::XRegistryKey> locale = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
+    css::uno::Reference<css::registry::XRegistryKey> locale = xRegistryRootKey->openKey(rtl::OUString("L10N/ooLocale"));
     if(locale.is() && !locale->getStringValue().isEmpty()) {
         rtl::OUString language;
         rtl::OUString country;
@@ -452,39 +451,39 @@ void getJavaPropsFromSafetySettings(
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "com.sun.star.configuration.ConfigurationRegistry")),
+            rtl::OUString(
+                              "com.sun.star.configuration.ConfigurationRegistry"),
             xCtx);
     if(!xConfRegistry.is())
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), 0);
+            rtl::OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
         xConfRegistry, css::uno::UNO_QUERY);
     if(!xConfRegistry_simple.is())
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")), 0);
+            rtl::OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
 
     xConfRegistry_simple->open(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Java")),
+        rtl::OUString("org.openoffice.Office.Java"),
         sal_True, sal_False);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey =
         xConfRegistry_simple->getRootKey();
 
     if (xRegistryRootKey.is())
     {
-        css::uno::Reference<css::registry::XRegistryKey> key_NetAccess= xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VirtualMachine/NetAccess")));
+        css::uno::Reference<css::registry::XRegistryKey> key_NetAccess= xRegistryRootKey->openKey(rtl::OUString("VirtualMachine/NetAccess"));
         if (key_NetAccess.is())
         {
             sal_Int32 val= key_NetAccess->getLongValue();
             rtl::OUString sVal;
             switch( val)
             {
-            case 0: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("host"));
+            case 0: sVal= rtl::OUString("host");
                 break;
-            case 1: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unrestricted"));
+            case 1: sVal= rtl::OUString("unrestricted");
                 break;
-            case 3: sVal= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
+            case 3: sVal= rtl::OUString("none");
                 break;
             }
             rtl::OUString sProperty( RTL_CONSTASCII_USTRINGPARAM("appletviewer.security.mode="));
@@ -492,15 +491,15 @@ void getJavaPropsFromSafetySettings(
             pjvm->pushProp(sProperty);
         }
         css::uno::Reference<css::registry::XRegistryKey> key_CheckSecurity= xRegistryRootKey->openKey(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VirtualMachine/Security")));
+            rtl::OUString("VirtualMachine/Security"));
         if( key_CheckSecurity.is())
         {
             sal_Bool val= (sal_Bool) key_CheckSecurity->getLongValue();
             rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("stardiv.security.disableSecurity="));
             if( val)
-                sProperty= sProperty + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false"));
+                sProperty= sProperty + rtl::OUString("false");
             else
-                sProperty= sProperty + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
+                sProperty= sProperty + rtl::OUString("true");
             pjvm->pushProp( sProperty);
         }
     }
@@ -526,7 +525,7 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
 #endif
 
     if (!strcmp(TIMEZONE, p))
-        pjvm->pushProp(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user.timezone=ECT")));
+        pjvm->pushProp(rtl::OUString("user.timezone=ECT"));
 }
 
 void initVMConfiguration(
@@ -628,8 +627,8 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
             rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
     if (m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "bad call to initialize")),
+            rtl::OUString(
+                              "bad call to initialize"),
             static_cast< cppu::OWeakObject * >(this));
     css::beans::NamedValue val;
     if (rArguments.getLength() == 1 && (rArguments[0] >>= val) && val.Name == "UnoVirtualMachine" )
@@ -658,8 +657,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
             } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
                 throw css::uno::RuntimeException(
                     rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "jvmaccess::UnoVirtualMachine::CreationException")),
+                            "jvmaccess::UnoVirtualMachine::CreationException"),
                     static_cast< cppu::OWeakObject * >(this));
             }
         }
@@ -1146,74 +1144,74 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if ( aAccessor == "ooInetHTTPProxyName" )
     {
-        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "http.proxyHost"));
+        aPropertyName = rtl::OUString(
+                                          "http.proxyHost");
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPProxyPort" )
     {
         aPropertyName
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort"));
+            = rtl::OUString("http.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = rtl::OUString::valueOf(n);
     }
     else if ( aAccessor == "ooInetHTTPSProxyName" )
     {
-        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "https.proxyHost"));
+        aPropertyName = rtl::OUString(
+                                          "https.proxyHost");
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPSProxyPort" )
     {
         aPropertyName
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyPort"));
+            = rtl::OUString("https.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = rtl::OUString::valueOf(n);
     }
     else if ( aAccessor == "ooInetFTPProxyName" )
     {
-        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "ftp.proxyHost"));
+        aPropertyName = rtl::OUString(
+                                          "ftp.proxyHost");
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetFTPProxyPort" )
     {
-        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "ftp.proxyPort"));
+        aPropertyName = rtl::OUString(
+                                          "ftp.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = rtl::OUString::valueOf(n);
     }
     else if ( aAccessor == "ooInetNoProxy" )
     {
-        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "http.nonProxyHosts"));
-        aPropertyName2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                           "ftp.nonProxyHosts"));
+        aPropertyName = rtl::OUString(
+                                          "http.nonProxyHosts");
+        aPropertyName2 = rtl::OUString(
+                                           "ftp.nonProxyHosts");
         rEvent.Element >>= aPropertyValue;
         aPropertyValue = aPropertyValue.replace(';', '|');
     }
     else if ( aAccessor == "NetAccess" )
     {
-        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "appletviewer.security.mode"));
+        aPropertyName = rtl::OUString(
+                                          "appletviewer.security.mode");
         sal_Int32 n = 0;
         if (rEvent.Element >>= n)
             switch (n)
             {
             case 0:
-                aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "host"));
+                aPropertyValue = rtl::OUString(
+                                                   "host");
                 break;
             case 1:
-                aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "unrestricted"));
+                aPropertyValue = rtl::OUString(
+                                                   "unrestricted");
                 break;
             case 3:
-                aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "none"));
+                aPropertyValue = rtl::OUString(
+                                                   "none");
                 break;
             }
         else
@@ -1222,16 +1220,16 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if ( aAccessor == "Security" )
     {
-        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                          "stardiv.security.disableSecurity"));
+        aPropertyName = rtl::OUString(
+                                          "stardiv.security.disableSecurity");
         sal_Bool b = sal_Bool();
         if (rEvent.Element >>= b)
             if (b)
-                aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "false"));
+                aPropertyValue = rtl::OUString(
+                                                   "false");
             else
-                aPropertyValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "true"));
+                aPropertyValue = rtl::OUString(
+                                                   "true");
         else
             return;
         bSecurityChanged = true;
@@ -1257,12 +1255,12 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             // call java.lang.System.setProperty
             // String setProperty( String key, String value)
             jclass jcSystem= pJNIEnv->FindClass("java/lang/System");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/lang/System")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:FindClass java/lang/System"), 0);
             jmethodID jmSetProps= pJNIEnv->GetStaticMethodID( jcSystem, "setProperty","(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.setProperty")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetStaticMethodID java.lang.System.setProperty"), 0);
 
             jstring jsPropName= pJNIEnv->NewString( aPropertyName.getStr(), aPropertyName.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
 
             // remove the property if it does not have a value ( user left the dialog field empty)
             // or if the port is set to 0
@@ -1273,14 +1271,14 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             {
                 // call java.lang.System.getProperties
                 jmethodID jmGetProps= pJNIEnv->GetStaticMethodID( jcSystem, "getProperties","()Ljava/util/Properties;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.getProperties")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetStaticMethodID java.lang.System.getProperties"), 0);
                 jobject joProperties= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetProps);
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.getProperties")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.getProperties"), 0);
                 // call java.util.Properties.remove
                 jclass jcProperties= pJNIEnv->FindClass("java/util/Properties");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/util/Properties")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:FindClass java/util/Properties"), 0);
                 jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID java.util.Properties.remove")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetMethodID java.util.Properties.remove"), 0);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName);
 
                 // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
@@ -1288,7 +1286,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                 if (!aPropertyName2.isEmpty())
                 {
                     jstring jsPropName2= pJNIEnv->NewString( aPropertyName2.getStr(), aPropertyName2.getLength());
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                     pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName2);
                 }
             }
@@ -1296,20 +1294,20 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             {
                 // Change the Value of the property
                 jstring jsPropValue= pJNIEnv->NewString( aPropertyValue.getStr(), aPropertyValue.getLength());
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                 pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
 
                 // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
                 // has a value for two java properties
                 if (!aPropertyName2.isEmpty())
                 {
                     jstring jsPropName2= pJNIEnv->NewString( aPropertyName2.getStr(), aPropertyName2.getLength());
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                     jsPropValue= pJNIEnv->NewString( aPropertyValue.getStr(), aPropertyValue.getLength());
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                     pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName2, jsPropValue);
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
                 }
             }
 
@@ -1319,7 +1317,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             if (bSecurityChanged)
             {
                 jmethodID jmGetSecur= pJNIEnv->GetStaticMethodID( jcSystem,"getSecurityManager","()Ljava/lang/SecurityManager;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.getSecurityManager")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetStaticMethodID java.lang.System.getSecurityManager"), 0);
                 jobject joSecur= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetSecur);
                 if (joSecur != 0)
                 {
@@ -1333,9 +1331,9 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
                     jclass jcSec= pJNIEnv->GetObjectClass( joSecur);
                     jclass jcClass= pJNIEnv->FindClass("java/lang/Class");
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java.lang.Class")), 0);
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:FindClass java.lang.Class"), 0);
                     jmethodID jmName= pJNIEnv->GetMethodID( jcClass,"getName","()Ljava/lang/String;");
-                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID java.lang.Class.getName")), 0);
+                    if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetMethodID java.lang.Class.getName"), 0);
                     jstring jsClass= (jstring) pJNIEnv->CallObjectMethod( jcSec, jmName);
                     const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, NULL);
                     rtl::OUString sName( jcharName);
@@ -1350,9 +1348,9 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     {
                         // call SandboxSecurity.reset
                         jmethodID jmReset= pJNIEnv->GetMethodID( jcSec,"reset","()V");
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID com.sun.star.lib.sandbox.SandboxSecurity.reset")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetMethodID com.sun.star.lib.sandbox.SandboxSecurity.reset"), 0);
                         pJNIEnv->CallVoidMethod( joSecur, jmReset);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallVoidMethod com.sun.star.lib.sandbox.SandboxSecurity.reset")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallVoidMethod com.sun.star.lib.sandbox.SandboxSecurity.reset"), 0);
                     }
                 }
             }
@@ -1421,8 +1419,8 @@ void JavaVirtualMachine::registerConfigChangesListener()
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            m_xContext->getServiceManager()->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationProvider")), m_xContext), css::uno::UNO_QUERY);
+            m_xContext->getServiceManager()->createInstanceWithContext( rtl::OUString(
+                "com.sun.star.configuration.ConfigurationProvider"), m_xContext), css::uno::UNO_QUERY);
 
         if (xConfigProvider.is())
         {
@@ -1430,13 +1428,13 @@ void JavaVirtualMachine::registerConfigChangesListener()
             // arguments for ConfigurationAccess
             css::uno::Sequence< css::uno::Any > aArguments(2);
             aArguments[0] <<= css::beans::PropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                rtl::OUString("nodepath"),
                 0,
-                css::uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet/Settings"))),
+                css::uno::makeAny(rtl::OUString("org.openoffice.Inet/Settings")),
                 css::beans::PropertyState_DIRECT_VALUE);
             // depth: -1 means unlimited
             aArguments[1] <<= css::beans::PropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+                rtl::OUString("depth"),
                 0,
                 css::uno::makeAny( (sal_Int32)-1),
                 css::beans::PropertyState_DIRECT_VALUE);
@@ -1445,8 +1443,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
                 = css::uno::Reference< css::container::XContainer >(
                     xConfigProvider->createInstanceWithArguments(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                             "com.sun.star.configuration.ConfigurationAccess")),
+                             "com.sun.star.configuration.ConfigurationAccess"),
                         aArguments),
                     css::uno::UNO_QUERY);
 
@@ -1456,13 +1453,13 @@ void JavaVirtualMachine::registerConfigChangesListener()
             // now register as listener to changes in org.openoffice.Java/VirtualMachine
             css::uno::Sequence< css::uno::Any > aArguments2(2);
             aArguments2[0] <<= css::beans::PropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                rtl::OUString("nodepath"),
                 0,
-                css::uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Java/VirtualMachine"))),
+                css::uno::makeAny(rtl::OUString("org.openoffice.Office.Java/VirtualMachine")),
                 css::beans::PropertyState_DIRECT_VALUE);
             // depth: -1 means unlimited
             aArguments2[1] <<= css::beans::PropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+                rtl::OUString("depth"),
                 0,
                 css::uno::makeAny( (sal_Int32)-1),
                 css::beans::PropertyState_DIRECT_VALUE);
@@ -1471,8 +1468,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
                 = css::uno::Reference< css::container::XContainer >(
                     xConfigProvider->createInstanceWithArguments(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                             "com.sun.star.configuration.ConfigurationAccess")),
+                             "com.sun.star.configuration.ConfigurationAccess"),
                         aArguments2),
                     css::uno::UNO_QUERY);
 
@@ -1513,32 +1509,32 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
 
             // creat Java Properties as JNI strings
             jstring jsFtpProxyHost= pJNIEnv->NewString( sFtpProxyHost.getStr(), sFtpProxyHost.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
             jstring jsFtpProxyPort= pJNIEnv->NewString( sFtpProxyPort.getStr(), sFtpProxyPort.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
             jstring jsFtpNonProxyHosts= pJNIEnv->NewString( sFtpNonProxyHosts.getStr(), sFtpNonProxyHosts.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
             jstring jsHttpProxyHost= pJNIEnv->NewString( sHttpProxyHost.getStr(), sHttpProxyHost.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
             jstring jsHttpProxyPort= pJNIEnv->NewString( sHttpProxyPort.getStr(), sHttpProxyPort.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
             jstring jsHttpNonProxyHosts= pJNIEnv->NewString( sHttpNonProxyHosts.getStr(), sHttpNonProxyHosts.getLength());
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
 
             // prepare java.lang.System.setProperty
             jclass jcSystem= pJNIEnv->FindClass("java/lang/System");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/lang/System")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:FindClass java/lang/System"), 0);
             jmethodID jmSetProps= pJNIEnv->GetStaticMethodID( jcSystem, "setProperty","(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.setProperty")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetStaticMethodID java.lang.System.setProperty"), 0);
 
             // call java.lang.System.getProperties
             jmethodID jmGetProps= pJNIEnv->GetStaticMethodID( jcSystem, "getProperties","()Ljava/util/Properties;");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.getProperties")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetStaticMethodID java.lang.System.getProperties"), 0);
             jobject joProperties= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetProps);
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.getProperties")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.getProperties"), 0);
             // prepare java.util.Properties.remove
             jclass jcProperties= pJNIEnv->FindClass("java/util/Properties");
-            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java/util/Properties")), 0);
+            if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:FindClass java/util/Properties"), 0);
 
             if (set_reset)
             {
@@ -1558,44 +1554,44 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                     if( propName.equals( sFtpProxyHost))
                     {
                         jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyHost, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
                     }
                     else if( propName.equals( sFtpProxyPort))
                     {
                         jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyPort, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
                     }
                     else if( propName.equals( sFtpNonProxyHosts))
                     {
                         jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpNonProxyHosts, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
                     }
                     else if( propName.equals( sHttpProxyHost))
                     {
                         jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpProxyHost, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
                     }
                     else if( propName.equals( sHttpProxyPort))
                     {
                         jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpProxyPort, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
                     }
                     else if( propName.equals( sHttpNonProxyHosts))
                     {
                         jstring jsVal= pJNIEnv->NewString( propValue.getStr(), propValue.getLength());
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:NewString"), 0);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpNonProxyHosts, jsVal);
-                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), 0);
+                        if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:CallStaticObjectMethod java.lang.System.setProperty"), 0);
                     }
                 }
             }
@@ -1603,7 +1599,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
             {
                 // call java.util.Properties.remove
                 jmethodID jmRemove= pJNIEnv->GetMethodID( jcProperties, "remove", "(Ljava/lang/Object;)Ljava/lang/Object;");
-                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID java.util.Property.remove")), 0);
+                if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString("JNI:GetMethodID java.util.Property.remove"), 0);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpProxyHost);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpProxyPort);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsFtpNonProxyHosts);
@@ -1628,20 +1624,17 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     rtl::OUString baseUrl;
     try {
         baseUrl = exp->expandMacros(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("$URE_INTERNAL_JAVA_DIR/")));
+            rtl::OUString("$URE_INTERNAL_JAVA_DIR/"));
     } catch (css::lang::IllegalArgumentException &) {
         throw css::uno::RuntimeException(
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com::sun::star::lang::IllegalArgumentException")),
+                    "com::sun::star::lang::IllegalArgumentException"),
             static_cast< cppu::OWeakObject * >(this));
     }
     rtl::OUString classPath;
     try {
         classPath = exp->expandMacros(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("$URE_INTERNAL_JAVA_CLASSPATH")));
+            rtl::OUString("$URE_INTERNAL_JAVA_CLASSPATH"));
     } catch (css::lang::IllegalArgumentException &) {}
     jclass class_URLClassLoader = environment->FindClass(
         "java/net/URLClassLoader");
@@ -1737,8 +1730,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
         throw css::uno::RuntimeException(
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "jvmaccess::UnoVirtualMachine::CreationException")),
+                    "jvmaccess::UnoVirtualMachine::CreationException"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }
@@ -1746,8 +1738,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
 void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
     environment->ExceptionClear();
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("JNI exception occurred")),
+        rtl::OUString("JNI exception occurred"),
         static_cast< cppu::OWeakObject * >(this));
 }
 

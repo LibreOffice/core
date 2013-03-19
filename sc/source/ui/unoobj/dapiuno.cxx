@@ -468,7 +468,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
 Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotTablesEnumeration")));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotTablesEnumeration"));
 }
 
 // XIndexAccess
@@ -1746,7 +1746,7 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
                                                     throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotFieldsEnumeration")));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotFieldsEnumeration"));
 }
 
 // XIndexAccess
@@ -2995,7 +2995,7 @@ Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration( this, OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.DataPilotFieldGroupsEnumeration" ) ) );
+    return new ScIndexEnumeration( this, OUString( "com.sun.star.sheet.DataPilotFieldGroupsEnumeration" ) );
 }
 
 // XElementAccess
@@ -3183,7 +3183,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
 Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration( this, OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.DataPilotFieldGroupEnumeration" ) ) );
+    return new ScIndexEnumeration( this, OUString( "com.sun.star.sheet.DataPilotFieldGroupEnumeration" ) );
 }
 
 // XElementAccess
@@ -3330,7 +3330,7 @@ Reference<XEnumeration> SAL_CALL ScDataPilotItemsObj::createEnumeration()
                                                     throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotItemsEnumeration")));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotItemsEnumeration"));
 }
 
 // XIndexAccess

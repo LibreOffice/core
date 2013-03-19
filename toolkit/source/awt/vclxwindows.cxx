@@ -4615,7 +4615,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-    // bool localize = xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) );
+    // bool localize = xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
     if ( xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) ) )
     {

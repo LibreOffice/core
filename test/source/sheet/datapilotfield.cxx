@@ -54,7 +54,7 @@ void DataPilotField::testSortInfo()
     uno::Reference< beans::XPropertySet> xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldSortInfo aSortInfoValue;
     rtl::OUString aSortInfo(RTL_CONSTASCII_USTRINGPARAM("SortInfo"));
-    aSortInfoValue.Field = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Col1"));
+    aSortInfoValue.Field = rtl::OUString("Col1");
     aSortInfoValue.IsAscending = false;
     aSortInfoValue.Mode = sheet::DataPilotFieldSortMode::MANUAL;
     uno::Any xValue;
@@ -120,7 +120,7 @@ void DataPilotField::testAutoShowInfo()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldAutoShowInfo aAutoShowInfoValue;
-    aAutoShowInfoValue.DataField = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Col1"));
+    aAutoShowInfoValue.DataField = rtl::OUString("Col1");
     aAutoShowInfoValue.IsEnabled = true;
     rtl::OUString aAutoShowInfo(RTL_CONSTASCII_USTRINGPARAM("AutoShowInfo"));
     uno::Any xValue;
@@ -153,7 +153,7 @@ void DataPilotField::testReference()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldReference aReferenceValue;
-    aReferenceValue.ReferenceField = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Col1"));
+    aReferenceValue.ReferenceField = rtl::OUString("Col1");
     aReferenceValue.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
     rtl::OUString aReference(RTL_CONSTASCII_USTRINGPARAM("Reference"));
     uno::Any xValue;

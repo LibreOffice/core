@@ -919,7 +919,7 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 {
     String sServiceName;
     if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
-        sServiceName = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.FrameStyle") );
+        sServiceName = OUString("com.sun.star.style.FrameStyle");
     else
         sServiceName = SvXMLStylesContext::GetServiceName( nFamily );
 

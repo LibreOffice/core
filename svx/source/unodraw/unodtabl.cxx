@@ -61,14 +61,14 @@ SvxUnoDashTable::~SvxUnoDashTable() throw()
 
 OUString SAL_CALL SvxUnoDashTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoDashTable") );
+    return OUString("SvxUnoDashTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable" ));
+    aSNS.getArray()[0] = OUString("com.sun.star.drawing.DashTable" );
     return aSNS;
 }
 

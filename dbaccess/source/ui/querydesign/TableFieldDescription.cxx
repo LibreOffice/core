@@ -216,7 +216,7 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
                     ++crit, ++c
                 )
             {
-                aCriteria[c].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Criterion_" ) ) + ::rtl::OUString::valueOf( c );
+                aCriteria[c].Name = ::rtl::OUString( "Criterion_" ) + ::rtl::OUString::valueOf( c );
                 aCriteria[c].Value <<= *crit;
             }
 

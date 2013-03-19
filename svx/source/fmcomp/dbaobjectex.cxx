@@ -82,7 +82,7 @@ namespace svx
             Reference<XPropertySet> xProp;
             m_aDescriptor[daComponent] >>= xProp;
             if ( xProp.is() )
-                xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsForm"))) >>= bForm;
+                xProp->getPropertyValue(::rtl::OUString("IsForm")) >>= bForm;
         }
         catch(Exception)
         {}

@@ -82,7 +82,7 @@ static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pSe
                                                  rtl_str_getLength(pServicePurpose),
                                                  RTL_TEXTENCODING_ASCII_US);
 
-    result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__cppu_loadSharedLibComponentFactory "));
+    result += rtl::OUString("\ts_test__cppu_loadSharedLibComponentFactory ");
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(\""));
     result += servicePurpose;
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\") - "));
@@ -92,14 +92,14 @@ static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pSe
             cppu::loadSharedLibComponentFactory(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION)),
                 rtl::OUString(),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impl.test.TestComponent")) + servicePurpose,
+                rtl::OUString("impl.test.TestComponent") + servicePurpose,
                 uno::Reference<lang::XMultiServiceFactory>(),
                 uno::Reference<registry::XRegistryKey>())
             );
 
         rtl::OUString envDcp_purpose(cppu::EnvDcp::getPurpose(g_envDcp));
         if (envDcp_purpose == servicePurpose)
-            result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("passed\n"));
+            result += rtl::OUString("passed\n");
 
         else
         {
@@ -125,7 +125,7 @@ static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServ
                                                  rtl_str_getLength(pServicePurpose),
                                                  RTL_TEXTENCODING_ASCII_US);
 
-    result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__cppu_writeSharedLibComponentInfo "));
+    result += rtl::OUString("\ts_test__cppu_writeSharedLibComponentInfo ");
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(\""));
     result += servicePurpose;
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\") - "));
@@ -146,7 +146,7 @@ static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServ
 
         rtl::OUString envDcp_purpose(cppu::EnvDcp::getPurpose(g_envDcp));
         if (envDcp_purpose == servicePurpose)
-            result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("passed\n"));
+            result += rtl::OUString("passed\n");
 
         else
         {
@@ -172,7 +172,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, argv)
     rtl::OUString message;
 
     message += rtl::OUString(argv[0], rtl_str_getLength(argv[0]), RTL_TEXTENCODING_ASCII_US);
-    message += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
+    message += rtl::OUString("\n");
 
     message += s_test__cppu_loadSharedLibComponentFactory(":unsafe");
     message += s_test__cppu_loadSharedLibComponentFactory(":affine");
@@ -183,11 +183,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, argv)
     message += s_test__cppu_writeSharedLibComponentInfo("");
 
     if (message.indexOf("FAILED") == -1)
-        message += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS PASSED\n"));
+        message += rtl::OUString("TESTS PASSED\n");
 
     else
     {
-        message += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS _NOT_ PASSED\n"));
+        message += rtl::OUString("TESTS _NOT_ PASSED\n");
         result = -1;
     }
 

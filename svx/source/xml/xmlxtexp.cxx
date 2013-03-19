@@ -180,12 +180,12 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
     try
     {
         xProps->setPropertyValue(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-            uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/xml" ) ) ) );
+            rtl::OUString( "MediaType" ),
+            uno::makeAny( rtl::OUString( "text/xml" ) ) );
 
         // use stock encryption
         xProps->setPropertyValue(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+            rtl::OUString( "UseCommonStoragePasswordEncryption" ),
             uno::makeAny( sal_True ) );
     } catch ( const uno::Exception & )
     {
@@ -199,7 +199,7 @@ static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
 {
     uno::Reference < io::XStream > xStream;
     xStream = xSubStorage->openStreamElement(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) ),
+                        rtl::OUString( "Content.xml" ),
                         embed::ElementModes::WRITE );
     *ppGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, GRAPHICHELPER_MODE_WRITE );
     initializeStreamMetadata( xStream );
@@ -272,7 +272,7 @@ bool SvxXMLXTableExportComponent::save(
             }
             else
             {
-                aPath += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".xml" ) );
+                aPath += rtl::OUString( ".xml" );
                 try {
                     xStream = xStorage->openStreamElement( aPath, eCreate );
                     if( !xStream.is() )

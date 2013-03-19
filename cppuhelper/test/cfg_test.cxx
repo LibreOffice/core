@@ -59,7 +59,7 @@ static Sequence< OUString > impl0_getSupportedServiceNames()
 //--------------------------------------------------------------------------------------------------
 static OUString impl0_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.bootstrap.TestComponent0") );
+    return OUString("com.sun.star.comp.bootstrap.TestComponent0");
 }
 //--------------------------------------------------------------------------------------------------
 static Sequence< OUString > impl1_getSupportedServiceNames()
@@ -70,7 +70,7 @@ static Sequence< OUString > impl1_getSupportedServiceNames()
 //--------------------------------------------------------------------------------------------------
 static OUString impl1_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.bootstrap.TestComponent1") );
+    return OUString("com.sun.star.comp.bootstrap.TestComponent1");
 }
 
 //==================================================================================================

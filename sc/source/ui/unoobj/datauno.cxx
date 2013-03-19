@@ -675,7 +675,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSubTotalDescriptorBase::creat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SubTotalFieldsEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SubTotalFieldsEnumeration"));
 }
 
 // XIndexAccess
@@ -2218,7 +2218,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDatabaseRangeObj )
 
 rtl::OUString SAL_CALL ScDatabaseRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScDatabaseRangeObj" ));
+    return rtl::OUString( "ScDatabaseRangeObj" );
 }
 
 sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const rtl::OUString& rServiceName )
@@ -2335,7 +2335,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDatabaseRangesObj::createEnum
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DatabaseRangesEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.DatabaseRangesEnumeration"));
 }
 
 // XIndexAccess

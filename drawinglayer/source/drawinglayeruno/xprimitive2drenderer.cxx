@@ -87,7 +87,7 @@ namespace drawinglayer
 
         rtl::OUString XPrimitive2DRenderer_getImplementationName()
         {
-            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drawinglayer::unorenderer::XPrimitive2DRenderer" ) );
+            return rtl::OUString( "drawinglayer::unorenderer::XPrimitive2DRenderer" );
         }
 
         uno::Reference< uno::XInterface > SAL_CALL XPrimitive2DRenderer_createInstance(const uno::Reference< lang::XMultiServiceFactory >&)

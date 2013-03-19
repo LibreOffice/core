@@ -69,8 +69,8 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     , _aElements( CACHE_SIZE )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= _xTDMgr;
+    xContext->getValueByName( OUString(
+        "/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get singleton \"TypeDescriptionManager\" from context!" );
 }
 //__________________________________________________________________________________________________
@@ -399,7 +399,7 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
             if (! _aCpp2Uno.is())
             {
                 throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get c++ to uno mapping!") ),
+                    OUString("cannot get c++ to uno mapping!"),
                     (XWeak *)(OWeakObject *)this );
             }
         }
@@ -422,7 +422,7 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
             if (! _aUno2Cpp.is())
             {
                 throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get uno to c++ mapping!") ),
+                    OUString("cannot get uno to c++ mapping!"),
                     (XWeak *)(OWeakObject *)this );
             }
         }
@@ -439,7 +439,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
         return (uno_Interface *)getCpp2Uno().mapInterface( xObj.get(), pTo );
 
     throw RuntimeException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
+        OUString("illegal object given!"),
         (XWeak *)(OWeakObject *)this );
 }
 

@@ -82,14 +82,14 @@ namespace svx
         throw()
     {
         Sequence< ::rtl::OUString > aSupportedServiceNames( 1 );
-        aSupportedServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.NamespaceMap" ) );
+        aSupportedServiceNames[0] = ::rtl::OUString( "com.sun.star.xml.NamespaceMap" );
         return aSupportedServiceNames;
     }
 
     ::rtl::OUString SAL_CALL NamespaceMap_getImplementationName()
         throw()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Svx.NamespaceMap" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Svx.NamespaceMap" );
     }
 
 

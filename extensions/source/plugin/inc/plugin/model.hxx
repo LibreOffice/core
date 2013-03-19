@@ -105,7 +105,7 @@ class PluginModel : public BroadcasterHelperHolder,
     static rtl::OUString SAL_CALL getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.extensions.PluginModel" ));
+        return rtl::OUString( "com.sun.star.extensions.PluginModel" );
     }
 
     // OPropertySetHelper

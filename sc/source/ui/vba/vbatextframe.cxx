@@ -43,7 +43,7 @@ ScVbaTextFrame::Characters() throw (uno::RuntimeException)
 rtl::OUString
 ScVbaTextFrame::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaTextFrame"));
+    return rtl::OUString("ScVbaTextFrame");
 }
 
 uno::Sequence< rtl::OUString >
@@ -53,7 +53,7 @@ ScVbaTextFrame::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.TextFrame" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.TextFrame" );
     }
     return aServiceNames;
 }

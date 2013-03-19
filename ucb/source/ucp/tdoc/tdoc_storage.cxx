@@ -98,8 +98,8 @@ StorageElementFactory::createStorage( const rtl::OUString & rUri,
          ( eMode != READ_WRITE_NOCREATE ) &&
          ( eMode != READ_WRITE_CREATE ) )
         throw lang::IllegalArgumentException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "Invalid open mode!" ) ),
+            rtl::OUString(
+                "Invalid open mode!" ),
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
 
@@ -107,8 +107,8 @@ StorageElementFactory::createStorage( const rtl::OUString & rUri,
     if ( aUri.isRoot() )
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "Root never has a storage!" ) ),
+            rtl::OUString(
+                "Root never has a storage!" ),
             uno::Reference< uno::XInterface >(),
             sal_Int16( 1 ) );
     }
@@ -420,8 +420,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     sal_Int16( 2 ) );
             else
                 throw embed::InvalidStorageException(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "Invalid document id!" ) ),
+                    rtl::OUString(
+                        "Invalid document id!" ),
                     uno::Reference< uno::XInterface >() );
         }
 
@@ -435,8 +435,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         try
         {
             uno::Any aPropValue = xPropSet->getPropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) );
+                rtl::OUString( "OpenMode" ) );
 
             sal_Int32 nOpenMode = 0;
             if ( aPropValue >>= nOpenMode )
@@ -448,8 +447,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                         {
                             // document opened, but not readable.
                             throw embed::InvalidStorageException(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "Storage is open, but not readable!" ) ),
+                                rtl::OUString(
+                                    "Storage is open, but not readable!" ),
                                 uno::Reference< uno::XInterface >() );
                         }
                         // storage okay
@@ -461,8 +460,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                         {
                             // document opened, but not writable.
                             throw embed::InvalidStorageException(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "Storage is open, but not writable!" ) ),
+                                rtl::OUString(
+                                    "Storage is open, but not writable!" ),
                                 uno::Reference< uno::XInterface >() );
                         }
                         // storage okay
@@ -475,8 +474,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     "Bug! Value of property OpenMode has wrong type!" );
 
                 throw uno::RuntimeException(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "Bug! Value of property OpenMode has wrong type!" ) ),
+                    rtl::OUString(
+                        "Bug! Value of property OpenMode has wrong type!" ),
                     uno::Reference< uno::XInterface >() );
             }
         }
@@ -485,8 +484,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             OSL_FAIL( "Property OpenMode not supported!" );
 
             throw embed::StorageWrappedTargetException(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "Bug! Value of property OpenMode has wrong type!" ) ),
+                    rtl::OUString(
+                        "Bug! Value of property OpenMode has wrong type!" ),
                     uno::Reference< uno::XInterface >(),
                     uno::makeAny( e ) );
         }
@@ -495,8 +494,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             OSL_FAIL( "Caught WrappedTargetException!" );
 
             throw embed::StorageWrappedTargetException(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "WrappedTargetException during getPropertyValue!" ) ),
+                    rtl::OUString(
+                        "WrappedTargetException during getPropertyValue!" ),
                     uno::Reference< uno::XInterface >(),
                     uno::makeAny( e ) );
         }
@@ -559,8 +558,8 @@ StorageElementFactory::queryStream(
     if ( !xParentStorage.is() )
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "No parent storage!" ) ),
+            rtl::OUString(
+                "No parent storage!" ),
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
     }
@@ -569,16 +568,16 @@ StorageElementFactory::queryStream(
     if ( aUri.isRoot() )
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "Root never is a stream!" ) ),
+            rtl::OUString(
+                "Root never is a stream!" ),
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
     }
     else if ( aUri.isDocument() )
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "A document never is a stream!" ) ),
+            rtl::OUString(
+                "A document never is a stream!" ),
             uno::Reference< uno::XInterface >(),
             sal_Int16( 2 ) );
     }
@@ -615,8 +614,8 @@ StorageElementFactory::queryStream(
             OSL_FAIL( "StorageElementFactory::queryStream : Unknown open mode!" );
 
             throw embed::InvalidStorageException(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "Unknown open mode!" ) ),
+                rtl::OUString(
+                    "Unknown open mode!" ),
                 uno::Reference< uno::XInterface >() );
     }
 
@@ -672,8 +671,8 @@ StorageElementFactory::queryStream(
     if ( !xStream.is() )
     {
         throw embed::InvalidStorageException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "No stream!" ) ),
+            rtl::OUString(
+                "No stream!" ),
             uno::Reference< uno::XInterface >() );
     }
 

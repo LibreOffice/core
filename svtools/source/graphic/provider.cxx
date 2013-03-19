@@ -70,7 +70,7 @@ GraphicProvider::~GraphicProvider()
 ::rtl::OUString GraphicProvider::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.graphic.GraphicProvider" ) );
+    return ::rtl::OUString( "com.sun.star.comp.graphic.GraphicProvider" );
 }
 
 // ------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ uno::Sequence< ::rtl::OUString > GraphicProvider::getSupportedServiceNames_Stati
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) );
+    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.GraphicProvider" );
 
     return aSeq;
 }

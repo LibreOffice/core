@@ -51,7 +51,7 @@ ScVbaMenuBar::Menus( const uno::Any& aIndex ) throw (script::BasicErrorException
 rtl::OUString
 ScVbaMenuBar::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuBar"));
+    return rtl::OUString("ScVbaMenuBar");
 }
 
 uno::Sequence<rtl::OUString>
@@ -61,7 +61,7 @@ ScVbaMenuBar::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.MenuBar" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.MenuBar" );
     }
     return aServiceNames;
 }

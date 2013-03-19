@@ -2527,7 +2527,7 @@ throw (uno::RuntimeException)
     if (::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         if ( !aPam.GetNode()->GetTxtNode() )
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid text range") ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString("Invalid text range"), uno::Reference< uno::XInterface >() );
 
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 
@@ -2626,8 +2626,8 @@ public:
     SwFrmFmt & GetHeadFootFmtOrThrow() {
         SwFrmFmt *const pFmt( GetHeadFootFmt() );
         if (!pFmt) {
-            throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "SwXHeadFootText: disposed or invalid")), 0);
+            throw uno::RuntimeException(OUString(
+                    "SwXHeadFootText: disposed or invalid"), 0);
         }
         return *pFmt;
     }

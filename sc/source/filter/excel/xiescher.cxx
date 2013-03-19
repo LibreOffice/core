@@ -1453,7 +1453,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                     {
                         double fAngle = 180.0;
                         com::sun::star::beans::PropertyValue aTextRotateAngle;
-                        aTextRotateAngle.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                        aTextRotateAngle.Name = rtl::OUString( "TextRotateAngle" );
                         aTextRotateAngle.Value <<= fAngle;
                         SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
                         aGeometryItem.SetPropertyValue( aTextRotateAngle );

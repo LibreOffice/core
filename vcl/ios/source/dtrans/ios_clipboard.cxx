@@ -71,12 +71,12 @@ using ::rtl::OUString;
 
 OUString clipboard_getImplementationName()
 {
-  return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.IosClipboard"));
+  return OUString("com.sun.star.datatransfer.clipboard.IosClipboard");
 }
 
 Sequence<OUString> clipboard_getSupportedServiceNames()
 {
-  return makeSequence(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")));
+  return makeSequence(OUString("com.sun.star.datatransfer.clipboard.SystemClipboard"));
 }
 
 
@@ -103,8 +103,7 @@ IosClipboard::IosClipboard(UIPasteboard* pasteboard, bool bUseSystemPasteboard) 
 
       if (mPasteboard == nil)
         {
-          throw RuntimeException(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("IosClipboard: Cannot create pasteboard")),
+          throw RuntimeException(OUString("IosClipboard: Cannot create pasteboard"),
                 static_cast<XClipboardEx*>(this));
         }
     }
@@ -118,7 +117,7 @@ IosClipboard::IosClipboard(UIPasteboard* pasteboard, bool bUseSystemPasteboard) 
       [mPasteboard release];
 
       throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("IosClipboard: Cannot create pasteboard change listener")),
+            OUString("IosClipboard: Cannot create pasteboard change listener"),
             static_cast<XClipboardEx*>(this));
     }
 
@@ -216,7 +215,7 @@ void SAL_CALL IosClipboard::addClipboardListener(const Reference< XClipboardList
   MutexGuard aGuard(m_aMutex);
 
   if (!listener.is())
-     throw IllegalArgumentException(OUString(RTL_CONSTASCII_USTRINGPARAM("empty reference")),
+     throw IllegalArgumentException(OUString("empty reference"),
                                    static_cast<XClipboardEx*>(this), 1);
 
   mClipboardListeners.push_back(listener);
@@ -229,7 +228,7 @@ void SAL_CALL IosClipboard::removeClipboardListener(const Reference< XClipboardL
   MutexGuard aGuard(m_aMutex);
 
   if (!listener.is())
-     throw IllegalArgumentException(OUString(RTL_CONSTASCII_USTRINGPARAM("empty reference")),
+     throw IllegalArgumentException(OUString("empty reference"),
                                    static_cast<XClipboardEx*>(this), 1);
 
   mClipboardListeners.remove(listener);

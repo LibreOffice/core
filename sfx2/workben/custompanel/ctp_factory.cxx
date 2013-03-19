@@ -93,7 +93,7 @@ namespace sd { namespace colortoolpanel
         {
             OSL_FAIL( "ToolPanelFactory::createUIElement: no parent window in the args!" );
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No parent window provided in the creation arguments. Cannot create tool panel." ) ),
+                ::rtl::OUString( "No parent window provided in the creation arguments. Cannot create tool panel." ),
                 *this,
                 2
             );
@@ -113,7 +113,7 @@ namespace sd { namespace colortoolpanel
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ToolPanelFactory::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.example.custompanel.ToolPanelFactory" ) );
+        return ::rtl::OUString( "org.openoffice.comp.example.custompanel.ToolPanelFactory" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ namespace sd { namespace colortoolpanel
     Sequence< ::rtl::OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames_static() throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.example.colorpanel.ToolPanelFactory" ) );
+        aServiceNames[0] = ::rtl::OUString( "org.openoffice.example.colorpanel.ToolPanelFactory" );
         return aServiceNames;
     }
 

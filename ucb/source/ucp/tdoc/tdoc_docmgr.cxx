@@ -76,8 +76,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
 {
     document::EventObject aDocEvent;
     aDocEvent.Source = Source.Source;
-    aDocEvent.EventName = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "OfficeDocumentsListener::notifyClosing" ) );
+    aDocEvent.EventName = rtl::OUString( "OfficeDocumentsListener::notifyClosing" );
     m_pManager->notifyEvent( aDocEvent );
 }
 
@@ -147,8 +146,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         try
         {
             uno::Any aValue = xPropSet->getPropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "RuntimeUID" ) ) );
+                rtl::OUString( "RuntimeUID" ) );
             aValue >>= aId;
         }
         catch ( beans::UnknownPropertyException const & )

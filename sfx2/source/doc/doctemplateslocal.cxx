@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    ::rtl::OUString aStringID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "groupuinames.xml" ) );
+    ::rtl::OUString aStringID = ::rtl::OUString( "groupuinames.xml" );
     return ReadLocalizationSequence_Impl( xInStream, aStringID, xContext );
 }
 
@@ -63,9 +63,9 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     ::comphelper::AttributeList* pRootAttrList = new ::comphelper::AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "xmlns" ) ),
+        ::rtl::OUString( "xmlns" ),
         aCDATAString,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "http://openoffice.org/2006/groupuinames" ) ) );
+        ::rtl::OUString( "http://openoffice.org/2006/groupuinames" ) );
 
     xWriterHandler->startDocument();
     xWriterHandler->startElement( aGroupListElement, xRootAttrList );

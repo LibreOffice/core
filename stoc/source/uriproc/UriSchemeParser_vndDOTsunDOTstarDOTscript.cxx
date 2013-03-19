@@ -436,7 +436,7 @@ Parser::parse(
         return new UrlReference(scheme, schemeSpecificPart);
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")), 0);
+            rtl::OUString("std::bad_alloc"), 0);
     }
 }
 
@@ -455,19 +455,17 @@ css::uno::Reference< css::uno::XInterface > create(
         return static_cast< cppu::OWeakObject * >(new Parser);
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")), 0);
+            rtl::OUString("std::bad_alloc"), 0);
     }
 }
 
 rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"));
+    return rtl::OUString("com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript");
 }
 
 css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"));
+    s[0] = rtl::OUString("com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript");
     return s;
 }
 

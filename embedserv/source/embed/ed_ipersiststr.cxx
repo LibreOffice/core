@@ -206,19 +206,19 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     uno::Sequence< beans::PropertyValue > aArgs( 3 );
 
     sal_Int32 nInd = 0; // must not be bigger than the preset size
-    aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
+    aArgs[nInd].Name = ::rtl::OUString( "FilterName" );
     aArgs[nInd++].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
+        aArgs[nInd].Name = ::rtl::OUString( "InputStream" );
         aArgs[nInd++].Value <<= xStream;
-        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
-        aArgs[nInd++].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
+        aArgs[nInd].Name = ::rtl::OUString( "URL" );
+        aArgs[nInd++].Value <<= ::rtl::OUString( "private:stream" );
     }
     else
     {
-        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+        aArgs[nInd].Name = ::rtl::OUString( "URL" );
 
         rtl::OUString sDocUrl;
         if ( pFilePath )
@@ -237,7 +237,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
 
     aArgs.realloc( nInd );
 
-    // aArgs[].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
+    // aArgs[].Name = ::rtl::OUString( "ReadOnly" );
     // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
     return aArgs;
@@ -247,12 +247,12 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Imp
 {
     uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
 
-    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
+    aArgs[0].Name = ::rtl::OUString( "FilterName" );
     aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
+        aArgs[1].Name = ::rtl::OUString( "OutputStream" );
         aArgs[1].Value <<= xStream;
     }
 
@@ -631,7 +631,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
     {
         try
         {
-            xStorable->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) ),
+            xStorable->storeToURL( ::rtl::OUString( "private:stream" ),
                                         fillArgsForStoring_Impl( xTempOut ) );
             hr = copyXTempOutToIStream( xTempOut, pTargetStream );
             if ( SUCCEEDED( hr ) )

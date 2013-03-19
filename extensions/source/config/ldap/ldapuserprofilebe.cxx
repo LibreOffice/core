@@ -61,7 +61,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
                         xContext, &aDefinition, &loggedOnUser))
                 {
                     throw css::uno::RuntimeException(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LdapUserProfileBe- LDAP not configured")),
+                        rtl::OUString("LdapUserProfileBe- LDAP not configured"),
                         NULL);
                 }
 
@@ -107,7 +107,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
             css::configuration::theDefaultProvider::get(context));
 
-        css::beans::NamedValue aPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), uno::makeAny(kComponent) );
+        css::beans::NamedValue aPath(rtl::OUString("nodepath"), uno::makeAny(kComponent) );
 
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[0] <<=  aPath;
@@ -177,8 +177,7 @@ void LdapUserProfileBe::setPropertyValue(
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        rtl::OUString("setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
@@ -213,7 +212,7 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 
 //------------------------------------------------------------------------------
 rtl::OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.LdapUserProfileBe"));
+    return rtl::OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
 }
 //------------------------------------------------------------------------------
 
@@ -227,7 +226,7 @@ rtl::OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
 uno::Sequence<rtl::OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
 {
     uno::Sequence<rtl::OUString> aServices(1) ;
-    aServices[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.LdapUserProfileBe")) ;
+    aServices[0] = rtl::OUString("com.sun.star.configuration.backend.LdapUserProfileBe") ;
     return aServices ;
 }
 //------------------------------------------------------------------------------

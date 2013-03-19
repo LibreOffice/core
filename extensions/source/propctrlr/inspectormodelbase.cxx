@@ -99,25 +99,25 @@ namespace pcr
         ,m_bIsReadOnly( sal_False )
     {
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasHelpSection" ) ),
+            ::rtl::OUString( "HasHelpSection" ),
             MODEL_PROPERTY_ID_HAS_HELP_SECTION,
             PropertyAttribute::READONLY,
             &m_bHasHelpSection, ::getCppuType( &m_bHasHelpSection )
         );
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MinHelpTextLines" ) ),
+            ::rtl::OUString( "MinHelpTextLines" ),
             MODEL_PROPERTY_ID_MIN_HELP_TEXT_LINES,
             PropertyAttribute::READONLY,
             &m_nMinHelpTextLines, ::getCppuType( &m_nMinHelpTextLines )
         );
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxHelpTextLines" ) ),
+            ::rtl::OUString( "MaxHelpTextLines" ),
             MODEL_PROPERTY_ID_MAX_HELP_TEXT_LINES,
             PropertyAttribute::READONLY,
             &m_nMaxHelpTextLines, ::getCppuType( &m_nMaxHelpTextLines )
         );
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+            ::rtl::OUString( "IsReadOnly" ),
             MODEL_PROPERTY_ID_IS_READ_ONLY,
             PropertyAttribute::BOUND,
             &m_bIsReadOnly, ::getCppuType( &m_bIsReadOnly )

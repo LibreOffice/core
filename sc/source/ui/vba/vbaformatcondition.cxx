@@ -140,7 +140,7 @@ ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ConditionalFormat") ), uno::makeAny( mxSheetConditionalEntries) );
+        mxParentRangePropertySet->setPropertyValue( rtl::OUString("ConditionalFormat"), uno::makeAny( mxSheetConditionalEntries) );
     }
     catch (uno::Exception& )
     {
@@ -151,7 +151,7 @@ ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
 rtl::OUString
 ScVbaFormatCondition::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatCondition"));
+    return rtl::OUString("ScVbaFormatCondition");
 }
 
 uno::Sequence< rtl::OUString >
@@ -161,7 +161,7 @@ ScVbaFormatCondition::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.FormatCondition" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.FormatCondition" );
     }
     return aServiceNames;
 }

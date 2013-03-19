@@ -94,7 +94,7 @@ void MyThread::run()
             Reference < XBridge > rBridge =
                 m_rBridgeFactory->createBridge(
                     OUString() ,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("iiop")) ,
+                    OUString("iiop") ,
                     rConnection ,
                     (XInstanceProvider * ) new OInstanceProvider );
 
@@ -119,27 +119,27 @@ int main( int argc, char *argv[] )
 
     {
         Reference< XMultiServiceFactory > rSMgr = createRegistryServiceFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "client.rdb" )  ) );
+            OUString( "client.rdb" ) );
 
         Reference < XConnector > rConnector(
-            createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")),
+            createComponent( OUString("com.sun.star.connection.Connector"),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("connector.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
         Reference < XAcceptor > rAcceptor(
-            createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")),
+            createComponent( OUString("com.sun.star.connection.Acceptor"),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
         // just ensure that it is registered
-//      createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
+//      createComponent( OUString("com.sun.star.bridge.Bridge.iiop"),
 //                       OUString( RTL_CONSTASCII_USTRINGPARAM("iiopbrdg" SAL_DLLEXTENSION)),
 //                       rSMgr );
 
         Reference < XBridgeFactory > rFactory(
-            createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
+            createComponent( OUString("com.sun.star.bridge.BridgeFactory"),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
@@ -163,13 +163,13 @@ int main( int argc, char *argv[] )
             {
 
                 Reference < XBridge > rBridge = rFactory->createBridge(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("bla blub")),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("iiop")),
+                    OUString("bla blub"),
+                    OUString("iiop"),
                     rConnection,
                     Reference < XInstanceProvider > () );
 
                 Reference < XInterface > rInitialObject
-                    = rBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("bla")) );
+                    = rBridge->getInstance( OUString("bla") );
 
                 if( rInitialObject.is() )
                 {
@@ -182,7 +182,7 @@ int main( int argc, char *argv[] )
             }
 
             Reference < XBridge > rBridge = rFactory->getBridge(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("bla blub")) );
+                OUString("bla blub") );
             OSL_ASSERT( ! rBridge.is() );
 
         }

@@ -49,13 +49,13 @@ sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
         {
             aFlavor.MimeType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                 "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
-            aFlavor.HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
+            aFlavor.HumanPresentableName = ::rtl::OUString( "Enhanced Windows MetaFile" );
         }
         else
         {
             aFlavor.MimeType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                 "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) );
-            aFlavor.HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows GDIMetaFile" ) );
+            aFlavor.HumanPresentableName = ::rtl::OUString( "Windows GDIMetaFile" );
         }
 
         aFlavor.DataType = getCppuType( (const sal_uInt64*) 0 );

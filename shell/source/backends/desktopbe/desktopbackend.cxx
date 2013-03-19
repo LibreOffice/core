@@ -55,8 +55,7 @@ namespace {
 
 rtl::OUString SAL_CALL getDefaultImplementationName() {
     return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.backend.DesktopBackend"));
+            "com.sun.star.comp.configuration.backend.DesktopBackend");
 }
 
 css::uno::Sequence< rtl::OUString > SAL_CALL getDefaultSupportedServiceNames() {
@@ -147,8 +146,7 @@ void Default::setPropertyValue(rtl::OUString const &, css::uno::Any const &)
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        rtl::OUString("setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
@@ -198,8 +196,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         css::uno::getCurrentContext());
     if (current.is()) {
         current->getValueByName(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("system.desktop-environment"))) >>=
+            rtl::OUString("system.desktop-environment")) >>=
             desktop;
     }
 
@@ -209,20 +206,17 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         backend = createBackend(
             context,
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.backend.GconfBackend")));
+                    "com.sun.star.configuration.backend.GconfBackend"));
     } else if ( desktop == "KDE" ) {
         backend = createBackend(
             context,
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.backend.KDEBackend")));
+                    "com.sun.star.configuration.backend.KDEBackend"));
     } else if ( desktop == "KDE4" ) {
         backend = createBackend(
             context,
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.backend.KDE4Backend")));
+                    "com.sun.star.configuration.backend.KDE4Backend"));
     }
     return backend.is()
         ? backend : static_cast< cppu::OWeakObject * >(new Default);

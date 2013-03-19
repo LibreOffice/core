@@ -49,7 +49,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( ScAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString("CreateDialogFactory") );
     if ( fp )
         return fp();
     return 0;

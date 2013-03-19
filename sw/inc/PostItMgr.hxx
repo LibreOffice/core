@@ -102,7 +102,7 @@ class SwNoteProps: public utl::ConfigItem
         bool bIsShowAnchor;
     public:
         SwNoteProps()
-            : ConfigItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Notes")))
+            : ConfigItem(::rtl::OUString("Office.Writer/Notes"))
             , bIsShowAnchor(false)
         {
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames = GetPropertyNames();
@@ -124,7 +124,7 @@ class SwNoteProps: public utl::ConfigItem
             {
                 aNames.realloc(1);
                 ::rtl::OUString* pNames = aNames.getArray();
-                pNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowAnkor"));
+                pNames[0] = ::rtl::OUString("ShowAnkor");
             }
             return aNames;
         }

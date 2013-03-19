@@ -61,7 +61,7 @@ void OEvoabTable::refreshColumns()
                 Any(),
                 m_SchemaName,
                 m_Name,
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
+                ::rtl::OUString("%"));
 
         if (xResult.is())
         {

@@ -242,7 +242,7 @@ void XDataPilotTable2::buildDataFields( uno::Reference< sheet::XDataPilotTable2 
     for( sal_Int32 i = 0; i < nFieldCount; ++i)
     {
         uno::Reference< beans::XPropertySet > xPropSet(xIndex->getByIndex(i), UNO_QUERY_THROW);
-        Any aAny = xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")));
+        Any aAny = xPropSet->getPropertyValue(rtl::OUString("Orientation"));
         sheet::DataPilotFieldOrientation aOrientation;
         CPPUNIT_ASSERT( aAny >>= aOrientation );
 

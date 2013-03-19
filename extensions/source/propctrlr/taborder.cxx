@@ -243,7 +243,7 @@ namespace pcr
         {
             Reference< XTabController > xTabController;
             if ( m_xORB.is() )
-                xTabController = xTabController.query( m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.FormController" ) ) ) );
+                xTabController = xTabController.query( m_xORB->createInstance( ::rtl::OUString( "com.sun.star.form.FormController" ) ) );
             DBG_ASSERT( xTabController.is(), "TabOrderDialog::AutoOrderClickHdl: could not instantiate a tab controller!" );
             if ( !xTabController.is() )
                 return 0;

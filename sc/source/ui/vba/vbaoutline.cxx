@@ -40,7 +40,7 @@ ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevel
 rtl::OUString
 ScVbaOutline::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaOutline"));
+    return rtl::OUString("ScVbaOutline");
 }
 
 uno::Sequence< rtl::OUString >
@@ -50,7 +50,7 @@ ScVbaOutline::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Outline" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Outline" );
     }
     return aServiceNames;
 }

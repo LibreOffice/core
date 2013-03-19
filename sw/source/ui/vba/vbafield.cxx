@@ -54,7 +54,7 @@ sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException)
 rtl::OUString
 SwVbaField::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaField"));
+    return rtl::OUString("SwVbaField");
 }
 
 uno::Sequence<rtl::OUString>
@@ -64,7 +64,7 @@ SwVbaField::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Field" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Field" );
     }
     return aServiceNames;
 }
@@ -345,7 +345,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
 
     SwVbaRange* pVbaRange = dynamic_cast< SwVbaRange* >( Range.get() );
@@ -357,7 +357,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl::OUString _text ) throw (uno::RuntimeException)
 {
-    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.FileName")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString("com.sun.star.text.TextField.FileName") ), uno::UNO_QUERY_THROW );
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
     if( !_text.isEmpty() )
     {
@@ -382,7 +382,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl
     }
 
     uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FileFormat") ), uno::makeAny( nFileFormat ) );
+    xProps->setPropertyValue( rtl::OUString("FileFormat"), uno::makeAny( nFileFormat ) );
 
     return xTextField;
 }
@@ -466,11 +466,11 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
 
     if( bCustom )
     {
-        sFieldService = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.textfield.docinfo.Custom" ) );
+        sFieldService = rtl::OUString( "com.sun.star.text.textfield.docinfo.Custom" );
     }
     else if( sFieldService.isEmpty() )
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
 
     uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( sFieldService ), uno::UNO_QUERY_THROW );
@@ -479,7 +479,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     {
         uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
         rtl::OUString sDocPropertyName( aDocProperty );
-        xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ), uno::makeAny( sDocPropertyName ) );
+        xProps->setPropertyValue( rtl::OUString("Name"), uno::makeAny( sDocPropertyName ) );
     }
 
     return xTextField;
@@ -520,7 +520,7 @@ sal_Int32 SAL_CALL SwVbaFields::Update() throw (uno::RuntimeException)
 rtl::OUString
 SwVbaFields::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFields"));
+    return rtl::OUString("SwVbaFields");
 }
 
 // XEnumerationAccess
@@ -537,7 +537,7 @@ SwVbaFields::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Fields" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Fields" );
     }
     return aServiceNames;
 }

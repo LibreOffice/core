@@ -262,7 +262,7 @@ try
         case xlSurfaceWireframe:
         case xlSurfaceTopView:
         case xlSurfaceTopViewWireframe:
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.BarDiagram")));
+            setDiagram( rtl::OUString("com.sun.star.chart.BarDiagram"));
             break;
         case xlLine:
         case xl3DLine:
@@ -271,7 +271,7 @@ try
         case xlLineMarkers:
         case xlLineMarkersStacked:
         case xlLineMarkersStacked100:
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.LineDiagram")));
+            setDiagram( rtl::OUString("com.sun.star.chart.LineDiagram"));
             break;
         case xl3DArea:
         case xlArea:
@@ -279,17 +279,17 @@ try
         case xlAreaStacked100:
         case xl3DAreaStacked:
         case xl3DAreaStacked100:
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.AreaDiagram")) );
+            setDiagram( rtl::OUString("com.sun.star.chart.AreaDiagram") );
             break;
         case xlDoughnut:
         case xlDoughnutExploded:
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.DonutDiagram") ) );
+            setDiagram( rtl::OUString("com.sun.star.chart.DonutDiagram") );
             break;
         case xlStockHLC:
         case xlStockOHLC:
         case xlStockVHLC:
         case xlStockVOHLC:
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.StockDiagram")));
+            setDiagram( rtl::OUString("com.sun.star.chart.StockDiagram"));
             mxDiagramPropertySet->setPropertyValue( UPDOWN, uno::makeAny(sal_Bool((_nChartType == xlStockOHLC) || (_nChartType == xlStockVOHLC))));
             mxDiagramPropertySet->setPropertyValue(VOLUME, uno::makeAny(sal_Bool((_nChartType == xlStockVHLC) || (_nChartType == xlStockVOHLC))));
             break;
@@ -300,13 +300,13 @@ try
         case xl3DPie:
         case xlPie:
         case xlBarOfPie:                            // not possible (Zoom pie)
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.PieDiagram")));
+            setDiagram( rtl::OUString("com.sun.star.chart.PieDiagram"));
             break;
 
         case xlRadar:
         case xlRadarMarkers:
         case xlRadarFilled:
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.NetDiagram")));
+            setDiagram( rtl::OUString("com.sun.star.chart.NetDiagram"));
             break;
         case xlXYScatter:
         case xlBubble:                      // not possible
@@ -315,7 +315,7 @@ try
         case xlXYScatterLinesNoMarkers:
         case xlXYScatterSmooth:
         case xlXYScatterSmoothNoMarkers:
-            setDiagram( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.XYDiagram")));
+            setDiagram( rtl::OUString("com.sun.star.chart.XYDiagram"));
             switch(_nChartType)
             {
                 case xlXYScatter:
@@ -555,7 +555,7 @@ ScVbaChart::Activate() throw (script::BasicErrorException, uno::RuntimeException
     if ( pChartObj )
         pChartObj->Activate();
     else
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no ChartObject as parent" ) ) );
+        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( "no ChartObject as parent" ) );
 }
 
 void SAL_CALL
@@ -1055,7 +1055,7 @@ ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) thro
 rtl::OUString
 ScVbaChart::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaChart"));
+    return rtl::OUString("ScVbaChart");
 }
 
 uno::Sequence< rtl::OUString >
@@ -1065,7 +1065,7 @@ ScVbaChart::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Chart" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Chart" );
     }
     return aServiceNames;
 }

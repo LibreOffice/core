@@ -112,18 +112,18 @@ int LogBridge::v_isValid(rtl::OUString * pReason)
     int result = m_count > 0;
     if (!result)
     {
-        *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not entered"));
+        *pReason = rtl::OUString("not entered");
     }
     else
     {
         result = m_threadId == osl_getThreadIdentifier(NULL);
 
         if (!result)
-            *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wrong thread"));
+            *pReason = rtl::OUString("wrong thread");
     }
 
     if (result)
-        *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OK"));
+        *pReason = rtl::OUString("OK");
 
     return result;
 }

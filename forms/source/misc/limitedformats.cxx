@@ -54,8 +54,8 @@ namespace frm
     //---------------------------------------------------------------------
     static const Locale& getLocale(LocaleType _eType)
     {
-        static const Locale s_aEnglishUS( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en") ), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("us") ), ::rtl::OUString() );
-        static const Locale s_aGerman( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de") ), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE") ), ::rtl::OUString() );
+        static const Locale s_aEnglishUS( ::rtl::OUString("en"), ::rtl::OUString("us"), ::rtl::OUString() );
+        static const Locale s_aGerman( ::rtl::OUString("de"), ::rtl::OUString("DE"), ::rtl::OUString() );
         static const ::rtl::OUString s_sEmptyString;
         static const Locale s_aSystem( s_sEmptyString, s_sEmptyString, s_sEmptyString );
 

@@ -53,7 +53,7 @@ namespace pcr
         DBG_CTOR( ButtonNavigationHandler, NULL );
 
         m_aContext.createComponent(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.FormComponentPropertyHandler" ) ),
+            ::rtl::OUString( "com.sun.star.form.inspection.FormComponentPropertyHandler" ),
             m_xSlaveHandler );
         if ( !m_xSlaveHandler.is() )
             throw RuntimeException();
@@ -68,14 +68,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ButtonNavigationHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.ButtonNavigationHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.ButtonNavigationHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.ButtonNavigationHandler" ) );
+        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.ButtonNavigationHandler" );
         return aSupported;
     }
 

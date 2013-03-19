@@ -188,8 +188,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
                 m_xSMgr, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xCtx;
             xCtx.set( xProps->getPropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+                rtl::OUString( "DefaultContext" ) ),
                 uno::UNO_QUERY_THROW );
 
             uno::Reference< task::XInteractionHandler > xIH(
@@ -961,7 +960,7 @@ Content::queryCreatableContentsInfo()
 
     beans::Property aProp;
     m_pProvider->getProperty(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
+        rtl::OUString( "Title" ), aProp );
 
     uno::Sequence< beans::Property > aDocProps( 1 );
     aDocProps.getArray()[ 0 ] = aProp;
@@ -1383,7 +1382,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             //xProps.reset(
             //    new ContentProperties( aUnescapedTitle ) );
             xProps->addProperty(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                rtl::OUString( "Title" ),
                 uno::makeAny( aUnescapedTitle ),
                 true );
         }
@@ -1393,16 +1392,16 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xProps.reset( new ContentProperties( aUnescapedTitle, false ) );
             else
                 xProps->addProperty(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                    rtl::OUString( "Title" ),
                     uno::makeAny( aUnescapedTitle ),
                     true );
 
             xProps->addProperty(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                rtl::OUString( "IsFolder" ),
                 uno::makeAny( false ),
                 true );
             xProps->addProperty(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                rtl::OUString( "IsDocument" ),
                 uno::makeAny( true ),
                 true );
         }
@@ -1425,7 +1424,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             // Add BaseURI property, if requested.
             xProps->addProperty(
-                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ),
+                 rtl::OUString( "BaseURI" ),
                  uno::makeAny( getBaseURI( xResAccess ) ),
                  true );
         }
@@ -1435,11 +1434,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             // Add CreatableContentsInfo property, if requested.
             sal_Bool bFolder = sal_False;
             xProps->getValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ) )
+                rtl::OUString( "IsFolder" ) )
                     >>= bFolder;
             xProps->addProperty(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "CreatableContentsInfo" ) ),
+                rtl::OUString( "CreatableContentsInfo" ),
                 uno::makeAny( bFolder
                                   ? queryCreatableContentsInfo()
                                   : uno::Sequence< ucb::ContentInfo >() ),
@@ -3129,8 +3127,7 @@ Content::getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess )
     {
         rtl::OUString aLocation;
         m_xCachedProps->getValue( rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "Content-Location" ) ) ) >>= aLocation;
+                                        "Content-Location" ) ) >>= aLocation;
         if ( aLocation.getLength() )
         {
             try

@@ -56,7 +56,7 @@ OUString SAL_CALL OResultSet::getImplementationName()
     throw (RuntimeException)
 {
     OSL_TRACE("OResultSet::getImplementationName");
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.mysqlc.ResultSet" ) );
+    return ::rtl::OUString( "com.sun.star.sdbcx.mysqlc.ResultSet" );
 }
 /* }}} */
 
@@ -67,8 +67,8 @@ Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
 {
     OSL_TRACE("OResultSet::getSupportedServiceNames");
     Sequence< OUString > aSupported(2);
-    aSupported[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.ResultSet" ) );
-    aSupported[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.ResultSet" ) );
+    aSupported[0] = OUString( "com.sun.star.sdbc.ResultSet" );
+    aSupported[1] = OUString( "com.sun.star.sdbcx.ResultSet" );
     return (aSupported);
 }
 /* }}} */

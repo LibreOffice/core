@@ -85,7 +85,7 @@ namespace calc
         // register our property at the base class
         CellAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "BoundCell" )),
+            ::rtl::OUString( "BoundCell" ),
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),
@@ -254,7 +254,7 @@ namespace calc
                         if ( xProp.is() )
                         {
                             CellContentType eResultType;
-                            if ( (xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormulaResultType" )) ) >>= eResultType) && eResultType == CellContentType_VALUE )
+                            if ( (xProp->getPropertyValue(::rtl::OUString( "FormulaResultType" ) ) >>= eResultType) && eResultType == CellContentType_VALUE )
                                 bHasValue = sal_True;
                         }
                     }
@@ -417,10 +417,10 @@ namespace calc
                 if ( xOldFormat.is() )
                 {
                     // use the locale of the existing format
-                    xOldFormat->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Locale" )) ) >>= aLocale;
+                    xOldFormat->getPropertyValue( ::rtl::OUString( "Locale" ) ) >>= aLocale;
 
                     sal_Int16 nOldType = ::comphelper::getINT16(
-                        xOldFormat->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) );
+                        xOldFormat->getPropertyValue( ::rtl::OUString( "Type" ) ) );
                     if ( nOldType & NumberFormat::LOGICAL )
                         bWasBoolean = sal_True;
                 }
@@ -471,7 +471,7 @@ namespace calc
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sheet.OCellValueBinding" ) );
+        return ::rtl::OUString( "com.sun.star.comp.sheet.OCellValueBinding" );
     }
 
     //--------------------------------------------------------------------
@@ -495,10 +495,10 @@ namespace calc
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
         Sequence< ::rtl::OUString > aServices( m_bListPos ? 3 : 2 );
-        aServices[ 0 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.table.CellValueBinding" ) );
-        aServices[ 1 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.binding.ValueBinding" ) );
+        aServices[ 0 ] =  ::rtl::OUString( "com.sun.star.table.CellValueBinding" );
+        aServices[ 1 ] =  ::rtl::OUString( "com.sun.star.form.binding.ValueBinding" );
         if ( m_bListPos )
-            aServices[ 2 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.table.ListPositionCellBinding" ) );
+            aServices[ 2 ] =  ::rtl::OUString( "com.sun.star.table.ListPositionCellBinding" );
         return aServices;
     }
 

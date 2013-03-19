@@ -124,25 +124,25 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
                     // Should really share!
                     // At least use for the handles the #define'd values in .hxx file...
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("CursorName") ), 0,
+                        OUString("CursorName"), 0,
                         ::getCppuType( (OUString *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("EscapeProcessing") ), 1,
+                        OUString("EscapeProcessing"), 1,
                         ::getBooleanCppuType() , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchDirection") ), 2,
+                        OUString("FetchDirection"), 2,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchSize") ), 3,
+                        OUString("FetchSize"), 3,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("IsBookmarkable") ), 4,
+                        OUString("IsBookmarkable"), 4,
                         ::getBooleanCppuType() , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetConcurrency") ), 5,
+                        OUString("ResultSetConcurrency"), 5,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetType") ), 6,
+                        OUString("ResultSetType"), 6,
                         ::getCppuType( (sal_Int32 *)0) , 0 )
                 };
             OSL_ASSERT( sizeof(aTable) / sizeof(Property) == BASERESULTSET_SIZE );

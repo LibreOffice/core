@@ -187,7 +187,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
 
     // if it is decryption, the amount of data should be rounded to the block size even in case of padding
     if ( ( !m_bPadding || !m_bEncryption ) && nSizeForPadding )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The data should contain complete blocks only." ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( ::rtl::OUString( "The data should contain complete blocks only." ), uno::Reference< uno::XInterface >() );
 
     if ( m_bW3CPadding && m_bEncryption )
     {

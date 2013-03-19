@@ -74,14 +74,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL EFormsPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.EFormsPropertyHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.EFormsPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EFormsPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.XMLFormsPropertyHandler" ) );
+        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.XMLFormsPropertyHandler" );
         return aSupported;
     }
 
@@ -468,7 +468,7 @@ namespace pcr
         }
 
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
+        aDescriptor.Category = ::rtl::OUString( "Data" );
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
         return aDescriptor;
     }
@@ -512,15 +512,15 @@ namespace pcr
             if ( !( xModel.is() && xBinding.is() && !sFacetName.isEmpty() ) )
                 return InteractiveSelectionResult_Cancelled;
 
-            xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormModel" ) ), makeAny( xModel ) );
-            xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Binding" ) ), makeAny( xBinding ) );
-            xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FacetName" ) ), makeAny( sFacetName ) );
+            xDialogProps->setPropertyValue( ::rtl::OUString( "FormModel" ), makeAny( xModel ) );
+            xDialogProps->setPropertyValue( ::rtl::OUString( "Binding" ), makeAny( xBinding ) );
+            xDialogProps->setPropertyValue( ::rtl::OUString( "FacetName" ), makeAny( sFacetName ) );
 
             if ( !xDialog->execute() )
                 // cancelled
                 return InteractiveSelectionResult_Cancelled;
 
-            _rData = xDialogProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConditionValue" ) ) );
+            _rData = xDialogProps->getPropertyValue( ::rtl::OUString( "ConditionValue" ) );
             return InteractiveSelectionResult_ObtainedValue;
         }
         catch( const Exception& )

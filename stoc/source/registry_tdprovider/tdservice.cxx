@@ -347,8 +347,7 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
             {
                 throw RuntimeException(
                     rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "Service has bad constructors")),
+                            "Service has bad constructors"),
                     static_cast< OWeakObject * >(this));
             }
             (*ctors)[i] = new Constructor(
@@ -375,8 +374,7 @@ void ServiceTypeDescriptionImpl::getReferences()
     if (superTypes > 1) {
         throw RuntimeException(
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "Service has more than one supertype")),
+                    "Service has more than one supertype"),
             static_cast< OWeakObject * >(this));
     }
     if (superTypes == 1) {
@@ -398,8 +396,7 @@ void ServiceTypeDescriptionImpl::getReferences()
         {
             throw RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.container.NoSuchElementException: " ) )
+                        "com.sun.star.container.NoSuchElementException: " )
                 + e.Message,
                 static_cast< OWeakObject * >( this ) );
         }
@@ -466,8 +463,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                         if ( !( aTypeDesc >>= aOptionalServices[ nOS ] ) )
                             throw RuntimeException(
                                 OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "Service 'export' is not a service" ) ),
+                                        "Service 'export' is not a service" ),
                                 static_cast< OWeakObject * >( this ) );
                         nOS++;
                     }
@@ -477,8 +473,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                         if ( !( aTypeDesc >>= aMandatoryServices[ nMS ] ) )
                             throw RuntimeException(
                                 OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "Service 'export' is not a service" ) ),
+                                        "Service 'export' is not a service" ),
                                 static_cast< OWeakObject * >( this ) );
                         nMS++;
                     }

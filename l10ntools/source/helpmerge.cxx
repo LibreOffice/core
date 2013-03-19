@@ -228,10 +228,10 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                 rtl::OUString sSourceText(
                     pXMLElement->ToOUString().
                     replaceAll(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
+                        rtl::OUString("\n"),
                         rtl::OUString()).
                     replaceAll(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
+                        rtl::OUString("\t"),
                         rtl::OUString()));
                 // re-add spaces to the beginning of translated string,
                 // important for indentation of Basic code examples

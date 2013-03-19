@@ -309,7 +309,7 @@ uno::Type SAL_CALL SvxUnoXColorTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  ) throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoXColorTable" ) );
+    return OUString( "SvxUnoXColorTable" );
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
@@ -383,7 +383,7 @@ uno::Type SAL_CALL SvxUnoXLineEndTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  ) throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoXLineEndTable" ) );
+    return OUString( "SvxUnoXLineEndTable" );
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
@@ -465,7 +465,7 @@ uno::Type SAL_CALL SvxUnoXDashTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  ) throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoXDashTable" ) );
+    return OUString( "SvxUnoXDashTable" );
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
@@ -542,7 +542,7 @@ uno::Type SAL_CALL SvxUnoXHatchTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  ) throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoXHatchTable" ) );
+    return OUString( "SvxUnoXHatchTable" );
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
@@ -631,7 +631,7 @@ uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  ) throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoXGradientTable" ) );
+    return OUString( "SvxUnoXGradientTable" );
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
@@ -699,7 +699,7 @@ uno::Type SAL_CALL SvxUnoXBitmapTable::getElementType()
 // XServiceInfo
 OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  ) throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoXBitmapTable" ) );
+    return OUString( "SvxUnoXBitmapTable" );
 }
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)

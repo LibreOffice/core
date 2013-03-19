@@ -41,13 +41,13 @@ Reference< XInterface > SAL_CALL CLibxml2XFormsExtension::Create(
 
 ::rtl::OUString SAL_CALL CLibxml2XFormsExtension::getImplementationName_Static()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.xml.xpath.XFormsExtension") );
+    return ::rtl::OUString("com.sun.star.comp.xml.xpath.XFormsExtension");
 }
 
 Sequence< ::rtl::OUString > SAL_CALL CLibxml2XFormsExtension::getSupportedServiceNames_Static()
 {
     Sequence< ::rtl::OUString > aSequence(1);
-    aSequence[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.xpath.XPathExtension") );
+    aSequence[0] = ::rtl::OUString("com.sun.star.xml.xpath.XPathExtension");
     return aSequence;
 }
 

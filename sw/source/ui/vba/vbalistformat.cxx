@@ -68,17 +68,17 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
         if( isFirstElement )
         {
             sal_Bool isNumberingRestart = !bContinuePreviousList;
-            xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart") ), uno::makeAny( isNumberingRestart ) );
+            xProps->setPropertyValue( rtl::OUString("ParaIsNumberingRestart"), uno::makeAny( isNumberingRestart ) );
             if( isNumberingRestart )
             {
                 sal_Int16 nStartValue = 1;
-                xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue") ), uno::makeAny( nStartValue ) );
+                xProps->setPropertyValue( rtl::OUString("NumberingStartValue"), uno::makeAny( nStartValue ) );
             }
             isFirstElement = sal_False;
         }
         else
         {
-            xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart") ), uno::makeAny( sal_False ) );
+            xProps->setPropertyValue( rtl::OUString("ParaIsNumberingRestart"), uno::makeAny( sal_False ) );
         }
         pListTemplate->applyListTemplate( xProps );
     }
@@ -86,13 +86,13 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
 
 void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  ) throw (css::uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
 }
 
 rtl::OUString
 SwVbaListFormat::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaListFormat"));
+    return rtl::OUString("SwVbaListFormat");
 }
 
 uno::Sequence< rtl::OUString >
@@ -102,7 +102,7 @@ SwVbaListFormat::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.ListFormat" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.ListFormat" );
     }
     return aServiceNames;
 }

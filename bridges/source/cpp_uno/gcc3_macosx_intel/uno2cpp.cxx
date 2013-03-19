@@ -470,7 +470,7 @@ void unoInterfaceProxyDispatch(
     default:
     {
         ::com::sun::star::uno::RuntimeException aExc(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
+            OUString("illegal member type description!"),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
         Type const & rExcType = ::getCppuType( &aExc );

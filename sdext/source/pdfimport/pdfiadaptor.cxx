@@ -148,7 +148,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             try {
                 xSubFilter = uno::Reference<document::XFilter>(
                     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.OwnSubFilter" ) ),
+                        rtl::OUString( "com.sun.star.document.OwnSubFilter" ),
                         aArgs,
                         m_xContext ),
                     uno::UNO_QUERY );
@@ -169,8 +169,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     {
                         nPwPos = aFilterData.getLength();
                         aFilterData.realloc( nPwPos+1 );
-                        aFilterData[nPwPos].Name = rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM( "Password" ) );
+                        aFilterData[nPwPos].Name = rtl::OUString( "Password" );
                     }
                     aFilterData[nPwPos].Value <<= aPwd;
                     bRet = xSubFilter->filter( aFilterData );

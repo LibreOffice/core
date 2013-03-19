@@ -568,7 +568,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAcce
 
 rtl::OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessiblePreviewTable"));
+    return rtl::OUString("ScAccessiblePreviewTable");
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNames()
@@ -579,7 +579,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServ
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.AccessibleTableView"));
+    pNames[nOldSize] = rtl::OUString("com.sun.star.table.AccessibleTableView");
 
     return aSequence;
 }

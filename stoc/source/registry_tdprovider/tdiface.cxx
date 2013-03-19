@@ -339,8 +339,7 @@ void InterfaceTypeDescriptionImpl::checkInterfaceType(
     if (resolveTypedefs(type)->getTypeClass() != TypeClass_INTERFACE) {
         throw RuntimeException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "Interface base is not an interface type")),
+                    "Interface base is not an interface type"),
             static_cast< OWeakObject * >(this));
     }
 }
@@ -537,8 +536,7 @@ InterfaceTypeDescriptionImpl::getBaseTypes() throw (RuntimeException) {
             } catch (const NoSuchElementException & e) {
                 throw RuntimeException(
                     (OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.container.NoSuchElementException: "))
+                            "com.sun.star.container.NoSuchElementException: ")
                      + e.Message),
                     static_cast< OWeakObject * >(this));
             }
@@ -565,8 +563,7 @@ InterfaceTypeDescriptionImpl::getOptionalBaseTypes() throw (RuntimeException) {
             } catch (const NoSuchElementException & e) {
                 throw RuntimeException(
                     (OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.container.NoSuchElementException: "))
+                            "com.sun.star.container.NoSuchElementException: ")
                      + e.Message),
                     static_cast< OWeakObject * >(this));
             }

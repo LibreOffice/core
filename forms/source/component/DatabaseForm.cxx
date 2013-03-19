@@ -404,7 +404,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
         catch(const Exception&)
         {
             throw WrappedTargetException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not clone the given database form." ) ),
+                ::rtl::OUString( "Could not clone the given database form." ),
                 *const_cast< ODatabaseForm* >( &_cloneSource ),
                 ::cppu::getCaughtException()
             );
@@ -2165,7 +2165,7 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
     if (xDisp.is())
     {
         Sequence<PropertyValue> aArgs(2);
-        aArgs.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer") );
+        aArgs.getArray()[0].Name = ::rtl::OUString("Referer");
         aArgs.getArray()[0].Value <<= aReferer;
 
         // build a sequence from the to-be-submitted string
@@ -2174,7 +2174,7 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
         Sequence< sal_Int8 > aPostData((const sal_Int8*)a8BitData.getStr(), a8BitData.getLength());
         Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
-        aArgs.getArray()[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PostData") );
+        aArgs.getArray()[1].Name = ::rtl::OUString("PostData");
         aArgs.getArray()[1].Value <<= xPostData;
 
         xDisp->dispatch(aURL, aArgs);
@@ -2259,7 +2259,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             if (xDisp.is())
             {
                 Sequence<PropertyValue> aArgs(1);
-                aArgs.getArray()->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer") );
+                aArgs.getArray()->Name = ::rtl::OUString("Referer");
                 aArgs.getArray()->Value <<= aReferer;
                 xDisp->dispatch(aURL, aArgs);
             }
@@ -2292,15 +2292,15 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
                 return;
 
             Sequence<PropertyValue> aArgs(3);
-            aArgs.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer") );
+            aArgs.getArray()[0].Name = ::rtl::OUString("Referer");
             aArgs.getArray()[0].Value <<= aReferer;
-            aArgs.getArray()[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType") );
+            aArgs.getArray()[1].Name = ::rtl::OUString("ContentType");
             aArgs.getArray()[1].Value <<= aContentType;
 
             // build a sequence from the to-be-submitted string
             Reference< XInputStream > xPostData = new SequenceInputStream(aData);
 
-            aArgs.getArray()[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PostData") );
+            aArgs.getArray()[2].Name = ::rtl::OUString("PostData");
             aArgs.getArray()[2].Value <<= xPostData;
 
             xDisp->dispatch(aURL, aArgs);
@@ -3781,7 +3781,7 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt ) th
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms.ODatabaseForm" ) );
+    return ::rtl::OUString( "com.sun.star.comp.forms.ODatabaseForm" );
 }
 
 //------------------------------------------------------------------------------
@@ -3802,7 +3802,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Stati
     ::rtl::OUString* pServices = aServices.getArray();
 
     *pServices++ = FRM_SUN_FORMCOMPONENT;
-    *pServices++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.FormComponents") );
+    *pServices++ = ::rtl::OUString("com.sun.star.form.FormComponents");
     *pServices++ = FRM_SUN_COMPONENT_FORM;
     *pServices++ = FRM_SUN_COMPONENT_HTMLFORM;
     *pServices++ = FRM_SUN_COMPONENT_DATAFORM;

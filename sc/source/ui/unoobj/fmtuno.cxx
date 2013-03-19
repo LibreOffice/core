@@ -383,7 +383,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::creat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableConditionalEntryEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.TableConditionalEntryEnumeration"));
 }
 
 // XIndexAccess

@@ -44,13 +44,13 @@ namespace frm
             switch ( _eFunc )
             {
             case OClipboardDispatcher::eCut:
-                aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Cut" ) );
+                aURL.Complete = ::rtl::OUString( ".uno:Cut" );
                 break;
             case OClipboardDispatcher::eCopy:
-                aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Copy" ) );
+                aURL.Complete = ::rtl::OUString( ".uno:Copy" );
                 break;
             case OClipboardDispatcher::ePaste:
-                aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Paste" ) );
+                aURL.Complete = ::rtl::OUString( ".uno:Paste" );
                 break;
             }
             return aURL;

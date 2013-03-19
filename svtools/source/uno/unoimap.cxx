@@ -401,18 +401,18 @@ Sequence< ::rtl::OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNam
     throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapObject" ));
+    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.image.ImageMapObject" );
     switch( mnType )
     {
     case IMAP_OBJ_POLYGON:
     default:
-        aSNS.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapPolygonObject" ));
+        aSNS.getArray()[1] = ::rtl::OUString("com.sun.star.image.ImageMapPolygonObject" );
         break;
     case IMAP_OBJ_RECTANGLE:
-        aSNS.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapRectangleObject" ));
+        aSNS.getArray()[1] = ::rtl::OUString("com.sun.star.image.ImageMapRectangleObject" );
         break;
     case IMAP_OBJ_CIRCLE:
-        aSNS.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapCircleObject" ));
+        aSNS.getArray()[1] = ::rtl::OUString("com.sun.star.image.ImageMapCircleObject" );
         break;
     }
     return aSNS;
@@ -424,11 +424,11 @@ Sequence< ::rtl::OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNam
     {
     case IMAP_OBJ_POLYGON:
     default:
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svt.ImageMapPolygonObject") );
+        return ::rtl::OUString("org.openoffice.comp.svt.ImageMapPolygonObject");
     case IMAP_OBJ_CIRCLE:
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svt.ImageMapCircleObject") );
+        return ::rtl::OUString("org.openoffice.comp.svt.ImageMapCircleObject");
     case IMAP_OBJ_RECTANGLE:
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svt.ImageMapRectangleObject") );
+        return ::rtl::OUString("org.openoffice.comp.svt.ImageMapRectangleObject");
     }
 }
 
@@ -721,7 +721,7 @@ sal_Bool SAL_CALL SvUnoImageMap::hasElements(  ) throw(RuntimeException)
 ::rtl::OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
     throw(RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.svt.SvUnoImageMap" ) );
+    return ::rtl::OUString( "org.openoffice.comp.svt.SvUnoImageMap" );
 }
 
 sal_Bool SAL_CALL SvUnoImageMap::supportsService( const ::rtl::OUString& ServiceName )

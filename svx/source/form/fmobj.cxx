@@ -359,7 +359,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
     Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
     m_xEnvironmentHistory = Reference< XIndexContainer >(
-        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.Forms")) ),
+        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.form.Forms") ),
         UNO_QUERY);
     DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
 
@@ -564,7 +564,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 {
                     // create and insert (into the destination) a copy of the form
                     xCurrentDestForm.set(
-                        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.DataForm" )) ),
+                        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString( "com.sun.star.form.component.DataForm" ) ),
                         UNO_QUERY_THROW );
                     ::comphelper::copyProperties( xCurrentSourceForm, xCurrentDestForm );
 

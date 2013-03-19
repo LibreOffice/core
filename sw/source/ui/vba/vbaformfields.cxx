@@ -177,7 +177,7 @@ SwVbaFormFields::createCollectionObject( const css::uno::Any& aSource )
 rtl::OUString
 SwVbaFormFields::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFormFields"));
+    return rtl::OUString("SwVbaFormFields");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -187,7 +187,7 @@ SwVbaFormFields::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.FormFields") );
+        sNames[0] = rtl::OUString("ooo.vba.word.FormFields");
     }
     return sNames;
 }

@@ -937,7 +937,7 @@ void Test_Impl::testConstructorsService(
     Sequence< double > arg23(1); arg23[0] = 0.456;
     Sequence< sal_Unicode > arg24(1); arg24[0] = 'X';
     Sequence< OUString > arg25(1);
-    arg25[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("test"));
+    arg25[0] = OUString("test");
     Sequence< Type > arg26(1); arg26[0] = UnoType< Any >::get();
     Sequence< Any > arg27(1); arg27[0] <<= true;
     Sequence< Sequence< sal_Bool > > arg28(1);
@@ -961,7 +961,7 @@ void Test_Impl::testConstructorsService(
         0.123f,
         0.456,
         'X',
-        OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
+        OUString("test"),
         UnoType< Any >::get(),
         makeAny(true),
         arg14,
@@ -1003,7 +1003,7 @@ void Test_Impl::testConstructorsService(
     args[9] <<= 0.456;
     sal_Unicode arg10c = 'X';
     args[10].setValue(&arg10c, UnoType< UnoCharType >::get());
-    args[11] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("test"));
+    args[11] <<= OUString("test");
     args[12] <<= UnoType< Any >::get();
     args[13] <<= true;
     args[14] <<= arg14;
@@ -1053,10 +1053,10 @@ void Test_Impl::testConstructorsService(
     Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > > argSeq8(1);
     argSeq8[0] = TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > (
         TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString>(
-            TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+            TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString("test")));
     Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > argSeq9(1);
     argSeq9[0] = TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("test")), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
+        OUString("test"), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
                      'X', TestPolyStruct<Any>(Any(true))));
     Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> > > argSeq10(1);
     argSeq10[0] = TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> >(
@@ -1072,11 +1072,11 @@ void Test_Impl::testConstructorsService(
     argSeq13[0] = Sequence<TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> > >(1);
     argSeq13[0][0] = TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString> >(
         TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>,OUString>(
-            TestPolyStruct2<sal_Unicode,Any>('X', Any(true)), OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+            TestPolyStruct2<sal_Unicode,Any>('X', Any(true)), OUString("test")));
     Sequence<Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > > > argSeq14(1);
     argSeq14[0] = Sequence<TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > > >(1);
     argSeq14[0][0] = TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> > >(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("test")), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
+        OUString("test"), TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >(
             'X', TestPolyStruct<Any>(Any(true))));
     Sequence<Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> > > > argSeq15(1);
     argSeq15[0] = Sequence<TestPolyStruct2<TestPolyStruct2<sal_Unicode,Any>, TestPolyStruct<sal_Unicode> > >(1);
@@ -1093,7 +1093,7 @@ void Test_Impl::testConstructorsService(
         TestPolyStruct<sal_Int32>(SAL_MIN_INT32),
         TestPolyStruct<sal_Int64>(SAL_MIN_INT64),
         TestPolyStruct<sal_Unicode>('X'),
-        TestPolyStruct<OUString>(OUString(RTL_CONSTASCII_USTRINGPARAM("test"))),
+        TestPolyStruct<OUString>(OUString("test")),
         TestPolyStruct<float>(0.123f),
         TestPolyStruct<double>(0.456),
         TestPolyStruct<Reference<XInterface> >(static_cast<XBridgeTest2*>(this)),
@@ -1103,9 +1103,9 @@ void Test_Impl::testConstructorsService(
             TestPolyStruct2<sal_Unicode, Any>('X', Any(true))),
         TestPolyStruct<TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString> > (
             TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>,OUString>(
-                TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString(RTL_CONSTASCII_USTRINGPARAM("test")))),
+                TestPolyStruct2<sal_Unicode, Any>('X', Any(true)), OUString("test"))),
         TestPolyStruct2<OUString, TestPolyStruct2<sal_Unicode,TestPolyStruct<Any> > >(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
+            OUString("test"),
             TestPolyStruct2<sal_Unicode, TestPolyStruct<Any> >('X', TestPolyStruct<Any>(Any(true)))),
         TestPolyStruct2<TestPolyStruct2<sal_Unicode, Any>, TestPolyStruct<sal_Unicode> >(
             TestPolyStruct2<sal_Unicode, Any>('X', Any(true)),

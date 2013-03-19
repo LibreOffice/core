@@ -246,7 +246,7 @@ void Test::test_Uri() {
 
     // Check UTF-8 handling:
 
-    aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%E0%83%BF"));
+    aText1 = rtl::OUString("%E0%83%BF");
         // \U+00FF encoded with three instead of two bytes
     aText2 = aText1;
     CPPUNIT_ASSERT_MESSAGE(
@@ -256,7 +256,7 @@ void Test::test_Uri() {
             RTL_TEXTENCODING_UTF8)
          == aText2));
 
-    aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%EF%BF%BF"));
+    aText1 = rtl::OUString("%EF%BF%BF");
         // \U+FFFF is no legal character
     aText2 = aText1;
     CPPUNIT_ASSERT_MESSAGE(
@@ -268,7 +268,7 @@ void Test::test_Uri() {
 
     // Check IURI handling:
 
-    aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%30%C3%BF"));
+    aText1 = rtl::OUString("%30%C3%BF");
     aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("%30"));
     aBuffer.append(static_cast< sal_Unicode >(0x00FF));
     aText2 = aBuffer.makeStringAndClear();
@@ -279,8 +279,8 @@ void Test::test_Uri() {
 
     // Check modified rtl_UriCharClassUnoParamValue (removed '[' and ']'):
 
-    aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[]%5B%5D"));
-    aText2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%5B%5D%5B%5D"));
+    aText1 = rtl::OUString("[]%5B%5D");
+    aText2 = rtl::OUString("%5B%5D%5B%5D");
     CPPUNIT_ASSERT_MESSAGE(
         "failure 19",
         (rtl::Uri::encode(
@@ -381,7 +381,7 @@ void Test::test_Uri() {
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x045F, 0 };
         aText1 = rtl::OUString(aText1U);
-        aText2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%20!%A1%FF"));
+        aText2 = rtl::OUString("%20!%A1%FF");
         CPPUNIT_ASSERT_MESSAGE(
             "failure 20",
             (rtl::Uri::encode(
@@ -415,8 +415,7 @@ void Test::test_Uri() {
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x028A, 0xD849, 0xDD13, 0 };
         aText1 = rtl::OUString(aText1U);
-        aText2 = rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("%20!%81%30%B1%33%95%39%C5%37"));
+        aText2 = rtl::OUString("%20!%81%30%B1%33%95%39%C5%37");
         CPPUNIT_ASSERT_MESSAGE(
             "failure 22",
             (rtl::Uri::encode(
@@ -444,7 +443,7 @@ void Test::test_Uri() {
              == aText2));
     }
     {
-        aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%20%C4%80%FF"));
+        aText1 = rtl::OUString("%20%C4%80%FF");
         aText2 = rtl::OUString();
         CPPUNIT_ASSERT_MESSAGE(
             "failure 24",
@@ -453,7 +452,7 @@ void Test::test_Uri() {
              == aText2));
     }
     {
-        aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%81 "));
+        aText1 = rtl::OUString("%81 ");
         aText2 = rtl::OUString();
         CPPUNIT_ASSERT_MESSAGE(
             "failure 25",
@@ -462,7 +461,7 @@ void Test::test_Uri() {
              == aText2));
     }
     {
-        aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%81%20"));
+        aText1 = rtl::OUString("%81%20");
         aText2 = rtl::OUString();
         CPPUNIT_ASSERT_MESSAGE(
             "failure 26",
@@ -471,7 +470,7 @@ void Test::test_Uri() {
              == aText2));
     }
     {
-        aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%81%30%B1%33"));
+        aText1 = rtl::OUString("%81%30%B1%33");
         sal_Unicode const aText2U[] = { 0x028A, 0 };
         aText2 = rtl::OUString(aText2U);
         CPPUNIT_ASSERT_MESSAGE(
@@ -481,7 +480,7 @@ void Test::test_Uri() {
              == aText2));
     }
     {
-        aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%810%B13"));
+        aText1 = rtl::OUString("%810%B13");
         sal_Unicode const aText2U[] = { 0x028A, 0 };
         aText2 = rtl::OUString(aText2U);
         CPPUNIT_ASSERT_MESSAGE(
@@ -494,8 +493,8 @@ void Test::test_Uri() {
     // Check rtl_UriEncodeStrictKeepEscapes mode:
 
     {
-        aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%%ea%c3%aa"));
-        aText2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%25%EA%C3%AA"));
+        aText1 = rtl::OUString("%%ea%c3%aa");
+        aText2 = rtl::OUString("%25%EA%C3%AA");
         CPPUNIT_ASSERT_MESSAGE(
             "failure 29",
             (rtl::Uri::encode(
@@ -506,7 +505,7 @@ void Test::test_Uri() {
     {
         sal_Unicode const aText1U[] = { 0x00EA, 0 };
         aText1 = rtl::OUString(aText1U);
-        aText2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%C3%AA"));
+        aText2 = rtl::OUString("%C3%AA");
         CPPUNIT_ASSERT_MESSAGE(
             "failure 30",
             (rtl::Uri::encode(

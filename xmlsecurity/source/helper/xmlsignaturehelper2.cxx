@@ -87,7 +87,7 @@ void SAL_CALL ImplXMLSignatureListener::endDocument(  )
 void SAL_CALL ImplXMLSignatureListener::startElement( const rtl::OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
-    if ( aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Signature")) )
+    if ( aName == rtl::OUString("Signature") )
     {
             maStartVerifySignatureElementListener.Call( (void*)&xAttribs );
     }
@@ -195,8 +195,8 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
         const ::rtl::OUString sName = ::rtl::Uri::decode(
             rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (sName.isEmpty() && !rURI.isEmpty())
-            throw uno::Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "Could not decode URI for stream element.")), 0);
+            throw uno::Exception(::rtl::OUString(
+            "Could not decode URI for stream element."), 0);
 
         uno::Reference< io::XStream > xStream;
         xStream = rxStore->cloneStreamElement( sName );
@@ -210,8 +210,8 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
             rURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (aStoreName.isEmpty() && !rURI.isEmpty())
             throw uno::Exception(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "Could not decode URI for stream element.")), 0);
+            ::rtl::OUString(
+            "Could not decode URI for stream element."), 0);
 
         rtl::OUString aElement = rURI.copy( nSepPos+1 );
         uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );

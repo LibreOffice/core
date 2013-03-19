@@ -1288,7 +1288,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
             {
                 ScRangeList aChangeRanges;
                 aChangeRanges.Append( aRange );
-                pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+                pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
             }
         }
     }
@@ -1349,7 +1349,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                     break;
             }
             aChangeRanges.Append( aChangeRange );
-            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+            pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
         }
     }
 }

@@ -458,7 +458,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetLinksEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SheetLinksEnumeration"));
 }
 
 // XIndexAccess
@@ -993,7 +993,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAreaLinksObj::createEnumerati
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.CellAreaLinksEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.CellAreaLinksEnumeration"));
 }
 
 // XIndexAccess
@@ -1209,8 +1209,8 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
 
     if ( !bSuccess )
     {
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "ScDDELinkObj::getResults: failed to get results!" ) ),
+        throw uno::RuntimeException( ::rtl::OUString(
+            "ScDDELinkObj::getResults: failed to get results!" ),
             uno::Reference< uno::XInterface >() );
     }
 
@@ -1241,8 +1241,8 @@ void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >&
 
     if ( !bSuccess )
     {
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "ScDDELinkObj::setResults: failed to set results!" ) ),
+        throw uno::RuntimeException( ::rtl::OUString(
+            "ScDDELinkObj::setResults: failed to set results!" ),
             uno::Reference< uno::XInterface >() );
     }
 }
@@ -1319,7 +1319,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDDELinksObj::createEnumeratio
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DDELinksEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.DDELinksEnumeration"));
 }
 
 // XIndexAccess
@@ -1461,8 +1461,8 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
 
     if ( !xLink.is() )
     {
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "ScDDELinksObj::addDDELink: cannot add DDE link!" ) ),
+        throw uno::RuntimeException( ::rtl::OUString(
+            "ScDDELinksObj::addDDELink: cannot add DDE link!" ),
             uno::Reference< uno::XInterface >() );
     }
 
@@ -1680,8 +1680,8 @@ Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createEnumer
 {
     SolarMutexGuard aGuard;
     Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.sheet.ExternalDocLink"))));
+        new ScIndexEnumeration(this, OUString(
+            "com.sun.star.sheet.ExternalDocLink")));
     return aRef;
 }
 
@@ -1796,8 +1796,8 @@ Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::createEnume
 {
     SolarMutexGuard aGuard;
     Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.sheet.ExternalDocLinks"))));
+        new ScIndexEnumeration(this, OUString(
+            "com.sun.star.sheet.ExternalDocLinks")));
     return aRef;
 }
 

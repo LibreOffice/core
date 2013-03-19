@@ -37,14 +37,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SwTextDocument_getSupportedServiceName
     // resolved by rtti!
     uno::Sequence< ::rtl::OUString > aRet ( 1 );
     ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.TextDocument" ) );
+    pArray[0] = ::rtl::OUString( "com.sun.star.text.TextDocument" );
 
     return aRet;
 }
 
 ::rtl::OUString SAL_CALL SwTextDocument_getImplementationName() throw()
 {
-    return ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.TextDocument" ) );
+    return ::rtl::OUString( "com.sun.star.comp.Writer.TextDocument" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
@@ -66,14 +66,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SwWebDocument_getSupportedServiceNames
     // resolved by rtti!
     uno::Sequence< ::rtl::OUString > aRet ( 1 );
     ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.WebDocument" ) );
+    pArray[0] = ::rtl::OUString( "com.sun.star.text.WebDocument" );
 
     return aRet;
 }
 
 ::rtl::OUString SAL_CALL SwWebDocument_getImplementationName() throw()
 {
-    return ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WebDocument" ) );
+    return ::rtl::OUString( "com.sun.star.comp.Writer.WebDocument" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
@@ -93,14 +93,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNa
 {
     uno::Sequence< ::rtl::OUString > aRet ( 1 );
     ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.GlobalDocument" ) );
+    pArray[0] = ::rtl::OUString( "com.sun.star.text.GlobalDocument" );
 
     return aRet;
 }
 
 ::rtl::OUString SAL_CALL SwGlobalDocument_getImplementationName() throw()
 {
-    return ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.GlobalDocument" ) );
+    return ::rtl::OUString( "com.sun.star.comp.Writer.GlobalDocument" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance(

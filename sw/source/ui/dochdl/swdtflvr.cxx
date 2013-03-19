@@ -708,8 +708,8 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         xWrt->SetShowProgress( sal_False );
 
 #if defined(DEBUGPASTE)
-        SvFileStream aPasteDebug(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "PASTEBUFFER.debug")), STREAM_WRITE|STREAM_TRUNC);
+        SvFileStream aPasteDebug(rtl::OUString(
+            "PASTEBUFFER.debug"), STREAM_WRITE|STREAM_TRUNC);
         SwWriter aDbgWrt( aPasteDebug, *pDoc );
         aDbgWrt.Write( xWrt );
 #endif
@@ -1735,13 +1735,12 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                     {
                         xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
                         uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator")) ),
+                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
                             uno::UNO_QUERY_THROW );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,
-                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DummyName" ) ),
+                                                            ::rtl::OUString( "DummyName" ),
                                                             uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information

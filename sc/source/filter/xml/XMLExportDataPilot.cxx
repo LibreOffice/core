@@ -76,27 +76,27 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(
             if (bUseRegularExpressions)
                 return GetXMLToken(XML_MATCH);
             else
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                return rtl::OUString("=");
         }
         case SC_NOT_EQUAL :
         {
             if (bUseRegularExpressions)
                 return GetXMLToken(XML_NOMATCH);
             else
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
+                return rtl::OUString("!=");
         }
         case SC_BOTPERC :
             return GetXMLToken(XML_BOTTOM_PERCENT);
         case SC_BOTVAL :
             return GetXMLToken(XML_BOTTOM_VALUES);
         case SC_GREATER :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+            return rtl::OUString(">");
         case SC_GREATER_EQUAL :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+            return rtl::OUString(">=");
         case SC_LESS :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+            return rtl::OUString("<");
         case SC_LESS_EQUAL :
-            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+            return rtl::OUString("<=");
         case SC_TOPPERC :
             return GetXMLToken(XML_TOP_PERCENT);
         case SC_TOPVAL :
@@ -104,7 +104,7 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(
         default:
             OSL_FAIL("This FilterOperator is not supported.");
     }
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+    return rtl::OUString("=");
 }
 
 void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions)

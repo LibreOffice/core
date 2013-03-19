@@ -182,7 +182,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                     if ( xPropSet.is() )
                     {
                         aValue = xPropSet->getPropertyValue(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LockCount" )) );
+                            ::rtl::OUString( "LockCount" ) );
                         aValue >>= m_pWrkWin->m_nLock;
                     }
                 }

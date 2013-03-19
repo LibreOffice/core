@@ -556,7 +556,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             for (; itr != itrEnd; ++itr)
                 aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
 
-            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+            pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
         }
 
         if ( bRecord )
@@ -744,7 +744,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 {
                     aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
                 }
-                pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+                pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
             }
 
             aModificator.SetDocumentModified();
@@ -1295,7 +1295,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
                 }
             }
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "attribute" ) ), aChangeRanges, aProperties );
+        pModelObj->NotifyChanges( ::rtl::OUString( "attribute" ), aChangeRanges, aProperties );
     }
 
     StartFormatArea();
@@ -1518,8 +1518,8 @@ sal_Bool ScViewFunc::InsertCells( InsCellCmd eCmd, sal_Bool bRecord, sal_Bool bP
                     ScRangeList aChangeRanges;
                     aChangeRanges.Append( aRange );
                     ::rtl::OUString aOperation = ( eCmd == INS_INSROWS ?
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-rows" ) ) :
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-columns" ) ) );
+                        ::rtl::OUString( "insert-rows" ) :
+                        ::rtl::OUString( "insert-columns" ) );
                     pModelObj->NotifyChanges( aOperation, aChangeRanges );
                 }
             }
@@ -1579,8 +1579,8 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, sal_Bool bRecord )
                 ScRangeList aChangeRanges;
                 aChangeRanges.Append( aRange );
                 ::rtl::OUString aOperation = ( eCmd == DEL_DELROWS ?
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-rows" ) ) :
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-columns" ) ) );
+                    ::rtl::OUString( "delete-rows" ) :
+                    ::rtl::OUString( "delete-columns" ) );
                 pModelObj->NotifyChanges( aOperation, aChangeRanges );
             }
         }
@@ -1951,7 +1951,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, sal_Bool bRecord )
         {
             aFuncMark.FillRangeListWithMarks( &aChangeRanges, false );
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
     }
 
     aModificator.SetDocumentModified();
@@ -2255,7 +2255,7 @@ void ScViewFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW
                     }
                 }
             }
-            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "column-resize" ) ), aChangeRanges );
+            pModelObj->NotifyChanges( ::rtl::OUString( "column-resize" ), aChangeRanges );
         }
     }
 }

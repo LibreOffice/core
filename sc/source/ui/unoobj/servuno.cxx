@@ -86,7 +86,7 @@ public:
     {
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("")), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString(""), uno::Reference< uno::XInterface >() );
 
         uno::Sequence< uno::Any > aArgs(2);
         // access the application object ( parent for workbook )
@@ -632,7 +632,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 {
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[ 0 ] <<= pDocShell->GetModel();
-                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( "ooo.vba.excel.Globals" ), aArgs );
                     pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
                     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
                     if ( pAppMgr )

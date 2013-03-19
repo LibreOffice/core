@@ -81,7 +81,7 @@ SwVbaFrames::createCollectionObject( const css::uno::Any& aSource )
 rtl::OUString
 SwVbaFrames::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFrames"));
+    return rtl::OUString("SwVbaFrames");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -91,7 +91,7 @@ SwVbaFrames::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Frames") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Frames");
     }
     return sNames;
 }

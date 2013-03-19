@@ -1964,7 +1964,7 @@ void SfxMedium::Transfer_Impl()
             // LongName wasn't defined anywhere, only used here... get the Title instead
             // as it's less probably empty
             rtl::OUString aFileName;
-            Any aAny = aDestContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title" )) );
+            Any aAny = aDestContent.getPropertyValue( ::rtl::OUString("Title" ) );
             aAny >>= aFileName;
             if ( aFileName.isEmpty() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );

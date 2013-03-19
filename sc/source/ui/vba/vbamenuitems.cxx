@@ -135,7 +135,7 @@ uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const rtl::OUSt
 rtl::OUString
 ScVbaMenuItems::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuItems"));
+    return rtl::OUString("ScVbaMenuItems");
 }
 
 uno::Sequence<rtl::OUString>
@@ -145,7 +145,7 @@ ScVbaMenuItems::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.MenuItems" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.MenuItems" );
     }
     return aServiceNames;
 }

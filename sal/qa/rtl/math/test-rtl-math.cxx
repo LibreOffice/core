@@ -54,7 +54,7 @@ public:
         rtl_math_ConversionStatus status;
         sal_Int32 end;
         double res = rtl::math::stringToDouble(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("  +1.E01foo")),
+            rtl::OUString("  +1.E01foo"),
             sal_Unicode('.'), sal_Unicode(','), &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_CONSTASCII_LENGTH("  +1.E01")), end);
@@ -65,7 +65,7 @@ public:
         rtl_math_ConversionStatus status;
         sal_Int32 end;
         double res = rtl::math::stringToDouble(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("  +Efoo")),
+            rtl::OUString("  +Efoo"),
             sal_Unicode('.'), sal_Unicode(','), &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);

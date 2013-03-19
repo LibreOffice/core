@@ -78,8 +78,7 @@ bool ContentProvider::getProperty(
             // Mandatory UCB properties.
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                    rtl::OUString( "ContentType" ),
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -87,8 +86,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                    rtl::OUString( "IsDocument" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
@@ -96,7 +94,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                    rtl::OUString( "IsFolder" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
@@ -104,7 +102,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                    rtl::OUString( "Title" ),
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND ) );
@@ -113,8 +111,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
+                    rtl::OUString( "DateCreated" ),
                     -1,
                     getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -122,8 +119,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
+                    rtl::OUString( "DateModified" ),
                     -1,
                     getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -131,7 +127,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                    rtl::OUString( "MediaType" ),
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -139,7 +135,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
+                    rtl::OUString( "Size" ),
                     -1,
                     getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -147,7 +143,7 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ),
+                    rtl::OUString( "BaseURI" ),
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -155,8 +151,8 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "CreatableContentsInfo" ) ),
+                    rtl::OUString(
+                        "CreatableContentsInfo" ),
                     -1,
                     getCppuType( static_cast<
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
@@ -431,21 +427,21 @@ uno::Sequence< beans::Property > Content::getProperties(
     // Add mandatory properties.
     if ( !bHasContentType )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ) );
+            rtl::OUString( "ContentType" ) );
 
     if ( !bHasIsDocument )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ) );
+            rtl::OUString( "IsDocument" ) );
 
     if ( !bHasIsFolder )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ) );
+            rtl::OUString( "IsFolder" ) );
 
     if ( !bHasTitle )
     {
         // Always present since it can be calculated from content's URI.
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) );
+            rtl::OUString( "Title" ) );
     }
 
     // Add optional properties.
@@ -454,29 +450,29 @@ uno::Sequence< beans::Property > Content::getProperties(
     {
         // Always present since it can be calculated from content's URI.
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ) );
+            rtl::OUString( "BaseURI" ) );
     }
 
     if ( !bHasDateCreated && bHasCreationDate )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ) );
+            rtl::OUString( "DateCreated" ) );
 
     if ( !bHasDateModified && bHasGetLastModified )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) );
+            rtl::OUString( "DateModified" ) );
 
     if ( !bHasMediaType && bHasGetContentType )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) );
+            rtl::OUString( "MediaType" ) );
 
     if ( !bHasSize && bHasGetContentLength )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) );
+            rtl::OUString( "Size" ) );
 
     if ( !bHasCreatableInfos )
         aPropSet.insert(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "CreatableContentsInfo" ) ) );
+            rtl::OUString(
+                "CreatableContentsInfo" ) );
 
     // Add cached properties, if present and still missing.
     if ( xCachedProps.get() )
@@ -532,27 +528,23 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     aCmdInfo[ 0 ] =
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                rtl::OUString( "getCommandInfo" ),
                 -1,
                 getCppuVoidType() );
     aCmdInfo[ 1 ] =
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                rtl::OUString( "getPropertySetInfo" ),
                 -1,
                 getCppuVoidType() );
     aCmdInfo[ 2 ] =
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                rtl::OUString( "getPropertyValues" ),
                 -1,
                 getCppuType( static_cast<
                                 uno::Sequence< beans::Property > * >( 0 ) ) );
     aCmdInfo[ 3 ] =
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                rtl::OUString( "setPropertyValues" ),
                 -1,
                 getCppuType( static_cast<
                     uno::Sequence< beans::PropertyValue > * >( 0 ) ) );
@@ -563,18 +555,18 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     aCmdInfo[ 4 ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                rtl::OUString( "delete" ),
                 -1,
                 getCppuBooleanType() );
     aCmdInfo[ 5 ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                rtl::OUString( "insert" ),
                 -1,
                 getCppuType( static_cast<
                     ucb::InsertCommandArgument * >( 0 ) ) );
     aCmdInfo[ 6 ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                rtl::OUString( "open" ),
                 -1,
                 getCppuType( static_cast<
                     ucb::OpenCommandArgument2 * >( 0 ) ) );
@@ -585,7 +577,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     aCmdInfo[ 7 ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "post" ) ),
+                rtl::OUString( "post" ),
                 -1,
                 getCppuType( static_cast<
                     ucb::PostCommandArgument2 * >( 0 ) ) );
@@ -618,14 +610,14 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+                rtl::OUString( "transfer" ),
                 -1,
                 getCppuType( static_cast< ucb::TransferInfo * >( 0 ) ) );
         nPos++;
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "createNewContent" ) ),
+                rtl::OUString(
+                    "createNewContent" ),
                 -1,
                 getCppuType( static_cast< ucb::ContentInfo * >( 0 ) ) );
         nPos++;
@@ -639,13 +631,13 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     {
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lock" ) ),
+                rtl::OUString( "lock" ),
                 -1,
                 getCppuVoidType() );
         nPos++;
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unlock" ) ),
+                rtl::OUString( "unlock" ),
                 -1,
                 getCppuVoidType() );
         nPos++;

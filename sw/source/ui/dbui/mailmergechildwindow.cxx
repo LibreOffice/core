@@ -230,7 +230,7 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
             if( xTransferableProperties.is() )
             {
                 ::rtl::OUString sURL;
-                xTransferableProperties->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) ) >>= sURL;
+                xTransferableProperties->getPropertyValue( ::rtl::OUString("URL") ) >>= sURL;
                 if(!sURL.isEmpty())
                     SWUnoHelper::UCB_DeleteFile( sURL );
             }

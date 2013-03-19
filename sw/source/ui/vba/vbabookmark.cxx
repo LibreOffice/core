@@ -46,7 +46,7 @@ SwVbaBookmark::~SwVbaBookmark()
 void SwVbaBookmark::checkVality() throw ( uno::RuntimeException )
 {
     if( !mbValid )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The bookmark is not valid" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("The bookmark is not valid" ), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException )
@@ -86,7 +86,7 @@ uno::Any SAL_CALL SwVbaBookmark::Range() throw ( uno::RuntimeException )
 rtl::OUString
 SwVbaBookmark::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBookmark"));
+    return rtl::OUString("SwVbaBookmark");
 }
 
 uno::Sequence< rtl::OUString >
@@ -96,7 +96,7 @@ SwVbaBookmark::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Bookmark" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Bookmark" );
     }
     return aServiceNames;
 }

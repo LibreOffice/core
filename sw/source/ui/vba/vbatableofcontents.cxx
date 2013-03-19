@@ -38,13 +38,13 @@ SwVbaTableOfContents::~SwVbaTableOfContents()
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getLowerHeadingLevel() throw (uno::RuntimeException)
 {
     sal_Int16 nLevel = 0;
-    mxTocProps->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Level") ) ) >>= nLevel;
+    mxTocProps->getPropertyValue(rtl::OUString("Level") ) >>= nLevel;
     return nLevel;
 }
 
 void SAL_CALL SwVbaTableOfContents::setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) throw (uno::RuntimeException)
 {
-    mxTocProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Level") ), uno::makeAny( sal_Int8( _lowerheadinglevel ) ) );
+    mxTocProps->setPropertyValue( rtl::OUString("Level"), uno::makeAny( sal_Int8( _lowerheadinglevel ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getTabLeader() throw (uno::RuntimeException)
@@ -61,25 +61,25 @@ void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ ) t
 ::sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields() throw (css::uno::RuntimeException)
 {
     sal_Bool bUseFields = sal_False;
-    mxTocProps->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks") ) ) >>= bUseFields;
+    mxTocProps->getPropertyValue(rtl::OUString("CreateFromMarks") ) >>= bUseFields;
     return bUseFields;
 }
 
 void SAL_CALL SwVbaTableOfContents::setUseFields( ::sal_Bool _useFields ) throw (css::uno::RuntimeException)
 {
-    mxTocProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks") ), uno::makeAny( _useFields ) );
+    mxTocProps->setPropertyValue( rtl::OUString("CreateFromMarks"), uno::makeAny( _useFields ) );
 }
 
 ::sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels() throw (css::uno::RuntimeException)
 {
     sal_Bool bUseOutlineLevels = sal_False;
-    mxTocProps->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline") ) ) >>= bUseOutlineLevels;
+    mxTocProps->getPropertyValue(rtl::OUString("CreateFromOutline") ) >>= bUseOutlineLevels;
     return bUseOutlineLevels;
 }
 
 void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( ::sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException)
 {
-    mxTocProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline") ), uno::makeAny( _useOutlineLevels ) );
+    mxTocProps->setPropertyValue( rtl::OUString("CreateFromOutline"), uno::makeAny( _useOutlineLevels ) );
 }
 
 void SAL_CALL SwVbaTableOfContents::Delete(  ) throw (uno::RuntimeException)
@@ -96,7 +96,7 @@ void SAL_CALL SwVbaTableOfContents::Update(  ) throw (uno::RuntimeException)
 rtl::OUString
 SwVbaTableOfContents::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTableOfContents"));
+    return rtl::OUString("SwVbaTableOfContents");
 }
 
 uno::Sequence< rtl::OUString >
@@ -106,7 +106,7 @@ SwVbaTableOfContents::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.TableOfContents" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.TableOfContents" );
     }
     return aServiceNames;
 }

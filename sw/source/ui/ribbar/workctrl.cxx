@@ -500,11 +500,11 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
         SfxBoolItem aNext(FN_SCROLL_NEXT_PREV, NID_NEXT == nSet);
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollNextPrev" ));
+        aArgs[0].Name = rtl::OUString( "ScrollNextPrev" );
         aNext.QueryValue( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ScrollNextPrev" )),
+                                     rtl::OUString( ".uno:ScrollNextPrev" ),
                                      aArgs );
     }
     return 0;
@@ -681,12 +681,12 @@ void    SwZoomBox_Impl::Select()
         {
             Any a;
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreviewZoom" ));
+            aArgs[0].Name = rtl::OUString( "PreviewZoom" );
             aItem.QueryValue( a );
             aArgs[0].Value = a;
             SfxToolBoxControl::Dispatch(
                 m_xDispatchProvider,
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PreviewZoom" )),
+                rtl::OUString( ".uno:PreviewZoom" ),
                 aArgs );
         }
 

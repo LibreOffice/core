@@ -996,7 +996,7 @@ Any ORowSetValue::makeAny() const
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 {
-                    ::rtl::OUStringBuffer sVal(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0x")));
+                    ::rtl::OUStringBuffer sVal(::rtl::OUString("0x"));
                     Sequence<sal_Int8> aSeq(getSequence());
                     const sal_Int8* pBegin  = aSeq.getConstArray();
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();

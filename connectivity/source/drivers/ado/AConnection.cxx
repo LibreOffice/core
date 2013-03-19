@@ -138,8 +138,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             WpADOProperties aProps = m_pAdoConnection->get_Properties();
             if(aProps.IsValid())
             {
-                OTools::putValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:ODBC Parsing")),sal_True);
-                OLEVariant aVar(OTools::getValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:Engine Type"))));
+                OTools::putValue(aProps,::rtl::OUString("Jet OLEDB:ODBC Parsing"),sal_True);
+                OLEVariant aVar(OTools::getValue(aProps,::rtl::OUString("Jet OLEDB:Engine Type")));
                 if(!aVar.isNull() && !aVar.isEmpty())
                     m_nEngineType = aVar;
             }
@@ -208,7 +208,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     WpADOProperties aProps = m_pAdoConnection->get_Properties();
     if(aProps.IsValid())
     {
-        OTools::putValue(aProps,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Jet OLEDB:ODBC Parsing")),sal_True);
+        OTools::putValue(aProps,::rtl::OUString("Jet OLEDB:ODBC Parsing"),sal_True);
         WpADOCommand aCommand;
         aCommand.Create();
         aCommand.put_ActiveConnection((IDispatch*)*m_pAdoConnection);

@@ -354,8 +354,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
                             AnimationFactory::createNumberPropertyAnimation(
-                                ::rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM("Opacity") ),
+                                ::rtl::OUString("Opacity"),
                                 rShape,
                                 rShapeManager,
                                 rSlideSize ),

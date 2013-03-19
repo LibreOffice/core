@@ -66,7 +66,7 @@ static void ShowMessageBox( const Reference< XToolkit >& rToolkit, const Referen
         // describe window properties.
         WindowDescriptor                aDescriptor;
         aDescriptor.Type              = WindowClass_MODALTOP;
-        aDescriptor.WindowServiceName = OUString( RTL_CONSTASCII_USTRINGPARAM( "infobox" ));
+        aDescriptor.WindowServiceName = OUString( "infobox" );
         aDescriptor.ParentIndex       = -1;
         aDescriptor.Parent            = Reference< XWindowPeer >( rFrame->getContainerWindow(), UNO_QUERY );
         aDescriptor.Bounds            = Rectangle(0,0,300,200);
@@ -139,21 +139,21 @@ void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >
         if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
         {
             ShowMessageBox( mxToolkit, mxFrame,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "SDK Add-On example" )),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "Function 1 activated" )) );
+                            OUString( "SDK Add-On example" ),
+                            OUString( "Function 1 activated" ) );
         }
         else if ( aURL.Path.compareToAscii( "Function2" ) == 0 )
         {
             ShowMessageBox( mxToolkit, mxFrame,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "SDK Add-On example" )),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "Function 2 activated" )) );
+                            OUString( "SDK Add-On example" ),
+                            OUString( "Function 2 activated" ) );
         }
         else if ( aURL.Path.compareToAscii( "Help" ) == 0 )
         {
             // Show info box
             ShowMessageBox( mxToolkit, mxFrame,
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "About SDK Add-On example" )),
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "This is the SDK Add-On example" )) );
+                            OUString( "About SDK Add-On example" ),
+                            OUString( "This is the SDK Add-On example" ) );
     }
     }
 }

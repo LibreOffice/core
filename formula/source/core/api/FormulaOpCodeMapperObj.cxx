@@ -93,7 +93,7 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName_Static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "simple.formula.FormulaOpCodeMapperObj" ) );
+    return rtl::OUString( "simple.formula.FormulaOpCodeMapperObj" );
 }
 // --------------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  ) throw(uno::RuntimeException)
@@ -103,7 +103,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedSe
 uno::Sequence< rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
 {
     uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.FormulaOpCodeMapper" ));
+    aSeq[0] = ::rtl::OUString( "com.sun.star.sheet.FormulaOpCodeMapper" );
     return aSeq;
 }
 

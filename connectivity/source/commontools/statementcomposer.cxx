@@ -127,7 +127,7 @@ namespace dbtools
                         if ( _rData.sCommand.isEmpty() )
                             break;
 
-                        sStatement = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SELECT * FROM " ) );
+                        sStatement = ::rtl::OUString( "SELECT * FROM " );
 
                         ::rtl::OUString sCatalog, sSchema, sTable;
                         qualifiedNameComponents( _rData.xConnection->getMetaData(), _rData.sCommand, sCatalog, sSchema, sTable, eInDataManipulation );
@@ -149,12 +149,12 @@ namespace dbtools
 
                         //  a native query ?
                         sal_Bool bQueryEscapeProcessing = sal_False;
-                        xQuery->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EscapeProcessing" ) ) ) >>= bQueryEscapeProcessing;
+                        xQuery->getPropertyValue( ::rtl::OUString( "EscapeProcessing" ) ) >>= bQueryEscapeProcessing;
                         if ( !bQueryEscapeProcessing )
                             break;
 
                         // the command used by the query
-                        xQuery->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Command" ) ) ) >>= sStatement;
+                        xQuery->getPropertyValue( ::rtl::OUString( "Command" ) ) >>= sStatement;
                         if ( sStatement.isEmpty() )
                             break;
 
@@ -162,7 +162,7 @@ namespace dbtools
                         Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
                         ::utl::SharedUNOComponent< XSingleSelectQueryComposer > xComposer;
                         xComposer.set(
-                            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ),
+                            xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
                             UNO_QUERY_THROW
                         );
 
@@ -170,7 +170,7 @@ namespace dbtools
                         xComposer->setElementaryQuery( sStatement );
 
                         // the sort order
-                        const ::rtl::OUString sPropOrder( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Order" ) ) );
+                        const ::rtl::OUString sPropOrder( ::rtl::OUString( "Order" ) );
                         if ( ::comphelper::hasProperty( sPropOrder, xQuery ) )
                         {
                             ::rtl::OUString sOrder;
@@ -189,7 +189,7 @@ namespace dbtools
                         if ( bApplyFilter )
                         {
                             ::rtl::OUString sFilter;
-                            OSL_VERIFY( xQuery->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Filter" ) ) ) >>= sFilter );
+                            OSL_VERIFY( xQuery->getPropertyValue( ::rtl::OUString( "Filter" ) ) >>= sFilter );
                             xComposer->setFilter( sFilter );
                         }
 
@@ -207,7 +207,7 @@ namespace dbtools
                 {
                     // create an composer
                     Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
-                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ),
+                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
                         UNO_QUERY_THROW );
                     xComposer->setElementaryQuery( sStatement );
 

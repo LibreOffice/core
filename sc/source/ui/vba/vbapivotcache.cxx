@@ -35,7 +35,7 @@ ScVbaPivotCache::Refresh() throw (css::uno::RuntimeException)
 rtl::OUString
 ScVbaPivotCache::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotCache"));
+    return rtl::OUString("ScVbaPivotCache");
 }
 
 uno::Sequence< rtl::OUString >
@@ -45,7 +45,7 @@ ScVbaPivotCache::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.PivotCache" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.PivotCache" );
     }
     return aServiceNames;
 }

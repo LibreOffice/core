@@ -41,8 +41,7 @@ void SingletonTypeDescriptionImpl::init() {
     } catch (NoSuchElementException const & e) {
         throw RuntimeException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.container.NoSuchElementException: "))
+                    "com.sun.star.container.NoSuchElementException: ")
              + e.Message),
             static_cast< OWeakObject * >(this));
     }
@@ -56,8 +55,7 @@ void SingletonTypeDescriptionImpl::init() {
         } else {
             throw RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "Singleton is based on neither interface nor service")),
+                        "Singleton is based on neither interface nor service"),
                 static_cast< OWeakObject * >(this));
         }
     }

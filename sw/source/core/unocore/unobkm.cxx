@@ -242,7 +242,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     UnoActionContext aCont(m_pImpl->m_pDoc);
     if (m_pImpl->m_sMarkName.isEmpty())
     {
-         m_pImpl->m_sMarkName =  OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmark"));
+         m_pImpl->m_sMarkName =  OUString("Bookmark");
     }
     if ((eType == IDocumentMarkAccess::BOOKMARK) &&
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_pImpl->m_sMarkName))
@@ -378,7 +378,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXBookmark::getImplementationName() throw (uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXBookmark"));
+    return OUString("SwXBookmark");
 }
 
 static char const*const g_ServicesBookmark[] =
@@ -440,8 +440,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     uno::RuntimeException)
 {
     // nothing to set here
-    throw lang::IllegalArgumentException( ::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Property is read-only: "))
+    throw lang::IllegalArgumentException( ::rtl::OUString("Property is read-only: ")
             + PropertyName, static_cast< cppu::OWeakObject * >(this), 0 );
 }
 

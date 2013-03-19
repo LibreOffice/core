@@ -2218,7 +2218,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
             aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
             rtl::Bootstrap aBootstrap( aBootStrap );
             ::rtl::OUString aUserPath;
-            aBootstrap.getFrom( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
+            aBootstrap.getFrom( rtl::OUString( "UserInstallation" ), aUserPath );
             aUserPath += String( RTL_CONSTASCII_USTRINGPARAM("/user/config/fontnames.dat") );
             String aBaseURL = aPath.copy( 0, aPath.lastIndexOf('/')+1 );
             mpFontAttrCache = new ImplFontAttrCache( aUserPath, aBaseURL );

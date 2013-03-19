@@ -719,7 +719,7 @@ namespace frm
                         {
                             // otherwise look for the alias
                             Reference< XColumnsSupplier > xSupplyFields;
-                            xFormProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupplyFields;
+                            xFormProps->getPropertyValue(::rtl::OUString("SingleSelectQueryComposer")) >>= xSupplyFields;
 
                             // search the field
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
@@ -741,15 +741,15 @@ namespace frm
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
                     ::rtl::OUString aStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
                     if (aBoundFieldName.isEmpty())   // act like a combobox
-                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISTINCT ") );
+                        aStatement += ::rtl::OUString("DISTINCT ");
 
                     aStatement += quoteName(aQuote,aFieldName);
                     if (!aBoundFieldName.isEmpty())
                     {
-                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ") );
+                        aStatement += ::rtl::OUString(", ");
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
-                    aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ") );
+                    aStatement += ::rtl::OUString(" FROM ");
 
                     ::rtl::OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
@@ -841,7 +841,7 @@ namespace frm
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type") ) ) >>= m_nBoundColumnType );
+                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString("Type") ) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {

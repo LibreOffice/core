@@ -74,7 +74,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
 
     // collecting a list of impress filters
     Reference< XNameAccess > xFilters( rxContext->getServiceManager()->createInstanceWithContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ), rxContext ), UNO_QUERY_THROW );
+        OUString( "com.sun.star.document.FilterFactory" ), rxContext ), UNO_QUERY_THROW );
     Sequence< OUString > aFilterList( xFilters->getElementNames() );
     for ( int i = 0; i < aFilterList.getLength(); i++ )
     {
@@ -119,7 +119,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
     }
 
     Reference< XNameAccess > xTypes( rxContext->getServiceManager()->createInstanceWithContext(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ) ), rxContext ), UNO_QUERY_THROW );
+        OUString( "com.sun.star.document.TypeDetection" ), rxContext ), UNO_QUERY_THROW );
     Sequence< OUString > aTypeList( xFilters->getElementNames() );
 
 //  mxFilePicker->setDefaultName( );

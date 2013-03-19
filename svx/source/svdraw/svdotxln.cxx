@@ -176,7 +176,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
             ::ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-            ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
+            ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( "DateModified" ) ) );
             ::com::sun::star::util::DateTime aDateTime;
 
             aAny >>= aDateTime;

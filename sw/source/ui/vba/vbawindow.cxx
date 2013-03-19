@@ -108,7 +108,7 @@ SwVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
         else if (nwindowState == word::WdWindowState::wdWindowStateNormal)
             pWork -> Restore();
         else
-            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Parameter" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Invalid Parameter" ), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -131,7 +131,7 @@ SwVbaWindow::ActivePane() throw (uno::RuntimeException)
 rtl::OUString
 SwVbaWindow::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaWindow"));
+    return rtl::OUString("SwVbaWindow");
 }
 
 uno::Sequence< rtl::OUString >
@@ -141,7 +141,7 @@ SwVbaWindow::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Window" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Window" );
     }
     return aServiceNames;
 }

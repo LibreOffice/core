@@ -89,7 +89,7 @@ sal_uInt16 lcl_getImageId(const uno::Reference< report::XReportComponent>& _xEle
     uno::Reference< report::XReportControlModel> xReportModel(_xElement,uno::UNO_QUERY);
     if ( xFixedText.is() )
     {
-        sName.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
+        sName.append(::rtl::OUString(" : "));
         sName.append(xFixedText->getLabel());
     }
     else if ( xReportModel.is() && _xElement->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
@@ -97,7 +97,7 @@ sal_uInt16 lcl_getImageId(const uno::Reference< report::XReportComponent>& _xEle
         ReportFormula aFormula( xReportModel->getDataField() );
         if ( aFormula.isValid() )
         {
-            sName.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
+            sName.append(::rtl::OUString(" : "));
             sName.append( aFormula.getUndecoratedContent() );
         }
     }

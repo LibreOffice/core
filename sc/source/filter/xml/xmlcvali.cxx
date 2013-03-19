@@ -472,7 +472,7 @@ void ScXMLContentValidationContext::SetErrorMessage(const rtl::OUString& sTitle,
 
 void ScXMLContentValidationContext::SetErrorMacro(const sal_Bool bExecute)
 {
-    sErrorMessageType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macro"));
+    sErrorMessageType = rtl::OUString("macro");
     bDisplayError = bExecute;
 }
 

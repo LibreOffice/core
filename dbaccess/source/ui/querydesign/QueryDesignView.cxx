@@ -374,9 +374,9 @@ namespace
                 OUString aQuote = xMetaData->getIdentifierQuoteString();
                 if ( _bForce || isAppendTableAliasEnabled( _xConnection ) || pEntryTab->GetAliasName() != aDBName )
                 {
-                    aTableListStr += OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                    aTableListStr += OUString(" ");
                     if ( generateAsBeforeTableAlias( _xConnection ) )
-                        aTableListStr += OUString(RTL_CONSTASCII_USTRINGPARAM("AS "));
+                        aTableListStr += OUString("AS ");
                     aTableListStr += ::dbtools::quoteName( aQuote, pEntryTab->GetAliasName() );
                 }
                 aDBName = aTableListStr;
@@ -865,7 +865,7 @@ namespace
                             else
                             {
                                 aWhereStr += aWork;
-                                aWhereStr += OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                                aWhereStr += OUString("=");
                                 aWhereStr += aCriteria;
                             }
                         }
@@ -999,7 +999,7 @@ namespace
                     eErrorCode = eStatementTooLong;
                 else
                 {
-                    _rsRet = OUString(RTL_CONSTASCII_USTRINGPARAM(" ORDER BY "));
+                    _rsRet = OUString(" ORDER BY ");
                     _rsRet += aWorkStr;
                 }
             }
@@ -1107,17 +1107,17 @@ namespace
                                     {
                                         // create outer join
                                         if ( bUseEscape )
-                                            aStr += OUString(RTL_CONSTASCII_USTRINGPARAM("{ OJ "));
+                                            aStr += OUString("{ OJ ");
                                         aStr += aJoin;
                                         if ( bUseEscape )
-                                            aStr += OUString(RTL_CONSTASCII_USTRINGPARAM(" }"));
+                                            aStr += OUString(" }");
                                     }
                                     break;
                                 default:
                                     aStr += aJoin;
                                     break;
                             }
-                            aStr += OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                            aStr += OUString(",");
                             aTableListStr += aStr;
                         }
                     }
@@ -1584,7 +1584,7 @@ namespace
                     for(;aIter != aTabEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
-                        if (pTabWin->ExistsField( OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aDragLeft ))
+                        if (pTabWin->ExistsField( OUString("*"), aDragLeft ))
                         {
                             aDragLeft->SetAlias(String());
                             aDragLeft->SetTable(String());
@@ -1698,22 +1698,22 @@ namespace
                     case SQL_NODE_LESS:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+                        aCondition = aCondition + OUString(">");
                         break;
                     case SQL_NODE_LESSEQ:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+                        aCondition = aCondition + OUString(">=");
                         break;
                     case SQL_NODE_GREAT:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+                        aCondition = aCondition + OUString("<");
                         break;
                     case SQL_NODE_GREATEQ:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+                        aCondition = aCondition + OUString("<=");
                         break;
                     default:
                         break;
@@ -2258,7 +2258,7 @@ namespace
                                 for(;aIter != aEnd;++aIter)
                                 {
                                     OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
-                                    if (pTabWin->ExistsField( OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aInfo ))
+                                    if (pTabWin->ExistsField( OUString("*"), aInfo ))
                                     {
                                         aInfo->SetAlias(String());
                                         aInfo->SetTable(String());
@@ -2943,16 +2943,16 @@ OUString OQueryDesignView::getStatement()
         aCriteriaListStr = aTmp;
     }
     // ----------------- construct statement  ----------------------
-    OUStringBuffer aSqlCmd(OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")));
+    OUStringBuffer aSqlCmd(OUString("SELECT "));
     if(rController.isDistinct())
-        aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" DISTINCT ")));
+        aSqlCmd.append(OUString(" DISTINCT "));
     aSqlCmd.append(aFieldListStr);
-    aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ")));
+    aSqlCmd.append(OUString(" FROM "));
     aSqlCmd.append(aTableListStr);
 
     if (aCriteriaListStr.getLength())
     {
-        aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
+        aSqlCmd.append(OUString(" WHERE "));
         aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
     }
     // ----------------- construct GroupBy and attachen ------------
@@ -2967,7 +2967,7 @@ OUString OQueryDesignView::getStatement()
     // ----------------- attache having  ------------
     if(aHavingStr.getLength())
     {
-        aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" HAVING ")));
+        aSqlCmd.append(OUString(" HAVING "));
         aSqlCmd.append(aHavingStr.makeStringAndClear());
     }
     // ----------------- construct sorting and attach ------------
@@ -3108,8 +3108,8 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         {
             // first try the international version
             OUString sSql;
-            sSql += OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * "));
-            sSql += OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x WHERE "));
+            sSql += OUString("SELECT * ");
+            sSql += OUString(" FROM x WHERE ");
             sSql += pEntry->GetField();
             sSql += _sCriteria;
             SAL_WNODEPRECATED_DECLARATIONS_PUSH

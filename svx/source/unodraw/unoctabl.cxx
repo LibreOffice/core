@@ -51,7 +51,7 @@ public:
 
     static OUString getImplementationName_Static() throw()
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SvxUnoColorTable"));
+        return OUString("com.sun.star.drawing.SvxUnoColorTable");
     }
 
     static uno::Sequence< OUString >  getSupportedServiceNames_Static(void) throw();
@@ -98,7 +98,7 @@ sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceNam
 
 OUString SAL_CALL SvxUnoColorTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoColorTable") );
+    return OUString("SvxUnoColorTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
@@ -110,7 +110,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
 uno::Sequence< OUString > SvxUnoColorTable::getSupportedServiceNames_Static(void) throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable" ));
+    aSNS.getArray()[0] = OUString("com.sun.star.drawing.ColorTable" );
     return aSNS;
 }
 

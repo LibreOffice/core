@@ -239,7 +239,7 @@ DBG_NAME(DirectSQLDialog)
                     while (xResultSet->next())
                     {
                         // initialise the output line for each row
-                        String out = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+                        String out = ::rtl::OUString("");
                         // work along the columns until that are none left
                         int i = 1;
                         try
@@ -247,7 +247,7 @@ DBG_NAME(DirectSQLDialog)
                             for (;;)
                             {
                                 // be dumb, treat everything as a string
-                                out += xRow->getString(i) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                                out += xRow->getString(i) + ::rtl::OUString(",");
                                 i++;
                             }
                         }

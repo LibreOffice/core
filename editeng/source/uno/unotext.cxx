@@ -1669,7 +1669,7 @@ uno::Reference< text::XText > SAL_CALL SvxUnoTextRange::getText()
 OUString SAL_CALL SvxUnoTextRange::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextRange"));
+    return OUString("SvxUnoTextRange");
 }
 
 // ====================================================================
@@ -2091,8 +2091,8 @@ void SvxPropertyValuesToItemSet(
 
             if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 // should be PropertyVetoException which is not yet defined for the new import API's functions
-                throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
-                //throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+                throw uno::RuntimeException( OUString( "Property is read-only: " ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+                //throw PropertyVetoException ( OUString( "Property is read-only: " ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
 
             if (pEntry->nWID == WID_FONTDESC)
             {
@@ -2138,7 +2138,7 @@ void SvxPropertyValuesToItemSet(
                 pPropSet->setPropertyValue( pProps[i].Name, pProps[i].Value, rItemSet );
         }
         else
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
     }
 }
 
@@ -2266,7 +2266,7 @@ void SvxUnoTextBase::copyText(
 OUString SAL_CALL SvxUnoTextBase::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextBase"));
+    return OUString("SvxUnoTextBase");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames(  )

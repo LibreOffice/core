@@ -160,14 +160,14 @@ namespace dbtools
     ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if ( !aDefault.isEmpty() )
     {
-        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DEFAULT ")));
+        aSql.append(::rtl::OUString(" DEFAULT "));
         aSql.append(sPreFix);
         aSql.append(aDefault);
         aSql.append(sPostFix);
     } // if ( aDefault.getLength() )
 
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
-        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT NULL")));
+        aSql.append(::rtl::OUString(" NOT NULL"));
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
@@ -184,7 +184,7 @@ namespace dbtools
 
 ::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const ::rtl::OUString& _sCreatePattern)
 {
-    ::rtl::OUStringBuffer aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE TABLE ")));
+    ::rtl::OUStringBuffer aSql(::rtl::OUString("CREATE TABLE "));
     ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -199,7 +199,7 @@ namespace dbtools
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
     aSql.append(sComposedName);
-    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")));
+    aSql.append(::rtl::OUString(" ("));
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -226,7 +226,7 @@ namespace
     ::rtl::OUString generateColumnNames(const Reference<XIndexAccess>& _xColumns,const Reference<XDatabaseMetaData>& _xMetaData)
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        static const ::rtl::OUString sComma(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(",")));
+        static const ::rtl::OUString sComma(::rtl::OUString(","));
 
         const ::rtl::OUString sQuote(_xMetaData->getIdentifierQuoteString());
         ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( " (" ));
@@ -280,7 +280,7 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ")));
+                    aSql.append(::rtl::OUString(" PRIMARY KEY "));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::UNIQUE)
@@ -290,7 +290,7 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" UNIQUE ")));
+                    aSql.append(::rtl::OUString(" UNIQUE "));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::FOREIGN)
@@ -302,7 +302,7 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY ")));
+                    aSql.append(::rtl::OUString(" FOREIGN KEY "));
                     ::rtl::OUString sRefTable = getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     ::dbtools::qualifiedNameComponents(xMetaData,
                                                         sRefTable,
@@ -321,16 +321,16 @@ namespace
                     switch(nDeleteRule)
                     {
                         case KeyRule::CASCADE:
-                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE CASCADE ")));
+                            aSql.append(::rtl::OUString(" ON DELETE CASCADE "));
                             break;
                         case KeyRule::RESTRICT:
-                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE RESTRICT ")));
+                            aSql.append(::rtl::OUString(" ON DELETE RESTRICT "));
                             break;
                         case KeyRule::SET_NULL:
-                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET NULL ")));
+                            aSql.append(::rtl::OUString(" ON DELETE SET NULL "));
                             break;
                         case KeyRule::SET_DEFAULT:
-                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET DEFAULT ")));
+                            aSql.append(::rtl::OUString(" ON DELETE SET DEFAULT "));
                             break;
                         default:
                             ;
@@ -531,7 +531,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
     if ( !xProp.is() )
     {
-        xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+        xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString("%"),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
         if ( !xProp.is() )
             xProp = new connectivity::sdbcx::OColumn(_rName,
                                                 ::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),
@@ -563,7 +563,7 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
         if ( xDataSourceProperties.is() )
         {
             Reference< XPropertySet > xSettings(
-                xDataSourceProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings") ) ),
+                xDataSourceProperties->getPropertyValue( ::rtl::OUString( "Settings") ),
                 UNO_QUERY_THROW
             );
             OSL_VERIFY( xSettings->getPropertyValue( ::rtl::OUString::createFromAscii( _pAsciiSettingName ) ) >>= bValue );
@@ -587,7 +587,7 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const ::rtl::
             return false;
 
         const Reference< XPropertySet > xSettings(
-                xDataSourceProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings") ) ),
+                xDataSourceProperties->getPropertyValue( ::rtl::OUString( "Settings") ),
                 UNO_QUERY_THROW
             );
 
@@ -617,7 +617,7 @@ sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const :
         if ( xProp.is() )
         {
             Sequence< PropertyValue > aInfo;
-            xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Info"))) >>= aInfo;
+            xProp->getPropertyValue(::rtl::OUString("Info")) >>= aInfo;
             const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
                                                 aInfo.getConstArray() + aInfo.getLength(),
                                                 ::std::bind2nd(TPropertyValueEqualFunctor(),_sProperty));
@@ -746,7 +746,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         // Some drivers put a table privilege as soon as any column has the privilege,
         // some drivers only if all columns have the privilege.
         // To unifiy the situation, collect column privileges here, too.
-        Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
+        Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, ::rtl::OUString("%"));
         Reference< XRow > xColumnCurrentRow(xColumnPrivileges, UNO_QUERY);
         if ( xColumnCurrentRow.is() )
         {
@@ -819,14 +819,14 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
                               const ::rtl::OUString& _rName,
                               ColumnInformationMap& _rInfo)
 {
-    static ::rtl::OUString STR_WHERE = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "));
+    static ::rtl::OUString STR_WHERE = ::rtl::OUString(" WHERE ");
 
-    ::rtl::OUString sSelect = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+    ::rtl::OUString sSelect = ::rtl::OUString("SELECT ");
     sSelect += _rName;
-    sSelect += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "));
+    sSelect += ::rtl::OUString(" FROM ");
     sSelect += _sComposedName;
     sSelect += STR_WHERE;
-    sSelect += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0 = 1"));
+    sSelect += ::rtl::OUString("0 = 1");
 
     try
     {
@@ -930,7 +930,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const ::rtl::OUString& _rSourc
         throw SQLException(
             sMessage,
             NULL,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "22018" ) ),
+            ::rtl::OUString( "22018" ),
             22018,
             Any()
         );
@@ -956,7 +956,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
         throw SQLException(
             sMessage,
             NULL,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "22001" ) ),
+            ::rtl::OUString( "22001" ),
             22001,
             Any()
         );
@@ -1007,10 +1007,10 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
             }
         }
         else
-            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.libreoffice.report.pentaho.SOReportJobFactory"));
+            return ::rtl::OUString("org.libreoffice.report.pentaho.SOReportJobFactory");
     }
     else
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.libreoffice.report.pentaho.SOReportJobFactory"));
+        return ::rtl::OUString("org.libreoffice.report.pentaho.SOReportJobFactory");
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------

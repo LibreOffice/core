@@ -43,14 +43,14 @@ SwVbaPane::View() throw ( css::uno::RuntimeException )
 void SAL_CALL
 SwVbaPane::Close( ) throw ( css::uno::RuntimeException )
 {
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseWin"));
+    rtl::OUString url = rtl::OUString( ".uno:CloseWin");
     dispatchRequests( mxModel,url );
 }
 
 rtl::OUString
 SwVbaPane::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaPane"));
+    return rtl::OUString("SwVbaPane");
 }
 
 uno::Sequence< rtl::OUString >
@@ -60,7 +60,7 @@ SwVbaPane::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Pane" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Pane" );
     }
     return aServiceNames;
 }

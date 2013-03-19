@@ -74,7 +74,7 @@ struct SameOrSubDirJREMap
         if (s1 == s2.first)
             return true;
         rtl::OUString sSub;
-        sSub = s2.first + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sSub = s2.first + rtl::OUString("/");
         if (s1.match(sSub) == sal_True)
             return true;
         return false;

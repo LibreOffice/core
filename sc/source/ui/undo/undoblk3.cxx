@@ -186,7 +186,7 @@ void ScUndoDeleteContents::Undo()
     {
         ScRangeList aChangeRanges;
         aChangeRanges.Append( aRange );
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
     }
 }
 
@@ -202,7 +202,7 @@ void ScUndoDeleteContents::Redo()
     {
         ScRangeList aChangeRanges;
         aChangeRanges.Append( aRange );
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
     }
 }
 

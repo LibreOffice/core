@@ -130,11 +130,11 @@ void SvxLineBox::Select()
 
                     Any a;
                     Sequence< PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ));
+                    aArgs[0].Name = ::rtl::OUString( "LineDash" );
                     aLineDashItem.QueryValue ( a );
                     aArgs[0].Value = a;
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )),
+                                                 ::rtl::OUString( ".uno:LineDash" ),
                                                  aArgs );
                 }
             }
@@ -144,11 +144,11 @@ void SvxLineBox::Select()
         XLineStyleItem aLineStyleItem( eXLS );
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XLineStyle" ));
+        aArgs[0].Name = ::rtl::OUString( "XLineStyle" );
         aLineStyleItem.QueryValue ( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
+                                     ::rtl::OUString( ".uno:XLineStyle" ),
                                      aArgs );
 
         nCurPos = GetSelectEntryPos();
@@ -474,11 +474,11 @@ void SvxMetricField::Modify()
 
     Any a;
     Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" ));
+    aArgs[0].Name = ::rtl::OUString( "LineWidth" );
     aLineWidthItem.QueryValue( a );
     aArgs[0].Value = a;
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
+                                 ::rtl::OUString( ".uno:LineWidth" ),
                                  aArgs );
 }
 

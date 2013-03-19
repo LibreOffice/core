@@ -1146,7 +1146,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
             pValue->Value >>= _rsAutoIncrementValue;
         pValue =::std::find_if(aInfo.getConstArray(),
                                                     aInfo.getConstArray() + aInfo.getLength(),
-                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled")) ));
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString("IsAutoRetrievingEnabled") ));
         if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
@@ -1189,15 +1189,15 @@ void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
     // query part exists?
     if ( _bQuestionMark )
         // no, so start with '?'
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+        _rURL += ::rtl::OUString("?");
     else
         // yes, so only append with '&'
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+        _rURL += ::rtl::OUString("&");
 
     // set parameters
-    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
+    _rURL += ::rtl::OUString("Language=");
     _rURL += utl::ConfigManager::getLocale();
-    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
+    _rURL += ::rtl::OUString("&System=");
     _rURL += SvtHelpOptions().GetSystem();
 }
 
@@ -1215,7 +1215,7 @@ namespace
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                                  Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
-            if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
+            if ( ( aCnt.getPropertyValue( ::rtl::OUString("AnchorName") ) >>= sAnchor ) )
             {
 
                 if ( !sAnchor.isEmpty() )
@@ -1242,9 +1242,9 @@ namespace
 ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName, const rtl::OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
-    aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
+    aURL.Complete = ::rtl::OUString( "vnd.sun.star.help://" );
     aURL.Complete += _sModuleName;
-    aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+    aURL.Complete += ::rtl::OUString( "/" );
     aURL.Complete += ::rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
 
     ::rtl::OUString sAnchor;
@@ -1254,7 +1254,7 @@ namespace
     AppendConfigToken(aURL.Complete,sal_True);
     if ( bHasAnchor )
     {
-        aURL.Complete += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"));
+        aURL.Complete += ::rtl::OUString("#");
         aURL.Complete += sAnchor;
     }
     return aURL;
@@ -1486,7 +1486,7 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _rName, const Referen
     }
     else
     {
-        sCommand = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SELECT * FROM " ) );
+        sCommand = ::rtl::OUString( "SELECT * FROM " );
         sCommand += composeTableNameForSelect( _rxConnection, _rxSourceObject );
     }
     return createView( _rName, _rxConnection, sCommand );
@@ -1557,7 +1557,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
     {
         String sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
         sError.SearchAndReplaceAscii("#",sNewName);
-        throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
+        throw SQLException(sError,NULL,::rtl::OUString("S1000") ,0,Any());
     }
 
     try
@@ -1566,11 +1566,11 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
         Sequence< Any > aArguments(3);
         PropertyValue aValue;
         // set as folder
-        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+        aValue.Name = ::rtl::OUString("Name");
         aValue.Value <<= sNewName;
         aArguments[0] <<= aValue;
         //parent
-        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
+        aValue.Name = ::rtl::OUString("Parent");
         aValue.Value <<= xNameAccess;
         aArguments[1] <<= aValue;
 

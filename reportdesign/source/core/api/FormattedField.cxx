@@ -107,7 +107,7 @@ void SAL_CALL OFormattedField::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFormattedField::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OFormattedField"));
+    return ::rtl::OUString("com.sun.star.comp.report.OFormattedField");
 }
 
 //--------------------------------------------------------------------------
@@ -120,7 +120,7 @@ uno::Sequence< ::rtl::OUString > OFormattedField::getSupportedServiceNames_Stati
 {
     uno::Sequence< ::rtl::OUString > aServices(2);
     aServices.getArray()[0] = SERVICE_FORMATTEDFIELD;
-    aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel"));
+    aServices.getArray()[1] = ::rtl::OUString("com.sun.star.awt.UnoControlFormattedFieldModel");
 
     return aServices;
 }
@@ -262,7 +262,7 @@ uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getForm
         {
             uno::Reference< beans::XPropertySet> xProp(::dbtools::findDataSource(getParent()),uno::UNO_QUERY);
             if ( xProp.is() )
-                m_xFormatsSupplier.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormatsSupplier"))),uno::UNO_QUERY);
+                m_xFormatsSupplier.set(xProp->getPropertyValue(::rtl::OUString("NumberFormatsSupplier")),uno::UNO_QUERY);
         }
     }
     return m_xFormatsSupplier;
@@ -364,7 +364,7 @@ void SAL_CALL OFormattedField::setSize( const awt::Size& aSize ) throw (beans::P
 // XShapeDescriptor
 ::rtl::OUString SAL_CALL OFormattedField::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"));
+   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 // =============================================================================

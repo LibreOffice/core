@@ -1397,7 +1397,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     {
         // check the version of the document
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= aODFVersion;
+        xPropSet->getPropertyValue( ::rtl::OUString( "Version" ) ) >>= aODFVersion;
     }
     catch( uno::Exception& )
     {}

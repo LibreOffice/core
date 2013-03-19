@@ -113,7 +113,7 @@ public:
             try
             {
                 uno::Reference< beans::XPropertySet > xProps( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
-                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( rtl::OUString("BasicLibraries") ), uno::UNO_QUERY_THROW );
                 rtl::OUString sProjectName( "Standard");
                 if ( !mpDocShell->GetBasicManager()->GetName().isEmpty() )
                 {
@@ -612,7 +612,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 {
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
-                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Globals")), aArgs );
+                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString("ooo.vba.word.Globals"), aArgs );
                     pDoc->GetDocShell()->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
                 }
                 aGlobs >>= xRet;
@@ -1607,18 +1607,18 @@ uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
 
 OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXBookmarks"));
+    return OUString("SwXBookmarks");
 }
 
 sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmarks")) == rServiceName;
+    return OUString("com.sun.star.text.Bookmarks") == rServiceName;
 }
 
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmarks"));
+    aRet[0] = OUString("com.sun.star.text.Bookmarks");
     return aRet;
 }
 

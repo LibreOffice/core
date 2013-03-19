@@ -105,8 +105,7 @@ rtl::OUString recursivelyExpandMacros(
         if (requestStack->file == requestFile &&
             requestStack->key == requestKey)
         {
-            return rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("***RECURSION DETECTED***"));
+            return rtl::OUString("***RECURSION DETECTED***");
         }
     }
     ExpandRequestLink link = { requestStack, requestFile, requestKey };
@@ -267,7 +266,7 @@ static OUString & getIniFileName_Impl()
         resolvePathnameUrl(&fileName);
 #else
         if(getFromCommandLineArgs(
-               OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")), &fileName))
+               OUString("INIFILENAME"), &fileName))
         {
             resolvePathnameUrl(&fileName);
         }
@@ -459,8 +458,7 @@ struct FundamentalIniData {
         ini =
             ((static_cast< Bootstrap_Impl * >(get_static_bootstrap_handle())->
               getValue(
-                  rtl::OUString(
-                      RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP")),
+                  rtl::OUString("URE_BOOTSTRAP"),
                   &uri.pData, 0, LOOKUP_MODE_NORMAL, false, 0)) &&
              resolvePathnameUrl(&uri))
             ? rtl_bootstrap_args_open(uri.pData) : NULL;

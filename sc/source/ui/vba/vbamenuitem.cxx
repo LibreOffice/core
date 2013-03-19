@@ -67,7 +67,7 @@ ScVbaMenuItem::Delete( ) throw (script::BasicErrorException, uno::RuntimeExcepti
 rtl::OUString
 ScVbaMenuItem::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuItem"));
+    return rtl::OUString("ScVbaMenuItem");
 }
 
 uno::Sequence<rtl::OUString>
@@ -77,7 +77,7 @@ ScVbaMenuItem::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.MenuItem" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.MenuItem" );
     }
     return aServiceNames;
 }

@@ -64,7 +64,7 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< Element* >::co
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
-        aProps[ rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text:style-name" ) ) ] =
+        aProps[ rtl::OUString( "text:style-name" ) ] =
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 

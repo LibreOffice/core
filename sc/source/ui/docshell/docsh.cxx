@@ -685,7 +685,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             uno::UNO_QUERY_THROW );
                         uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xServiceManager, uno::UNO_QUERY_THROW );
                         uno::Reference< container::XEnumeration> xEnum = xEnumAccess->createContentEnumeration(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocumentJob" ) ) );
+                            ::rtl::OUString( "com.sun.star.sheet.SpreadsheetDocumentJob" ) );
                         if ( xEnum.is() )
                         {
                             while ( xEnum->hasMoreElements() )
@@ -703,7 +703,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : NULL );
                                     uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : 0 );
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
-                                    aArgsForJob[0] = beans::NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SpreadsheetView" )),
+                                    aArgsForJob[0] = beans::NamedValue( ::rtl::OUString( "SpreadsheetView" ),
                                             uno::makeAny( xSpreadsheetView ) );
                                     xJob->execute( aArgsForJob );
                                 }
@@ -831,7 +831,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             uno::Reference< frame::XStorable > xStor( GetModel(), uno::UNO_QUERY_THROW );
                                             // TODO/LATER: More entries from the MediaDescriptor might be interesting for the merge
                                             uno::Sequence< beans::PropertyValue > aValues(1);
-                                            aValues[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName"));
+                                            aValues[0].Name = ::rtl::OUString( "FilterName");
                                             aValues[0].Value <<= ::rtl::OUString( GetMedium()->GetFilter()->GetFilterName() );
 
                                             SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
@@ -2921,7 +2921,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     // Grab the Calc configuration.
     Reference<XUIConfigurationManager> xConfigMgr =
         xModuleCfgSupplier->getUIConfigurationManager(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")));
+            OUString("com.sun.star.sheet.SpreadsheetDocument"));
 
     if (!xConfigMgr.is())
         return;
@@ -2968,15 +2968,15 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     switch (eType)
     {
         case ScOptionsUtil::KEY_DEFAULT:
-            xScAccel->setKeyEvent(aDelete, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ClearContents")));
-            xScAccel->setKeyEvent(aBackspace, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Delete")));
-            xScAccel->setKeyEvent(aCtrlD, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillDown")));
-            xScAccel->setKeyEvent(aAltDown, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSelect")));
+            xScAccel->setKeyEvent(aDelete, OUString(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aBackspace, OUString(".uno:Delete"));
+            xScAccel->setKeyEvent(aCtrlD, OUString(".uno:FillDown"));
+            xScAccel->setKeyEvent(aAltDown, OUString(".uno:DataSelect"));
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
-            xScAccel->setKeyEvent(aDelete, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Delete")));
-            xScAccel->setKeyEvent(aBackspace, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ClearContents")));
-            xScAccel->setKeyEvent(aCtrlD, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSelect")));
+            xScAccel->setKeyEvent(aDelete, OUString(".uno:Delete"));
+            xScAccel->setKeyEvent(aBackspace, OUString(".uno:ClearContents"));
+            xScAccel->setKeyEvent(aCtrlD, OUString(".uno:DataSelect"));
         break;
         default:
             ;

@@ -221,9 +221,9 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         if ( !aDocHierarchicalName.isEmpty() )
             aName = aDocHierarchicalName;
         else
-            aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ) );
+            aName = ::rtl::OUString( "dummyObjectName" );
 
-        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+        sPropName = OUString("StreamRelPath");
         xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
     }
 
@@ -292,7 +292,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( pOrigFileName )
     {
         PropertyValue *pProps = aProps.getArray();
-        pProps->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FileName") );
+        pProps->Name = OUString("FileName");
         (pProps++)->Value <<= OUString( *pOrigFileName  );
     }
 

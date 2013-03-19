@@ -32,13 +32,13 @@ using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL ScDocument_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.SpreadsheetDocument" ) );
+    return rtl::OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
 {
     uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
+    aSeq[0] = ::rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" );
     return aSeq;
 }
 

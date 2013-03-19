@@ -149,7 +149,7 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 // -----------------------------------------------------------------------
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
-    : ConfigItem( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Help" )) )
+    : ConfigItem( OUString( "Office.Common/Help" ) )
     , bExtendedHelp( sal_False )
     , bHelpTips( sal_True )
     , bHelpAgentEnabled( sal_False )

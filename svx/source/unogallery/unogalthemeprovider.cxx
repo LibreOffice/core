@@ -80,7 +80,7 @@ GalleryThemeProvider::~GalleryThemeProvider()
 SVX_DLLPUBLIC ::rtl::OUString GalleryThemeProvider::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.gallery.GalleryThemeProvider" ) );
+    return ::rtl::OUString( "com.sun.star.comp.gallery.GalleryThemeProvider" );
 }
 
 // ------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ SVX_DLLPUBLIC uno::Sequence< ::rtl::OUString > GalleryThemeProvider::getSupporte
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.gallery.GalleryThemeProvider" ) );
+    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.gallery.GalleryThemeProvider" );
 
     return aSeq;
 }

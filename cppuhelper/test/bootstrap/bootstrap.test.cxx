@@ -53,7 +53,7 @@ static bool s_check_object_is_in(void * pObject)
     currentEnv.get()->pExtEnv->getObjectIdentifier(currentEnv.get()->pExtEnv, &pOId, pObject);
 
 
-    uno::TypeDescription typeDescription(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface")));
+    uno::TypeDescription typeDescription(rtl::OUString("com.sun.star.uno.XInterface"));
 
     void * pRegisteredObject = NULL;
     currentEnv.get()->pExtEnv->getRegisteredInterface(currentEnv.get()->pExtEnv,
@@ -92,11 +92,11 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
         cppu::loadSharedLibComponentFactory(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION)),
 #ifdef WIN32
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            rtl::OUString(""),
 #else
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://../lib/")),
+            rtl::OUString("file://../lib/"),
 #endif
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impl.test.TestComponent")) + servicePurpose,
+            rtl::OUString("impl.test.TestComponent") + servicePurpose,
             uno::Reference<lang::XMultiServiceFactory>(),
             uno::Reference<registry::XRegistryKey>()
             )
@@ -104,7 +104,7 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
 
     if (!xItf.is())
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tgot no object - FAILURE\n"));
+        s_comment += rtl::OUString("\t\tgot no object - FAILURE\n");
         return;
     }
 
@@ -125,33 +125,33 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
 
 static void s_test__loadSharedLibComponentFactory__free_free()
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__free_free\n"));
+    s_comment += rtl::OUString("\ts_test__loadSharedLibComponentFactory__free_free\n");
 
     s_test__loadSharedLibComponentFactory(rtl::OUString(), rtl::OUString());
 }
 
 static void s_test__loadSharedLibComponentFactory__free_purpose()
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__free_purpose\n"));
+    s_comment += rtl::OUString("\ts_test__loadSharedLibComponentFactory__free_purpose\n");
 
     s_test__loadSharedLibComponentFactory(rtl::OUString(),
-                                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")));
+                                          rtl::OUString(":testenv"));
 }
 
 static void s_test__loadSharedLibComponentFactory__purpose_free()
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__purpose_free\n"));
+    s_comment += rtl::OUString("\ts_test__loadSharedLibComponentFactory__purpose_free\n");
 
-    s_test__loadSharedLibComponentFactory(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")),
+    s_test__loadSharedLibComponentFactory(rtl::OUString(":testenv"),
                                           rtl::OUString());
 }
 
 static void s_test__loadSharedLibComponentFactory__purpose_purpose()
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__loadSharedLibComponentFactory__purpose_purpose\n"));
+    s_comment += rtl::OUString("\ts_test__loadSharedLibComponentFactory__purpose_purpose\n");
 
-    s_test__loadSharedLibComponentFactory(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")),
-                                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")));
+    s_test__loadSharedLibComponentFactory(rtl::OUString(":testenv"),
+                                          rtl::OUString(":testenv"));
 }
 
 static rtl::OUString s_getSDrive(void)
@@ -166,10 +166,10 @@ static rtl::OUString s_getSDrive(void)
     path += rtl::OUString(tmp, rtl_str_getLength(tmp), RTL_TEXTENCODING_ASCII_US);
     path += rtl::OUString(SAL_PATHDELIMITER);
 #ifdef WIN32
-    path += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bin"));
+    path += rtl::OUString("bin");
 
 #else
-    path += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lib"));
+    path += rtl::OUString("lib");
 #endif
 
     tmp = getenv("UPDMINOREXT");
@@ -199,7 +199,7 @@ static void s_test__createSimpleRegistry(rtl::OUString const & clientPurpose)
 
     if (!registry.is())
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tgot no object - FAILURE\n"));
+        s_comment += rtl::OUString("\t\tgot no object - FAILURE\n");
         return;
     }
 
@@ -213,16 +213,16 @@ static void s_test__createSimpleRegistry(rtl::OUString const & clientPurpose)
 
 static void s_test__createSimpleRegistry__free(void)
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__createSimpleRegistry__free\n"));
+    s_comment += rtl::OUString("\ts_test__createSimpleRegistry__free\n");
 
     s_test__createSimpleRegistry(rtl::OUString());
 }
 
 static void s_test__createSimpleRegistry__purpose(void)
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__createSimpleRegistry__purpose\n"));
+    s_comment += rtl::OUString("\ts_test__createSimpleRegistry__purpose\n");
 
-    s_test__createSimpleRegistry(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")));
+    s_test__createSimpleRegistry(rtl::OUString(":testenv"));
 }
 
 
@@ -247,7 +247,7 @@ static void s_test__bootstrap_InitialComponentContext(rtl::OUString const & clie
 
     if (!xContext.is())
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tgot no object - FAILURE\n"));
+        s_comment += rtl::OUString("\t\tgot no object - FAILURE\n");
         return;
     }
 
@@ -264,16 +264,16 @@ static void s_test__bootstrap_InitialComponentContext(rtl::OUString const & clie
 
 static void s_test__bootstrap_InitialComponentContext__free(void)
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__bootstrap_InitialComponentContext__free\n"));
+    s_comment += rtl::OUString("\ts_test__bootstrap_InitialComponentContext__free\n");
 
     s_test__bootstrap_InitialComponentContext(rtl::OUString());
 }
 
 static void s_test__bootstrap_InitialComponentContext__purpose(void)
 {
-    s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\ts_test__bootstrap_InitialComponentContext__purpose\n"));
+    s_comment += rtl::OUString("\ts_test__bootstrap_InitialComponentContext__purpose\n");
 
-    s_test__bootstrap_InitialComponentContext(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":testenv")));
+    s_test__bootstrap_InitialComponentContext(rtl::OUString(":testenv"));
 }
 
 
@@ -293,12 +293,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, argv)
     int ret;
     if (s_comment.indexOf("FAILURE") == -1)
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS PASSED\n"));
+        s_comment += rtl::OUString("TESTS PASSED\n");
         ret = 0;
     }
     else
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS _NOT_ PASSED\n"));
+        s_comment += rtl::OUString("TESTS _NOT_ PASSED\n");
         ret = -1;
     }
 

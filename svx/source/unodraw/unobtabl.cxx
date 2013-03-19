@@ -80,14 +80,14 @@ bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
 
 OUString SAL_CALL SvxUnoBitmapTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoBitmapTable") );
+    return OUString("SvxUnoBitmapTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable" ));
+    aSNS.getArray()[0] = OUString("com.sun.star.drawing.BitmapTable" );
     return aSNS;
 }
 

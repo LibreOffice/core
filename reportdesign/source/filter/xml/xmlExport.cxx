@@ -78,13 +78,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLSettingsExporter"));
+        return ::rtl::OUString("com.sun.star.comp.report.XMLSettingsExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
     //---------------------------------------------------------------------
@@ -95,13 +95,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptContentExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLContentExporter"));
+        return ::rtl::OUString("com.sun.star.comp.report.XMLContentExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -114,13 +114,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptStylesExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLStylesExporter"));
+        return ::rtl::OUString("com.sun.star.comp.report.XMLStylesExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -132,13 +132,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptMetaExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLMetaExporter"));
+        return ::rtl::OUString("com.sun.star.comp.report.XMLMetaExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -150,13 +150,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLFullExporter"));
+        return ::rtl::OUString("com.sun.star.comp.report.XMLFullExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -311,7 +311,7 @@ Reference< XInterface > ORptExport::create(Reference< XComponentContext > const 
 // -----------------------------------------------------------------------------
 ::rtl::OUString ORptExport::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ExportFilter"));
+    return ::rtl::OUString("com.sun.star.comp.report.ExportFilter");
 }
 
 //--------------------------------------------------------------------------
@@ -323,7 +323,7 @@ Reference< XInterface > ORptExport::create(Reference< XComponentContext > const 
 uno::Sequence< ::rtl::OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aServices(1);
-    aServices.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+    aServices.getArray()[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
 
     return aServices;
 }
@@ -1440,12 +1440,12 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                         static const ::rtl::OUString s_sCurrent(RTL_CONSTASCII_USTRINGPARAM("current"));
                         AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, sal_False, sal_False);
-                        Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
+                        Characters(::rtl::OUString("1"));
                     }
                     else if ( sToken == s_sPageCount )
                     {
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, sal_False, sal_False);
-                        Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
+                        Characters(::rtl::OUString("1"));
                     }
                     else
                     {
@@ -1497,7 +1497,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<SvXMLElementExport> pSubDocument;
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"))),uno::UNO_QUERY);
+            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(::rtl::OUString("Model")),uno::UNO_QUERY);
             if ( xModel.is() ) // special handling for chart object
             {
                 pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, sal_False, sal_False));
@@ -1531,55 +1531,55 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 switch(nGroupOn)
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LEFT"));
-                        sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                        sFunction = ::rtl::OUString("LEFT");
+                        sPrefix = ::rtl::OUString(";") + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
                         break;
                     case report::GroupOn::YEAR:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YEAR"));
+                        sFunction = ::rtl::OUString("YEAR");
                         break;
                     case report::GroupOn::QUARTAL:
-                        sFunction   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT((MONTH"));
+                        sFunction   = ::rtl::OUString("INT((MONTH");
                         sPostfix    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-1)/3)+1"));
-                        sFunctionName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUARTAL_")) + sExpression;
+                        sFunctionName = ::rtl::OUString("QUARTAL_") + sExpression;
                         break;
                     case report::GroupOn::MONTH:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
+                        sFunction = ::rtl::OUString("MONTH");
                         break;
                     case report::GroupOn::WEEK:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WEEK"));
+                        sFunction = ::rtl::OUString("WEEK");
                         break;
                     case report::GroupOn::DAY:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DAY"));
+                        sFunction = ::rtl::OUString("DAY");
                         break;
                     case report::GroupOn::HOUR:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HOUR"));
+                        sFunction = ::rtl::OUString("HOUR");
                         break;
                     case report::GroupOn::MINUTE:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MINUTE"));
+                        sFunction = ::rtl::OUString("MINUTE");
                         break;
                     case report::GroupOn::INTERVAL:
                         {
-                            sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT"));
+                            sFunction = ::rtl::OUString("INT");
                             uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
-                            xCountFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:0"))));
-                            ::rtl::OUString sCountName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_count_")) + sExpression;
+                            xCountFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,::rtl::OUString("rpt:0")));
+                            ::rtl::OUString sCountName = sFunction + ::rtl::OUString("_count_") + sExpression;
                             xCountFunction->setName(sCountName);
-                            xCountFunction->setFormula(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[")) + sCountName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("] + 1")));
+                            xCountFunction->setFormula(::rtl::OUString("rpt:[") + sCountName + ::rtl::OUString("] + 1"));
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             // The reference to sCountName in the formula of sFunctionName refers to the *old* value
                             // so we need to expand the the formula of sCountName
                             sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" + 1) / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
-                            sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
-                            sFunction = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("));
-                            sInitialFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:0"));
+                            sFunctionName = sFunction + ::rtl::OUString("_") + sExpression;
+                            sFunction = sFunction + ::rtl::OUString("(");
+                            sInitialFormula = ::rtl::OUString("rpt:0");
                         }
                         break;
                     default:
                         ;
                 }
                 if ( sFunctionName.isEmpty() )
-                    sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
+                    sFunctionName = sFunction + ::rtl::OUString("_") + sExpression;
                 if ( !sFunction.isEmpty() )
                 {
                     sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
@@ -1589,10 +1589,10 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                     xFunction->setName(sFunctionName);
                     if ( !sInitialFormula.isEmpty() )
                         xFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True, sInitialFormula));
-                    sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
-                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(["));
+                    sFunction = ::rtl::OUString("rpt:") + sFunction;
+                    sFunction += ::rtl::OUString("([");
                     sFunction += sExpression;
-                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+                    sFunction += ::rtl::OUString("]");
 
                     if ( !sPrefix.isEmpty() )
                         sFunction += sPrefix;

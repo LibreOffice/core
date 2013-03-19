@@ -268,7 +268,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewHeaderCell::getA
 
 rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessiblePreviewHeaderCell"));
+    return rtl::OUString("ScAccessiblePreviewHeaderCell");
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupportedServiceNames()
@@ -279,7 +279,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupporte
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.AccessibleCellView"));
+    pNames[nOldSize] = rtl::OUString("com.sun.star.table.AccessibleCellView");
 
     return aSequence;
 }
@@ -376,7 +376,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
         {
             //! name for corner cell?
 
-//          sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Column/Row Header"));
+//          sName = rtl::OUString("Column/Row Header");
         }
         else
         {

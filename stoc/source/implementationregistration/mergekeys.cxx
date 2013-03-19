@@ -155,8 +155,8 @@ void mergeKeys(
     if (xDest->isReadOnly())
     {
         throw registry::InvalidRegistryException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "destination registry is read-only!  cannot merge!") ),
+            OUString(
+                          "destination registry is read-only!  cannot merge!"),
             Reference< XInterface >() );
     }
 

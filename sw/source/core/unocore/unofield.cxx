@@ -566,7 +566,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             if( USHRT_MAX != nMId )
                 pType->PutValue( rValue, nMId );
             else
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else if(!pType && m_pDoc &&
@@ -701,7 +701,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             }
             break;
         default:
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
 }
@@ -809,7 +809,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 }
             }
             else
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
         else
         {
@@ -878,7 +878,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
             default:
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             }
 
             if( pStr )
@@ -1921,9 +1921,9 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
     const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-        throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     if(pField)
     {
@@ -2080,7 +2080,7 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
         pEntry = _pParaPropSet->getPropertyMap().getByName(rPropertyName);
     }
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     switch( pEntry->nWID )
     {

@@ -289,7 +289,7 @@ namespace xforms
             RegexMatcher aMatcher( aIcuPattern, 0, nMatchStatus );
             if ( U_FAILURE( nMatchStatus ) )
             {
-                _rErrorMessage = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "This is no valid pattern." ) );
+                _rErrorMessage = ::rtl::OUString( "This is no valid pattern." );
                 return false;
             }
         }
@@ -547,7 +547,7 @@ namespace xforms
                 sal_Int32 nValue( 0 );
                 OSL_VERIFY( _rNewValue >>= nValue );
                 if ( nValue <= 0 )
-                    _rErrorMessage = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Length limits must denote positive integer values." ) );
+                    _rErrorMessage = ::rtl::OUString( "Length limits must denote positive integer values." );
                         // TODO/eforms: localize the error message
             }
             break;

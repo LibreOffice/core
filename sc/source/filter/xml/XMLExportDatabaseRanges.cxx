@@ -397,21 +397,21 @@ private:
                 if (bRegExp)
                     return GetXMLToken(XML_MATCH);
                 else
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                    return OUString("=");
             }
             case SC_GREATER:
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+                return rtl::OUString(">");
             case SC_GREATER_EQUAL:
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+                return rtl::OUString(">=");
             case SC_LESS:
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+                return rtl::OUString("<");
             case SC_LESS_EQUAL:
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+                return rtl::OUString("<=");
             case SC_NOT_EQUAL:
                 if (bRegExp)
                     return GetXMLToken(XML_NOMATCH);
                 else
-                    return OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
+                    return OUString("!=");
             case SC_TOPPERC:
                 return GetXMLToken(XML_TOP_PERCENT);
             case SC_TOPVAL:
@@ -419,7 +419,7 @@ private:
             default:
                 ;
         }
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+        return OUString("=");
     }
 
     class WriteSetItem : public std::unary_function<ScQueryEntry::Item, void>
@@ -472,7 +472,7 @@ private:
             // Store the 1st value for backward compatibility.
             const ScQueryEntry::Item& rItem = rItems.front();
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString(RTL_CONSTASCII_USTRINGPARAM("=")));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString("="));
             SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 
             std::for_each(rItems.begin(), rItems.end(), WriteSetItem(mrExport));

@@ -99,7 +99,7 @@ SwVbaPanes::createCollectionObject( const css::uno::Any& aSource )
 rtl::OUString
 SwVbaPanes::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaPanes"));
+    return rtl::OUString("SwVbaPanes");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -109,7 +109,7 @@ SwVbaPanes::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Panes") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Panes");
     }
     return sNames;
 }

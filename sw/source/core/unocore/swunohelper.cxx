@@ -200,9 +200,9 @@ bool UCB_GetFileListOfFolder( const String& rURL,
         sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;
         ::com::sun::star::uno::Sequence < rtl::OUString > aProps( nSeqSize );
         rtl::OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        pProps[ 0 ] = rtl::OUString("Title");
         if( pDateTimeList )
-            pProps[ 1 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified"));
+            pProps[ 1 ] = rtl::OUString("DateModified");
 
         try
         {

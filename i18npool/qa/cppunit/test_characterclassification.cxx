@@ -59,8 +59,8 @@ private:
 void TestCharacterClassification::testTitleCase()
 {
     lang::Locale aLocale;
-    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+    aLocale.Language = ::rtl::OUString("en");
+    aLocale.Country = ::rtl::OUString("US");
 
     {
         //basic example

@@ -63,7 +63,7 @@ DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext 
 {
     try
     {
-        m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.FormComponentPropertyHandler")),m_xContext),uno::UNO_QUERY_THROW);
+        m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.form.inspection.FormComponentPropertyHandler"),m_xContext),uno::UNO_QUERY_THROW);
         m_xTypeConverter.set(script::Converter::create(m_xContext));
 
     }catch(const uno::Exception &)
@@ -92,14 +92,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL DataProviderHandler::getSupportedServi
 //------------------------------------------------------------------------
 ::rtl::OUString DataProviderHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.DataProviderHandler"));
+    return ::rtl::OUString("com.sun.star.comp.report.DataProviderHandler");
 }
 
 //------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > DataProviderHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.inspection.DataProviderHandler"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.report.inspection.DataProviderHandler");
     return aSupported;
 }
 
@@ -149,7 +149,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
             }
         }
         m_xDataProvider.set(m_xFormComponent,uno::UNO_QUERY);
-        m_xReportComponent.set( xNameCont->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReportComponent" ) ) ), uno::UNO_QUERY );
+        m_xReportComponent.set( xNameCont->getByName( ::rtl::OUString( "ReportComponent" ) ), uno::UNO_QUERY );
         if ( m_xDataProvider.is() )
         {
             ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
@@ -198,7 +198,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const ::rtl::OUString & 
             //            for(;pChartTypeIter != pChartTypeEnd;++pChartTypeIter)
             //            {
             //                sChartTypes += (*pChartTypeIter)->getChartType();
-            //                sChartTypes += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+            //                sChartTypes += ::rtl::OUString(";");
             //            }
             //        }
             //        aPropertyValue;// <<= sChartTypes;
@@ -241,12 +241,12 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
         uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
         if ( !xTitle.is() )
         {
-            xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.Title")),m_xContext),uno::UNO_QUERY);
+            xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.chart2.Title"),m_xContext),uno::UNO_QUERY);
             xTitled->setTitleObject(xTitle);
         }
         if ( xTitle.is() )
         {
-            uno::Reference< chart2::XFormattedString> xFormatted(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.FormattedString")),m_xContext),uno::UNO_QUERY);
+            uno::Reference< chart2::XFormattedString> xFormatted(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.chart2.FormattedString"),m_xContext),uno::UNO_QUERY);
             ::rtl::OUString sStr;
             _aValue>>= sStr;
             xFormatted->setString(sStr);
@@ -288,9 +288,9 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     if ( nId != -1 )
     {
         aOut.Category = ((m_pInfoService->getPropertyUIFlags(nId ) & PROP_FLAG_DATA_PROPERTY) != 0) ?
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data"))
+                                    ::rtl::OUString("Data")
                                                         :
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("General"));
+                                    ::rtl::OUString("General");
         aOut.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nId ) );
         aOut.DisplayName = m_pInfoService->getPropertyTranslation(nId);
     }
@@ -454,7 +454,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
             sal_Bool bModified = xReport->isModified();
             // this fills the chart again
             ::comphelper::NamedValueCollection aArgs;
-            aArgs.put( "CellRangeRepresentation", uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) ) );
+            aArgs.put( "CellRangeRepresentation", uno::makeAny( ::rtl::OUString( "all" ) ) );
             aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
             aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
             aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
@@ -494,29 +494,29 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
 {
     uno::Sequence<uno::Any> aSeq(6);
     beans::PropertyValue aParam;
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
-    aParam.Value <<= m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow")));
+    aParam.Name = ::rtl::OUString("ParentWindow");
+    aParam.Value <<= m_xContext->getValueByName( ::rtl::OUString("DialogParentWindow"));
     aSeq[0] <<= aParam;
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Detail"));
+    aParam.Name = ::rtl::OUString("Detail");
     aParam.Value <<= m_xDataProvider;
     aSeq[1] <<= aParam;
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Master"));
+    aParam.Name = ::rtl::OUString("Master");
     aParam.Value <<= m_xReportComponent->getSection()->getReportDefinition();
     aSeq[2] <<= aParam;
 
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Explanation"));
+    aParam.Name = ::rtl::OUString("Explanation");
     aParam.Value <<= ::rtl::OUString(String(ModuleRes(RID_STR_EXPLANATION)));
     aSeq[3] <<= aParam;
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DetailLabel"));
+    aParam.Name = ::rtl::OUString("DetailLabel");
     aParam.Value <<= ::rtl::OUString(String(ModuleRes(RID_STR_DETAILLABEL)));
     aSeq[4] <<= aParam;
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MasterLabel"));
+    aParam.Name = ::rtl::OUString("MasterLabel");
     aParam.Value <<= ::rtl::OUString(String(ModuleRes(RID_STR_MASTERLABEL)));
     aSeq[5] <<= aParam;
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.MasterDetailLinkDialog")),aSeq
+        ::rtl::OUString("org.openoffice.comp.form.ui.MasterDetailLinkDialog"),aSeq
             , m_xContext), uno::UNO_QUERY);
 
     _rClearBeforeDialog.clear();
@@ -527,16 +527,16 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 {
     uno::Sequence<uno::Any> aSeq(2);
     beans::PropertyValue aParam;
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
-    aParam.Value <<= m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow")));
+    aParam.Name = ::rtl::OUString("ParentWindow");
+    aParam.Value <<= m_xContext->getValueByName( ::rtl::OUString("DialogParentWindow"));
     aSeq[0] <<= aParam;
-    aParam.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChartModel"));
+    aParam.Name = ::rtl::OUString("ChartModel");
     aParam.Value <<= m_xChartModel;
     aSeq[1] <<= aParam;
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.ChartTypeDialog")),aSeq
+        ::rtl::OUString("com.sun.star.comp.chart2.ChartTypeDialog"),aSeq
             , m_xContext), uno::UNO_QUERY);
 
     _rClearBeforeDialog.clear();

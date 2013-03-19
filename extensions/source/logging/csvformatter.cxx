@@ -108,8 +108,8 @@ namespace logging
 namespace
 {
     const sal_Unicode quote_char = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")).toChar();
-    const sal_Unicode comma_char = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(",")).toChar();
-    const ::rtl::OUString dos_newline = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\r\n"));
+    const sal_Unicode comma_char = ::rtl::OUString(",").toChar();
+    const ::rtl::OUString dos_newline = ::rtl::OUString("\r\n");
 
     inline bool needsQuoting(const ::rtl::OUString& str)
     {
@@ -150,7 +150,7 @@ namespace
     ::com::sun::star::uno::Sequence< ::rtl::OUString> initialColumns()
     {
         com::sun::star::uno::Sequence< ::rtl::OUString> result = ::com::sun::star::uno::Sequence< ::rtl::OUString>(1);
-        result[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("message"));
+        result[0] = ::rtl::OUString("message");
         return result;
     };
 }
@@ -341,13 +341,13 @@ namespace logging
 
     ::rtl::OUString SAL_CALL CsvFormatter::getImplementationName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.CsvFormatter" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.CsvFormatter" );
     }
 
     Sequence< ::rtl::OUString > SAL_CALL CsvFormatter::getSupportedServiceNames_static()
     {
         Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.CsvFormatter" ) );
+        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.CsvFormatter" );
         return aServiceNames;
     }
 

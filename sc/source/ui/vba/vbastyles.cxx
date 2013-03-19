@@ -121,7 +121,7 @@ ScVbaStyles::Add( const ::rtl::OUString& _sName, const uno::Any& _aBasedOn ) thr
             }
         }
 
-        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CellStyle"))), uno::UNO_QUERY_THROW );
+        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance( rtl::OUString("com.sun.star.style.CellStyle")), uno::UNO_QUERY_THROW );
 
         if (!mxNameContainerCellStyles->hasByName(_sName))
         {
@@ -157,7 +157,7 @@ ScVbaStyles::Delete(const rtl::OUString _sStyleName) throw ( script::BasicErrorE
 rtl::OUString
 ScVbaStyles::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaStyles"));
+    return rtl::OUString("ScVbaStyles");
 }
 
 uno::Sequence< rtl::OUString >
@@ -167,7 +167,7 @@ ScVbaStyles::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.XStyles" ) );
+                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.XStyles" );
         }
         return aServiceNames;
 }

@@ -65,8 +65,8 @@ uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
 
 ScTableSheetObj::ScTableSheetObj():
     UnoApiTest("/sc/qa/extras/testdocuments"),
-    apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")), 4),
-    apitest::XReplaceable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("searchReplaceString")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("replaceReplaceString")))
+    apitest::XSearchable(rtl::OUString("test"), 4),
+    apitest::XReplaceable(rtl::OUString("searchReplaceString"), rtl::OUString("replaceReplaceString"))
 {
 }
 
@@ -74,7 +74,7 @@ ScTableSheetObj::ScTableSheetObj():
 uno::Reference< uno::XInterface > ScTableSheetObj::init()
 {
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScTableSheetObj.ods")), aFileURL);
+    createFileURL(rtl::OUString("ScTableSheetObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());

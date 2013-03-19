@@ -244,7 +244,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
+                        xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
                                 uno::makeAny( ::rtl::OUString( pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                     }
                 }
@@ -295,7 +295,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     try
                     {
                         if ( sClassLocation.Len() )
-                            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
+                            xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
                                 uno::makeAny(
                                     ::rtl::OUString(
                                         URIHelper::SmartRel2Abs(
@@ -305,7 +305,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         if ( aCommandList.size() )
                         {
                             aCommandList.FillSequence( aSeq );
-                            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aSeq ) );
+                            xSet->setPropertyValue( ::rtl::OUString("PluginCommands"), uno::makeAny( aSeq ) );
                         }
                     }
                     catch (const uno::Exception&)
@@ -355,27 +355,27 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         aMargin = pMarginItem->GetSize();
 
                     if ( pURLItem )
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString("FrameURL"), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
                     if ( pNameItem )
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString("FrameName"), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
 
                     if ( eScroll == ScrollingAuto )
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
+                        xSet->setPropertyValue( ::rtl::OUString("FrameIsAutoScroll"),
                             uno::makeAny( sal_True ) );
                     else
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
+                        xSet->setPropertyValue( ::rtl::OUString("FrameIsScrollingMode"),
                             uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
                     if ( pBorderItem )
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
+                        xSet->setPropertyValue( ::rtl::OUString("FrameIsBorder"),
                             uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
 
                     if ( pMarginItem )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
+                        xSet->setPropertyValue( ::rtl::OUString("FrameMarginWidth"),
                             uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
+                        xSet->setPropertyValue( ::rtl::OUString("FrameMarginHeight"),
                             uno::makeAny( sal_Int32( aMargin.Height() ) ) );
                     }
                 }

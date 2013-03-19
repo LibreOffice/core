@@ -411,7 +411,7 @@ namespace pcr
             Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create(xContext) );
 
             Sequence< PropertyValue > aMediaProperties(1);
-            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMediaProperties[0].Name = ::rtl::OUString( "URL" );
             aMediaProperties[0].Value <<= _rImageURL;
 
             Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );

@@ -95,14 +95,14 @@ namespace rptui
     //------------------------------------------------------------------------
     ::rtl::OUString DefaultComponentInspectorModel::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.DefaultComponentInspectorModel"));
+        return ::rtl::OUString("com.sun.star.comp.report.DefaultComponentInspectorModel");
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DefaultComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.inspection.DefaultComponentInspectorModel"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.report.inspection.DefaultComponentInspectorModel");
         return aSupported;
     }
 
@@ -255,7 +255,7 @@ namespace rptui
         if ( !m_xComponent.is() )
             try
             {
-                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.DefaultFormComponentInspectorModel")),m_xContext),UNO_QUERY_THROW);
+                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.form.inspection.DefaultFormComponentInspectorModel"),m_xContext),UNO_QUERY_THROW);
             }
             catch(const Exception &)
             {

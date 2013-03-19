@@ -290,7 +290,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 {
     sal_Bool bRet = sal_False;
 
-    mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ) );
+    mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( OUString("com.sun.star.drawing.GraphicExportFilter") ) );
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
         return sal_False;
@@ -301,7 +301,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
     if(xStatusIndicator.is())
     {
-        xStatusIndicator->start(OUString(  RTL_CONSTASCII_USTRINGPARAM( "PlaceWare:" )),xDrawPages->getCount());
+        xStatusIndicator->start(OUString( "PlaceWare:" ),xDrawPages->getCount());
     }
 
     Reference< XDrawPage > xDrawPage;
@@ -346,7 +346,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
             OUString aName( RTL_CONSTASCII_USTRINGPARAM("i") );
             aName += OUString::valueOf( nPage );
-            aName += OUString( RTL_CONSTASCII_USTRINGPARAM(".gif") );
+            aName += OUString(".gif");
             pEntry->setURL( aName );
 
             if(xStatusIndicator.is())
@@ -485,17 +485,17 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
     Reference< XFilter > xFilter( mxGraphicExporter, UNO_QUERY );
 
     Sequence< PropertyValue > aFilterData( 2 );
-    aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Width") );
+    aFilterData[0].Name = OUString("Width");
     aFilterData[0].Value <<= (sal_Int32)704;
-    aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Translucent") );
+    aFilterData[1].Name = OUString("Translucent");
     aFilterData[1].Value <<= (sal_Bool)sal_False;
 
     Sequence< PropertyValue > aDescriptor( 3 );
-    aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
-    aDescriptor[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("GIF") );
-    aDescriptor[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("URL") );
+    aDescriptor[0].Name = OUString("FilterName");
+    aDescriptor[0].Value <<= OUString("GIF");
+    aDescriptor[1].Name = OUString("URL");
     aDescriptor[1].Value <<= OUString( pEntry->getTempURL() );
-    aDescriptor[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterData") );
+    aDescriptor[2].Name = OUString("FilterData");
     aDescriptor[2].Value <<= aFilterData;
     mxGraphicExporter->setSourceDocument( xComp );
     xFilter->filter( aDescriptor );

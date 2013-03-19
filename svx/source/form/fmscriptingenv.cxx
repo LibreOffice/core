@@ -200,7 +200,7 @@ namespace svxform
             Reference< XHierarchicalNameAccess > xTypeDescriptions( aContext.getSingleton( "com.sun.star.reflection.theTypeDescriptionManager" ), UNO_QUERY_THROW );
 
             ::rtl::OUString sMethodDescription( _rListenerType );
-            sMethodDescription += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ));
+            sMethodDescription += ::rtl::OUString( "::" );
             sMethodDescription += _rMethodName;
 
             Reference< XInterfaceMethodTypeDescription > xMethod( xTypeDescriptions->getByHierarchicalName( sMethodDescription ), UNO_QUERY_THROW );
@@ -413,7 +413,7 @@ namespace svxform
                 {
                     Reference< XControl > xControl( aEvent.Source, UNO_QUERY_THROW );
                     Reference< XPropertySet > xProps( xControl->getModel(), UNO_QUERY_THROW );
-                    aCaller = xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) );
+                    aCaller = xProps->getPropertyValue( rtl::OUString("Name") );
                 }
                 catch( Exception& ) {}
             }
@@ -471,9 +471,9 @@ namespace svxform
             {
                 // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
                 if ( SFX_APP()->GetBasicManager()->HasMacro( sScriptCode ) )
-                    sMacroLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application" ) );
+                    sMacroLocation = ::rtl::OUString( "application" );
                 else
-                    sMacroLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "document" ) );
+                    sMacroLocation = ::rtl::OUString( "document" );
             }
 
             ::rtl::OUStringBuffer aScriptURI;

@@ -1134,8 +1134,7 @@ void SimpleRegistry::open(
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.registry.SimpleRegistry.open(")) +
+                    "com.sun.star.registry.SimpleRegistry.open(") +
              rURL +
              rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -1254,14 +1253,12 @@ css::uno::Reference< css::uno::XInterface > SimpleRegistry_CreateInstance(
 
 css::uno::Sequence< rtl::OUString > simreg_getSupportedServiceNames() {
     css::uno::Sequence< rtl::OUString > names(1);
-    names[0] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"));
+    names[0] = rtl::OUString("com.sun.star.registry.SimpleRegistry");
     return names;
 }
 
 rtl::OUString simreg_getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.SimpleRegistry"));
+    return rtl::OUString("com.sun.star.comp.stoc.SimpleRegistry");
 }
 
 }

@@ -112,11 +112,11 @@ uno::Reference< word::XTableOfContents > SAL_CALL
 SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const uno::Any& /*UseHeadingStyles*/, const uno::Any& /*UpperHeadingLevel*/, const uno::Any& LowerHeadingLevel, const uno::Any& UseFields, const uno::Any& /*TableID*/, const uno::Any& /*RightAlignPageNumbers*/, const uno::Any& /*IncludePageNumbers*/, const uno::Any& /*AddedStyles*/, const uno::Any& /*UseHyperlinks*/, const uno::Any& /*HidePageNumbersInWeb*/, const uno::Any& /*UseOutlineLevels*/ ) throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xDocMSF( mxTextDocument, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XDocumentIndex > xDocumentIndex( xDocMSF->createInstance(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ContentIndex")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XDocumentIndex > xDocumentIndex( xDocMSF->createInstance(  rtl::OUString("com.sun.star.text.ContentIndex") ), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xTocProps( xDocumentIndex, uno::UNO_QUERY_THROW );
     sal_Bool isProtected = sal_False;
-    xTocProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsProtected") ), uno::makeAny( isProtected ) );
+    xTocProps->setPropertyValue( rtl::OUString("IsProtected"), uno::makeAny( isProtected ) );
 
     uno::Reference< word::XTableOfContents > xToc( new SwVbaTableOfContents( this, mxContext, mxTextDocument, xDocumentIndex ) );
 
@@ -167,7 +167,7 @@ SwVbaTablesOfContents::createCollectionObject( const uno::Any& aSource )
 rtl::OUString
 SwVbaTablesOfContents::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTablesOfContents"));
+    return rtl::OUString("SwVbaTablesOfContents");
 }
 
 uno::Sequence<rtl::OUString>
@@ -177,7 +177,7 @@ SwVbaTablesOfContents::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.TablesOfContents") );
+        sNames[0] = rtl::OUString("ooo.vba.word.TablesOfContents");
     }
     return sNames;
 }

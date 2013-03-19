@@ -172,7 +172,7 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before ) throw ( css::script
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );
     uno::Reference< container::XIndexAccess > xIndexAccess = getRowColContainer();
     uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nAPIRowColIndex), uno::UNO_QUERY_THROW );
-    xRowColPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" )), uno::makeAny(sal_True));
+    xRowColPropertySet->setPropertyValue( rtl::OUString( "IsStartOfNewPage" ), uno::makeAny(sal_True));
     sheet::TablePageBreakData aTablePageBreakData;
     aTablePageBreakData.ManualBreak = sal_True;
     aTablePageBreakData.Position = nAPIRowColIndex;
@@ -240,7 +240,7 @@ ScVbaHPageBreaks::getElementType() throw (uno::RuntimeException)
 rtl::OUString
 ScVbaHPageBreaks::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaHPageBreaks"));
+    return rtl::OUString("ScVbaHPageBreaks");
 }
 
 uno::Sequence< rtl::OUString >
@@ -250,7 +250,7 @@ ScVbaHPageBreaks::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.HPageBreaks" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.HPageBreaks" );
     }
     return aServiceNames;
 }
@@ -300,7 +300,7 @@ ScVbaVPageBreaks::getElementType() throw ( uno::RuntimeException )
 rtl::OUString
 ScVbaVPageBreaks::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaVPageBreaks"));
+    return rtl::OUString("ScVbaVPageBreaks");
 }
 
 uno::Sequence< rtl::OUString >
@@ -310,7 +310,7 @@ ScVbaVPageBreaks::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.VPageBreaks" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.excel.VPageBreaks" );
     }
     return aServiceNames;
 }

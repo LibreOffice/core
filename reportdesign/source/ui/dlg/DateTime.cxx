@@ -182,7 +182,7 @@ short ODateTimeDialog::Execute()
     uno::Reference< beans::XPropertySet> xFormSet = _xFormats->getByKey(_nNumberFormatKey);
     OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
     ::rtl::OUString sFormat;
-    xFormSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatString"))) >>= sFormat;
+    xFormSet->getPropertyValue(::rtl::OUString("FormatString")) >>= sFormat;
 
     double nValue = 0;
     if ( _bTime )

@@ -39,7 +39,7 @@ using namespace ::com::sun::star::beans;
 SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_TABLE), getSvxMapProvider().GetPropertySet(SVXMAP_TABLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ) );
+    SetShapeType( rtl::OUString( "com.sun.star.drawing.TableShape" ) );
 }
 
 //----------------------------------------------------------------------

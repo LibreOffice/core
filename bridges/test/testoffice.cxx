@@ -156,7 +156,7 @@ void testDocument( const Reference < XMultiServiceFactory > & rSmgr )
         Reference< XComponent > rComponent =
             rLoader->loadComponentFromURL(
                 OUString::createFromAscii( urls[i] ) ,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("_blank")),
+                OUString("_blank"),
                 0 ,
                 Sequence < ::com::sun::star::beans::PropertyValue >() );
 
@@ -175,7 +175,7 @@ void doSomething( const  Reference < XInterface > &r )
     {
         printf( "got the remote naming service !\n" );
         Reference < XInterface > rXsmgr = rName->getRegisteredObject(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )) );
+            OUString( "StarOffice.ServiceManager" ) );
 
         Reference < XMultiServiceFactory > rSmgr( rXsmgr , UNO_QUERY );
         if( rSmgr.is() )
@@ -203,22 +203,22 @@ int main( int argc, char *argv[] )
     parseCommandLine( argv , &sConnectionString , &sProtocol , &bLatency , &bReverse );
     {
         Reference< XMultiServiceFactory > rSMgr = createRegistryServiceFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "client.rdb" )  ) );
+            OUString( "client.rdb" ) );
 
         // just ensure that it is registered
 
         Reference < XConnector > rConnector(
-            createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")),
+            createComponent( OUString("com.sun.star.connection.Connector"),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("connector.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
-        createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
+        createComponent( OUString("com.sun.star.bridge.Bridge.iiop"),
                          OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
                          rSMgr );
 
         Reference < XBridgeFactory > rFactory(
-            createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
+            createComponent( OUString("com.sun.star.bridge.BridgeFactory"),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
@@ -231,13 +231,13 @@ int main( int argc, char *argv[] )
                     rConnector->connect( sConnectionString );
 
                 Reference < XBridge > rBridge = rFactory->createBridge(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("bla blub")),
+                    OUString("bla blub"),
                     sProtocol,
                     rConnection,
                     Reference < XInstanceProvider > () );
 
                 Reference < XInterface > rInitialObject
-                    = rBridge->getInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("NamingService")) );
+                    = rBridge->getInstance( OUString("NamingService") );
 
                 if( rInitialObject.is() )
                 {

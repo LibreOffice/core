@@ -53,7 +53,7 @@ uno::Reference< uno::XInterface >
 OUString SvFilterOptionsDialog_getImplementationName()
     throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.SvFilterOptionsDialog" ) );
+    return OUString( "com.sun.star.comp.svtools.SvFilterOptionsDialog" );
 }
 #define SERVICE_NAME "com.sun.star.ui.dialog.FilterOptionsDialog"
 sal_Bool SAL_CALL SvFilterOptionsDialog_supportsService( const OUString& ServiceName )
@@ -238,9 +238,9 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
             ( xDoc, uno::UNO_QUERY );
     if ( xServiceInfo.is() )
     {
-        if ( xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+        if ( xServiceInfo->supportsService( OUString( "com.sun.star.presentation.PresentationDocument" ) ) )
             aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Impress/Layout/Other/MeasureUnit" ) );
-        else if ( xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+        else if ( xServiceInfo->supportsService( OUString( "com.sun.star.drawing.DrawingDocument" ) ) )
             aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Draw/Layout/Other/MeasureUnit" ) );
         if ( aConfigPath.Len() )
         {

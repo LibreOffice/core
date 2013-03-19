@@ -40,7 +40,7 @@ ScVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
 rtl::OUString
 ScVbaDialogs::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaDialogs"));
+    return rtl::OUString("ScVbaDialogs");
 }
 
 uno::Sequence< rtl::OUString >
@@ -50,7 +50,7 @@ ScVbaDialogs::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Dialogs" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Dialogs" );
     }
     return aServiceNames;
 }

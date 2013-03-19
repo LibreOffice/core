@@ -249,8 +249,7 @@ void LdapConnection::initConnection()
     if (aUser.isEmpty())
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-            ("LdapConnection::findUserDn -User id is empty")),
+            rtl::OUString("LdapConnection::findUserDn -User id is empty"),
                 NULL, 0) ;
     }
 

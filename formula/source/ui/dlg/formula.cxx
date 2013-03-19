@@ -434,9 +434,9 @@ uno::Reference< sheet::XFormulaOpCodeMapper > FormulaDlg_Impl::GetFormulaOpCodeM
         m_pBinaryOpCodesEnd = m_aBinaryOpCodes.getConstArray() + m_aBinaryOpCodes.getLength();
 
         uno::Sequence< ::rtl::OUString > aArgs(3);
-        aArgs[TOKEN_OPEN]   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("));
+        aArgs[TOKEN_OPEN]   = ::rtl::OUString("(");
         aArgs[TOKEN_CLOSE]  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-        aArgs[TOKEN_SEP]    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        aArgs[TOKEN_SEP]    = ::rtl::OUString(";");
         m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings(aArgs,sheet::FormulaLanguage::ODFF);
 
         m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::SPECIAL);
@@ -1171,7 +1171,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
         for(i=0;i<=nEd;i++)
         {
             if ( m_aArguments[i].isEmpty() )
-                m_aArguments[i] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                m_aArguments[i] = ::rtl::OUString(" ");
         }
         if(pParaWin->GetArgument(nEd).Len()!=0)
             m_aArguments[nEd] = pParaWin->GetArgument(nEd);

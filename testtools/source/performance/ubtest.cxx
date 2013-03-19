@@ -336,33 +336,33 @@ static void createInstance( Reference< T > & rxOut,
                 {
                     // acceptor
                     xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor") ),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.Acceptor") ),
+                        OUString("acceptor"),
+                        OUString("com.sun.star.comp.stoc.Acceptor"),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // connector
                     xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("connectr") ),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.Connector") ),
+                        OUString("connectr"),
+                        OUString("com.sun.star.comp.stoc.Connector"),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // iiop bridge
                     xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge") ),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.various") ),
+                        OUString("remotebridge"),
+                        OUString("com.sun.star.bridge.Bridge.various"),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr") ),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.BridgeFactory") ),
+                        OUString("brdgfctr"),
+                        OUString("com.sun.star.comp.stoc.BridgeFactory"),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // uno url resolver
                     xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("uuresolver") ),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.bridge.UnoUrlResolver") ),
+                        OUString("uuresolver"),
+                        OUString("com.sun.star.comp.bridge.UnoUrlResolver"),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // java loader
 //                      xSet->insert( makeAny( loadLibComponentFactory(
-//                          OUString( RTL_CONSTASCII_USTRINGPARAM("javaloader") ),
-//                          OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaComponentLoader") ),
+//                          OUString("javaloader"),
+//                          OUString("com.sun.star.comp.stoc.JavaComponentLoader"),
 //                          xMgr, Reference< XRegistryKey >() ) ) );
                 }
                 s_bSet = sal_True;
@@ -478,11 +478,11 @@ Reference< XInterface > TestImpl::getDirect()
         if (! _xDirect.is())
         {
             Reference< XSingleServiceFactory > xFac( loadLibComponentFactory(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("perfobj") ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.performance.PerformanceTestObject") ),
+                OUString("perfobj"),
+                OUString("com.sun.star.comp.performance.PerformanceTestObject"),
                 _xSMgr, Reference< XRegistryKey >() ) );
             if (! xFac.is())
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no test object available!") ), Reference< XInterface >() );
+                throw RuntimeException( OUString("no test object available!"), Reference< XInterface >() );
             _xDirect = xFac->createInstance();
         }
     }
@@ -495,7 +495,7 @@ Reference< XInterface > TestImpl::resolveObject( const OUString & rUnoUrl )
     Reference< XUnoUrlResolver > xResolver;
     createInstance(
         xResolver, _xSMgr,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver") ) );
+        OUString("com.sun.star.bridge.UnoUrlResolver") );
 
     Reference< XInterface > xResolvedObject( xResolver->resolve( rUnoUrl ) );
 
@@ -569,7 +569,7 @@ static void benchmark(
 {
     Reference< XPerformanceTest > xBench( xInstance, UNO_QUERY );
     if (! xBench.is())
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("illegal test object!") ), Reference< XInterface >() );
+        throw RuntimeException( OUString("illegal test object!"), Reference< XInterface >() );
 
     sal_Int64 i;
     sal_uInt32 tStart, tEnd;
@@ -969,7 +969,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 
     try
     {
-        OUString aLoopStr( extractParam( rArgs, OUString( RTL_CONSTASCII_USTRINGPARAM("loop") ) ) );
+        OUString aLoopStr( extractParam( rArgs, OUString("loop") ) );
         if (aLoopStr.getLength())
         {
             sal_Int64 n = aLoopStr.toInt64();
@@ -977,7 +977,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                 nLoop = n;
         }
 
-        OUString aDurationStr( extractParam( rArgs , OUString( RTL_CONSTASCII_USTRINGPARAM("duration" ) ) ) );
+        OUString aDurationStr( extractParam( rArgs , OUString("duration" ) ) );
         if( aDurationStr.getLength() )
         {
             sal_Int64 n = aDurationStr.toInt64();
@@ -985,7 +985,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                 nLoop = nMagicNumberDirect * n;
         }
 
-        OUString aLogStr( extractParam( rArgs, OUString( RTL_CONSTASCII_USTRINGPARAM("log") ) ) );
+        OUString aLogStr( extractParam( rArgs, OUString("log") ) );
         if (aLogStr.getLength())
         {
             if (aLogStr.compareToAscii( "stderr" ) == 0)
@@ -1011,7 +1011,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             }
         }
 
-        OUString aArgStr( extractParam( rArgs, OUString( RTL_CONSTASCII_USTRINGPARAM("opt") ) ) );
+        OUString aArgStr( extractParam( rArgs, OUString("opt") ) );
         if (aArgStr.getLength())
         {
             aArg = aArgStr;
@@ -1061,16 +1061,16 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                                    aCurrentLanguageBindingName.pData, 0 );
 
             // pseudo mapping uno<->uno: does nothing!
-            Mapping aMapping( aCppEnv.get(), aAnoCppEnv.get(), OUString( RTL_CONSTASCII_USTRINGPARAM("pseudo") ) );
+            Mapping aMapping( aCppEnv.get(), aAnoCppEnv.get(), OUString("pseudo") );
             if (! aMapping.is())
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no pseudo mapping available!") ), Reference< XInterface >() );
+                throw RuntimeException( OUString("no pseudo mapping available!"), Reference< XInterface >() );
 
             Reference< XInterface > xMapped;
             Reference< XInterface > xDirect( getDirect() );
             aMapping.mapInterface( reinterpret_cast< void ** >( &xMapped ), xDirect.get(),
                                    ::getCppuType( &xDirect ) );
             if (! xMapped.is())
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("mapping object failed!") ), Reference< XInterface >() );
+                throw RuntimeException( OUString("mapping object failed!"), Reference< XInterface >() );
 
             sal_uInt32 nStart = getSystemTicks();
             benchmark( aSheets[ "mapped in process" ], xMapped, nLoop / 100 );
@@ -1085,22 +1085,22 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             // start server process
             oslSecurity hSecurity = osl_getCurrentSecurity();
             if (! hSecurity)
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get current security handle!") ), Reference< XInterface >() );
+                throw RuntimeException( OUString("cannot get current security handle!"), Reference< XInterface >() );
 
             OUString aArgs[] = {
-                OUString( RTL_CONSTASCII_USTRINGPARAM("-c") ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.performance.PerformanceTestObject") ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("-l") ),
+                OUString("-c"),
+                OUString("com.sun.star.comp.performance.PerformanceTestObject"),
+                OUString("-l"),
 #ifdef SAL_UNX
-                OUString( RTL_CONSTASCII_USTRINGPARAM("libperfobj.so") ),
+                OUString("libperfobj.so"),
 #else
-                OUString( RTL_CONSTASCII_USTRINGPARAM("perfobj.dll") ),
+                OUString("perfobj.dll"),
 #endif
-                OUString( RTL_CONSTASCII_USTRINGPARAM("-r") ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb") ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("-u") ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=6000;iiop;TestRemoteObject") ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM("--singleaccept") )
+                OUString("-r"),
+                OUString("applicat.rdb"),
+                OUString("-u"),
+                OUString("uno:socket,host=localhost,port=6000;iiop;TestRemoteObject"),
+                OUString("--singleaccept")
             };
             rtl_uString * pArgs[] = {
                 aArgs[0].pData,
@@ -1132,7 +1132,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 
             osl_freeSecurityHandle( hSecurity );
             if (! hProcess)
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("cannot start server process!") ), Reference< XInterface >() );
+                throw RuntimeException( OUString("cannot start server process!"), Reference< XInterface >() );
             osl_freeProcessHandle( hProcess );
 
             // wait three seconds
@@ -1141,8 +1141,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             osl_waitThread( &threeSeconds );
 
             // connect and resolve outer process object
-            Reference< XInterface > xResolvedObject( resolveObject( OUString(
-                RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=6000;iiop;TestRemoteObject") ) ) );
+            Reference< XInterface > xResolvedObject( resolveObject( OUString("uno:socket,host=localhost,port=6000;iiop;TestRemoteObject") ) );
 
             benchmark( aSheets[ "remote same host" ], xResolvedObject, nLoop / 300 );
         }
@@ -1152,7 +1151,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         if (aArg.indexOf( 'r' ) >= 0)
         {
             // remote
-            OUString aUnoUrl( extractParam( rArgs, OUString( RTL_CONSTASCII_USTRINGPARAM("url") ) ) );
+            OUString aUnoUrl( extractParam( rArgs, OUString("url") ) );
             if (! aUnoUrl.getLength())
                 throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("performance test r(emote) needs additional uno url!") ), Reference< XInterface >() );
 
@@ -1172,7 +1171,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         {
             // java
               benchmark( aSheets[ "java in process" ],
-                       _xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.benchmark.JavaTestObject"))),
+                       _xSMgr->createInstance(OUString("com.sun.star.comp.benchmark.JavaTestObject")),
                        nLoop / 1000 );
         }
 

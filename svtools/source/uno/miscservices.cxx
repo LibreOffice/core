@@ -96,7 +96,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
+                OUString( "com.sun.star.ui.AddressBookSourceDialog" );
 
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
@@ -109,7 +109,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilterOptionsDialog" ));
+                OUString( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
 
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),

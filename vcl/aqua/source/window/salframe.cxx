@@ -1079,7 +1079,7 @@ rtl::OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
         aKeyMap[ KEY_PAGEUP ]   = rtl::OUString( sal_Unicode( 0x21de ) );
         aKeyMap[ KEY_PAGEDOWN ] = rtl::OUString( sal_Unicode( 0x21df ) );
         aKeyMap[ KEY_RETURN ]   = rtl::OUString( sal_Unicode( 0x21a9 ) );
-        aKeyMap[ KEY_ESCAPE ]   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "esc" ) );
+        aKeyMap[ KEY_ESCAPE ]   = rtl::OUString( "esc" );
         aKeyMap[ KEY_TAB ]      = rtl::OUString( sal_Unicode( 0x21e5 ) );
         aKeyMap[ KEY_BACKSPACE ]= rtl::OUString( sal_Unicode( 0x232b ) );
         aKeyMap[ KEY_SPACE ]    = rtl::OUString( sal_Unicode( 0x2423 ) );

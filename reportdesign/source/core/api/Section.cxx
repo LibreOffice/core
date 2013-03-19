@@ -177,7 +177,7 @@ void SAL_CALL OSection::disposing()
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.Section"));
+    return ::rtl::OUString("com.sun.star.comp.report.Section");
 }
 //------------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString> OSection::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
@@ -317,7 +317,7 @@ void OSection::checkNotPageHeaderFooter()
 void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _forcenewpage < report::ForceNewPage::NONE || _forcenewpage > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star::report::ForceNewPage"))
+        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::ForceNewPage")
                         ,*this
                         ,1
                         ,m_xContext);
@@ -335,7 +335,7 @@ void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang
 void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _newroworcol < report::ForceNewPage::NONE || _newroworcol > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star::report::ForceNewPage"))
+        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::ForceNewPage")
                         ,*this
                         ,1
                         ,m_xContext);
@@ -427,11 +427,11 @@ const ::std::vector< ::rtl::OUString >& lcl_getControlModelMap()
     static ::std::vector< ::rtl::OUString > s_sControlModels;
     if ( s_sControlModels.empty() )
     {
-        s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FixedText")) );
-        s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FixedLine")) );
-        s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageControl")) );
-        s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField")) );
-        s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shape")) );
+        s_sControlModels.push_back( ::rtl::OUString("FixedText") );
+        s_sControlModels.push_back( ::rtl::OUString("FixedLine") );
+        s_sControlModels.push_back( ::rtl::OUString("ImageControl") );
+        s_sControlModels.push_back( ::rtl::OUString("FormattedField") );
+        s_sControlModels.push_back( ::rtl::OUString("Shape") );
     }
     return s_sControlModels;
 
@@ -450,19 +450,19 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
     switch( aFind - aRet.begin()  )
     {
         case 0:
-            xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"))),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.form.component.FixedText")),uno::UNO_QUERY);
             break;
         case 1:
-            xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel"))),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.awt.UnoControlFixedLineModel")),uno::UNO_QUERY);
             break;
         case 2:
-            xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"))),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.form.component.DatabaseImageControl")),uno::UNO_QUERY);
             break;
         case 3:
-            xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"))),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.form.component.FormattedField")),uno::UNO_QUERY);
             break;
         case 4:
-            xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"))),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.drawing.ControlShape")),uno::UNO_QUERY);
             break;
         default:
             break;

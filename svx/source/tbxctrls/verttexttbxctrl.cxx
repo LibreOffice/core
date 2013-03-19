@@ -34,14 +34,14 @@ SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {
     SetVert(sal_False);
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CTLFontState" )));
+    addStatusListener( rtl::OUString( ".uno:CTLFontState" ));
 }
 
 SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {
     SetVert(sal_True);
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:VerticalTextState" )));
+    addStatusListener( rtl::OUString( ".uno:VerticalTextState" ));
 }
 
 /* ---------------------------------------------------------------------------*/

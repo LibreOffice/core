@@ -76,17 +76,17 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             uno::Sequence< ::rtl::OUString > rServices;
             sal_Int32 ind = 0;
 
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            xNewKey = xKey->createKey( ::rtl::OUString("/") +
                                         MainThreadExecutor::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+                                        ::rtl::OUString( "/UNO/SERVICES")  );
 
             rServices = MainThreadExecutor::impl_staticGetSupportedServiceNames();
             for( ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            xNewKey = xKey->createKey( ::rtl::OUString("/") +
                                         VCLBitmapCreator::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+                                        ::rtl::OUString( "/UNO/SERVICES")  );
 
             rServices = VCLBitmapCreator::impl_staticGetSupportedServiceNames();
             for( ind = 0; ind < rServices.getLength(); ind++ )

@@ -640,7 +640,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
         try
         {
             uno::Any aAny = xOptions->getPropertyValue(
-                                        OUString(RTL_CONSTASCII_USTRINGPARAM( "NullDate" )) );
+                                        OUString( "NullDate" ) );
             util::Date aDate;
             if ( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );

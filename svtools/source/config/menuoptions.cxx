@@ -40,15 +40,15 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_MENU                           OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Menu"  ))
+#define ROOTNODE_MENU                           OUString("Office.Common/View/Menu"  )
 #define DEFAULT_DONTHIDEDISABLEDENTRIES         sal_False
 #define DEFAULT_FOLLOWMOUSE                     sal_True
 #define DEFAULT_MENUICONS                       2
 
-#define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString(RTL_CONSTASCII_USTRINGPARAM("DontHideDisabledEntry"    ))
-#define PROPERTYNAME_FOLLOWMOUSE                OUString(RTL_CONSTASCII_USTRINGPARAM("FollowMouse"              ))
-#define PROPERTYNAME_SHOWICONSINMENUES          OUString(RTL_CONSTASCII_USTRINGPARAM("ShowIconsInMenues"        ))
-#define PROPERTYNAME_SYSTEMICONSINMENUES        OUString(RTL_CONSTASCII_USTRINGPARAM("IsSystemIconsInMenus"     ))
+#define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString("DontHideDisabledEntry"    )
+#define PROPERTYNAME_FOLLOWMOUSE                OUString("FollowMouse"              )
+#define PROPERTYNAME_SHOWICONSINMENUES          OUString("ShowIconsInMenues"        )
+#define PROPERTYNAME_SYSTEMICONSINMENUES        OUString("IsSystemIconsInMenus"     )
 
 #define PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES  0
 #define PROPERTYHANDLE_FOLLOWMOUSE              1

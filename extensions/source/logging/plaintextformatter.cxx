@@ -186,14 +186,14 @@ namespace logging
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL PlainTextFormatter::getImplementationName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.PlainTextFormatter" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.PlainTextFormatter" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames_static()
     {
         Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.PlainTextFormatter" ) );
+        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.PlainTextFormatter" );
         return aServiceNames;
     }
 

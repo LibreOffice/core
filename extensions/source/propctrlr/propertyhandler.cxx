@@ -219,9 +219,9 @@ namespace pcr
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
 
         if ( ( m_pInfoService->getPropertyUIFlags( nPropId ) & PROP_FLAG_DATA_PROPERTY ) != 0 )
-            aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) );
+            aDescriptor.Category = ::rtl::OUString( "Data" );
         else
-            aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
+            aDescriptor.Category = ::rtl::OUString( "General" );
         return aDescriptor;
     }
 
@@ -379,28 +379,28 @@ namespace pcr
             ::rtl::OUString sConfigurationProperty;
             if ( xDocumentSI->supportsService( SERVICE_WEB_DOCUMENT ) )
             {   // writer
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.WriterWeb/Layout/Other" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MeasureUnit" ) );
+                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.WriterWeb/Layout/Other" );
+                sConfigurationProperty = ::rtl::OUString( "MeasureUnit" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_TEXT_DOCUMENT ) )
             {   // writer
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Writer/Layout/Other" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MeasureUnit" ) );
+                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Writer/Layout/Other" );
+                sConfigurationProperty = ::rtl::OUString( "MeasureUnit" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_SPREADSHEET_DOCUMENT ) )
             {   // calc
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit" );
+                sConfigurationProperty = ::rtl::OUString( "Metric" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_DRAWING_DOCUMENT ) )
             {
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Draw/Layout/Other/MeasureUnit" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Draw/Layout/Other/MeasureUnit" );
+                sConfigurationProperty = ::rtl::OUString( "Metric" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_PRESENTATION_DOCUMENT ) )
             {
-                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Impress/Layout/Other/MeasureUnit" ) );
-                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Impress/Layout/Other/MeasureUnit" );
+                sConfigurationProperty = ::rtl::OUString( "Metric" );
             }
 
             // read the measurement unit from the configuration

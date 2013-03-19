@@ -361,8 +361,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeExcep
         }
     }
     else
-        throw uno::RuntimeException( rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM( "Visible property doesn't support non boolean #FIXME" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Visible property doesn't support non boolean #FIXME" ), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL
@@ -370,7 +369,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain view shell" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Cannot obtain view shell" ), uno::Reference< uno::XInterface >() );
 
     ScMarkData& rMarkData = pViewShell->GetViewData()->GetMarkData();
     sal_Bool bReplace = sal_True;
@@ -474,7 +473,7 @@ ScVbaWorksheets::getItemByStringIndex( const rtl::OUString& sIndex ) throw (uno:
 rtl::OUString
 ScVbaWorksheets::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWorksheets"));
+    return rtl::OUString("ScVbaWorksheets");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -484,7 +483,7 @@ ScVbaWorksheets::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Worksheets") );
+        sNames[0] = rtl::OUString("ooo.vba.excel.Worksheets");
     }
     return sNames;
 }

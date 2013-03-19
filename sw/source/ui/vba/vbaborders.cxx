@@ -142,7 +142,7 @@ private:
 protected:
     virtual rtl::OUString getServiceImplName()
     {
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBorder"));
+        return rtl::OUString("SwVbaBorder");
     }
 
     virtual css::uno::Sequence<rtl::OUString> getServiceNames()
@@ -151,7 +151,7 @@ protected:
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Border" ) );
+            aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Border" );
         }
         return aServiceNames;
     }
@@ -226,12 +226,12 @@ public:
                     break;
                 }
                 default:
-                    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Bad param" ) ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( rtl::OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Method failed" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
     }
 };
 
@@ -354,7 +354,7 @@ void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::Runtim
 rtl::OUString
 SwVbaBorders::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBorders"));
+    return rtl::OUString("SwVbaBorders");
 }
 
 uno::Sequence< rtl::OUString >
@@ -364,7 +364,7 @@ SwVbaBorders::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Borders" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Borders" );
     }
     return aServiceNames;
 }

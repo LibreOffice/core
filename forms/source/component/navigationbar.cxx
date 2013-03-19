@@ -173,7 +173,7 @@ namespace frm
     //------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.form.ONavigationBarModel" ) );
+        return ::rtl::OUString( "com.sun.star.comp.form.ONavigationBarModel" );
     }
 
     //------------------------------------------------------------------
@@ -183,7 +183,7 @@ namespace frm
         aSupported.realloc( aSupported.getLength() + 2 );
 
         ::rtl::OUString* pArray = aSupported.getArray();
-        pArray[ aSupported.getLength() - 2 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlModel" ) );
+        pArray[ aSupported.getLength() - 2 ] = ::rtl::OUString( "com.sun.star.awt.UnoControlModel" );
         pArray[ aSupported.getLength() - 1 ] = FRM_SUN_COMPONENT_NAVTOOLBAR;
         return aSupported;
     }
@@ -447,7 +447,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:
-            aDefault <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.control.NavigationToolBar" ) );
+            aDefault <<= ::rtl::OUString( "com.sun.star.form.control.NavigationToolBar" );
             break;
 
         case PROPERTY_ID_HELPTEXT:

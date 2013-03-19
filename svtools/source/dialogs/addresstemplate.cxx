@@ -321,9 +321,9 @@ void AssignmentPersistentData::Commit()
 
     // -------------------------------------------------------------------
     AssignmentPersistentData::AssignmentPersistentData()
-        :ConfigItem( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.DataAccess/AddressBook" )))
+        :ConfigItem( ::rtl::OUString( "Office.DataAccess/AddressBook" ))
     {
-        Sequence< ::rtl::OUString > aStoredNames = GetNodeNames(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields")));
+        Sequence< ::rtl::OUString > aStoredNames = GetNodeNames(::rtl::OUString("Fields"));
         const ::rtl::OUString* pStoredNames = aStoredNames.getConstArray();
         for (sal_Int32 i=0; i<aStoredNames.getLength(); ++i, ++pStoredNames)
             m_aStoredFields.insert(*pStoredNames);
@@ -348,7 +348,7 @@ void AssignmentPersistentData::Commit()
         {
             ::rtl::OUString sFieldPath(RTL_CONSTASCII_USTRINGPARAM("Fields/"));
             sFieldPath += _rLogicalName;
-            sFieldPath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/AssignedFieldName"));
+            sFieldPath += ::rtl::OUString("/AssignedFieldName");
             sAssignment = getStringProperty(sFieldPath);
         }
         return sAssignment;
@@ -421,17 +421,17 @@ void AssignmentPersistentData::Commit()
 
         // Fields/<field>
         ::rtl::OUString sFieldElementNodePath(sDescriptionNodePath);
-        sFieldElementNodePath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sFieldElementNodePath += ::rtl::OUString("/");
         sFieldElementNodePath += _rLogicalName;
 
         Sequence< PropertyValue > aNewFieldDescription(2);
         // Fields/<field>/ProgrammaticFieldName
         aNewFieldDescription[0].Name = sFieldElementNodePath;
-        aNewFieldDescription[0].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/ProgrammaticFieldName"));
+        aNewFieldDescription[0].Name += ::rtl::OUString("/ProgrammaticFieldName");
         aNewFieldDescription[0].Value <<= _rLogicalName;
         // Fields/<field>/AssignedFieldName
         aNewFieldDescription[1].Name = sFieldElementNodePath;
-        aNewFieldDescription[1].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/AssignedFieldName"));
+        aNewFieldDescription[1].Name += ::rtl::OUString("/AssignedFieldName");
         aNewFieldDescription[1].Value <<= _rAssignment;
 
         // just set the new value
@@ -1236,7 +1236,7 @@ void AssignmentPersistentData::Commit()
                 if ( xProp.is() )
                 {
                     ::rtl::OUString sName;
-                    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sName;
+                    xProp->getPropertyValue(::rtl::OUString("DataSourceName")) >>= sName;
 
                     INetURLObject aURL( sName );
                     if( aURL.GetProtocol() != INET_PROT_NOT_VALID )

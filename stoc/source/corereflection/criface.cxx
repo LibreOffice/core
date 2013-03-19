@@ -206,7 +206,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
         return aRet;
     }
     throw IllegalArgumentException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
+        OUString("illegal object given!"),
         (XWeak *)(OWeakObject *)this, 0 );
 }
 //__________________________________________________________________________________________________
@@ -216,7 +216,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
     if (getAttributeTypeDescr()->bReadOnly)
     {
         throw IllegalAccessException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("cannot set readonly attribute!") ),
+            OUString("cannot set readonly attribute!"),
             (XWeak *)(OWeakObject *)this );
     }
 
@@ -292,11 +292,11 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         (*pUnoI->release)( pUnoI );
 
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal value given!") ),
+            OUString("illegal value given!"),
             *(const Reference< XInterface > *)rObj.getValue(), 1 );
     }
     throw IllegalArgumentException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal destination object given!") ),
+        OUString("illegal destination object given!"),
         (XWeak *)(OWeakObject *)this, 0 );
 }
 //__________________________________________________________________________________________________
@@ -625,7 +625,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         {
             (*pUnoI->release)( pUnoI );
             throw IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("arguments len differ!") ),
+                OUString("arguments len differ!"),
                 *(const Reference< XInterface > *)rObj.getValue(), 1 );
         }
 
@@ -699,7 +699,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 if (! bAssign)
                 {
                     IllegalArgumentException aExc(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("cannot coerce argument type during corereflection call!") ),
+                        OUString("cannot coerce argument type during corereflection call!"),
                         *(const Reference< XInterface > *)rObj.getValue(), (sal_Int16)nPos );
 
                     // cleanup
@@ -738,7 +738,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
 
             InvocationTargetException aExc;
             aExc.Context = *(const Reference< XInterface > *)rObj.getValue();
-            aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred during invocation!") );
+            aExc.Message = OUString("exception occurred during invocation!");
             uno_any_destruct(
                 &aExc.TargetException,
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
@@ -776,7 +776,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         return aRet;
     }
     throw IllegalArgumentException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal destination object given!") ),
+        OUString("illegal destination object given!"),
         (XWeak *)(OWeakObject *)this, 0 );
 }
 

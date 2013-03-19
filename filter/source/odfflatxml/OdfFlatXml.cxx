@@ -204,14 +204,14 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
 
 OUString OdfFlatXml::impl_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.filter.OdfFlatXml"));
+    return OUString("com.sun.star.comp.filter.OdfFlatXml");
 }
 
 Sequence< OUString > OdfFlatXml::impl_getSupportedServiceNames()
 {
     Sequence< OUString > lServiceNames(2);
-    lServiceNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ImportFilter" ));
-    lServiceNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportFilter" ));
+    lServiceNames[0] = OUString( "com.sun.star.document.ImportFilter" );
+    lServiceNames[1] = OUString( "com.sun.star.document.ExportFilter" );
     return lServiceNames;
 }
 

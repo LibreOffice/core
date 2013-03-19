@@ -65,7 +65,7 @@ ConditionField::ConditionField( Condition* _pParent, const ResId& _rResId ) : Ed
     m_pSubEdit->EnableRTL( sal_False );
     m_pSubEdit->SetPosPixel( Point() );
 
-    m_aFormula.SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("...")));
+    m_aFormula.SetText(::rtl::OUString("..."));
     m_aFormula.SetClickHdl( LINK( this, ConditionField, OnFormula ) );
     m_aFormula.Show();
     m_pSubEdit->Show();

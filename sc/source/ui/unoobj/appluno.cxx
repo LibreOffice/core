@@ -367,7 +367,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
 
 rtl::OUString ScSpreadsheetSettings::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScSpreadsheetSettings" ));
+    return rtl::OUString( "stardiv.StarCalc.ScSpreadsheetSettings" );
 }
 
 uno::Sequence<rtl::OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
@@ -629,7 +629,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
 
 rtl::OUString ScRecentFunctionsObj::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScRecentFunctionsObj" ));
+    return rtl::OUString( "stardiv.StarCalc.ScRecentFunctionsObj" );
 }
 
 uno::Sequence<rtl::OUString> ScRecentFunctionsObj::getSupportedServiceNames_Static()
@@ -710,7 +710,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
 
 rtl::OUString ScFunctionListObj::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScFunctionListObj" ));
+    return rtl::OUString( "stardiv.StarCalc.ScFunctionListObj" );
 }
 
 uno::Sequence<rtl::OUString> ScFunctionListObj::getSupportedServiceNames_Static()
@@ -882,7 +882,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumer
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.FunctionDescriptionEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.FunctionDescriptionEnumeration"));
 }
 
 // XElementAccess

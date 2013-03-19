@@ -138,8 +138,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             {
                 throw RuntimeException(
                     (OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "pyuno bridge: Couldn't get reflection for method "))
+                            "pyuno bridge: Couldn't get reflection for method ")
                      + functionName),
                     Reference< XInterface > () );
             }

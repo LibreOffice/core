@@ -309,7 +309,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
-        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rtl::OUString::createFromAscii(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
+        throw PropertyVetoException ( OUString( "Property is read-only: " ) + rtl::OUString::createFromAscii(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
 
     switch( rInfo.mnHandle )
     {
@@ -706,13 +706,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             uno::Sequence< beans::PropertyValue > aInfo;
             if ( !( rValue >>= aInfo ) )
                 throw lang::IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
+                    ::rtl::OUString( "Value of type Sequence<PropertyValue> expected!" ),
                     uno::Reference< uno::XInterface >(),
                     2 );
 
             if ( !mpDocSh->SetModifyPasswordInfo( aInfo ) )
                 throw beans::PropertyVetoException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                    ::rtl::OUString( "The hash is not allowed to be changed now!" ),
                     uno::Reference< uno::XInterface >() );
         }
         break;
@@ -1223,7 +1223,7 @@ void SwXDocumentSettings::_postGetValues ()
 OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.DocumentSettings"));
+    return OUString("com.sun.star.comp.Writer.DocumentSettings");
 }
 
 sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
@@ -1244,9 +1244,9 @@ Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     Sequence< OUString > aSeq( 3 );
-    aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings") );
-    aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DocumentSettings") );
-    aSeq[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.PrintSettings") );
+    aSeq[0] = OUString("com.sun.star.document.Settings");
+    aSeq[1] = OUString("com.sun.star.text.DocumentSettings");
+    aSeq[2] = OUString("com.sun.star.text.PrintSettings");
     return aSeq;
 }
 

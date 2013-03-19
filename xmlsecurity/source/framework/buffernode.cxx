@@ -251,34 +251,34 @@ rtl::OUString BufferNode::printChildren() const
 
     for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BufID=" ));
+        rc += rtl::OUString( "BufID=" );
         rc += rtl::OUString::valueOf((*ii)->getBufferId());
 
         if (((ElementCollector*)(*ii))->getModify())
         {
-            rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[M]" ));
+            rc += rtl::OUString( "[M]" );
         }
 
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",Pri=" ));
+        rc += rtl::OUString( ",Pri=" );
 
         switch (((ElementCollector*)(*ii))->getPriority())
         {
             case cssxc::sax::ElementMarkPriority_BEFOREMODIFY:
-                rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BEFOREMODIFY" ));
+                rc += rtl::OUString( "BEFOREMODIFY" );
                 break;
             case cssxc::sax::ElementMarkPriority_AFTERMODIFY:
-                rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFTERMODIFY" ));
+                rc += rtl::OUString( "AFTERMODIFY" );
                 break;
             default:
-                rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UNKNOWN" ));
+                rc += rtl::OUString( "UNKNOWN" );
                 break;
         }
 
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "(" ));
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SecID=" ));
+        rc += rtl::OUString( "(" );
+        rc += rtl::OUString( "SecID=" );
         rc += rtl::OUString::valueOf(((ElementCollector*)(*ii))->getSecurityId());
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+        rc += rtl::OUString( " " );
     }
 
     return rc;

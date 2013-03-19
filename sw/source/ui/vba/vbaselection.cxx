@@ -81,7 +81,7 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange() throw ( un
 {
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextRanges") ) ) )
+    if( xServiceInfo->supportsService( rtl::OUString("com.sun.star.text.TextRanges") ) )
     {
         uno::Reference< container::XIndexAccess > xTextRanges( xServiceInfo, uno::UNO_QUERY_THROW );
         if( xTextRanges->getCount() > 0 )
@@ -92,7 +92,7 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange() throw ( un
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
     return xTextRange;
 }
@@ -154,7 +154,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
         }
         default:
         {
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
         }
     }
 }
@@ -189,7 +189,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
         }
         default:
         {
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
         }
     }
 }
@@ -215,11 +215,11 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count ) throw ( 
             }
             default:
             {
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
             }
         }
     }
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Delete"));
+    rtl::OUString url = rtl::OUString( ".uno:Delete");
     dispatchRequests( mxModel,url );
 }
 
@@ -258,7 +258,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         {
             if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
             {
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
             }
             uno::Reference< view::XViewCursor > xViewCursor( mxTextViewCursor, uno::UNO_QUERY_THROW );
             if( eDirection == word::MOVE_UP )
@@ -271,7 +271,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         {
             if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
             {
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
             }
             if( word::gotoSelectedObjectAnchor( mxModel ) )
             {
@@ -287,7 +287,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
                 {
                     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
                     uno::Reference< text::XTextTable > xTextTable;
-                    xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextTable") ) ) >>= xTextTable;
+                    xCursorProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextTable;
                     if( xTextTable.is() )
                     {
                         uno::Reference< text::XTextRange > xRange( xTextTable->getCellByName( xTextTableCursor->getRangeName()), uno::UNO_QUERY_THROW );
@@ -311,7 +311,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
             {
                 if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
                 {
-                    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
                 }
                 uno::Reference< text::XParagraphCursor > xParagraphCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
@@ -326,7 +326,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
             {
                 if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
                 {
-                    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
                 }
                 uno::Reference< text::XWordCursor > xWordCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
@@ -343,7 +343,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
         }
         default:
         {
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
         }
     }
 }
@@ -353,8 +353,8 @@ void SwVbaSelection::NextCell( sal_Int32 nCount, word::E_DIRECTION eDirection ) 
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
     uno::Reference< table::XCell > xCell;
-    xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextTable") ) ) >>= xTextTable;
-    xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cell") ) ) >>= xCell;
+    xCursorProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextTable;
+    xCursorProps->getPropertyValue( rtl::OUString("Cell") ) >>= xCell;
     if( !xTextTable.is() || !xCell.is() )
     {
         DebugHelper::exception(SbERR_BAD_ARGUMENT, rtl::OUString());
@@ -362,7 +362,7 @@ void SwVbaSelection::NextCell( sal_Int32 nCount, word::E_DIRECTION eDirection ) 
     }
     uno::Reference< beans::XPropertySet > xCellProps( xCell, uno::UNO_QUERY_THROW );
     rtl::OUString aCellName;
-    xCellProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CellName") ) ) >>= aCellName;
+    xCellProps->getPropertyValue( rtl::OUString("CellName") ) >>= aCellName;
     uno::Reference< text::XTextTableCursor > xTextTableCursor = xTextTable->createCursorByCellName( aCellName );
     // move the table cursor
     switch( eDirection )
@@ -548,7 +548,7 @@ SwVbaSelection::getFont() throw ( uno::RuntimeException )
 void SAL_CALL
 SwVbaSelection::TypeBackspace() throw ( uno::RuntimeException )
 {
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwBackspace"));
+    rtl::OUString url = rtl::OUString( ".uno:SwBackspace");
     dispatchRequests( mxModel,url );
 }
 
@@ -648,11 +648,11 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
             if( nPage != 0 )
                 xPageCursor->jumpToPage( ( sal_Int16 )( nPage ) );
             else
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
             break;
         }
         default:
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
     return getRange();
 }
@@ -691,7 +691,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
         {
             uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
             uno::Reference< text::XTextTable > xTextTable;
-            xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextTable") ) ) >>= xTextTable;
+            xCursorProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextTable;
             if( xTextTable.is() )
                 result = uno::makeAny( sal_True );
             else
@@ -735,7 +735,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
                 {
                     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
                     rtl::OUString aPageStyleName;
-                    xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))) >>= aPageStyleName;
+                    xCursorProps->getPropertyValue( rtl::OUString("PageStyleName")) >>= aPageStyleName;
                     bool bFirstPage = false;
                     if ( aPageStyleName == "First Page" )
                         bFirstPage = true;
@@ -764,7 +764,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
             break;
         }
         default:
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
     return result;
 }
@@ -792,7 +792,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex ) throw (uno::RuntimeException)
 
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
-    xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextTable") ) ) >>= xTextTable;
+    xCursorProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextTable;
     if( xTextTable.is() )
     {
             uno::Reference< css::text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
@@ -955,7 +955,7 @@ uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable() throw( uno::R
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
-    xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextTable") ) ) >>= xTextTable;
+    xCursorProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextTable;
     return xTextTable;
 }
 
@@ -981,7 +981,7 @@ void SwVbaSelection::GetSelectedCellRange( rtl::OUString& sTLName, rtl::OUString
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
-    xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextTable") ) ) >>= xTextTable;
+    xCursorProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextTable;
     if( !xTextTable.is() )
         throw uno::RuntimeException( );
 
@@ -998,13 +998,13 @@ void SwVbaSelection::GetSelectedCellRange( rtl::OUString& sTLName, rtl::OUString
     if( sTLName.isEmpty() )
     {
         uno::Reference< table::XCell > xCell;
-        xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cell") ) ) >>= xCell;
+        xCursorProps->getPropertyValue( rtl::OUString("Cell") ) >>= xCell;
         if( !xCell.is() )
         {
             throw uno::RuntimeException( );
         }
         uno::Reference< beans::XPropertySet > xCellProps( xCell, uno::UNO_QUERY_THROW );
-        xCellProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CellName") ) ) >>= sTLName;
+        xCellProps->getPropertyValue( rtl::OUString("CellName") ) >>= sTLName;
     }
 }
 
@@ -1041,7 +1041,7 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index ) throw (uno::Run
 
 void SAL_CALL SwVbaSelection::Copy(  ) throw (uno::RuntimeException)
 {
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Copy"));
+    rtl::OUString url = rtl::OUString( ".uno:Copy");
     dispatchRequests( mxModel,url );
 }
 
@@ -1053,7 +1053,7 @@ void SAL_CALL SwVbaSelection::CopyAsPicture(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SwVbaSelection::Paste(  ) throw (uno::RuntimeException)
 {
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Paste"));
+    rtl::OUString url = rtl::OUString( ".uno:Paste");
     dispatchRequests( mxModel,url );
 }
 
@@ -1101,7 +1101,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  ) throw (uno::RuntimeException)
             // insert an empty line
             uno::Reference< text::XTextRange > xFirstCellRange = word::getFirstObjectPosition( xText );
             mxTextViewCursor->gotoRange( xFirstCellRange, sal_False );
-            rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPara"));
+            rtl::OUString url = rtl::OUString( ".uno:InsertPara");
             dispatchRequests( mxModel,url );
         }
     }
@@ -1165,7 +1165,7 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
 rtl::OUString
 SwVbaSelection::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSelection"));
+    return rtl::OUString("SwVbaSelection");
 }
 
 uno::Sequence< rtl::OUString >
@@ -1175,7 +1175,7 @@ SwVbaSelection::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Selection" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Selection" );
     }
     return aServiceNames;
 }

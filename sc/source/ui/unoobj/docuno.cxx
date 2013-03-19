@@ -250,7 +250,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                   ! bSuppress);
     // show Subgroup for print content
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
-    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aPrintRangeOpt.maGroupHint = rtl::OUString( "PrintRange" );
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", rtl::OUString(aStrings.GetString(2)),
                                                       rtl::OUString(),
                                                       aPrintRangeOpt);
@@ -258,13 +258,13 @@ ScPrintUIOptions::ScPrintUIOptions()
     // create a choice for the content to create
     uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpIds( 3 ), aWidgetIds( 3 );
     aChoices[0] = aStrings.GetString( 3 );
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+    aHelpIds[0] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" );
     aWidgetIds[0] = "printallsheets";
     aChoices[1] = aStrings.GetString( 4 );
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
+    aHelpIds[1] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" );
     aWidgetIds[1] = "printselectedsheets";
     aChoices[2] = aStrings.GetString( 5 );
-    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ) );
+    aHelpIds[2] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" );
     aWidgetIds[2] = "printselectedcells";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
                                                     aHelpIds, "PrintContent",
@@ -282,10 +282,10 @@ ScPrintUIOptions::ScPrintUIOptions()
     aHelpIds.realloc( 2 );
     aWidgetIds.realloc( 2 );
     aChoices[0] = aStrings.GetString( 7 );
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0" ) );
+    aHelpIds[0] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0" );
     aWidgetIds[0] = "printallpages";
     aChoices[1] = aStrings.GetString( 8 );
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1" ) );
+    aHelpIds[1] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1" );
     aWidgetIds[1] = "printpages";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
                                                     aHelpIds,
@@ -1840,7 +1840,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 That constant will be equivelant to 'ThisComponent' but for
                 each application, so e.g. a 'ThisExcelDoc' and a 'ThisWordDoc'
                 constant can co-exist, as required by VBA. */
-            aRet <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisExcelDoc" ) );
+            aRet <<= rtl::OUString( "ThisExcelDoc" );
         }
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {
@@ -2013,7 +2013,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 
 rtl::OUString SAL_CALL ScModelObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScModelObj" ));
+    return rtl::OUString( "ScModelObj" );
 }
 
 sal_Bool SAL_CALL ScModelObj::supportsService( const rtl::OUString& rServiceName )
@@ -2696,7 +2696,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableSheetsObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetsEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SpreadsheetsEnumeration"));
 }
 
 // XIndexAccess
@@ -2872,7 +2872,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableColumnsObj::createEnumer
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.TableColumnsEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.table.TableColumnsEnumeration"));
 }
 
 // XIndexAccess
@@ -3131,7 +3131,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableRowsObj::createEnumerati
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.TableRowsEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.table.TableRowsEnumeration"));
 }
 
 // XIndexAccess
@@ -3484,7 +3484,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAnnotationsObj::createEnumera
     //! iterate directly (more efficiently)?
 
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.CellAnnotationsEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.CellAnnotationsEnumeration"));
 }
 
 // XIndexAccess
@@ -3644,7 +3644,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScScenariosObj::createEnumerati
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.ScenariosEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.ScenariosEnumeration"));
 }
 
 // XIndexAccess

@@ -66,7 +66,7 @@ void lcl_correctCellAddress(const ::rtl::OUString & _sName, const uno::Reference
     if ( nPos != -1 )
     {
         sCellAddress = sCellAddress.copy(0,nPos);
-        sCellAddress += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$65535"));
+        sCellAddress += ::rtl::OUString("$65535");
         pList->RemoveAttribute(_sName);
         pList->AddAttribute(_sName,sCellAddress);
     }
@@ -117,14 +117,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ExportDocumentHandler::getSupportedSer
 //------------------------------------------------------------------------
 ::rtl::OUString ExportDocumentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ExportDocumentHandler"));
+    return ::rtl::OUString("com.sun.star.comp.report.ExportDocumentHandler");
 }
 
 //------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > ExportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ExportDocumentHandler"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.report.ExportDocumentHandler");
     return aSupported;
 }
 
@@ -182,7 +182,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
         m_xDelegatee->startElement(sTableCalc,NULL);
         pList = new SvXMLAttributeList();
         uno::Reference< xml::sax::XAttributeList > xNullAttr = pList;
-        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1900-01-01")));
+        pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),::rtl::OUString("1900-01-01"));
 
         const ::rtl::OUString sNullDate = lcl_createAttribute(XML_NP_TABLE,XML_NULL_DATE);
         m_xDelegatee->startElement(sNullDate,xNullAttr);
@@ -216,7 +216,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
     else if ( _sName == "chart:plot-area" )
     {
         SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
-        pList->RemoveAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")));
+        pList->RemoveAttribute(::rtl::OUString("table:cell-range-address"));
     }
     else if ( _sName == "chart:categories" )
     {
@@ -306,8 +306,8 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    m_xDelegatee = aArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentHandler")),m_xDelegatee);
-    m_xModel = aArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")),m_xModel);
+    m_xDelegatee = aArgs.getUnpackedValueOrDefault(::rtl::OUString("DocumentHandler"),m_xDelegatee);
+    m_xModel = aArgs.getUnpackedValueOrDefault(::rtl::OUString("Model"),m_xModel);
 
     OSL_ENSURE(m_xDelegatee.is(),"No document handler avialable!");
     if ( !m_xDelegatee.is() || !m_xModel.is() )

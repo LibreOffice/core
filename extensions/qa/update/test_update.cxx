@@ -84,7 +84,7 @@ protected:
         deployment::UpdateInformationEntry aEntry;
         if ( aUpdateInfoEnumeration->nextElement() >>= aEntry )
         {
-            CPPUNIT_ASSERT( aEntry.UpdateDocument->getNodeName() == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "description" ) ) );
+            CPPUNIT_ASSERT( aEntry.UpdateDocument->getNodeName() == rtl::OUString( "description" ) );
 
             uno::Reference< dom::XNodeList> xChildNodes = aEntry.UpdateDocument->getChildNodes();
             CPPUNIT_ASSERT( xChildNodes.is() );
@@ -104,8 +104,8 @@ protected:
 
             //uno::Reference< dom::XElement > xChildId( xChildNodes->item( 0 ), uno::UNO_QUERY );
             //CPPUNIT_ASSERT( xChildId.is() );
-            //CPPUNIT_ASSERT( xChildId->getNodeValue() == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LibreOffice_3.4" ) ) );
-            //fprintf( stderr, "Attribute == %s\n", rtl::OUStringToOString( aEntry.UpdateDocument->getAttribute( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "test" ) ) ), RTL_TEXTENCODING_UTF8 ).getStr() );
+            //CPPUNIT_ASSERT( xChildId->getNodeValue() == rtl::OUString( "LibreOffice_3.4" ) );
+            //fprintf( stderr, "Attribute == %s\n", rtl::OUStringToOString( aEntry.UpdateDocument->getAttribute( rtl::OUString( "test" ) ), RTL_TEXTENCODING_UTF8 ).getStr() );
             //fprintf( stderr, "Value == %s\n", rtl::OUStringToOString( xChildId->getNodeValue(), RTL_TEXTENCODING_UTF8 ).getStr() );
             // TODO check more deeply
         }
@@ -120,14 +120,14 @@ protected:
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
 
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Linux" ) ),
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "x86" ) ),
+                    rtl::OUString( "Linux" ),
+                    rtl::OUString( "x86" ),
                     m_aRepositoryList,
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "111111-222222-333333-444444" ) ),
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InstallSetID" ) ) ) )
+                    rtl::OUString( "111111-222222-333333-444444" ),
+                    rtl::OUString( "InstallSetID" ) ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
-            CPPUNIT_ASSERT( aInfo.Sources[0].URL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "http://www.libreoffice.org/download/" ) ) );
+            CPPUNIT_ASSERT( aInfo.Sources[0].URL == rtl::OUString( "http://www.libreoffice.org/download/" ) );
         }
         else
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );
@@ -140,11 +140,11 @@ protected:
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
 
         if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Linux" ) ),
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "x86" ) ),
+                    rtl::OUString( "Linux" ),
+                    rtl::OUString( "x86" ),
                     m_aRepositoryList,
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "123456-abcdef-1a2b3c-4d5e6f" ) ),
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InstallSetID" ) ) ) )
+                    rtl::OUString( "123456-abcdef-1a2b3c-4d5e6f" ),
+                    rtl::OUString( "InstallSetID" ) ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.empty() );
         }

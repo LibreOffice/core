@@ -89,7 +89,7 @@ void SAL_CALL OReportEngineJFree::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OReportEngineJFree::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OReportEngineJFree"));
+    return ::rtl::OUString("com.sun.star.comp.report.OReportEngineJFree");
 }
 
 //--------------------------------------------------------------------------
@@ -190,9 +190,9 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
 
             uno::Sequence< beans::NamedValue > aConvertedProperties(8);
             sal_Int32 nPos = 0;
-            aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStorage"));
+            aConvertedProperties[nPos].Name = ::rtl::OUString("InputStorage");
             aConvertedProperties[nPos++].Value <<= xTemp;
-            aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStorage"));
+            aConvertedProperties[nPos].Name = ::rtl::OUString("OutputStorage");
 
             ::rtl::OUString sFileURL;
             String sName = m_xReport->getCaption();
@@ -304,15 +304,15 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
         {
             uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
             sal_Int32 nLen = 0;
-            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+            aArgs[nLen].Name = ::rtl::OUString("AsTemplate");
             aArgs[nLen++].Value <<= sal_False;
 
-            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            aArgs[nLen].Name = ::rtl::OUString("ReadOnly");
             aArgs[nLen++].Value <<= sal_True;
 
             if ( _bHidden )
             {
-                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+                aArgs[nLen].Name = ::rtl::OUString("Hidden");
                 aArgs[nLen++].Value <<= sal_True;
             }
 

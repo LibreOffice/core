@@ -209,7 +209,7 @@ void SAL_CALL OFixedLine::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFixedLine::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OFixedLine"));
+    return ::rtl::OUString("com.sun.star.comp.report.OFixedLine");
 }
 
 //--------------------------------------------------------------------------
@@ -526,7 +526,7 @@ void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::Proper
 // XShapeDescriptor
 ::rtl::OUString SAL_CALL OFixedLine::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"));
+   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFixedLine::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)

@@ -195,7 +195,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 //------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.forms.OFormattedFieldWrapper") );
+    return ::rtl::OUString("com.sun.star.comp.forms.OFormattedFieldWrapper");
 }
 
 //------------------------------------------------------------------

@@ -1594,7 +1594,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::ge
 ::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName(void)
                     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessibleDocumentPagePreview"));
+    return ::rtl::OUString("ScAccessibleDocumentPagePreview");
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames(void)
@@ -1605,7 +1605,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSup
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.AccessibleSpreadsheetPageView"));
+    pNames[nOldSize] = rtl::OUString("com.sun.star.AccessibleSpreadsheetPageView");
 
     return aSequence;
 }

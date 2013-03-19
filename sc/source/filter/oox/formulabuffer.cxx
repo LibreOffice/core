@@ -203,7 +203,7 @@ void  FormulaBuffer::createSharedFormula( const ::com::sun::star::table::CellAdd
     rtl::OUString aName = rtl::OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
         append( static_cast< sal_Int32 >( rAddress.Sheet + 1 ) ).
         append( sal_Unicode( '_' ) ).append( nSharedId ).
-        append( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_0") ) ).makeStringAndClear();
+        append( rtl::OUString("_0") ).makeStringAndClear();
     ScRangeData* pScRangeData  = createNamedRangeObject( aName, aTokens, 0  );
 
     pScRangeData->SetType(RT_SHARED);

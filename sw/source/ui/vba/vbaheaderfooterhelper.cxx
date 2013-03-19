@@ -54,8 +54,8 @@ sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xM
     if( !isHeaderFooter( xCurrentText ) )
         return sal_False;
 
-    rtl::OUString aPropIsShared = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderIsShared") );
-    rtl::OUString aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderText") );
+    rtl::OUString aPropIsShared = rtl::OUString("HeaderIsShared");
+    rtl::OUString aPropText = rtl::OUString("HeaderText");
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
     sal_Bool isShared = sal_True;
@@ -64,9 +64,9 @@ sal_Bool HeaderFooterHelper::isHeader( const uno::Reference< frame::XModel >& xM
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
         if( 0 == xPageCursor->getPage() % 2 )
-            aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderTextLeft") );
+            aPropText = rtl::OUString("HeaderTextLeft");
         else
-            aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderTextRight") );
+            aPropText = rtl::OUString("HeaderTextRight");
     }
 
     uno::Reference< text::XText > xHeaderText( xPageProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
@@ -104,7 +104,7 @@ sal_Bool HeaderFooterHelper::isEvenPagesHeader( const uno::Reference< frame::XMo
     {
         uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
         sal_Bool isShared = sal_False;
-        xStyleProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HeaderIsShared"))) >>= isShared;
+        xStyleProps->getPropertyValue( rtl::OUString("HeaderIsShared")) >>= isShared;
         if( !isShared )
         {
             uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
@@ -120,8 +120,8 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
     if( !isHeaderFooter( xCurrentText ) )
         return sal_False;
 
-    rtl::OUString aPropIsShared = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterIsShared") );
-    rtl::OUString aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterText") );
+    rtl::OUString aPropIsShared = rtl::OUString("FooterIsShared");
+    rtl::OUString aPropText = rtl::OUString("FooterText");
     uno::Reference< style::XStyle > xPageStyle = word::getCurrentPageStyle( xModel );
     uno::Reference< beans::XPropertySet > xPageProps( xPageStyle, uno::UNO_QUERY_THROW );
     sal_Bool isShared = sal_True;
@@ -130,9 +130,9 @@ sal_Bool HeaderFooterHelper::isFooter( const uno::Reference< frame::XModel >& xM
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
         if( 0 == xPageCursor->getPage() % 2 )
-            aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterTextLeft") );
+            aPropText = rtl::OUString("FooterTextLeft");
         else
-            aPropText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterTextRight") );
+            aPropText = rtl::OUString("FooterTextRight");
     }
 
     uno::Reference< text::XText > xFooterText( xPageProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
@@ -169,7 +169,7 @@ sal_Bool HeaderFooterHelper::isEvenPagesFooter( const uno::Reference< frame::XMo
     {
         uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
         sal_Bool isShared = sal_False;
-        xStyleProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FooterIsShared"))) >>= isShared;
+        xStyleProps->getPropertyValue( rtl::OUString("FooterIsShared")) >>= isShared;
         if( !isShared )
         {
             uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );

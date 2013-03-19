@@ -847,7 +847,7 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
 //----------------------------------------------------------------------
 OUString SAL_CALL SvxDrawPage::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxDrawPage"));
+    return OUString("SvxDrawPage");
 }
 
 sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
@@ -859,7 +859,7 @@ sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSeq( 1 );
-    aSeq.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection" ));
+    aSeq.getArray()[0] = OUString("com.sun.star.drawing.ShapeCollection" );
     return aSeq;
 }
 

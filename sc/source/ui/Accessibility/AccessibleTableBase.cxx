@@ -439,7 +439,7 @@ void SAL_CALL
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleTableBase"));
+    return rtl::OUString("ScAccessibleTableBase");
 }
 
     //=====  XTypeProvider  ===================================================

@@ -176,16 +176,16 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+                ::rtl::OUString("CellRangeRepresentation"), -1,
                 uno::makeAny( aRangeString ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+                ::rtl::OUString("HasCategories"), -1,
                 uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+                ::rtl::OUString("FirstCellAsLabel"), -1,
                 uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+                ::rtl::OUString("DataRowSource"), -1,
                 uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
             xReceiver->setArguments( aArgs );
 
@@ -290,7 +290,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                             if ( xSet.is() )
                             {
-                                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
+                                xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
                                         uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                             }
                         }
@@ -667,7 +667,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 {
                     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
                         xMCF->createInstanceWithContext(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.WizardDialog"))
+                            rtl::OUString("com.sun.star.comp.chart2.WizardDialog")
                             , xContext), uno::UNO_QUERY);
                     uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                     if( xChartModel.is() && xInit.is() )
@@ -677,10 +677,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                         uno::Sequence<uno::Any> aSeq(2);
                         uno::Any* pArray = aSeq.getArray();
                         beans::PropertyValue aParam1;
-                        aParam1.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
+                        aParam1.Name = rtl::OUString("ParentWindow");
                         aParam1.Value <<= uno::makeAny(xDialogParentWindow);
                         beans::PropertyValue aParam2;
-                        aParam2.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChartModel"));
+                        aParam2.Name = rtl::OUString("ChartModel");
                         aParam2.Value <<= uno::makeAny(xChartModel);
                         pArray[0] <<= uno::makeAny(aParam1);
                         pArray[1] <<= uno::makeAny(aParam2);
@@ -694,7 +694,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             {
                                 //get dialog size:
                                 awt::Size aDialogAWTSize;
-                                if( xDialogProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) )
+                                if( xDialogProps->getPropertyValue( ::rtl::OUString("Size") )
                                     >>= aDialogAWTSize )
                                 {
                                     Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -702,12 +702,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                                     {
                                         //calculate and set new position
                                         Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
-                                        xDialogProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Position")),
+                                        xDialogProps->setPropertyValue( ::rtl::OUString("Position"),
                                             uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                     }
                                 }
                                 //tell the dialog to unlock controller
-                                xDialogProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UnlockControllersOnExecute")),
+                                xDialogProps->setPropertyValue( ::rtl::OUString("UnlockControllersOnExecute"),
                                             uno::makeAny( sal_True ) );
 
                             }

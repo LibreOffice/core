@@ -56,7 +56,7 @@ void testPropertyTypeHelper()
 
     ::com::sun::star::beans::Property prop;
 
-    prop.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Huhu") );
+    prop.Name = rtl::OUString("Huhu");
     prop.Handle = 5;
     prop.Attributes = 3;
 

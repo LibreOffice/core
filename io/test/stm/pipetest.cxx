@@ -153,7 +153,7 @@ void OPipeTest::testInvariant( const OUString& TestName, const Reference < XInte
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
         ERROR_ASSERT( ! info->supportsService(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("bla bluzb") ) ), "XServiceInfo test failed" );
+            OUString("bla bluzb") ), "XServiceInfo test failed" );
     }
 
 }
@@ -165,7 +165,7 @@ sal_Int32 OPipeTest::test(
     sal_Int32 hTestHandle)
     throw  (    IllegalArgumentException, RuntimeException)
 {
-    if( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) == TestName )  {
+    if( OUString("com.sun.star.io.Pipe") == TestName )  {
         try
         {
             if( 0 == hTestHandle ) {

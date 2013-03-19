@@ -52,7 +52,7 @@ namespace
     Sequence< OUString > SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFolderPicker"));
+        aRet[0] = OUString("com.sun.star.ui.dialogs.SystemFolderPicker");
         return aRet;
     }
 }

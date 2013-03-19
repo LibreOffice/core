@@ -78,8 +78,8 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
         case STATE_NAME0:
             if (bEnd || !isAlphanum(c))
                 throw rtl::MalformedUriException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "UNO URL contains bad descriptor name")));
+                    rtl::OUString(
+                                      "UNO URL contains bad descriptor name"));
             nStart = i;
             eState = STATE_NAME;
             break;
@@ -93,15 +93,15 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
             }
             else if (!isAlphanum(c))
                 throw rtl::MalformedUriException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "UNO URL contains bad descriptor name")));
+                    rtl::OUString(
+                                      "UNO URL contains bad descriptor name"));
             break;
 
         case STATE_KEY0:
             if (bEnd || !isAlphanum(c))
                 throw rtl::MalformedUriException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "UNO URL contains bad parameter key")));
+                    rtl::OUString(
+                                      "UNO URL contains bad parameter key"));
             nStart = i;
             eState = STATE_KEY;
             break;
@@ -115,8 +115,8 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
             }
             else if (bEnd || !isAlphanum(c))
                 throw rtl::MalformedUriException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "UNO URL contains bad parameter key")));
+                    rtl::OUString(
+                                      "UNO URL contains bad parameter key"));
             break;
 
         case STATE_VALUE:
@@ -131,8 +131,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
                                              RTL_TEXTENCODING_UTF8))).second)
                     throw rtl::MalformedUriException(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "UNO URL contains duplicated parameter")));
+                                "UNO URL contains duplicated parameter"));
                 eState = STATE_KEY0;
             }
             break;
@@ -223,8 +222,8 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     sal_Int32 j = rUrl.indexOf(';', i);
     if (j < 0)
         throw rtl::MalformedUriException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "UNO URL has too few semicolons")));
+            rtl::OUString(
+                              "UNO URL has too few semicolons"));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< UnoUrlDescriptor::Impl >
         xConnection(new UnoUrlDescriptor::Impl(rUrl.copy(i, j - i)));
@@ -233,8 +232,8 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     j = rUrl.indexOf(0x3B, i); // ';'
     if (j < 0)
         throw rtl::MalformedUriException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "UNO URL has too few semicolons")));
+            rtl::OUString(
+                              "UNO URL has too few semicolons"));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< UnoUrlDescriptor::Impl >
         xProtocol(new UnoUrlDescriptor::Impl(rUrl.copy(i, j - i)));
@@ -242,8 +241,8 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     i = j + 1;
     if (i == rUrl.getLength())
         throw rtl::MalformedUriException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "UNO URL contains empty ObjectName")));
+            rtl::OUString(
+                              "UNO URL contains empty ObjectName"));
     for (j = i; j < rUrl.getLength(); ++j)
     {
         sal_Unicode c = rUrl.getStr()[j];
@@ -255,8 +254,8 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
             && c != 0x3F && c != 0x40 && c != 0x5F // '?', '@', '_'
             && c != 0x7E) // '~'
             throw rtl::MalformedUriException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                  "UNO URL contains invalid ObjectName")));
+                rtl::OUString(
+                                  "UNO URL contains invalid ObjectName"));
     }
     return new Impl(xConnection, xProtocol, rUrl.copy(i));
 }

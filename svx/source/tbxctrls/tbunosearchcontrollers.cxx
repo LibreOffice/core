@@ -148,7 +148,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 if (xPropSet.is())
                 {
                     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                    css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
+                    css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" ) );
                     aValue >>= xLayoutManager;
                     if (xLayoutManager.is())
                     {
@@ -360,7 +360,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FindTextToolbarController::getSup
 css::uno::Sequence< ::rtl::OUString >  FindTextToolbarController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ) );
+    aSNS.getArray()[0] = ::rtl::OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 
@@ -698,7 +698,7 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
     if (xPropSet.is())
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) );
+        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" ) );
         aValue >>= xLayoutManager;
         if (xLayoutManager.is())
         {
@@ -778,8 +778,8 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FindbarDispatcher::getSupportedSe
 css::uno::Sequence< ::rtl::OUString >  FindbarDispatcher::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FindbarDispatcher" ));
-    aSNS.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ProtocolHandler" ));
+    aSNS.getArray()[0] = ::rtl::OUString( "com.sun.star.comp.svx.FindbarDispatcher" );
+    aSNS.getArray()[1] = ::rtl::OUString( "com.sun.star.frame.ProtocolHandler" );
     return aSNS;
 }
 
@@ -823,7 +823,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
             return;
 
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
+        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" ) );
         aValue >>= xLayoutManager;
         if (!xLayoutManager.is())
             return;

@@ -75,7 +75,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
     uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")),
+                                        rtl::OUString("_beamer"),
                                         frame::FrameSearchFlag::CHILDREN);
     if (xBeamerFrame.is())
     {

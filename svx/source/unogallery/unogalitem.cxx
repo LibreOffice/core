@@ -128,7 +128,7 @@ void SAL_CALL GalleryItem::release()
 ::rtl::OUString GalleryItem::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.gallery.GalleryItem" ) );
+    return ::rtl::OUString( "com.sun.star.comp.gallery.GalleryItem" );
 }
 
 // ------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ uno::Sequence< ::rtl::OUString > GalleryItem::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.gallery.GalleryItem" ) );
+    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.gallery.GalleryItem" );
 
     return aSeq;
 }

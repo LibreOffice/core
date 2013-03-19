@@ -230,7 +230,7 @@ ScVbaGlobals::getDebug() throw (uno::RuntimeException)
     {
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithContext(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.Debug" ) ), mxContext );
+            ::rtl::OUString( "ooo.vba.Debug" ), mxContext );
         return uno::Any( xVBADebug );
     }
     catch( uno::Exception& )

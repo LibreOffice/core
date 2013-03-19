@@ -1094,7 +1094,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xFac.is() )
         return;
 
-    Reference< XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
+    Reference< XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
     if( !xProps.is() )
         return;
 
@@ -1294,26 +1294,26 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         sal_Int16 nTmp = document::PrinterIndependentLayout::DISABLED;
         aAny <<= nTmp;
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("PrinterIndependentLayout") ),
+            OUString("PrinterIndependentLayout"),
             aAny );
     }
 
     if( ! bAddExternalLeading )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("AddExternalLeading")), makeAny( false ) );
+            OUString("AddExternalLeading"), makeAny( false ) );
     }
 
     if( ! bUseFormerLineSpacing )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerLineSpacing")), makeAny( true ) );
+            OUString("UseFormerLineSpacing"), makeAny( true ) );
     }
 
     if( !bUseFormerObjectPositioning )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerObjectPositioning")), makeAny( true ) );
+            OUString("UseFormerObjectPositioning"), makeAny( true ) );
     }
 
     if( !bUseOldNumbering )
@@ -1322,7 +1322,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         sal_Bool bOldNum = true;
         aAny.setValue(&bOldNum, ::getBooleanCppuType());
         xProps->setPropertyValue
-            (OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldNumbering")),
+            (OUString("UseOldNumbering"),
                        aAny );
     }
 
@@ -1332,27 +1332,26 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         sal_Bool bTmp = true;
         aAny.setValue(&bTmp, ::getBooleanCppuType());
         xProps->setPropertyValue
-            (OUString( RTL_CONSTASCII_USTRINGPARAM
-                       ("OutlineLevelYieldsNumbering")),
+            (OUString("OutlineLevelYieldsNumbering"),
                        aAny );
     }
 
     if( !bAddParaSpacingToTableCells )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("AddParaSpacingToTableCells")), makeAny( false ) );
+            OUString("AddParaSpacingToTableCells"), makeAny( false ) );
     }
 
     if( !bUseFormerTextWrapping )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerTextWrapping")), makeAny( true ) );
+            OUString("UseFormerTextWrapping"), makeAny( true ) );
     }
 
     if( !bConsiderWrapOnObjPos )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("ConsiderTextWrapOnObjPos")), makeAny( false ) );
+            OUString("ConsiderTextWrapOnObjPos"), makeAny( false ) );
     }
 
     // #i47448#
@@ -1369,53 +1368,53 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !bIgnoreFirstLineIndentInNumbering && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("IgnoreFirstLineIndentInNumbering")), makeAny( true ) );
+            OUString("IgnoreFirstLineIndentInNumbering"), makeAny( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotJustifyLinesWithManualBreak && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotJustifyLinesWithManualBreak")), makeAny( true ) );
+            OUString("DoNotJustifyLinesWithManualBreak"), makeAny( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotResetParaAttrsForNumFont && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotResetParaAttrsForNumFont")), makeAny( true ) );
+            OUString("DoNotResetParaAttrsForNumFont"), makeAny( true ) );
     }
 
     if ( !bLoadReadonly )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("LoadReadonly") ), makeAny( false ) );
+            OUString("LoadReadonly"), makeAny( false ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotCaptureDrawObjsOnPage && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotCaptureDrawObjsOnPage") ), makeAny( true ) );
+            OUString("DoNotCaptureDrawObjsOnPage"), makeAny( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bClipAsCharacterAnchoredWriterFlyFrames && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames") ), makeAny( true ) );
+            OUString("ClipAsCharacterAnchoredWriterFlyFrames"), makeAny( true ) );
     }
 
     if ( !bUnixForceZeroExtLeading )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("UnxForceZeroExtLeading") ), makeAny( true ) );
+            OUString("UnxForceZeroExtLeading"), makeAny( true ) );
     }
 
     if ( !bUseOldPrinterMetrics )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldPrinterMetrics") ), makeAny( true ) );
+            OUString("UseOldPrinterMetrics"), makeAny( true ) );
     }
 
     // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
@@ -1425,25 +1424,25 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if ( !bSmallCapsPercentage66 )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("SmallCapsPercentage66") ), makeAny( true ) );
+            OUString("SmallCapsPercentage66"), makeAny( true ) );
     }
 
     if ( !bTabOverflow )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("TabOverflow") ), makeAny( false ) );
+            OUString("TabOverflow"), makeAny( false ) );
     }
 
     if ( !bUnbreakableNumberings )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("UnbreakableNumberings") ), makeAny( false ) );
+            OUString("UnbreakableNumberings"), makeAny( false ) );
     }
 
     if ( !bClippedPictures )
     {
         xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("ClippedPictures") ), makeAny( false ) );
+            OUString("ClippedPictures"), makeAny( false ) );
     }
 
     if ( !bBackgroundParaOverDrawings )
@@ -1545,8 +1544,8 @@ void SwXMLImport::initialize(
 
 OUString SAL_CALL SwXMLImport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisImporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames()
@@ -1566,8 +1565,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
 
 OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisStylesImporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisStylesImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportStyles_getSupportedServiceNames()
@@ -1590,8 +1589,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
 
 OUString SAL_CALL SwXMLImportContent_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisContentImporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisContentImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportContent_getSupportedServiceNames()
@@ -1614,8 +1613,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
 
 OUString SAL_CALL SwXMLImportMeta_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisMetaImporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisMetaImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportMeta_getSupportedServiceNames()
@@ -1635,8 +1634,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
 
 OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisSettingsImporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisSettingsImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportSettings_getSupportedServiceNames()
@@ -1674,8 +1673,8 @@ OUString SAL_CALL SwXMLImport::getImplementationName()
             return SwXMLImportSettings_getImplementationName();
         default:
             // generic name for 'unknown' cases
-            return OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.comp.Writer.SwXMLImport" ) );
+            return OUString(
+                "com.sun.star.comp.Writer.SwXMLImport" );
     }
 }
 

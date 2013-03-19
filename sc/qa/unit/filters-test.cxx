@@ -131,16 +131,16 @@ bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
 void ScFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir(OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+    testDir(OUString("Quattro Pro 6.0"),
         getURLFromSrc("/sc/qa/unit/data/qpro/"), OUString());
 
     //warning, the current "sylk filter" in sc (docsh.cxx) automatically
     //chains on failure on trying as csv, rtf, etc. so "success" may
     //not indicate that it imported as .slk.
-    testDir(OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
+    testDir(OUString("SYLK"),
         getURLFromSrc("/sc/qa/unit/data/slk/"), OUString());
 
-    testDir(OUString(RTL_CONSTASCII_USTRINGPARAM("MS Excel 97")),
+    testDir(OUString("MS Excel 97"),
         getURLFromSrc("/sc/qa/unit/data/xls/"), OUString());
 #endif
 }
@@ -209,16 +209,16 @@ void testRangeNameImpl(ScDocument* pDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
-    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("GLOBAL1")));
+    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(OUString("GLOBAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
     double aValue;
     pDoc->GetValue(1,0,0,aValue);
     CPPUNIT_ASSERT_MESSAGE("range name Global1 should reference Sheet1.A1", aValue == 1);
-    pRangeData = pDoc->GetRangeName(0)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL1")));
+    pRangeData = pDoc->GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
     pDoc->GetValue(1,2,0,aValue);
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", aValue == 3);
-    pRangeData = pDoc->GetRangeName(1)->findByUpperName(OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
+    pRangeData = pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
     //check for correct results for the remaining formulas
     pDoc->GetValue(1,1,0, aValue);
@@ -262,9 +262,9 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
     OUString aString = pDoc->GetString(1, 0, 0);
 
     //check string import
-    CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == OUString(RTL_CONSTASCII_USTRINGPARAM("String1")));
+    CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == OUString("String1"));
     aString = pDoc->GetString(1, 1, 0);
-    CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == OUString(RTL_CONSTASCII_USTRINGPARAM("String2")));
+    CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == OUString("String2"));
 
     //check basic formula import
     pDoc->GetValue(2,0,0,fValue);
@@ -462,8 +462,7 @@ void ScFiltersTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
-        getMultiServiceFactory()->createInstance(OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
+        getMultiServiceFactory()->createInstance(OUString("com.sun.star.comp.Calc.SpreadsheetDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 

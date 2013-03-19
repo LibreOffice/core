@@ -64,7 +64,7 @@ using namespace com::sun::star::util;
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.mork.ResultSet"));
+    return ::rtl::OUString("com.sun.star.sdbcx.mork.ResultSet");
 }
 // -------------------------------------------------------------------------
  Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
@@ -733,11 +733,11 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
     OSQLParseNode *pMark = pNode->getChild(0);
 
     // Initialize to empty string
-    rMatchString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
+    rMatchString = ::rtl::OUString("");
 
     rtl::OUString aParameterName;
     if (SQL_ISPUNCTUATION(pMark,"?")) {
-        aParameterName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?"));
+        aParameterName = ::rtl::OUString("?");
     }
     else if (SQL_ISPUNCTUATION(pMark,":")) {
         aParameterName = pNode->getChild(1)->getTokenValue();
@@ -939,7 +939,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             // String containing only a '%' and nothing else
             op = MQueryOp::Exists;
             // Will be ignored for Exists case, but clear anyway.
-            matchString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(""));
+            matchString = ::rtl::OUString("");
         }
         else if ( matchString.indexOf ( WILDCARD ) == -1 &&
              matchString.indexOf ( MATCHCHAR ) == -1 )
@@ -992,7 +992,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 else
                 {
                     sal_Int32 pos = matchString.indexOf ( WILDCARD );
-                    matchString = matchString.replaceAt( pos, 1,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".*")) );
+                    matchString = matchString.replaceAt( pos, 1,::rtl::OUString(".*") );
                     op = MQueryOp::RegExp;
                 }
 
@@ -1003,13 +1003,13 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 sal_Int32 pos = matchString.indexOf ( WILDCARD );
                 while ( (pos = matchString.indexOf ( WILDCARD )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".*")) );
+                    matchString = matchString.replaceAt( pos, 1, ::rtl::OUString(".*") );
                 }
 
                 pos = matchString.indexOf ( MATCHCHAR );
                 while ( (pos = matchString.indexOf( MATCHCHAR )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".")) );
+                    matchString = matchString.replaceAt( pos, 1, ::rtl::OUString(".") );
                 }
 
                 op = MQueryOp::RegExp;

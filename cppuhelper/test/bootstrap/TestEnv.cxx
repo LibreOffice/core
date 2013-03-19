@@ -96,10 +96,10 @@ int  TestEnv::v_isValid(rtl::OUString * pReason)
     int result = m_inCount & 1;
 
     if (result)
-        *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OK"));
+        *pReason = rtl::OUString("OK");
 
     else
-        *pReason = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not entered/invoked"));
+        *pReason = rtl::OUString("not entered/invoked");
 
     return result;
 }

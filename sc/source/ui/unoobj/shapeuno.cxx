@@ -278,7 +278,7 @@ static sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, 
         uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
-            xShapeProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" )) ) >>= rCaptionPoint;
+            xShapeProp->getPropertyValue( rtl::OUString( "CaptionPoint" ) ) >>= rCaptionPoint;
             bReturn = sal_True;
         }
     }
@@ -446,7 +446,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
         else
-            throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("only XCell or XSpreadsheet objects allowed")), static_cast<cppu::OWeakObject*>(this), 0);
+            throw lang::IllegalArgumentException(rtl::OUString("only XCell or XSpreadsheet objects allowed"), static_cast<cppu::OWeakObject*>(this), 0);
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
     {
@@ -1403,9 +1403,9 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
     return NULL;
 }
 
-#define SC_EVENTACC_ONCLICK     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) )
-#define SC_EVENTACC_SCRIPT      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) )
-#define SC_EVENTACC_EVENTTYPE   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) )
+#define SC_EVENTACC_ONCLICK     ::rtl::OUString( "OnClick" )
+#define SC_EVENTACC_SCRIPT      ::rtl::OUString( "Script" )
+#define SC_EVENTACC_EVENTTYPE   ::rtl::OUString( "EventType" )
 
 typedef ::cppu::WeakImplHelper1< container::XNameReplace > ShapeUnoEventAcess_BASE;
 class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
@@ -1517,7 +1517,7 @@ ScShapeObj::getEvents(  ) throw(uno::RuntimeException)
 
 ::rtl::OUString SAL_CALL ScShapeObj::getImplementationName(  ) throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sc.ScShapeObj" ) );
+    return ::rtl::OUString( "com.sun.star.comp.sc.ScShapeObj" );
 }
 
 ::sal_Bool SAL_CALL ScShapeObj::supportsService( const ::rtl::OUString& _ServiceName ) throw (uno::RuntimeException)
@@ -1543,12 +1543,12 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScShapeObj::getSupportedServiceNames( 
         aSupported = xSI->getSupportedServiceNames();
 
     aSupported.realloc( aSupported.getLength() + 1 );
-    aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.Shape" ) );
+    aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( "com.sun.star.sheet.Shape" );
 
     if( bIsNoteCaption )
     {
         aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.CellAnnotationShape" ) );
+        aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( "com.sun.star.sheet.CellAnnotationShape" );
     }
 
     return aSupported;

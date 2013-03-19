@@ -219,7 +219,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         {
             // get the null date
             Date aDate;
-            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString("NullDate")) >>= aDate;
             return aDate;
         }
         catch ( const Exception&  )
@@ -459,7 +459,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
                          {
                              Reference< XNumberFormatsSupplier > xSupplier( xFormatter->getNumberFormatsSupplier(), UNO_SET_THROW );
                              Reference< XPropertySet > xFormatterSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
-                             OSL_VERIFY( xFormatterSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NullDate" ) ) ) >>= aFormatterNullDate );
+                             OSL_VERIFY( xFormatterSettings->getPropertyValue( ::rtl::OUString( "NullDate" ) ) >>= aFormatterNullDate );
                          }
                          catch( const Exception& )
                          {

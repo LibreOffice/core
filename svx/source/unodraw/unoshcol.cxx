@@ -220,7 +220,7 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException
 
 ::rtl::OUString SvxShapeCollection::getImplementationName_Static()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SvxShapeCollection") );
+    return ::rtl::OUString("com.sun.star.drawing.SvxShapeCollection");
 }
 
 sal_Bool SAL_CALL SvxShapeCollection::supportsService( const ::rtl::OUString& ServiceName )
@@ -237,8 +237,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SvxShapeCollection::getSupportedServic
 uno::Sequence< ::rtl::OUString > SvxShapeCollection::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aSeq(2);
-    aSeq.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shapes") );
-    aSeq.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection") );
+    aSeq.getArray()[0] = ::rtl::OUString("com.sun.star.drawing.Shapes");
+    aSeq.getArray()[1] = ::rtl::OUString("com.sun.star.drawing.ShapeCollection");
     return aSeq;
 }
 

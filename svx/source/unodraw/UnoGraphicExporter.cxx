@@ -193,14 +193,14 @@ namespace svx
         throw()
     {
         Sequence< OUString > aSupportedServiceNames( 1 );
-        aSupportedServiceNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicExportFilter" ) );
+        aSupportedServiceNames[0] = OUString( "com.sun.star.drawing.GraphicExportFilter" );
         return aSupportedServiceNames;
     }
 
     SVX_DLLPUBLIC OUString SAL_CALL GraphicExporter_getImplementationName()
         throw()
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.GraphicExporter" ) );
+        return OUString( "com.sun.star.comp.Draw.GraphicExporter" );
     }
 
     /** creates a bitmap that is optionaly transparent from a metafile
@@ -517,12 +517,12 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnWidth;
-                    pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelWidth" ) );
+                    pDataValues->Name = OUString( "PixelWidth" );
                 }
                 else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Height" ) ) ) // for compatibility reasons, deprecated
                 {
                     pDataValues->Value >>= rSettings.mnHeight;
-                    pDataValues->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PixelHeight" ) );
+                    pDataValues->Name = OUString( "PixelHeight" );
                 }
                 else if ( pDataValues->Name == "ExportOnlyBackground" )
                 {

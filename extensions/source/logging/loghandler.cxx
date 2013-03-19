@@ -83,10 +83,10 @@ namespace logging
         m_rMutex.acquire();
 
         if ( !getIsInitialized() )
-            throw DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "component not initialized" ) ), NULL );
+            throw DisposedException( ::rtl::OUString( "component not initialized" ), NULL );
 
         if ( m_rBHelper.bDisposed )
-            throw DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "component already disposed" ) ), NULL );
+            throw DisposedException( ::rtl::OUString( "component already disposed" ), NULL );
 
         // fallback settings, in case they weren't passed at construction time
         if ( !getFormatter().is() )

@@ -87,7 +87,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
                 xWindow->setVisible( sal_False );
 
                 // reparent the window
-                xWinPeer->setProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginParent" ) ),
+                xWinPeer->setProperty( ::rtl::OUString( "PluginParent" ),
                                         uno::makeAny( (sal_Int64) 0 ) );
 
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -206,13 +206,13 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
     sal_Int32 nLen = aArguments.getLength();
     if ( nLen != 1 )
         throw lang::IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Wrong count of parameters!" ) ),
+                        ::rtl::OUString("Wrong count of parameters!" ),
                         uno::Reference< uno::XInterface >(),
                         0 );
 
     if ( !( aArguments[0] >>= m_xFrame ) || !m_xFrame.is() )
         throw lang::IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Nonempty reference is expected as the first argument!" ) ),
+                ::rtl::OUString("Nonempty reference is expected as the first argument!" ),
                 uno::Reference< uno::XInterface >(),
                 0 );
 
@@ -259,7 +259,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ODocumentCloser::impl_staticGetSupport
 // --------------------------------------------------------
 ::rtl::OUString SAL_CALL ODocumentCloser::impl_staticGetImplementationName()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.embed.DocumentCloser" ) );
+    return rtl::OUString( "com.sun.star.comp.embed.DocumentCloser" );
 }
 
 // --------------------------------------------------------

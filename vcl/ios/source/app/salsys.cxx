@@ -108,12 +108,12 @@ static NSString* getStandardString( int nButtonId, bool bUseResources )
     {
         switch( nButtonId )
         {
-        case BUTTON_OK:         aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OK" ) );break;
-        case BUTTON_ABORT:      aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Abort" ) );break;
-        case BUTTON_CANCEL:     aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cancel" ) );break;
-        case BUTTON_RETRY:      aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Retry" ) );break;
-        case BUTTON_YES:        aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Yes" ) );break;
-        case BUTTON_NO :        aText = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No" ) );break;
+        case BUTTON_OK:         aText = rtl::OUString( "OK" );break;
+        case BUTTON_ABORT:      aText = rtl::OUString( "Abort" );break;
+        case BUTTON_CANCEL:     aText = rtl::OUString( "Cancel" );break;
+        case BUTTON_RETRY:      aText = rtl::OUString( "Retry" );break;
+        case BUTTON_YES:        aText = rtl::OUString( "Yes" );break;
+        case BUTTON_NO :        aText = rtl::OUString( "No" );break;
         }
     }
     return aText.getLength() ? CreateNSString( aText) : nil;

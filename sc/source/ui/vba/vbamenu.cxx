@@ -69,7 +69,7 @@ ScVbaMenu::MenuItems( const uno::Any& aIndex ) throw (script::BasicErrorExceptio
 rtl::OUString
 ScVbaMenu::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenu"));
+    return rtl::OUString("ScVbaMenu");
 }
 
 uno::Sequence<rtl::OUString>
@@ -79,7 +79,7 @@ ScVbaMenu::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Menu" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Menu" );
     }
     return aServiceNames;
 }

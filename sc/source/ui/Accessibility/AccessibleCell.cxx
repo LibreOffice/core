@@ -268,7 +268,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 ::rtl::OUString SAL_CALL ScAccessibleCell::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleCell"));
+    return rtl::OUString("ScAccessibleCell");
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL
@@ -280,7 +280,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.AccessibleCell"));
+    pNames[nOldSize] = rtl::OUString("com.sun.star.sheet.AccessibleCell");
 
     return aSequence;
 }

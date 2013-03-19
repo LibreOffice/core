@@ -56,8 +56,7 @@ namespace {
 
 rtl::OUString SAL_CALL getServiceImplementationName() {
     return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.configuration.backend.KDEBackend"));
+            "com.sun.star.comp.configuration.backend.KDEBackend");
 }
 
 css::uno::Sequence< rtl::OUString > SAL_CALL getServiceSupportedServiceNames() {
@@ -149,8 +148,7 @@ Service::Service(): enabled_(false) {
     if (context.is()) {
         rtl::OUString desktop;
         context->getValueByName(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("system.desktop-environment"))) >>=
+            rtl::OUString("system.desktop-environment")) >>=
             desktop;
         enabled_ = desktop == "KDE" && KApplication::kApplication() != 0;
     }
@@ -163,8 +161,7 @@ void Service::setPropertyValue(rtl::OUString const &, css::uno::Any const &)
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        rtl::OUString("setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 

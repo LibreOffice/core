@@ -66,14 +66,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL EditPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.EditPropertyHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.EditPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL EditPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.EditPropertyHandler" ) );
+        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.EditPropertyHandler" );
         return aSupported;
     }
 
@@ -285,7 +285,7 @@ namespace pcr
             _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
             _rxInspectorUI->enablePropertyUI( PROPERTY_VERTICAL_ALIGN,  nTextType == TEXTTYPE_SINGLELINE );
 
-            _rxInspectorUI->showCategory( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) ), nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->showCategory( ::rtl::OUString( "Data" ), nTextType != TEXTTYPE_RICHTEXT );
         }
         break;
 

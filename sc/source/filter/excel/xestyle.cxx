@@ -3047,8 +3047,8 @@ XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
 void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr aStyleSheet = rStrm.CreateOutputStream(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/styles.xml") ),
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "styles.xml" )),
+            OUString( "xl/styles.xml"),
+            OUString( "styles.xml" ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" );

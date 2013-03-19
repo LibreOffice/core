@@ -296,7 +296,7 @@ static void getLibEnv(oslModule                lib,
                 const OString aStr( aEnv.getToken( 0, ';', nIndex ) );
                 if ( aStr.equals(implName) )
                 {
-                    *pSourceEnv_name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":log"));
+                    *pSourceEnv_name += ::rtl::OUString(":log");
                     break;
                 }
             } while( nIndex != -1 );

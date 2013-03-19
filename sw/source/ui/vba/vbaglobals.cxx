@@ -41,7 +41,7 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
 {
     OSL_TRACE("SwVbaGlobals::SwVbaGlobals()");
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Application"));
+        aInitArgs[ 0 ].Name = rtl::OUString("Application");
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
@@ -141,7 +141,7 @@ float SAL_CALL SwVbaGlobals::CentimetersToPoints( float _Centimeters ) throw (un
 rtl::OUString
 SwVbaGlobals::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaGlobals"));
+    return rtl::OUString("SwVbaGlobals");
 }
 
 uno::Sequence< rtl::OUString >
@@ -151,7 +151,7 @@ SwVbaGlobals::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Globals" ) );
+                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Globals" );
         }
         return aServiceNames;
 }
@@ -164,9 +164,9 @@ SwVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
     if ( !bInit )
     {
          rtl::OUString names[] = {
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.word.Document" ) ),
+            ::rtl::OUString( "ooo.vba.word.Document" ),
 //            #FIXME #TODO make Application a proper service
-//            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.word.Application" ) ),
+//            ::rtl::OUString( "ooo.vba.word.Application" ),
         };
         sal_Int32 nWordServices = SAL_N_ELEMENTS( names );
         sal_Int32 startIndex = serviceNames.getLength();

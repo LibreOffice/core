@@ -88,8 +88,7 @@ uno::Any SAL_CALL TypeDescriptionEnumerationImpl::nextElement()
         return xEnum->nextElement();
 
     throw container::NoSuchElementException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("No further elements in enumeration!") ),
+        rtl::OUString("No further elements in enumeration!"),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 
@@ -111,8 +110,7 @@ TypeDescriptionEnumerationImpl::nextTypeDescription()
         return xEnum->nextTypeDescription();
 
     throw container::NoSuchElementException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("No further elements in enumeration!") ),
+        rtl::OUString("No further elements in enumeration!"),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 

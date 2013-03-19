@@ -110,7 +110,7 @@ css::uno::Sequence< rtl::OUString > StructTypeDescription::getTypeParameters()
         return parameters;
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")),
+            rtl::OUString("std::bad_alloc"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }

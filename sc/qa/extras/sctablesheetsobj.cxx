@@ -75,7 +75,7 @@ sal_Int32 ScTableSheetsObj::nTest = 0;
 
 ScTableSheetsObj::ScTableSheetsObj():
             UnoApiTest("/sc/qa/extras/testdocuments"),
-            apitest::XNameContainer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")))
+            apitest::XNameContainer(rtl::OUString("Sheet2"))
 {
 
 }
@@ -98,7 +98,7 @@ uno::Reference< lang::XComponent > ScTableSheetsObj::loadFromDesktop(const rtl::
 uno::Reference< uno::XInterface > ScTableSheetsObj::init()
 {
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rangenamessrc.ods")), aFileURL);
+    createFileURL(rtl::OUString("rangenamessrc.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());

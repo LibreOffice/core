@@ -92,7 +92,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
     switch( _nControl )
     {
         case ControlCharacter::LINE_BREAK:
-            m_pFixedContent->Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")));
+            m_pFixedContent->Characters(::rtl::OUString("\n"));
             break;
         default:
             OSL_FAIL("Not supported control character");
@@ -189,7 +189,7 @@ void OXMLFixedContent::EndElement()
         {
             uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
             Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-            xControl->setDataField(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + m_sPageText);
+            xControl->setDataField(::rtl::OUString("rpt:") + m_sPageText);
              OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
             m_pInP->m_xComponent = xControl.get();
             m_xComponent = xControl.get();

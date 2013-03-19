@@ -53,7 +53,7 @@ SwVbaDialog::mapIndexToName( sal_Int32 nIndex )
 rtl::OUString
 SwVbaDialog::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaDialog"));
+    return rtl::OUString("SwVbaDialog");
 }
 
 uno::Sequence< rtl::OUString >
@@ -63,7 +63,7 @@ SwVbaDialog::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Dialog" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Dialog" );
     }
     return aServiceNames;
 }

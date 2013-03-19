@@ -141,10 +141,10 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
     {
         uno::Sequence<beans::PropertyValue> aPropSeq( 2 );
         aPropSeq[0] = beans::PropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EventType")), -1,
-                        uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")) ), beans::PropertyState_DIRECT_VALUE );
+                        rtl::OUString("EventType"), -1,
+                        uno::makeAny( rtl::OUString("Script") ), beans::PropertyState_DIRECT_VALUE );
         aPropSeq[1] = beans::PropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")), -1,
+                        rtl::OUString("Script"), -1,
                         uno::makeAny( *pScript ), beans::PropertyState_DIRECT_VALUE );
         aRet <<= aPropSeq;
     }

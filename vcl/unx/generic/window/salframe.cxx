@@ -2882,7 +2882,7 @@ void X11SalFrame::beginUnicodeSequence()
     if( !rSeq.isEmpty() )
         endUnicodeSequence();
 
-    rSeq = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "u" ) );
+    rSeq = rtl::OUString( "u" );
 
     if( ! aDeleteWatch.isDeleted() )
     {

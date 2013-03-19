@@ -3374,7 +3374,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeListRef aRangesRef( new ScRangeList(aRanges) );
         ScChartListenerCollection* pColl = pDoc->GetChartListenerCollection();
-        rtl::OUString aName = pColl->getUniqueName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("__Uno")));
+        rtl::OUString aName = pColl->getUniqueName(rtl::OUString("__Uno"));
         if (aName.isEmpty())
             // failed to create unique name.
             return;
@@ -4762,7 +4762,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellRangesObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRangesEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SheetCellRangesEnumeration"));
 }
 
 // XIndexAccess
@@ -4803,7 +4803,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException)
 
 rtl::OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellRangesObj" ));
+    return rtl::OUString( "ScCellRangesObj" );
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const rtl::OUString& rServiceName )
@@ -6090,7 +6090,7 @@ const SfxItemPropertyMap& ScCellRangeObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellRangeObj" ));
+    return rtl::OUString( "ScCellRangeObj" );
 }
 
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const rtl::OUString& rServiceName )
@@ -6807,7 +6807,7 @@ const SfxItemPropertyMap& ScCellObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellObj" ));
+    return rtl::OUString( "ScCellObj" );
 }
 
 sal_Bool SAL_CALL ScCellObj::supportsService( const rtl::OUString& rServiceName )
@@ -8706,7 +8706,7 @@ const SfxItemPropertyMap& ScTableSheetObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScTableSheetObj" ));
+    return rtl::OUString( "ScTableSheetObj" );
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const rtl::OUString& rServiceName )

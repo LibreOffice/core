@@ -468,10 +468,10 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
-                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),OUString());
+                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString("Name"),OUString());
                         if (!sFilter.isEmpty())
                         {
-                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),sal_Int32());
+                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString("Flags"),sal_Int32());
                             lList.push_back(sFilter);
                             lAlienList.push_back(0 != (nFlags & SFX_FILTER_ALIEN));
                             lODFList.push_back( isODFFormat( sFilter ) );
@@ -491,8 +491,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             OSL_FAIL(
                 rtl::OUStringToOString(
                     (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "exception in FilterFactory access: ")) +
+                            "exception in FilterFactory access: ") +
                      e.Message),
                     RTL_TEXTENCODING_UTF8).
                 getStr());

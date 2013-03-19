@@ -31,15 +31,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL OHatchWindowFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.HatchWindowFactory" ));
-    aRet[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.embed.HatchWindowFactory" ));
+    aRet[0] = ::rtl::OUString( "com.sun.star.embed.HatchWindowFactory" );
+    aRet[1] = ::rtl::OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OHatchWindowFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.embed.HatchWindowFactory" ));
+    return ::rtl::OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
 }
 
 //-------------------------------------------------------------------------

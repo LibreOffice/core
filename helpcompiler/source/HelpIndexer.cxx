@@ -47,8 +47,8 @@ HelpIndexer::HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
 {
     d_indexDir = rtl::OUStringBuffer(outDir).append('/').
         append(module).appendAscii(RTL_CONSTASCII_STRINGPARAM(".idxl")).toString();
-    d_captionDir = srcDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/caption"));
-    d_contentDir = srcDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/content"));
+    d_captionDir = srcDir + rtl::OUString("/caption");
+    d_contentDir = srcDir + rtl::OUString("/content");
 }
 
 bool HelpIndexer::indexDocuments()
@@ -117,7 +117,7 @@ bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
 
     osl::Directory dir(path);
     if (osl::FileBase::E_None != dir.open()) {
-        d_error = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error reading directory ")) + path;
+        d_error = rtl::OUString("Error reading directory ") + path;
         return true;
     }
 
@@ -136,8 +136,8 @@ bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
 bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {
     // Add the help path as an indexed, untokenized field.
 
-    rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#HLP#")) +
-        d_module + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + fileName;
+    rtl::OUString path = rtl::OUString("#HLP#") +
+        d_module + rtl::OUString("/") + fileName;
     std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
     doc->add(*_CLNEW Field(_T("path"), &aPath[0], Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 
@@ -146,11 +146,11 @@ bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {
         rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
 
     // Add the caption as a field.
-    rtl::OUString captionPath = d_captionDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEscapedFileName;
+    rtl::OUString captionPath = d_captionDir + rtl::OUString("/") + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 
     // Add the content as a field.
-    rtl::OUString contentPath = d_contentDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEscapedFileName;
+    rtl::OUString contentPath = d_contentDir + rtl::OUString("/") + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 
     return true;

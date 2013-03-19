@@ -46,57 +46,57 @@ sal_Bool SAL_CALL component_writeInfo(
             Reference< XRegistryKey > xKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
 
-            OUString str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            OUString str = OUString("/") +
                 OPipeTest_getImplementationName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             Reference< XRegistryKey >  xNewKey = xKey->createKey( str );
             xNewKey->createKey( OPipeTest_getServiceName() );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 OPumpTest_getImplementationName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OPumpTest_getServiceName() );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 ODataStreamTest_getImplementationName(1) +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( ODataStreamTest_getServiceName(1) );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 ODataStreamTest_getImplementationName(2) +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( ODataStreamTest_getServiceName(2) );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 OObjectStreamTest_getImplementationName(1) +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OObjectStreamTest_getServiceName(1) );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 OObjectStreamTest_getImplementationName(2) +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OObjectStreamTest_getServiceName(2) );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 OMarkableOutputStreamTest_getImplementationName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OMarkableOutputStreamTest_getServiceName() );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 OMarkableInputStreamTest_getImplementationName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OMarkableInputStreamTest_getServiceName() );
 
-            str = OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            str = OUString("/") +
                 OMyPersistObject_getImplementationName() +
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
+                OUString("/UNO/SERVICES");
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OMyPersistObject_getServiceName() );
 

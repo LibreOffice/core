@@ -408,14 +408,14 @@ sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName 
 
 OUString SAL_CALL SvxUnoDrawPool::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoDrawPool") );
+    return OUString("SvxUnoDrawPool");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPool::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults" ));
+    aSNS.getArray()[0] = OUString("com.sun.star.drawing.Defaults" );
     return aSNS;
 }
 

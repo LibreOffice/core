@@ -183,7 +183,7 @@ sal_Bool OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        SvTreeListEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
+        SvTreeListEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString("*") );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 

@@ -195,7 +195,7 @@ SwVbaCells::createCollectionObject( const uno::Any& aSource )
 rtl::OUString
 SwVbaCells::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaCells"));
+    return rtl::OUString("SwVbaCells");
 }
 
 uno::Sequence<rtl::OUString>
@@ -205,7 +205,7 @@ SwVbaCells::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Cells") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Cells");
     }
     return sNames;
 }

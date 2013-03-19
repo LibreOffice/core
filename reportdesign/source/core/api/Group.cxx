@@ -80,7 +80,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(OGroup,GroupBase,GroupPropertySet)
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OGroup::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.Group"));
+    return ::rtl::OUString("com.sun.star.comp.report.Group");
 }
 //------------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString> OGroup::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
@@ -193,7 +193,7 @@ uno::Reference< report::XSection > SAL_CALL OGroup::getFooter() throw (container
 void SAL_CALL OGroup::setGroupOn( ::sal_Int16 _groupon ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if ( _groupon < report::GroupOn::DEFAULT || _groupon > report::GroupOn::INTERVAL )
-        throwIllegallArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star::report::GroupOn"))
+        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::GroupOn")
                         ,*this
                         ,1
                         ,m_xContext);
@@ -220,7 +220,7 @@ void SAL_CALL OGroup::setGroupInterval( ::sal_Int32 _groupinterval ) throw (uno:
 void SAL_CALL OGroup::setKeepTogether( ::sal_Int16 _keeptogether ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if ( _keeptogether < report::KeepTogether::NO || _keeptogether > report::KeepTogether::WITH_FIRST_DETAIL )
-        throwIllegallArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star::report::KeepTogether"))
+        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::KeepTogether")
                         ,*this
                         ,1
                         ,m_xContext);

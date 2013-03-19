@@ -168,21 +168,21 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
 void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _xConnection,const Reference< XPropertySet >& _rxObject ) const
 {
     ::std::pair< ::rtl::OUString, ::rtl::OUString > aProperties[] = {
-                 ::std::pair< ::rtl::OUString, ::rtl::OUString >(PROPERTY_FILTER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AND ")))
-                ,::std::pair< ::rtl::OUString, ::rtl::OUString >(PROPERTY_ORDER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ORDER BY ")))
+                 ::std::pair< ::rtl::OUString, ::rtl::OUString >(PROPERTY_FILTER,::rtl::OUString(" AND "))
+                ,::std::pair< ::rtl::OUString, ::rtl::OUString >(PROPERTY_ORDER,::rtl::OUString(" ORDER BY "))
     };
 
     size_t i = 0;
 
     try
     {
-        const String sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")));
+        const String sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + ::rtl::OUString("."));
         const ::rtl::OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
-        const String sTargetNameTemp = (sTargetName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")));
+        const String sTargetNameTemp = (sTargetName + ::rtl::OUString("."));
 
         ::rtl::OUString sStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
         sStatement += sTargetName;
-        sStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE 0=1"));
+        sStatement += ::rtl::OUString(" WHERE 0=1");
 
 
         for ( i=0; i < sizeof( aProperties ) / sizeof( aProperties[0] ); ++i )
@@ -942,7 +942,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                                 m_bCreatePrimaryKeyColumn = sal_True;
                                 m_aKeyName = pPage->GetKeyName();
                                 if ( m_aKeyName.isEmpty() )
-                                    m_aKeyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) );
+                                    m_aKeyName = ::rtl::OUString( "ID" );
                                 m_aKeyName = createUniqueName( m_aKeyName );
                                 sal_Int32 nBreakPos2 = 0;
                                 CheckColumns(nBreakPos2);

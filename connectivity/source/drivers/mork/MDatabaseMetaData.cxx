@@ -87,13 +87,13 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     // ****************************************************
 
     // Catalog
-    aRow[1] = new ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("")));
+    aRow[1] = new ORowSetValueDecorator(::rtl::OUString(""));
     // Schema
-    aRow[2] = new ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("")));
+    aRow[2] = new ORowSetValueDecorator(::rtl::OUString(""));
     // DATA_TYPE
     aRow[5] = new ORowSetValueDecorator(static_cast<sal_Int16>(DataType::VARCHAR));
     // TYPE_NAME, not used
-    aRow[6] = new ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VARCHAR")));
+    aRow[6] = new ORowSetValueDecorator(::rtl::OUString("VARCHAR"));
     // COLUMN_SIZE
     aRow[7] = new ORowSetValueDecorator(s_nCOLUMN_SIZE);
     // BUFFER_LENGTH, not used
@@ -115,7 +115,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     // CHAR_OCTET_LENGTH, refer to [5]
     aRow[16] = new ORowSetValueDecorator(s_nCHAR_OCTET_LENGTH);
     // IS_NULLABLE
-    aRow[18] = new ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("YES")));
+    aRow[18] = new ORowSetValueDecorator(::rtl::OUString("YES"));
 
     // Iterate over all tables
     for(size_t j = 0; j < tables.size(); j++ ) {
@@ -848,15 +848,15 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     // there exists no possibility to get table types so we have to check
     static ::rtl::OUString sTableTypes[] =
     {
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VIEW"))
+        ::rtl::OUString("TABLE"),
+        ::rtl::OUString("VIEW")
         // Currently we only support a 'TABLE' and 'VIEW' nothing more complex
         //
-        // ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYSTEM TABLE")),
-        // ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("GLOBAL TEMPORARY")),
-        // ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LOCAL TEMPORARY")),
-        // ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ALIAS")),
-        // ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYNONYM"))
+        // ::rtl::OUString("SYSTEM TABLE"),
+        // ::rtl::OUString("GLOBAL TEMPORARY"),
+        // ::rtl::OUString("LOCAL TEMPORARY"),
+        // ::rtl::OUString("ALIAS"),
+        // ::rtl::OUString("SYNONYM")
     };
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
@@ -890,7 +890,7 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.reserve(19);
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VARCHAR"))));
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("VARCHAR")));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
@@ -980,7 +980,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     aRow[3] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
     aRow[4] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
     aRow[5] = new ::connectivity::ORowSetValueDecorator(getUserName());
-    aRow[7] = new ::connectivity::ORowSetValueDecorator(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NO")));
+    aRow[7] = new ::connectivity::ORowSetValueDecorator(::rtl::OUString("NO"));
 
 
     // Iterate over all tables

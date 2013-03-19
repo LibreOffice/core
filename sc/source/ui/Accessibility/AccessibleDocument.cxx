@@ -1040,7 +1040,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
         uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
-            uno::Any aPropAny = xShapeProp->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(  "LayerID" )));
+            uno::Any aPropAny = xShapeProp->getPropertyValue(rtl::OUString(  "LayerID" ));
             sal_Int16 nLayerID = 0;
             if( aPropAny >>= nLayerID )
             {
@@ -1787,7 +1787,7 @@ void SAL_CALL
     ScAccessibleDocument::getImplementationName(void)
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleDocument"));
+    return ::rtl::OUString("ScAccessibleDocument");
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL
@@ -1799,7 +1799,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.AccessibleSpreadsheetDocumentView"));
+    pNames[nOldSize] = rtl::OUString("com.sun.star.AccessibleSpreadsheetDocumentView");
 
     return aSequence;
 }

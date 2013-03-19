@@ -1345,7 +1345,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
         OUString aRet = RESIDSTR(STR_UNKNOWN_APPLICATION);
         if( !rServiceName.isEmpty() )
         {
-            aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " (" ));
+            aRet += OUString( " (" );
             aRet += rServiceName;
             aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
         }
@@ -1620,7 +1620,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
 {
     Sequence< OUString > aUserData(8);
 
-    aUserData[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" ) );
+    aUserData[0] = OUString( "com.sun.star.documentconversion.XSLTFilter" );
     aUserData[1] = OUString::valueOf( mbNeedsXSLT2 );
     aUserData[2] = maImportService;
     aUserData[3] = maExportService;

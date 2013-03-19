@@ -85,7 +85,7 @@ namespace svgio
 
         rtl::OUString XSvgParser_getImplementationName()
         {
-            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "svgio::svgreader::XSvgParser" ) );
+            return rtl::OUString( "svgio::svgreader::XSvgParser" );
         }
 
         uno::Reference< uno::XInterface > SAL_CALL XSvgParser_createInstance(const uno::Reference< uno::XComponentContext >& context)

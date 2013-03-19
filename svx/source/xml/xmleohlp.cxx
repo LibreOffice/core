@@ -264,7 +264,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         while( nPos >= 0 && nPos < rURLStr.getLength() )
         {
             ::rtl::OUString aToken = rURLStr.getToken( 0, ',', nPos );
-            if ( aToken.equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "oasis=false" ) ) ) )
+            if ( aToken.equalsIgnoreAsciiCase( ::rtl::OUString( "oasis=false" ) ) )
             {
                 if ( pOasisFormat )
                     *pOasisFormat = sal_False;
@@ -416,8 +416,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
                 // This is an ole object
                 uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-                    uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) );
+                    ::rtl::OUString( "MediaType" ),
+                    uno::makeAny( ::rtl::OUString( "application/vnd.sun.star.oleobject" ) ) );
 
                 xStm->getOutputStream()->closeOutput();
             }
@@ -497,7 +497,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     else
     {
         // Objects are written using ::comphelper::IEmbeddedHelper::SaveAs
-        sRetURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("./") );
+        sRetURL = ::rtl::OUString("./");
         if( !aContainerStorageName.isEmpty() )
         {
             sRetURL += aContainerStorageName;
@@ -683,7 +683,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 mxTempStorage =
                                     comphelper::OStorageHelper::GetTemporaryStorage();
                             Sequence < beans::PropertyValue > aDummy( 0 ), aEmbDescr( 1 );
-                            aEmbDescr[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
+                            aEmbDescr[0].Name = ::rtl::OUString( "StoreVisualReplacement" );
                                aEmbDescr[0].Value <<= (sal_Bool)(!bOasisFormat);
                             if ( !bOasisFormat )
                             {
@@ -691,7 +691,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 if ( xGrInStream.is() )
                                 {
                                     aEmbDescr.realloc( 2 );
-                                    aEmbDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualReplacement" ) );
+                                    aEmbDescr[1].Name = ::rtl::OUString( "VisualReplacement" );
                                     aEmbDescr[1].Value <<= xGrInStream;
                                 }
                             }

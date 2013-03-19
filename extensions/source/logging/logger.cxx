@@ -285,7 +285,7 @@ namespace logging
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL EventLogger::getImplementationName() throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.EventLogger" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.EventLogger" );
     }
 
     //--------------------------------------------------------------------
@@ -298,7 +298,7 @@ namespace logging
     Sequence< ::rtl::OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.Logger" ) );
+        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.Logger" );
         return aServiceNames;
     }
 
@@ -332,7 +332,7 @@ namespace logging
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL LoggerPool::getImplementationName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.LoggerPool" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.LoggerPool" );
     }
 
     //--------------------------------------------------------------------
@@ -346,7 +346,7 @@ namespace logging
     //--------------------------------------------------------------------
     ::rtl::OUString LoggerPool::getSingletonName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.LoggerPool" ) );
+        return ::rtl::OUString( "com.sun.star.logging.LoggerPool" );
     }
 
     //--------------------------------------------------------------------
@@ -375,7 +375,7 @@ namespace logging
     //--------------------------------------------------------------------
     Reference< XLogger > SAL_CALL LoggerPool::getDefaultLogger(  ) throw (RuntimeException)
     {
-        return getNamedLogger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.logging.DefaultLogger" ) ) );
+        return getNamedLogger( ::rtl::OUString( "org.openoffice.logging.DefaultLogger" ) );
     }
 
     //--------------------------------------------------------------------

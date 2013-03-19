@@ -61,9 +61,9 @@ FormatPaintBrushToolBoxControl::~FormatPaintBrushToolBoxControl()
 void FormatPaintBrushToolBoxControl::impl_executePaintBrush()
 {
     Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistentCopy" ));
+    aArgs[0].Name  = rtl::OUString( "PersistentCopy" );
     aArgs[0].Value = makeAny( static_cast<sal_Bool>(m_bPersistentCopy) );
-    Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormatPaintbrush" ))
+    Dispatch( rtl::OUString( ".uno:FormatPaintbrush" )
         , aArgs );
 }
 

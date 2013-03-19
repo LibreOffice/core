@@ -97,8 +97,8 @@ ScVbaPalette::getPalette() const
     if ( m_pShell )
         xProps.set( m_pShell->GetModel(), uno::UNO_QUERY_THROW );
     else
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't extract palette, no doc shell" ) ), uno::Reference< uno::XInterface >() );
-    xIndex.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ColorPalette") ) ), uno::UNO_QUERY );
+        throw uno::RuntimeException( rtl::OUString( "Can't extract palette, no doc shell" ), uno::Reference< uno::XInterface >() );
+    xIndex.set( xProps->getPropertyValue( rtl::OUString("ColorPalette") ), uno::UNO_QUERY );
     if ( !xIndex.is() )
         return new DefaultPalette();
     return xIndex;

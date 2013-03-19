@@ -240,7 +240,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
             if ( m_xContext.is() )
             {
                 uno::Reference< container::XHierarchicalNameAccess > xTypeDescProv(
-                    m_xContext->getValueByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ) ),
+                    m_xContext->getValueByName( ::rtl::OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ),
                     uno::UNO_QUERY_THROW );
 
                 m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );
@@ -600,15 +600,15 @@ bool StringRepresentation::convertStringToGenericValue( const ::rtl::OUString& _
 namespace comp_StringRepresentation {
 
 ::rtl::OUString SAL_CALL _getImplementationName() {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "StringRepresentation"));
+    return ::rtl::OUString(
+        "StringRepresentation");
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.inspection.StringRepresentation"));
+    s[0] = ::rtl::OUString(
+        "com.sun.star.inspection.StringRepresentation");
     return s;
 }
 

@@ -47,7 +47,7 @@ SvxClipBoardControl::SvxClipBoardControl(
      pPopup     (0),
     bDisabled( sal_False )
 {
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )));
+    addStatusListener( rtl::OUString( ".uno:ClipboardFormatItems" ));
     ToolBox& rBox = GetToolBox();
     rBox.SetItemBits( nId, TIB_DROPDOWN | rBox.GetItemBits( nId ) );
     rBox.Invalidate();
@@ -95,10 +95,10 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedFormat" ));
+        aArgs[0].Name = rtl::OUString( "SelectedFormat" );
         aItem.QueryValue( a );
         aArgs[0].Value = a;
-        Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )),
+        Dispatch( rtl::OUString( ".uno:ClipboardFormatItems" ),
                   aArgs );
     }
 

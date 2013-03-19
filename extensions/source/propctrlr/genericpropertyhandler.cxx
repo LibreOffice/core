@@ -103,7 +103,7 @@ namespace pcr
             if ( _rxContext.is() )
             {
                 Reference< XHierarchicalNameAccess > xTypeDescProv(
-                    _rxContext->getValueByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ) ),
+                    _rxContext->getValueByName( ::rtl::OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ),
                     UNO_QUERY_THROW );
 
                 m_xTypeDescription = Reference< XEnumTypeDescription >( xTypeDescProv->getByHierarchicalName( m_aEnumType.getTypeName() ), UNO_QUERY_THROW );
@@ -283,14 +283,14 @@ namespace pcr
     void UrlClickHandler::impl_dispatch_throw( const ::rtl::OUString& _rURL )
     {
         Reference< XURLTransformer > xTransformer( URLTransformer::create(m_aContext.getUNOContext()) );
-        URL aURL; aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenHyperlink" ) );
+        URL aURL; aURL.Complete = ::rtl::OUString( ".uno:OpenHyperlink" );
         xTransformer->parseStrict( aURL );
 
         Reference< XDesktop2 > xDispProv = Desktop::create( m_aContext.getUNOContext() );
         Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, ::rtl::OUString(), 0 ), UNO_QUERY_THROW );
 
         Sequence< PropertyValue > aDispatchArgs(1);
-        aDispatchArgs[0].Name   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+        aDispatchArgs[0].Name   = ::rtl::OUString("URL");
         aDispatchArgs[0].Value  <<= _rURL;
 
         xDispatch->dispatch( aURL, aDispatchArgs );
@@ -340,14 +340,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL GenericPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.GenericPropertyHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.GenericPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL GenericPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.GenericPropertyHandler" ) );
+        aSupported[0] = ::rtl::OUString( "com.sun.star.inspection.GenericPropertyHandler" );
         return aSupported;
     }
 
@@ -380,7 +380,7 @@ namespace pcr
 
         Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( makeAny( _rxIntrospectee ) ) );
         if ( !xIntrospectionAccess.is() )
-            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The introspection service could not handle the given component." ) ), *this );
+            throw RuntimeException( ::rtl::OUString( "The introspection service could not handle the given component." ), *this );
 
         m_xComponent = Reference< XPropertySet >( xIntrospectionAccess->queryAdapter( XPropertySet::static_type() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess
@@ -667,7 +667,7 @@ namespace pcr
         if ( !aDescriptor.Control.is() )
             PropertyHandlerHelper::describePropertyLine( pos->second, aDescriptor, _rxControlFactory );
 
-        aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "General" ) );
+        aDescriptor.Category = ::rtl::OUString( "General" );
         return aDescriptor;
     }
 

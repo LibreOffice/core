@@ -69,7 +69,7 @@ ScVbaPivotTables::getElementType() throw (uno::RuntimeException)
 rtl::OUString
 ScVbaPivotTables::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTables"));
+    return rtl::OUString("ScVbaPivotTables");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -79,7 +79,7 @@ ScVbaPivotTables::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.PivotTables") );
+        sNames[0] = rtl::OUString("ooo.vba.excel.PivotTables");
     }
     return sNames;
 }

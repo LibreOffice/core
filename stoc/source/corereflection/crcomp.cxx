@@ -203,7 +203,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
+        OUString("illegal object given!"),
         (XWeak *)(OWeakObject *)this, 0 );
 }
 //__________________________________________________________________________________________________
@@ -232,14 +232,14 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
             else
             {
                 throw IllegalArgumentException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("illegal value given!") ),
+                    OUString("illegal value given!"),
                     (XWeak *)(OWeakObject *)this, 1 );
             }
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
+        OUString("illegal object given!"),
         (XWeak *)(OWeakObject *)this, 0 );
 }
 
@@ -269,14 +269,14 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
             else
             {
                 throw IllegalArgumentException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("illegal value given!") ),
+                    OUString("illegal value given!"),
                     (XWeak *)(OWeakObject *)this, 1 );
             }
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
+        OUString("illegal object given!"),
         (XWeak *)(OWeakObject *)this, 0 );
 }
 

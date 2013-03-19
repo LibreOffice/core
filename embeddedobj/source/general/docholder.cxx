@@ -164,11 +164,11 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     m_aOutplaceFrameProps.realloc( 3 );
     beans::NamedValue aArg;
 
-    aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopWindow"));
+    aArg.Name = ::rtl::OUString("TopWindow");
     aArg.Value <<= sal_True;
     m_aOutplaceFrameProps[0] <<= aArg;
 
-    aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MakeVisible"));
+    aArg.Name = ::rtl::OUString("MakeVisible");
     aArg.Value <<= sal_False;
     m_aOutplaceFrameProps[1] <<= aArg;
 
@@ -183,7 +183,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     }
     m_refCount--;
 
-    aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
+    aArg.Name = ::rtl::OUString("ParentFrame");
     aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
     m_aOutplaceFrameProps[2] <<= aArg;
 }
@@ -366,7 +366,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
     {
         uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
+        xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
             xLayoutManager->setVisible( bVisible );
@@ -434,7 +434,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         }
 
         awt::WindowDescriptor aOwnWinDescriptor( awt::WindowClass_TOP,
-                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("dockingwindow") ),
+                                                ::rtl::OUString("dockingwindow"),
                                                 xMyParent,
                                                 0,
                                                 awt::Rectangle(),//aOwnRectangle,
@@ -453,14 +453,14 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         uno::Sequence< uno::Any > aArgs( 2 );
         beans::NamedValue aArg;
 
-        aArg.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContainerWindow"));
+        aArg.Name    = ::rtl::OUString("ContainerWindow");
         aArg.Value <<= xOwnWindow;
         aArgs[0] <<= aArg;
 
         uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
         if ( xContFrame.is() )
         {
-            aArg.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
+            aArg.Name    = ::rtl::OUString("ParentFrame");
             aArg.Value <<= xContFrame;
             aArgs[1] <<= aArg;
         }
@@ -535,7 +535,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         if( xUIConfigManager.is())
         {
             xResult = xUIConfigManager->getSettings(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ) ),
+                ::rtl::OUString( "private:resource/menubar/menubar" ),
                 sal_False );
         }
     }
@@ -557,7 +557,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );
             xResult = xModUIConfMan->getSettings(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ) ),
+                    ::rtl::OUString( "private:resource/menubar/menubar" ),
                     sal_False );
         }
     }
@@ -656,7 +656,7 @@ sal_Bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star
     {
         uno::Reference< ::com::sun::star::ui::XUIElementSettings > xUISettings(
             xContLM->getElement(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ) ) ),
+                ::rtl::OUString( "private:resource/menubar/menubar" ) ),
             uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xContMenu = xUISettings->getSettings( sal_True );
         if ( !xContMenu.is() )
@@ -690,7 +690,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
         try
         {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
+            xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xOwnLM;
             xDocAreaAcc = xContainerLM->getDockingAreaAcceptor();
         }
         catch( const uno::Exception& ){}
@@ -783,7 +783,7 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
 
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
+            xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xOwnLM;
         } catch( const uno::Exception& )
         {}
 
@@ -860,7 +860,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
         uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
+            xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xOwnLM;
         } catch( const uno::Exception& )
         {}
 
@@ -972,18 +972,18 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             ::rtl::OUString sUrl;
             uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
             if (    xServiceInfo.is()
-                &&  xServiceInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ReportDefinition"))) )
+                &&  xServiceInfo->supportsService(::rtl::OUString("com.sun.star.report.ReportDefinition")) )
             {
-                sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/ReportDesign"));
+                sUrl = ::rtl::OUString(".component:DB/ReportDesign");
             }
             else if( xServiceInfo.is()
-                &&   xServiceInfo->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument")) ))
-                sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
+                &&   xServiceInfo->supportsService( ::rtl::OUString("com.sun.star.chart2.ChartDocument") ))
+                sUrl = ::rtl::OUString("private:factory/schart");
             else
-                sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:object"));
+                sUrl = ::rtl::OUString("private:object");
 
             xComponentLoader->loadComponentFromURL( sUrl,
-                                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_self" )),
+                                                        rtl::OUString( "_self" ),
                                                         0,
                                                         aArgs.getPropertyValues() );
 
@@ -1173,7 +1173,7 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
     // if the component does not support document::XEventBroadcaster
     // the modify notifications are used as workaround, but only for running state
     if( aEvent.Source == m_xComponent && m_pEmbedObj && m_pEmbedObj->getCurrentState() == embed::EmbedStates::RUNNING )
-        m_pEmbedObj->PostEvent_Impl( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) ) );
+        m_pEmbedObj->PostEvent_Impl( ::rtl::OUString( "OnVisAreaChanged" ) );
 }
 
 //---------------------------------------------------------------------------

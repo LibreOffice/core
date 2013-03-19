@@ -31,7 +31,7 @@ struct UseDiagnose : public rtl::StaticWithInit< bool, UseDiagnose>
     {
         ::rtl::OUString value;
         sal_Bool res = rtl::Bootstrap::get(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XMLSECURITY_TRACE")), value);
+            ::rtl::OUString("XMLSECURITY_TRACE"), value);
         return res == sal_True ? true : false;
     }
 };

@@ -157,7 +157,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             }
             jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
                 (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getAllJavaInfos")));
+                    rtl::OUString("jfw_plugin_getAllJavaInfos"));
 #else
             jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
                 jfw_plugin_getAllJavaInfos;
@@ -193,7 +193,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 #ifndef DISABLE_DYNLOADING
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                 (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
+                    rtl::OUString("jfw_plugin_getJavaInfoByPath"));
             OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
             if (jfw_plugin_getJavaInfoByPathFunc == NULL)
                 return JFW_E_ERROR;
@@ -543,7 +543,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 
             jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
                 (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getAllJavaInfos")));
+                    rtl::OUString("jfw_plugin_getAllJavaInfos"));
 #else
             jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
                 jfw_plugin_getAllJavaInfos;
@@ -629,7 +629,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 //get the function from the plugin
                 jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                     (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
+                        rtl::OUString("jfw_plugin_getJavaInfoByPath"));
 #else
                 jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                     jfw_plugin_getJavaInfoByPath;
@@ -872,7 +872,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
 
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                 (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
+                    rtl::OUString("jfw_plugin_getJavaInfoByPath"));
 #else
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                 jfw_plugin_getJavaInfoByPath;

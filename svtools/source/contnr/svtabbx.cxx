@@ -1089,7 +1089,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
 
         case ::svt::BBTYPE_ROWHEADERBAR:
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "error" ) );
+            aRetText = ::rtl::OUString( "error" );
             break;
 
         default:

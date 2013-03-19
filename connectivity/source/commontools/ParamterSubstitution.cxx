@@ -35,13 +35,13 @@ namespace connectivity
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
         uno::Reference< sdbc::XConnection > xConnection;
-        xConnection = aArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")),xConnection);
+        xConnection = aArgs.getUnpackedValueOrDefault(::rtl::OUString("ActiveConnection"),xConnection);
         m_xConnection = xConnection;
     }
     //------------------------------------------------------------------------------
     rtl::OUString ParameterSubstitution::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.ParameterSubstitution"));
+        return ::rtl::OUString("org.openoffice.comp.helper.ParameterSubstitution");
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException)
@@ -68,7 +68,7 @@ namespace connectivity
     Sequence< ::rtl::OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ParameterSubstitution"));
+        aSNS[0] = ::rtl::OUString("com.sun.star.sdb.ParameterSubstitution");
         return aSNS;
     }
 

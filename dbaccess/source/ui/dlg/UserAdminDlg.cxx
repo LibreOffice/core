@@ -110,7 +110,7 @@ DBG_NAME(OUserAdminDlg)
             if ( !aMetaData.supportsUserAdministration( getORB() ) )
             {
                 String sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
-                throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
+                throw SQLException(sError,NULL,::rtl::OUString("S1000") ,0,Any());
             }
         }
         catch(const SQLException&)

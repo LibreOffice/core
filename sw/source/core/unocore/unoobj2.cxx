@@ -907,7 +907,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXTextRange::getImplementationName() throw (uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXTextRange"));
+    return OUString("SwXTextRange");
 }
 
 static char const*const g_ServicesTextRange[] =
@@ -1366,7 +1366,7 @@ SwXTextRange::getAvailableServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextContent"));
+    pArray[0] = OUString("com.sun.star.text.TextContent");
     return aRet;
 }
 

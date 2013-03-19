@@ -97,8 +97,8 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
 
 XSERVICEINFO_IMPL_1_CTX(
     ContentProvider,
-    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ) ),
+    rtl::OUString(
+        "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ),
     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
         TDOC_CONTENT_PROVIDER_SERVICE_NAME ) ) );
 
@@ -125,7 +125,7 @@ ContentProvider::queryContent(
     Uri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
         throw ucb::IllegalIdentifierException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid URL!" ) ),
+            rtl::OUString( "Invalid URL!" ),
             Identifier );
 
     // Normalize URI.
@@ -190,16 +190,16 @@ ContentProvider::createDocumentContent(
 
             // no content.
             throw lang::IllegalArgumentException(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "Illegal Content Identifier!" ) ),
+                rtl::OUString(
+                    "Illegal Content Identifier!" ),
                 static_cast< cppu::OWeakObject * >( this ),
                 1 );
         }
         else
         {
             throw lang::IllegalArgumentException(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "Unable to obtain document id from model!" ) ),
+                rtl::OUString(
+                    "Unable to obtain document id from model!" ),
                 static_cast< cppu::OWeakObject * >( this ),
                 1 );
         }
@@ -207,8 +207,8 @@ ContentProvider::createDocumentContent(
      else
      {
         throw lang::IllegalArgumentException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "No Document Manager!" ) ),
+            rtl::OUString(
+                "No Document Manager!" ),
             static_cast< cppu::OWeakObject * >( this ),
             1 );
      }

@@ -1449,7 +1449,7 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         xRoadmapItem = evt.Source;
         sal_Int32 nID = 0;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" )));
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( "ID" ));
         aValue >>= nID;
 
         ::com::sun::star::uno::Any rVal = evt.NewValue;
@@ -1498,11 +1498,11 @@ RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::Contai
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )));
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( "Label" ));
         aValue >>= aCurRMItemData.Label;
-        aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" )));
+        aValue = xPropertySet->getPropertyValue(::rtl::OUString( "ID" ));
         aValue >>= aCurRMItemData.n_ID;
-        aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" )));
+        aValue = xPropertySet->getPropertyValue(::rtl::OUString( "Enabled" ));
         aValue >>= aCurRMItemData.b_Enabled;
     }
     return aCurRMItemData;

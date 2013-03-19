@@ -246,7 +246,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
 
 rtl::OUString ScFunctionAccess::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScFunctionAccess" ));
+    return rtl::OUString( "stardiv.StarCalc.ScFunctionAccess" );
 }
 
 uno::Sequence<rtl::OUString> ScFunctionAccess::getSupportedServiceNames_Static()
@@ -261,7 +261,7 @@ uno::Sequence<rtl::OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 
 rtl::OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScFunctionAccess") );
+    return rtl::OUString( "ScFunctionAccess");
 }
 
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const rtl::OUString& rServiceName )

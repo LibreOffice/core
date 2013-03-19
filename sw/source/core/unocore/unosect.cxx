@@ -140,8 +140,8 @@ public:
     SwSectionFmt & GetSectionFmtOrThrow() const {
         SwSectionFmt *const pFmt( GetSectionFmt() );
         if (!pFmt) {
-            throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "SwXTextSection: disposed or invalid")), 0);
+            throw uno::RuntimeException(OUString(
+                    "SwXTextSection: disposed or invalid"), 0);
         }
         return *pFmt;
     }
@@ -585,14 +585,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                OUString("Unknown property: ")
                     + pPropertyNames[nProperty],
                 static_cast<cppu::OWeakObject *>(& m_rThis));
         }
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
         {
             throw beans::PropertyVetoException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only: "))
+                OUString("Property is read-only: ")
                     + pPropertyNames[nProperty],
                 static_cast<cppu::OWeakObject *>(& m_rThis));
         }
@@ -988,7 +988,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                OUString("Unknown property: ")
                     + pPropertyNames[nProperty],
                 static_cast<cppu::OWeakObject *>(& m_rThis));
         }
@@ -1291,14 +1291,12 @@ throw (uno::RuntimeException)
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Unknown property exception caught")),
+        throw uno::RuntimeException(OUString("Unknown property exception caught"),
             static_cast<cppu::OWeakObject *>(this));
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("WrappedTargetException caught")),
+        throw uno::RuntimeException(OUString("WrappedTargetException caught"),
             static_cast<cppu::OWeakObject *>(this));
     }
 
@@ -1415,7 +1413,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                OUString("Unknown property: ")
                     + pNames[i], static_cast< cppu::OWeakObject* >(this));
         }
         switch (pEntry->nWID)
@@ -1491,13 +1489,13 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName, static_cast< cppu::OWeakObject* >(this));
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
-        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "setPropertyToDefault: property is read-only: "))
+        throw uno::RuntimeException(OUString(
+                    "setPropertyToDefault: property is read-only: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
@@ -1634,7 +1632,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }

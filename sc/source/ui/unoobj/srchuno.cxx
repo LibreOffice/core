@@ -193,7 +193,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScCellSearchObj )
 
 rtl::OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellSearchObj" ));
+    return rtl::OUString( "ScCellSearchObj" );
 }
 
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const rtl::OUString& rServiceName )

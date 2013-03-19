@@ -124,11 +124,11 @@ namespace dbaui
                     NamedValue      aProp;
                     sal_Int32       nArg = 0;
 
-                    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
+                    aProp.Name    = ::rtl::OUString("ParentFrame");
                     aProp.Value <<= m_xParentFrame;
                     lArgs[nArg++] <<= aProp;
 
-                    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopWindow"));
+                    aProp.Name    = ::rtl::OUString("TopWindow");
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
 
@@ -147,7 +147,7 @@ namespace dbaui
                 Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_QUERY_THROW );
                 xReturn = xFrameLoader->loadComponentFromURL(
                     m_sComponentURL,
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
+                    ::rtl::OUString("_self"),
                     0,
                     i_rDispatchArgs.getPropertyValues()
                 );

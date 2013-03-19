@@ -502,7 +502,7 @@ void SAL_CALL Submission::submitWithInteraction(
 
     if ( !xModel.is() || msID.isEmpty() )
         throw RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "This is not a valid submission object." ) ),
+                ::rtl::OUString( "This is not a valid submission object." ),
                 *this
               );
 

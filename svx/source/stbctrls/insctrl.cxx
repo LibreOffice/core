@@ -82,7 +82,7 @@ void SvxInsertStatusBarControl::Click()
 
     ::com::sun::star::uno::Any a;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InsertMode" ));
+    aArgs[0].Name = rtl::OUString( "InsertMode" );
     aIns.QueryValue( a );
     aArgs[0].Value = a;
 

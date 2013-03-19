@@ -142,7 +142,7 @@ namespace dbtools
                 {
                     Reference< XPropertySet > xDataSource( xConnectionAsChild->getParent(), UNO_QUERY_THROW );
                     Reference< XPropertySet > xDataSourceSettings(
-                        xDataSource->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings" ) ) ),
+                        xDataSource->getPropertyValue( ::rtl::OUString( "Settings" ) ),
                         UNO_QUERY_THROW );
 
                     _out_setting = xDataSourceSettings->getPropertyValue( ::rtl::OUString::createFromAscii( _asciiName ) );

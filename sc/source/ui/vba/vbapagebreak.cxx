@@ -36,7 +36,7 @@ ScVbaPageBreak<Ifc1>::ScVbaPageBreak( const uno::Reference< XHelperInterface >& 
 template< typename Ifc1 >
 sal_Int32 ScVbaPageBreak<Ifc1>::getType() throw (uno::RuntimeException)
 {
-    uno::Any aValue = mxRowColPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" )));
+    uno::Any aValue = mxRowColPropertySet->getPropertyValue( rtl::OUString( "IsStartOfNewPage" ));
     sal_Bool hasPageBreak = false;
     aValue >>= hasPageBreak;
 
@@ -61,11 +61,11 @@ void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
 
     if( type == excel::XlPageBreak::xlPageBreakNone )
     {
-        mxRowColPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" )), uno::makeAny(sal_False));
+        mxRowColPropertySet->setPropertyValue( rtl::OUString( "IsStartOfNewPage" ), uno::makeAny(sal_False));
         return;
     }
 
-    mxRowColPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" )), uno::makeAny(sal_True));
+    mxRowColPropertySet->setPropertyValue( rtl::OUString( "IsStartOfNewPage" ), uno::makeAny(sal_True));
     if( type == excel::XlPageBreak::xlPageBreakManual )
         maTablePageBreakData.ManualBreak = sal_True;
     else
@@ -75,7 +75,7 @@ void ScVbaPageBreak<Ifc1>::setType(sal_Int32 type) throw (uno::RuntimeException)
 template< typename Ifc1 >
 void ScVbaPageBreak<Ifc1>::Delete() throw ( script::BasicErrorException, uno::RuntimeException)
 {
-    mxRowColPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" )), uno::makeAny(sal_False));
+    mxRowColPropertySet->setPropertyValue( rtl::OUString( "IsStartOfNewPage" ), uno::makeAny(sal_False));
 }
 
 template< typename Ifc1 >
@@ -89,7 +89,7 @@ template< typename Ifc1 >
 rtl::OUString
 ScVbaPageBreak<Ifc1>::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPageBreak"));
+    return rtl::OUString("ScVbaPageBreak");
 }
 
 template< typename Ifc1 >
@@ -100,7 +100,7 @@ ScVbaPageBreak<Ifc1>::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.PageBreak" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.PageBreak" );
     }
     return aServiceNames;
 }
@@ -111,7 +111,7 @@ template class ScVbaPageBreak< excel::XHPageBreak >;
 rtl::OUString
 ScVbaHPageBreak::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaHPageBreak"));
+    return rtl::OUString("ScVbaHPageBreak");
 }
 
 uno::Sequence< rtl::OUString >
@@ -121,7 +121,7 @@ ScVbaHPageBreak::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.HPageBreak" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.HPageBreak" );
     }
     return aServiceNames;
 }
@@ -144,7 +144,7 @@ ScVbaVPageBreak::~ScVbaVPageBreak()
 rtl::OUString
 ScVbaVPageBreak::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaVPageBreak"));
+    return rtl::OUString("ScVbaVPageBreak");
 }
 
 uno::Sequence< rtl::OUString >
@@ -154,7 +154,7 @@ ScVbaVPageBreak::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.VPageBreak" ) );
+        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.excel.VPageBreak" );
     }
     return aServiceNames;
 }

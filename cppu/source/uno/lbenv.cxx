@@ -1122,7 +1122,7 @@ static uno_Environment * initDefaultEnvironment(
         if (!envPurpose.isEmpty())
         {
             rtl::OUString libStem = envPurpose.copy(envPurpose.lastIndexOf(':') + 1);
-            libStem += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_uno_uno") );
+            libStem += rtl::OUString("_uno_uno");
 
             if(!loadEnv(libStem, pEnv))
             {

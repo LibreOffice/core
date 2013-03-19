@@ -798,7 +798,7 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
     }
 
     beans::PropertyValue* const pPrintContent(
-            m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintContent"))));
+            m_rController.getValue(rtl::OUString("PrintContent")));
 
     if (pPrintContent)
     {
@@ -944,7 +944,7 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
         xFrame = uno::Reference < XFrame >(xDesktop, UNO_QUERY);
 
     uno::Reference < XFilter > xFilter(
-        ::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.PDFFilter"))),
+        ::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString("com.sun.star.document.PDFFilter")),
         UNO_QUERY);
 
     if (xFilter.is())
@@ -962,9 +962,9 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
         uno::Reference< XExporter > xExport(xFilter, UNO_QUERY);
         xExport->setSourceDocument(xDoc);
         uno::Sequence<beans::PropertyValue> aFilterData(2);
-        aFilterData[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageLayout"));
+        aFilterData[0].Name = rtl::OUString("PageLayout");
         aFilterData[0].Value <<= sal_Int32(0);
-        aFilterData[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstPageOnLeft"));
+        aFilterData[1].Name = rtl::OUString("FirstPageOnLeft");
         aFilterData[1].Value <<= sal_False;
 
 
@@ -987,7 +987,7 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
                     aRangeText.AppendAscii(",");
             }
             aFilterData.realloc(aFilterData.getLength()+1);
-            aFilterData[aFilterData.getLength()-1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageRange"));
+            aFilterData[aFilterData.getLength()-1].Name = rtl::OUString("PageRange");
             aFilterData[aFilterData.getLength()-1].Value <<= rtl::OUString(aRangeText);
         }
         else if (pStr && !strcmp(pStr, "current"))
@@ -1027,7 +1027,7 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
                        if (i < xSheets->getCount())
                        {
                             aFilterData.realloc(aFilterData.getLength()+1);
-                            aFilterData[aFilterData.getLength()-1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageRange"));
+                            aFilterData[aFilterData.getLength()-1].Name = rtl::OUString("PageRange");
                             aFilterData[aFilterData.getLength()-1].Value <<= rtl::OUString(OUString::number(i + 1));
                        }
                    }
@@ -1053,15 +1053,15 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
             if (aSelection.hasValue())
             {
                 aFilterData.realloc(aFilterData.getLength()+1);
-                aFilterData[aFilterData.getLength()-1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection"));
+                aFilterData[aFilterData.getLength()-1].Name = rtl::OUString("Selection");
                 aFilterData[aFilterData.getLength()-1].Value <<= aSelection;
             }
         }
 #endif
         uno::Sequence<beans::PropertyValue> aArgs(2);
-        aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterData"));
+        aArgs[0].Name = rtl::OUString("FilterData");
         aArgs[0].Value <<= aFilterData;
-        aArgs[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
+        aArgs[1].Name = rtl::OUString("OutputStream");
         aArgs[1].Value <<= xOStm;
         xFilter->filter(aArgs);
     }
@@ -1076,9 +1076,9 @@ GtkPrintDialog::updateControllerPrintRange()
     // TODO: use get_print_pages
     if (const gchar* const pStr = m_pWrapper->print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES))
     {
-        beans::PropertyValue* pVal = m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintRange")));
+        beans::PropertyValue* pVal = m_rController.getValue(rtl::OUString("PrintRange"));
         if (!pVal)
-            pVal = m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintContent")));
+            pVal = m_rController.getValue(rtl::OUString("PrintContent"));
         SAL_WARN_IF(!pVal, "vcl.gtk", "Nothing to map standard print options to!");
         if (pVal)
         {
@@ -1093,7 +1093,7 @@ GtkPrintDialog::updateControllerPrintRange()
 
             if (nVal == 1)
             {
-                pVal = m_rController.getValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageRange")));
+                pVal = m_rController.getValue(rtl::OUString("PageRange"));
                 SAL_WARN_IF(!pVal, "vcl.gtk", "PageRange doesn't exist!");
                 if (pVal)
                 {
@@ -1135,9 +1135,9 @@ GtkPrintDialog::impl_readFromSettings()
 
     const rtl::OUString aPrintDialogStr(RTL_CONSTASCII_USTRINGPARAM("PrintDialog"));
     const rtl::OUString aCopyCount(pItem->getValue(aPrintDialogStr,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount"))));
+                rtl::OUString("CopyCount")));
     const rtl::OUString aCollate(pItem->getValue(aPrintDialogStr,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate"))));
+                rtl::OUString("Collate")));
 
     bool bChanged(false);
 
@@ -1173,13 +1173,13 @@ const
 
     const rtl::OUString aPrintDialogStr(RTL_CONSTASCII_USTRINGPARAM("PrintDialog"));
     pItem->setValue(aPrintDialogStr,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount")),
+            rtl::OUString("CopyCount"),
             rtl::OUString::valueOf(sal_Int32(m_pWrapper->print_settings_get_n_copies(pSettings))));
     pItem->setValue(aPrintDialogStr,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate")),
+            rtl::OUString("Collate"),
             m_pWrapper->print_settings_get_collate(pSettings)
-                ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"))
-                : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")))
+                ? rtl::OUString("true")
+                : rtl::OUString("false"))
         ;
     // pItem->setValue(aPrintDialog, rtl::OUString::createFromAscii("ToFile"), );
     g_object_unref(G_OBJECT(pSettings));

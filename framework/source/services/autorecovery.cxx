@@ -309,7 +309,7 @@ void CacheLockGuard::lock(sal_Bool bLockForAddRemoveVectorItems)
     {
         OSL_FAIL("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.")),
+                ::rtl::OUString("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp."),
                 m_xOwner);
     }
 
@@ -714,7 +714,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid listener reference.")), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(::rtl::OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.addInterface(aURL.Complete, xListener);
 
@@ -749,7 +749,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid listener reference.")), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(::rtl::OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
@@ -1123,7 +1123,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     if (rInfo.AppModule.isEmpty())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant find out the default filter and its extension, if no application module is known!")),
+                ::rtl::OUString("Cant find out the default filter and its extension, if no application module is known!"),
                 static_cast< css::frame::XDispatch* >(this));
     }
 
@@ -1166,11 +1166,11 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         css::uno::Sequence< ::rtl::OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(rtl::OUString(TYPE_PROP_EXTENSIONS), css::uno::Sequence< ::rtl::OUString >());
         if (lExtensions.getLength())
         {
-            rInfo.Extension  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+            rInfo.Extension  = ::rtl::OUString(".");
             rInfo.Extension += lExtensions[0];
         }
         else
-            rInfo.Extension = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".unknown"));
+            rInfo.Extension = ::rtl::OUString(".unknown");
     }
     catch(const css::uno::Exception&)
     {
@@ -3624,7 +3624,7 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getComponentContext(m_xSMGR));
-        aContent.executeCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), css::uno::makeAny(sal_True));
+        aContent.executeCommand(::rtl::OUString("delete"), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)
     {

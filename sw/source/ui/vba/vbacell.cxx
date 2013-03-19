@@ -91,7 +91,7 @@ void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule ) throw (
 rtl::OUString
 SwVbaCell::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaCell"));
+    return rtl::OUString("SwVbaCell");
 }
 
 uno::Sequence< rtl::OUString >
@@ -101,7 +101,7 @@ SwVbaCell::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Cell" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Cell" );
     }
     return aServiceNames;
 }

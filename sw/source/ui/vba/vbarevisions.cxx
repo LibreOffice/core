@@ -160,7 +160,7 @@ void SAL_CALL SwVbaRevisions::RejectAll(  ) throw (css::uno::RuntimeException)
 rtl::OUString
 SwVbaRevisions::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRevisions"));
+    return rtl::OUString("SwVbaRevisions");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -170,7 +170,7 @@ SwVbaRevisions::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Revisions") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Revisions");
     }
     return sNames;
 }

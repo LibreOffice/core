@@ -466,7 +466,7 @@ namespace pcr
     //------------------------------------------------------------------
     IMPL_LINK( OHyperlinkControl, OnHyperlinkClicked, void*, /*_NotInterestedIn*/ )
     {
-        ActionEvent aEvent( *this, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "clicked" ) ) );
+        ActionEvent aEvent( *this, ::rtl::OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
             boost::bind(
                 &XActionListener::actionPerformed,

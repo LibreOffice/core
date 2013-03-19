@@ -538,7 +538,7 @@ void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
         OSQLParseNode* pChildNode = _pNode->getChild(i);
         if(SQL_ISRULE(pChildNode,parameter) && pChildNode->count() == 1)
         {
-            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":")) ,SQL_NODE_PUNCTUATION,0);
+            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(":") ,SQL_NODE_PUNCTUATION,0);
             delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
             ::rtl::OUString sParameterName = _sDefaultName;
             sParameterName += ::rtl::OUString::valueOf(++_rParameterCount);

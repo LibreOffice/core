@@ -746,8 +746,8 @@ public:
     SwUnoCrsr & GetCursorOrThrow() {
         SwUnoCrsr *const pUnoCursor( GetCursor() );
         if (!pUnoCursor) {
-            throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "SwXTextCursor: disposed or invalid")), 0);
+            throw uno::RuntimeException(OUString(
+                        "SwXTextCursor: disposed or invalid"), 0);
         }
         return *pUnoCursor;
     }
@@ -1829,7 +1829,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName, static_cast<cppu::OWeakObject *>(0));
     }
 
@@ -1976,7 +1976,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             else
             {
                 throw beans::UnknownPropertyException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                    OUString("Unknown property: ")
                         + pNames[i],
                     static_cast<cppu::OWeakObject *>(0));
             }
@@ -2100,14 +2100,14 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName, static_cast<cppu::OWeakObject *>(0));
     }
 
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
-        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "setPropertyToDefault: property is read-only: "))
+        throw uno::RuntimeException(OUString(
+                "setPropertyToDefault: property is read-only: ")
                 + rPropertyName, 0);
     }
 
@@ -2141,7 +2141,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName, static_cast<cppu::OWeakObject *>(0));
     }
 
@@ -2418,15 +2418,15 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                     continue;
                 }
                 throw beans::UnknownPropertyException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                    OUString("Unknown property: ")
                         + pNames[i],
                     static_cast<cppu::OWeakObject *>(this));
             }
             if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
             {
                 throw uno::RuntimeException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "setPropertiesToDefault: property is read-only: "))
+                    OUString(
+                            "setPropertiesToDefault: property is read-only: ")
                         + pNames[i],
                     static_cast<cppu::OWeakObject *>(this));
             }
@@ -2490,7 +2490,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     continue;
                 }
                 throw beans::UnknownPropertyException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                    OUString("Unknown property: ")
                         + pNames[i],
                     static_cast<cppu::OWeakObject *>(0));
             }
@@ -2977,7 +2977,7 @@ SwXTextCursor::getAvailableServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextContent"));
+    pArray[0] = OUString("com.sun.star.text.TextContent");
     return aRet;
 }
 

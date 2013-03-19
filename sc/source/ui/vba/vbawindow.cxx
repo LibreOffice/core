@@ -103,13 +103,13 @@ public:
     {
         ScModelObj* pModel = static_cast< ScModelObj* >( m_xModel.get() );
         if ( !pModel )
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain current document" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Cannot obtain current document" ), uno::Reference< uno::XInterface >() );
         ScDocShell* pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
         if ( !pDocShell )
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain docshell" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Cannot obtain docshell" ), uno::Reference< uno::XInterface >() );
         ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
         if ( !pViewShell )
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain view shell" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Cannot obtain view shell" ), uno::Reference< uno::XInterface >() );
 
         SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
         uno::Sequence<sal_Int32> aSheets( nTabCount );
@@ -290,7 +290,7 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 /*
     sal_Int32 nSheets = 0;
     sal_Int32 nPosition = 0;
-    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No Implemented")), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString("No Implemented"), uno::Reference< uno::XInterface >() );
     sal_Bool bSheets = ( Sheets >>= nSheets );
     sal_Bool bPosition = ( Position >>= nPosition );
     if ( bSheets || bPosition ) // at least one param specified
@@ -444,7 +444,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
         else if (nwindowState == xlNormal)
             pWork -> Restore();
         else
-            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Parameter" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Invalid Parameter" ), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -867,7 +867,7 @@ void SAL_CALL ScVbaWindow::setTabRatio( double fRatio ) throw (css::uno::Runtime
 rtl::OUString
 ScVbaWindow::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWindow"));
+    return rtl::OUString("ScVbaWindow");
 }
 
 uno::Sequence< rtl::OUString >
@@ -877,7 +877,7 @@ ScVbaWindow::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Window" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Window" );
     }
     return aServiceNames;
 }

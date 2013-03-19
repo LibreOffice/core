@@ -46,7 +46,7 @@ void SAL_CALL SwVbaFrame::Select() throw ( uno::RuntimeException )
 rtl::OUString
 SwVbaFrame::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFrame"));
+    return rtl::OUString("SwVbaFrame");
 }
 
 uno::Sequence< rtl::OUString >
@@ -56,7 +56,7 @@ SwVbaFrame::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Frame" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Frame" );
     }
     return aServiceNames;
 }

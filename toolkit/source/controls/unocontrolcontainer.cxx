@@ -289,7 +289,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
         if ( existent == maControls.end() )
             return candidateId;
     }
-    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "out of identifiers" ) ), NULL );
+    throw uno::RuntimeException( ::rtl::OUString( "out of identifiers" ), NULL );
 }
 
 //------------------------------------------------------------------------
@@ -308,7 +308,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
         if ( loop == maControls.end() )
             return candidateName;
     }
-    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "out of identifiers" ) ), NULL );
+    throw uno::RuntimeException( ::rtl::OUString( "out of identifiers" ), NULL );
 }
 //  ----------------------------------------------------
 //  Function to set the controls' visibility according
@@ -494,7 +494,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
     uno::Reference< awt::XControl > xControl;
     if ( !( _rElement >>= xControl ) || !xControl.is() )
         throw lang::IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Elements must support the XControl interface." ) ),
+            ::rtl::OUString( "Elements must support the XControl interface." ),
             *this,
             1
         );
@@ -509,7 +509,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     uno::Reference< awt::XControl > xControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
         throw container::NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "There is no element with the given identifier." ) ),
+            ::rtl::OUString( "There is no element with the given identifier." ),
             *this
         );
 
@@ -523,14 +523,14 @@ void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier,
     uno::Reference< awt::XControl > xExistentControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xExistentControl ) )
         throw container::NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "There is no element with the given identifier." ) ),
+            ::rtl::OUString( "There is no element with the given identifier." ),
             *this
         );
 
     uno::Reference< awt::XControl > xNewControl;
     if ( !( _rElement >>= xNewControl ) )
         throw lang::IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Elements must support the XControl interface." ) ),
+            ::rtl::OUString( "Elements must support the XControl interface." ),
             *this,
             1
         );

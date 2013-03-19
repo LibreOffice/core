@@ -63,8 +63,7 @@ bool sfx2::openUriExternally(
         if (e.ArgumentPosition != 0) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "unexpected IllegalArgumentException: "))
+                        "unexpected IllegalArgumentException: ")
                  + e.Message),
                 css::uno::Reference< css::uno::XInterface >());
         }

@@ -148,7 +148,7 @@ namespace dbaui
         switch ( _eOpenMode )
         {
             case E_OPEN_NORMAL:
-                sOpenMode = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) );
+                sOpenMode = ::rtl::OUString( "open" );
                 break;
 
             case E_OPEN_FOR_MAIL:
@@ -156,7 +156,7 @@ namespace dbaui
                 // fall through
 
             case E_OPEN_DESIGN:
-                sOpenMode = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "openDesign" ) );
+                sOpenMode = ::rtl::OUString( "openDesign" );
                 break;
 
             default:
@@ -215,7 +215,7 @@ namespace dbaui
                     ), UNO_QUERY_THROW );
             }
 
-            xWizard->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "start" ) ) );
+            xWizard->trigger( ::rtl::OUString( "start" ) );
             ::comphelper::disposeComponent( xWizard );
         }
         catch(const Exception&)
@@ -317,7 +317,7 @@ namespace dbaui
                 aCommandArgs.put( "OpenMode", aOpenModeArg );
 
                 Command aCommand;
-                aCommand.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "openDesign" ) );
+                aCommand.Name = ::rtl::OUString( "openDesign" );
                 aCommand.Argument <<= aCommandArgs.getPropertyValues();
                 WaitObject aWaitCursor( m_pDialogParent );
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
@@ -379,7 +379,7 @@ namespace dbaui
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
                 // more like a hack, insert an empty message
-                aInfo.prepend(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \n")));
+                aInfo.prepend(::rtl::OUString(" \n"));
 
                 String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
                 sMessage.SearchAndReplaceAscii("$file$",_rLinkName);

@@ -52,17 +52,17 @@ static Property * getPropertyTable1()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString *)0) ,
+                Property( OUString("a"), 0, getCppuType( (OUString *)0) ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //OUString
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ) ,
+                Property( OUString("b"), 1, getCppuCharType( ) ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("c") ), 2, getCppuType( (sal_Int32*)0) ,
+                Property( OUString("c"), 2, getCppuType( (sal_Int32*)0) ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //sal_Int32
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("d") ), 5, getCppuType( (double*)0)     ,
+                Property( OUString("d"), 5, getCppuType( (double*)0)     ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //double
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("e") ), 7, getCppuBooleanType()         ,
+                Property( OUString("e"), 7, getCppuBooleanType()         ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //BOOL
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any*)0)        ,
+                Property( OUString("f"), 8, getCppuType( (Any*)0)        ,
                              PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )  //Any
             };
             pTable = aTable;
@@ -81,17 +81,17 @@ static Property * getPropertyTable2()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any *)0)   ,
+                Property( OUString("f"), 8, getCppuType( (Any *)0)   ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Any
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ),
+                Property( OUString("b"), 1, getCppuCharType( ),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0),
+                Property( OUString("a"), 0, getCppuType( (OUString*)0),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("d") ), 5, getCppuType( (double*)0) ,
+                Property( OUString("d"), 5, getCppuType( (double*)0) ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Double
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("c") ), 2, getCppuType( (sal_Int32*)0),
+                Property( OUString("c"), 2, getCppuType( (sal_Int32*)0),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // sal_Int32
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("e") ), 7, getCppuBooleanType()         ,
+                Property( OUString("e"), 7, getCppuBooleanType()         ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Bool
             };
             pTable = aTable;
@@ -109,11 +109,11 @@ static Property * getPropertyTable3()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ),
+                Property( OUString("b"), 1, getCppuCharType( ),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 8, getCppuType( (Any *)0)   ,
+                Property( OUString("f"), 8, getCppuType( (Any *)0)   ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // any
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0),
+                Property( OUString("a"), 0, getCppuType( (OUString*)0),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // OUString
             };
             pTable = aTable;
@@ -132,11 +132,11 @@ static Property * getPropertyTable4()
         if( ! pTable ) {
             static Property aTable[] =
             {
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("a") ), 0, getCppuType( (OUString*)0),
+                Property( OUString("a"), 0, getCppuType( (OUString*)0),
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("b") ), 1, getCppuCharType( ),
+                Property( OUString("b"), 1, getCppuCharType( ),
                                      PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), // Char
-                Property( OUString( RTL_CONSTASCII_USTRINGPARAM("f") ), 2, getCppuType( (Any *)0)   ,
+                Property( OUString("f"), 2, getCppuType( (Any *)0)   ,
                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Any
             };
             pTable = aTable;
@@ -220,10 +220,10 @@ void test_PropertyArrayHelper()
             OSL_ENSURE( aP.Type == getPropertyTable1()[i].Type, "Type not correct" );
         }
 
-        OSL_ENSURE( !a1.hasPropertyByName( OUString( RTL_CONSTASCII_USTRINGPARAM("never exist") ) ), "hasPropertyByName not correct" );
+        OSL_ENSURE( !a1.hasPropertyByName( OUString("never exist") ), "hasPropertyByName not correct" );
         try
         {
-            a1.getPropertyByName( OUString( RTL_CONSTASCII_USTRINGPARAM("never exist") ) );
+            a1.getPropertyByName( OUString("never exist") );
             OSL_FAIL( "exeption not thrown" );
         }
         catch( UnknownPropertyException & )
@@ -239,7 +239,7 @@ void test_PropertyArrayHelper()
             sal_Int32 Handle = a1.getHandleByName( getPropertyTable1()[i].Name );
             OSL_ENSURE( Handle == getPropertyTable1()[i].Handle, "Handle not correct" );
         }
-        sal_Int32 Handle = a1.getHandleByName( OUString( RTL_CONSTASCII_USTRINGPARAM("asdaf") ) );
+        sal_Int32 Handle = a1.getHandleByName( OUString("asdaf") );
         OSL_ENSURE( Handle == -1, "Handle not correct" );
     }
 
@@ -277,10 +277,10 @@ void test_PropertyArrayHelper()
         Sequence< OUString > aS( 4 );
         sal_Int32 Handles[4];
         // muss sortiert sein
-        aS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("a") );
-        aS.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("d") );
-        aS.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("f") );
-        aS.getArray()[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("t") );
+        aS.getArray()[0] = OUString("a");
+        aS.getArray()[1] = OUString("d");
+        aS.getArray()[2] = OUString("f");
+        aS.getArray()[3] = OUString("t");
         sal_Int32 nHitCount = a1.fillHandles( Handles, aS );
         OSL_ENSURE( nHitCount == 3, "wrong number of hits " );
         OSL_ENSURE( Handles[0] == getPropertyTable1()[0].Handle, "Handle not correct" );
@@ -408,11 +408,11 @@ Property * getBasicProps()
 
             static Property aBasicProps[PROPERTY_COUNT] =
             {
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") )  , PROPERTY_BOOL , getCppuBooleanType(), PropertyAttribute::READONLY ),
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ) , PROPERTY_INT16,
+                 Property( OUString("BOOL")  , PROPERTY_BOOL , getCppuBooleanType(), PropertyAttribute::READONLY ),
+                 Property( OUString("INT16") , PROPERTY_INT16,
                                  getCppuType( (sal_Int16*)0 ),  PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ) , PROPERTY_INT32, getCppuType( (sal_Int32*)0 ), PropertyAttribute::BOUND ),
-                 Property( OUString( RTL_CONSTASCII_USTRINGPARAM("TEST") )  , 55            , getCppuType( (sal_Int32*)0),  PropertyAttribute::BOUND )
+                 Property( OUString("INT32") , PROPERTY_INT32, getCppuType( (sal_Int32*)0 ), PropertyAttribute::BOUND ),
+                 Property( OUString("TEST")  , 55            , getCppuType( (sal_Int32*)0),  PropertyAttribute::BOUND )
             };
             pTable = aBasicProps;
         }
@@ -468,13 +468,13 @@ public:
             case PROPERTY_BOOL:
                 {
                 OSL_FAIL( "PropertySetHelper: BOOL cannot change" );
-                OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
+                OSL_ENSURE( evt.PropertyName == OUString("BOOL"), "PropertySetHelper: wrong name" );
                 }
             break;
 
             case PROPERTY_INT16:
                 {
-                OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
+                OSL_ENSURE( evt.PropertyName == OUString("INT16"), "PropertySetHelper: wrong name" );
 
                 OSL_ENSURE( pExceptedListenerValues[nCurrent].getValueType().getTypeClass() == TypeClass_SHORT ,
                             "PropertySetHelper: wrong data type" );
@@ -493,7 +493,7 @@ public:
 
             case PROPERTY_INT32:
                 {
-                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString("INT32"), "PropertySetHelper: wrong name" );
 
                     sal_Int32 nInt32(0),nOldInt32(0);
 
@@ -526,13 +526,13 @@ public:
             case PROPERTY_BOOL:
                 {
                     OSL_FAIL( "PropertySetHelper: BOOL cannot change" );
-                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString("BOOL"), "PropertySetHelper: wrong name" );
                 }
             break;
 
             case PROPERTY_INT16:
                 {
-                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString("INT16"), "PropertySetHelper: wrong name" );
 
                     sal_Int16 nInt16(0), nOldInt16(0);
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
@@ -554,7 +554,7 @@ public:
 
             case PROPERTY_INT32:
                 {
-                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString("INT32"), "PropertySetHelper: wrong name" );
 
                     sal_Int32 nInt32(0),nOldInt32(0);
                     pExceptedListenerValues[nCurrent] >>= nInt32;
@@ -589,13 +589,13 @@ public:
                 case PROPERTY_BOOL:
                     {
                     OSL_FAIL( "PropertySetHelper: BOOL cannot change" );
-                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString("BOOL"), "PropertySetHelper: wrong name" );
                     }
                 break;
 
                 case PROPERTY_INT16:
                     {
-                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString("INT16"), "PropertySetHelper: wrong name" );
 
                     sal_Int16 nInt16(0), nOldInt16(0);
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
@@ -611,7 +611,7 @@ public:
 
                 case PROPERTY_INT32:
                     {
-                    OSL_ENSURE( evt.PropertyName == OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == OUString("INT32"), "PropertySetHelper: wrong name" );
 
 
                     sal_Int32 nInt32(0),nOldInt32(0);
@@ -804,26 +804,26 @@ void test_PropertySetHelper()
             Reference < XPropertiesChangeListener >     x1( xPS_L, UNO_QUERY );
             Reference < XVetoableChangeListener >       x2( xPS_L, UNO_QUERY );
 
-            xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
+            xPS->addPropertyChangeListener( OUString("INT16"), xPS_L );
             Sequence<OUString> szPN( 3 );
-            szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
-            szPN.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") );
-            szPN.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ); // must ne ignored by the addPropertiesChangeListener method
+            szPN.getArray()[0] = OUString("BOOL");
+            szPN.getArray()[1] = OUString("INT32");
+            szPN.getArray()[2] = OUString("Does not exist"); // must ne ignored by the addPropertiesChangeListener method
             pPS->addPropertiesChangeListener( szPN, x1 );
 
             szPN = Sequence<OUString>();
             pPS->addPropertiesChangeListener( szPN, x1 );
-            pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
+            pPS->addVetoableChangeListener( OUString("INT16"), x2 );
 
-            xPS->removePropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
+            xPS->removePropertyChangeListener( OUString("INT16"), xPS_L );
             pPS->removePropertiesChangeListener( x1 );
             pPS->removePropertiesChangeListener( x1 );
-            pPS->removeVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
+            pPS->removeVetoableChangeListener( OUString("INT16"), x2 );
 
             // this exception must thrown
             try
             {
-                xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), xPS_L );
+                xPS->addPropertyChangeListener( OUString("Does not exist"), xPS_L );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
@@ -833,7 +833,7 @@ void test_PropertySetHelper()
 
             try
             {
-                xPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), x2 );
+                xPS->addVetoableChangeListener( OUString("Does not exist"), x2 );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
@@ -849,14 +849,14 @@ void test_PropertySetHelper()
             Reference < XPropertiesChangeListener >  x1( xPS_L, UNO_QUERY );
             Reference < XVetoableChangeListener >    x2( xPS_L, UNO_QUERY );
 
-            xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
+            xPS->addPropertyChangeListener( OUString("INT16"), xPS_L );
             Sequence<OUString> szPN( 2 );
-            szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
-            szPN.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") );
+            szPN.getArray()[0] = OUString("BOOL");
+            szPN.getArray()[1] = OUString("INT32");
             pPS->addPropertiesChangeListener( szPN, x1 );
             szPN = Sequence<OUString>();
             pPS->addPropertiesChangeListener( szPN, x1 );
-            pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
+            pPS->addVetoableChangeListener( OUString("INT16"), x2 );
             pPS->dispose();
         }
         OSL_ENSURE( pPS_L->nDisposing == 4      , "PropertySetHelper: wrong disposing count" );
@@ -873,7 +873,7 @@ void test_PropertySetHelper()
                 sal_Bool b = sal_True;
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
-                xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ), aBool );
+                xPS->setPropertyValue( OUString("BOOL"), aBool );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( PropertyVetoException & /*e*/ )
@@ -900,7 +900,7 @@ void test_PropertySetHelper()
                 sal_Bool b = sal_True;
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
-                xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ), aBool );
+                xPS->setPropertyValue( OUString("Does not exist"), aBool );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
@@ -923,7 +923,7 @@ void test_PropertySetHelper()
             try
             {
                 Any aBool;
-                aBool = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ) );
+                aBool = xPS->getPropertyValue( OUString("Does not exist") );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
@@ -944,7 +944,7 @@ void test_PropertySetHelper()
             try
             {
                 Any aBool;
-                xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), aBool );
+                xPS->setPropertyValue( OUString("INT32"), aBool );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
@@ -966,7 +966,7 @@ void test_PropertySetHelper()
             {
                 Any aINT32;
                 aINT32 <<= (sal_Int32 ) 16;
-                xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aINT32 );
+                xPS->setPropertyValue( OUString("INT16"), aINT32 );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
@@ -987,7 +987,7 @@ void test_PropertySetHelper()
 
 
             Any aValue;
-            aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") ) );
+            aValue = xPS->getPropertyValue( OUString("BOOL") );
             sal_Bool b = *( (sal_Bool*)aValue.getValue());
             OSL_ENSURE( ! b, "PropertySetHelper: wrong BOOL value" );
             aValue = ((XFastPropertySet *)pPS)->getFastPropertyValue( PROPERTY_BOOL );
@@ -997,8 +997,8 @@ void test_PropertySetHelper()
 
             sal_Int16 n16(0);
             aValue <<=(sal_Int16)22;
-            xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aValue );
-            aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ) );
+            xPS->setPropertyValue( OUString("INT16"), aValue );
+            aValue = xPS->getPropertyValue( OUString("INT16") );
             aValue >>= n16;
             OSL_ENSURE( 22 == n16 , "PropertySetHelper: wrong INT16 value" );
             aValue <<= (sal_Int16)44;
@@ -1010,8 +1010,8 @@ void test_PropertySetHelper()
 
             // widening conversion
             aValue <<= (sal_Int16)55;
-            xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ), aValue );
-            aValue = xPS->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") ) );
+            xPS->setPropertyValue( OUString("INT32"), aValue );
+            aValue = xPS->getPropertyValue( OUString("INT32") );
             sal_Int32 n32(0);
             aValue >>= n32;
             OSL_ENSURE( 55 == n32 , "PropertySetHelper: wrong INT32 value" );
@@ -1022,9 +1022,9 @@ void test_PropertySetHelper()
             OSL_ENSURE( 66 == n32, "PropertySetHelper: wrong INT32 value" );
 
             Sequence< OUString >valueNames = Sequence<OUString>( 3 );
-            valueNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
-            valueNames.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
-            valueNames.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") );
+            valueNames.getArray()[0] = OUString("BOOL");
+            valueNames.getArray()[1] = OUString("INT16");
+            valueNames.getArray()[2] = OUString("INT32");
             Sequence< Any > aValues = pPS->getPropertyValues( valueNames );
 
             b = *((sal_Bool*)aValues.getConstArray()[0].getValue());
@@ -1042,8 +1042,8 @@ void test_PropertySetHelper()
         {
             Reference < XVetoableChangeListener >  x2( xPS_L, UNO_QUERY );
 
-            xPS->addPropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
-            pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
+            xPS->addPropertyChangeListener( OUString("INT16"), xPS_L );
+            pPS->addVetoableChangeListener( OUString("INT16"), x2 );
 
             pPS_L->nCount = 10;
             Sequence< Any > aSeq( pPS_L->nCount );
@@ -1064,7 +1064,7 @@ void test_PropertySetHelper()
 
             Any aValue;
             aValue <<= (sal_Int16)22;
-            xPS->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), aValue );
+            xPS->setPropertyValue( OUString("INT16"), aValue );
             aValue <<= (sal_Int16) 44;
             ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT16, aValue );
             aValue <<= (sal_Int16)100;// exception
@@ -1084,8 +1084,8 @@ void test_PropertySetHelper()
             pPS_L->nCount = 0;
             pPS_L->nCurrent = 0;
             pPS_L->pExceptedListenerValues = NULL;
-            xPS->removePropertyChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), xPS_L );
-            pPS->removeVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
+            xPS->removePropertyChangeListener( OUString("INT16"), xPS_L );
+            pPS->removeVetoableChangeListener( OUString("INT16"), x2 );
         }
 
         // Test multi property set listener
@@ -1093,12 +1093,12 @@ void test_PropertySetHelper()
             Reference < XPropertiesChangeListener > x1( xPS_L, UNO_QUERY );
             Reference < XVetoableChangeListener >  x2( xPS_L, UNO_QUERY );
 
-            pPS->addVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ) , x2 );
+            pPS->addVetoableChangeListener( OUString("INT16") , x2 );
             Sequence<OUString> szPN( 4 );
-            szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("BOOL") );
-            szPN.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") );
-            szPN.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("Does not exist") ); // must ne ignored by the addPropertiesChangeListener method
-            szPN.getArray()[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
+            szPN.getArray()[0] = OUString("BOOL");
+            szPN.getArray()[1] = OUString("INT32");
+            szPN.getArray()[2] = OUString("Does not exist"); // must ne ignored by the addPropertiesChangeListener method
+            szPN.getArray()[3] = OUString("INT16");
             pPS->addPropertiesChangeListener( szPN, x1 );
 
             pPS_L->nCount = 6;
@@ -1114,8 +1114,8 @@ void test_PropertySetHelper()
             pPS_L->pExceptedListenerValues[5] <<= (sal_Int32) 44; // new value  bound
 
             szPN = Sequence<OUString>( 2 );
-            szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
-            szPN.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT32") );
+            szPN.getArray()[0] = OUString("INT16");
+            szPN.getArray()[1] = OUString("INT32");
             Sequence< Any > aValues( 2 );
             aValues.getArray()[0] <<= (sal_Int16) 22;
             aValues.getArray()[1] <<= (sal_Int16) 44;
@@ -1136,8 +1136,8 @@ void test_PropertySetHelper()
 
 
             //vetoable exception with multible
-            szPN.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
-            szPN.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") );
+            szPN.getArray()[0] = OUString("INT16");
+            szPN.getArray()[1] = OUString("INT16");
             pPS->nINT32 = 0;
             pPS->nINT16 = 0;
             pPS_L->nCount = 4;
@@ -1160,7 +1160,7 @@ void test_PropertySetHelper()
 
             OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
             pPS->removePropertiesChangeListener( x1 );
-            pPS->removeVetoableChangeListener( OUString( RTL_CONSTASCII_USTRINGPARAM("INT16") ), x2 );
+            pPS->removeVetoableChangeListener( OUString("INT16"), x2 );
         }
     }
 }

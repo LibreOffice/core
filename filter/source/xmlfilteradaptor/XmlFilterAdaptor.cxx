@@ -82,7 +82,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is()){
-        xStatusIndicator->start(OUString(  RTL_CONSTASCII_USTRINGPARAM( "Loading :" )),nProgressRange);
+        xStatusIndicator->start(OUString( "Loading :" ),nProgressRange);
     }
 
     OUString sXMLImportService (  udImport  );
@@ -90,7 +90,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
 
     Sequence< Any > aAnys(1);
     OUString aBaseURI;
-    if (aMediaMap.find(OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" )))->second >>= aBaseURI)
+    if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)
     {
         INetURLObject aURLObj(aBaseURI);
         // base URI in this case is the URI of the actual saving location
@@ -108,7 +108,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
      Reference< XPropertySet > xInfoSet(
         GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
      xInfoSet->setPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" )), makeAny( aBaseURI ));
+        OUString( "BaseURI" ), makeAny( aBaseURI ));
     aAnys[0] <<= xInfoSet;
 
 
@@ -159,12 +159,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
             //Load the Styles from the Template URL Supplied in the TypeDetection file
-            if(msTemplateName.indexOf(OUString( RTL_CONSTASCII_USTRINGPARAM( "file:" )))==-1)
+            if(msTemplateName.indexOf(OUString( "file:" ))==-1)
             {
                 Reference< XConfigManager >xCfgMgr ( mxMSF->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" )) ), UNO_QUERY );
+                    OUString( "com.sun.star.config.SpecialConfigManager" ) ), UNO_QUERY );
                 OUString PathString(xCfgMgr->substituteVariables(OUString(RTL_CONSTASCII_USTRINGPARAM("$(progurl)"))));
-                PathString = PathString.concat(OUString( RTL_CONSTASCII_USTRINGPARAM( "/" )));
+                PathString = PathString.concat(OUString( "/" ));
                 msTemplateName=PathString.concat(msTemplateName);
             }
 
@@ -221,7 +221,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >()));
 
     if (xStatusIndicator.is())
-       xStatusIndicator->start(OUString(  RTL_CONSTASCII_USTRINGPARAM( "Saving :" )),nProgressRange);
+       xStatusIndicator->start(OUString( "Saving :" ),nProgressRange);
 
     // Set up converter bridge.
     Reference< com::sun::star::xml::XExportFilter > xConverter(mxMSF->createInstance(udConvertClass ), UNO_QUERY);
@@ -261,7 +261,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
         // get the base URI, so we can use relative links
         OUString aBaseURI;
-        if (aMediaMap.find(OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" )))->second >>= aBaseURI)
+        if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)
         {
             INetURLObject aURLObj(aBaseURI);
             // base URI in this case is the URI of the actual saving location
@@ -281,12 +281,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
          Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
          xInfoSet->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePrettyPrinting" )), makeAny( bPrettyPrint ));
+            OUString( "UsePrettyPrinting" ), makeAny( bPrettyPrint ));
         xInfoSet->setPropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportTextNumberElement" )),
+                        OUString( "ExportTextNumberElement" ),
                         makeAny( bExportTextNumberElementForListItems ));
          xInfoSet->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" )), makeAny( aBaseURI ));
+            OUString( "BaseURI" ), makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;
 
         Reference< XExporter > xExporter( mxMSF->createInstanceWithArguments (
@@ -365,17 +365,17 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
     {
         comphelper::SequenceAsHashMap aMap(aAnySeq);
         msFilterName = aMap.getUnpackedValueOrDefault(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" )), OUString());
+            OUString( "Type" ), OUString());
         msUserData = aMap.getUnpackedValueOrDefault(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "UserData" )), Sequence< OUString >());
+            OUString( "UserData" ), Sequence< OUString >());
         msTemplateName = aMap.getUnpackedValueOrDefault(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" )), OUString());
+            OUString( "TemplateName" ), OUString());
     }
 }
 OUString XmlFilterAdaptor_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) );
+    return OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
 }
 #define SERVICE_NAME1 "com.sun.star.document.ExportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ImportFilter"

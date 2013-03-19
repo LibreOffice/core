@@ -56,7 +56,7 @@ int main( int argc, char *argv[] )
 
 
     OUString iniName;
-    Bootstrap::get(OUString(RTL_CONSTASCII_USTRINGPARAM("iniName")), iniName, OUString());
+    Bootstrap::get(OUString("iniName"), iniName, OUString());
 
 #if OSL_DEBUG_LEVEL > 1
      if(iniName.getLength())
@@ -76,7 +76,7 @@ int main( int argc, char *argv[] )
     sal_Bool useDefault;
 
     OUString aDummy;
-    useDefault = bootstrap.getFrom(OUString(RTL_CONSTASCII_USTRINGPARAM("USEDEFAULT")), aDummy);
+    useDefault = bootstrap.getFrom(OUString("USEDEFAULT"), aDummy);
 
     sal_Bool result = sal_False;
     sal_Bool found  = sal_True;
@@ -105,12 +105,12 @@ int main( int argc, char *argv[] )
         fprintf(stderr, "bootstrap parameter couldn't be found\n");
 
     // test the default case
-    name = OUString( RTL_CONSTASCII_USTRINGPARAM( "no_one_has_set_this_name" ) );
+    name = OUString( "no_one_has_set_this_name" );
       OSL_ASSERT( ! bootstrap.getFrom( name, value ) );
     result = result && !bootstrap.getFrom( name, value );
 
-    myDefault = OUString( RTL_CONSTASCII_USTRINGPARAM( "1" ) );
-    OUString myDefault2 = OUString( RTL_CONSTASCII_USTRINGPARAM( "2" ) );
+    myDefault = OUString( "1" );
+    OUString myDefault2 = OUString( "2" );
 
     bootstrap.getFrom( name, value, myDefault );
       OSL_ASSERT( value == myDefault );

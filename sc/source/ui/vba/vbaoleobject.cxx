@@ -40,7 +40,7 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
     css::uno::Reference< css::frame::XModel > xModel( xChild->getParent(), uno::UNO_QUERY_THROW );
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.ControlProvider" ) ), mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
     m_xControl.set( xControlProvider->createControl(  xControlShape, xModel ) );
 }
 
@@ -128,7 +128,7 @@ ScVbaOLEObject::setWidth( double _width ) throw (uno::RuntimeException)
 rtl::OUString
 ScVbaOLEObject::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaOLEObject"));
+    return rtl::OUString("ScVbaOLEObject");
 }
 
 uno::Sequence< rtl::OUString >
@@ -138,7 +138,7 @@ ScVbaOLEObject::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.OLEObject" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.OLEObject" );
     }
     return aServiceNames;
 }

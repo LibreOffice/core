@@ -28,7 +28,7 @@ ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< XHelperInterface >& xPar
 rtl::OUString
 ScVbaChartTitle::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaChartTitle"));
+    return rtl::OUString("ScVbaChartTitle");
 }
 
 uno::Sequence< rtl::OUString >
@@ -39,7 +39,7 @@ ScVbaChartTitle::getServiceNames()
     {
         uno::Sequence< rtl::OUString > BaseServiceNames = ChartTitleBase::getServiceNames();
         aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Chart" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Chart" );
         for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
             aServiceNames[ index ] = BaseServiceNames[ index ];
     }

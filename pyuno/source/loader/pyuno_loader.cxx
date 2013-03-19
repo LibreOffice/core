@@ -86,7 +86,7 @@ static PyRef getLoaderModule() throw( RuntimeException )
     if( !module.is() )
     {
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pythonloader: Couldn't load pythonloader module" ) ),
+            OUString( "pythonloader: Couldn't load pythonloader module" ),
             Reference< XInterface > () );
     }
     return PyRef( PyModule_GetDict( module.get() ));
@@ -108,7 +108,7 @@ static PyRef getObjectFromLoaderModule( const char * func )
 
 OUString getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.pyuno.Loader" ) );
+    return OUString( "org.openoffice.comp.pyuno.Loader" );
 }
 
 Sequence< OUString > getSupportedServiceNames()
@@ -189,8 +189,8 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
         rtl::Bootstrap bootstrap(path);
 
         // look for pythonhome
-        bootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "PYUNO_LOADER_PYTHONHOME") ), pythonHome );
-        bootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "PYUNO_LOADER_PYTHONPATH" ) ) , pythonPath );
+        bootstrap.getFrom( OUString( "PYUNO_LOADER_PYTHONHOME"), pythonHome );
+        bootstrap.getFrom( OUString( "PYUNO_LOADER_PYTHONPATH" ) , pythonPath );
 
         // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
         // sadly, there is no api for setting the pythonpath, we have to use the environment variable

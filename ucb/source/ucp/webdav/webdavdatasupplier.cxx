@@ -444,8 +444,7 @@ sal_Bool DataSupplier::getData()
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
                                     rtl::OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM(
-                                            "IsFolder" ) ) );
+                                            "IsFolder" ) );
                             rValue >>= bFolder;
 
                             if ( !bFolder )
@@ -461,8 +460,7 @@ sal_Bool DataSupplier::getData()
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
                                     rtl::OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM(
-                                            "IsDocument" ) ) );
+                                            "IsDocument" ) );
                             rValue >>= bDocument;
 
                             if ( !bDocument )

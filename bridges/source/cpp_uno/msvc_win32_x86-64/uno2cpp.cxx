@@ -412,7 +412,7 @@ void unoInterfaceProxyDispatch(
                      pReturn, pArgs, ppException ) )
             {
                 RuntimeException aExc(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("Too many parameters!") ),
+                    OUString("Too many parameters!"),
                     Reference< XInterface >() );
 
                 Type const & rExcType = ::getCppuType( &aExc );
@@ -424,7 +424,7 @@ void unoInterfaceProxyDispatch(
     default:
     {
         RuntimeException aExc(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Illegal member type description!") ),
+            OUString("Illegal member type description!"),
             Reference< XInterface >() );
 
         Type const & rExcType = ::getCppuType( &aExc );

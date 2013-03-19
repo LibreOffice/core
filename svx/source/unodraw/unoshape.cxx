@@ -1690,8 +1690,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         if( (pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
             throw beans::PropertyVetoException(
                 ( rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "Readonly property can't be set: " ) )
+                        "Readonly property can't be set: " )
                   + rPropertyName ),
                 uno::Reference< drawing::XShape >( this ) );
 

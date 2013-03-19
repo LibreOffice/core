@@ -104,25 +104,25 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
     switch(eDayOfWeek)
     {
         case MONDAY:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Monday"));
+            sRet = ::rtl::OUString("Monday");
             break;
         case TUESDAY:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tuesday"));
+            sRet = ::rtl::OUString("Tuesday");
             break;
         case WEDNESDAY:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wednesday"));
+            sRet = ::rtl::OUString("Wednesday");
             break;
         case THURSDAY:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thursday"));
+            sRet = ::rtl::OUString("Thursday");
             break;
         case FRIDAY:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Friday"));
+            sRet = ::rtl::OUString("Friday");
             break;
         case SATURDAY:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Saturday"));
+            sRet = ::rtl::OUString("Saturday");
             break;
         case SUNDAY:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sunday"));
+            sRet = ::rtl::OUString("Sunday");
             break;
         default:
             OSL_FAIL("Error in enum values for date");
@@ -140,40 +140,40 @@ ORowSetValue OOp_MonthName::operate(const ORowSetValue& lhs) const
     switch(aD.Month)
     {
         case 1:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("January"));
+            sRet = ::rtl::OUString("January");
             break;
         case 2:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("February"));
+            sRet = ::rtl::OUString("February");
             break;
         case 3:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("March"));
+            sRet = ::rtl::OUString("March");
             break;
         case 4:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("April"));
+            sRet = ::rtl::OUString("April");
             break;
         case 5:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("May"));
+            sRet = ::rtl::OUString("May");
             break;
         case 6:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("June"));
+            sRet = ::rtl::OUString("June");
             break;
         case 7:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("July"));
+            sRet = ::rtl::OUString("July");
             break;
         case 8:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("August"));
+            sRet = ::rtl::OUString("August");
             break;
         case 9:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("September"));
+            sRet = ::rtl::OUString("September");
             break;
         case 10:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("October"));
+            sRet = ::rtl::OUString("October");
             break;
         case 11:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("November"));
+            sRet = ::rtl::OUString("November");
             break;
         case 12:
-            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("December"));
+            sRet = ::rtl::OUString("December");
             break;
     }
     return sRet;

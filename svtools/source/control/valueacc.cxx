@@ -747,7 +747,7 @@ void ValueSetAcc::ThrowIfDisposed (void)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")),
+            ::rtl::OUString("object has been already disposed"),
             static_cast<uno::XWeak*>(this));
     }
     else

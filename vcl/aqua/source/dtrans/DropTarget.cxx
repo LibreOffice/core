@@ -56,13 +56,13 @@ using ::rtl::OUString;
 
 OUString dropTarget_getImplementationName()
 {
-  return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"));
+  return OUString("com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1");
 }
 
 
 Sequence<OUString> dropTarget_getSupportedServiceNames()
 {
-  return makeSequence(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget")));
+  return makeSequence(OUString("com.sun.star.datatransfer.dnd.OleDropTarget"));
 }
 
 
@@ -385,7 +385,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
   {
     if (aArguments.getLength() < 2)
       {
-        throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("DropTarget::initialize: Cannot install window event handler")),
+        throw RuntimeException(OUString("DropTarget::initialize: Cannot install window event handler"),
                                static_cast<OWeakObject*>(this));
       }
 

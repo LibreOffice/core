@@ -60,14 +60,14 @@ extern Reference< XInterface > SAL_CALL create_MyService1Impl(
 static Sequence< OUString > getSupportedServiceNames_MyService2Impl()
 {
     Sequence<OUString> names(1);
-    names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("my_module.MyService2"));
+    names[0] = OUString("my_module.MyService2");
     return names;
 }
 
 static OUString getImplementationName_MyService2Impl()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-                         "my_module.my_sc_implementation.MyService2") );
+    return OUString(
+                         "my_module.my_sc_implementation.MyService2");
 }
 
 class MyService2Impl : public ::cppu::WeakImplHelper3<
@@ -112,8 +112,8 @@ void MyService2Impl::initialize( Sequence< Any > const & args )
     if (args.getLength() != 1)
     {
         throw lang::IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "give a string instanciating this component!") ),
+            OUString(
+                          "give a string instanciating this component!"),
             // resolve to XInterface reference:
             static_cast< ::cppu::OWeakObject * >(this),
             0 ); // argument pos
@@ -121,8 +121,8 @@ void MyService2Impl::initialize( Sequence< Any > const & args )
     if (! (args[ 0 ] >>= m_sData))
     {
         throw lang::IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "no string given as argument!") ),
+            OUString(
+                          "no string given as argument!"),
             // resolve to XInterface reference:
             static_cast< ::cppu::OWeakObject * >(this),
             0 ); // argument pos
@@ -150,8 +150,8 @@ OUString MyService2Impl::getImplementationName()
     throw (RuntimeException)
 {
     // unique implementation name
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-                         "my_module.my_sc_implementation.MyService2") );
+    return OUString(
+                         "my_module.my_sc_implementation.MyService2");
 }
 
 sal_Bool MyService2Impl::supportsService( OUString const & serviceName )
