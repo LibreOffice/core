@@ -28,8 +28,10 @@
 
 #include <canvasgraphichelper.hxx>
 #include <action.hxx>
+#include <outdevstate.hxx>
 
 #include <vector>
+#include <map>
 
 class GDIMetaFile;
 class VirtualDevice;
@@ -166,6 +168,12 @@ static float GetSwapFloat( SvStream& rSt )
             }
         };
 
+        // EMF+
+        typedef struct {
+            XForm aWorldTransform;
+            OutDevState aDevState;
+        } EmfPlusGraphicState;
+
         class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
         {
         public:
@@ -278,7 +286,6 @@ static float GetSwapFloat( SvStream& rSt )
             sal_Int32       nOriginY;
             sal_Int32       nHDPI;
             sal_Int32       nVDPI;
-            ::PolyPolygon   aClippingPolygon;
             /* EMF+ emf header info */
             sal_Int32       nFrameLeft;
             sal_Int32       nFrameTop;
@@ -292,6 +299,9 @@ static float GetSwapFloat( SvStream& rSt )
             bool            mbMultipart;
             sal_uInt16      mMFlags;
             SvMemoryStream  mMStream;
+            /* emf+ graphic state stack */
+            ::std::map<int,EmfPlusGraphicState> mGSStack;
+            typedef ::std::map<int,EmfPlusGraphicState>::iterator EPGSSIter;
         };
 
 
