@@ -323,7 +323,6 @@ void ScFormulaReferenceHelper::Init()
         ScAddress aCursorPos( nCol, nRow, nTab );
 
         String rStrExp;
-        pRefCell.reset( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
         pRefComp.reset( new ScCompiler( pDoc, aCursorPos) );
         pRefComp->SetGrammar( pDoc->GetGrammar() );
         pRefComp->SetCompileForFAP(true);

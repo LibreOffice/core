@@ -26,7 +26,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include "address.hxx"
-#include "cell.hxx"
 #include "compiler.hxx"
 #include "formula/funcutl.hxx"
 #include "IAnyRefDialog.hxx"
@@ -45,7 +44,6 @@ class ScRangeList;
 class ScFormulaReferenceHelper
 {
     IAnyRefDialog*      m_pDlg;
-    ::std::auto_ptr<ScFormulaCell>      pRefCell;
     ::std::auto_ptr<ScCompiler>         pRefComp;
     formula::RefEdit*    pRefEdit;               // active input field
     formula::RefButton*  pRefBtn;                // associated button

@@ -38,6 +38,7 @@ class ScDocument;
 class ScFuncDesc;
 class ScInputHandler;
 class ScDocShell;
+class ScFormulaCell;
 
 //============================================================================
 typedef ScTabViewShell* PtrTabViewShell;
