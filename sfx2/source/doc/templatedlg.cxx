@@ -114,11 +114,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModelessDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       maTabControl(this,SfxResId(TAB_CONTROL)),
       maTabPage(&maTabControl, SfxResId(TAB_TEMPLATE_MANAGER)),
-      mpToolbars( new Control(&maTabPage,SfxResId(TOOLBARS))),
       mpSearchEdit(new Edit(&maTabPage,WB_HIDE | WB_BORDER)),
-      mpViewBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_VIEW))),
-      mpActionBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_ACTION))),
-      mpTemplateBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_TEMPLATES))),
+      mpViewBar( new ToolBox(&maTabPage, SfxResId(TBX_ACTION_VIEW))),
+      mpActionBar( new ToolBox(&maTabPage, SfxResId(TBX_ACTION_ACTION))),
+      mpTemplateBar( new ToolBox(&maTabPage, SfxResId(TBX_ACTION_TEMPLATES))),
       mpSearchView(new TemplateSearchView(&maTabPage)),
       maView(new TemplateLocalView(&maTabPage,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateRemoteView(&maTabPage, WB_VSCROLL,false)),
@@ -240,7 +239,6 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpTemplateDefaultMenu;
     delete mpActionMenu;
     delete mpRepositoryMenu;
-    delete mpToolbars;
 }
 
 void SfxTemplateManagerDlg::setSaveMode(bool bMode)
@@ -319,9 +317,6 @@ void SfxTemplateManagerDlg::Resize()
 
     long nToolbarsHeight = std::max(std::max(aViewSize.getHeight(), aActionSize.getHeight()), aTemplateSize.getHeight());
 
-    Size aToolbarsSize (aWinSize.getWidth(), nToolbarsHeight);
-    mpToolbars->SetSizePixel(aToolbarsSize);
-
     aActionSize.setWidth(3*aActionSize.getWidth());
     aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
     aTemplateSize.setWidth(aWinSize.getWidth());
@@ -335,7 +330,7 @@ void SfxTemplateManagerDlg::Resize()
 
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
-    aViewPos.setY(aToolbarsSize.getHeight());
+    aViewPos.setY(nToolbarsHeight);
     aViewPos.setX(0);
     Size aThumbSize(aWinSize.getWidth(), maTabControl.GetTabPageSizePixel().getWidth() - aViewPos.getY());
     maView->SetPosSizePixel(aViewPos, aThumbSize);

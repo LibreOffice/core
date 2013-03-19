@@ -112,12 +112,6 @@ TabPage TAB_TEMPLATE_MANAGER
     Size = MAP_APPFONT( 290, 220 );
     Hide = TRUE;
 
-    Control TOOLBARS
-    {
-        Size = MAP_APPFONT( 290 , 20 );
-        TabStop = False;
-    };
-
     Control TEMPLATE_VIEW
     {
         Pos = MAP_APPFONT( 0, 20 );
