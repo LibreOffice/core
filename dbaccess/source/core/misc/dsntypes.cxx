@@ -342,8 +342,12 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
     sal_Int32 nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'));
     if (-1 == nSeparator)
     {
-        // there should be at least one such separator
-        OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the colon !");
+        if (!sDsn.isEmpty())
+        {
+            // there should be at least one such separator
+            OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the colon !");
+        }
+
         return DST_UNKNOWN;
     }
 
