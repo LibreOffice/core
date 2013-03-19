@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,tdeabdrv1))
 
+$(eval $(call gb_Library_use_packages,tdeabdrv1,\
+	shell_inc \
+))
+
 $(eval $(call gb_Library_set_include,tdeabdrv1,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
