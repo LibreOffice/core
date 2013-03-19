@@ -1425,7 +1425,7 @@ RTLFUNC(GetPathSeparator)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    rPar.Get(0)->PutString( DirEntry::GetAccessDelimiter() );
+    rPar.Get(0)->PutString( OUString( SAL_PATHDELIMITER ) );
 }
 
 RTLFUNC(ResolvePath)
@@ -1436,7 +1436,6 @@ RTLFUNC(ResolvePath)
     if ( rPar.Count() == 2 )
     {
         OUString aStr = rPar.Get(1)->GetOUString();
-        DirEntry aEntry( aStr );
         rPar.Get(0)->PutString( aStr );
     }
     else
