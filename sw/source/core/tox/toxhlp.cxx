@@ -19,36 +19,23 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <com/sun/star/i18n/IndexEntrySupplier.hpp>
 #include <rtl/strbuf.hxx>
 #include <tools/string.hxx>
 #include <toxwrap.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
 
 IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
 {
-    uno::Reference<
-            lang::XMultiServiceFactory > rxMSF =
-                                    ::comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     try {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xI =
-            rxMSF->createInstance( ::rtl::OUString(
-                                "com.sun.star.i18n.IndexEntrySupplier") );
-        if( xI.is() )
-        {
-            ::com::sun::star::uno::Any x = xI->queryInterface( ::getCppuType(
-                    (const uno::Reference< i18n::XExtendedIndexEntrySupplier>*)0) );
-            x >>= xIES;
-        }
+        xIES = i18n::IndexEntrySupplier::create(xContext);
     }
-    catch (const ::com::sun::star::uno::Exception&
-#if OSL_DEBUG_LEVEL > 0
-        e
-#endif
-        )
+    catch (const uno::Exception& e)
     {
 #if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg("IndexEntrySupplierWrapper: Caught exception\n");

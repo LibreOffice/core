@@ -20,7 +20,6 @@
 #ifndef __com_sun_star_i18n_IndexEntrySupplier_idl__
 #define __com_sun_star_i18n_IndexEntrySupplier_idl__
 
-#include <com/sun/star/i18n/XIndexEntrySupplier.idl>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.idl>
 
 
@@ -28,12 +27,7 @@ module com { module sun { module star { module i18n {
 
 
 /// Supplier for creating index entries in a "table of alphabetical index"
-published service IndexEntrySupplier
-{
-    interface com::sun::star::i18n::XIndexEntrySupplier;
-
-    [optional] interface com::sun::star::i18n::XExtendedIndexEntrySupplier;
-};
+published service IndexEntrySupplier : XExtendedIndexEntrySupplier;
 
 }; }; }; };
 

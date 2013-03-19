@@ -27,6 +27,7 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/IndexEntrySupplier.hpp>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
@@ -125,12 +126,9 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, sal_Bool bNewDlg,
 
     if (SvtCJKOptions().IsCJKFontEnabled())
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+        uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
 
-        xExtendedIndexEntrySupplier =
-            uno::Reference< i18n::XExtendedIndexEntrySupplier > (
-                    xMSF->createInstance( "com.sun.star.i18n.IndexEntrySupplier"),
-                                                                        uno::UNO_QUERY );
+        xExtendedIndexEntrySupplier = i18n::IndexEntrySupplier::create(xContext);
 
         m_pPhoneticFT0->Show();
         m_pPhoneticED0->Show();

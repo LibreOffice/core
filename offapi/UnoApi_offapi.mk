@@ -181,6 +181,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
 	BreakIterator \
 	CharacterClassification \
 	Collator \
+	IndexEntrySupplier \
 	InputSequenceChecker \
 	LocaleCalendar \
 	LocaleData \
@@ -915,7 +916,6 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/grap
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
 	ChapterCollator \
-	IndexEntrySupplier \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/image,\
 	ImageMap \
