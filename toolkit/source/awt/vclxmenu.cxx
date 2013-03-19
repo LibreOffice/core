@@ -39,18 +39,18 @@
     #define THROW_MENUITEM_NOT_FOUND( Func, nItemId ) \
         if ( MENU_ITEM_NOTFOUND == mpMenu->GetItemPos( nItemId ) ) \
             throw  ::com::sun::star::container::NoSuchElementException( \
-                OUString( Func ) \
-                += ": There is no menu item with " \
-                += OUString::valueOf( sal_Int32( nItemId ) ) \
-                += " as identifier", \
+                Func \
+                ": There is no menu item with " \
+                + OUString::valueOf( sal_Int32( nItemId ) ) \
+                + " as identifier", \
                 *this \
             );
     #define THROW_MENUPOS_NOT_FOUND( Func, nPos ) \
         if ( MENU_ITEM_NOTFOUND == sal_uInt16( nPos ) ) \
             throw  ::com::sun::star::container::NoSuchElementException( \
-                OUString( Func ) \
-                += ": There is no menu item at position " \
-                += OUString::valueOf( sal_Int32( nPos ) ), \
+                Func \
+                ": There is no menu item at position " \
+                + OUString::valueOf( sal_Int32( nPos ) ), \
                 *this \
             );
 #else
