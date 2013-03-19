@@ -78,6 +78,7 @@ bridge_exception_objects := cpp2uno dllinit uno2cpp
 bridge_noopt_objects := except
 else ifeq ($(OS)$(COM),WNTGCC)
 bridges_SELECTED_BRIDGE := mingw_intel
+bridge_asm_objects := call
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := callvirtualmethod cpp2uno dllinit except smallstruct
 endif
