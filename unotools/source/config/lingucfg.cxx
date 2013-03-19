@@ -930,39 +930,24 @@ sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     return bSuccess;
 }
 
-static uno::Reference< util::XMacroExpander > lcl_GetMacroExpander()
-{
-    static uno::WeakReference< util::XMacroExpander > aG_xMacroExpander;
-
-    uno::Reference< util::XMacroExpander > xMacroExpander( aG_xMacroExpander );
-    if ( !xMacroExpander.is() )
-    {
-        aG_xMacroExpander = util::theMacroExpander::get( comphelper::getProcessComponentContext() );
-        xMacroExpander = aG_xMacroExpander;
-    }
-
-    return xMacroExpander;
-}
-
-
 static bool lcl_GetFileUrlFromOrigin(
     OUString /*out*/ &rFileUrl,
-    const OUString &rOrigin,
-    uno::Reference< util::XMacroExpander > &rxMacroExpander )
+    const OUString &rOrigin )
 {
     bool bSuccess = false;
     if (!rOrigin.isEmpty())
     {
         OUString aURL( rOrigin );
-        if (( aURL.compareTo( EXPAND_PROTOCOL ) == 0 ) &&
-            rxMacroExpander.is() )
+        if ( aURL.compareTo( EXPAND_PROTOCOL ) == 0 )
         {
             // cut protocol
             OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
             // decode uric class chars
             aMacro = Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
             // expand macro string
-            aURL = rxMacroExpander->expandMacros( aMacro );
+            aURL = util::theMacroExpander::get(
+                comphelper::getProcessComponentContext() )->expandMacros(
+                    aMacro );
 
             bool bIsFileUrl = aURL.compareTo( FILE_PROTOCOL ) == 0;
             if (bIsFileUrl)
@@ -1013,11 +998,10 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
         if (bSuccess)
         {
             // get file URL's for the locations
-            uno::Reference< util::XMacroExpander > xMacroExpander( lcl_GetMacroExpander() );
             for (sal_Int32 i = 0;  i < aLocations.getLength();  ++i)
             {
                 rtl::OUString &rLocation = aLocations[i];
-                if (!lcl_GetFileUrlFromOrigin( rLocation, rLocation, xMacroExpander ))
+                if (!lcl_GetFileUrlFromOrigin( rLocation, rLocation ))
                     bSuccess = false;
             }
 
@@ -1156,8 +1140,7 @@ rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
             rtl::OUString aTmp;
             if (aAny >>= aTmp)
             {
-                uno::Reference< util::XMacroExpander > xMacroExpander( lcl_GetMacroExpander() );
-                if (lcl_GetFileUrlFromOrigin( aTmp, aTmp, xMacroExpander ))
+                if (lcl_GetFileUrlFromOrigin( aTmp, aTmp ))
                     aRes = aTmp;
             }
         }
