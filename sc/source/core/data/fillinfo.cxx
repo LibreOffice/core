@@ -509,13 +509,13 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->pShadowAttr  = pShadowAttr;
                                 //  nWidth wird nicht mehr einzeln gesetzt
 
-                                sal_Bool bEmbed = sal_False; //bIsEmbedded &&
+                                sal_Bool bEmbed = sal_False; /*bIsEmbedded &&
                                         nTab    >= aEmbedRange.aStart.Tab() &&
                                         nTab    <= aEmbedRange.aEnd.Tab()   &&
                                         nX      >= aEmbedRange.aStart.Col() &&
                                         nX      <= aEmbedRange.aEnd.Col()   &&
                                         nCurRow >= aEmbedRange.aStart.Row() &&
-                                        nCurRow <= aEmbedRange.aEnd.Row();
+                                        nCurRow <= aEmbedRange.aEnd.Row(); */
 
                                 if (bScenario)
                                 {
