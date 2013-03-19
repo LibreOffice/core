@@ -1262,7 +1262,7 @@ RTLFUNC(Mid)
                 {
                     aResultStr = aArgStr;
                     aResultStr.remove( nStartPos, nLen );
-                    aResultStr.insert( nStartPos, rPar.Get(4)->GetOUString().getStr(), nLen);
+                    aResultStr.insert( nStartPos, rPar.Get(4)->GetOUString().getStr(), std::min(nLen, rPar.Get(4)->GetOUString().getLength()));
                 }
 
                 rPar.Get(1)->PutString( aResultStr.makeStringAndClear() );
