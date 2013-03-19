@@ -57,8 +57,8 @@
  * @file
  * Text content, it's an adapter for string to IXFObject.
  ************************************************************************/
-#include    "xftextcontent.hxx"
-#include    "ixfstream.hxx"
+#include "xftextcontent.hxx"
+#include "ixfstream.hxx"
 
 XFTextContent::XFTextContent(rtl::OUString text):m_strText(text)
 {

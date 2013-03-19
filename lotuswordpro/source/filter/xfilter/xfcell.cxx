@@ -57,10 +57,10 @@
  * @file
  * Table cell.
  ************************************************************************/
-#include    "xfcell.hxx"
-#include    "xfparagraph.hxx"
-#include    "xftable.hxx"
-#include    "xfrow.hxx"
+#include "xfcell.hxx"
+#include "xfparagraph.hxx"
+#include "xftable.hxx"
+#include "xfrow.hxx"
 
 XFCell::XFCell()
 {

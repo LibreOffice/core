@@ -60,7 +60,7 @@
 #ifndef     _IXFATTRLIST_HXX
 #define     _IXFATTRLIST_HXX
 
-#include    <rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 
 /**
  * @brief

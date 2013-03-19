@@ -26,8 +26,8 @@
 #include <sys/types.h>
 
 #include "registry/registry.h"
-#include    <rtl/ustring.hxx>
-#include    <rtl/alloc.h>
+#include <rtl/ustring.hxx>
+#include <rtl/alloc.h>
 
 using namespace std;
 

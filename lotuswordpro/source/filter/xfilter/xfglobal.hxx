@@ -61,34 +61,34 @@
 #ifndef     _GLOBAL_HXX
 #define     _GLOBAL_HXX
 
-#include    <cassert>
+#include <cassert>
 
 #ifndef _SAL_TYPES_H
-#include    "sal/types.h"
+#include "sal/types.h"
 #endif
 
 #ifndef _RTL_USTRING_HXX_
-#include    <rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef _IXFOBJECT_HXX
-#include    "ixfobject.hxx"
+#include "ixfobject.hxx"
 #endif
 
 #ifndef _IXFSTREAM_HXX
-#include    "ixfstream.hxx"
+#include "ixfstream.hxx"
 #endif
 
 #ifndef _IXFATTRLIST_HXX
-#include    "ixfattrlist.hxx"
+#include "ixfattrlist.hxx"
 #endif
 
 #ifndef _XFUTIL_HXX
-#include    "xfutil.hxx"
+#include "xfutil.hxx"
 #endif
 
 #ifndef _XFDEFS_HXX
-#include    "xfdefs.hxx"
+#include "xfdefs.hxx"
 #endif
 
 #define PI 3.1415926

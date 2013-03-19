@@ -57,9 +57,9 @@
  * @file
  * Table object.
  ************************************************************************/
-#include    "xfrow.hxx"
-#include    "xfcell.hxx"
-#include    "xftable.hxx"
+#include "xfrow.hxx"
+#include "xfcell.hxx"
+#include "xftable.hxx"
 
 XFRow::XFRow()
 {

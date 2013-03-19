@@ -60,8 +60,8 @@
 #ifndef     _XFFOOTER_HXX
 #define     _XFFOOTER_HXX
 
-#include    "xfcontentcontainer.hxx"
-#include    <vector>
+#include "xfcontentcontainer.hxx"
+#include <vector>
 
 /**
  * @descr   Foot obejct. It's just a container.

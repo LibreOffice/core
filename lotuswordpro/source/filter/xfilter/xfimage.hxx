@@ -60,7 +60,7 @@
 #ifndef     _XFIMAGE_HXX
 #define     _XFIMAGE_HXX
 
-#include    "xfframe.hxx"
+#include "xfframe.hxx"
 
 /**
  * @brief

@@ -60,7 +60,7 @@
 #ifndef     _XFDEFS_HXX
 #define     _XFDEFS_HXX
 
-#include    "sal/types.h"
+#include "sal/types.h"
 
 enum    enumXFContent
 {

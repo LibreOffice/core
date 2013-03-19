@@ -57,12 +57,12 @@
  * @file
  * Util functions for xml filter.
  ************************************************************************/
-#include    <stdio.h>
-#include    "xfutil.hxx"
-#include    "xfparagraph.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    <rtl/ustrbuf.hxx>
-#include    <sstream>
+#include <stdio.h>
+#include "xfutil.hxx"
+#include "xfparagraph.hxx"
+#include "xfcontentcontainer.hxx"
+#include <rtl/ustrbuf.hxx>
+#include <sstream>
 
 rtl::OUString Int32ToOUString(sal_Int32 num)
 {

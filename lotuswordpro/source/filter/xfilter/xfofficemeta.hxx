@@ -61,7 +61,7 @@
 #ifndef     _XFOFFICEMETA_HXX
 #define     _XFOFFICEMETA_HXX
 
-#include    "xfglobal.hxx"
+#include "xfglobal.hxx"
 
 class XFOfficeMeta : public IXFObject
 {

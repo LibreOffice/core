@@ -60,9 +60,9 @@
 #ifndef     _XFANNOTATION_HXX
 #define     _XFANNOTATION_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfcontentcontainer.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
+#include "xfcontentcontainer.hxx"
 
 class XFAnnotation : public XFContentContainer
 {

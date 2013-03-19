@@ -61,10 +61,10 @@
 #ifndef     _XFFRAME_HXX
 #define     _XFFRAME_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfrect.hxx"
-#include    "xfcontentcontainer.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
+#include "xfrect.hxx"
+#include "xfcontentcontainer.hxx"
 
 #define     XFFRAME_FLAG_HEIGHT         0x00000001
 #define     XFFRAME_FLAG_MINHEIGHT      0x00000002

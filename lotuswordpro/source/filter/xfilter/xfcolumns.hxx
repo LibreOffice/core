@@ -60,9 +60,9 @@
 #ifndef     _XFCOLUMNS_HXX
 #define     _XFCOLUMNS_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcolor.hxx"
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xfcolor.hxx"
+#include <vector>
 
 #define     XFCOLUMNS_FLAG_SEPERATOR    0X00000001
 #define     XFCOLUMNS_FLAG_GAP          0X00000010

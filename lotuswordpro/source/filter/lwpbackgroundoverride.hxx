@@ -57,8 +57,8 @@
 #define     _LWPBACKGROUNDOVERRIDE_HXX
 
 
-#include    "lwpoverride.hxx"
-#include    "lwpbackgroundstuff.hxx"
+#include "lwpoverride.hxx"
+#include "lwpbackgroundstuff.hxx"
 
 class LwpObjectStream;
 class LwpBackgroundOverride : public LwpOverride

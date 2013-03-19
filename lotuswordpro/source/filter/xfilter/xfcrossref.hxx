@@ -60,7 +60,7 @@
 #ifndef     _XFCROSSREF_HXX
 #define     _XFCROSSREF_HXX
 
-#include    "xfcontent.hxx"
+#include "xfcontent.hxx"
 
 /**
  * @brief

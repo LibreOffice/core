@@ -57,8 +57,8 @@
  * @file
  * Table style.
  ************************************************************************/
-#include    "xftablestyle.hxx"
-#include    "xfbgimage.hxx"
+#include "xftablestyle.hxx"
+#include "xfbgimage.hxx"
 
 XFTableStyle::XFTableStyle()
 {

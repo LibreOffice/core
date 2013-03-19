@@ -61,8 +61,8 @@
 #ifndef     _XFDRAWAREASTYLE_HXX
 #define     _XFDRAWAREASTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
+#include "xfstyle.hxx"
+#include "xfcolor.hxx"
 
 class XFDrawAreaStyle : public XFStyle
 {

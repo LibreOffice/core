@@ -60,8 +60,8 @@
 #ifndef     _XFBREAKS_HXX
 #define     _XFBREAKS_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include "xfglobal.hxx"
+#include "ixfproperty.hxx"
 
 /**
  * @descr   Page|Column break object.

@@ -61,11 +61,11 @@
 #ifndef     _XFFRAMESTYLE_HXX
 #define     _XFFRAMESTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfmargins.hxx"
-#include    "xfcolor.hxx"
-#include    "xfpadding.hxx"
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include "xfmargins.hxx"
+#include "xfcolor.hxx"
+#include "xfpadding.hxx"
 
 class XFBorders;
 class XFColumns;

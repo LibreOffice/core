@@ -60,7 +60,7 @@
 #ifndef     _IXFSTYLE_HXX
 #define     _IXFSTYLE_HXX
 
-#include    "xfglobal.hxx"
+#include "xfglobal.hxx"
 /**
  * @descr
  * Interface for all style object.

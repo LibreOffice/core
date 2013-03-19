@@ -70,7 +70,7 @@
 #include "lwpdlvlist.hxx"
 #include "lwpobjid.hxx"
 #include "lwpatomholder.hxx"
-#include    "unicode/utypes.h"
+#include "unicode/utypes.h"
 const sal_uInt16 MAXNUMBERPOSITIONS = 10; //max number of positions
 const sal_uInt16 NUMCHAR_none = 0x00;   //none of numberchar
 const sal_uInt16 NUMCHAR_1 = 0x01;      //index for numberchar "1"

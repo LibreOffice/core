@@ -60,7 +60,7 @@
 #ifndef     _LWPBREAKSOVERRIDE_HXX
 #define     _LWPBREAKSOVERRIDE_HXX
 
-#include    "lwpoverride.hxx"
+#include "lwpoverride.hxx"
 
 class LwpObjectStream;
 class LwpAtomHolder;

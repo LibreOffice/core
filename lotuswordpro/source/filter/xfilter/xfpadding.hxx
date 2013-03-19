@@ -60,8 +60,8 @@
 #ifndef     _XFPADDING_HXX
 #define     _XFPADDING_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include "xfglobal.hxx"
+#include "ixfproperty.hxx"
 
 #define XFPADDING_FLAG_LEFT     0X00000001
 #define XFPADDING_FLAG_RIGHT    0X00000002

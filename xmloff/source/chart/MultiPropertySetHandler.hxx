@@ -20,7 +20,7 @@
 #ifndef _MULTI_PROPERTY_SET_HANDLER_HXX
 #define _MULTI_PROPERTY_SET_HANDLER_HXX
 
-#include    <rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 

@@ -57,7 +57,7 @@
  * @file
  * index entry object.
  ************************************************************************/
-#include    "xfentry.hxx"
+#include "xfentry.hxx"
 
 XFEntry::XFEntry()
 {

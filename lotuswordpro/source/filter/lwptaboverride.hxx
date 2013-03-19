@@ -60,8 +60,8 @@
 #ifndef     _LWPTABOVERRIDE_HXX
 #define     _LWPTABOVERRIDE_HXX
 
-#include    "lwpoverride.hxx"
-#include    "lwpobjid.hxx"
+#include "lwpoverride.hxx"
+#include "lwpobjid.hxx"
 
 class   LwpTabOverride : public LwpOverride
 {

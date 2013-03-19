@@ -60,8 +60,8 @@
 #ifndef     _XFDATE_HXX
 #define     _XFDATE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
 
 /**
  * @descr   Date obejct.

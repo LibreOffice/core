@@ -56,9 +56,9 @@
 #ifndef     _LWPARROWSTYLES_HXX
 #define     _LWPARROWSTYLES_HXX
 
-#include    "xfilter/xfarrowstyle.hxx"
-#include    "xfilter/xfstylemanager.hxx"
-#include    "lwpglobalmgr.hxx"
+#include "xfilter/xfarrowstyle.hxx"
+#include "xfilter/xfstylemanager.hxx"
+#include "lwpglobalmgr.hxx"
 
 /**
  * @descr   Registe arrow styles that are not directly support by SODC.

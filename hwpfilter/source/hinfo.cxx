@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include    "precompile.h"
+#include "precompile.h"
 
-#include    "hwplib.h"
-#include    "hinfo.h"
-#include    "hwpfile.h"
+#include "hwplib.h"
+#include "hinfo.h"
+#include "hwpfile.h"
 
 // Info Block
 

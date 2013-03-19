@@ -60,8 +60,8 @@
 #ifndef     _XFDRAWLINESTYLE_HXX
 #define     _XFDRAWLINESTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
+#include "xfstyle.hxx"
+#include "xfcolor.hxx"
 
 /**
  * @brief

@@ -60,8 +60,8 @@
 #ifndef     _XFMASTERPAGE_HXX
 #define     _XFMASTERPAGE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcontentcontainer.hxx"
+#include "xfstyle.hxx"
+#include "xfcontentcontainer.hxx"
 
 class XFFooter;
 class XFHeader;

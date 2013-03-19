@@ -57,9 +57,9 @@
  * @file
  * Image style object.
  ************************************************************************/
-#include    "xfimagestyle.hxx"
-#include    "xfborders.hxx"
-#include    "xfshadow.hxx"
+#include "xfimagestyle.hxx"
+#include "xfborders.hxx"
+#include "xfshadow.hxx"
 
 XFImageStyle::XFImageStyle()
 {

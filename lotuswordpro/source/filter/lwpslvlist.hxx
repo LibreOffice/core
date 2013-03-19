@@ -60,9 +60,9 @@
 #ifndef     _LWPSLVLIST_HXX
 #define     _LWPSLVLIST_HXX
 
-#include    "lwpobjstrm.hxx"
-#include    "lwpfilehdr.hxx"
-#include    "lwpobjid.hxx"
+#include "lwpobjstrm.hxx"
+#include "lwpfilehdr.hxx"
+#include "lwpobjid.hxx"
 
 class LwpSLVList
 {

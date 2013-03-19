@@ -60,12 +60,12 @@
 #ifndef     _XFDATESTYLE_HXX
 #define     _XFDATESTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "ixfproperty.hxx"
-#include    "xftimestyle.hxx"
-#include    "xfstylecont.hxx"
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include "ixfproperty.hxx"
+#include "xftimestyle.hxx"
+#include "xfstylecont.hxx"
+#include <vector>
 
 class XFDatePart : public XFTimePart
 {

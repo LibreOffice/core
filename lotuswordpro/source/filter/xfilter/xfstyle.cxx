@@ -57,7 +57,7 @@
  * @file
  * Base style object .
  ************************************************************************/
-#include    "xfstyle.hxx"
+#include "xfstyle.hxx"
 
 XFStyle::XFStyle()
 {

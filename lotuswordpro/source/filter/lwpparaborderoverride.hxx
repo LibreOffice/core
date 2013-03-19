@@ -60,7 +60,7 @@
 #ifndef     _LWPPARABORDEROVERRIDE_HXX
 #define     _LWPPARABORDEROVERRIDE_HXX
 
-#include    "lwpoverride.hxx"
+#include "lwpoverride.hxx"
 
 class LwpBorderStuff;
 class LwpShadow;

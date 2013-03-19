@@ -60,8 +60,8 @@
 #ifndef     _XFSTYLECONTAINER_HXX
 #define     _XFSTYLECONTAINER_HXX
 
-#include    "xfglobal.hxx"
-#include    <vector>
+#include "xfglobal.hxx"
+#include <vector>
 
 class IXFStyle;
 

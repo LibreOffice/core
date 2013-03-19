@@ -60,11 +60,11 @@
 #ifndef     _XFCELLSTYLE_HXX
 #define     _XFCELLSTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
-#include    "xfmargins.hxx"
-#include    "xfpadding.hxx"
-#include    "xfshadow.hxx"
+#include "xfstyle.hxx"
+#include "xfcolor.hxx"
+#include "xfmargins.hxx"
+#include "xfpadding.hxx"
+#include "xfshadow.hxx"
 
 class XFBorders;
 class XFFont;

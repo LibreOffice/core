@@ -60,12 +60,12 @@
 #ifndef     _XFSTYLEMANAGER_HXX
 #define     _XFSTYLEMANAGER_HXX
 
-#include    "xfglobal.hxx"
-#include    "xffontdecl.hxx"
-#include    "xfstylecont.hxx"
-#include    "xfconfigmanager.hxx"
-#include    <map>
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xffontdecl.hxx"
+#include "xfstylecont.hxx"
+#include "xfconfigmanager.hxx"
+#include <map>
+#include <vector>
 
 class IXFStream;
 class IXFStyle;

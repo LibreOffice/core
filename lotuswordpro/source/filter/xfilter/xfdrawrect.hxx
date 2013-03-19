@@ -60,7 +60,7 @@
 #ifndef     _XFDRAWRECT_HXX
 #define     _XFDRAWRECT_HXX
 
-#include    "xfdrawobj.hxx"
+#include "xfdrawobj.hxx"
 
 class XFDrawRect : public XFDrawObject
 {

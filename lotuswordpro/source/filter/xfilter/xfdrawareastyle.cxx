@@ -57,7 +57,7 @@
  * @file
  * Area style of Drawing object.
  ************************************************************************/
-#include    "xfdrawareastyle.hxx"
+#include "xfdrawareastyle.hxx"
 
 XFDrawAreaStyle::XFDrawAreaStyle()
 {

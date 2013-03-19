@@ -60,9 +60,9 @@
 #ifndef     _XFTABSSTYLE_HXX
 #define     _XFTABSSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include <vector>
 
 class XFTabStyle : public XFStyle
 {

@@ -57,7 +57,7 @@
  * @file
  * Border object,now only used by paragraph object.
  ************************************************************************/
-#include    "xfborders.hxx"
+#include "xfborders.hxx"
 
 XFBorder::XFBorder()
 {

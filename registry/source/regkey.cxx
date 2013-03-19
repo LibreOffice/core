@@ -20,10 +20,10 @@
 
 #include "regkey.hxx"
 
-#include    <registry/registry.hxx>
-#include    <rtl/alloc.h>
-#include    "regimpl.hxx"
-#include    "keyimpl.hxx"
+#include <registry/registry.hxx>
+#include <rtl/alloc.h>
+#include "regimpl.hxx"
+#include "keyimpl.hxx"
 
 using rtl::OUString;
 

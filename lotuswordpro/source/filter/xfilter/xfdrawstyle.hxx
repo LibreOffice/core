@@ -60,9 +60,9 @@
 #ifndef     _XFDRAWSTYLE_HXX
 #define     _XFDRAWSTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
-#include    <cassert>
+#include "xfstyle.hxx"
+#include "xfcolor.hxx"
+#include <cassert>
 
 class XFDrawLineStyle;
 class XFDrawAreaStyle;

@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include        <stdio.h>
-#include        <ctype.h>
-#include        "cppdef.h"
-#include        "cpp.h"
+#include <stdio.h>
+#include <ctype.h>
+#include "cppdef.h"
+#include "cpp.h"
 #if HOST == SYS_VMS
 /*
  * Include the rms stuff.  (We can't just include rms.h as it uses the
  * VaxC-specific library include syntax that Decus CPP doesn't support.
  * By including things by hand, we can CPP ourself.)
  */
-#include        <nam.h>
-#include        <fab.h>
-#include        <rab.h>
-#include        <rmsdef.h>
+#include <nam.h>
+#include <fab.h>
+#include <rab.h>
+#include <rmsdef.h>
 #endif
 
 /*

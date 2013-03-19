@@ -60,11 +60,11 @@
 #ifndef     _XFLISTSTYLE_HXX
 #define     _XFLISTSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfnumfmt.hxx"
-#include    "unicode/utypes.h"
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include "xfnumfmt.hxx"
+#include "unicode/utypes.h"
+#include <vector>
 
 class IXFStream;
 

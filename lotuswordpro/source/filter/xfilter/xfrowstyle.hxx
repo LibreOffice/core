@@ -60,9 +60,9 @@
 #ifndef     _XFROWSTYLE_HXX
 #define     _XFROWSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include "xfcolor.hxx"
 
 class XFBGImage;
 class XFRowStyle : public XFStyle

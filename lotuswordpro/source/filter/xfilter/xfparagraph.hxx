@@ -60,9 +60,9 @@
 #ifndef     _XFPARAGRAPH_HXX
 #define     _XFPARAGRAPH_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xfcontentcontainer.hxx"
+#include <vector>
 
 class IXFStream;
 

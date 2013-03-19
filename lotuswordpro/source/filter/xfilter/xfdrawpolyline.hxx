@@ -60,8 +60,8 @@
 #ifndef     _XFPOLYLINE_HXX
 #define     _XFPOLYLINE_HXX
 
-#include    "xfdrawobj.hxx"
-#include    <vector>
+#include "xfdrawobj.hxx"
+#include <vector>
 
 class XFDrawPolyline : public XFDrawObject
 {

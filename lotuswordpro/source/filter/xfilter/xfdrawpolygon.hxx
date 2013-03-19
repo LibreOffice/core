@@ -60,8 +60,8 @@
 #ifndef     _XFPOLYGON_HXX
 #define     _XFPOLYGON_HXX
 
-#include    "xfdrawpolyline.hxx"
-#include    <vector>
+#include "xfdrawpolyline.hxx"
+#include <vector>
 
 /**
  * @brief

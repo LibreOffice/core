@@ -60,8 +60,8 @@
 #ifndef     _XFCONTENTCONTAINER_HXX
 #define     _XFCONTENTCONTAINER_HXX
 
-#include    "xfcontent.hxx"
-#include    <vector>
+#include "xfcontent.hxx"
+#include <vector>
 
 /**
  * @brief

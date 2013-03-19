@@ -60,8 +60,8 @@
 #ifndef     _XFFOOTERSTYLE_HXX
 #define     _XFFOOTERSTYLE_HXX
 
-#include    "xfheaderstyle.hxx"
-#include    "xfmargins.hxx"
+#include "xfheaderstyle.hxx"
+#include "xfmargins.hxx"
 
 class XFFooterStyle : public XFHeaderStyle
 {

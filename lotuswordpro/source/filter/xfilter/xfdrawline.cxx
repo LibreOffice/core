@@ -57,7 +57,7 @@
  * @file
  * Line object.
  ************************************************************************/
-#include    "xfdrawline.hxx"
+#include "xfdrawline.hxx"
 
 XFDrawLine::XFDrawLine()
 {

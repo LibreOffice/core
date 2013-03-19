@@ -58,7 +58,7 @@
  * Margins object, include left margin,right margin,top margin and bottom margin.
  ************************************************************************/
 
-#include    "xfmargins.hxx"
+#include "xfmargins.hxx"
 
 XFMargins::XFMargins()
 {

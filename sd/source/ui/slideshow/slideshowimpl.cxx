@@ -72,7 +72,7 @@
 #include "slideshow.hrc"
 #include "canvas/elapsedtime.hxx"
 #include "avmedia/mediawindow.hxx"
-#include  "svtools/colrdlg.hxx"
+#include "svtools/colrdlg.hxx"
 #include "RemoteServer.hxx"
 #include "customshowlist.hxx"
 

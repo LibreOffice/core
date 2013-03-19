@@ -82,7 +82,7 @@
 #include "xfilter/xfcolstyle.hxx"
 #include "xfilter/xfframestyle.hxx"
 #include "xfilter/xfframe.hxx"
-#include    "xfilter/xffloatframe.hxx"
+#include "xfilter/xffloatframe.hxx"
 #include "lwpframelayout.hxx"
 #include "xfilter/xfparastyle.hxx"
 

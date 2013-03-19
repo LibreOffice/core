@@ -60,7 +60,7 @@
 #ifndef     _XFCOLSTYLE_HXX
 #define     _XFCOLSTYLE_HXX
 
-#include    "xfstyle.hxx"
+#include "xfstyle.hxx"
 
 /**
  * @brief

@@ -57,8 +57,8 @@
  * @file
  * Header style,exist in page-master object.
  ************************************************************************/
-#include    "xfheaderstyle.hxx"
-#include    "xfbgimage.hxx"
+#include "xfheaderstyle.hxx"
+#include "xfbgimage.hxx"
 
 XFHeaderStyle::XFHeaderStyle(sal_Bool isFooter)
 {

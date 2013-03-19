@@ -60,8 +60,8 @@
 #ifndef     _XFLINEBREAK_HXX
 #define     _XFLINEBREAK_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
 
 class XFLineBreak : public XFContent
 {

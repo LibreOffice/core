@@ -60,7 +60,7 @@
 #ifndef     _LWPTABRACK_HXX
 #define     _LWPTABRACK_HXX
 
-#include    "lwpobj.hxx"
+#include "lwpobj.hxx"
 
 class   LwpObjectStream;
 class   LwpTab;

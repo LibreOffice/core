@@ -60,7 +60,7 @@
 #ifndef     _XFENDNOTECONFIG_HXX
 #define     _XFENDNOTECONFIG_HXX
 
-#include    "xfendnoteconfig.hxx"
+#include "xfendnoteconfig.hxx"
 
 class XFEndnoteConfig : public XFFootnoteConfig
 {

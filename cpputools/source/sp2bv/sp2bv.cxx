@@ -22,7 +22,7 @@
 #include "osl/thread.h"
 #include "osl/file.h"
 #include "rtl/ustring.hxx"
-#include  "rtl/ustrbuf.h"
+#include "rtl/ustrbuf.h"
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 

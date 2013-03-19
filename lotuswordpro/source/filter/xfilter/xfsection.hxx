@@ -60,10 +60,10 @@
 #ifndef     _XFSECTION_HXX
 #define     _XFSECTION_HXX
 
-#include    "xfcontentcontainer.hxx"
-#include    "xfcontent.hxx"
-#include    "xfcolor.hxx"
-#include    <vector>
+#include "xfcontentcontainer.hxx"
+#include "xfcontent.hxx"
+#include "xfcolor.hxx"
+#include <vector>
 
 /**
  * @brief

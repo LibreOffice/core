@@ -60,9 +60,9 @@
 #ifndef     _XFPAGENUMBER_HXX
 #define     _XFPAGENUMBER_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfnumfmt.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
+#include "xfnumfmt.hxx"
 
 /**
  * @brief

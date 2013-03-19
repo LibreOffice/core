@@ -57,10 +57,10 @@
  * @file
  * Paragraph object of OOo, it will output <text:p >...</text:p> element.
  ************************************************************************/
-#include    "xfparagraph.hxx"
-#include    "ixfstream.hxx"
-#include    "ixfattrlist.hxx"
-#include    "xftextcontent.hxx"
+#include "xfparagraph.hxx"
+#include "ixfstream.hxx"
+#include "ixfattrlist.hxx"
+#include "xftextcontent.hxx"
 
 XFParagraph::XFParagraph()
 {

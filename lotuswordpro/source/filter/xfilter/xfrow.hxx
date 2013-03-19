@@ -60,8 +60,8 @@
 #ifndef     _XFROW_HXX
 #define     _XFROW_HXX
 
-#include    "xfcontent.hxx"
-#include    <map>
+#include "xfcontent.hxx"
+#include <map>
 
 class XFCell;
 class XFTable;

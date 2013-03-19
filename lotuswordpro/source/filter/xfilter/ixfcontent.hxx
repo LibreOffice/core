@@ -60,7 +60,7 @@
 #ifndef     _IXFCONTENT_HXX
 #define     _IXFCONTENT_HXX
 
-#include    "xfglobal.hxx"
+#include "xfglobal.hxx"
 
 /**
  * @brief Base interface for all content object.Implementation classes include text span,paragraph,

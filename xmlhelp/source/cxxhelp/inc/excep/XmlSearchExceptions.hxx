@@ -19,7 +19,7 @@
 #ifndef _XMLSEARCH_EXCEP_XMLSEARCHEXCEPTIONS_HXX_
 #define _XMLSEARCH_EXCEP_XMLSEARCHEXCEPTIONS_HXX_
 
-#include  <rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 
 
 namespace xmlsearch {

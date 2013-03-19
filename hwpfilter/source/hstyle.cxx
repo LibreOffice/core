@@ -21,9 +21,9 @@
 
 #include <comphelper/newarray.hxx>
 
-#include    "hwplib.h"
-#include    "hwpfile.h"
-#include    "hstyle.h"
+#include "hwplib.h"
+#include "hwpfile.h"
+#include "hstyle.h"
 
 enum
 { MAXSTYLENAME = 20 };

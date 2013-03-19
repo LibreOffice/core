@@ -60,9 +60,9 @@
 #ifndef     _XFTEXTSPAN_HXX
 #define     _XFTEXTSPAN_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
+#include <vector>
 
 class IXFStream;
 

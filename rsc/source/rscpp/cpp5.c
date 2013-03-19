@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include    <stdio.h>
-#include    <ctype.h>
-#include    "cppdef.h"
-#include    "cpp.h"
+#include <stdio.h>
+#include <ctype.h>
+#include "cppdef.h"
+#include "cpp.h"
 
 /*
  * Evaluate an #if expression.

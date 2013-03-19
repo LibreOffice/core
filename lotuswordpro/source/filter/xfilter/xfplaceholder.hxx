@@ -60,7 +60,7 @@
 #ifndef     _XFPLACEHOLDER_HXX
 #define     _XFPLACEHOLDER_HXX
 
-#include    "xfcontent.hxx"
+#include "xfcontent.hxx"
 
 /**
  * @brief

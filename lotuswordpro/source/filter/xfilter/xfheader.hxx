@@ -60,9 +60,9 @@
 #ifndef     _XFHEADER_HXX
 #define     _XFHEADER_HXX
 
-#include    "xfcontentcontainer.hxx"
-#include    "xfparagraph.hxx"
-#include    <vector>
+#include "xfcontentcontainer.hxx"
+#include "xfparagraph.hxx"
+#include <vector>
 
 class XFHeader : public XFContentContainer
 {

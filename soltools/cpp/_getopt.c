@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include    <stdio.h>
-#include    <string.h>
+#include <stdio.h>
+#include <string.h>
 
 #define EPR                 fprintf(stderr,
 #define ERR(str, chr)       if(opterr) { EPR "%s%c\n", str, chr); }

@@ -57,9 +57,9 @@
  * @file
  * Tabrack for LwpTabPiece object.
  ************************************************************************/
-#include    "lwptabrack.hxx"
-#include    "lwpobjstrm.hxx"
-#include    "lwpslvlist.hxx"
+#include "lwptabrack.hxx"
+#include "lwpobjstrm.hxx"
+#include "lwpslvlist.hxx"
 
 LwpTab::LwpTab()
 {

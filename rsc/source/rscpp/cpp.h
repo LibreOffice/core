@@ -225,8 +225,8 @@ typedef struct sizes {
  */
 
 #if HOST == SYS_VMS
-#include                <ssdef.h>
-#include                <stsdef.h>
+#include <ssdef.h>
+#include <stsdef.h>
 #define IO_NORMAL       (SS$_NORMAL | STS$M_INHIB_MSG)
 #define IO_ERROR        SS$_ABORT
 #endif

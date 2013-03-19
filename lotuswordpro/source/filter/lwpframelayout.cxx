@@ -65,7 +65,7 @@ Mar 2005            Created
 #include "lwppara.hxx"
 #include "xfilter/xfstylemanager.hxx"
 #include "xfilter/xfparagraph.hxx"
-#include    "xfilter/xffloatframe.hxx"
+#include "xfilter/xffloatframe.hxx"
 #include "xfilter/xfrubystyle.hxx"
 #include "lwppagelayout.hxx"
 #include "lwpoleobject.hxx"

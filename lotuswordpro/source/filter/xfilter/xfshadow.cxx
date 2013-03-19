@@ -57,7 +57,7 @@
  * @file
  * Shadow object,now only used by paragraph object.
  ************************************************************************/
-#include    "xfshadow.hxx"
+#include "xfshadow.hxx"
 
 XFShadow::XFShadow():m_aColor(128,128,0)
 {

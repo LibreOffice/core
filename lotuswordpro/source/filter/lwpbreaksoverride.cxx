@@ -60,9 +60,9 @@
 #include <memory>
 
 #include "clone.hxx"
-#include    "lwpbreaksoverride.hxx"
-#include    "lwpobjstrm.hxx"
-#include    "lwpatomholder.hxx"
+#include "lwpbreaksoverride.hxx"
+#include "lwpobjstrm.hxx"
+#include "lwpatomholder.hxx"
 
 
 LwpBreaksOverride::LwpBreaksOverride()

@@ -61,7 +61,7 @@
 #ifndef     _XFFONTDECL_HXX
 #define     _XFFONTDECL_HXX
 
-#include    "xfglobal.hxx"
+#include "xfglobal.hxx"
 
 /**
  * @brief

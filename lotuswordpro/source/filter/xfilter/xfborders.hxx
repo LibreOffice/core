@@ -60,8 +60,8 @@
 #ifndef     _XFBORDERS_HXX
 #define     _XFBORDERS_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcolor.hxx"
+#include "xfglobal.hxx"
+#include "xfcolor.hxx"
 
 /**
  * @brief

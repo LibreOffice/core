@@ -57,11 +57,11 @@
  * @file
  * Table object.
  ************************************************************************/
-#include    "xftable.hxx"
-#include    "xfrow.hxx"
-#include    "xfcolstyle.hxx"
-#include    "xfstylemanager.hxx"
-#include    <cassert>
+#include "xftable.hxx"
+#include "xfrow.hxx"
+#include "xfcolstyle.hxx"
+#include "xfstylemanager.hxx"
+#include <cassert>
 
 XFTable::XFTable()
 {

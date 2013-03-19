@@ -57,8 +57,8 @@
  * @file
  * Image object.
  ************************************************************************/
-#include    "xfimage.hxx"
-#include    "xfbase64.hxx"
+#include "xfimage.hxx"
+#include "xfbase64.hxx"
 
 XFImage::XFImage() : m_bUseLink(sal_False)
 {

@@ -60,11 +60,11 @@
 #ifndef     _XFCONFIGMANAGER_HXX
 #define     _XFCONFIGMANAGER_HXX
 
-#include    "xfstylecont.hxx"
-#include    "xflinenumberconfig.hxx"
-#include    "xffootnoteconfig.hxx"
-#include    "xfendnoteconfig.hxx"
-#include    "xfdefs.hxx"
+#include "xfstylecont.hxx"
+#include "xflinenumberconfig.hxx"
+#include "xffootnoteconfig.hxx"
+#include "xfendnoteconfig.hxx"
+#include "xfdefs.hxx"
 
 /**
  * @brief

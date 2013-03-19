@@ -57,7 +57,7 @@
  * @file
  * Line style of Drawing object.
  ************************************************************************/
-#include    "xfdrawlinestyle.hxx"
+#include "xfdrawlinestyle.hxx"
 
 XFDrawLineStyle::XFDrawLineStyle()
 {

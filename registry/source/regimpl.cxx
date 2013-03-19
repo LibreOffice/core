@@ -18,36 +18,36 @@
  */
 
 
-#include    "regimpl.hxx"
+#include "regimpl.hxx"
 
 #include <memory>
-#include    <string.h>
-#include    <stdio.h>
+#include <string.h>
+#include <stdio.h>
 
 #if defined(UNX)
-#include    <unistd.h>
+#include <unistd.h>
 #endif
 #ifdef __MINGW32__
-#include    <unistd.h>
+#include <unistd.h>
 #endif
 
-#include    <registry/reflread.hxx>
+#include <registry/reflread.hxx>
 
-#include    <registry/reflwrit.hxx>
+#include <registry/reflwrit.hxx>
 
 #include "registry/reader.hxx"
 #include "registry/refltype.hxx"
 #include "registry/types.h"
 #include "registry/version.h"
 
-#include    "reflcnst.hxx"
-#include    "keyimpl.hxx"
+#include "reflcnst.hxx"
+#include "keyimpl.hxx"
 
-#include    <osl/thread.h>
-#include    <rtl/alloc.h>
-#include    <rtl/ustring.hxx>
-#include    <rtl/ustrbuf.hxx>
-#include    <osl/file.hxx>
+#include <osl/thread.h>
+#include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <osl/file.hxx>
 
 using namespace osl;
 using namespace store;

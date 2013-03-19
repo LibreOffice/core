@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include        <sal/types.h>
-#include        <stdio.h>
-#include        <ctype.h>
-#include        "cppdef.h"
-#include        "cpp.h"
+#include <sal/types.h>
+#include <stdio.h>
+#include <ctype.h>
+#include "cppdef.h"
+#include "cpp.h"
 /*
  * parm[], parmp, and parlist[] are used to store #define() argument
  * lists.  nargs contains the actual number of parameters stored.

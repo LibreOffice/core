@@ -60,16 +60,16 @@
 #ifndef     _XFSAXSTREAM_HXX
 #define     _XFSAXSTREAM_HXX
 
-#include    "ixfstream.hxx"
+#include "ixfstream.hxx"
 
-#include    <cppuhelper/implbase1.hxx>
-#include    <cppuhelper/implbase3.hxx>
-#include    <cppuhelper/factory.hxx>
-#include    <com/sun/star/document/XFilter.hpp>
-#include    <com/sun/star/document/XImporter.hpp>
-#include    <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include    <com/sun/star/lang/XServiceInfo.hpp>
-#include    <com/sun/star/io/XInputStream.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/factory.hxx>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;

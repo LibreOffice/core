@@ -20,7 +20,7 @@
 #ifndef _FRM_PROPERTY_HXX_
 #define _FRM_PROPERTY_HXX_
 
-#include  <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/propshlp.hxx>

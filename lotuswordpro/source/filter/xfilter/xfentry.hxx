@@ -60,7 +60,7 @@
 #ifndef     _XFENTRY_HXX
 #define     _XFENTRY_HXX
 
-#include    "xfcontent.hxx"
+#include "xfcontent.hxx"
 
 /**
  * @brief

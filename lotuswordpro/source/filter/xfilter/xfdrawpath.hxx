@@ -60,8 +60,8 @@
 #ifndef     _XFDRAWPATH_HXX
 #define     _XFDRAWPATH_HXX
 
-#include    "xfdrawobj.hxx"
-#include    <vector>
+#include "xfdrawobj.hxx"
+#include <vector>
 
 /**
  * @brief

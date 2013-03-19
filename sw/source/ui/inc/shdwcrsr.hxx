@@ -22,7 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include  <limits.h>
+#include <limits.h>
 
 class Window;
 

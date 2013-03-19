@@ -58,15 +58,15 @@
  * Page master used bye XFMasterPage.
  * It is the real object to define header and footer of pages.
  ************************************************************************/
-#include    "xfpagemaster.hxx"
-#include    "ixfstream.hxx"
-#include    "ixfattrlist.hxx"
-#include    "xfborders.hxx"
-#include    "xfshadow.hxx"
-#include    "xfcolumns.hxx"
-#include    "xfheaderstyle.hxx"
-#include    "xffooterstyle.hxx"
-#include    "xfbgimage.hxx"
+#include "xfpagemaster.hxx"
+#include "ixfstream.hxx"
+#include "ixfattrlist.hxx"
+#include "xfborders.hxx"
+#include "xfshadow.hxx"
+#include "xfcolumns.hxx"
+#include "xfheaderstyle.hxx"
+#include "xffooterstyle.hxx"
+#include "xfbgimage.hxx"
 
 XFPageMaster::XFPageMaster() : m_fPageWidth(0), m_fPageHeight(0), m_eUsage(enumXFPageUsageNone),
 m_eTextDir(enumXFTextDirNone), m_bPrintOrient(sal_True), m_pBorders(NULL), m_pShadow(NULL),

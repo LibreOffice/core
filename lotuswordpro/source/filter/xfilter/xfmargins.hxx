@@ -60,8 +60,8 @@
 #ifndef     _XFMARGINS_HXX
 #define     _XFMARGINS_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include "xfglobal.hxx"
+#include "ixfproperty.hxx"
 
 #define     XFMARGINS_FLAG_LEFT     0x00000001
 #define     XFMARGINS_FLAG_RIGHT    0x00000002

@@ -57,8 +57,8 @@
  * @file
  * Frame whose anchor is not page.
  ************************************************************************/
-#include    "xfframe.hxx"
-#include    "xfparagraph.hxx"
+#include "xfframe.hxx"
+#include "xfparagraph.hxx"
 #define     ZINDEX_MIN 0
 XFFrame::XFFrame()
 {

@@ -60,8 +60,8 @@
 #ifndef     _XFSAXATTRLIST_HXX
 #define     _XFSAXATTRLIST_HXX
 
-#include    "ixfattrlist.hxx"
-#include    "xmloff/attrlist.hxx"
+#include "ixfattrlist.hxx"
+#include "xmloff/attrlist.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 using namespace ::com::sun::star::uno;

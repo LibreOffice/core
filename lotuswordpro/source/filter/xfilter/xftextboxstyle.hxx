@@ -56,11 +56,11 @@
 #ifndef     _XFTEXTBOXSTYLE_HXX
 #define     _XFTEXTBOXSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfmargins.hxx"
-#include    "xfcolor.hxx"
-#include    "xfpadding.hxx"
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include "xfmargins.hxx"
+#include "xfcolor.hxx"
+#include "xfpadding.hxx"
 
 /**
 * @brief

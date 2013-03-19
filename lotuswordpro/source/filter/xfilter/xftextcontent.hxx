@@ -60,8 +60,8 @@
 #ifndef     _XFTEXTCONTENT_HXX
 #define     _XFTEXTCONTENT_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
 
 class IXFStream;
 

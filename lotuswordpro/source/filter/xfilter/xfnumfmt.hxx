@@ -60,8 +60,8 @@
 #ifndef     _XFNUMFMT_HXX
 #define     _XFNUMFMT_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include "xfglobal.hxx"
+#include "ixfproperty.hxx"
 
 /**
  * @brief

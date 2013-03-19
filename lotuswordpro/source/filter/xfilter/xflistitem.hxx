@@ -60,9 +60,9 @@
 #ifndef     _XFLISTITEM_HXX
 #define     _XFLISTITEM_HXX
 
-#include    "xfcontent.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    "xfparagraph.hxx"
+#include "xfcontent.hxx"
+#include "xfcontentcontainer.hxx"
+#include "xfparagraph.hxx"
 
 class   XFListItem : public XFContentContainer
 {

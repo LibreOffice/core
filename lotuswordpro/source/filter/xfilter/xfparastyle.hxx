@@ -62,16 +62,16 @@
 #ifndef     _XFPARASTYLE_HXX
 #define     _XFPARASTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfcolor.hxx"
-#include    "xfmargins.hxx"
-#include    "xfbreaks.hxx"
-#include    "xfpadding.hxx"
-#include    "xfshadow.hxx"
-#include    "xfdropcap.hxx"
-#include    "xfstylecont.hxx"
-#include    "xflineheight.hxx"
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include "xfcolor.hxx"
+#include "xfmargins.hxx"
+#include "xfbreaks.hxx"
+#include "xfpadding.hxx"
+#include "xfshadow.hxx"
+#include "xfdropcap.hxx"
+#include "xfstylecont.hxx"
+#include "xflineheight.hxx"
 
 #define     XFPARA_FLAG_FONT        0X00000001
 #define     XFPARA_FLAG_DROPCAP     0X00000002

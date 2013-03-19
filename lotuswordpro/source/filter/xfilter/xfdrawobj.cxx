@@ -57,7 +57,7 @@
  * @file
  * Interfer for all Drawing object.
  ************************************************************************/
-#include    "xfdrawobj.hxx"
+#include "xfdrawobj.hxx"
 
 XFDrawObject::XFDrawObject()
 {

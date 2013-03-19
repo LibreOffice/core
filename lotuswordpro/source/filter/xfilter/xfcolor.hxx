@@ -60,7 +60,7 @@
 #ifndef     _XFCOLOR_HXX
 #define     _XFCOLOR_HXX
 
-#include    "xfglobal.hxx"
+#include "xfglobal.hxx"
 
 /**
  * @brief

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include    <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include "javaoptions.hxx"
 #include "osl/process.h"

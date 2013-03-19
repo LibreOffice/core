@@ -60,8 +60,8 @@
 #ifndef     _XFDROPCAP_HXX
 #define     _XFDROPCAP_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
+#include "xfglobal.hxx"
+#include "ixfproperty.hxx"
 
 class XFDropcap : public IXFProperty
 {

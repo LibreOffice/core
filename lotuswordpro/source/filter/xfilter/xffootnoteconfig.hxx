@@ -60,7 +60,7 @@
 #ifndef     _XFFOOTNOTECONFIG_HXX
 #define     _XFFOOTNOTECONFIG_HXX
 
-#include    "xfstyle.hxx"
+#include "xfstyle.hxx"
 
 class XFFootnoteConfig : public XFStyle
 {

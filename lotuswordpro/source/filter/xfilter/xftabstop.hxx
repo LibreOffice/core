@@ -60,8 +60,8 @@
 #ifndef     _XFTABSTOP_HXX
 #define     _XFTABSTOP_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
 
 class XFTabStop : public XFContent
 {

@@ -60,7 +60,7 @@
 #ifndef     _XFBOOKMARK_HXX
 #define     _XFBOOKMARK_HXX
 
-#include    "xfcontent.hxx"
+#include "xfcontent.hxx"
 
 /**
  * @brief

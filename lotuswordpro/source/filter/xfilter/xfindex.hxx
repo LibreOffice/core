@@ -62,10 +62,10 @@
 #include <map>
 #include <vector>
 
-#include    "xfcontent.hxx"
-#include    "ixfproperty.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    "xftabstop.hxx"
+#include "xfcontent.hxx"
+#include "ixfproperty.hxx"
+#include "xfcontentcontainer.hxx"
+#include "xftabstop.hxx"
 
 class XFIndex;
 class XFIndexTemplate;

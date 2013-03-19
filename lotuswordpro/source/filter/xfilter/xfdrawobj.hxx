@@ -60,8 +60,8 @@
 #ifndef     _XFDRAWOBJ_HXX
 #define     _XFDRAWOBJ_HXX
 
-#include    "xfframe.hxx"
-#include    "xfrect.hxx"
+#include "xfframe.hxx"
+#include "xfrect.hxx"
 
 #define     XFDRAWOBJECT_FLAG_ROTATE    0X00000001
 #define     XFDRAWOBJECT_FLAG_TRANLATE  0X00000002

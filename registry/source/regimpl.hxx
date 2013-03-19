@@ -23,10 +23,10 @@
 #include <set>
 #include <boost/unordered_map.hpp>
 
-#include    <registry/registry.h>
-#include    <rtl/ustring.hxx>
-#include    <osl/mutex.hxx>
-#include    <store/store.hxx>
+#include <registry/registry.h>
+#include <rtl/ustring.hxx>
+#include <osl/mutex.hxx>
+#include <store/store.hxx>
 
 #define REG_PAGESIZE 512
 

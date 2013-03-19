@@ -60,8 +60,8 @@
 #ifndef     _XFIMAGESTYLE_HXX
 #define     _XFIMAGESTYLE_HXX
 
-#include    "xfframestyle.hxx"
-#include    "xfrect.hxx"
+#include "xfframestyle.hxx"
+#include "xfrect.hxx"
 
 class XFImageStyle : public XFFrameStyle
 {

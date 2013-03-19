@@ -61,8 +61,8 @@
 #ifndef     _XFTEXTSTYLE_HXX
 #define     _XFTEXTSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
 
 class   IXFStream;
 class   XFFont;

@@ -60,11 +60,11 @@
 #ifndef     _XFTABLESTYLE_HXX
 #define     _XFTABLESTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfmargins.hxx"
-#include    "xfshadow.hxx"
-#include    "xfcolor.hxx"
-#include    "xfbreaks.hxx"
+#include "xfstyle.hxx"
+#include "xfmargins.hxx"
+#include "xfshadow.hxx"
+#include "xfcolor.hxx"
+#include "xfbreaks.hxx"
 
 class XFBGImage;
 class XFTableStyle : public XFStyle

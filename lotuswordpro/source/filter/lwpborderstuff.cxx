@@ -57,10 +57,10 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-#include    "lwpborderstuff.hxx"
-#include    "lwpstyledef.hxx"
-#include    "lwpfilehdr.hxx"
-#include    "lwptools.hxx"
+#include "lwpborderstuff.hxx"
+#include "lwpstyledef.hxx"
+#include "lwpfilehdr.hxx"
+#include "lwptools.hxx"
 
 LwpBorderStuff::LwpBorderStuff()
 {

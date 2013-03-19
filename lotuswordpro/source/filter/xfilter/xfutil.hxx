@@ -61,9 +61,9 @@
 #ifndef     _XFUTIL_HXX
 #define     _XFUTIL_HXX
 
-#include    "xfdefs.hxx"
-#include    <rtl/ustring.hxx>
-#include    <string>
+#include "xfdefs.hxx"
+#include <rtl/ustring.hxx>
+#include <string>
 
 
 #define A2OUSTR(str)    rtl::OUString::createFromAscii(str)

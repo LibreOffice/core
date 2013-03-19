@@ -57,8 +57,8 @@
  * @file
  * Represente index source,index body and index index entry.
  ************************************************************************/
-#include    "xfindex.hxx"
-#include    "xfparagraph.hxx"
+#include "xfindex.hxx"
+#include "xfparagraph.hxx"
 
 XFIndex::XFIndex()
 {

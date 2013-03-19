@@ -16,15 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include        <stdio.h>
+#include <stdio.h>
 #ifdef UNX
-#include        <stdlib.h>
+#include <stdlib.h>
 #endif
-#include        <ctype.h>
-#include        "cppdef.h"
-#include        "cpp.h"
+#include <ctype.h>
+#include "cppdef.h"
+#include "cpp.h"
 
-#include        "time.h" /* BP */
+#include "time.h" /* BP */
 
 #ifndef _STRING_H
 #include <string.h>
@@ -35,7 +35,7 @@ int AddInclude( char *pIncStr );  /* BP, 11.09.91, Forward-Deklaration */
 #endif
 
 #if (OSL_DEBUG_LEVEL > 1) && (HOST == SYS_VMS || HOST == SYS_UNIX)
-#include        <signal.h>
+#include <signal.h>
 #endif
 
 void InitCpp3()

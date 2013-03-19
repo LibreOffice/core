@@ -60,7 +60,7 @@
 #ifndef     _XFBASE64_HXX
 #define     _XFBASE64_HXX
 
-#include    "xfglobal.hxx"
+#include "xfglobal.hxx"
 
 /**
  * @brief

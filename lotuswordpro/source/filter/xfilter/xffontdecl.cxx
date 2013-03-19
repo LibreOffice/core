@@ -57,7 +57,7 @@
  * @file
  * Font decl of all used fonts.
  ************************************************************************/
-#include    "xffontdecl.hxx"
+#include "xffontdecl.hxx"
 
 XFFontDecl::XFFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed)
 {

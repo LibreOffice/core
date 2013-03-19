@@ -60,8 +60,8 @@
 #ifndef     _XFFONT_HXX
 #define     _XFFONT_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcolor.hxx"
+#include "xfglobal.hxx"
+#include "xfcolor.hxx"
 
 #define     XFFONT_FLAG_NAME            0X00000001
 #define     XFFONT_FLAG_NAME_ASIA       0X00000002

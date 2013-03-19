@@ -60,8 +60,8 @@
 #ifndef     _XFDRAWLINE_HXX
 #define     _XFDRAWLINE_HXX
 
-#include    "xfdrawobj.hxx"
-#include    "xfpoint.hxx"
+#include "xfdrawobj.hxx"
+#include "xfpoint.hxx"
 
 /**
  * @brief

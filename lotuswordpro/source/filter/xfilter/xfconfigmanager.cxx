@@ -57,7 +57,7 @@
  * @file
  * Manager for all config object,include line number config.
  ************************************************************************/
-#include    "xfconfigmanager.hxx"
+#include "xfconfigmanager.hxx"
 
 XFConfigManager::XFConfigManager()
     : m_pLineNumberConfig(0)

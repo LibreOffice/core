@@ -60,7 +60,7 @@
 #ifndef     _XFBGIMAGE_HXX
 #define     _XFBGIMAGE_HXX
 
-#include    "xfstyle.hxx"
+#include "xfstyle.hxx"
 
 /**
  * @brief

@@ -62,10 +62,10 @@
  Mar 2005           Created
  ************************************************************************/
 
-#include    "lwpoverride.hxx"
-#include    "lwptblcell.hxx"
-#include    "lwppara.hxx"
-#include    "lwptblformula.hxx"
+#include "lwpoverride.hxx"
+#include "lwptblcell.hxx"
+#include "lwppara.hxx"
+#include "lwptblformula.hxx"
 
 #include "lwptablelayout.hxx"
 #include <rtl/ustrbuf.hxx>

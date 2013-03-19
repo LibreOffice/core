@@ -60,9 +60,9 @@
 #ifndef     _XFFOOTNOTE_HXX
 #define     _XFFOOTNOTE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfcontent.hxx"
-#include    "xfcontentcontainer.hxx"
+#include "xfglobal.hxx"
+#include "xfcontent.hxx"
+#include "xfcontentcontainer.hxx"
 
 /**
  * @brief

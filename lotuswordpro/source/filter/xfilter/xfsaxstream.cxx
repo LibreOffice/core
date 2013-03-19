@@ -57,8 +57,8 @@
  * @file
  * Tool for sax writer.
  ************************************************************************/
-#include    "xfsaxstream.hxx"
-#include    "xfsaxattrlist.hxx"
+#include "xfsaxstream.hxx"
+#include "xfsaxattrlist.hxx"
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>

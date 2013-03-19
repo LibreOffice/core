@@ -60,9 +60,9 @@
 #ifndef     _XFFONTFACTORY_HXX
 #define     _XFFONTFACTORY_HXX
 
-#include    "xfglobal.hxx"
-#include    "xffont.hxx"
-#include    <vector>
+#include "xfglobal.hxx"
+#include "xffont.hxx"
+#include <vector>
 
 /**
  * @brief

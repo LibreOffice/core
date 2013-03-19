@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include        <sal/types.h>
-#include        <stdio.h>
-#include        <ctype.h>
-#include        <string.h>
-#include        "cppdef.h"
-#include        "cpp.h"
+#include <sal/types.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include "cppdef.h"
+#include "cpp.h"
 
 /*ER evaluate macros to pDefOut */
 

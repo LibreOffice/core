@@ -20,9 +20,9 @@
 #ifndef _KEYIMPL_HXX_
 #define _KEYIMPL_HXX_
 
-#include    <registry/registry.h>
-#include    "regimpl.hxx"
-#include    <rtl/ustring.hxx>
+#include <registry/registry.h>
+#include "regimpl.hxx"
+#include <rtl/ustring.hxx>
 
 class ORegKey
 {

@@ -60,7 +60,7 @@
 #ifndef     _LWPNUMBERINGOVERRIDE_HXX
 #define     _LWPNUMBERINGOVERRIDE_HXX
 
-#include    "lwpoverride.hxx"
+#include "lwpoverride.hxx"
 
 class LwpObjectStream;
 class LwpNumberingOverride : public LwpOverride

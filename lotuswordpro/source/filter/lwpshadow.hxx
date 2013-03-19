@@ -60,8 +60,8 @@
 #ifndef     _LWPSHADOW_HXX
 #define     _LWPSHADOW_HXX
 
-#include    "lwpcolor.hxx"
-#include    "lwptools.hxx"
+#include "lwpcolor.hxx"
+#include "lwptools.hxx"
 
 class LwpShadow
 {

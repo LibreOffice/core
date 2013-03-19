@@ -60,7 +60,7 @@
 #ifndef     _XFLINENUMBERCONFIG_HXX
 #define     _XFLINENUMBERCONFIG_HXX
 
-#include    "xfstyle.hxx"
+#include "xfstyle.hxx"
 
 class XFLineNumberConfig : public XFStyle
 {

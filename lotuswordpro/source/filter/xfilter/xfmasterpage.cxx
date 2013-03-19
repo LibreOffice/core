@@ -57,11 +57,11 @@
  * @file
  * Master page object which was used to apply a layout to the pages.
  ************************************************************************/
-#include    "xfmasterpage.hxx"
-#include    "xfpagemaster.hxx"
-#include    "xfstylemanager.hxx"
-#include    "xffooter.hxx"
-#include    "xfheader.hxx"
+#include "xfmasterpage.hxx"
+#include "xfpagemaster.hxx"
+#include "xfstylemanager.hxx"
+#include "xffooter.hxx"
+#include "xfheader.hxx"
 #include "../lwpglobalmgr.hxx"
 XFMasterPage::XFMasterPage()
 {

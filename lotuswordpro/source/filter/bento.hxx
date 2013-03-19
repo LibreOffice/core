@@ -57,7 +57,7 @@
 #define BENTO_H
 
 #include <string>
-#include    <vector>
+#include <vector>
 #include "lwpsvstream.hxx"
 
 #define BEN_CC __stdcall

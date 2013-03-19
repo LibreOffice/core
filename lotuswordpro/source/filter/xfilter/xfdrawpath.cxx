@@ -57,7 +57,7 @@
  * @file
  * Draw path object.
  ************************************************************************/
-#include    "xfdrawpath.hxx"
+#include "xfdrawpath.hxx"
 
 XFSvgPathEntry::XFSvgPathEntry()
 {

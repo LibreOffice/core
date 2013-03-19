@@ -65,16 +65,16 @@
 #ifndef     _LWPPIECE_HXX
 #define     _LWPPIECE_HXX
 
-#include    "lwpobj.hxx"
-#include    "lwpoverride.hxx"
-#include    "lwpobjstrm.hxx"
-#include    "lwpdlvlist.hxx"
-#include    "lwpbreaksoverride.hxx"
-#include    "lwpparaborderoverride.hxx"
-#include    "lwpnumberingoverride.hxx"
-#include    "lwpcharborderoverride.hxx"
-#include    "lwpbackgroundoverride.hxx"
-#include    "lwptaboverride.hxx"
+#include "lwpobj.hxx"
+#include "lwpoverride.hxx"
+#include "lwpobjstrm.hxx"
+#include "lwpdlvlist.hxx"
+#include "lwpbreaksoverride.hxx"
+#include "lwpparaborderoverride.hxx"
+#include "lwpnumberingoverride.hxx"
+#include "lwpcharborderoverride.hxx"
+#include "lwpbackgroundoverride.hxx"
+#include "lwptaboverride.hxx"
 
 class LwpOverride;
 class LwpDLVList;

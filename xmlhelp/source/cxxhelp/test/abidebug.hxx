@@ -18,7 +18,7 @@
  */
 #include <iostream>
 #ifndef _RTL_USTRING_
-#include  <rtl/ustring>
+#include <rtl/ustring>
 #endif
 ostream& operator<<( ostream& out,const OUString& bla );
 

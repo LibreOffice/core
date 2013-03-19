@@ -57,7 +57,7 @@
  * @file
  * Polylon object.
  ************************************************************************/
-#include    "xfdrawpolygon.hxx"
+#include "xfdrawpolygon.hxx"
 
 XFDrawPolygon::XFDrawPolygon()
 {

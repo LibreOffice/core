@@ -61,9 +61,9 @@
 #ifndef     _XFCell_HXX
 #define     _XFCell_HXX
 
-#include    "xfcontent.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    <vector>
+#include "xfcontent.hxx"
+#include "xfcontentcontainer.hxx"
+#include <vector>
 
 class XFTable;
 class XFRow;

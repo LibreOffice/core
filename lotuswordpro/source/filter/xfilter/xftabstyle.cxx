@@ -57,7 +57,7 @@
  * @file
  * Tab style for paragraph.include tab offset and tab char properties.
  ************************************************************************/
-#include    "xftabstyle.hxx"
+#include "xftabstyle.hxx"
 
 XFTabStyle::XFTabStyle()
 {

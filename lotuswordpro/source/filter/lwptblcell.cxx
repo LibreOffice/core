@@ -62,9 +62,9 @@
  Mar 2005           Created
  ************************************************************************/
 
-#include    "lwpoverride.hxx"
-#include    "lwpobjid.hxx"
-#include    "lwptblcell.hxx"
+#include "lwpoverride.hxx"
+#include "lwpobjid.hxx"
+#include "lwptblcell.hxx"
 #include "lwppara.hxx"
 
 //////////////////////////////////////////////////////////////////

@@ -57,8 +57,8 @@
  * @file
  * Section style,whose family is "section"
  ************************************************************************/
-#include    "xfsectionstyle.hxx"
-#include    "xfcolumns.hxx"
+#include "xfsectionstyle.hxx"
+#include "xfcolumns.hxx"
 
 XFSectionStyle::XFSectionStyle()
 {

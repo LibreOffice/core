@@ -60,11 +60,11 @@
 #ifndef     _XFHEADERSTYLE_HXX
 #define     _XFHEADERSTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfmargins.hxx"
-#include    "xfborders.hxx"
-#include    "xfpadding.hxx"
-#include    "xfshadow.hxx"
+#include "xfstyle.hxx"
+#include "xfmargins.hxx"
+#include "xfborders.hxx"
+#include "xfpadding.hxx"
+#include "xfshadow.hxx"
 
 /**
  * @brief

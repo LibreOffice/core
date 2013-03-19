@@ -57,10 +57,10 @@
  * @file
  * Style for all draw object.
  ************************************************************************/
-#include    "xfdrawstyle.hxx"
-#include    "xfdrawlinestyle.hxx"
-#include    "xfdrawareastyle.hxx"
-#include    "xfstylemanager.hxx"
+#include "xfdrawstyle.hxx"
+#include "xfdrawlinestyle.hxx"
+#include "xfdrawareastyle.hxx"
+#include "xfstylemanager.hxx"
 #include "xffontworkstyle.hxx"
 #include "../lwpglobalmgr.hxx"
 XFDrawStyle::XFDrawStyle()

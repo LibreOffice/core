@@ -60,7 +60,7 @@
 #ifndef     _XFRECT_HXX
 #define     _XFRECT_HXX
 
-#include    "xfpoint.hxx"
+#include "xfpoint.hxx"
 
 class XFRect
 {

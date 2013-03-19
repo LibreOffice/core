@@ -60,10 +60,10 @@
 #ifndef     _XFNUMBERSTYLE_HXX
 #define     _XFNUMBERSTYLE_HXX
 
-#include    "xfstyle.hxx"
-#include    "xfstylemanager.hxx"
-#include    "xfcolor.hxx"
-#include    <rtl/ustring.hxx>
+#include "xfstyle.hxx"
+#include "xfstylemanager.hxx"
+#include "xfcolor.hxx"
+#include <rtl/ustring.hxx>
 
 class XFNumberStyle : public XFStyle
 {

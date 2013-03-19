@@ -57,7 +57,7 @@
  * @file
  * Date style. The date format for date field.
  ************************************************************************/
-#include    "xfdatestyle.hxx"
+#include "xfdatestyle.hxx"
 
 XFDatePart::XFDatePart()
 {

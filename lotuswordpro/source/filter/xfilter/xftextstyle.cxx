@@ -58,11 +58,11 @@
  * Style for <text:p> or <text:h> or <text:span>
  * Now we have only font attributes.
  ************************************************************************/
-#include    "xftextstyle.hxx"
-#include    "ixfattrlist.hxx"
-#include    "ixfstream.hxx"
-#include    "xffont.hxx"
-#include    "xfutil.hxx"
+#include "xftextstyle.hxx"
+#include "ixfattrlist.hxx"
+#include "ixfstream.hxx"
+#include "xffont.hxx"
+#include "xfutil.hxx"
 
 XFTextStyle::XFTextStyle()
 {

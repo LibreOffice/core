@@ -59,7 +59,7 @@
 ************************************************************************/
 #ifndef     _LWPBACKGROUNDSTUFF_HXX
 #define     _LWPBACKGROUNDSTUFF_HXX
-#include    "lwpcolor.hxx"
+#include "lwpcolor.hxx"
 
 /* background patterns */
 #define BACK_TRANSPARENT    0

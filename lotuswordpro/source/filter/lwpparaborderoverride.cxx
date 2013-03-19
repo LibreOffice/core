@@ -60,10 +60,10 @@
 #include <memory>
 
 #include "clone.hxx"
-#include    "lwpparaborderoverride.hxx"
-#include    "lwpborderstuff.hxx"
-#include    "lwpshadow.hxx"
-#include    "lwpmargins.hxx"
+#include "lwpparaborderoverride.hxx"
+#include "lwpborderstuff.hxx"
+#include "lwpshadow.hxx"
+#include "lwpmargins.hxx"
 
 LwpParaBorderOverride::LwpParaBorderOverride()
 {

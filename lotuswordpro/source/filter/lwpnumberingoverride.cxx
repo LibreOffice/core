@@ -58,8 +58,8 @@
 * Numbering override of Wordpro.
 ************************************************************************/
 
-#include    "lwpnumberingoverride.hxx"
-#include    "lwpobjstrm.hxx"
+#include "lwpnumberingoverride.hxx"
+#include "lwpobjstrm.hxx"
 
 LwpNumberingOverride::LwpNumberingOverride()
 {

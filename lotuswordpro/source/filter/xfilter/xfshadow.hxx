@@ -60,9 +60,9 @@
 #ifndef     _XFSHADOW_HXX
 #define     _XFSHADOW_HXX
 
-#include    "xfglobal.hxx"
-#include    "ixfproperty.hxx"
-#include    "xfcolor.hxx"
+#include "xfglobal.hxx"
+#include "ixfproperty.hxx"
+#include "xfcolor.hxx"
 
 /**
  * @brief

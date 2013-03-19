@@ -60,7 +60,7 @@
 #ifndef     _XFARROWSTYLE_HXX
 #define     _XFARROWSTYLE_HXX
 
-#include    "xfstyle.hxx"
+#include "xfstyle.hxx"
 
 class XFArrowStyle : public XFStyle
 {

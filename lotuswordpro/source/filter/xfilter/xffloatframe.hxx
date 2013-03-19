@@ -60,8 +60,8 @@
 #ifndef     _XFFLOATFRAME_HXX
 #define     _XFFLOATFRAME_HXX
 
-#include    "xfframe.hxx"
-#include    <vector>
+#include "xfframe.hxx"
+#include <vector>
 
 /**
  * @brief

@@ -57,8 +57,8 @@
  * @file
  * Document object of the xml filter framework.
  ************************************************************************/
-#include    "xfsaxattrlist.hxx"
-#include    "xmloff/attrlist.hxx"
+#include "xfsaxattrlist.hxx"
+#include "xmloff/attrlist.hxx"
 
 XFSaxAttrList::XFSaxAttrList()
 {

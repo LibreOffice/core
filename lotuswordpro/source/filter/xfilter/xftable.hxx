@@ -60,12 +60,12 @@
 #ifndef     _XFTABLE_HXX
 #define     _XFTABLE_HXX
 
-#include    "xfcontent.hxx"
-#include    "xfrow.hxx"
-#include    "xfcell.hxx"
-#include    "xfcontentcontainer.hxx"
-#include    <map>
-#include    <vector>
+#include "xfcontent.hxx"
+#include "xfrow.hxx"
+#include "xfcell.hxx"
+#include "xfcontentcontainer.hxx"
+#include <map>
+#include <vector>
 
 class XFTable : public XFContent
 {

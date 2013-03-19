@@ -60,7 +60,7 @@
 #ifndef     _IXFPROPERTY_HXX
 #define     _IXFPROPERTY_HXX
 
-#include    "ixfobject.hxx"
+#include "ixfobject.hxx"
 
 class IXFProperty : public IXFObject
 {

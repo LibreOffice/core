@@ -57,8 +57,8 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
-#include    "xfstylemanager.hxx"
-#include    "ixfstyle.hxx"
+#include "xfstylemanager.hxx"
+#include "ixfstyle.hxx"
 
 XFStyleManager::XFStyleManager() : s_aStdArrowStyles( A2OUSTR("arrow") ), s_aTextStyles( A2OUSTR("T") ),
     s_aParaStyles( A2OUSTR("P") ),s_aListStyles( A2OUSTR("L") ),s_aSectionStyles( A2OUSTR("Sect") ),

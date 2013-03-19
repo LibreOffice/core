@@ -57,9 +57,9 @@
  * @file
  * Implemention file for Meta data,pls reference to the header file.
  ************************************************************************/
-#include    "xfofficemeta.hxx"
-#include    "ixfstream.hxx"
-#include    "ixfattrlist.hxx"
+#include "xfofficemeta.hxx"
+#include "ixfstream.hxx"
+#include "ixfattrlist.hxx"
 
 void    XFOfficeMeta::SetCreator(rtl::OUString creator)
 {

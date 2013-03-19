@@ -60,7 +60,7 @@
  #ifndef _XFFONTWORKSTYLE_HXX
  #define _XFFONTWORKSTYLE_HXX
 
-#include    "xfstyle.hxx"
+#include "xfstyle.hxx"
 
 class XFFontWorkStyle
 {

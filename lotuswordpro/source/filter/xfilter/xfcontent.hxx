@@ -60,7 +60,7 @@
 #ifndef     _XFCONTENT_HXX
 #define     _XFCONTENT_HXX
 
-#include    "ixfcontent.hxx"
+#include "ixfcontent.hxx"
 
 /**
  * @descr

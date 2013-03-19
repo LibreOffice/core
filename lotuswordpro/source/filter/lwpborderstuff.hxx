@@ -60,7 +60,7 @@
 #ifndef     _LWPBORDERSTUFF_HXX
 #define     _LWPBORDERSTUFF_HXX
 
-#include    "lwpcolor.hxx"
+#include "lwpcolor.hxx"
 
 class LwpBorderStuff
 {

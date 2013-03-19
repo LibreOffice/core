@@ -60,10 +60,10 @@
 #ifndef     _XFSECTIONSTYLE_HXX
 #define     _XFSECTIONSTYLE_HXX
 
-#include    "xfglobal.hxx"
-#include    "xfstyle.hxx"
-#include    "xfbgimage.hxx"
-#include    "xfcolor.hxx"
+#include "xfglobal.hxx"
+#include "xfstyle.hxx"
+#include "xfbgimage.hxx"
+#include "xfcolor.hxx"
 
 class XFColumns;
 /*

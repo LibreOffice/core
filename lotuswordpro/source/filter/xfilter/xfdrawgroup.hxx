@@ -60,9 +60,9 @@
 #ifndef     _XFDRAWGROUP_HXX
 #define     _XFDRAWGROUP_HXX
 
-#include    "xfdrawobj.hxx"
-#include    "xfframe.hxx"
-#include    "xfcontentcontainer.hxx"
+#include "xfdrawobj.hxx"
+#include "xfframe.hxx"
+#include "xfcontentcontainer.hxx"
 
 /**
  * @brief

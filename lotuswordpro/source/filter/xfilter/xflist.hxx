@@ -60,8 +60,8 @@
 #ifndef     _XFLIST_HXX
 #define     _XFLIST_HXX
 
-#include    "xflistitem.hxx"
-#include    "xfcontentcontainer.hxx"
+#include "xflistitem.hxx"
+#include "xfcontentcontainer.hxx"
 
 class XFListItem;
 

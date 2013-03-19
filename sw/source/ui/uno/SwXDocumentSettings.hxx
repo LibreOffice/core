@@ -22,8 +22,8 @@
 
 #include <comphelper/MasterPropertySet.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include  <com/sun/star/lang/XServiceInfo.hpp>
-#include  <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase5.hxx>
 

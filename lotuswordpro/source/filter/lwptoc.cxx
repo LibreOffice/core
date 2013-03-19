@@ -75,7 +75,7 @@
 #include "xfilter/xfparagraph.hxx"
 #include "xfilter/xfparastyle.hxx"
 #include "xfilter/xfindex.hxx"
-#include    "xfilter/xffloatframe.hxx"
+#include "xfilter/xffloatframe.hxx"
 #include "xfilter/xfframestyle.hxx"
 #include "xfilter/xfframe.hxx"
 #include "xfilter/xftable.hxx"

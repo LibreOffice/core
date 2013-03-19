@@ -58,9 +58,9 @@
  * Global functions or include files that are needed.
  * It's all for the full filter.
  ************************************************************************/
-#include    "xfglobal.hxx"
-#include    "xffontfactory.hxx"
-#include    "xfstylemanager.hxx"
+#include "xfglobal.hxx"
+#include "xffontfactory.hxx"
+#include "xfstylemanager.hxx"
 
 int XFGlobal::s_nFrameID = 1;
 int XFGlobal::s_nGraphID = 1;
