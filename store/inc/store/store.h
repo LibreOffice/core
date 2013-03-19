@@ -323,8 +323,8 @@ STORE_DLLPUBLIC storeError SAL_CALL store_attrib (
 
 
 /** Insert a file entry as 'hard link' to another file entry.
-    @precond  Source must not exist, Destination must exist.
-    @postcond Source has attribute STORE_ATTRIB_ISLINK.
+    @pre  Source must not exist, Destination must exist.
+    @post Source has attribute STORE_ATTRIB_ISLINK.
     @see      store_attrib()
 
     @param  hFile [in] the File Handle
@@ -342,8 +342,8 @@ STORE_DLLPUBLIC storeError SAL_CALL store_link (
 
 
 /** Insert a file entry as 'symbolic link' to another file entry.
-    @precond  Source must not exist
-    @postcond Source has attribute STORE_ATTRIB_ISLINK.
+    @pre  Source must not exist
+    @post Source has attribute STORE_ATTRIB_ISLINK.
     @see      store_attrib()
 
     @param  hFile [in] the File Handle

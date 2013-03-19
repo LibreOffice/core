@@ -31,7 +31,8 @@ extern "C" {
 
 
 /** Allocate memory.
-    @descr A call to this function will return NULL upon the requested
+
+    A call to this function will return NULL upon the requested
     memory size being either zero or larger than currently allocatable.
 
     @param  Bytes [in] memory size.
@@ -43,9 +44,9 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_allocateMemory (
 
 
 /** Reallocate memory.
-    @descr A call to this function with parameter 'Ptr' being NULL
-    is equivalent to a rtl_allocateMemory() call.
 
+    A call to this function with parameter 'Ptr' being NULL
+    is equivalent to a rtl_allocateMemory() call.
     A call to this function with parameter 'Bytes' being 0
     is equivalent to a rtl_freeMemory() call.
 
@@ -72,7 +73,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeMemory (
 
 
 /** Allocate and zero memory.
-    @descr A call to this function will return NULL upon the requested
+
+    A call to this function will return NULL upon the requested
     memory size being either zero or larger than currently allocatable.
 
     @param  Bytes [in] memory size.
@@ -187,6 +189,7 @@ typedef struct rtl_cache_st rtl_cache_type;
  *  @param  destructor  [in] object destructor callback function.
  *  @param  reclaim     [in] reclaim callback function.
  *  @param  pUserArg    [in] opaque argument passed to callback functions.
+ *  @param  pSource     [in] opaque argument passed to callback functions.
  *  @param  nFlags      [in] flags.
  *
  *  @return pointer to rtl_cache_type, or NULL upon failure.

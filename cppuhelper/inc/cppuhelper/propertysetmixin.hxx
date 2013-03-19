@@ -63,10 +63,10 @@ template< typename T > class PropertySetMixin;
 /**
    @short A helper base class for <code>cppu::PropertySetMixin</code>.
 
-   @descr See the documentation of <code>cppu::PropertySetMixin</code> for
+   See the documentation of <code>cppu::PropertySetMixin</code> for
    further details.
 
-   @descr That <code>cppu::PropertySetMixin</code> is derived from this
+   That <code>cppu::PropertySetMixin</code> is derived from this
    base class should be considered an implementation detail.  The functionality
    of <code>cppu::PropertySetMixin</code> that is inherited from this base
    class and is visible to subclasses of
@@ -120,11 +120,11 @@ protected:
        <code>cppu::PropertySetMixin</code> when implementing UNO interface
        type attribute setter functions.
 
-       @descr This class is not thread safe; that is, the constructor,
+       This class is not thread safe; that is, the constructor,
        <code>notify</code>, and the destructor must be called from the same
        thread.
 
-       @descr See <code>cppu::PropertySetMixinImpl::prepareSet</code> for
+       See <code>cppu::PropertySetMixinImpl::prepareSet</code> for
        further details.
     */
     class CPPUHELPER_DLLPUBLIC BoundListeners {
@@ -132,14 +132,14 @@ protected:
         /**
            @short The constructor.
 
-           @descr May throw <code>std::bad_alloc</code>.
+           May throw <code>std::bad_alloc</code>.
         */
         BoundListeners();
 
         /**
            @short The destructor.
 
-           @descr Does not throw.
+           Does not throw.
         */
         ~BoundListeners();
 
@@ -147,10 +147,10 @@ protected:
            @short Notifies any
            <code>com::sun::star::beans::XPropertyChangeListener</code>s.
 
-           @descr May throw <code>com::sun::star::uno::RuntimeException</code>
+           May throw <code>com::sun::star::uno::RuntimeException</code>
            and <code>std::bad_alloc</code>.
 
-           @descr See <code>cppu::PropertySetMixinImpl::prepareSet</code>
+           See <code>cppu::PropertySetMixinImpl::prepareSet</code>
            for further details.
          */
         void notify() const;
@@ -170,7 +170,7 @@ protected:
        <code>cppu::PropertySetMixin</code> when implementing UNO interface
        type attribute setter functions.
 
-       @descr First, this function checks whether this instance has already been
+       First, this function checks whether this instance has already been
        disposed (see <code>cppu::PropertySetMixinImpl::dispose</code>),
        and throws a <code>com::sun::star::lang::DisposedException</code> if
        applicable.  For a constrained attribute (whose setter can explicitly
@@ -187,7 +187,7 @@ protected:
        Furthermore, <code>boundListeners->notify()</code> and this function have
        to be called from the same thread.
 
-       @descr May throw
+       May throw
        <code>com::sun::star::beans::PropertyVetoException</code>,
        <code>com::sun::star::uno::RuntimeException</code> (and
        <code>com::sun::star::lang::DisposedException</code> in particular), and
@@ -201,7 +201,7 @@ protected:
        <code>com::sun::star::beans::PropertyChangeEvent::OldValue</code>, which
        is rather useless, anyway (see &ldquo;Using the Observer Pattern&rdquo;
        in <a href="http://tools.openoffice.org/CodingGuidelines.sxw">
-       <cite>OpenOffice.org Coding Guidelines</cite></a>).  If the attribute
+       OpenOffice.org Coding Guidelines</a>).  If the attribute
        that is going to be set is neither bound nor constrained, or if
        <code>com::sun::star::beans::PropertyChangeEvent::OldValue</code> should
        not be set, a <code>VOID</code> <code>Any</code> can be used instead.
@@ -211,7 +211,7 @@ protected:
        <code>com::sun::star::beans::PropertyChangeEvent::NewValue</code>, which
        is rather useless, anyway (see &ldquo;Using the Observer Pattern&rdquo;
        in <a href="http://tools.openoffice.org/CodingGuidelines.sxw">
-       <cite>OpenOffice.org Coding Guidelines</cite></a>), <em>unless</em> the
+       OpenOffice.org Coding Guidelines</a>), <em>unless</em> the
        attribute that is going to be set is constrained.  If the attribute
        that is going to be set is neither bound nor constrained, or if it is
        only bound but
@@ -233,7 +233,7 @@ protected:
     /**
        @short Mark this instance as being disposed.
 
-       @descr See <code>com::sun::star::lang::XComponent</code> for the general
+       See <code>com::sun::star::lang::XComponent</code> for the general
        concept of disposing UNO objects.  On the first call to this function,
        all registered listeners
        (<code>com::sun::star::beans::XPropertyChangeListener</code>s and
@@ -241,7 +241,7 @@ protected:
        notified of the disposing source.  Any subsequent calls to this function
        are ignored.
 
-       @descr May throw <code>com::sun::star::uno::RuntimeException</code> and
+       May throw <code>com::sun::star::uno::RuntimeException</code> and
        <code>std::bad_alloc</code>.
      */
     void dispose();
@@ -251,7 +251,7 @@ protected:
        <code>cppu::PropertySetMixin</code> when implementing
        <code>com::sun::star::uno::XInterface::queryInterface</code>.
 
-       @descr This function checks for support of any of the UNO interface types
+       This function checks for support of any of the UNO interface types
        specified in the call of the <code>cppu::PropertySetMixin</code>
        constructor.  It does not check for any other UNO interface types (not
        even for <code>com::sun::star::uno::XInterface</code>), and should not
@@ -291,7 +291,7 @@ protected:
        @short Adds a
        <code>com::sun::star::beans::XPropertyChangeListener</code>.
 
-       @descr If a listener is added more than once, it will receive all
+       If a listener is added more than once, it will receive all
        relevant notifications multiple times.
 
        @see com::sun::star::beans::XPropertySet::addPropertyChangeListener
@@ -319,7 +319,7 @@ protected:
        @short Adds a
        <code>com::sun::star::beans::XVetoableChangeListener</code>.
 
-       @descr If a listener is added more than once, it will receive all
+       If a listener is added more than once, it will receive all
        relevant notifications multiple times.
 
        @see com::sun::star::beans::XPropertySet::addVetoableChangeListener
@@ -406,10 +406,10 @@ private:
    @short A helper mixin to implement certain UNO interfaces related to property
    set handling on top of the attributes of a given UNO interface type.
 
-   @descr The UNO interface type is specified by the type parameter
+   The UNO interface type is specified by the type parameter
    <code>T</code> (which must correspond to a UNO interface type).
 
-   @descr No specializations of this class template should be added by client
+   No specializations of this class template should be added by client
    code.
 
    @since UDK 3.2.1
@@ -419,7 +419,7 @@ protected:
     /**
        @short The constructor.
 
-       @descr May throw <code>com::sun::star::uno::RuntimeException</code> and
+       May throw <code>com::sun::star::uno::RuntimeException</code> and
        <code>std::bad_alloc</code>.
 
        @param context  the component context used by this class template; must
@@ -468,7 +468,7 @@ protected:
     /**
        @short The destructor.
 
-       @descr Does not throw.
+       Does not throw.
     */
     ~PropertySetMixin() {}
 

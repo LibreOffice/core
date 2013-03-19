@@ -108,6 +108,7 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
 /**
    Detaches the current thread from the threadpool. Must be called for
    every call to uno_threadpool_attach.
+  @param hPool the handle that was previously created by uno_threadpool_create().
 */
 CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
@@ -132,6 +133,7 @@ uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
   If pJob is a reply, there MUST be a thread with the given threadId waiting
   for this reply.
 
+  @param hPool the handle that was previously created by uno_threadpool_create().
   @param pThreadId The Id of the thread, that initialized this request. (In general a
                    remote threadid).
   @param pJob The argument, that doRequest will get or that will be returned by

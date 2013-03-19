@@ -54,7 +54,7 @@ protected:
     virtual ~OWeakObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
     /** disposes and resets m_pWeakConnectionPoint
-        @precond
+        @pre
             m_refCount equals 0
     */
     void    disposeWeakConnectionPoint();

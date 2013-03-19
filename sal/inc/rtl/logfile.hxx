@@ -25,7 +25,7 @@
 namespace rtl
 {
 /**
-@descr  The intended use for class Logfile is to write time stamp information
+@brief  The intended use for class Logfile is to write time stamp information
         for profiling purposes.
 
         Profiling output should only be generated for a special product version of OpenOffice
@@ -93,7 +93,9 @@ namespace rtl
     {
     public:
         inline Logfile( const sal_Char *name );
-        /** @descr  Create a log file context where the message field consists of a project
+        /** Create a log file context
+
+                Create a log file context where the message field consists of a project
                 name, the author's shortcut, and the actual message.  These three strings
                 are written in a format that is understood by script that later parses the
                 log file and that so can extract the three strings.

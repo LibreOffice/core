@@ -33,7 +33,7 @@ struct ContextEntry_Init
 {
     /** late init denotes a object that will be raised when first get() is calling for it
 
-        The context implementation expects either a ::com::sun::star::lang::XSingleComponentFactory
+        The context implementation expects either a com::sun::star::lang::XSingleComponentFactory
         object as value (to instanciate the object) or a string as value for raising
         a service via the used service manager.
     */

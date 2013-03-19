@@ -627,9 +627,10 @@ public:
 
     /** resolves a keyname.
 
-        @param  keyName specifies the name of the key which will be resolved relativ to this key.
+        @param[in]  keyName specifies the name of the key which will be resolved relative to this key.
                         The resolved name will be prefixed with the name of this key.
-        @param firstLinkOnly ignored
+        @param[in]  firstLinkOnly ignored
+        @param[out] rResolvedName the resolved name.
         @return REG_NO_ERROR if succeeds else an error code.
      */
     inline RegError getResolvedKeyName(const ::rtl::OUString& keyName,

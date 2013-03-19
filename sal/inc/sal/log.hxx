@@ -212,11 +212,15 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     For all the other macros, the given area argument must be non-null and must
     match the regular expression
 
+    @verbatim
       <area> ::= <segment>("."<segment>)*
+    @endverbatim
 
     with
 
+    @verbatim
       <segment> ::= [0-9a-z]+
+    @endverbatim
 
     For a list of areas used see @ref sal_log_areas "SAL debug areas". Whenever
     you use a new log area, add it to the file sal/inc/sal/log-areas.dox .
@@ -233,13 +237,17 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     macro calls actually generate log output.  The environment variable SAL_LOG
     must either be unset or must match the regular expression
 
+    @verbatim
       <env> ::= <switch>*
+    @endverbatim
 
     with
 
+    @verbatim
       <switch> ::= <sense><level>("."<area>)?
       <sense> ::= "+"|"-"
       <level> ::= "INFO"|"WARN"
+    @endverbatim
 
     If the environment variable is unset, "+WARN" is used instead (which results
     in all warnings being output but no infos).  If the given value does not

@@ -79,12 +79,13 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer(
     If the <code>minimumCapacity</code> argument is nonpositive, this
     method takes no action and simply returns.
 
-    @param   capacity          in: old capicity, out: new capacity.
-    @param   minimumCapacity   the minimum desired capacity.
+    @param[in,out]   This              the String to operate on.
+    @param[in,out]   capacity          in: old capacity, out: new capacity.
+    @param[in]       minimumCapacity   the minimum desired capacity.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_ensureCapacity(
-                                                /*inout*/rtl_uString ** This,
-                                                /*inout*/sal_Int32* capacity,
+                                                rtl_uString ** This,
+                                                sal_Int32* capacity,
                                                 sal_Int32 minimumCapacity);
 
 /**
@@ -165,11 +166,12 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_insert_ascii(
 
     start must be >= 0 && <= This->length
 
-    @param  start       The beginning index, inclusive
-    @param  len         The substring length
+    @param[in,out]  This    The String to operate on.
+    @param[in]      start   The beginning index, inclusive
+    @param[in]      len     The substring length
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_remove(
-                                       /*inout*/rtl_uString ** This,
+                                       rtl_uString ** This,
                                        sal_Int32 start,
                                        sal_Int32 len );
 

@@ -449,7 +449,7 @@ public:
     inline void set( Any const & rAny, UnoReference_QueryThrow dummy);
     /** sets the given interface
         An interface already set will be released.
-        Throws a RuntimeException if the source interface is <NULL/>.
+        Throws a RuntimeException if the source interface is @b NULL.
 
         @param pInterface an interface pointer
         @param dummy UNO_SET_THROW to force obvious distinction to other set methods
@@ -459,7 +459,7 @@ public:
     inline void SAL_CALL set( interface_type * pInterface, UnoReference_SetThrow dummy) SAL_THROW( (RuntimeException) );
     /** sets the given interface
         An interface already set will be released.
-        Throws a RuntimeException if the source interface is <NULL/>.
+        Throws a RuntimeException if the source interface is @b NULL.
 
         @param rRef an interface reference
         @param dummy UNO_SET_THROW to force obvious distinction to other set methods

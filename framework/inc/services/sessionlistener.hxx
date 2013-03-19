@@ -66,7 +66,6 @@ namespace framework{
                         if flush failed</li>
                 </ul>
  */
-/// @NOHTML
 
 class SessionListener :   // interfaces
                         public css::lang::XTypeProvider,

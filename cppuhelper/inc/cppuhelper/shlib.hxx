@@ -49,8 +49,8 @@ namespace cppu
     @param xMgr service manager to be provided to the component
     @param xKey registry key to be provided to the component
     @return
-    factory instance (::com::sun::star::lang::XSingleComponentFactory or
-    ::com::sun::star::lang::XSingleComponentFactory)
+    factory instance (com::sun::star::lang::XSingleComponentFactory or
+    com::sun::star::lang::XSingleComponentFactory)
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
@@ -74,8 +74,8 @@ SAL_CALL loadSharedLibComponentFactory(
     @param xKey registry key to be provided to the component
     @param rPrefix optional component prefix
     @return
-    factory instance (::com::sun::star::lang::XSingleComponentFactory or
-    ::com::sun::star::lang::XSingleComponentFactory)
+    factory instance (com::sun::star::lang::XSingleComponentFactory or
+    com::sun::star::lang::XSingleComponentFactory)
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
@@ -94,8 +94,8 @@ SAL_CALL loadSharedLibComponentFactory(
     @param xKey registry key to be provided to the component
     @param rPrefix optional component prefix
     @return
-    factory instance (::com::sun::star::lang::XSingleComponentFactory or
-    ::com::sun::star::lang::XSingleComponentFactory)
+    factory instance (com::sun::star::lang::XSingleComponentFactory or
+    com::sun::star::lang::XSingleComponentFactory)
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL invokeStaticComponentFactory(
@@ -112,7 +112,7 @@ SAL_CALL invokeStaticComponentFactory(
     directory.  The resulting path of the library will be checked against environment variable
     CPLD_ACCESSPATH if set.
 
-    @obsolete component_writeInfo should no longer be used in new components
+    @deprecated component_writeInfo should no longer be used in new components
 
     @param rLibName name of the library
     @param rPath optional path

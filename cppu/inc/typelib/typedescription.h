@@ -422,7 +422,6 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     </ul>
 */
 typedef struct _typelib_InterfaceTypeDescription
-/// @NOHTML
 {
     /** inherits all members of typelib_TypeDescription
     */
@@ -949,7 +948,8 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release(
 /** Retrieves the type description for a given reference. If it is not possible to resolve the
     reference, null is returned.
 
-    @param ppRet inout type description
+    @param[in,out] ppRet type description
+    @param[in] pRef type description reference
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDescription(
     typelib_TypeDescription ** ppRet, typelib_TypeDescriptionReference * pRef )

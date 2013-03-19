@@ -39,6 +39,7 @@ CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const ::com::sun::star::uno::
 /** Use this function to get the dynamic type of a caught C++-UNO exception;
     completes the above function throwing exceptions generically.
 
+    @code
     try
     {
         ...
@@ -53,6 +54,7 @@ CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const ::com::sun::star::uno::
         ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() );
         ...
     }
+    @endcode
 
     Restrictions:
     - use only for caught C++-UNO exceptions (UNOIDL defined)

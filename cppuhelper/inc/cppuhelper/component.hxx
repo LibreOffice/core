@@ -33,9 +33,9 @@
 namespace cppu
 {
 
-/** Deprecated.  Helper for implementing ::com::sun::star::lang::XComponent.
+/** Deprecated.  Helper for implementing com::sun::star::lang::XComponent.
     Upon disposing objects of this class, sub-classes receive a disposing() call.  Objects of
-    this class can be held weakly, i.e. by a ::com::sun::star::uno::WeakReference.  Object of
+    this class can be held weakly, i.e. by a com::sun::star::uno::WeakReference.  Object of
     this class can be aggregated, i.e. incoming queryInterface() calls are delegated.
 
     @attention

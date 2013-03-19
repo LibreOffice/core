@@ -317,6 +317,19 @@ public:
         @param bIgnoreRuntimeExceptionsWhileFiring
                         indicates whether occuring RuntimeExceptions shall be
                         ignored when firing notifications
+       @param pnHandles     the id's of the properties that changed.
+       @param nCount        the number of elements in the arrays pnHandles, pNewValues and pOldValues.
+       @param bVetoable true means fire to VetoableChangeListener, false means fire to
+                  XPropertyChangedListener and XMultiPropertyChangedListener.
+       @param bIgnoreRuntimeExceptionsWhileFiring
+                        indicates whether occurring RuntimeExceptions will be
+                        ignored when firing notifications
+                        (vetoableChange(), propertyChange())
+                        to listeners.
+                        PropertyVetoExceptions may still be thrown.
+                        This flag is useful in an inter-process scenario when
+                        remote bridges may break down
+                        (firing DisposedExceptions).
 
         @see OPropertySetHelper::fire
      */
@@ -559,6 +572,7 @@ protected:
        @param rConvertedValue the converted value. Only set if return is true.
        @param rOldValue the old value. Only set if return is true.
        @param nHandle the handle of the proberty.
+       @param rValue the value to be converted
        @return true if the value converted.
      */
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
@@ -575,11 +589,11 @@ protected:
         @attention
         Although you are permitted to throw any UNO exception, only the following
         are valid for usage:
-        -- ::com::sun::star::beans::UnknownPropertyException
-        -- ::com::sun::star::beans::PropertyVetoException
-        -- ::com::sun::star::lang::IllegalArgumentException
-        -- ::com::sun::star::lang::WrappedTargetException
-        -- ::com::sun::star::uno::RuntimeException
+        -- com::sun::star::beans::UnknownPropertyException
+        -- com::sun::star::beans::PropertyVetoException
+        -- com::sun::star::lang::IllegalArgumentException
+        -- com::sun::star::lang::WrappedTargetException
+        -- com::sun::star::uno::RuntimeException
 
         @param nHandle
                handle

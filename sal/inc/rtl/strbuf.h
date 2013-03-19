@@ -79,12 +79,13 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer(
     If the <code>minimumCapacity</code> argument is nonpositive, this
     method takes no action and simply returns.
 
-    @param   capacity         in: old capicity, out: new capacity.
-    @param   minimumCapacity   the minimum desired capacity.
+    @param[in,out]   This              the String to operate on.
+    @param[in,out]   capacity          in: old capacity, out: new capacity.
+    @param[in]       minimumCapacity   the minimum desired capacity.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_ensureCapacity(
-                                                /*inout*/rtl_String ** This,
-                                                /*inout*/sal_Int32* capacity,
+                                                rtl_String ** This,
+                                                sal_Int32* capacity,
                                                 sal_Int32 minimumCapacity);
 
 
@@ -97,14 +98,15 @@ SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_ensureCapacity(
     <code>offset</code>. The length of this string buffer increases by
     the length of the argument.
 
-    @param  capacity    the capacity of the string buffer
-    @param  offset      the offset.
-    @param  str         a character array.
-    @param  len         the number of characters to append.
+    @param[in,out]  This        the String to operate on.
+    @param[in,out]  capacity    the capacity of the string buffer
+    @param[in]      offset      the offset.
+    @param[in]      str         a character array.
+    @param[in]      len         the number of characters to append.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_insert(
-                                       /*inout*/rtl_String ** This,
-                                       /*inout*/sal_Int32 * capacity,
+                                       rtl_String ** This,
+                                       sal_Int32 * capacity,
                                        sal_Int32 offset,
                                        const sal_Char * str,
                                        sal_Int32 len);
@@ -117,11 +119,12 @@ SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_insert(
 
     start must be >= 0 && <= This->length
 
-    @param  start       The beginning index, inclusive
-    @param  len         The substring length
+    @param[in,out]  This        The String to operate on.
+    @param[in]      start       The beginning index, inclusive
+    @param[in]      len         The substring length
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_remove(
-                                       /*inout*/rtl_String ** This,
+                                       rtl_String ** This,
                                        sal_Int32 start,
                                        sal_Int32 len );
 

@@ -177,9 +177,9 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getMappingByName(
 /** Function pointer declaration to get a mapping from a loaded bridge. Bridges export a function
     called uno_ext_getMapping() of this signature.
 
-    @param ppMapping    [inout] mapping; existing mapping will be released
-    @pFrom              source environment
-    @pTo                destination environment
+    @param[in,out] ppMapping  mapping; existing mapping will be released
+    @param[in] pFrom              source environment
+    @param[in] pTo                destination environment
 */
 typedef void (SAL_CALL * uno_ext_getMappingFunc)(
     struct _uno_Mapping ** ppMapping,

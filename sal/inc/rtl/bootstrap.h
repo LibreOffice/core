@@ -106,6 +106,7 @@ extern "C" {
      is different than the executable file name. It must be given on command line. If it is
      given the executable ini-file is ignored.
    </li>
+   </ul>
 */
 
 /** may be called by an application to set an ini-filename.
@@ -115,7 +116,7 @@ extern "C" {
     If it is never called, the filename is based on the name of the executable,
     with the suffix ".ini" on Windows or "rc" on Unix.
 
-    @param pNameUri URL of the inifile with path but WITHOUT suffix (.ini or rc)
+    @param pFileUri URL of the inifile with path but WITHOUT suffix (.ini or rc)
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pFileUri )
     SAL_THROW_EXTERN_C();
@@ -186,7 +187,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
 
 /** Returns the name of the inifile associated with this handle.
 
-   @param ppIniName contains after the call the name of the ini-filename.
+   @param handle   [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
+   @param ppIniName [out] contains after the call the name of the ini-filename.
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_get_iniName_from_handle(
         rtlBootstrapHandle handle, rtl_uString ** ppIniName)

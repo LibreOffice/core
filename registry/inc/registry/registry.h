@@ -140,11 +140,13 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setValue(RegKeyHandle hKey,
 
 /** This function sets an long list value of a key.
 
-    @param  keyName points to a null terminated string specifying the name of a key which value
+    @param[in]  hKey identifies a currently open key. The key which value will be set by this
+                 function is a subkey of the key identified by hKey.
+    @param[in]  keyName points to a null terminated string specifying the name of a key which value
                     will be set. If keyName is NULL, then the value of the key specified by
                     hKey will be set.
-    @param  pValueList points to an array of longs containing the data of the value.
-    @param  len specifies the len of pValueList.
+    @param[out]  pValueList points to an array of longs containing the data of the value.
+    @param[out]  len specifies the len of pValueList.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setLongListValue(RegKeyHandle hKey,
@@ -155,11 +157,13 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setLongListValue(RegKeyHandle hKey,
 
 /** This function sets an ascii list value of a key.
 
-    @param  keyName points to a null terminated string specifying the name of a key which value
+    @param[in]  hKey identifies a currently open key. The key which value will be set by this
+                 function is a subkey of the key identified by hKey.
+    @param[in]  keyName points to a null terminated string specifying the name of a key which value
                     will be set. If keyName is NULL, then the value of the key specified by
                     hKey will be set.
-    @param  pValueList points to an array of sal_Char* containing the data of the value.
-    @param  len specifies the len of pValueList.
+    @param[in]  pValueList points to an array of sal_Char* containing the data of the value.
+    @param[in]  len specifies the len of pValueList.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setStringListValue(RegKeyHandle hKey,
@@ -170,11 +174,13 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setStringListValue(RegKeyHandle hKe
 
 /** This function sets an unicode string list value of a key.
 
-    @param  keyName points to a null terminated string specifying the name of a key which value
+    @param[in]  hKey identifies a currently open key. The key which value will be set by this
+                 function is a subkey of the key identified by hKey.
+    @param[in]  keyName points to a null terminated string specifying the name of a key which value
                     will be set. If keyName is NULL, then the value of the key specified by
                     hKey will be set.
-    @param  pValueList points to an array of sal_Unicode* containing the data of the value.
-    @param  len specifies the len of pValueList.
+    @param[in]  pValueList points to an array of sal_Unicode* containing the data of the value.
+    @param[in]  len specifies the len of pValueList.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_setUnicodeListValue(RegKeyHandle hKey,
@@ -217,11 +223,13 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getValue(RegKeyHandle hKey,
 
 /** This function gets the long list value of a key.
 
-    @param  keyName points to a null terminated string specifying the name of a key which value
+    @param[in]  hKey identifies a currently open key. The key which value will be got by this
+                 function is a subkey of the key identified by hKey.
+    @param[in]  keyName points to a null terminated string specifying the name of a key which value
                     will be got. If keyName is NULL, then the value of the key specified by
                     hKey will be got.
-    @param  pValueList a Pointer to a long value list which returns the data of the value.
-    @param  pLen returns the length of the value list.
+    @param[out]  pValueList a Pointer to a long value list which returns the data of the value.
+    @param[out]  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
@@ -232,11 +240,13 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getLongListValue(RegKeyHandle hKey,
 
 /** This function gets the string list value of a key.
 
-    @param  keyName points to a null terminated string specifying the name of a key which value
-                    will be got. If keyName is NULL, then the value of the key specified by
-                    hKey will be got.
-    @param  pValueList a Pointer to an ascii value list which returns the data of the value.
-    @param  pLen returns the length of the value list.
+    @param[in]  hKey identifies a currently open key. The key whose value will be retrived by this
+                 function is a subkey of the key identified by hKey.
+    @param[in]  keyName points to a null terminated string specifying the name of a key whose value
+                    will be retrived. If keyName is NULL, then the value of the key specified by
+                    hKey will be retrived.
+    @param[out]  pValueList a Pointer to an ascii value list which returns the data of the value.
+    @param[out]  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKey,
@@ -247,11 +257,13 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getStringListValue(RegKeyHandle hKe
 
 /** This function gets the unicode list value of a key.
 
-    @param  keyName points to a null terminated string specifying the name of a key which value
-                    will be got. If keyName is NULL, then the value of the key specified by
-                    hKey will be got.
-    @param  pValueList a Pointer to an unicode value list which returns the data of the value.
-    @param  pLen returns the length of the value list.
+    @param[in]  hKey identifies a currently open key. The key whose value will be retrived by this
+                 function is a subkey of the key identified by hKey.
+    @param[in]  keyName points to a null terminated string specifying the name of a key whose value
+                    will be retrived. If keyName is NULL, then the value of the key specified by
+                    hKey will be retrived.
+    @param[out]  pValueList a Pointer to an unicode value list which returns the data of the value.
+    @param[out]  pLen returns the length of the value list.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getUnicodeListValue(RegKeyHandle hKey,
@@ -276,9 +288,11 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueTyp
     The registry differentiates two possible types:
     - RG_KEYTYPE represents a real key
     - RG_LINKTYPE used to represent a link (no longer used)
-    @param  keyName points to a null terminated string specifying the name of the key which keytype
+    @param[in]  hKey identifies a currently open key. The key specified by keyName is a subkey
+                 of the key identified by hKey.
+    @param[in]  keyName points to a null terminated string specifying the name of the key which keytype
                     will be returned.
-    @param  pKeyType returns the type of the key.
+    @param[out]  pKeyType returns the type of the key.
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
@@ -287,12 +301,12 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getKeyType(RegKeyHandle hKey,
 
 /** This function resolves a keyname.
 
-    and returns the resolved keyName in pResolvedName.
-    @param  hKey identifies a currently open key. The key specified by keyName is a subkey
+    @param[in]  hKey identifies a currently open key. The key specified by keyName is a subkey
                  of the key identified by hKey.
-    @param  keyName points to a null terminated string specifying the relativ name of a key.
+    @param[in]  keyName points to a null terminated string specifying the relativ name of a key.
                     The name of hKey together with keyName will be generated.
-    @param firstLinkOnly ignored
+    @param[in] firstLinkOnly ignored
+    @param[out]  pResolvedName returns the resolved keyName.
     @return REG_NO_ERROR if succeeds else an error code.
  */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,

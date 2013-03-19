@@ -33,13 +33,11 @@ extern "C" {
 
 /**  Various predefined URI 'char classes.'
 
-     @descr
      A 'char class' defines which (ASCII) characters can be written 'as they
      are' in a part of a Uri, and which characters have to be written using
      escape sequences ('%' followed by two hex digits).  Characters outside
      the ASCII range are always written using escape sequences.
 
-     @descr
      If there are other frequently used char classes, they can be added to
      this enumeration; the function rtl_getUriCharClass() has to be adapted
      then, too.
@@ -48,58 +46,64 @@ typedef enum
 {
     /** The empty char class.
 
-        @descr
         All characters are written using escape sequences.
      */
     rtl_UriCharClassNone,
 
     /** The RFC 2732 @<uric> char class.
 
-        @descr
+        @verbatim
         The 'valid' characters are !$&'()*+,-./:;=?@[]_~ plus digits and
         letters.
+        @endverbatim
      */
     rtl_UriCharClassUric,
 
     /** The RFC 2396 @<uric_no_slash> char class.
 
-        @descr
+        @verbatim
         The 'valid' characters are !$&'()*+,-.:;=?@_~ plus digits and letters.
+        @endverbatim
      */
     rtl_UriCharClassUricNoSlash,
 
     /** The RFC 2396 @<rel_segment> char class.
 
-        @descr
+        @verbatim
         The 'valid' characters are !$&'()*+,-.;=@_~ plus digits and letters.
+        @endverbatim
      */
     rtl_UriCharClassRelSegment,
 
     /** The RFC 2396 @<reg_name> char class.
 
-        @descr
+        @verbatim
         The 'valid' characters are !$&'()*+,-.:;=@_~ plus digits and letters.
+        @endverbatim
      */
     rtl_UriCharClassRegName,
 
     /** The RFC 2396 @<userinfo> char class.
 
-        @descr
+        @verbatim
         The 'valid' characters are !$&'()*+,-.:;=_~ plus digits and letters.
+        @endverbatim
      */
     rtl_UriCharClassUserinfo,
 
     /** The RFC 2396 @<pchar> char class.
 
-        @descr
+        @verbatim
         The 'valid' characters are !$&'()*+,-.:=@_~ plus digits and letters.
+        @endverbatim
      */
     rtl_UriCharClassPchar,
 
     /** The char class for the values of uno URL parameters.
 
-        @descr
+        @verbatim
         The 'valid' characters are !$&'()*+-./:?@_~ plus digits and letters.
+        @endverbatim
      */
     rtl_UriCharClassUnoParamValue,
 
@@ -115,7 +119,6 @@ typedef enum
     /** The special meaning of '%' is ignored (i.e., there are by definition
         no escape sequences in the input).
 
-        @descr
         This mechanism is useful to encode user input as part of a URI (e.g.,
         the user-supplied password in an ftp URL---'%20abcde' is a valid
         password, so do not assume that the '%20' is an escaped space).
@@ -126,7 +129,6 @@ typedef enum
         even if they represent characters that need not be escaped or if they
         do not even map to characters in the given charset.
 
-        @descr
         This mechanism is useful when passing on complete URIs more or less
         unmodified (e.g., within an HTTP proxy): missing escape sequences are
         added, but existing escape sequences are not touched (except that any
@@ -138,7 +140,6 @@ typedef enum
         a first step; only those that represent characters that need to be
         escaped are kept intact.
 
-        @descr
         This mechanism is useful to properly encode complete URIs entered by
         the user: the URI is brought into a 'canonic form,' but care is taken
         not to damage (valid) escape sequences the (careful) user already
@@ -176,7 +177,6 @@ typedef enum
     /** The text is returned in the form of an IURI (cf.
         draft-masinter-url-i18n-05.txt).
 
-        @descr
         All escape sequences representing ASCII characters (%00--%7F) are
         kept, all other escape sequences are interpreted as UTF-8 characters
         and translated to Unicode, if possible.
@@ -185,7 +185,6 @@ typedef enum
 
     /** The text is decoded.
 
-        @descr
         All escape sequences representing characters from the given charset
         are decoded and translated to Unicode, if possible.
      */
@@ -204,7 +203,6 @@ rtl_UriDecodeMechanism;
 
 /** Map a predefined rtl_UriCharClass to a form usable by rtl_uriEncode().
 
-    @descr
     The function rtl_uriEncode() expects an array of 128 booleans, and this
     function maps rtl_UriCharClass enumeration members to such arrays.
 

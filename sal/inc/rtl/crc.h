@@ -35,7 +35,8 @@ extern "C" {
  *
  *======================================================================*/
 /** Evaluate CRC32 over given data.
-    @descr This function evaluates the CRC polynomial 0xEDB88320.
+
+    This function evaluates the CRC polynomial 0xEDB88320.
 
     @param  Crc    [in] CRC32 over previous data or zero.
     @param  Data   [in] data buffer.

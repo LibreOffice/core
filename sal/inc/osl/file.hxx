@@ -282,7 +282,6 @@ public:
         If pustrTempFileURL is not 0 the caller receives the name of the
         created file and is responsible for removing the file.
 
-        @descr
         Description of the different pHandle, ppustrTempFileURL parameter combinations.
         pHandle is 0 and pustrTempDirURL is 0 - this combination is invalid<br>
         pHandle is not 0 and pustrTempDirURL is 0 - a handle to the open file
@@ -1256,7 +1255,6 @@ public:
     <dd>On success</dd>
     <dt>E_INVAL</dt>
     <dd>The value of the input parameter is invalid</dd>
-    </dl>
     <br><p><strong>In addition to these error codes others may occur as well, for instance:</strong></p><br>
     <dt>E_BADF</dt>
     <dd>The file is not open for writing</dd>

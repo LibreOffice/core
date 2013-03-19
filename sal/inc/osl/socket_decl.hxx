@@ -48,7 +48,6 @@ namespace osl
 
         /** The SocketAddr takes over the responsibility of the handle ( which means,
             that the handle gets destructed by the destructor of this reference)
-
             @param nocopy use SAL_NO_COPY
          */
         inline SocketAddr(const oslSocketAddr , __osl_socket_NoCopy nocopy );
@@ -116,6 +115,7 @@ namespace osl
         inline SocketAddr & SAL_CALL operator= (const SocketAddr& Addr);
 
         /** Assigns the socket addr without copyconstructing it.
+            @param Addr the socket address.
             @param nocopy use SAL_NO_COPY
           */
         inline SocketAddr & SAL_CALL assign( oslSocketAddr Addr, __osl_socket_NoCopy nocopy );
@@ -180,6 +180,7 @@ namespace osl
 
         /** The instance takes over the handle's ownership without acquiring the
             handle, but releases it within the dtor.
+            @param socketHandle the handle
             @param noacquire use SAL_NO_ACQUIRE
          */
         inline Socket( oslSocket socketHandle, __sal_NoAcquire noacquire );
@@ -498,6 +499,8 @@ namespace osl
     {
     public:
         /** Creates a socket.
+            @param Family the Family of the socket (Inet by default)
+            @param Protocol the Protocon of the socket (IP by default)
             @param Type For some protocols it might be desirable to
             use a different type than <code>osl_Socket_TypeStream</code>
             (like <code>osl_Socket_TypeSeqPacket</code>).
@@ -579,6 +582,8 @@ namespace osl
     {
     public:
         /** Creates a socket that can connect to a (remote) host.
+            @param Family the Family of the socket (Inet by default)
+            @param Protocol the Protocon of the socket (IP by default)
             @param Type For some protocols it might be desirable to
             use a different type than sock_stream <code>osl_Socket_TypeSeqPacket</code>
             (like <code>osl_Socket_TypeSeqPacket</code>).
@@ -649,6 +654,8 @@ namespace osl
     public:
 
         /** Creates a datagram socket.
+            @param Family the Family of the socket (Inet by default)
+            @param Protocol the Protocon of the socket (IP by default)
             @param Type is sock_dgram by default.
         */
         inline DatagramSocket(oslAddrFamily Family= osl_Socket_FamilyInet,

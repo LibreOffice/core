@@ -143,7 +143,7 @@ SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_init (
 
 
 /** Encode a buffer under a given cipher algorithm.
-    @precond Initialized for a compatible cipher direction.
+    @pre Initialized for a compatible cipher direction.
     @see     rtl_cipher_init()
 
     @param  Cipher  [in]  cipher handle.
@@ -161,7 +161,7 @@ SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_encode (
 
 
 /** Decode a buffer under a given cipher algorithm.
-    @precond Initialized for a compatible cipher direction.
+    @pre Initialized for a compatible cipher direction.
     @see     rtl_cipher_init()
 
     @param  Cipher  [in]  cipher handle.
@@ -193,7 +193,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroy (
  *
  *======================================================================*/
 /** Create a Blowfish cipher handle for the given mode.
-    @descr The Blowfish block cipher algorithm is specified in
+
+    The Blowfish block cipher algorithm is specified in
     Bruce Schneier: Applied Cryptography, 2nd edition, ch. 14.3
 
     @see rtl_cipher_create()
@@ -248,7 +249,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroyBF (
  *
  *======================================================================*/
 /** Create a RC4 cipher handle for the given mode.
-    @descr The RC4 symmetric stream cipher algorithm is specified in
+
+    The RC4 symmetric stream cipher algorithm is specified in
     Bruce Schneier: Applied Cryptography, 2nd edition, ch. 17.1
 
     @see rtl_cipher_create()

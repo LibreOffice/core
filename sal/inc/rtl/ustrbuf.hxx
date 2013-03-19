@@ -667,6 +667,7 @@ public:
         string are then appended to this string buffer.
 
         @param   i   an <code>sal_Int32</code>.
+        @param radix the radix
         @return  this string buffer.
      */
     OUStringBuffer & append(sal_Int32 i, sal_Int16 radix = 10 )
@@ -684,6 +685,7 @@ public:
         string are then appended to this string buffer.
 
         @param   l   a <code>long</code>.
+        @param radix the radix
         @return  this string buffer.
      */
     OUStringBuffer & append(sal_Int64 l, sal_Int16 radix = 10 )

@@ -51,12 +51,16 @@ public:
     inline sal_Bool SAL_CALL logonUser(const rtl::OUString& strName,
                                        const rtl::OUString& strPasswd);
     /** get the security information for one user.
+
+        @verbatim
         This method will try to login the user at the denoted file server.
         If a network resource named \\server\username exists and this resource
         could be connected by this user, the methos will return true and getHomeDir
         will return \\server\username.
+        @endverbatim
         @param[in] strName denotes the name of the user
         @param[in] strPasswd denotes the password of this user
+        @param[in] strFileServer denotes the file server to login to
         @return True, if the specified user is known by file server and the
         could be connected, otherwise False
     */

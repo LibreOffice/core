@@ -196,7 +196,7 @@ public:
         @tparam ListenerT listener type
         @tparam FuncT unary functor type, let your compiler deduce this for you
         @param func unary functor object expecting an argument of type
-                    ::com::sun::star::uno::Reference<ListenerT>
+                    com::sun::star::uno::Reference<ListenerT>
     */
     template <typename ListenerT, typename FuncT>
     inline void forEach( FuncT const& func );

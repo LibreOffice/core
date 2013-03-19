@@ -1207,11 +1207,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_new(
     alternatively pass ownership to an OUString with
     rtl::OUString(newStr, SAL_NO_ACQUIRE);
 
-    @param newStr
-    pointer to the new string.
-
-    @param len
-    the number of characters.
+    @param[in] nLen the number of characters.
+    @return pointer to the new string.
 
     @since LibreOffice 4.1
  */
@@ -1292,8 +1289,10 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromStr_WithLength(
     or beginIndex + count greater than the length of the string have
     undefined behaviour.
 
-    @param     beginIndex   the beginning index, inclusive.
-    @param     count        the number of characters.
+    @param[out]    newStr       the specified substring.
+    @param[in]     from         the String to take the substring from.
+    @param[in]     beginIndex   the beginning index, inclusive.
+    @param[in]     count        the number of characters.
     @return    the specified substring.
 
     @since LibreOffice 4.0

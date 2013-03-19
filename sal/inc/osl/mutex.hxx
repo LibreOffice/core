@@ -34,7 +34,7 @@ namespace osl
     public:
         /** Create a thread-local mutex.
             @return 0 if the mutex could not be created, otherwise a handle to the mutex.
-            @seealso ::osl_createMutex()
+            @see ::osl_createMutex()
         */
         Mutex()
         {
@@ -42,7 +42,7 @@ namespace osl
         }
 
         /** Release the OS-structures and free mutex data-structure.
-            @seealso ::osl_destroyMutex()
+            @see ::osl_destroyMutex()
         */
         ~Mutex()
         {
@@ -51,7 +51,7 @@ namespace osl
 
         /** Acquire the mutex, block if already acquired by another thread.
             @return sal_False if system-call fails.
-            @seealso ::osl_acquireMutex()
+            @see ::osl_acquireMutex()
         */
         sal_Bool acquire()
         {
@@ -60,7 +60,7 @@ namespace osl
 
         /** Try to acquire the mutex without blocking.
             @return sal_False if it could not be acquired.
-            @seealso ::osl_tryToAcquireMutex()
+            @see ::osl_tryToAcquireMutex()
         */
         sal_Bool tryToAcquire()
         {
@@ -69,7 +69,7 @@ namespace osl
 
         /** Release the mutex.
             @return sal_False if system-call fails.
-            @seealso ::osl_releaseMutex()
+            @see ::osl_releaseMutex()
         */
         sal_Bool release()
         {
@@ -80,7 +80,7 @@ namespace osl
             The global and static mutex object can be used to initialize other
             static objects in a thread safe manner.
             @return the global mutex object
-            @seealso ::osl_getGlobalMutex()
+            @see ::osl_getGlobalMutex()
         */
         static Mutex * getGlobalMutex()
         {

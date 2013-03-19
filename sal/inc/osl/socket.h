@@ -283,6 +283,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
 
 
 /** Sets the Port of Addr.
+    @param[in] Addr the SocketAddr to perfom the operation on.
     @param[in] Port is expected in host byte-order.
     @return <code>sal_False</code> if Addr is not an inet-addr.
 */
@@ -291,7 +292,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(
 
 
 /** Returns the hostname represented by Addr.
-    @param strHostname out-parameter. The hostname represented by the address. If
+    @param[in] Addr The socket address from which to extract the hostname.
+    @param[out] strHostname The hostname represented by the address. If
     there is no hostname to be found, it returns 0.
 */
 SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(
@@ -299,7 +301,8 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(
 
 
 /** Gets the address in dotted decimal format.
-    @param strDottedInetAddr out-parameter. Contains the dotted decimal address
+    @param[in] Addr The socket address from which to extract the dotted decimal address.
+    @param[out] strDottedInetAddr Contains the dotted decimal address
     (e.g. 141.99.20.34) represented by the address.
     If the address is invalid or not of type <code>osl_Socket_FamilyInet</code>,
     it returns 0.
@@ -314,7 +317,8 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_setAddrOfSocketAddr(
         oslSocketAddr Addr, sal_Sequence *pByteSeq );
 
 /** Returns the addr field in the struct sockaddr.
-    @param ppByteSeq out parameter. After the call, *ppByteSeq contains the ipadrress
+    @param[in] Addr The socket address from which to extract the ipaddress.
+    @param[out] ppByteSeq After the call, *ppByteSeq contains the ipaddress
                      in network byteorder. *ppByteSeq may be 0 in case of an invalid socket handle.
     @return <code>osl_Socket_Ok</code> or <code>osl_Socket_Error</code>
  */
@@ -466,6 +470,7 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_connectSocketTo(
 
 /** Prepares the socket to act as an acceptor of incoming connections.
     You should call "listen" before you use "accept".
+    @param[in] Socket The socket to listen on.
     @param[in] MaxPendingConnections denotes the length of the queue of
     pending connections for this socket. If MaxPendingConnections is
     -1, the systems default value will be used (Usually 5).
@@ -478,6 +483,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_listenOnSocket(
 
 /** Waits for an ingoing connection on the socket.
     This call blocks if there is no incoming connection present.
+    @param[in] Socket The socket to accept the connection on.
     @param[in] pAddr if pAddr is != 0, the peers address is returned.
     @return 0 if the accept-call failed, otherwise you get a socket
     representing the new connection.
@@ -637,7 +643,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isExceptionPending(
         oslSocket Socket, const TimeValue* pTimeout);
 
 /** Shuts down communication on a connected socket.
-    @param Direction denotes which end of the socket
+    @param[in] Socket the Socket to perfom the operation on.
+    @param[in] Direction denotes which end of the socket
     should be closed:
     <ul>
     <li> <code>osl_Socket_DirRead</code>    closes read operations.
@@ -784,6 +791,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isNonBlockingMode(
 
 
 /** Queries the socket for its type.
+    @param[in] Socket The socket to query.
     @return one of:
     <ul>
     <li> osl_Socket_TypeStream
@@ -793,13 +801,13 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isNonBlockingMode(
     <li> osl_Socket_TypeSeqPacket
     <li> osl_invalid_SocketType, if an error occurred
     </ul>
-
 */
 SAL_DLLPUBLIC oslSocketType SAL_CALL osl_getSocketType(
         oslSocket Socket);
 
 /** returns  a string which describes the last socket error.
-    @param strError out-parameter. The string that receives the error message.
+    @param[in] Socket The socket to query.
+    @param[out] strError The string that receives the error message.
 */
 SAL_DLLPUBLIC void SAL_CALL osl_getLastSocketErrorDescription(
         oslSocket Socket, rtl_uString **strError);
@@ -871,14 +879,16 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet Incomi
                                     const TimeValue* pTimeout);
 
 /** Closes the socket terminating any ongoing dataflow.
+    @param[in] Socket The socket to close.
  */
 SAL_DLLPUBLIC void SAL_CALL osl_closeSocket(oslSocket Socket);
 
 
 /** Retrieves n bytes from the stream and copies them into pBuffer.
     The function avoids incomplete reads due to packet boundaries.
-    @param pBuffer receives the read data.
-    @param nSize the number of bytes to read. pBuffer must be large enough
+    @param[in] Socket The socket to read from.
+    @param[out] pBuffer receives the read data.
+    @param[out] nSize the number of bytes to read. pBuffer must be large enough
     to hold the n bytes!
     @return the number of read bytes. The number will only be smaller than
     n if an exceptional condition (e.g. connection closed) occurs.
@@ -888,8 +898,9 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer
 
 /** Writes n bytes from pBuffer to the stream. The method avoids
     incomplete writes due to packet boundaries.
-    @param pBuffer contains the data to be written.
-    @param nSize the number of bytes to write.
+    @param[out] Socket The socket to write to.
+    @param[in] pBuffer contains the data to be written.
+    @param[in] nSize the number of bytes to write.
     @return the number of written bytes. The number will only be smaller than
     nSize if an exceptional condition (e.g. connection closed) occurs.
 */

@@ -91,7 +91,7 @@ SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_create  (
 
 
 /** Destroy a digest handle.
-    @postcond Digest handle destroyed and invalid.
+    @post Digest handle destroyed and invalid.
     @param    Digest [in] digest handle to be destroyed.
     @return   None.
  */
@@ -145,8 +145,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_update (
 
 
 /** Finalize a digest and retrieve the digest value.
-    @precond  Digest value length must not be less than digest length.
-    @postcond Digest initialized to accept another update sequence.
+    @pre  Digest value length must not be less than digest length.
+    @post Digest initialized to accept another update sequence.
     @see      rtl_digest_queryLength()
     @see      rtl_digest_update()
 
@@ -169,8 +169,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
 #define RTL_DIGEST_LENGTH_MD2 16
 
 /** Create a MD2 digest handle.
-    @descr The MD2 digest algorithm is specified in
 
+    The MD2 digest algorithm is specified in
     RFC 1319 (Informational)
       The MD2 Message-Digest Algorithm
 
@@ -206,7 +206,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD2 (
 
 
 /** Evaluate a MD2 digest value from given data.
-    @descr This function performs an optimized call sequence on a
+
+    This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
 
     @see rtl_digest_updateMD2()
@@ -232,8 +233,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD2 (
 #define RTL_DIGEST_LENGTH_MD5 16
 
 /** Create a MD5 digest handle.
-    @descr The MD5 digest algorithm is specified in
 
+    The MD5 digest algorithm is specified in
     RFC 1321 (Informational)
       The MD5 Message-Digest Algorithm
 
@@ -269,10 +270,11 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD5 (
 
 
 /** Retrieve the raw (not finalized) MD5 digest value.
-    @descr This function is a non-standard replacement for
+
+    This function is a non-standard replacement for
     rtl_digest_getMD5() and must be used with caution.
 
-    @postcond Digest initialized to accept another update sequence.
+    @post Digest initialized to accept another update sequence.
     @see      rtl_digest_get()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_rawMD5 (
@@ -282,7 +284,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_rawMD5 (
 
 
 /** Evaluate a MD5 digest value from given data.
-    @descr This function performs an optimized call sequence on a
+
+    This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
 
     @see rtl_digest_updateMD5()
@@ -308,8 +311,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
 #define RTL_DIGEST_LENGTH_SHA 20
 
 /** Create a SHA digest handle.
-    @descr The SHA digest algorithm is specified in
 
+    The SHA digest algorithm is specified in
     FIPS PUB 180 (Superseded by FIPS PUB 180-1)
       Secure Hash Standard
 
@@ -345,7 +348,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA (
 
 
 /** Evaluate a SHA digest value from given data.
-    @descr This function performs an optimized call sequence on a
+
+    This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
 
     @see rtl_digest_updateSHA()
@@ -371,8 +375,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
 #define RTL_DIGEST_LENGTH_SHA1 20
 
 /** Create a SHA1 digest handle.
-    @descr The SHA1 digest algorithm is specified in
 
+    The SHA1 digest algorithm is specified in
     FIPS PUB 180-1 (Supersedes FIPS PUB 180)
       Secure Hash Standard
 
@@ -408,7 +412,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 
 
 /** Evaluate a SHA1 digest value from given data.
-    @descr This function performs an optimized call sequence on a
+
+    This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
 
     @see rtl_digest_updateSHA1()
@@ -434,7 +439,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1 (
 #define RTL_DIGEST_LENGTH_HMAC_MD5 RTL_DIGEST_LENGTH_MD5
 
 /** Create a HMAC_MD5 digest handle.
-    @descr The HMAC_MD5 digest algorithm is specified in
+
+    The HMAC_MD5 digest algorithm is specified in
 
     RFC 2104 (Informational)
       HMAC: Keyed-Hashing for Message Authentication
@@ -486,7 +492,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
 
 
 /** Evaluate a HMAC_MD5 digest value from given data.
-    @descr This function performs an optimized call sequence on a
+
+    This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
 
     @see rtl_digest_initHMAC_MD5()
@@ -516,8 +523,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
 #define RTL_DIGEST_LENGTH_HMAC_SHA1 RTL_DIGEST_LENGTH_SHA1
 
 /** Create a HMAC_SHA1 digest handle.
-    @descr The HMAC_SHA1 digest algorithm is specified in
 
+    The HMAC_SHA1 digest algorithm is specified in
     RFC 2104 (Informational)
       HMAC: Keyed-Hashing for Message Authentication
     RFC 2898 (Informational)
@@ -570,7 +577,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
 
 
 /** Evaluate a HMAC_SHA1 digest value from given data.
-    @descr This function performs an optimized call sequence on a
+
+    This function performs an optimized call sequence on a
     single data buffer, avoiding digest creation and destruction.
 
     @see rtl_digest_initHMAC_SHA1()
@@ -598,8 +606,8 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
  *
  *======================================================================*/
 /** Password-Based Key Derivation Function.
-    @descr The PBKDF2 key derivation function is specified in
 
+    The PBKDF2 key derivation function is specified in
     RFC 2898 (Informational)
       PKCS #5: Password-Based Cryptography Specification Version 2.0
 
