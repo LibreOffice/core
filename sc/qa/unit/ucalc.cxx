@@ -67,6 +67,7 @@
 #include "calcconfig.hxx"
 #include "interpre.hxx"
 #include "columniterator.hxx"
+#include "types.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -1203,6 +1204,8 @@ void Test::testFormulaHashAndTag()
 
     ScAddress aPos1(0,0,0), aPos2(1,0,0);
 
+    // Test formula hashing.
+
     struct {
         const char* pFormula1; const char* pFormula2; bool bEqual;
     } aHashTests[] = {
@@ -1243,6 +1246,37 @@ void Test::testFormulaHashAndTag()
 
         aPos1.IncRow();
         aPos2.IncRow();
+    }
+
+    // Go back to row 1.
+    aPos1.SetRow(0);
+    aPos2.SetRow(0);
+
+    // Test formula vectorization state.
+
+    struct {
+        const char* pFormula; ScFormulaVectorState eState;
+    } aVectorTests[] = {
+        { "=SUM(1;2;3;4;5)", FormulaVectorEnabled },
+        { "=NOW()", FormulaVectorDisabled },
+        { "=AVERAGE(X1:Y200)", FormulaVectorCheckReference },
+        { "=MAX(X1:Y200;10;20)", FormulaVectorCheckReference },
+        { "=MIN(10;11;22)", FormulaVectorEnabled },
+        { "=H4", FormulaVectorCheckReference },
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aVectorTests); ++i)
+    {
+        m_pDoc->SetString(aPos1, OUString::createFromAscii(aVectorTests[i].pFormula));
+        ScFormulaVectorState eState = m_pDoc->GetFormulaVectorState(aPos1);
+
+        if (eState != aVectorTests[i].eState)
+        {
+            std::ostringstream os;
+            os << "Unexpected vectorization state: expr:" << aVectorTests[i].pFormula;
+            CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
+        }
+        aPos1.IncRow();
     }
 
     m_pDoc->DeleteTab(0);
