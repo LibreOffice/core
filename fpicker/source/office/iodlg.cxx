@@ -1202,7 +1202,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             }
             else
             {
-                String aCurPath;
+                OUString aCurPath;
                 if ( ::utl::LocalFileHelper::ConvertURLToSystemPath( aFileName, aCurPath ) )
                 {
                     // if content does not exist: at least its path must exist
@@ -1545,13 +1545,13 @@ void SvtFileDialog::UpdateControls( const String& rURL )
 
     //=========================================================================
     {
-        String sText;
+        OUString sText;
         DBG_ASSERT( INET_PROT_NOT_VALID != aObj.GetProtocol(), "SvtFileDialog::UpdateControls: Invalid URL!" );
 
         if ( aObj.getSegmentCount() )
         {
             ::utl::LocalFileHelper::ConvertURLToSystemPath( rURL, sText );
-            if ( sText.Len() )
+            if ( !sText.isEmpty() )
             {
                 // no Fsys path for server file system ( only UCB has mountpoints! )
                 if ( INET_PROT_FILE != aObj.GetProtocol() )
@@ -1559,7 +1559,7 @@ void SvtFileDialog::UpdateControls( const String& rURL )
                         INetURLObject::GetScheme( aObj.GetProtocol() ).getLength() ) );
             }
 
-            if ( !sText.Len() && aObj.getSegmentCount() )
+            if ( sText.isEmpty() && aObj.getSegmentCount() )
                 sText = rURL;
         }
 
@@ -1577,7 +1577,7 @@ void SvtFileDialog::UpdateControls( const String& rURL )
                 sText = sURL;
         }
 
-        if ( !sText.Len() && rURL.Len() )
+        if ( sText.isEmpty() && rURL.Len() )
             // happens, for instance, for URLs which the INetURLObject does not know to belong to a hierarchical scheme
             sText = rURL;
         _pImp->_pEdCurrentPath->SetText( sText );
@@ -1973,13 +1973,13 @@ void SvtFileDialog::displayIOException( const String& _rURL, IOErrorCode _eCode 
     try
     {
         // create make a human-readable string from the URL
-        String sDisplayPath( _rURL );
+        OUString sDisplayPath( _rURL );
         ::utl::LocalFileHelper::ConvertURLToSystemPath( _rURL, sDisplayPath );
 
         // build an own exception which tells "access denied"
         InteractiveAugmentedIOException aException;
         aException.Arguments.realloc( 2 );
-        aException.Arguments[ 0 ] <<= OUString( sDisplayPath );
+        aException.Arguments[ 0 ] <<= sDisplayPath;
         aException.Arguments[ 1 ] <<= PropertyValue(
             OUString( "Uri" ),
             -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
