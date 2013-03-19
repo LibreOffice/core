@@ -162,8 +162,7 @@ DirectoryTraveller::DirectoryTraveller (
       m_nLevel   (nLevel),
       m_nCount   (0)
 {
-    m_aPath += rName;
-    m_aPath += OUString("/");
+    m_aPath += rName + "/";
 }
 
 /*
@@ -359,7 +358,7 @@ int SAL_CALL main (int argc, char **argv)
         {
             OUString aName ("demostor-");
             aName += OUString::valueOf ((sal_Int32)(i + 1), 10);
-            aName += OUString(".dat");
+            aName += ".dat";
 
 #if (_DEMOSTOR_REMOVE == 1)
             eErrCode = aFile.remove (aPath, aName);

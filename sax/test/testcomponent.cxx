@@ -91,7 +91,7 @@ int main (int argc, char **argv)
 #else
             OUString aDllName = OUString( "lib");
             aDllName += OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
-            aDllName += OUString( ".so");
+            aDllName += ".so";
 #endif
             xReg->registerImplementation(
                 OUString("com.sun.star.loader.SharedLibrary"),
@@ -119,7 +119,7 @@ int main (int argc, char **argv)
 #else
         OUString aDllName = OUString( "lib");
         aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
-        aDllName += OUString( ".so");
+        aDllName += ".so";
 #endif
 
         xReg->registerImplementation(

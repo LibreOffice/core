@@ -956,9 +956,9 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
             for (sal_Int32 j = 1; j <= 3; j++) {
                 aProperties[1].Value <<= j;
                 result += makeNumberingString( aProperties, aLocale );
-                result += OUString(", ");
+                result += ", ";
             }
-            result += OUString("...");
+            result += "...";
             return result;
         }
 }

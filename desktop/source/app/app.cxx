@@ -2274,11 +2274,11 @@ void Desktop::OpenClients()
         if ( lastIndex > 0 )
         {
             aIniName    = aIniName.copy( 0, lastIndex+1 );
-            aIniName    += OUString( "perftune" );
+            aIniName    += "perftune";
 #if defined(WNT)
-            aIniName    += OUString( ".ini" );
+            aIniName    += ".ini";
 #else
-            aIniName    += OUString( "rc" );
+            aIniName    += "rc";
 #endif
         }
 

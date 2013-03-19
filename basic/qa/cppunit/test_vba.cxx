@@ -122,7 +122,7 @@ void VBATest::testMiscOLEStuff()
     uno::Sequence< uno::Any > aArgs(1);
     // path to test document
     OUString sPath = getPathFromSrc("/basic/qa/vba_tests/data/");
-    sPath += OUString( "ADODBdata.xls" );
+    sPath += "ADODBdata.xls";
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] = uno::makeAny( sPath );

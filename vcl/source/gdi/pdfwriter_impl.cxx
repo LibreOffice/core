@@ -12091,7 +12091,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
         m_nSignatureObject = createObject();
         rNewWidget.m_aValue = OUString::valueOf( m_nSignatureObject );
-        rNewWidget.m_aValue += OUString(" 0 R");
+        rNewWidget.m_aValue += " 0 R";
         //createDefaultSignatureAppearance( rNewWidget, rSig );
         // let's add a fake appearance
         rNewWidget.m_aAppearances[ "N" ][ "Standard" ] = new SvMemoryStream();

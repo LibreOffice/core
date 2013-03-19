@@ -39,7 +39,7 @@ OString getTempFileName(const OUString& fileName)
   OUString ousTmpUrl;
   FileBase::getTempDirURL(ousTmpUrl);
   if (!ousTmpUrl.endsWithIgnoreAsciiCaseAsciiL("/", 1))
-    ousTmpUrl += OUString("/");
+    ousTmpUrl += "/";
   ousTmpUrl += fileName;
 
   OUString sysTmpPath;

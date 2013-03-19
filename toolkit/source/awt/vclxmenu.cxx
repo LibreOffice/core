@@ -40,16 +40,16 @@
         if ( MENU_ITEM_NOTFOUND == mpMenu->GetItemPos( nItemId ) ) \
             throw  ::com::sun::star::container::NoSuchElementException( \
                 OUString( Func ) \
-                += OUString( ": There is no menu item with " ) \
+                += ": There is no menu item with " \
                 += OUString::valueOf( sal_Int32( nItemId ) ) \
-                += OUString( " as identifier" ), \
+                += " as identifier", \
                 *this \
             );
     #define THROW_MENUPOS_NOT_FOUND( Func, nPos ) \
         if ( MENU_ITEM_NOTFOUND == sal_uInt16( nPos ) ) \
             throw  ::com::sun::star::container::NoSuchElementException( \
                 OUString( Func ) \
-                += OUString( ": There is no menu item at position " ) \
+                += ": There is no menu item at position " \
                 += OUString::valueOf( sal_Int32( nPos ) ), \
                 *this \
             );

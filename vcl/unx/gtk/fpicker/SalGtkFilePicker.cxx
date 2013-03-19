@@ -1855,7 +1855,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             if (!aToken.isEmpty())
             {
                 if (!aTokens.isEmpty())
-                    aTokens += OUString(",");
+                    aTokens += ",";
                 aTokens = aTokens += aToken;
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,

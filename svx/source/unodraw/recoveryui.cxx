@@ -184,7 +184,7 @@ static OUString GetCrashConfigDir()
     Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT)
-    ustrValue += OUString("/user/crashdata");
+    ustrValue += "/user/crashdata";
 #endif
     return ustrValue;
 }
@@ -202,7 +202,7 @@ static OUString GetUnsentURL()
 {
     OUString    aURL = GetCrashConfigDir();
 
-    aURL += OUString(  "/"  );
+    aURL += "/";
     aURL += OUString(  LCKFILE  );
 
     return aURL;

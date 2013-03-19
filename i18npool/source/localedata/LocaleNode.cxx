@@ -704,11 +704,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             {
                 OUString aStr(  "Duplicated default for usage=\"");
                 aStr += aUsage;
-                aStr += OUString(  "\" type=\"");
+                aStr += "\" type=\"";
                 aStr += aType;
-                aStr += OUString(  "\": formatindex=\"");
+                aStr += "\": formatindex=\"";
                 aStr += aFormatIndex;
-                aStr += OUString(  "\".");
+                aStr += "\".";
                 incError( aStr);
             }
         }

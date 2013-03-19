@@ -147,9 +147,9 @@ OUString TempFile::createTempFileURL()
         u %= (nRadix*nRadix*nRadix);
         OUString aTmp( aTempDirURL );
         if( aTmp.getStr()[ aTmp.getLength() - 1 ] != sal_Unicode( '/' ) )
-            aTmp += OUString( "/" );
+            aTmp += "/";
         aTmp += OUString::valueOf( (sal_Int32) (unsigned) u, nRadix );
-        aTmp += OUString( ".tmp" );
+        aTmp += ".tmp";
 
         osl::File aFile( aTmp );
         osl::FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);

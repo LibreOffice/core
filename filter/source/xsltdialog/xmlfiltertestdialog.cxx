@@ -372,7 +372,7 @@ void XMLFilterTestDialog::onExportBrowse()
                                         {
                                             if( n > 0 )
                                                 aExtension += OUString( sal_Unicode(';') );
-                                            aExtension += OUString( "*." );
+                                            aExtension += "*.";
                                             aExtension += (*pExtensions++);
                                         }
                                     }

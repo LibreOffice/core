@@ -164,7 +164,7 @@ void oldtests::test_OUStringBuffer()
     TEST_ENSURE( s1 == b2.getStr(), "test_OWStringBuffer error 4");
 
     sal_Int32 n = 123456789L;
-    s1 += OUString(" 123456789");
+    s1 += " 123456789";
     b2.append(OUString(" "));
     b2.append(n);
     TEST_ENSURE( s1 == b2.getStr(), "test_OWStringBuffer error 5");
@@ -174,7 +174,7 @@ void oldtests::test_OUStringBuffer()
 #else
     sal_Int64 m = -3223372036854775807;
 #endif
-    s1 += OUString(" -3223372036854775807");
+    s1 += " -3223372036854775807";
     b2.append(OUString(" "));
     b2.append(m);
     TEST_ENSURE( s1 == b2.getStr(), "test_OWStringBuffer error 6");

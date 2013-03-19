@@ -112,7 +112,7 @@ inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
 {
 
      rtl::OUString aDirURL(getExecutableDirectory());
-     aDirURL += OUString("/");
+     aDirURL += "/";
      aDirURL += OUString::createFromAscii( _sFilename.getStr() );
 #if defined(WNT)
     aDirURL += rtl::OUString(".ini");
@@ -577,8 +577,7 @@ namespace rtl_Bootstrap
                   rtl::OUString suMacro("${");         //rtlrc:Bootstrap:RTLVALUE}");
 
      rtl::OUString aDirURL("$ORIGIN");
-     aDirURL += OUString("/");
-     aDirURL += OUString("rtl");
+     aDirURL += "/rtl";
 #if defined(WNT)
     aDirURL += rtl::OUString(".ini");
 #else
@@ -748,7 +747,7 @@ namespace rtl_Bootstrap
         rtl::OUString suName("INHERITED_VALUE");
                 OUString suGetValue;
                 Bootstrap::get( suName, suGetValue );
-                suGetValue += OUString("/well");
+                suGetValue += "/well";
                 CPPUNIT_ASSERT_MESSAGE("expandMacros failed.", suGetValue.compareTo(suMacro) == 0 );
             }
 

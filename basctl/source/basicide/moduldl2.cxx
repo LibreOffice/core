@@ -940,7 +940,7 @@ void LibPage::InsertLib()
                                     {
                                         OUString aErrStr( IDE_RESSTR(RID_STR_REPLACELIB) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                        aErrStr += OUString( "\n" );
+                                        aErrStr += "\n";
                                         aErrStr += IDE_RESSTR(RID_STR_LIBISREADONLY);
                                         ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
                                         continue;

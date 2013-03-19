@@ -37,7 +37,7 @@ SAL_IMPLEMENT_MAIN()
 
     osl_getExecutableFile( &sExecutableFile.pData );
 
-    sExecutableFile += OUString(".bin");
+    sExecutableFile += ".bin";
 
     nCommandArgs = osl_getCommandArgCount();
     pCommandArgs = new rtl_uString *[nCommandArgs];

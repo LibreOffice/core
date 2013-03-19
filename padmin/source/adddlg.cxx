@@ -1009,7 +1009,7 @@ void AddPrinterDialog::addPrinter()
             {
                 aInfo.m_aFeatures = OUString("fax=");
                 if( m_pFaxNamePage->isFaxSwallow() )
-                    aInfo.m_aFeatures += OUString("swallow");
+                    aInfo.m_aFeatures += "swallow";
             }
             else if( m_pChooseDevicePage->isPDF() )
             {

@@ -67,9 +67,9 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
         aLibName += aDLLSuffix;
     }
 #ifdef MACOSX
-    aLibName += OUString( ".dylib" );
+    aLibName += ".dylib";
 #else
-    aLibName += OUString( ".so" );
+    aLibName += ".so";
 #endif
 #endif
 

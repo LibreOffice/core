@@ -829,7 +829,7 @@ ERRTYPE RscCompiler::Link()
                 OUString sIlstUrl;
                 sIlstUrl = sRcUrl.copy(sRcUrl.lastIndexOf('/')+1);
                 sIlstUrl = sIlstUrl.copy(0,sIlstUrl.lastIndexOf('.'));
-                sIlstUrl += OUString(".ilst");
+                sIlstUrl += ".ilst";
                 sIlstUrl = lcl_getAbsoluteUrl(sOilDirUrl, OUStringToOString(sIlstUrl, RTL_TEXTENCODING_UTF8));
 
                 aSysList = lcl_getSystemPath(sIlstUrl);

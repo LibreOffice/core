@@ -308,9 +308,9 @@ sal_Int32 compileFile(const OString * pathname)
     cpp = cpp.copy(0, idx);
 
 #if defined(SAL_W32)
-    cpp += OUString("ucpp.exe");
+    cpp += "ucpp.exe";
 #else
-    cpp += OUString("ucpp");
+    cpp += "ucpp";
 #endif
 #else // SYSTEM_UCPP
     cpp = OUString( RTL_CONSTASCII_USTRINGPARAM(UCPP));

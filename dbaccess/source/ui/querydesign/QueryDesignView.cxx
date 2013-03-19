@@ -374,9 +374,9 @@ namespace
                 OUString aQuote = xMetaData->getIdentifierQuoteString();
                 if ( _bForce || isAppendTableAliasEnabled( _xConnection ) || pEntryTab->GetAliasName() != aDBName )
                 {
-                    aTableListStr += OUString(" ");
+                    aTableListStr += " ";
                     if ( generateAsBeforeTableAlias( _xConnection ) )
-                        aTableListStr += OUString("AS ");
+                        aTableListStr += "AS ";
                     aTableListStr += ::dbtools::quoteName( aQuote, pEntryTab->GetAliasName() );
                 }
                 aDBName = aTableListStr;
@@ -864,9 +864,7 @@ namespace
                             }
                             else
                             {
-                                aWhereStr += aWork;
-                                aWhereStr += OUString("=");
-                                aWhereStr += aCriteria;
+                                aWhereStr += aWork + "=" + aCriteria;
                             }
                         }
                     }
@@ -1107,17 +1105,17 @@ namespace
                                     {
                                         // create outer join
                                         if ( bUseEscape )
-                                            aStr += OUString("{ OJ ");
+                                            aStr += "{ OJ ";
                                         aStr += aJoin;
                                         if ( bUseEscape )
-                                            aStr += OUString(" }");
+                                            aStr += " }";
                                     }
                                     break;
                                 default:
                                     aStr += aJoin;
                                     break;
                             }
-                            aStr += OUString(",");
+                            aStr += ",";
                             aTableListStr += aStr;
                         }
                     }
@@ -3108,8 +3106,8 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         {
             // first try the international version
             OUString sSql;
-            sSql += OUString("SELECT * ");
-            sSql += OUString(" FROM x WHERE ");
+            sSql += "SELECT * ";
+            sSql += " FROM x WHERE ";
             sSql += pEntry->GetField();
             sSql += _sCriteria;
             SAL_WNODEPRECATED_DECLARATIONS_PUSH

@@ -344,8 +344,7 @@ rtl::OUString ElementConfig::format( SvStream& rStream, sal_Size& nLength ) cons
     OUString aRet;
     if( maName.getLength() )
     {
-        aRet += maName;
-        aRet += OUString( " = "  );
+        aRet += maName + " = ";
     }
 
     switch( mnType )
@@ -387,10 +386,10 @@ rtl::OUString ElementConfig::dump_hex( SvStream& rStream, sal_Size& nLength )
         if( (nRow == 16) || (nLength==0) )
         {
             while( aHex.getLength() < (16*3) )
-                aHex += OUString( " " );
+                aHex += " ";
             aOut += aHex;
             aOut += aAscii;
-            aOut += OUString( "\n\r"  );
+            aOut += "\n\r";
             aHex = aEmpty;
             aAscii = aEmpty;
             nRow = 0;
@@ -476,7 +475,7 @@ rtl::OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLeng
         {
             aRet += (*aIter++)->format( rStream, nLength );
             if( (aIter != aEnd) || (nLength != 0) )
-                aRet += OUString( "\n\r"  );
+                aRet += "\n\r";
         }
 
         if( nLength )
@@ -486,7 +485,7 @@ rtl::OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLeng
     {
         aRet = getName();
         if( aRet.getLength() )
-            aRet += OUString( " = "  );
+            aRet += " = ";
 
         OUString aValue;
         switch( getType() )

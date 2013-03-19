@@ -2769,7 +2769,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     else
                     {
-                        sServiceName += OUString( "TextField.");
+                        sServiceName += "TextField.";
                         sServiceName += OUString::createFromAscii(aIt->second.cFieldServiceName );
                     }
 

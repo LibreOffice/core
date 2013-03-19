@@ -1345,9 +1345,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
         OUString aRet = RESIDSTR(STR_UNKNOWN_APPLICATION);
         if( !rServiceName.isEmpty() )
         {
-            aRet += OUString( " (" );
-            aRet += rServiceName;
-            aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
+            aRet += " (" + rServiceName + ")";
         }
         return aRet;
     }

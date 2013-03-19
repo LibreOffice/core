@@ -102,7 +102,7 @@ int main (int argc, char **argv)
 #else
         OUString aDllName("lib");
         aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
-        aDllName += OUString(".so");
+        aDllName += ".so";
 #endif
 
         xReg->registerImplementation(

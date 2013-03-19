@@ -1170,7 +1170,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
                 rNode.GetLang( nPos ) ) );
     OUString sLang( aLocale.Language );
     if ( !aLocale.Country.isEmpty() )
-        sLang += OUString( "-" ) + OUString( aLocale.Country );
+        sLang += "-" + aLocale.Country;
     m_pSerializer->singleElementNS( XML_w, XML_lid,
             FSNS( XML_w, XML_val ),
             OUStringToOString( sLang, RTL_TEXTENCODING_UTF8 ).getStr( ), FSEND );

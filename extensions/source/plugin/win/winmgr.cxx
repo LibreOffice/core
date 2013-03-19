@@ -409,7 +409,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                             {
                             case ',':
                             case ';':
-                                aExtensions += OUString(";*.");
+                                aExtensions += ";*.";
                             case ' ':
                                 break;
                             case '*':

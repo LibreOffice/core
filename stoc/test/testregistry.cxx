@@ -111,7 +111,7 @@ Registry *myRegistry = new Registry();
 RegistryKey rootKey, rKey, rKey2;
 
 OUString userReg = getExePath();
-userReg += OUString("user.rdb");
+userReg += "user.rdb";
 if(myRegistry->open(userReg, REG_READWRITE))
 {
 OSL_VERIFY(!myRegistry->create(userReg));
@@ -131,7 +131,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
     RegistryKey rootKey;
 
     OUString appReg = getExePath();
-    appReg += OUString("stoctest.rdb");
+    appReg += "stoctest.rdb";
 
     OSL_VERIFY(!myRegistry->open(appReg, REG_READWRITE));
     OSL_VERIFY(!myRegistry->openRootKey(rootKey));
@@ -440,8 +440,8 @@ void test_DefaultRegistry(
     OUString userRdb(exePath);
     OUString applicatRdb(exePath);
 
-    userRdb += OUString("user.rdb");
-    applicatRdb += OUString("stoctest.rdb");
+    userRdb += "user.rdb";
+    applicatRdb += "stoctest.rdb";
 
     Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False, OUString());
                                                                                       //OUString("//./e:/src596/stoc/wntmsci3/bin") );

@@ -1945,7 +1945,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT)
-            ustrValue += OUString("/user/crashdata");
+            ustrValue += "/user/crashdata";
 #endif
             return ustrValue;
         }

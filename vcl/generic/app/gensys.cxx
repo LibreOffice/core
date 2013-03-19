@@ -191,7 +191,7 @@ const char* SalGenericSystem::getFrameClassName()
     {
         OUString aIni, aProduct;
         rtl::Bootstrap::get( "BRAND_BASE_DIR", aIni );
-        aIni += OUString("/program/") + SAL_CONFIGFILE( "bootstrap" );
+        aIni += "/program/") + SAL_CONFIGFILE( "bootstrap";
         rtl::Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( "ProductKey", aProduct );
 

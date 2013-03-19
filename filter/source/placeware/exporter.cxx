@@ -346,7 +346,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 
             OUString aName("i");
             aName += OUString::valueOf( nPage );
-            aName += OUString(".gif");
+            aName += ".gif";
             pEntry->setURL( aName );
 
             if(xStatusIndicator.is())

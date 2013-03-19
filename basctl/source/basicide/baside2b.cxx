@@ -1366,7 +1366,7 @@ void WatchWindow::AddWatch( const String& rVName )
     WatchItem* pWatchItem = new WatchItem(aVar);
 
     OUString aWatchStr_( aVar );
-    aWatchStr_ += OUString( "\t\t" );
+    aWatchStr_ += "\t\t";
     SvTreeListEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, LIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
@@ -2121,7 +2121,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     }
                     else
                     {
-                        aWatchStr += OUString( "<?>" );
+                        aWatchStr += "<?>";
                     }
                 }
                 else if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
@@ -2199,7 +2199,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             }
             else if( !bArrayElement )
             {
-                aWatchStr += OUString( "<Out of Scope>" );
+                aWatchStr += "<Out of Scope>";
             }
 
             if( bCollapse )

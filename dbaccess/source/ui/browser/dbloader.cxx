@@ -163,10 +163,10 @@ extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey)
     aImpl += DBContentLoader::getImplementationName_Static();
 
     OUString aImpltwo = aImpl;
-    aImpltwo += OUString("/UNO/Loader");
+    aImpltwo += "/UNO/Loader";
     Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
     aImpltwo = aImpl;
-    aImpltwo += OUString("/Loader");
+    aImpltwo += "/Loader";
     Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
     xNewKey = xLoaderKey->createKey( OUString("Pattern") );
     xNewKey->setAsciiValue( OUString(".component:DB*") );

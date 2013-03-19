@@ -192,7 +192,7 @@ int _cdecl main( int argc, char * argv[] )
                     keyName2 = OUString("/");
                     keyName2 += sName1;
                     keyName2 += OUString().valueOf(i);
-                    keyName2 += OUString("/");
+                    keyName2 += "/";
                     keyName2 += sName2;
                     keyName2 += OUString().valueOf(j);
                     if (reg_openKey(hRootKey, keyName2.pData, &hSubKey))
@@ -204,10 +204,10 @@ int _cdecl main( int argc, char * argv[] )
                             keyName3 = OUString("/");
                             keyName3 += sName1;
                             keyName3 += OUString().valueOf(i);
-                            keyName3 += OUString("/");
+                            keyName3 += "/";
                             keyName3 += sName2;
                             keyName3 += OUString().valueOf(j);
-                            keyName3 += OUString("/");
+                            keyName3 += "/";
                             keyName3 += sName3;
                             keyName3 += OUString().valueOf(n);
                             if (reg_openKey(hRootKey, keyName3.pData, &hSubSubKey))
