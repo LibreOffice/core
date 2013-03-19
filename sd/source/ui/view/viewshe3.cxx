@@ -80,12 +80,9 @@ using namespace ::rtl;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Status (Enabled/Disabled) von Menue-SfxSlots setzen
-|*
-\************************************************************************/
-
+/**
+ * set state (enabled/disabled) of Menu SfxSlots
+ */
 void  ViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STYLE_FAMILY ) )
@@ -226,7 +223,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (! pArgs)
     {
-        // AutoLayouts muessen fertig sein
+        // AutoLayouts must be ready
         pDocument->StopWorkStartupDelay();
 
         // Use the layouts of the previous page and notes page as template.
@@ -259,7 +256,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     }
     else if (pArgs->Count() == 4)
     {
-        // AutoLayouts muessen fertig sein
+        // AutoLayouts must be ready
         pDocument->StopWorkStartupDelay();
 
         SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, sal_False);

@@ -71,11 +71,6 @@ namespace sd {
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 
-/*************************************************************************
-|*
-|* aktuelle Seite loeschen
-|*
-\************************************************************************/
 
 void DrawViewShell::DeleteActualPage()
 {
@@ -96,11 +91,6 @@ void DrawViewShell::DeleteActualPage()
     }
 }
 
-/*************************************************************************
-|*
-|* aktuelle Ebene loeschen
-|*
-\************************************************************************/
 
 void DrawViewShell::DeleteActualLayer()
 {
@@ -108,7 +98,7 @@ void DrawViewShell::DeleteActualLayer()
     const String&  rName  = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
     String         aString(SdResId(STR_ASK_DELETE_LAYER));
 
-    // Platzhalter ersetzen
+    // replace placeholder
     sal_uInt16 nPos = aString.Search(sal_Unicode('$'));
     aString.Erase(nPos, 1);
     aString.Insert(rName, nPos);
@@ -118,22 +108,16 @@ void DrawViewShell::DeleteActualLayer()
         const SdrLayer* pLayer = rAdmin.GetLayer(rName, sal_False);
         mpDrawView->DeleteLayer( pLayer->GetName() );
 
-        // damit TabBar und Window neu gezeichnet werden;
-        // sollte spaeter wie beim Aendern der Layerfolge durch einen
-        // Hint von Joe angestossen werden
+        /* in order to redraw TabBar and Window; should be initiated later on by
+           a hint from Joe (as by a change if the layer order). */
         // ( View::Notify() --> ViewShell::ResetActualLayer() )
 
-        mbIsLayerModeActive = false;    // damit ChangeEditMode() ueberhaupt was tut
+        mbIsLayerModeActive = false;    // so that ChangeEditMode() does something
         ChangeEditMode(GetEditMode(), true);
     }
 }
 
 
-/*************************************************************************
-|*
-|* Keyboard event
-|*
-\************************************************************************/
 
 sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
@@ -213,12 +197,9 @@ sal_Bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Vom Lineal ausgehenden Drag (Hilflinien, Ursprung) beginnen
-|*
-\************************************************************************/
-
+/**
+ * Start with Drag from ruler (helper lines, origin)
+ */
 void DrawViewShell::StartRulerDrag (
     const Ruler& rRuler,
     const MouseEvent& rMEvt)
@@ -252,11 +233,6 @@ void DrawViewShell::StartRulerDrag (
     }
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown event
-|*
-\************************************************************************/
 
 void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     ::sd::Window* pWin)
@@ -282,11 +258,6 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     }
 }
 
-/*************************************************************************
-|*
-|* MouseMove event
-|*
-\************************************************************************/
 
 
 void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
@@ -397,11 +368,6 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 }
 
 
-/*************************************************************************
-|*
-|* MouseButtonUp event
-|*
-\************************************************************************/
 
 void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
@@ -441,11 +407,6 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 }
 
-/*************************************************************************
-|*
-|* Command event
-|*
-\************************************************************************/
 
 void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
@@ -501,38 +462,38 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         else if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !bNativeShow &&
                  pWin != NULL && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
-            sal_uInt16 nSdResId = 0;          // ResourceID fuer Popup-Menue
+            sal_uInt16 nSdResId = 0;          // ResourceID for popup menu
             sal_Bool bGraphicShell = this->ISA(GraphicViewShell);
 
-            // Ist ein Fangobjekt unter dem Mauszeiger?
+            // is there a snap object under the cursor?
             SdrPageView* pPV;
             Point   aMPos = pWin->PixelToLogic( maMousePos );
             sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic(
                 Size(FuPoor::HITPIX, 0 ) ).Width();
             sal_uInt16  nHelpLine;
-            // fuer Klebepunkt
+            // for glue points
             SdrObject*  pObj = NULL;
             sal_uInt16      nPickId = 0;
-            // fuer Feldbefehl
+            // for field command
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
             const SvxFieldItem* pFldItem = NULL;
             if( pOLV )
                 pFldItem = pOLV->GetFieldAtSelection();
 
-            // Hilfslinie
+            // helper line
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
                 nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
                 ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
                 return;
             }
-            // Klebepunkt unter dem Mauszeiger markiert?
+            // is glue point under cursor marked?
             else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
                      mpDrawView->IsGluePointMarked( pObj, nPickId ) )
             {
                 nSdResId = RID_DRAW_GLUEPOINT_POPUP;
             }
-            // Feldbefehl ?
+            // field command?
             else if( pFldItem && (pFldItem->GetField()->ISA( SvxDateField ) ||
                                  pFldItem->GetField()->ISA( SvxExtTimeField ) ||
                                  pFldItem->GetField()->ISA( SvxExtFileField ) ||
@@ -559,7 +520,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
-                    // Feld selektieren, so dass es beim Insert geloescht wird
+                    // select field, so that it will be deleted on insert
                     ESelection aSel = pOLV->GetSelection();
                     sal_Bool bSel = sal_True;
                     if( aSel.nStartPos == aSel.nEndPos )
@@ -571,7 +532,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                     pOLV->InsertField( aFieldItem );
 
-                    // Selektion wird wieder in den Ursprungszustand gebracht
+                    // reset selection back to original state
                     if( !bSel )
                         aSel.nEndPos--;
                     pOLV->SetSelection( aSel );
@@ -581,7 +542,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             }
             else
             {
-                // ist etwas selektiert?
+                // is something selected?
                 if (mpDrawView->AreObjectsMarked() &&
                     mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
                 {
@@ -740,7 +701,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     }
                 }
 
-                // Mehrfachselektion
+                // multiple selection
                 else if (mpDrawView->AreObjectsMarked() &&
                     mpDrawView->GetMarkedObjectList().GetMarkCount() > 1 )
                 {
@@ -748,7 +709,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                                 RID_DRAW_MULTISELECTION_POPUP;
                 }
 
-                // nichts selektiert
+                // nothing selected
                 else
                 {
                     nSdResId = bGraphicShell ? RID_GRAPHIC_NOSEL_POPUP :
@@ -801,11 +762,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     }
 }
 
-/*************************************************************************
-|*
-|* Linealmarkierungen anzeigen
-|*
-\************************************************************************/
 
 void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
     ::sd::Window* pWin)
@@ -857,7 +813,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
             mpVerticalRuler->SetLines(nCnt, pVLines);
     }
 
-    // StatusBar Koordinatenanzeige
+    // display with coordinates in StatusBar
     OSL_ASSERT (GetViewShell()!=NULL);
     if ( !GetViewShell()->GetUIActiveClient() )
     {
@@ -866,7 +822,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
                                    SID_ATTR_SIZE, SID_ATTR_SIZE,
                                    0L);
 
-//        GetStatusBarState(aSet);  nicht performant bei gedrueckter Modifiertaste!!
+//        GetStatusBarState(aSet); not fast by pressed modify key!!
 
         aSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
 

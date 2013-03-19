@@ -64,12 +64,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SfxRequests fuer temporaere Funktionen
-|*
-\************************************************************************/
-
+/**
+ * SfxRequests for temporary functions
+ */
 void DrawViewShell::FuTemp02(SfxRequest& rReq)
 {
     sal_uInt16 nSId = rReq.GetSlot();
@@ -111,7 +108,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
 
-                    // Ueberpruefung auf schon vorhandene Namen
+                    // test for already existing names
                     sal_Bool bLoop = sal_True;
                     while( bLoop && pDlg->Execute() == RET_OK )
                     {
@@ -121,7 +118,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                         if( rLayerAdmin.GetLayer( aLayerName, sal_False )
                             || aLayerName.Len()==0 )
                         {
-                            // Name ist schon vorhanden
+                            // name already exists
                             WarningBox aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
@@ -131,7 +128,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                         else
                             bLoop = sal_False;
                     }
-                    if( bLoop ) // wurde abgebrochen
+                    if( bLoop ) // was canceled
                     {
                         delete pDlg;
 
@@ -242,7 +239,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
 
             const SfxItemSet* pArgs = rReq.GetArgs();
-            // darf der Layer geloescht werden ?
+            // is it allowed to delete the layer?
             bool bDelete = true;
 
             String aLayoutLayer ( SdResId(STR_LAYER_LAYOUT) );
@@ -276,7 +273,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
 
-                    // Ueberpruefung auf schon vorhandene Namen
+                    // test for already existing names
                     sal_Bool    bLoop = sal_True;
                     sal_uInt16  nRet = 0;
                     while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
@@ -287,7 +284,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                         if( (rLayerAdmin.GetLayer( aLayerName, sal_False ) &&
                              aLayerName != aOldLayerName) || aLayerName.Len()==0 )
                         {
-                            // Name ist schon vorhanden
+                            // name already exists
                             WarningBox aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
@@ -555,7 +552,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                                     pOldFldItem->GetField()->ISA( SvxAuthorField ) ||
                                     pOldFldItem->GetField()->ISA( SvxPageField ) ) )
                 {
-                    // Feld selektieren, so dass es beim Insert geloescht wird
+                    // select field, then it will be deleted when inserting
                     ESelection aSel = pOLV->GetSelection();
                     if( aSel.nStartPos == aSel.nEndPos )
                         aSel.nEndPos++;
@@ -698,9 +695,9 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
         default:
         {
-            // switch Anweisung wegen CLOOKS aufgeteilt. Alle case-Anweisungen die
-            // eine Fu???? -Funktion aufrufen, sind in die Methode FuTemp03 (drviewsb)
-            // gewandert.
+            /* switch construct was split because of CLOOKS. All cases which
+               call a Fu??? function were moved to the method FuTemp03
+               (drviewsb).   */
             FuTemp03(rReq);
         }
         break;
@@ -838,7 +835,7 @@ void DrawViewShell::ModifyLayer (
 
         if (!bIsVisible)
         {
-            // Unsichtbare Layer werden anders dargestellt
+            // invisible layers are presented differnt
             nBits = TPB_SPECIAL;
         }
 

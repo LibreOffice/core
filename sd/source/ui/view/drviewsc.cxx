@@ -54,15 +54,12 @@
 #include "brkdlg.hrc"
 namespace sd {
 
-#define MIN_ACTIONS_FOR_DIALOG  5000    // bei mehr als 1600 Metaobjekten
-                                        // wird beim Aufbrechen ein Dialog
-                                        // angezeigt.
-/*************************************************************************
-|*
-|* SfxRequests fuer temporaere Funktionen
-|*
-\************************************************************************/
+#define MIN_ACTIONS_FOR_DIALOG  5000    ///< if there are more meta objects, we show a dialog during the break up
 
+
+/**
+ * SfxRequests for temporary functions
+ */
 void DrawViewShell::FuTemp03(SfxRequest& rReq)
 {
     sal_uInt16 nSId = rReq.GetSlot();
@@ -339,7 +336,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                 sal_uLong nAnz=rMarkList.GetMarkCount();
 
-                // Summe der Metaobjekte aller sel. Metafiles erm.
+                // determine the sum of meta objects of all selected meta files
                 sal_uLong nCount = 0;
                 for(sal_uLong nm=0; nm<nAnz; nm++)
                 {
@@ -366,11 +363,10 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     }
                 }
 
-                // anhand der erm. Summe entscheiden ob mit
-                // oder ohne Dialog aufgebrochen wird.
+                // decide with the sum of all meta objects if we should show a dialog
                 if(nCount < MIN_ACTIONS_FOR_DIALOG)
                 {
-                    // ohne Dialog aufbrechen
+                    // nope, no dialog
                     mpDrawView->DoImportMarkedMtf();
                 }
                 else
@@ -634,13 +630,9 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
     };
 };
 
-/*************************************************************************
-|*
-|* Liefert die globale/Haupt-ID zurueck, also die ID, ueber die die
-|* Toolbox ausgeloest wird
-|*
-\************************************************************************/
-
+/**
+ * Returns the global/main ID, i.e. the ID, which is used to execute the toolbox
+ */
 sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
 {
     sal_uInt16 nMappedSId = 0;
@@ -834,13 +826,9 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
     return( nMappedSId );
 }
 
-/*************************************************************************
-|*
-|* Fuellt das SlotArray, um das aktuelle Mapping des ToolboxSlots zu
-|* bekommen
-|*
-\************************************************************************/
-
+/**
+ * Fills the SlotArray in order to get the current mapping of the ToolboxSlots
+ */
 void DrawViewShell::MapSlot( sal_uInt16 nSId )
 {
     sal_uInt16 nMappedSId = GetIdBySubId( nSId );
@@ -852,12 +840,9 @@ void DrawViewShell::MapSlot( sal_uInt16 nSId )
     }
 }
 
-/*************************************************************************
-|*
-|* Ermoeglicht ueber das SlotArray ein ImageMapping
-|*
-\************************************************************************/
-
+/**
+ * Allows a ImageMapping via SlotArray
+ */
 void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
 {
     if( !bPermanent )
@@ -883,11 +868,6 @@ void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
     }
 }
 
-/*************************************************************************
-|*
-|* Gibt den gemappten Slot zurueck
-|*
-\************************************************************************/
 
 sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
 {
@@ -896,22 +876,18 @@ sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
     if( nId != USHRT_MAX )
         nSlot = mpSlotArray[ nId+1 ];
 
-    // Wenn der Slot noch auf sich selbst gemapped ist, muss 0 zurueck-
-    // gegeben werden, da sonst der Slot immer wieder selbst executet
-    // wird. Im Array ist der Slot selbst initial vorhanden, damit das
-    // Image richtig angezeigt wird.
+    /* If the slot is mapped to itself, we have to return 0. Otherwise the slot
+       would be executed over and over again. The slot is initial available in
+       the array in order to show the image correct.  */
     if( nSId == nSlot )
         return( 0 );
 
     return( nSlot );
 }
 
-/*************************************************************************
-|*
-|* Gibt die Nummer des HauptSlots im SlotArray zurueck
-|*
-\************************************************************************/
-
+/**
+ * @returns number of the main slot in the slot array
+ */
 sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
 {
     for( sal_uInt16 i = 0; i < SLOTARRAY_COUNT; i += 2 )
@@ -924,11 +900,6 @@ sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
 }
 
 
-/*************************************************************************
-|*
-|* IMap-Dlg updaten
-|*
-\************************************************************************/
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 {
@@ -954,7 +925,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 
         SvxIMapDlgChildWindow::UpdateIMapDlg( aGraphic, pIMap, pTargetList, pObj );
 
-        // TargetListe kann von uns wieder geloescht werden
+        // We can delete the target list
         if ( pTargetList )
         {
             for ( size_t i = 0, n = pTargetList->size(); i < n; ++i )

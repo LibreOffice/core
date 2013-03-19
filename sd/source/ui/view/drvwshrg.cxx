@@ -57,11 +57,9 @@ using namespace sd;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SFX-Slotmap und Standardinterface deklarieren
-|*
-\************************************************************************/
+/**
+ * Declare SFX-Slotmap and Standardinterface
+ */
 
 
 SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))

@@ -93,11 +93,6 @@ namespace sd {
 
 TYPEINIT1(View, FmFormView);
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 
 View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
                ViewShell* pViewShell)
@@ -133,7 +128,7 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     SetHitTolerancePixel(2);
     SetMeasureLayer(String(SdResId(STR_LAYER_MEASURELINES)));
 
-    // Timer fuer verzoegertes Drop (muss fuer MAC sein)
+    // Timer for delayed drop (has to be for MAC)
     maDropErrorTimer.SetTimeoutHdl( LINK(this, View, DropErrorHdl) );
     maDropErrorTimer.SetTimeout(50);
     maDropInsertFileTimer.SetTimeoutHdl( LINK(this, View, DropInsertFileHdl) );
@@ -149,11 +144,6 @@ void View::ImplClearDrawDropMarker()
     }
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 
 View::~View()
 {
@@ -169,7 +159,7 @@ View::~View()
 
     while(PaintWindowCount())
     {
-        // Alle angemeldeten OutDevs entfernen
+        // remove all registered OutDevs
         DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
     }
 }
@@ -466,15 +456,12 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
     return xRetval;
 }
 
-/*************************************************************************
-|*
-|* Paint-Methode: das Ereignis wird an die View weitergeleitet
-|*
-\************************************************************************/
-
+/**
+ * The event will be forwarded to the View
+ */
 void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
-    // ausfuehren ??
+    // execute ??
     if (mnLockRedrawSmph == 0)
     {
         SdrPageView* pPgView = GetSdrPageView();
@@ -510,7 +497,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
         ViewRedirector aViewRedirector;
         FmFormView::CompleteRedraw(pOutDev, rReg, pRedirector ? pRedirector : &aViewRedirector);
     }
-    // oder speichern?
+    // or save?
     else
     {
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
@@ -521,12 +508,6 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
 }
 
 
-/*************************************************************************
-|*
-|* Selektion hat sich geaendert
-|*
-\************************************************************************/
-
 void View::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
@@ -536,12 +517,6 @@ void View::MarkListHasChanged()
 }
 
 
-/*************************************************************************
-|*
-|* Attribute setzen
-|*
-\************************************************************************/
-
 sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
 {
     sal_Bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
@@ -549,42 +524,30 @@ sal_Bool View::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
 }
 
 
-/*************************************************************************
-|*
-|* Attribute holen
-|*
-\************************************************************************/
-
 sal_Bool View::GetAttributes( SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr ) const
 {
     return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
 }
 
 
-/*************************************************************************
-|*
-|* Ist ein Praesentationsobjekt selektiert?
-|*
-\************************************************************************/
-
+/**
+ * Is a presentation object selected?
+ */
 sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_Bool bCheckPresObjListOnly, sal_Bool bCheckLayoutOnly) const
 {
-    /**************************************************************************
-    * Ist ein Presentationsobjekt selektiert?
-    **************************************************************************/
     SdrMarkList* pMarkList;
 
     if (mnDragSrcPgNum != SDRPAGE_NOTFOUND &&
         mnDragSrcPgNum != GetSdrPageView()->GetPage()->GetPageNum())
     {
-        // Es laeuft gerade Drag&Drop
-        // Source- und Destination-Page unterschiedlich:
-        // es wird die gemerkte MarkList verwendet
+        /* Drag&Drop is in progress
+           Source and destination page are different:
+           we use the saved mark list */
         pMarkList = mpDragSrcMarkList;
     }
     else
     {
-        // Es wird die aktuelle MarkList verwendet
+        // We use the current mark list
         pMarkList = new SdrMarkList(GetMarkedObjectList());
     }
 
@@ -599,7 +562,7 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
 
     for (nMark = nMarkMax; (nMark >= 0) && !bSelected; nMark--)
     {
-        // Rueckwaerts durch die Marklist
+        // Backwards through mark list
         pMark = pMarkList->GetMark(nMark);
         pObj = pMark->GetMarkedSdrObj();
 
@@ -636,11 +599,6 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
     return (bSelected);
 }
 
-/*************************************************************************
-|*
-|* Alles selektieren
-|*
-\************************************************************************/
 
 void View::SelectAll()
 {
@@ -657,37 +615,24 @@ void View::SelectAll()
 }
 
 
-/*************************************************************************
-|*
-|* Dokument hat sich geaendert
-|*
-\************************************************************************/
 
 void View::ModelHasChanged()
 {
-    // Erst SdrView benachrichtigen
+    // First, notify SdrView
     FmFormView::ModelHasChanged();
 }
 
-/*************************************************************************
-|*
-|* StyleSheet setzen
-|*
-\************************************************************************/
 
 sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
 {
-    // weiter an SdrView
+    // forward to SdrView
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
 }
 
 
-/*************************************************************************
-|*
-|* Texteingabe beginnen
-|*
-\************************************************************************/
-
+/**
+ * Start text input
+ */
 static void SetSpellOptions( const SdDrawDocument& rDoc, sal_uLong& rCntrl )
 {
     sal_Bool bOnlineSpell = rDoc.GetOnlineSpell();
@@ -845,12 +790,9 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
     return bRestored;
 }
 
-/*************************************************************************
-|*
-|* Originalgroesse der markierten Objekte setzen
-|*
-\************************************************************************/
-
+/**
+ * Sets the original size of the marked objects.
+ */
 void View::SetMarkedOriginalSize()
 {
     SdrUndoGroup* pUndoGroup = new SdrUndoGroup(mrDoc);
@@ -935,12 +877,9 @@ void View::SetMarkedOriginalSize()
         delete pUndoGroup;
 }
 
-/*************************************************************************
-|*
-|* OLE-Obj am Client connecten
-|*
-\************************************************************************/
-
+/**
+ * Connect OLE object to client.
+ */
 void View::DoConnect(SdrOle2Obj* pObj)
 {
     if (mpViewSh)
@@ -964,11 +903,11 @@ void View::DoConnect(SdrOle2Obj* pObj)
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
                     Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                    aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                    aScaleWidth.ReduceInaccurate(10);       // compatible to SdrOle2Obj
                     aScaleHeight.ReduceInaccurate(10);
                     pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
-                    // sichtbarer Ausschnitt wird nur inplace veraendert!
+                    // visible area is only changed in-place!
                     // the object area must be set after the scaling, since it triggers resize
                     aRect.SetSize(aObjAreaSize);
                     pSdClient->SetObjArea(aRect);
@@ -1101,12 +1040,9 @@ IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner )
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Handler fuer das Loeschen von Seiten (Absaetzen)
-|*
-\************************************************************************/
-
+/**
+ * Handler for the deletion of the pages (paragraphs).
+ */
 IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();

@@ -148,7 +148,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
                         SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( (sal_uInt16) nPara ) );
-                        aAttr.Put( aTmpSet, sal_False ); // sal_False= InvalidItems nicht als Default, sondern als "Loecher" betrachten
+                        aAttr.Put( aTmpSet, sal_False ); // sal_False= InvalidItems is not default, handle it as "holes"
                         const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
                         SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 

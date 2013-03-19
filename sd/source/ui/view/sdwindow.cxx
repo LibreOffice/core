@@ -41,27 +41,22 @@
 
 namespace sd {
 
-#define SCROLL_LINE_FACT   0.05     // Faktor fuer Zeilenscrolling
-#define SCROLL_PAGE_FACT   0.5      // Faktor fuer Seitenscrolling
-#define SCROLL_SENSITIVE   20       // Sensitiver Bereich (Pixel)
-#define ZOOM_MULTIPLICATOR 10000    // Multiplikator um Rundungsfehler zu vermeiden
-#define MIN_ZOOM           5        // Minimaler Zoomfaktor
-#define MAX_ZOOM           3000     // Maximaler Zoomfaktor
+#define SCROLL_LINE_FACT   0.05     ///< factor for line scrolling
+#define SCROLL_PAGE_FACT   0.5      ///< factor for page scrolling
+#define SCROLL_SENSITIVE   20       ///< sensitive area in pixel
+#define ZOOM_MULTIPLICATOR 10000    ///< multiplier to avoid rounding errors
+#define MIN_ZOOM           5        ///< minimal zoom factor
+#define MAX_ZOOM           3000     ///< maximal zoom factor
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 Window::Window(::Window* pParent)
     : ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
       DropTargetHelper( this ),
       mpShareWin(NULL),
-      maWinPos(0, 0),           // vorsichtshalber; die Werte sollten aber
-      maViewOrigin(0, 0),       // vom Besitzer des Fensters neu gesetzt
-      maViewSize(1000, 1000),   // werden
+      maWinPos(0, 0),           // precautionary; but the values should be set
+      maViewOrigin(0, 0),       // again from the owner of the window
+      maViewSize(1000, 1000),
       maPrevSize(-1,-1),
       mnMinZoom(MIN_ZOOM),
       mnMaxZoom(MAX_ZOOM),
@@ -79,7 +74,7 @@ Window::Window(::Window* pParent)
     aMap.SetMapUnit(MAP_100TH_MM);
     SetMapMode(aMap);
 
-    // Damit im Diamodus die ::WindowColor genommen wird
+    // whit it, the ::WindowColor is used in the slide mode
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
 
     // adjust contrast mode initially
@@ -88,7 +83,7 @@ Window::Window(::Window* pParent)
         ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
         : ViewShell::OUTPUT_DRAWMODE_COLOR );
 
-    // Hilfe-ID setzen
+    // set Help ID
     // SetHelpId(HID_SD_WIN_DOCUMENT);
     SetUniqueId(HID_SD_WIN_DOCUMENT);
 
@@ -96,11 +91,6 @@ Window::Window(::Window* pParent)
     EnableRTL(sal_False);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 Window::~Window (void)
 {
@@ -232,11 +222,6 @@ long Window::GetZoom (void) const
 
 
 
-/*************************************************************************
-|*
-|* Resize event
-|*
-\************************************************************************/
 
 void Window::Resize()
 {
@@ -247,11 +232,6 @@ void Window::Resize()
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-/*************************************************************************
-|*
-|* PrePaint event
-|*
-\************************************************************************/
 
 void Window::PrePaint()
 {
@@ -259,11 +239,6 @@ void Window::PrePaint()
         mpViewShell->PrePaint();
 }
 
-/*************************************************************************
-|*
-|* Paint event
-|*
-\************************************************************************/
 
 void Window::Paint(const Rectangle& rRect)
 {
@@ -271,11 +246,6 @@ void Window::Paint(const Rectangle& rRect)
         mpViewShell->Paint(rRect, this);
 }
 
-/*************************************************************************
-|*
-|* Keyboard event
-|*
-\************************************************************************/
 
 void Window::KeyInput(const KeyEvent& rKEvt)
 {
@@ -292,11 +262,6 @@ void Window::KeyInput(const KeyEvent& rKEvt)
     }
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown event
-|*
-\************************************************************************/
 
 void Window::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -304,11 +269,6 @@ void Window::MouseButtonDown(const MouseEvent& rMEvt)
         mpViewShell->MouseButtonDown(rMEvt, this);
 }
 
-/*************************************************************************
-|*
-|* MouseMove event
-|*
-\************************************************************************/
 
 void Window::MouseMove(const MouseEvent& rMEvt)
 {
@@ -316,11 +276,6 @@ void Window::MouseMove(const MouseEvent& rMEvt)
         mpViewShell->MouseMove(rMEvt, this);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp event
-|*
-\************************************************************************/
 
 void Window::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -330,17 +285,13 @@ void Window::MouseButtonUp(const MouseEvent& rMEvt)
         mpViewShell->MouseButtonUp(rMEvt, this);
 }
 
-/*************************************************************************
-|*
-|* Command event
-|*
-\************************************************************************/
 
 void Window::Command(const CommandEvent& rCEvt)
 {
     if ( mpViewShell )
         mpViewShell->Command(rCEvt, this);
 }
+
 
 long Window::Notify( NotifyEvent& rNEvt )
 {
@@ -355,12 +306,6 @@ long Window::Notify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-
-/*************************************************************************
-|*
-|* RequestHelp event
-|*
-\************************************************************************/
 
 void Window::RequestHelp(const HelpEvent& rEvt)
 {
@@ -400,36 +345,26 @@ Size Window::GetViewSize (void) const
 
 
 
-/*************************************************************************
-|*
-|* Position der linken oberen Ecke des im Fenster sichtbaren Bereichs
-|* setzen
-|*
-\************************************************************************/
-
+/**
+ * Set the position of the upper left corner from the visible area of the
+ * window.
+ */
 void Window::SetWinViewPos(const Point& rPnt)
 {
     maWinPos = rPnt;
 }
 
-/*************************************************************************
-|*
-|* Ursprung der Darstellung in Bezug zur gesamten Arbeitsflaeche setzen
-|*
-\************************************************************************/
-
+/**
+ * Set origin of the representation in respect to the whole working area.
+ */
 void Window::SetViewOrigin(const Point& rPnt)
 {
     maViewOrigin = rPnt;
 }
 
-/*************************************************************************
-|*
-|* Groesse der gesamten Arbeitsflaeche, die mit dem Fenster betrachtet
-|* werden kann, setzen
-|*
-\************************************************************************/
-
+/**
+ * Set size of the whole working area which can be seen with the window.
+ */
 void Window::SetViewSize(const Size& rSize)
 {
     maViewSize = rSize;
@@ -651,14 +586,11 @@ void Window::SetMinZoomAutoCalc (bool bAuto)
 
 
 
-/*************************************************************************
-|*
-|* Neuen MapMode-Origin berechnen und setzen; wenn aWinPos.X()/Y()
-|* gleich -1 ist, wird die entsprechende Position zentriert
-|* (z.B. fuer Initialisierung)
-|*
-\************************************************************************/
-
+/**
+ * Calculate and set new MapMode origin.
+ * If aWinPos.X()/Y() == -1, then we center the corresponding position (e.g. for
+ * initialization).
+ */
 void Window::UpdateMapOrigin(sal_Bool bInvalidate)
 {
     sal_Bool       bChanged = sal_False;
@@ -713,15 +645,15 @@ void Window::UpdateMapMode (void)
     maWinPos -= maViewOrigin;
     Size aPix(maWinPos.X(), maWinPos.Y());
     aPix = LogicToPixel(aPix);
-    // Groesse muss vielfaches von BRUSH_SIZE sein, damit Muster
-    // richtig dargestellt werden
+    // Size has to be a multiple of BRUSH_SIZE due to the correct depiction of
+    // pattern
     // #i2237#
     // removed old stuff here which still forced zoom to be
     // %BRUSH_SIZE which is outdated now
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
-        // Seite soll nicht am Fensterrand "kleben"
+        // page should not "stick" to the window border
         if (aPix.Width() == 0)
         {
             // #i2237#
@@ -752,38 +684,28 @@ void Window::UpdateMapMode (void)
 
 
 
-/*************************************************************************
-|*
-|* X-Position des sichtbaren Bereichs als Bruchteil (< 1)
-|* der gesamten Arbeitsbereichbreite zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns X position of the visible area as fraction (< 1) of the whole
+ * working area.
+ */
 double Window::GetVisibleX()
 {
     return ((double) maWinPos.X() / maViewSize.Width());
 }
 
-/*************************************************************************
-|*
-|* Y-Position des sichtbaren Bereichs als Bruchteil (< 1)
-|* der gesamten Arbeitsbereichhoehe zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns Y position of the visible area as fraction (< 1) of the whole
+ * working area.
+ */
 double Window::GetVisibleY()
 {
     return ((double) maWinPos.Y() / maViewSize.Height());
 }
 
-/*************************************************************************
-|*
-|* X- und Y-Position des sichtbaren Bereichs als Bruchteile (< 1)
-|* der gesamten Arbeitsbereichgroesse setzen
-|* negative Werte werden ignoriert
-|*
-\************************************************************************/
-
+/**
+ * Set x and y position of the visible area as fraction (< 1) of the whole
+ * working area. Negative values are ignored.
+ */
 void Window::SetVisibleXY(double fX, double fY)
 {
     long nOldX = maWinPos.X();
@@ -798,13 +720,10 @@ void Window::SetVisibleXY(double fX, double fY)
     Update();
 }
 
-/*************************************************************************
-|*
-|* Breite des sichtbaren Bereichs im Verhaeltnis zur
-|* gesamten Arbeitsbereichbreite zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns width of the visible area in proportion to the width of the whole
+ * working area.
+ */
 double Window::GetVisibleWidth()
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
@@ -813,13 +732,10 @@ double Window::GetVisibleWidth()
     return ((double) aWinSize.Width() / maViewSize.Width());
 }
 
-/*************************************************************************
-|*
-|* Hoehe des sichtbaren Bereichs im Verhaeltnis zur
-|* gesamten Arbeitsbereichhoehe zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns height of the visible area in proportion to the height of the whole
+ * working area.
+ */
 double Window::GetVisibleHeight()
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
@@ -828,72 +744,54 @@ double Window::GetVisibleHeight()
     return ((double) aWinSize.Height() / maViewSize.Height());
 }
 
-/*************************************************************************
-|*
-|* Breite einer Scrollspalte im Verhaeltnis zur gesamten
-|* Arbeitsbereichbreite zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns width of a scroll column in proportion to the width of the whole
+ * working area.
+ */
 double Window::GetScrlLineWidth()
 {
     return (GetVisibleWidth() * SCROLL_LINE_FACT);
 }
 
-/*************************************************************************
-|*
-|* Breite einer Scrollspalte im Verhaeltnis zur gesamten
-|* Arbeitsbereichhoehe zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns height of a scroll column in proportion to the height of the whole
+ * working area.
+ */
 double Window::GetScrlLineHeight()
 {
     return (GetVisibleHeight() * SCROLL_LINE_FACT);
 }
 
-/*************************************************************************
-|*
-|* Breite einer Scrollpage im Verhaeltnis zur gesamten
-|* Arbeitsbereichbreite zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns width of a scroll page in proportion to the width of the whole
+ * working area.
+ */
 double Window::GetScrlPageWidth()
 {
     return (GetVisibleWidth() * SCROLL_PAGE_FACT);
 }
 
-/*************************************************************************
-|*
-|* Breite einer Scrollpage im Verhaeltnis zur gesamten
-|* Arbeitsbereichhoehe zuruegeben
-|*
-\************************************************************************/
-
+/**
+ * @returns height of a scroll page in proportion to the height of the whole
+ * working area.
+ */
 double Window::GetScrlPageHeight()
 {
     return (GetVisibleHeight() * SCROLL_PAGE_FACT);
 }
 
-/*************************************************************************
-|*
-|* Fenster deaktivieren
-|*
-\************************************************************************/
-
+/**
+ * Deactivate window.
+ */
 void Window::LoseFocus()
 {
     mnTicks = 0;
     ::Window::LoseFocus ();
 }
 
-/*************************************************************************
-|*
-|* Fenster aktivieren
-|*
-\************************************************************************/
-
+/**
+ * Activate window.
+ */
 void Window::GrabFocus()
 {
     mnTicks      = 0;
@@ -901,19 +799,14 @@ void Window::GrabFocus()
 }
 
 
-/*************************************************************************
-|*
-|* DataChanged
-|*
-\************************************************************************/
 
 void Window::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ::Window::DataChanged( rDCEvt );
 
-    // PRINTER bei allen Dokumenten weglassen, die keinen Printer benutzen.
-    // FONTS und FONTSUBSTITUTION weglassen, wenn keine Textausgaben
-    // vorhanden sind, bzw. wenn das Dokument keinen Text zulaesst.
+    /* Omit PRINTER by all documents which are not using a printer.
+       Omit FONTS and FONTSUBSTITUTION if no text output is available or if the
+       document does not allow text.  */
 
     if ( (rDCEvt.GetType() == DATACHANGED_PRINTER) ||
          (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
@@ -935,16 +828,15 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                         Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
-            // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
-            // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
-            // Resize-Handler aber auch die Groesse der ScrollBars aus
-            // den Settings abgefragt werden.
+            /* Rearrange or initiate Resize for scroll bars since the size of
+               the scroll bars my have changed. Within this, inside the resize-
+               handler, the size of the scroll bars will be asked from the
+               Settings. */
             Resize();
 
-            // Daten neu Setzen, die aus den Systemeinstellungen bzw. aus
-            // den Settings uebernommen werden. Evtl. weitere Daten neu
-            // berechnen, da sich auch die Aufloesung hierdurch geaendert
-            // haben kann.
+            /* Re-set data, which are from system control or from Settings. May
+               have to re-set more data since the resolution may also has
+               changed. */
             if( mpViewShell )
             {
                 const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
@@ -994,34 +886,29 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
              ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
               (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
         {
-            // Virtuelle Device die auch von der Aufloesung oder von
-            // Systemeinstellungen abhaengen, sollten geupdatet werden.
-            // Ansonsten sollte zumindest bei DATACHANGED_DISPLAY
-            // die virtuellen Devices geupdatet werden, da es einige
-            // Systeme erlauben die Aufloesung und Farbtiefe waehrend
-            // der Laufzeit zu aendern oder eben bei Palettenaenderungen
-            // die virtuellen Device geupdatet werden muessen, da bei
-            // Ausgaben ein anderes Farbmatching stattfinden kann.
+            /* Virtual devices, which also depends on the resolution or the
+               system control, should be updated. Otherwise, we should update
+               the virtual devices at least at DATACHANGED_DISPLAY since some
+               systems allow to change the resolution and color depth during
+               runtime. Or the virtual devices have to be updated when the color
+               palette has changed since a different color matching can be used
+               when outputting. */
         }
 
         if ( rDCEvt.GetType() == DATACHANGED_FONTS )
         {
-            // Wenn das Dokument Font-AuswahlBoxen anbietet, muessen
-            // diese geupdatet werden. Wie dies genau aussehen muss,
-            // weiss ich leider auch nicht. Aber evtl. kann man das
-            // ja global handeln. Dies muessten wir evtl. mal
-            // mit PB absprechen, aber der ist derzeit leider Krank.
-            // Also bevor dies hier gehandelt wird, vorher mit
-            // PB und mir absprechen.
+            /* If the document provides font choose boxes, we have to update
+               them. I don't know how this looks like (also not really me, I
+               only translated the comment ;). We may can handle it global. We
+               have to discuss it with PB, but he is ill at the moment.
+               Before we handle it here, discuss it with PB and me. */
         }
 
         if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
              (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) )
         {
-            // Formatierung neu durchfuehren, da Fonts die im Dokument
-            // vorkommen, nicht mehr vorhanden sein muessen oder
-            // jetzt vorhanden sind oder durch andere ersetzt wurden
-            // sind.
+            /* Do reformating since the fonts of the document may no longer
+               exist, or exist now, or are replaced with others. */
             if( mpViewShell )
             {
                 DrawDocShell* pDocSh = mpViewShell->GetDocSh();
@@ -1032,13 +919,11 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
 
         if ( rDCEvt.GetType() == DATACHANGED_PRINTER )
         {
-            // Wie hier die Behandlung aussehen soll, weiss ich leider
-            // selbst noch nicht. Evtl. mal einen Printer loeschen und
-            // schauen was gemacht werden muss. Evtl. muesste ich in
-            // VCL dafuer noch etwas einbauen, wenn der benutze Printer
-            // geloescht wird. Ansonsten wuerde ich hier evtl. die
-            // Formatierung neu berechnen, wenn der aktuelle Drucker
-            // zerstoert wurde.
+            /* I don't know how the handling should look like. Maybe we delete a
+               printer and look what we have to do. Maybe I have to add
+               something to the VCL, in case the used printer is deleted.
+               Otherwise I may recalculate the formatting here if the current
+               printer is destroyed. */
             if( mpViewShell )
             {
                 DrawDocShell* pDocSh = mpViewShell->GetDocSh();
@@ -1047,7 +932,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             }
         }
 
-        // Alles neu ausgeben
+        // Update everything
         Invalidate();
     }
 }
@@ -1055,11 +940,6 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
 
 
 
-/*************************************************************************
-|*
-|* DropTargetHelper::AcceptDrop
-|*
-\************************************************************************/
 
 sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
 {
@@ -1077,11 +957,6 @@ sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-/*************************************************************************
-|*
-|* DropTargetHelper::ExecuteDrop
-|*
-\************************************************************************/
 
 sal_Int8 Window::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -1106,11 +981,6 @@ void Window::SetUseDropScroll (bool bUseDropScroll)
 
 
 
-/*************************************************************************
-|*
-|* Scrolling bei AcceptDrop-Events
-|*
-\************************************************************************/
 
 void Window::DropScroll(const Point& rMousePos)
 {

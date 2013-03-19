@@ -53,12 +53,9 @@ using namespace com::sun::star;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Status (Enabled/Disabled) von Menue-SfxSlots setzen
-|*
-\************************************************************************/
-
+/**
+ * Set state (Enabled/Disabled) of Menu-SfxSlots
+ */
 void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 {
     // Status of menu entries (Buttons,...)
@@ -134,16 +131,15 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem(SID_COMPRESS_GRAPHIC);
             }
 
-            // Wenn es sich um kein Gruppenobjekt oder 3D-Objekt handelt
-            // wird "Gruppe betreten" disabled
+            /* If it is not a group object or 3D object, we disable "enter
+               group". */
             if( !( ( pObj->ISA( SdrObjGroup ) && nInv == SdrInventor ) ||
                 (pObj->ISA (E3dPolyScene) || pObj->ISA (E3dScene) /*|| pObj->ISA (E3dCompoundObject) */) ) )
             {
                 rSet.DisableItem( SID_ENTER_GROUP );
             }
 
-            // Wenn es sich um kein Gruppenobjekt handelt
-            // wird "Gruppierung aufheben" disabled
+            // If it is not a group object, we disable "ungroup"
             if (!(pObj->ISA(SdrObjGroup) && nInv == SdrInventor))
             {
                 rSet.DisableItem(SID_UNGROUP);
@@ -168,11 +164,11 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 nId == OBJ_PATHLINE ||
                 nId == OBJ_FREELINE ))
             {
-                //rSet.DisableItem( SID_ATTRIBUTES_AREA ); // wieder raus!
+                //rSet.DisableItem( SID_ATTRIBUTES_AREA ); // remove again!
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
             }
-            if( (!pObj->ISA( SdrPathObj ) && !aInfoRec.bCanConvToPath) || pObj->ISA( SdrObjGroup ) ) // Solange es JOE fehlerhaft behandelt!
-            { // JOE: Ein Gruppenobjekt kann eben u.U. in ein PathObj gewandelt werden
+            if( (!pObj->ISA( SdrPathObj ) && !aInfoRec.bCanConvToPath) || pObj->ISA( SdrObjGroup ) ) // As long as JOE handles it incorrectly!
+            { // JOE: a group object may can be converted into a PathObj
                 rSet.DisableItem( SID_LINEEND_POLYGON );
             }
             if(nInv == SdrInventor &&
@@ -293,7 +289,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem(SID_POLY_INTERSECT);
         rSet.DisableItem( SID_CONNECT );
     }
-    // Mehrfachselektion
+    // multi-selection
     else if( nMarkCount > 1 )
     {
         // distribure dialog for 3+n objects
@@ -302,7 +298,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
         rSet.DisableItem( SID_LINEEND_POLYGON );
         rSet.DisableItem( SID_ENTER_GROUP );
-        // Jetzt muessen Namen fuer Objekte eindeutig sein
+        // Now names for objects have to be unique
         rSet.DisableItem( SID_NAME_GROUP );
         // #i68101#
         rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
@@ -457,7 +453,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             rSet.DisableItem( SID_UNGROUP );
         }
     }
-    // kein Objekt selektiert
+    // select no object
     else
     {
         rSet.DisableItem( SID_ENTER_GROUP );

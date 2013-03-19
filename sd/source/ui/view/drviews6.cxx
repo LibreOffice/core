@@ -63,15 +63,12 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SfxRequests fuer FontWork bearbeiten
-|*
-\************************************************************************/
-
+/**
+ * handle SfxRequests for FontWork
+ */
 void DrawViewShell::ExecFormText(SfxRequest& rReq)
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // nothing is executed during a slide show!
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -104,7 +101,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
                                    GetValue());
 
             if(HasCurrentFunction(SID_BEZIER_EDIT))
-            {   // ggf. die richtige Editfunktion aktivieren
+            {   // activate the right edit function if necessary
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
                                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
@@ -114,12 +111,9 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
     }
 }
 
-/*************************************************************************
-|*
-|* Statuswerte fuer FontWork zurueckgeben
-|*
-\************************************************************************/
-
+/**
+ * Return state values for FontWork
+ */
 void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
@@ -137,7 +131,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     if ( pObj == NULL || !pObj->ISA(SdrTextObj) ||
         !((SdrTextObj*) pObj)->HasText() )
     {
-// automatisches Auf/Zuklappen des FontWork-Dialog; erstmal deaktiviert
+// automatic open/close the FontWork-Dialog; first deactivate it
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -163,15 +157,10 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     }
 }
 
-/*************************************************************************
-|*
-|* SfxRequests fuer Animator bearbeiten
-|*
-\************************************************************************/
 
 void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // nothing is executed during a slide show!
     if (HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -206,20 +195,17 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
     }
 }
 
-/*************************************************************************
-|*
-|* Statuswerte fuer Animator zurueckgeben
-|*
-|* nValue == 0 -> Kein Button
-|* nValue == 1 -> Button 'uebernehmen'
-|* nValue == 2 -> Button 'einzeln uebernehmen'
-|* nValue == 3 -> Buttons 'uebernehmen' und 'einzeln uebernehmen'
-|*
-\************************************************************************/
-
+/**
+ * Return status values for animator
+ *
+ * nValue == 0 -> No button
+ * nValue == 1 -> Button 'accept'
+ * nValue == 2 -> Button 'accept individually'
+ * nValue == 3 -> Buttons 'accept' and 'accept individually'
+ */
 void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
 {
-    // Hier koennten Buttons etc. disabled werden
+    // here we could disable buttons etc.
     sal_uInt16 nValue;
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
@@ -229,15 +215,15 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
         nValue = 0;
     else if( nMarkCount > 1 )
         nValue = 3;
-    else // 1 Objekt
+    else // 1 Object
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         sal_uInt32 nInv = pObj->GetObjInventor();
         sal_uInt16 nId  = pObj->GetObjIdentifier();
-        // 1 selektiertes Gruppenobjekt
+        // 1 selected group object
         if( nInv == SdrInventor && nId == OBJ_GRUP )
             nValue = 3;
-        else if( nInv == SdrInventor && nId == OBJ_GRAF ) // Anim. GIF ?
+        else if( nInv == SdrInventor && nId == OBJ_GRAF ) // Animated GIF ?
         {
             sal_uInt16 nCount = 0;
 
@@ -254,15 +240,10 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     rSet.Put( SfxUInt16Item( SID_ANIMATOR_STATE, nValue ) );
 }
 
-/*************************************************************************
-|*
-|* Statuswerte fuer SfxChildWindows setzen
-|*
-\************************************************************************/
 
 void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 {
-    // Stati der SfxChild-Windows (Animator, Fontwork etc.)
+    // State of SfxChild-Windows (Animator, Fontwork etc.)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_FONTWORK ) )
     {
         sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
@@ -316,15 +297,12 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 }
 
 
-/*************************************************************************
-|*
-|* SfxRequests fuer Pipette bearbeiten
-|*
-\************************************************************************/
-
+/**
+ * Handle SfxRequests for pipette
+ */
 void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // nothing is executed during a slide show!
     if (HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -425,12 +403,9 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_BMPMASK_EXEC, bEnable ) );
 }
 
-/*************************************************************************
-|*
-|* SfxRequests fuer temporaere Funktionen
-|*
-\************************************************************************/
-
+/**
+ * SfxRequests for temporary functions
+ */
 void DrawViewShell::FuTemp04(SfxRequest& rReq)
 {
     sal_uInt16 nSId = rReq.GetSlot();
@@ -600,10 +575,11 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_CONVERT_TO_3D_LATHE_FAST:
         {
-            // Der Aufruf ist ausreichend. Die Initialisierung per Start3DCreation und CreateMirrorPolygons
-            // ist nicht mehr noetig, falls der Parameter sal_True uebergeben wird. Dann wird sofort und
-            // ohne Benutzereingriff ein gekippter Rotationskoerper mit einer Achse links neben dem
-            // Umschliessenden Rechteck der slektierten Objekte gezeichnet.
+            /* The call is enough. The initialization via Start3DCreation and
+               CreateMirrorPolygons is no longer needed if the parameter
+               sal_True is provided. Then a tilted rotary body with an axis left
+               besides the bounding rectangle of the selected objects is drawn
+               immediately and without user interaction.  */
             mpDrawView->SdrEndTextEdit();
             if(GetActiveWindow())
                 GetActiveWindow()->EnterWait();

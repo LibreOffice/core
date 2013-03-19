@@ -76,11 +76,6 @@ void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
     mrParent.DragFinished( nDropAction );
 }
 
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
 
 TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE | WB_DRAG) ),
@@ -95,11 +90,6 @@ TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     SetHelpId( HID_SD_TABBAR_PAGES );
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 TabControl::~TabControl()
 {
@@ -168,11 +158,6 @@ void TabControl::DoubleClick()
     }
 }
 
-/*************************************************************************
-|*
-|* StartDrag-Request
-|*
-\************************************************************************/
 
 void TabControl::StartDrag( sal_Int8, const Point& )
 {
@@ -182,22 +167,12 @@ void TabControl::StartDrag( sal_Int8, const Point& )
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
 }
 
-/*************************************************************************
-|*
-|* DragFinished
-|*
-\************************************************************************/
 
 void TabControl::DragFinished( sal_Int8 )
 {
     bInternalMove = sal_False;
 }
 
-/*************************************************************************
-|*
-|* AcceptDrop-Event
-|*
-\************************************************************************/
 
 sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
@@ -238,11 +213,6 @@ sal_Int8 TabControl::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-/*************************************************************************
-|*
-|* ExecuteDrop-Event
-|*
-\************************************************************************/
 
 sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -360,7 +330,7 @@ long TabControl::AllowRenaming()
 
     if( aCompareName != aNewName )
     {
-        // Seite umbenennen
+        // rename page
         if( pDrViewSh->GetDocSh()->CheckPageName( this, aNewName ) )
         {
             SetEditText( aNewName );

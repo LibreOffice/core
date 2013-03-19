@@ -34,12 +34,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Controller-Item fuer Ruler
-|*
-\************************************************************************/
-
+/**
+ * Controller-Item for ruler
+ */
 class RulerCtrlItem : public SfxControllerItem
 {
     Ruler &rRuler;
@@ -74,11 +71,6 @@ void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolIt
 }
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal_uInt16 nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
 : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
@@ -101,11 +93,6 @@ Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal
     }
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 Ruler::~Ruler()
 {
@@ -115,11 +102,6 @@ Ruler::~Ruler()
     rBindings.LeaveRegistrations();
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-Handler
-|*
-\************************************************************************/
 
 void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -136,33 +118,18 @@ void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
         SvxRuler::MouseButtonDown(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* MouseMove-Handler
-|*
-\************************************************************************/
 
 void Ruler::MouseMove(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseMove(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-Handler
-|*
-\************************************************************************/
 
 void Ruler::MouseButtonUp(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseButtonUp(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* NullOffset setzen
-|*
-\************************************************************************/
 
 void Ruler::SetNullOffset(const Point& rOffset)
 {
@@ -174,11 +141,6 @@ void Ruler::SetNullOffset(const Point& rOffset)
     SetNullOffsetLogic(nOffset);
 }
 
-/*************************************************************************
-|*
-|* Command event
-|*
-\************************************************************************/
 
 void Ruler::Command(const CommandEvent& rCEvt)
 {
@@ -189,11 +151,6 @@ void Ruler::Command(const CommandEvent& rCEvt)
     }
 }
 
-/*************************************************************************
-|*
-|* ExtraDown
-|*
-\************************************************************************/
 
 void Ruler::ExtraDown()
 {

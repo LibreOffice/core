@@ -126,12 +126,6 @@ private:
 
 
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
-
 Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     : SdrOutliner( &pDoc->GetItemPool(), nMode ),
       mpImpl(new Implementation()),
@@ -410,12 +404,9 @@ sal_Bool Outliner::SpellNextDocument (void)
 }
 
 
-/*************************************************************************
-|*
-|* Spelling: naechstes TextObjekt pruefen
-|*
-\************************************************************************/
-
+/**
+ * check next text object
+ */
 ::svx::SpellPortions Outliner::GetNextSpellSentence (void)
 {
     ::svx::SpellPortions aResult;
@@ -1385,12 +1376,9 @@ void Outliner::EnterEditMode (sal_Bool bGrabFocus)
 
 
 
-/*************************************************************************
-|*
-|* SpellChecker: Error-LinkHdl
-|*
-\************************************************************************/
-
+/**
+ * SpellChecker: Error link handler
+ */
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
     mbError = true;

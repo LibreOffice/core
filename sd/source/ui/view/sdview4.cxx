@@ -64,23 +64,18 @@ using namespace com::sun::star;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Graphik einfuegen
-|* Wird ein leeres Graphikobjekt uebergeben, so wird dieses gefuellt.
-|* Andernfalls wird ein an der gegebenen Position vorhandenes Objekt
-|* gefuellt. Ist an der Position kein Objekt vorhanden, so wird ein neues
-|* Objekt erzeugt und ein Pointer auf dieses Objekt zurueckgegeben.
-|*
-\************************************************************************/
-
+/**
+ * If an empty graphic object is provided, we fill it. Otherwise we fill an
+ * existing object at the specified position. If there is no object at the
+ * position, we create a new object and return a pointer to it.
+ */
 SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                                    const Point& rPos, SdrObject* pObj, ImageMap* pImageMap )
 {
     SdrEndTextEdit();
     mnAction = rAction;
 
-    // Liegt ein Objekt an der Position rPos?
+    // Is there a object at the position rPos?
     SdrGrafObj*     pNewGrafObj = NULL;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
@@ -110,7 +105,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
             if( bIsGraphic )
             {
-                // Das Objekt wird mit der Bitmap gefuellt
+                // We fill the object with the Bitmap
                 pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
                 pNewGrafObj->SetGraphic(rGraphic);
             }
@@ -130,7 +125,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
             if (pPage && pPage->IsPresObj(pPickObj))
             {
-                // Neues PresObj in die Liste eintragen
+                // Insert new PresObj into the list
                 pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
                 pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
             }
@@ -145,9 +140,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
         else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
         {
-            /******************************************************************
-            * Das Objekt wird mit der Graphik gefuellt
-            ******************************************************************/
+            // we fill the object with the graphic
             if( IsUndoEnabled() )
             {
                 BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
@@ -353,12 +346,9 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     return pNewMediaObj;
 }
 
-/*************************************************************************
-|*
-|* Timer-Handler fuer InsertFile beim Drop()
-|*
-\************************************************************************/
-
+/**
+ * Timer handler for InsertFile at Drop()
+ */
 IMPL_LINK_NOARG(View, DropInsertFileHdl)
 {
     DBG_ASSERT( mpViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
@@ -550,24 +540,18 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
     return nError;
 }
 
-/*************************************************************************
-|*
-|* Timer-Handler fuer Errorhandling beim Drop()
-|*
-\************************************************************************/
-
+/**
+ * Timer handler for Errorhandling at Drop()
+ */
 IMPL_LINK_NOARG(View, DropErrorHdl)
 {
     InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;
 }
 
-/*************************************************************************
-|*
-|* StyleSheet aus der Sleketion besorgen
-|*
-\************************************************************************/
-
+/**
+ * @returns StyleSheet from selection
+ */
 SfxStyleSheet* View::GetStyleSheet() const
 {
     return SdrView::GetStyleSheet();

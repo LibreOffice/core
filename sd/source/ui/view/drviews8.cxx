@@ -71,12 +71,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SfxRequests fuer temporaere Funktionen
-|*
-\************************************************************************/
-
+/**
+ * SfxRequests for temporary functions
+ */
 void DrawViewShell::FuTemp01(SfxRequest& rReq)
 {
     switch(rReq.GetSlot())
@@ -230,7 +227,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         {
             SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore (); // es werden eigenstaendige macros generiert !!
+            rReq.Ignore (); // we generate independent macros !!
         }
         break;
 
@@ -239,7 +236,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         {
             mbZoomOnPage = sal_False;
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
-            // Beendet sich selbst, kein Cancel() notwendig!
+            // finishes itself, no Cancel() needed!
             Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Ignore ();
         }
@@ -251,7 +248,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
             SetCurrentFunction( FuDisplayOrder::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             Invalidate( SID_POSITION );
             rReq.Ignore ();
-            // Beendet sich selbst, kein Cancel() notwendig!
+            // finishes itself, no Cancel() needed!
         }
         break;
 
@@ -279,7 +276,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         break;
 
         case SID_CAPTUREPOINT:
-            // negative Werte um Aufruf aus Menue zu signalisieren
+            // negative value to signal call from menu
             maMousePos = Point(-1,-1);
         case SID_SET_SNAPITEM:
         {
@@ -423,20 +420,15 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         default:
         {
-            // switch Anweisung wegen CLOOKS aufgeteilt. Alle case-Anweisungen die
-            // eine Fu???? -Funktion aufrufen, sind in die Methode FuTemp01 (drviews8),
-            // FuTemp02 (drviewsb) gewandert.
+            // Switch statement splitted because of CLOOKS. All case-statements
+            // which call a Fu???? - function, are gone into FuTemp01
+            // (drviews8), FuTemp02 (drviewsb).
             FuTemp02(rReq);
         }
         break;
     }
 }
 
-/*************************************************************************
-|*
-|* Scanner-Event
-|*
-\************************************************************************/
 
 void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 {

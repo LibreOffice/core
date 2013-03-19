@@ -70,11 +70,9 @@ namespace sd {
 
 /************************************************************************/
 
-/*************************************************************************
-|*
-|* SfxRequests for temporary functions
-|*
-\************************************************************************/
+/**
+ * SfxRequests for temporary functions
+ */
 
 void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 {

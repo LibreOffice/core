@@ -59,15 +59,10 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SfxRequests fuer Gallery bearbeiten
-|*
-\************************************************************************/
 
 void DrawViewShell::ExecGallery(SfxRequest& rReq)
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // nothing is executed during a slide show!
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -82,27 +77,26 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         {
             GetDocSh()->SetWaitCursor( sal_True );
 
-            // Graphik einfuegen
+            // insert graphic
             if (nFormats & SGA_FORMAT_GRAPHIC)
             {
                 Graphic aGraphic = pGal->GetGraphic();
 
-                // Ggf. Groesse reduzieren
+                // reduce size if necessary
                 Window aWindow (GetActiveWindow());
                 aWindow.SetMapMode(aGraphic.GetPrefMapMode());
                 Size aSizePix = aWindow.LogicToPixel(aGraphic.GetPrefSize());
                 aWindow.SetMapMode( MapMode(MAP_100TH_MM) );
                 Size aSize = aWindow.PixelToLogic(aSizePix);
 
-                // Groesse ggf. auf Seitengroesse begrenzen
+                // constrain size to page size if necessary
                 SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
                 Size aPageSize = pPage->GetSize();
                 aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
                 aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
 
 
-                // Falls Grafik zu gross, wird die Grafik
-                // in die Seite eingepasst
+                // if the graphic is to big, we fit it into the page
                 if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
                     aSize.Height() && aPageSize.Height() )
                 {
@@ -111,7 +105,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                     float fWinWH =  (float)aPageSize.Width() /
                                     (float)aPageSize.Height();
 
-                    // Grafik an Pagesize anpassen (skaliert)
+                    // adjust graphic to page size (scales)
                     if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
                     {
                         aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
@@ -125,7 +119,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                 }
 
 
-                // Ausgaberechteck fuer Grafik setzen
+                // set output rectangle for graphic
                 Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                             (aPageSize.Height() - aSize.Height()) / 2);
                 aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
@@ -137,9 +131,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                 if ( mpDrawView->AreObjectsMarked() )
                 {
-                    /******************************************************
-                    * Ist ein leeres Graphik-Objekt vorhanden?
-                    ******************************************************/
+                    // is there a empty graphic object?
                     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
@@ -153,10 +145,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                             if( pGrafObj->IsEmptyPresObj() )
                             {
-                                /******************************************
-                                * Das leere Graphik-Objekt bekommt eine neue
-                                * Graphik
-                                ******************************************/
+                                // the empty graphic object gets a new graphic
                                 bInsertNewObject = sal_False;
 
                                 SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->Clone();
@@ -184,7 +173,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                     mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
                 }
 
-                // Soll nur ein Link benutzt werden?
+                // should we just use a link?
                 if( pGrafObj && pGal->IsLinkage() )
                     pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), pGal->GetFilterName() );
             }
@@ -201,33 +190,24 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 }
 
 
-/*************************************************************************
-|*
-|* Statuswerte fuer Gallery zurueckgeben
-|*
-\************************************************************************/
 
 void DrawViewShell::GetGalleryState(SfxItemSet& )
 {
 }
 
-/*************************************************************************
-|*
-|* Makros fuer die Attributeinstellungen bearbeiten
-|*
-\************************************************************************/
+/**
+ * Edit macros for attribute configuration
+ */
 
-//
-// die vorgehensweise fuer die attributaenderung ist praktisch ueberall identisch
-// 1. bisherige attribute auslesen
-// 2. parameter aus dem basic-set auslesen
-// 3. gewaehltes item aus dem attribut-set loeschen
-// 4. neues attribut-item erzeugen
-// 5. item in den set eintragen
-//
+/* the work flow to adjust the attributes is nearly everywhere the same
+   1. read existing attributes
+   2. read parameter from the basic-set
+   3. delete selected item from the attribute-set
+   4. create new attribute-item
+   5. insert item into set      */
 void DrawViewShell::AttrExec (SfxRequest &rReq)
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // nothing is executed during a slide show!
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -241,7 +221,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
     switch (rReq.GetSlot ())
     {
-        // neuen fuellstil setzen
+        // set new fill-style
         case SID_SETFILLSTYLE :
             if (pArgs)
                 if (pArgs->Count () == 1)
@@ -263,7 +243,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // linienstil neu bestimmen
+        // determine new line style
         case SID_SETLINESTYLE :
             if (pArgs)
                 if (pArgs->Count () == 1)
@@ -285,7 +265,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // linienbreite setzen
+        // set line width
         case SID_SETLINEWIDTH :
             if (pArgs)
                 if (pArgs->Count () == 1)
@@ -512,7 +492,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // einstellungen fuer farbverlauf
+        // configuration for gradients
         case SID_GRADIENT :
             if (pArgs)
                 if (pArgs->Count () == 8)
@@ -589,7 +569,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // einstellungen fuer schraffur
+        // configuration for hatch
         case SID_HATCH :
             if (pArgs)
                 if (pArgs->Count () == 4)
@@ -764,12 +744,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     delete pAttr;
 }
 
-/*************************************************************************
-|*
-|* Makros fuer die Attributeinstellungen bearbeiten
-|*
-\************************************************************************/
-
+/**
+ * Edit macros for attribute configuration
+ */
 void DrawViewShell::AttrState (SfxItemSet& rSet)
 {
     SfxWhichIter     aIter (rSet);

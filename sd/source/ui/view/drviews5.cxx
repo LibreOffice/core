@@ -69,24 +69,18 @@ static const int TABCONTROL_INITIAL_SIZE = 350;
 static const int PAPER_SHADOW_EXT_PIXEL = 2;
 
 
-/*************************************************************************
-|*
-|* Wird gerufen, wenn sich das Model aendert
-|*
-\************************************************************************/
 
 void DrawViewShell::ModelHasChanged()
 {
     Invalidate();
-    // Damit der Navigator auch einen aktuellen Status bekommt
+    // that the navigator also gets an up to date state
     GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
 
     SfxBoolItem aItem( SID_3D_STATE, sal_True );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-    // jetzt den von der Drawing Engine neu erzeugten TextEditOutliner
-    // initialisieren
+    // now initialize the TextEditOutliner which was newly created by the draw engine
     ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
     if (pOutliner)
     {
@@ -144,28 +138,25 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     if ( mbZoomOnPage && !bInPlaceActive && !bClientActive )
     {
-        // bei Split immer erstes Fenster resizen
+        // with split, always resize first window
         //af pWindow = mpContentWindow.get();
         SfxRequest aReq(SID_SIZE_PAGE, 0, GetDoc()->GetItemPool());
         ExecuteSlot( aReq );
     }
 }
 
-/*************************************************************************
-|*
-|* Daten der FrameView auf die aktuelle View uebertragen
-|*
-\************************************************************************/
-
+/**
+ * Apply data of the FrameView on the current view
+ */
 void DrawViewShell::ReadFrameViewData(FrameView* pView)
 {
     ModifyGuard aGuard( GetDoc() );
 
-    // Diese Option wird am Model eingestellt
+    // this option has to be adjust at the model
     GetDoc()->SetPickThroughTransparentTextFrames(
              SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType())->IsPickThrough());
 
-    // Initialisierungen der Zeichen-(Bildschirm-)Attribute
+    // initialization of the Character-(Screen-) attribute
     if (HasRuler() != pView->HasRuler())
         SetRuler( pView->HasRuler() );
 
@@ -304,7 +295,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
 
-    // DrawMode fuer 'Normales' Fenster wiederherstellen
+    // restore DrawMode for 'normal' window
     if(GetActiveWindow()->GetDrawMode() != pView->GetDrawMode())
       GetActiveWindow()->SetDrawMode(pView->GetDrawMode());
 
@@ -314,20 +305,18 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aDesignModeItem, 0L );
     }
 
-    // Muss am Ende gerufen werden, da ein WriteFrameViewData() ausgeloest wird
+    // has to be called in the end, because it executes a WriteFrameViewData()
     if (mpDrawView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
         mpDrawView->SetFrameDragSingles( pView->IsFrameDragSingles() );
 }
 
-/*************************************************************************
-|*
-|* Daten der aktuellen View auf die FrameView uebertragen
-|*
-\************************************************************************/
 
+/**
+ * Apply data of the current view on the FrameView
+ */
 void DrawViewShell::WriteFrameViewData()
 {
-    // Zeichen-(Bildschirm-)Attribute an FrameView merken
+    // store character-(screen-) attribute of FrameView
     mpFrameView->SetRuler( HasRuler() );
     mpFrameView->SetGridCoarse( mpDrawView->GetGridCoarse() );
     mpFrameView->SetGridFine( mpDrawView->GetGridFine() );
@@ -402,33 +391,24 @@ void DrawViewShell::WriteFrameViewData()
     if ( mpFrameView->GetActiveLayer() != mpDrawView->GetActiveLayer() )
         mpFrameView->SetActiveLayer( mpDrawView->GetActiveLayer() );
 
-    // DrawMode fuer 'Normales' Fenster merken
+    // store DrawMode for 'normal' window
     if(mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode())
       mpFrameView->SetDrawMode(GetActiveWindow()->GetDrawMode());
 }
 
 
 
-/*************************************************************************
-|*
-|* PrePaint-Method
-|*
-\************************************************************************/
-
 void DrawViewShell::PrePaint()
 {
     mpDrawView->PrePaint();
 }
 
-/*************************************************************************
-|*
-|* Paint-Methode: das Ereignis wird vom Fenster pWin an
-|* die Viewshell und die aktuelle Funktion weitergeleitet
-|*
-|* Anmerkung: pWin==NULL, wenn Paint() vom ShowWindow gerufen wird!
-|*
-\************************************************************************/
-
+/**
+ * The event is forwarded to the Viewshell and the current function by the
+ * window pWin.
+ *
+ * Remark: pWin==NULL, if Paint() is called from ShowWindow!
+ */
 void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
     // Fill var FillColor here to have it available on later call
@@ -462,12 +442,9 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     }
 }
 
-/*************************************************************************
-|*
-|* Zoom-Faktor fuer InPlace einstellen
-|*
-\************************************************************************/
-
+/**
+ * adjust zoom factor for InPlace
+ */
 void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
     ViewShell::SetZoomFactor(rZoomX, rZoomY);
@@ -476,11 +453,6 @@ void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY
     GetActiveWindow()->SetWinViewPos(aOrigin);
 }
 
-/*************************************************************************
-|*
-|* Seite wird gehided
-|*
-\************************************************************************/
 
 void DrawViewShell::HidePage()
 {

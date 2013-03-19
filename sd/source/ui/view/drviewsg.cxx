@@ -48,7 +48,7 @@ namespace sd {
 
 void DrawViewShell::ExecIMap( SfxRequest& rReq )
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // during a slide show, nothing is executed!
     if(HasCurrentFunction(SID_PRESENTATION) )
         return;
 
@@ -103,15 +103,10 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_IMAP_EXEC, bDisable ) );
 }
 
-/*************************************************************************
-|*
-|*  Execute-Methode der Optionsleiste
-|*
-\************************************************************************/
 
 void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // during a slide show, nothing is executed!
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -127,8 +122,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         break;
 
 
-        // Raster- / Hilfslinien-Optionen
-        case SID_GRID_VISIBLE: // noch nicht hier !
+        // Grid- / Help lines option
+        case SID_GRID_VISIBLE: // not here yet!
         {
             pOptions->SetGridVisible( !mpDrawView->IsGridVisible() );
         }
@@ -140,7 +135,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         }
         break;
 
-        case SID_HELPLINES_VISIBLE: // noch nicht hier !
+        case SID_HELPLINES_VISIBLE: // not here yet!
         {
             pOptions->SetHelplines( !mpDrawView->IsHlplVisible() );
         }
@@ -212,7 +207,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     {
         pOptions->StoreConfig();
 
-        // Speichert die Konfiguration SOFORT
+        // Saves the configuration IMMEDIATELY
         // SFX_APP()->SaveConfiguration();
         WriteFrameViewData();
 
@@ -226,11 +221,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 }
 
 
-/*************************************************************************
-|*
-|*  State-Methode der Optionsleiste
-|*
-\************************************************************************/
 
 void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 {

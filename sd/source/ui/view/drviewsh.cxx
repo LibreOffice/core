@@ -47,11 +47,6 @@ namespace sd {
 
 #define TABCONTROL_INITIAL_SIZE     500
 
-/*************************************************************************
-|*
-|* Sprung zu Bookmark
-|*
-\************************************************************************/
 
 sal_Bool DrawViewShell::GotoBookmark(const String& rBookmark)
 {
@@ -66,9 +61,8 @@ sal_Bool DrawViewShell::GotoBookmark(const String& rBookmark)
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Bereich sichtbar machen (Bildausschnitt scrollen)
+/**
+ * Make area visible (scroll part of picture)
 |*
 \************************************************************************/
 
@@ -88,20 +82,20 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
     sal_Bool bZoomAllowed(sal_False);
     Size aLogicSize(rRect.GetSize());
 
-    // Sichtbarer Bereich
+    // visible area
     Size aVisSizePixel(rWin.GetOutputSizePixel());
     Rectangle aVisArea(rWin.PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)));
     Size aVisAreaSize(aVisArea.GetSize());
 
     if(!aVisArea.IsInside(rRect) && !SlideShow::IsRunning( GetViewShellBase() ) )
     {
-        // Objekt liegt nicht komplett im sichtbaren Bereich
+        // object is not entirely in visible area
         sal_Int32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
         sal_Int32 nFreeSpaceY(aVisAreaSize.Height() - aLogicSize.Height());
 
         if(bZoomAllowed && (nFreeSpaceX < 0 || nFreeSpaceY < 0))
         {
-            // Objekt passt nicht in sichtbaren Bereich -> auf Objektgroesse zoomen
+            // object does not fit into visible area -> zoom to object size
             SetZoomRect(rRect);
         }
         else

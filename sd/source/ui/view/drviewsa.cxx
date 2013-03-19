@@ -112,11 +112,6 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
         mpParent->ScannerEvent( rEventObject );
 }
 
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
 
 DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
 : ViewShell (pFrame, pParentWindow, rViewShellBase)
@@ -132,11 +127,6 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
     doShow();
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 DrawViewShell::~DrawViewShell()
 {
@@ -200,12 +190,9 @@ DrawViewShell::~DrawViewShell()
     delete [] mpSlotArray;
 }
 
-/*************************************************************************
-|*
-|* gemeinsamer Initialisierungsanteil der beiden Konstruktoren
-|*
-\************************************************************************/
-
+/**
+ * common part of both constructors
+ */
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
     mpActualPage = 0;
@@ -220,11 +207,11 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     OSL_ASSERT (GetViewShell()!=NULL);
 
-    // Array fuer Slot-/ImageMapping:
-    // Gerader Eintrag: Haupt-/ToolboxSlot
-    // Ungerader Eintrag: gemappter Slot
-    // Achtung: Anpassen von GetIdBySubId() !!!
-    // Reihenfolge (insbesondere Zoom) darf nicht geaendert werden !!!
+    /* array for slot-/image mapping:
+       even entry: main-/toolbox slot
+       odd entry:  mapped slot
+       Attention: adjust GetIdBySubId() !!!
+       Do not change order (especial zoom) !!! */
     mpSlotArray = new sal_uInt16[ SLOTARRAY_COUNT ];
     mpSlotArray[ 0 ]  = SID_OBJECT_CHOOSE_MODE;
     mpSlotArray[ 1 ]  = SID_OBJECT_ROTATE;
@@ -256,15 +243,15 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     GetDoc()->CreateFirstPages();
 
     mpDrawView = new DrawView(pDocSh, GetActiveWindow(), this);
-    mpView = mpDrawView;             // Pointer der Basisklasse ViewShell
-    mpDrawView->SetSwapAsynchron(sal_True); // Asynchrones Laden von Graphiken
+    mpView = mpDrawView;             // Pointer of base class ViewShell
+    mpDrawView->SetSwapAsynchron(sal_True); // Asynchronous load of graphics
 
     // We do not read the page kind from the frame view anymore so we have
     // to set it in order to resync frame view and this view.
     mpFrameView->SetPageKind(eInitialPageKind);
     mePageKind = eInitialPageKind;
     meEditMode = EM_PAGE;
-    DocumentType eDocType = GetDoc()->GetDocumentType(); // RTTI fasst hier noch nicht
+    DocumentType eDocType = GetDoc()->GetDocumentType(); // RTTI does not work here
     switch (mePageKind)
     {
         case PK_STANDARD:
@@ -294,14 +281,14 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mpDrawView->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
 
-    // Objekte koennen max. so gross wie die ViewSize werden
+    // objects can not grow bigger than ViewSize
     GetDoc()->SetMaxObjSize(aSize);
 
-    // Split-Handler fuer TabControls
+    // Split-Handler for TabControls
     maTabControl.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
 
-    // Damit der richtige EditMode von der FrameView komplett eingestellt
-    // werden kann, wird hier ein aktuell anderer gewaehlt (kleiner Trick)
+    /* In order to set the correct EditMode of the FrameView, we select another
+       one (small trick).  */
     if (mpFrameView->GetViewShEditMode(mePageKind) == EM_PAGE)
     {
         meEditMode = EM_MASTERPAGE;
@@ -311,7 +298,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         meEditMode = EM_PAGE;
     }
 
-    // Einstellungen der FrameView uebernehmen
+    // Use configuration of FrameView
     ReadFrameViewData(mpFrameView);
 
     if( eDocType == DOCUMENT_TYPE_DRAW )
@@ -328,7 +315,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
             GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
 
-            // AutoLayouts muessen erzeugt sein
+            // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();
         }
         else if (mePageKind == PK_HANDOUT)
@@ -337,7 +324,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
             GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
 
-            // AutoLayouts muessen erzeugt sein
+            // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();
         }
         else
@@ -348,7 +335,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         }
     }
 
-    // Selektionsfunktion starten
+    // start selection function
     SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
     FuPermanent(aReq);
     mpDrawView->SetFrameDragSingles(sal_True);
@@ -446,24 +433,20 @@ bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
 
 
 
-/*************************************************************************
-|*
-|* pruefe ob linienzuege gezeichnet werden muessen
-|*
-\************************************************************************/
+/**
+ * check if we have to draw a polyline
+ */
 
 /*
-    linienzuege werden ueber makros als folge von
+    Polylines are represented by makros as a sequence of:
         MoveTo (x, y)
-        LineTo (x, y)   [oder BezierTo (x, y)]
+        LineTo (x, y)   [or BezierTo (x, y)]
         LineTo (x, y)
             :
-    dargestellt. einen endbefehl fuer die linienzuege
-    gibt es nicht, also muessen alle befehle in den
-    requests nach LineTo (BezierTo) abgetestet und die
-    punktparameter gesammelt werden.
-    der erste nicht-LineTo fuehrt dann dazu, dass aus
-    den gesammelten punkten der linienzug erzeugt wird
+    There is no end command for polylines. Therefore, we have to test all
+    commands in the requests for LineTo (BezierTo) and we have to gather
+    the point-parameter. The first not-LineTo leads to the creation of the
+    polyline from the gathered points.
 */
 
 void DrawViewShell::CheckLineTo(SfxRequest& rReq)
@@ -482,12 +465,9 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
     rReq.Ignore ();
 }
 
-/*************************************************************************
-|*
-|* veraendere die seitemparameter, wenn SID_PAGESIZE oder SID_PAGEMARGIN
-|*
-\************************************************************************/
-
+/**
+ * Change page parameter if SID_PAGESIZE or SID_PAGEMARGIN
+ */
 void DrawViewShell::SetupPage (Size &rSize,
                                  long nLeft,
                                  long nRight,
@@ -502,9 +482,7 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        /**********************************************************************
-        * Erst alle MasterPages bearbeiten
-        **********************************************************************/
+        // first, handle all master pages
         SdPage *pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
 
         if( pPage )
@@ -537,9 +515,7 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        /**********************************************************************
-        * Danach alle Pages bearbeiten
-        **********************************************************************/
+        // then, handle all pages
         SdPage *pPage = GetDoc()->GetSdPage(i, mePageKind);
 
         if( pPage )
@@ -598,22 +574,17 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
 
-    // auf (neue) Seitengroesse zoomen
+    // zoom onto (new) page size
     GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
-/*************************************************************************
-|*
-|* Statuswerte der Statusbar zurueckgeben
-|*
-\************************************************************************/
 
 void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 {
-    // Zoom-Item
-    // Hier sollte der entsprechende Wert (Optimal ?, Seitenbreite oder
-    // Seite) mit Hilfe des ZoomItems weitergegeben werden !!!
+    /* Zoom-Item
+       Here we should propagate the corresponding value (Optimal ?, page width
+       or page) with the help of the ZoomItems !!!   */
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
         if (GetDocSh()->IsUIActive() || (SlideShow::IsRunning(GetViewShellBase())) )
@@ -630,7 +601,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             else
                 pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
 
-            // Bereich einschraenken
+            // constrain area
             sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
@@ -686,7 +657,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     aPos.X() = Fraction(aPos.X()) / aUIScale;
     aPos.Y() = Fraction(aPos.Y()) / aUIScale;
 
-    // Position- und Groesse-Items
+    // position- and size items
     if ( mpDrawView->IsAction() )
     {
         Rectangle aRect;

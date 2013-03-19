@@ -101,11 +101,7 @@ using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Permanente Funktionen
-|*
-\************************************************************************/
+// Permanent Functions
 
 void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 {
@@ -141,7 +137,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 
 void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
-    // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
+    // We do not execute a thing during a native slide show
 
     if (SlideShow::IsRunning(GetViewShellBase()))
         return;
@@ -229,7 +225,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         rBind.Update(nOldSId);
     }
 
-    // Slot wird gemapped (ToolboxImages/-Slots)
+    // map Slot (ToolboxImages/-Slots)
     MapSlot( nSId );
 
     switch ( nSId )
@@ -315,7 +311,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             if( nSlotId == SID_OBJECT_ROTATE )
             {
-                // togle rotation
+                // toggle rotation
                 if( nOldSId == nSlotId )
                 {
                     nSlotId = SID_OBJECT_SELECT;
@@ -339,7 +335,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                                       String(SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER) )
                                       ).Execute() == RET_YES )
                     {
-                        // Implizite Wandlung in Bezier
+                        // implicit transformation into bezier
                         WaitObject aWait( (Window*)GetActiveWindow() );
                         mpDrawView->ConvertMarkedToPathObj(sal_False);
                     }
@@ -376,7 +372,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                                       String(SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER) )
                                       ).Execute() == RET_YES )
                     {
-                        // Implizite Wandlung in Bezier
+                        // implicit transformation into bezier
                         WaitObject aWait( (Window*)GetActiveWindow() );
                         mpDrawView->ConvertMarkedToPathObj(sal_False);
                     }
@@ -560,8 +556,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         SetHelpId( GetCurrentFunction()->GetSlotID() );
     }
 
-    // Shell wird invalidiert, schneller als einzeln (laut MI)
-    // Jetzt explizit der letzte Slot incl. Update()
+    // invalidate shell, is faster than every individually (says MI)
+    // now explicit the last slot incl. Update()
     Invalidate();
 
     // CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
@@ -631,18 +627,13 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 // service routine for Undo/Redo implementation
 extern SfxUndoManager* ImpGetUndoManagerFromViewShell(DrawViewShell& rDViewShell);
 
-/*************************************************************************
-|*
-|* SfxRequests fuer Support-Funktionen
-|*
-\************************************************************************/
 
 void DrawViewShell::FuSupport(SfxRequest& rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
         GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
-    // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
+    // We do not execute a thing during a native slide show
     if(SlideShow::IsRunning(GetViewShellBase()) &&
         (rReq.GetSlot() != SID_PRESENTATION_END &&
          rReq.GetSlot() != SID_SIZE_PAGE))
@@ -655,7 +646,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
     sal_uInt16 nSId = rReq.GetSlot();
 
-    // Slot wird evtl. gemapped (ToolboxImages/-Slots)
+    // maybe we map the slot (ToolboxImages/-Slots)
     MapSlot( nSId );
 
     switch ( nSId )
@@ -667,7 +658,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        // Slots der ToolboxController gemapped ausfuehren
+        // execute slots of ToolboxController mapped
         case SID_OBJECT_CHOOSE_MODE:
         case SID_POSITION:
         case SID_OBJECT_ALIGN:
@@ -718,7 +709,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             mpDrawView->SetFrameDragSingles(!mpDrawView->IsFrameDragSingles());
 
             /******************************************************************
-            * ObjectBar einschalten
+            * turn ObjectBar on
             ******************************************************************/
             if( dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) || dynamic_cast< FuConstructBezierPolygon* >( GetCurrentFunction().get() ) )
             {
@@ -911,7 +902,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_NOTES_MASTERPAGE:    // BASIC
         case SID_HANDOUT_MASTERPAGE:  // BASIC
         {
-            // AutoLayouts muessen fertig sein
+            // AutoLayouts needs to be finished
             GetDoc()->StopWorkStartupDelay();
 
             const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -934,7 +925,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 if (nSId == SID_TITLE_MASTERPAGE ||
                     nSId == SID_SLIDE_MASTERPAGE)
                 {
-                    // Gibt es eine Seite mit dem AutoLayout "Titel"?
+                    // Is there a page with the AutoLayout "Title"?
                     sal_Bool bFound = sal_False;
                     sal_uInt16 i = 0;
                     sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
@@ -958,7 +949,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     }
                 }
 
-                // Default-Layer der MasterPage einschalten
+                // turn on default layer of MasterPage
                 mpDrawView->SetActiveLayer( String( SdResId(STR_LAYER_BCKGRNDOBJ) ) );
 
                 ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
@@ -1159,8 +1150,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        // Namensverwirrung: SID_SIZE_OPTIMAL -> Zoom auf selektierte Objekte
-        // --> Wird als Objektzoom im Programm angeboten
+        // name confusion: SID_SIZE_OPTIMAL -> Zoom onto selected objects
+        // --> Is offered as object zoom in program
         case SID_SIZE_OPTIMAL:  // BASIC
         {
             mbZoomOnPage = sal_False;
@@ -1189,8 +1180,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        // Namensverwirrung: SID_SIZE_ALL -> Zoom auf alle Objekte
-        // --> Wird als Optimal im Programm angeboten
+        // name confusion: SID_SIZE_ALL -> Zoom onto all objects
+        // --> Is offered as optimal in program
         case SID_SIZE_ALL:  // BASIC
         {
             mbZoomOnPage = sal_False;
@@ -1232,7 +1223,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if (mpZoomList->IsPreviousPossible())
             {
-                // Vorheriges ZoomRect einstellen
+                // set previous ZoomRect
                 SetZoomRect(mpZoomList->GetPreviousZoomRect());
             }
             rReq.Done ();
@@ -1249,7 +1240,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if (mpZoomList->IsNextPossible())
             {
-                // Naechstes ZoomRect einstellen
+                // set next ZoomRect
                 SetZoomRect(mpZoomList->GetNextZoomRect());
             }
             rReq.Done ();
@@ -1487,11 +1478,6 @@ void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
     }
 }
 
-/*************************************************************************
-|*
-|* URL-Feld einfuegen
-|*
-\************************************************************************/
 
 void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
                                      const String& rTarget, const Point* pPos)
@@ -1551,11 +1537,6 @@ void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
     }
 }
 
-/*************************************************************************
-|*
-|* URL-Button einfuegen
-|*
-\************************************************************************/
 
 void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
                                       const String& rTarget, const Point* pPos)

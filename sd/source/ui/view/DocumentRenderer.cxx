@@ -1984,7 +1984,7 @@ private:
                 continue;
 
             MapMode aMap (rInfo.maMap);
-            // Kann sich die Seitengroesse geaendert haben?
+            // is it possible that the page size changed?
             const Size aPageSize = pPage->GetSize();
 
             if (mpOptions->IsPageSize())
@@ -2014,9 +2014,10 @@ private:
 
             long aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();
             long aPageHeight  = aPageSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder();
-            // Bugfix zu 44530:
-            // Falls implizit umgestellt wurde (Landscape/Portrait)
-            // wird dies beim Kacheln, bzw. aufteilen (Poster) beruecksichtigt
+            // Bugfix for 44530:
+            // if it was implicitly changed (Landscape/Portrait),
+            // this is considered for tiling, respectively for the splitting up
+            // (Poster)
             if( ( rInfo.maPrintSize.Width() > rInfo.maPrintSize.Height()
                     && aPageWidth < aPageHeight )
                 || ( rInfo.maPrintSize.Width() < rInfo.maPrintSize.Height()

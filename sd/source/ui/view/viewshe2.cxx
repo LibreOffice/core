@@ -78,12 +78,9 @@ const String aEmptyStr;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Scrollbar-Update: Thumbpos und VisibleSize anpassen
-|*
-\************************************************************************/
-
+/**
+ * adjust Thumbpos and VisibleSize
+ */
 void ViewShell::UpdateScrollBars()
 {
     if (mpHorizontalScrollBar.get() != NULL)
@@ -135,24 +132,18 @@ void ViewShell::UpdateScrollBars()
     }
 
 }
-/*************************************************************************
-|*
-|* Handling fuer horizontale Scrollbars
-|*
-\************************************************************************/
-
+/**
+ * Handling for horizontal Scrollbars
+ */
 IMPL_LINK_INLINE_START(ViewShell, HScrollHdl, ScrollBar *, pHScroll )
 {
     return VirtHScrollHdl(pHScroll);
 }
 IMPL_LINK_INLINE_END(ViewShell, HScrollHdl, ScrollBar *, pHScroll )
 
-/*************************************************************************
-|*
-|* virtueller Scroll-Handler fuer horizontale Scrollbars
-|*
-\************************************************************************/
-
+/**
+ * virtual scroll handler for horizontal Scrollbars
+ */
 long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
     long nDelta = pHScroll->GetDelta();
@@ -161,7 +152,7 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     {
         double fX = (double) pHScroll->GetThumbPos() / pHScroll->GetRange().Len();
 
-        // alle Fenster der Spalte scrollen
+        // scroll all windows of the column
         ::sd::View* pView = GetView();
         OutlinerView* pOLV = NULL;
 
@@ -198,24 +189,18 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Handling fuer vertikale Scrollbars
-|*
-\************************************************************************/
-
+/**
+ * handling for vertical Scrollbars
+ */
 IMPL_LINK_INLINE_START(ViewShell, VScrollHdl, ScrollBar *, pVScroll )
 {
     return VirtVScrollHdl(pVScroll);
 }
 IMPL_LINK_INLINE_END(ViewShell, VScrollHdl, ScrollBar *, pVScroll )
 
-/*************************************************************************
-|*
-|* Handling fuer vertikale Scrollbars
-|*
-\************************************************************************/
-
+/**
+ * handling for vertical Scrollbars
+ */
 long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 {
     if(IsPageFlipMode())
@@ -284,13 +269,10 @@ void ViewShell::UpdateVRuler()
 {
 }
 
-/*************************************************************************
-|*
-|* Eine bestimmte Anzahl von Zeilen scrollen (wird beim automatischen
-|* Scrollen (Zeichen/Draggen) verwendet)
-|*
-\************************************************************************/
-
+/**
+ * Scroll a specific number of lines. Is used in the automatic scrolling
+ * (character/drag).
+ */
 void ViewShell::ScrollLines(long nLinesX, long nLinesY)
 {
     if ( nLinesX )
@@ -304,12 +286,6 @@ void ViewShell::ScrollLines(long nLinesX, long nLinesY)
 
     Scroll(nLinesX, nLinesY);
 }
-
-/*************************************************************************
-|*
-|* Window um nScrollX, nScrollY scrollen
-|*
-\************************************************************************/
 
 void ViewShell::Scroll(long nScrollX, long nScrollY)
 {
@@ -352,12 +328,9 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
     }
 }
 
-/*************************************************************************
-|*
-|* Den Zoomfaktor fuer alle Split-Windows setzen
-|*
-\************************************************************************/
-
+/**
+ * Set zoom factor for all split windows.
+ */
 void ViewShell::SetZoom(long nZoom)
 {
     Fraction aUIScale(nZoom, 100);
@@ -393,13 +366,10 @@ void ViewShell::SetZoom(long nZoom)
     UpdateScrollBars();
 }
 
-/*************************************************************************
-|*
-|* Zoomrechteck fuer aktives Fenster einstellen und alle Split-Windows
-|* auf den gleichen Zoomfaktor setzen
-|*
-\************************************************************************/
-
+/**
+ * Set zoom rectangle for active window. Sets all split windows to the same zoom
+ * factor.
+ */
 void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 {
     long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
@@ -440,12 +410,9 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
     UpdateScrollBars();
 }
 
-/*************************************************************************
-|*
-|* Abbildungsparameter fuer alle Split-Windows initialisieren
-|*
-\************************************************************************/
-
+/**
+ * Initialize imaging parameters for all split windows.
+ */
 void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                               const Point& rWinPos, sal_Bool bUpdate)
 {
@@ -473,12 +440,9 @@ void ViewShell::InitWindows(const Point& rViewOrigin, const Size& rViewSize,
     }
 }
 
-/*************************************************************************
-|*
-|* Alle Split-Windows unter dem uebergebenen Rechteck invalidieren
-|*
-\************************************************************************/
-
+/**
+ * Invalidate all split windows below the ?provided rectangle.
+ */
 void ViewShell::InvalidateWindows()
 {
     if (mpContentWindow.get() != NULL)
@@ -486,13 +450,9 @@ void ViewShell::InvalidateWindows()
 }
 
 
-/*************************************************************************
-|*
-|* Auf allen Split-Windows ein Markierungsrechteck mit dem
-|* uebergebenen Pen zeichnen
-|*
-\************************************************************************/
-
+/**
+ * Draw a selection rectangle with the ?provided pen on all split windows.
+ */
 void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 {
     if (mpContentWindow.get() != NULL)
@@ -500,12 +460,6 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
         mpContentWindow->InvertTracking(rRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW);
     }
 }
-
-/*************************************************************************
-|*
-|* Groesse und Raender aller Seiten setzen
-|*
-\************************************************************************/
 
 void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                                        long nLeft, long nRight,
@@ -527,9 +481,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        /**********************************************************************
-        * Erst alle MasterPages bearbeiten
-        **********************************************************************/
+        // first, handle all master pages
         pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
@@ -577,9 +529,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        /**********************************************************************
-        * Danach alle Pages bearbeiten
-        **********************************************************************/
+        // then, handle all pages
         pPage = GetDoc()->GetSdPage(i, ePageKind);
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
@@ -626,11 +576,11 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         pPage->SetAutoLayout( pPage->GetAutoLayout() );
     }
 
-    // Handoutseite an neues Format der Standardseiten anpassen
+    // adjust handout page to new format of the standard page
     if( (ePageKind == PK_STANDARD) || (ePageKind == PK_HANDOUT) )
         GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(sal_True);
 
-    // Undo Gruppe dem Undo Manager uebergeben
+    // handed over undo group to undo manager
     pViewShell->GetViewFrame()->GetObjectShell()
         ->GetUndoManager()->AddUndoAction(pUndoGroup);
 
@@ -666,19 +616,16 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
 
-    // auf (neue) Seitengroesse zoomen
+    // zoom onto (new) page size
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_END));
 }
 
-/*************************************************************************
-|*
-|* Zoom-Faktor fuer InPlace einstellen
-|*
-\************************************************************************/
-
+/**
+ * Set zoom factor for InPlace
+ */
 void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 {
     long nZoom = (long)((double) rZoomX * 100);
@@ -686,11 +633,6 @@ void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 }
 
 
-/*************************************************************************
-|*
-|* Aktives Fenster setzen
-|*
-\************************************************************************/
 
 void ViewShell::SetActiveWindow (::sd::Window* pWin)
 {
@@ -727,12 +669,6 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 }
 
 
-
-/*************************************************************************
-|*
-|* RequestHelp event
-|*
-\************************************************************************/
 
 sal_Bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 {
@@ -794,11 +730,6 @@ void ViewShell::WriteFrameViewData()
 {
 }
 
-/*************************************************************************
-|*
-|* OLE-Object aktivieren
-|*
-\************************************************************************/
 
 sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
@@ -815,9 +746,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
     {
-        /**********************************************************
-        * Leeres OLE-Objekt mit OLE-Objekt versehen
-        **********************************************************/
+        // provide OLE object to empty OLE object
         aName = pObj->GetProgName();
         ::rtl::OUString aObjName;
         SvGlobalName aClass;
@@ -848,7 +777,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         {
             aName = "";
 
-            // Dialog "OLE-Objekt einfuegen" aufrufen
+            // call dialog "insert OLE object"
             GetDocSh()->SetWaitCursor( sal_False );
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
@@ -864,16 +793,12 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if ( xObj.is() )
         {
-            /******************************************************
-            * OLE-Objekt ist nicht mehr leer
-            ******************************************************/
+            // OLE object is no longer empty
             pObj->SetEmptyPresObj(sal_False);
             pObj->SetOutlinerParaObject(NULL);
             pObj->SetGraphic(NULL);
 
-            /******************************************************
-            * Das leere OLE-Objekt bekommt ein neues IPObj
-            ******************************************************/
+            // the empty OLE object gets a new IPObj
             if (!aName.isEmpty())
             {
                 pObj->SetObjRef(xObj);
@@ -882,7 +807,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             }
             else
             {
-                // Das Einfuegen hat der Dialog schon gemacht
+                // insertion was done by the dialog
                 pObj->SetObjRef(xObj);
             }
 
@@ -947,7 +872,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         aScaleHeight.ReduceInaccurate(10);
         pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
-        // sichtbarer Ausschnitt wird nur inplace veraendert!
+        // visible section is only changed in-place!
         aRect.SetSize(aObjAreaSize);
         // the object area size must be set after scaling, since it triggers the resizing
         pSdClient->SetObjArea(aRect);
@@ -957,7 +882,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             AdaptDefaultsForChart( xObj );
         }
 
-        pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
+        pSdClient->DoVerb(nVerb);   // if necessary, ErrCode is outputted by Sfx
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
             SID_NAVIGATOR_STATE, sal_True, sal_False);
     }
@@ -972,12 +897,9 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     return aErrCode == 0;
 }
 
-/*************************************************************************
-|*
-|* umschliessendes Rechteck aller (Split-)Fenster zurueckgeben.
-|*
-\************************************************************************/
-
+/**
+ * @returns enclosing rectangle of all (split-) windows.
+ */
 const Rectangle& ViewShell::GetAllWindowRect()
 {
     maAllWindowRectangle.SetPos(
@@ -985,37 +907,24 @@ const Rectangle& ViewShell::GetAllWindowRect()
     return maAllWindowRectangle;
 }
 
-/*************************************************************************
-|*
-|* Read user data
-|*
-\************************************************************************/
 void ViewShell::ReadUserData(const String&)
 {
-    // Auf an FrameView gemerkte VisArea zoomen
+    // zoom onto VisArea from FrameView
     GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
-/*************************************************************************
-|*
-|* Write user data
-|*
-\************************************************************************/
 
 void ViewShell::WriteUserData(String&)
 {
-    // Das Schreiben unserer Daten erfolgt stets in WriteFrameViewData()
+    // writing of our data is always done in WriteFrameViewData()
     WriteFrameViewData();
 }
 
 
-/*************************************************************************
-|*
-|* Lineale ein- / ausschalten
-|*
-\************************************************************************/
-
+/**
+ * Switch ruler on/off
+ */
 void ViewShell::SetRuler(sal_Bool bRuler)
 {
     mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
@@ -1049,11 +958,6 @@ void ViewShell::SetRuler(sal_Bool bRuler)
         GetViewShell()->InvalidateBorder();
 }
 
-/*************************************************************************
-|*
-|* AcceptDrop
-|*
-\************************************************************************/
 
 sal_Int8 ViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
@@ -1066,11 +970,6 @@ sal_Int8 ViewShell::AcceptDrop (
     return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
 }
 
-/*************************************************************************
-|*
-|* ExecuteDrop
-|*
-\************************************************************************/
 
 sal_Int8 ViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,

@@ -131,11 +131,7 @@ SfxViewFrame* ViewShell::GetViewFrame (void) const
 }
 
 
-/*************************************************************************
-|*
-|* SFX-Slotmap und Standardinterface deklarieren
-|*
-\************************************************************************/
+/// declare SFX-Slotmap and standard interface
 TYPEINIT1(ViewShell, SfxShell);
 
 
@@ -163,12 +159,9 @@ ViewShell::~ViewShell()
 }
 
 
-/*************************************************************************
-|*
-|* gemeinsamer Initialiserungsanteil der beiden Konstruktoren
-|*
-\************************************************************************/
-
+/**
+ * common initialization part of both constructors
+ */
 void ViewShell::construct(void)
 {
     mbHasRulers = false;
@@ -293,20 +286,17 @@ void ViewShell::Exit (void)
 
 
 
-/*************************************************************************
-|*
-|* Aktivierung: Arbeitsfenster den Fokus zuweisen
-|*
-\************************************************************************/
-
+/**
+ * set focus to working window
+ */
 void ViewShell::Activate(sal_Bool bIsMDIActivate)
 {
     SfxShell::Activate(bIsMDIActivate);
 
-    // Laut MI darf keiner GrabFocus rufen, der nicht genau weiss von
-    // welchem Window der Focus gegrabt wird. Da Activate() vom SFX teilweise
-    // asynchron verschickt wird, kann es sein, dass ein falsches Window
-    // den Focus hat
+    /* According to MI, nobody is allowed to call GrabFocus, who does not
+       exactly know from which window the focus is grabbed. Since Activate()
+       is sent sometimes asynchronous,  it can happen, that the wrong window
+       gets the focus. */
 
     if (mpHorizontalRuler.get() != NULL)
         mpHorizontalRuler->SetActive(sal_True);
@@ -315,7 +305,7 @@ void ViewShell::Activate(sal_Bool bIsMDIActivate)
 
     if (bIsMDIActivate)
     {
-        // Damit der Navigator auch einen aktuellen Status bekommt
+        // thus, the Navigator will also get a current status
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
         if (GetDispatcher() != NULL)
             GetDispatcher()->Execute(
@@ -366,11 +356,6 @@ void ViewShell::UIDeactivated( SfxInPlaceClient*  )
         GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this, *GetDrawView());
 }
 
-/*************************************************************************
-|*
-|* Deaktivierung
-|*
-\************************************************************************/
 
 void ViewShell::Deactivate(sal_Bool bIsMDIActivate)
 {
@@ -385,7 +370,7 @@ void ViewShell::Deactivate(sal_Bool bIsMDIActivate)
 
     OSL_ASSERT (GetViewShell()!=NULL);
 
-    // View-Attribute an der FrameView merken
+    // remember view attributes of FrameView
     WriteFrameViewData();
 
     if (bIsMDIActivate)
@@ -419,12 +404,6 @@ void ViewShell::Shutdown (void)
 
 
 
-
-/*************************************************************************
-|*
-|* Keyboard event
-|*
-\************************************************************************/
 
 sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
@@ -488,11 +467,6 @@ sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown event
-|*
-\************************************************************************/
 
 void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
@@ -512,7 +486,7 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
         SetActiveWindow(pWin);
     }
 
-    // MouseEvent in E3dView eintragen
+    // insert MouseEvent into E3dView
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
@@ -533,11 +507,6 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 }
 
-/*************************************************************************
-|*
-|* MouseMove event
-|*
-\************************************************************************/
 
 void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
@@ -557,7 +526,7 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
         SetActiveWindow(pWin);
     }
 
-    // MouseEvent in E3dView eintragen
+    // insert MouseEvent into E3dView
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
@@ -572,11 +541,6 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     }
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp event
-|*
-\************************************************************************/
 
 void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
@@ -585,7 +549,7 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
         SetActiveWindow(pWin);
     }
 
-    // MouseEvent in E3dView eintragen
+    // insert MouseEvent into E3dView
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
@@ -609,11 +573,6 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 }
 
 
-/*************************************************************************
-|*
-|* Command event
-|*
-\************************************************************************/
 
 void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
@@ -961,11 +920,9 @@ void ViewShell::SetUIUnit(FieldUnit eUnit)
         mpVerticalRuler->SetUnit(eUnit);
 }
 
-/*************************************************************************
-|*
-|* DefTab an den horizontalen Linealen setzen
-|*
-\************************************************************************/
+/**
+ * set DefTab at horizontal rulers
+ */
 void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 {
     if (mpHorizontalRuler.get() != NULL)

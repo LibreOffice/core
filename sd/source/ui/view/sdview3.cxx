@@ -732,17 +732,17 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             }
                             aSet.Put( pObj->GetMergedItemSet() );
 
-                            // Eckenradius soll nicht uebernommen werden.
-                            // In der Gallery stehen Farbverlauefe (Rechtecke)
-                            // welche den Eckenradius == 0 haben. Dieser soll
-                            // nicht auf das Objekt uebertragen werden.
+                            /* Do not take over corner radius. There are
+                               gradients (rectangles) in the gallery with corner
+                               radius of 0. We should not use that on the
+                               object. */
                             aSet.ClearItem( SDRATTR_ECKENRADIUS );
 
                             pPickObj->SetMergedItemSetAndBroadcast( aSet );
 
                             if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
                             {
-                                // Zusaetzlich 3D Attribute handeln
+                                // handle 3D attribute in addition
                                 SfxItemSet aNewSet( mrDoc.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
                                 SfxItemSet aOldSet( mrDoc.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
 
@@ -1287,7 +1287,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 else
                     aSet.Put( XLineColorItem( aName, aColor ) );
 
-                // Textfarbe hinzufuegen
+                // add text color
                 pPickObj->SetMergedItemSetAndBroadcast( aSet );
             }
         }

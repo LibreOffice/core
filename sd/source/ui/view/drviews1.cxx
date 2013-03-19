@@ -1009,7 +1009,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
 
-            if( !pMaster )              // Falls es diese Page nicht geben sollte
+            if( !pMaster )              // if this page should not exist
                 pMaster = GetDoc()->GetMasterSdPage(0, mePageKind);
 
             sal_uInt16 nNum = pMaster->GetPageNum();

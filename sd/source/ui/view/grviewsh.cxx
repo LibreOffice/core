@@ -30,11 +30,6 @@ namespace sd {
 
 static const int TABCONTROL_INITIAL_SIZE = 350;
 
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
 
 GraphicViewShell::GraphicViewShell (
     SfxViewFrame* pFrame,

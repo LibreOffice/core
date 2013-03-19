@@ -90,16 +90,13 @@ using ::com::sun::star::frame::XController;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SfxRequests fuer Controller bearbeiten
-|*
-\************************************************************************/
-
+/**
+ * handle SfxRequests for controller
+ */
 void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 {
-    // waehrend einer Diashow wird nichts ausser dem Seitenwechsel und dem
-    // Sprung zur Bookmark ausgefuehrt!
+    // except a page switch and jumps to bookmarks, nothing is executed during
+    // a slide show
     if( HasCurrentFunction(SID_PRESENTATION) &&
         rReq.GetSlot() != SID_SWITCHPAGE &&
         rReq.GetSlot() != SID_JUMPTOMARK)
@@ -236,7 +233,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 }
             }
 
-            // Default-Layer der Page einschalten
+            // turn on default layer of page
             mpDrawView->SetActiveLayer( String( SdResId(STR_LAYER_LAYOUT) ) );
 
             ChangeEditMode(EM_PAGE, mbIsLayerModeActive);
@@ -313,9 +310,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         }
         case SID_OBJECTRESIZE:
         {
-            /******************************************************************
-            * Der Server moechte die Clientgrosse verandern
-            ******************************************************************/
+            // The server likes to change the client size
             OSL_ASSERT (GetViewShell()!=NULL);
             SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
 
@@ -374,7 +369,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         p3DWin->DocumentReload();
                 }
 
-                // Normale Weiterleitung an ViewFrame zur Ausfuehrung
+                // normal forwarding to ViewFrame for execution
                 GetViewFrame()->ExecuteSlot(rReq);
 
                 // From here on we must cope with this object and the frame already being
@@ -466,15 +461,10 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
     }
 }
 
-/*************************************************************************
-|*
-|* SfxRequests fuer Lineale bearbeiten
-|*
-\************************************************************************/
 
 void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // nothing is executed during a slide show!
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -750,16 +740,12 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         }
     }
     if ( pUndoGroup )
-        // Undo Gruppe dem Undo Manager uebergeben
+        // give the undo group to the undo manager
         GetViewFrame()->GetObjectShell()->GetUndoManager()->
                                             AddUndoAction(pUndoGroup);
 }
 
-/*************************************************************************
-|*
-|* Statuswerte der Lineale bestimmen
-|*
-\************************************************************************/
+
 void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 {
     Point aOrigin;
@@ -868,7 +854,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     rSet.DisableItem( SID_RULER_OBJECT );
 
-                    // Seitenraender werden gelocked
+                    // lock page margins
                     aProtect.SetSizeProtect( sal_True );
                     aProtect.SetPosProtect( sal_True );
                 }
@@ -914,15 +900,10 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     rSet.Put( aProtect );
 }
 
-/*************************************************************************
-|*
-|* SfxRequests fuer StatusBar bearbeiten
-|*
-\************************************************************************/
 
 void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 {
-    // waehrend einer Diashow wird nichts ausgefuehrt!
+    // nothing is executed during a slide show!
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -944,12 +925,9 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
     }
 }
 
-/*************************************************************************
-|*
-|* Status der Snap-Objekt-Eintraege im Popup setzen
-|*
-\************************************************************************/
-
+/**
+ * set state of snap object entries in popup
+ */
 void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     SdrPageView* pPV;

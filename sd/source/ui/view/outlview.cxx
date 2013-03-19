@@ -91,11 +91,6 @@ struct SdParaAndPos
 
 TYPEINIT1( OutlineView, ::sd::View );
 
-/*************************************************************************
-|*
-|* Constructor
-|*
-\************************************************************************/
 
 OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewSh)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewSh)
@@ -174,12 +169,9 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
         pDocUndoMgr->SetLinkedUndoManager(&mrOutliner.GetUndoManager());
 }
 
-/*************************************************************************
-|*
-|* Destructor, restore Links, clear Oultiner
-|*
-\************************************************************************/
-
+/**
+ * Destructor, restore Links, clear Oultiner
+ */
 OutlineView::~OutlineView()
 {
     DBG_ASSERT(maDragAndDropModelGuard.get() == 0, "sd::OutlineView::~OutlineView(), prior drag operation not finished correctly!" );
@@ -235,11 +227,6 @@ void OutlineView::DisconnectFromApplication (void)
 
 
 
-/*************************************************************************
-|*
-|* Paint method
-|*
-\************************************************************************/
 
 void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
@@ -260,21 +247,14 @@ void OutlineView::InvalidateSlideNumberArea()
 {
 }
 
-/*************************************************************************
-|*
-|* Window size was changed
-|*
-\************************************************************************/
+/**
+ * Window size was changed
+ */
 
 void OutlineView::AdjustPosSizePixel(const Point &,const Size &,::sd::Window*)
 {
 }
 
-/*************************************************************************
-|*
-|* add a window
-|*
-\************************************************************************/
 
 void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
 {
@@ -313,11 +293,6 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
     ::sd::View::AddWindowToPaintView(pWin);
 }
 
-/*************************************************************************
-|*
-|* remove a window
-|*
-\************************************************************************/
 
 void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
 {
@@ -346,12 +321,9 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
     ::sd::View::DeleteWindowFromPaintView(pWin);
 }
 
-/*************************************************************************
-|*
-|* Return a pointer to the OutlinerView corresponding to the window
-|*
-\************************************************************************/
-
+/**
+ * Return a pointer to the OutlinerView corresponding to the window
+ */
 OutlinerView* OutlineView::GetViewByWindow (::Window* pWin) const
 {
     OutlinerView* pOlView = NULL;
@@ -369,12 +341,9 @@ OutlinerView* OutlineView::GetViewByWindow (::Window* pWin) const
 }
 
 
-/*************************************************************************
-|*
-|* Return the title before a random paragraph
-|*
-\************************************************************************/
-
+/**
+ * Return the title before a random paragraph
+ */
 Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
 {
     sal_Int32 nPos = mrOutliner.GetAbsPos(const_cast<Paragraph*>(pPara));
@@ -394,12 +363,9 @@ Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
     return NULL;
 }
 
-/*************************************************************************
-|*
-|* Return the title after a random paragraph
-|*
-\************************************************************************/
-
+/**
+ * Return the title after a random paragraph
+ */
 Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 {
     Paragraph* pResult = const_cast< Paragraph* >( pPara );
@@ -417,12 +383,9 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
     return NULL;
 }
 
-/*************************************************************************
-|*
-|* Handler for inserting pages (paragraphs)
-|*
-\************************************************************************/
-
+/**
+ * Handler for inserting pages (paragraphs)
+ */
 IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 {
     // we get calls to this handler during binary insert of drag and drop contents but
@@ -562,12 +525,9 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     return pPage;
 }
 
-/*************************************************************************
-|*
-|* Handler for deleting pages (paragraphs)
-|*
-\************************************************************************/
-
+/**
+ * Handler for deleting pages (paragraphs)
+ */
 IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphRemovingHdl(), model change without undo?!" );
@@ -625,13 +585,10 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Handler for changing the indentation depth of paragraphs (requires inserting
-|* or deleting of pages in some cases)
-|*
-\************************************************************************/
-
+/**
+ * Handler for changing the indentation depth of paragraphs (requires inserting
+ * or deleting of pages in some cases)
+ */
 IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::DepthChangedHdl(), no undo for model change?!" );
@@ -849,12 +806,9 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Handler for StatusEvents
-|*
-\************************************************************************/
-
+/**
+ * Handler for StatusEvents
+ */
 IMPL_LINK_NOARG(OutlineView, StatusEventHdl)
 {
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
@@ -895,12 +849,9 @@ IMPL_LINK_NOARG(OutlineView, EndDropHdl)
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Handler for the start of a paragraph movement
-|*
-\************************************************************************/
-
+/**
+ * Handler for the start of a paragraph movement
+ */
 IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 {
     OutlineViewPageChangesGuard aGuard(this);
@@ -941,12 +892,9 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Handler for the end of a paragraph movement
-|*
-\************************************************************************/
-
+/**
+ * Handler for the end of a paragraph movement
+ */
 IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 {
     OutlineViewPageChangesGuard aGuard(this);
@@ -1013,12 +961,9 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Look for the title text object in one page of the model
-|*
-\************************************************************************/
-
+/**
+ * Look for the title text object in one page of the model
+ */
 SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 {
     sal_uLong           nObjectCount = pPage->GetObjCount();
@@ -1039,12 +984,9 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 }
 
 
-/*************************************************************************
-|*
-|* Look for the outline text object in one page of the model
-|*
-\************************************************************************/
-
+/**
+ * Look for the outline text object in one page of the model
+ */
 SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage* pPage)
 {
     sal_uLong           nObjectCount = pPage->GetObjCount();
@@ -1137,12 +1079,9 @@ sal_Bool OutlineView::PrepareClose(sal_Bool)
 }
 
 
-/*************************************************************************
-|*
-|* Set attributes of the selected text
-|*
-\************************************************************************/
-
+/**
+ * Set attributes of the selected text
+ */
 sal_Bool OutlineView::SetAttributes(const SfxItemSet& rSet, sal_Bool )
 {
     sal_Bool bOk = sal_False;
@@ -1160,12 +1099,9 @@ sal_Bool OutlineView::SetAttributes(const SfxItemSet& rSet, sal_Bool )
     return (bOk);
 }
 
-/*************************************************************************
-|*
-|* Get attributes of the selected text
-|*
-\************************************************************************/
-
+/**
+ * Get attributes of the selected text
+ */
 sal_Bool OutlineView::GetAttributes( SfxItemSet& rTargetSet, sal_Bool ) const
 {
     OutlinerView* pOlView = GetViewByWindow(
@@ -1280,12 +1216,9 @@ void OutlineView::FillOutliner()
     mrOutliner.SetUpdateMode(true);
 }
 
-/*************************************************************************
-|*
-|* Handler for deleting of level 0 paragraphs (pages): Warning
-|*
-\************************************************************************/
-
+/**
+ * Handler for deleting of level 0 paragraphs (pages): Warning
+ */
 IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
 {
     sal_uInt16 nNumOfPages = mrOutliner.GetSelPageCount();
@@ -1311,12 +1244,9 @@ IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
     return 1;
 }
 
-/*************************************************************************
-|*
-|* Handler for indenting level 0 paragraphs (pages): Warning
-|*
-\************************************************************************/
-
+/**
+ * Handler for indenting level 0 paragraphs (pages): Warning
+ */
 IMPL_LINK_INLINE_START( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
 {
     return RemovingPagesHdl(pOutlinerView);
@@ -1407,12 +1337,9 @@ void OutlineView::SetActualPage( SdPage* pActual )
     }
 }
 
-/*************************************************************************
-|*
-|* Get StyleSheet from the selection
-|*
-\************************************************************************/
-
+/**
+ * Get StyleSheet from the selection
+ */
 SfxStyleSheet* OutlineView::GetStyleSheet() const
 {
      ::sd::Window* pActWin = mrOutlineViewShell.GetActiveWindow();
@@ -1423,12 +1350,9 @@ SfxStyleSheet* OutlineView::GetStyleSheet() const
 
 
 
-/*************************************************************************
-|*
-|* Mark pages as selected / not selected
-|*
-\************************************************************************/
-
+/**
+ * Mark pages as selected / not selected
+ */
 void OutlineView::SetSelectedPages()
 {
     // list of selected title paragraphs
@@ -1471,12 +1395,9 @@ void OutlineView::SetSelectedPages()
 }
 
 
-/*************************************************************************
-|*
-|* Set new links
-|*
-\************************************************************************/
-
+/**
+ * Set new links
+ */
 void OutlineView::SetLinks()
 {
     // set notification links
@@ -1497,12 +1418,9 @@ void OutlineView::SetLinks()
 
 
 
-/*************************************************************************
-|*
-|* Restore old links
-|*
-\************************************************************************/
-
+/**
+ * Restore old links
+ */
 void OutlineView::ResetLinks() const
 {
     Link aEmptyLink;
@@ -1519,22 +1437,12 @@ void OutlineView::ResetLinks() const
     mrOutliner.SetEndPasteOrDropHdl(aEmptyLink);
 }
 
-/*************************************************************************
-|*
-|* AcceptDrop
-|*
-\************************************************************************/
 
 sal_Int8 OutlineView::AcceptDrop( const AcceptDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, sal_uInt16)
 {
     return DND_ACTION_NONE;
 }
 
-/*************************************************************************
-|*
-|* ExecuteDrop
-|*
-\************************************************************************/
 
 sal_Int8 OutlineView::ExecuteDrop( const ExecuteDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, sal_uInt16)
 {

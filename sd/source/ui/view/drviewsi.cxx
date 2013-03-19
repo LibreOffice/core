@@ -59,12 +59,9 @@ namespace sd {
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
-/*************************************************************************
-|*
-|* SfxRequests fuer EffekteWindow bearbeiten
-|*
-\************************************************************************/
-
+/**
+ * Handle SfxRequests for EffekteWindow
+ */
 void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
 {
     CheckLineTo (rReq);
@@ -101,11 +98,6 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
     }
 }
 
-/*************************************************************************
-|*
-|* 3D - Assign / Update
-|*
-\************************************************************************/
 void DrawViewShell::Update3DWindow()
 {
     sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
@@ -139,25 +131,25 @@ void DrawViewShell::AssignFrom3DWindow()
                     0, 0);
                 p3DWin->GetAttr( aSet );
 
-                // Eigene UNDO-Klammerung auch um die Wandlung in 3D
+                // own UNDO-compounding also around transformation in 3D
                 GetView()->BegUndo(String(SdResId(STR_UNDO_APPLY_3D_FAVOURITE)));
 
                 if(GetView()->IsConvertTo3DObjPossible())
                 {
-                    // Nur TextAttribute zuweisen
+                    // assign only text-attribute
                     SfxItemSet aTextSet( GetDoc()->GetPool(),
                         EE_ITEMS_START, EE_ITEMS_END, 0 );
                     aTextSet.Put( aSet, sal_False );
                     GetView()->SetAttributes( aTextSet );
 
-                    // Text in 3D umwandeln
+                    // transform text into 3D
                     sal_uInt16 nSId = SID_CONVERT_TO_3D;
                     SfxBoolItem aItem( nSId, sal_True );
                     GetViewFrame()->GetDispatcher()->Execute(
                         nSId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-                    // Feststellen, ob ein FILL_Attribut gesetzt ist.
-                    // Falls nicht, Fuellattribut hart setzen
+                    // Determine if a FILL attribute is set.
+                    // If not, hard set a fill attribut
                     XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
                     if(eFillStyle == XFILL_NONE)
                         aSet.Put(XFillStyleItem (XFILL_SOLID));
@@ -170,10 +162,10 @@ void DrawViewShell::AssignFrom3DWindow()
                     aSet.ClearItem(SDRATTR_3DOBJ_DEPTH);
                 }
 
-                // Attribute zuweisen
+                // assign attribute
                 GetView()->Set3DAttributes( aSet );
 
-                // Ende UNDO
+                // end UNDO
                 GetView()->EndUndo();
             }
             else
@@ -184,7 +176,7 @@ void DrawViewShell::AssignFrom3DWindow()
                 aInfoBox.Execute();
             }
 
-            // Focus zurueckholen
+            // get focus back
             GetActiveWindow()->GrabFocus();
         }
     }

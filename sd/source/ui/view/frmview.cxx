@@ -51,11 +51,6 @@ using ::rtl::OUString;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 
 FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
   : SdrView(pDrawDoc, (OutputDevice*) NULL),
@@ -82,9 +77,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
         if ( pDocShell )
         {
-            /**********************************************************************
-            * Das Dokument wurde geladen, ist eine FrameView vorhanden?
-            **********************************************************************/
+            // document is loaded, is there a FrameView?
             sal_uLong nSdViewShellCount = 0;
             ViewShellBase* pBase = NULL;
             SfxViewShell* pSfxViewSh = NULL;
@@ -139,9 +132,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
     if (pFrameView)
     {
-        /**********************************************************************
-        * FrameView mit der FrameView der DocShell initialisieren
-        **********************************************************************/
+        // initialize FrameView with the FrameView of the DocShell
         SetRuler( pFrameView->HasRuler() );
         SetGridCoarse( pFrameView->GetGridCoarse() );
         SetGridFine( pFrameView->GetGridFine() );
@@ -210,9 +201,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
     }
     else
     {
-        /**********************************************************************
-        * FrameView mit den Applikationsdaten initialisieren
-        **********************************************************************/
+        // initialize FrameView with the application data
         maVisibleLayers.SetAll();
         maPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
@@ -261,22 +250,12 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 
 FrameView::~FrameView()
 {
 }
 
 
-/*************************************************************************
-|*
-|* Verbindung herstellen
-|*
-\************************************************************************/
 
 void FrameView::Connect()
 {
@@ -284,11 +263,6 @@ void FrameView::Connect()
 }
 
 
-/*************************************************************************
-|*
-|* Verbindung loesen
-|*
-\************************************************************************/
 
 void FrameView::Disconnect()
 {
@@ -303,12 +277,9 @@ void FrameView::Disconnect()
     }
 }
 
-/*************************************************************************
-|*
-|* Update mit Daten der SdOptions
-|*
-\************************************************************************/
-
+/**
+ * Update with data from the specified SdOptions
+ */
 void FrameView::Update(SdOptions* pOptions)
 {
     if (pOptions)
@@ -355,12 +326,9 @@ void FrameView::Update(SdOptions* pOptions)
 }
 
 
-/*************************************************************************
-|*
-|* EditMode (Page oder MasterPage) des Arbeitsmodus setzen
-|*
-\************************************************************************/
-
+/**
+ * Set EditMode (Page or MasterPage) of working mode
+ */
 void FrameView::SetViewShEditMode(EditMode eMode, PageKind eKind)
 {
     if (eKind == PK_STANDARD)
@@ -378,12 +346,9 @@ void FrameView::SetViewShEditMode(EditMode eMode, PageKind eKind)
 }
 
 
-/*************************************************************************
-|*
-|* EditMode (Page oder MasterPage) des Arbeitsmodus zurueckgeben
-|*
-\************************************************************************/
-
+/**
+ * Return EditMode (Page or MasterPage) of working mode
+ */
 EditMode FrameView::GetViewShEditMode(PageKind eKind)
 {
     EditMode eMode = EM_PAGE;

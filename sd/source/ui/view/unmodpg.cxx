@@ -39,11 +39,6 @@
 TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 ModifyPageUndoAction::ModifyPageUndoAction(
     SdDrawDocument* pTheDoc,
@@ -79,16 +74,11 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     maComment = String(SdResId(STR_UNDO_MODIFY_PAGE));
 }
 
-/*************************************************************************
-|*
-|* Undo()
-|*
-\************************************************************************/
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
 void ModifyPageUndoAction::Undo()
 {
-    // invalidate Selection, there could be objects deleted in tis UNDO
+    // invalidate Selection, there could be objects deleted in this UNDO
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
@@ -129,15 +119,10 @@ void ModifyPageUndoAction::Undo()
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 }
 
-/*************************************************************************
-|*
-|* Redo()
-|*
-\************************************************************************/
 
 void ModifyPageUndoAction::Redo()
 {
-    // invalidate Selection, there could be objects deleted in tis UNDO
+    // invalidate Selection, there could be objects deleted in this UNDO
     // which are no longer allowed to be selected then.
       SdrViewIter aIter(mpPage);
     SdrView* pView = aIter.FirstView();
@@ -178,21 +163,11 @@ void ModifyPageUndoAction::Redo()
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 ModifyPageUndoAction::~ModifyPageUndoAction()
 {
 }
 
-/*************************************************************************
-|*
-|* Kommentar liefern
-|*
-\************************************************************************/
 
 rtl::OUString ModifyPageUndoAction::GetComment() const
 {

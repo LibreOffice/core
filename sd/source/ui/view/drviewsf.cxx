@@ -63,17 +63,14 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Status von Controller-SfxSlots setzen
-|*
-\************************************************************************/
-
+/**
+ * Set state of controller SfxSlots
+ */
 void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 {
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
     {
-        // "Letzte Version" vom SFx en/disablen lassen
+        // let "last version" of SFx en/disable
         GetViewFrame()->GetSlotState (SID_RELOAD, NULL, &rSet);
     }
 
@@ -181,7 +178,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     }
     rSet.Put( SfxBoolItem( SID_READONLY_MODE, mbReadOnly ) );
 
-    // Ausgabequalitaet
+    // output quality
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_GRAYSCALE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
@@ -265,11 +262,6 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 }
 
 
-/*************************************************************************
-|*
-|* Status der Attribut-Items
-|*
-\************************************************************************/
 
 void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 {
@@ -398,8 +390,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_NEW_BY_EXAMPLE:
             {
-                // PseudoStyleSheets koennen nicht 'by Example' erzeugt werden;
-                // normale StyleSheets brauchen dafuer ein selektiertes Objekt
+                // It is not possible to create PseudoStyleSheets 'by Example';
+                // normal style sheets need a selected object for that
                 ISfxTemplateCommon* pTemplCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
                 if (pTemplCommon)
                 {
@@ -415,9 +407,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                         }
                     }
                 }
-                // falls (noch) kein Gestalter da ist, muessen wir uns auf den
-                // View-Zustand zurueckziehen; eine aktuell eingestellte Familie
-                // kann nicht beruecksichtigt werden
+                // if there is no (yet) a designer, we have to go back into the
+                // view state; an actual set family can not be considered
                 else
                 {
                     if (!mpDrawView->AreObjectsMarked())
@@ -452,11 +443,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
     rSet.Put( aAllSet, sal_False );
 
-    // Flaechen und/oder Linienattribute wurden geaendert
+    // there were changes at area and/or line attributes
     if( bAttr && pSet )
     {
-        // Wenn die View selektierte Objekte besitzt, muessen entspr. Items
-        // von SFX_ITEM_DEFAULT (_ON) auf SFX_ITEM_DISABLED geaendert werden
+        // if the view owns selected objects, corresponding items have to be
+        // changed from SFX_ITEM_DEFAULT (_ON) to SFX_ITEM_DISABLED
         if( mpDrawView->AreObjectsMarked() )
         {
             SfxWhichIter aNewIter( *pSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
@@ -477,11 +468,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 }
 
 
-/*************************************************************************
-|*
-|* Text der Selektion zurueckgeben
-|*
-\************************************************************************/
 
 String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
 {
@@ -509,11 +495,6 @@ String DrawViewShell::GetSelectionText(sal_Bool bCompleteWords)
     return (aStrSelection);
 }
 
-/*************************************************************************
-|*
-|* Ist etwas selektiert?
-|*
-\************************************************************************/
 
 sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
 {

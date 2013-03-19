@@ -45,12 +45,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SfxRequests fuer Navigator bearbeiten
-|*
-\************************************************************************/
-
+/**
+ * handle SfxRequests for navigator
+ */
 void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 {
     CheckLineTo (rReq);
@@ -94,21 +91,21 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 {
                     case PAGE_FIRST:
                     {
-                        // Sprung zu erster Seite
+                        // jump to first page
                         SwitchPage(0);
                     }
                     break;
 
                     case PAGE_LAST:
                     {
-                        // Sprung zu letzter Seite
+                        // jumpt to last page
                         SwitchPage(GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1);
                     }
                     break;
 
                     case PAGE_NEXT:
                     {
-                        // Sprung zu naechster Seite
+                        // jump to next page
                         sal_uInt16 nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
 
                         if (nSdPage < GetDoc()->GetSdPageCount(mpActualPage->GetPageKind()) - 1)
@@ -120,7 +117,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 
                     case PAGE_PREVIOUS:
                     {
-                        // Sprung zu vorheriger Seite
+                        // jump to previous page
                         sal_uInt16 nSdPage = (mpActualPage->GetPageNum() - 1) / 2;
 
                         if (nSdPage > 0)
@@ -163,11 +160,6 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
     }
 }
 
-/*************************************************************************
-|*
-|* Statuswerte fuer Navigator zurueckgeben
-|*
-\************************************************************************/
 
 void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 {
@@ -209,7 +201,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         nLastPage = GetDoc()->GetSdPageCount( mePageKind ) - 1;
     }
 
-    // erste Seite / vorherige Seite
+    // first page / previous page
     if( nCurrentPage == nFirstPage )
     {
         nState |= NAVBTN_FIRST_DISABLED;
@@ -223,7 +215,7 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
         nState |= NAVBTN_FIRST_ENABLED | NAVBTN_PREV_ENABLED;
     }
 
-    // letzte Seite / naechste Seite
+    // last page / next page
     if( nCurrentPage == nLastPage )
     {
         nState |= NAVBTN_LAST_DISABLED;

@@ -452,7 +452,7 @@ void View::DragFinished( sal_Int8 nDropAction )
                 SdrObject* pChkObj =
 #endif
                     pObj->GetPage()->RemoveObject(nOrdNum);
-                DBG_ASSERT(pChkObj==pObj,"pChkObj!=pObj beim RemoveObject()");
+                DBG_ASSERT(pChkObj==pObj,"pChkObj!=pObj in RemoveObject()");
             }
         }
 
@@ -784,7 +784,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                     bCreated = sal_True;
                                 }
 
-                                // Undo-Action mit alten und neuen Groessen erzeugen
+                                // create undo action with old and new sizes
                                 SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction(&mrDoc, pPickObj, bCreated);
                                 pAction->SetActive(pInfo->mbActive, pInfo->mbActive);
                                 pAction->SetEffect(pInfo->meEffect, pInfo->meEffect);
@@ -864,16 +864,17 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
                 nPgPos = pPage->GetPageNum() + 1;
         }
 
-        // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
-        // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
-        // aufgenommen (bNameOK == sal_False -> Benutzer hat abgebrochen)
+        /* In order t ensure unique page names, we test the ones we want to
+           insert. If necessary. we put them into and replacement list (bNameOK
+           == sal_False -> User canceled).  */
         sal_Bool    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? sal_True : sal_False );
         sal_Bool    bNameOK = GetExchangeList( aExchangeList, aBookmarkList, 2 );
         sal_Bool    bReplace = sal_False;
 
-        // Da man hier nicht weiss, ob es sich um eine Seite oder ein Objekt handelt,
-        // wird eine Liste sowohl mit Seiten, als auch mit Objekten gefuellt.
-        // Sollten Seitennamen und Objektnamen identisch sein gibt es hier natuerlich Probleme !!!
+        /* Since we don't know the type (page or object), we fill a list with
+           pages and objects.
+           Of course we have problems if there are pages and objects with the
+           same name!!! */
         if( bNameOK )
         {
             mrDoc.InsertBookmark( aBookmarkList, aExchangeList,
@@ -894,8 +895,8 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
 {
     assert(rExchangeList.empty());
 
-    bool bListIdentical = true; // BookmarkList und ExchangeList sind gleich
-    bool bNameOK = true;        // Name ist eindeutig
+    bool bListIdentical = true; ///< Bookmark list and exchange list are identical
+    bool bNameOK = true;        ///< name is unique
 
     std::vector<rtl::OUString>::const_iterator pIter;
     for ( pIter = rBookmarkList.begin(); bNameOK && pIter != rBookmarkList.end(); ++pIter )
@@ -943,7 +944,7 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
         rExchangeList.push_back(aNewName);
     }
 
-    // ExchangeList ist mit BookmarkList identisch
+    // Exchange list is identical to bookmark list
     if( !rExchangeList.empty() && bListIdentical )
         rExchangeList.clear();
 

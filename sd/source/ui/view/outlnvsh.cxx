@@ -102,13 +102,9 @@ namespace sd {
 /************************************************************************/
 
 
-/*************************************************************************
-|*
-|* Declare SFX-Slotmap and standard interface
-|*
-\************************************************************************/
-
-
+/**
+ * Declare SFX-Slotmap and standard interface
+ */
 SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
 {
     SFX_POPUPMENU_REGISTRATION( SdResId(RID_OUTLINE_POPUP) );
@@ -128,12 +124,9 @@ SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
 TYPEINIT1( OutlineViewShell, ViewShell );
 
 
-/*************************************************************************
-|*
-|* common initialization part of both constructors
-|*
-\************************************************************************/
-
+/**
+ * common initialization part of both constructors
+ */
 void OutlineViewShell::Construct(DrawDocShell* )
 {
     sal_Bool bModified = GetDoc()->IsChanged();
@@ -192,14 +185,9 @@ Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController (vo
 }
 
 
-
-
-/*************************************************************************
-|*
-|* Default constructor, windows must not center themselves automatically
-|*
-\************************************************************************/
-
+/**
+ * Default constructor, windows must not center themselves automatically
+ */
 OutlineViewShell::OutlineViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
@@ -225,11 +213,6 @@ OutlineViewShell::OutlineViewShell (
     doShow();
 }
 
-/*************************************************************************
-|*
-|* Destructor
-|*
-\************************************************************************/
 
 OutlineViewShell::~OutlineViewShell()
 {
@@ -260,13 +243,10 @@ void OutlineViewShell::Shutdown (void)
 
 
 
-/*************************************************************************
-|*
-|* Paint method: the event gets forwarded from pWindow to the Viewshell
-|* and the current function
-|*
-\************************************************************************/
-
+/**
+ * Paint method: the event gets forwarded from pWindow to the Viewshell
+ * and the current function
+ */
 void OutlineViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
     if (pOlView)
@@ -320,12 +300,9 @@ void OutlineViewShell::ArrangeGUIElements ()
     }
 }
 
-/*************************************************************************
-|*
-|* Handle SfxRequest for the Controller
-|*
-\************************************************************************/
-
+/**
+ * Handle SfxRequest for the Controller
+ */
 void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -369,11 +346,9 @@ void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
 
 
 
-/*************************************************************************
-|*
-|* Activate(): during the first invocation the fields get updated
-|*
-\************************************************************************/
+/**
+ * Activate(): during the first invocation the fields get updated
+ */
 void OutlineViewShell::Activate( sal_Bool bIsMDIActivate )
 {
     if ( ! mbInitialized)
@@ -395,11 +370,6 @@ void OutlineViewShell::Activate( sal_Bool bIsMDIActivate )
     }
 }
 
-/*************************************************************************
-|*
-|* Deactivate()
-|*
-\************************************************************************/
 void OutlineViewShell::Deactivate( sal_Bool bIsMDIActivate )
 {
     pOlView->DisconnectFromApplication();
@@ -409,11 +379,9 @@ void OutlineViewShell::Deactivate( sal_Bool bIsMDIActivate )
     ViewShell::Deactivate( bIsMDIActivate );
 }
 
-/*************************************************************************
-|*
-|* Set status of Controller-SfxSlots
-|*
-\************************************************************************/
+/**
+ * Set status of Controller-SfxSlots
+ */
 void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
 {
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_HYPERLINK_GETLINK))
@@ -473,12 +441,9 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     }
 }
 
-/*************************************************************************
-|*
-|* SfxRequests for support functions
-|*
-\************************************************************************/
-
+/**
+ * SfxRequests for support functions
+ */
 void OutlineViewShell::FuSupport(SfxRequest &rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
@@ -705,12 +670,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
     Invalidate(SID_PASTE);
 }
 
-/*************************************************************************
-|*
-|* SfxRequests for permanent functions
-|*
-\************************************************************************/
-
+/**
+ * SfxRequests for permanent functions
+ */
 void OutlineViewShell::FuPermanent(SfxRequest &rReq)
 {
     if(HasCurrentFunction())
@@ -770,12 +732,9 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Set Status (Enabled/Disabled) of Menu-SfxSlots
-|*
-\************************************************************************/
-
+/**
+ * Set Status (Enabled/Disabled) of Menu-SfxSlots
+ */
 void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 {
     ViewShell::GetMenuState(rSet);
@@ -1122,12 +1081,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
 }
 
-/*************************************************************************
-|*
-|* gets invoked when ScrollBar is used
-|*
-\************************************************************************/
-
+/**
+ * gets invoked when ScrollBar is used
+ */
 long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
     long   nThumb = pHScroll->GetThumbPos();
@@ -1177,13 +1133,10 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     return 0;
 }
 
-/*************************************************************************
-|*
-|* PrepareClose, gets called when the Shell shall be destroyed.
-|* Forwards the invocation to the View
-|*
-\************************************************************************/
-
+/**
+ * PrepareClose, gets called when the Shell shall be destroyed.
+ * Forwards the invocation to the View
+ */
 sal_uInt16 OutlineViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     if( ViewShell::PrepareClose(bUI, bForBrowsing) != sal_True )
@@ -1193,12 +1146,9 @@ sal_uInt16 OutlineViewShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 }
 
 
-/*************************************************************************
-|*
-|* Zoom with zoom factor. Inform OutlinerView
-|*
-\************************************************************************/
-
+/**
+ * Zoom with zoom factor. Inform OutlinerView
+ */
 void OutlineViewShell::SetZoom(long nZoom)
 {
     ViewShell::SetZoom(nZoom);
@@ -1217,12 +1167,9 @@ void OutlineViewShell::SetZoom(long nZoom)
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-/*************************************************************************
-|*
-|* Zoom with zoom rectangle. Inform OutlinerView
-|*
-\************************************************************************/
-
+/**
+ * Zoom with zoom rectangle. Inform OutlinerView
+ */
 void OutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
 {
     ViewShell::SetZoomRect(rZoomRect);
@@ -1241,13 +1188,10 @@ void OutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
-/*************************************************************************
-|*
-|* Before saving: Update Model of the Drawing Engine, then forward the
-|* invocation to the ObjectShell.
-|*
-\************************************************************************/
-
+/**
+ * Before saving: Update Model of the Drawing Engine, then forward the
+ * invocation to the ObjectShell.
+ */
 void OutlineViewShell::Execute(SfxRequest& rReq)
 {
     bool bForwardCall = true;
@@ -1293,12 +1237,9 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
         ((DrawDocShell*)GetViewFrame()->GetObjectShell())->ExecuteSlot( rReq );
 }
 
-/*************************************************************************
-|*
-|* Read FrameViews data and set actual views data
-|*
-\************************************************************************/
-
+/**
+ * Read FrameViews data and set actual views data
+ */
 void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 {
     ::Outliner* pOutl = pOlView->GetOutliner();
@@ -1319,12 +1260,9 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 
 
 
-/*************************************************************************
-|*
-|* Write actual views data to FrameView
-|*
-\************************************************************************/
-
+/**
+ * Write actual views data to FrameView
+ */
 void OutlineViewShell::WriteFrameViewData()
 {
     ::Outliner* pOutl = pOlView->GetOutliner();
@@ -1342,21 +1280,13 @@ void OutlineViewShell::WriteFrameViewData()
 }
 
 
-/*************************************************************************
-|*
-|* Handle SfxRequests for the StatusBar
-|*
-\************************************************************************/
-
+/**
+ * Handle SfxRequests for the StatusBar
+ */
 void OutlineViewShell::ExecStatusBar(SfxRequest&)
 {
 }
 
-/*************************************************************************
-|*
-|* Return state values of the StatusBar
-|*
-\************************************************************************/
 
 void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 {
@@ -1452,11 +1382,6 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
 }
 
-/*************************************************************************
-|*
-|* Command event
-|*
-\************************************************************************/
 
 void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 {
@@ -1490,11 +1415,6 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 }
 
 
-/*************************************************************************
-|*
-|* Keyboard event
-|*
-\************************************************************************/
 
 sal_Bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
@@ -1534,12 +1454,9 @@ sal_Bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 }
 
 
-/*************************************************************************
-|*
-|* Return text of the selection
-|*
-\************************************************************************/
-
+/**
+ * Return text of the selection
+ */
 String OutlineViewShell::GetSelectionText(sal_Bool bCompleteWords)
 {
     String aStrSelection;
@@ -1567,12 +1484,9 @@ String OutlineViewShell::GetSelectionText(sal_Bool bCompleteWords)
 }
 
 
-/*************************************************************************
-|*
-|* Is something selected?
-|*
-\************************************************************************/
-
+/**
+ * Is something selected?
+ */
 sal_Bool OutlineViewShell::HasSelection(sal_Bool bText) const
 {
     sal_Bool bReturn = sal_False;
@@ -1591,12 +1505,9 @@ sal_Bool OutlineViewShell::HasSelection(sal_Bool bText) const
 }
 
 
-/*************************************************************************
-|*
-|* Status of Attribute-Items
-|*
-\************************************************************************/
-
+/**
+ * Status of Attribute-Items
+ */
 void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter  aIter( rSet );
@@ -1695,11 +1606,6 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
 
 
-/*************************************************************************
-|*
-|* MouseButtonUp event
-|*
-\************************************************************************/
 
 void OutlineViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
@@ -1730,12 +1636,10 @@ SdPage* OutlineViewShell::getCurrentPage() const
     return const_cast<OutlineViewShell*>(this)->GetActualPage();
 }
 
-/*************************************************************************
-|*
-|* Returns the first selected page.
-|* If nothing is selected, the first page is returned.
-|*
-\************************************************************************/
+/**
+ * Returns the first selected page.
+ * If nothing is selected, the first page is returned.
+ */
 SdPage* OutlineViewShell::GetActualPage()
 {
     return pOlView->GetActualPage();
@@ -1752,11 +1656,6 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, sal_Bool )
     }
 }
 
-/*************************************************************************
-|*
-|* Update Title
-|*
-\************************************************************************/
 
 bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 {
@@ -1839,11 +1738,6 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
     return bNewObject;
 }
 
-/*************************************************************************
-|*
-|* Update LayoutObject
-|*
-\************************************************************************/
 
 bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 {
@@ -1952,12 +1846,9 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 }
 
 
-/*************************************************************************
-|*
-|* Fill Outliner from Stream
-|*
-\************************************************************************/
-
+/**
+ * Fill Outliner from Stream
+ */
 sal_uLong OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat)
 {
     sal_uLong bRet = 0;
