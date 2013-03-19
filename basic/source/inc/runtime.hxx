@@ -458,12 +458,6 @@ OUString getFullPath( const OUString& aRelPath );
 // has not to be infected with UNO)
 void implStepRenameUCB( const OUString& aSource, const OUString& aDest );
 
-//*** OSL file access ***
-// #87427 OSL need File URLs, so map to getFullPath
-inline OUString getFullPathUNC( const OUString& aRelPath )
-{
-    return getFullPath( aRelPath );
-}
 void implStepRenameOSL( const OUString& aSource, const OUString& aDest );
 bool IsBaseIndexOne();
 

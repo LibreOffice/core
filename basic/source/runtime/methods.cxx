@@ -38,11 +38,7 @@
 
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
-#ifdef WNT
-#include <tools/fsys.hxx>
-#else
 #include <osl/file.hxx>
-#endif
 #include "errobject.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -548,7 +544,7 @@ void implStepRenameUCB( const OUString& aSource, const OUString& aDest )
 // Implementation of StepRENAME with OSL
 void implStepRenameOSL( const OUString& aSource, const OUString& aDest )
 {
-    FileBase::RC nRet = File::move( getFullPathUNC( aSource ), getFullPathUNC( aDest ) );
+    FileBase::RC nRet = File::move( getFullPath( aSource ), getFullPath( aDest ) );
     if( nRet != FileBase::E_None )
     {
         StarBASIC::Error( SbERR_PATH_NOT_FOUND );
@@ -582,7 +578,7 @@ RTLFUNC(FileCopy)
         }
         else
         {
-            FileBase::RC nRet = File::copy( getFullPathUNC( aSource ), getFullPathUNC( aDest ) );
+            FileBase::RC nRet = File::copy( getFullPath( aSource ), getFullPath( aDest ) );
             if( nRet != FileBase::E_None )
             {
                 StarBASIC::Error( SbERR_PATH_NOT_FOUND );
@@ -626,7 +622,7 @@ RTLFUNC(Kill)
         }
         else
         {
-            File::remove( getFullPathUNC( aFileSpec ) );
+            File::remove( getFullPath( aFileSpec ) );
         }
     }
     else
@@ -662,7 +658,7 @@ RTLFUNC(MkDir)
         }
         else
         {
-            Directory::create( getFullPathUNC( aPath ) );
+            Directory::create( getFullPath( aPath ) );
         }
     }
     else
@@ -774,7 +770,7 @@ RTLFUNC(RmDir)
         }
         else
         {
-            implRemoveDirRecursive( getFullPathUNC( aPath ) );
+            implRemoveDirRecursive( getFullPath( aPath ) );
         }
     }
     else
@@ -840,7 +836,7 @@ RTLFUNC(FileLen)
         else
         {
             DirectoryItem aItem;
-            DirectoryItem::get( getFullPathUNC( aStr ), aItem );
+            DirectoryItem::get( getFullPath( aStr ), aItem );
             FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
             aItem.getFileStatus( aFileStatus );
             nLen = (sal_Int32)aFileStatus.getFileSize();
@@ -2927,18 +2923,16 @@ RTLFUNC(GetAttr)
     {
         sal_Int16 nFlags = 0;
 
-        // In Windows, We want to use Windows API to get the file attributes
+        // In Windows, we want to use Windows API to get the file attributes
         // for VBA interoperability.
     #if defined( WNT )
         if( SbiRuntime::isVBAEnabled() )
         {
-            DirEntry aEntry( rPar.Get(1)->GetOUString() );
-            aEntry.ToAbs();
-
-            // #57064 extract the real-path for virtual URLs
-            OString aByteStrFullPath(OUStringToOString(aEntry.GetFull(),
-                                                            osl_getThreadTextEncoding()));
-            DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.getStr());
+            OUString aPathURL = getFullPath( rPar.Get(1)->GetOUString() );
+            OUString aPath;
+            getSystemPathFromFileURL( aPathURL, aPath );
+            OString aSystemPath(OUStringToOString(aPath, osl_getThreadTextEncoding()));
+            DWORD nRealFlags = GetFileAttributes (aSystemPath.getStr());
             if (nRealFlags != 0xffffffff)
             {
                 if (nRealFlags == FILE_ATTRIBUTE_NORMAL)
@@ -2999,7 +2993,7 @@ RTLFUNC(GetAttr)
         else
         {
             DirectoryItem aItem;
-            DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetOUString() ), aItem );
+            DirectoryItem::get( getFullPath( rPar.Get(1)->GetOUString() ), aItem );
             FileStatus aFileStatus( osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type );
             aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
@@ -3059,7 +3053,7 @@ RTLFUNC(FileDateTime)
         else
         {
             DirectoryItem aItem;
-            DirectoryItem::get( getFullPathUNC( aPath ), aItem );
+            DirectoryItem::get( getFullPath( aPath ), aItem );
             FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
             aItem.getFileStatus( aFileStatus );
             TimeValue aTimeVal = aFileStatus.getModifyTime();
@@ -3506,7 +3500,7 @@ RTLFUNC(Shell)
         std::list<String>::const_iterator iter = aTokenList.begin();
         const OUString& rStr = *iter;
         OUString aOUStrProg( rStr.getStr(), rStr.getLength() );
-        OUString aOUStrProgUNC = getFullPathUNC( aOUStrProg );
+        OUString aOUStrProgURL = getFullPath( aOUStrProg );
 
         ++iter;
 
@@ -3526,7 +3520,7 @@ RTLFUNC(Shell)
 
         oslProcess pApp;
         sal_Bool bSucc = osl_executeProcess(
-                    aOUStrProgUNC.pData,
+                    aOUStrProgURL.pData,
                     pParamList,
                     nParamCount,
                     nOptions,
@@ -4583,7 +4577,7 @@ RTLFUNC(FileExists)
         else
         {
             DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aStr ), aItem );
+            FileBase::RC nRet = DirectoryItem::get( getFullPath( aStr ), aItem );
             bExists = (nRet == FileBase::E_None);
         }
         rPar.Get(0)->PutBool( bExists );
