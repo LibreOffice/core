@@ -76,6 +76,10 @@ else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_intel
 bridge_exception_objects := cpp2uno dllinit uno2cpp
 bridge_noopt_objects := except
+else ifeq ($(OS)$(COM),WNTGCC)
+bridges_SELECTED_BRIDGE := mingw_intel
+bridge_noopt_objects := uno2cpp
+bridge_exception_objects := callvirtualmethod cpp2uno dllinit except smallstruct
 endif
 
 else ifeq ($(OS)$(CPU),LINUX6)
@@ -152,12 +156,6 @@ else ifeq ($(OS)$(CPU),SOLARISS)
 bridges_SELECTED_BRIDGE := gcc3_solaris_sparc
 bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
-
-else ifeq ($(OS)$(COM),WNTGCC)
-
-bridges_SELECTED_BRIDGE := mingw_intel
-bridge_noopt_objects := uno2cpp
-bridge_exception_objects := callvirtualmethod cpp2uno dllinit except smallstruct
 
 endif
 
