@@ -74,7 +74,7 @@ published service SetExpression
     [property]double Value;
     /** contains the name of the set expression field master this field is connected to.
      */
-    [property]string VariableName;
+    [property, readonly] string VariableName;
     /** determines whether changes in language attributes at the position the text field
         is located also change the number format as appropriate for this language.
 
