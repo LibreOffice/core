@@ -424,6 +424,7 @@ sub run {
     for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     {
         my $languagesarrayref = installer::languages::get_all_languages_for_one_product($installer::globals::languageproducts[$n], $allvariableshashref);
+        my @setuplanguagesarray = @{ $languagesarrayref };
 
         my $languagestringref = installer::languages::get_language_string($languagesarrayref);
         installer::logger::print_message( "------------------------------------\n" );
@@ -441,6 +442,8 @@ sub run {
             $installer::globals::addsystemintegration = 0;
             $installer::globals::addlicensefile = 0;
             $installer::globals::makedownload = 1;
+            @setuplanguagesarray = grep { $_ ne "en-US" } @setuplanguagesarray;
+            unshift(@setuplanguagesarray, "en-US");
         }
 
         ############################################################
@@ -533,7 +536,7 @@ sub run {
         # Resolving include paths (language dependent)
         ################################################
 
-        $includepatharrayref_lang = installer::ziplist::replace_languages_in_paths($includepatharrayref, $languagesarrayref);
+        $includepatharrayref_lang = installer::ziplist::replace_languages_in_paths($includepatharrayref, \@setuplanguagesarray);
 
         if ( $installer::globals::refresh_includepaths ) { installer::worker::collect_all_files_from_includepaths($includepatharrayref_lang); }
 
@@ -1340,21 +1343,21 @@ sub run {
             # Collection all available directory trees
             installer::windows::directory::collectdirectorytrees($directoriesforepmarrayref);
 
-            # Attention: The table "Director.idt" contains language specific strings -> parameter: $languagesarrayref !
-            installer::windows::directory::create_directory_table($directoriesforepmarrayref, $languagesarrayref, $newidtdir, $allvariableshashref, $shortdirname, $loggingdir);
+            # Attention: The table "Director.idt" contains language specific strings -> parameter: \@setuplanguagesarray !
+            installer::windows::directory::create_directory_table($directoriesforepmarrayref, \@setuplanguagesarray, $newidtdir, $allvariableshashref, $shortdirname, $loggingdir);
 
             $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref, $uniquefilename, $allupdatesequences, $allupdatecomponents, $allupdatefileorder);
             if ( $installer::globals::updatedatabase ) { installer::windows::file::check_file_sequences($allupdatefileorder, $allupdatecomponentorder); }
 
-            # Attention: The table "Registry.idt" contains language specific strings -> parameter: $languagesarrayref !
-            installer::windows::registry::create_registry_table($registryitemsinproductlanguageresolvedarrayref, \@allregistrycomponents, $newidtdir, $languagesarrayref, $allvariableshashref);
+            # Attention: The table "Registry.idt" contains language specific strings -> parameter: \@setuplanguagesarray !
+            installer::windows::registry::create_registry_table($registryitemsinproductlanguageresolvedarrayref, \@allregistrycomponents, $newidtdir, \@setuplanguagesarray, $allvariableshashref);
 
             installer::windows::component::create_component_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, \@allregistrycomponents, $newidtdir, $componentid, $componentidkeypath, $allvariableshashref);
 
-            # Attention: The table "Feature.idt" contains language specific strings -> parameter: $languagesarrayref !
+            # Attention: The table "Feature.idt" contains language specific strings -> parameter: \@setuplanguagesarray !
             installer::windows::feature::add_uniquekey($modulesinproductlanguageresolvedarrayref);
             $modulesinproductlanguageresolvedarrayref = installer::windows::feature::sort_feature($modulesinproductlanguageresolvedarrayref);
-            installer::windows::feature::create_feature_table($modulesinproductlanguageresolvedarrayref, $newidtdir, $languagesarrayref, $allvariableshashref);
+            installer::windows::feature::create_feature_table($modulesinproductlanguageresolvedarrayref, $newidtdir, \@setuplanguagesarray, $allvariableshashref);
 
             installer::windows::featurecomponent::create_featurecomponent_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $newidtdir);
 
@@ -1362,11 +1365,11 @@ sub run {
 
             installer::windows::font::create_font_table($filesinproductlanguageresolvedarrayref, $newidtdir);
 
-            # Attention: The table "Shortcut.idt" contains language specific strings -> parameter: $languagesarrayref !
+            # Attention: The table "Shortcut.idt" contains language specific strings -> parameter: \@setuplanguagesarray !
             # Attention: Shortcuts (Folderitems) have icon files, that have to be copied into the Icon directory (last parameter)
             my @iconfilecollector = ();
 
-            installer::windows::shortcut::create_shortcut_table($filesinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $newidtdir, $languagesarrayref, $includepatharrayref, \@iconfilecollector);
+            installer::windows::shortcut::create_shortcut_table($filesinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $newidtdir, \@setuplanguagesarray, $includepatharrayref, \@iconfilecollector);
 
             installer::windows::inifile::create_inifile_table($inifiletableentries, $filesinproductlanguageresolvedarrayref, $newidtdir);
 
@@ -1394,9 +1397,9 @@ sub run {
             # For multilingual installation sets, the differences of this
             # databases have to be stored in transforms.
 
-            for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
+            for ( my $m = 0; $m <= $#{\@setuplanguagesarray}; $m++ )
             {
-                my $onelanguage = ${$languagesarrayref}[$m];
+                my $onelanguage = ${\@setuplanguagesarray}[$m];
 
                 my $is_rtl = 0;
                 my @rtllanguages = ("ar", "fa", "he", "ug", "ky-CN");
@@ -1497,7 +1500,7 @@ sub run {
 
                 # adding language specific properties for multilingual installation sets
 
-                installer::windows::property::set_languages_in_property_table($languageidtdir, $languagesarrayref);
+                installer::windows::property::set_languages_in_property_table($languageidtdir, \@setuplanguagesarray);
 
                 # adding settings into CheckBox.idt
                 installer::windows::property::update_checkbox_table($languageidtdir, $allvariableshashref);
@@ -1536,13 +1539,13 @@ sub run {
             # Creating transforms, if the installation set has more than one language
             # renaming the msi database
 
-            my $defaultlanguage = installer::languages::get_default_language($languagesarrayref);
+            my $defaultlanguage = installer::languages::get_default_language(\@setuplanguagesarray);
 
             if ( $installer::globals::iswin || $installer::globals::packageformat eq 'msi' )
             {
-                if  ( $#{$languagesarrayref} > 0 )
+                if  ( $#{\@setuplanguagesarray} > 0 )
                 {
-                    installer::windows::msiglobal::create_transforms($languagesarrayref, $defaultlanguage, $installdir, $allvariableshashref);
+                    installer::windows::msiglobal::create_transforms(\@setuplanguagesarray, $defaultlanguage, $installdir, $allvariableshashref);
                 }
                 # if there are Merge Modules, they have to be integrated now
                 my $mergedbname = installer::windows::msiglobal::get_msidatabasename($allvariableshashref, $defaultlanguage);

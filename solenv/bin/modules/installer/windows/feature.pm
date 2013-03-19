@@ -386,8 +386,9 @@ sub create_feature_table
 
             # Controlling the language!
             # Only language independent feature or feature with the correct language will be included into the table
+            # But help packs are different. They have en-US added as setup language.
 
-            if (! (!(( $onefeature->{'ismultilingual'} )) || ( $onefeature->{'specificlanguage'} eq $onelanguage )) )  { next; }
+            if (! (!(( $onefeature->{'ismultilingual'} )) || ( $onefeature->{'specificlanguage'} eq $onelanguage ) || $installer::globals::helppack ) )  { next; }
 
             my %feature = ();
 
