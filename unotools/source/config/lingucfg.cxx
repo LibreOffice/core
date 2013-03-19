@@ -938,7 +938,7 @@ static bool lcl_GetFileUrlFromOrigin(
     if (!rOrigin.isEmpty())
     {
         OUString aURL( rOrigin );
-        if ( aURL.compareTo( EXPAND_PROTOCOL ) == 0 )
+        if ( aURL.startsWith( EXPAND_PROTOCOL ) )
         {
             // cut protocol
             OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
@@ -949,7 +949,7 @@ static bool lcl_GetFileUrlFromOrigin(
                 comphelper::getProcessComponentContext() )->expandMacros(
                     aMacro );
 
-            bool bIsFileUrl = aURL.compareTo( FILE_PROTOCOL ) == 0;
+            bool bIsFileUrl = aURL.startsWith( FILE_PROTOCOL );
             if (bIsFileUrl)
             {
                 rFileUrl = aURL;
