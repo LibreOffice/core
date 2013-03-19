@@ -23,6 +23,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 #include "osl/file.h"
 #include "osl/file.hxx"
@@ -252,6 +254,54 @@ bool handleFile(
     return false;
 }
 
+void handleFilesOfDir(
+    std::vector<OUString>& aFiles, const OString& rProject,
+    const OString& rProjectRoot, const OString& rPotDir )
+{
+    ///Handle files in lexical order
+    std::sort(aFiles.begin(), aFiles.end());
+
+    typedef std::vector<OUString>::const_iterator citer_t;
+
+    bool bFirstLocFile = true; ///< First file in directory which needs localization
+
+    for( citer_t aIt = aFiles.begin(); aIt != aFiles.end(); ++aIt )
+    {
+        if (handleFile( rProject, rProjectRoot, *aIt, rPotDir, bFirstLocFile))
+        {
+            bFirstLocFile = false;
+        }
+    }
+
+    if( !bFirstLocFile )
+    {
+        //Delete pot file if it contain only the header
+        OString sPotFile = rPotDir.concat(".pot");
+        PoIfstream aPOStream( sPotFile );
+        PoEntry aPO;
+        aPOStream.readEntry( aPO );
+        bool bDel = aPOStream.eof();
+        aPOStream.close();
+        if( bDel )
+        {
+            system(OString("rm " + sPotFile).getStr());
+        }
+    }
+    //Remove empty pot directories
+    OUString sPoPath =
+        OStringToOUString(
+            rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+    OUString sPoUrl;
+    if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
+        != osl::FileBase::E_None)
+    {
+        cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
+             << OUStringToOString(sPoPath, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+        throw false; //TODO
+    }
+    osl::Directory::remove(sPoUrl);
+}
+
 bool includeProject(const OString& rProject) {
     static OString projects[] = {
         "accessibility",
@@ -338,7 +388,7 @@ void handleDirectory(
             << "Error: Cannot open directory: " << rUrl << '\n';
         throw false; //TODO
     }
-    bool bFirstLocFile = true;
+    std::vector<OUString> aFileNames;
     for (;;) {
         osl::DirectoryItem item;
         osl::FileBase::RC e = dir.getNextItem(item);
@@ -356,7 +406,7 @@ void handleDirectory(
             cerr << "Error: Cannot get file status\n";
             throw false; //TODO
         }
-        const OString sFileName =
+        const OString sDirName =
             OUStringToOString(stat.getFileName(),RTL_TEXTENCODING_UTF8);
         switch (nLevel) {
         case -1: // the clone or src directory
@@ -368,12 +418,12 @@ void handleDirectory(
             break;
         case 0: // a root directory
             if (stat.getFileType() == osl::FileStatus::Directory) {
-                if (includeProject(sFileName)) {
+                if (includeProject(sDirName)) {
                     handleDirectory(
-                        stat.getFileURL(), 1, sFileName,
-                        OString(), rPotDir.concat("/").concat(sFileName));
-                } else if ( sFileName == "clone" ||
-                            sFileName == "src" )
+                        stat.getFileURL(), 1, sDirName,
+                        OString(), rPotDir.concat("/").concat(sDirName));
+                } else if ( sDirName == "clone" ||
+                            sDirName == "src" )
                 {
                     handleDirectory(
                         stat.getFileURL(), -1, OString(), OString(), rPotDir);
@@ -381,54 +431,33 @@ void handleDirectory(
             }
             break;
         default:
-            if (stat.getFileType() == osl::FileStatus::Directory) {
+            if (stat.getFileType() == osl::FileStatus::Directory)
+            {
                 OString pr(rProjectRoot);
                 if (!pr.isEmpty()) {
                     pr += OString('/');
                 }
                 pr += OString("..");
                 handleDirectory(
-                    stat.getFileURL(), 2, rProject, pr, rPotDir.concat("/").concat(sFileName));
-            } else {
-                if( handleFile( rProject, rProjectRoot, stat.getFileURL(),
-                                rPotDir, bFirstLocFile) )
-                    bFirstLocFile = false;
+                    stat.getFileURL(), 2, rProject, pr, rPotDir.concat("/").concat(sDirName));
+            }
+            else
+            {
+                aFileNames.push_back(stat.getFileURL());
             }
             break;
         }
+    }
+
+    if( !aFileNames.empty() )
+    {
+        handleFilesOfDir( aFileNames, rProject, rProjectRoot, rPotDir );
     }
 
     if (dir.close() != osl::FileBase::E_None) {
         cerr << "Error: Cannot close directory\n";
         throw false; //TODO
     }
-    if( bFirstLocFile == false )
-    {
-        //Delete pot file if it contain only the header
-        OString sPotFile = rPotDir.concat(".pot");
-        PoIfstream aPOStream( sPotFile );
-        PoEntry aPO;
-        aPOStream.readEntry( aPO );
-        bool bDel = aPOStream.eof();
-        aPOStream.close();
-        if( bDel )
-        {
-            system(OString("rm " + sPotFile).getStr());
-        }
-    }
-    //Remove empty pot directories
-    OUString sPoPath =
-        OStringToOUString(
-            rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
-    OUString sPoUrl;
-    if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
-        != osl::FileBase::E_None)
-    {
-        cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
-             << OUStringToOString(sPoPath, RTL_TEXTENCODING_UTF8).getStr() << "\n";
-        throw false; //TODO
-    }
-    osl::Directory::remove(sPoUrl);
 }
 
 void handleProjects(char * sSourceRoot, char const * sDestRoot)
