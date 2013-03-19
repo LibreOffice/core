@@ -1222,6 +1222,13 @@ void Test::testFormulaHashAndTag()
         { "=X20", "=X$20", false }, // absolute vs relative
         { "=X20", "=$X20", false }, // absolute vs relative
         { "=X$20", "=$X20", false }, // column absolute vs row absolute
+        // similar enough for merging ...
+        { "=A1", "=B1", true },
+        { "=$A$1", "=$B$1", true },
+        { "=A1", "=C2", true },
+        { "=SUM(A1)", "=SUM(B1)", true },
+        { "=A1+3", "=B1+3", true },
+        { "=A1+7", "=B1+42", false },
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aHashTests); ++i)
@@ -6221,14 +6228,14 @@ void Test::testFormulaGrouping()
         const char *pFormula[3];
         const bool  bGroup[3];
     } aGroupTests[] = {
-        { { "=B1",  "=C1",  "" },      // single increments
-          { true,   true,    false } },
-        { { "=B1",  "=D1",  "=F1" },   // tripple increments
-          { true,  true,    true } },
-        { { "=B1",  "",     "=C1" },   // a gap
-          { false,  false,  false } },
-        { { "=B1",  "=C1+3", "=C1+D1" }, // confusion: FIXME: =C1+7
-          { false,  false,  false } },
+        { { "=SUM(B1)",  "=SUM(C1)",    "" },            // single increments
+          { true,        true,          false } },
+        { { "=SUM(B1)",  "=SUM(D1)",    "=SUM(F1)" },    // tripple increments
+          { true,        true,          true } },
+        { { "=SUM(B1)",  "",            "=SUM(C1)" },    // a gap
+          { false,       false,         false } },
+        { { "=SUM(B1)",  "=SUM(C1;3)",  "=SUM(D1;3)" }, // similar foo
+          { false,       true,          true } },
     };
 
     m_pDoc->InsertTab( 0, "sheet" );
@@ -6259,7 +6266,7 @@ void Test::testFormulaGrouping()
             if( !!pCur->GetCellGroup().get() ^ aGroupTests[i].bGroup[j] )
             {
                 printf("expected group test %d at row %d to be %d but is %d\n",
-                       i, j, !!pCur->GetCellGroup().get(), aGroupTests[i].bGroup[j]);
+                       i, j, aGroupTests[i].bGroup[j], !!pCur->GetCellGroup().get());
                 CPPUNIT_ASSERT_MESSAGE("Failed", false);
             }
         }

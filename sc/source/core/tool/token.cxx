@@ -1348,19 +1348,16 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, bool bValidOnly ) const
 
 namespace {
 
+// we want to compare for similar not identical formulae
+// so we can't use actual row & column indices.
 size_t HashSingleRef( const ScSingleRefData& rRef )
 {
-    SCsCOL nCol = rRef.Flags.bColRel ? rRef.nRelCol : rRef.nCol;
-    SCsROW nRow = rRef.Flags.bRowRel ? rRef.nRelRow : rRef.nRow;
-    SCsTAB nTab = rRef.Flags.bTabRel ? rRef.nRelTab : rRef.nTab;
-    size_t nVal = nCol;
-    nVal += (nRow << 8);
-    nVal += (nTab << 16);
+    size_t nVal = 0;
 
-    // Embed flag values too.
     nVal += rRef.Flags.bColRel;
     nVal += (rRef.Flags.bRowRel << 1);
     nVal += (rRef.Flags.bTabRel << 2);
+
     return nVal;
 }
 

@@ -1722,10 +1722,9 @@ bool ScFormulaCellGroup::IsCompatible( ScSimilarFormulaDelta *pDelta )
 /// formulae should produce pOther
 ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
 {
-
-// FIXME: TODO - M1
-//    if ( kohei_comparison_hash_not_equal( mnHash, pOther->mnHash )
-//       return NULL;
+    // are these formule at all similar ?
+    if ( GetHash() != pOtherCell->GetHash() )
+        return NULL;
 
     FormulaToken **pThis = pCode->GetCode();
     sal_uInt16     pThisLen = pCode->GetCodeLen();
