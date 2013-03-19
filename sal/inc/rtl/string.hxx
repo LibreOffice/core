@@ -165,7 +165,7 @@ public:
 
       @param    value       a NULL-terminated character array.
     */
-#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if HAVE_SFINAE_ANONYMOUS_BROKEN
     // Old gcc can try to convert anonymous enums to OString and give compile error.
     // So there's no special-cased handling of string literals.
     // These are inline functions and technically both variants should work
@@ -535,7 +535,7 @@ public:
       @return   sal_True if the strings are equal;
                 sal_False, otherwise.
     */
-#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if HAVE_SFINAE_ANONYMOUS_BROKEN
     sal_Bool equalsIgnoreAsciiCase( const sal_Char * asciiStr ) const SAL_THROW(())
     {
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;

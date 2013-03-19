@@ -22,11 +22,11 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #include <shell/tde_defines.h>
 #endif // ENABLE_TDE
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #include <tqobject.h>
 #else // ENABLE_TDE
 #include <qobject.h>

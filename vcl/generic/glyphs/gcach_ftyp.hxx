@@ -25,7 +25,7 @@
 #include <rtl/textcvt.h>
 
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 class GraphiteFaceWrapper;
 #endif
 
@@ -72,7 +72,7 @@ public:
     const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     GraphiteFaceWrapper*  GetGraphiteFace();
 #endif
     void                  ReleaseFaceFT( FT_FaceRec_* );
@@ -101,7 +101,7 @@ private:
     const int       mnFaceNum;
     int             mnRefCount;
     const int       mnSynthetic;
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     bool            mbCheckedGraphite;
     GraphiteFaceWrapper * mpGraphiteFace;
 #endif

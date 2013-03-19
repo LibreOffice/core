@@ -121,7 +121,7 @@
 
 #include <config_telepathy.h>
 
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
 #endif
 
@@ -2556,7 +2556,7 @@ sal_Bool ScDocShell::HasAutomaticTableName( const String& rFilter )
         || rFilter.EqualsAscii( pFilterRtf );
 }
 
-#ifndef ENABLE_TELEPATHY
+#if ! ENABLE_TELEPATHY
 ScDocFunc *ScDocShell::CreateDocFunc()
 {
     return new ScDocFuncDirect( *this );
@@ -2592,7 +2592,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     pSolverSaveData ( NULL ),
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
@@ -2641,7 +2641,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     pSolverSaveData ( NULL ),
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
     , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
@@ -2702,7 +2702,7 @@ ScDocShell::~ScDocShell()
         OSL_FAIL("The Modificator should not exist");
         delete pModificator;
     }
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
     delete mpCollaboration;
 #endif
 }

@@ -193,7 +193,7 @@ public:
 
       @since LibreOffice 3.6
     */
-#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if HAVE_SFINAE_ANONYMOUS_BROKEN
     // Old gcc can try to convert anonymous enums to OUString and give compile error.
     // So instead have a variant for const and non-const char[].
     template< int N >

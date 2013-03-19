@@ -94,7 +94,7 @@ extern "C" {
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_GTK
+#if ENABLE_GTK
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #else

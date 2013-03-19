@@ -29,7 +29,7 @@
 #include "sal/main.h"
 #include "sal/types.h"
 
-#ifdef HAVE_SYSLOG_H
+#if HAVE_SYSLOG_H
 #include <string.h>
 #include <syslog.h>
 // from sal/osl/all/log.cxx:
@@ -64,7 +64,7 @@ void sal_detail_initialize(int argc, char ** argv) {
         close(fd);
     }
 #endif
-#ifdef HAVE_SYSLOG_H
+#if HAVE_SYSLOG_H
     const char *use_syslog = getenv("SAL_LOG_SYSLOG");
     sal_use_syslog = use_syslog != NULL && !strcmp(use_syslog, "1");
     if (sal_use_syslog)

@@ -27,7 +27,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 
 // the minimum TDE version which is required at runtime
 #define MIN_KDE_VERSION_MAJOR   14

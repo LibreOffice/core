@@ -45,7 +45,7 @@
 
 #include <config_telepathy.h>
 
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
 #endif
 
@@ -106,7 +106,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_COLLABORATION:
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
             GetViewData()->GetDocShell()->GetCollaboration()->DisplayContacts();
 #endif
             break;

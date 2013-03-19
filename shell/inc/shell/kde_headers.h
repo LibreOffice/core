@@ -22,7 +22,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 
 #include "shell/tde_headers.h"
 

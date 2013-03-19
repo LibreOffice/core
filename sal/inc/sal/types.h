@@ -394,7 +394,7 @@ namespace css = ::com::sun::star;
 
     @since LibreOffice 4.1
 */
-#if defined HAVE_CXX11_DELETE
+#if HAVE_CXX11_DELETE
 #define SAL_DELETED_FUNCTION = delete
 #else
 #define SAL_DELETED_FUNCTION
@@ -407,7 +407,7 @@ namespace css = ::com::sun::star;
 
     @since LibreOffice 4.1
 */
-#if defined HAVE_CXX11_OVERRIDE
+#if HAVE_CXX11_OVERRIDE
 #define SAL_OVERRIDE override
 #else
 #define SAL_OVERRIDE

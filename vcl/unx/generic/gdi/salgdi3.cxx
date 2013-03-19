@@ -67,7 +67,7 @@
 #include "outdev.h"
 
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
 #include <graphite_serverfont.hxx>
 #endif
@@ -744,7 +744,7 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
     {
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
         // Is this a Graphite font?
         if (!bDisableGraphite_ &&
             GraphiteServerFontLayout::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))

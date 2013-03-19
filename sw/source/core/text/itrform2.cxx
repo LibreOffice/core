@@ -2620,7 +2620,7 @@ namespace {
             nReformat -= 2;
 
     #ifndef MACOSX
-    #ifndef ENABLE_GRAPHITE
+    #if ! ENABLE_GRAPHITE
             // #i28795#, #i34607#, #i38388#
             // step back six(!) more characters for complex scripts
             // this is required e.g., for Khmer (thank you, Javier!)

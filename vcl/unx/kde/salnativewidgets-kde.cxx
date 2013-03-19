@@ -34,7 +34,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #define QPushButton_String      "TQPushButton"
 #define QRadioButton_String     "TQRadioButton"
 #define QCheckBox_String        "TQCheckBox"

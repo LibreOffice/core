@@ -24,7 +24,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 
 #include <tqcheckbox.h>
 #include <tqcombobox.h>
@@ -78,7 +78,7 @@
 
 #endif // ENABLE_TDE
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #define QCheckBox_String    "TQCheckBox"
 #define QComboBox_String    "TQComboBox"
 #else // ENABLE_TDE
@@ -105,7 +105,7 @@ KDEFileDialog::KDEFileDialog( const QString &startDir, const QString &filter,
       m_bIsExecuting( false ),
       m_bCanNotifySelection( true )
 {
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
     connect( this, SIGNAL( fileHighlighted( const TQString & ) ),
              this, SLOT( fileHighlightedCommand( const TQString & ) ) );
 #else // ENABLE_TDE
@@ -666,7 +666,7 @@ QString KDEFileDialog::localCopy( const QString &rFileName ) const
     return qDestURL.url();
 }
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 void KDEFileDialog::fileHighlightedCommand( const TQString & )
 #else // ENABLE_TDE
 void KDEFileDialog::fileHighlightedCommand( const QString & )

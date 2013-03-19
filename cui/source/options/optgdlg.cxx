@@ -117,7 +117,7 @@ namespace
 
             if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde4") )
             {
-                #ifdef ENABLE_KDE4
+                #if ENABLE_KDE4
                 return OUString("com.sun.star.ui.dialogs.KDE4FilePicker" );
                 #else
                 return OUString();
@@ -125,7 +125,7 @@ namespace
             }
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde") )
             {
-                #ifdef ENABLE_KDE
+                #if ENABLE_KDE
                 return OUString("com.sun.star.ui.dialogs.KDEFilePicker");
                 #else
                 return OUString();
@@ -133,7 +133,7 @@ namespace
             }
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCase("tde") )
             {
-                #ifdef ENABLE_TDE
+                #if ENABLE_TDE
                 return OUString("com.sun.star.ui.dialogs.TDEFilePicker");
                 #else
                 return OUString();
@@ -191,7 +191,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pHelpAgentResetBtn, "resethelpagent");
     if (!lcl_HasSystemFilePicker())
         get<VclContainer>("filedlgframe")->Hide();
-#if !defined(MACOSX) && !defined(ENABLE_GTK)
+#if !defined(MACOSX) && ! ENABLE_GTK
     get<VclContainer>("printdlgframe")->Hide();
 #endif
     get(m_pFileDlgCB, "filedlg");

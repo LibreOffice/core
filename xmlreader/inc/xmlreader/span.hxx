@@ -59,7 +59,7 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
             begin, length, text.getStr(), text.getLength()) == 0;
     }
 
-#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     /**
      @overload
      This function accepts an ASCII string literal as its argument.

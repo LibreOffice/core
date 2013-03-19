@@ -38,7 +38,7 @@
 // Manually defining RTL_DISABLE_FAST_STRING allows to force turning fast string concatenation off
 // (e.g. for debugging).
 #ifndef RTL_DISABLE_FAST_STRING
-#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
 // This feature is not part of public API and is meant to be used only internally by LibreOffice.
 #ifdef LIBO_INTERNAL_ONLY
 // Enable fast string concatenation.

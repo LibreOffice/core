@@ -22,7 +22,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 
 // the service names
 #define FILE_PICKER_SERVICE_NAME "com.sun.star.ui.dialogs.TDEFilePicker"

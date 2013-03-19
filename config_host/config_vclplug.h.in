@@ -8,8 +8,23 @@ Settings about which X11 desktops have support enabled.
 #define CONFIG_VCLPLUG_H
 
 #undef ENABLE_GTK
+#ifndef ENABLE_GTK
+#define ENABLE_GTK 0
+#endif
+
 #undef ENABLE_KDE
+#ifndef ENABLE_KDE
+#define ENABLE_KDE 0
+#endif
+
 #undef ENABLE_KDE4
+#ifndef ENABLE_KDE4
+#define ENABLE_KDE4 0
+#endif
+
 #undef ENABLE_TDE
+#ifndef ENABLE_TDE
+#define ENABLE_TDE 0
+#endif
 
 #endif

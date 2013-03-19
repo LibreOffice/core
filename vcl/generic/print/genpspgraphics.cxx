@@ -47,7 +47,7 @@
 #include "langboost.hxx"
 
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
 #include <graphite_serverfont.hxx>
 #endif
@@ -743,7 +743,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
     if (bIsPspServerFontLayout)
     {
         const PspServerFontLayout * pPspLayout = dynamic_cast<const PspServerFontLayout*>(&rLayout);
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
         const GraphiteServerFontLayout * pGrLayout = dynamic_cast<const GraphiteServerFontLayout*>(&rLayout);
 #endif
         if (pPspLayout)
@@ -752,7 +752,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
             nMinCharPos = pPspLayout->getMinCharPos();
             nMaxCharPos = pPspLayout->getMaxCharPos();
         }
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
         else if (pGrLayout)
         {
         }
@@ -1021,7 +1021,7 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     if( m_pServerFont[ nFallbackLevel ]
         && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
     {
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
         // Is this a Graphite font?
         if (GraphiteServerFontLayout::IsGraphiteEnabledFont(*m_pServerFont[nFallbackLevel]))
         {

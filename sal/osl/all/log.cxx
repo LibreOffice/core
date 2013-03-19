@@ -56,7 +56,7 @@
 #define OSL_DETAIL_GETPID getpid()
 #endif
 
-#ifdef HAVE_SYSLOG_H
+#if HAVE_SYSLOG_H
 #include <syslog.h>
 // sal/osl/unx/salinit.cxx::sal_detail_initialize updates this:
 bool sal_use_syslog;
@@ -123,7 +123,7 @@ char const * getEnvironmentVariable() {
 
 #endif
 
-#ifdef HAVE_SYSLOG_H
+#if HAVE_SYSLOG_H
 int toSyslogPriority(sal_detail_LogLevel level) {
     switch (level) {
     default:
@@ -214,7 +214,7 @@ void log(
 {
     std::ostringstream s;
 #ifndef ANDROID
-#ifdef HAVE_SYSLOG_H
+#if HAVE_SYSLOG_H
     if (!sal_use_syslog)
 #endif
         s << toString(level) << ':';
@@ -254,7 +254,7 @@ void log(
         area = "LibreOffice";
     __android_log_print(android_log_level, area, "%s", s.str().c_str());
 #else
-#ifdef HAVE_SYSLOG_H
+#if HAVE_SYSLOG_H
     if (sal_use_syslog)
         syslog(toSyslogPriority(level), "%s", s.str().c_str());
     else

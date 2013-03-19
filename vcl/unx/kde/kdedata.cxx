@@ -46,7 +46,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #define THIS_DESKENV_NAME_CAP "TDE"
 #define THIS_DESKENV_NAME_LOW "tde"
 #else // ENABLE_TDE

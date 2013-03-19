@@ -103,7 +103,7 @@
 
 #include <config_telepathy.h>
 
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
 #include <tubes/manager.hxx>
 #endif
 
@@ -555,7 +555,7 @@ Desktop::Desktop()
 
 Desktop::~Desktop()
 {
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
     TeleManager::finalize();
 #endif
 }
@@ -1619,7 +1619,7 @@ int Desktop::Main()
     aOptions.SetVCLSettings();
     SetSplashScreenProgress(60);
 
-#ifdef ENABLE_TELEPATHY
+#if ENABLE_TELEPATHY
     bool bListen = rCmdLineArgs.IsInvisible();
     TeleManager::init( bListen );
 #endif

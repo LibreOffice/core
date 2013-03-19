@@ -49,7 +49,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
         :   "memory");
         return ++nCount;
     }
-#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#if HAVE_GCC_BUILTIN_ATOMIC
     else
         return __sync_add_and_fetch (pCount, 1);
 #else
@@ -79,7 +79,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         :   "memory");
         return --nCount;
     }
-#if defined( HAVE_GCC_BUILTIN_ATOMIC )
+#if HAVE_GCC_BUILTIN_ATOMIC
     else
         return __sync_sub_and_fetch (pCount, 1);
 #else
@@ -96,7 +96,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     }
 #endif
 }
-#elif defined( HAVE_GCC_BUILTIN_ATOMIC )
+#elif HAVE_GCC_BUILTIN_ATOMIC
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return __sync_add_and_fetch(pCount, 1);

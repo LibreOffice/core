@@ -129,7 +129,7 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
     m_pQuickLaunchCB->Show();
 
     //Only available in Win or if building the gtk systray
-#if !defined(WNT) && !defined(ENABLE_GTK)
+#if !defined(WNT) && ! ENABLE_GTK
     m_pQuickStarterFrame->Hide();
 #endif
 

@@ -154,7 +154,7 @@ public:
         @overload
         @since LibreOffice 3.6
      */
-#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN // see the OString ctors
+#if HAVE_SFINAE_ANONYMOUS_BROKEN // see the OString ctors
     OStringBuffer( const char* value )
         : pData(NULL)
     {
@@ -454,7 +454,7 @@ public:
         @param   str   the characters to be appended.
         @return  this string buffer.
      */
-#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if HAVE_SFINAE_ANONYMOUS_BROKEN
     OStringBuffer & append( const sal_Char * str )
     {
         return append( str, rtl_str_getLength( str ) );
@@ -665,7 +665,7 @@ public:
         @param      str      a character array.
         @return     this string buffer.
      */
-#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if HAVE_SFINAE_ANONYMOUS_BROKEN
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str )
     {
         return insert( offset, str, rtl_str_getLength( str ) );

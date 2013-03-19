@@ -79,7 +79,7 @@ extern "C"
         return 0;
     }
 
-    #ifndef ENABLE_GTK
+    #if ! ENABLE_GTK
     static void ThreadEventHandler( XtPointer /*client_data*/, int* /*source*/, XtInputId* id )
     {
         char buf[256];
@@ -231,7 +231,7 @@ static void signal_handler( int nSig )
     _exit(nSig);
 }
 
-#ifdef ENABLE_GTK
+#if ENABLE_GTK
 
 static gboolean noClosure( gpointer )
 {
@@ -393,7 +393,7 @@ int main( int argc, char **argv)
     }
     int nSocket = atol( argv[1] );
 
-    #ifdef ENABLE_GTK
+    #if ENABLE_GTK
     g_thread_init(NULL);
     gtk_init(&argc, &argv);
     #endif
@@ -408,7 +408,7 @@ int main( int argc, char **argv)
     pXtAppDisplay = XtOpenDisplay( app_context, NULL, "SOPlugin", "SOPlugin", NULL, 0, &argc, argv );
 
 
-    #ifdef ENABLE_GTK
+    #if ENABLE_GTK
     // integrate Xt events into GTK event loop
     GPollFD aXtPollDesc, aWakeupPollDesc;
 
@@ -481,7 +481,7 @@ int main( int argc, char **argv)
     // of XtAppMainLoop
     do
     {
-        #ifdef ENABLE_GTK
+        #if ENABLE_GTK
         g_main_context_iteration( NULL, sal_True );
         #else
         XtAppProcessEvent( app_context, XtIMAll );
@@ -490,7 +490,7 @@ int main( int argc, char **argv)
 
     SAL_INFO("extensions.plugin", "left plugin app main loop");
 
-    #ifdef ENABLE_GTK
+    #if ENABLE_GTK
     g_source_remove(xt_polling_timer_id);
     #endif
 

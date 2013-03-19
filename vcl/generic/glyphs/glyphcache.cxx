@@ -28,7 +28,7 @@
 #include <outfont.hxx>
 
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 #include <graphite_features.hxx>
 #endif
 
@@ -85,7 +85,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
 {
     // TODO: is it worth to improve this hash function?
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     if (rFontSelData.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
         != -1)
     {
@@ -99,7 +99,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     nHash   += rFontSelData.mbVertical;
     nHash   += rFontSelData.GetSlant();
     nHash   += rFontSelData.GetWeight();
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     nHash   += rFontSelData.meLanguage;
 #endif
     return nHash;
@@ -134,7 +134,7 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
     if( nAWidth != nBWidth )
         return false;
 
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
    if (rA.meLanguage != rB.meLanguage)
         return false;
    // check for features

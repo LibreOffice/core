@@ -29,7 +29,7 @@
 #include <outfont.hxx>
 #include <impfont.hxx>
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 #include <graphite2/Font.h>
 #include <graphite_layout.hxx>
 #endif
@@ -269,7 +269,7 @@ void FtFontFile::Unmap()
     mpFileMap = NULL;
 }
 
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 // wrap FtFontInfo's table function
 const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, size_t *len)
 {
@@ -307,7 +307,7 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
     mnSynthetic( nSynthetic ),
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     mbCheckedGraphite(false),
     mpGraphiteFace(NULL),
 #endif
@@ -336,7 +336,7 @@ FtFontInfo::~FtFontInfo()
     delete mpExtraKernInfo;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     delete mpGraphiteFace;
 #endif
 }
@@ -367,7 +367,7 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
    return maFaceFT;
 }
 
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
 {
     if (mbCheckedGraphite)
@@ -2574,7 +2574,7 @@ const unsigned char* ServerFont::GetTable(const char* pName, sal_uLong* pLength)
     return mpFontInfo->GetTable( pName, pLength );
 }
 
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 GraphiteFaceWrapper* ServerFont::GetGraphiteFace() const
 {
     return mpFontInfo->GetGraphiteFace();

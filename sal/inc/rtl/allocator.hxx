@@ -129,7 +129,7 @@ public:
     }
 
     //-----------------------------------------
-#if defined HAVE_CXX11_PERFECT_FORWARDING
+#if HAVE_CXX11_PERFECT_FORWARDING
     template< typename... Args >
     void construct (pointer p, Args &&... value)
     {

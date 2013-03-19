@@ -146,7 +146,7 @@ public:
         rtl_uStringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
 
-#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN // see OUString ctors
+#if HAVE_SFINAE_ANONYMOUS_BROKEN // see OUString ctors
     template< int N >
     OUStringBuffer( const char (&literal)[ N ] )
         : pData(NULL)
@@ -588,7 +588,7 @@ public:
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
         return append( sz, rtl_ustr_valueOfBoolean( sz, b ) );
     }
-#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     // Pointer can be automatically converted to bool, which is unwanted here.
     // Explicitly delete all pointer append() overloads to prevent this
     // (except for char* and sal_Unicode* overloads, which are handled elsewhere).

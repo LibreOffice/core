@@ -73,7 +73,7 @@ namespace
         uno::Sequence<rtl::OUString> aRet(3);
         aRet[0] = rtl::OUString("com.sun.star.ui.dialogs.FilePicker");
         aRet[1] = rtl::OUString("com.sun.star.ui.dialogs.SystemFilePicker");
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
         aRet[2] = rtl::OUString("com.sun.star.ui.dialogs.TDEFilePicker");
 #else // ENABLE_TDE
         aRet[2] = rtl::OUString("com.sun.star.ui.dialogs.KDEFilePicker");
@@ -703,7 +703,7 @@ void UnxFilePicker::initFilePicker()
 #endif
 
         // The executable name
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
         rtl::OUString helperurl("${ORIGIN}/tdefilepicker");
 #else // ENABLE_TDE
         rtl::OUString helperurl("${ORIGIN}/kdefilepicker");

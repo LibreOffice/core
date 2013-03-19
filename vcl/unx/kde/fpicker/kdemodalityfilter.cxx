@@ -21,7 +21,7 @@
 
 #include <kdemodalityfilter.hxx>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #include <tdeapplication.h>
 #include <kdialogbase.h>
 #else // ENABLE_TDE

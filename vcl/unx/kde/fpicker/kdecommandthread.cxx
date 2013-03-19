@@ -23,7 +23,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #include <tqstringlist.h>
 #include <tdeapplication.h>
 #else // ENABLE_TDE

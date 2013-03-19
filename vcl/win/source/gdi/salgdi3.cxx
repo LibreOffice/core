@@ -65,7 +65,7 @@
 #include <algorithm>
 
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 #include <graphite2/Font.h>
 #endif
 
@@ -1046,7 +1046,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 }
 
 // =======================================================================
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 
 #ifdef DEBUG
 static FILE * grLogFile = NULL;
@@ -1149,7 +1149,7 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbDisableGlyphApi( false ),
     mbHasKoreanRange( false ),
     mbHasCJKSupport( false ),
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     mpGraphiteData(NULL),
     mbHasGraphiteSupport( false ),
 #endif
@@ -1200,7 +1200,7 @@ ImplWinFontData::~ImplWinFontData()
 
     if( mpUnicodeMap )
         mpUnicodeMap->DeReference();
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     if (mpGraphiteData)
         mpGraphiteData->DeReference();
 #ifdef DEBUG
@@ -1232,7 +1232,7 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 
     ReadCmapTable( hDC );
     GetFontCapabilities( hDC );
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     static const char* pDisableGraphiteText = getenv( "SAL_DISABLE_GRAPHITE" );
     if( !pDisableGraphiteText || (pDisableGraphiteText[0] == '0') )
     {
@@ -1269,7 +1269,7 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 
 }
 
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 const gr_face* ImplWinFontData::GraphiteFace() const
 {
 #ifdef DEBUG

@@ -30,7 +30,7 @@
 #include <boost/unordered_set.hpp>
 
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 #include <graphite2/Font.h>
 #endif
 
@@ -41,7 +41,7 @@ class ImplFontAttrCache;
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 class RawFontData;
 class GrFontData
 {
@@ -86,7 +86,7 @@ public:
     bool                    SupportsArabic() const      { return mbHasArabicSupport; }
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
     const gr_face*          GraphiteFace() const;
 #endif
@@ -107,7 +107,7 @@ private:
     mutable bool                    mbDisableGlyphApi;
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     mutable GrFontData*             mpGraphiteData;
     mutable bool                    mbHasGraphiteSupport;
 #endif

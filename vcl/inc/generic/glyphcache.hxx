@@ -49,7 +49,7 @@ class ServerFontLayout;
 #include <sallayout.hxx>
 
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 class GraphiteFaceWrapper;
 #endif
 
@@ -206,7 +206,7 @@ public:
     GlyphData&                  GetGlyphData( int nGlyphIndex );
     const GlyphMetric&          GetGlyphMetric( int nGlyphIndex )
                                 { return GetGlyphData( nGlyphIndex ).GetMetric(); }
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     virtual GraphiteFaceWrapper* GetGraphiteFace() const;
 #endif
 

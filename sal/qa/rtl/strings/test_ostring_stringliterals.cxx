@@ -77,7 +77,7 @@ CPPUNIT_TEST_SUITE_END();
 void test::ostring::StringLiterals::checkCtors()
 {
 // string literal ctors do not work with SFINAE broken and are disabled
-#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     bool result_tmp;
     CPPUNIT_ASSERT( CONST_CTOR_USED( "test" ));
     const char good1[] = "test";
@@ -159,7 +159,7 @@ void test::ostring::StringLiterals::checkUsage()
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = "foo" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
-#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
@@ -264,7 +264,7 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 void test::ostring::StringLiterals::checkBuffer()
 {
     rtl::OStringBuffer buf;
-#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
+#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     rtl_string_unittest_const_literal_function = false;
     buf.append( "foo" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );

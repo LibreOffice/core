@@ -51,7 +51,7 @@ typedef boost::unordered_map<int,int> IntMap;
 
 // Graphite headers
 #include <config_graphite.h>
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 #include <i18npool/languagetag.hxx>
 #include <graphite_layout.hxx>
 #include <graphite_features.hxx>
@@ -1191,7 +1191,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
     aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
-#ifdef HAVE_FMERGENEUTRALITEMS
+#if HAVE_FMERGENEUTRALITEMS
     aScriptControl.fMergeNeutralItems = true;
 #endif
     // determine relevant substring and work only on it
@@ -2671,7 +2671,7 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
     return true;
 }
 
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
 
 class GraphiteLayoutWinImpl : public GraphiteLayout
 {
@@ -2897,7 +2897,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
     &&   (bUspInited || InitUSP()) )   // CTL layout engine
     {
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
         {
             pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
@@ -2923,7 +2923,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         BYTE eCharSet = ANSI_CHARSET;
         if( mpLogFont )
             eCharSet = mpLogFont->lfCharSet;
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
             pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
         else
@@ -3038,7 +3038,7 @@ PhysicalFontFace* ImplWinFontData::Clone() const
 {
     if( mpUnicodeMap )
         mpUnicodeMap->AddReference();
-#ifdef ENABLE_GRAPHITE
+#if ENABLE_GRAPHITE
     if ( mpGraphiteData )
         mpGraphiteData->AddReference();
 #endif

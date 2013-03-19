@@ -23,7 +23,7 @@
 #include <kdefilepicker.hxx>
 #include <kdecommandthread.hxx>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #include <tqeventloop.h>
 #include <tdeaboutdata.h>
 #include <tdeapplication.h>
@@ -39,7 +39,7 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #define THIS_DESKENV_NAME_CAP "TDE"
 #define THIS_DESKENV_NAME_LOW "tde"
 #else // ENABLE_TDE
@@ -47,7 +47,7 @@
 #define THIS_DESKENV_NAME_LOW "kde"
 #endif // ENABLE_TDE
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #define KAboutData TDEAboutData
 #define KCmdLineArgs TDECmdLineArgs
 #define KCmdLineOptions TDECmdLineOptions

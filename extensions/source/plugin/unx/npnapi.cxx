@@ -410,7 +410,7 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
             SAL_INFO("extensions.plugin", "xembed requested");
             break;
         case NPNVToolkit:
-#           ifdef ENABLE_GTK
+#           if ENABLE_GTK
             *(int*)value = NPNVGtk2;
 #           else
             *(int*)value = 0;
@@ -589,7 +589,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                              "0000", 4,
                              NULL );
 
-                #ifdef ENABLE_GTK
+                #if ENABLE_GTK
                 if( pInst->pGtkWindow )
                     g_object_unref( G_OBJECT(pInst->pGtkWindow) );
                 if( pInst->pGtkWidget )
@@ -675,7 +675,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         "   \"" << pInst->argn[i] << "\"=\"" << pInst->argv[i]
                             << "\"");
 
-                #ifdef ENABLE_GTK
+                #if ENABLE_GTK
                 // check if XEMBED is to be used
                 // ask for Bool. there seems to be no clear definition whether the
                 // return value should be an int or unsigned char
@@ -712,7 +712,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 if( pWindow->height < 1 )
                     pWindow->height = 1;
 
-                #ifdef ENABLE_GTK
+                #if ENABLE_GTK
                 if( pInst->bShouldUseXEmbed )
                 {
                     if( ! pInst->pGtkWidget )

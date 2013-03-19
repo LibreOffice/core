@@ -22,13 +22,13 @@
 
 #include <config_vclplug.h>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #include <shell/tde_defines.h>
 #endif // ENABLE_TDE
 
 #include <cstddef>
 
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
 #include <tdefiledialog.h>
 #include <tdefilefiltercombo.h>
 #else // ENABLE_TDE
@@ -42,7 +42,7 @@ class QVBox;
 
 class KDEFileDialog : public KFileDialog
 {
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
     TQ_OBJECT
 #else // ENABLE_TDE
     Q_OBJECT
@@ -114,7 +114,7 @@ protected:
 protected slots:
 // Qt3 moc does not really understand #ifdef and would process both slots,
 // so the FILTER_OUT_FOO tags are used to remove some slots before moc sees them.
-#ifdef ENABLE_TDE
+#if ENABLE_TDE
     void                        fileHighlightedCommand( const TQString & ); // FILTER_OUT_TDE
 #else // ENABLE_TDE
     void                        fileHighlightedCommand( const QString & );  // FILTER_OUT_KDE

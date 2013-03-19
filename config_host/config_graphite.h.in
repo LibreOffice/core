@@ -2,5 +2,8 @@
 #define CONFIG_GRAPHITE_H
 
 #undef ENABLE_GRAPHITE
+#ifndef ENABLE_GRAPHITE
+#define ENABLE_GRAPHITE 0
+#endif
 
 #endif
