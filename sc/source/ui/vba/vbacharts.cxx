@@ -75,7 +75,7 @@ ScVbaCharts::getCount() throw (uno::RuntimeException)
             if ( xTableChartsSupplier.is() )
             {
                 uno::Reference< table::XTableCharts > xTableCharts = xTableChartsSupplier->getCharts();
-                ncount =+ xTableCharts->getElementNames().getLength();
+                ncount += xTableCharts->getElementNames().getLength();
             }
         }
     }
