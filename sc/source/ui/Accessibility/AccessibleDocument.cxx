@@ -898,7 +898,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                     if ((*aDataItr)->pAccShape)
                     {
                         (*aDataItr)->pAccShape->SetState(AccessibleStateType::SELECTED);
-                        (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                        (*aDataItr)->pAccShape->SetState(AccessibleStateType::FOCUSED);
                         bResult = sal_True;
                     }
                     aFocusedItr = aDataItr;
