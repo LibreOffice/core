@@ -825,7 +825,7 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 ::rtl::OUString TPGalleryThemeProperties::addExtension( const ::rtl::OUString& _rDisplayText, const ::rtl::OUString& _rExtension )
 {
     ::rtl::OUString sAllFilter( RTL_CONSTASCII_USTRINGPARAM( "(*.*)" ) );
-    ::rtl::OUString sOpenBracket( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+    ::rtl::OUString sOpenBracket( " (" );
     ::rtl::OUString sCloseBracket( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
     ::rtl::OUString sRet = _rDisplayText;
 
@@ -901,7 +901,7 @@ void TPGalleryThemeProperties::FillFilterList()
     }
 
     // media filters
-    static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    static const ::rtl::OUString aWildcard( "*." );
     ::avmedia::FilterNameVector     aFilters;
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 

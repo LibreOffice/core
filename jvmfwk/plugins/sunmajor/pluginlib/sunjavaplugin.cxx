@@ -86,8 +86,8 @@ OString getPluginJarPath(
     const OUString& sVersion)
 {
     OString ret;
-    OUString sName1(RTL_CONSTASCII_USTRINGPARAM("javaplugin.jar"));
-    OUString sName2(RTL_CONSTASCII_USTRINGPARAM("plugin.jar"));
+    OUString sName1("javaplugin.jar");
+    OUString sName2("plugin.jar");
     OUString sPath;
     if ( sVendor == SUN_MICRO )
     {
@@ -599,7 +599,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
 #ifdef UNX
     //Setting the JAVA_HOME is needed for awt
-    rtl::OUString javaHome(RTL_CONSTASCII_USTRINGPARAM("JAVA_HOME="));
+    rtl::OUString javaHome("JAVA_HOME=");
     rtl::OUString sPathLocation;
     osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
     javaHome += sPathLocation;
@@ -609,8 +609,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #endif
 
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
-    rtl::OUString sSymbolCreateJava(
-            RTL_CONSTASCII_USTRINGPARAM("JNI_CreateJavaVM"));
+    rtl::OUString sSymbolCreateJava("JNI_CreateJavaVM");
 
     JNI_CreateVM_Type * pCreateJavaVM = (JNI_CreateVM_Type *) osl_getFunctionSymbol(
         moduleRt, sSymbolCreateJava.pData);

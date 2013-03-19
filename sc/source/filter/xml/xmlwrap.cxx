@@ -163,7 +163,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        rtl::OUString sPropName("StreamName");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( sStream ) );
     }
 
@@ -374,7 +374,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             if( xParentSet.is() )
             {
                 uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
-                OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+                OUString sPropName("BuildId" );
                 if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
                 {
                     xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
@@ -395,7 +395,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         // Set base URI
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
         ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : ::rtl::OUString();
-        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        rtl::OUString sPropName("BaseURI");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
         // TODO/LATER: do not do it for embedded links
@@ -602,7 +602,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             if( xModelSet.is() )
             {
                 uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-                OUString sBuildPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+                OUString sBuildPropName("BuildId" );
                 if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sBuildPropName) )
                 {
                     xModelSet->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
@@ -683,7 +683,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         if (xSet.is())
         {
             xSet->setPropertyValue(rtl::OUString("MediaType"), uno::makeAny(sMediaType));
-            OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+            OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
             // advise storage impl to use common encryption
             xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True) );
@@ -699,7 +699,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        rtl::OUString sPropName("StreamName");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( sName ) );
     }
 
@@ -788,7 +788,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         xStorage = pMedium->GetOutputStorage();
 
     OUString sFileName;
-    OUString sTextMediaType(RTL_CONSTASCII_USTRINGPARAM("text/xml"));
+    OUString sTextMediaType("text/xml");
     if (pMedium)
         sFileName = pMedium->GetName();
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
@@ -830,18 +830,18 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         sal_Bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
         xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(bUsePrettyPrinting));
 
-        const OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+        const OUString sTargetStorage("TargetStorage");
         xInfoSet->setPropertyValue( sTargetStorage, uno::Any( xStorage ) );
 
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
         ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : ::rtl::OUString();
-        rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        rtl::OUString sPropName("BaseURI");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
         // TODO/LATER: do not do it for embedded links
         if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
         {
-            OUString aName(RTL_CONSTASCII_USTRINGPARAM("dummyObjectName"));
+            OUString aName("dummyObjectName");
             if ( pMedium && pMedium->GetItemSet() )
             {
                 const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(

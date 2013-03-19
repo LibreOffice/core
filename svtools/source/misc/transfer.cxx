@@ -222,14 +222,14 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
         if( xMimeType.is() )
         {
-            const ::rtl::OUString aClassNameString(RTL_CONSTASCII_USTRINGPARAM( "classname" ));
-            const ::rtl::OUString aTypeNameString(RTL_CONSTASCII_USTRINGPARAM( "typename" ));
-            const ::rtl::OUString aDisplayNameString(RTL_CONSTASCII_USTRINGPARAM( "displayname" ));
-            const ::rtl::OUString aViewAspectString(RTL_CONSTASCII_USTRINGPARAM( "viewaspect" ));
-            const ::rtl::OUString aWidthString(RTL_CONSTASCII_USTRINGPARAM( "width" ));
-            const ::rtl::OUString aHeightString(RTL_CONSTASCII_USTRINGPARAM( "height" ));
-            const ::rtl::OUString aPosXString(RTL_CONSTASCII_USTRINGPARAM( "posx" ));
-            const ::rtl::OUString aPosYString(RTL_CONSTASCII_USTRINGPARAM( "posy" ));
+            const ::rtl::OUString aClassNameString( "classname" );
+            const ::rtl::OUString aTypeNameString( "typename" );
+            const ::rtl::OUString aDisplayNameString( "displayname" );
+            const ::rtl::OUString aViewAspectString( "viewaspect" );
+            const ::rtl::OUString aWidthString( "width" );
+            const ::rtl::OUString aHeightString( "height" );
+            const ::rtl::OUString aPosXString( "posx" );
+            const ::rtl::OUString aPosYString( "posy" );
 
             if( xMimeType->hasParameter( aClassNameString ) )
             {
@@ -1345,7 +1345,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
         Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
         Reference< XMimeContentTypeFactory >    xMimeFact = MimeContentTypeFactory::create( xContext );
         DataFlavorEx                            aFlavorEx;
-        const ::rtl::OUString                   aCharsetStr(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
+        const ::rtl::OUString                   aCharsetStr( "charset" );
 
 
         for( sal_Int32 i = 0; i < rDataFlavorSeq.getLength(); i++ )
@@ -2279,7 +2279,7 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
                 if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( "text/plain" ) ) )
                 {
                     // special handling for text/plain media types
-                    const ::rtl::OUString aCharsetString(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
+                    const ::rtl::OUString aCharsetString( "charset" );
 
                     if( !xRequestType2->hasParameter( aCharsetString ) ||
                         xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( "utf-16" ) ) ||
@@ -2291,7 +2291,7 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
                 else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( "application/x-openoffice" ) ) )
                 {
                     // special handling for application/x-openoffice media types
-                    const ::rtl::OUString aFormatString(RTL_CONSTASCII_USTRINGPARAM( "windows_formatname" ));
+                    const ::rtl::OUString aFormatString( "windows_formatname" );
 
                     if( xRequestType1->hasParameter( aFormatString ) &&
                         xRequestType2->hasParameter( aFormatString ) &&

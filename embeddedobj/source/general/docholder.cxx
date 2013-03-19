@@ -106,8 +106,8 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
                             const uno::Reference< frame::XDispatchProvider >& xSourceDisp )
 {
     sal_Int32 nInd = 0;
-    ::rtl::OUString aModuleIdentPropName( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ) );
-    ::rtl::OUString aDispProvPropName( RTL_CONSTASCII_USTRINGPARAM( "DispatchProvider" ) );
+    ::rtl::OUString aModuleIdentPropName( "ModuleIdentifier" );
+    ::rtl::OUString aDispProvPropName( "DispatchProvider" );
     sal_Bool bModuleNameSet = sal_False;
     sal_Bool bDispProvSet = sal_False;
 

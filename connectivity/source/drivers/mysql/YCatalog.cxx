@@ -54,9 +54,9 @@ void OMySQLCatalog::refreshObjects(const Sequence< ::rtl::OUString >& _sKindOfOb
 void OMySQLCatalog::refreshTables()
 {
     TStringVector aVector;
-    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-    static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-    static const ::rtl::OUString s_sAll(RTL_CONSTASCII_USTRINGPARAM("%"));
+    static const ::rtl::OUString s_sTableTypeView("VIEW");
+    static const ::rtl::OUString s_sTableTypeTable("TABLE");
+    static const ::rtl::OUString s_sAll("%");
 
     Sequence< ::rtl::OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;

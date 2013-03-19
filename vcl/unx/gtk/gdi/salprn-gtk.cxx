@@ -1133,7 +1133,7 @@ GtkPrintDialog::impl_readFromSettings()
     vcl::SettingsConfigItem* const pItem(vcl::SettingsConfigItem::get());
     GtkPrintSettings* const pSettings(getSettings());
 
-    const rtl::OUString aPrintDialogStr(RTL_CONSTASCII_USTRINGPARAM("PrintDialog"));
+    const rtl::OUString aPrintDialogStr("PrintDialog");
     const rtl::OUString aCopyCount(pItem->getValue(aPrintDialogStr,
                 rtl::OUString("CopyCount")));
     const rtl::OUString aCollate(pItem->getValue(aPrintDialogStr,
@@ -1171,7 +1171,7 @@ const
     vcl::SettingsConfigItem* const pItem(vcl::SettingsConfigItem::get());
     GtkPrintSettings* const pSettings(getSettings());
 
-    const rtl::OUString aPrintDialogStr(RTL_CONSTASCII_USTRINGPARAM("PrintDialog"));
+    const rtl::OUString aPrintDialogStr("PrintDialog");
     pItem->setValue(aPrintDialogStr,
             rtl::OUString("CopyCount"),
             rtl::OUString::valueOf(sal_Int32(m_pWrapper->print_settings_get_n_copies(pSettings))));

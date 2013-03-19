@@ -300,7 +300,7 @@ namespace frm
 
                     bool bSelected = ( rEvent.Selected == STATE_CHECK );
 
-                    ::rtl::OUString sExpressionMarker( RTL_CONSTASCII_USTRINGPARAM( "$expression$" ) );
+                    ::rtl::OUString sExpressionMarker( "$expression$" );
                     ::dbtools::getBoleanComparisonPredicate(
                         sExpressionMarker,
                         bSelected,

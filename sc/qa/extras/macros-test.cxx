@@ -84,7 +84,7 @@ void ScMacrosTest::testStarBasic()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
-    rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document"));
+    rtl::OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
     String sUrl = aURL;
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;

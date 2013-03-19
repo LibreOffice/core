@@ -666,12 +666,12 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     case WID_PORTIONTYPE:
         if ( rSet.GetItemState( EE_FEATURE_FIELD, sal_False ) == SFX_ITEM_SET )
         {
-            OUString aType( RTL_CONSTASCII_USTRINGPARAM("TextField") );
+            OUString aType("TextField");
             rAny <<= aType;
         }
         else
         {
-            OUString aType( RTL_CONSTASCII_USTRINGPARAM("Text") );
+            OUString aType("Text");
             rAny <<= aType;
         }
         break;

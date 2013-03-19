@@ -467,8 +467,8 @@ DBG_NAME(OTableSubscriptionPage)
     Sequence< ::rtl::OUString > OTableSubscriptionPage::collectDetailedSelection() const
     {
         Sequence< ::rtl::OUString > aTableFilter;
-        static const ::rtl::OUString sDot(RTL_CONSTASCII_USTRINGPARAM("."));
-        static const ::rtl::OUString sWildcard(RTL_CONSTASCII_USTRINGPARAM("%"));
+        static const ::rtl::OUString sDot(".");
+        static const ::rtl::OUString sWildcard("%");
 
         ::rtl::OUString sComposedName;
         const SvTreeListEntry* pAllObjectsEntry = m_aTablesList.getAllObjectsEntry();

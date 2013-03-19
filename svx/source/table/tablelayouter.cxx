@@ -526,7 +526,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
     MergeVector aMergedCells( nColCount );
     Int32Vector aOptimalColumns;
 
-    const OUString sOptimalSize( RTL_CONSTASCII_USTRINGPARAM("OptimalSize") );
+    const OUString sOptimalSize("OptimalSize");
 
     if( sal::static_int_cast< sal_Int32 >( maColumns.size() ) != nColCount )
         maColumns.resize( nColCount );
@@ -681,7 +681,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
     MergeVector aMergedCells( nRowCount );
     Int32Vector aOptimalRows;
 
-    const OUString sOptimalSize( RTL_CONSTASCII_USTRINGPARAM("OptimalSize") );
+    const OUString sOptimalSize("OptimalSize");
 
     // first calculate current height and initial minimum size per column,
     // merged cells will be counted later

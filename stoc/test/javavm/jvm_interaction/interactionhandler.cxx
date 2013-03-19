@@ -125,7 +125,7 @@ sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
     sal_Bool retVal= sal_True;
     setCurrentContext( Reference<XCurrentContext>( static_cast<XWeak*>(new Context()), UNO_QUERY));
 
-      OUString sVMService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
+      OUString sVMService("com.sun.star.java.JavaVirtualMachine");
     Reference<XInterface> xXInt= xMgr->createInstance(sVMService);
     if( ! xXInt.is())
         return sal_False;

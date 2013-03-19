@@ -43,7 +43,7 @@ void XNamed::testGetName()
 void XNamed::testSetName()
 {
     uno::Reference< container::XNamed > xNamed(init(), UNO_QUERY_THROW);
-    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("NewName"));
+    rtl::OUString aName("NewName");
 
     xNamed->setName(aName);
     CPPUNIT_ASSERT( aName == xNamed->getName() );

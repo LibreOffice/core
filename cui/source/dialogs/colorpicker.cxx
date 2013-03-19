@@ -173,7 +173,7 @@ sal_Int32 HexColorControl::GetColor()
 {
     sal_Int32 nColor = -1;
 
-    OUString aStr( RTL_CONSTASCII_USTRINGPARAM( "#" ) );
+    OUString aStr( "#" );
     aStr += GetText();
     sal_Int32 nLen = aStr.getLength();
     if( nLen < 7 )

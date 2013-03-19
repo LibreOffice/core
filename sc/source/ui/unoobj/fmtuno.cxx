@@ -423,7 +423,7 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasElements() throw(uno::RuntimeExce
 
 static rtl::OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
 {
-    rtl::OUString aRet( RTL_CONSTASCII_USTRINGPARAM( "Entry" ) );
+    rtl::OUString aRet( "Entry" );
     aRet += rtl::OUString::valueOf( nIndex );
     return aRet;
 }

@@ -393,7 +393,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         // build a connection with it's current settings (4. data source name, or 5. URL)
 
-        const ::rtl::OUString sUserProp( RTL_CONSTASCII_USTRINGPARAM( "User" ));
+        const ::rtl::OUString sUserProp( "User" );
         ::rtl::OUString sDataSourceName;
         xRowSetProps->getPropertyValue(::rtl::OUString("DataSourceName")) >>= sDataSourceName;
         ::rtl::OUString sURL;
@@ -952,7 +952,7 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
     // ask the parent of the connection (should be an DatabaseAccess)
     Reference< XNumberFormatsSupplier> xReturn;
     Reference< XChild> xConnAsChild(_rxConn, UNO_QUERY);
-    ::rtl::OUString sPropFormatsSupplier( RTL_CONSTASCII_USTRINGPARAM( "NumberFormatsSupplier" ));
+    ::rtl::OUString sPropFormatsSupplier( "NumberFormatsSupplier" );
     if (xConnAsChild.is())
     {
         Reference< XPropertySet> xConnParentProps(xConnAsChild->getParent(), UNO_QUERY);
@@ -990,22 +990,22 @@ try
     Property* pOldProps = aOldProperties.getArray();
     Property* pNewProps = aNewProperties.getArray();
 
-    ::rtl::OUString sPropDefaultControl(RTL_CONSTASCII_USTRINGPARAM("DefaultControl"));
-    ::rtl::OUString sPropLabelControl(RTL_CONSTASCII_USTRINGPARAM("LabelControl"));
-    ::rtl::OUString sPropFormatsSupplier(RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier"));
-    ::rtl::OUString sPropCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM("CurrencySymbol"));
-    ::rtl::OUString sPropDecimals(RTL_CONSTASCII_USTRINGPARAM("Decimals"));
-    ::rtl::OUString sPropEffectiveMin(RTL_CONSTASCII_USTRINGPARAM("EffectiveMin"));
-    ::rtl::OUString sPropEffectiveMax(RTL_CONSTASCII_USTRINGPARAM("EffectiveMax"));
-    ::rtl::OUString sPropEffectiveDefault(RTL_CONSTASCII_USTRINGPARAM("EffectiveDefault"));
-    ::rtl::OUString sPropDefaultText(RTL_CONSTASCII_USTRINGPARAM("DefaultText"));
-    ::rtl::OUString sPropDefaultDate(RTL_CONSTASCII_USTRINGPARAM("DefaultDate"));
-    ::rtl::OUString sPropDefaultTime(RTL_CONSTASCII_USTRINGPARAM("DefaultTime"));
-    ::rtl::OUString sPropValueMin(RTL_CONSTASCII_USTRINGPARAM("ValueMin"));
-    ::rtl::OUString sPropValueMax(RTL_CONSTASCII_USTRINGPARAM("ValueMax"));
-    ::rtl::OUString sPropDecimalAccuracy(RTL_CONSTASCII_USTRINGPARAM("DecimalAccuracy"));
-    ::rtl::OUString sPropClassId(RTL_CONSTASCII_USTRINGPARAM("ClassId"));
-    ::rtl::OUString sFormattedServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.FormattedField" ) );
+    ::rtl::OUString sPropDefaultControl("DefaultControl");
+    ::rtl::OUString sPropLabelControl("LabelControl");
+    ::rtl::OUString sPropFormatsSupplier("FormatsSupplier");
+    ::rtl::OUString sPropCurrencySymbol("CurrencySymbol");
+    ::rtl::OUString sPropDecimals("Decimals");
+    ::rtl::OUString sPropEffectiveMin("EffectiveMin");
+    ::rtl::OUString sPropEffectiveMax("EffectiveMax");
+    ::rtl::OUString sPropEffectiveDefault("EffectiveDefault");
+    ::rtl::OUString sPropDefaultText("DefaultText");
+    ::rtl::OUString sPropDefaultDate("DefaultDate");
+    ::rtl::OUString sPropDefaultTime("DefaultTime");
+    ::rtl::OUString sPropValueMin("ValueMin");
+    ::rtl::OUString sPropValueMax("ValueMax");
+    ::rtl::OUString sPropDecimalAccuracy("DecimalAccuracy");
+    ::rtl::OUString sPropClassId("ClassId");
+    ::rtl::OUString sFormattedServiceName( "com.sun.star.form.component.FormattedField" );
 
     for (sal_Int16 i=0; i<aOldProperties.getLength(); ++i)
     {

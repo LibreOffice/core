@@ -487,7 +487,7 @@ static bool AddLocalTempFontDirs( void )
 
     // add private font files
 
-    rtl::OUString aBrandStr( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) );
+    rtl::OUString aBrandStr( "$BRAND_BASE_DIR" );
     rtl_bootstrap_expandMacros( &aBrandStr.pData );
     rtl::OUString aBrandSysPath;
     OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );

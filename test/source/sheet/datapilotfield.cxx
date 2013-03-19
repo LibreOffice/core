@@ -53,7 +53,7 @@ void DataPilotField::testSortInfo()
 {
     uno::Reference< beans::XPropertySet> xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldSortInfo aSortInfoValue;
-    rtl::OUString aSortInfo(RTL_CONSTASCII_USTRINGPARAM("SortInfo"));
+    rtl::OUString aSortInfo("SortInfo");
     aSortInfoValue.Field = rtl::OUString("Col1");
     aSortInfoValue.IsAscending = false;
     aSortInfoValue.Mode = sheet::DataPilotFieldSortMode::MANUAL;
@@ -69,7 +69,7 @@ void DataPilotField::testSortInfo()
 
     //setting HasSortInfo only makes sense for false, for true the uno implementation does nothing
     sal_Bool bHasSortInfo;
-    rtl::OUString aHasSortInfo(RTL_CONSTASCII_USTRINGPARAM("HasSortInfo"));
+    rtl::OUString aHasSortInfo("HasSortInfo");
     xValue = xPropSet->getPropertyValue(aHasSortInfo);
     CPPUNIT_ASSERT( xValue >>= bHasSortInfo );
     CPPUNIT_ASSERT_MESSAGE("should have sort info", bHasSortInfo);
@@ -87,7 +87,7 @@ void DataPilotField::testLayoutInfo()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     sheet::DataPilotFieldLayoutInfo aLayoutInfoValue;
-    rtl::OUString aLayoutInfo(RTL_CONSTASCII_USTRINGPARAM("LayoutInfo"));
+    rtl::OUString aLayoutInfo("LayoutInfo");
     aLayoutInfoValue.AddEmptyLines = false;
     aLayoutInfoValue.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
     uno::Any xValue;
@@ -102,7 +102,7 @@ void DataPilotField::testLayoutInfo()
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     sal_Bool bHasLayoutInfo;
-    rtl::OUString aHasLayoutInfo(RTL_CONSTASCII_USTRINGPARAM("HasLayoutInfo"));
+    rtl::OUString aHasLayoutInfo("HasLayoutInfo");
     xValue = xPropSet->getPropertyValue(aHasLayoutInfo);
     CPPUNIT_ASSERT( xValue >>= bHasLayoutInfo );
     CPPUNIT_ASSERT_MESSAGE("should have layout information", bHasLayoutInfo);
@@ -122,7 +122,7 @@ void DataPilotField::testAutoShowInfo()
     sheet::DataPilotFieldAutoShowInfo aAutoShowInfoValue;
     aAutoShowInfoValue.DataField = rtl::OUString("Col1");
     aAutoShowInfoValue.IsEnabled = true;
-    rtl::OUString aAutoShowInfo(RTL_CONSTASCII_USTRINGPARAM("AutoShowInfo"));
+    rtl::OUString aAutoShowInfo("AutoShowInfo");
     uno::Any xValue;
     xValue <<= aAutoShowInfoValue;
     xPropSet->setPropertyValue(aAutoShowInfo, xValue);
@@ -135,7 +135,7 @@ void DataPilotField::testAutoShowInfo()
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     sal_Bool bHasAutoShowInfo;
-    rtl::OUString aHasAutoShowInfo(RTL_CONSTASCII_USTRINGPARAM("HasAutoShowInfo"));
+    rtl::OUString aHasAutoShowInfo("HasAutoShowInfo");
     xValue = xPropSet->getPropertyValue(aHasAutoShowInfo);
     CPPUNIT_ASSERT( xValue >>= bHasAutoShowInfo );
     CPPUNIT_ASSERT_MESSAGE("should have AutoShow information", bHasAutoShowInfo);
@@ -155,7 +155,7 @@ void DataPilotField::testReference()
     sheet::DataPilotFieldReference aReferenceValue;
     aReferenceValue.ReferenceField = rtl::OUString("Col1");
     aReferenceValue.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
-    rtl::OUString aReference(RTL_CONSTASCII_USTRINGPARAM("Reference"));
+    rtl::OUString aReference("Reference");
     uno::Any xValue;
     xValue <<= aReferenceValue;
     xPropSet->setPropertyValue(aReference, xValue);
@@ -168,7 +168,7 @@ void DataPilotField::testReference()
 
     //setting HasReference only makes sense for false, tor true the uno implementation does nothing
     sal_Bool bHasReference;
-    rtl::OUString aHasReference(RTL_CONSTASCII_USTRINGPARAM("HasReference"));
+    rtl::OUString aHasReference("HasReference");
     xValue = xPropSet->getPropertyValue(aHasReference);
     CPPUNIT_ASSERT( xValue >>= bHasReference );
     CPPUNIT_ASSERT_MESSAGE("should have Reference information", bHasReference);
@@ -186,7 +186,7 @@ void DataPilotField::testIsGroupField()
 {
     uno::Reference< beans::XPropertySet > xPropSet(init(),UNO_QUERY_THROW);
     uno::Any xValue;
-    rtl::OUString aIsGroupField(RTL_CONSTASCII_USTRINGPARAM("IsGroupField"));
+    rtl::OUString aIsGroupField("IsGroupField");
     sal_Bool bIsGroupField;
 
     xValue = xPropSet->getPropertyValue(aIsGroupField);

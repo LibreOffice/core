@@ -76,7 +76,7 @@ uno::Reference< uno::XInterface > ScNamedRangesObj::init(sal_Int32 nSheet)
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
-    rtl::OUString aNamedRangesPropertyString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
+    rtl::OUString aNamedRangesPropertyString("NamedRanges");
     uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesPropertyString), UNO_QUERY_THROW);
 
     //set value from xnamedranges.hxx

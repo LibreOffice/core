@@ -161,7 +161,7 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                 // type
                 if (! s_aTypes[typelib_TypeClass_TYPE])
                 {
-                    OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("type") );
+                    OUString sTypeName("type");
                     ::typelib_typedescriptionreference_new(
                         &s_aTypes[typelib_TypeClass_TYPE], typelib_TypeClass_TYPE, sTypeName.pData );
                     // another static ref:
@@ -170,7 +170,7 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                 // any
                 if (! s_aTypes[typelib_TypeClass_ANY])
                 {
-                    OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("any") );
+                    OUString sTypeName("any");
                     ::typelib_typedescriptionreference_new(
                         &s_aTypes[typelib_TypeClass_ANY], typelib_TypeClass_ANY, sTypeName.pData );
                     // another static ref:
@@ -179,7 +179,7 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                 // string
                 if (! s_aTypes[typelib_TypeClass_STRING])
                 {
-                    OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("string") );
+                    OUString sTypeName("string");
                     ::typelib_typedescriptionreference_new(
                         &s_aTypes[typelib_TypeClass_STRING], typelib_TypeClass_STRING, sTypeName.pData );
                     // another static ref:
@@ -188,18 +188,18 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                 // XInterface
                 if (! s_aTypes[typelib_TypeClass_INTERFACE])
                 {
-                    OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface") );
+                    OUString sTypeName("com.sun.star.uno.XInterface");
 
                     typelib_InterfaceTypeDescription * pTD = 0;
 
                     typelib_TypeDescriptionReference * pMembers[3] = { 0,0,0 };
-                    OUString sMethodName0( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface::queryInterface") );
+                    OUString sMethodName0("com.sun.star.uno.XInterface::queryInterface");
                     ::typelib_typedescriptionreference_new(
                         &pMembers[0], typelib_TypeClass_INTERFACE_METHOD, sMethodName0.pData );
-                    OUString sMethodName1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface::acquire") );
+                    OUString sMethodName1("com.sun.star.uno.XInterface::acquire");
                     ::typelib_typedescriptionreference_new(
                         &pMembers[1], typelib_TypeClass_INTERFACE_METHOD, sMethodName1.pData );
-                    OUString sMethodName2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface::release") );
+                    OUString sMethodName2("com.sun.star.uno.XInterface::release");
                     ::typelib_typedescriptionreference_new(
                         &pMembers[2], typelib_TypeClass_INTERFACE_METHOD, sMethodName2.pData );
 
@@ -221,16 +221,16 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                     assert( ! s_aTypes[typelib_TypeClass_EXCEPTION] );
                     {
                     typelib_TypeDescription * pTD1 = 0;
-                    OUString sTypeName1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Exception") );
+                    OUString sTypeName1("com.sun.star.uno.Exception");
 
                     typelib_CompoundMember_Init aMembers[2];
-                    OUString sMemberType0( RTL_CONSTASCII_USTRINGPARAM("string") );
-                    OUString sMemberName0( RTL_CONSTASCII_USTRINGPARAM("Message") );
+                    OUString sMemberType0("string");
+                    OUString sMemberName0("Message");
                     aMembers[0].eTypeClass = typelib_TypeClass_STRING;
                     aMembers[0].pTypeName = sMemberType0.pData;
                     aMembers[0].pMemberName = sMemberName0.pData;
-                    OUString sMemberType1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface") );
-                    OUString sMemberName1( RTL_CONSTASCII_USTRINGPARAM("Context") );
+                    OUString sMemberType1("com.sun.star.uno.XInterface");
+                    OUString sMemberName1("Context");
                     aMembers[1].eTypeClass = typelib_TypeClass_INTERFACE;
                     aMembers[1].pTypeName = sMemberType1.pData;
                     aMembers[1].pMemberName = sMemberName1.pData;
@@ -243,7 +243,7 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                     // another static ref:
                     ++s_aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
                     // RuntimeException
-                    OUString sTypeName2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException") );
+                    OUString sTypeName2("com.sun.star.uno.RuntimeException");
                     ::typelib_typedescription_new(
                         &pTD1, typelib_TypeClass_EXCEPTION, sTypeName2.pData, s_aTypes[typelib_TypeClass_EXCEPTION], 0, 0 );
                     ::typelib_typedescription_register( &pTD1 );
@@ -252,24 +252,24 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                     // XInterface members
                     typelib_InterfaceMethodTypeDescription * pMethod = 0;
                     typelib_Parameter_Init aParameters[1];
-                    OUString sParamName0( RTL_CONSTASCII_USTRINGPARAM("aType") );
-                    OUString sParamType0( RTL_CONSTASCII_USTRINGPARAM("type") );
+                    OUString sParamName0("aType");
+                    OUString sParamType0("type");
                     aParameters[0].pParamName = sParamName0.pData;
                     aParameters[0].eTypeClass = typelib_TypeClass_TYPE;
                     aParameters[0].pTypeName = sParamType0.pData;
                     aParameters[0].bIn = sal_True;
                     aParameters[0].bOut = sal_False;
                     rtl_uString * pExceptions[1];
-                    OUString sExceptionName0( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException") );
+                    OUString sExceptionName0("com.sun.star.uno.RuntimeException");
                     pExceptions[0] = sExceptionName0.pData;
-                    OUString sReturnType0( RTL_CONSTASCII_USTRINGPARAM("any") );
+                    OUString sReturnType0("any");
                     typelib_typedescription_newInterfaceMethod(
                         &pMethod, 0, sal_False, sMethodName0.pData,
                         typelib_TypeClass_ANY, sReturnType0.pData,
                         1, aParameters, 1, pExceptions );
                     ::typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
 
-                    OUString sReturnType1( RTL_CONSTASCII_USTRINGPARAM("void") );
+                    OUString sReturnType1("void");
                     ::typelib_typedescription_newInterfaceMethod(
                         &pMethod, 1, sal_True, sMethodName1.pData,
                         typelib_TypeClass_VOID, sReturnType1.pData, 0, 0, 0, 0 );

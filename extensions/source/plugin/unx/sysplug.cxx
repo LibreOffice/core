@@ -136,8 +136,7 @@ UnxPluginComm::~UnxPluginComm()
 
 bool UnxPluginComm::getPluginappPath(rtl::OString * path) {
     OSL_ASSERT(path != NULL);
-    rtl::OUString p(
-        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/pluginapp.bin"));
+    rtl::OUString p("$BRAND_BASE_DIR/program/pluginapp.bin");
     rtl::Bootstrap::expandMacros(p);
     return
         (osl::FileBase::getSystemPathFromFileURL(p, p) ==

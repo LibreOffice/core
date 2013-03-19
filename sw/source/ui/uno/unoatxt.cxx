@@ -66,7 +66,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
 
 uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw()
 {
-    OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AutoTextContainer"));
+    OUString sService("com.sun.star.text.AutoTextContainer");
     const uno::Sequence< OUString > aSeq( &sService, 1 );
     return aSeq;
 }

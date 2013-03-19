@@ -2528,9 +2528,9 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         if (xMultiServiceFactory.is())
         {
             sal_Int32 nCount(aConfigProps.getLength());
-            rtl::OUString sCTName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
-            rtl::OUString sVBName(RTL_CONSTASCII_USTRINGPARAM("VBACompatibilityMode"));
-            rtl::OUString sSCName(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration"));
+            rtl::OUString sCTName("TrackedChangesProtectionKey");
+            rtl::OUString sVBName("VBACompatibilityMode");
+            rtl::OUString sSCName("ScriptConfiguration");
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
                 if (aConfigProps[i].Name == sCTName)
@@ -2613,7 +2613,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
             }
             catch ( const util::MalformedNumberFormatException& rException )
             {
-                rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Fehler im Formatstring "));
+                rtl::OUString sErrorMessage("Fehler im Formatstring ");
                 sErrorMessage += sFormatString;
                 sErrorMessage += rtl::OUString(" an Position ");
                 sErrorMessage += rtl::OUString::valueOf(rException.CheckPos);

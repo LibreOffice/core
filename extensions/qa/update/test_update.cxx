@@ -70,7 +70,7 @@ protected:
     // test the getUpdateInformationEnumeration() method
     void testGetUpdateInformationEnumeration()
     {
-        ::rtl::OUString aInstallSetID( RTL_CONSTASCII_USTRINGPARAM( "TODO" ) ); // unused when we do not have a 'feed'
+        ::rtl::OUString aInstallSetID( "TODO" ); // unused when we do not have a 'feed'
 
         uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
             m_xProvider->getUpdateInformationEnumeration( m_aRepositoryList, aInstallSetID );

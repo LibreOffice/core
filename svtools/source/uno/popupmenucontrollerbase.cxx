@@ -317,7 +317,7 @@ throw( ::com::sun::star::uno::RuntimeException )
     // Just use the main part of the URL for popup menu controllers
     sal_Int32     nQueryPart( 0 );
     sal_Int32     nSchemePart( 0 );
-    rtl::OUString aMainURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:" ));
+    rtl::OUString aMainURL( "vnd.sun.star.popup:" );
 
     nSchemePart = aURL.indexOf( ':' );
     if (( nSchemePart > 0 ) &&

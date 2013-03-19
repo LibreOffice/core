@@ -252,7 +252,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ODocumentCloser::getSupportedServiceNa
 // --------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL ODocumentCloser::impl_staticGetSupportedServiceNames()
 {
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.DocumentCloser" ) );
+    const rtl::OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
     return uno::Sequence< rtl::OUString >( &aServiceName, 1 );
 }
 

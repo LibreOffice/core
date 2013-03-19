@@ -454,8 +454,7 @@ SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
 
 SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
 {
-    rtl::OUString aSubTbxResName(
-        RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/graffilterbar" ) );
+    rtl::OUString aSubTbxResName( "private:resource/toolbar/graffilterbar" );
     createAndPositionSubToolBar( aSubTbxResName );
 
     return NULL;

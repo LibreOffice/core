@@ -77,7 +77,7 @@ SwTbxInsertCtrl::~SwTbxInsertCtrl()
 void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
 {
     ToolBox& rTbx = GetToolBox();
-    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+    rtl::OUString aSlotURL( "slot:" );
     aSlotURL += rtl::OUString::valueOf( sal_Int32( nLastSlotId ));
     Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
 
@@ -103,7 +103,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
             if( nLastSlotId )
                 nId = nLastSlotId;
 
-            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+            rtl::OUString aSlotURL( "slot:" );
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
             ToolBox& rBox = GetToolBox();
             Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
@@ -120,12 +120,12 @@ SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
 {
     if(GetSlotId() == FN_INSERT_CTRL)
     {
-        OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertbar" ));
+        OUString aToolBarResStr( "private:resource/toolbar/insertbar" );
         createAndPositionSubToolBar( aToolBarResStr );
     }
     else /* FN_INSERT_OBJ_CTRL */
     {
-        OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertobjectbar" ));
+        OUString aToolBarResStr( "private:resource/toolbar/insertobjectbar" );
         createAndPositionSubToolBar( aToolBarResStr );
     }
     return NULL;

@@ -965,7 +965,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
     // defaults
     FILE * stream = stderr;
     sal_Int64 nLoop = NLOOP;
-    OUString aArg( RTL_CONSTASCII_USTRINGPARAM("dms") );
+    OUString aArg("dms");
 
     try
     {
@@ -1123,8 +1123,8 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             out( "\" ..." );
 
             oslProcess hProcess = 0;
-            OUString aUnoExe( RTL_CONSTASCII_USTRINGPARAM("uno") );
-            OUString aWorkingDir( RTL_CONSTASCII_USTRINGPARAM(".") );
+            OUString aUnoExe("uno");
+            OUString aWorkingDir(".");
             osl_executeProcess(
                 aUnoExe.pData, pArgs, sizeof(aArgs) / sizeof(OUString),
                 osl_Process_SEARCHPATH | osl_Process_DETACHED | osl_Process_NORMAL,

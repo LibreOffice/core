@@ -72,8 +72,8 @@ namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
     {
-        const ::rtl::OUString sConfigName( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.ReportDesign/PropertyBrowser/" ) );
-        const ::rtl::OUString sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "DirectHelp" ) );
+        const ::rtl::OUString sConfigName( "/org.openoffice.Office.ReportDesign/PropertyBrowser/" );
+        const ::rtl::OUString sPropertyName( "DirectHelp" );
 
         ::utl::OConfigurationTreeRoot aConfiguration(
             ::utl::OConfigurationTreeRoot::createWithComponentContext( _rxContext, sConfigName ) );
@@ -145,7 +145,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
             m_xBrowserController = inspection::ObjectInspector::createWithModel(m_xInspectorContext, xInspectorModel);
             if ( !m_xBrowserController.is() )
             {
-                const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.ObjectInspector" ) );
+                const ::rtl::OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
                 ShowServiceNotAvailableError(pParent, sServiceName, sal_True);
             }
             else

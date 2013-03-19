@@ -157,7 +157,7 @@ bool StateEventHelper::isCommandEnabled()
         SolarMutexGuard aSolarGuard;
         if ( m_xDispatchProvider.is() && m_xURLTransformer.is() )
         {
-            ::rtl::OUString aSelf( RTL_CONSTASCII_USTRINGPARAM( "_self" ));
+            ::rtl::OUString aSelf( "_self" );
 
             aTargetURL.Complete = m_aCommandURL;
             m_xURLTransformer->parseStrict( aTargetURL );

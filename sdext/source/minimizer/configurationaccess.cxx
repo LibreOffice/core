@@ -36,8 +36,7 @@ using namespace ::com::sun::star::container;
 
 static const OUString& GetPathToConfigurationRoot (void)
 {
-    static const OUString sPathToConfigurationRoot (
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.extension.SunPresentationMinimizer"));
+    static const OUString sPathToConfigurationRoot ("org.openoffice.Office.extension.SunPresentationMinimizer");
     return sPathToConfigurationRoot;
 }
 
@@ -168,7 +167,7 @@ rtl::OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
     rtl::OUString aPath;
     try
     {
-        static const OUString sProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.expand:" ) );
+        static const OUString sProtocol( "vnd.sun.star.expand:" );
         Reference< container::XNameAccess > xSet( OpenConfiguration( true ), UNO_QUERY_THROW );
         if ( xSet->hasByName( TKGet( eToken ) ) )
             xSet->getByName( TKGet( eToken ) ) >>= aPath;

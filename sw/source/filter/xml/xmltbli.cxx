@@ -1388,8 +1388,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     OSL_ENSURE( xFactory.is(), "factory missing" );
     if( xFactory.is() )
     {
-        OUString sService(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextTable" ) );
+        OUString sService( "com.sun.star.text.TextTable" );
         Reference<XInterface> xIfc = xFactory->createInstance( sService );
         OSL_ENSURE( xIfc.is(), "Couldn't create a table" );
 
@@ -2904,7 +2903,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         // The Cursor already is in the first section
         pStNd = pTxtCrsr->GetPaM()->GetNode()->FindTableBoxStartNode();
         bFirstSection = false;
-        OUString sStyleName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+        OUString sStyleName("Standard");
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
             GetImport().GetTextImport()->GetCursor(), sStyleName, sal_True );
     }

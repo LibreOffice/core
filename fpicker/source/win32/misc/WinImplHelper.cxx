@@ -39,9 +39,9 @@ using ::com::sun::star::uno::Sequence;
 //
 //------------------------------------------------------------
 
-const rtl::OUString TILDE(RTL_CONSTASCII_USTRINGPARAM( "~" ));
+const rtl::OUString TILDE( "~" );
 const sal_Unicode   TILDE_SIGN = L'~';
-const rtl::OUString AMPERSAND(RTL_CONSTASCII_USTRINGPARAM( "&" ));
+const rtl::OUString AMPERSAND( "&" );
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 //------------------------------------------------------------

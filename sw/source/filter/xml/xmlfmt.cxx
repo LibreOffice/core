@@ -304,8 +304,8 @@ uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
                                                     uno::UNO_QUERY );
         if( xFactory.is() )
         {
-            OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.style.ConditionalParagraphStyle" ) );
+            OUString sServiceName(
+                        "com.sun.star.style.ConditionalParagraphStyle" );
             uno::Reference < uno::XInterface > xIfc =
                 xFactory->createInstance( sServiceName );
             if( xIfc.is() )

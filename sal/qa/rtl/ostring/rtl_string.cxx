@@ -108,7 +108,7 @@ namespace rtl_string
 
         void convertUStringToString_001()
             {
-                rtl::OUString suString(RTL_CONSTASCII_USTRINGPARAM("Hello"));
+                rtl::OUString suString("Hello");
                 rtl::OString sString;
                 sal_Bool bRet = rtl_convertUStringToString(&sString.pData, suString.getStr(), suString.getLength(), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS);
 

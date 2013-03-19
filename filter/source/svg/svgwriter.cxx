@@ -905,7 +905,7 @@ sal_Bool SVGTextWriter::nextParagraph()
                             if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
                             {
                                 sal_Bool bIsNumbered = sal_True;
-                                OUString msNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"));
+                                OUString msNumberingIsNumber("NumberingIsNumber");
                                 if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
                                 {
                                     if( !(xPropSet->getPropertyValue( msNumberingIsNumber ) >>= bIsNumbered ) )
@@ -1035,7 +1035,7 @@ sal_Bool SVGTextWriter::nextParagraph()
                             if( xNumRules.is() && ( nListLevel < xNumRules->getCount() ) )
                             {
                                 sal_Bool bIsNumbered = sal_True;
-                                OUString msNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"));
+                                OUString msNumberingIsNumber("NumberingIsNumber");
                                 if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
                                 {
                                     if( !(xPropSet->getPropertyValue( msNumberingIsNumber ) >>= bIsNumbered ) )
@@ -1161,8 +1161,8 @@ sal_Bool SVGTextWriter::nextTextPortion()
                     Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( "TextField" ), UNO_QUERY );
                     if( xTextField.is() )
                     {
-                        const ::rtl::OUString sServicePrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
-                        const ::rtl::OUString sPresentationServicePrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.") );
+                        const ::rtl::OUString sServicePrefix("com.sun.star.text.textfield.");
+                        const ::rtl::OUString sPresentationServicePrefix("com.sun.star.presentation.TextField.");
 
                         Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
                         const Sequence< OUString > aServices = xService->getSupportedServiceNames();
@@ -1260,8 +1260,8 @@ sal_Bool SVGTextWriter::nextTextPortion()
                     Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( "TextField" ), UNO_QUERY );
                     if( xTextField.is() )
                     {
-                        const ::rtl::OUString sServicePrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.") );
-                        const ::rtl::OUString sPresentationServicePrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.") );
+                        const ::rtl::OUString sServicePrefix("com.sun.star.text.textfield.");
+                        const ::rtl::OUString sPresentationServicePrefix("com.sun.star.presentation.TextField.");
 
                         Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
                         const Sequence< OUString > aServices = xService->getSupportedServiceNames();

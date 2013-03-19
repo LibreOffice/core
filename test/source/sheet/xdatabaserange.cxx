@@ -162,7 +162,7 @@ void XDatabaseRange::testRefresh()
     uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString("Refresh")), UNO_QUERY_THROW);
 
     const sal_Int32 nCol = 0;
-    rtl::OUString aHidden(RTL_CONSTASCII_USTRINGPARAM("IsVisible"));
+    rtl::OUString aHidden("IsVisible");
     uno::Reference< sheet::XCellRangeReferrer > xCellRangeReferrer(xDBRange, UNO_QUERY_THROW);
     uno::Reference< table::XCellRange > xCellRange = xCellRangeReferrer->getReferredCells();
 

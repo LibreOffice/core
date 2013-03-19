@@ -3006,9 +3006,9 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
 {
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
     bool bIsChart( false );
-    rtl::OUString sPropCLSID (RTL_CONSTASCII_USTRINGPARAM("CLSID"));
-    rtl::OUString sPropModel (RTL_CONSTASCII_USTRINGPARAM("Model"));
-    rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
+    rtl::OUString sPropCLSID ("CLSID");
+    rtl::OUString sPropModel ("Model");
+    rtl::OUString sPersistName ("PersistName");
     if (xShapeProps.is())
     {
         sal_Int32 nZOrder = 0;

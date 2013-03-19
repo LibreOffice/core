@@ -2552,8 +2552,7 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 
     if( !Storage.is() )
     {
-        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM
-            ( "StringResourceWithStorageImpl::setStorage: invalid storage" ));
+        ::rtl::OUString errorMsg( "StringResourceWithStorageImpl::setStorage: invalid storage" );
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2911,8 +2910,7 @@ void StringResourceWithLocationImpl::setURL( const ::rtl::OUString& URL )
     sal_Int32 nLen = URL.getLength();
     if( nLen == 0 )
     {
-        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM
-            ( "StringResourceWithLocationImpl::setURL: invalid URL" ));
+        ::rtl::OUString errorMsg( "StringResourceWithLocationImpl::setURL: invalid URL" );
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 

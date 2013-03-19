@@ -72,7 +72,7 @@ private:
 
 void DBAccessTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+    rtl::OUString aSep("/");
     rtl::OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
@@ -86,8 +86,8 @@ DBAccessTest::DBAccessTest()
 
 void DBAccessTest::test()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("testdb."));
-    const rtl::OUString aFileExtension(RTL_CONSTASCII_USTRINGPARAM("odb"));
+    const rtl::OUString aFileNameBase("testdb.");
+    const rtl::OUString aFileExtension("odb");
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);

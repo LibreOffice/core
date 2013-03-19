@@ -215,9 +215,9 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const ::rtl::OUString& sDirec
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    const ::rtl::OUString aPackage( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/"));
-    const ::rtl::OUString aRelPath( RTL_CONSTASCII_USTRINGPARAM("Path/Info"));
-    const ::rtl::OUString aKey( RTL_CONSTASCII_USTRINGPARAM("WorkPathChanged"));
+    const ::rtl::OUString aPackage("org.openoffice.Office.Common/");
+    const ::rtl::OUString aRelPath("Path/Info");
+    const ::rtl::OUString aKey("WorkPathChanged");
 
     css::uno::Any aValue = ::comphelper::ConfigurationHelper::readDirectKey(
         comphelper::getComponentContext(m_xSMGR), aPackage, aRelPath, aKey, ::comphelper::ConfigurationHelper::E_READONLY);

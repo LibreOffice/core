@@ -35,7 +35,7 @@ namespace dbtools
     //=====================================================================
     static const ::rtl::OUString& getActiveConnectionPropertyName()
     {
-        static const ::rtl::OUString s_sActiveConnectionPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ));
+        static const ::rtl::OUString s_sActiveConnectionPropertyName( "ActiveConnection" );
         return s_sActiveConnectionPropertyName;
     }
 

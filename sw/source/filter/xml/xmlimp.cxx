@@ -526,19 +526,18 @@ void SwXMLImport::startDocument( void )
     {
         Any aAny;
         // insert style mode?
-        OUString sStyleInsertModeFamilies(
-                RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeFamilies"));
+        OUString sStyleInsertModeFamilies("StyleInsertModeFamilies");
         if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeFamilies) )
         {
             aAny = xImportInfo->getPropertyValue(sStyleInsertModeFamilies);
             Sequence< OUString> aFamiliesSeq;
             if( aAny >>= aFamiliesSeq )
             {
-                OUString sFrameStyles( RTL_CONSTASCII_USTRINGPARAM ( "FrameStyles" ) );
-                OUString sPageStyles( RTL_CONSTASCII_USTRINGPARAM ( "PageStyles" ) );
-                OUString sCharacterStyles( RTL_CONSTASCII_USTRINGPARAM ( "CharacterStyles" ) );
-                OUString sParagraphStyles( RTL_CONSTASCII_USTRINGPARAM ( "ParagraphStyles" ) );
-                OUString sNumberingStyles( RTL_CONSTASCII_USTRINGPARAM ( "NumberingStyles" ) );
+                OUString sFrameStyles( "FrameStyles" );
+                OUString sPageStyles( "PageStyles" );
+                OUString sCharacterStyles( "CharacterStyles" );
+                OUString sParagraphStyles( "ParagraphStyles" );
+                OUString sNumberingStyles( "NumberingStyles" );
                 sal_uInt16 nFamilyMask = 0U;
                 sal_Int32 nCount = aFamiliesSeq.getLength();
                 const OUString *pSeq = aFamiliesSeq.getConstArray();
@@ -558,8 +557,7 @@ void SwXMLImport::startDocument( void )
                 }
 
                 sal_Bool bOverwrite = sal_False;
-                OUString sStyleInsertModeOverwrite(
-                    RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeOverwrite"));
+                OUString sStyleInsertModeOverwrite("StyleInsertModeOverwrite");
                 if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeOverwrite) )
                 {
                     aAny = xImportInfo->getPropertyValue(sStyleInsertModeOverwrite);
@@ -573,8 +571,7 @@ void SwXMLImport::startDocument( void )
         }
 
         // text insert mode?
-        OUString sTextInsertModeRange(
-                RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
+        OUString sTextInsertModeRange("TextInsertModeRange");
         if( xPropertySetInfo->hasPropertyByName(sTextInsertModeRange) )
         {
             aAny = xImportInfo->getPropertyValue(sTextInsertModeRange);
@@ -584,8 +581,7 @@ void SwXMLImport::startDocument( void )
         }
 
         // auto text mode
-        OUString sAutoTextMode(
-                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+        OUString sAutoTextMode("AutoTextMode");
         if( xPropertySetInfo->hasPropertyByName(sAutoTextMode) )
         {
             aAny = xImportInfo->getPropertyValue(sAutoTextMode);
@@ -595,8 +591,7 @@ void SwXMLImport::startDocument( void )
         }
 
         // organizer mode
-        OUString sOrganizerMode(
-                RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        OUString sOrganizerMode("OrganizerMode");
         if( xPropertySetInfo->hasPropertyByName(sOrganizerMode) )
         {
             aAny = xImportInfo->getPropertyValue(sOrganizerMode);
@@ -1169,14 +1164,14 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bBackgroundParaOverDrawings = false;
     bool bTabOverMargin = false;
 
-    OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
+    OUString sRedlineProtectionKey( "RedlineProtectionKey" );
 
     const PropertyValue* currentDatabaseDataSource = NULL;
     const PropertyValue* currentDatabaseCommand = NULL;
     const PropertyValue* currentDatabaseCommandType = NULL;
-    OUString currentDatabaseDataSourceKey( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseDataSource" ));
-    OUString currentDatabaseCommandKey( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseCommand" ));
-    OUString currentDatabaseCommandTypeKey( RTL_CONSTASCII_USTRINGPARAM( "CurrentDatabaseCommandType" ));
+    OUString currentDatabaseDataSourceKey( "CurrentDatabaseDataSource" );
+    OUString currentDatabaseCommandKey( "CurrentDatabaseCommand" );
+    OUString currentDatabaseCommandTypeKey( "CurrentDatabaseCommandType" );
 
     while( nCount-- )
     {

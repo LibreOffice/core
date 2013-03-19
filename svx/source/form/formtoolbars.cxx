@@ -91,7 +91,7 @@ namespace svxform
         else if ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS )
             pToolBarName = "formdesign";
 
-        ::rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
+        ::rtl::OUString aToolBarResStr( "private:resource/toolbar/" );
         aToolBarResStr += ::rtl::OUString::createFromAscii( pToolBarName );
         return aToolBarResStr;
     }

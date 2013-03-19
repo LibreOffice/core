@@ -448,8 +448,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
     // Information for a single SQL type
     if(xRs.is())
     {
-        static const ::rtl::OUString aB1(RTL_CONSTASCII_USTRINGPARAM(" [ "));
-        static const ::rtl::OUString aB2(RTL_CONSTASCII_USTRINGPARAM(" ]"));
+        static const ::rtl::OUString aB1(" [ ");
+        static const ::rtl::OUString aB2(" ]");
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
@@ -1376,7 +1376,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     }
     if ( !pTypeInfo )
     {
-        ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x")),sTypeName;
+        ::rtl::OUString sCreate("x"),sTypeName;
         sal_Bool bForce = sal_True;
         pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,sal_False,bForce);
     }

@@ -986,7 +986,7 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
 
     try
     {
-        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+        OUString aPropName( "Title" );
         bool canRename = true;
         ::ucbhelper::Content aContent( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
 
@@ -2115,8 +2115,8 @@ void SvtFileView_Impl::implEnumerationSuccess()
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
 {
-    OUString aTab(       RTL_CONSTASCII_USTRINGPARAM( "\t" ));
-    OUString aTabString( RTL_CONSTASCII_USTRINGPARAM( "%09" ));
+    OUString aTab( "\t" );
+    OUString aTabString( "%09" );
     sal_Int32 iPos;
 
     while ( ( iPos = aValue.indexOf( aTab ) ) >= 0 )
@@ -2129,8 +2129,8 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     ::osl::MutexGuard aGuard( maMutex );
 
     OUString aValue;
-    OUString aTab(     RTL_CONSTASCII_USTRINGPARAM( "\t" ));
-    OUString aDateSep( RTL_CONSTASCII_USTRINGPARAM( ", " ));
+    OUString aTab( "\t" );
+    OUString aDateSep( ", " );
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
@@ -2180,7 +2180,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    OUString aTab( RTL_CONSTASCII_USTRINGPARAM( "\t" ));
+    OUString aTab( "\t" );
 
     sal_uInt32 nCount = (sal_uInt32) rList.getLength();
 
@@ -2466,8 +2466,8 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
     pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, sal_False );
 
     OUString aValue;
-    OUString aTab(     RTL_CONSTASCII_USTRINGPARAM( "\t" ));
-    OUString aDateSep( RTL_CONSTASCII_USTRINGPARAM( ", " ));
+    OUString aTab( "\t" );
+    OUString aDateSep( ", " );
 
     // title, type, size, date
     aValue = pData->GetTitle();

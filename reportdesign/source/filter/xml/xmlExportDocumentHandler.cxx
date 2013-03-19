@@ -43,7 +43,7 @@ void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHandler >
     SvtSaveOptions aSaveOpt;
     if ( aSaveOpt.IsPrettyPrinting() )
     {
-        static const ::rtl::OUString s_sWhitespaces(RTL_CONSTASCII_USTRINGPARAM(" "));
+        static const ::rtl::OUString s_sWhitespaces(" ");
         _xDelegatee->ignorableWhitespace(s_sWhitespaces);
     }
 }
@@ -283,7 +283,7 @@ void SAL_CALL ExportDocumentHandler::characters(const ::rtl::OUString & aChars) 
     }
     else if ( m_bExportChar )
     {
-        static const ::rtl::OUString s_sZero(RTL_CONSTASCII_USTRINGPARAM("0"));
+        static const ::rtl::OUString s_sZero("0");
         m_xDelegatee->characters(s_sZero);
     }
 }
@@ -371,16 +371,16 @@ void ExportDocumentHandler::exportTableRows()
 
     const ::rtl::OUString sValueType( lcl_createAttribute(XML_NP_OFFICE, XML_VALUE_TYPE) );
 
-    const static ::rtl::OUString s_sFieldPrefix(RTL_CONSTASCII_USTRINGPARAM("field:["));
-    const static ::rtl::OUString s_sFieldPostfix(RTL_CONSTASCII_USTRINGPARAM("]"));
+    const static ::rtl::OUString s_sFieldPrefix("field:[");
+    const static ::rtl::OUString s_sFieldPostfix("]");
     const ::rtl::OUString sCell( lcl_createAttribute(XML_NP_TABLE, XML_TABLE_CELL) );
     const ::rtl::OUString sP( lcl_createAttribute(XML_NP_TEXT, XML_P) );
     const ::rtl::OUString sFtext(lcl_createAttribute(XML_NP_RPT,XML_FORMATTED_TEXT) );
     const ::rtl::OUString sRElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_ELEMENT) );
     const ::rtl::OUString sRComponent( lcl_createAttribute(XML_NP_RPT,XML_REPORT_COMPONENT) ) ;
     const ::rtl::OUString sFormulaAttrib( lcl_createAttribute(XML_NP_RPT,XML_FORMULA) );
-    const static ::rtl::OUString s_sString(RTL_CONSTASCII_USTRINGPARAM("string"));
-    const static ::rtl::OUString s_sFloat(RTL_CONSTASCII_USTRINGPARAM("float"));
+    const static ::rtl::OUString s_sString("string");
+    const static ::rtl::OUString s_sFloat("float");
 
     SvXMLAttributeList* pCellAtt = new SvXMLAttributeList();
     uno::Reference< xml::sax::XAttributeList > xCellAtt = pCellAtt;

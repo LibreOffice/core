@@ -349,7 +349,7 @@ bool OOdbcManagement::manageDataSources_async()
 
     // this is done in an external process, due to #i78733#
     // (and note this whole functionality is supported on Windows only, ATM)
-    ::rtl::OUString sExecutableName( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program/odbcconfig.exe" ) );
+    ::rtl::OUString sExecutableName( "$BRAND_BASE_DIR/program/odbcconfig.exe" );
     ::rtl::Bootstrap::expandMacros( sExecutableName ); //TODO: detect failure
     oslProcess hProcessHandle(0);
     oslProcessError eError = osl_executeProcess( sExecutableName.pData, NULL, 0, 0, NULL, NULL, NULL, 0, &hProcessHandle );

@@ -180,7 +180,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         const ::rtl::OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
         const String sTargetNameTemp = (sTargetName + ::rtl::OUString("."));
 
-        ::rtl::OUString sStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
+        ::rtl::OUString sStatement("SELECT * FROM ");
         sStatement += sTargetName;
         sStatement += ::rtl::OUString(" WHERE 0=1");
 
@@ -1113,7 +1113,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     _rColumns.clear();
 
     OFieldDescription* pActFieldDescr = NULL;
-    ::rtl::OUString sCreateParam(RTL_CONSTASCII_USTRINGPARAM("x"));
+    ::rtl::OUString sCreateParam("x");
     //////////////////////////////////////////////////////////////////////
     // ReadOnly-Flag
     // On drop no line must be editable.
@@ -1612,7 +1612,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
         if ( !pType.get() )
         {
             _bNotConvert = sal_False;
-            ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x"));
+            ::rtl::OUString sCreate("x");
             pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,sal_False,bForce);
             if ( !pType.get() )
                 pType = m_pTypeInfo;

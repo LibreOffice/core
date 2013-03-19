@@ -289,7 +289,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     }
 
     // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
-    OUString sFieldSeparators(RTL_CONSTASCII_USTRINGPARAM(",;\t"));
+    OUString sFieldSeparators(",;\t");
     OUString sTextSeparators(mcTextSep);
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;

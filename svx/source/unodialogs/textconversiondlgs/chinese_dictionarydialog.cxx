@@ -503,8 +503,8 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
             {
                 try
                 {
-                    rtl::OUString aNameTo_Simplified( RTL_CONSTASCII_USTRINGPARAM("ChineseT2S") );
-                    rtl::OUString aNameTo_Traditional( RTL_CONSTASCII_USTRINGPARAM("ChineseS2T") );
+                    rtl::OUString aNameTo_Simplified("ChineseT2S");
+                    rtl::OUString aNameTo_Traditional("ChineseS2T");
                     lang::Locale aLocale;
                     aLocale.Language = rtl::OUString("zh");
 

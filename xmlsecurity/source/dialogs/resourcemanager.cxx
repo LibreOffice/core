@@ -85,7 +85,7 @@ namespace XmlSec
     {
         vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(rRawString);
         ::rtl::OUStringBuffer s1, s2;
-        OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
+        OUString sEqual(" = ");
         typedef vector< pair < OUString, OUString > >::const_iterator CIT;
         for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); ++i)
         {

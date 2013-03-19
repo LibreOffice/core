@@ -84,37 +84,37 @@ namespace drawinglayer
             // the local UNO API strings
             const ::rtl::OUString& getNamePropertyObjectTransformation()
             {
-                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("ObjectTransformation"));
+                static ::rtl::OUString s_sNameProperty("ObjectTransformation");
                 return s_sNameProperty;
             }
 
             const ::rtl::OUString& getNamePropertyViewTransformation()
             {
-                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("ViewTransformation"));
+                static ::rtl::OUString s_sNameProperty("ViewTransformation");
                 return s_sNameProperty;
             }
 
             const ::rtl::OUString& getNamePropertyViewport()
             {
-                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("Viewport"));
+                static ::rtl::OUString s_sNameProperty("Viewport");
                 return s_sNameProperty;
             }
 
             const ::rtl::OUString& getNamePropertyTime()
             {
-                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("Time"));
+                static ::rtl::OUString s_sNameProperty("Time");
                 return s_sNameProperty;
             }
 
             const ::rtl::OUString& getNamePropertyVisualizedPage()
             {
-                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("VisualizedPage"));
+                static ::rtl::OUString s_sNameProperty("VisualizedPage");
                 return s_sNameProperty;
             }
 
             const ::rtl::OUString& getNamePropertyReducedDisplayQuality()
             {
-                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("ReducedDisplayQuality"));
+                static ::rtl::OUString s_sNameProperty("ReducedDisplayQuality");
                 return s_sNameProperty;
             }
 

@@ -228,7 +228,7 @@ DBG_NAME(OConnectionHelper)
             break;
             case  ::dbaccess::DST_MSACCESS:
             {
-                const ::rtl::OUString sExt(RTL_CONSTASCII_USTRINGPARAM("*.mdb"));
+                const ::rtl::OUString sExt("*.mdb");
                 String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
@@ -240,7 +240,7 @@ DBG_NAME(OConnectionHelper)
             break;
             case  ::dbaccess::DST_MSACCESS_2007:
             {
-                const ::rtl::OUString sAccdb(RTL_CONSTASCII_USTRINGPARAM("*.accdb"));
+                const ::rtl::OUString sAccdb("*.accdb");
                 String sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,

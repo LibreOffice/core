@@ -191,7 +191,7 @@ static void SAL_CALL pseudo_Mapping_acquire( uno_Mapping * pMapping )
 {
     if (1 == osl_atomic_increment( & static_cast< pseudo_Mapping * >( pMapping )->nRef ))
     {
-        OUString aMappingPurpose( RTL_CONSTASCII_USTRINGPARAM("pseudo") );
+        OUString aMappingPurpose("pseudo");
         uno_registerMapping( &pMapping,
                              pseudo_Mapping_free,
                              (uno_Environment *)((pseudo_Mapping *)pMapping)->pFrom,
@@ -247,7 +247,7 @@ extern "C" void SAL_CALL uno_ext_getMapping(
         if (0 == rtl_ustr_ascii_compare( pFrom->pTypeName->buffer, UNO_LB_UNO ) &&
             0 == rtl_ustr_ascii_compare( pTo->pTypeName->buffer, UNO_LB_UNO ))
         {
-            OUString aMappingPurpose( RTL_CONSTASCII_USTRINGPARAM("pseudo") );
+            OUString aMappingPurpose("pseudo");
             // ref count is initially 1
             pMapping = new pseudo_uno::pseudo_Mapping( pFrom->pExtEnv, pTo->pExtEnv );
             uno_registerMapping( &pMapping, pseudo_uno::pseudo_Mapping_free,

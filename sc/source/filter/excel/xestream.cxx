@@ -1168,7 +1168,7 @@ OUString XclExpXmlStream::implGetImplementationName() const
 
 Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportFilter" ) );
+    const OUString aServiceName( "com.sun.star.document.ExportFilter" );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

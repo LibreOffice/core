@@ -46,11 +46,10 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (0 == s_type_XCurrentContext)
         {
-            OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XCurrentContext") );
+            OUString sTypeName("com.sun.star.uno.XCurrentContext");
             typelib_InterfaceTypeDescription * pTD = 0;
             typelib_TypeDescriptionReference * pMembers[1] = { 0 };
-            OUString sMethodName0(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XCurrentContext::getValueByName") );
+            OUString sMethodName0("com.sun.star.uno.XCurrentContext::getValueByName");
             typelib_typedescriptionreference_new(
                 &pMembers[0],
                 typelib_TypeClass_INTERFACE_METHOD,
@@ -67,18 +66,17 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 
             typelib_InterfaceMethodTypeDescription * pMethod = 0;
             typelib_Parameter_Init aParameters[1];
-            OUString sParamName0( RTL_CONSTASCII_USTRINGPARAM("Name") );
-            OUString sParamType0( RTL_CONSTASCII_USTRINGPARAM("string") );
+            OUString sParamName0("Name");
+            OUString sParamType0("string");
             aParameters[0].pParamName = sParamName0.pData;
             aParameters[0].eTypeClass = typelib_TypeClass_STRING;
             aParameters[0].pTypeName = sParamType0.pData;
             aParameters[0].bIn = sal_True;
             aParameters[0].bOut = sal_False;
             rtl_uString * pExceptions[1];
-            OUString sExceptionName0(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException") );
+            OUString sExceptionName0("com.sun.star.uno.RuntimeException");
             pExceptions[0] = sExceptionName0.pData;
-            OUString sReturnType0( RTL_CONSTASCII_USTRINGPARAM("any") );
+            OUString sReturnType0("any");
             typelib_typedescription_newInterfaceMethod(
                 &pMethod,
                 3, sal_False,

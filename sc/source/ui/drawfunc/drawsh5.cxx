@@ -92,10 +92,10 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
-            rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
-            rtl::OUString sPropTargetFrame(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ));
-            rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
+            rtl::OUString sPropButtonType( "ButtonType" );
+            rtl::OUString sPropTargetURL( "TargetURL" );
+            rtl::OUString sPropTargetFrame( "TargetFrame" );
+            rtl::OUString sPropLabel( "Label" );
 
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
@@ -179,16 +179,16 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                 uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                                 uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                                rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+                                rtl::OUString sPropTargetURL( "TargetURL" );
 
                                 // Darf man eine URL an dem Objekt setzen?
                                 if (xInfo->hasPropertyByName( sPropTargetURL ))
                                 {
                                     // Ja!
 
-                                    rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType") );
-                                    rtl::OUString sPropTargetFrame(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" ));
-                                    rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
+                                    rtl::OUString sPropButtonType( "ButtonType");
+                                    rtl::OUString sPropTargetFrame( "TargetFrame" );
+                                    rtl::OUString sPropLabel( "Label" );
 
                                     uno::Any aAny;
                                     if ( xInfo->hasPropertyByName( sPropLabel ) )

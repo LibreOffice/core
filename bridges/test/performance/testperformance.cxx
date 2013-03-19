@@ -171,7 +171,7 @@ void main()
         MyTimer timer( "performance - 1000*1000 unicode string construction/destruction" );
         for( int i = 0 ; i < 1000*1000 ; i ++  )
         {
-            OUString textEnc( RTL_CONSTASCII_USTRINGPARAM( "this is a test string" ) );
+            OUString textEnc( "this is a test string" );
         }
     }
 

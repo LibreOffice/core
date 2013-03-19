@@ -113,7 +113,7 @@ OUString getImplementationName()
 
 Sequence< OUString > getSupportedServiceNames()
 {
-    OUString serviceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Python" ) );
+    OUString serviceName( "com.sun.star.loader.Python" );
     return Sequence< OUString > ( &serviceName, 1 );
 }
 
@@ -171,7 +171,7 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
     if( oldEnv )
         bufPYTHONPATH.append( rtl::OUString(oldEnv, strlen(oldEnv), osl_getThreadTextEncoding()) );
 
-    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("PYTHONPATH"));
+    rtl::OUString envVar("PYTHONPATH");
     rtl::OUString envValue(bufPYTHONPATH.makeStringAndClear());
     osl_setEnvironment(envVar.pData, envValue.pData);
 }
@@ -203,10 +203,10 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 #ifdef WNT
     //extend PATH under windows to include the branddir/program so ssl libs will be found
     //for use by terminal mailmerge dependency _ssl.pyd
-    rtl::OUString sEnvName(RTL_CONSTASCII_USTRINGPARAM("PATH"));
+    rtl::OUString sEnvName("PATH");
     rtl::OUString sPath;
     osl_getEnvironment(sEnvName.pData, &sPath.pData);
-    rtl::OUString sBrandLocation(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
+    rtl::OUString sBrandLocation("$BRAND_BASE_DIR/program");
     rtl::Bootstrap::expandMacros(sBrandLocation);
     osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
     sPath = rtl::OUStringBuffer(sPath).

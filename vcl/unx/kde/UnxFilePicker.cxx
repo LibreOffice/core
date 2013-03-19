@@ -704,9 +704,9 @@ void UnxFilePicker::initFilePicker()
 
         // The executable name
 #ifdef ENABLE_TDE
-        rtl::OUString helperurl( RTL_CONSTASCII_USTRINGPARAM("${ORIGIN}/tdefilepicker"));
+        rtl::OUString helperurl("${ORIGIN}/tdefilepicker");
 #else // ENABLE_TDE
-        rtl::OUString helperurl( RTL_CONSTASCII_USTRINGPARAM("${ORIGIN}/kdefilepicker"));
+        rtl::OUString helperurl("${ORIGIN}/kdefilepicker");
 #endif // ENABLE_TDE
         rtl::Bootstrap::expandMacros( helperurl );
         rtl::OUString helperpath;
@@ -827,12 +827,12 @@ sal_Bool UnxFilePicker::controlIdInfo( sal_Int16 nControlId, ::rtl::OUString &rT
         sal_Int32 nTitle;
     } ElementToName;
 
-    const ::rtl::OUString aCheckBox( RTL_CONSTASCII_USTRINGPARAM(   "checkbox" ) );
-    const ::rtl::OUString aControl( RTL_CONSTASCII_USTRINGPARAM(    "control" ) );
-    const ::rtl::OUString aEdit( RTL_CONSTASCII_USTRINGPARAM(       "edit" ) );
-    const ::rtl::OUString aLabel( RTL_CONSTASCII_USTRINGPARAM(      "label" ) );
-    const ::rtl::OUString aListBox( RTL_CONSTASCII_USTRINGPARAM(    "listbox" ) );
-    const ::rtl::OUString aPushButton( RTL_CONSTASCII_USTRINGPARAM( "pushbutton" ) );
+    const ::rtl::OUString aCheckBox(   "checkbox" );
+    const ::rtl::OUString aControl(    "control" );
+    const ::rtl::OUString aEdit(       "edit" );
+    const ::rtl::OUString aLabel(      "label" );
+    const ::rtl::OUString aListBox(    "listbox" );
+    const ::rtl::OUString aPushButton( "pushbutton" );
 
     const ElementToName *pPtr;
     const ElementToName pArray[] =

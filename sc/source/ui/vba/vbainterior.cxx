@@ -48,9 +48,9 @@ typedef std::pair< sal_Int32, sal_Int32 > PatternPair;
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlPattern;
-static const rtl::OUString BACKCOLOR( RTL_CONSTASCII_USTRINGPARAM( "CellBackColor" ) );
-static const rtl::OUString PATTERN( RTL_CONSTASCII_USTRINGPARAM( "Pattern" ) );
-static const rtl::OUString PATTERNCOLOR( RTL_CONSTASCII_USTRINGPARAM( "PatternColor" ) );
+static const rtl::OUString BACKCOLOR( "CellBackColor" );
+static const rtl::OUString PATTERN( "Pattern" );
+static const rtl::OUString PATTERNCOLOR( "PatternColor" );
 
 static PatternMap lcl_getPatternMap()
 {

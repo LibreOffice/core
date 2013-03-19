@@ -170,7 +170,7 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
     throw( uno::Exception, uno::RuntimeException )
 {
-    const OUString aDrawingPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
+    const OUString aDrawingPrefix("com.sun.star.drawing.");
 
     if( rServiceSpecifier.startsWith( aDrawingPrefix ) )
     {
@@ -552,7 +552,7 @@ sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames() throw(uno::RuntimeException)
 {
-    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
+    OUString aSN("com.sun.star.drawing.DrawingDocument");
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }

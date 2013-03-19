@@ -1060,8 +1060,8 @@ bool ORowSetValue::getBool()    const
             case DataType::LONGVARCHAR:
                 {
                     const ::rtl::OUString sValue(m_aValue.m_pString);
-                    const static ::rtl::OUString s_sTrue(RTL_CONSTASCII_USTRINGPARAM("true"));
-                    const static ::rtl::OUString s_sFalse(RTL_CONSTASCII_USTRINGPARAM("false"));
+                    const static ::rtl::OUString s_sTrue("true");
+                    const static ::rtl::OUString s_sFalse("false");
                     if ( sValue.equalsIgnoreAsciiCase(s_sTrue) )
                     {
                         bRet = sal_True;

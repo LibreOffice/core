@@ -332,7 +332,7 @@ namespace frm
 
             if (!bFoundIt)
             {   // somebody gave us an format which we can't translate
-                ::rtl::OUString sMessage (RTL_CONSTASCII_USTRINGPARAM("This control supports only a very limited number of formats.") );
+                ::rtl::OUString sMessage ("This control supports only a very limited number of formats.");
                 throw IllegalArgumentException(sMessage, NULL, 2);
             }
 

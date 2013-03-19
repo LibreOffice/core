@@ -164,7 +164,7 @@ OUString    ConnectionGetImplementationName()
 }
 com::sun::star::uno::Sequence<rtl::OUString> ConnectionGetSupportedServiceNames(void)
 {
-    OUString serv( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.Connection" ) );
+    OUString serv( "com.sun.star.sdbc.Connection" );
     return Sequence< OUString> (&serv,1);
 }
 

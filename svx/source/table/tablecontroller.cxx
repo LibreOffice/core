@@ -531,7 +531,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
         RemoveSelection();
 
-        const OUString sSize( RTL_CONSTASCII_USTRINGPARAM( "Size" ) );
+        const OUString sSize( "Size" );
 
         const bool bUndo = mpModel && mpModel->IsUndoEnabled();
 
@@ -848,7 +848,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     {
         Reference< XStyleFamiliesSupplier > xSFS( pModel->getUnoModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_QUERY_THROW );
-        const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
+        const OUString sFamilyName( "table" );
         Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( sFamilyName ), UNO_QUERY_THROW );
 
         if( xTableFamilyAccess->hasByName( pArg->GetValue() ) )

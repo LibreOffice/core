@@ -60,8 +60,8 @@ extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 // extern CLIPFORMAT        getClipFormatFromGUID_Impl( GUID* );
 ::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid );
 
-const ::rtl::OUString aOfficeEmbedStreamName( RTL_CONSTASCII_USTRINGPARAM ( "package_stream" ) );
-const ::rtl::OUString aExtentStreamName( RTL_CONSTASCII_USTRINGPARAM ( "properties_stream" ) );
+const ::rtl::OUString aOfficeEmbedStreamName( "package_stream" );
+const ::rtl::OUString aExtentStreamName( "properties_stream" );
 
 uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
                                         uno::Reference< lang::XMultiServiceFactory > xFactory,

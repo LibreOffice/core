@@ -101,7 +101,7 @@ void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom
     pViewSh->RefreshZoom();
 }
 
-const ::rtl::OUString REPLACE_CELLS_WARNING(  RTL_CONSTASCII_USTRINGPARAM( "ReplaceCellsWarning"));
+const ::rtl::OUString REPLACE_CELLS_WARNING( "ReplaceCellsWarning");
 
 class PasteCellsWarningReseter
 {

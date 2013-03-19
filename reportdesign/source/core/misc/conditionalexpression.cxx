@@ -78,7 +78,7 @@ namespace rptui
 
         // Okay, let's start with replacing all $$ in our pattern with the actual field data source
         ::rtl::OUString sMatchExpression( m_sPattern );
-        const ::rtl::OUString sFieldDataPattern( RTL_CONSTASCII_USTRINGPARAM( "$$" ) );
+        const ::rtl::OUString sFieldDataPattern( "$$" );
         sal_Int32 nIndex( sMatchExpression.indexOf( sFieldDataPattern ) );
         while ( nIndex != -1 )
         {
@@ -86,8 +86,8 @@ namespace rptui
             nIndex = sMatchExpression.indexOf( sFieldDataPattern, nIndex + _rFieldDataSource.getLength() );
         }
 
-        const ::rtl::OUString sLHSPattern( RTL_CONSTASCII_USTRINGPARAM( "$1" ) );
-        const ::rtl::OUString sRHSPattern( RTL_CONSTASCII_USTRINGPARAM( "$2" ) );
+        const ::rtl::OUString sLHSPattern( "$1" );
+        const ::rtl::OUString sRHSPattern( "$2" );
         sal_Int32 nLHSIndex( sMatchExpression.indexOf( sLHSPattern ) );
         sal_Int32 nRHSIndex( sMatchExpression.indexOf( sRHSPattern ) );
 

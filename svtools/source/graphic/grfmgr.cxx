@@ -1148,7 +1148,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &
 void
 GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< rtl::OUString >& rvEmbedImgUrls )
 {
-    static rtl::OUString sImageURL(RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ) );
+    static rtl::OUString sImageURL( "ImageURL" );
     Reference< XPropertySet > xProps( xIf, UNO_QUERY );
     if ( xProps.is() )
     {

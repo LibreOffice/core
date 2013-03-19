@@ -138,7 +138,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
     if ( pContext )
         return pContext;
 
-    static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
+    static const ::rtl::OUString s_sStringConcat(" & ");
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
     Reference<XComponentContext> xContext = m_rImport.GetComponentContext();
 
@@ -218,7 +218,7 @@ void OXMLFixedContent::Characters( const ::rtl::OUString& rChars )
         static const ::rtl::OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
         if ( !m_sPageText.isEmpty() )
         {
-            static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
+            static const ::rtl::OUString s_sStringConcat(" & ");
             m_sPageText += s_sStringConcat;
         }
 

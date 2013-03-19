@@ -5017,7 +5017,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         Menu* pMenu = 0;
-                        ::rtl::OUString sMenuName(RTL_CONSTASCII_USTRINGPARAM("private:resource/ReadonlyContextMenu"));
+                        ::rtl::OUString sMenuName("private:resource/ReadonlyContextMenu");
                         if( GetView().TryContextMenuInterception( *pROPopup, sMenuName, pMenu, aEvent ) )
                         {
                             if ( pMenu )

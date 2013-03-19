@@ -392,7 +392,7 @@ namespace calc
     {
         // set boolean number format if not already set
 
-        ::rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" ) );
+        ::rtl::OUString sPropName( "NumberFormat" );
         Reference<XPropertySet> xCellProp( m_xCell, UNO_QUERY );
         Reference<XNumberFormatsSupplier> xSupplier( m_xDocument, UNO_QUERY );
         if ( xSupplier.is() && xCellProp.is() )
@@ -456,7 +456,7 @@ namespace calc
         OCellValueBinding* pNonConstThis = const_cast< OCellValueBinding* >( this );
         if ( !pNonConstThis->supportsType( _rType ) )
         {
-            ::rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "The given type (" ) );
+            ::rtl::OUString sMessage( "The given type (" );
             sMessage += _rType.getTypeName();
             sMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ") is not supported by this binding." ) );
                 // TODO: localize this error message

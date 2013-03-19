@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 
-rtl::OUString sDocCtxName( RTL_CONSTASCII_USTRINGPARAM("WordDocumentContext") );
+rtl::OUString sDocCtxName("WordDocumentContext");
 
 // =============================================================================
 // SwVbaGlobals

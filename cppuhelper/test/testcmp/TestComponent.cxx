@@ -179,7 +179,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     rtl::OUString uTmp(pImplName, rtl_str_getLength(pImplName), RTL_TEXTENCODING_ASCII_US);
 
     rtl::OUString uImplName(cppu::EnvDcp::getTypeName(uTmp));
-    rtl::OUString cmpName(RTL_CONSTASCII_USTRINGPARAM("impl.test.TestComponent"));
+    rtl::OUString cmpName("impl.test.TestComponent");
 
     if (uImplName.equals(cmpName))
     {

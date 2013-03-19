@@ -1043,7 +1043,7 @@ void TableModel::optimize()
             {
                 if( nCol > 0 ) try
                 {
-                    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM("Width") );
+                    const OUString sWidth("Width");
                     sal_Int32 nWidth1 = 0, nWidth2 = 0;
                     Reference< XPropertySet > xSet1( static_cast< XCellRange* >( maColumns[nCol].get() ), UNO_QUERY_THROW );
                     Reference< XPropertySet > xSet2( static_cast< XCellRange* >( maColumns[nCol-1].get() ), UNO_QUERY_THROW );
@@ -1081,7 +1081,7 @@ void TableModel::optimize()
             {
                 if( nRow > 0 ) try
                 {
-                    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM("Height") );
+                    const OUString sHeight("Height");
                     sal_Int32 nHeight1 = 0, nHeight2 = 0;
                     Reference< XPropertySet > xSet1( static_cast< XCellRange* >( maRows[nRow].get() ), UNO_QUERY_THROW );
                     Reference< XPropertySet > xSet2( static_cast< XCellRange* >( maRows[nRow-1].get() ), UNO_QUERY_THROW );

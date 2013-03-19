@@ -873,7 +873,7 @@ void OTableController::loadData()
             pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
             sal_Bool bForce;
-            ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x"));
+            ::rtl::OUString sCreate("x");
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreate,nPrecision,nScale,bIsAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
                 pTypeInfo = m_pTypeInfo;

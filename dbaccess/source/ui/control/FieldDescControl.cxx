@@ -1291,7 +1291,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             ActivateAggregate( tpScale );
             pScale->SetMax(::std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
             pScale->SetMin(pFieldType->nMinimumScale);
-            static const ::rtl::OUString s_sPRECISION(RTL_CONSTASCII_USTRINGPARAM("PRECISION"));
+            static const ::rtl::OUString s_sPRECISION("PRECISION");
             pScale->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty() || pFieldType->aCreateParams == s_sPRECISION);
         }
         else

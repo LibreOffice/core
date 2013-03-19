@@ -2519,7 +2519,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                                 sal_Int32 nNameLen = aMethName2.getLength();
                                 sal_Int32 nCopyLen2 = (nNameLen < 6) ? nNameLen : 6;
                                 ::rtl::OUString aStartStr2 = aMethName2.copy( 0, nCopyLen2 );
-                                ::rtl::OUString aRemoveStr( RTL_CONSTASCII_USTRINGPARAM("remove" ) );
+                                ::rtl::OUString aRemoveStr("remove" );
                                 // ACHTUNG: Wegen SDL-Bug NICHT != bei ::rtl::OUString verwenden !!!
                                 if( !( aStartStr2 == aRemoveStr ) )
                                     continue;

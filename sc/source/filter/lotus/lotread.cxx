@@ -200,7 +200,7 @@ FltError ImportLotus::Read()
     SCTAB       nCnt;
     rtl::OUString aTabName;
     rtl::OUString aBaseName;
-    rtl::OUString aRef( RTL_CONSTASCII_USTRINGPARAM( "temp" ) );
+    rtl::OUString aRef( "temp" );
     if( nTabs != 0 )
     {
         if( nTabs > 1 )

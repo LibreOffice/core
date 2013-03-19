@@ -116,8 +116,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         Reference<XPropertySet> rInfoSet = getExportInfo();
         if( rInfoSet.is() )
         {
-            OUString sAutoTextMode(
-                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+            OUString sAutoTextMode("AutoTextMode");
             if( rInfoSet->getPropertySetInfo()->hasPropertyByName(
                         sAutoTextMode ) )
             {
@@ -288,7 +287,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         Reference<XPropertySet> rInfoSet = getExportInfo();
         if( rInfoSet.is() )
         {
-            OUString sShowChanges( RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+            OUString sShowChanges("ShowChanges");
             bSaveRedline = ! rInfoSet->getPropertySetInfo()->hasPropertyByName(
                                                                 sShowChanges );
         }
@@ -391,7 +390,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     Reference<XPropertySet> xInfoSet( getExportInfo() );
     if ( xInfoSet.is() )
     {
-        OUString sShowChanges( RTL_CONSTASCII_USTRINGPARAM( "ShowChanges" ));
+        OUString sShowChanges( "ShowChanges" );
         if( xInfoSet->getPropertySetInfo()->hasPropertyByName( sShowChanges ) )
         {
             bShowRedlineChanges = *(sal_Bool*) xInfoSet->
@@ -486,7 +485,7 @@ void SwXMLExport::_ExportContent()
     Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
     if (xPropSet.is())
     {
-        OUString sTwoDigitYear(RTL_CONSTASCII_USTRINGPARAM("TwoDigitYear"));
+        OUString sTwoDigitYear("TwoDigitYear");
 
         Any aAny = xPropSet->getPropertyValue( sTwoDigitYear );
         aAny <<= (sal_Int16)1930;

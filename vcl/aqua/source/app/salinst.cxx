@@ -265,7 +265,7 @@ void InitSalData()
 
 const ::rtl::OUString& SalGetDesktopEnvironment()
 {
-    static OUString aDesktopEnvironment(RTL_CONSTASCII_USTRINGPARAM( "MacOSX" ));
+    static OUString aDesktopEnvironment( "MacOSX" );
     return aDesktopEnvironment;
 }
 

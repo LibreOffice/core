@@ -230,7 +230,7 @@ sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName
 
 Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames() throw(RuntimeException)
 {
-    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style") );
+    OUString aServiceName("com.sun.star.style.Style");
     Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -508,7 +508,7 @@ sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames() throw(RuntimeException)
 {
-    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.StyleFamily") );
+    OUString aServiceName("com.sun.star.style.StyleFamily");
     Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

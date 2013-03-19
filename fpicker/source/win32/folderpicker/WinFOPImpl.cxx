@@ -42,7 +42,7 @@ using osl::FileBase;
 //
 //------------------------------------------------------------------------
 
-const OUString BACKSLASH(RTL_CONSTASCII_USTRINGPARAM( "\\" ));
+const OUString BACKSLASH( "\\" );
 
 //------------------------------------------------------------------------
 // ctor

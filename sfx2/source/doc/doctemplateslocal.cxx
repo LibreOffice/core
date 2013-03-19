@@ -52,12 +52,12 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 
     xWriterHandler->setOutputStream( xOutStream );
 
-    ::rtl::OUString aGroupListElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group-list" ) );
-    ::rtl::OUString aGroupElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group" ) );
-    ::rtl::OUString aNameAttr( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:name" ) );
-    ::rtl::OUString aUINameAttr( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:default-ui-name" ) );
-    ::rtl::OUString aCDATAString( RTL_CONSTASCII_USTRINGPARAM ( "CDATA" ) );
-    ::rtl::OUString aWhiteSpace( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+    ::rtl::OUString aGroupListElement( "groupuinames:template-group-list" );
+    ::rtl::OUString aGroupElement( "groupuinames:template-group" );
+    ::rtl::OUString aNameAttr( "groupuinames:name" );
+    ::rtl::OUString aUINameAttr( "groupuinames:default-ui-name" );
+    ::rtl::OUString aCDATAString( "CDATA" );
+    ::rtl::OUString aWhiteSpace( " " );
 
     // write the namespace
     ::comphelper::AttributeList* pRootAttrList = new ::comphelper::AttributeList;

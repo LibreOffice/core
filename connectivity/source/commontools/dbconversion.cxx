@@ -441,7 +441,7 @@ namespace dbtools
                 {
                     // our time struct only supports hundredth seconds
                     sNano = sNano.copy(0,::std::min<sal_Int32>(sNano.getLength(),2));
-                    const static ::rtl::OUString s_Zeros(RTL_CONSTASCII_USTRINGPARAM("00"));
+                    const static ::rtl::OUString s_Zeros("00");
                     sNano += s_Zeros.copy(0,s_Zeros.getLength() - sNano.getLength());
                     nHundredthSeconds = static_cast<sal_uInt16>(sNano.toInt32());
                 }
