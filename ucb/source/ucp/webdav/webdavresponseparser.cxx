@@ -230,7 +230,7 @@ namespace
     void WebDAVContext::splitName(const ::rtl::OUString& rSource)
     {
         const sal_Int32 nLen(rSource.getLength());
-        maNamespace = ::rtl::OUString();
+        maNamespace = "";
         maName = rSource;
 
         if(nLen)
@@ -453,7 +453,7 @@ namespace
                             case WebDAVName_response:
                             {
                                 // response start, reset Href and status and maResponseProperties
-                                maHref = maStatus = ::rtl::OUString();
+                                maHref = maStatus = "";
 
                                 if(isCollectingProperties())
                                 {

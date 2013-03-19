@@ -176,7 +176,7 @@ void XMLTextMarkImportContext::StartElement(
     {
         if (m_sBookmarkName.isEmpty())
         {
-            m_sBookmarkName = ::rtl::OUString("Unknown");
+            m_sBookmarkName = "Unknown";
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }

@@ -191,10 +191,10 @@ namespace comp_CLiteral {
     return ::rtl::OUString( "CLiteral");
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString( "com.sun.star.rdf.Literal");
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.rdf.Literal";
     return s;
 }
 

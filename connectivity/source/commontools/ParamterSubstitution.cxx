@@ -65,10 +65,10 @@ namespace connectivity
         return getSupportedServiceNames_Static();
     }
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    Sequence< OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString("com.sun.star.sdb.ParameterSubstitution");
+        Sequence< OUString > aSNS( 1 );
+        aSNS[0] = "com.sun.star.sdb.ParameterSubstitution";
         return aSNS;
     }
 

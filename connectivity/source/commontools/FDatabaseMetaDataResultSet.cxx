@@ -821,10 +821,10 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
         return ::rtl::OUString("org.openoffice.comp.helper.DatabaseMetaDataResultSet");
     }
     //------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
+        Sequence< OUString > aSNS( 1 );
+        aSNS[0] = "com.sun.star.sdbc.ResultSet";
         return aSNS;
     }
     //------------------------------------------------------------------

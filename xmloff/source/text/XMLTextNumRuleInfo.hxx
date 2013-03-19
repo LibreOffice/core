@@ -163,15 +163,15 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
 inline void XMLTextNumRuleInfo::Reset()
 {
     mxNumRules = 0;
-    msNumRulesName = ::rtl::OUString();
-    msListId = ::rtl::OUString();
+    msNumRulesName = "";
+    msListId = "";
     mnListStartValue = -1;
     mnListLevel = 0;
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbIsNumbered = mbIsRestart =
     mbOutlineStyleAsNormalListStyle = sal_False;
     mbContinueingPreviousSubTree = sal_False;
-    msListLabelString = ::rtl::OUString();
+    msListLabelString = "";
 }
 #endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX
 

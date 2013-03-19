@@ -55,7 +55,7 @@ namespace xmloff
             Sequence< PropertyValue >& rMappedEvent = m_aMappedEvents[sName];
 
             sLocalMacroName = pEvents->ScriptCode;
-            sLibrary = ::rtl::OUString();
+            sLibrary = "";
             if (pEvents->ScriptType.equals(EVENT_STARBASIC))
             {   // for StarBasic, the library name is part of the ScriptCode
                 sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );

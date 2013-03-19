@@ -752,7 +752,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< ::com::sun::star::uno::
         }
         // just append the parameters and then split them again; seems simplest
         arg0 = arg0 + arg1;
-        arg1 = ::rtl::OUString();
+        arg1 = "";
     }
 
     // split parameter
@@ -819,10 +819,10 @@ namespace comp_CURI {
         "CURI");
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString( "com.sun.star.rdf.URI");
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.rdf.URI";
     return s;
 }
 

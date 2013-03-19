@@ -450,9 +450,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create(
             "comp.test.testtools.bridgetest.Constructors");
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() {
-    css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString("test.testtools.bridgetest.Constructors");
+css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() {
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "test.testtools.bridgetest.Constructors";
     return s;
 }
 
@@ -469,9 +469,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create2(
             "comp.test.testtools.bridgetest.Constructors2");
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames2() {
-    css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString("test.testtools.bridgetest.Constructors2");
+css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames2() {
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "test.testtools.bridgetest.Constructors2";
     return s;
 }
 
