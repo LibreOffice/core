@@ -286,7 +286,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>

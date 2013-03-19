@@ -22,16 +22,11 @@
 
 #include <com/sun/star/uno/XAggregation.hpp>
 
-namespace comphelper
-{
-    class ComponentContext;
-}
-
 namespace dbaccess
 {
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
-        createDataSourceRegistrations( const ::comphelper::ComponentContext& _rxContext );
+        createDataSourceRegistrations( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
 
 } // namespace dbaccess
 

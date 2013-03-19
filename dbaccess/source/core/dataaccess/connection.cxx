@@ -282,7 +282,7 @@ DBG_NAME(OConnection)
 
 OConnection::OConnection(ODatabaseSource& _rDB
                          , Reference< XConnection >& _rxMaster
-                         , const Reference< XMultiServiceFactory >& _rxORB)
+                         , const Reference< XComponentContext >& _rxORB)
             :OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
@@ -305,8 +305,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
 
     try
     {
-        Reference< XProxyFactory > xProxyFactory =
-                ProxyFactory::create( m_aContext.getUNOContext() );
+        Reference< XProxyFactory > xProxyFactory = ProxyFactory::create( m_aContext );
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
         setDelegation(xAgg,m_refCount);
         OSL_ENSURE(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
@@ -320,7 +319,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
 
     try
     {
-        m_xQueries = new OQueryContainer(Reference< XNameContainer >(_rDB.getQueryDefinitions( ),UNO_QUERY), this,_rxORB, &m_aWarnings);
+        m_xQueries = new OQueryContainer(Reference< XNameContainer >(_rDB.getQueryDefinitions(), UNO_QUERY), this, _rxORB, &m_aWarnings);
 
         sal_Bool bCase = sal_True;
         Reference<XDatabaseMetaData> xMeta;
@@ -685,7 +684,11 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
                 Sequence<Any> aArgs(1);
                 Reference<XConnection> xMy(this);
                 aArgs[0] <<= NamedValue("ActiveConnection",makeAny(xMy));
-                aFind = m_aSupportServices.insert(TSupportServices::value_type(_sServiceSpecifier,m_aContext.createComponentWithArguments(_sServiceSpecifier,aArgs))).first;
+                aFind = m_aSupportServices.insert(
+                           TSupportServices::value_type(
+                               _sServiceSpecifier,
+                               m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceSpecifier, aArgs, m_aContext)
+                           )).first;
             }
             return aFind->second;
         }
@@ -717,7 +720,7 @@ Reference< XTablesSupplier > OConnection::getMasterTables()
         {
             Reference<XDatabaseMetaData> xMeta = getMetaData();
             if ( xMeta.is() )
-                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection( xMeta->getURL(), m_xMasterConnection, m_aContext.getUNOContext() );
+                m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection( xMeta->getURL(), m_xMasterConnection, m_aContext );
         }
         catch(const SQLException&)
         {
@@ -753,8 +756,9 @@ void OConnection::impl_loadConnectionTools_throw()
     Sequence< Any > aArguments( 1 );
     aArguments[0] <<= NamedValue( "Connection" , makeAny( Reference< XConnection >( this ) ) );
 
-    if ( !m_aContext.createComponentWithArguments( "com.sun.star.sdb.tools.ConnectionTools", aArguments, m_xConnectionTools ) )
-        throw RuntimeException( "service not registered: com.sun.star.sdb.tools.ConnectionTools" , *this );
+    m_xConnectionTools.set(
+        m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.sdb.tools.ConnectionTools", aArguments, m_aContext),
+        UNO_QUERY_THROW );
 }
 
 Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)

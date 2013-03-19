@@ -22,6 +22,7 @@
 #include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
 // .......................................................................
@@ -53,7 +54,7 @@ namespace svt
         ::rtl::OUString                     m_sTable;
 
     protected:
-        OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB);
+        OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
 
     public:
         // XTypeProvider
@@ -97,7 +98,7 @@ namespace svt
     }
 
     //-------------------------------------------------------------------------
-    OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB)
+    OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
         registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
@@ -114,7 +115,7 @@ namespace svt
     //-------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL OAddressBookSourceDialogUno::Create(const Reference< XMultiServiceFactory >& _rxFactory)
     {
-        return *(new OAddressBookSourceDialogUno(_rxFactory));
+        return *(new OAddressBookSourceDialogUno( comphelper::getComponentContext(_rxFactory)));
     }
 
     //-------------------------------------------------------------------------
@@ -252,9 +253,9 @@ namespace svt
     Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
     {
         if ( m_xDataSource.is() && !m_sTable.isEmpty() )
-            return new AddressBookSourceDialog(_pParent, m_aContext.getUNOContext(), m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
+            return new AddressBookSourceDialog(_pParent, m_aContext, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
         else
-            return new AddressBookSourceDialog( _pParent, m_aContext.getUNOContext() );
+            return new AddressBookSourceDialog( _pParent, m_aContext );
     }
 
 // .......................................................................

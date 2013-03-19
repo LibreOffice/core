@@ -541,7 +541,7 @@ private:
     */
     static void
             impl_import_nolck_throw(
-                const ::comphelper::ComponentContext _rContext,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxTargetComponent,
                 const ::comphelper::NamedValueCollection& _rResource
             );

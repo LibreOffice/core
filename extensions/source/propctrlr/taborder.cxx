@@ -73,7 +73,7 @@ namespace pcr
     DBG_NAME(TabOrderDialog)
     //------------------------------------------------------------------------
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
-                    const Reference< XControlContainer >& _rxControlCont, const Reference< XMultiServiceFactory >& _rxORB )
+                    const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB )
         :ModalDialog( _pParent, PcrRes( RID_DLG_TABORDER ) )
         ,m_xModel( _rxTabModel )
         ,m_xControlContainer( _rxControlCont )
@@ -243,7 +243,7 @@ namespace pcr
         {
             Reference< XTabController > xTabController;
             if ( m_xORB.is() )
-                xTabController = xTabController.query( m_xORB->createInstance( ::rtl::OUString( "com.sun.star.form.FormController" ) ) );
+                xTabController.set( m_xORB->getServiceManager()->createInstanceWithContext("com.sun.star.form.FormController", m_xORB), UNO_QUERY_THROW );
             DBG_ASSERT( xTabController.is(), "TabOrderDialog::AutoOrderClickHdl: could not instantiate a tab controller!" );
             if ( !xTabController.is() )
                 return 0;

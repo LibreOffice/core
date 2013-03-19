@@ -76,7 +76,7 @@ protected:
 
 public:
 
-                SVGDialog( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+                SVGDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
     virtual     ~SVGDialog();
 };
 

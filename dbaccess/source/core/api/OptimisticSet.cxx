@@ -84,14 +84,14 @@ namespace
 
 DBG_NAME(OptimisticSet)
 
-OptimisticSet::OptimisticSet(const ::comphelper::ComponentContext& _rContext,
+OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
                              const Reference< XConnection>& i_xConnection,
                              const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                              const ORowSetValueVector& _aParameterValueForCache,
                              sal_Int32 i_nMaxRows,
                              sal_Int32& o_nRowCount)
             :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows,o_nRowCount)
-            ,m_aSqlParser( _rContext.getUNOContext() )
+            ,m_aSqlParser( _rContext )
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
 {

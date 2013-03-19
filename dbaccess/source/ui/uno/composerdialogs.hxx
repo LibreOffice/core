@@ -55,7 +55,7 @@ namespace dbaui
         // </properties>
 
     protected:
-        ComposerDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        ComposerDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         ~ComposerDialog();
 
     public:
@@ -83,7 +83,7 @@ namespace dbaui
     {
     public:
         RowsetFilterDialog(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 
         DECLARE_SERVICE_INFO_STATIC( );
@@ -110,7 +110,7 @@ namespace dbaui
     {
     public:
         RowsetOrderDialog(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 
         DECLARE_SERVICE_INFO_STATIC( );

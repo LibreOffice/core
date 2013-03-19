@@ -1157,14 +1157,15 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     // which conflicts, at the latest, with the framework's concept of loading into _blank frames.
                     // So, since we know that our frame loader can handle it, we skip the generic framework loader
                     // mechanism, and the type detection (which doesn't know about the Basic IDE).
-                    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                    Reference< XSynchronousFrameLoader > xLoader( aContext.createComponent(
-                        SfxFrameLoader_Impl::impl_getStaticImplementationName() ), UNO_QUERY_THROW );
+                    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    Reference< XSynchronousFrameLoader > xLoader(
+                        xContext->getServiceManager()->createInstanceWithContext(SfxFrameLoader_Impl::impl_getStaticImplementationName(), xContext),
+                        UNO_QUERY_THROW );
                     ::comphelper::NamedValueCollection aLoadArgs;
                     aLoadArgs.put( "Model", pBasicIDE->GetModel() );
                     aLoadArgs.put( "URL", ::rtl::OUString( "private:factory/sbasic"  ) );
 
-                    Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( aContext.getUNOContext() ) );
+                    Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( xContext ) );
                     if ( !xTargetFrame.is() )
                         xTargetFrame = SfxFrame::CreateBlankFrame();
                     ENSURE_OR_THROW( xTargetFrame.is(), "could not obtain a frameto load the Basic IDE into!" );

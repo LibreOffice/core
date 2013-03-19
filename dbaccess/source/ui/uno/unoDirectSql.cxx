@@ -28,6 +28,7 @@
 #include "dbustrings.hrc"
 #include "datasourceconnector.hxx"
 #include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
 
 
 extern "C" void SAL_CALL createRegistryInfo_ODirectSQLDialog()
@@ -53,7 +54,7 @@ namespace dbaui
     //=====================================================================
 DBG_NAME(ODirectSQLDialog)
 //---------------------------------------------------------------------
-    ODirectSQLDialog::ODirectSQLDialog(const Reference< XMultiServiceFactory >& _rxORB)
+    ODirectSQLDialog::ODirectSQLDialog(const Reference< XComponentContext >& _rxORB)
         :ODirectSQLDialog_BASE( _rxORB )
     {
         DBG_CTOR(ODirectSQLDialog,NULL);
@@ -71,7 +72,15 @@ DBG_NAME(ODirectSQLDialog)
     IMPLEMENT_IMPLEMENTATION_ID( ODirectSQLDialog )
 
     //---------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC( ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog", SERVICE_SDB_DIRECTSQLDIALOG.ascii )
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog")
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODirectSQLDialog, SERVICE_SDB_DIRECTSQLDIALOG.ascii)
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        SAL_CALL ODirectSQLDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    {
+        return static_cast< XServiceInfo* >(new ODirectSQLDialog( comphelper::getComponentContext(_rxORB)));
+    }
 
     //---------------------------------------------------------------------
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
@@ -86,7 +95,7 @@ DBG_NAME(ODirectSQLDialog)
             try
             {
                 // the connection the row set is working with
-                ODatasourceConnector aDSConnector(m_aContext.getUNOContext(), _pParent);
+                ODatasourceConnector aDSConnector(m_aContext, _pParent);
                 xConnection = aDSConnector.connect( m_sInitialSelection, NULL );
             }
             catch( const Exception& )

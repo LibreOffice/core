@@ -57,6 +57,7 @@ namespace dbaccess
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
@@ -195,7 +196,7 @@ namespace dbaccess
     class DBACCESS_DLLPRIVATE SettingsExportContext : public ::xmloff::XMLSettingsExportContext
     {
     public:
-        SettingsExportContext( const ::comphelper::ComponentContext& i_rContext, const StorageXMLOutputStream& i_rDelegator )
+        SettingsExportContext( const Reference<XComponentContext>& i_rContext, const StorageXMLOutputStream& i_rDelegator )
             :m_rContext( i_rContext )
             ,m_rDelegator( i_rDelegator )
             ,m_aNamespace( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_NP_CONFIG ) )
@@ -226,7 +227,7 @@ namespace dbaccess
         }
 
     private:
-        const ::comphelper::ComponentContext&   m_rContext;
+        const Reference<XComponentContext>&   m_rContext;
         const StorageXMLOutputStream&           m_rDelegator;
         const ::rtl::OUStringBuffer             m_aNamespace;
     };
@@ -269,7 +270,7 @@ namespace dbaccess
     //--------------------------------------------------------------------
     Reference< com::sun::star::uno::XComponentContext > SettingsExportContext::GetComponentContext() const
     {
-        return m_rContext.getUNOContext();
+        return m_rContext;
     }
 
     //==================================================================================================================
@@ -479,7 +480,7 @@ namespace dbaccess
         m_aCompDesc.sName = aComponentIdentity.Second;
 
         // what the controller didn't give us is the information whether this is in edit mode or not ...
-        Reference< XModuleManager2 > xModuleManager( ModuleManager::create(m_rContext.getUNOContext()) );
+        Reference< XModuleManager2 > xModuleManager( ModuleManager::create(m_rContext) );
         const ::rtl::OUString sModuleIdentifier = xModuleManager->identify( m_xComponent );
 
         switch ( m_eType )

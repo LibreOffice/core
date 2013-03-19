@@ -83,7 +83,7 @@ connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUSt
 // =========================================================================
 DBG_NAME(ORowSetBase)
 
-ORowSetBase::ORowSetBase( const ::comphelper::ComponentContext& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
+ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
     :OPropertyStateContainer(_rBHelper)
     ,m_pMutex(_pMutex)
     ,m_pCache(NULL)
@@ -91,7 +91,7 @@ ORowSetBase::ORowSetBase( const ::comphelper::ComponentContext& _rContext, ::cpp
     ,m_rBHelper(_rBHelper)
     ,m_pEmptyCollection( NULL )
     ,m_aContext( _rContext )
-    ,m_aErrors( _rContext.getUNOContext() )
+    ,m_aErrors( _rContext )
     ,m_nLastColumnIndex(-1)
     ,m_nDeletedPosition(-1)
     ,m_nResultSetType( ResultSetType::FORWARD_ONLY )

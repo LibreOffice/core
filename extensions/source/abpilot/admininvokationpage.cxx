@@ -89,7 +89,7 @@ namespace abp
     //---------------------------------------------------------------------
     IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, /*NOTINTERESTEDIN*/ )
     {
-        OAdminDialogInvokation aInvokation( comphelper::getComponentContext(getORB()), getDialog()->getDataSource().getDataSource(), getDialog() );
+        OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
         if ( aInvokation.invokeAdministration( AST_LDAP == getSettings().eType ) )
         {
             // try to connect to this data source

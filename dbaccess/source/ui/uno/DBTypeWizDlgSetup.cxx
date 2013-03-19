@@ -26,6 +26,7 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <vcl/msgbox.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace dbaui;
 
@@ -47,7 +48,7 @@ namespace dbaui
 
 //=========================================================================
 //-------------------------------------------------------------------------
-ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XMultiServiceFactory >& _rxORB)
+ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
     ,m_bOpenDatabase(sal_True)
     ,m_bStartTableWizard(sal_False)
@@ -68,7 +69,7 @@ Sequence<sal_Int8> SAL_CALL ODBTypeWizDialogSetup::getImplementationId(  ) throw
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    Reference < XInterface > xDBWizard = *(new ODBTypeWizDialogSetup(_rxFactory));
+    Reference < XInterface > xDBWizard = *(new ODBTypeWizDialogSetup( comphelper::getComponentContext(_rxFactory) ));
     return xDBWizard;
 }
 
@@ -120,7 +121,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
 //------------------------------------------------------------------------------
 Dialog* ODBTypeWizDialogSetup::createDialog(Window* _pParent)
 {
-    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(), m_aInitialSelection);
+    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
 }
 // -----------------------------------------------------------------------------
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)

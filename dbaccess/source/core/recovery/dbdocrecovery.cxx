@@ -35,7 +35,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
@@ -75,7 +74,6 @@ namespace dbaccess
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::util::XModifiable;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     /** === end UNO using === **/
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
@@ -135,7 +133,7 @@ namespace dbaccess
             return s_sMapStreamEncodingName;
         }
 
-        static void lcl_writeObjectMap_throw( const ::comphelper::ComponentContext& i_rContext, const Reference< XStorage >& i_rStorage,
+        static void lcl_writeObjectMap_throw( const Reference<XComponentContext> & i_rContext, const Reference< XStorage >& i_rStorage,
             const MapStringToCompDesc& i_mapStorageToCompDesc )
         {
             if ( i_mapStorageToCompDesc.empty() )
@@ -251,9 +249,9 @@ namespace dbaccess
     //====================================================================
     struct DBACCESS_DLLPRIVATE DatabaseDocumentRecovery_Data
     {
-        const ::comphelper::ComponentContext aContext;
+        const Reference<XComponentContext> aContext;
 
-        DatabaseDocumentRecovery_Data( const ::comphelper::ComponentContext& i_rContext )
+        DatabaseDocumentRecovery_Data( const Reference<XComponentContext> & i_rContext )
             :aContext( i_rContext )
         {
         }
@@ -263,7 +261,7 @@ namespace dbaccess
     //= DatabaseDocumentRecovery
     //====================================================================
     //--------------------------------------------------------------------
-    DatabaseDocumentRecovery::DatabaseDocumentRecovery( const ::comphelper::ComponentContext& i_rContext )
+    DatabaseDocumentRecovery::DatabaseDocumentRecovery( const Reference<XComponentContext> & i_rContext )
         :m_pData( new DatabaseDocumentRecovery_Data( i_rContext ) )
     {
     }
@@ -352,7 +350,7 @@ namespace dbaccess
 
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
                 SubComponentRecovery::getComponentsStorageName( aKnownTypes[i] ), ElementModes::READ ) );
-            lcl_readObjectMap_throw( m_pData->aContext.getUNOContext(), xComponentsStor, aMapCompDescs[ aKnownTypes[i] ] );
+            lcl_readObjectMap_throw( m_pData->aContext, xComponentsStor, aMapCompDescs[ aKnownTypes[i] ] );
             xComponentsStor->dispose();
         }
 

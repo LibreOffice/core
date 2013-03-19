@@ -100,7 +100,7 @@ public:
     OQuery(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
         );
 
 // com::sun::star::lang::XTypeProvider

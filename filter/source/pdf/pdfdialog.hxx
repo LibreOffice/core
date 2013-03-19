@@ -68,7 +68,7 @@ protected:
 
 public:
 
-                PDFDialog( const Reference< XMultiServiceFactory >& rxMSF );
+                PDFDialog( const Reference< XComponentContext >& rxContext );
     virtual     ~PDFDialog();
 };
 

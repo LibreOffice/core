@@ -22,7 +22,6 @@
 
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <svtools/roadmapwizard.hxx>
 
 #include <memory>
@@ -42,12 +41,12 @@ namespace dbmm
     public:
         MacroMigrationDialog(
             Window* _pParent,
-            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >& _rxDocument
         );
         virtual ~MacroMigrationDialog();
 
-        const ::comphelper::ComponentContext&
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                 getComponentContext() const;
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >&
                 getDocument() const;

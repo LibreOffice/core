@@ -21,6 +21,7 @@
 #define _EXTENSIONS_DBP_UNOAUTOPILOT_HXX_
 
 #include <svtools/genericunodialog.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "componentmodule.hxx"
 #include <cppuhelper/typeprovider.hxx>
@@ -55,7 +56,7 @@ namespace dbp
             ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE, SERVICEINFO > >
             ,public OModuleResourceClient
     {
-        OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >

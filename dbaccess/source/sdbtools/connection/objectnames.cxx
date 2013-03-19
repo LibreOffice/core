@@ -59,6 +59,7 @@ namespace sdbtools
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::XComponentContext;
     /** === end UNO using === **/
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
@@ -83,12 +84,12 @@ namespace sdbtools
     class PlainExistenceCheck : public INameValidation
     {
     private:
-        const ::comphelper::ComponentContext    m_aContext;
+        const Reference<XComponentContext>    m_aContext;
         Reference< XConnection >                m_xConnection;
         Reference< XNameAccess >                m_xContainer;
 
     public:
-        PlainExistenceCheck( const ::comphelper::ComponentContext& _rContext, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxContainer )
+        PlainExistenceCheck( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxContainer )
             :m_aContext( _rContext )
             ,m_xConnection( _rxConnection )
             ,m_xContainer( _rxContainer )
@@ -107,7 +108,7 @@ namespace sdbtools
             if ( validateName( _rName ) )
                 return;
 
-            ::connectivity::SQLError aErrors( m_aContext.getUNOContext() );
+            ::connectivity::SQLError aErrors( m_aContext );
             SQLException aError( aErrors.getSQLException( ErrorCondition::DB_OBJECT_NAME_IS_USED, m_xConnection, _rName ) );
 
             ::dbtools::DatabaseMetaData aMeta( m_xConnection );
@@ -126,11 +127,11 @@ namespace sdbtools
     //====================================================================
     class TableValidityCheck : public INameValidation
     {
-        const ::comphelper::ComponentContext  m_aContext;
+        const Reference<XComponentContext>  m_aContext;
         const Reference< XConnection >        m_xConnection;
 
     public:
-        TableValidityCheck( const ::comphelper::ComponentContext& _rContext, const Reference< XConnection >& _rxConnection )
+        TableValidityCheck( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
             :m_aContext( _rContext )
             ,m_xConnection( _rxConnection )
         {
@@ -161,7 +162,7 @@ namespace sdbtools
             if ( validateName( _rName ) )
                 return;
 
-            ::connectivity::SQLError aErrors( m_aContext.getUNOContext() );
+            ::connectivity::SQLError aErrors( m_aContext );
             aErrors.raiseException( ErrorCondition::DB_INVALID_SQL_NAME, m_xConnection, _rName );
         }
     };
@@ -171,11 +172,11 @@ namespace sdbtools
     //====================================================================
     class QueryValidityCheck : public INameValidation
     {
-        const ::comphelper::ComponentContext    m_aContext;
+        const Reference<XComponentContext>    m_aContext;
         const Reference< XConnection >          m_xConnection;
 
     public:
-        QueryValidityCheck( const ::comphelper::ComponentContext& _rContext, const Reference< XConnection >& _rxConnection )
+        QueryValidityCheck( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
             :m_aContext( _rContext )
             ,m_xConnection( _rxConnection )
         {
@@ -210,7 +211,7 @@ namespace sdbtools
             ::connectivity::ErrorCondition nErrorCondition = validateName_getErrorCondition( _rName );
             if ( nErrorCondition != 0 )
             {
-                ::connectivity::SQLError aErrors( m_aContext.getUNOContext() );
+                ::connectivity::SQLError aErrors( m_aContext );
                 aErrors.raiseException( nErrorCondition, m_xConnection );
             }
         }
@@ -270,7 +271,7 @@ namespace sdbtools
                 if the given command type is neither CommandType::TABLE or CommandType::QUERY
         */
         static  PNameValidation  createExistenceCheck(
-                    const ::comphelper::ComponentContext& _rContext,
+                    const Reference<XComponentContext>& _rContext,
                     sal_Int32 _nCommandType,
                     const Reference< XConnection >& _rxConnection
                 );
@@ -293,7 +294,7 @@ namespace sdbtools
                 if the given command type is neither CommandType::TABLE or CommandType::QUERY
         */
         static  PNameValidation  createValidityCheck(
-                    const ::comphelper::ComponentContext& _rContext,
+                    const Reference<XComponentContext>& _rContext,
                     const sal_Int32 _nCommandType,
                     const Reference< XConnection >& _rxConnection
                 );
@@ -319,7 +320,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    PNameValidation  NameCheckFactory::createExistenceCheck( const ::comphelper::ComponentContext& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
+    PNameValidation  NameCheckFactory::createExistenceCheck( const Reference<XComponentContext>& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
 
@@ -356,7 +357,7 @@ namespace sdbtools
     }
 
     //--------------------------------------------------------------------
-    PNameValidation  NameCheckFactory::createValidityCheck( const ::comphelper::ComponentContext& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
+    PNameValidation  NameCheckFactory::createValidityCheck( const Reference<XComponentContext>& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
 
@@ -391,7 +392,7 @@ namespace sdbtools
     //= ObjectNames
     //====================================================================
     //--------------------------------------------------------------------
-    ObjectNames::ObjectNames( const ::comphelper::ComponentContext& _rContext, const Reference< XConnection >& _rxConnection )
+    ObjectNames::ObjectNames( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new ObjectNames_Impl )
     {

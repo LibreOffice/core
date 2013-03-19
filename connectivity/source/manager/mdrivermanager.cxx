@@ -30,6 +30,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
@@ -534,8 +535,7 @@ Sequence< ::rtl::OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceName
 //--------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OSDBCDriverManager::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
-    ::comphelper::ComponentContext aContext( _rxFactory );
-    return *( new OSDBCDriverManager( aContext.getUNOContext() ) );
+    return *( new OSDBCDriverManager( comphelper::getComponentContext(_rxFactory) ) );
 }
 
 //--------------------------------------------------------------------------

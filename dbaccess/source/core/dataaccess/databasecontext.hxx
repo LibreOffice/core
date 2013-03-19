@@ -38,7 +38,6 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 
 #include <basic/basicmanagerrepository.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -94,7 +93,8 @@ private:
 
 protected:
     ::osl::Mutex                    m_aMutex;
-    ::comphelper::ComponentContext  m_aContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                    m_aContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
                                     m_xDBRegistrationAggregate;

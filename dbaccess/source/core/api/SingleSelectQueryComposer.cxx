@@ -223,10 +223,10 @@ DBG_NAME(OSingleSelectQueryComposer)
 
 OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAccess>& _rxTables,
                                const Reference< XConnection>& _xConnection,
-                               const ::comphelper::ComponentContext& _rContext )
+                               const Reference<XComponentContext>& _rContext )
     :OSubComponent(m_aMutex,_xConnection)
     ,OPropertyContainer(m_aBHelper)
-    ,m_aSqlParser( _rContext.getUNOContext() )
+    ,m_aSqlParser( _rContext )
     ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aElementaryParts( (size_t)SQLPartCount )
@@ -249,8 +249,8 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     m_aCurrentColumns.resize(4);
 
     m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
-    m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getUNOContext() );
-    Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext.getUNOContext()) );
+    m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext );
+    Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext) );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");
@@ -1507,14 +1507,14 @@ namespace
 void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, ::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setStructuredFilter" );
-    OPredicateInputController aPredicateInput(m_aContext.getUNOContext(),m_xConnection);
+    OPredicateInputController aPredicateInput(m_aContext, m_xConnection);
     setFilter(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setStructuredHavingClause" );
-    OPredicateInputController aPredicateInput(m_aContext.getUNOContext(),m_xConnection);
+    OPredicateInputController aPredicateInput(m_aContext, m_xConnection);
     setHavingClause(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
@@ -1583,7 +1583,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     if ( aValue.hasValue() )
     {
         if(  !m_xTypeConverter.is() )
-            m_xTypeConverter.set( Converter::create(m_aContext.getUNOContext()) );
+            m_xTypeConverter.set( Converter::create(m_aContext) );
         OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
 
         if ( nType != DataType::BOOLEAN && DataType::BIT != nType )
@@ -1736,7 +1736,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
             if ( pCondition )
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
-                Reference< XNumberFormatter > xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+                Reference< XNumberFormatter > xFormatter( NumberFormatter::create(m_aContext), UNO_QUERY_THROW );
                 xFormatter->attachNumberFormatsSupplier( m_xNumberFormatsSupplier );
 
                 if (setORCriteria(pCondition, m_aAdditiveIterator, aFilters, xFormatter))

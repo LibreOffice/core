@@ -90,6 +90,7 @@ namespace dbmm
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdb::XOfficeDatabaseDocument;
     using ::com::sun::star::sdb::XFormDocumentsSupplier;
     using ::com::sun::star::sdb::XReportDocumentsSupplier;
@@ -857,7 +858,7 @@ namespace dbmm
     {
     public:
         MigrationEngine_Impl(
-            const ::comphelper::ComponentContext& _rContext,
+            const Reference<XComponentContext>& _rContext,
             const Reference< XOfficeDatabaseDocument >& _rxDocument,
             IMigrationProgress& _rProgress,
             MigrationLog& _rLogger
@@ -869,7 +870,7 @@ namespace dbmm
         bool    migrateAll();
 
     private:
-        ::comphelper::ComponentContext              m_aContext;
+        Reference<XComponentContext>              m_aContext;
         const Reference< XOfficeDatabaseDocument >  m_xDocument;
         const Reference< XModel >                   m_xDocumentModel;
         IMigrationProgress&                         m_rProgress;
@@ -983,7 +984,7 @@ namespace dbmm
     //= MigrationEngine_Impl - implementation
     //====================================================================
     //--------------------------------------------------------------------
-    MigrationEngine_Impl::MigrationEngine_Impl( const ::comphelper::ComponentContext& _rContext,
+    MigrationEngine_Impl::MigrationEngine_Impl( const Reference<XComponentContext>& _rContext,
             const Reference< XOfficeDatabaseDocument >& _rxDocument, IMigrationProgress& _rProgress, MigrationLog& _rLogger )
         :m_aContext( _rContext )
         ,m_xDocument( _rxDocument )
@@ -1497,12 +1498,12 @@ namespace dbmm
             if ( _eScriptType == eBasic )
             {
                 xTargetLibraries.set( DocumentScriptLibraryContainer::create(
-                    m_aContext.getUNOContext(), xStorageDoc ), UNO_QUERY_THROW );
+                    m_aContext, xStorageDoc ), UNO_QUERY_THROW );
             }
             else
             {
                 xTargetLibraries.set( DocumentDialogLibraryContainer::create(
-                    m_aContext.getUNOContext(), xStorageDoc ), UNO_QUERY_THROW );
+                    m_aContext, xStorageDoc ), UNO_QUERY_THROW );
             }
 
             // copy all libs to the target, with potentially renaming them
@@ -1637,7 +1638,7 @@ namespace dbmm
             }
 
             // analyze the script URI
-            Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_aContext.getUNOContext() );
+            Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_aContext );
             Reference< XVndSunStarScriptUrlReference > xUri( xUriRefFac->parse( _inout_rScriptCode ), UNO_QUERY_THROW );
 
             OUString sScriptLanguage = xUri->getParameter( OUString( "language" ) );
@@ -1821,8 +1822,8 @@ namespace dbmm
             Reference< XInputStreamProvider > xISP( _inout_rDialogLibraryElement, UNO_QUERY_THROW );
             Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
 
-            Reference< XNameContainer > xDialogModel( m_aContext.createComponent( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
-            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
+            Reference< XNameContainer > xDialogModel( m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", m_aContext), UNO_QUERY_THROW );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext, m_xDocumentModel );
 
             // adjust the events of the dialog
             impl_adjustDialogElementEvents_throw( xDialogModel );
@@ -1837,7 +1838,7 @@ namespace dbmm
             }
 
             // export dialog model
-            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
+            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext, m_xDocumentModel );
             _inout_rDialogLibraryElement <<= xISP;
         }
         catch( const Exception& )
@@ -1944,7 +1945,7 @@ namespace dbmm
     //= MigrationEngine
     //====================================================================
     //--------------------------------------------------------------------
-    MigrationEngine::MigrationEngine( const ::comphelper::ComponentContext& _rContext,
+    MigrationEngine::MigrationEngine( const Reference<XComponentContext>& _rContext,
             const Reference< XOfficeDatabaseDocument >& _rxDocument, IMigrationProgress& _rProgress,
             MigrationLog& _rLogger )
         :m_pImpl( new MigrationEngine_Impl( _rContext, _rxDocument, _rProgress, _rLogger ) )

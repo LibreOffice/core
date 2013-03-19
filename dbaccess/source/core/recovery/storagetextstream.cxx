@@ -22,7 +22,6 @@
 
 #include <com/sun/star/io/TextOutputStream.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <tools/diagnose_ex.h>
 
 //......................................................................................................................
@@ -42,6 +41,7 @@ namespace dbaccess
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::io::TextOutputStream;
     using ::com::sun::star::io::XTextOutputStream2;
@@ -80,14 +80,14 @@ namespace dbaccess
     //= StorageTextOutputStream
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    StorageTextOutputStream::StorageTextOutputStream(   const ::comphelper::ComponentContext& i_rContext,
+    StorageTextOutputStream::StorageTextOutputStream(   const Reference<XComponentContext>& i_rContext,
                                                         const Reference< XStorage >& i_rParentStorage,
                                                         const ::rtl::OUString& i_rStreamName
                                                     )
         :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageTextOutputStream_Data )
     {
-        m_pData->xTextOutput = TextOutputStream::create( i_rContext.getUNOContext() );
+        m_pData->xTextOutput = TextOutputStream::create( i_rContext );
         m_pData->xTextOutput->setEncoding( lcl_getTextStreamEncodingName() );
         m_pData->xTextOutput->setOutputStream( getOutputStream() );
     }

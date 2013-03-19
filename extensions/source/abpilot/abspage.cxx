@@ -68,7 +68,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    Reference< XMultiServiceFactory > AddressBookSourcePage::getORB()
+    const Reference< XComponentContext > & AddressBookSourcePage::getORB()
     {
         return getDialog()->getORB();
     }

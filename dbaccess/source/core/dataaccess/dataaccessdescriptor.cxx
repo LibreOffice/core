@@ -29,7 +29,6 @@
 #include <com/sun/star/sdb/XDataAccessDescriptorFactory.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
@@ -83,7 +82,7 @@ namespace dbaccess
                                 ,public ::comphelper::OPropertyArrayUsageHelper< DataAccessDescriptor >
     {
     public:
-        DataAccessDescriptor( const ::comphelper::ComponentContext& _rContext );
+        DataAccessDescriptor( const Reference<XComponentContext> & _rContext );
 
         // UNO
         DECLARE_XINTERFACE()
@@ -106,7 +105,7 @@ namespace dbaccess
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     private:
-        ::comphelper::ComponentContext  m_aContext;
+        Reference<XComponentContext> m_xContext;
 
         // </properties>
         ::rtl::OUString             m_sDataSourceName;
@@ -132,11 +131,11 @@ namespace dbaccess
 #define REGISTER_PROPERTY( propname, member ) \
     registerProperty( PROPERTY_##propname, PROPERTY_ID_##propname, PropertyAttribute::BOUND, &member, ::getCppuType( &member ) )
 
-    DataAccessDescriptor::DataAccessDescriptor( const ::comphelper::ComponentContext& _rContext )
+    DataAccessDescriptor::DataAccessDescriptor( const Reference<XComponentContext> & _rContext )
         :DataAccessDescriptor_MutexBase()
         ,DataAccessDescriptor_TypeBase()
         ,DataAccessDescriptor_PropertyBase( m_aBHelper )
-        ,m_aContext( _rContext )
+        ,m_xContext( _rContext )
         ,m_sDataSourceName()
         ,m_sDatabaseLocation()
         ,m_sConnectionResource()
@@ -248,11 +247,11 @@ namespace dbaccess
         ~DataAccessDescriptorFactory();
 
     private:
-        ::comphelper::ComponentContext  m_aContext;
+        Reference<XComponentContext>  m_xContext;
     };
 
     DataAccessDescriptorFactory::DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext )
-        :m_aContext( _rxContext )
+        :m_xContext( _rxContext )
     {
     }
 
@@ -302,7 +301,7 @@ namespace dbaccess
 
     Reference< XPropertySet > SAL_CALL DataAccessDescriptorFactory::createDataAccessDescriptor(  ) throw (RuntimeException)
     {
-        return new DataAccessDescriptor( m_aContext );
+        return new DataAccessDescriptor( m_xContext );
     }
 
 } // namespace dbaccess

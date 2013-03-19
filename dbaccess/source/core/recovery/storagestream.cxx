@@ -41,6 +41,7 @@ namespace dbaccess
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::io::XStream;
     /** === end UNO using === **/
@@ -50,7 +51,7 @@ namespace dbaccess
     //= StorageOutputStream
     //====================================================================
     //--------------------------------------------------------------------
-    StorageOutputStream::StorageOutputStream(   const ::comphelper::ComponentContext& i_rContext,
+    StorageOutputStream::StorageOutputStream(   const Reference<XComponentContext>& i_rContext,
                                                 const Reference< XStorage >& i_rParentStorage,
                                                 const ::rtl::OUString& i_rStreamName
                                              )
@@ -83,7 +84,7 @@ namespace dbaccess
     //= StorageInputStream
     //====================================================================
     //--------------------------------------------------------------------
-    StorageInputStream::StorageInputStream( const ::comphelper::ComponentContext& i_rContext,
+    StorageInputStream::StorageInputStream( const Reference<XComponentContext>& i_rContext,
                                             const Reference< XStorage >& i_rParentStorage,
                                             const ::rtl::OUString& i_rStreamName
                                           )

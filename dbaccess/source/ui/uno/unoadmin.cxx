@@ -51,7 +51,7 @@ namespace dbaui
 //=========================================================================
 DBG_NAME(ODatabaseAdministrationDialog)
 //-------------------------------------------------------------------------
-ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XMultiServiceFactory >& _rxORB)
+ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
     ,m_pDatasourceItems(NULL)
     ,m_pItemPool(NULL)
@@ -60,7 +60,7 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
 {
     DBG_CTOR(ODatabaseAdministrationDialog,NULL);
 
-    m_pCollection = new ::dbaccess::ODsnTypeCollection(comphelper::getComponentContext(_rxORB));
+    m_pCollection = new ::dbaccess::ODsnTypeCollection(_rxORB);
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
 }
 

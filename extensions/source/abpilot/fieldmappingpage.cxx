@@ -92,7 +92,7 @@ namespace abp
         AddressSettings& rSettings = getSettings();
 
         // invoke the dialog doing the mapping
-        if ( fieldmapping::invokeDialog( comphelper::getComponentContext(getORB()), this, getDialog()->getDataSource().getDataSource(), rSettings ) )
+        if ( fieldmapping::invokeDialog( getORB(), this, getDialog()->getDataSource().getDataSource(), rSettings ) )
         {
             if ( rSettings.aFieldMapping.size() )
                 getDialog()->travelNext();

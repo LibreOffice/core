@@ -94,7 +94,7 @@ void SAL_CALL LocalNameApproval::approveElement( const OUString& _rName, const R
 //==========================================================================
 DBG_NAME(ODocumentContainer)
 
-ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& _xORB
+ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xORB
                                     ,const Reference< XInterface >& _xParentContainer
                                     ,const TContentPtr& _pImpl
                                     , sal_Bool _bFormsContainer
@@ -107,7 +107,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
                     &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
 
-    setElementApproval( PContainerApprove( new LocalNameApproval ( comphelper::getComponentContext(_xORB) ) ) );
+    setElementApproval( PContainerApprove( new LocalNameApproval ( _xORB ) ) );
 }
 
 ODocumentContainer::~ODocumentContainer()
@@ -145,8 +145,8 @@ Reference< XContent > ODocumentContainer::createObject( const OUString& _rName)
     ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( _rName );
     OSL_ENSURE( aFind != rDefinitions.end(), "ODocumentContainer::createObject:Invalid entry in map!" );
     if ( aFind->second->m_aProps.bIsFolder )
-        return new ODocumentContainer( m_aContext.getLegacyServiceFactory(), *this, aFind->second, m_bFormsContainer );
-    return new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), aFind->second, m_bFormsContainer );
+        return new ODocumentContainer( m_aContext, *this, aFind->second, m_bFormsContainer );
+    return new ODocumentDefinition( *this, m_aContext, aFind->second, m_bFormsContainer );
 }
 
 Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const OUString& aServiceSpecifier ) throw (Exception, RuntimeException)
@@ -254,7 +254,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                         ODocumentDefinition::GetDocumentServiceFromMediaType( sMediaType, m_aContext, aClassID );
                     else if ( !sDocServiceName.isEmpty() )
                     {
-                        ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext.getUNOContext() );
+                        ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext );
                         const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByDocumentName( sDocServiceName ) );
                         const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
                         aClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
@@ -278,7 +278,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         else
             pElementImpl = aFind->second;
 
-        ::rtl::Reference< ODocumentDefinition > pDocDef = new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), pElementImpl, m_bFormsContainer );
+        ::rtl::Reference< ODocumentDefinition > pDocDef = new ODocumentDefinition( *this, m_aContext, pElementImpl, m_bFormsContainer );
         if ( aClassID.getLength() )
         {
             pDocDef->initialLoad( aClassID, aCreationArgs, xConnection );
@@ -335,7 +335,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         else
             pElementImpl = aFind->second;
         OSL_ENSURE( pElementImpl ," Invalid entry in map!");
-        xContent = new ODocumentContainer( m_aContext.getLegacyServiceFactory(), *this, pElementImpl, ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION );
+        xContent = new ODocumentContainer( m_aContext, *this, pElementImpl, ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION );
 
         // copy children
         if ( xCopyFrom.is() )
@@ -429,7 +429,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
             // open as folder - return result set
 
             Reference< XDynamicResultSet > xSet
-                            = new DynamicResultSet( m_aContext.getUNOContext(),
+                            = new DynamicResultSet( m_aContext,
                                                     this,
                                                     aOpenCommand,
                                                     Environment );

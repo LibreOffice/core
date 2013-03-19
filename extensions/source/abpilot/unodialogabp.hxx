@@ -46,7 +46,7 @@ namespace abp
             ,public OABSPilotUno_PBase
     {
         ::rtl::OUString m_sDataSourceName;
-        OABSPilotUno(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        OABSPilotUno(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
     public:
         // XInterface (disambiguation)

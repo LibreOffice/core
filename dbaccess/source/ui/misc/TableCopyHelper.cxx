@@ -39,7 +39,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
@@ -105,9 +104,9 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
             return;
         }
 
-        ::comphelper::ComponentContext aContext( m_pController->getORB() );
+        Reference<XComponentContext> aContext( m_pController->getORB() );
 
-        Reference< XDataAccessDescriptorFactory > xFactory( DataAccessDescriptorFactory::get( aContext.getUNOContext() ) );
+        Reference< XDataAccessDescriptorFactory > xFactory( DataAccessDescriptorFactory::get( aContext ) );
 
         Reference< XPropertySet > xSource( xFactory->createDataAccessDescriptor(), UNO_SET_THROW );
         xSource->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( i_nCommandType ) );
@@ -120,7 +119,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
         Reference< XPropertySet > xDest( xFactory->createDataAccessDescriptor(), UNO_SET_THROW );
         xDest->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( i_rDestConnection ) );
 
-        Reference< XCopyTableWizard > xWizard( CopyTableWizard::create( aContext.getUNOContext(), xSource, xDest ), UNO_SET_THROW );
+        Reference< XCopyTableWizard > xWizard( CopyTableWizard::create( aContext, xSource, xDest ), UNO_SET_THROW );
 
         ::rtl::OUString sTableNameForAppend( GetTableNameForAppend() );
         xWizard->setDestinationTableName( GetTableNameForAppend() );

@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase9.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -111,7 +110,8 @@ namespace dbaccess
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                                 m_xParentContainer;
-        const ::comphelper::ComponentContext    m_aContext;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                                m_aContext;
         const ::connectivity::SQLError          m_aErrorHelper;
         TContentPtr                             m_pImpl;
         sal_uInt32                              m_nCommandId;
@@ -132,7 +132,7 @@ namespace dbaccess
 
     public:
 
-        OContentHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+        OContentHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
                         ,const TContentPtr& _pImpl
                     );
@@ -183,7 +183,7 @@ namespace dbaccess
             getPropertyValues( const ::com::sun::star::uno::Sequence<
                             ::com::sun::star::beans::Property >& rProperties );
 
-        const ::comphelper::ComponentContext& getContext() const { return m_aContext; }
+        const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_aContext; }
 
         inline TContentPtr getImpl() const { return m_pImpl; }
 

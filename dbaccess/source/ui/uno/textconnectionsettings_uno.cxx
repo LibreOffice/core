@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/XTextConnectionSettings.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -48,6 +48,7 @@ namespace dbaui
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::Property;
@@ -74,7 +75,7 @@ namespace dbaui
         PropertyValues  m_aPropertyValues;
 
     protected:
-        OTextConnectionSettingsDialog( const ::comphelper::ComponentContext& _rContext );
+        OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext );
         virtual ~OTextConnectionSettingsDialog();
 
     public:
@@ -116,8 +117,8 @@ namespace dbaui
     //= OTextConnectionSettingsDialog
     //====================================================================
     //--------------------------------------------------------------------
-    OTextConnectionSettingsDialog::OTextConnectionSettingsDialog( const ::comphelper::ComponentContext& _rContext )
-        :OTextConnectionSettingsDialog_BASE( _rContext.getLegacyServiceFactory() )
+    OTextConnectionSettingsDialog::OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext )
+        :OTextConnectionSettingsDialog_BASE( _rContext )
     {
         TextConnectionSettingsDialog::bindItemStorages( *m_pDatasourceItems, m_aPropertyValues );
     }
@@ -131,7 +132,15 @@ namespace dbaui
     IMPLEMENT_IMPLEMENTATION_ID( OTextConnectionSettingsDialog )
 
     //---------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC( OTextConnectionSettingsDialog, "com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog", "com.sun.star.sdb.TextConnectionSettings" )
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OTextConnectionSettingsDialog, "com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog")
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(OTextConnectionSettingsDialog)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(OTextConnectionSettingsDialog, "com.sun.star.sdb.TextConnectionSettings")
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        SAL_CALL OTextConnectionSettingsDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    {
+        return static_cast< XServiceInfo* >(new OTextConnectionSettingsDialog( comphelper::getComponentContext(_rxORB)));
+    }
 
     //---------------------------------------------------------------------
     Reference< XPropertySetInfo >  SAL_CALL OTextConnectionSettingsDialog::getPropertySetInfo() throw(RuntimeException)

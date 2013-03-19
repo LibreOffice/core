@@ -22,6 +22,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -78,15 +79,15 @@ Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL SVGDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr )
     throw( Exception )
 {
-    return( static_cast< cppu::OWeakObject* >( new SVGDialog( rSMgr ) ) );
+    return( static_cast< cppu::OWeakObject* >( new SVGDialog( comphelper::getComponentContext(rSMgr) ) ) );
 }
 
 // -------------
 // - SVGDialog -
 // -------------
 
-SVGDialog::SVGDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
-    OGenericUnoDialog( rxMSF )
+SVGDialog::SVGDialog( const Reference< XComponentContext > &rxContext ) :
+    OGenericUnoDialog( rxContext )
 {
 }
 

@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/diagnose_ex.h>
@@ -49,6 +48,7 @@ namespace dbaccess
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::WeakReference;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     using ::com::sun::star::document::XEventsSupplier;
     using ::com::sun::star::container::XNameAccess;
@@ -122,7 +122,7 @@ namespace dbaccess
     //====================================================================
     //= DocumentEventExecutor
     //====================================================================
-    DocumentEventExecutor::DocumentEventExecutor( const ::comphelper::ComponentContext& _rContext,
+    DocumentEventExecutor::DocumentEventExecutor( const Reference<XComponentContext> & _rContext,
             const Reference< XEventsSupplier >& _rxDocument )
         :m_pData( new DocumentEventExecutor_Data( _rxDocument ) )
     {
@@ -136,7 +136,7 @@ namespace dbaccess
 
         try
         {
-            m_pData->xURLTransformer = URLTransformer::create(_rContext.getUNOContext());
+            m_pData->xURLTransformer = URLTransformer::create(_rContext);
         }
         catch( const Exception& )
         {

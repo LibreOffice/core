@@ -22,10 +22,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-
-namespace comphelper {
-    class ComponentContext;
-}
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 
@@ -47,7 +44,9 @@ namespace dbmm
             component at the given component context, or using the given document's interaction handler,
             if one is specified in the document's media descriptor.
         */
-        InteractionHandler( const ::comphelper::ComponentContext& _rContext, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+        InteractionHandler(
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
 
         /** destructor
         */

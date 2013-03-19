@@ -2957,7 +2957,7 @@ namespace pcr
             impl_getDefaultDialogParent_nothrow(),
             xTabControllerModel,
             impl_getContextControlContainer_nothrow(),
-            m_aContext.getLegacyServiceFactory()
+            m_aContext.getUNOContext()
         );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog.Execute() );

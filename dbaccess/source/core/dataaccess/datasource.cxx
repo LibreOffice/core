@@ -644,11 +644,11 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     Reference< XDriverManager > xManager;
     try {
-        xManager.set( ConnectionPool::create( m_pImpl->m_aContext.getUNOContext() ), UNO_QUERY_THROW );
+        xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
     if ( !xManager.is() )
         // no connection pool installed, fall back to driver manager
-        xManager.set( DriverManager::create(m_pImpl->m_aContext.getUNOContext() ), UNO_QUERY_THROW );
+        xManager.set( DriverManager::create(m_pImpl->m_aContext ), UNO_QUERY_THROW );
 
     OUString sUser(_rUid);
     OUString sPwd(_rPwd);
@@ -1197,7 +1197,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString
     if ( xSdbcConn.is() )
     {
         // build a connection server and return it (no stubs)
-        xConn = new OConnection(*this, xSdbcConn, m_pImpl->m_aContext.getLegacyServiceFactory());
+        xConn = new OConnection(*this, xSdbcConn, m_pImpl->m_aContext);
     }
     return xConn;
 }
@@ -1216,7 +1216,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
     { // create a new proxy for the connection
         if ( !m_pImpl->m_xSharedConnectionManager.is() )
         {
-            m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext.getUNOContext() );
+            m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext );
             m_pImpl->m_xSharedConnectionManager = m_pImpl->m_pSharedConnectionManager;
         }
         xConn = m_pImpl->m_pSharedConnectionManager->getConnection(
@@ -1259,13 +1259,13 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
             {
                 Sequence<Any> aArgs(1);
                 aArgs[0] <<= NamedValue("DataSource",makeAny(xMy));
-                xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
+                xContainer.set( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext), UNO_QUERY);
             }
         }
         if ( !xContainer.is() )
         {
             TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
-            xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_False );
+            xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, sal_False );
         }
         m_pImpl->m_xCommandDefinitions = xContainer;
     }
@@ -1282,7 +1282,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
     if ( !xContainer.is() )
     {
         TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_TABLE ) );
-        xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_True );
+        xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, sal_True );
         m_pImpl->m_xTableDefinitions = xContainer;
     }
     return xContainer;

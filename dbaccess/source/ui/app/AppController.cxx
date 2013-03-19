@@ -77,7 +77,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/msgbox.hxx>
@@ -3010,11 +3009,11 @@ void OApplicationController::impl_migrateScripts_nothrow()
     try
     {
         OUString sDialogService("com.sun.star.sdb.application.MacroMigrationWizard");
-        ::comphelper::ComponentContext aContext( getORB() );
+        Reference<XComponentContext> aContext( getORB() );
         Sequence< Any > aDialogArgs(1);
         aDialogArgs[0] <<= Reference< XOfficeDatabaseDocument >( m_xModel, UNO_QUERY_THROW );
         Reference< XExecutableDialog > xDialog(
-            aContext.createComponentWithArguments( sDialogService, aDialogArgs ),
+            aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sDialogService, aDialogArgs, aContext),
             UNO_QUERY );
 
         if ( !xDialog.is() )

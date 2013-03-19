@@ -30,7 +30,7 @@
 #include "resource/jdbc_log.hrc"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -40,9 +40,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
-    :m_aContext( _rxFactory )
-    ,m_aLogger( m_aContext.getUNOContext(), "sdbcl", "org.openoffice.sdbc.jdbcBridge" )
+java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+    :m_aContext( _rxContext )
+    ,m_aLogger( _rxContext, "sdbcl", "org.openoffice.sdbc.jdbcBridge" )
 {
 }
 // --------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ Sequence< ::rtl::OUString > java_sql_Driver::getSupportedServiceNames_Static(  )
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-    return *(new java_sql_Driver(_rxFactory));
+    return *(new java_sql_Driver( comphelper::getComponentContext(_rxFactory)));
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL java_sql_Driver::getImplementationName(  ) throw(RuntimeException)

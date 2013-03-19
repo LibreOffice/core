@@ -57,7 +57,7 @@ namespace abp
     //= OAddessBookSourcePilot
     //=====================================================================
     //---------------------------------------------------------------------
-    OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB)
+    OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent, ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ),
             WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS )
         ,m_xORB(_rxORB)
@@ -172,10 +172,10 @@ namespace abp
             m_aNewDataSource.registerDataSource(m_aSettings.sRegisteredDataSourceName);
 
         // 3. write the data source / table names into the configuration
-        addressconfig::writeTemplateAddressSource( comphelper::getComponentContext(getORB()), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
+        addressconfig::writeTemplateAddressSource( getORB(), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
 
         // 4. write the field mapping
-        fieldmapping::writeTemplateAddressFieldMapping( comphelper::getComponentContext(getORB()), m_aSettings.aFieldMapping );
+        fieldmapping::writeTemplateAddressFieldMapping( getORB(), m_aSettings.aFieldMapping );
     }
 
     //---------------------------------------------------------------------
@@ -215,7 +215,7 @@ namespace abp
 
         implCommitAll();
 
-        addressconfig::markPilotSuccess( comphelper::getComponentContext(getORB()) );
+        addressconfig::markPilotSuccess( getORB() );
 
         return sal_True;
     }
@@ -327,7 +327,7 @@ namespace abp
     {
         DBG_ASSERT( !needManualFieldMapping( ), "OAddessBookSourcePilot::implDoAutoFieldMapping: invalid call!" );
 
-        fieldmapping::defaultMapping( comphelper::getComponentContext(getORB()), m_aSettings.aFieldMapping );
+        fieldmapping::defaultMapping( getORB(), m_aSettings.aFieldMapping );
     }
 
     //---------------------------------------------------------------------

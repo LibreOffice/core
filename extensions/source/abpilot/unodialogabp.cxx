@@ -20,6 +20,7 @@
 #include "unodialogabp.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include "abspilot.hxx"
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -44,7 +45,7 @@ namespace abp
     //= OABSPilotUno
     //=====================================================================
     //---------------------------------------------------------------------
-    OABSPilotUno::OABSPilotUno(const Reference< XMultiServiceFactory >& _rxORB)
+    OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
         registerProperty( ::rtl::OUString("DataSourceName"), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
@@ -98,7 +99,7 @@ namespace abp
     //---------------------------------------------------------------------
     Reference< XInterface > SAL_CALL OABSPilotUno::Create(const Reference< XMultiServiceFactory >& _rxFactory)
     {
-        return *(new OABSPilotUno(_rxFactory));
+        return *(new OABSPilotUno( comphelper::getComponentContext(_rxFactory) ));
     }
 
     //---------------------------------------------------------------------
@@ -163,7 +164,7 @@ namespace abp
     //--------------------------------------------------------------------------
     Dialog* OABSPilotUno::createDialog(Window* _pParent)
     {
-        return new OAddessBookSourcePilot(_pParent, m_aContext.getLegacyServiceFactory());
+        return new OAddessBookSourcePilot(_pParent, m_aContext );
     }
 
     //--------------------------------------------------------------------------

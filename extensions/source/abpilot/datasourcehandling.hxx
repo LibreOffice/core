@@ -25,9 +25,6 @@
 
 //========================================================================
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
-    }
     namespace beans {
         class XPropertySet;
     }
@@ -54,7 +51,7 @@ namespace abp
 
     public:
         ODataSourceContext(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
         ~ODataSourceContext();
 
@@ -120,7 +117,7 @@ namespace abp
         // ----------------------------------------------------------------
         /// constructs an object which is initially invalid
         ODataSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 
         /// copy ctor

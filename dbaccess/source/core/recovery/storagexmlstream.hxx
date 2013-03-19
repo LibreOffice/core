@@ -27,11 +27,6 @@
 
 #include <memory>
 
-namespace comphelper
-{
-    class ComponentContext;
-}
-
 //........................................................................
 namespace dbaccess
 {
@@ -45,7 +40,7 @@ namespace dbaccess
     {
     public:
         StorageXMLOutputStream(
-            const ::comphelper::ComponentContext& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const ::rtl::OUString& i_rStreamName
         );
@@ -79,7 +74,7 @@ namespace dbaccess
     {
     public:
         StorageXMLInputStream(
-            const ::comphelper::ComponentContext& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const ::rtl::OUString& i_rStreamName
         );

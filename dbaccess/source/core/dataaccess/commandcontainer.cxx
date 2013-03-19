@@ -42,7 +42,7 @@ namespace dbaccess
 //==========================================================================
 DBG_NAME(OCommandContainer)
 
-OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::uno::XComponentContext >& _xORB
                                      ,const Reference< XInterface >&    _xParentContainer
                                      ,const TContentPtr& _pImpl
                                      ,sal_Bool _bTables
@@ -68,8 +68,8 @@ Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _r
 
     const TContentPtr& pElementContent( rDefinitions.find( _rName )->second );
     if ( m_bTables )
-        return new OComponentDefinition( *this, _rName, m_aContext.getLegacyServiceFactory(), pElementContent, m_bTables );
-    return new OCommandDefinition( *this, _rName, m_aContext.getLegacyServiceFactory(), pElementContent );
+        return new OComponentDefinition( *this, _rName, m_aContext, pElementContent, m_bTables );
+    return new OCommandDefinition( *this, _rName, m_aContext, pElementContent );
 }
 
 Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
@@ -80,9 +80,9 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(
 Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
 {
     if(m_bTables)
-        return com::sun::star::sdb::TableDefinition::createDefault( m_aContext.getUNOContext() );
+        return com::sun::star::sdb::TableDefinition::createDefault( m_aContext );
     else
-        return m_aContext.createComponent( (::rtl::OUString)( SERVICE_SDB_COMMAND_DEFINITION ) );
+        return m_aContext->getServiceManager()->createInstanceWithContext(SERVICE_SDB_COMMAND_DEFINITION, m_aContext);
 }
 
 OUString OCommandContainer::determineContentType() const

@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <svl/solar.hrc>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -76,7 +77,7 @@ Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new SWFDialog( rSMgr );
+    return (cppu::OWeakObject*) new SWFDialog( comphelper::getComponentContext(rSMgr) );
 }
 
 // -----------------------------------------------------------------------------
@@ -87,8 +88,8 @@ Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMul
 // - SWFDialog -
 // -------------
 
-SWFDialog::SWFDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
-    OGenericUnoDialog( rxMSF )
+SWFDialog::SWFDialog( const Reference< XComponentContext> &rxContext ) :
+    OGenericUnoDialog( rxContext )
 {
     mpResMgr = ResMgr::CreateResMgr( "flash", Application::GetSettings().GetUILanguageTag().getLocale() );
 }

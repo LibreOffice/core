@@ -27,6 +27,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/metric.hxx>

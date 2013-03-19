@@ -103,7 +103,7 @@ protected:
 
 
 protected:
-    OComponentDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+    OComponentDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         ,sal_Bool _bTable = sal_True);
@@ -115,7 +115,7 @@ public:
     OComponentDefinition(
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
             ,const ::rtl::OUString& _rElementName
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
             ,sal_Bool _bTable = sal_True
         );

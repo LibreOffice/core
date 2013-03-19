@@ -28,7 +28,6 @@
 
 #include <tools/debug.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -73,7 +72,7 @@ void OCommandDefinition::registerProperties()
                     &rCommandDefinition.m_aLayoutInformation, ::getCppuType(&rCommandDefinition.m_aLayoutInformation));
 }
 
-OCommandDefinition::OCommandDefinition(const Reference< XMultiServiceFactory >& _xORB
+OCommandDefinition::OCommandDefinition(const Reference< XComponentContext >& _xORB
                                        ,const Reference< XInterface >& _rxContainer
                                        ,const TContentPtr& _pImpl)
     :OComponentDefinition(_xORB,_rxContainer,_pImpl,sal_False)
@@ -89,7 +88,7 @@ OCommandDefinition::~OCommandDefinition()
 
 OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
-                                       ,const Reference< XMultiServiceFactory >& _xORB
+                                       ,const Reference< XComponentContext >& _xORB
                                        ,const TContentPtr& _pImpl)
     :OComponentDefinition(_rxContainer,_rElementName,_xORB,_pImpl,sal_False)
 {
@@ -128,8 +127,7 @@ Sequence< ::rtl::OUString > SAL_CALL OCommandDefinition::getSupportedServiceName
 
 Reference< XInterface > OCommandDefinition::Create(const Reference< XComponentContext >& _rxContext)
 {
-    ::comphelper::ComponentContext aContext( _rxContext );
-    return *(new OCommandDefinition( aContext.getLegacyServiceFactory(), NULL, TContentPtr( new OCommandDefinition_Impl ) ) );
+    return *(new OCommandDefinition( _rxContext, NULL, TContentPtr( new OCommandDefinition_Impl ) ) );
 }
 
 void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)

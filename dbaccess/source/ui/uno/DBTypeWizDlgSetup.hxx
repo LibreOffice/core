@@ -40,7 +40,7 @@ class ODBTypeWizDialogSetup
     sal_Bool        m_bStartTableWizard;
 
 protected:
-    ODBTypeWizDialogSetup(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+    ODBTypeWizDialogSetup(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

@@ -101,7 +101,7 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
 //------------------------------------------------------------------------------
 Dialog* ChartTypeUnoDlg::createDialog(Window* _pParent)
 {
-    return new ChartTypeDialog( _pParent, m_xChartModel, m_aContext.getUNOContext() );
+    return new ChartTypeDialog( _pParent, m_xChartModel, m_aContext );
 }
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------

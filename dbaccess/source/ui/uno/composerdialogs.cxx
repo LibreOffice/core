@@ -25,6 +25,7 @@
 #include "dbustrings.hrc"
 #include "queryfilter.hxx"
 #include "queryorder.hxx"
+#include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -59,7 +60,7 @@ namespace dbaui
     //=====================================================================
     DBG_NAME(ComposerDialog)
     //---------------------------------------------------------------------
-    ComposerDialog::ComposerDialog(const Reference< XMultiServiceFactory >& _rxORB)
+    ComposerDialog::ComposerDialog(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog( _rxORB )
     {
         DBG_CTOR(ComposerDialog,NULL);
@@ -101,7 +102,7 @@ namespace dbaui
 
             // fallback: if there is a connection and thus a row set, but no composer, create one
             if ( xConnection.is() && !m_xComposer.is() )
-                m_xComposer = ::dbtools::getCurrentSettingsComposer( Reference< XPropertySet >( m_xRowSet, UNO_QUERY ), m_aContext.getUNOContext() );
+                m_xComposer = ::dbtools::getCurrentSettingsComposer( Reference< XPropertySet >( m_xRowSet, UNO_QUERY ), m_aContext );
 
             // the columns of the row set
             Reference< XColumnsSupplier > xSuppColumns( m_xRowSet, UNO_QUERY );
@@ -135,18 +136,27 @@ namespace dbaui
     //= RowsetFilterDialog
     //=====================================================================
     //---------------------------------------------------------------------
-    RowsetFilterDialog::RowsetFilterDialog( const Reference< XMultiServiceFactory >& _rxORB )
+    RowsetFilterDialog::RowsetFilterDialog( const Reference< XComponentContext >& _rxORB )
         :ComposerDialog( _rxORB )
     {
     }
 
     //---------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC( RowsetFilterDialog, "com.sun.star.uno.comp.sdb.RowsetFilterDialog", "com.sun.star.sdb.FilterDialog" )
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(RowsetFilterDialog, "com.sun.star.uno.comp.sdb.RowsetFilterDialog")
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetFilterDialog)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetFilterDialog, "com.sun.star.sdb.FilterDialog")
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        SAL_CALL RowsetFilterDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    {
+        return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
+    }
+
 
     //---------------------------------------------------------------------
     Dialog* RowsetFilterDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
-        return new DlgFilterCrit( _pParent, m_aContext.getUNOContext(), _rxConnection, m_xComposer, _rxColumns );
+        return new DlgFilterCrit( _pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns );
     }
 
     void SAL_CALL RowsetFilterDialog::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
@@ -181,13 +191,21 @@ namespace dbaui
     //= RowsetOrderDialog
     //=====================================================================
     //---------------------------------------------------------------------
-    RowsetOrderDialog::RowsetOrderDialog( const Reference< XMultiServiceFactory >& _rxORB )
+    RowsetOrderDialog::RowsetOrderDialog( const Reference< XComponentContext >& _rxORB )
         :ComposerDialog( _rxORB )
     {
     }
 
     //---------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC( RowsetOrderDialog, "com.sun.star.uno.comp.sdb.RowsetOrderDialog", "com.sun.star.sdb.OrderDialog" )
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(RowsetOrderDialog, "com.sun.star.uno.comp.sdb.RowsetOrderDialog")
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(RowsetOrderDialog)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(RowsetOrderDialog, "com.sun.star.sdb.OrderDialog")
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        SAL_CALL RowsetOrderDialog::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+    {
+        return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
+    }
 
     //---------------------------------------------------------------------
     Dialog* RowsetOrderDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )

@@ -20,6 +20,7 @@
 
 #include "xfm_addcondition.hxx"
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "datanavi.hxx"
 #include <vcl/msgbox.hxx>
@@ -66,7 +67,7 @@ namespace svxform
     //= OAddConditionDialog
     //====================================================================
     //--------------------------------------------------------------------
-    OAddConditionDialog::OAddConditionDialog( const Reference< XMultiServiceFactory >& _rxORB )
+    OAddConditionDialog::OAddConditionDialog( const Reference< XComponentContext >& _rxORB )
         :OAddConditionDialogBase( _rxORB )
     {
         registerProperty(
@@ -121,7 +122,7 @@ namespace svxform
     //-------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL OAddConditionDialog::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
-        return *( new OAddConditionDialog( _rxFactory ) );
+        return *( new OAddConditionDialog( comphelper::getComponentContext(_rxFactory) ) );
     }
 
     //-------------------------------------------------------------------------

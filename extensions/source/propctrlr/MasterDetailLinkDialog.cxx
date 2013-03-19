@@ -105,7 +105,7 @@ namespace pcr
     //--------------------------------------------------------------------------
     Dialog* MasterDetailLinkDialog::createDialog(Window* _pParent)
     {
-        return new FormLinkDialog(_pParent,m_xDetail,m_xMaster,m_aContext.getUNOContext()
+        return new FormLinkDialog(_pParent,m_xDetail,m_xMaster, m_aContext
             ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);
     }
     //---------------------------------------------------------------------

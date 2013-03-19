@@ -66,7 +66,7 @@ DBG_NAME(OQueryContainer)
 OQueryContainer::OQueryContainer(
                   const Reference< XNameContainer >& _rxCommandDefinitions
                 , const Reference< XConnection >& _rxConn
-                , const Reference< XMultiServiceFactory >& _rxORB,
+                , const Reference< XComponentContext >& _rxORB,
                 ::dbtools::IWarningsContainer* _pWarnings)
     :ODefinitionContainer(_rxORB,NULL,TContentPtr(new ODefinitionContainer_Impl))
     ,m_pWarnings( _pWarnings )
@@ -154,7 +154,9 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
         throw DisposedException( ::rtl::OUString(), *this );
 
     // first clone this object's CommandDefinition part
-    Reference< XPropertySet > xCommandDefinitionPart( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_QUERYDEFINITION ), UNO_QUERY_THROW );
+    Reference< XPropertySet > xCommandDefinitionPart(
+           m_aContext->getServiceManager()->createInstanceWithContext( SERVICE_SDB_QUERYDEFINITION, m_aContext),
+           UNO_QUERY_THROW );
     ::comphelper::copyProperties( _rxDesc, xCommandDefinitionPart );
     // TODO : the columns part of the descriptor has to be copied
 
@@ -343,11 +345,11 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XConte
     Reference< XContent > xReturn;
     if ( xContainer .is() )
     {
-        xReturn = new OQueryContainer( xContainer, m_xConnection, m_aContext.getLegacyServiceFactory(), m_pWarnings );
+        xReturn = new OQueryContainer( xContainer, m_xConnection, m_aContext, m_pWarnings );
     }
     else
     {
-        OQuery* pNewObject = new OQuery( Reference< XPropertySet >( _rxCommandDesc, UNO_QUERY ), m_xConnection, m_aContext.getLegacyServiceFactory() );
+        OQuery* pNewObject = new OQuery( Reference< XPropertySet >( _rxCommandDesc, UNO_QUERY ), m_xConnection, m_aContext );
         xReturn = pNewObject;
 
         pNewObject->setWarningsContainer( m_pWarnings );

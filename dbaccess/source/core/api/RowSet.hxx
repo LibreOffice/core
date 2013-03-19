@@ -243,7 +243,7 @@ namespace dbaccess
         virtual ~ORowSet();
 
     public:
-        ORowSet(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        ORowSet(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
         // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -475,7 +475,7 @@ namespace dbaccess
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
     public:
-        ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex );
+        ORowSetClone( const css::uno::Reference<css::uno::XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex );
         virtual ~ORowSetClone();
 
     // com::sun::star::lang::XTypeProvider

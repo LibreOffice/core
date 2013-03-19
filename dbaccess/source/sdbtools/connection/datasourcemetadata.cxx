@@ -34,6 +34,7 @@ namespace sdbtools
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::XComponentContext;
     /** === end UNO using === **/
 
     //====================================================================
@@ -47,7 +48,7 @@ namespace sdbtools
     //= DataSourceMetaData
     //====================================================================
     //--------------------------------------------------------------------
-    DataSourceMetaData::DataSourceMetaData( const ::comphelper::ComponentContext& _rContext, const Reference< XConnection >& _rxConnection )
+    DataSourceMetaData::DataSourceMetaData( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new DataSourceMetaData_Impl )
     {

@@ -372,7 +372,7 @@ namespace dbaccess
     }
 
 ::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const Reference< XStorage >& _rxContainerStorage,
-    const ::rtl::OUString& _rEntityName, const ::comphelper::ComponentContext& _rContext,
+    const ::rtl::OUString& _rEntityName, const Reference< XComponentContext >& _rContext,
     Sequence< sal_Int8 >& _rClassId )
 {
     return GetDocumentServiceFromMediaType(
@@ -381,12 +381,12 @@ namespace dbaccess
 }
 
 ::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const ::rtl::OUString& _rMediaType,
-    const ::comphelper::ComponentContext& _rContext, Sequence< sal_Int8 >& _rClassId )
+    const Reference< XComponentContext >& _rContext, Sequence< sal_Int8 >& _rClassId )
 {
     ::rtl::OUString sResult;
     try
     {
-        ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext.getUNOContext() );
+        ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext );
         sResult = aConfigHelper.GetDocServiceNameFromMediaType( _rMediaType );
         _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID( _rMediaType ));
         if ( !_rClassId.getLength() && !sResult.isEmpty() )
@@ -432,7 +432,7 @@ namespace dbaccess
 //==========================================================================
 DBG_NAME(ODocumentDefinition)
 
-ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxContainer, const Reference< XMultiServiceFactory >& _xORB,
+ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxContainer, const Reference< XComponentContext >& _xORB,
                                           const TContentPtr& _pImpl, sal_Bool _bForm )
     :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,OPropertyStateContainer(OContentHelper::rBHelper)
@@ -631,7 +631,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( const bool i_bR
         xTopWindow->toFront();
 
         // remove the frame from the desktop's frame collection because we need full control of it.
-        impl_removeFrameFromDesktop_throw( m_aContext.getUNOContext(), xFrame );
+        impl_removeFrameFromDesktop_throw( m_aContext, xFrame );
 
         // ensure that we ourself are kept alive as long as the embedded object's frame is
         // opened
@@ -961,7 +961,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     {
         // we are in ReadOnly mode
         // we would like to open the Writer or Calc with the report direct, without design it.
-        Reference< report::XReportEngine > xReportEngine( m_aContext.createComponent( "com.sun.star.comp.report.OReportEngineJFree" ), UNO_QUERY_THROW );
+        Reference< report::XReportEngine > xReportEngine( m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.report.OReportEngineJFree", m_aContext), UNO_QUERY_THROW );
 
         xReportEngine->setReportDefinition(xReportDefinition);
         xReportEngine->setActiveConnection(m_xLastKnownConnection);
@@ -1214,7 +1214,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
         Reference< XStorage> xStorage = getContainerStorage();
         if ( xStorage.is() )
         {
-            Reference< XEmbeddedObjectCreator> xEmbedFactory = EmbeddedObjectCreator::create(m_aContext.getUNOContext());
+            Reference< XEmbeddedObjectCreator> xEmbedFactory = EmbeddedObjectCreator::create(m_aContext);
             Sequence<PropertyValue> aEmpty,aMediaDesc(1);
             aMediaDesc[0].Name = PROPERTY_URL;
             aMediaDesc[0].Value <<= _sURL;
@@ -1296,7 +1296,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, 0) );
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
@@ -1370,7 +1370,7 @@ sal_Bool ODocumentDefinition::saveAs()
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, 0) );
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
@@ -1557,7 +1557,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         xParentFrame = lcl_getDatabaseDocumentFrame( *m_pImpl->m_pDataSource );
     if ( !xParentFrame.is() )
     { // i87957 we need a parent frame
-        Reference< XDesktop2 > xDesktop = Desktop::create( m_aContext.getUNOContext() );
+        Reference< XDesktop2 > xDesktop = Desktop::create( m_aContext );
         xParentFrame.set( xDesktop, UNO_QUERY_THROW );
         Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
         if ( xCloseable.is() )
@@ -1613,7 +1613,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
         Reference< XStorage> xStorage = getContainerStorage();
         if ( xStorage.is() )
         {
-            Reference< XEmbeddedObjectCreator> xEmbedFactory = OOoEmbeddedObjectFactory::create(m_aContext.getUNOContext());
+            Reference< XEmbeddedObjectCreator> xEmbedFactory = OOoEmbeddedObjectFactory::create(m_aContext);
             ::rtl::OUString sDocumentService;
             sal_Bool bSetSize = sal_False;
             sal_Int32 nEntryConnectionMode = EntryInitModes::DEFAULT_INIT;
@@ -1631,8 +1631,8 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 if ( !m_bForm && !(sDocumentService == "com.sun.star.text.TextDocument"))
                 {
                     // we seem to be a "new style" report, check if report extension is present.
-                    Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
-                    const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getUNOContext());
+                    Reference< XContentEnumerationAccess > xEnumAccess( m_aContext->getServiceManager(), UNO_QUERY );
+                    const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext);
                     Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
                     if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                     {
@@ -2077,7 +2077,7 @@ bool ODocumentDefinition::prepareClose()
     return true;
 }
 
-void ODocumentDefinition::fillReportData( const ::comphelper::ComponentContext& _rContext,
+void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& _rContext,
                                                const Reference< util::XCloseable >& _rxComponent,
                                                const Reference< XConnection >& _rxActiveConnection )
 {
@@ -2086,14 +2086,14 @@ void ODocumentDefinition::fillReportData( const ::comphelper::ComponentContext& 
     aValue.Name =  "TextDocument";
     aValue.Value <<= _rxComponent;
     aArgs[0] <<= aValue;
-       aValue.Name = "ActiveConnection";
-       aValue.Value <<= _rxActiveConnection;
-       aArgs[1] <<= aValue;
+    aValue.Name = "ActiveConnection";
+    aValue.Value <<= _rxActiveConnection;
+    aArgs[1] <<= aValue;
 
     try
     {
         Reference< XJobExecutor > xExecuteable(
-            _rContext.createComponentWithArguments( "com.sun.star.wizards.report.CallReportWizard", aArgs ), UNO_QUERY_THROW );
+            _rContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.wizards.report.CallReportWizard", aArgs, _rContext), UNO_QUERY_THROW );
         xExecuteable->trigger( "fill" );
     }
     catch( const Exception& )

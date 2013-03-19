@@ -82,7 +82,7 @@ DBG_NAME(ORowSetCache)
 
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                           const ::comphelper::ComponentContext& _rContext,
+                           const Reference<XComponentContext>& _rContext,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
                            sal_Bool&    _bNew,
@@ -1580,7 +1580,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     sal_Bool bOk = sal_False;
     ::rtl::OUString sSql = _xAnalyzer->getQuery();
     ::rtl::OUString sErrorMsg;
-    ::connectivity::OSQLParser aSqlParser( m_aContext.getUNOContext() );
+    ::connectivity::OSQLParser aSqlParser( m_aContext );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
     SAL_WNODEPRECATED_DECLARATIONS_POP

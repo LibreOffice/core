@@ -22,13 +22,7 @@
 
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 
-#include <comphelper/componentcontext.hxx>
-
 #include <memory>
-
-namespace comphelper {
-    class ComponentContext;
-}
 
 //........................................................................
 namespace dbmm
@@ -53,7 +47,7 @@ namespace dbmm
                 passed herein as reference, must live as long as the engine instance lives.
         */
         MigrationEngine(
-            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument >& _rxDocument,
             IMigrationProgress& _rProgress,
             MigrationLog& _rLogger

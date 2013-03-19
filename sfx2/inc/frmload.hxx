@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
@@ -40,7 +39,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
 class SfxFilter;
@@ -48,10 +46,10 @@ class SfxFilterMatcher;
 
 class SAL_DLLPRIVATE SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::lang::XServiceInfo >
 {
-    ::comphelper::ComponentContext  m_aContext;
+    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >  m_aContext;
 
 public:
-                            SfxFrameLoader_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
+                            SfxFrameLoader_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >& _rxContext );
 
     SFX_DECL_XSERVICEINFO
 

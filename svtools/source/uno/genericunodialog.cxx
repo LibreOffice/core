@@ -44,24 +44,6 @@ namespace svt
 {
 //.........................................................................
 
-//=========================================================================
-//-------------------------------------------------------------------------
-OGenericUnoDialog::OGenericUnoDialog(const Reference< XMultiServiceFactory >& _rxORB)
-        :OPropertyContainer(GetBroadcastHelper())
-        ,m_pDialog(NULL)
-        ,m_bExecuting(sal_False)
-        ,m_bCanceled(sal_False)
-        ,m_bTitleAmbiguous(sal_True)
-        ,m_bInitialized( false )
-        ,m_bNeedInitialization( false )
-        ,m_aContext( _rxORB )
-{
-    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
-        &m_sTitle, getCppuType(&m_sTitle));
-    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
-        &m_xParent, getCppuType(&m_xParent));
-}
-
 //-------------------------------------------------------------------------
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
         :OPropertyContainer(GetBroadcastHelper())

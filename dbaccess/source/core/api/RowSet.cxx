@@ -56,7 +56,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
@@ -130,12 +130,12 @@ namespace dbaccess
 
 Reference< XInterface > ORowSet_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return *(new ORowSet(_rxFactory));
+    return *(new ORowSet( comphelper::getComponentContext(_rxFactory) ));
 }
 
-ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
+ORowSet::ORowSet( const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
     :ORowSet_BASE1(m_aMutex)
-    ,ORowSetBase( _rxORB, ORowSet_BASE1::rBHelper, &m_aMutex )
+    ,ORowSetBase( _rxContext, ORowSet_BASE1::rBHelper, &m_aMutex )
     ,m_pParameters( NULL )
     ,m_aRowsetListeners(*m_pMutex)
     ,m_aApproveListeners(*m_pMutex)
@@ -509,8 +509,7 @@ Sequence< OUString > SAL_CALL ORowSet::getSupportedServiceNames(  ) throw(Runtim
 
 Reference< XInterface > ORowSet::Create(const Reference< XComponentContext >& _rxContext)
 {
-    ::comphelper::ComponentContext aContext( _rxContext );
-    return ORowSet_CreateInstance( aContext.getLegacyServiceFactory() );
+    return *(new ORowSet( _rxContext ));
 }
 
 // OComponentHelper
@@ -1464,7 +1463,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
         calcConnection( _rxHandler );
         m_bRebuildConnOnExecute = sal_False;
 
-        Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_aContext.getUNOContext() );
+        Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_aContext );
         Reference<XParametersSupplier>  xParameters(xComposer, UNO_QUERY);
 
         Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
@@ -2159,7 +2158,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
         Reference< XConnection > xNewConn;
         if ( !m_aDataSourceName.isEmpty() )
         {
-            Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()) );
+            Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext) );
             try
             {
                 Reference< XDataSource > xDataSource( xDatabaseContext->getByName( m_aDataSourceName ), UNO_QUERY_THROW );
@@ -2721,7 +2720,7 @@ void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
 // ***********************************************************
 DBG_NAME(ORowSetClone);
 
-ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex )
+ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex )
              :OSubComponent(m_aMutex, rParent)
              ,ORowSetBase( _rContext, OComponentHelper::rBHelper, _pMutex )
              ,m_pParent(&rParent)

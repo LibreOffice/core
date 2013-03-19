@@ -71,7 +71,6 @@
 #include "FieldDescriptions.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <svx/svxids.hrc>
 

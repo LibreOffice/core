@@ -37,7 +37,7 @@ namespace dbaccess
     {
     public:
         StorageTextOutputStream(
-            const ::comphelper::ComponentContext& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const ::rtl::OUString& i_rStreamName
         );

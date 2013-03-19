@@ -43,7 +43,6 @@
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
 #include <comphelper/implbase_var.hxx>
 #endif
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/warningscontainer.hxx>
@@ -92,7 +91,7 @@ protected:
     // the filter as set on the parent data link at construction of the connection
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
-    ::comphelper::ComponentContext                      m_aContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_aContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                     m_xMasterConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XConnectionTools >          m_xConnectionTools;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XTableUIProvider >    m_xTableUIProvider;
@@ -116,7 +115,7 @@ protected:
 public:
     OConnection(ODatabaseSource& _rDB
                 ,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster
-                ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
 // com::sun::star::lang::XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);

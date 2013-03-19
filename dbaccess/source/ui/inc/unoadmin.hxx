@@ -53,7 +53,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;
 
 protected:
-    ODatabaseAdministrationDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+    ODatabaseAdministrationDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
     virtual ~ODatabaseAdministrationDialog();
 protected:
 // OGenericUnoDialog overridables

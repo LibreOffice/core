@@ -37,7 +37,7 @@ class OUserSettingsDialog
 {
 
 protected:
-    OUserSettingsDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+    OUserSettingsDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

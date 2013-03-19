@@ -95,7 +95,7 @@ namespace abp
 #else
         bWithMork = true;
 
-        Reference< XDriverManager2 > xManager = DriverManager::create( comphelper::getComponentContext( _pParent->getORB() ) );
+        Reference< XDriverManager2 > xManager = DriverManager::create( _pParent->getORB() );
 
         try
         {

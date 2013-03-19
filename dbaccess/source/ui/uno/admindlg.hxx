@@ -37,7 +37,7 @@ class ODataSourcePropertyDialog
 {
 
 protected:
-    ODataSourcePropertyDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+    ODataSourcePropertyDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

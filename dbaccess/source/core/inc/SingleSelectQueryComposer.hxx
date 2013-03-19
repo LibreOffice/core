@@ -33,7 +33,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <memory>
 
@@ -92,7 +91,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionQueries;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
-        ::comphelper::ComponentContext                                                      m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_aContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
 
         ::std::vector<OPrivateColumns*>         m_aCurrentColumns;
@@ -189,7 +188,7 @@ namespace dbaccess
 
         OSingleSelectQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                        const ::comphelper::ComponentContext& _rContext);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rContext);
 
 
         void SAL_CALL disposing(void);

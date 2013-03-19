@@ -55,7 +55,7 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/ConnectionPool.hpp>
 
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -87,6 +87,7 @@ namespace dbaui
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::beans::Property;
@@ -193,7 +194,7 @@ namespace dbaui
         bool            isInitialized() const { return m_xSourceConnection.is() && m_pSourceObject.get() && m_xDestConnection.is(); }
 
     protected:
-        CopyTableWizard( const Reference< XMultiServiceFactory >& _rxORB );
+        CopyTableWizard( const Reference< XComponentContext >& _rxORB );
         ~CopyTableWizard();
 
         // OGenericUnoDialog overridables
@@ -338,7 +339,7 @@ namespace dbaui
                     const CopyTableRowEvent& _rEvent );
 
 private:
-        ::comphelper::ComponentContext  m_aContext;
+        Reference<XComponentContext>    m_xContext;
 
         // attributes
         sal_Int16                       m_nOperation;
@@ -392,9 +393,9 @@ private:
 
 //=========================================================================
 //-------------------------------------------------------------------------
-CopyTableWizard::CopyTableWizard( const Reference< XMultiServiceFactory >& _rxORB )
+CopyTableWizard::CopyTableWizard( const Reference< XComponentContext >& _rxORB )
     :CopyTableWizard_Base( _rxORB )
-    ,m_aContext( _rxORB )
+    ,m_xContext( _rxORB )
     ,m_nOperation( CopyTableOperation::CopyDefinitionAndData )
     ,m_sDestinationTable()
     ,m_aPrimaryKeyName( sal_False,  "ID" )
@@ -432,7 +433,7 @@ CopyTableWizard::~CopyTableWizard()
 //-------------------------------------------------------------------------
 Reference< XInterface > CopyTableWizard::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
-    return *( new CopyTableWizard( _rxFactory ) );
+    return *( new CopyTableWizard( comphelper::getComponentContext(_rxFactory) ) );
 }
 
 //-------------------------------------------------------------------------
@@ -911,7 +912,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
         OSL_VERIFY( _rxDataSourceDescriptor->getPropertyValue( PROPERTY_DATABASE_LOCATION ) >>= sDatabaseLocation );
 
     // need a DatabaseContext for loading the data source
-    Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create( m_aContext.getUNOContext() );
+    Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create( m_xContext );
     Reference< XDataSource > xDataSource;
     if ( !sDataSource.isEmpty() )
         xDataSource.set( xDatabaseContext->getByName( sDataSource ), UNO_QUERY_THROW );
@@ -950,11 +951,11 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 
     Reference< XDriverManager > xDriverManager;
     try {
-        xDriverManager.set( ConnectionPool::create( m_aContext.getUNOContext() ), UNO_QUERY_THROW );
+        xDriverManager.set( ConnectionPool::create( m_xContext ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
     if ( !xDriverManager.is() )
         // no connection pool installed
-        xDriverManager.set( DriverManager::create(m_aContext.getUNOContext() ), UNO_QUERY_THROW );
+        xDriverManager.set( DriverManager::create( m_xContext ), UNO_QUERY_THROW );
 
     if ( aConnectionInfo.getLength() )
         xConnection.set( xDriverManager->getConnectionWithInfo( sConnectionResource, aConnectionInfo ), UNO_SET_THROW );
@@ -1540,7 +1541,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0), UNO_QUERY );
+            m_xInteractionHandler.set( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
 
         Reference< XInteractionHandler > xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );
@@ -1593,7 +1594,7 @@ Dialog* CopyTableWizard::createDialog( Window* _pParent )
         *m_pSourceObject,
         m_xSourceConnection.getTyped(),
         m_xDestConnection.getTyped(),
-        m_aContext.getUNOContext(),
+        m_xContext,
         m_xInteractionHandler
     );
 

@@ -48,7 +48,7 @@ namespace dbaui
         ::rtl::OUString m_sInitialSelection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;
     protected:
-        ODirectSQLDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        ODirectSQLDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         virtual ~ODirectSQLDialog();
 
     public:

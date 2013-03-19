@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/componentcontext.hxx>
 
 namespace dbaccess
 {
@@ -53,7 +52,7 @@ namespace dbaccess
         virtual void makeNewStatement( );
         virtual ~OptimisticSet();
     public:
-        OptimisticSet(const ::comphelper::ComponentContext& _rContext,
+        OptimisticSet(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rContext,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_xConnection,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                       const ORowSetValueVector& _aParameterValueForCache,

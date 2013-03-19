@@ -26,7 +26,6 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <svtools/genericunodialog.hxx>
 
 //........................................................................
@@ -99,7 +98,7 @@ namespace dbmm
         virtual void destroyDialog();
 
     private:
-        ::comphelper::ComponentContext          m_aContext;
+        Reference<XComponentContext>          m_aContext;
         Reference< XOfficeDatabaseDocument >    m_xDocument;
     };
 

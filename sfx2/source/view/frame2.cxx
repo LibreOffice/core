@@ -244,9 +244,9 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
     try
     {
         // create and initialize new top level frame for this window
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        Reference < XDesktop2 > xDesktop = Desktop::create( aContext.getUNOContext() );
-        Reference < XFrame > xFrame( aContext.createComponent( "com.sun.star.frame.Frame"), UNO_QUERY_THROW );
+        Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        Reference < XDesktop2 > xDesktop = Desktop::create( xContext );
+        Reference < XFrame > xFrame( xContext->getServiceManager()->createInstanceWithContext("com.sun.star.frame.Frame", xContext), UNO_QUERY_THROW );
 
         Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY_THROW );
         xFrame->initialize( xWin.get() );

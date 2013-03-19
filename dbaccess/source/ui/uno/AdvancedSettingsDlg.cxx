@@ -21,6 +21,7 @@
 #include "unoadmin.hxx"
 #include "dbu_reghelper.hxx"
 #include "advancedsettingsdlg.hxx"
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace dbaui
@@ -40,7 +41,7 @@ namespace dbaui
     {
 
     protected:
-        OAdvancedSettingsDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        OAdvancedSettingsDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
     public:
         // XTypeProvider
@@ -69,7 +70,7 @@ namespace dbaui
 
     //=========================================================================
     //-------------------------------------------------------------------------
-    OAdvancedSettingsDialog::OAdvancedSettingsDialog(const Reference< XMultiServiceFactory >& _rxORB)
+    OAdvancedSettingsDialog::OAdvancedSettingsDialog(const Reference< XComponentContext >& _rxORB)
         :ODatabaseAdministrationDialog(_rxORB)
     {
     }
@@ -83,7 +84,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL OAdvancedSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
     {
-        return *(new OAdvancedSettingsDialog(_rxFactory));
+        return *(new OAdvancedSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
     }
 
     //-------------------------------------------------------------------------
@@ -135,7 +136,7 @@ namespace dbaui
     //------------------------------------------------------------------------------
     Dialog* OAdvancedSettingsDialog::createDialog(Window* _pParent)
     {
-        AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(),m_aInitialSelection);
+        AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
         return pDlg;
     }
 

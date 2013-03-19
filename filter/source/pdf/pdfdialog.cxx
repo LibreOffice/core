@@ -71,7 +71,7 @@ Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new PDFDialog( rSMgr );
+    return (cppu::OWeakObject*) new PDFDialog( comphelper::getComponentContext(rSMgr) );
 }
 
 // -----------------------------------------------------------------------------
@@ -82,8 +82,8 @@ Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMul
 // - PDFDialog -
 // -------------
 
-PDFDialog::PDFDialog( const Reference< XMultiServiceFactory > &rxMSF )
-: PDFDialog_Base( rxMSF )
+PDFDialog::PDFDialog( const Reference< XComponentContext > &rxContext )
+: PDFDialog_Base( rxContext )
 {
 }
 
@@ -125,7 +125,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 
     if( mxSrcDoc.is() )
     {
-        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, maFilterData, mxSrcDoc, m_aContext.getLegacyServiceFactory() );
+        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, maFilterData, mxSrcDoc, uno::Reference<lang::XMultiServiceFactory>(m_aContext->getServiceManager(), uno::UNO_QUERY_THROW) );
         pRet = pDlg;
     }
 

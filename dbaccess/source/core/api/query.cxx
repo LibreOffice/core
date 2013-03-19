@@ -73,7 +73,7 @@ DBG_NAME(OQuery)
 
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
-               ,const Reference< XMultiServiceFactory >& _xORB)
+               ,const Reference< XComponentContext >& _xORB)
     :OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
     ,OQueryDescriptor_Base(m_aMutex,*this)
     ,ODataSettings(OContentHelper::rBHelper,sal_True)

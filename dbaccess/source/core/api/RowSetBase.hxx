@@ -41,7 +41,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #include "RowSetCacheIterator.hxx"
 #include "core_resource.hxx"
-#include <comphelper/componentcontext.hxx>
 
 #include <functional>
 
@@ -97,7 +96,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>   m_xNumberFormatTypes;
         OEmptyCollection*                                                               m_pEmptyCollection;
 
-        ::comphelper::ComponentContext          m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>   m_aContext;
         ::connectivity::SQLError                m_aErrors;
 
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
@@ -112,7 +111,7 @@ namespace dbaccess
 
     protected:
         ORowSetBase(
-            const ::comphelper::ComponentContext& _rContext,
+            const css::uno::Reference<css::uno::XComponentContext>& _rContext,
             ::cppu::OBroadcastHelper& _rBHelper,
             ::osl::Mutex* _pMutex
         );

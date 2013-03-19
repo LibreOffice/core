@@ -20,7 +20,6 @@
 
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -43,6 +42,7 @@ namespace dbaccess
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::lang::IllegalAccessException;
@@ -80,7 +80,7 @@ namespace dbaccess
                                 ,public DatabaseRegistrations_Base
     {
     public:
-        DatabaseRegistrations( const ::comphelper::ComponentContext& _rxContext );
+        DatabaseRegistrations( const Reference<XComponentContext>& _rxContext );
 
     protected:
         ~DatabaseRegistrations();
@@ -125,7 +125,7 @@ namespace dbaccess
                 impl_getNodeForName_nothrow( const ::rtl::OUString& _rName );
 
     private:
-        ::comphelper::ComponentContext      m_aContext;
+        Reference<XComponentContext>        m_aContext;
         ::utl::OConfigurationTreeRoot       m_aConfigurationRoot;
         ::cppu::OInterfaceContainerHelper   m_aRegistrationListeners;
     };
@@ -133,13 +133,13 @@ namespace dbaccess
     //====================================================================
     //= DatabaseRegistrations - implementation
     //====================================================================
-    DatabaseRegistrations::DatabaseRegistrations( const ::comphelper::ComponentContext& _rxContext )
+    DatabaseRegistrations::DatabaseRegistrations( const Reference<XComponentContext> & _rxContext )
         :m_aContext( _rxContext )
         ,m_aConfigurationRoot()
         ,m_aRegistrationListeners( m_aMutex )
     {
         m_aConfigurationRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
-            m_aContext.getUNOContext(), getConfigurationRootPath(), -1, ::utl::OConfigurationTreeRoot::CM_UPDATABLE );
+            m_aContext, getConfigurationRootPath(), -1, ::utl::OConfigurationTreeRoot::CM_UPDATABLE );
     }
 
     DatabaseRegistrations::~DatabaseRegistrations()
@@ -356,7 +356,7 @@ namespace dbaccess
     //====================================================================
     //= DatabaseRegistrations - factory
     //====================================================================
-    Reference< XAggregation > createDataSourceRegistrations( const ::comphelper::ComponentContext& _rxContext )
+    Reference< XAggregation > createDataSourceRegistrations( const Reference<XComponentContext> & _rxContext )
     {
         return new DatabaseRegistrations( _rxContext );
     }

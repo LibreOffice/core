@@ -31,7 +31,6 @@
 #include <comphelper/property.hxx>
 #include "definitioncolumn.hxx"
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -126,7 +125,7 @@ void OComponentDefinition::registerProperties()
     }
 }
 
-OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory >& _xORB
+OComponentDefinition::OComponentDefinition(const Reference< XComponentContext >& _xORB
                                            ,const Reference< XInterface >&  _xParentContainer
                                            ,const TContentPtr& _pImpl
                                            ,sal_Bool _bTable)
@@ -146,7 +145,7 @@ OComponentDefinition::~OComponentDefinition()
 
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
                                        ,const ::rtl::OUString& _rElementName
-                                       ,const Reference< XMultiServiceFactory >& _xORB
+                                       ,const Reference< XComponentContext >& _xORB
                                        ,const TContentPtr& _pImpl
                                        ,sal_Bool _bTable)
     :OContentHelper(_xORB,_rxContainer,_pImpl)
@@ -190,8 +189,7 @@ Sequence< ::rtl::OUString > SAL_CALL OComponentDefinition::getSupportedServiceNa
 
 Reference< XInterface > OComponentDefinition::Create( const Reference< XComponentContext >& _rxContext )
 {
-    ::comphelper::ComponentContext aContext( _rxContext );
-    return *(new OComponentDefinition( aContext.getLegacyServiceFactory(), NULL, TContentPtr( new OComponentDefinition_Impl ) ) );
+    return *(new OComponentDefinition( _rxContext, NULL, TContentPtr( new OComponentDefinition_Impl ) ) );
 }
 
 void SAL_CALL OComponentDefinition::disposing()

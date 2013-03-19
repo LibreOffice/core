@@ -59,7 +59,7 @@ namespace sdbtools
     //= ConnectionTools
     //====================================================================
     //--------------------------------------------------------------------
-    ConnectionTools::ConnectionTools( const ::comphelper::ComponentContext& _rContext )
+    ConnectionTools::ConnectionTools( const Reference<XComponentContext>& _rContext )
         :ConnectionDependentComponent( _rContext )
     {
     }
@@ -146,7 +146,7 @@ namespace sdbtools
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
     {
-        return *( new ConnectionTools( ::comphelper::ComponentContext( _rxContext ) ) );
+        return *( new ConnectionTools( Reference<XComponentContext>( _rxContext ) ) );
     }
 
     //--------------------------------------------------------------------

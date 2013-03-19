@@ -23,11 +23,7 @@
 #include "dbaccessdllapi.h"
 
 #include <com/sun/star/embed/XStorage.hpp>
-
-namespace comphelper
-{
-    class ComponentContext;
-}
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 //........................................................................
 namespace dbaccess
@@ -43,7 +39,7 @@ namespace dbaccess
     {
     public:
         StorageOutputStream(
-            const ::comphelper::ComponentContext& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const ::rtl::OUString& i_rStreamName
         );
@@ -54,12 +50,14 @@ namespace dbaccess
         virtual void close();
 
     protected:
-        const ::comphelper::ComponentContext&   getContext() const { return m_rContext; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                                                getContext() const { return m_rContext; }
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >&
                                                 getOutputStream() const { return m_xOutputStream; }
 
     private:
-        const ::comphelper::ComponentContext&   m_rContext;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                                                m_rContext;
               ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                                                 m_xOutputStream;
     };
@@ -73,7 +71,7 @@ namespace dbaccess
     {
     public:
         StorageInputStream(
-            const ::comphelper::ComponentContext& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
             const ::rtl::OUString& i_rStreamName
         );
@@ -84,12 +82,14 @@ namespace dbaccess
         virtual void close();
 
     protected:
-        const ::comphelper::ComponentContext&   getContext() const { return m_rContext; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                                                getContext() const { return m_rContext; }
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >&
                                                 getInputStream() const { return m_xInputStream; }
 
     private:
-        const ::comphelper::ComponentContext&   m_rContext;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                                                m_rContext;
               ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                                                 m_xInputStream;
     };

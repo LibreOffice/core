@@ -403,7 +403,7 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 //============================================================
 DBG_NAME(ODatabaseModelImpl)
 
-ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >& _rxFactory, ODatabaseContext& _rDBContext )
+ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
             :m_xModel()
             ,m_xDataSource()
             ,m_pStorageAccess( NULL )
@@ -417,7 +417,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
-            ,m_aContext( _rxFactory )
+            ,m_aContext( _rxContext )
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_False)
             ,m_bPasswordRequired(sal_False)
@@ -437,7 +437,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
 
 ODatabaseModelImpl::ODatabaseModelImpl(
                     const ::rtl::OUString& _rRegistrationName,
-                    const Reference< XMultiServiceFactory >& _rxFactory,
+                    const Reference< XComponentContext >& _rxContext,
                     ODatabaseContext& _rDBContext
                     )
             :m_xModel()
@@ -453,7 +453,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
-            ,m_aContext( _rxFactory )
+            ,m_aContext( _rxContext )
             ,m_sName(_rRegistrationName)
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_False)
@@ -492,7 +492,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
         aInitArgs[0] <<= NamedValue("AutomaticAddition", makeAny( (sal_Bool)sal_True ));
         aInitArgs[1] <<= NamedValue("AllowedTypes", makeAny( aAllowedTypes ));
 
-        m_xSettings.set( m_aContext.createComponentWithArguments( "com.sun.star.beans.PropertyBag", aInitArgs ), UNO_QUERY_THROW );
+        m_xSettings.set( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.beans.PropertyBag", aInitArgs, m_aContext), UNO_QUERY_THROW );
 
         // insert the default settings
         Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY_THROW );
@@ -757,7 +757,7 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
         UserInformation aUserInfo;
         Locale aLocale = aUserInfo.getUserLanguage();
 
-        m_xNumberFormatsSupplier.set( NumberFormatsSupplier::createWithLocale( m_aContext.getUNOContext(), aLocale ) );
+        m_xNumberFormatsSupplier.set( NumberFormatsSupplier::createWithLocale( m_aContext, aLocale ) );
     }
     return m_xNumberFormatsSupplier;
 }
@@ -810,7 +810,7 @@ void ODatabaseModelImpl::disposeStorages() SAL_THROW(())
 
 Reference< XSingleServiceFactory > ODatabaseModelImpl::createStorageFactory() const
 {
-    return StorageFactory::create( m_aContext.getUNOContext() );
+    return StorageFactory::create( m_aContext );
 }
 
 void ODatabaseModelImpl::commitRootStorage()
@@ -828,7 +828,7 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
 {
     if ( !m_xDocumentStorage.is() )
     {
-        Reference< XSingleServiceFactory> xStorageFactory = StorageFactory::create( m_aContext.getUNOContext() );
+        Reference< XSingleServiceFactory> xStorageFactory = StorageFactory::create( m_aContext );
         Any aSource;
         aSource = m_aMediaDescriptor.get( "Stream" );
         if ( !aSource.hasValue() )
@@ -965,7 +965,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
 
         try
         {
-            Reference< XGlobalEventBroadcaster > xModelCollection = GlobalEventBroadcaster::create( m_aContext.getUNOContext() );
+            Reference< XGlobalEventBroadcaster > xModelCollection = GlobalEventBroadcaster::create( m_aContext );
             xModelCollection->insert( makeAny( xModel ) );
         }
         catch( const Exception& )
@@ -1157,7 +1157,7 @@ Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContain
             = _bScript ? &DocumentScriptLibraryContainer::create : &DocumentDialogLibraryContainer::create;
 
         rxContainer.set(
-            (*Factory)( m_aContext.getUNOContext(), xDocument ),
+            (*Factory)( m_aContext, xDocument ),
             UNO_QUERY_THROW
         );
     }

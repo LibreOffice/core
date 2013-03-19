@@ -82,7 +82,7 @@ public:
 
     ODocumentDefinition(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
             const TContentPtr& _pImpl,
             sal_Bool _bForm
         );
@@ -153,7 +153,7 @@ public:
     inline sal_Bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     static void fillReportData(
-                    const ::comphelper::ComponentContext& _rContext,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& _rxComponent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActiveConnection
                 );
@@ -175,13 +175,13 @@ public:
 
     static ::rtl::OUString GetDocumentServiceFromMediaType(
         const ::rtl::OUString& _rMediaType,
-        const ::comphelper::ComponentContext& _rContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
         ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
     );
     static ::rtl::OUString GetDocumentServiceFromMediaType(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxContainerStorage,
         const ::rtl::OUString& _rEntityName,
-        const ::comphelper::ComponentContext& _rContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
         ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
     );
 

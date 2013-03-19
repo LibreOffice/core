@@ -93,7 +93,7 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
 //==========================================================================
 DBG_NAME(ODefinitionContainer)
 
-ODefinitionContainer::ODefinitionContainer(   const Reference< XMultiServiceFactory >& _xORB
+ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext >& _xORB
                                             , const Reference< XInterface >&    _xParentContainer
                                             , const TContentPtr& _pImpl
                                             , bool _bCheckSlash

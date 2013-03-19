@@ -69,7 +69,7 @@ namespace pcr
                                     m_xModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                                     m_xControlContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                     m_xORB;
 
         FixedText                   aFT_Controls;
@@ -100,7 +100,7 @@ namespace pcr
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxTabModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxControlCont,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 
         virtual ~TabOrderDialog();

@@ -21,6 +21,7 @@
 #include "dbu_reghelper.hxx"
 #include "DBTypeWizDlg.hxx"
 #include "dbwiz.hxx"
+#include <comphelper/processfactory.hxx>
 
 using namespace dbaui;
 
@@ -40,7 +41,7 @@ namespace dbaui
 
 //=========================================================================
 //-------------------------------------------------------------------------
-ODBTypeWizDialog::ODBTypeWizDialog(const Reference< XMultiServiceFactory >& _rxORB)
+ODBTypeWizDialog::ODBTypeWizDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
 {
 }
@@ -54,7 +55,7 @@ Sequence<sal_Int8> SAL_CALL ODBTypeWizDialog::getImplementationId(  ) throw(Runt
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODBTypeWizDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return *(new ODBTypeWizDialog(_rxFactory));
+    return *(new ODBTypeWizDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //-------------------------------------------------------------------------
@@ -106,7 +107,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo() thr
 //------------------------------------------------------------------------------
 Dialog* ODBTypeWizDialog::createDialog(Window* _pParent)
 {
-    ODbTypeWizDialog* pDlg = new ODbTypeWizDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(),m_aInitialSelection);
+    ODbTypeWizDialog* pDlg = new ODbTypeWizDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
     return pDlg;
 }
 

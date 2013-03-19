@@ -20,7 +20,6 @@
 #ifndef EXTENSIONS_ABSPILOT_HXX
 #define EXTENSIONS_ABSPILOT_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svtools/roadmapwizard.hxx>
 #include "addresssettings.hxx"
 #include <vcl/fixed.hxx>
@@ -38,7 +37,7 @@ namespace abp
     class OAddessBookSourcePilot : public OAddessBookSourcePilot_Base
     {
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                 m_xORB;
         AddressSettings         m_aSettings;
 
@@ -49,12 +48,12 @@ namespace abp
         /// ctor
         OAddessBookSourcePilot(
             Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         /// dtor
         ~OAddessBookSourcePilot();
 
         /// get the service factory which was used to create the dialog
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                                 getORB() { return m_xORB; }
         AddressSettings&        getSettings() { return m_aSettings; }
         const AddressSettings&  getSettings() const { return m_aSettings; }

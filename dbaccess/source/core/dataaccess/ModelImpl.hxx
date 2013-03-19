@@ -39,7 +39,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sdb/XBookmarksSupplier.hpp>
@@ -225,7 +224,7 @@ private:
 
 public:
     OWeakConnectionArray                                                        m_aConnections;
-    const ::comphelper::ComponentContext                                        m_aContext;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_aContext;
 
 public:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
@@ -277,14 +276,14 @@ public:
             SAL_THROW(( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException ));
 
     ODatabaseModelImpl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _pDBContext
     );
     virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
         const ::rtl::OUString& _rRegistrationName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _rDBContext
         );
 

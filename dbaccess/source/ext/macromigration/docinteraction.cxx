@@ -24,7 +24,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/interaction.hxx>
 #include <rtl/ref.hxx>
@@ -45,6 +44,7 @@ namespace dbmm
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::task::DocumentPasswordRequest;
@@ -65,8 +65,8 @@ namespace dbmm
         {
         }
 
-        InteractionHandler_Data( const ::comphelper::ComponentContext& _rContext )
-            :xHandler( ::com::sun::star::task::InteractionHandler::createWithParent(_rContext.getUNOContext(), 0), UNO_QUERY )
+        InteractionHandler_Data( const Reference<XComponentContext>& _rContext )
+            :xHandler( ::com::sun::star::task::InteractionHandler::createWithParent(_rContext, 0), UNO_QUERY )
         {
         }
     };
@@ -75,7 +75,7 @@ namespace dbmm
     //= InteractionHandler
     //====================================================================
     //--------------------------------------------------------------------
-    InteractionHandler::InteractionHandler( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
+    InteractionHandler::InteractionHandler( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
         :m_pData( new InteractionHandler_Data( _rContext ) )
     {
         // check whether the doumentc has an own interaction handler set

@@ -52,7 +52,6 @@
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
@@ -96,10 +95,10 @@ namespace dbaxml
 
 class DBTypeDetection : public ::cppu::WeakImplHelper2< XExtendedFilterDetection, XServiceInfo>
 {
-    ::comphelper::ComponentContext  m_aContext;
+    const Reference< XComponentContext >  m_aContext;
 
 public:
-    DBTypeDetection(const Reference< XMultiServiceFactory >&);
+    DBTypeDetection(const Reference< XComponentContext >&);
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(  );
@@ -118,8 +117,8 @@ public:
     virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
 };
 // -------------------------------------------------------------------------
-DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFactory)
-    :m_aContext( _rxFactory )
+DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContext)
+    :m_aContext( _rxContext )
 {
 }
 // -------------------------------------------------------------------------
@@ -137,7 +136,7 @@ OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::co
         {
             bStreamFromDescr = sal_True;
             xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromInputStream(
-                xInStream, m_aContext.getUNOContext() ), UNO_QUERY );
+                xInStream, m_aContext ), UNO_QUERY );
         }
         else
         {
@@ -147,7 +146,7 @@ OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::co
             if ( !sFileLocation.isEmpty() )
             {
                 xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromURL(
-                    sFileLocation, ElementModes::READ, m_aContext.getUNOContext() ), UNO_QUERY );
+                    sFileLocation, ElementModes::READ, m_aContext ), UNO_QUERY );
             }
         }
 
@@ -186,7 +185,7 @@ OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::co
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
-    return *(new DBTypeDetection(rSMgr));
+    return *(new DBTypeDetection( comphelper::getComponentContext(rSMgr) ));
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
@@ -231,14 +230,14 @@ extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection()
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
 {
 private:
-    ::comphelper::ComponentContext      m_aContext;
+    const Reference< XComponentContext >  m_aContext;
     Reference< XFrameLoader >           m_xMySelf;
     OUString                            m_sCurrentURL;
     sal_uLong                               m_nStartWizard;
 
     DECL_LINK( OnStartTableWizard, void* );
 public:
-    DBContentLoader(const Reference< XMultiServiceFactory >&);
+    DBContentLoader(const Reference< XComponentContext >&);
     ~DBContentLoader();
 
     // XServiceInfo
@@ -266,7 +265,7 @@ private:
 };
 DBG_NAME(DBContentLoader)
 
-DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
+DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxFactory)
     :m_aContext( _rxFactory )
     ,m_nStartWizard(0)
 {
@@ -285,7 +284,7 @@ DBContentLoader::~DBContentLoader()
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
-    return *(new DBContentLoader(rSMgr));
+    return *(new DBContentLoader( comphelper::getComponentContext(rSMgr) ));
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
@@ -325,12 +324,12 @@ Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) thro
 namespace
 {
     // ...................................................................
-    sal_Bool lcl_urlAllowsInteraction( const ::comphelper::ComponentContext& _rContext, const OUString& _rURL )
+    sal_Bool lcl_urlAllowsInteraction( const Reference<XComponentContext> & _rContext, const OUString& _rURL )
     {
         bool bDoesAllow = sal_False;
         try
         {
-            Reference< XURLTransformer > xTransformer( URLTransformer::create(_rContext.getUNOContext()) );
+            Reference< XURLTransformer > xTransformer( URLTransformer::create(_rContext) );
             URL aURL;
             aURL.Complete = _rURL;
             xTransformer->parseStrict( aURL );
@@ -371,7 +370,7 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
     aWizardArgs[0] <<= PropertyValue(
                     OUString("ParentWindow"),
                     0,
-                    makeAny( lcl_getTopMostWindow( m_aContext.getUNOContext() ) ),
+                    makeAny( lcl_getTopMostWindow( m_aContext ) ),
                     PropertyState_DIRECT_VALUE);
 
     aWizardArgs[1] <<= PropertyValue(
@@ -381,11 +380,10 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
                     PropertyState_DIRECT_VALUE);
 
     // create the dialog
-    Reference< XExecutableDialog > xAdminDialog;
-    OSL_VERIFY( m_aContext.createComponentWithArguments( "com.sun.star.sdb.DatabaseWizardDialog", aWizardArgs, xAdminDialog ) );
+    Reference< XExecutableDialog > xAdminDialog( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.sdb.DatabaseWizardDialog", aWizardArgs, m_aContext), UNO_QUERY_THROW);
 
     // execute it
-    if ( !xAdminDialog.is() || ( RET_OK != xAdminDialog->execute() ) )
+    if ( RET_OK != xAdminDialog->execute() )
         return sal_False;
 
     Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
@@ -426,7 +424,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     // not touch it.
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
-        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
+        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, 0) );
        aMediaDesc.put( "InteractionHandler", xHandler );
     }
 
@@ -442,7 +440,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     sal_Int32 nInitialSelection = -1;
     if ( !xModel.is() )
     {
-        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()) );
+        Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext) );
 
         OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
         bCreateNew = sFactoryName.match(_rURL);
@@ -598,8 +596,8 @@ IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
         aWizArgs[0] <<= aValue;
 
         SolarMutexGuard aGuard;
-        Reference< XJobExecutor > xTableWizard;
-        if ( m_aContext.createComponentWithArguments( "com.sun.star.wizards.table.CallTableWizard", aWizArgs, xTableWizard ) )
+        Reference< XJobExecutor > xTableWizard( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.wizards.table.CallTableWizard", aWizArgs, m_aContext), UNO_QUERY);
+        if ( xTableWizard.is() )
             xTableWizard->trigger(OUString("start"));
     }
     catch(const Exception&)

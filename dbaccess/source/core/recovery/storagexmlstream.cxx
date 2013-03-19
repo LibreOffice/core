@@ -25,7 +25,6 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
@@ -50,6 +49,7 @@ namespace dbaccess
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::xml::sax::XDocumentHandler;
     using ::com::sun::star::xml::sax::XAttributeList;
@@ -77,13 +77,13 @@ namespace dbaccess
     //= StorageXMLOutputStream
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    StorageXMLOutputStream::StorageXMLOutputStream( const ::comphelper::ComponentContext& i_rContext,
+    StorageXMLOutputStream::StorageXMLOutputStream( const Reference<XComponentContext>& i_rContext,
                                                     const Reference< XStorage >& i_rParentStorage,
                                                     const ::rtl::OUString& i_rStreamName )
         :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLOutputStream_Data )
     {
-        const Reference< XWriter > xSaxWriter = Writer::create( i_rContext.getUNOContext() );
+        const Reference< XWriter > xSaxWriter = Writer::create( i_rContext );
         xSaxWriter->setOutputStream( getOutputStream() );
 
         m_pData->xHandler.set( xSaxWriter, UNO_QUERY_THROW );
@@ -161,13 +161,13 @@ namespace dbaccess
     //= StorageXMLInputStream
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    StorageXMLInputStream::StorageXMLInputStream( const ::comphelper::ComponentContext& i_rContext,
+    StorageXMLInputStream::StorageXMLInputStream( const Reference<XComponentContext>& i_rContext,
                                                   const Reference< XStorage >& i_rParentStorage,
                                                   const ::rtl::OUString& i_rStreamName )
         :StorageInputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLInputStream_Data )
     {
-        m_pData->xParser.set( Parser::create(i_rContext.getUNOContext()) );
+        m_pData->xParser.set( Parser::create(i_rContext) );
     }
 
     //------------------------------------------------------------------------------------------------------------------

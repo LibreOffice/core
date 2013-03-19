@@ -48,7 +48,7 @@ namespace abp
         // helper
         OAddessBookSourcePilot* getDialog();
         const OAddessBookSourcePilot*   getDialog() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &
                                 getORB();
         AddressSettings&        getSettings();
         const AddressSettings&  getSettings() const;

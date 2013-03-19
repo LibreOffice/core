@@ -487,7 +487,7 @@ void ODatabaseDocument::impl_reset_nothrow()
     m_pImpl->m_bDocumentReadOnly = sal_False;
 }
 
-void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentContext _rContext, const Reference< XInterface >& _rxTargetComponent,
+void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentContext >& _rContext, const Reference< XInterface >& _rxTargetComponent,
                                                  const ::comphelper::NamedValueCollection& _rResource )
 {
     Sequence< Any > aFilterCreationArgs;
@@ -510,7 +510,7 @@ void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentCo
     aFilterCreationArgs[nCount] <<= xInfoSet;
 
     Reference< XImporter > xImporter(
-        _rContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs ),
+        _rContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs, _rContext),
         UNO_QUERY_THROW );
 
     Reference< XComponent > xComponent( _rxTargetComponent, UNO_QUERY_THROW );
@@ -534,8 +534,7 @@ void SAL_CALL ODatabaseDocument::initNew(  ) throw (DoubleInitializationExceptio
     impl_setInitializing();
 
     // create a temporary storage
-    Reference< XStorage > xTempStor( ::comphelper::OStorageHelper::GetTemporaryStorage(
-        m_pImpl->m_aContext.getUNOContext() ) );
+    Reference< XStorage > xTempStor( ::comphelper::OStorageHelper::GetTemporaryStorage( m_pImpl->m_aContext ) );
 
     // store therein
     impl_storeToStorage_throw( xTempStor, Sequence< PropertyValue >(), aGuard );
@@ -1125,7 +1124,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
 
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUString& _rURL ) const
 {
-    Reference< ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_pImpl->m_aContext.getUNOContext()));
+    Reference< ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_pImpl->m_aContext));
     Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
     Reference< io::XTruncate > xTruncate(xStream,UNO_QUERY);
     if ( xTruncate.is() )
@@ -1415,14 +1414,16 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
             {
                 Sequence<Any> aArgs(1);
                 aArgs[0] <<= NamedValue("DatabaseDocument",makeAny(xMy));
-                xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
+                xContainer.set(
+                       m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext),
+                       UNO_QUERY);
                 rContainerRef = xContainer;
             }
         }
         if ( !xContainer.is() )
         {
             TContentPtr& rContainerData( m_pImpl->getObjectContainer( _eType ) );
-            rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, bFormsContainer );
+            rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_aContext, *this, rContainerData, bFormsContainer );
         }
         impl_reparent_nothrow( xContainer );
     }
@@ -1582,7 +1583,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
     OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
     // get component
-    Reference< XWriter > xSaxWriter = xml::sax::Writer::create( m_pImpl->m_aContext.getUNOContext() );
+    Reference< XWriter > xSaxWriter = xml::sax::Writer::create( m_pImpl->m_aContext );
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream( xOutputStream );
@@ -1595,10 +1596,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
         aArgs[ i+1 ] = _rArguments[i];
 
     // get filter component
-    Reference< XExporter > xExporter;
-    OSL_VERIFY( m_pImpl->m_aContext.createComponentWithArguments( pServiceName, aArgs, xExporter ) );
-    if ( !xExporter.is() )
-        return;
+    Reference< XExporter > xExporter( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString::createFromAscii(pServiceName), aArgs, m_pImpl->m_aContext), UNO_QUERY_THROW );
 
     // connect model and filter
     xExporter->setSourceDocument( xComponent );
@@ -1677,7 +1675,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
            if ( xDlgs.is() )
            {
                Reference< XModel > xModel(const_cast< ODatabaseDocument*>(this));
-               lcl_uglyHackToStoreDialogeEmbedImages( m_pImpl->getLibraryContainer(false), _rxTargetStorage, xModel, m_pImpl->m_aContext.getUNOContext() );
+               lcl_uglyHackToStoreDialogeEmbedImages( m_pImpl->getLibraryContainer(false), _rxTargetStorage, xModel, m_pImpl->m_aContext );
            }
        }
        catch ( const Exception& )
@@ -1699,7 +1697,7 @@ Reference< XUIConfigurationManager2 > ODatabaseDocument::getUIConfigurationManag
 
     if ( !m_xUIConfigurationManager.is() )
     {
-        m_xUIConfigurationManager = UIConfigurationManager::create( m_pImpl->m_aContext.getUNOContext() );
+        m_xUIConfigurationManager = UIConfigurationManager::create( m_pImpl->m_aContext );
 
         OUString aUIConfigFolderName( "Configurations2" );
         Reference< XStorage > xConfigStorage;
@@ -1865,11 +1863,10 @@ Sequence< OUString > ODatabaseDocument::getSupportedServiceNames(  ) throw (Runt
 
 Reference< XInterface > ODatabaseDocument::Create( const Reference< XComponentContext >& _rxContext )
 {
-    ::comphelper::ComponentContext aContext( _rxContext );
     Reference< XUnoTunnel > xDBContextTunnel( DatabaseContext::create(_rxContext), UNO_QUERY_THROW );
     ODatabaseContext* pContext = reinterpret_cast< ODatabaseContext* >( xDBContextTunnel->getSomething( ODatabaseContext::getUnoTunnelImplementationId() ) );
 
-    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( aContext.getLegacyServiceFactory(), *pContext ) );
+    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( _rxContext, *pContext ) );
     Reference< XModel > xModel( pImpl->createNewModel_deliverOwnership( false ) );
     return xModel.get();
 }
@@ -1969,7 +1966,7 @@ Reference< provider::XScriptProvider > SAL_CALL ODatabaseDocument::getScriptProv
     if ( !xScriptProvider.is() )
     {
         Reference < XScriptProviderFactory > xFactory =
-            theMasterScriptProviderFactory::get( m_pImpl->m_aContext.getUNOContext() );
+            theMasterScriptProviderFactory::get( m_pImpl->m_aContext );
 
         Any aScriptProviderContext;
         if ( m_bAllowDocumentScripting )
@@ -2036,11 +2033,11 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( cons
         throw IllegalArgumentException( OUString(), *this, 3 );
 
     DocumentGuard aGuard( *this );
-    ::comphelper::ComponentContext aContext( m_pImpl->m_aContext );
     aGuard.clear();
 
-    Reference< XController2 > xController;
-    aContext.createComponent( "org.openoffice.comp.dbu.OApplicationController", xController );
+    Reference< XController2 > xController(
+         m_pImpl->m_aContext->getServiceManager()->createInstanceWithContext("org.openoffice.comp.dbu.OApplicationController", m_pImpl->m_aContext),
+         UNO_QUERY_THROW );
 
     ::comphelper::NamedValueCollection aInitArgs( _Arguments );
     aInitArgs.put( "Frame", _Frame );
@@ -2056,10 +2053,10 @@ Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
 {
     if ( ! m_xTitleHelper.is ())
     {
-        Reference< XUntitledNumbers >  xDesktop(Desktop::create(m_pImpl->m_aContext.getUNOContext()), uno::UNO_QUERY_THROW);
+        Reference< XUntitledNumbers >  xDesktop(Desktop::create(m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
         Reference< frame::XModel >     xThis   (getThis(), uno::UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext.getUNOContext());
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext);
         m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);
@@ -2071,7 +2068,7 @@ Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
 uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHelper_throw(const uno::Reference< uno::XInterface >& _xComponent)
 {
     if ( !m_xModuleManager.is() )
-        m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext.getUNOContext()) );
+        m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext) );
 
     OUString sModuleId;
     try

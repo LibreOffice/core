@@ -127,7 +127,7 @@ namespace pcr
     //--------------------------------------------------------------------------
     Dialog* OTabOrderDialog::createDialog( Window* _pParent )
     {
-        return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_aContext.getLegacyServiceFactory() );
+        return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
     }
 
 //........................................................................

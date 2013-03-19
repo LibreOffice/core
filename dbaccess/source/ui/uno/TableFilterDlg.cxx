@@ -21,6 +21,7 @@
 #include "dbu_reghelper.hxx"
 #include "TableFilterDlg.hxx"
 #include "TablesSingleDlg.hxx"
+#include <comphelper/processfactory.hxx>
 
 
 using namespace dbaui;
@@ -41,7 +42,7 @@ namespace dbaui
 
 //=========================================================================
 //-------------------------------------------------------------------------
-OTableFilterDialog::OTableFilterDialog(const Reference< XMultiServiceFactory >& _rxORB)
+OTableFilterDialog::OTableFilterDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
 {
 }
@@ -55,7 +56,7 @@ Sequence<sal_Int8> SAL_CALL OTableFilterDialog::getImplementationId(  ) throw(Ru
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OTableFilterDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OTableFilterDialog(_rxFactory));
+    return *(new OTableFilterDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //-------------------------------------------------------------------------
@@ -107,7 +108,7 @@ Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo() t
 //------------------------------------------------------------------------------
 Dialog* OTableFilterDialog::createDialog(Window* _pParent)
 {
-    OTableSubscriptionDialog* pDlg = new OTableSubscriptionDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(), m_aInitialSelection);
+    OTableSubscriptionDialog* pDlg = new OTableSubscriptionDialog(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection);
     return pDlg;
 }
 

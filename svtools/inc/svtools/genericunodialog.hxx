@@ -37,7 +37,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <tools/link.hxx>
 
 class Dialog;
@@ -86,13 +85,12 @@ namespace svt
         com::sun::star::uno::Reference<com::sun::star::awt::XWindow>    m_xParent;  /// parent window
         // </properties>
 
-        ::comphelper::ComponentContext m_aContext;
+        com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_aContext;
 
     public:
         inline bool needInitialization() const { return m_bNeedInitialization && !m_bInitialized; }
 
     protected:
-        OGenericUnoDialog(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& _rxORB);
         OGenericUnoDialog(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext);
         virtual ~OGenericUnoDialog();
 

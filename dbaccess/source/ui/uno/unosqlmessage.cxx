@@ -22,6 +22,7 @@
 #include "unosqlmessage.hxx"
 #include "dbu_reghelper.hxx"
 #include "dbustrings.hrc"
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 
@@ -47,7 +48,7 @@ namespace dbaui
 
 //=========================================================================
 //-------------------------------------------------------------------------
-OSQLMessageDialog::OSQLMessageDialog(const Reference< XMultiServiceFactory >& _rxORB)
+OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxORB)
     :OSQLMessageDialogBase(_rxORB)
 {
     registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID,
@@ -66,7 +67,7 @@ Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(Run
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OSQLMessageDialog(_rxFactory));
+    return *(new OSQLMessageDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //-------------------------------------------------------------------------

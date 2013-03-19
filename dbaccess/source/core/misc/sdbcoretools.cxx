@@ -32,7 +32,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/interaction.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -81,14 +80,16 @@ namespace dbaccess
     }
 
 // -----------------------------------------------------------------------------
-    ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const Any& _rError )
+    ::rtl::OUString extractExceptionMessage( const Reference<XComponentContext> & _rContext, const Any& _rError )
     {
         ::rtl::OUString sDisplayMessage;
 
         try
         {
-            Reference< XInteractionRequestStringResolver > xStringResolver;
-            if ( _rContext.createComponent( "com.sun.star.task.InteractionRequestStringResolver", xStringResolver ) )
+            Reference< XInteractionRequestStringResolver > xStringResolver(
+                 _rContext->getServiceManager()->createInstanceWithContext("com.sun.star.task.InteractionRequestStringResolver", _rContext),
+                 UNO_QUERY );
+            if ( xStringResolver.is() )
             {
                 ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
                 ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );

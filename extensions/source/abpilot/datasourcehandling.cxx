@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -110,7 +109,7 @@ namespace abp
     //---------------------------------------------------------------------
     /// creates and inserts a data source, and sets it's URL property to the string given
     static ODataSource lcl_implCreateAndSetURL(
-        const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rName,
+        const Reference< XComponentContext >& _rxORB, const ::rtl::OUString& _rName,
         const sal_Char* _pInitialAsciiURL ) SAL_THROW (( ))
     {
         ODataSource aReturn( _rxORB );
@@ -118,7 +117,7 @@ namespace abp
         {
             // create the new data source
             Reference< XPropertySet > xNewDataSource;
-            lcl_implCreateAndInsert( comphelper::getComponentContext(_rxORB), _rName, xNewDataSource );
+            lcl_implCreateAndInsert( _rxORB, _rName, xNewDataSource );
 
             //.............................................................
             // set the URL property
@@ -141,16 +140,14 @@ namespace abp
     }
     //---------------------------------------------------------------------
     void lcl_registerDataSource(
-        const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _sName,
+        const Reference< XComponentContext >& _rxORB, const ::rtl::OUString& _sName,
         const ::rtl::OUString& _sURL ) SAL_THROW (( ::com::sun::star::uno::Exception ))
     {
         OSL_ENSURE( !_sName.isEmpty(), "lcl_registerDataSource: invalid name!" );
         OSL_ENSURE( !_sURL.isEmpty(), "lcl_registerDataSource: invalid URL!" );
         try
         {
-            Reference< XDatabaseContext > xRegistrations(
-                DatabaseContext::create(
-                    comphelper::getComponentContext(_rxORB)));
+            Reference< XDatabaseContext > xRegistrations( DatabaseContext::create(_rxORB) );
             if ( xRegistrations->hasRegisteredDatabase( _sName ) )
                 xRegistrations->changeDatabaseLocation( _sName, _sURL );
             else
@@ -167,11 +164,11 @@ namespace abp
     //=====================================================================
     struct ODataSourceContextImpl
     {
-        Reference< XMultiServiceFactory >   xORB;
+        Reference< XComponentContext >      xORB;
         Reference< XNameAccess >            xContext;           /// the UNO data source context
         StringBag                           aDataSourceNames;   /// for quicker name checks (without the UNO overhead)
 
-        ODataSourceContextImpl( const Reference< XMultiServiceFactory >& _rxORB ) : xORB( _rxORB ) { }
+        ODataSourceContextImpl( const Reference< XComponentContext >& _rxORB ) : xORB( _rxORB ) { }
         ODataSourceContextImpl( const ODataSourceContextImpl& _rSource )
             :xORB       ( _rSource.xORB )
             ,xContext   ( _rSource.xContext )
@@ -183,14 +180,14 @@ namespace abp
     //= ODataSourceContext
     //=====================================================================
     //---------------------------------------------------------------------
-    ODataSourceContext::ODataSourceContext(const Reference< XMultiServiceFactory >& _rxORB)
+    ODataSourceContext::ODataSourceContext(const Reference< XComponentContext >& _rxORB)
         :m_pImpl( new ODataSourceContextImpl( _rxORB ) )
     {
         try
         {
             // create the UNO context
             m_pImpl->xContext = Reference<XNameAccess>(
-                      lcl_getDataSourceContext( comphelper::getComponentContext(_rxORB) ),
+                      lcl_getDataSourceContext( _rxORB ),
                       UNO_QUERY_THROW);
 
             if (m_pImpl->xContext.is())
@@ -309,7 +306,7 @@ namespace abp
     struct ODataSourceImpl
     {
     public:
-        Reference< XMultiServiceFactory >       xORB;               /// the service factory
+        Reference< XComponentContext >          xORB;               /// the service factory
         Reference< XPropertySet >               xDataSource;        /// the UNO data source
         ::utl::SharedUNOComponent< XConnection >
                                                 xConnection;
@@ -317,7 +314,7 @@ namespace abp
         ::rtl::OUString                         sName;
         sal_Bool                                bTablesUpToDate;    // table name cache up-to-date?
 
-        ODataSourceImpl( const Reference< XMultiServiceFactory >& _rxORB )
+        ODataSourceImpl( const Reference< XComponentContext >& _rxORB )
             :xORB( _rxORB )
             ,bTablesUpToDate( sal_False )
         {
@@ -359,7 +356,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    ODataSource::ODataSource( const Reference< XMultiServiceFactory >& _rxORB )
+    ODataSource::ODataSource( const Reference< XComponentContext >& _rxORB )
         :m_pImpl(new ODataSourceImpl(_rxORB))
     {
     }
@@ -523,7 +520,7 @@ namespace abp
         try
         {
             xInteractions.set(
-                InteractionHandler::createWithParent(comphelper::getComponentContext(m_pImpl->xORB), 0),
+                InteractionHandler::createWithParent(m_pImpl->xORB, 0),
                 UNO_QUERY);
         }
         catch(const Exception&)

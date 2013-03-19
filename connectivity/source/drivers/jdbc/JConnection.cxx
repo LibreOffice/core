@@ -259,7 +259,7 @@ jclass java_sql_Connection::theClass = 0;
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     :java_lang_Object()
     ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)(&_rDriver), this)
-    ,m_xContext( _rDriver.getContext().getUNOContext() )
+    ,m_xContext( _rDriver.getContext() )
     ,m_pDriver( &_rDriver )
     ,m_pDriverobject(NULL)
     ,m_pDriverClassLoader()
@@ -470,7 +470,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
     {
         try
         {
-            OSQLParser aParser( m_pDriver->getContext().getUNOContext() );
+            OSQLParser aParser( m_pDriver->getContext() );
             ::rtl::OUString sErrorMessage;
             ::rtl::OUString sNewSql;
             OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
@@ -702,7 +702,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
                     LocalRef< jobject > driverClassLoader(t.env());
 
                     loadClass(
-                        m_pDriver->getContext().getUNOContext(),
+                        m_pDriver->getContext(),
                         t.env(), _sDriverClassPath, _sDriverClass, &driverClassLoader, &driverClass );
 
                     m_pDriverClassLoader.set( driverClassLoader );
@@ -759,7 +759,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
 {
     static const ::rtl::OUString s_sNodeName("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths");
     ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
-        m_pDriver->getContext().getUNOContext(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+        m_pDriver->getContext(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
     ::rtl::OUString sURL;
     if ( aNamesRoot.isValid() && aNamesRoot.hasByName( _sDriverClass ) )
     {

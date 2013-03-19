@@ -60,7 +60,7 @@ class OCommandDefinition    :public OComponentDefinition
 protected:
     virtual ~OCommandDefinition();
 
-    OCommandDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+    OCommandDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         );
@@ -73,7 +73,7 @@ public:
     OCommandDefinition(
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
             ,const ::rtl::OUString& _rElementName
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
         );
 

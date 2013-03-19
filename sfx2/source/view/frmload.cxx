@@ -49,6 +49,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/interaction.hxx>
 #include <rtl/logfile.hxx>
@@ -87,6 +88,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
@@ -95,8 +97,8 @@ using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XModel2;
 /** === end UNO using === **/
 
-SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XMultiServiceFactory >& _rxFactory )
-    :m_aContext( _rxFactory )
+SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XComponentContext >& _rxContext )
+    :m_aContext( _rxContext )
 {
 }
 
@@ -115,7 +117,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
             return 0;
 
         Reference< XTypeDetection > xDetect(
-            m_aContext.createComponent( "com.sun.star.document.TypeDetection" ),
+            m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_aContext),
             UNO_QUERY_THROW);
 
         ::comphelper::NamedValueCollection aNewArgs;
@@ -160,7 +162,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
         aQuery.put( "DocumentService", i_rServiceName );
 
         const Reference< XContainerQuery > xQuery(
-            m_aContext.createComponent( "com.sun.star.document.FilterFactory" ),
+            m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_aContext),
             UNO_QUERY_THROW );
 
         const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
@@ -582,7 +584,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
             // create the new doc
             const ::rtl::OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", ::rtl::OUString() );
-            xModel.set( m_aContext.createComponent( sServiceName ), UNO_QUERY_THROW );
+            xModel.set( m_aContext->getServiceManager()->createInstanceWithContext(sServiceName, m_aContext), UNO_QUERY_THROW );
 
             // load resp. init it
             const Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
@@ -693,9 +695,9 @@ rtl::OUString SfxFrameLoader_Impl::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-UNOREFERENCE< UNOXINTERFACE > SAL_CALL SfxFrameLoader_Impl::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
+Reference< UNOXINTERFACE > SAL_CALL SfxFrameLoader_Impl::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( UNOEXCEPTION )
 {
-    return UNOREFERENCE< UNOXINTERFACE >( *new SfxFrameLoader_Impl( xServiceManager ) );
+    return Reference< XInterface >( *new SfxFrameLoader_Impl( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

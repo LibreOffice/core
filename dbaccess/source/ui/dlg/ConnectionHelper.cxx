@@ -72,7 +72,6 @@
 #endif //_ADO_DATALINK_BROWSE_
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 

@@ -24,7 +24,6 @@
 
 #include <com/sun/star/sdb/tools/XObjectNames.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <memory>
@@ -60,7 +59,7 @@ namespace sdbtools
                 if _rxConnection is <NULL/>
         */
         ObjectNames(
-            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
         );
 

@@ -27,11 +27,6 @@
 
 #include <memory>
 
-namespace comphelper
-{
-    class ComponentContext;
-}
-
 namespace dbaccess
 {
 
@@ -45,7 +40,7 @@ namespace dbaccess
     {
     public:
         DocumentEventExecutor(
-            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventsSupplier >& _rxDocument );
 
     protected:

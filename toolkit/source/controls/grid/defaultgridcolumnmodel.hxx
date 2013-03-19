@@ -41,7 +41,7 @@ class DefaultGridColumnModel    :public ::cppu::BaseMutex
                                 ,public DefaultGridColumnModel_Base
 {
 public:
-    DefaultGridColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    DefaultGridColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
     DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource );
     virtual ~DefaultGridColumnModel();
 

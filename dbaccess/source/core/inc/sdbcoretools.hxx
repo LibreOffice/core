@@ -26,11 +26,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-
-namespace comphelper
-{
-    class ComponentContext;
-}
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace dbaccess
 {
@@ -42,7 +38,7 @@ namespace dbaccess
 
     /** retrieves a to-be-displayed string for a given caught exception;
     */
-    ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const ::com::sun::star::uno::Any& _rError );
+    ::rtl::OUString extractExceptionMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext, const ::com::sun::star::uno::Any& _rError );
 
     namespace tools
     {

@@ -24,8 +24,7 @@
 
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-
-#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 //........................................................................
 namespace dbaccess
@@ -38,7 +37,9 @@ namespace dbaccess
     class DBACCESS_DLLPRIVATE SubComponentRecovery
     {
     public:
-        SubComponentRecovery( const ::comphelper::ComponentContext& i_rContext, const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rController,
+        SubComponentRecovery(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rController,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rComponent )
             :m_rContext( i_rContext )
             ,m_xDocumentUI( i_rController, ::com::sun::star::uno::UNO_SET_THROW )
@@ -49,7 +50,9 @@ namespace dbaccess
             impl_identifyComponent_throw();
         }
 
-        SubComponentRecovery( const ::comphelper::ComponentContext& i_rContext, const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rController,
+        SubComponentRecovery(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rController,
                 const SubComponentType i_eType )
             :m_rContext( i_rContext )
             ,m_xDocumentUI( i_rController, ::com::sun::star::uno::UNO_SET_THROW )
@@ -101,7 +104,8 @@ namespace dbaccess
         void    impl_identifyComponent_throw();
 
     private:
-        const ::comphelper::ComponentContext&   m_rContext;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                                                m_rContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
                                                 m_xDocumentUI;
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >

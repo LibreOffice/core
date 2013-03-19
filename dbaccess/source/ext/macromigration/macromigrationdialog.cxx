@@ -112,7 +112,7 @@ namespace dbmm
     //====================================================================
     struct MacroMigrationDialog_Data
     {
-        ::comphelper::ComponentContext          aContext;
+        Reference<XComponentContext>          aContext;
         MigrationLog                            aLogger;
         Reference< XOfficeDatabaseDocument >    xDocument;
         Reference< XModel2 >                    xDocumentModel;
@@ -122,7 +122,7 @@ namespace dbmm
         bool                                    bMigrationSuccess;
 
         MacroMigrationDialog_Data(
-                const ::comphelper::ComponentContext& _rContext,
+                const Reference<XComponentContext>& _rContext,
                 const Reference< XOfficeDatabaseDocument >& _rxDocument )
             :aContext( _rContext )
             ,aLogger()
@@ -139,7 +139,7 @@ namespace dbmm
     //= MacroMigrationDialog
     //====================================================================
     //--------------------------------------------------------------------
-    MacroMigrationDialog::MacroMigrationDialog( Window* _pParent, const ::comphelper::ComponentContext& _rContext,
+    MacroMigrationDialog::MacroMigrationDialog( Window* _pParent, const Reference<XComponentContext>& _rContext,
         const Reference< XOfficeDatabaseDocument >& _rxDocument )
         :MacroMigrationDialog_Base( _pParent, MacroMigrationResId( DLG_MACRO_MIGRATION ) )
         ,m_pData( new MacroMigrationDialog_Data( _rContext, _rxDocument ) )
@@ -174,7 +174,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    const ::comphelper::ComponentContext& MacroMigrationDialog::getComponentContext() const
+    const Reference<XComponentContext>& MacroMigrationDialog::getComponentContext() const
     {
         return m_pData->aContext;
     }
@@ -438,7 +438,7 @@ namespace dbmm
         try
         {
             // check that the backup location isn't the same as the document itself
-            if ( lcl_equalURLs_nothrow( m_pData->aContext.getUNOContext(), sBackupLocation, m_pData->xDocumentModel->getURL() ) )
+            if ( lcl_equalURLs_nothrow( m_pData->aContext, sBackupLocation, m_pData->xDocumentModel->getURL() ) )
             {
                 ErrorBox aErrorBox( const_cast< MacroMigrationDialog* >( this ), MacroMigrationResId( ERR_INVALID_BACKUP_LOCATION ) );
                 aErrorBox.Execute();

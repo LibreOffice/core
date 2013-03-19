@@ -44,7 +44,7 @@ public:
     /** constructs the container.<BR>
     */
     OCommandContainer(
-         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         ,sal_Bool _bTables

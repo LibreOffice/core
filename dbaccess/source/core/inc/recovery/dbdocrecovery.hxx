@@ -24,14 +24,10 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
 #include <memory>
-
-namespace comphelper
-{
-    class ComponentContext;
-}
 
 namespace dbaccess
 {
@@ -44,7 +40,7 @@ namespace dbaccess
     {
     public:
         DatabaseDocumentRecovery(
-            const ::comphelper::ComponentContext& i_rContext
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext
         );
         ~DatabaseDocumentRecovery();
 

@@ -238,7 +238,7 @@ Sequence< OUString > ODatabaseContext::getSupportedServiceNames(  ) throw (Runti
 
 Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
 {
-    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( m_aContext.getLegacyServiceFactory(), *this ) );
+    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( m_aContext, *this ) );
     Reference< XDataSource > xDataSource( pImpl->getOrCreateDataSource() );
 
     return xDataSource.get();
@@ -352,7 +352,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
 
     ::rtl::Reference< ODatabaseModelImpl > pModelImpl;
     {
-        pModelImpl.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), *this ) );
+        pModelImpl.set( new ODatabaseModelImpl( _rName, m_aContext, *this ) );
 
         Reference< XModel > xModel( pModelImpl->createNewModel_deliverOwnership( false ), UNO_SET_THROW );
         Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
@@ -360,7 +360,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
+        aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext, 0) );
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );

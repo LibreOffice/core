@@ -24,10 +24,8 @@
 #include "java/lang/Object.hxx"
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/logging.hxx>
-#include <comphelper/componentcontext.hxx>
 
 namespace connectivity
 {
@@ -35,14 +33,14 @@ namespace connectivity
 
     class java_sql_Driver : public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDriver,::com::sun::star::lang::XServiceInfo>
     {
-        ::comphelper::ComponentContext          m_aContext;
+        css::uno::Reference<css::uno::XComponentContext> m_aContext;
         ::comphelper::ResourceBasedEventLogger  m_aLogger;
 
     protected:
         virtual ~java_sql_Driver();
 
     public:
-        java_sql_Driver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+        java_sql_Driver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         static rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -59,7 +57,7 @@ namespace connectivity
         virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(::com::sun::star::uno::RuntimeException) ;
         virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(::com::sun::star::uno::RuntimeException);
 
-        const ::comphelper::ComponentContext&           getContext() const { return m_aContext; }
+        const css::uno::Reference<css::uno::XComponentContext>& getContext() const { return m_aContext; }
         const ::comphelper::ResourceBasedEventLogger&   getLogger() const { return m_aLogger; }
     };
 

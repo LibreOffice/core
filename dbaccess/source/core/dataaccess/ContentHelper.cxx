@@ -61,15 +61,15 @@ OContentHelper_Impl::~OContentHelper_Impl()
     DBG_DTOR(OContentHelper_Impl,NULL);
 }
 
-OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
+OContentHelper::OContentHelper(const Reference< XComponentContext >& _xORB
                                ,const Reference< XInterface >&  _xParentContainer
                                ,const TContentPtr& _pImpl)
     : OContentHelper_COMPBASE(m_aMutex)
     ,m_aContentListeners(m_aMutex)
     ,m_aPropertyChangeListeners(m_aMutex)
-    ,m_xParentContainer(_xParentContainer)
+    ,m_xParentContainer( _xParentContainer )
     ,m_aContext( _xORB )
-    ,m_aErrorHelper( m_aContext.getUNOContext() )
+    ,m_aErrorHelper( m_aContext )
     ,m_pImpl(_pImpl)
     ,m_nCommandId(0)
 {
@@ -423,7 +423,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_aContext.getUNOContext() );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_aContext );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )

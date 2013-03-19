@@ -21,6 +21,7 @@
 #include "dbu_reghelper.hxx"
 #include "admindlg.hxx"
 #include "dbadmin.hxx"
+#include <comphelper/processfactory.hxx>
 
 
 using namespace dbaui;
@@ -41,7 +42,7 @@ namespace dbaui
 
 //=========================================================================
 //-------------------------------------------------------------------------
-ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference< XMultiServiceFactory >& _rxORB)
+ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
 {
 }
@@ -55,7 +56,7 @@ Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId(  ) t
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODataSourcePropertyDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return *(new ODataSourcePropertyDialog(_rxFactory));
+    return *(new ODataSourcePropertyDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //-------------------------------------------------------------------------
@@ -108,7 +109,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODataSourcePropertyDialog::getPropertySetI
 Dialog* ODataSourcePropertyDialog::createDialog(Window* _pParent)
 {
 
-    ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_aContext.getUNOContext());
+    ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_aContext);
 
     // the initial selection
     if ( m_aInitialSelection.hasValue() )

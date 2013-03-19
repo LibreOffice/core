@@ -23,7 +23,7 @@
 //= OUnoAutoPilot
 //=====================================================================
 template <class TYPE, class SERVICEINFO>
-OUnoAutoPilot<TYPE, SERVICEINFO>::OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+OUnoAutoPilot<TYPE, SERVICEINFO>::OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
     :OUnoAutoPilot_Base(_rxORB)
 {
 }
@@ -40,7 +40,7 @@ template <class TYPE, class SERVICEINFO>
 template <class TYPE, class SERVICEINFO>
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OUnoAutoPilot<TYPE, SERVICEINFO>(_rxFactory));
+    return *(new OUnoAutoPilot<TYPE, SERVICEINFO>( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //---------------------------------------------------------------------
@@ -99,7 +99,7 @@ template <class TYPE, class SERVICEINFO>
 template <class TYPE, class SERVICEINFO>
 Dialog* OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(Window* _pParent)
 {
-    return new TYPE(_pParent, m_xObjectModel, m_aContext.getUNOContext());
+    return new TYPE(_pParent, m_xObjectModel, m_aContext);
 }
 
 //--------------------------------------------------------------------------

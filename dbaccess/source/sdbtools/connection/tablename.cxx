@@ -51,6 +51,7 @@ namespace sdbtools
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::uno::XComponentContext;
     /** === end UNO using === **/
 
     namespace CompositionType = ::com::sun::star::sdb::tools::CompositionType;
@@ -73,7 +74,7 @@ namespace sdbtools
     //= TableName
     //====================================================================
     //--------------------------------------------------------------------
-    TableName::TableName( const ::comphelper::ComponentContext& _rContext, const Reference< XConnection >& _rxConnection )
+    TableName::TableName( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new TableName_Impl )
     {

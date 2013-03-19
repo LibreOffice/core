@@ -21,6 +21,7 @@
 #include "dbu_reghelper.hxx"
 #include "UserSettingsDlg.hxx"
 #include "UserAdminDlg.hxx"
+#include <comphelper/processfactory.hxx>
 
 
 using namespace dbaui;
@@ -41,7 +42,7 @@ namespace dbaui
 
 //=========================================================================
 //-------------------------------------------------------------------------
-OUserSettingsDialog::OUserSettingsDialog(const Reference< XMultiServiceFactory >& _rxORB)
+OUserSettingsDialog::OUserSettingsDialog(const Reference< XComponentContext >& _rxORB)
     :ODatabaseAdministrationDialog(_rxORB)
 {
 }
@@ -55,7 +56,7 @@ Sequence<sal_Int8> SAL_CALL OUserSettingsDialog::getImplementationId(  ) throw(R
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OUserSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OUserSettingsDialog(_rxFactory));
+    return *(new OUserSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //-------------------------------------------------------------------------
@@ -107,7 +108,7 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() 
 //------------------------------------------------------------------------------
 Dialog* OUserSettingsDialog::createDialog(Window* _pParent)
 {
-    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_aContext.getUNOContext(),m_aInitialSelection,m_xActiveConnection);
+    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_aContext, m_aInitialSelection, m_xActiveConnection);
     return pDlg;
 }
 

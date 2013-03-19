@@ -37,7 +37,6 @@
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <cppuhelper/compbase11.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "RowSetRow.hxx"
@@ -64,7 +63,7 @@ namespace dbaccess
         //the set can be static, bookmarkable or keyset
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
-        ::comphelper::ComponentContext                                                  m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_aContext;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xCacheSet;
 
@@ -137,7 +136,7 @@ namespace dbaccess
     public:
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                     const ::comphelper::ComponentContext& _rContext,
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew,

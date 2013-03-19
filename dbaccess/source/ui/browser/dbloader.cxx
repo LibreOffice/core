@@ -41,7 +41,6 @@
 
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
