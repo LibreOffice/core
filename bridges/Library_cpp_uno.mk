@@ -20,10 +20,13 @@ endif
 $(eval $(call gb_Library_Library,$(bridge_lib_name)))
 
 ifeq ($(OS)$(CPU),AIXP)
+
 bridges_SELECTED_BRIDGE := gcc3_aix_powerpc
 bridge_exception_objects := except
 bridge_cxx_objects := cpp2uno uno2cpp
+
 else ifeq ($(CPU),R)
+
 ifeq ($(OS),IOS)
 bridges_SELECTED_BRIDGE := gcc3_ios_arm
 bridge_asm_objects := helper
@@ -39,20 +42,28 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,gcc3_uno)) 
 	$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,gcc3_uno)) : \
 	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
-endif # CPU=R
+endif
+
 else ifeq ($(OS)$(CPU),LINUXL)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_alpha
 bridge_exception_objects := cpp2uno except uno2cpp
+
 else ifeq ($(OS)$(CPU),LINUXH)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_hppa
 bridge_asm_objects := call
 bridge_noopt_objects := cpp2uno except uno2cpp
+
 else ifeq ($(OS)$(CPU),LINUXA)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_ia64
 bridge_asm_objects := call
 bridge_exception_objects := except
 bridge_noopt_objects := cpp2uno uno2cpp
+
 else ifeq ($(CPU),I)
+
 ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_intel
 bridge_asm_objects := call
@@ -65,36 +76,52 @@ else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_intel
 bridge_exception_objects := cpp2uno dllinit uno2cpp
 bridge_noopt_objects := except
-endif # CPU=I
+endif
+
 else ifeq ($(OS)$(CPU),LINUX6)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_m68k
 bridge_noopt_objects := cpp2uno except uno2cpp
+
 else ifeq ($(CPU),M)
+
 ifneq ($(filter ANDROID LINUX,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_mips
 bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
-endif # CPU=M
+endif
+
 else ifeq ($(OS)$(CPUNAME),LINUXPOWERPC)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_powerpc
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := cpp2uno except
+
 else ifeq ($(OS)$(CPUNAME),LINUXPOWERPC64)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_powerpc64
 bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
+
 else ifeq ($(OS)$(CPUNAME),LINUXS390)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_s390
 bridge_exception_objects := cpp2uno except uno2cpp
+
 else ifeq ($(OS)$(CPUNAME),LINUXS390X)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_s390x
 bridge_exception_objects := cpp2uno except uno2cpp
+
 else ifeq ($(OS)$(CPU),LINUXS)
+
 bridges_SELECTED_BRIDGE := gcc3_linux_sparc
 bridge_asm_objects := call
 bridge_noopt_objects := except
 bridge_exception_objects := cpp2uno uno2cpp
+
 else ifeq ($(CPU),X)
+
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_x86-64
 bridge_asm_objects := call
@@ -107,22 +134,31 @@ bridges_SELECTED_BRIDGE := msvc_win32_x86-64
 bridge_exception_objects := cpp2uno dllinit uno2cpp
 bridge_noopt_objects := except
 bridge_asm_objects := call
-endif # CPU=X
+endif
+
 else ifeq ($(OS)$(CPU),MACOSXP)
+
 bridges_SELECTED_BRIDGE := gcc3_macosx_powerpc
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := cpp2uno except
+
 else ifeq ($(OS)$(CPU),SOLARISI)
+
 bridges_SELECTED_BRIDGE := gcc3_solaris_intel
 bridge_exception_objects := cpp2uno except uno2cpp
+
 else ifeq ($(OS)$(CPU),SOLARISS)
+
 bridges_SELECTED_BRIDGE := gcc3_solaris_sparc
 bridge_noopt_objects := cpp2uno uno2cpp
 bridge_exception_objects := except
+
 else ifeq ($(OS)$(COM),WNTGCC)
+
 bridges_SELECTED_BRIDGE := mingw_intel
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := callvirtualmethod cpp2uno dllinit except smallstruct
+
 endif
 
 $(eval $(call gb_Library_use_external,$(bridge_lib_name),boost_headers))
