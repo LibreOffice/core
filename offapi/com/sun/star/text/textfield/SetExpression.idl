@@ -35,48 +35,61 @@ published service SetExpression
 
     /** contains the textual content of the field.
      */
-    [property]string Content;
+    [property] string Content;
+
     /** contains the current content of the text field.
-        <p> This property is especially useful for import/export purposes. </p>
+        <p>This property is especially useful for import/export purposes.</p>
      */
-    [property]string CurrentPresentation;
+    [property] string CurrentPresentation;
 
     /** this is the number format for this field.
         @see com::sun::star::util::NumberFormatter
     */
-    [property]long NumberFormat;
+    [property] long NumberFormat;
+
     /** specifies the type of the numbering as
         <type scope="com::sun::star::style">NumberingType</type>
      */
-    [property]short NumberingType;
+    [property] short NumberingType;
+
     /** determines whether the content is displayed or evaluated.
      */
-    [property]boolean IsShowFormula;
+    [property] boolean IsShowFormula;
+
     /** contains an informational text that is displayed at the user
      interface if it's an input field.
       */
-    [property]string Hint;
+    [property] string Hint;
+
     /** determines whether this field is an input field.
      */
-    [property]boolean IsInput;
+    [property] boolean IsInput;
+
     /** determines whether the field is visible.
      */
-    [property]boolean IsVisible;
+    [property] boolean IsVisible;
+
     /** contains the sequence value when this field is used as sequence field.
      */
-    [property]short SequenceValue;
+    [property] short SequenceValue;
+
     /** determines the type of the variable as described in
         <type scope="com::sun::star::text">SetVariableType</type>
      */
-    [property]short SubType;
+    [property] short SubType;
+
     /** contains the numerical value of the field.
      */
     [property]double Value;
-    /** contains the name of the set expression field master this field is connected to.
+
+    /** contains the name of the set expression field master this field is
+        connected to.
      */
     [property, readonly] string VariableName;
-    /** determines whether changes in language attributes at the position the text field
-        is located also change the number format as appropriate for this language.
+
+    /** determines whether changes in language attributes at the position
+        the text field is located also change the number format as appropriate
+        for this language.
 
     @since OOo 1.1.2
      */
