@@ -397,12 +397,6 @@ sub main()
                 # needs a duplicated pair of backslashes to produce a literal \\
                 ('^\s*completelangiso\s*=', '^\s*$', '^\s*' . $langcoun . '\s*\\\\*$'));
 
-            # @noMSLocaleLangs = ( "br", "bs", ... )
-            grepFile(
-                '^\s*@noMSLocaleLangs\s*=\s*\(\s*(\s*"([a-z]{2,3})(-[A-Z][A-Z])?"\s*,?)*' . $langcoun . '',
-                "$SRC_ROOT", "solenv", "bin/modules/installer/languages.pm",
-                ('^\s*@noMSLocaleLangs\s*=', '\)\s*$', '"' . $langcoun . '"'));
-
             # af    1252  1078   # Afrikaans
             grepFile(
                 '^\s*' . $langcoun . '',
