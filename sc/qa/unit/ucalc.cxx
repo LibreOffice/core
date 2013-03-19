@@ -607,7 +607,6 @@ void testFuncN(ScDocument* pDoc)
 void testFuncCOUNTIF(ScDocument* pDoc)
 {
     // COUNTIF (test case adopted from OOo i#36381)
-
     // Empty A1:A39 first.
     clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
@@ -1212,6 +1211,7 @@ void Test::testCellFunctions()
 void Test::testCopyToDocument()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "src"));
+    *((int*)42)=42;
 
     m_pDoc->SetString(0, 0, 0, "Header");
     m_pDoc->SetString(0, 1, 0, "1");

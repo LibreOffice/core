@@ -299,10 +299,10 @@ SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
     { ::xmloff::token::XML_STEP_CENTER_Y,      6 },
     // the GNM values should only be used for reading Gnumeric ods files
     // they should never be used for writing ods file
-    { ::xmloff::token::XML_GNM_STEP_START,     7 },
-    { ::xmloff::token::XML_GNM_STEP_END,       8 },
-    { ::xmloff::token::XML_GNM_STEP_CENTER_X,  9 },
-    { ::xmloff::token::XML_GNM_STEP_CENTER_Y, 10 },
+    { ::xmloff::token::XML_GNM_STEP_START,     3 },
+    { ::xmloff::token::XML_GNM_STEP_END,       4 },
+    { ::xmloff::token::XML_GNM_STEP_CENTER_X,  5 },
+    { ::xmloff::token::XML_GNM_STEP_CENTER_Y,  6 },
     { ::xmloff::token::XML_TOKEN_INVALID,      0 }
 };
 

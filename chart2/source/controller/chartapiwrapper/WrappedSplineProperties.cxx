@@ -284,19 +284,6 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
         case 6:
             aInnerValue = chart2::CurveStyle_STEP_CENTER_Y;
             break;
-        // map the pre-ODF1.3 Gnumeric values to ODF1.3
-        case 7:
-            aInnerValue = chart2::CurveStyle_STEP_START;
-            break;
-        case 8:
-            aInnerValue = chart2::CurveStyle_STEP_END;
-            break;
-        case 9:
-            aInnerValue = chart2::CurveStyle_STEP_CENTER_X;
-            break;
-        case 10:
-            aInnerValue = chart2::CurveStyle_STEP_CENTER_Y;
-            break;
         default:
             SAL_WARN_IF(chart2::CurveStyle_LINES != 0, "chart2", "Unknown line style");
             aInnerValue = chart2::CurveStyle_LINES;
