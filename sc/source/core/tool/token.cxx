@@ -1386,45 +1386,48 @@ void ScTokenArray::GenHash()
                 {
                     // Constant value.
                     sal_uInt8 nVal = p->GetByte();
-                    nHash += (static_cast<size_t>(nVal) << i);
-                    continue;
+                    nHash += static_cast<size_t>(nVal);
                 }
+                break;
                 case svDouble:
                 {
                     // Constant value.
                     double fVal = p->GetDouble();
-                    nHash += (static_cast<size_t>(fVal) << i);
-                    continue;
+                    nHash += static_cast<size_t>(fVal);
                 }
+                break;
                 case svString:
                 {
                     // Constant string.
                     const String& rStr = p->GetString();
-                    nHash += (aHasher(rStr) << i);
-                    continue;
+                    nHash += aHasher(rStr);
                 }
+                break;
                 case svSingleRef:
                 {
                     size_t nVal = HashSingleRef(p->GetSingleRef());
-                    nHash += (nVal << i);
-                    continue;
+                    nHash += nVal;
                 }
+                break;
                 case svDoubleRef:
                 {
                     const ScComplexRefData& rRef = p->GetDoubleRef();
                     size_t nVal1 = HashSingleRef(rRef.Ref1);
                     size_t nVal2 = HashSingleRef(rRef.Ref2);
-                    nHash += (nVal1 << i);
-                    nHash += (nVal2 << i);
-                    continue;
+                    nHash += nVal1;
+                    nHash += nVal2;
                 }
+                break;
                 default:
-                    ;
+                    // Use the opcode value in all the other cases.
+                    nHash += static_cast<size_t>(eOp);
             }
         }
+        else
+            // Use the opcode value in all the other cases.
+            nHash += static_cast<size_t>(eOp);
 
-        // Use the opcode value in all the other cases.
-        nHash += (static_cast<size_t>(eOp) << i);
+        nHash = (nHash << 4) - nHash;
     }
 
     mnHashValue = nHash;
