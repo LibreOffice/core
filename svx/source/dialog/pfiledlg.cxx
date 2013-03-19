@@ -94,7 +94,7 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
              ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.SearchAscii ( sVideo ) == 0 ) )
         {
             // extension already in the filterlist of the filedlg ?
-            sal_Bool bAlreadyExist = sal_False;
+            bool bAlreadyExist = false;
             for ( j = aPlugExtensions.begin(), end = aPlugExtensions.end(); j != end && !bAlreadyExist; ++j )
             {
                 bAlreadyExist = (j->Search( aStrPlugExtension ) != STRING_NOTFOUND );

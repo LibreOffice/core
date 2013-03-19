@@ -276,8 +276,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
         Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
         if (xDic.is())
         {
-            sal_Bool bNegative = xDic->getDictionaryType() == DictionaryType_NEGATIVE ?
-                                sal_True : sal_False;
+            bool bNegative = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
             String aDicName( xDic->getName() );
             const String aTxt( ::GetDicInfoStr( aDicName,
                         LanguageTag( xDic->getLocale() ).getLanguageType(), bNegative ) );
@@ -455,7 +454,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
         if ( aBox.Execute() == RET_YES )
         {
             xDic->setLocale( LanguageTag( nLang ).getLocale() );
-            sal_Bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
+            bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
 
             const String sName(
                 ::GetDicInfoStr( xDic->getName(),

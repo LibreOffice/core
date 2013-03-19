@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 // -----------------------------------------------------------------------
 
-String GetDicInfoStr( const String& rName, const sal_uInt16 nLang, sal_Bool bNeg )
+String GetDicInfoStr( const String& rName, const sal_uInt16 nLang, bool bNeg )
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
@@ -88,7 +88,7 @@ static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
 }
 
 
-static sal_Bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nLang )
+static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nLang )
 {
     sal_Int32 i = -1;
     sal_Int32 nLen = rLangSeq.getLength();
@@ -166,12 +166,12 @@ void SvxLanguageBox::Init()
         {
             LanguageType nLangType = aLangTable.GetTypeAtIndex( i );
 
-            sal_Bool bInsert = sal_True;
+            bool bInsert = true;
             if ((LANGUAGE_DONTKNOW == nLangType)  ||
                 (LANGUAGE_SYSTEM   == nLangType)  ||
                 (LANGUAGE_USER1 <= nLangType  &&  nLangType <= LANGUAGE_USER9))
             {
-                bInsert = sal_False;
+                bInsert = false;
             }
 
             if ( bInsert )
@@ -367,7 +367,7 @@ sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal
     sal_uInt16 nAt = 0;
     if ( m_bWithCheckmark )
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
 
         if (!m_pSpellUsedLang)
         {
@@ -376,7 +376,7 @@ sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal
                 m_pSpellUsedLang = new Sequence< sal_Int16 >( xSpell->getLanguages() );
         }
         bFound = m_pSpellUsedLang ?
-            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang ) : sal_False;
+            lcl_SeqHasLang( *m_pSpellUsedLang, nRealLang ) : false;
 
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }

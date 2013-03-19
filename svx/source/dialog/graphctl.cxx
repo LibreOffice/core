@@ -278,7 +278,7 @@ void GraphCtrl::MarkListHasChanged()
 void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aCode( rKEvt.GetKeyCode() );
-    sal_Bool    bProc = sal_False;
+    bool    bProc = false;
 
     switch ( aCode.GetCode() )
     {
@@ -288,7 +288,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
             if ( bSdrMode )
             {
                 pView->DeleteMarked();
-                bProc = sal_True;
+                bProc = true;
                 if( !pView->AreObjectsMarked() )
                     GetParentDialog()->GrabFocusToFirstControl();
             }
@@ -321,7 +321,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 {
                     GetParentDialog()->GrabFocusToFirstControl();
                 }
-                bProc = sal_True;
+                bProc = true;
             }
         }
         break;
@@ -342,7 +342,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         pView->UnmarkAllObj();
                         pView->MarkNextObj (bForward);
                     }
-                    bProc = sal_True;
+                    bProc = true;
                 }
                 else if(aCode.IsMod1())
                 {
@@ -572,7 +572,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                         }
                     }
 
-                    bProc = sal_True;
+                    bProc = true;
                 }
             }
         }

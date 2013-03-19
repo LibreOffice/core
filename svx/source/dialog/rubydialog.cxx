@@ -88,7 +88,7 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
     Reference<XRubySelection>       xSelection;
     Sequence<PropertyValues>        aRubyValues;
     Reference<XController>          xController;
-    sal_Bool                        bHasSelectionChanged;
+    bool                            bHasSelectionChanged;
     public:
         SvxRubyData_Impl();
         ~SvxRubyData_Impl();
@@ -102,7 +102,7 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
                                             xModel = xController->getModel();
                                         return xModel;
                                     }
-    sal_Bool                        HasSelectionChanged() const{return bHasSelectionChanged;}
+    bool                            HasSelectionChanged() const{return bHasSelectionChanged;}
     Reference<XRubySelection>       GetRubySelection()
                                     {
                                         xSelection = Reference<XRubySelection>(xController, UNO_QUERY);
@@ -114,7 +114,7 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
                                             aRubyValues.realloc(0);
                                         else
                                             aRubyValues = xSelection->getRubyList(false);
-                                        bHasSelectionChanged = sal_False;
+                                        bHasSelectionChanged = false;
                                     }
     Sequence<PropertyValues>&       GetRubyValues() {return aRubyValues;}
     void                            AssertOneEntry();
@@ -125,7 +125,7 @@ class SvxRubyData_Impl : public cppu::WeakImplHelper1
 };
 //-----------------------------------------------------------------------------
 SvxRubyData_Impl::SvxRubyData_Impl() :
-    bHasSelectionChanged(sal_False)
+    bHasSelectionChanged(false)
 {
 }
 //-----------------------------------------------------------------------------
@@ -143,7 +143,7 @@ void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
             if(xSelSupp.is())
                 xSelSupp->removeSelectionChangeListener(this);
 
-            bHasSelectionChanged = sal_True;
+            bHasSelectionChanged = true;
             xController = xCtrl;
             xSelSupp = Reference<XSelectionSupplier>(xController, UNO_QUERY);
             if(xSelSupp.is())
@@ -157,7 +157,7 @@ void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
 //-----------------------------------------------------------------------------
 void SvxRubyData_Impl::selectionChanged( const EventObject& ) throw (RuntimeException)
 {
-    bHasSelectionChanged = sal_True;
+    bHasSelectionChanged = true;
 }
 //-----------------------------------------------------------------------------
 void SvxRubyData_Impl::disposing( const EventObject&) throw (RuntimeException)
@@ -439,7 +439,7 @@ void SvxRubyDialog::Update()
     sal_Int16 nAdjust = -1;
     sal_Int16 nPosition = -1;
     OUString sCharStyleName, sTmp;
-    sal_Bool bCharStyleEqual = sal_True;
+    bool bCharStyleEqual = true;
     for(sal_Int32 nRuby = 0; nRuby < nLen; nRuby++)
     {
         const Sequence<PropertyValue> &rProps = aRubyValues.getConstArray()[nRuby];
@@ -469,7 +469,7 @@ void SvxRubyDialog::Update()
                 if(!nRuby)
                     sCharStyleName = sTmp;
                 else if(sCharStyleName != sTmp)
-                    bCharStyleEqual = sal_False;
+                    bCharStyleEqual = false;
             }
         }
     }
@@ -797,7 +797,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
         nAdjust = 1;
 
     //which part is stretched ?
-    sal_Bool bRubyStretch = nBaseWidth >= nRubyWidth;
+    bool bRubyStretch = nBaseWidth >= nRubyWidth;
 
     long nCenter = aWinSize.Width() / 2;
     long nLeftStart = nCenter - (bRubyStretch ? (nBaseWidth / 2) : (nRubyWidth / 2));
@@ -807,7 +807,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
     //use above also if no selection is set
-    sal_Bool bAbove = m_pParentDlg->m_pPositionLB->GetSelectEntryPos() != 1;
+    bool bAbove = m_pParentDlg->m_pPositionLB->GetSelectEntryPos() != 1;
     if(!bAbove)
     {
         long nTmp = nYRuby;

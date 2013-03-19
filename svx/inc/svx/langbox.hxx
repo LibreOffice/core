@@ -47,7 +47,7 @@ class SvtLanguageTable;
 
 
 // load language strings from resource
-SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const sal_uInt16 nLang, sal_Bool bNeg );
+SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const sal_uInt16 nLang, bool bNeg );
 
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {

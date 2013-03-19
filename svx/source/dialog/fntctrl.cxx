@@ -196,9 +196,9 @@ public:
     Size                CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, const SvxFont &rFont );
     void                DrawPrev( OutputDevice* pWin, Printer* pPrt, Point &rPt, const SvxFont &rFont );
 
-    sal_Bool            SetFontWidthScale( sal_uInt16 nScaleInPercent );
+    bool                SetFontWidthScale( sal_uInt16 nScaleInPercent );
     inline void         Invalidate100PercentFontWidth();
-    inline sal_Bool     Is100PercentFontWidthValid() const;
+    inline bool         Is100PercentFontWidthValid() const;
     void                ScaleFontWidth( const OutputDevice& rOutDev );
                             // scales rNonCJKFont and aCJKFont depending on nFontWidthScale and
                             //  sets the 100%-Font-Widths
@@ -209,7 +209,7 @@ inline void FontPrevWin_Impl::Invalidate100PercentFontWidth()
     n100PercentFontWidth = n100PercentFontWidthCJK = n100PercentFontWidthCTL = -1;
 }
 
-inline sal_Bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
+inline bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
 {
     DBG_ASSERT( ( n100PercentFontWidth == -1 && n100PercentFontWidthCJK == -1 ) ||
                 ( n100PercentFontWidth != -1 && n100PercentFontWidthCJK != -1 ) ||
@@ -422,15 +422,15 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontPrevWin_Impl::SetFontWidthScale( sal_uInt16 nScale )
+bool FontPrevWin_Impl::SetFontWidthScale( sal_uInt16 nScale )
 {
     if( nFontWidthScale != nScale )
     {
         nFontWidthScale = nScale;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 

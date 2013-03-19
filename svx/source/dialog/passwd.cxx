@@ -29,7 +29,7 @@
 
 IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
 {
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     short nRet = RET_OK;
     String aEmpty;
 
@@ -39,7 +39,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
         aNewPasswdED.SetText( aEmpty );
         aRepeatPasswdED.SetText( aEmpty );
         aNewPasswdED.GrabFocus();
-        bOK = sal_False;
+        bOK = false;
     }
 
     if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
@@ -47,7 +47,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
         ErrorBox( this, WB_OK, aOldPasswdErrStr ).Execute();
         aOldPasswdED.SetText( aEmpty );
         aOldPasswdED.GrabFocus();
-        bOK = sal_False;
+        bOK = false;
     }
 
     if ( bOK )

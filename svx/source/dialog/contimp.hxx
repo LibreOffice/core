@@ -79,13 +79,13 @@ public:
     sal_Bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
 
     void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
-    PolyPolygon         GetPolyPolygon( sal_Bool bRescaleToGraphic = sal_True );
+    PolyPolygon         GetPolyPolygon( bool bRescaleToGraphic = true );
 
     void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
     const void*         GetEditingObject() const { return pCheckObj; }
 
-    sal_Bool                IsUndoPossible() const;
-    sal_Bool                IsRedoPossible() const;
+    bool                IsUndoPossible() const;
+    bool                IsRedoPossible() const;
 
     void                UpdateGraphic( const Graphic& rGraphic, sal_Bool bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL,

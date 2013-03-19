@@ -415,7 +415,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         case( TBI_ACTIVE ):
         {
             URLLoseFocusHdl( NULL );
-            sal_Bool bNewState = !pTbx->IsItemChecked( TBI_ACTIVE );
+            bool bNewState = !pTbx->IsItemChecked( TBI_ACTIVE );
             pTbx->CheckItem( TBI_ACTIVE, bNewState );
             pIMapWnd->SetCurrentObjState( !bNewState );
         }

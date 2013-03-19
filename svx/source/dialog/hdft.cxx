@@ -481,7 +481,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     }
     else
     {
-        sal_Bool bDelete = sal_True;
+        bool bDelete = true;
 
         if ( !bDisableQueryBox && pBox && m_pTurnOnBox->GetSavedValue() == sal_True )
             bDelete = ( QueryBox( this, SVX_RES( RID_SVXQBX_DELETE_HEADFOOT ) ).Execute() == RET_YES );

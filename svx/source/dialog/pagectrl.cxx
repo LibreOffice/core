@@ -32,15 +32,15 @@ struct PageWindow_Impl
     SvxBoxItem*     pBorder;
     Bitmap          aBitmap;
     bool            bBitmap;
-    sal_Bool        bResetBackground;
+    bool            bResetBackground;
     sal_Bool        bFrameDirection;
     sal_Int32       nFrameDirection;
 
 
     PageWindow_Impl() :
         pBorder(0),
-        bBitmap(sal_False),
-        bResetBackground(sal_False),
+        bBitmap(false),
+        bResetBackground(false),
         bFrameDirection(sal_False),
         nFrameDirection(0) {}
 
@@ -224,7 +224,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
         DrawRect( Rectangle( Point(0,0), winSize ) );
 
         if ( pImpl->bResetBackground )
-            pImpl->bResetBackground = sal_False;
+            pImpl->bResetBackground = false;
     }
     SetLineColor( rFieldTextColor );
     // Shadow
@@ -343,7 +343,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
             rtl::OUString sDraw(sText.GetChar(i));
             long nHDiff = 0;
             long nCharWidth = GetTextWidth(sDraw);
-            sal_Bool bHorizontal = 0 == aMove.Y();
+            bool bHorizontal = 0 == aMove.Y();
             if(!bHorizontal)
             {
                 nHDiff = (nAWidth - nCharWidth)/2;
@@ -407,10 +407,10 @@ void SvxPageWindow::SetBitmap( Bitmap* pBmp )
     if ( pBmp )
     {
         pImpl->aBitmap = *pBmp;
-        pImpl->bBitmap = sal_True;
+        pImpl->bBitmap = true;
     }
     else
-        pImpl->bBitmap = sal_False;
+        pImpl->bBitmap = false;
 }
 
 // -----------------------------------------------------------------------
@@ -440,7 +440,7 @@ void  SvxPageWindow::SetFrameDirection(sal_Int32 nFrameDirection)
 
 void SvxPageWindow::ResetBackground()
 {
-    pImpl->bResetBackground = sal_True;
+    pImpl->bResetBackground = true;
 }
 
 Size SvxPageWindow::GetOptimalSize() const

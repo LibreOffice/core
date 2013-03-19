@@ -191,7 +191,7 @@ sal_Bool SvxContourDlg::IsGraphicChanged() const
 
 PolyPolygon SvxContourDlg::GetPolyPolygon()
 {
-    return pSuperClass->GetPolyPolygon( sal_True );
+    return pSuperClass->GetPolyPolygon( true );
 }
 
 const void* SvxContourDlg::GetEditingObject() const
@@ -362,7 +362,7 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     aContourWnd.GetSdrModel()->SetChanged( sal_True );
 }
 
-PolyPolygon SvxSuperContourDlg::GetPolyPolygon( sal_Bool bRescaleToGraphic )
+PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
 {
     PolyPolygon aRetPolyPoly( aContourWnd.GetPolyPolygon() );
 
@@ -407,12 +407,12 @@ void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, sal_Bool _bGrap
     aUpdateTimer.Start();
 }
 
-sal_Bool SvxSuperContourDlg::IsUndoPossible() const
+bool SvxSuperContourDlg::IsUndoPossible() const
 {
     return aUndoGraphic.GetType() != GRAPHIC_NONE;
 }
 
-sal_Bool SvxSuperContourDlg::IsRedoPossible() const
+bool SvxSuperContourDlg::IsRedoPossible() const
 {
     return aRedoGraphic.GetType() != GRAPHIC_NONE;
 }
