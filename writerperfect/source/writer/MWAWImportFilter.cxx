@@ -35,7 +35,6 @@
 #include <iostream>
 
 using namespace ::com::sun::star::uno;
-using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
@@ -912,12 +911,9 @@ throw( com::sun::star::uno::RuntimeException )
     }
 
     if (!xInputStream.is())
-        return ::rtl::OUString();
+        return OUString();
 
     WPXSvInputStream input( xInputStream );
-
-    if (input.atEOS())
-        return ::rtl::OUString();
 
     confidence = MWAWDocument::isFileFormatSupported(&input, docType, docKind);
 

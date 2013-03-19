@@ -17,9 +17,6 @@
 
 // #define DEBUG_XML 1
 
-using namespace ::rtl;
-using rtl::OUString;
-
 using com::sun::star::xml::sax::XAttributeList;
 
 DocumentHandler::DocumentHandler(Reference < XDocumentHandler > &xHandler) :

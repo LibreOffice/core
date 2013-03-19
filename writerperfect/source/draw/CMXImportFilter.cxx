@@ -38,8 +38,6 @@ using com::sun::star::uno::Reference;
 using com::sun::star::io::XInputStream;
 using com::sun::star::io::XSeekable;
 using com::sun::star::uno::Sequence;
-using namespace ::rtl;
-using rtl::OUString;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XInterface;
@@ -133,7 +131,7 @@ throw( com::sun::star::uno::RuntimeException )
     }
 
     if (!xInputStream.is())
-        return ::rtl::OUString();
+        return OUString();
 
     WPXSvInputStream input( xInputStream );
 

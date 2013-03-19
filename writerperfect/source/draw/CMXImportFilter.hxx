@@ -38,7 +38,7 @@ protected:
     // oo.org declares
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
-    ::rtl::OUString msFilterName;
+    OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
 public:
@@ -57,7 +57,7 @@ public:
     throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //XExtendedFilterDetection
-    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Descriptor )
+    virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Descriptor )
     throw( com::sun::star::uno::RuntimeException );
 
     // XInitialization
@@ -65,22 +65,22 @@ public:
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
     throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString &ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString &ServiceName )
     throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
     throw (::com::sun::star::uno::RuntimeException);
 
 };
 
-::rtl::OUString CMXImportFilter_getImplementationName()
+OUString CMXImportFilter_getImplementationName()
 throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL CMXImportFilter_supportsService( const ::rtl::OUString &ServiceName )
+sal_Bool SAL_CALL CMXImportFilter_supportsService( const OUString &ServiceName )
 throw ( ::com::sun::star::uno::RuntimeException );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL CMXImportFilter_getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL CMXImportFilter_getSupportedServiceNames(  )
 throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >

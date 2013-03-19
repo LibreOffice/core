@@ -19,7 +19,7 @@ using namespace ::com::sun::star::io;
 
 namespace
 {
-static void splitPath( std::vector<rtl::OUString> &rElems, const ::rtl::OUString &rPath )
+static void splitPath( std::vector<OUString> &rElems, const OUString &rPath )
 {
     for (sal_Int32 i = 0; i >= 0;)
         rElems.push_back( rPath.getToken( 0, '/', i ) );
@@ -159,8 +159,8 @@ WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
 {
     if (!name)
         return 0;
-    rtl::OUString rPath(name,strlen(name),RTL_TEXTENCODING_UTF8);
-    std::vector<rtl::OUString> aElems;
+    OUString rPath(name,strlen(name),RTL_TEXTENCODING_UTF8);
+    std::vector<OUString> aElems;
     splitPath( aElems, rPath );
 
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())

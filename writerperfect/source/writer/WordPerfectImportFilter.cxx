@@ -194,9 +194,6 @@ throw( RuntimeException )
 
     WPXSvInputStream input( xInputStream );
 
-    if (input.atEOS())
-        return OUString();
-
     confidence = WPDocument::isFileFormatSupported(&input);
 
     if (confidence == WPD_CONFIDENCE_EXCELLENT || confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
