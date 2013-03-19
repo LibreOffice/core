@@ -3080,7 +3080,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
             else if( nMode & CSS1_FRMSIZE_PIXEL )
             {
                 rHTMLWrt.OutCSS1_PixelProperty( sCSS1_P_height,
-                                                rFSItem.GetSize().Width(),
+                                                rFSItem.GetSize().Height(),
                                                 sal_True );
             }
             else
