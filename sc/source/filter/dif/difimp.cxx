@@ -23,7 +23,6 @@
 #include <svl/zforlist.hxx>
 
 #include "attrib.hxx"
-#include "cell.hxx"
 #include "dif.hxx"
 #include "docpool.hxx"
 #include "document.hxx"
@@ -33,6 +32,7 @@
 #include "patattr.hxx"
 #include "scerrors.hxx"
 #include "scitems.hxx"
+#include "stringutil.hxx"
 
 const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
 const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
@@ -53,16 +53,16 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 {
     DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );
 
-    const sal_Bool  bPlain = aDifParser.IsPlain();
+    const bool bPlain = aDifParser.IsPlain();
 
     SCTAB       nBaseTab = rInsPos.Tab();
 
     TOPIC       eTopic = T_UNKNOWN;
-    sal_Bool        bSyntErrWarn = false;
-    sal_Bool        bOverflowWarn = false;
+    bool        bSyntErrWarn = false;
+    bool        bOverflowWarn = false;
 
     rtl::OUString   aData = aDifParser.aData;
-    sal_Bool        bData = false;
+    bool        bData = false;
 
     rIn.Seek( 0 );
 
@@ -133,14 +133,20 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
         DATASET             eAkt = D_UNKNOWN;
 
+        ScSetStringParam aStrParam; // used to set string value without number detection.
+        aStrParam.mbDetectNumberFormat = false;
+        aStrParam.mbHandleApostrophe = false;
+        aStrParam.meSetTextNumFormat = ScSetStringParam::Always;
+
         while( eAkt != D_EOD )
-            {
+        {
             eAkt = aDifParser.GetNextDataset();
 
             aPrgrsBar.Progress();
+            ScAddress aPos(nColCnt, nRowCnt, nBaseTab);
 
             switch( eAkt )
-                {
+            {
                 case D_BOT:
                     if( nColCnt < SCCOL_MAX )
                         nRowCnt++;
@@ -154,17 +160,18 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
                     if( ValidCol(nColCnt) && ValidRow(nRowCnt) )
                     {
-                        ScBaseCell*     pCell;
+                        pDoc->EnsureTable(nBaseTab);
+
                         if( DifParser::IsV( aData.getStr() ) )
                         {
-                            pCell = new ScValueCell( aDifParser.fVal );
+                            pDoc->SetValue(aPos, aDifParser.fVal);
                             if( !bPlain )
                                 aAttrCache.SetNumFormat( nColCnt, nRowCnt,
                                     aDifParser.nNumFormat );
                         }
                         else if( aData == pKeyTRUE || aData == pKeyFALSE )
                         {
-                            pCell = new ScValueCell( aDifParser.fVal );
+                            pDoc->SetValue(aPos, aDifParser.fVal);
                             if( bPlain )
                                 aAttrCache.SetLogical( nColCnt, nRowCnt );
                             else
@@ -172,19 +179,19 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                                     aDifParser.nNumFormat );
                         }
                         else if( aData == pKeyNA || aData == pKeyERROR  )
-                            pCell = new ScStringCell( aData );
+                        {
+                            pDoc->SetString(aPos, aData, &aStrParam);
+                        }
                         else
                         {
                             String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#IND: " ));
                             aTmp += aData;
                             aTmp += sal_Unicode('?');
-                            pCell = new ScStringCell( aTmp );
+                            pDoc->SetString(aPos, aTmp, &aStrParam);
                         }
-
-                        pDoc->PutCell( nColCnt, nRowCnt, nBaseTab, pCell, true );
                     }
                     else
-                        bOverflowWarn = sal_True;
+                        bOverflowWarn = true;
 
                     nColCnt++;
                     break;
@@ -196,8 +203,12 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                     {
                         if (!aData.isEmpty())
                         {
-                            pDoc->PutCell( nColCnt, nRowCnt, nBaseTab,
-                                ScBaseCell::CreateTextCell( aData, pDoc ), true );
+                            pDoc->EnsureTable(nBaseTab);
+
+                            if (ScStringUtil::isMultiline(aData))
+                                pDoc->SetEditText(aPos, aData);
+                            else
+                                pDoc->SetString(aPos, aData, &aStrParam);
                         }
                     }
                     else

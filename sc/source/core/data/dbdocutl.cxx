@@ -24,8 +24,8 @@
 
 #include "dbdocutl.hxx"
 #include "document.hxx"
-#include "cell.hxx"
 #include "formula/errorcodes.hxx"
+#include "stringutil.hxx"
 
 using namespace ::com::sun::star;
 
@@ -153,38 +153,45 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
                             NUMBERFORMAT_CURRENCY, ScGlobal::eLnge );
 
-    ScBaseCell* pCell;
+    ScAddress aPos(nCol, nRow, nTab);
     if (bEmptyFlag)
-    {
-        pCell = NULL;
-        pDoc->PutCell( nCol, nRow, nTab, pCell );
-    }
+        pDoc->SetEmptyCell(aPos);
     else if (bError)
     {
         pDoc->SetError( nCol, nRow, nTab, NOTAVAILABLE );
     }
     else if (bValue)
     {
-        pCell = new ScValueCell( nVal );
-        if (nFormatIndex == 0)
-            pDoc->PutCell( nCol, nRow, nTab, pCell );
-        else
-            pDoc->PutCell( nCol, nRow, nTab, pCell, nFormatIndex );
+        pDoc->SetValue(aPos, nVal);
+        if (nFormatIndex)
+            pDoc->SetNumberFormat(aPos, nFormatIndex);
     }
     else
     {
         if (aString.Len())
         {
-            pCell = ScBaseCell::CreateTextCell( aString, pDoc );
-            if (pStrData)
+            if (ScStringUtil::isMultiline(aString))
             {
-                pStrData->mbSimpleText = pCell->GetCellType() != CELLTYPE_EDIT;
-                pStrData->mnStrLength = aString.Len();
+                pDoc->SetEditText(aPos, aString);
+                if (pStrData)
+                    pStrData->mbSimpleText = false;
             }
+            else
+            {
+                ScSetStringParam aParam;
+                aParam.mbDetectNumberFormat = false;
+                aParam.mbHandleApostrophe = false;
+                aParam.meSetTextNumFormat = ScSetStringParam::Always;
+                pDoc->SetString(aPos, aString, &aParam);
+                if (pStrData)
+                    pStrData->mbSimpleText = true;
+            }
+
+            if (pStrData)
+                pStrData->mnStrLength = aString.Len();
         }
         else
-            pCell = NULL;
-        pDoc->PutCell( nCol, nRow, nTab, pCell );
+            pDoc->SetEmptyCell(aPos);
     }
 }
 

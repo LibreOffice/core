@@ -305,6 +305,8 @@ public:
 
     void SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
 
+    void SetEmptyCell( SCCOL nCol, SCROW nRow );
+
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
@@ -509,14 +511,12 @@ public:
     const ScPatternAttr*    GetPattern( SCCOL nCol, SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
 
-    sal_uLong                   GetNumberFormat( const ScAddress& rPos ) const
-                                {
-                                    return ValidColRow(rPos.Col(),rPos.Row()) ?
-                                        aCol[rPos.Col()].GetNumberFormat( rPos.Row() ) :
-                                        0;
-                                }
-    sal_uLong                   GetNumberFormat( SCCOL nCol, SCROW nRow ) const;
-    sal_uInt32              GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
+    sal_uInt32 GetNumberFormat( const ScAddress& rPos ) const;
+    sal_uInt32 GetNumberFormat( SCCOL nCol, SCROW nRow ) const;
+    sal_uInt32 GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
+
+    void SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat );
+
     void                    MergeSelectionPattern( ScMergePatternState& rState,
                                                 const ScMarkData& rMark, bool bDeep ) const;
     void                    MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,

@@ -428,6 +428,8 @@ public:
 
     ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
 
+    void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
+
 private:
     const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;
 

@@ -741,6 +741,8 @@ public:
     bool            TestRemoveSubTotals( SCTAB nTab, const ScSubTotalParam& rParam );
     bool            HasSubTotalCells( const ScRange& rRange );
 
+    SC_DLLPUBLIC void EnsureTable( SCTAB nTab );
+
     SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell, bool bForceTab = false );
     SC_DLLPUBLIC void           PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
                             bool bForceTab = false );
@@ -763,7 +765,12 @@ public:
      */
     SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
 
+    SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, const OUString& rStr );
+
+    void SetEmptyCell( const ScAddress& rPos );
+
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
+    SC_DLLPUBLIC void SetValue( const ScAddress& rPos, double fVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
 
     SC_DLLPUBLIC void           InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
@@ -790,6 +797,7 @@ public:
                                      sal_uInt32& rFormat ) const;
     sal_uInt32      GetNumberFormat( const ScRange& rRange ) const;
     SC_DLLPUBLIC sal_uInt32     GetNumberFormat( const ScAddress& ) const;
+    void SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
                     /** If no number format attribute is set and the cell
                         pointer passed is of type formula cell, the calculated
                         number format of the formula cell is returned. pCell

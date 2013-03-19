@@ -20,9 +20,7 @@
 #include "stringutil.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/math.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+#include "global.hxx"
 
 ScSetStringParam::ScSetStringParam() :
     mpNumFormatter(NULL),
@@ -308,6 +306,17 @@ OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, con
         rIndex = -1;
         return OUString();
     }
+}
+
+bool ScStringUtil::isMultiline( const OUString& rStr )
+{
+    if (rStr.indexOf('\n') != -1)
+        return true;
+
+    if (rStr.indexOf(CHAR_CR) != -1)
+        return true;
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1334,6 +1334,14 @@ void ScTable::SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText )
     aCol[nCol].SetEditText(nRow, pEditText);
 }
 
+void ScTable::SetEmptyCell( SCCOL nCol, SCROW nRow )
+{
+    if (!ValidColRow(nCol, nRow))
+        return;
+
+    aCol[nCol].Delete(nRow);
+}
+
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 {
     if (ValidColRow(nCol, nRow))
@@ -1615,8 +1623,14 @@ const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich )
         return NULL;
 }
 
+sal_uInt32 ScTable::GetNumberFormat( const ScAddress& rPos ) const
+{
+    return ValidColRow(rPos.Col(),rPos.Row()) ?
+        aCol[rPos.Col()].GetNumberFormat( rPos.Row() ) :
+        0;
+}
 
-sal_uLong ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
+sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].GetNumberFormat( nRow );
@@ -1632,6 +1646,13 @@ sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow 
     return aCol[nCol].GetNumberFormat(nStartRow, nEndRow);
 }
 
+void ScTable::SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat )
+{
+    if (!ValidColRow(nCol, nRow))
+        return;
+
+    aCol[nCol].SetNumberFormat(nRow, nNumberFormat);
+}
 
 const ScPatternAttr* ScTable::GetPattern( SCCOL nCol, SCROW nRow ) const
 {

@@ -574,6 +574,16 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
     }
 }
 
+void ScDocument::EnsureTable( SCTAB nTab )
+{
+    bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+    if (static_cast<size_t>(nTab) >= maTabs.size())
+        maTabs.resize(nTab+1, NULL);
+
+    if (!maTabs[nTab])
+        maTabs[nTab] = new ScTable(this, nTab, "temp", bExtras, bExtras);
+}
+
 void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                           ScBaseCell* pCell, sal_uLong nFormatIndex, bool bForceTab )
 {

@@ -129,14 +129,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 void ScColumn::Insert( SCROW nRow, sal_uInt32 nNumberFormat, ScBaseCell* pCell )
 {
     Insert(nRow, pCell);
-    short eOldType = pDocument->GetFormatTable()->
-                        GetType( (sal_uLong)
-                            ((SfxUInt32Item*)GetAttr( nRow, ATTR_VALUE_FORMAT ))->
-                                GetValue() );
-    short eNewType = pDocument->GetFormatTable()->GetType(nNumberFormat);
-    if (!pDocument->GetFormatTable()->IsCompatible(eOldType, eNewType))
-        ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT, (sal_uInt32) nNumberFormat) );
-
+    SetNumberFormat(nRow, nNumberFormat);
     bDirtyGroups = true;
 }
 

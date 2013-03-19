@@ -86,6 +86,7 @@
 #include "clipparam.hxx"
 #include "stlalgorithm.hxx"
 #include "defaultsoptions.hxx"
+#include "editutil.hxx"
 
 #include <map>
 #include <limits>
@@ -2979,11 +2980,37 @@ void ScDocument::SetEditText( const ScAddress& rPos, EditTextObject* pEditText )
     maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), pEditText);
 }
 
+void ScDocument::SetEditText( const ScAddress& rPos, const OUString& rStr )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    ScFieldEditEngine& rEngine = GetEditEngine();
+    rEngine.SetText(rStr);
+    maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
+}
+
+void ScDocument::SetEmptyCell( const ScAddress& rPos )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    maTabs[rPos.Tab()]->SetEmptyCell(rPos.Col(), rPos.Row());
+}
+
 void ScDocument::SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
             maTabs[nTab]->SetValue( nCol, nRow, rVal );
+}
+
+void ScDocument::SetValue( const ScAddress& rPos, double fVal )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    maTabs[rPos.Tab()]->SetValue(rPos.Col(), rPos.Row(), fVal);
 }
 
 OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -3140,6 +3167,13 @@ sal_uInt32 ScDocument::GetNumberFormat( const ScAddress& rPos ) const
     return 0;
 }
 
+void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    maTabs[rPos.Tab()]->SetNumberFormat(rPos.Col(), rPos.Row(), nNumberFormat);
+}
 
 void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
             const ScAddress& rPos, const ScBaseCell* pCell ) const
