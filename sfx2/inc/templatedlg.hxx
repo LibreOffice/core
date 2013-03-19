@@ -128,7 +128,6 @@ private:
 
     TabControl maTabControl;
     TabPage maTabPage;
-    Control *mpToolbars;
 
     Edit *mpSearchEdit;
     ToolBox *mpViewBar;
