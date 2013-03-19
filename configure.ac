@@ -2830,6 +2830,26 @@ printf ("hello world\n");
 fi
 AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 
+# Use -isystem (gcc) if possible, to avoid warnigs in 3rd party headers.
+ISYSTEM=
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING( for -isystem )
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -finline-limit=0"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ ISYSTEM=-isystem ],[])
+    CFLAGS=$save_CFLAGS
+    if test -n "$ISYSTEM"; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+    fi
+fi
+if test -z "$ISYSTEM"; then
+    # fall back to using -I
+    ISYSTEM=-I
+fi
+AC_SUBST(ISYSTEM)
+
 dnl ===================================================================
 dnl  Check which Visual Studio or MinGW compiler is used
 dnl ===================================================================
@@ -3901,7 +3921,7 @@ else
     WORKDIR=${BUILDDIR}/workdir/${INPATH}
 fi
 OUTDIR="${SOLARVER}/${INPATH}"
-SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
+SOLARINC="-I. ${ISYSTEM}${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
 AC_SUBST(COM)
 AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
