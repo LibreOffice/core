@@ -952,8 +952,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         long nXMax=Max(aBewareRect1.Right(),aBewareRect2.Right());
         long nYMin=Min(aBewareRect1.Top(),aBewareRect2.Top());
         long nYMax=Max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
-        //int bBoundOverlap=aBoundRect1.Right()>aBoundRect2.Left() && aBoundRect1.Left()<aBoundRect2.Right() &&
-                               aBoundRect1.Bottom()>aBoundRect2.Top() && aBoundRect1.Top()<aBoundRect2.Bottom();
         FASTBOOL bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
                                 aBewareRect1.Bottom()>aBewareRect2.Top() && aBewareRect1.Top()<aBewareRect2.Bottom();
         unsigned nMainCase=3;
