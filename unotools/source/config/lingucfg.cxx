@@ -957,12 +957,14 @@ static bool lcl_GetFileUrlFromOrigin(
             }
             else
             {
-                DBG_ASSERT( bIsFileUrl, "not a file URL");
+                SAL_WARN(
+                    "unotools.config", "not a file URL, <" << aURL << ">" );
             }
         }
         else
         {
-            DBG_ASSERT( 0, "failed to get file URL" );
+            SAL_WARN(
+                "unotools.config", "failed to get file URL, <" << aURL << ">" );
         }
     }
     return bSuccess;
