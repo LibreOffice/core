@@ -18,7 +18,6 @@
  */
 
 #include <tools/string.hxx>
-#include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>

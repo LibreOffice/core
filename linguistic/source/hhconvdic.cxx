@@ -19,7 +19,6 @@
 
 #include <unicode/uscript.h>
 #include <i18npool/lang.h>
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <osl/mutex.hxx>

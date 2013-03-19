@@ -25,7 +25,6 @@
 #include <i18npool/languagetag.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>

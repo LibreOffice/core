@@ -18,7 +18,6 @@
  */
 
 #include <tools/debug.hxx>
-#include <tools/fsys.hxx>
 #include <tools/string.hxx>
 #include <i18npool/languagetag.hxx>
 #include <tools/stream.hxx>

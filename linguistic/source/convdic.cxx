@@ -22,7 +22,6 @@
 #include <i18npool/lang.h>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
