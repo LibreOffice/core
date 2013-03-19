@@ -2930,7 +2930,7 @@ RTLFUNC(GetAttr)
         {
             OUString aPathURL = getFullPath( rPar.Get(1)->GetOUString() );
             OUString aPath;
-            getSystemPathFromFileURL( aPathURL, aPath );
+            FileBase::getSystemPathFromFileURL( aPathURL, aPath );
             OString aSystemPath(OUStringToOString(aPath, osl_getThreadTextEncoding()));
             DWORD nRealFlags = GetFileAttributes (aSystemPath.getStr());
             if (nRealFlags != 0xffffffff)
