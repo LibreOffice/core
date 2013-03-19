@@ -115,7 +115,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       maTabControl(this,SfxResId(TAB_CONTROL)),
       maTabPage(&maTabControl, SfxResId(TAB_TEMPLATE_MANAGER)),
       mpToolbars( new Control(&maTabPage,SfxResId(TOOLBARS))),
-      mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
+      mpSearchEdit(new Edit(&maTabPage,WB_HIDE | WB_BORDER)),
       mpViewBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_VIEW))),
       mpActionBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_ACTION))),
       mpTemplateBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_TEMPLATES))),
