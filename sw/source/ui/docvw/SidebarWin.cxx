@@ -319,16 +319,13 @@ void SwSidebarWin::InitControls()
     mpOutliner->SetUpdateMode( sal_True );
     Rescale();
 
+    mpSidebarTxtControl->EnableRTL( sal_False );
     mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTxtControl );
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutliner->InsertView(mpOutlinerView );
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
     mpOutlinerView->SetAttribs(DefaultItem());
-
-    // TODO: ??
-    EEHorizontalTextDirection aDefHoriTextDir = Application::GetSettings().GetLayoutRTL() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
-    mpOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
 
     //create Scrollbars
     mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
