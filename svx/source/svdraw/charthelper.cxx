@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
+#include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 //// header for function rtl_createUuid
@@ -87,32 +87,27 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
                 if(xShapeAccess.is() && xShapeAccess->getCount())
                 {
                     const sal_Int32 nShapeCount(xShapeAccess->getCount());
-                    const uno::Reference< lang::XMultiServiceFactory > xMgr(::comphelper::getProcessServiceFactory());
-                    const uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory(
-                        xMgr->createInstance(
-                            String(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.graphic.PrimitiveFactory2D" ))),
-                            uno::UNO_QUERY);
+                    const uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+                    const uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory =
+                        graphic::PrimitiveFactory2D::create( xContext );
 
-                    if(xPrimitiveFactory.is())
+                    const uno::Sequence< beans::PropertyValue > aParams;
+                    uno::Reference< drawing::XShape > xShape;
+
+                    for(sal_Int32 a(0); a < nShapeCount; a++)
                     {
-                        const uno::Sequence< beans::PropertyValue > aParams;
-                        uno::Reference< drawing::XShape > xShape;
+                        xShapeAccess->getByIndex(a) >>= xShape;
 
-                        for(sal_Int32 a(0); a < nShapeCount; a++)
+                        if(xShape.is())
                         {
-                            xShapeAccess->getByIndex(a) >>= xShape;
+                            const drawinglayer::primitive2d::Primitive2DSequence aNew(
+                                xPrimitiveFactory->createPrimitivesFromXShape(
+                                    xShape,
+                                    aParams));
 
-                            if(xShape.is())
-                            {
-                                const drawinglayer::primitive2d::Primitive2DSequence aNew(
-                                    xPrimitiveFactory->createPrimitivesFromXShape(
-                                        xShape,
-                                        aParams));
-
-                                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                                    aRetval,
-                                    aNew);
-                            }
+                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
+                                aRetval,
+                                aNew);
                         }
                     }
                 }

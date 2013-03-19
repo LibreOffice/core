@@ -2622,6 +2622,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/geometry,\
 $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/graphic,\
 	GraphicColorMode \
 	GraphicType \
+	PrimitiveFactory2D \
 	SvgTools \
 	XGraphic \
 	XGraphicObject \

@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
+#include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -45,6 +45,7 @@
 #include <vcl/graph.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <comphelper/processfactory.hxx>
 #include "exportdialog.hxx"
 
 #define FORMAT_UNKNOWN  0
@@ -357,35 +358,32 @@ awt::Size ExportDialog::GetOriginalSize()
     }
     else
     {
-        uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory(
-            mxMgr->createInstance(OUString("com.sun.star.comp.graphic.PrimitiveFactory2D")), uno::UNO_QUERY);
-        if ( xPrimitiveFactory.is() )
+        uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory = graphic::PrimitiveFactory2D::create( comphelper::getComponentContext(mxMgr) );
+
+        basegfx::B2DHomMatrix aViewTransformation( Application::GetDefaultDevice()->GetViewTransformation() );
+        com::sun::star::geometry::AffineMatrix2D aTransformation;
+        aTransformation.m00 = aViewTransformation.get(0,0);
+        aTransformation.m01 = aViewTransformation.get(0,1);
+        aTransformation.m02 = aViewTransformation.get(0,2);
+        aTransformation.m10 = aViewTransformation.get(1,0);
+        aTransformation.m11 = aViewTransformation.get(1,1);
+        aTransformation.m12 = aViewTransformation.get(1,2);
+
+        const OUString sViewTransformation( "ViewTransformation" );
+        uno::Sequence< beans::PropertyValue > aViewInformation( 1 );
+        aViewInformation[ 0 ].Value <<= aTransformation;
+        aViewInformation[ 0 ].Name  = sViewTransformation;
+
+        if ( mxShape.is() )
+            aShapesRange = GetShapeRangeForXShape( mxShape, xPrimitiveFactory, aViewInformation );
+        else if ( mxShapes.is() )
         {
-            basegfx::B2DHomMatrix aViewTransformation( Application::GetDefaultDevice()->GetViewTransformation() );
-            com::sun::star::geometry::AffineMatrix2D aTransformation;
-            aTransformation.m00 = aViewTransformation.get(0,0);
-            aTransformation.m01 = aViewTransformation.get(0,1);
-            aTransformation.m02 = aViewTransformation.get(0,2);
-            aTransformation.m10 = aViewTransformation.get(1,0);
-            aTransformation.m11 = aViewTransformation.get(1,1);
-            aTransformation.m12 = aViewTransformation.get(1,2);
-
-            const OUString sViewTransformation( "ViewTransformation" );
-            uno::Sequence< beans::PropertyValue > aViewInformation( 1 );
-            aViewInformation[ 0 ].Value <<= aTransformation;
-            aViewInformation[ 0 ].Name  = sViewTransformation;
-
-            if ( mxShape.is() )
-                aShapesRange = GetShapeRangeForXShape( mxShape, xPrimitiveFactory, aViewInformation );
-            else if ( mxShapes.is() )
+            const sal_Int32 nCount = mxShapes->getCount();
+            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                const sal_Int32 nCount = mxShapes->getCount();
-                for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-                {
-                    uno::Reference< drawing::XShape > xShape;
-                    mxShapes->getByIndex( nIndex ) >>= xShape;
-                    aShapesRange.expand( GetShapeRangeForXShape( xShape, xPrimitiveFactory, aViewInformation ) );
-                }
+                uno::Reference< drawing::XShape > xShape;
+                mxShapes->getByIndex( nIndex ) >>= xShape;
+                aShapesRange.expand( GetShapeRangeForXShape( xShape, xPrimitiveFactory, aViewInformation ) );
             }
         }
     }
