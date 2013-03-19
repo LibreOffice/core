@@ -2796,14 +2796,23 @@ endif # SYSTEM_UCPP
 ifeq (,$(PYTHON_FOR_BUILD))
 
 define gb_ExternalExecutable__register_python
+ifeq ($(OS),MACOSX)
+
+# use set_external, to avoid having the command added as prerequisite for the
+# targets that make use of it. (Otherwise make will choke as it doesn't have a
+# matching rule to build that specific file)
+$(call gb_ExternalExecutable_set_external,python,$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR))
+# the Zip ensures that internal python has been built (cannot use the Package
+# target, as that is not used on Mac)
+$(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Zip_get_outdir_target_for_build,LibreOfficePython.framework))
+
+else
+
 $(call gb_ExternalExecutable_set_internal,python)
 $(call gb_ExternalExecutable_set_precommand,python,$(gb_PYTHON_PRECOMMAND))
-$(call gb_ExternalExecutable_add_dependencies,python,\
-	$(if $(filter MACOSX,$(OS)) \
-		,$(call gb_Zip_get_outdir_target_for_build,LibreOfficePython.framework) \
-		,$(call gb_Package_get_target_for_build,python3) \
-	) \
-)
+$(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Package_get_target_for_build,python3))
+
+endif
 
 endef
 
