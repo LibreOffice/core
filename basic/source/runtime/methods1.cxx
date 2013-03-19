@@ -29,7 +29,6 @@
 #include <basic/sbxvar.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <vcl/jobset.hxx>
