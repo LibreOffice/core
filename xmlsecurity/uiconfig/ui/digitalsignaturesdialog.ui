@@ -310,7 +310,7 @@
                   <object class="GtkImage" id="invalidimg">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="pixbuf">xmlsecurity/res/caution_11x16.png</property>
+                    <property name="pixbuf">svx/res/caution_11x16.png</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -323,7 +323,7 @@
                   <object class="GtkImage" id="oldsignatureimg">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="pixbuf">xmlsecurity/res/caution_11x16.png</property>
+                    <property name="pixbuf">svx/res/caution_11x16.png</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
