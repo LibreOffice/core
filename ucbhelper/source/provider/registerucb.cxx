@@ -52,7 +52,7 @@ registerAtUcb(
     OSL_ENSURE(rServiceFactory.is(),
                "ucb::registerAtUcb(): No service factory");
 
-    bool bNoProxy = rArguments.compareTo("{noproxy}") == 0;
+    bool bNoProxy = rArguments.startsWith("{noproxy}");
     rtl::OUString
         aProviderArguments(bNoProxy ?
                                rArguments.

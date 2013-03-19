@@ -2842,7 +2842,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
 OUString SfxLibraryContainer::expand_url( const OUString& url )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (0 == url.compareTo( EXPAND_PROTOCOL ":" ))
+    if (url.startsWith( EXPAND_PROTOCOL ":" ))
     {
         if( !mxMacroExpander.is() )
         {
