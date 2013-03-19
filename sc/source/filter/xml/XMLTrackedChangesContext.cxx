@@ -25,6 +25,7 @@
 #include "cell.hxx"
 #include "textuno.hxx"
 #include "editutil.hxx"
+#include "document.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>

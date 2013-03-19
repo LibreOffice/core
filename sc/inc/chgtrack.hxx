@@ -27,6 +27,7 @@
 
 #include <tools/datetime.hxx>
 #include <tools/mempool.hxx>
+#include "tools/link.hxx"
 #include <unotools/options.hxx>
 #include "global.hxx"
 #include "bigrange.hxx"
@@ -39,7 +40,7 @@
 
 class ScBaseCell;
 class ScDocument;
-
+class ScFormulaCell;
 
 enum ScChangeActionType
 {

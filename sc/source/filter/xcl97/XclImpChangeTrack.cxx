@@ -27,6 +27,7 @@
 #include "xihelper.hxx"
 #include "xilink.hxx"
 #include "externalrefmgr.hxx"
+#include "document.hxx"
 
 //___________________________________________________________________
 // class XclImpChangeTrack

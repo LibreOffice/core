@@ -20,14 +20,12 @@
 #ifndef SC_BIGRANGE_HXX
 #define SC_BIGRANGE_HXX
 
-
 #include "global.hxx"
-#include "document.hxx"
-
 
 static const sal_Int32 nInt32Min = 0x80000000;
 static const sal_Int32 nInt32Max = 0x7fffffff;
 
+class ScDocument;
 
 class ScBigAddress
 {
@@ -61,7 +59,7 @@ public:
                 { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
     inline void     PutInOrder( ScBigAddress& r );
-    inline sal_Bool     IsValid( const ScDocument* ) const;
+    bool IsValid( const ScDocument* pDoc ) const;
     inline ScAddress    MakeAddress() const;
 
     ScBigAddress&   operator=( const ScBigAddress& r )
@@ -100,20 +98,6 @@ inline void ScBigAddress::PutInOrder( ScBigAddress& r )
         nTab = nTmp;
     }
 }
-
-
-inline sal_Bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
-{   // min/max interval bounds define whole col/row/tab
-    return
-        ((0 <= nCol && nCol <= MAXCOL)
-            || nCol == nInt32Min || nCol == nInt32Max) &&
-        ((0 <= nRow && nRow <= MAXROW)
-            || nRow == nInt32Min || nRow == nInt32Max) &&
-        ((0 <= nTab && nTab < pDoc->GetTableCount())
-            || nTab == nInt32Min || nTab == nInt32Max)
-        ;
-}
-
 
 inline ScAddress ScBigAddress::MakeAddress() const
 {

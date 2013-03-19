@@ -27,6 +27,7 @@
 #include "xeformula.hxx"
 #include "cell.hxx"
 #include "xcl97rec.hxx"
+#include "document.hxx"
 
 #include <oox/token/tokens.hxx>
 #include <rtl/strbuf.hxx>

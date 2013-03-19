@@ -26,7 +26,6 @@
 #include "formula/errorcodes.hxx"
 #include "formula/tokenarray.hxx"
 #include "scdll.hxx"
-#include "document.hxx"
 #include "scmatrix.hxx"
 #include "externalrefmgr.hxx"
 #include "calcconfig.hxx"
@@ -189,8 +188,7 @@ double ConvertStringToValue( const String& );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
 double GetCellValueOrZero( const ScAddress&, const ScBaseCell* );
 double GetValueCellValue( const ScAddress&, const ScValueCell* );
-ScBaseCell* GetCell( const ScAddress& rPos )
-    { return pDok->GetCell( rPos ); }
+ScBaseCell* GetCell( const ScAddress& rPos );
 void GetCellString( String& rStr, const ScBaseCell* pCell );
 sal_uInt16 GetCellErrCode( const ScBaseCell* pCell );
 CellType GetCellType( const ScBaseCell* pCell );

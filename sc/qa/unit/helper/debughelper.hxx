@@ -36,7 +36,6 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
-#include "document.hxx"
 
 #ifdef WNT
 #if !defined NOMINMAX

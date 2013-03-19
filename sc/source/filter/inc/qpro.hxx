@@ -22,13 +22,14 @@
 
 #include <sal/config.h>
 #include "filter.hxx"
-#include "document.hxx"
 #include <tools/string.hxx>
 
 #include "flttypes.hxx"
 #include "ftools.hxx"
 #include "qprostyle.hxx"
 #include "biff.hxx"
+
+class ScDocument;
 
 // Stream wrapper class
 class ScQProReader : public ScBiffReader

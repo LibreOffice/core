@@ -22,6 +22,7 @@
 #include "chgviset.hxx"
 #include "rechead.hxx"
 #include "chgtrack.hxx"
+#include "document.hxx"
 
 // -----------------------------------------------------------------------
 ScChangeViewSettings::~ScChangeViewSettings()

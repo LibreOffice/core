@@ -545,6 +545,10 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
     return fValue;
 }
 
+ScBaseCell* ScInterpreter::GetCell( const ScAddress& rPos )
+{
+    return pDok->GetCell( rPos );
+}
 
 void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
 {

@@ -44,6 +44,7 @@
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include "markdata.hxx"
+#include "document.hxx"
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

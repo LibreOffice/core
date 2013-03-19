@@ -35,7 +35,6 @@
 #include <svtools/headbar.hxx>
 
 #include "conditio.hxx"
-#include "document.hxx"
 
 #include <map>
 

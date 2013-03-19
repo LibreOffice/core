@@ -23,11 +23,13 @@
 
 #include <sal/config.h>
 #include "filter.hxx"
-#include "document.hxx"
 #include <tools/string.hxx>
 
 #include "flttypes.hxx"
 #include "ftools.hxx"
+#include "address.hxx"
+
+class ScDocument;
 
 class ScQProStyle
 {
