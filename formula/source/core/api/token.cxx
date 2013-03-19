@@ -581,12 +581,17 @@ bool FormulaTokenArray::HasNameOrColRowName() const
 }
 
 
-FormulaTokenArray::FormulaTokenArray()
+FormulaTokenArray::FormulaTokenArray() :
+    pCode(NULL),
+    pRPN(NULL),
+    nLen(0),
+    nRPN(0),
+    nIndex(0),
+    nError(0),
+    nRefs(0),
+    nMode(RECALCMODE_NORMAL),
+    bHyperLink(false)
 {
-    pCode = NULL; pRPN = NULL;
-    nError = nLen = nIndex = nRPN = nRefs = 0;
-    bHyperLink = false;
-    ClearRecalcMode();
 }
 
 FormulaTokenArray::FormulaTokenArray( const FormulaTokenArray& rArr )
