@@ -1561,6 +1561,15 @@ size_t ScDocument::GetFormulaHash( const ScAddress& rPos ) const
     return maTabs[nTab]->GetFormulaHash(rPos.Col(), rPos.Row());
 }
 
+ScFormulaVectorState ScDocument::GetFormulaVectorState( const ScAddress& rPos ) const
+{
+    SCTAB nTab = rPos.Tab();
+    if (!ValidTab(nTab) || static_cast<size_t>(nTab) >= maTabs.size() || !maTabs[nTab])
+        return FormulaVectorUnknown;
+
+    return maTabs[nTab]->GetFormulaVectorState(rPos.Col(), rPos.Row());
+}
+
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 {
     if ( rOld == rNew )

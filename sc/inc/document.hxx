@@ -1856,6 +1856,8 @@ public:
 
     size_t GetFormulaHash( const ScAddress& rPos ) const;
 
+    ScFormulaVectorState GetFormulaVectorState( const ScAddress& rPos ) const;
+
 private: // CLOOK-Impl-methods
 
     /**

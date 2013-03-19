@@ -1527,20 +1527,32 @@ void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
 
 size_t ScColumn::GetFormulaHash( SCROW nRow ) const
 {
+    const ScFormulaCell* pCell = FetchFormulaCell(nRow);
+    return pCell ? pCell->GetHash() : 0;
+}
+
+ScFormulaVectorState ScColumn::GetFormulaVectorState( SCROW nRow ) const
+{
+    const ScFormulaCell* pCell = FetchFormulaCell(nRow);
+    return pCell ? pCell->GetVectorState() : FormulaVectorUnknown;
+}
+
+const ScFormulaCell* ScColumn::FetchFormulaCell( SCROW nRow ) const
+{
     if (!ValidRow(nRow))
-        return 0;
+        return NULL;
 
     SCSIZE nIndex;
     if (!Search(nRow, nIndex))
         // cell not found.
-        return 0;
+        return NULL;
 
     const ScBaseCell* pCell = maItems[nIndex].pCell;
     if (pCell->GetCellType() != CELLTYPE_FORMULA)
         // Not a formula cell.
-        return 0;
+        return NULL;
 
-    return static_cast<const ScFormulaCell*>(pCell)->GetHash();
+    return static_cast<const ScFormulaCell*>(pCell);
 }
 
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const

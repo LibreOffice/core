@@ -889,6 +889,11 @@ size_t ScFormulaCell::GetHash() const
     return pCode->GetHash();
 }
 
+ScFormulaVectorState ScFormulaCell::GetVectorState() const
+{
+    return pCode->GetVectorState();
+}
+
 void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
                                 const FormulaGrammar::Grammar eGrammar ) const
 {

@@ -1205,7 +1205,7 @@ void Test::testFormulaHashAndTag()
 
     struct {
         const char* pFormula1; const char* pFormula2; bool bEqual;
-    } aTests[] = {
+    } aHashTests[] = {
         { "=1", "=2", false }, // different constants
         { "=SUM(1;2;3;4;5)", "=AVERAGE(1;2;3;4;5)", false }, // different functions
         { "=C2*3", "=D2*3", true },  // relative references
@@ -1221,16 +1221,16 @@ void Test::testFormulaHashAndTag()
         { "=X$20", "=$X20", false }, // column absolute vs row absolute
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aHashTests); ++i)
     {
-        m_pDoc->SetString(aPos1, OUString::createFromAscii(aTests[i].pFormula1));
-        m_pDoc->SetString(aPos2, OUString::createFromAscii(aTests[i].pFormula2));
+        m_pDoc->SetString(aPos1, OUString::createFromAscii(aHashTests[i].pFormula1));
+        m_pDoc->SetString(aPos2, OUString::createFromAscii(aHashTests[i].pFormula2));
         size_t nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
         size_t nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
 
         std::ostringstream os;
-        os << "(expr1:" << aTests[i].pFormula1 << "; expr2:" << aTests[i].pFormula2 << ")";
-        if (aTests[i].bEqual)
+        os << "(expr1:" << aHashTests[i].pFormula1 << "; expr2:" << aHashTests[i].pFormula2 << ")";
+        if (aHashTests[i].bEqual)
         {
             os << " Error: these hashes should be equal." << endl;
             CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), nHashVal1 == nHashVal2);

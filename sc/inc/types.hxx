@@ -36,6 +36,19 @@ class ScMatrix;
 typedef ::boost::intrusive_ptr<ScMatrix>        ScMatrixRef;
 typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
 
+/**
+ * When vectorization is enabled, we could potentially mass-calculate a
+ * series of formula token arrays in adjacent formula cells in one step,
+ * provided that they all contain identical set of tokens.
+ */
+enum ScFormulaVectorState
+{
+    FormulaVectorDisabled = 0,
+    FormulaVectorEnabled,
+    FormulaVectorCheckReference,
+    FormulaVectorUnknown
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

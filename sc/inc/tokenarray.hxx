@@ -24,6 +24,7 @@
 #include "scmatrix.hxx"
 #include <tools/solar.h>
 #include "scdllapi.h"
+#include "types.hxx"
 #include <formula/tokenarray.hxx>
 
 struct ScRawToken;
@@ -34,17 +35,10 @@ class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
 
-    /**
-     * When vectorization is enabled, we could potentially mass-calculate a
-     * series of formula token arrays in adjacent formula cells in one step,
-     * provided that they all contain identical set of tokens.
-     */
-    enum VectorState { Disabled = 0, Enabled, CheckReference };
-
     bool                    ImplGetReference( ScRange& rRange, bool bValidOnly ) const;
 
     size_t mnHashValue;
-    VectorState meVectorState;
+    ScFormulaVectorState meVectorState;
 
 public:
     ScTokenArray();
@@ -55,6 +49,8 @@ public:
 
     void GenHash();
     size_t GetHash() const;
+
+    ScFormulaVectorState GetVectorState() const;
 
     /// Exactly and only one range (valid or deleted)
     bool    IsReference( ScRange& rRange ) const;

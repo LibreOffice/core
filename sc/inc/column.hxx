@@ -24,6 +24,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "rangenam.hxx"
+#include "types.hxx"
 
 #include <set>
 #include <vector>
@@ -410,7 +411,11 @@ public:
 
     size_t GetFormulaHash( SCROW nRow ) const;
 
+    ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
+
 private:
+    const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;
+
     ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos) const;
 
     SCROW FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const;

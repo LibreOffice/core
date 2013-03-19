@@ -2104,6 +2104,14 @@ size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].GetFormulaHash(nRow);
 }
 
+ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidCol(nCol))
+        return FormulaVectorUnknown;
+
+    return aCol[nCol].GetFormulaVectorState(nRow);
+}
+
 void ScTable::DeleteConditionalFormat( sal_uLong nIndex )
 {
     mpCondFormatList->erase(nIndex);

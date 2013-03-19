@@ -29,6 +29,7 @@
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
 #include "postit.hxx"
+#include "types.hxx"
 
 #include <set>
 #include <map>
@@ -797,6 +798,8 @@ public:
     void SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType );
 
     size_t GetFormulaHash( SCCOL nCol, SCROW nRow ) const;
+
+    ScFormulaVectorState GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const;
 
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

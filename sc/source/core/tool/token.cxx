@@ -1249,7 +1249,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
 
 void ScTokenArray::CheckToken( const FormulaToken& r )
 {
-    if (meVectorState == Disabled)
+    if (meVectorState == FormulaVectorDisabled)
         // It's already disabled.  No more checking needed.
         return;
 
@@ -1270,7 +1270,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 // Don't change the state.
             break;
             default:
-                meVectorState = Disabled;
+                meVectorState = FormulaVectorDisabled;
         }
         return;
     }
@@ -1289,7 +1289,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svSingleRef:
             case svDoubleRef:
                 // Depends on the reference state.
-                meVectorState = CheckReference;
+                meVectorState = FormulaVectorCheckReference;
             break;
             case svError:
             case svEmptyCell:
@@ -1311,7 +1311,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svSubroutine:
             case svUnknown:
                 // We don't support vectorization on these.
-                meVectorState = Disabled;
+                meVectorState = FormulaVectorDisabled;
             default:
                 ;
         }
@@ -1438,6 +1438,11 @@ size_t ScTokenArray::GetHash() const
     return mnHashValue;
 }
 
+ScFormulaVectorState ScTokenArray::GetVectorState() const
+{
+    return meVectorState;
+}
+
 bool ScTokenArray::IsReference( ScRange& rRange ) const
 {
     return ImplGetReference( rRange, false );
@@ -1453,7 +1458,7 @@ bool ScTokenArray::IsValidReference( ScRange& rRange ) const
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
     mnHashValue(0),
-    meVectorState(Enabled)
+    meVectorState(FormulaVectorEnabled)
 {
 }
 
