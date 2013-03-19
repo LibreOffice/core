@@ -437,13 +437,13 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 // here we know that the count of column doesn't match
                 ::std::map<sal_Int32,sal_Int32> aColumnMatching;
                 static const ::rtl::OUString sPrivs[] = {
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_CAT")),
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_SCHEM")),
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_NAME")),
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTOR")),
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTEE")),
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVILEGE")),
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IS_GRANTABLE"))
+                                            ::rtl::OUString("TABLE_CAT"),
+                                            ::rtl::OUString("TABLE_SCHEM"),
+                                            ::rtl::OUString("TABLE_NAME"),
+                                            ::rtl::OUString("GRANTOR"),
+                                            ::rtl::OUString("GRANTEE"),
+                                            ::rtl::OUString("PRIVILEGE"),
+                                            ::rtl::OUString("IS_GRANTABLE")
                                         };
 
                 ::rtl::OUString sColumnName;
@@ -560,7 +560,7 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethod
     {
         ::rtl::OUString sLoggedResult( sReturn );
         if ( sLoggedResult.isEmpty() )
-            sLoggedResult = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "<empty string>" ) );
+            sLoggedResult = ::rtl::OUString( "<empty string>" );
         m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, sLoggedResult );
     }
 
@@ -611,8 +611,8 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
     // log the call
     if ( m_aLogger.isLoggable( LogLevel::FINEST ) )
     {
-        ::rtl::OUString sCatalogLog = bCatalog ? sCatalog : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "null" ) );
-        ::rtl::OUString sSchemaLog = bSchema ? _rSchemaPattern : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "null" ) );
+        ::rtl::OUString sCatalogLog = bCatalog ? sCatalog : ::rtl::OUString( "null" );
+        ::rtl::OUString sSchemaLog = bSchema ? _rSchemaPattern : ::rtl::OUString( "null" );
         if ( _pOptionalAdditionalString )
             m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG4, _pMethodName, sCatalogLog, sSchemaLog, _rLeastPattern, *_pOptionalAdditionalString );
         else

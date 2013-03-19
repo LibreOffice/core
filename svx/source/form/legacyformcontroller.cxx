@@ -182,7 +182,7 @@ namespace svxform
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL LegacyFormController::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.svx.LegacyFormController" ) );
+        return ::rtl::OUString( "org.openoffice.comp.svx.LegacyFormController" );
     }
 
     //--------------------------------------------------------------------
@@ -200,8 +200,8 @@ namespace svxform
     Sequence< ::rtl::OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServices(2);
-        aServices.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.FormController" ) );
-        aServices.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.control.TabController") );
+        aServices.getArray()[0] = ::rtl::OUString( "com.sun.star.form.FormController" );
+        aServices.getArray()[1] = ::rtl::OUString("com.sun.star.awt.control.TabController");
         return aServices;
     }
 

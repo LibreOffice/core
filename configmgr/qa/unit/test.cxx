@@ -208,10 +208,10 @@ WriterThread::WriterThread(
 
 bool WriterThread::iteration() {
     rtl::OUString options[] = {
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fish")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("chips")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("kippers")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bloaters")) };
+        rtl::OUString("fish"),
+        rtl::OUString("chips"),
+        rtl::OUString("kippers"),
+        rtl::OUString("bloaters") };
     test_.setKey(path_, name_, css::uno::makeAny(options[index_]));
     index_ = (index_ + 1) % (sizeof options / sizeof (rtl::OUString));
     return true;
@@ -259,7 +259,7 @@ void RecursiveTest::test() {
                     "dotuno:WebHtml"))),
         css::uno::UNO_QUERY_THROW);
     properties_->addPropertyChangeListener(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")), this);
+        rtl::OUString("Label"), this);
     step();
     CPPUNIT_ASSERT(count_ == 0);
     css::uno::Reference< css::lang::XComponent >(
@@ -306,8 +306,8 @@ void SimpleRecursiveTest::step() const {
             RTL_CONSTASCII_USTRINGPARAM(
                 "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                 "dotuno:WebHtml")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),
-        css::uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("step"))));
+        rtl::OUString("Label"),
+        css::uno::makeAny(rtl::OUString("step")));
 }
 
 class CrossThreadTest: public RecursiveTest {
@@ -332,13 +332,13 @@ void CrossThreadTest::step() const {
             RTL_CONSTASCII_USTRINGPARAM(
                 "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                 "dotuno:WebHtml")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))).join();
+        rtl::OUString("Label")).join();
     test_.resetKey(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                 "dotuno:WebHtml")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")));
+        rtl::OUString("Label"));
 }
 
 void Test::setUp() {
@@ -356,7 +356,7 @@ void Test::setUp() {
             cppu::createRegistryServiceFactory(
                 rtl::OUString(registry, SAL_NO_ACQUIRE)),
             css::uno::UNO_QUERY_THROW)->getPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
+                rtl::OUString("DefaultContext")),
         css::uno::UNO_QUERY_THROW);
     provider_ = css::configuration::theDefaultProvider::get(context_);
 }
@@ -370,44 +370,40 @@ void Test::testKeyFetch() {
     rtl::OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale"))) >>=
+            rtl::OUString("/org.openoffice.Setup"),
+            rtl::OUString("L10N/ooLocale")) >>=
         s);
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test/AString"))) >>=
+            rtl::OUString("/org.openoffice.Setup"),
+            rtl::OUString("Test/AString")) >>=
         s);
 }
 
 void Test::testKeySet() {
     setKey(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString")),
-        css::uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baa"))));
+        rtl::OUString("/org.openoffice.Setup/Test"),
+        rtl::OUString("AString"),
+        css::uno::makeAny(rtl::OUString("baa")));
     rtl::OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))) >>=
+            rtl::OUString("/org.openoffice.Setup/Test"),
+            rtl::OUString("AString")) >>=
         s);
     CPPUNIT_ASSERT( s == "baa" );
 }
 
 void Test::testKeyReset() {
     if (resetKey(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))))
+            rtl::OUString("/org.openoffice.Setup/Test"),
+            rtl::OUString("AString")))
     {
         rtl::OUString s;
         CPPUNIT_ASSERT(
             getKey(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))) >>=
+                rtl::OUString("/org.openoffice.Setup/Test"),
+                rtl::OUString("AString")) >>=
             s);
         CPPUNIT_ASSERT( s == "Foo" );
     }
@@ -421,7 +417,7 @@ void Test::testSetSetMemberName() {
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                     ".uno:FontworkShapeType")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
+            rtl::OUString("Label")) >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Shape" );
 
@@ -434,13 +430,11 @@ void Test::testSetSetMemberName() {
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNamed > member;
     access->getByName(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(".uno:FontworkGalleryFloater"))) >>=
+        rtl::OUString(".uno:FontworkGalleryFloater")) >>=
         member;
     CPPUNIT_ASSERT(member.is());
     member->setName(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(".uno:FontworkShapeType")));
+        rtl::OUString(".uno:FontworkShapeType"));
     css::uno::Reference< css::util::XChangesBatch >(
         access, css::uno::UNO_QUERY_THROW)->commitChanges();
     css::uno::Reference< css::lang::XComponent >(
@@ -452,7 +446,7 @@ void Test::testSetSetMemberName() {
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                     ".uno:FontworkShapeType")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
+            rtl::OUString("Label")) >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Gallery" );
 }
@@ -475,11 +469,11 @@ void Test::testReadCommands() {
             if (access->getByName(names[j]) >>= child) {
                 CPPUNIT_ASSERT(child.is());
                 child->getByName(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")));
+                    rtl::OUString("Label"));
                 child->getByName(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContextLabel")));
+                    rtl::OUString("ContextLabel"));
                 child->getByName(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Properties")));
+                    rtl::OUString("Properties"));
             }
         }
     }
@@ -492,32 +486,26 @@ void Test::testReadCommands() {
 void Test::testThreads() {
     struct Entry { rtl::OUString path; rtl::OUString relative; };
     Entry list[] = {
-        { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test/AString")) },
-        { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test/AString")) },
+        { rtl::OUString("/org.openoffice.Setup"),
+          rtl::OUString("Test/AString") },
+        { rtl::OUString("/org.openoffice.Setup"),
+          rtl::OUString("Test/AString") },
         { rtl::OUString(
-              RTL_CONSTASCII_USTRINGPARAM(
-                  "/org.openoffice.UI.GenericCommands")),
+                  "/org.openoffice.UI.GenericCommands"),
           rtl::OUString(
-              RTL_CONSTASCII_USTRINGPARAM(
-                  "UserInterface/Commands/dotuno:WebHtml/Label")) },
+                  "UserInterface/Commands/dotuno:WebHtml/Label") },
         { rtl::OUString(
-              RTL_CONSTASCII_USTRINGPARAM(
-                  "/org.openoffice.UI.GenericCommands")),
+                  "/org.openoffice.UI.GenericCommands"),
           rtl::OUString(
-              RTL_CONSTASCII_USTRINGPARAM(
-                  "UserInterface/Commands/dotuno:NewPresentation/Label")) },
+                  "UserInterface/Commands/dotuno:NewPresentation/Label") },
         { rtl::OUString(
-              RTL_CONSTASCII_USTRINGPARAM(
-                  "/org.openoffice.UI.GenericCommands")),
+                  "/org.openoffice.UI.GenericCommands"),
           rtl::OUString(
-              RTL_CONSTASCII_USTRINGPARAM(
-                  "UserInterface/Commands/dotuno:RecentFileList/Label")) },
-        { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")) },
-        { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test/ABoolean")) }
+                  "UserInterface/Commands/dotuno:RecentFileList/Label") },
+        { rtl::OUString("/org.openoffice.Setup"),
+          rtl::OUString("L10N/ooLocale") },
+        { rtl::OUString("/org.openoffice.Setup"),
+          rtl::OUString("Test/ABoolean") }
     };
     std::size_t const numReaders = sizeof list / sizeof (Entry);
     std::size_t const numWriters = numReaders - 2;
@@ -619,12 +607,11 @@ css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
     css::uno::Any arg(
         css::uno::makeAny(
             css::beans::NamedValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                rtl::OUString("nodepath"),
                 css::uno::makeAny(path))));
     return provider_->createInstanceWithArguments(
         rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationAccess")),
+                "com.sun.star.configuration.ConfigurationAccess"),
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
 
@@ -634,12 +621,11 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
     css::uno::Any arg(
         css::uno::makeAny(
             css::beans::NamedValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                rtl::OUString("nodepath"),
                 css::uno::makeAny(path))));
     return provider_->createInstanceWithArguments(
         rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationUpdateAccess")),
+                "com.sun.star.configuration.ConfigurationUpdateAccess"),
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
 

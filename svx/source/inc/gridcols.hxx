@@ -23,16 +23,16 @@
 
 namespace rtl { class OUString; }
 
-#define FM_COL_TEXTFIELD      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextField" ) )
-#define FM_COL_COMBOBOX       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ComboBox" ) )
-#define FM_COL_CHECKBOX       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CheckBox" ) )
-#define FM_COL_TIMEFIELD      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TimeField" ) )
-#define FM_COL_DATEFIELD      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateField" ) )
-#define FM_COL_NUMERICFIELD   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumericField" ) )
-#define FM_COL_CURRENCYFIELD  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrencyField" ) )
-#define FM_COL_PATTERNFIELD   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PatternField" ) )
-#define FM_COL_LISTBOX        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ) )
-#define FM_COL_FORMATTEDFIELD rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormattedField" ) )
+#define FM_COL_TEXTFIELD      rtl::OUString( "TextField" )
+#define FM_COL_COMBOBOX       rtl::OUString( "ComboBox" )
+#define FM_COL_CHECKBOX       rtl::OUString( "CheckBox" )
+#define FM_COL_TIMEFIELD      rtl::OUString( "TimeField" )
+#define FM_COL_DATEFIELD      rtl::OUString( "DateField" )
+#define FM_COL_NUMERICFIELD   rtl::OUString( "NumericField" )
+#define FM_COL_CURRENCYFIELD  rtl::OUString( "CurrencyField" )
+#define FM_COL_PATTERNFIELD   rtl::OUString( "PatternField" )
+#define FM_COL_LISTBOX        rtl::OUString( "ListBox" )
+#define FM_COL_FORMATTEDFIELD rtl::OUString( "FormattedField" )
 
 // column type ids
 #define TYPE_CHECKBOX       0

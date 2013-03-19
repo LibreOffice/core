@@ -77,7 +77,7 @@ SwVbaVariables::Add( const rtl::OUString& rName, const uno::Any& rValue ) throw 
 rtl::OUString
 SwVbaVariables::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaVariables"));
+    return rtl::OUString("SwVbaVariables");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -87,7 +87,7 @@ SwVbaVariables::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Variables") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Variables");
     }
     return sNames;
 }

@@ -149,12 +149,12 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
 
     Reference< XConnector > xConnector(
         _xSMgr->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector") ),
+            OUString("com.sun.star.connection.Connector"),
             _xCtx ),
         UNO_QUERY );
 
     if (! xConnector.is())
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("no connector!" ) ), Reference< XInterface >() );
+        throw RuntimeException( OUString("no connector!" ), Reference< XInterface >() );
 
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 

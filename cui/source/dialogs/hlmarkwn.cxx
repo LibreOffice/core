@@ -255,9 +255,9 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
             try
             {
                 uno::Sequence< beans::PropertyValue > aArg(1);
-                aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
+                aArg.getArray()[0].Name = OUString( "Hidden" );
                 aArg.getArray()[0].Value <<= (sal_Bool) sal_True;
-                xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
+                xComp = xLoader->loadComponentFromURL( aURL, OUString( "_blank" ), 0, aArg );
             }
             catch( const io::IOException& )
             {

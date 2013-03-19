@@ -217,7 +217,7 @@ public:
         SfxFilter* pExportFilter = new SfxFilter(
             rFilter,
             OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
-            rUserData, OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+            rUserData, OUString("private:factory/scalc*") );
         pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
         aStoreMedium.SetFilter(pExportFilter);
         pShell->DoSaveAs( aStoreMedium );

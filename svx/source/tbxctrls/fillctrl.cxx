@@ -68,14 +68,14 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
     bIgnoreStatusUpdate( sal_False ),
     eLastXFS        ( XFILL_NONE )
 {
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillHatch" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillBitmap" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GradientListState" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:HatchListState" )));
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BitmapListState" )));
+    addStatusListener( rtl::OUString( ".uno:FillColor" ));
+    addStatusListener( rtl::OUString( ".uno:FillGradient" ));
+    addStatusListener( rtl::OUString( ".uno:FillHatch" ));
+    addStatusListener( rtl::OUString( ".uno:FillBitmap" ));
+    addStatusListener( rtl::OUString( ".uno:ColorTableState" ));
+    addStatusListener( rtl::OUString( ".uno:GradientListState" ));
+    addStatusListener( rtl::OUString( ".uno:HatchListState" ));
+    addStatusListener( rtl::OUString( ".uno:BitmapListState" ));
 }
 
 //========================================================================
@@ -545,7 +545,7 @@ FillControl::~FillControl()
 IMPL_LINK_NOARG_INLINE_START(FillControl, DelayHdl)
 {
     SelectFillTypeHdl( NULL );
-    ( (SvxFillToolBoxControl*)GetData() )->updateStatus( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )));
+    ( (SvxFillToolBoxControl*)GetData() )->updateStatus( ::rtl::OUString( ".uno:FillStyle" ));
 //  ( (SvxFillToolBoxControl*)GetData() )->GetBindings().Invalidate( SID_ATTR_FILL_STYLE );
     return 0;
 }
@@ -673,12 +673,12 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
         Sequence< PropertyValue > aArgs( 1 );
 
         // First set the style
-        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ));
+        aArgs[0].Name = ::rtl::OUString( "FillStyle" );
         aXFillStyleItem.QueryValue(  a );
         aArgs[0].Value = a;
         ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( sal_True );
         ((SvxFillToolBoxControl*)GetData())->Dispatch(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )), aArgs );
+            ::rtl::OUString( ".uno:FillStyle" ), aArgs );
         ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( sal_False );
 
         switch( eXFS )
@@ -701,10 +701,10 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
                 XFillColorItem aXFillColorItem( aTmpStr, pLbFillAttr->GetSelectEntryColor() );
 
-                aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ));
+                aArgs[0].Name = ::rtl::OUString( "FillColor" );
                 aXFillColorItem.QueryValue( a );
                 aArgs[0].Value = a;
-                ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )),
+                ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( ".uno:FillColor" ),
                                                                aArgs );
             }
             break;
@@ -722,10 +722,10 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         XGradient aGradient = aItem.GetGradientList()->GetGradient( nPos )->GetGradient();
                         XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
 
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ));
+                        aArgs[0].Name = ::rtl::OUString( "FillGradient" );
                         aXFillGradientItem.QueryValue( a );
                         aArgs[0].Value = a;
-                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )),
+                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( ".uno:FillGradient" ),
                                                                        aArgs );
                     }
                 }
@@ -745,10 +745,10 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         XHatch aHatch = aItem.GetHatchList()->GetHatch( nPos )->GetHatch();
                         XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
 
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ));
+                        aArgs[0].Name = ::rtl::OUString( "FillHatch" );
                         aXFillHatchItem.QueryValue( a );
                         aArgs[0].Value = a;
-                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillHatch" )),
+                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( ".uno:FillHatch" ),
                                                                        aArgs );
                     }
                 }
@@ -769,10 +769,10 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
                         const XFillBitmapItem aXFillBitmapItem(pLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
 
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ));
+                        aArgs[0].Name = ::rtl::OUString( "FillBitmap" );
                         aXFillBitmapItem.QueryValue( a );
                         aArgs[0].Value = a;
-                        ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillBitmap")), aArgs);
+                        ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(".uno:FillBitmap"), aArgs);
                     }
                 }
             }

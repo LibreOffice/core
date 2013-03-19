@@ -163,7 +163,7 @@ namespace svx
             ::utl::OConfigurationTreeRoot aConfig(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext(
                     m_aContext.getUNOContext(),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument" ) )
+                    ::rtl::OUString( "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument" )
             ) );
             ::rtl::OUString sDatabaseFilter;
             OSL_VERIFY( aConfig.getNodeValue( "ooSetupFactoryActualFilter" ) >>= sDatabaseFilter );
@@ -195,7 +195,7 @@ namespace svx
         if ( m_aFilterExtensions.getLength() == 0 )
         {
             m_aFilterExtensions.realloc(1);
-            m_aFilterExtensions[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.odb" ) );
+            m_aFilterExtensions[0] = ::rtl::OUString( "*.odb" );
         }
     }
 

@@ -60,14 +60,14 @@ SvxUnoTransGradientTable::~SvxUnoTransGradientTable() throw()
 
 OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoTransGradientTable") );
+    return OUString("SvxUnoTransGradientTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable" ));
+    aSNS.getArray()[0] = OUString("com.sun.star.drawing.TransparencyGradientTable" );
     return aSNS;
 }
 

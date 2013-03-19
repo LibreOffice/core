@@ -226,7 +226,7 @@ sal_Int16 SAL_CALL ToolbarMenuAcc::getAccessibleRole() throw (RuntimeException)
 OUString SAL_CALL ToolbarMenuAcc::getAccessibleDescription() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "ToolbarMenu" ) );
+    return OUString( "ToolbarMenu" );
 }
 
 // -----------------------------------------------------------------------------
@@ -599,7 +599,7 @@ void ToolbarMenuAcc::ThrowIfDisposed (void) throw (DisposedException)
 {
     if(rBHelper.bDisposed || rBHelper.bInDispose || !mpParent)
     {
-        throw DisposedException ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")), static_cast<XWeak*>(this));
+        throw DisposedException ( ::rtl::OUString("object has been already disposed"), static_cast<XWeak*>(this));
     }
 }
 

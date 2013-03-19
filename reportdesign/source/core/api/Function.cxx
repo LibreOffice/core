@@ -64,7 +64,7 @@ void SAL_CALL OFunction::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFunction::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OFunction"));
+    return ::rtl::OUString("com.sun.star.comp.report.OFunction");
 }
 
 //--------------------------------------------------------------------------

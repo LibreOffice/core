@@ -87,7 +87,7 @@ void SAL_CALL
 ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) throw (css::uno::RuntimeException)
 {
     // #TODO #FIXME needs implementation, or can't be done?
-    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Not Implemented") ), uno::Reference< XInterface >() );
+    throw uno::RuntimeException( ::rtl::OUString( "Not Implemented"), uno::Reference< XInterface >() );
 }
 
 
@@ -110,7 +110,7 @@ ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException)
 rtl::OUString
 ScVbaCharacters::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCharacters"));
+    return rtl::OUString("ScVbaCharacters");
 }
 
 uno::Sequence< rtl::OUString >
@@ -120,7 +120,7 @@ ScVbaCharacters::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Characters" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Characters" );
     }
     return aServiceNames;
 }

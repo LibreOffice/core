@@ -158,7 +158,7 @@ namespace svt { namespace uno
             {
                 if ( i_rPaths[i][0] != nFirstPageId )
                     throw IllegalArgumentException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "All paths must start with the same page id." ) ),
+                        ::rtl::OUString( "All paths must start with the same page id." ),
                         i_rContext, 2 );
             }
         }
@@ -240,14 +240,14 @@ namespace svt { namespace uno
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL Wizard::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.uno.Wizard" ) );
+        return ::rtl::OUString( "com.sun.star.comp.svtools.uno.Wizard" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL Wizard::getSupportedServiceNames_static() throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aServices(1);
-        aServices[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.Wizard" ) );
+        aServices[0] = ::rtl::OUString( "com.sun.star.ui.dialogs.Wizard" );
         return aServices;
     }
 

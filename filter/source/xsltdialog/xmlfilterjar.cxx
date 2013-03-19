@@ -72,7 +72,7 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
 {
     try
     {
-        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString( "com.sun.star.config.SpecialConfigManager" )), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             sProgPath = xCfgMgr->substituteVariables( sProgPath );
@@ -135,7 +135,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
     {
         OUString aFileURL( rSourceFile );
 
-        if( !aFileURL.matchIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("file://") ) ) )
+        if( !aFileURL.matchIgnoreAsciiCase( OUString("file://") ) )
         {
             aFileURL = URIHelper::SmartRel2Abs( sProgPath, aFileURL, Link(), false );
         }
@@ -162,13 +162,13 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+        aArg.Name = ::rtl::OUString( "StorageFormat" );
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
+                rtl::OUString( "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -262,13 +262,13 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+        aArg.Name = ::rtl::OUString( "StorageFormat" );
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
+                rtl::OUString( "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -341,8 +341,8 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
     {
         OUString szPackagePath( encodeZipUri( rURL.copy( sVndSunStarPackage.getLength() ) ) );
 
-        if ( ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
-          || ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
+        if ( ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( ".." ) )
+          || ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, OUString( "." ) ) )
             throw lang::IllegalArgumentException();
 
         if( xIfc->hasByHierarchicalName( szPackagePath ) )

@@ -135,7 +135,7 @@ sal_Bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < co
     try
     {
         sal_uLong nStgFmtId = SotStorage::GetFormatID( rStg );
-        bRet = rStg->isStreamElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")) );
+        bRet = rStg->isStreamElement( ::rtl::OUString("content.xml") );
         if ( bRet )
             bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
     }

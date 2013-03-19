@@ -157,7 +157,7 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
         aFont.SetWeight(WEIGHT_MEDIUM);
         SetFont( aFont );
         DrawText(  aRect ,
-                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit Note")),
+                   rtl::OUString("Edit Note"),
                    TEXT_DRAW_CENTER );
         SetFont( aOldFont );
     }

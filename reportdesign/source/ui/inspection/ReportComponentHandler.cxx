@@ -45,7 +45,7 @@ ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentCo
 {
     try
     {
-        m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.FormComponentPropertyHandler")),m_xContext),uno::UNO_QUERY_THROW);
+        m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.form.inspection.FormComponentPropertyHandler"),m_xContext),uno::UNO_QUERY_THROW);
 
     }catch(const uno::Exception &)
     {
@@ -73,14 +73,14 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ReportComponentHandler::getSupportedSe
 //------------------------------------------------------------------------
 ::rtl::OUString ReportComponentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.ReportComponentHandler"));
+    return ::rtl::OUString("com.sun.star.comp.report.ReportComponentHandler");
 }
 
 //------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > ReportComponentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.inspection.ReportComponentHandler"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.report.inspection.ReportComponentHandler");
     return aSupported;
 }
 

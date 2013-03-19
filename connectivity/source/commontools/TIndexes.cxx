@@ -136,7 +136,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
     else
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        ::rtl::OUStringBuffer aSql( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE ")));
+        ::rtl::OUStringBuffer aSql( ::rtl::OUString("CREATE "));
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
 
@@ -233,7 +233,7 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
             sIndexName = dbtools::composeTableName( m_pTable->getMetaData(), sTemp, aSchema, aName, sal_True, ::dbtools::eInIndexDefinitions );
 
             aSql += sIndexName
-                    + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "))
+                    + ::rtl::OUString(" ON ")
                         + aComposedName;
 
             Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

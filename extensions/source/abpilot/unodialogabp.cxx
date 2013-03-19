@@ -47,7 +47,7 @@ namespace abp
     OABSPilotUno::OABSPilotUno(const Reference< XMultiServiceFactory >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName")), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
+        registerProperty( ::rtl::OUString("DataSourceName"), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
             &m_sDataSourceName, ::getCppuType( &m_sDataSourceName ) );
     }
 
@@ -110,7 +110,7 @@ namespace abp
     //---------------------------------------------------------------------
     ::rtl::OUString OABSPilotUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.abp.OAddressBookSourcePilot"));
+        return ::rtl::OUString("org.openoffice.comp.abp.OAddressBookSourcePilot");
     }
 
     //---------------------------------------------------------------------
@@ -123,7 +123,7 @@ namespace abp
     ::comphelper::StringSequence OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.AddressBookSourcePilot"));
+        aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot");
         return aSupported;
     }
 
@@ -179,7 +179,7 @@ namespace abp
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lProtocol(1);
-        lProtocol[0].Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deactivate"));
+        lProtocol[0].Name    = ::rtl::OUString("Deactivate");
         lProtocol[0].Value <<= sal_True;
         return makeAny( lProtocol );
     }

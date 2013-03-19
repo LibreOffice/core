@@ -45,7 +45,7 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")));
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString("CreateDialogFactory"));
     if ( fp )
         return fp();
     return 0;

@@ -60,7 +60,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         aPostArgument.Source = apSerialization->getInputStream();
         CSS::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
         aPostArgument.Sink = aSink;
-        aPostArgument.MediaType = OUString(RTL_CONSTASCII_USTRINGPARAM("application/xml"));
+        aPostArgument.MediaType = OUString("application/xml");
         aPostArgument.Referer = OUString();
         Any aCommandArgument;
         aCommandArgument <<= aPostArgument;

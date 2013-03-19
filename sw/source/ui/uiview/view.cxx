@@ -1020,7 +1020,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")), frame::FrameSearchFlag::CHILDREN);
+            OUString("_beamer"), frame::FrameSearchFlag::CHILDREN);
     if(xBeamerFrame.is())
     {
         SwDBData aData = pWrtShell->GetDBData();
@@ -1498,56 +1498,56 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     beans::PropertyValue *pValue = rSequence.getArray();
 
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
-    pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "ViewId" ) );
-    OUStringBuffer sBuffer ( OUString(RTL_CONSTASCII_USTRINGPARAM( "view" ) ) );
+    pValue->Name = rtl::OUString( "ViewId" );
+    OUStringBuffer sBuffer ( OUString( "view" ) );
     ::sax::Converter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
     pValue->Value <<= sBuffer.makeStringAndClear();
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewLeft" ) );
+    pValue->Name = OUString( "ViewLeft" );
     pValue->Value <<= TWIP_TO_MM100 ( rRect.Left() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewTop" ) );
+    pValue->Name = OUString( "ViewTop" );
     pValue->Value <<= TWIP_TO_MM100 ( rRect.Top() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleLeft" ) );
+    pValue->Name = OUString( "VisibleLeft" );
     pValue->Value <<= TWIP_TO_MM100 ( rVis.Left() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleTop" ) );
+    pValue->Name = OUString( "VisibleTop" );
     pValue->Value <<= TWIP_TO_MM100 ( rVis.Top() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleRight" ) );
+    pValue->Name = OUString( "VisibleRight" );
     pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Right() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleBottom" ) );
+    pValue->Name = OUString( "VisibleBottom" );
     pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomType" ) );
+    pValue->Name = OUString( "ZoomType" );
     const sal_Int16 nZoomType = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetZoomType());
     pValue->Value <<= nZoomType;
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewLayoutColumns" ) );
+    pValue->Name = OUString( "ViewLayoutColumns" );
     const sal_Int16 nViewLayoutColumns = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetViewLayoutColumns());
     pValue->Value <<= nViewLayoutColumns;
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewLayoutBookMode" ) );
+    pValue->Name = OUString( "ViewLayoutBookMode" );
     const sal_Bool bIsViewLayoutBookMode = pWrtShell->GetViewOptions()->IsViewLayoutBookMode();
     pValue->Value.setValue( &bIsViewLayoutBookMode, ::getBooleanCppuType() );
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomFactor" ) );
+    pValue->Name = OUString( "ZoomFactor" );
     pValue->Value <<= static_cast < sal_Int16 > (pWrtShell->GetViewOptions()->GetZoom());
     pValue++;nIndex++;
 
-    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "IsSelectedFrame" ) );
+    pValue->Name = OUString( "IsSelectedFrame" );
     const sal_Bool bIsSelected = FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? sal_False : sal_True;
     pValue->Value.setValue ( &bIsSelected, ::getBooleanCppuType() );
     nIndex++;

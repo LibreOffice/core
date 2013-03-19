@@ -301,7 +301,7 @@ sal_Bool isProfileLocked(OConnection* _pCon)
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     OSL_ENSURE( xFactory.is(), "can't get service factory" );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
     xMozillaBootstrap = ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XMozillaBootstrap >(xInstance,::com::sun::star::uno::UNO_QUERY);
     if (_pCon)

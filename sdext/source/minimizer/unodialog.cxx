@@ -46,16 +46,16 @@ using namespace ::com::sun::star::script;
 UnoDialog::UnoDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame ) :
     mxMSF( rxMSF ),
     mxController( rxFrame->getController() ),
-    mxDialogModel( mxMSF->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.awt.UnoControlDialogModel" ) ), mxMSF ), UNO_QUERY_THROW ),
+    mxDialogModel( mxMSF->getServiceManager()->createInstanceWithContext( OUString(
+        "com.sun.star.awt.UnoControlDialogModel" ), mxMSF ), UNO_QUERY_THROW ),
     mxDialogModelMultiPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelMSF( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelNameContainer( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelNameAccess( mxDialogModel, UNO_QUERY_THROW ),
     mxControlModel( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialog( mxMSF->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.awt.UnoControlDialog" ) ), mxMSF ), UNO_QUERY_THROW ),
+    mxDialog( mxMSF->getServiceManager()->createInstanceWithContext( OUString(
+        "com.sun.star.awt.UnoControlDialog" ), mxMSF ), UNO_QUERY_THROW ),
     mxControl( mxDialog, UNO_QUERY_THROW ),
     mbStatus( sal_False )
 {
@@ -149,10 +149,10 @@ Reference< XButton > UnoDialog::insertButton( const OUString& rName, Reference< 
     Reference< XButton > xButton;
     try
     {
-        Reference< XInterface > xButtonModel( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ) ),
+        Reference< XInterface > xButtonModel( insertControlModel( OUString( "com.sun.star.awt.UnoControlButtonModel" ),
             rName, rPropertyNames, rPropertyValues ) );
         Reference< XPropertySet > xPropertySet( xButtonModel, UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xButton = Reference< XButton >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
 
         if ( xActionListener.is() )
@@ -175,9 +175,9 @@ Reference< XFixedText > UnoDialog::insertFixedText( const OUString& rName, const
     Reference< XFixedText > xFixedText;
     try
     {
-        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedTextModel" ) ),
+        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlFixedTextModel" ),
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xFixedText = Reference< XFixedText >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
     }
     catch ( Exception& )
@@ -193,9 +193,9 @@ Reference< XCheckBox > UnoDialog::insertCheckBox( const OUString& rName, const S
     Reference< XCheckBox > xCheckBox;
     try
     {
-        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCheckBoxModel" ) ),
+        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlCheckBoxModel" ),
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xCheckBox = Reference< XCheckBox >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
     }
     catch ( Exception& )
@@ -211,9 +211,9 @@ Reference< XControl > UnoDialog::insertFormattedField( const OUString& rName, co
     Reference< XControl > xControl;
     try
     {
-        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFormattedFieldModel" ) ),
+        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlFormattedFieldModel" ),
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xControl = Reference< XControl >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
     }
     catch ( Exception& )
@@ -229,9 +229,9 @@ Reference< XComboBox > UnoDialog::insertComboBox( const OUString& rName, const S
     Reference< XComboBox > xControl;
     try
     {
-        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlComboBoxModel" ) ),
+        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlComboBoxModel" ),
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xControl = Reference< XComboBox >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
     }
     catch ( Exception& )
@@ -247,9 +247,9 @@ Reference< XRadioButton > UnoDialog::insertRadioButton( const OUString& rName, c
     Reference< XRadioButton > xControl;
     try
     {
-        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlRadioButtonModel" ) ),
+        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlRadioButtonModel" ),
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xControl = Reference< XRadioButton >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
     }
     catch ( Exception& )
@@ -265,9 +265,9 @@ Reference< XListBox > UnoDialog::insertListBox( const OUString& rName, const Seq
     Reference< XListBox > xControl;
     try
     {
-        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlListBoxModel" ) ),
+        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlListBoxModel" ),
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xControl = Reference< XListBox >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
     }
     catch ( Exception& )
@@ -283,9 +283,9 @@ Reference< XControl > UnoDialog::insertImage( const OUString& rName, const Seque
     Reference< XControl > xControl;
     try
     {
-        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlImageControlModel" ) ),
+        Reference< XPropertySet > xPropertySet( insertControlModel( OUString( "com.sun.star.awt.UnoControlImageControlModel" ),
             rName, rPropertyNames, rPropertyValues ), UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), Any( rName ) );
+        xPropertySet->setPropertyValue( OUString( "Name" ), Any( rName ) );
         xControl = Reference< XControl >( mxDialogControlContainer->getControl( rName ), UNO_QUERY_THROW );
     }
     catch ( Exception& )

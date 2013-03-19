@@ -728,13 +728,13 @@ Content::createNewContent( const ucb::ContentInfo& Info )
             return uno::Reference< ucb::XContent >();
 
         rtl::OUString aURL = m_aUri.getUri();
-        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aURL += rtl::OUString("/");
 
         if ( Info.Type.equalsIgnoreAsciiCase(
                 getContentType( m_aUri.getScheme(), sal_True ) ) )
-            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Folder"));
+            aURL += rtl::OUString("New_Folder");
         else
-            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Stream"));
+            aURL += rtl::OUString("New_Stream");
 
         uno::Reference< ucb::XContentIdentifier > xId(
             new ::ucbhelper::ContentIdentifier( aURL ) );
@@ -922,7 +922,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // Append all Core Properties.
         xRow->appendString (
             beans::Property(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
+                rtl::OUString("ContentType"),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
@@ -930,14 +930,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.aContentType );
         xRow->appendString(
             beans::Property(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+                rtl::OUString("Title"),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
             rData.aTitle );
         xRow->appendBoolean(
             beans::Property(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+                rtl::OUString("IsDocument"),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
@@ -945,7 +945,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.bIsDocument );
         xRow->appendBoolean(
             beans::Property(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
+                rtl::OUString("IsFolder"),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
@@ -953,7 +953,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.bIsFolder );
         xRow->appendObject(
             beans::Property(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo")),
+                rtl::OUString("CreatableContentsInfo"),
                 -1,
                 getCppuType( static_cast<
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
@@ -963,7 +963,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 rData.getCreatableContentsInfo( PackageUri( rContentId ) ) ) );
         xRow->appendString(
             beans::Property(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
+                rtl::OUString("MediaType"),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
@@ -974,7 +974,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             xRow->appendLong(
                 beans::Property(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")),
+                    rtl::OUString("Size"),
                     -1,
                     getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
@@ -983,7 +983,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             xRow->appendBoolean(
                 beans::Property(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
+                    rtl::OUString("Compressed"),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND ),
@@ -991,7 +991,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             xRow->appendBoolean(
                 beans::Property(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")),
+                    rtl::OUString("Encrypted"),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND ),
@@ -1004,7 +1004,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             xRow->appendBoolean(
                 beans::Property(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasEncryptedEntries")),
+                    rtl::OUString("HasEncryptedEntries"),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
@@ -1075,32 +1075,32 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "Title" )
@@ -1109,8 +1109,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Property is read-only!" )),
+                                rtl::OUString(
+                                    "Property is read-only!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else
@@ -1139,8 +1139,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     {
                         aRet[ n ] <<=
                             lang::IllegalArgumentException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Empty title not allowed!" )),
+                                rtl::OUString(
+                                    "Empty title not allowed!" ),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 -1 );
                     }
@@ -1149,8 +1149,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 {
                     aRet[ n ] <<=
                         beans::IllegalTypeException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property value has wrong type!" )),
+                            rtl::OUString(
+                                "Property value has wrong type!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -1175,8 +1175,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Property value has wrong type!" )),
+                                rtl::OUString(
+                                    "Property value has wrong type!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1184,8 +1184,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "Compressed" )
@@ -1211,16 +1211,16 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Property value has wrong type!" )),
+                                rtl::OUString(
+                                        "Property value has wrong type!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
             else
             {
                 aRet[ n ] <<= beans::UnknownPropertyException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Compressed only supported by streams!" )),
+                                rtl::OUString(
+                                    "Compressed only supported by streams!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1247,16 +1247,16 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Property value has wrong type!" )),
+                                rtl::OUString(
+                                        "Property value has wrong type!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
             else
             {
                 aRet[ n ] <<= beans::UnknownPropertyException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Encrypted only supported by streams!" )),
+                                rtl::OUString(
+                                    "Encrypted only supported by streams!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1264,8 +1264,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "EncryptionKey" )
@@ -1296,16 +1296,16 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Property value has wrong type!" )),
+                                rtl::OUString(
+                                    "Property value has wrong type!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
             else
             {
                 aRet[ n ] <<= beans::UnknownPropertyException(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "EncryptionKey not supported by non-root folder!" )),
+                        rtl::OUString(
+                            "EncryptionKey not supported by non-root folder!" ),
                         static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1358,8 +1358,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= uno::Exception(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "No property set for storing the value!" )),
+                                rtl::OUString(
+                                    "No property set for storing the value!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1371,7 +1371,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         // Assemble new content identifier...
         rtl::OUString aNewURL = m_aUri.getParentUri();
-        aNewURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aNewURL += rtl::OUString("/");
         aNewURL += ::ucb_impl::urihelper::encodeSegment( aNewTitle );
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
@@ -1394,14 +1394,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Exchange failed!")),
+                    rtl::OUString("Exchange failed!"),
                     static_cast< cppu::OWeakObject * >( this ) );
         }
     }
 
     if ( !aNewTitle.isEmpty() )
     {
-        aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        aEvent.PropertyName = rtl::OUString("Title");
         aEvent.OldValue     = uno::makeAny( m_aProps.aTitle );
         aEvent.NewValue     = uno::makeAny( aNewTitle );
 
@@ -1422,8 +1422,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "Uri")),
+                                 rtl::OUString(
+                                                   "Uri"),
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
@@ -1432,8 +1432,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     ucb::IOErrorCode_CANT_WRITE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "Cannot store persistent data!" )),
+                    rtl::OUString(
+                        "Cannot store persistent data!" ),
                     this );
                 // Unreachable
             }
@@ -1496,8 +1496,8 @@ uno::Any Content::open(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "Uri")),
+                                 rtl::OUString(
+                                                   "Uri"),
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
@@ -1508,7 +1508,7 @@ uno::Any Content::open(
                     m_eState == PERSISTENT
                         ? xEnv
                         : uno::Reference< ucb::XCommandEnvironment >(),
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Got no data stream!")),
+                    rtl::OUString("Got no data stream!"),
                     this );
                 // Unreachable
             }

@@ -185,7 +185,7 @@ void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatus
 
 OUString PPPOptimizerDialog_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.SunPresentationMinimizerImp" ) );
+    return OUString( "com.sun.star.comp.SunPresentationMinimizerImp" );
 }
 
 Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()

@@ -915,7 +915,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
                 if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
 
                 ::rtl::OUString aString("SELECT * FROM ");
 
@@ -1075,7 +1075,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
         aPropertySet->setPropertyValue("ActiveConnection", aVal);
         Reference< XMultiServiceFactory >   xFactory(xConnection, UNO_QUERY);
         if ( xFactory.is() )
-            m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
+            m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
 
         if(xOldConnection.is())
             xOldConnection->dispose();
@@ -1168,7 +1168,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
                 if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
 
                 ::rtl::OUString aString("SELECT * FROM ");
 
@@ -1409,7 +1409,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
             xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, makeAny( rName ) );
-            xPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeWidgetLook" ) ), makeAny( (sal_Bool)sal_True ) );
+            xPropSet->setPropertyValue( ::rtl::OUString( "NativeWidgetLook" ), makeAny( (sal_Bool)sal_True ) );
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 

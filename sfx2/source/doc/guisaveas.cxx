@@ -194,7 +194,7 @@ public:
             uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY_THROW );
             m_xDocumentSettings.set(
                 xDocSettingsSupplier->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ),
+                    ::rtl::OUString( "com.sun.star.document.Settings" ) ),
                 uno::UNO_QUERY_THROW );
 
             ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
@@ -460,19 +460,19 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
 //-------------------------------------------------------------------------
 ::rtl::OUString ModelData_Impl::GetDocServiceName()
 {
-    return GetModuleProps().getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDocumentService")), ::rtl::OUString());
+    return GetModuleProps().getUnpackedValueOrDefault(::rtl::OUString("ooSetupFactoryDocumentService"), ::rtl::OUString());
 }
 
 //-------------------------------------------------------------------------
 void ModelData_Impl::CheckInteractionHandler()
 {
     ::comphelper::SequenceAsHashMap::const_iterator aInteractIter =
-            m_aMediaDescrHM.find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) );
+            m_aMediaDescrHM.find( ::rtl::OUString("InteractionHandler") );
 
     if ( aInteractIter == m_aMediaDescrHM.end() )
     {
         try {
-            m_aMediaDescrHM[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) ]
+            m_aMediaDescrHM[ ::rtl::OUString("InteractionHandler") ]
                 <<= task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), 0);
         }
         catch( const uno::Exception& )
@@ -492,7 +492,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
     uno::Sequence< beans::PropertyValue > aProps;
 
     ::rtl::OUString aFilterName = GetModuleProps().getUnpackedValueOrDefault(
-                                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDefaultFilter")),
+                                                                ::rtl::OUString("ooSetupFactoryDefaultFilter"),
                                                                 ::rtl::OUString() );
 
     m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aProps;
@@ -509,7 +509,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
     if ( aProps.getLength() )
     {
         ::comphelper::SequenceAsHashMap aFiltHM( aProps );
-        sal_Int32 nFlags = aFiltHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),
+        sal_Int32 nFlags = aFiltHM.getUnpackedValueOrDefault( ::rtl::OUString("Flags"),
                                                         (sal_Int32)0 );
         if ( ( ( nFlags & nMust ) == nMust ) && !( nFlags & nDont ) )
             aFilterProps = aProps;
@@ -523,7 +523,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sal_Int32 nMust, sal_Int32 nDont )
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
-    aSearchRequest[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
+    aSearchRequest[0].Name = ::rtl::OUString("DocumentService");
     aSearchRequest[0].Value <<= GetDocServiceName();
 
     return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -541,9 +541,9 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     {
         // Preselect PDF-Filter for EXPORT
         uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
-        aSearchRequest[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
-        aSearchRequest[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdf_Portable_Document_Format"));
-        aSearchRequest[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
+        aSearchRequest[0].Name = ::rtl::OUString("Type");
+        aSearchRequest[0].Value <<= ::rtl::OUString("pdf_Portable_Document_Format");
+        aSearchRequest[1].Name = ::rtl::OUString("DocumentService");
         aSearchRequest[1].Value <<= GetDocServiceName();
 
         aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -647,7 +647,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
         // it is done only for documents that have persistence already
         uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
                             comphelper::getProcessComponentContext(),
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::rtl::OUString( "/org.openoffice.Office.Common" ),
                             ::comphelper::ConfigurationHelper::E_STANDARD );
         if ( !xCommonConfig.is() )
             throw uno::RuntimeException(); // should the saving proceed as usual instead?
@@ -659,11 +659,11 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
             // the saving is acceptable
             // in case the configuration entry is not set or set to false
             // or in case of version creation
-            ::rtl::OUString aVersionCommentString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VersionComment"));
+            ::rtl::OUString aVersionCommentString = ::rtl::OUString("VersionComment");
             if ( ( ::comphelper::ConfigurationHelper::readRelativeKey(
                     xCommonConfig,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Save/Document/" ) ),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AlwaysSaveAs" ) ) ) >>= bAlwaysSaveAs )
+                    ::rtl::OUString( "Save/Document/" ),
+                    ::rtl::OUString( "AlwaysSaveAs" ) ) >>= bAlwaysSaveAs )
               && bAlwaysSaveAs
             && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
             {
@@ -765,13 +765,13 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
             m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
         aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
-        nFiltFlags = aFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")), (sal_Int32)0 );
+        nFiltFlags = aFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString("Flags"), (sal_Int32)0 );
     }
 
     // only a temporary solution until default filter retrieving feature is implemented
     // then GetDocServiceDefaultFilter() must be used
     ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceDefaultFilterCheckFlags( 3, 0 );
-    sal_Int32 nDefFiltFlags = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")), (sal_Int32)0 );
+    sal_Int32 nDefFiltFlags = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString("Flags"), (sal_Int32)0 );
 
     // if the old filter is not acceptable
     // and there is no default filter or it is not acceptable for requested parameters then proceed with saveAs
@@ -791,12 +791,12 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
     {
         // the default filter is acceptable and the old filter is alian one
         // so ask to make a saveAs operation
-        ::rtl::OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")),
+        ::rtl::OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString("UIName"),
                                                                                 ::rtl::OUString() );
-        ::rtl::OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")),
+        ::rtl::OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString("UIName"),
                                                                                 ::rtl::OUString() );
         ::rtl::OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreusedFilterName")),
+                                                    ::rtl::OUString("PreusedFilterName"),
                                                     ::rtl::OUString() );
         if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
         {
@@ -847,7 +847,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
 sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
-    aSearchRequest[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
+    aSearchRequest[0].Name = ::rtl::OUString("DocumentService");
     aSearchRequest[0].Value <<= GetDocServiceName();
 
     uno::Reference< container::XEnumeration > xFilterEnum =
@@ -860,7 +860,7 @@ sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
         {
             ::comphelper::SequenceAsHashMap aPropsHM( pProps );
             ::rtl::OUString aUIServName = aPropsHM.getUnpackedValueOrDefault(
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent")),
+                                            ::rtl::OUString("UIComponent"),
                                             ::rtl::OUString() );
             if ( !aUIServName.isEmpty() )
                 return sal_True;
@@ -884,7 +884,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     sal_Bool bUseFilterOptions = sal_False;
 
     ::comphelper::SequenceAsHashMap::const_iterator aOverwriteIter =
-                GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite")) );
+                GetMediaDescr().find( ::rtl::OUString("Overwrite") );
 
     // the file name must be specified if overwrite option is set
     if ( aOverwriteIter != GetMediaDescr().end() )
@@ -938,10 +938,10 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             // this is a PDF export
             // the filter options has been shown already
             ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")),
+                                                        ::rtl::OUString("UIName"),
                                                         ::rtl::OUString() );
 
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ), rStandardDir, rBlackList ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, ::rtl::OUString( "pdf" ), rStandardDir, rBlackList ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
@@ -990,7 +990,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     {
         // it is export, set the preselected filter
         ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")),
+                                        ::rtl::OUString("UIName"),
                                         ::rtl::OUString() );
         pFileDlg->SetCurrentFilter( aFilterUIName );
     }
@@ -1006,24 +1006,24 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
 
         ::comphelper::SequenceAsHashMap aOldFiltPropsHM( aOldFilterProps );
-        sal_Int32 nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")), (sal_Int32)0 );
+        sal_Int32 nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString("Flags"), (sal_Int32)0 );
 
         if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || nOldFiltFlags & nDont )
         {
             // the suggested type will be changed, the extension should be adjusted
             aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type")),
+                                            ::rtl::OUString("Type"),
                                             ::rtl::OUString() );
 
             ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")),
+                                            ::rtl::OUString("UIName"),
                                             ::rtl::OUString() );
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
         {
             pFileDlg->SetCurrentFilter( aOldFiltPropsHM.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")),
+                                                        ::rtl::OUString("UIName"),
                                                         ::rtl::OUString() ) );
         }
     }
@@ -1037,7 +1037,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     uno::Reference < view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), uno::UNO_QUERY );
     if ( xSel.is() && xSel->getSelection().hasValue() )
-        GetMediaDescr()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SelectionOnly"))] <<= sal_True;
+        GetMediaDescr()[::rtl::OUString("SelectionOnly")] <<= sal_True;
 
     // This is a temporary hardcoded solution must be removed when
     // dialogs do not need parameters in SidSet representation any more
@@ -1166,7 +1166,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     // merge in results of the dialog execution
-    GetMediaDescr()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))] <<=
+    GetMediaDescr()[::rtl::OUString("URL")] <<=
                                                 ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ));
     GetMediaDescr()[sFilterNameString] <<= aFilterName;
 
@@ -1186,14 +1186,14 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
             if ( xFrameDispatch.is() )
             {
                 util::URL aURL;
-                aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SetDocumentProperties"));
+                aURL.Complete = ::rtl::OUString(".uno:SetDocumentProperties");
 
                 uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
                 if ( xTransformer->parseStrict( aURL ) )
                 {
                     uno::Reference< frame::XDispatch > xDispatch = xFrameDispatch->queryDispatch(
                                                                                 aURL,
-                                                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
+                                                                                ::rtl::OUString("_self"),
                                                                                 0 );
                     if ( xDispatch.is() )
                     {
@@ -1217,7 +1217,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
     ::rtl::OUString aRecommendedDir;
 
     if ( ( !aSuggestedDir.isEmpty() || GetStorable()->hasLocation() )
-      && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")),
+      && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString("RepairPackage"),
                                                                       sal_False ) )
     {
         INetURLObject aLocation;
@@ -1272,18 +1272,18 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
         {
             // adjust the extension to the type
             uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
-                comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")) ),
+                comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.document.TypeDetection") ),
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
-                INetURLObject aObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file:///c:/" ) ) + aRecommendedName );
+                INetURLObject aObj( ::rtl::OUString( "file:///c:/" ) + aRecommendedName );
 
                 uno::Sequence< beans::PropertyValue > aTypeNameProps;
                 if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
                 {
                     ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
                     uno::Sequence< ::rtl::OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extensions")),
+                                                    ::rtl::OUString("Extensions"),
                                                     ::uno::Sequence< ::rtl::OUString >() );
                     if ( aExtensions.getLength() )
                         aObj.SetExtension( aExtensions[0] );
@@ -1312,7 +1312,7 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguratio
     if ( !m_xFilterCFG.is() )
     {
         m_xFilterCFG = uno::Reference< container::XNameAccess >(
-            comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory")) ),
+            comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.document.FilterFactory") ),
             uno::UNO_QUERY );
 
         if ( !m_xFilterCFG.is() )
@@ -1371,7 +1371,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
     if ( nStoreMode & SAVEAS_REQUESTED )
     {
         ::comphelper::SequenceAsHashMap::const_iterator aSaveToIter =
-                        aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveTo")) );
+                        aModelData.GetMediaDescr().find( ::rtl::OUString("SaveTo") );
         if ( aSaveToIter != aModelData.GetMediaDescr().end() )
         {
             sal_Bool bWideExport = sal_False;
@@ -1465,7 +1465,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
 
     ::comphelper::SequenceAsHashMap aFilterPropsHM( aFilterProps );
     ::rtl::OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
+                                                                    ::rtl::OUString("Name"),
                                                                     ::rtl::OUString() );
 
     const ::rtl::OUString sFilterNameString(aFilterNameString);
@@ -1478,7 +1478,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
                                                     ::rtl::OUString() );
 
     sal_Bool bUseFilterOptions = sal_False;
-    ::comphelper::SequenceAsHashMap::const_iterator aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) );
+    ::comphelper::SequenceAsHashMap::const_iterator aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString("URL") );
 
     const ::rtl::OUString sFilterOptionsString(aFilterOptionsString);
     const ::rtl::OUString sFilterDataString(aFilterDataString);
@@ -1502,7 +1502,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
     {
         sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
         ::comphelper::SequenceAsHashMap::const_iterator aDlgIter =
-            aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSystemDialog")) );
+            aModelData.GetMediaDescr().find( ::rtl::OUString("UseSystemDialog") );
         if ( aDlgIter != aModelData.GetMediaDescr().end() )
         {
             sal_Bool bUseSystemDialog = sal_True;
@@ -1516,28 +1516,28 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
         }
 
         // The Dispatch supports parameter FolderName that overwrites SuggestedSaveAsDir
-        ::rtl::OUString aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FolderName" ) ), ::rtl::OUString() );
+        ::rtl::OUString aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( "FolderName" ), ::rtl::OUString() );
         if ( aSuggestedDir.isEmpty() )
         {
-            aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsDir" ) ), ::rtl::OUString() );
+            aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( "SuggestedSaveAsDir" ), ::rtl::OUString() );
             if ( aSuggestedDir.isEmpty() )
-                aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsDir" ) ), ::rtl::OUString() );
+                aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( "SuggestedSaveAsDir" ), ::rtl::OUString() );
         }
 
-        aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
+        aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( "SuggestedSaveAsName" ), ::rtl::OUString() );
         if ( aSuggestedName.isEmpty() )
-            aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
+            aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( "SuggestedSaveAsName" ), ::rtl::OUString() );
 
         ::rtl::OUString sStandardDir;
         ::comphelper::SequenceAsHashMap::const_iterator aStdDirIter =
-            aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StandardDir")) );
+            aModelData.GetMediaDescr().find( ::rtl::OUString("StandardDir") );
         if ( aStdDirIter != aModelData.GetMediaDescr().end() )
             aStdDirIter->second >>= sStandardDir;
 
         ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlackList;
 
         ::comphelper::SequenceAsHashMap::const_iterator aBlackListIter =
-            aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BlackList")) );
+            aModelData.GetMediaDescr().find( ::rtl::OUString("BlackList") );
         if ( aBlackListIter != aModelData.GetMediaDescr().end() )
             aBlackListIter->second >>= aBlackList;
 
@@ -1569,7 +1569,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
         }
 
         bDialogUsed = sal_True;
-        aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) );
+        aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString("URL") );
     }
     else
     {
@@ -1616,7 +1616,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
     }
 
     ::comphelper::SequenceAsHashMap::const_iterator aIter =
-                            aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterFlags")) );
+                            aModelData.GetMediaDescr().find( ::rtl::OUString("FilterFlags") );
     sal_Bool bFilterFlagsSet = ( aIter != aModelData.GetMediaDescr().end() );
 
     if( !( nStoreMode & PDFEXPORT_REQUESTED ) && !bFilterFlagsSet
@@ -1635,7 +1635,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
 
     DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
 
-    OSL_ENSURE( aModelData.GetMediaDescr().find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) ) == aModelData.GetMediaDescr().end(), "The Password property of MediaDescriptor should not be used here!" );
+    OSL_ENSURE( aModelData.GetMediaDescr().find( ::rtl::OUString( "Password" ) ) == aModelData.GetMediaDescr().end(), "The Password property of MediaDescriptor should not be used here!" );
     if ( aOptions.IsDocInfoSave()
       && ( !aModelData.GetStorable()->hasLocation()
           || INetURLObject( aModelData.GetStorable()->getLocation() ) != aURL ) )
@@ -1715,7 +1715,7 @@ sal_Bool SfxStoringHelper::CheckFilterOptionsAppearence(
                {
                 ::comphelper::SequenceAsHashMap aPropsHM( aProps );
                    ::rtl::OUString aServiceName = aPropsHM.getUnpackedValueOrDefault(
-                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent")),
+                                                    ::rtl::OUString("UIComponent"),
                                                     ::rtl::OUString() );
                 if( !aServiceName.isEmpty() )
                        bUseFilterOptions = sal_True;

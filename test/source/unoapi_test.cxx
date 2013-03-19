@@ -44,8 +44,7 @@ void UnoApiTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
+        getMultiServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.Calc.SpreadsheetDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
     mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }

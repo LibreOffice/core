@@ -87,8 +87,8 @@ namespace
 void SaveODFItem::Commit() {}
 void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-    SaveODFItem::SaveODFItem(): utl::ConfigItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "Office.Common/Save"))), m_nODF(0)
+    SaveODFItem::SaveODFItem(): utl::ConfigItem(::rtl::OUString(
+        "Office.Common/Save")), m_nODF(0)
     {
         OUString sDef(RTL_CONSTASCII_USTRINGPARAM("ODF/DefaultVersion"));
         Sequence< css::uno::Any > aValues = GetProperties( Sequence<OUString>(&sDef,1) );
@@ -105,8 +105,8 @@ void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >
         }
         else
             throw uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion")), 0);
+                OUString(
+                    "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion"), 0);
     }
 }
 

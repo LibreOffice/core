@@ -158,17 +158,17 @@ CustomToolBarImportHelper::createMenu( const rtl::OUString& rName, const uno::Re
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
         // set name for menubar
-        xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UIName") ), uno::makeAny( rName ) );
+        xProps->setPropertyValue( rtl::OUString("UIName"), uno::makeAny( rName ) );
         if ( xPopup.is() )
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
-            aPopupMenu[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
-            aPopupMenu[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("vnd.openoffice.org:") ) + rName );
-            aPopupMenu[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Label") );
+            aPopupMenu[0].Name = rtl::OUString("CommandURL");
+            aPopupMenu[0].Value = uno::makeAny( rtl::OUString("vnd.openoffice.org:") + rName );
+            aPopupMenu[1].Name = rtl::OUString("Label");
             aPopupMenu[1].Value <<= rName;
-            aPopupMenu[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ItemDescriptorContainer") );
+            aPopupMenu[2].Name = rtl::OUString("ItemDescriptorContainer");
             aPopupMenu[2].Value = uno::makeAny( xMenuDesc );
-            aPopupMenu[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Type" ) );
+            aPopupMenu[3].Name = rtl::OUString("Type" );
             aPopupMenu[3].Value <<= sal_Int32( 0 );
 
             xPopup->insertByIndex( xPopup->getCount(), uno::makeAny( aPopupMenu ) );
@@ -297,7 +297,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     bBeginGroup = rHeader.isBeginGroup();
     controlGeneralInfo.ImportToolBarControlData( helper, props );
     beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Visible") ) ;
+    aProp.Name = rtl::OUString("Visible") ;
     aProp.Value = uno::makeAny( rHeader.isVisible() ); // where is the visible attribute stored
     props.push_back( aProp );
     if ( rHeader.getTct() == 0x01
@@ -348,7 +348,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
     else if ( rHeader.getTct() == 0x0a )
     {
-        aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") ) ;
+        aProp.Name = rtl::OUString("CommandURL") ;
         rtl::OUString sMenuBar( RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/") );
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
@@ -359,7 +359,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
 
     short icontext =  ( rHeader.getTbct() & 0x03 );
-    aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Style") ) ;
+    aProp.Name = rtl::OUString("Style") ;
     if ( bIsMenuBar )
     {
         nStyle |= ui::ItemStyle::TEXT;
@@ -495,24 +495,24 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
         if ( !extraInfo.getOnAction().isEmpty() )
         {
-            aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
+            aProp.Name = rtl::OUString("CommandURL");
             ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
             if ( aMacroInf.mbFound )
                 aProp.Value = helper.createCommandFromMacro( aMacroInf.msResolvedMacro );
             else
-                aProp.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UnResolvedMacro[" )).concat( extraInfo.getOnAction() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "]" )) );
+                aProp.Value <<= rtl::OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( rtl::OUString( "]" ) );
             sControlData.push_back( aProp );
         }
 
-        aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Label") );
+        aProp.Name = rtl::OUString("Label");
         aProp.Value = uno::makeAny( customText.getString().replace('&','~') );
         sControlData.push_back( aProp );
 
-        aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Type") );
+        aProp.Name = rtl::OUString("Type");
         aProp.Value = uno::makeAny( ui::ItemType::DEFAULT );
         sControlData.push_back( aProp );
 
-        aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Tooltip") );
+        aProp.Name = rtl::OUString("Tooltip");
         aProp.Value = uno::makeAny( tooltip.getString() );
         sControlData.push_back( aProp );
 /*

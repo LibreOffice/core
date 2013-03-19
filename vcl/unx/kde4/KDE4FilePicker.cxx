@@ -77,9 +77,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
-        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
-        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDE4FilePicker"));
+        aRet[0] = rtl::OUString("com.sun.star.ui.dialogs.FilePicker");
+        aRet[1] = rtl::OUString("com.sun.star.ui.dialogs.SystemFilePicker");
+        aRet[2] = rtl::OUString("com.sun.star.ui.dialogs.KDE4FilePicker");
         return aRet;
     }
 }
@@ -591,7 +591,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     if (args.getLength() == 0)
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
+                rtl::OUString( "no arguments" ),
                 static_cast< XFilePicker2* >( this ), 1 );
     }
 
@@ -601,7 +601,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
         ( arg.getValueType() != ::getCppuType((sal_Int8*)0)))
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
+                rtl::OUString( "invalid argument type" ),
                 static_cast< XFilePicker2* >( this ), 1 );
     }
 
@@ -673,7 +673,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         default:
             throw lang::IllegalArgumentException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
+                    rtl::OUString( "Unknown template" ),
                     static_cast< XFilePicker2* >( this ),
                     1 );
     }

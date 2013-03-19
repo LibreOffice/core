@@ -118,8 +118,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 
         return uno::makeAny( sValue );
 #else
-        throw uno::RuntimeException( rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("Only support on Windows")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Only support on Windows"), uno::Reference< uno::XInterface >() );
 #endif
     }
 
@@ -162,8 +161,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
         }
         return;
 #else
-        throw uno::RuntimeException( rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("Not implemented")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
 #endif
     }
 
@@ -231,8 +229,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
                 break;
             }
             default:
-                throw uno::RuntimeException( rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("Unknown value for Cursor pointer")), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString("Unknown value for Cursor pointer"), uno::Reference< uno::XInterface >() );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
         }
@@ -270,7 +267,7 @@ SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OU
 rtl::OUString
 SwVbaSystem::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSystem"));
+    return rtl::OUString("SwVbaSystem");
 }
 
 uno::Sequence< rtl::OUString >
@@ -280,7 +277,7 @@ SwVbaSystem::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.System" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.System" );
     }
     return aServiceNames;
 }

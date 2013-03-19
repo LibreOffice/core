@@ -47,7 +47,7 @@ uno::Any SAL_CALL SwVbaRow::getHeight() throw (css::uno::RuntimeException)
         return uno::makeAny( sal_Int32( word::WdConstants::wdUndefined ) );
 
     sal_Int32 nHeight = 0;
-    mxRowProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ) ) >>= nHeight;
+    mxRowProps->getPropertyValue( rtl::OUString("Height") ) >>= nHeight;
     return uno::makeAny( (float)Millimeter::getInPoints( nHeight ) );
 }
 
@@ -57,20 +57,20 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height ) throw (css::uno::Ru
     _height >>= height;
 
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( height );
-    mxRowProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ), uno::makeAny( nHeight ) );
+    mxRowProps->setPropertyValue( rtl::OUString("Height"), uno::makeAny( nHeight ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRow::getHeightRule() throw (css::uno::RuntimeException)
 {
     sal_Bool isAutoHeight = sal_False;
-    mxRowProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsAutoHeight") ) ) >>= isAutoHeight;
+    mxRowProps->getPropertyValue( rtl::OUString("IsAutoHeight") ) >>= isAutoHeight;
     return isAutoHeight ? word::WdRowHeightRule::wdRowHeightAuto : word::WdRowHeightRule::wdRowHeightExactly;
 }
 
 void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException)
 {
     sal_Bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
-    mxRowProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsAutoHeight") ), uno::makeAny( isAutoHeight ) );
+    mxRowProps->setPropertyValue( rtl::OUString("IsAutoHeight"), uno::makeAny( isAutoHeight ) );
 }
 
 void SAL_CALL
@@ -107,7 +107,7 @@ void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule ) throw (c
 rtl::OUString
 SwVbaRow::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRow"));
+    return rtl::OUString("SwVbaRow");
 }
 
 uno::Sequence< rtl::OUString >
@@ -117,7 +117,7 @@ SwVbaRow::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Row" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Row" );
     }
     return aServiceNames;
 }

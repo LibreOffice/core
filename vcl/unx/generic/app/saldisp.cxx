@@ -728,7 +728,7 @@ rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
     if( aKeyCode != 0 && aKeyCode != NoSymbol )
     {
         if( !nKeySym )
-            aRet = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ) );
+            aRet = rtl::OUString( "???" );
         else
         {
             aRet = ::vcl_sal::getKeysymReplacementName( aLang, nKeySym );

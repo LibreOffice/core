@@ -88,14 +88,14 @@ namespace dbaui
     Sequence< ::rtl::OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
         Sequence< ::rtl::OUString > aSupported(2);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.Accessible"));
-        aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleContext"));
+        aSupported[0] = ::rtl::OUString("com.sun.star.accessibility.Accessible");
+        aSupported[1] = ::rtl::OUString("com.sun.star.accessibility.AccessibleContext");
         return aSupported;
     }
     // -----------------------------------------------------------------------------
     ::rtl::OUString OTableWindowAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.TableWindowAccessibility"));
+        return ::rtl::OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext

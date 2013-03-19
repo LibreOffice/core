@@ -723,8 +723,7 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
     {
         rtl::OUString aMessage(pBaseUriRef);
         aMessage += rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            " does not start with a scheme component"));
+                            " does not start with a scheme component");
         rtl_uString_assign(pException,
                            const_cast< rtl::OUString & >(aMessage).pData);
         return false;
@@ -734,8 +733,7 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
     {
         rtl::OUString aMessage(pBaseUriRef);
         aMessage += rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "path component does not start with slash"));
+                            "path component does not start with slash");
         rtl_uString_assign(pException, aMessage.pData);
         return false;
     }

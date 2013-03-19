@@ -285,7 +285,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create a bool option for paper tray
     bDefaultVal = rDefaultPrintData.IsPaperFromSetup();
     vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
-    aPaperTrayOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPageOptGroup" ) );
+    aPaperTrayOpt.maGroupHint = rtl::OUString( "OptionsPageOptGroup" );
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("printpaperfromsetup", aLocalizedStrings.GetString( 11 ),
                                                         ".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox",
                                                         "PrintPaperFromSetup",
@@ -294,7 +294,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // print range selection
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
-    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aPrintRangeOpt.maGroupHint = rtl::OUString( "PrintRange" );
     aPrintRangeOpt.mbInternalOnly = sal_True;
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", rtl::OUString(aLocalizedStrings.GetString(26)),
                                                            rtl::OUString(),
@@ -308,15 +308,15 @@ SwPrintUIOptions::SwPrintUIOptions(
     uno::Sequence< rtl::OUString > aWidgetIds( 3 );
     aChoices[0] = aLocalizedStrings.GetString( 27 );
     aChoicesDisabled[0] = sal_False;
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+    aHelpIds[0] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" );
     aWidgetIds[0] = "printallpages";
     aChoices[1] = aLocalizedStrings.GetString( 28 );
     aChoicesDisabled[1] = sal_False;
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
+    aHelpIds[1] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" );
     aWidgetIds[1] = "printpages";
     aChoices[2] = aLocalizedStrings.GetString( 29 );
     aChoicesDisabled[2] = sal_Bool(! bHasSelection);
-    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ) );
+    aHelpIds[2] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" );
     aWidgetIds[2] = "printselection";
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
                                                         aHelpIds, aPrintRangeName,
@@ -331,7 +331,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                       aPageRangeOpt);
     // print content selection
     vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;
-    aContentsOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPage" ) );
+    aContentsOpt.maGroupHint = rtl::OUString( "JobPage" );
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("extrawriterprintoptions", rtl::OUString(aLocalizedStrings.GetString(12)),
                                                            rtl::OUString(), aContentsOpt);
     // create a list box for notes content
@@ -342,14 +342,14 @@ SwPrintUIOptions::SwPrintUIOptions(
     aChoices[2] = aLocalizedStrings.GetString( 15 );
     aChoices[3] = aLocalizedStrings.GetString( 16 );
     aHelpIds.realloc( 2 );
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText" ) );
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox" ) );
-    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), 0, sal_False );
+    aHelpIds[0] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText" );
+    aHelpIds[1] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox" );
+    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( "PrintProspect" ), 0, sal_False );
     aAnnotOpt.mbEnabled = bHasPostIts;
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("writercomments",
                                                            aLocalizedStrings.GetString( 17 ),
                                                            aHelpIds,
-                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),
+                                                           rtl::OUString( "PrintAnnotationMode" ),
                                                            aChoices,
                                                            nPrintPostIts,
                                                            uno::Sequence< sal_Bool >(),
@@ -357,7 +357,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create subsection for Page settings
     vcl::PrinterOptionsHelper::UIControlOptions aPageSetOpt;
-    aPageSetOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+    aPageSetOpt.maGroupHint = rtl::OUString( "LayoutPage" );
 
     if (!bWeb)
     {
@@ -368,7 +368,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         aRLChoices[1] = aLocalizedStrings.GetString( 20 );
         aRLChoices[2] = aLocalizedStrings.GetString( 21 );
         uno::Sequence< rtl::OUString > aRLHelp( 1 );
-        aRLHelp[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintLeftRightPages:ListBox" ) );
+        aRLHelp[0] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintLeftRightPages:ListBox" );
         // create a choice option for all/left/right pages
         // 0 : all pages (left & right)
         // 1 : left pages
@@ -405,8 +405,8 @@ SwPrintUIOptions::SwPrintUIOptions(
         aBRTLChoices[1] = aLocalizedStrings.GetString( 25 );
         vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
         uno::Sequence< rtl::OUString > aBRTLHelpIds( 1 );
-        aBRTLHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox" ) );
-        aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
+        aBRTLHelpIds[0] = rtl::OUString( ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox" );
+        aBrochureRTLOpt.maGroupHint = rtl::OUString( "LayoutPage" );
         // RTL brochure choices
         //      0 : left-to-right
         //      1 : right-to-left
@@ -414,7 +414,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("scriptdirection",
                                                                rtl::OUString(),
                                                                aBRTLHelpIds,
-                                                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspectRTL" ) ),
+                                                               rtl::OUString( "PrintProspectRTL" ),
                                                                aBRTLChoices,
                                                                nBRTLChoice,
                                                                uno::Sequence< sal_Bool >(),
@@ -501,7 +501,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     bool bChanged = processProperties( i_rNewProp );
 
     uno::Reference< awt::XDevice >  xRenderDevice;
-    uno::Any aVal( getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
+    uno::Any aVal( getValue( rtl::OUString( "RenderDevice" ) ) );
     aVal >>= xRenderDevice;
 
     OutputDevice* pOut = 0;

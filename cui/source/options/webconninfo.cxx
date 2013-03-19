@@ -190,7 +190,7 @@ void WebConnectionInfoDialog::FillPasswordList()
             {
                 ::rtl::OUString aUIEntry( aUrls[ nURLIdx ] );
                 aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
-                aUIEntry += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
+                aUIEntry += ::rtl::OUString( "*" );
                 SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
                 pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
             }

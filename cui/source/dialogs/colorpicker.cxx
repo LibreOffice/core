@@ -1510,7 +1510,7 @@ private:
 
 OUString SAL_CALL ColorPicker_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.cui.ColorPicker" ) );
+    return OUString( "com.sun.star.cui.ColorPicker" );
 }
 
 // --------------------------------------------------------------------
@@ -1525,7 +1525,7 @@ Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XCompone
 Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > seq(1);
-    seq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.ColorPicker" ) );
+    seq[0] = OUString( "com.sun.star.ui.dialogs.ColorPicker" );
     return seq;
 }
 

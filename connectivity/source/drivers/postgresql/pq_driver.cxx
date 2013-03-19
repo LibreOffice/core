@@ -134,7 +134,7 @@ Reference< XConnection > Driver::connect(
     seq[1] <<= info;
     return Reference< XConnection> (
         m_smgr->createInstanceWithArgumentsAndContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.connectivity.pq.Connection.noext" ) ),
+            OUString("org.openoffice.comp.connectivity.pq.Connection.noext" ),
             seq, m_ctx ),
         UNO_QUERY );
 }

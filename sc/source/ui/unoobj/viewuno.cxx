@@ -984,7 +984,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetViewPanesEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SpreadsheetViewPanesEnumeration"));
 }
 
 // XIndexAccess
@@ -2149,7 +2149,7 @@ void ScTabViewObj::RangeSelChanged( const String& rText )
 
 rtl::OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScTabViewObj" ));
+    return rtl::OUString( "ScTabViewObj" );
 }
 
 sal_Bool SAL_CALL ScTabViewObj::supportsService( const rtl::OUString& rServiceName )

@@ -139,17 +139,17 @@ void MyThread::run()
                 {
                     printf( "doing reverse callme test (test is ok, when on each line a +- appears\n" );
                     Reference < XInterface > r = rBridge->getInstance(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("blubber"  )));
+                        OUString("blubber"  ));
                     Reference < XTestFactory > rFactory( r , UNO_QUERY );
                     Reference < XCallMe > rCallMe = rFactory->createCallMe();
 
                     for( sal_Int32 i = 0 ; i < 1  ; i ++ )
                     {
                         rCallMe->callOneway(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("my test string")) , 2 );
+                            OUString("my test string") , 2 );
                     }
                     printf( "all oneway are send\n" );
-                    rCallMe->call( OUString( RTL_CONSTASCII_USTRINGPARAM( "reverse call me test finished" )) , 0 );
+                    rCallMe->call( OUString( "reverse call me test finished" ) , 0 );
                 printf( "revers callme test finished\n" );
                 }
             }
@@ -190,22 +190,22 @@ int main( int argc, char *argv[] )
 
     {
         Reference< XMultiServiceFactory > rSMgr = createRegistryServiceFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "server.rdb" )  ) );
+            OUString( "server.rdb" ) );
 
         Reference < XBridgeFactory > rBridgeFactory ( createComponent(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
+            OUString("com.sun.star.bridge.BridgeFactory"),
             OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION )),
             rSMgr ),
                                                      UNO_QUERY );
 
 
-        createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
+        createComponent( OUString("com.sun.star.bridge.Bridge.iiop"),
                          OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
                          rSMgr );
 
 
         Reference < XAcceptor > rAcceptor(
-            createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")),
+            createComponent( OUString("com.sun.star.connection.Acceptor"),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor.uno" SAL_DLLEXTENSION)),
                              rSMgr ) ,
             UNO_QUERY );

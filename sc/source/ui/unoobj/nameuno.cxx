@@ -429,7 +429,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangeObj )
 
 rtl::OUString SAL_CALL ScNamedRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScNamedRangeObj" ) );
+    return rtl::OUString( "ScNamedRangeObj" );
 }
 
 sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const rtl::OUString& rServiceName )
@@ -611,7 +611,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScNamedRangesObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.NamedRangesEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.NamedRangesEnumeration"));
 }
 
 // container::XIndexAccess
@@ -1186,7 +1186,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScLabelRangesObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.LabelRangesEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.LabelRangesEnumeration"));
 }
 
 // container::XIndexAccess

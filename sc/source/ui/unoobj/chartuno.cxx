@@ -259,16 +259,16 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 // set arguments
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+                    ::rtl::OUString("CellRangeRepresentation"), -1,
                     uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
                 aArgs[1] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+                    ::rtl::OUString("HasCategories"), -1,
                     uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[2] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+                    ::rtl::OUString("FirstCellAsLabel"), -1,
                     uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[3] = beans::PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+                    ::rtl::OUString("DataRowSource"), -1,
                     uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
                 xReceiver->setArguments( aArgs );
             }
@@ -314,7 +314,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration(
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.TableChartsEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.table.TableChartsEnumeration"));
 }
 
 // XIndexAccess
@@ -447,7 +447,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN)
     pDocShell->GetDocument()->AddUnoObject(*this);
 
     uno::Sequence< table::CellRangeAddress > aInitialPropValue;
-    registerPropertyNoMember( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RelatedCellRanges" )),
+    registerPropertyNoMember( ::rtl::OUString( "RelatedCellRanges" ),
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
         ::getCppuType( &aInitialPropValue ), &aInitialPropValue );
 }

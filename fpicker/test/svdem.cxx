@@ -70,7 +70,7 @@ String aEmptyStr;
 SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( rtl::OUString( "applicat.rdb" ), sal_True );
 
    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> xMSch;
    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xComponentContext;

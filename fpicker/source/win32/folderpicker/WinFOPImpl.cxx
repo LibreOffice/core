@@ -78,7 +78,7 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
 
         if ( ::osl::FileBase::E_None != rc )
             throw IllegalArgumentException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "directory is not a valid file url" )),
+                OUString( "directory is not a valid file url" ),
                 static_cast< cppu::OWeakObject * >( m_pFolderPicker ),
                 1 );
 

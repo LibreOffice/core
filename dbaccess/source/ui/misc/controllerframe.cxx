@@ -225,7 +225,7 @@ namespace dbaui
         {
             if ( _rData.m_xDocEventBroadcaster.is() )
             {
-                ::rtl::OUString sEventName = _bActive ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnFocus")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnfocus"));
+                ::rtl::OUString sEventName = _bActive ? rtl::OUString("OnFocus") : rtl::OUString("OnUnfocus");
                 Reference< XController2 > xController( _rData.m_rController.getXController(), UNO_QUERY_THROW );
                 _rData.m_xDocEventBroadcaster->notifyDocumentEvent( sEventName, xController, Any() );
             }

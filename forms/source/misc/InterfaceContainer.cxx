@@ -123,7 +123,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 break;
 
             Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBACodeNameProvider") ) ), UNO_QUERY );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString("ooo.vba.VBACodeNameProvider") ), UNO_QUERY );
             if ( !xNameQuery.is() )
                 break;
 
@@ -146,9 +146,9 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             ::rtl::OUString sServiceName;
-            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl") ) ) >>= sServiceName;
+            xProps->getPropertyValue( rtl::OUString("DefaultControl") ) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBAToOOEventDesc") ) ), UNO_QUERY_THROW );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString("ooo.vba.VBAToOOEventDesc") ), UNO_QUERY_THROW );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( m_xServiceFactory->createInstance( sServiceName ), sCodeName );
             // register the vba script events
             m_xEventAttacher->registerScriptEvents( i_nIndex, vbaEvents );
@@ -223,7 +223,7 @@ void OInterfaceContainer::clonedFrom( const OInterfaceContainer& _cloneSource )
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not clone the given interface hierarchy." ) ),
+            ::rtl::OUString( "Could not clone the given interface hierarchy." ),
             static_cast< XIndexContainer* >( const_cast< OInterfaceContainer* >( &_cloneSource ) ),
             ::cppu::getCaughtException()
         );
@@ -870,7 +870,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     bool bHandleVbaEvents = false;
     try
     {
-        _rxElement->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("GenerateVbaEvents") ) ) >>= bHandleVbaEvents;
+        _rxElement->getPropertyValue(rtl::OUString("GenerateVbaEvents") ) >>= bHandleVbaEvents;
     }
     catch( const Exception& )
     {

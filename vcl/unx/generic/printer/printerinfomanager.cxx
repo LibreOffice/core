@@ -1244,8 +1244,8 @@ static void lpgetSysQueueTokenHandler(
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     boost::unordered_set< OUString, OUStringHash > aUniqueSet;
     boost::unordered_set< OUString, OUStringHash > aOnlySet;
-    aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_all" ) ) );
-    aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+    aUniqueSet.insert( OUString( "_all" ) );
+    aUniqueSet.insert( OUString( "_default" ) );
 
     // the eventual "all" attribute of the "_all" queue tells us, which
     // printers are to be used for this user at all

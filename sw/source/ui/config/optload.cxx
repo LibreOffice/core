@@ -576,7 +576,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     // get Productname and -version
     rtl::OUString sWithoutVersion( utl::ConfigManager::getProductName() );
     rtl::OUString sComplete(
-        sWithoutVersion + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) +
+        sWithoutVersion + rtl::OUString(" ") +
         utl::ConfigManager::getProductVersion() );
 
     SvObjectServerList aObjS;

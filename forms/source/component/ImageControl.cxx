@@ -294,7 +294,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
                 ::rtl::OUString sNewImageURL;
                 if ( m_xGraphicObject.is() )
                 {
-                    sNewImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+                    sNewImageURL = ::rtl::OUString( "vnd.sun.star.GraphicObject:" );
                     sNewImageURL = sNewImageURL + m_xGraphicObject->getUniqueID();
                 }
                 m_sImageURL = sNewImageURL;
@@ -795,7 +795,7 @@ void OImageControlControl::implClearGraphics( sal_Bool _bForce )
             if ( sOldImageURL.isEmpty() )
                 // the ImageURL is already empty, so simply setting a new empty one would not suffice
                 // (since it would be ignored)
-                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:emptyImage" ) ) ) );
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( "private:emptyImage" ) ) );
                     // (the concrete URL we're passing here doens't matter. It's important that
                     // the model cannot resolve it to a a valid resource describing an image stream
         }
@@ -879,7 +879,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
     {
         Reference< XPropertySet > xModelProps( const_cast< OImageControlControl* >( this )->getModel(), UNO_QUERY_THROW );
         Reference< XGraphic > xGraphic;
-        OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ) ) >>= xGraphic );
+        OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( "Graphic" ) ) >>= xGraphic );
         bIsEmpty = !xGraphic.is();
     }
     catch( const Exception& )

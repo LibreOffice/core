@@ -577,7 +577,7 @@ void XMLTableStyleContext::SetDefaults()
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetImport().GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
         {
-            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.Defaults"))), uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(rtl::OUString("com.sun.star.sheet.Defaults")), uno::UNO_QUERY);
             if (xProperties.is())
                 FillPropertySet(xProperties);
         }
@@ -709,7 +709,7 @@ XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         const uno::Reference< XAttributeList > & xAttrList,
         const bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    sCellStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CellStyle" ) )),
+    sCellStyleServiceName( rtl::OUString( "com.sun.star.style.CellStyle" )),
     sColumnStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
     sRowStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ))),
     sTableStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))),
@@ -800,7 +800,7 @@ uno::Reference < XNameContainer >
                     xStyles.set(xTableStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TableStyles" ) ));
+                        OUString( rtl::OUString( "TableStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_CELL:
@@ -809,7 +809,7 @@ uno::Reference < XNameContainer >
                     xStyles.set(xCellStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) ));
+                        OUString( rtl::OUString( "CellStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
@@ -818,7 +818,7 @@ uno::Reference < XNameContainer >
                     xStyles.set(xColumnStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnStyles" ) ));
+                        OUString( rtl::OUString( "ColumnStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_ROW:
@@ -827,7 +827,7 @@ uno::Reference < XNameContainer >
                     xStyles.set(xRowStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowStyles" ) ));
+                        OUString( rtl::OUString( "RowStyles" ));
             }
             break;
         }

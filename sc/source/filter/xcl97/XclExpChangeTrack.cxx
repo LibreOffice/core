@@ -1624,8 +1624,8 @@ void XclExpChangeTrack::Write()
 static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
 {
     sax_fastparser::FSHelperPtr pUserNames = rWorkbookStrm.CreateOutputStream(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/revisions/userNames.xml" )),
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "revisions/userNames.xml" )),
+            OUString( "xl/revisions/userNames.xml" ),
+            OUString( "revisions/userNames.xml" ),
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.userNames+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/usernames" );
@@ -1648,8 +1648,8 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
     lcl_WriteUserNamesXml( rWorkbookStrm );
 
     sax_fastparser::FSHelperPtr pRevisionHeaders = rWorkbookStrm.CreateOutputStream(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/revisions/revisionHeaders.xml" )),
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "revisions/revisionHeaders.xml" )),
+            OUString( "xl/revisions/revisionHeaders.xml" ),
+            OUString( "revisions/revisionHeaders.xml" ),
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionHeaders+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionHeaders" );

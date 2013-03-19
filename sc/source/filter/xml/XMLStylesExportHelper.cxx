@@ -194,7 +194,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number()"));
             break;
             case sheet::ValidationType_LIST :
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-in-list("));
+                sCondition += rtl::OUString("cell-content-is-in-list(");
                 sCondition += aValidation.sFormula1;
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
             break;
@@ -221,7 +221,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
             !aValidation.sFormula2.isEmpty())))
         {
             if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" and "));
+                sCondition += rtl::OUString(" and ");
             if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
                 aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
             {
@@ -230,22 +230,22 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
                 switch (aValidation.aOperator)
                 {
                     case sheet::ConditionOperator_EQUAL :
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                        sCondition += rtl::OUString("=");
                     break;
                     case sheet::ConditionOperator_GREATER :
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+                        sCondition += rtl::OUString(">");
                     break;
                     case sheet::ConditionOperator_GREATER_EQUAL :
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+                        sCondition += rtl::OUString(">=");
                     break;
                     case sheet::ConditionOperator_LESS :
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+                        sCondition += rtl::OUString("<");
                     break;
                     case sheet::ConditionOperator_LESS_EQUAL :
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+                        sCondition += rtl::OUString("<=");
                     break;
                     case sheet::ConditionOperator_NOT_EQUAL :
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
+                        sCondition += rtl::OUString("!=");
                     break;
                     default:
                     {
@@ -259,19 +259,19 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
                 if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
                 {
                     if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-between("));
+                        sCondition += rtl::OUString("cell-content-text-length-is-between(");
                     else
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-not-between("));
+                        sCondition += rtl::OUString("cell-content-text-length-is-not-between(");
                 }
                 else
                 {
                     if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-between("));
+                        sCondition += rtl::OUString("cell-content-is-between(");
                     else
-                        sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-not-between("));
+                        sCondition += rtl::OUString("cell-content-is-not-between(");
                 }
                 sCondition += aValidation.sFormula1;
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                sCondition += rtl::OUString(",");
                 sCondition += aValidation.sFormula2;
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
             }

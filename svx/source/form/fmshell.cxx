@@ -773,7 +773,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             if ( nRecord != -1 )
-                rController->execute( nSlot, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Position" )), makeAny( (sal_Int32)nRecord ) );
+                rController->execute( nSlot, ::rtl::OUString( "Position" ), makeAny( (sal_Int32)nRecord ) );
 
             rReq.Done();
         }   break;

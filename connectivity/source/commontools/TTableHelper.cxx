@@ -272,7 +272,7 @@ void OTableHelper::refreshColumns()
             aCatalog,
             m_SchemaName,
             m_Name,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"))
+            ::rtl::OUString("%")
         ) );
 
         // collect the column names, together with their ordinal position
@@ -476,10 +476,10 @@ void OTableHelper::refreshIndexes()
 ::rtl::OUString OTableHelper::getRenameStart() const
 {
     ::rtl::OUString sSql(RTL_CONSTASCII_USTRINGPARAM("RENAME "));
-    if ( m_Type == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VIEW "));
+    if ( m_Type == ::rtl::OUString("VIEW") )
+        sSql += ::rtl::OUString(" VIEW ");
     else
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TABLE "));
+        sSql += ::rtl::OUString(" TABLE ");
 
     return sSql;
 }
@@ -512,7 +512,7 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
             ::rtl::OUString sComposedName;
             sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName
-                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TO "));
+                 + ::rtl::OUString(" TO ");
             sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName;
 

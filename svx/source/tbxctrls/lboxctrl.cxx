@@ -294,9 +294,9 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
     DBG_ASSERT(( SID_UNDO == GetSlotId() || SID_REDO == GetSlotId() ), "mismatching ids" );
 
     if ( m_aCommandURL == ".uno:Undo" )
-        updateStatus( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GetUndoStrings" )));
+        updateStatus( rtl::OUString( ".uno:GetUndoStrings" ));
     else
-        updateStatus( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GetRedoStrings" )));
+        updateStatus( rtl::OUString( ".uno:GetRedoStrings" ));
 
     ToolBox& rBox = GetToolBox();
 

@@ -458,7 +458,7 @@ namespace toolkitform
             {
                 ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( _rpDescriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
-                OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ) ) ) >>= eButtonType );
+                OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( "ButtonType" ) ) >>= eButtonType );
                 static const ::rtl::OUString FM_PROP_TARGET_URL(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
@@ -470,12 +470,12 @@ namespace toolkitform
                     if ( xParentProps.is() )
                     {
                         Reference< XServiceInfo > xParentSI( xParentProps, UNO_QUERY );
-                        if ( xParentSI.is() && xParentSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.HTMLForm" ) ) ) )
+                        if ( xParentSI.is() && xParentSI->supportsService( ::rtl::OUString( "com.sun.star.form.component.HTMLForm" ) ) )
                         {
                             OSL_VERIFY( xParentProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= pButtonWidget->URL );
                             pButtonWidget->Submit = true;
                             FormSubmitMethod eMethod = FormSubmitMethod_POST;
-                            OSL_VERIFY( xParentProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SubmitMethod" ) ) ) >>= eMethod );
+                            OSL_VERIFY( xParentProps->getPropertyValue( rtl::OUString( "SubmitMethod" ) ) >>= eMethod );
                             pButtonWidget->SubmitGet = (eMethod == FormSubmitMethod_GET);
                         }
                     }
@@ -543,7 +543,7 @@ namespace toolkitform
                 }
                 catch(...)
                 {
-                    pRadioWidget->OnValue = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" ) );
+                    pRadioWidget->OnValue = rtl::OUString( "On" );
                 }
             }
 
@@ -558,7 +558,7 @@ namespace toolkitform
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
                 // ............................
                 // multi selection
-                OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiSelection" ) ) ) >>= pListWidget->MultiSelect );
+                OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( "MultiSelection" ) ) >>= pListWidget->MultiSelect );
                 // ............................
                 // entries
                 getStringItemVector( xModelProps, pListWidget->Entries );
@@ -568,7 +568,7 @@ namespace toolkitform
 
                 // get selected items
                 Sequence< sal_Int16 > aSelectIndices;
-                OSL_VERIFY( xModelProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedItems" ) ) ) >>= aSelectIndices );
+                OSL_VERIFY( xModelProps->getPropertyValue( rtl::OUString( "SelectedItems" ) ) >>= aSelectIndices );
                 if( aSelectIndices.getLength() > 0 )
                 {
                     pListWidget->SelectedEntries.resize( 0 );

@@ -1763,7 +1763,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
             aChangeRanges.Append(aChangeRange);
         }
     }
-    pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
 }
 
 

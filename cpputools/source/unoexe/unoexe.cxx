@@ -270,13 +270,13 @@ static Reference< XInterface > loadComponent(
             aExt.compareToAscii( "so" ) == 0)
         {
             createInstance(
-                xLoader, xContext, OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") ) );
+                xLoader, xContext, OUString("com.sun.star.loader.SharedLibrary") );
         }
         else if (aExt.compareToAscii( "jar" ) == 0 ||
                  aExt.compareToAscii( "class" ) == 0)
         {
             createInstance(
-                xLoader, xContext, OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java") ) );
+                xLoader, xContext, OUString("com.sun.star.loader.Java") );
         }
         else
         {
@@ -533,7 +533,7 @@ SAL_IMPLEMENT_MAIN()
         }
 
         if (!(aImplName.isEmpty() || aServiceName.isEmpty()))
-            throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("give component exOR service name!" ) ), Reference< XInterface >() );
+            throw RuntimeException( OUString("give component exOR service name!" ), Reference< XInterface >() );
         if (aImplName.isEmpty() && aServiceName.isEmpty())
         {
             if (! aUnoUrl.endsWithIgnoreAsciiCaseAsciiL(
@@ -545,12 +545,12 @@ SAL_IMPLEMENT_MAIN()
                     Reference<XInterface>() );
             if (bSingleInstance)
                 throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                  "unexpected option --singleinstance!") ),
+                    OUString(
+                                  "unexpected option --singleinstance!"),
                     Reference<XInterface>() );
         }
         if (!aImplName.isEmpty() && aLocation.isEmpty())
-            throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("give component location!" ) ), Reference< XInterface >() );
+            throw RuntimeException( OUString("give component location!" ), Reference< XInterface >() );
         if (!aServiceName.isEmpty() && !aLocation.isEmpty())
             out( "\n> warning: service name given, will ignore location!" );
 
@@ -573,9 +573,9 @@ SAL_IMPLEMENT_MAIN()
             sal_Int32 nIndex = 0, nTokens = 0;
             do { aUnoUrl.getToken( 0, ';', nIndex ); nTokens++; } while( nIndex != -1 );
             if (nTokens != 3 || aUnoUrl.getLength() < 10 ||
-                !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("uno:") ) ))
+                !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( OUString("uno:") ))
             {
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("illegal uno url given!" ) ), Reference< XInterface >() );
+                throw RuntimeException( OUString("illegal uno url given!" ), Reference< XInterface >() );
             }
             nIndex = 0;
             OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
@@ -584,7 +584,7 @@ SAL_IMPLEMENT_MAIN()
             Reference< XAcceptor > xAcceptor;
             createInstance(
                 xAcceptor, xContext,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor") ) );
+                OUString("com.sun.star.connection.Acceptor") );
 
             // init params
             Sequence< Any > aInitParams( aParams.getLength() );
@@ -614,7 +614,7 @@ SAL_IMPLEMENT_MAIN()
                 Reference< XBridgeFactory > xBridgeFactory;
                 createInstance(
                     xBridgeFactory, xContext,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory") ) );
+                    OUString("com.sun.star.bridge.BridgeFactory") );
 
                 // bridge
                 Reference< XBridge > xBridge( xBridgeFactory->createBridge(

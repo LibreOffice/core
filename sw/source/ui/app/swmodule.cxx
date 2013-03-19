@@ -216,8 +216,8 @@ SwModule::GetScannerManager()
             m_xScannerManager =
                 uno::Reference< scanner::XScannerManager2 >(
                     xMgr->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.scanner.ScannerManager")) ),
+                        rtl::OUString(
+                            "com.sun.star.scanner.ScannerManager") ),
                     uno::UNO_QUERY );
         }
     }

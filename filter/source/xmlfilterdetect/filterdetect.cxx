@@ -255,7 +255,7 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
 
 OUString FilterDetect_getImplementationName ()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.filters.XMLFilterDetect" ) );
+    return OUString( "com.sun.star.comp.filters.XMLFilterDetect" );
 }
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
 

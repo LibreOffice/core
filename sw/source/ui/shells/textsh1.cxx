@@ -1244,7 +1244,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         try
         {
-            uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), uno::UNO_QUERY);
+            uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
             if( xDialog.is() )
             {
                 xDialog->execute();

@@ -190,7 +190,7 @@ void SAL_CALL XMLFilterDialogComponent::release() throw ()
 
 OUString XMLFilterDialogComponent_getImplementationName() throw ( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLFilterDialogComponent" ) );
+    return OUString( "XMLFilterDialogComponent" );
 }
 
 //-------------------------------------------------------------------------

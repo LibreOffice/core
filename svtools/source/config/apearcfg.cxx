@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
 
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
-    :ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View")))
+    :ConfigItem(OUString("Office.Common/View"))
     ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
     ,nSnapMode          ( DEFAULT_SNAPMODE )

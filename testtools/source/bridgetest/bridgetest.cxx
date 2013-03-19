@@ -570,7 +570,7 @@ static sal_Bool performTest(
                 bRet &= check(tps1.member == 12345, "transportPolyHyper");
                 Sequence< Any > seq(2);
                 seq[0] <<= static_cast< sal_uInt32 >(33);
-                seq[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ABC"));
+                seq[1] <<= rtl::OUString("ABC");
                 TestPolyStruct< Sequence< Any > > tps2(seq);
                 TestPolyStruct< Sequence< Any > > tps3;
                 xLBT->transportPolySequence(tps2, tps3);
@@ -595,8 +595,7 @@ static sal_Bool performTest(
                 bRet &= check(
                     (((nullAny.getValueTypeName() ==
                        rtl::OUString(
-                           RTL_CONSTASCII_USTRINGPARAM(
-                               "com.sun.star.uno.XInterface"))) &&
+                               "com.sun.star.uno.XInterface")) &&
                       !static_cast< Reference< XInterface > const * >(
                           nullAny.getValue())->is())
                      || nullAny == Any()),
@@ -658,9 +657,9 @@ static sal_Bool performTest(
         float _arFloat[] = { 1.1f, 2.2f, 3.3f };
         double _arDouble[] = { 1.11, 2.22, 3.33 };
         OUString _arString[] = {
-            OUString(RTL_CONSTASCII_USTRINGPARAM("String 1")),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("String 2")),
-            OUString(RTL_CONSTASCII_USTRINGPARAM("String 3")) };
+            OUString("String 1"),
+            OUString("String 2"),
+            OUString("String 3") };
         sal_Bool _aBool = true;
         sal_Int32 _aInt = 0xBABEBABE;
         float _aFloat = 3.14f;
@@ -1200,15 +1199,15 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         if (! xOriginal.is())
         {
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "cannot get test object!") ),
+                OUString(
+                              "cannot get test object!"),
                 Reference< XInterface >() );
         }
         Reference< XBridgeTest > xTest( xOriginal, UNO_QUERY );
         if (! xTest.is())
         {
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("test object does not implement XBridgeTest!") ),
+                OUString("test object does not implement XBridgeTest!"),
                 Reference< XInterface >() );
         }
 
@@ -1223,7 +1222,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         if (! bRet)
         {
             throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("error: test failed!") ),
+                OUString("error: test failed!"),
                 Reference< XInterface >() );
         }
     }

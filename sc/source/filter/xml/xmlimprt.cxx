@@ -107,7 +107,7 @@ using ::rtl::OUStringBuffer;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisImporter" ) );
+    return rtl::OUString( "com.sun.star.comp.Calc.XMLOasisImporter" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
@@ -126,7 +126,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
 
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisMetaImporter" ) );
+    return rtl::OUString( "com.sun.star.comp.Calc.XMLOasisMetaImporter" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() throw()
@@ -145,7 +145,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
 
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisStylesImporter" ) );
+    return rtl::OUString( "com.sun.star.comp.Calc.XMLOasisStylesImporter" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames() throw()
@@ -164,7 +164,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
 
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisContentImporter" ) );
+    return rtl::OUString( "com.sun.star.comp.Calc.XMLOasisContentImporter" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw()
@@ -183,7 +183,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
 
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLOasisSettingsImporter" ) );
+    return rtl::OUString( "com.sun.star.comp.Calc.XMLOasisSettingsImporter" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw()
@@ -2566,7 +2566,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                     }
                 }
             }
-            uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.SpreadsheetSettings")));
+            uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(rtl::OUString("com.sun.star.comp.SpreadsheetSettings"));
             uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
             if (xProperties.is())
                 SvXMLUnitConverter::convertPropertySet(xProperties, aConfigProps);
@@ -2615,7 +2615,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
             {
                 rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Fehler im Formatstring "));
                 sErrorMessage += sFormatString;
-                sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" an Position "));
+                sErrorMessage += rtl::OUString(" an Position ");
                 sErrorMessage += rtl::OUString::valueOf(rException.CheckPos);
                 uno::Sequence<rtl::OUString> aSeq(1);
                 aSeq[0] = sErrorMessage;
@@ -2746,7 +2746,7 @@ void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
-            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))), uno::UNO_QUERY));
+            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance(rtl::OUString("com.sun.star.sheet.SheetCellRanges")), uno::UNO_QUERY));
         OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 
     }
@@ -2802,7 +2802,7 @@ void ScXMLImport::SetStyleToRanges()
         if (xMultiServiceFactory.is())
             xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(
             xMultiServiceFactory->createInstance(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRanges"))),
+            rtl::OUString("com.sun.star.sheet.SheetCellRanges")),
             uno::UNO_QUERY));
     }
     OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");

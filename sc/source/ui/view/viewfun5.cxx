@@ -216,13 +216,12 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     {
                         uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
                         uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator") ) ),
+                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
                             uno::UNO_QUERY_THROW );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,
-                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DummyName" ) ),
+                                                            ::rtl::OUString( "DummyName" ),
                                                             uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information

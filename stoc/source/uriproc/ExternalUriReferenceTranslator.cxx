@@ -209,19 +209,17 @@ css::uno::Reference< css::uno::XInterface > create(
         return static_cast< cppu::OWeakObject * >(new Translator(context));
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")), 0);
+            rtl::OUString("std::bad_alloc"), 0);
     }
 }
 
 rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uri.ExternalUriReferenceTranslator"));
+    return rtl::OUString("com.sun.star.comp.uri.ExternalUriReferenceTranslator");
 }
 
 css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator"));
+    s[0] = rtl::OUString("com.sun.star.uri.ExternalUriReferenceTranslator");
     return s;
 }
 

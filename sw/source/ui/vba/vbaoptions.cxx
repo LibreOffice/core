@@ -45,39 +45,39 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path ) throw ( uno::RuntimeException )
     {
         case word::WdDefaultFilePath::wdDocumentsPath:
         {
-            msDefaultFilePath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Work") );
+            msDefaultFilePath = rtl::OUString("Work");
             break;
         }
         case word::WdDefaultFilePath::wdPicturesPath:
         {
-            msDefaultFilePath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Gallery") );
+            msDefaultFilePath = rtl::OUString("Gallery");
             break;
         }
         case word::WdDefaultFilePath::wdUserTemplatesPath:
         case word::WdDefaultFilePath::wdWorkgroupTemplatesPath:
         {
-            msDefaultFilePath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Template") );
+            msDefaultFilePath = rtl::OUString("Template");
             break;
         }
         case word::WdDefaultFilePath::wdStartupPath:
         {
-            msDefaultFilePath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Addin") );
+            msDefaultFilePath = rtl::OUString("Addin");
             break;
         }
         case word::WdDefaultFilePath::wdUserOptionsPath:
         {
-            msDefaultFilePath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserConfig") );
+            msDefaultFilePath = rtl::OUString("UserConfig");
             break;
         }
         case word::WdDefaultFilePath::wdToolsPath:
         case word::WdDefaultFilePath::wdProgramPath:
         {
-            msDefaultFilePath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Module") );
+            msDefaultFilePath = rtl::OUString("Module");
             break;
         }
         case word::WdDefaultFilePath::wdTempFilePath:
         {
-            msDefaultFilePath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Temp") );
+            msDefaultFilePath = rtl::OUString("Temp");
             break;
         }
         default:
@@ -95,7 +95,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     value >>= sNewPath;
     rtl::OUString sNewPathUrl;
     ::osl::File::getFileURLFromSystemPath( sNewPath, sNewPathUrl );
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
     rtl::OUString sOldPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sOldPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
@@ -110,7 +110,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
 
 uno::Any SwVbaOptions::getValueEvent()
 {
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSettings")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
     rtl::OUString sPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
@@ -258,7 +258,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( ::sal_Bool /*_autof
 rtl::OUString
 SwVbaOptions::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaOptions"));
+    return rtl::OUString("SwVbaOptions");
 }
 
 uno::Sequence< rtl::OUString >
@@ -268,7 +268,7 @@ SwVbaOptions::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Options" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Options" );
     }
     return aServiceNames;
 }

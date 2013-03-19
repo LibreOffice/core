@@ -119,7 +119,7 @@ void SvxFontSizeBox_Impl::Select()
         float fSelVal     = float( nSelVal ) / 10;
 
         uno::Sequence< beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontHeight.Height" ));
+        aArgs[0].Name  = ::rtl::OUString( "FontHeight.Height" );
         aArgs[0].Value = uno::makeAny( fSelVal );
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -242,10 +242,10 @@ FontHeightToolBoxControl::FontHeightToolBoxControl(
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager ) :
     svt::ToolboxController( rServiceManager,
                             uno::Reference< frame::XFrame >(),
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight" )) ),
+                            ::rtl::OUString( ".uno:FontHeight" ) ),
     m_pBox( NULL )
 {
-    addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" )));
+    addStatusListener( ::rtl::OUString( ".uno:CharFontName" ));
 }
 
 FontHeightToolBoxControl::~FontHeightToolBoxControl()
@@ -303,7 +303,7 @@ uno::Sequence< ::rtl::OUString > FontHeightToolBoxControl::getSupportedServiceNa
 throw()
 {
     uno::Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = ::rtl::OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 
@@ -402,7 +402,7 @@ void FontHeightToolBoxControl::dispatchCommand(
         uno::Reference< frame::XDispatch >      xDispatch;
         uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
 
-        aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight" ));
+        aURL.Complete = ::rtl::OUString( ".uno:FontHeight" );
         xURLTransformer->parseStrict( aURL );
         xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
         if ( xDispatch.is() )

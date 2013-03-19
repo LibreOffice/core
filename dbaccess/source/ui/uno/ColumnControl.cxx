@@ -55,7 +55,7 @@ Reference< XInterface > SAL_CALL OColumnControl::Create(const Reference< XMultiS
 // -----------------------------------------------------------------------------
 ::rtl::OUString OColumnControl::GetComponentServiceName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ColumnDescriptorControl"));
+    return ::rtl::OUString("com.sun.star.sdb.ColumnDescriptorControl");
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer) throw( RuntimeException )

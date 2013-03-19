@@ -66,11 +66,11 @@ Any SAL_CALL iOSTransferable::getTransferData( const DataFlavor& aFlavor )
 {
   if (!isValidFlavor(aFlavor) || !isDataFlavorSupported(aFlavor))
     {
-      throw UnsupportedFlavorException(OUString(RTL_CONSTASCII_USTRINGPARAM("IosClipboard: Unsupported data flavor")),
+      throw UnsupportedFlavorException(OUString("IosClipboard: Unsupported data flavor"),
                                        static_cast<XTransferable*>(this));
     }
 
-  throw UnsupportedFlavorException(OUString(RTL_CONSTASCII_USTRINGPARAM("IosClipboard: Unsupported data flavor")),
+  throw UnsupportedFlavorException(OUString("IosClipboard: Unsupported data flavor"),
                                    static_cast<XTransferable*>(this));
   // ???
   return Any();
@@ -107,7 +107,7 @@ void iOSTransferable::initClipboardItemList()
 
   if (pboardFormats == NULL)
     {
-      throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("IosClipboard: Cannot get clipboard data")),
+      throw RuntimeException(OUString("IosClipboard: Cannot get clipboard data"),
                              static_cast<XTransferable*>(this));
     }
 

@@ -79,7 +79,7 @@ namespace calc
         // register our property at the base class
         CellRangeAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellRange" )),
+            ::rtl::OUString( "CellRange" ),
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),
@@ -176,7 +176,7 @@ namespace calc
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sheet.OCellListSource" ) );
+        return ::rtl::OUString( "com.sun.star.comp.sheet.OCellListSource" );
     }
 
     //--------------------------------------------------------------------
@@ -196,8 +196,8 @@ namespace calc
     Sequence< ::rtl::OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aServices( 2 );
-        aServices[ 0 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.table.CellRangeListSource" ) );
-        aServices[ 1 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.binding.ListEntrySource" ) );
+        aServices[ 0 ] =  ::rtl::OUString( "com.sun.star.table.CellRangeListSource" );
+        aServices[ 1 ] =  ::rtl::OUString( "com.sun.star.form.binding.ListEntrySource" );
         return aServices;
     }
 

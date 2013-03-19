@@ -90,13 +90,13 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no sequence given!") ),
+            OUString("no sequence given!"),
             (XWeak *)(OWeakObject *)this, 0 );
     }
     if (nLen < 0)
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal length given!") ),
+            OUString("illegal length given!"),
             (XWeak *)(OWeakObject *)this, 1 );
     }
 
@@ -115,7 +115,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
     if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no sequence given!") ),
+            OUString("no sequence given!"),
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
@@ -129,7 +129,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no sequence given!") ),
+            OUString("no sequence given!"),
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
@@ -137,7 +137,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal index given!") ),
+            OUString("illegal index given!"),
             (XWeak *)(OWeakObject *)this );
     }
 
@@ -160,7 +160,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     if (eTC != TypeClass_SEQUENCE && eTC != TypeClass_ARRAY)
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no sequence given!") ),
+            OUString("no sequence given!"),
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
@@ -168,7 +168,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal index given!") ),
+            OUString("illegal index given!"),
             (XWeak *)(OWeakObject *)this );
     }
 
@@ -188,7 +188,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     {
         TYPELIB_DANGER_RELEASE( pElemTypeDescr );
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("sequence element is not assignable by given value!") ),
+            OUString("sequence element is not assignable by given value!"),
             (XWeak *)(OWeakObject *)this, 2 );
     }
     TYPELIB_DANGER_RELEASE( pElemTypeDescr );

@@ -48,17 +48,17 @@ void Test::test() {
     };
     static Data const data[] = {
         { rtl::OUString(),
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0.0000.00.0")),
+          rtl::OUString("0.0000.00.0"),
           ::dp_misc::EQUAL },
-        { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".01")),
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0.1")),
+        { rtl::OUString(".01"),
+          rtl::OUString("0.1"),
           ::dp_misc::EQUAL },
-        { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10")),
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")),
+        { rtl::OUString("10"),
+          rtl::OUString("2"),
           ::dp_misc::GREATER },
-        { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("9223372036854775808")),
+        { rtl::OUString("9223372036854775808"),
               // 2^63
-          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("9223372036854775807")),
+          rtl::OUString("9223372036854775807"),
           ::dp_misc::GREATER }
     };
     for (::std::size_t i = 0; i < sizeof data / sizeof (Data); ++i) {

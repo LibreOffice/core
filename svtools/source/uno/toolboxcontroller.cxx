@@ -148,7 +148,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" )),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -380,7 +380,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Sequence<PropertyValue>   aArgs( 1 );
 
             // Provide key modifier information to dispatch function
-            aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+            aArgs[0].Name   = rtl::OUString( "KeyModifier" );
             aArgs[0].Value  = makeAny( KeyModifier );
 
             aTargetURL.Complete = aCommandURL;

@@ -68,19 +68,19 @@ void XNamedRange::testSetContent()
     rtl::OUString aExpectedContent;
 
     // test a cell
-    aExpectedContent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D1"));
+    aExpectedContent = rtl::OUString("D1");
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cell", xNamedRange->getContent().equals(aExpectedContent));
 
     // test a cellrange
-    aExpectedContent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D1:D10"));
+    aExpectedContent = rtl::OUString("D1:D10");
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cellrange", xNamedRange->getContent().equals(aExpectedContent));
 
     // test a formula
-    aExpectedContent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=D10"));
+    aExpectedContent = rtl::OUString("=D10");
     xNamedRange->setContent(aExpectedContent);
-    aExpectedContent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D10"));
+    aExpectedContent = rtl::OUString("D10");
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a formula", xNamedRange->getContent().equals(aExpectedContent));
 
 }

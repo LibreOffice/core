@@ -130,23 +130,23 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
 
 // #115423#
 //      case HINT_PAGECHG:              // Page geaendert
-//          aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageModified" ) );
+//          aEvent.EventName = OUString( "PageModified" );
 //          pPage = pSdrHint->GetPage();
 //          break;
         case HINT_PAGEORDERCHG:         // Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
-            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOrderModified" ) );
+            aEvent.EventName = OUString( "PageOrderModified" );
             pPage = pSdrHint->GetPage();
             break;
         case HINT_OBJCHG:               // Objekt geaendert
-            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeModified" ) );
+            aEvent.EventName = OUString( "ShapeModified" );
             pObj = pSdrHint->GetObject();
             break;
         case HINT_OBJINSERTED:          // Neues Zeichenobjekt eingefuegt
-            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeInserted" ) );
+            aEvent.EventName = OUString( "ShapeInserted" );
             pObj = pSdrHint->GetObject();
             break;
         case HINT_OBJREMOVED:           // Zeichenobjekt aus Liste entfernt
-            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "ShapeRemoved" ) );
+            aEvent.EventName = OUString( "ShapeRemoved" );
             pObj = pSdrHint->GetObject();
             break;
 //                HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
@@ -509,28 +509,28 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
 
     sal_uInt16 i = 0;
 
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapRectangleObject"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapCircleObject"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapPolygonObject"));
+    aSNS[i++] = OUString("com.sun.star.drawing.DashTable");
+    aSNS[i++] = OUString("com.sun.star.drawing.GradientTable");
+    aSNS[i++] = OUString("com.sun.star.drawing.HatchTable");
+    aSNS[i++] = OUString("com.sun.star.drawing.BitmapTable");
+    aSNS[i++] = OUString("com.sun.star.drawing.TransparencyGradientTable");
+    aSNS[i++] = OUString("com.sun.star.drawing.MarkerTable");
+    aSNS[i++] = OUString("com.sun.star.text.NumberingRules");
+    aSNS[i++] = OUString("com.sun.star.image.ImageMapRectangleObject");
+    aSNS[i++] = OUString("com.sun.star.image.ImageMapCircleObject");
+    aSNS[i++] = OUString("com.sun.star.image.ImageMapPolygonObject");
 
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SubtitleShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.GraphicObjectShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.ChartShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OLE2Shape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TableShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OrgChartShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"));
-    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutShape"));
+    aSNS[i++] = OUString("com.sun.star.presentation.TitleTextShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.OutlinerShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.SubtitleShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.GraphicObjectShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.ChartShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.PageShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.OLE2Shape");
+    aSNS[i++] = OUString("com.sun.star.presentation.TableShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.OrgChartShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.NotesShape");
+    aSNS[i++] = OUString("com.sun.star.presentation.HandoutShape");
 
     DBG_ASSERT( i == aSNS.getLength(), "Sequence overrun!" );
 
@@ -541,7 +541,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
 OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoDrawingModel"));
+    return OUString("SvxUnoDrawingModel");
 }
 
 sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
@@ -693,7 +693,7 @@ const char pSvxUnoDrawPagesAccessService[] = "com.sun.star.drawing.DrawPages";
 
 OUString SAL_CALL SvxUnoDrawPagesAccess::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoDrawPagesAccess" ) );
+    return OUString( "SvxUnoDrawPagesAccess" );
 }
 
 sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)

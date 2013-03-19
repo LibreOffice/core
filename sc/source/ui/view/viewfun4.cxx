@@ -672,7 +672,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool
         //TODO/LATER: what about "bLink"?
 
         uno::Sequence < beans::PropertyValue > aMedium(1);
-        aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+        aMedium[0].Name = ::rtl::OUString( "URL" );
         aMedium[0].Value <<= ::rtl::OUString( aStrURL );
 
         comphelper::EmbeddedObjectContainer aCnt( xStorage );

@@ -531,7 +531,7 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
     }
 
     throw UnknownPropertyException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get value ") ) + PropertyName,
+        OUString("cannot get value ") + PropertyName,
         Reference< XInterface >() );
 }
 
@@ -560,7 +560,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                         PropertyName, xTypeConverter->convertTo( Value, aProp.Type ) );
                 else
                     throw RuntimeException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("no type converter service!") ),
+                        OUString("no type converter service!"),
                         Reference< XInterface >() );
             }
             // NameContainer
@@ -575,7 +575,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                     aConv = xTypeConverter->convertTo( Value, _xNameContainer->getElementType() );
                 else
                     throw RuntimeException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("no type converter service!") ),
+                        OUString("no type converter service!"),
                         Reference< XInterface >() );
 
                 // bei Vorhandensein ersetzen, ansonsten einfuegen
@@ -586,7 +586,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
             }
             else
                 throw UnknownPropertyException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("no introspection nor name container!") ),
+                    OUString("no introspection nor name container!"),
                     Reference< XInterface >() );
         }
         catch (UnknownPropertyException &)
@@ -635,7 +635,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         if (nFParamsLen != InParams.getLength())
         {
             throw IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("incorrect number of parameters passed invoking function ") ) + FunctionName,
+                OUString("incorrect number of parameters passed invoking function ") + FunctionName,
                 (OWeakObject *) this, (sal_Int16) 1 );
         }
 
@@ -674,7 +674,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                     {
                         CannotConvertException aExc;
                         aExc.Context = *this;
-                        aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("invocation type mismatch!") );
+                        aExc.Message = OUString("invocation type mismatch!");
                         throw aExc;
                     }
                 }
@@ -714,7 +714,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
 
     RuntimeException aExc;
     aExc.Context = *this;
-    aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("invocation lacking of introspection access!") );
+    aExc.Message = OUString("invocation lacking of introspection access!");
     throw aExc;
 }
 
@@ -1103,24 +1103,23 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xTypeConverter = Reference<XTypeConverter>(
         mxSMgr->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")),
+            OUString("com.sun.star.script.Converter"),
             xCtx ),
         UNO_QUERY );
     xIntrospection = Introspection::create(xCtx);
     mxCtx->getValueByName(
-        OUString(
-            RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection")) )
+        OUString("/singletons/com.sun.star.reflection.theCoreReflection") )
                 >>= xCoreReflection;
     OSL_ENSURE( xCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
     if (! xCoreReflection.is())
     {
         throw DeploymentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible") ),
+            OUString("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible"),
             Reference< XInterface >() );
     }
 //         xCoreReflection = Reference<XIdlReflection>(
 //      mxSMgr->createInstanceWithContext(
-//          OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")),
+//          OUString("com.sun.star.reflection.CoreReflection"),
 //          xCtx),
 //      UNO_QUERY);
 }
@@ -1156,7 +1155,7 @@ Sequence< OUString > InvocationService::getSupportedServiceNames(void) throw( Ru
 //--------------------------------------------------------------------------------------------------
 Reference<XInterface> InvocationService::createInstance(void) throw( Exception, RuntimeException )
 {
-    //TODO:throw( Exception(OUString( RTL_CONSTASCII_USTRINGPARAM("no default construction of invocation adapter possible!")), *this) );
+    //TODO:throw( Exception(OUString("no default construction of invocation adapter possible!"), *this) );
     return Reference<XInterface>(); // dummy
 }
 
@@ -1172,7 +1171,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
     }
     else
     {
-        //TODO:throw( Exception(OUString( RTL_CONSTASCII_USTRINGPARAM("no default construction of invocation adapter possible!")), *this) );
+        //TODO:throw( Exception(OUString("no default construction of invocation adapter possible!"), *this) );
         return Reference<XInterface>();
     }
 }

@@ -63,7 +63,7 @@ using namespace ::com::sun::star::lang;
 
 #define SYMBOL_TO_FIELD_OFFSET      4
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-#define TOOLBOX_NAME                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
+#define TOOLBOX_NAME                ::rtl::OUString( "colorbar" )
 
 TYPEINIT1_AUTOFACTORY( TbxImageItem, SfxUInt16Item );
 
@@ -355,7 +355,7 @@ void ImplGrafModeControl::Select()
     if ( !IsTravelSelect() )
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GrafMode" ));
+        aArgs[0].Name = rtl::OUString( "GrafMode" );
         aArgs[0].Value = makeAny( sal_Int16( GetSelectEntryPos() ));
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -365,7 +365,7 @@ void ImplGrafModeControl::Select()
 
         SfxToolBoxControl::Dispatch(
             Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GrafMode" )),
+            OUString( ".uno:GrafMode" ),
             aArgs );
     }
 }

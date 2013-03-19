@@ -108,7 +108,7 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(Runtim
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.forms.OFormsCollection") );
+    return ::rtl::OUString("com.sun.star.comp.forms.OFormsCollection");
 }
 
 //------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
     StringSequence aReturn(2);
 
     aReturn.getArray()[0] = FRM_SUN_FORMS_COLLECTION;
-    aReturn.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.FormComponents") );
+    aReturn.getArray()[1] = ::rtl::OUString("com.sun.star.form.FormComponents");
 
     return aReturn;
 }

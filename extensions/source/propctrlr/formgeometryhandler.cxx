@@ -315,14 +315,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL FormGeometryHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.FormGeometryHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.FormGeometryHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL FormGeometryHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.FormGeometryHandler" ) );
+        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.FormGeometryHandler" );
         return aSupported;
     }
 
@@ -601,7 +601,7 @@ namespace pcr
             if ( !xPSI->hasPropertyByName( PROPERTY_ANCHOR ) )
                 return false;
             Reference< XServiceInfo > xSI( m_xAssociatedShape, UNO_QUERY_THROW );
-            if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.Shape" ) ) ) )
+            if ( xSI->supportsService( ::rtl::OUString( "com.sun.star.sheet.Shape" ) ) )
                 return true;
         }
         catch( const Exception& )

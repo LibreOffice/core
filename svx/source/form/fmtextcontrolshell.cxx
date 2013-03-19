@@ -456,7 +456,7 @@ namespace svx
 
             if ( pAsciiUnoName )
             {
-                sSlotUnoName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) );
+                sSlotUnoName = ::rtl::OUString( ".uno:" );
                 sSlotUnoName += ::rtl::OUString::createFromAscii( pAsciiUnoName );
             }
 #if OSL_DEBUG_LEVEL > 0
@@ -534,7 +534,7 @@ namespace svx
                 Reference< XPropertySetInfo > xPSI;
                 if ( xModelProps.is() )
                     xPSI = xModelProps->getPropertySetInfo();
-                ::rtl::OUString sRichTextPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RichText" ) );
+                ::rtl::OUString sRichTextPropertyName = ::rtl::OUString( "RichText" );
                 if ( xPSI.is() && xPSI->hasPropertyByName( sRichTextPropertyName ) )
                 {
                     OSL_VERIFY( xModelProps->getPropertyValue( sRichTextPropertyName ) >>= bIsRichText );
@@ -597,7 +597,7 @@ namespace svx
                 if ( SFX_APP() )
                     sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotId );
                 else
-                    sUnoSlotName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "<unknown>" ) );
+                    sUnoSlotName = ::rtl::OUString( "<unknown>" );
                 ::rtl::OString sUnoSlotNameAscii( "\"" );
                 sUnoSlotNameAscii += ::rtl::OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sUnoSlotNameAscii += "\"";
@@ -732,7 +732,7 @@ namespace svx
                             if ( pBoolItem )
                             {
                                 aArgs.realloc( 1 );
-                                aArgs[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enable" ) );
+                                aArgs[ 0 ].Name = ::rtl::OUString( "Enable" );
                                 aArgs[ 0 ].Value <<= (sal_Bool)pBoolItem->GetValue();
                             }
                         }

@@ -96,13 +96,13 @@ void test::oustring::StringLiterals::checkCtors()
     CPPUNIT_ASSERT( VALID_CONVERSION( bad5[ 1 ] ));
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "ab" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "" ), rtl::OUString( "" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "ab" ), rtl::OUString( "ab" ));
 #if 0
 // Also check that embedded \0 is included.
 // In fact, allowing this is probably just trouble, so this now asserts.
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "\0" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )));
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "a\0b" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "\0" ), rtl::OUString( "\0" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "a\0b" ), rtl::OUString( "a\0b" ));
 #endif
 }
 

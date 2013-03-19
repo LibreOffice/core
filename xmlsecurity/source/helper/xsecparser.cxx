@@ -171,7 +171,7 @@ void SAL_CALL XSecParser::startElement(
             }
         }
             else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                        +rtl::OUString(":")
                         +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
             {
             m_ouDate = rtl::OUString();
@@ -187,14 +187,14 @@ void SAL_CALL XSecParser::startElement(
     {//getCaughtException MUST be the first line in the catch block
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "xmlsecurity: Exception in XSecParser::startElement")),
+            rtl::OUString(
+                              "xmlsecurity: Exception in XSecParser::startElement"),
             0, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xmlsecurity: unexpected exception in XSecParser::startElement")), 0,
+            rtl::OUString("xmlsecurity: unexpected exception in XSecParser::startElement"), 0,
             cssu::Any());
     }
 }
@@ -246,7 +246,7 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
             m_bInX509Certificate = false;
             }
             else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                        +rtl::OUString(":")
                         +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
         {
             m_pXSecController->setDate( m_ouDate );
@@ -262,14 +262,14 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
     {//getCaughtException MUST be the first line in the catch block
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "xmlsecurity: Exception in XSecParser::endElement")),
+            rtl::OUString(
+                              "xmlsecurity: Exception in XSecParser::endElement"),
             0, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xmlsecurity: unexpected exception in XSecParser::endElement")), 0,
+            rtl::OUString("xmlsecurity: unexpected exception in XSecParser::endElement"), 0,
             cssu::Any());
     }
 }

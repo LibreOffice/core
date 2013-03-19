@@ -63,13 +63,13 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
             // open the stream from the result...
             // build media descriptor
             Sequence< PropertyValue > descriptor(2);
-            descriptor[0] = PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream") ),
+            descriptor[0] = PropertyValue(::rtl::OUString("InputStream"),
                 -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
-            descriptor[1] = PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+            descriptor[1] = PropertyValue(::rtl::OUString("ReadOnly"),
                 -1, makeAny(sal_True), PropertyState_DIRECT_VALUE);
 
             ::rtl::OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
-            ::rtl::OUString aTarget = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default") );
+            ::rtl::OUString aTarget = ::rtl::OUString("_default");
             xLoader->loadComponentFromURL(aURL, aTarget, FrameSearchFlag::ALL, descriptor);
 
             return CSubmission::SUCCESS;

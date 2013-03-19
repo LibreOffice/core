@@ -45,8 +45,8 @@ OMySQLCatalog::OMySQLCatalog(const Reference< XConnection >& _xConnection) : OCa
 void OMySQLCatalog::refreshObjects(const Sequence< ::rtl::OUString >& _sKindOfObject,TStringVector& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-                                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),
-                                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),
+                                                            ::rtl::OUString("%"),
+                                                            ::rtl::OUString("%"),
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
@@ -74,7 +74,7 @@ void OMySQLCatalog::refreshTables()
 void OMySQLCatalog::refreshViews()
 {
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+    aTypes[0] = ::rtl::OUString("VIEW");
 
     // let's simply assume the server is new enough to support views. Current drivers
     // as of this writing might not return the proper information in getTableTypes, so
@@ -100,7 +100,7 @@ void OMySQLCatalog::refreshUsers()
 {
     TStringVector aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-    Reference< XResultSet >  xResult = xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("select User from mysql.user group by User")));
+    Reference< XResultSet >  xResult = xStmt->executeQuery(::rtl::OUString("select User from mysql.user group by User"));
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

@@ -51,7 +51,7 @@ void SAL_CALL SwVbaReplacement::ClearFormatting( ) throw (uno::RuntimeException)
 rtl::OUString
 SwVbaReplacement::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaReplacement"));
+    return rtl::OUString("SwVbaReplacement");
 }
 
 uno::Sequence< rtl::OUString >
@@ -61,7 +61,7 @@ SwVbaReplacement::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Replacement" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Replacement" );
     }
     return aServiceNames;
 }

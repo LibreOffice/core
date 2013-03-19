@@ -73,7 +73,7 @@ uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames
 
 OUString SAL_CALL SwXAutoTextContainer_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SwXAutoTextContainer" ) );
+    return OUString("SwXAutoTextContainer" );
 }
 
 SwXAutoTextContainer::SwXAutoTextContainer()

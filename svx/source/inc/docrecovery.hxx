@@ -38,35 +38,35 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 
-#define RECOVERY_CMDPART_PROTOCOL                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:"))
+#define RECOVERY_CMDPART_PROTOCOL                   rtl::OUString( "vnd.sun.star.autorecovery:")
 
-#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEmergencySave"         ))
-#define RECOVERY_CMDPART_DO_RECOVERY                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doAutoRecovery"          ))
-#define RECOVERY_CMDPART_DO_CRASHREPORT             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doCrashReport"           ))
+#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          rtl::OUString( "/doEmergencySave"         )
+#define RECOVERY_CMDPART_DO_RECOVERY                rtl::OUString( "/doAutoRecovery"          )
+#define RECOVERY_CMDPART_DO_CRASHREPORT             rtl::OUString( "/doCrashReport"           )
 
-#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doPrepareEmergencySave"))
-#define RECOVERY_CMD_DO_EMERGENCY_SAVE              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEmergencySave"       ))
-#define RECOVERY_CMD_DO_RECOVERY                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doAutoRecovery"        ))
-#define RECOVERY_CMD_DO_ENTRY_BACKUP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryBackup"         ))
-#define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
+#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      rtl::OUString( "vnd.sun.star.autorecovery:/doPrepareEmergencySave")
+#define RECOVERY_CMD_DO_EMERGENCY_SAVE              rtl::OUString( "vnd.sun.star.autorecovery:/doEmergencySave"       )
+#define RECOVERY_CMD_DO_RECOVERY                    rtl::OUString( "vnd.sun.star.autorecovery:/doAutoRecovery"        )
+#define RECOVERY_CMD_DO_ENTRY_BACKUP                rtl::OUString( "vnd.sun.star.autorecovery:/doEntryBackup"         )
+#define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString( "vnd.sun.star.autorecovery:/doEntryCleanUp"        )
 
-#define PROP_STATUSINDICATOR                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator"  ))
-#define PROP_DISPATCHASYNCHRON                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DispatchAsynchron"))
-#define PROP_SAVEPATH                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SavePath"         ))
-#define PROP_ENTRYID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "EntryID"          ))
+#define PROP_STATUSINDICATOR                        rtl::OUString( "StatusIndicator"  )
+#define PROP_DISPATCHASYNCHRON                      rtl::OUString( "DispatchAsynchron")
+#define PROP_SAVEPATH                               rtl::OUString( "SavePath"         )
+#define PROP_ENTRYID                                rtl::OUString( "EntryID"          )
 
-#define STATEPROP_ID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID"           ))
-#define STATEPROP_STATE                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DocumentState"))
-#define STATEPROP_ORGURL                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OriginalURL"  ))
-#define STATEPROP_TEMPURL                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TempURL"      ))
-#define STATEPROP_FACTORYURL                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FactoryURL"   ))
-#define STATEPROP_TEMPLATEURL                       rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TemplateURL"  ))
-#define STATEPROP_TITLE                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title"        ))
-#define STATEPROP_MODULE                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Module"       ))
+#define STATEPROP_ID                                rtl::OUString( "ID"           )
+#define STATEPROP_STATE                             rtl::OUString( "DocumentState")
+#define STATEPROP_ORGURL                            rtl::OUString( "OriginalURL"  )
+#define STATEPROP_TEMPURL                           rtl::OUString( "TempURL"      )
+#define STATEPROP_FACTORYURL                        rtl::OUString( "FactoryURL"   )
+#define STATEPROP_TEMPLATEURL                       rtl::OUString( "TemplateURL"  )
+#define STATEPROP_TITLE                             rtl::OUString( "Title"        )
+#define STATEPROP_MODULE                            rtl::OUString( "Module"       )
 
-#define RECOVERY_OPERATIONSTATE_START               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "start" ))
-#define RECOVERY_OPERATIONSTATE_STOP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stop"  ))
-#define RECOVERY_OPERATIONSTATE_UPDATE              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "update"))
+#define RECOVERY_OPERATIONSTATE_START               rtl::OUString( "start" )
+#define RECOVERY_OPERATIONSTATE_STOP                rtl::OUString( "stop"  )
+#define RECOVERY_OPERATIONSTATE_UPDATE              rtl::OUString( "update")
 
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                        1

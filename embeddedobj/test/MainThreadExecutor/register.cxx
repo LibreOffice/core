@@ -62,9 +62,9 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 
             uno::Reference< registry::XRegistryKey >  xNewKey;
 
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+            xNewKey = xKey->createKey( ::rtl::OUString("/") +
                                         UNOMainThreadExecutor::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+                                        ::rtl::OUString( "/UNO/SERVICES")  );
 
             uno::Sequence< ::rtl::OUString > &rServices = UNOMainThreadExecutor::impl_staticGetSupportedServiceNames();
             for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )

@@ -69,7 +69,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     ::rtl::OUString OConnectionLineAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ConnectionLineAccessibility"));
+        return ::rtl::OUString("org.openoffice.comp.dbu.ConnectionLineAccessibility");
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext

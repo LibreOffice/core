@@ -275,7 +275,7 @@ void SAL_CALL
 ::rtl::OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleEditObject"));
+    return rtl::OUString("ScAccessibleEditObject");
 }
 
 //=====  XTypeProvider  =======================================================

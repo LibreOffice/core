@@ -104,7 +104,7 @@ namespace abp
 #ifdef DBG_UTIL
                     sal_Bool bSuccess =
 #endif
-                    xDialogProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FieldMapping" )) ) >>= aMapping;
+                    xDialogProps->getPropertyValue( ::rtl::OUString( "FieldMapping" ) ) >>= aMapping;
                     DBG_ASSERT( bSuccess, "fieldmapping::invokeDialog: invalid property type for FieldMapping!" );
 
                     // and copy it into the map
@@ -170,7 +170,7 @@ namespace abp
 
                 // access the configuration information which the driver uses for determining it's column names
                 ::rtl::OUString sDriverAliasesNodeName = lcl_getDriverSettingsNodeName();
-                sDriverAliasesNodeName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/ColumnAliases" ));
+                sDriverAliasesNodeName += ::rtl::OUString( "/ColumnAliases" );
 
                 // create a config node for this
                 OConfigurationTreeRoot aDriverFieldAliasing = OConfigurationTreeRoot::createWithComponentContext(
@@ -230,7 +230,7 @@ namespace abp
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
-            OConfigurationNode aFields = aAddressBookSettings.openNode( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Fields" )) );
+            OConfigurationNode aFields = aAddressBookSettings.openNode( ::rtl::OUString( "Fields" ) );
 
             // loop through all existent fields
             Sequence< ::rtl::OUString > aExistentFields = aFields.getNodeNames();
@@ -307,9 +307,9 @@ namespace abp
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
-            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceName" )), makeAny( _rDataSourceName ) );
-            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Command" )), makeAny( _rTableName ) );
-            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CommandType" )), makeAny( (sal_Int32)CommandType::TABLE ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString( "DataSourceName" ), makeAny( _rDataSourceName ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString( "Command" ), makeAny( _rTableName ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString( "CommandType" ), makeAny( (sal_Int32)CommandType::TABLE ) );
 
             // commit the changes done
             aAddressBookSettings.commit();
@@ -326,7 +326,7 @@ namespace abp
                 _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
             // set the flag
-            aAddressBookSettings.setNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoPilotCompleted" )), makeAny( (sal_Bool)sal_True ) );
+            aAddressBookSettings.setNodeValue( ::rtl::OUString( "AutoPilotCompleted" ), makeAny( (sal_Bool)sal_True ) );
 
             // commit the changes done
             aAddressBookSettings.commit();

@@ -492,14 +492,14 @@ void DocumentDigitalSignatures::addLocationToTrustedSources( const ::rtl::OUStri
 
 rtl::OUString DocumentDigitalSignatures::GetImplementationName() throw (RuntimeException)
 {
-    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) );
+    return rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" );
 }
 
 Sequence< rtl::OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw (cssu::RuntimeException)
 {
     Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) );
+    pArray[0] =  rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" );
     return aRet;
 }
 

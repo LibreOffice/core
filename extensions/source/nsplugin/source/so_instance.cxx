@@ -175,7 +175,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // create frame
         m_xFrame = Reference< frame::XFrame >(
-            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame") )),
+            mxRemoteMSF->createInstance( ::rtl::OUString("com.sun.star.frame.Frame")),
             uno::UNO_QUERY );
         if (!m_xFrame.is())
         {
@@ -191,9 +191,9 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             // currently ignore errors in this code
             uno::Reference< beans::XPropertySet > xFrameProps( m_xFrame, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xLMProps;
-            xFrameProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ) >>= xLMProps;
+            xFrameProps->getPropertyValue( ::rtl::OUString("LayoutManager") ) >>= xLMProps;
             if ( xLMProps.is() )
-                xLMProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticToolbars")), uno::makeAny( (sal_Bool)sal_False ) );
+                xLMProps->setPropertyValue( ::rtl::OUString("AutomaticToolbars"), uno::makeAny( (sal_Bool)sal_False ) );
         }
         catch( const uno::Exception& )
         {}
@@ -233,11 +233,11 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         // prepare to load document
         debug_fprintf(NSP_LOG_APPEND, "try to load document\n");
         Sequence< ::com::sun::star::beans::PropertyValue > setPropValues(3);
-        setPropValues[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOnly") );
+        setPropValues[0].Name = OUString("ViewOnly");
         setPropValues[0].Value <<= sal_True;
-        setPropValues[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
+        setPropValues[1].Name = OUString("ReadOnly");
         setPropValues[1].Value <<= sal_True;
-        setPropValues[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+        setPropValues[2].Name = OUString("InputStream");
         setPropValues[2].Value <<= xInputStream;
         /*
         setPropValues[ 3 ].Name = "FilterName";
@@ -249,11 +249,11 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // load document
          Sequence< ::com::sun::star::beans::PropertyValue > setPropValues2(3);
-        setPropValues2[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOnly") );
+        setPropValues2[0].Name = OUString("ViewOnly");
         setPropValues2[0].Value <<= sal_True;
-        setPropValues2[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
+        setPropValues2[1].Name = OUString("ReadOnly");
         setPropValues2[1].Value <<= sal_True;
-        setPropValues2[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("AsTemplate") );
+        setPropValues2[2].Name = OUString("AsTemplate");
         setPropValues2[2].Value <<= sal_False;
         m_xComponent = xLoader->loadComponentFromURL(
             m_sURL,
@@ -290,10 +290,10 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         //try to enable toolbar and tool windows
         Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
-        propertyValue[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FunctionBarVisible") );
+        propertyValue[0].Name = OUString("FunctionBarVisible");
         propertyValue[0].Value <<= sal_True;
         m_xDispatcher->executeDispatch(m_xDispatchProvider,
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FunctionBarVisible")),
+                ::rtl::OUString(".uno:FunctionBarVisible"),
                 m_xFrame->getName(), 0,
                 propertyValue );
 
@@ -309,7 +309,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             uno::Reference< presentation::XPresentationSupplier > xPresSuppl( m_xComponent, uno::UNO_QUERY_THROW );
             uno::Reference< presentation::XPresentation > xPres( xPresSuppl->getPresentation(), uno::UNO_SET_THROW );
             uno::Reference< beans::XPropertySet > xProps( xPresSuppl->getPresentation(), uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ), uno::makeAny( sal_False ) );
+            xProps->setPropertyValue( ::rtl::OUString( "IsFullScreen" ), uno::makeAny( sal_False ) );
             xPres->start();
         }
         catch( const uno::Exception& )
@@ -400,7 +400,7 @@ sal_Bool SoPluginInstance::Destroy(void)
         aArgs[0] <<= m_xFrame;
         uno::Reference< lang::XComponent > xDocumentCloser(
             mxRemoteMSF->createInstanceWithArguments(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.DocumentCloser" ) ),
+                ::rtl::OUString( "com.sun.star.embed.DocumentCloser" ),
                 aArgs ),
             uno::UNO_QUERY_THROW );
 
@@ -441,7 +441,7 @@ sal_Bool SoPluginInstance::Print(void)
 
     Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
     m_xDispatcher->executeDispatch(m_xDispatchProvider,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:PrintDefault")),
+        ::rtl::OUString(".uno:PrintDefault"),
         m_xFrame->getName(), 0,
         propertyValue );
     return sal_True;

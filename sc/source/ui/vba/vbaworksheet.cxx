@@ -163,8 +163,8 @@ openNewDoc(rtl::OUString aSheetName )
         uno::Reference <frame::XDesktop2 > xComponentLoader = frame::Desktop::create(xContext);
 
         uno::Reference<lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/scalc" ) ),
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0,
+                rtl::OUString( "private:factory/scalc" ),
+                rtl::OUString( "_blank" ), 0,
                 uno::Sequence < ::com::sun::star::beans::PropertyValue >() ) );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
         if ( xSpreadDoc.is() )
@@ -362,8 +362,7 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException)
         return excel::XlEnableSelection::xlNoSelection;
     }
     else
-        throw uno::RuntimeException(::rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM( "Sheet Name does not exist. ") ),
+        throw uno::RuntimeException(::rtl::OUString( "Sheet Name does not exist. "),
                                 uno::Reference< XInterface >() );
 }
 
@@ -404,8 +403,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         }
     }
     else
-        throw uno::RuntimeException(::rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM( "Sheet Name does not exist. ") ),
+        throw uno::RuntimeException(::rtl::OUString( "Sheet Name does not exist. "),
                                 uno::Reference< XInterface >() );
 
 }
@@ -702,7 +700,7 @@ void
 ScVbaWorksheet::CheckSpelling( const uno::Any& /*CustomDictionary*/,const uno::Any& /*IgnoreUppercase*/,const uno::Any& /*AlwaysSuggest*/, const uno::Any& /*SpellingLang*/ ) throw (uno::RuntimeException)
 {
     // #TODO# #FIXME# unused params above, can we do anything with those
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SpellDialog"));
+    rtl::OUString url = rtl::OUString( ".uno:SpellDialog");
     uno::Reference< frame::XModel > xModel( getModel() );
     dispatchRequests(xModel,url);
 }
@@ -804,7 +802,7 @@ ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeExceptio
     // #163498# initialize Names object with correct parent (this worksheet)
     // TODO: real sheet-local names...
     uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString("NamedRanges") ), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
     if ( aIndex.hasValue() )
         return uno::Any( xNames->Item( aIndex, uno::Any() ) );
@@ -951,7 +949,7 @@ ScVbaWorksheet::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::U
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.ControlProvider" ) ), mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::makeAny( xControl );
 }
@@ -1031,7 +1029,7 @@ ScVbaWorksheet::getControlShape( const ::rtl::OUString& sName )
 rtl::OUString
 ScVbaWorksheet::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWorksheet"));
+    return rtl::OUString("ScVbaWorksheet");
 }
 
 void SAL_CALL
@@ -1054,7 +1052,7 @@ ScVbaWorksheet::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Worksheet" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Worksheet" );
     }
     return aServiceNames;
 }
@@ -1063,7 +1061,7 @@ rtl::OUString SAL_CALL
 ScVbaWorksheet::getCodeName() throw (css::uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xSheetProp( mxSheet, uno::UNO_QUERY_THROW );
-    return xSheetProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CodeName" ) ) ).get< ::rtl::OUString >();
+    return xSheetProp->getPropertyValue( ::rtl::OUString( "CodeName" ) ).get< ::rtl::OUString >();
 }
 
 sal_Int16

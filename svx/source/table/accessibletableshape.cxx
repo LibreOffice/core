@@ -315,14 +315,14 @@ Reference< XAccessibleContext > SAL_CALL AccessibleTableShape::getAccessibleCont
 //-----------------------------------------------------------------------------
 OUString SAL_CALL AccessibleTableShape::getImplementationName(void) throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.accessibility.AccessibleTableShape" ) );
+    return OUString( "com.sun.star.comp.accessibility.AccessibleTableShape" );
 }
 
 //-----------------------------------------------------------------------------
 
 OUString AccessibleTableShape::CreateAccessibleBaseName(void) throw (RuntimeException)
 {
-    return OUString (RTL_CONSTASCII_USTRINGPARAM("TableShape"));
+    return OUString("TableShape");
 }
 
 //--------------------------------------------------------------------

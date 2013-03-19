@@ -996,7 +996,7 @@ uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const ::rtl::OUString& sProp
     }
     else
     {
-        throw beans::UnknownPropertyException( OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property: ") ) + sPropertyName, static_cast<OWeakObject *>(this) );
+        throw beans::UnknownPropertyException( OUString("unknown property: ") + sPropertyName, static_cast<OWeakObject *>(this) );
     }
 
     return aRet;
@@ -1262,7 +1262,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
         case SFX_STYLE_FAMILY_CHAR:
         {
             nMapId = PROPERTY_MAP_CHAR_STYLE;
-            aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterStyles" ) ) );
+            aAny = xFamilies->getByName ( OUString( "CharacterStyles" ) );
             // Get the Frame family (and keep it for later)
             aAny >>= mxStyleFamily;
         }
@@ -1270,20 +1270,20 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
         case SFX_STYLE_FAMILY_PARA:
         {
             nMapId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
-            aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ParagraphStyles" ) ) );
+            aAny = xFamilies->getByName ( OUString( "ParagraphStyles" ) );
             // Get the Frame family (and keep it for later)
             aAny >>= mxStyleFamily;
-            aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Standard" ) ) );
+            aAny = mxStyleFamily->getByName ( OUString( "Standard" ) );
             aAny >>= mxStyleData;
         }
         break;
         case SFX_STYLE_FAMILY_PAGE:
         {
             nMapId = PROPERTY_MAP_PAGE_STYLE;
-            aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "PageStyles" ) ) );
+            aAny = xFamilies->getByName ( OUString( "PageStyles" ) );
             // Get the Frame family (and keep it for later)
             aAny >>= mxStyleFamily;
-            aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Standard" ) ) );
+            aAny = mxStyleFamily->getByName ( OUString( "Standard" ) );
             aAny >>= mxStyleData;
         }
         break;
@@ -2110,9 +2110,9 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
 
         if(!pEntry ||
            (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(aBaseImpl.mxNewBase.is())
         {
             lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl,
@@ -2198,7 +2198,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 sal_Int8 nBin = 0;
                 aRet >>= nBin;
                 if ( nBin == -1 )
-                    aRet <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "[From printer settings]" ) );
+                    aRet <<= OUString( "[From printer settings]" );
                 else
                 {
                     SfxPrinter *pPrinter = pDoc->getPrinter( false );
@@ -2378,7 +2378,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
         if(!pEntry ||
            (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(pBasePool)
         {
             if(!pBase)
@@ -2431,7 +2431,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                 if (bExcept )
                 {
                     uno::RuntimeException aExcept;
-                    aExcept.Message = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "No default value for: " ) ) + pNames[nProp];
+                    aExcept.Message = OUString( "No default value for: " ) + pNames[nProp];
                     throw aExcept;
                 }
             }
@@ -2457,11 +2457,11 @@ uno::Sequence< uno::Any > SwXStyle::getPropertyValues(
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;
@@ -2585,7 +2585,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                 const String& rPropName = pNames[i];
                 const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( rPropName);
                 if(!pEntry)
-                    throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+                    throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
                 if( FN_UNO_NUM_RULES ==  pEntry->nWID ||
                     FN_UNO_FOLLOW_STYLE == pEntry->nWID )
                 {
@@ -2706,11 +2706,11 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
         {
             const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
             if( !pEntry )
-                throw beans::UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is unknown: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException ( OUString( "Property is unknown: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES )
-                throw uno::RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Cannot reset: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException ( OUString( "Cannot reset: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY )
-                throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertiesToDefault: property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException( OUString( "setPropertiesToDefault: property is read-only: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             if( pEntry->nWID == RES_PARATR_OUTLINELEVEL )
                 static_cast<SwTxtFmtColl*>(pTargetFmt)->DeleteAssignmentToListLevelOfOutlineStyle();
@@ -2869,7 +2869,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
                 {
                     const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[i] );
                     if ( !pEntry )
-                        throw beans::UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+                        throw beans::UnknownPropertyException ( OUString( "Unknown property: " ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
                     if (pEntry->nWID >= RES_UNKNOWNATR_END)
                     {
@@ -3022,9 +3022,9 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     {
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
         if (!pEntry)
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
         if(GetBasePool())
         {
@@ -3258,7 +3258,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
     {
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
         if (!pEntry)
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
         if(GetBasePool())
         {
@@ -3467,11 +3467,11 @@ uno::Sequence< uno::Any > SwXPageStyle::getPropertyValues(
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;
@@ -3967,7 +3967,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
         const String& rPropName = pNames[i];
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
         if(!pEntry)
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
         else if ( RES_TXTATR_AUTOFMT == pEntry->nWID || RES_AUTO_STYLE == pEntry->nWID )
         {
             OUString sName(StylePool::nameOf( pSet ));
@@ -3993,11 +3993,11 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;
@@ -4080,7 +4080,7 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
         const String& rPropName = pNames[i];
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
         if(!pEntry)
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
         pStates[i] = pPropSet->getPropertyState(*pEntry, rSet );
     }
     return aRet;

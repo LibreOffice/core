@@ -42,8 +42,7 @@ rtl::OUString Span::convertFromUtf8() const {
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot convert from UTF-8")),
+            rtl::OUString("cannot convert from UTF-8"),
             css::uno::Reference< css::uno::XInterface >());
     }
     return rtl::OUString(s, SAL_NO_ACQUIRE);

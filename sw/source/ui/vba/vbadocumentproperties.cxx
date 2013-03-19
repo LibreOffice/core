@@ -464,7 +464,7 @@ public:
     virtual rtl::OUString SAL_CALL getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setLinkSource( const rtl::OUString& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException);
     //XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
+    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString("Value"); }
     // XHelperInterface
     virtual rtl::OUString getServiceImplName();
     virtual uno::Sequence<rtl::OUString> getServiceNames();
@@ -622,7 +622,7 @@ SwVbaBuiltInDocumentProperty::setLinkSource( const rtl::OUString& /*LinkSource*/
 rtl::OUString
 SwVbaBuiltInDocumentProperty::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBuiltinDocumentProperty"));
+    return rtl::OUString("SwVbaBuiltinDocumentProperty");
 }
 
 uno::Sequence<rtl::OUString>
@@ -632,7 +632,7 @@ SwVbaBuiltInDocumentProperty::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.DocumentProperty" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.DocumentProperty" );
     }
     return aServiceNames;
 }
@@ -747,7 +747,7 @@ uno::Reference< XDocumentProperty > SAL_CALL
 SwVbaBuiltinDocumentProperties::Add( const ::rtl::OUString& /*Name*/, ::sal_Bool /*LinkToContent*/, ::sal_Int8 /*Type*/, const uno::Any& /*value*/, const uno::Any& /*LinkSource*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     throw uno::RuntimeException(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("not supported for Builtin properties") ), uno::Reference< uno::XInterface >() );
+        rtl::OUString("not supported for Builtin properties"), uno::Reference< uno::XInterface >() );
 }
 
 // XEnumerationAccess
@@ -776,7 +776,7 @@ SwVbaBuiltinDocumentProperties::createCollectionObject( const uno::Any& aSource 
 rtl::OUString
 SwVbaBuiltinDocumentProperties::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBuiltinDocumentProperties"));
+    return rtl::OUString("SwVbaBuiltinDocumentProperties");
 }
 
 uno::Sequence<rtl::OUString>
@@ -786,7 +786,7 @@ SwVbaBuiltinDocumentProperties::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.DocumentProperties" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.DocumentProperties" );
     }
     return aServiceNames;
 }
@@ -914,7 +914,7 @@ SwVbaCustomDocumentProperties::Add( const ::rtl::OUString& Name, ::sal_Bool Link
 rtl::OUString
 SwVbaCustomDocumentProperties::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaCustomDocumentProperties"));
+    return rtl::OUString("SwVbaCustomDocumentProperties");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

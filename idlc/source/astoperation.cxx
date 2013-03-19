@@ -48,7 +48,7 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 
     rtl::OUString returnTypeName;
     if (m_pReturnType == 0) {
-        returnTypeName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void"));
+        returnTypeName = rtl::OUString("void");
     } else {
         returnTypeName = rtl::OStringToOUString(
             m_pReturnType->getRelativName(), RTL_TEXTENCODING_UTF8);

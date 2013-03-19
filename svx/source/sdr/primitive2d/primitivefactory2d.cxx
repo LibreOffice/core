@@ -111,7 +111,7 @@ namespace drawinglayer
             if(!aSeq.getLength())
             {
                 aSeq.realloc(1L);
-                aSeq.getArray()[0L] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.PrimitiveFactory2D"));
+                aSeq.getArray()[0L] = rtl::OUString("com.sun.star.graphic.PrimitiveFactory2D");
             }
 
             return aSeq;

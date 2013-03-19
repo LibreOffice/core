@@ -143,14 +143,14 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceNa
 
 OUString SAL_CALL SvxUnoMarkerTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoMarkerTable") );
+    return OUString("SvxUnoMarkerTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable" ));
+    aSNS.getArray()[0] = OUString("com.sun.star.drawing.MarkerTable" );
     return aSNS;
 }
 

@@ -305,7 +305,7 @@ DBG_NAME(OTableSubscriptionPage)
                     sal_Bool bModified = ( xModi.is() && xModi->isModified() );
 
                     Sequence< ::rtl::OUString > aNewTableFilter(1);
-                    aNewTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
+                    aNewTableFilter[0] = ::rtl::OUString("%");
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
 
                     xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< ::rtl::OUString >() ) );
@@ -351,7 +351,7 @@ DBG_NAME(OTableSubscriptionPage)
             else
             {
                 // in addition, we need some infos about the connection used
-                m_sCatalogSeparator = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));    // (default)
+                m_sCatalogSeparator = ::rtl::OUString(".");    // (default)
                 m_bCatalogAtStart = sal_True;   // (default)
                 try
                 {

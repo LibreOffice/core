@@ -86,7 +86,7 @@ ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent,
     m_aPattColor.SetColor( (sal_uInt32)0x0 );
     m_nPattern = 0L;
     if ( !m_xProps.is() )
-        throw lang::IllegalArgumentException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "properties") ), uno::Reference< uno::XInterface >(), 2 );
+        throw lang::IllegalArgumentException( rtl::OUString( "properties"), uno::Reference< uno::XInterface >(), 2 );
 }
 
 uno::Any
@@ -250,7 +250,7 @@ ScVbaInterior::GetMixedColorComp(  sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 n
 uno::Reference< container::XNameContainer >
 ScVbaInterior::GetAttributeContainer()
 {
-    return uno::Reference < container::XNameContainer > ( m_xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserDefinedAttributes" )) ), uno::UNO_QUERY_THROW );
+    return uno::Reference < container::XNameContainer > ( m_xProps->getPropertyValue( rtl::OUString( "UserDefinedAttributes" ) ), uno::UNO_QUERY_THROW );
 }
 sal_Int32
 ScVbaInterior::GetAttributeData( uno::Any aValue )
@@ -266,7 +266,7 @@ uno::Any
 ScVbaInterior::SetAttributeData( sal_Int32 nValue )
 {
     xml::AttributeData aAttributeData;
-    aAttributeData.Type = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "sal_Int32" ));
+    aAttributeData.Type = rtl::OUString( "sal_Int32" );
     aAttributeData.Value = rtl::OUString::valueOf( nValue );
     return uno::makeAny( aAttributeData );
 }
@@ -289,7 +289,7 @@ ScVbaInterior::SetUserDefinedAttributes( const rtl::OUString& sName, const uno::
         if( xNameContainer->hasByName( sName ) )
             xNameContainer->removeByName( sName );
         xNameContainer->insertByName( sName, aValue );
-        m_xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserDefinedAttributes" )), uno::makeAny( xNameContainer ) );
+        m_xProps->setPropertyValue( rtl::OUString( "UserDefinedAttributes" ), uno::makeAny( xNameContainer ) );
     }
 }
 // OOo do not support below API
@@ -311,7 +311,7 @@ ScVbaInterior::setPattern( const uno::Any& _pattern ) throw (uno::RuntimeExcepti
         SetMixedColor();
     }
     else
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Pattern index" )), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Invalid Pattern index" ), uno::Reference< uno::XInterface >() );
 }
 Color
 ScVbaInterior::GetBackColor()
@@ -359,7 +359,7 @@ ScVbaInterior::setPatternColor( const uno::Any& _patterncolor ) throw (uno::Runt
         SetMixedColor();
     }
     else
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Pattern Color" )), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Invalid Pattern Color" ), uno::Reference< uno::XInterface >() );
 }
 uno::Any SAL_CALL
 ScVbaInterior::getPatternColorIndex() throw (uno::RuntimeException)
@@ -382,13 +382,13 @@ ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex ) throw 
         setPatternColor( uno::makeAny( OORGBToXLRGB( nPattColor ) ) );
     }
     else
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid Pattern Color" )), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Invalid Pattern Color" ), uno::Reference< uno::XInterface >() );
 }
 
 rtl::OUString
 ScVbaInterior::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaInterior"));
+    return rtl::OUString("ScVbaInterior");
 }
 
 uno::Sequence< rtl::OUString >
@@ -398,7 +398,7 @@ ScVbaInterior::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Interior" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Interior" );
     }
     return aServiceNames;
 }

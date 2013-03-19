@@ -71,7 +71,7 @@ void parseCommandLine( char *argv[] ,
     if( -1 == nIndex )
     {
         *pConnection = sTemp;
-        *pProtocol    = OUString( RTL_CONSTASCII_USTRINGPARAM( "iiop" ) );
+        *pProtocol    = OUString( "iiop" );
     }
     else
     {
@@ -97,10 +97,10 @@ Any OInstanceProvider::queryInterface( const  Type & aType ) throw ( RuntimeExce
               ::com::sun::star::uno::RuntimeException)
 {
     // Tries to get the PerformanceTestObject
-    if( sObjectName == OUString( RTL_CONSTASCII_USTRINGPARAM( "TestRemoteObject" ) ) )
+    if( sObjectName == OUString( "TestRemoteObject" ) )
     {
         return m_rSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.test.performance.PerformanceTestObject") ) );
+            OUString("com.sun.star.test.performance.PerformanceTestObject") );
     }
     return Reference < XInterface > ( (::cppu::OWeakObject * ) new OTestFactory() );
 }
@@ -421,7 +421,7 @@ void OInterfaceTest::call()
 {
     if( m_rCallMe.is() )
     {
-        m_rCallMe->call( OUString( RTL_CONSTASCII_USTRINGPARAM("This is my String during a callback!")) , 5);
+        m_rCallMe->call( OUString("This is my String during a callback!") , 5);
     }
 }
 
@@ -487,7 +487,7 @@ double getCallsPerSec( const Reference < XCallMe > &rCall , int nLoops, int nToD
     osl_getSystemTime( &aStartTime );
     for( sal_Int32 i = 0; i < nLoops; i ++ )
     {
-        rCall->call( OUString( RTL_CONSTASCII_USTRINGPARAM("Performance test string")) , nToDo );
+        rCall->call( OUString("Performance test string") , nToDo );
     }
     osl_getSystemTime( &aEndTime );
 
@@ -506,12 +506,12 @@ double getCallsPerSecOneway( const Reference < XCallMe > &rCall ,
     osl_getSystemTime( &aStartTime );
     for( sal_Int32 i = 0; i < nLoops; i ++ )
     {
-//          rCall->callOneway( OUString( RTL_CONSTASCII_USTRINGPARAM("Performance test string" )), 0 );
+//          rCall->callOneway( OUString("Performance test string" ), 0 );
           rCall->drawLine( 0 , 0 , 500 , 123 );
     }
     osl_getSystemTime( &aEndTime );
 
-    rCall->call( OUString( RTL_CONSTASCII_USTRINGPARAM("Performance test string")) , nToDo );
+    rCall->call( OUString("Performance test string") , nToDo );
     osl_getSystemTime( &aAfterExecution );
 
     double fStart = (double)aStartTime.Seconds + ((double)aStartTime.Nanosec / 1000000000.0);
@@ -577,7 +577,7 @@ void testPerformance( const Reference < XCallMe > &rRemote,
 void testException( const Reference < XCallMe > &r )
 {
     try {
-        r->call( OUString( RTL_CONSTASCII_USTRINGPARAM("dummy")) , -1 );
+        r->call( OUString("dummy") , -1 );
         OSL_ASSERT( ! "no exception flown !" );
     }
     catch( TestBridgeException  & e )
@@ -599,7 +599,7 @@ void testSequenceOfCalls( const Reference< XCallMe > & rRCallMe )
     printf( "Testing sequence of calls\n" );
     for( sal_Int32 i = 0 ; i < 800 ; i ++ )
     {
-        rRCallMe->callOneway( OUString( RTL_CONSTASCII_USTRINGPARAM("hifuj" )), 0 );
+        rRCallMe->callOneway( OUString("hifuj" ), 0 );
     }
 }
 
@@ -622,7 +622,7 @@ void testAllTypes( const Reference < XCallMe > & rRCallMe )
         types.UHyper = 1 << i*2;
         types.Float = (float)123.239;
         types.Double = 1279.12490012;
-        types.String = OUString( RTL_CONSTASCII_USTRINGPARAM("abcdefghijklmnopqrstuvwxyz"));
+        types.String = OUString("abcdefghijklmnopqrstuvwxyz");
         types.Interface = Reference< XInterface >( rRCallMe , UNO_QUERY);
         types.Any <<= types.Double;
 
@@ -761,7 +761,7 @@ Reference <XInterface > createComponent( const OUString &sService ,
         // erst registrieren
         Reference < XImplementationRegistration > rReg (
             rSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.ImplementationRegistration" ))),
+                OUString( "com.sun.star.registry.ImplementationRegistration" )),
             UNO_QUERY );
 
         OSL_ASSERT( rReg.is() );
@@ -770,7 +770,7 @@ Reference <XInterface > createComponent( const OUString &sService ,
         try
         {
             rReg->registerImplementation(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )),
+                OUString( "com.sun.star.loader.SharedLibrary" ),
                 aDllName,
                 Reference< XSimpleRegistry > () );
             rInterface = rSMgr->createInstance( sService );

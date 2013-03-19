@@ -141,7 +141,7 @@ namespace dbtools
         if ( !pReturn )
         {   // is it a text field ?
             sal_Int32 nType = DataType::OTHER;
-            _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) >>= nType;
+            _rxField->getPropertyValue( ::rtl::OUString( "Type" ) ) >>= nType;
 
             if  (   ( DataType::CHAR        == nType )
                 ||  ( DataType::VARCHAR     == nType )
@@ -200,17 +200,17 @@ namespace dbtools
                 try
                 {
                     Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
-                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) )
+                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString( "FormatKey" ) ) )
                     {
                         sal_Int32 nFormatKey = 0;
-                        _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) >>= nFormatKey;
+                        _rxField->getPropertyValue( ::rtl::OUString( "FormatKey" ) ) >>= nFormatKey;
                         if ( nFormatKey && m_xFormatter.is() )
                         {
                             Locale aFormatLocale;
                             ::comphelper::getNumberFormatProperty(
                                 m_xFormatter,
                                 nFormatKey,
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Locale" ) )
+                                ::rtl::OUString( "Locale" )
                             ) >>= aFormatLocale;
 
                             // valid locale
@@ -347,8 +347,8 @@ namespace dbtools
         {
             // first try the international version
             ::rtl::OUString sSql;
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * "));
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x WHERE "));
+            sSql += ::rtl::OUString("SELECT * ");
+            sSql += ::rtl::OUString(" FROM x WHERE ");
             sSql += sField;
             sSql += _rPredicateValue;
             ::std::auto_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, sal_True ) );

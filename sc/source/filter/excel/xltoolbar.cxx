@@ -62,12 +62,12 @@ MSOExcelCommandConvertor::MSOExcelCommandConvertor()
 /*
     // mso command id to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    msoToOOcmd[ 0x20b ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc") );
-    msoToOOcmd[ 0x50 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Open") );
+    msoToOOcmd[ 0x20b ] = rtl::OUString(".uno:CloseDoc");
+    msoToOOcmd[ 0x50 ] = rtl::OUString(".uno:Open");
 
    // mso tcid to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-   tcidToOOcmd[ 0x9d9 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(".uno:Print") );
+   tcidToOOcmd[ 0x9d9 ] = rtl::OUString(".uno:Print");
 */
 }
 
@@ -180,7 +180,7 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
         WString& name = tb.getName();
         // set UI name for toolbar
-        xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UIName") ), uno::makeAny( name.getString() ) );
+        xProps->setPropertyValue( rtl::OUString("UIName"), uno::makeAny( name.getString() ) );
 
         rtl::OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
         for ( std::vector< ScTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
@@ -305,7 +305,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
                  else
                  {
                      beans::PropertyValue aProp;
-                     aProp.Name =  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ItemDescriptorContainer") );
+                     aProp.Name =  rtl::OUString("ItemDescriptorContainer");
                      aProp.Value <<= xMenuDesc;
                      props.push_back( aProp );
                  }
@@ -316,7 +316,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
         {
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps( 1 );
-            sProps[ 0 ].Name =  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Type") );
+            sProps[ 0 ].Name =  rtl::OUString("Type");
             sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
@@ -425,7 +425,7 @@ bool ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     for ( std::vector<ScCTB>::iterator it = rCTB.begin(); it != it_end; ++it )
     {
         // for each customtoolbar
-        CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument" ) ) ) );
+        CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( rtl::OUString("com.sun.star.sheet.SpreadsheetDocument" ) ) );
         helper.setMSOCommandMap( new  MSOExcelCommandConvertor() );
         // Ignore menu toolbars, excel doesn't ( afaics ) store
         // menu customizations ( but you can have menus in a customtoolbar

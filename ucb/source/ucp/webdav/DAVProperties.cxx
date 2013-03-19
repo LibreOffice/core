@@ -138,7 +138,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
              DAVProperties::GETETAG.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) )
         {
-            aNameSpace = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DAV:" ) );
+            aNameSpace = rtl::OUString( "DAV:" );
         }
     }
 

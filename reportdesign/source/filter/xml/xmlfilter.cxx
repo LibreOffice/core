@@ -247,7 +247,7 @@ sal_Int32 ReadThroughComponent(
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
 
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) ) >>= bEncrypted;
+            xProps->getPropertyValue( ::rtl::OUString("Encrypted") ) >>= bEncrypted;
         }
         catch (const packages::WrongPasswordException&)
         {
@@ -408,7 +408,7 @@ uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContex
 // -----------------------------------------------------------------------------
 ::rtl::OUString ORptFilter::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OReportFilter"));
+    return ::rtl::OUString("com.sun.star.comp.report.OReportFilter");
 }
 
 //--------------------------------------------------------------------------
@@ -535,8 +535,8 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                 uno::UNO_QUERY );
 
         uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
-        aArgs[0] <<= beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage")),uno::makeAny(xStorage));
-        xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver")),aArgs) , uno::UNO_QUERY);
+        aArgs[0] <<= beans::NamedValue(::rtl::OUString("Storage"),uno::makeAny(xStorage));
+        xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(::rtl::OUString("com.sun.star.document.ImportEmbeddedObjectResolver"),aArgs) , uno::UNO_QUERY);
 
         static const ::rtl::OUString s_sOld(RTL_CONSTASCII_USTRINGPARAM("OldFormat"));
         static comphelper::PropertyMapEntry pMap[] =
@@ -551,9 +551,9 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         ::comphelper::MediaDescriptor aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
         const ::rtl::OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),::rtl::OUString()) );
-        xProp->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(sVal));
-        const ::rtl::OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalDocumentName")),::rtl::OUString()) );
-        xProp->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath")), uno::makeAny(sHierarchicalDocumentName));
+        xProp->setPropertyValue(rtl::OUString("BaseURI"), uno::makeAny(sVal));
+        const ::rtl::OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(rtl::OUString("HierarchicalDocumentName"),::rtl::OUString()) );
+        xProp->setPropertyValue(rtl::OUString("StreamRelPath"), uno::makeAny(sHierarchicalDocumentName));
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
         static const ::rtl::OUString s_sMeta(RTL_CONSTASCII_USTRINGPARAM("meta.xml"));
@@ -582,7 +582,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( nRet == 0 )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml"))));
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString("settings.xml")));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"
@@ -596,7 +596,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
         if ( nRet == 0 )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml"))));
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString("styles.xml")));
             nRet = ReadThroughComponent(xStorage
                                     ,xModel
                                     ,"styles.xml"
@@ -610,7 +610,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( nRet == 0 )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString("content.xml")));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"content.xml"
@@ -674,7 +674,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                 const SvXMLStylesContext* pAutoStyles = GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pm1"))));
+                    XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,::rtl::OUString("pm1")));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(getReportDefinition().get());

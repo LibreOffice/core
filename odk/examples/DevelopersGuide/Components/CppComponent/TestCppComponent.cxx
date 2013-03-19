@@ -61,11 +61,11 @@ SAL_IMPLEMENT_MAIN()
             my_module::MyService1::create(xContext);
 
         // call methodOne and print the return value on stdout
-        OUString s = xSomething->methodOne(OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World!")));
+        OUString s = xSomething->methodOne(OUString("Hello World!"));
         fprintf(stdout,"\nCreate new instance of MyService1\nCall of XSomething.methOne at MyService1 = %s", OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr());
 
         // create a new instance of MyService2 with the specified string argument
-        xSomething = my_module::MyService2::create(xContext, OUString(RTL_CONSTASCII_USTRINGPARAM("Hello My World!")));
+        xSomething = my_module::MyService2::create(xContext, OUString("Hello My World!"));
 
         // call methodTwo and print the return value of methodTwo
         s = xSomething->methodTwo();

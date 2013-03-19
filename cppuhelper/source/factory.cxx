@@ -228,7 +228,7 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
                 xComp->dispose();
 
             throw lang::IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("cannot pass arguments to component => no XInitialization implemented!") ),
+                OUString("cannot pass arguments to component => no XInitialization implemented!"),
                 Reference< XInterface >(), 0 );
         }
     }
@@ -818,7 +818,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     OUString aLocation;
 
     Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") ) );
+        OUString("/UNO/ACTIVATOR") );
     if( xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
     {
         aActivatorUrl = xActivatorKey->getAsciiValue();
@@ -828,7 +828,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         aActivatorName = tmpActivator.getToken(0, ':', nIndex );
 
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/LOCATION") ) );
+            OUString("/UNO/LOCATION") );
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
             aLocation = xLocationKey->getAsciiValue();
     }
@@ -837,7 +837,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
         // old style"url"
         // the location of the program code of the implementation
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/URL") ) );
+            OUString("/UNO/URL") );
         // is the key of the right type ?
         if( xLocationKey.is() && xLocationKey->getValueType() == RegistryValueType_ASCII )
         {
@@ -846,14 +846,14 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
 
             // search protocol delimiter
             sal_Int32 nPos = aLocation.indexOf(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("://") ) );
+                OUString("://") );
             if( nPos != -1 )
             {
                 aActivatorName = aLocation.copy( 0, nPos );
                 if( aActivatorName.compareToAscii( "java" ) == 0 )
-                    aActivatorName = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java") );
+                    aActivatorName = OUString("com.sun.star.loader.Java");
                 else if( aActivatorName.compareToAscii( "module" ) == 0 )
-                    aActivatorName = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") );
+                    aActivatorName = OUString("com.sun.star.loader.SharedLibrary");
                 aLocation = aLocation.copy( nPos + 3 );
             }
         }
@@ -884,7 +884,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames(void)
         try
         {
             Reference<XRegistryKey > xKey = xImplementationKey->openKey(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("UNO/SERVICES") ) );
+                OUString("UNO/SERVICES") );
 
             if (xKey.is())
             {

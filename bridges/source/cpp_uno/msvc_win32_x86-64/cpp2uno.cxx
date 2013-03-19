@@ -242,7 +242,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
     OSL_ENSURE( nFunctionIndex < pTD->nMapFunctionIndexToMemberIndex, "### illegal vtable index!\n" );
     if ( nFunctionIndex >= pTD->nMapFunctionIndexToMemberIndex )
-        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Illegal vtable index!")),
+        throw RuntimeException( rtl::OUString("Illegal vtable index!"),
                                 reinterpret_cast<XInterface *>( pCppI ) );
 
     // Determine called method
@@ -345,7 +345,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
         }
         default:
         {
-            throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No member description found!")),
+            throw RuntimeException( rtl::OUString("No member description found!"),
                                     reinterpret_cast<XInterface *>( pCppI ) );
         }
     }
@@ -456,8 +456,8 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
         Rtti():
             n0(0), n1(0), n2(0),
             rtti(CPPU_CURRENT_NAMESPACE::mscx_getRTTI(
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                       "com.sun.star.uno.XInterface"))))
+                     rtl::OUString(
+                                       "com.sun.star.uno.XInterface")))
         {}
     };
     static Rtti rtti;

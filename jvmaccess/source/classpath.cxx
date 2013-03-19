@@ -72,8 +72,7 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                 } catch (const css::lang::IllegalArgumentException & e) {
                     throw css::uno::RuntimeException(
                         (::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.lang.IllegalArgumentException: "))
+                                "com.sun.star.lang.IllegalArgumentException: ")
                          + e.Message),
                         css::uno::Reference< css::uno::XInterface >());
                 }

@@ -45,14 +45,14 @@ throw (uno::Exception)
 
 ::rtl::OUString SAL_CALL EmbedServer_getImplementationName() throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.EmbedServer") );
+    return ::rtl::OUString("com.sun.star.comp.ole.EmbedServer");
 
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL EmbedServer_getSupportedServiceNames() throw()
 {
     uno::Sequence< ::rtl::OUString > aServiceNames( 1 );
-    aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.OleEmbeddedServerRegistration" ) );
+    aServiceNames[0] = ::rtl::OUString( "com.sun.star.document.OleEmbeddedServerRegistration" );
     return aServiceNames;
 }
 

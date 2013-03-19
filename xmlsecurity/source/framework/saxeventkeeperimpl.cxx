@@ -348,44 +348,44 @@ rtl::OUString SAXEventKeeperImpl::printBufferNode(
 
     for ( int i=0; i<nIndent; ++i )
     {
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+        rc += rtl::OUString( " " );
     }
 
     if (pBufferNode == m_pCurrentBufferNode)
     {
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[%]" ));
+        rc += rtl::OUString( "[%]" );
     }
 
     if (pBufferNode == m_pCurrentBlockingBufferNode)
     {
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[B]" ));
+        rc += rtl::OUString( "[B]" );
     }
 
-    rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+    rc += rtl::OUString( " " );
     rc += m_xXMLDocument->getNodeName(pBufferNode->getXMLElement());
 
     BufferNode* pParent = (BufferNode*)pBufferNode->getParent();
     if (pParent != NULL)
     {
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[" ));
+        rc += rtl::OUString( "[" );
         rc += m_xXMLDocument->getNodeName(pParent->getXMLElement());
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "]" ));
+        rc += rtl::OUString( "]" );
     }
 
-    rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":EC=" ));
+    rc += rtl::OUString( ":EC=" );
     rc += pBufferNode->printChildren();
-    rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " BR=" ));
+    rc += rtl::OUString( " BR=" );
 
     ElementMark * pBlocker = pBufferNode->getBlocker();
     if (pBlocker != NULL)
     {
         rc += rtl::OUString::valueOf( pBlocker->getBufferId() );
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "(SecId=" ));
+        rc += rtl::OUString( "(SecId=" );
         rc += rtl::OUString::valueOf( pBlocker->getSecurityId() );
         rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+        rc += rtl::OUString( " " );
     }
-    rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ));
+    rc += rtl::OUString( "\n" );
 
     std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
     std::vector< const BufferNode* >::const_iterator jj = vChildren->begin();
@@ -1056,11 +1056,11 @@ rtl::OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
 {
     rtl::OUString rc;
 
-    rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ElementMarkBuffers: size = " ));
+    rc += rtl::OUString( "ElementMarkBuffers: size = " );
     rc += rtl::OUString::valueOf((sal_Int32)m_vElementMarkBuffers.size());
-    rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\nCurrentBufferNode: " ));
+    rc += rtl::OUString( "\nCurrentBufferNode: " );
     rc += m_xXMLDocument->getNodeName(m_pCurrentBufferNode->getXMLElement());
-    rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ));
+    rc += rtl::OUString( "\n" );
     rc += printBufferNode(m_pRootBufferNode, 0);
 
     return rc;

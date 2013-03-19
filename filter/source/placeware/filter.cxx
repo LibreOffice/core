@@ -144,7 +144,7 @@ void SAL_CALL PlaceWareExportFilter::initialize( const ::com::sun::star::uno::Se
 OUString PlaceWareExportFilter_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Impress.PlaceWareExportFilter" ) );
+    return OUString( "com.sun.star.comp.Impress.PlaceWareExportFilter" );
 }
 
 // -----------------------------------------------------------------------------

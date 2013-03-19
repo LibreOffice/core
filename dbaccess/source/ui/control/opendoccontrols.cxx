@@ -205,7 +205,7 @@ namespace dbaui
         Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( ePICKLIST );
         Reference< XNameAccess > xFilterFactory;
         xFilterFactory = xFilterFactory.query( ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ) ) );
+            ::rtl::OUString( "com.sun.star.document.FilterFactory" ) ) );
 
         sal_uInt32 nCount = aHistory.getLength();
         for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
@@ -226,7 +226,7 @@ namespace dbaui
 
                 ::comphelper::SequenceAsHashMap aFilterProperties( aProps );
                 ::rtl::OUString sDocumentService = aFilterProperties.getUnpackedValueOrDefault(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ) ), ::rtl::OUString() );
+                    ::rtl::OUString( "DocumentService" ), ::rtl::OUString() );
                 if ( sDocumentService.equalsAscii( _pAsciiModuleName ) )
                 {
                     // yes, it's a Base document

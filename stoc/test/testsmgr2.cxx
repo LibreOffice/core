@@ -45,8 +45,8 @@ SAL_IMPLEMENT_MAIN()
 
         Reference< XSimpleRegistry > r1 =  createSimpleRegistry();
         Reference< XSimpleRegistry > r2 =  createSimpleRegistry();
-        r1->open( OUString( RTL_CONSTASCII_USTRINGPARAM( "test1.rdb" ) ), sal_True, sal_False );
-        r2->open( OUString( RTL_CONSTASCII_USTRINGPARAM( "test2.rdb" ) ), sal_True, sal_False );
+        r1->open( OUString( "test1.rdb" ), sal_True, sal_False );
+        r2->open( OUString( "test2.rdb" ), sal_True, sal_False );
         Reference< XSimpleRegistry > r = createNestedRegistry( );
         Reference< XInitialization > rInit( r, UNO_QUERY );
         Sequence< Any > seq( 2 );
@@ -59,7 +59,7 @@ SAL_IMPLEMENT_MAIN()
         Reference< XContentEnumerationAccess > xCtAccess( rComp->getServiceManager(), UNO_QUERY );
 
         Reference< XEnumeration > rEnum =
-            xCtAccess->createContentEnumeration( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.Bridge" ) ) );
+            xCtAccess->createContentEnumeration( OUString( "com.sun.star.bridge.Bridge" ) );
 
         sal_Int32 n = 0;
         while( rEnum->hasMoreElements() )
@@ -88,7 +88,7 @@ SAL_IMPLEMENT_MAIN()
         try
         {
             xCtAccess->createContentEnumeration(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "blabla" ) ) );
+                OUString( "blabla" ) );
         }
         catch (DisposedException &)
         {

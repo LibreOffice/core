@@ -202,7 +202,7 @@ namespace extensions { namespace resource
         }
 
         // supported resource types so far: strings
-        m_aResourceTypes[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "string" ) ) ] =
+        m_aResourceTypes[ ::rtl::OUString( "string" ) ] =
             ResourceTypePtr( new StringResourceAccess );
     }
 

@@ -142,8 +142,8 @@ public:
     SwTxtNode & GetTxtNodeOrThrow() {
         SwTxtNode *const pTxtNode( GetTxtNode() );
         if (!pTxtNode) {
-            throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "SwXParagraph: disposed or invalid")), 0);
+            throw uno::RuntimeException(OUString(
+                    "SwXParagraph: disposed or invalid"), 0);
         }
         return *pTxtNode;
     }
@@ -397,14 +397,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                OUString("Unknown property: ")
                     + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
         if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
         {
             throw beans::PropertyVetoException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only: "))
+                OUString("Property is read-only: ")
                     + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
@@ -457,7 +457,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                OUString("Unknown property: ")
                     + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
@@ -491,14 +491,14 @@ throw (uno::RuntimeException)
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unknown property exception caught")),
+        throw uno::RuntimeException(OUString(
+                "Unknown property exception caught"),
             static_cast<cppu::OWeakObject *>(this));
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "WrappedTargetException caught")),
+        throw uno::RuntimeException(OUString(
+                "WrappedTargetException caught"),
             static_cast<cppu::OWeakObject *>(this));
     }
 
@@ -919,7 +919,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
@@ -953,7 +953,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+                OUString("Unknown property: ")
                     + *pNames,
                 static_cast<cppu::OWeakObject *>(this));
         }
@@ -996,7 +996,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
@@ -1004,7 +1004,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw uno::RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only: "))
+            OUString("Property is read-only: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
@@ -1066,7 +1066,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }

@@ -63,12 +63,12 @@ bool DragSource::g_DropSuccess = false;
 
 OUString dragSource_getImplementationName()
 {
-  return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"));
+  return OUString("com.sun.star.comp.datatransfer.dnd.OleDragSource_V1");
 }
 
 Sequence<OUString> dragSource_getSupportedServiceNames()
 {
-  return makeSequence(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource")));
+  return makeSequence(OUString("com.sun.star.datatransfer.dnd.OleDragSource"));
 }
 
 
@@ -179,7 +179,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 {
   if (aArguments.getLength() < 2)
     {
-      throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Not enough parameter.")),
+      throw Exception(OUString("DragSource::initialize: Not enough parameter."),
                       static_cast<OWeakObject*>(this));
     }
 
@@ -197,13 +197,13 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   if (![mView respondsToSelector: @selector(registerMouseEventListener:)] ||
       ![mView respondsToSelector: @selector(unregisterMouseEventListener:)])
     {
-      throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view doesn't support mouse listener")),
+      throw Exception(OUString("DragSource::initialize: Provided view doesn't support mouse listener"),
                       static_cast<OWeakObject*>(this));
     }
   NSWindow* pWin = [mView window];
   if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
   {
-      throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Provided view is not attached to a vcl frame")),
+      throw Exception(OUString("DragSource::initialize: Provided view is not attached to a vcl frame"),
                       static_cast<OWeakObject*>(this));
   }
   mpFrame = (AquaSalFrame*)[pWin performSelector: @selector(getSalFrame)];
@@ -212,7 +212,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 
   if (mDragSourceHelper == nil)
     {
-      throw Exception(OUString(RTL_CONSTASCII_USTRINGPARAM("DragSource::initialize: Cannot initialize DragSource")),
+      throw Exception(OUString("DragSource::initialize: Cannot initialize DragSource"),
                       static_cast<OWeakObject*>(this));
     }
 

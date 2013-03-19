@@ -116,7 +116,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 SAL_IMPLEMENT_MAIN()
 {
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
+    xreg->open( OUString("applicat.rdb"),
                                sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);

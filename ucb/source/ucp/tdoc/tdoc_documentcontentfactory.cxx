@@ -93,8 +93,8 @@ DocumentContentFactory::getSupportedServiceNames()
 // static
 rtl::OUString DocumentContentFactory::getImplementationName_Static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory" ) );
+    return rtl::OUString(
+        "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory" );
 }
 
 //=========================================================================
@@ -104,8 +104,8 @@ DocumentContentFactory::getSupportedServiceNames_Static()
 {
     uno::Sequence< rtl::OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-        = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.frame.TransientDocumentsDocumentContentFactory" ) );
+        = rtl::OUString(
+            "com.sun.star.frame.TransientDocumentsDocumentContentFactory" );
     return aSNS;
 }
 
@@ -127,8 +127,8 @@ DocumentContentFactory::createDocumentContent(
         xDocFac
             = uno::Reference< frame::XTransientDocumentsDocumentContentFactory >(
                 m_xSMgr->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.ucb.TransientDocumentsContentProvider" ) )
+                    rtl::OUString(
+                        "com.sun.star.ucb.TransientDocumentsContentProvider" )
                     ),
                 uno::UNO_QUERY );
     }
@@ -141,8 +141,8 @@ DocumentContentFactory::createDocumentContent(
         return xDocFac->createDocumentContent( Model );
 
     throw uno::RuntimeException(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "Unable to obtain document content factory!" ) ),
+        rtl::OUString(
+            "Unable to obtain document content factory!" ),
         static_cast< cppu::OWeakObject * >( this ) );
 }
 

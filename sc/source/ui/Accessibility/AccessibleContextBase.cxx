@@ -467,7 +467,7 @@ void SAL_CALL ScAccessibleContextBase::notifyEvent(
        ScAccessibleContextBase::getImplementationName(void)
     throw (uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleContextBase"));
+    return OUString("ScAccessibleContextBase");
 }
 
 sal_Bool SAL_CALL
@@ -494,8 +494,8 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     OUString* pServiceNames = aServiceNames.getArray();
     if (pServiceNames)
     {
-        pServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.Accessible"));
-        pServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
+        pServiceNames[0] = OUString("com.sun.star.accessibility.Accessible");
+        pServiceNames[1] = OUString("com.sun.star.accessibility.AccessibleContext");
     }
 
     return aServiceNames;

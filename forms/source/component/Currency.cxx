@@ -110,11 +110,11 @@ void OCurrencyModel::implConstruct()
                     bPrependCurrencySymbol = sal_False;
                     break;
                 case 2: // $ 1
-                    sCurrencySymbol = ::rtl::OUString(String(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
+                    sCurrencySymbol = ::rtl::OUString(String(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString(" ");
                     bPrependCurrencySymbol = sal_True;
                     break;
                 case 3: // 1 $
-                    sCurrencySymbol = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") ) + ::rtl::OUString(String(aLocaleInfo.getCurrSymbol()));
+                    sCurrencySymbol = ::rtl::OUString(" ") + ::rtl::OUString(String(aLocaleInfo.getCurrSymbol()));
                     bPrependCurrencySymbol = sal_False;
                     break;
             }

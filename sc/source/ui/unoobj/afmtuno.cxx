@@ -195,7 +195,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
 
 rtl::OUString ScAutoFormatsObj::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScAutoFormatsObj" ));
+    return rtl::OUString( "stardiv.StarCalc.ScAutoFormatsObj" );
 }
 
 uno::Sequence<rtl::OUString> ScAutoFormatsObj::getSupportedServiceNames_Static()
@@ -319,7 +319,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatsObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableAutoFormatEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.TableAutoFormatEnumeration"));
 }
 
 // container::XIndexAccess
@@ -477,7 +477,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableAutoFormatEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.TableAutoFormatEnumeration"));
 }
 
 // container::XIndexAccess

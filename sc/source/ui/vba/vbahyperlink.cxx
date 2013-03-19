@@ -55,7 +55,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
     UrlComponents aUrlComp;
     OUString aTextToDisplay;
     if( !(rAddress >>= aUrlComp.first) || aUrlComp.first.isEmpty() )
-        throw uno::RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot get address" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "Cannot get address" ), uno::Reference< uno::XInterface >() );
     rSubAddress >>= aUrlComp.second;
     rScreenTip >>= maScreenTip;
     rTextToDisplay >>= aTextToDisplay;
@@ -84,7 +84,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
         }
         // create and initialize a new URL text field
         uno::Reference< lang::XMultiServiceFactory > xFactory( ScVbaRange::getUnoModel( xAnchorRange ), uno::UNO_QUERY_THROW );
-        uno::Reference< text::XTextContent > xUrlField( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextField.URL" ) ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextContent > xUrlField( xFactory->createInstance( OUString( "com.sun.star.text.TextField.URL" ) ), uno::UNO_QUERY_THROW );
         mxTextField.set( xUrlField, uno::UNO_QUERY_THROW );
         setUrlComponents( aUrlComp );
         setTextToDisplay( aTextToDisplay );
@@ -155,14 +155,14 @@ OUString ScVbaHyperlink::getTextToDisplay() throw (uno::RuntimeException)
 {
     ensureTextField();
     OUString aTextToDisplay;
-    mxTextField->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Representation" ) ) ) >>= aTextToDisplay;
+    mxTextField->getPropertyValue( OUString( "Representation" ) ) >>= aTextToDisplay;
     return aTextToDisplay;
 }
 
 void ScVbaHyperlink::setTextToDisplay( const OUString& rTextToDisplay ) throw (uno::RuntimeException)
 {
     ensureTextField();
-    mxTextField->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Representation" ) ), uno::Any( rTextToDisplay ) );
+    mxTextField->setPropertyValue( OUString( "Representation" ), uno::Any( rTextToDisplay ) );
 }
 
 sal_Int32 SAL_CALL ScVbaHyperlink::getType() throw (uno::RuntimeException)
@@ -209,7 +209,7 @@ ScVbaHyperlink::UrlComponents ScVbaHyperlink::getUrlComponents() throw (uno::Run
 {
     ensureTextField();
     OUString aUrl;
-    mxTextField->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) ) >>= aUrl;
+    mxTextField->getPropertyValue( OUString( "URL" ) ) >>= aUrl;
     sal_Int32 nHashPos = aUrl.indexOf( '#' );
     if( nHashPos < 0 )
         return UrlComponents( aUrl, OUString() );
@@ -222,7 +222,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp ) throw (un
     OUStringBuffer aUrl( rUrlComp.first );
     if( !rUrlComp.second.isEmpty() )
         aUrl.append( sal_Unicode( '#' ) ).append( rUrlComp.second );
-    mxTextField->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ), uno::Any( aUrl.makeStringAndClear() ) );
+    mxTextField->setPropertyValue( OUString( "URL" ), uno::Any( aUrl.makeStringAndClear() ) );
 }
 
 namespace hyperlink

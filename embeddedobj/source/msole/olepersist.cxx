@@ -86,8 +86,8 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
             uno::UNO_QUERY_THROW );
 
     try {
-        xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RemoveFile" )), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ));
+        xTempFile->setPropertyValue( ::rtl::OUString( "RemoveFile" ), uno::makeAny( sal_False ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString( "Uri" ));
         aUrl >>= aResult;
     }
     catch ( const uno::Exception& )
@@ -166,8 +166,8 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
 
         xParentStorage->copyStreamElementData( aEntryName, xTempStream );
 
-        xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RemoveFile" )), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ));
+        xTempFile->setPropertyValue( ::rtl::OUString( "RemoveFile" ), uno::makeAny( sal_False ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString( "Uri" ));
         aUrl >>= aResult;
     }
     catch( const uno::RuntimeException& )
@@ -191,7 +191,7 @@ void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, cons
     if ( !xPropSet.is() )
         throw uno::RuntimeException(); // TODO: all the storage streams must support XPropertySet
 
-    xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" )), uno::makeAny( aMediaType ) );
+    xPropSet->setPropertyValue( ::rtl::OUString( "MediaType" ), uno::makeAny( aMediaType ) );
 }
 #endif
 //------------------------------------------------------
@@ -201,7 +201,7 @@ void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStre
     if ( !xPropSet.is() )
         throw uno::RuntimeException(); // Only StorageStreams must be provided here, they must implement the interface
 
-    xPropSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" )),
+    xPropSet->setPropertyValue( ::rtl::OUString( "UseCommonStoragePasswordEncryption" ),
                                 uno::makeAny( (sal_Bool)sal_True ) );
 }
 #ifdef WNT
@@ -379,7 +379,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLESimpleStorage" )),
+                    ::rtl::OUString( "com.sun.star.embed.OLESimpleStorage" ),
                     aArgs ),
             uno::UNO_QUERY );
 
@@ -502,7 +502,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         throw io::IOException(); // TODO:
 
     // insert the result file as replacement image
-    ::rtl::OUString aCacheName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "\002OlePres000" ));
+    ::rtl::OUString aCacheName = ::rtl::OUString( "\002OlePres000" );
     if ( xNameContainer->hasByName( aCacheName ) )
         xNameContainer->replaceByName( aCacheName, uno::makeAny( xTempFile ) );
     else
@@ -528,7 +528,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xFactory->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLESimpleStorage" )),
+                    ::rtl::OUString( "com.sun.star.embed.OLESimpleStorage" ),
                     aArgs ),
             uno::UNO_QUERY );
 
@@ -597,7 +597,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                 aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xFactory->createInstanceWithArguments(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLESimpleStorage" )),
+                                ::rtl::OUString( "com.sun.star.embed.OLESimpleStorage" ),
                                 aArgs ),
                         uno::UNO_QUERY );
 
@@ -644,7 +644,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         {
             xNameContainer = uno::Reference< container::XNameContainer >(
                 m_xFactory->createInstanceWithArguments(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLESimpleStorage" )),
+                        ::rtl::OUString( "com.sun.star.embed.OLESimpleStorage" ),
                         aArgs ),
                 uno::UNO_QUERY );
         }
@@ -673,7 +673,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                 if ( nInd == 0 )
                 {
                     // to be compatible with the old versions Ole10Native is checked after OlePress000
-                    aStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\001Ole10Native" ) );
+                    aStreamName = ::rtl::OUString( "\001Ole10Native" );
                     try
                     {
                         if ( ( xNameContainer->getByName( aStreamName ) >>= xCachedCopyStream ) && xCachedCopyStream.is() )
@@ -871,7 +871,7 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
 void OleEmbeddedObject::OnIconChanged_Impl()
 {
     // TODO/LATER: currently this notification seems to be impossible
-    // MakeEventListenerNotification_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnIconChanged" )) );
+    // MakeEventListenerNotification_Impl( ::rtl::OUString( "OnIconChanged" ) );
 }
 
 //------------------------------------------------------
@@ -901,7 +901,7 @@ void OleEmbeddedObject::OnViewChanged_Impl()
         // The view is changed while the object is in running state, save the new object
         m_xCachedVisualRepresentation = uno::Reference< io::XStream >();
         SaveObject_Impl();
-        MakeEventListenerNotification_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" )) );
+        MakeEventListenerNotification_Impl( ::rtl::OUString( "OnVisAreaChanged" ) );
     }
     // ===============================================================
 }
@@ -1082,7 +1082,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't store object without persistence!\n" )),
+        throw embed::WrongStateException( ::rtl::OUString( "Can't store object without persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1170,7 +1170,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( !xTargetStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( xTargetStream, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ));
+        SetStreamMediaType_Impl( xTargetStream, ::rtl::OUString( "application/vnd.sun.star.oleobject" ));
         uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
@@ -1317,12 +1317,12 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         throw lang::DisposedException(); // TODO
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No parent storage is provided!\n" )),
+        throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
+        throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -1337,7 +1337,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         // it can switch persistent representation only without initialization
 
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't change persistent representation of activated object!\n" )),
+                    ::rtl::OUString( "Can't change persistent representation of activated object!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1443,7 +1443,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
             if ( aURL.isEmpty() )
                 throw lang::IllegalArgumentException(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty URL is provided in the media descriptor!\n" )),
+                                    ::rtl::OUString( "Empty URL is provided in the media descriptor!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                     4 );
 
@@ -1465,7 +1465,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             //TODO:
         //}
         else
-            throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Wrong connection mode is provided!\n" )),
+            throw lang::IllegalArgumentException( ::rtl::OUString( "Wrong connection mode is provided!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
     }
@@ -1483,7 +1483,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
         // do nothing, the object has already switched it's persistence
     }
     else
-        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Wrong connection mode is provided!\n" )),
+        throw lang::IllegalArgumentException( ::rtl::OUString( "Wrong connection mode is provided!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                     3 );
 
@@ -1583,7 +1583,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't store object without persistence!\n" )),
+        throw embed::WrongStateException( ::rtl::OUString( "Can't store object without persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1648,13 +1648,13 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     aGuard.clear();
     if ( bUseNew )
     {
-        MakeEventListenerNotification_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnSaveAsDone" ) ));
+        MakeEventListenerNotification_Impl( ::rtl::OUString( "OnSaveAsDone" ));
 
         // the object can be changed only on windows
         // the notification should be done only if the object is not in loaded state
         if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
         {
-            MakeEventListenerNotification_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) ));
+            MakeEventListenerNotification_Impl( ::rtl::OUString( "OnVisAreaChanged" ));
         }
     }
 }
@@ -1709,7 +1709,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object persistence is not initialized!\n" )),
+        throw embed::WrongStateException( ::rtl::OUString( "The object persistence is not initialized!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1754,7 +1754,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't store object without persistence!\n" )),
+        throw embed::WrongStateException( ::rtl::OUString( "Can't store object without persistence!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1780,7 +1780,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         if ( !m_xObjectStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        SetStreamMediaType_Impl( m_xObjectStream, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ));
+        SetStreamMediaType_Impl( m_xObjectStream, ::rtl::OUString( "application/vnd.sun.star.oleobject" ));
         uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
@@ -1834,12 +1834,12 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     aGuard.clear();
 
-    MakeEventListenerNotification_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnSaveDone" ) ));
+    MakeEventListenerNotification_Impl( ::rtl::OUString( "OnSaveDone" ));
 
     // the object can be changed only on Windows
     // the notification should be done only if the object is not in loaded state
     if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE && !bStoreLoaded )
-        MakeEventListenerNotification_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) ));
+        MakeEventListenerNotification_Impl( ::rtl::OUString( "OnVisAreaChanged" ));
 }
 
 //------------------------------------------------------
@@ -1863,7 +1863,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object persistence is not initialized!\n" )),
+        throw embed::WrongStateException( ::rtl::OUString( "The object persistence is not initialized!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1904,7 +1904,7 @@ void SAL_CALL OleEmbeddedObject::reload(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object persistence is not initialized!\n" )),
+        throw embed::WrongStateException( ::rtl::OUString( "The object persistence is not initialized!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1943,12 +1943,12 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         throw lang::DisposedException(); // TODO
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No parent storage is provided!\n" )),
+        throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
+        throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -1957,7 +1957,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     {
         // it must be a linked initialized object
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not a valid linked object!\n" )),
+                    ::rtl::OUString( "The object is not a valid linked object!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -2086,7 +2086,7 @@ sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
 
     if ( !m_bIsLink )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not a link object!\n" )),
+                    ::rtl::OUString( "The object is not a link object!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: probably the link URL can be retrieved from OLE

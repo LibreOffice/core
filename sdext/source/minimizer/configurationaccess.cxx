@@ -321,19 +321,19 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
         Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxMSF );
         Sequence< Any > aCreationArguments( 2 );
         aCreationArguments[0] = makeAny( PropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), 0,
+            OUString( "nodepath" ), 0,
             makeAny( GetPathToConfigurationRoot() ),
             PropertyState_DIRECT_VALUE ) );
         aCreationArguments[1] = makeAny(beans::PropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ) ), 0, makeAny( true ),
+            OUString( "lazywrite" ), 0, makeAny( true ),
             PropertyState_DIRECT_VALUE ) );
         OUString sAccessService;
         if ( bReadOnly )
-            sAccessService = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationAccess" ) );
+            sAccessService = OUString(
+                "com.sun.star.configuration.ConfigurationAccess" );
         else
-            sAccessService = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
+            sAccessService = OUString(
+                "com.sun.star.configuration.ConfigurationUpdateAccess" );
 
         xRoot = xProvider->createInstanceWithArguments(
             sAccessService, aCreationArguments );

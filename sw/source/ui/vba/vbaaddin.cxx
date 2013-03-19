@@ -45,8 +45,7 @@ SwVbaAddin::~SwVbaAddin()
 void SAL_CALL
 SwVbaAddin::setName( const rtl::OUString& ) throw ( css::uno::RuntimeException )
 {
-    throw uno::RuntimeException( rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(" Fail to set name")), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(" Fail to set name"), uno::Reference< uno::XInterface >() );
 }
 
 ::rtl::OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException)
@@ -78,7 +77,7 @@ void SAL_CALL SwVbaAddin::setInstalled( ::sal_Bool _installed ) throw (uno::Runt
 rtl::OUString
 SwVbaAddin::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaAddin"));
+    return rtl::OUString("SwVbaAddin");
 }
 
 uno::Sequence< rtl::OUString >
@@ -88,7 +87,7 @@ SwVbaAddin::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Addin" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Addin" );
     }
     return aServiceNames;
 }

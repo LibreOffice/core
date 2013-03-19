@@ -204,7 +204,7 @@ void OXMLCell::EndElement()
         Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
         uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
         Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-        xControl->setDataField(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + m_sText);
+        xControl->setDataField(::rtl::OUString("rpt:") + m_sText);
 
         OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
         setComponent(xControl.get());

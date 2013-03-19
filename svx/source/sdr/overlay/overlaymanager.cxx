@@ -137,7 +137,7 @@ namespace sdr
             if(bUseReducedDisplayQualityForDrag)
             {
                 uno::Sequence< beans::PropertyValue > xProperties(1);
-                xProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedDisplayQuality"));
+                xProperties[0].Name = rtl::OUString("ReducedDisplayQuality");
                 xProperties[0].Value <<= true;
                 maViewInformation2D = drawinglayer::geometry::ViewInformation2D(xProperties);
             }

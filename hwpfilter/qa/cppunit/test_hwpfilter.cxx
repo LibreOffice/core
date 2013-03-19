@@ -64,8 +64,8 @@ namespace
         test::BootstrapFixture::setUp();
 
         m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.comp.hwpimport.HwpImportFilter"))),
+            ::rtl::OUString(
+                "com.sun.comp.hwpimport.HwpImportFilter")),
             uno::UNO_QUERY_THROW);
     }
 
@@ -74,7 +74,7 @@ namespace
         unsigned int, unsigned int, unsigned int)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
-        aDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+        aDescriptor[0].Name = rtl::OUString("URL");
         aDescriptor[0].Value <<= rURL;
         return m_xFilter->filter(aDescriptor);
     }

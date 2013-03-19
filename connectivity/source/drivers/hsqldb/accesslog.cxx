@@ -37,7 +37,7 @@ namespace connectivity { namespace hsqldb
     LogFile::LogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix )
     {
         m_sFileName = StorageContainer::jstring2ustring(env,streamName);
-        m_sFileName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+        m_sFileName += ::rtl::OUString(".");
         m_sFileName += ::rtl::OUString::createFromAscii( _pAsciiSuffix );
     }
 

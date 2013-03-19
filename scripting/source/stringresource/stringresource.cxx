@@ -797,8 +797,7 @@ StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
 ::rtl::OUString StringResourcePersistenceImpl::getImplementationName(  )
     throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM
-        ( "com.sun.star.comp.scripting.StringResourceWithLocation") );
+    return ::rtl::OUString( "com.sun.star.comp.scripting.StringResourceWithLocation");
 }
 
 // -----------------------------------------------------------------------------
@@ -2690,8 +2689,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     if ( aArguments.getLength() != 6 )
     {
         throw RuntimeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM
-                ( "XInitialization::initialize: invalid number of arguments!" ) ),
+            ::rtl::OUString( "XInitialization::initialize: invalid number of arguments!" ),
             Reference< XInterface >() );
     }
 

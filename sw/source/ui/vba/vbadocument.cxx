@@ -243,7 +243,7 @@ SwVbaDocument::PageSetup( ) throw (uno::RuntimeException)
 rtl::OUString
 SwVbaDocument::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaDocument"));
+    return rtl::OUString("SwVbaDocument");
 }
 
 uno::Any SAL_CALL
@@ -326,7 +326,7 @@ void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( ::sal_Bool /*_updatestyleson
     // check this property only in default paragraph style
     sal_Bool IsAutoHyphenation = sal_False;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaIsHyphenation")) ) >>= IsAutoHyphenation;
+    xParaProps->getPropertyValue( rtl::OUString("ParaIsHyphenation") ) >>= IsAutoHyphenation;
     return IsAutoHyphenation;
 }
 
@@ -334,7 +334,7 @@ void SAL_CALL SwVbaDocument::setAutoHyphenation( ::sal_Bool _autohyphenation ) t
 {
     //TODO
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaIsHyphenation")), uno::makeAny( _autohyphenation ) );
+    xParaProps->setPropertyValue( rtl::OUString("ParaIsHyphenation"), uno::makeAny( _autohyphenation ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getHyphenationZone() throw (uno::RuntimeException)
@@ -353,7 +353,7 @@ void SAL_CALL SwVbaDocument::setHyphenationZone( ::sal_Int32 /*_hyphenationzone*
     //TODO
     sal_Int16 nHyphensLimit = 0;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaHyphenationMaxHyphens")) ) >>= nHyphensLimit;
+    xParaProps->getPropertyValue( rtl::OUString("ParaHyphenationMaxHyphens") ) >>= nHyphensLimit;
     return nHyphensLimit;
 }
 
@@ -361,7 +361,7 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
 {
     sal_Int16 nHyphensLimit = static_cast< sal_Int16 >( _consecutivehyphenslimit );
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaHyphenationMaxHyphens")), uno::makeAny( nHyphensLimit ) );
+    xParaProps->setPropertyValue( rtl::OUString("ParaHyphenationMaxHyphens"), uno::makeAny( nHyphensLimit ) );
 }
 
 void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const uno::Any& /*NOReset*/, const uno::Any& /*Password*/, const uno::Any& /*UseIRM*/, const uno::Any& /*EnforceStyleLock*/ ) throw (uno::RuntimeException)
@@ -377,13 +377,13 @@ void SAL_CALL SwVbaDocument::PrintOut( const uno::Any& /*Background*/, const uno
 
 void SAL_CALL SwVbaDocument::PrintPreview(  ) throw (uno::RuntimeException)
 {
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrintPreview"));
+    rtl::OUString url = rtl::OUString( ".uno:PrintPreview");
     dispatchRequests( mxModel,url );
 }
 
 void SAL_CALL SwVbaDocument::ClosePrintPreview(  ) throw (uno::RuntimeException)
 {
-    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClosePreview"));
+    rtl::OUString url = rtl::OUString( ".uno:ClosePreview");
     dispatchRequests( mxModel,url );
 }
 
@@ -459,7 +459,7 @@ SwVbaDocument::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::Un
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.ControlProvider" ) ), mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::makeAny( xControl );
 }
@@ -506,7 +506,7 @@ SwVbaDocument::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Document" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Document" );
     }
     return aServiceNames;
 }

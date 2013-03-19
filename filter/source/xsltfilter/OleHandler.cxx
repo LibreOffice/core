@@ -108,8 +108,7 @@ namespace XSLT
         //create an com.sun.star.embed.OLESimpleStorage from the temp stream
         Sequence<Any> args(1);
         args[0] <<= xSeek;
-        Reference<XNameContainer> cont(m_msf->createInstanceWithArguments(OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLESimpleStorage" )), args), UNO_QUERY);
+        Reference<XNameContainer> cont(m_msf->createInstanceWithArguments(OUString( "com.sun.star.embed.OLESimpleStorage" ), args), UNO_QUERY);
         m_storage = cont;
     }
 

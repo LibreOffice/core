@@ -851,7 +851,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             case Top10:
                 pEntry->eOp = SC_TOPVAL;
                 pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
-                pEntry->GetQueryItem().maString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10"));
+                pEntry->GetQueryItem().maString = rtl::OUString("10");
             break;
             case Empty:
                 pEntry->SetQueryByEmpty();
@@ -1433,7 +1433,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {
                         rNewEntry.eOp = SC_TOPVAL;
-                        rItem.maString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10"));
+                        rItem.maString = rtl::OUString("10");
                     }
                     else if (nSel == SC_AUTOFILTER_EMPTY)
                     {

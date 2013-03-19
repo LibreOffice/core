@@ -300,14 +300,14 @@ namespace logging
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ConsoleHandler::getImplementationName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.ConsoleHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.ConsoleHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames_static()
     {
         Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.ConsoleHandler" ) );
+        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.ConsoleHandler" );
         return aServiceNames;
     }
 

@@ -41,7 +41,7 @@ namespace svxform
         // the layout manager
         Reference< XPropertySet > xFrameProps( _rxFrame, UNO_QUERY );
         if ( xFrameProps.is() )
-            xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ) >>= m_xLayouter;
+            xFrameProps->getPropertyValue( ::rtl::OUString( "LayoutManager" ) ) >>= m_xLayouter;
     }
 
     //--------------------------------------------------------------------

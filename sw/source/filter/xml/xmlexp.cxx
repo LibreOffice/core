@@ -362,7 +362,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     sal_Int32 nIndex = 0;
 
     Reference < XIndexContainer > xBox = IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "Views") );
+    pValue[nIndex].Name = OUString( "Views");
     pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
 
     SwDoc *pDoc = getDoc();
@@ -372,16 +372,16 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 
    OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
+    pValue[nIndex].Name = OUString( "ViewAreaTop");
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Top() ) : rRect.Top();
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaLeft") );
+    pValue[nIndex].Name = OUString( "ViewAreaLeft");
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Left() ) : rRect.Left();
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaWidth") );
+    pValue[nIndex].Name = OUString( "ViewAreaWidth");
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetWidth() ) : rRect.GetWidth();
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
+    pValue[nIndex].Name = OUString( "ViewAreaHeight");
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetHeight() ) : rRect.GetHeight();
 
     // "show redline mode" cannot simply be read from the document
@@ -399,11 +399,11 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         }
     }
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
+    pValue[nIndex].Name = OUString( "ShowRedlineChanges");
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
 
     sal_Bool bInBrowse =  pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "InBrowseMode") );
+    pValue[nIndex].Name = OUString( "InBrowseMode");
     pValue[nIndex++].Value.setValue( &bInBrowse, ::getBooleanCppuType() );
 
     if ( nIndex < NUM_EXPORTED_VIEW_SETTINGS )
@@ -416,7 +416,7 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
     Reference< XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
     if( xFac.is() )
     {
-        Reference< XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
+        Reference< XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
     }
@@ -521,8 +521,8 @@ void SwXMLExport::_ExportContent()
 // OOo
 OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportOOO_getSupportedServiceNames()
@@ -542,8 +542,8 @@ Reference< XInterface > SAL_CALL SwXMLExportOOO_createInstance(
 
 OUString SAL_CALL SwXMLExportStylesOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLStylesExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLStylesExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportStylesOOO_getSupportedServiceNames()
@@ -565,8 +565,8 @@ Reference< XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(
 
 OUString SAL_CALL SwXMLExportContentOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLContentExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLContentExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportContentOOO_getSupportedServiceNames()
@@ -588,8 +588,8 @@ Reference< XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(
 
 OUString SAL_CALL SwXMLExportMetaOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLMetaExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLMetaExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportMetaOOO_getSupportedServiceNames()
@@ -609,8 +609,8 @@ Reference< XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(
 
 OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLSettingsExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLSettingsExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportSettingsOOO_getSupportedServiceNames()
@@ -631,8 +631,8 @@ Reference< XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(
 // OASIS
 OUString SAL_CALL SwXMLExport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExport_getSupportedServiceNames()
@@ -652,8 +652,8 @@ Reference< XInterface > SAL_CALL SwXMLExport_createInstance(
 
 OUString SAL_CALL SwXMLExportStyles_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisStylesExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisStylesExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportStyles_getSupportedServiceNames()
@@ -675,8 +675,8 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
 
 OUString SAL_CALL SwXMLExportContent_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisContentExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisContentExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportContent_getSupportedServiceNames()
@@ -699,8 +699,8 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
 
 OUString SAL_CALL SwXMLExportMeta_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisMetaExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisMetaExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportMeta_getSupportedServiceNames()
@@ -720,8 +720,8 @@ Reference< XInterface > SAL_CALL SwXMLExportMeta_createInstance(
 
 OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisSettingsExporter" ) );
+    return OUString(
+        "com.sun.star.comp.Writer.XMLOasisSettingsExporter" );
 }
 
 Sequence< OUString > SAL_CALL SwXMLExportSettings_getSupportedServiceNames()
@@ -781,8 +781,8 @@ OUString SAL_CALL SwXMLExport::getImplementationName()
             return SwXMLExportSettings_getImplementationName();
         default:
             // generic name for 'unknown' cases
-            return OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.comp.Writer.SwXMLExport" ) );
+            return OUString(
+                "com.sun.star.comp.Writer.SwXMLExport" );
     }
 }
 

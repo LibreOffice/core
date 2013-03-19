@@ -219,15 +219,15 @@ namespace frm
     //------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ONavigationBarControl::getImplementationName_Static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.form.ONavigationBarControl" ) );
+        return ::rtl::OUString( "com.sun.star.comp.form.ONavigationBarControl" );
     }
 
     //------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames_Static()
     {
         Sequence< ::rtl::OUString > aServices( 2 );
-        aServices[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControl" ) );
-        aServices[ 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.control.NavigationToolBar" ) );
+        aServices[ 0 ] = ::rtl::OUString( "com.sun.star.awt.UnoControl" );
+        aServices[ 1 ] = ::rtl::OUString( "com.sun.star.form.control.NavigationToolBar" );
         return aServices;
     }
 

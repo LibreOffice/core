@@ -705,7 +705,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 
         nScTab = rDoc.GetTableCount();
         rDoc.MakeTable( nScTab );
-        rtl::OUStringBuffer aDummyName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DPCache") ));
+        rtl::OUStringBuffer aDummyName(rtl::OUString("DPCache"));
         if( maTabName.Len() > 0 )
             aDummyName.append( '_' ).append( maTabName );
         rtl::OUString aName = aDummyName.makeStringAndClear();

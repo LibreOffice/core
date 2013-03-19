@@ -47,7 +47,7 @@ ScVbaComment::ScVbaComment(
     mxRange( xRange )
 {
     if  ( !xRange.is() )
-        throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "range is not set " ) ), uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException( rtl::OUString( "range is not set " ), uno::Reference< uno::XInterface >() , 1 );
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY );
 }
 
@@ -200,7 +200,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
             xAnnoText->insertString( xRange, sText, bOverwrite );
             return xAnnoText->getString();
         }
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScVbaComment::Text - bad Start value " ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "ScVbaComment::Text - bad Start value " ), uno::Reference< uno::XInterface >() );
     }
     else if ( aText.hasValue() )
     {
@@ -215,7 +215,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
 rtl::OUString
 ScVbaComment::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaComment"));
+    return rtl::OUString("ScVbaComment");
 }
 
 uno::Sequence< rtl::OUString >
@@ -225,7 +225,7 @@ ScVbaComment::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.ScVbaComment" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.ScVbaComment" );
     }
     return aServiceNames;
 }

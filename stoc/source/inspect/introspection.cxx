@@ -1661,7 +1661,7 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
     mpTypeProviderCache = NULL;
 
     // Spezielle Klassen holen
-//     Reference< XInterface > xServiceIface = m_xSMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) );
+//     Reference< XInterface > xServiceIface = m_xSMgr->createInstance( ::rtl::OUString("com.sun.star.reflection.CoreReflection") );
 //     if( xServiceIface.is() )
 //         mxCoreReflection = Reference< XIdlReflection >::query( xServiceIface );
     Reference< XPropertySet > xProps( rXSMgr, UNO_QUERY );
@@ -1670,30 +1670,30 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
     {
         Reference< XComponentContext > xContext;
         xProps->getPropertyValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
+            ::rtl::OUString("DefaultContext") ) >>= xContext;
         OSL_ASSERT( xContext.is() );
         if (xContext.is())
         {
             xContext->getValueByName(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection") ) ) >>= mxCoreReflection;
+                ::rtl::OUString("/singletons/com.sun.star.reflection.theCoreReflection") ) >>= mxCoreReflection;
             OSL_ENSURE( mxCoreReflection.is(), "### CoreReflection singleton not accessible!?" );
         }
     }
     if (! mxCoreReflection.is())
     {
         throw DeploymentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible") ),
+            ::rtl::OUString("/singletons/com.sun.star.reflection.theCoreReflection singleton not accessible"),
             Reference< XInterface >() );
     }
 
-    mxElementAccessClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XElementAccess")) );
-    mxNameContainerClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XNameContainer")) );
-    mxNameAccessClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XNameAccess")) );
-    mxIndexContainerClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XIndexContainer")) );
-    mxIndexAccessClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XIndexAccess")) );
-    mxEnumerationAccessClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.XEnumerationAccess")) );
-    mxInterfaceClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface")) );
-    mxAggregationClass = mxCoreReflection->forName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XAggregation")) );
+    mxElementAccessClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.container.XElementAccess") );
+    mxNameContainerClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.container.XNameContainer") );
+    mxNameAccessClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.container.XNameAccess") );
+    mxIndexContainerClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.container.XIndexContainer") );
+    mxIndexAccessClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.container.XIndexAccess") );
+    mxEnumerationAccessClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.container.XEnumerationAccess") );
+    mxInterfaceClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.uno.XInterface") );
+    mxAggregationClass = mxCoreReflection->forName( ::rtl::OUString("com.sun.star.uno.XAggregation") );
     mbDisposed = sal_False;
 }
 
@@ -1888,7 +1888,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         ::rtl::OUString sOWName( pTD->pTypeName );
         if( !xRefl.is() )
         {
-            xRefl = Reference< XIdlReflection >( xMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ), UNO_QUERY );
+            xRefl = Reference< XIdlReflection >( xMgr->createInstance( ::rtl::OUString("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
             OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );
@@ -2318,7 +2318,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                             }
                             else
                             {
-                                if( aMethName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("queryInterface")) )
+                                if( aMethName != ::rtl::OUString("queryInterface") )
                                 {
                                     rMethodConcept_i |= MethodConcept::DANGEROUS;
                                     continue;

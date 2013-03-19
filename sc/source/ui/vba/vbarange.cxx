@@ -389,7 +389,7 @@ getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf ) throw ( uno::R
 {
 	ScCellRangesBase* pUno = ScCellRangesBase::getImplementation( xIf );
 	if ( !pUno )
-		throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying uno range object" ) ), uno::Reference< uno::XInterface >()  );
+            throw uno::RuntimeException( rtl::OUString( "Failed to access underlying uno range object" ), uno::Reference< uno::XInterface >()  );
 	return pUno->GetDocShell();
 }
 
@@ -427,7 +427,7 @@ getDocumentFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
 	ScDocShell* pDocShell = getDocShellFromRange( xRange );
 	if ( !pDocShell )
-		throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying docshell from uno range object" ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "Failed to access underlying docshell from uno range object" ), uno::Reference< uno::XInterface >() );
 	ScDocument* pDoc = pDocShell->GetDocument();
 	return pDoc;
 }
@@ -2473,7 +2473,7 @@ void
 ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
 {
     if ( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("That command cannot be used on multiple selections" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("That command cannot be used on multiple selections" ), uno::Reference< uno::XInterface >() );
     if ( Destination.hasValue() )
     {
         uno::Reference< excel::XRange > xRange( Destination, uno::UNO_QUERY_THROW );
@@ -3554,7 +3554,7 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException)
                 nSID = SID_CURSORBLKRIGHT;
                 break;
             default:
-                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": Invalid ColumnIndex" ) ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( ::rtl::OUString( ": Invalid ColumnIndex" ), uno::Reference< uno::XInterface >() );
         }
         if ( pDispatcher )
         {

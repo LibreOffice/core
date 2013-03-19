@@ -93,8 +93,8 @@ void TestBreakIterator::testLineBreaking()
     {
         rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
 
-        aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-        aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+        aLocale.Language = rtl::OUString("en");
+        aLocale.Country = rtl::OUString("US");
 
         {
             //Here we want the line break to leave text here) on the next line
@@ -115,8 +115,8 @@ void TestBreakIterator::testLineBreaking()
         rtl::OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
         rtl::OUString aTest(rtl::OUStringBuffer(aWord).append(' ').append(aWord).makeStringAndClear());
 
-        aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("he"));
-        aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IL"));
+        aLocale.Language = rtl::OUString("he");
+        aLocale.Country = rtl::OUString("IL");
 
         {
             //Here we want the line break to happen at the whitespace
@@ -129,8 +129,8 @@ void TestBreakIterator::testLineBreaking()
     {
         rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("foo /bar/baz"));
 
-        aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-        aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+        aLocale.Language = rtl::OUString("en");
+        aLocale.Country = rtl::OUString("US");
 
         {
             //Here we want the line break to leave /bar/ba clumped together on the next line
@@ -144,8 +144,8 @@ void TestBreakIterator::testLineBreaking()
     {
         rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("aaa]aaa"));
 
-        aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-        aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+        aLocale.Language = rtl::OUString("en");
+        aLocale.Country = rtl::OUString("US");
 
         {
             //Here we want the line break to move the whole lot to the next line
@@ -160,8 +160,8 @@ void TestBreakIterator::testLineBreaking()
 void TestBreakIterator::testWordBoundaries()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+    aLocale.Language = rtl::OUString("en");
+    aLocale.Country = rtl::OUString("US");
 
     i18n::Boundary aBounds;
 
@@ -393,8 +393,8 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=13451
     {
-        aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ca"));
-        aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ES"));
+        aLocale.Language = rtl::OUString("ca");
+        aLocale.Country = rtl::OUString("ES");
 
         rtl::OUString aTest("mirar-se comprar-vos donem-nos les mans aneu-vos-en!");
 
@@ -578,8 +578,8 @@ void TestBreakIterator::testWordBoundaries()
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bn"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN"));
+    aLocale.Language = rtl::OUString("bn");
+    aLocale.Country = rtl::OUString("IN");
 
     {
         const sal_Unicode BA_HALANT_LA[] = { 0x09AC, 0x09CD, 0x09AF };
@@ -623,8 +623,8 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
 
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ta"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN"));
+    aLocale.Language = rtl::OUString("ta");
+    aLocale.Country = rtl::OUString("IN");
 
     {
         const sal_Unicode KA_VIRAMA_SSA[] = { 0x0B95, 0x0BCD, 0x0BB7 };
@@ -700,8 +700,8 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_MESSAGE("Should be considered 1 grapheme", nGraphemeCount == 1);
     }
 
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hi"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IN"));
+    aLocale.Language = rtl::OUString("hi");
+    aLocale.Country = rtl::OUString("IN");
 
     {
         const sal_Unicode SHA_VOWELSIGNII[] = { 0x936, 0x940 };
@@ -725,8 +725,8 @@ void TestBreakIterator::testGraphemeIteration()
 void TestBreakIterator::testWeak()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+    aLocale.Language = rtl::OUString("en");
+    aLocale.Country = rtl::OUString("US");
 
     {
         const sal_Unicode WEAKS[] =
@@ -766,8 +766,8 @@ void TestBreakIterator::testWeak()
 void TestBreakIterator::testAsian()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+    aLocale.Language = rtl::OUString("en");
+    aLocale.Country = rtl::OUString("US");
 
     {
         const sal_Unicode ASIANS[] =
@@ -802,8 +802,8 @@ void TestBreakIterator::testAsian()
 void TestBreakIterator::testThai()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("th"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TH"));
+    aLocale.Language = rtl::OUString("th");
+    aLocale.Country = rtl::OUString("TH");
 
     //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
     {
@@ -855,8 +855,8 @@ void TestBreakIterator::testThai()
 void TestBreakIterator::testNorthernThai()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nod"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TH"));
+    aLocale.Language = rtl::OUString("nod");
+    aLocale.Country = rtl::OUString("TH");
 
     const sal_Unicode NORTHERN_THAI1[] = { 0x0E01, 0x0E38, 0x0E4A, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
     rtl::OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
@@ -876,8 +876,8 @@ void TestBreakIterator::testNorthernThai()
 void TestBreakIterator::testKhmer()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("km"));
-    aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KH"));
+    aLocale.Language = rtl::OUString("km");
+    aLocale.Country = rtl::OUString("KH");
 
     const sal_Unicode KHMER[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
 

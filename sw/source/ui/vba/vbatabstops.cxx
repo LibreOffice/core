@@ -28,13 +28,13 @@ using namespace ::com::sun::star;
 static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps ) throw (uno::RuntimeException)
 {
     uno::Sequence< style::TabStop > aSeq;
-    xParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaTabStops") ) ) >>= aSeq;
+    xParaProps->getPropertyValue( rtl::OUString("ParaTabStops") ) >>= aSeq;
     return aSeq;
 }
 
 static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq ) throw (uno::RuntimeException)
 {
-    xParaProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaTabStops") ), uno::makeAny( aSeq ) );
+    xParaProps->setPropertyValue( rtl::OUString("ParaTabStops"), uno::makeAny( aSeq ) );
 }
 
 typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > TabStopCollectionHelper_Base;
@@ -252,7 +252,7 @@ SwVbaTabStops::createCollectionObject( const css::uno::Any& aSource )
 rtl::OUString
 SwVbaTabStops::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTabStops"));
+    return rtl::OUString("SwVbaTabStops");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -262,7 +262,7 @@ SwVbaTabStops::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.TabStops") );
+        sNames[0] = rtl::OUString("ooo.vba.word.TabStops");
     }
     return sNames;
 }

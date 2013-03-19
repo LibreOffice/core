@@ -1826,12 +1826,12 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             ::rtl::OUString sFormat;
-            xFormSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatString"))) >>= sFormat;
+            xFormSet->getPropertyValue(::rtl::OUString("FormatString")) >>= sFormat;
 
             if ( !bTextFormat )
             {
                 Locale aLocale;
-                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= aLocale;
+                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,::rtl::OUString("Locale")) >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
                 if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE

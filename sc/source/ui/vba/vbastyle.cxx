@@ -31,7 +31,7 @@ uno::Reference< container::XNameAccess >
 ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
 {
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( rtl::OUString( "CellStyles" ) ), uno::UNO_QUERY_THROW );
     return xStylesAccess;
 }
 
@@ -47,9 +47,9 @@ lcl_getStyleProps( const rtl::OUString& sStyleName, const uno::Reference< frame:
 void ScVbaStyle::initialise() throw ( uno::RuntimeException )
 {
     if (!mxModel.is() )
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XModel Interface could not be retrieved")) );
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( "XModel Interface could not be retrieved") );
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxPropertySet, uno::UNO_QUERY_THROW );
-    if ( !xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CellStyle" ) ) ) )
+    if ( !xServiceInfo->supportsService( rtl::OUString( "com.sun.star.style.CellStyle" ) ) )
     {
             DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -160,7 +160,7 @@ ScVbaStyle::getMergeCells(  ) throw (script::BasicErrorException, uno::RuntimeEx
 rtl::OUString
 ScVbaStyle::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaStyle"));
+    return rtl::OUString("ScVbaStyle");
 }
 
 uno::Sequence< rtl::OUString >
@@ -170,7 +170,7 @@ ScVbaStyle::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.XStyle" ) );
+                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.XStyle" );
         }
         return aServiceNames;
 }

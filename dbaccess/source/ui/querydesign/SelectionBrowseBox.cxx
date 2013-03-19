@@ -721,13 +721,13 @@ sal_Bool OSelectionBrowseBox::saveField(String& _sFieldName ,OTableFieldDescRef&
             else
                 sSql += sFullFieldName;
 
-            sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")) + sSql;
+            sSql = ::rtl::OUString("SELECT ") + sSql;
             if ( !sFieldAlias.isEmpty() )
             { // always quote the alias name: there cannot be a function in it
-                sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                sSql += ::rtl::OUString(" ");
                 sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
             }
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
+            sSql += ::rtl::OUString(" FROM x");
 
             pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );
         }
@@ -822,7 +822,7 @@ sal_Bool OSelectionBrowseBox::saveField(String& _sFieldName ,OTableFieldDescRef&
                     if ( nFunCount == 4 && SQL_ISRULE(pColumnRef->getChild(3),column_ref) )
                         bError = fillColumnRef( pColumnRef->getChild(3), xConnection, aSelEntry, _bListAction );
                     else if ( nFunCount == 3 ) // we have a COUNT(*) here, so take the first table
-                        bError = fillColumnRef( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), ::rtl::OUString(), xMetaData, aSelEntry, _bListAction );
+                        bError = fillColumnRef( ::rtl::OUString("*"), ::rtl::OUString(), xMetaData, aSelEntry, _bListAction );
                     else
                     {
                         nFunctionType |= FKT_NUMERIC;

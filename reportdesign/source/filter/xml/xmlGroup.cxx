@@ -125,7 +125,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 const ::rtl::OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
                                 ::sal_Int16 nGroupOn = report::GroupOn::DEFAULT;
 
-                                if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:LEFT")))
+                                if ( sFormula ==::rtl::OUString("rpt:LEFT"))
                                 {
                                     nGroupOn = report::GroupOn::PREFIX_CHARACTERS;
                                     ::rtl::OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
@@ -133,30 +133,30 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     sInterval = sInterval.getToken(0,')',nIndex);
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
-                                else if ( sFormula == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:YEAR")))
+                                else if ( sFormula == ::rtl::OUString("rpt:YEAR"))
                                     nGroupOn = report::GroupOn::YEAR;
-                                else if ( sFormula == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MONTH")))
+                                else if ( sFormula == ::rtl::OUString("rpt:MONTH"))
                                 {
                                     nGroupOn = report::GroupOn::MONTH;
                                 }
-                                else if ( sCompleteFormula.matchIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:INT((MONTH")),0)
+                                else if ( sCompleteFormula.matchIgnoreAsciiCase(::rtl::OUString("rpt:INT((MONTH"),0)
                                        && sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("-1)/3)+1",8) )
                                 {
                                     nGroupOn = report::GroupOn::QUARTAL;
                                 }
-                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:WEEK")))
+                                else if ( sFormula ==::rtl::OUString("rpt:WEEK"))
                                     nGroupOn = report::GroupOn::WEEK;
-                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:DAY")))
+                                else if ( sFormula ==::rtl::OUString("rpt:DAY"))
                                     nGroupOn = report::GroupOn::DAY;
-                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:HOUR")))
+                                else if ( sFormula ==::rtl::OUString("rpt:HOUR"))
                                     nGroupOn = report::GroupOn::HOUR;
-                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MINUTE")))
+                                else if ( sFormula ==::rtl::OUString("rpt:MINUTE"))
                                     nGroupOn = report::GroupOn::MINUTE;
-                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:INT")))
+                                else if ( sFormula ==::rtl::OUString("rpt:INT"))
                                 {
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);
-                                    sExpression = sExpression.copy(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT_count_")).getLength());
+                                    sExpression = sExpression.copy(::rtl::OUString("INT_count_").getLength());
 
                                     nIndex = 0;
                                     ::rtl::OUString sInterval = sCompleteFormula.getToken(1,'/',nIndex);

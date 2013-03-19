@@ -68,7 +68,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("String") ), css::uno::makeAny( Text ));
+            xShapePropertySet->setPropertyValue( rtl::OUString("String"), css::uno::makeAny( Text ));
         }
         catch ( css::uno::Exception& )
         {
@@ -80,7 +80,7 @@ public:
         ::rtl::OUString sText;
         try
         {
-            xShapePropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("String") ) ) >>= sText;
+            xShapePropertySet->getPropertyValue( rtl::OUString("String") ) >>= sText;
         }
         catch ( css::uno::Exception& )
         {
@@ -117,7 +117,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextRotation")), css::uno::makeAny(_nOrientation*100));
+            xShapePropertySet->setPropertyValue(rtl::OUString("TextRotation"), css::uno::makeAny(_nOrientation*100));
         }
         catch (css::uno::Exception& )
         {
@@ -129,7 +129,7 @@ public:
         sal_Int32 nSOOrientation = 0;
         try
         {
-            xShapePropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextRotation"))) >>= nSOOrientation;
+            xShapePropertySet->getPropertyValue( rtl::OUString("TextRotation")) >>= nSOOrientation;
         }
         catch (css::uno::Exception& )
         {
@@ -140,7 +140,7 @@ public:
 // XHelperInterface
     rtl::OUString getServiceImplName()
     {
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TitleImpl"));
+        return rtl::OUString("TitleImpl");
     }
     css::uno::Sequence< rtl::OUString > getServiceNames()
     {
@@ -148,7 +148,7 @@ public:
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.XTitle" ) );
+            aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.XTitle" );
         }
         return aServiceNames;
     }

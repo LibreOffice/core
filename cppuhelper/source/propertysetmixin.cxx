@@ -266,8 +266,7 @@ void Data::initProperties(
                     if (args.getLength() != 1) {
                         throw css::uno::RuntimeException(
                             rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "inconsistent UNO type registry")),
+                                    "inconsistent UNO type registry"),
                             css::uno::Reference< css::uno::XInterface >());
                     }
                     t = args[0];
@@ -277,8 +276,7 @@ void Data::initProperties(
                 if (handles > SAL_MAX_INT32) {
                     throw css::uno::RuntimeException(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "interface type has too many attributes")),
+                                "interface type has too many attributes"),
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 rtl::OUString name(members[i]->getMemberName());
@@ -297,8 +295,7 @@ void Data::initProperties(
                 {
                     throw css::uno::RuntimeException(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "inconsistent UNO type registry")),
+                                "inconsistent UNO type registry"),
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 handleNames->push_back(name);
@@ -517,7 +514,7 @@ rtl::OUString PropertySetMixinImpl::Impl::translateHandle(
 {
     if (handle < 0 || handle >= handleMap.getLength()) {
         throw css::beans::UnknownPropertyException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad handle "))
+            (rtl::OUString("bad handle ")
              + rtl::OUString::valueOf(handle)),
             object);
     }
@@ -589,8 +586,7 @@ void PropertySetMixinImpl::Impl::setProperty(
         //TODO  Clarify whether PropertyVetoException is the correct exception
         // to throw when trying to set a read-only property:
         throw css::beans::PropertyVetoException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot set read-only property "))
+            (rtl::OUString("cannot set read-only property ")
              + name),
             object);
     } catch (css::lang::WrappedTargetRuntimeException & e) {
@@ -643,8 +639,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
     } catch (css::lang::IllegalArgumentException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "unexpected com.sun.star.lang.IllegalArgumentException: "))
+                    "unexpected com.sun.star.lang.IllegalArgumentException: ")
              + e.Message),
             object);
     } catch (css::lang::WrappedTargetRuntimeException & e) {
@@ -689,8 +684,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             try {
                 if (!(css::uno::Reference< css::reflection::XIdlField2 >(
                           ambiguous->getField(
-                              rtl::OUString(
-                                  RTL_CONSTASCII_USTRINGPARAM("IsAmbiguous"))),
+                              rtl::OUString("IsAmbiguous")),
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= isAmbiguous))
                 {
@@ -704,7 +698,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
                     ambiguous->getField(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                        rtl::OUString("Value")),
                     css::uno::UNO_QUERY_THROW)->get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 throw css::uno::RuntimeException(
@@ -727,8 +721,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
 
                 if (!(css::uno::Reference< css::reflection::XIdlField2 >(
                           defaulted->getField(
-                              rtl::OUString(
-                                  RTL_CONSTASCII_USTRINGPARAM("IsDefaulted"))),
+                              rtl::OUString("IsDefaulted")),
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= isDefaulted))
                 {
@@ -742,7 +735,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
                     defaulted->getField(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                        rtl::OUString("Value")),
                     css::uno::UNO_QUERY_THROW)->get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 throw css::uno::RuntimeException(
@@ -765,8 +758,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 bool present = false;
                 if (!(css::uno::Reference< css::reflection::XIdlField2 >(
                           optional->getField(
-                              rtl::OUString(
-                                  RTL_CONSTASCII_USTRINGPARAM("IsPresent"))),
+                              rtl::OUString("IsPresent")),
                           css::uno::UNO_QUERY_THROW)->get(value)
                       >>= present))
                 {
@@ -783,7 +775,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
                     optional->getField(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                        rtl::OUString("Value")),
                     css::uno::UNO_QUERY_THROW)->get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 throw css::uno::RuntimeException(
@@ -798,8 +790,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "unexpected type of attribute "))
+                        "unexpected type of attribute ")
                  + name),
                 object);
         }
@@ -826,8 +817,7 @@ PropertySetMixinImpl::Impl::getReflection(rtl::OUString const & typeName) const
         refl.ifc = css::uno::Reference< css::reflection::XIdlReflection >(
             factory->createInstanceWithContext(
                 rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.reflection.CoreReflection")),
+                        "com.sun.star.reflection.CoreReflection"),
                 m_context),
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
@@ -865,8 +855,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         try {
             css::uno::Reference< css::reflection::XIdlField2 > field(
                 type->getField(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                    rtl::OUString("Value")),
                 css::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
@@ -875,8 +864,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
                     wrapDefaulted, isDefaulted, wrapOptional));
             css::uno::Reference< css::reflection::XIdlField2 >(
                 type->getField(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("IsAmbiguous"))),
+                    rtl::OUString("IsAmbiguous")),
                 css::uno::UNO_QUERY_THROW)->set(
                     strct, css::uno::makeAny(isAmbiguous));
         } catch (css::lang::IllegalArgumentException & e) {
@@ -906,8 +894,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         try {
             css::uno::Reference< css::reflection::XIdlField2 > field(
                 type->getField(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                    rtl::OUString("Value")),
                 css::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
@@ -916,8 +903,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
                     false, false, wrapOptional));
             css::uno::Reference< css::reflection::XIdlField2 >(
                 type->getField(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("IsDefaulted"))),
+                    rtl::OUString("IsDefaulted")),
                 css::uno::UNO_QUERY_THROW)->set(
                     strct, css::uno::makeAny(isDefaulted));
         } catch (css::lang::IllegalArgumentException & e) {
@@ -948,15 +934,13 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         try {
             css::uno::Reference< css::reflection::XIdlField2 >(
                 type->getField(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("IsPresent"))),
+                    rtl::OUString("IsPresent")),
                 css::uno::UNO_QUERY_THROW)->set(
                     strct, css::uno::makeAny(present));
             if (present) {
                 css::uno::Reference< css::reflection::XIdlField2 > field(
                     type->getField(
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                        rtl::OUString("Value")),
                     css::uno::UNO_QUERY_THROW);
                 field->set(
                     strct,
@@ -986,8 +970,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         if (wrapAmbiguous || wrapDefaulted || wrapOptional) {
             throw css::uno::RuntimeException(
                 rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "unexpected type of attribute")),
+                        "unexpected type of attribute"),
                 object);
         }
         return value;
@@ -1027,7 +1010,7 @@ void PropertySetMixinImpl::prepareSet(
         osl::MutexGuard g(m_impl->mutex);
         if (m_impl->disposed) {
             throw css::lang::DisposedException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("disposed")),
+                rtl::OUString("disposed"),
                 static_cast< css::beans::XPropertySet * >(this));
         }
         if ((it->second.property.Attributes
@@ -1393,10 +1376,9 @@ void PropertySetMixinImpl::setPropertyValues(
                         props[i].Handle)))
             {
                 throw css::beans::UnknownPropertyException(
-                    (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name "))
+                    (rtl::OUString("name ")
                      + props[i].Name
-                     + rtl::OUString(
-                         RTL_CONSTASCII_USTRINGPARAM(" does not match handle "))
+                     + rtl::OUString(" does not match handle ")
                      + rtl::OUString::valueOf(props[i].Handle)),
                     static_cast< css::beans::XPropertySet * >(this));
             }

@@ -255,32 +255,32 @@ rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
         {
             PropertyVector aProperties(6);
 
-            aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
+            aProperties[0].Name = OUString( "Width" );
             aProperties[0].Handle = Property_Width;
             aProperties[0].Type = ::getCppuType((const sal_Int32*)0);
             aProperties[0].Attributes = 0;
 
-            aProperties[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OptimalWidth" ) );
+            aProperties[1].Name = OUString( "OptimalWidth" );
             aProperties[1].Handle = Property_OptimalWidth;
             aProperties[1].Type = ::getBooleanCppuType();
             aProperties[1].Attributes = 0;
 
-            aProperties[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) );
+            aProperties[2].Name = OUString( "IsVisible" );
             aProperties[2].Handle = Property_IsVisible;
             aProperties[2].Type = ::getBooleanCppuType();
             aProperties[2].Attributes = 0;
 
-            aProperties[3].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsStartOfNewPage" ) );
+            aProperties[3].Name = OUString( "IsStartOfNewPage" );
             aProperties[3].Handle = Property_IsStartOfNewPage;
             aProperties[3].Type = ::getBooleanCppuType();
             aProperties[3].Attributes = 0;
 
-            aProperties[4].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) );
+            aProperties[4].Name = OUString( "Size" );
             aProperties[4].Handle = Property_Width;
             aProperties[4].Type = ::getCppuType((const sal_Int32*)0);
             aProperties[4].Attributes = 0;
 
-            aProperties[5].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OptimalSize" ) );
+            aProperties[5].Name = OUString( "OptimalSize" );
             aProperties[5].Handle = Property_OptimalWidth;
             aProperties[5].Type = ::getBooleanCppuType();
             aProperties[5].Attributes = 0;

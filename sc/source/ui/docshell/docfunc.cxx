@@ -2810,7 +2810,7 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
     uno::Reference< uno::XInterface > xDocModuleApiObject;
     if ( xSF.is() )
     {
-        xVBACodeNamedObjectAccess.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY );
+        xVBACodeNamedObjectAccess.set( xSF->createInstance( rtl::OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY );
         xDocModuleApiObject.set( xVBACodeNamedObjectAccess->getByName( sCodeName ), uno::UNO_QUERY );
     }
     return xDocModuleApiObject;
@@ -2855,12 +2855,12 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModul
              nNum = 1;
         }
         while( xLib->hasByName( genModuleName ) )
-            genModuleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Sheet")) + rtl::OUString::valueOf( ++nNum );
+            genModuleName = rtl::OUString( "Sheet") + rtl::OUString::valueOf( ++nNum );
 
         uno::Any aSourceAny;
         rtl::OUString sTmpSource = sSource;
         if ( sTmpSource.isEmpty() )
-            sTmpSource = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
+            sTmpSource = ::rtl::OUString( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" );
         aSourceAny <<= sTmpSource;
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )

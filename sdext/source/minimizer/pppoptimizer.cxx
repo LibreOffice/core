@@ -181,7 +181,7 @@ sal_Int64 PPPOptimizer::GetFileSize( const rtl::OUString& rURL )
 
 OUString PPPOptimizer_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.PPPOptimizerImp" ) );
+    return OUString( "com.sun.star.comp.PPPOptimizerImp" );
 }
 
 Sequence< OUString > PPPOptimizer_getSupportedServiceNames()

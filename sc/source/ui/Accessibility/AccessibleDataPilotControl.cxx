@@ -450,7 +450,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAc
 ::rtl::OUString SAL_CALL ScAccessibleDataPilotControl::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleDataPilotControl"));
+    return rtl::OUString("ScAccessibleDataPilotControl");
 }
 
     ///=====  XTypeProvider  ===================================================
@@ -661,7 +661,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 ::rtl::OUString SAL_CALL ScAccessibleDataPilotButton::getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleDataPilotButton"));
+    return rtl::OUString("ScAccessibleDataPilotButton");
 }
 
     ///=====  XTypeProvider  ===================================================

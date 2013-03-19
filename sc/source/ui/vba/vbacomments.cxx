@@ -91,7 +91,7 @@ ScVbaComments::getElementType() throw (uno::RuntimeException)
 rtl::OUString
 ScVbaComments::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaComments"));
+    return rtl::OUString("ScVbaComments");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -101,7 +101,7 @@ ScVbaComments::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Comments") );
+        sNames[0] = rtl::OUString("ooo.vba.excel.Comments");
     }
     return sNames;
 }

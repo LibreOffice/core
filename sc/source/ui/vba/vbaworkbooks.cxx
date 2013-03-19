@@ -88,7 +88,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             {
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
                 uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY_THROW );
                 // set up the module info for the workbook and sheets in the nealy created
                 // spreadsheet
                 ScDocument* pDoc = pShell->GetDocument();
@@ -120,9 +120,9 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
                     xVBAModuleInfo->insertModuleInfo( *it, sModuleInfo );
                     if( xLib->hasByName( *it ) )
-                        xLib->replaceByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n") ) ) );
+                        xLib->replaceByName( *it, uno::makeAny( rtl::OUString( "Option VBASupport 1\n") ) );
                     else
-                        xLib->insertByName( *it, uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) ) ) );
+                        xLib->insertByName( *it, uno::makeAny( rtl::OUString( "Option VBASupport 1\n" ) ) );
                 }
             }
         }
@@ -266,9 +266,9 @@ ScVbaWorkbooks::isSpreadSheetFile( const rtl::OUString& sType )
 rtl::OUString
 ScVbaWorkbooks::getFileFilterType( const rtl::OUString& rFileName )
 {
-    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")), mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.document.TypeDetection"), mxContext), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aMediaDesc(1);
-    aMediaDesc[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("URL" ) );
+    aMediaDesc[ 0 ].Name = rtl::OUString("URL" );
     aMediaDesc[ 0 ].Value <<= rFileName;
     rtl::OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, sal_True );
     return sType;
@@ -304,7 +304,7 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         // 6 Custom character (see the Delimiter argument
         // no format means use the current delimiter
         sProps.realloc( 3 );
-        sProps[ nIndex ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FilterOptions" ) );
+        sProps[ nIndex ].Name = rtl::OUString("FilterOptions" );
         sal_Int16 delims[] = { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
         static rtl::OUString sRestOfFormat( RTL_CONSTASCII_USTRINGPARAM(",34,0,1" ) );
 
@@ -317,7 +317,7 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
             Format >>= nFormat; // val of nFormat overwritten if extracted
             // validate param
             if ( nFormat < 1 || nFormat > 6 )
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal value for Format" ) ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString( "Illegal value for Format" ), uno::Reference< uno::XInterface >() );
         }
 
         sal_Int16 nDelim = getCurrentDelim();
@@ -330,29 +330,29 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         {
             // Need to check Delimiter param
             if ( !Delimiter.hasValue() )
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Expected value for Delimiter" ) ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString( "Expected value for Delimiter" ), uno::Reference< uno::XInterface >() );
             rtl::OUString sStr;
             Delimiter >>= sStr;
             String aUniStr( sStr );
             if ( aUniStr.Len() )
                 nDelim = aUniStr.GetChar(0);
             else
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Incorrect value for Delimiter" ) ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString( "Incorrect value for Delimiter" ), uno::Reference< uno::XInterface >() );
         }
 
         getCurrentDelim() = nDelim; //set new current
 
         sFormat = rtl::OUString::valueOf( (sal_Int32)nDelim ) + sRestOfFormat;
         sProps[ nIndex++ ].Value <<= sFormat;
-        sProps[ nIndex ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
+        sProps[ nIndex ].Name = rtl::OUString("FilterName");
         sProps[ nIndex++ ].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Text - txt - csv (StarCalc)") );
         // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
         // csv is forced for deep detected 'writerxxx' types
-        sProps[ nIndex ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DocumentService") );
-        sProps[ nIndex ].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
+        sProps[ nIndex ].Name = rtl::OUString("DocumentService");
+        sProps[ nIndex ].Value <<= rtl::OUString("com.sun.star.sheet.SpreadsheetDocument");
     }
     else if ( !isSpreadSheetFile( sType ) )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Bad Format")), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Bad Format"), uno::Reference< uno::XInterface >() );
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( openDocument( rFileName, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
     uno::Any aRet = getWorkbook( mxContext, xSpreadDoc, mxParent );
@@ -365,7 +365,7 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
 rtl::OUString
 ScVbaWorkbooks::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbooks"));
+    return rtl::OUString("ScVbaWorkbooks");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -375,7 +375,7 @@ ScVbaWorkbooks::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Workbooks") );
+        sNames[0] = rtl::OUString("ooo.vba.excel.Workbooks");
     }
     return sNames;
 }

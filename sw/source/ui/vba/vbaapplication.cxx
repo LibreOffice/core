@@ -185,7 +185,7 @@ SwVbaApplication::getCurrentDocument() throw (css::uno::RuntimeException)
 rtl::OUString
 SwVbaApplication::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaApplication"));
+    return rtl::OUString("SwVbaApplication");
 }
 
 uno::Sequence< rtl::OUString >
@@ -195,7 +195,7 @@ SwVbaApplication::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Application" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Application" );
     }
     return aServiceNames;
 }

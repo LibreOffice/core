@@ -82,7 +82,7 @@ SwVbaAddins::createCollectionObject( const css::uno::Any& aSource )
 rtl::OUString
 SwVbaAddins::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaAddins"));
+    return rtl::OUString("SwVbaAddins");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -92,7 +92,7 @@ SwVbaAddins::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Addins") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Addins");
     }
     return sNames;
 }

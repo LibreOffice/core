@@ -280,15 +280,15 @@ namespace frm
     //------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ORichTextControl::getImplementationName_Static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.form.ORichTextControl" ) );
+        return ::rtl::OUString( "com.sun.star.comp.form.ORichTextControl" );
     }
 
     //------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ORichTextControl::getSupportedServiceNames_Static()
     {
         Sequence< ::rtl::OUString > aServices( 3 );
-        aServices[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControl" ) );
-        aServices[ 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEdit" ) );
+        aServices[ 0 ] = ::rtl::OUString( "com.sun.star.awt.UnoControl" );
+        aServices[ 1 ] = ::rtl::OUString( "com.sun.star.awt.UnoControlEdit" );
         aServices[ 2 ] = FRM_SUN_CONTROL_RICHTEXTCONTROL;
         return aServices;
     }

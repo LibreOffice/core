@@ -80,8 +80,8 @@ uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
 
 ScCellRangeObj::ScCellRangeObj():
         UnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XSearchable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), 1),
-        apitest::XReplaceable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("15")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("35")))
+        apitest::XSearchable(rtl::OUString("15"), 1),
+        apitest::XReplaceable(rtl::OUString("15"), rtl::OUString("35"))
 {
 }
 

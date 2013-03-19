@@ -506,14 +506,14 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                     rtl::OUString aNameTo_Simplified( RTL_CONSTASCII_USTRINGPARAM("ChineseT2S") );
                     rtl::OUString aNameTo_Traditional( RTL_CONSTASCII_USTRINGPARAM("ChineseS2T") );
                     lang::Locale aLocale;
-                    aLocale.Language = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("zh") );
+                    aLocale.Language = rtl::OUString("zh");
 
                     if( xContainer->hasByName( aNameTo_Simplified ) )
                         xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                 xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TW") );
+                        aLocale.Country = rtl::OUString("TW");
                         xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                 xDictionaryList->addNewDictionary( aNameTo_Simplified
                                 , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -528,7 +528,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                                 xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CN") );
+                        aLocale.Country = rtl::OUString("CN");
                         xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
                                 xDictionaryList->addNewDictionary( aNameTo_Traditional
                                 , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE

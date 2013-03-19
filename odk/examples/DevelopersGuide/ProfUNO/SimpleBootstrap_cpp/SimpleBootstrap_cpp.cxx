@@ -76,8 +76,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         // open a spreadsheet document
         Reference< XComponent > xComponent( xComponentLoader->loadComponentFromURL(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/scalc" ) ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0,
+            OUString( "private:factory/scalc" ),
+            OUString( "_blank" ), 0,
             Sequence < ::com::sun::star::beans::PropertyValue >() ) );
         if ( !xComponent.is() )
         {

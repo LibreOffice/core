@@ -64,7 +64,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
 {
     ScVbaChart* pChart = static_cast< ScVbaChart* >( xChart.get() );
     if ( !pChart )
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Object failure, can't access chart implementation" )), uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException( rtl::OUString( "Object failure, can't access chart implementation" ), uno::Reference< uno::XInterface >()  );
 
     uno::Reference< beans::XPropertySet > xAxisPropertySet;
     if (((nType == xlCategory) || (nType == xlSeriesAxis) || (nType == xlValue)))
@@ -96,18 +96,18 @@ public:
             // primary
             sal_Bool bBool = false;
             uno::Reference< beans::XPropertySet > xDiagramPropertySet( pChart->xDiagramPropertySet() );
-            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasXAxis" ) ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( "HasXAxis" ) ) >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlCategory ) );
-            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasYAxis" ) ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( "HasYAxis" ) ) >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlSeriesAxis ) );
 
             if (  pChart->is3D() )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlValue ) );
 
             // secondary
-            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryXAxis" ) ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( "HasSecondaryXAxis" ) ) >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlSecondary, xlCategory ) );
-            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxis" ) ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue( rtl::OUString( "HasSecondaryYAxis" ) ) >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlSecondary, xlSeriesAxis ) );
         }
 
@@ -160,7 +160,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) 
     sal_Int32 nAxisGroup = xlPrimary;
     sal_Int32 nType = -1;
     if ( !_nType.hasValue() || ( ( _nType >>= nType ) == false )  )
-        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Axes::Item Failed to extract type" )), uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException( rtl::OUString( "Axes::Item Failed to extract type" ), uno::Reference< uno::XInterface >()  );
 
     if ( _oAxisGroup.hasValue() )
         _oAxisGroup >>= nAxisGroup ;
@@ -177,7 +177,7 @@ ScVbaAxes::createCollectionObject(const css::uno::Any& aSource)
 rtl::OUString
 ScVbaAxes::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaAxes"));
+    return rtl::OUString("ScVbaAxes");
 }
 
 uno::Sequence< rtl::OUString >
@@ -187,7 +187,7 @@ ScVbaAxes::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Axes" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Axes" );
     }
     return aServiceNames;
 }

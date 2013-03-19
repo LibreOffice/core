@@ -79,7 +79,7 @@ SEQ( sal_Int8 ) SAL_CALL ScannerManager::getMaskDIB() throw()
 
 OUString ScannerManager::getImplementationName_Static() throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" ) );
+    return ::rtl::OUString( "com.sun.star.scanner.ScannerManager" );
 }
 
 // -----------------------------------------------------------------------------
@@ -88,7 +88,7 @@ SEQ( OUString ) ScannerManager::getSupportedServiceNames_Static() throw ()
 {
     SEQ( OUString ) aSNS( 1 );
 
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" ) );
+    aSNS.getArray()[0] = ::rtl::OUString( "com.sun.star.scanner.ScannerManager" );
 
     return aSNS;
 }

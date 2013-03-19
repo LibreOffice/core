@@ -211,7 +211,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString("com.sun.star.frame.Frame") ), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             // create an intermediate window, which is to be the container window of the frame
@@ -224,7 +224,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
             m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
 
             m_xMeAsFrame->initialize( m_xFrameContainerWindow );
-            m_xMeAsFrame->setName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("form property browser")) );
+            m_xMeAsFrame->setName(::rtl::OUString("form property browser") );
             if ( _pBindings->GetDispatcher() )
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
@@ -285,10 +285,10 @@ FmPropBrw::~FmPropBrw()
         Reference<XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
-            const ::rtl::OUString pProps[] = { ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) )
-                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
-                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) )
-                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ) };
+            const ::rtl::OUString pProps[] = { ::rtl::OUString( "ContextDocument" )
+                                             , ::rtl::OUString( "DialogParentWindow" )
+                                             , ::rtl::OUString( "ControlContext" )
+                                             , ::rtl::OUString( "ControlShapeAccess" ) };
             for ( size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i )
                 xName->removeByName( pProps[i] );
         }
@@ -567,10 +567,10 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     // a ComponentContext for the
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
-        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( xDocument ) ),
-        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( xParentWindow ) ),
-        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ), makeAny( xControlContext ) ),
-        ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ), makeAny( xControlMap ) )
+        ::cppu::ContextEntry_Init( ::rtl::OUString( "ContextDocument" ), makeAny( xDocument ) ),
+        ::cppu::ContextEntry_Init( ::rtl::OUString( "DialogParentWindow" ), makeAny( xParentWindow ) ),
+        ::cppu::ContextEntry_Init( ::rtl::OUString( "ControlContext" ), makeAny( xControlContext ) ),
+        ::cppu::ContextEntry_Init( ::rtl::OUString( "ControlShapeAccess" ), makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),

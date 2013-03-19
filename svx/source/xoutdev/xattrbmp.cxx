@@ -543,11 +543,11 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
         uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
-        aPropSeq[0].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
+        aPropSeq[0].Name  = ::rtl::OUString( "Name" );
         aPropSeq[0].Value = uno::makeAny( aInternalName );
-        aPropSeq[1].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ));
+        aPropSeq[1].Name  = ::rtl::OUString( "FillBitmapURL" );
         aPropSeq[1].Value = uno::makeAny( aURL );
-        aPropSeq[2].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ));
+        aPropSeq[2].Name  = ::rtl::OUString( "Bitmap" );
         aPropSeq[2].Value = uno::makeAny( xBmp );
 
         rVal <<= aPropSeq;

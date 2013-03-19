@@ -272,7 +272,7 @@ void ProviderImpl::initialize(
         if (xRegistry.is() && xRegistry->isValid())
         {
             com::sun::star::uno::Reference< XRegistryKey > xKey( xRegistry->getRootKey()->openKey(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR") ) ) );
+                OUString("/UCR") ) );
             if (xKey.is() && xKey->isValid())
             {
                 _aBaseKeys.push_back( xKey );

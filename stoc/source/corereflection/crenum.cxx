@@ -160,7 +160,7 @@ void IdlEnumFieldImpl::set( const Any &, const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     throw IllegalAccessException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("enum field is constant!") ),
+        OUString("enum field is constant!"),
         (XWeak *)(OWeakObject *)this );
 }
 //__________________________________________________________________________________________________
@@ -168,7 +168,7 @@ void IdlEnumFieldImpl::set( Any &, const Any & )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     throw IllegalAccessException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("enum field is constant!") ),
+        OUString("enum field is constant!"),
         (XWeak *)(OWeakObject *)this );
 }
 

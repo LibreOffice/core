@@ -61,7 +61,7 @@ sal_Bool test1()
 {
     printf("\n Test1:  com.sun.star.bridge.oleautomation.BridgeSupplier\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
+    xreg->open( OUString("services.rdb"),
                                sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
@@ -96,7 +96,7 @@ sal_Bool test2()
 {
     printf("Test2:  com.sun.star.bridge.OleBridgeSupplierVar1\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
+    xreg->open( OUString("services.rdb"),
                                sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
@@ -129,7 +129,7 @@ sal_Bool test3()
 {
     printf("Test3:  com.sun.star.bridge.oleautomation.Factory\n");
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
+    xreg->open( OUString("services.rdb"),
                 sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
@@ -173,7 +173,7 @@ sal_Bool test4()
     {
     printf("Test4:  com.sun.star.bridge.oleautomation.ApplicationRegistration\n");
        Reference<XSimpleRegistry> xreg= createSimpleRegistry();
-    xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("services.rdb")),
+    xreg->open( OUString("services.rdb"),
                                sal_False, sal_False );
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);

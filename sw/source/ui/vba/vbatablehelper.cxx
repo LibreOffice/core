@@ -125,14 +125,14 @@ sal_Int32 SwVbaTableHelper::getTableWidth( ) throw (uno::RuntimeException)
     sal_Int32 nWidth = 0;
     sal_Bool isWidthRelatvie = sal_False;
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
-    xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsWidthRelative") ) ) >>= isWidthRelatvie;
+    xTableProps->getPropertyValue( rtl::OUString("IsWidthRelative") ) >>= isWidthRelatvie;
     if( isWidthRelatvie )
     {
-        xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RelativeWidth") ) ) >>= nWidth;
+        xTableProps->getPropertyValue( rtl::OUString("RelativeWidth") ) >>= nWidth;
     }
     else
     {
-        xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ) ) >>= nWidth;
+        xTableProps->getPropertyValue( rtl::OUString("Width") ) >>= nWidth;
     }
     return nWidth;
 }

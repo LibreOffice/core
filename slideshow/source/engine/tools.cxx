@@ -745,7 +745,7 @@ namespace slideshow
             // read bound rect
             awt::Rectangle aTmpRect;
             if( !(xPropSet->getPropertyValue(
-                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BoundRect") ) ) >>= aTmpRect) )
+                      ::rtl::OUString("BoundRect") ) >>= aTmpRect) )
             {
                 ENSURE_OR_THROW( false,
                                   "getAPIShapeBounds(): Could not get \"BoundRect\" property from shape" );
@@ -767,7 +767,7 @@ namespace slideshow
             // read prio
             sal_Int32 nPrio(0);
             if( !(xPropSet->getPropertyValue(
-                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ) ) >>= nPrio) )
+                      ::rtl::OUString("ZOrder") ) >>= nPrio) )
             {
                 ENSURE_OR_THROW( false,
                                   "getAPIShapePrio(): Could not get \"ZOrder\" property from shape" );

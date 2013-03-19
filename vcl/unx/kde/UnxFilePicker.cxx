@@ -71,12 +71,12 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
-        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
+        aRet[0] = rtl::OUString("com.sun.star.ui.dialogs.FilePicker");
+        aRet[1] = rtl::OUString("com.sun.star.ui.dialogs.SystemFilePicker");
 #ifdef ENABLE_TDE
-        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.TDEFilePicker"));
+        aRet[2] = rtl::OUString("com.sun.star.ui.dialogs.TDEFilePicker");
 #else // ENABLE_TDE
-        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDEFilePicker"));
+        aRet[2] = rtl::OUString("com.sun.star.ui.dialogs.KDEFilePicker");
 #endif // ENABLE_TDE
         return aRet;
     }
@@ -101,7 +101,7 @@ UnxFilePicker::~UnxFilePicker()
 {
     if ( m_nFilePickerPid > 0 )
     {
-        sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "exit" )) );
+        sendCommand( ::rtl::OUString( "exit" ) );
         waitpid( m_nFilePickerPid, NULL, 0 );
     }
 
@@ -170,7 +170,7 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
     // this is _not_ an osl::Condition, see i#93366
     m_pCommandThread->execCondition().reset();
 
-    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "exec" ) ));
+    sendCommand( ::rtl::OUString( "exec" ));
 
     m_pCommandThread->execCondition().wait();
 
@@ -184,8 +184,8 @@ void SAL_CALL UnxFilePicker::setMultiSelectionMode( sal_Bool bMode )
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::rtl::OUString aString = bMode?
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "setMultiSelection true" )):
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "setMultiSelection false" ));
+        ::rtl::OUString( "setMultiSelection true" ):
+        ::rtl::OUString( "setMultiSelection false" );
 
     sendCommand( aString );
 }
@@ -224,7 +224,7 @@ rtl::OUString SAL_CALL UnxFilePicker::getDisplayDirectory()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getDirectory" )),
+    sendCommand( ::rtl::OUString( "getDirectory" ),
                  m_pCommandThread->getDirectoryCondition() );
 
     return m_pCommandThread->getDirectory();
@@ -236,7 +236,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL UnxFilePicker::getFiles()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getFiles" )),
+    sendCommand( ::rtl::OUString( "getFiles" ),
                  m_pCommandThread->getFilesCondition() );
 
     return m_pCommandThread->getFiles();
@@ -278,7 +278,7 @@ rtl::OUString SAL_CALL UnxFilePicker::getCurrentFilter()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getCurrentFilter" )),
+    sendCommand( ::rtl::OUString( "getCurrentFilter" ),
                  m_pCommandThread->getCurrentFilterCondition() );
 
     return m_pCommandThread->getCurrentFilter();
@@ -531,14 +531,14 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
     uno::Any aAny;
     if ( 0 == rArguments.getLength( ) )
         throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
+                rtl::OUString( "no arguments" ),
                 static_cast< XFilePicker2* >( this ), 1 );
 
     aAny = rArguments[0];
 
     if ( ( aAny.getValueType() != ::getCppuType( (sal_Int16*)0 ) ) && ( aAny.getValueType() != ::getCppuType( (sal_Int8*)0 ) ) )
         throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
+                rtl::OUString( "invalid argument type" ),
                 static_cast< XFilePicker2* >( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -622,7 +622,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 
         default:
             throw lang::IllegalArgumentException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
+                    rtl::OUString( "Unknown template" ),
                     static_cast< XFilePicker2* >( this ),
                     1 );
     }
@@ -769,7 +769,7 @@ void UnxFilePicker::checkFilePicker() throw( ::com::sun::star::uno::RuntimeExcep
     else
     {
         throw uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "the external file picker does not run" )),
+                ::rtl::OUString( "the external file picker does not run" ),
                 *this );
     }
 }
@@ -779,7 +779,7 @@ void UnxFilePicker::sendCommand( const ::rtl::OUString &rCommand )
     if ( m_nFilePickerWrite < 0 )
         return;
 
-    ::rtl::OString aUtfString = OUStringToOString( rCommand + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "\n" )), RTL_TEXTENCODING_UTF8 );
+    ::rtl::OString aUtfString = OUStringToOString( rCommand + ::rtl::OUString( "\n" ), RTL_TEXTENCODING_UTF8 );
 
 #if OSL_DEBUG_LEVEL > 0
     ::std::cerr << "UnxFilePicker sent: \"" << aUtfString.getStr() << "\"" << ::std::endl;
@@ -883,17 +883,17 @@ sal_Bool UnxFilePicker::controlActionInfo( sal_Int16 nControlAction, ::rtl::OUSt
     const ElementToName *pPtr;
     const ElementToName pArray[] =
     {
-        { ControlActions::ADD_ITEM,                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "addItem" ) ) },
-        { ControlActions::ADD_ITEMS,               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "addItems" ) ) },
-        { ControlActions::DELETE_ITEM,             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "deleteItem" ) ) },
-        { ControlActions::DELETE_ITEMS,            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "deleteItems" ) ) },
-        { ControlActions::SET_SELECT_ITEM,         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setSelectedItem" ) ) },
-        { ControlActions::GET_ITEMS,               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getItems" ) ) },
-        { ControlActions::GET_SELECTED_ITEM,       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getSelectedItem" ) ) },
-        { ControlActions::GET_SELECTED_ITEM_INDEX, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getSelectedItemIndex" ) ) },
-        { ControlActions::SET_HELP_URL,            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setHelpURL" ) ) },
-        { ControlActions::GET_HELP_URL,            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getHelpURL" ) ) },
-        { 0,                                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "noAction" ) ) }
+        { ControlActions::ADD_ITEM,                ::rtl::OUString( "addItem" ) },
+        { ControlActions::ADD_ITEMS,               ::rtl::OUString( "addItems" ) },
+        { ControlActions::DELETE_ITEM,             ::rtl::OUString( "deleteItem" ) },
+        { ControlActions::DELETE_ITEMS,            ::rtl::OUString( "deleteItems" ) },
+        { ControlActions::SET_SELECT_ITEM,         ::rtl::OUString( "setSelectedItem" ) },
+        { ControlActions::GET_ITEMS,               ::rtl::OUString( "getItems" ) },
+        { ControlActions::GET_SELECTED_ITEM,       ::rtl::OUString( "getSelectedItem" ) },
+        { ControlActions::GET_SELECTED_ITEM_INDEX, ::rtl::OUString( "getSelectedItemIndex" ) },
+        { ControlActions::SET_HELP_URL,            ::rtl::OUString( "setHelpURL" ) },
+        { ControlActions::GET_HELP_URL,            ::rtl::OUString( "getHelpURL" ) },
+        { 0,                                       ::rtl::OUString( "noAction" ) }
     };
 
     for ( pPtr = pArray; pPtr->nId && ( pPtr->nId != nControlAction ); ++pPtr )

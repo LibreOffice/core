@@ -1802,7 +1802,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 {
                     Reference< beans::XPropertySet > xSeqProp( xLS->getValues(), uno::UNO_QUERY );
                     ::rtl::OUString aRole;
-                    if( xSeqProp.is() && (xSeqProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Role"))) >>= aRole) &&
+                    if( xSeqProp.is() && (xSeqProp->getPropertyValue(::rtl::OUString("Role")) >>= aRole) &&
                         aRole.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("categories")) )
                         bThisIsCategories = bHasCategories = true;
                 }
@@ -1904,7 +1904,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getList(aTableNumList);
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableNumberList")), -1,
+            beans::PropertyValue( ::rtl::OUString("TableNumberList"), -1,
                                   uno::makeAny( lcl_createTableNumberList( aTableNumList ) ),
                                   beans::PropertyState_DIRECT_VALUE ));
     }
@@ -1913,7 +1913,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+            beans::PropertyValue( ::rtl::OUString("DataRowSource"), -1,
                                   uno::makeAny( eRowSource ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1921,7 +1921,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+            beans::PropertyValue( ::rtl::OUString("HasCategories"), -1,
                                   uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1929,7 +1929,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+            beans::PropertyValue( ::rtl::OUString("FirstCellAsLabel"), -1,
                                   uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1955,7 +1955,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
     // add cell range property
     aResult.push_back(
-        beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+        beans::PropertyValue( ::rtl::OUString("CellRangeRepresentation"), -1,
                               uno::makeAny( sRangeRep ), beans::PropertyState_DIRECT_VALUE ));
 
     //Sequence Mapping
@@ -2025,7 +2025,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         if( bDifferentIndexes && !aSequenceMappingVector.empty() )
         {
             aResult.push_back(
-                beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SequenceMapping")), -1,
+                beans::PropertyValue( ::rtl::OUString("SequenceMapping"), -1,
                     uno::makeAny( lcl_VectorToSequence(aSequenceMappingVector) )
                     , beans::PropertyState_DIRECT_VALUE ));
         }
@@ -2486,7 +2486,7 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
 //  rRangeList->Format( aStr, SCR_ABS_3D, m_pDocument );
 //    m_aIdentifier = ::rtl::OUString( aStr );
 
-//      m_aIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID_"));
+//      m_aIdentifier = ::rtl::OUString( "ID_");
 //      static sal_Int32 nID = 0;
 //      m_aIdentifier += ::rtl::OUString::valueOf( ++nID);
 }

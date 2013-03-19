@@ -47,13 +47,13 @@ namespace rptui
 //------------------------------------------------------------------------------
 ::rtl::OUString OStatusbarController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.comp.StatusbarController"));
+    return ::rtl::OUString("com.sun.star.report.comp.StatusbarController");
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> OStatusbarController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StatusbarController"));
+    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.frame.StatusbarController");
     return aSupported;
 }
 // -----------------------------------------------------------------------------

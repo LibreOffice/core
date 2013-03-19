@@ -145,31 +145,31 @@ static ::cppu::IPropertyArrayHelper & getStatementPropertyArrayHelper()
             static Property aTable[] =
                 {
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("CursorName") ), 0,
+                        OUString("CursorName"), 0,
                         ::getCppuType( (OUString *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("EscapeProcessing") ), 1,
+                        OUString("EscapeProcessing"), 1,
                         ::getBooleanCppuType() , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchDirection") ), 2,
+                        OUString("FetchDirection"), 2,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchSize") ), 3,
+                        OUString("FetchSize"), 3,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("MaxFieldSize") ), 4,
+                        OUString("MaxFieldSize"), 4,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("MaxRows") ), 5,
+                        OUString("MaxRows"), 5,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("QueryTimeOut") ), 6,
+                        OUString("QueryTimeOut"), 6,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetConcurrency") ), 7,
+                        OUString("ResultSetConcurrency"), 7,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetType") ), 8,
+                        OUString("ResultSetType"), 8,
                         ::getCppuType( (sal_Int32 *)0) , 0 )
                 };
             OSL_ASSERT( sizeof(aTable)/ sizeof(Property)  == STATEMENT_SIZE );

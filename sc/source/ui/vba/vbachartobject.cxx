@@ -100,7 +100,7 @@ ScVbaChartObject::Delete() throw ( css::script::BasicErrorException )
     if (pChartObjectsImpl)
         pChartObjectsImpl->removeByName( getPersistName() );
     else
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Parent is not ChartObjects" ) ) );
+        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( "Parent is not ChartObjects" ) );
 }
 
 void
@@ -117,7 +117,7 @@ ScVbaChartObject::Activate() throw ( script::BasicErrorException )
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChartObject Activate internal error" ) ) );
+        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( "ChartObject Activate internal error" ) );
     }
 }
 
@@ -130,7 +130,7 @@ ScVbaChartObject::getChart() throw (css::uno::RuntimeException)
 rtl::OUString
 ScVbaChartObject::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaChartObject"));
+    return rtl::OUString("ScVbaChartObject");
 }
 
 uno::Sequence< rtl::OUString >
@@ -140,7 +140,7 @@ ScVbaChartObject::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.ChartObject" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.ChartObject" );
     }
     return aServiceNames;
 }

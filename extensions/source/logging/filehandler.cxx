@@ -402,14 +402,14 @@ namespace logging
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL FileHandler::getImplementationName_static()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.FileHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.FileHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL FileHandler::getSupportedServiceNames_static()
     {
         Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.logging.FileHandler" ) );
+        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.FileHandler" );
         return aServiceNames;
     }
 

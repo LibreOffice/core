@@ -54,21 +54,21 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         Reference< XMultiComponentFactory > xMgr( createRegistryServiceFactory(
-                                                      OUString( RTL_CONSTASCII_USTRINGPARAM("cpputest.rdb") ) ), UNO_QUERY );
+                                                      OUString("cpputest.rdb") ), UNO_QUERY );
         Reference< XComponentContext > xInitialContext;
         OSL_VERIFY( Reference< beans::XPropertySet >( xMgr, UNO_QUERY )->getPropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xInitialContext );
+                        OUString("DefaultContext") ) >>= xInitialContext );
 
         ContextEntry_Init aEntry;
         aEntry.bLateInitService = false;
-        aEntry.name = OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") );
+        aEntry.name = OUString("bla, bla");
         aEntry.value = makeAny( (sal_Int32)5 );
         Reference< XComponentContext > xContext( createComponentContext( &aEntry, 1, xInitialContext ) );
         OSL_ASSERT( xContext->getServiceManager() != xMgr ); // must be wrapped one
         OSL_ASSERT(
             Reference< beans::XPropertySet >(
                 xContext->getServiceManager(), UNO_QUERY )->getPropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) != xInitialContext );
+                    OUString("DefaultContext") ) != xInitialContext );
 
         Reference< XMultiServiceFactory > x( xMgr, UNO_QUERY );
         test_ImplHelper( x );
@@ -78,9 +78,9 @@ SAL_IMPLEMENT_MAIN()
         test_interfacecontainer();
 
         OSL_VERIFY( xContext->getValueByName(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
+                        OUString("bla, bla") ) == (sal_Int32)5 );
         OSL_VERIFY( ! xInitialContext->getValueByName(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ).hasValue() );
+                        OUString("bla, bla") ).hasValue() );
         Reference< XComponent >( xInitialContext, UNO_QUERY )->dispose();
         xMgr.clear();
         xContext.clear();

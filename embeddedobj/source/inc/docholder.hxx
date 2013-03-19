@@ -131,7 +131,7 @@ public:
 
     rtl::OUString GetTitle() const
     {
-        return m_aContainerName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " - " )) + m_aDocumentNamePart;
+        return m_aContainerName + ::rtl::OUString( " - " ) + m_aDocumentNamePart;
     }
 
     rtl::OUString GetContainerName() const { return m_aContainerName; }

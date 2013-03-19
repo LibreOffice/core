@@ -169,7 +169,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
 //===== Service ===============================================================
 ::rtl::OUString UnoControlTabPageModel_getImplementationName (void) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tab.UnoControlTabPageModel"));
+    return rtl::OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
 }
 
 Sequence<rtl::OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames (void)
@@ -195,7 +195,7 @@ UnoControlTabPage::~UnoControlTabPage()
 
 ::rtl::OUString UnoControlTabPage::GetComponentServiceName()
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabPageModel"));
+    return ::rtl::OUString("TabPageModel");
 }
 
 void UnoControlTabPage::dispose() throw(RuntimeException)
@@ -265,8 +265,8 @@ throw (::com::sun::star::uno::RuntimeException)
         Sequence< rtl::OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
         // Properties in a sequence must be sorted!
-        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ));
-        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width"  ));
+        aProps[0] = rtl::OUString( "Height" );
+        aProps[1] = rtl::OUString( "Width"  );
         aValues[0] <<= aAppFontSize.Height();
         aValues[1] <<= aAppFontSize.Width();
 
@@ -292,8 +292,8 @@ throw (::com::sun::star::uno::RuntimeException)
         mbPosModified = true;
         Sequence< rtl::OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
-        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX"  ));
-        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ));
+        aProps[0] = rtl::OUString( "PositionX"  );
+        aProps[1] = rtl::OUString( "PositionY" );
         aValues[0] <<= aTmp.Width();
         aValues[1] <<= aTmp.Height();
 

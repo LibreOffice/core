@@ -265,8 +265,7 @@ void ReflectionBase::setName( const ::rtl::OUString& /* aName */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     throw RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM( "pq_sdbc::ReflectionBase::setName not implemented" ) ),
+        rtl::OUString( "pq_sdbc::ReflectionBase::setName not implemented" ),
         *this );
     //setPropertyValue( getStatics().NAME , makeAny( aName ) );
 }

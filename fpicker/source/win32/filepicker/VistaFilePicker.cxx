@@ -75,8 +75,8 @@ namespace
     css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker_getSupportedServiceNames()
     {
         css::uno::Sequence< ::rtl::OUString > aRet(2);
-        aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
-        aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
+        aRet[0] = ::rtl::OUString("com.sun.star.ui.dialogs.FilePicker");
+        aRet[1] = ::rtl::OUString("com.sun.star.ui.dialogs.SystemFilePicker");
         return aRet;
     }
 }
@@ -606,7 +606,7 @@ void SAL_CALL VistaFilePicker::cancel()
 ::rtl::OUString SAL_CALL VistaFilePicker::getImplementationName()
     throw(css::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog"));
+    return ::rtl::OUString("com.sun.star.comp.fpicker.VistaFileDialog");
 }
 
 // -------------------------------------------------

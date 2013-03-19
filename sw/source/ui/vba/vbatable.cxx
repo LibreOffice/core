@@ -120,7 +120,7 @@ SwVbaTable::Columns( const uno::Any& index ) throw (uno::RuntimeException)
 rtl::OUString
 SwVbaTable::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTable"));
+    return rtl::OUString("SwVbaTable");
 }
 
 uno::Sequence<rtl::OUString>
@@ -130,7 +130,7 @@ SwVbaTable::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Table" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Table" );
     }
     return aServiceNames;
 }

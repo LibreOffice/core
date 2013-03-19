@@ -207,8 +207,8 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr pSst = rStrm.CreateOutputStream(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/sharedStrings.xml") ),
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "sharedStrings.xml" )),
+            OUString( "xl/sharedStrings.xml"),
+            OUString( "sharedStrings.xml" ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" );

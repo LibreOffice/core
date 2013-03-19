@@ -361,7 +361,7 @@ sal_Int32 ReadThroughComponent(
         uno::Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
 
         Any aAny = xProps->getPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+                OUString("Encrypted") );
 
         bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
                 *(sal_Bool *)aAny.getValue();
@@ -699,7 +699,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
     beans::NamedValue aLateInitSettings(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LateInitSettings" ) ),
+        ::rtl::OUString( "LateInitSettings" ),
         makeAny( xLateInitSettings )
     );
 
@@ -732,19 +732,19 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         OUString *pSeq = aFamiliesSeq.getArray();
         if( aOpt.IsFrmFmts() )
             // SFX_STYLE_FAMILY_FRAME;
-            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("FrameStyles"));
+            *pSeq++ = OUString("FrameStyles");
         if( aOpt.IsPageDescs() )
             // SFX_STYLE_FAMILY_PAGE;
-            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
+            *pSeq++ = OUString("PageStyles");
         if( aOpt.IsTxtFmts() )
         {
             // (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
-            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"));
-            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"));
+            *pSeq++ = OUString("CharacterStyles");
+            *pSeq++ = OUString("ParagraphStyles");
         }
         if( aOpt.IsNumRules() )
             // SFX_STYLE_FAMILY_PSEUDO;
-            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"));
+            *pSeq++ = OUString("NumberingStyles");
 
         OUString sStyleInsertModeFamilies(
                 RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeFamilies"));
@@ -815,12 +815,12 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         }
         else
         {
-            StreamPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dummyObjectName"));
+            StreamPath = ::rtl::OUString("dummyObjectName");
         }
 
         if( !StreamPath.isEmpty() )
         {
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+            sPropName = OUString("StreamRelPath");
             xInfoSet->setPropertyValue( sPropName, makeAny( StreamPath ) );
         }
     }
@@ -852,13 +852,13 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     {
         const sal_Bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R")),
+                OUString("ShapePositionInHoriL2R"),
                 makeAny( bShapePositionInHoriL2R ) );
     }
     {
         const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat")),
+                OUString("TextDocInOOoFileFormat"),
                 makeAny( bTextDocInOOoFileFormat ) );
     }
 

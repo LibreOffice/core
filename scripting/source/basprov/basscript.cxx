@@ -47,7 +47,7 @@ namespace basprov
 {
 //.........................................................................
 #define BASSCRIPT_PROPERTY_ID_CALLER         1
-#define BASSCRIPT_PROPERTY_CALLER            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Caller" ) )
+#define BASSCRIPT_PROPERTY_CALLER            ::rtl::OUString( "Caller" )
 
 #define BASSCRIPT_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -192,12 +192,10 @@ namespace basprov
                 {
                     throw provider::ScriptFrameworkErrorException(
                         ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "wrong number of parameters!" ) ),
+                                "wrong number of parameters!" ),
                          Reference< XInterface >(),
                          m_funcName,
-                         ::rtl::OUString(
-                             RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ),
+                         ::rtl::OUString( "Basic" ),
                         provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
                 }
             }

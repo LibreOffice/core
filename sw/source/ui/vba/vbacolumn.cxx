@@ -80,7 +80,7 @@ void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, c
 rtl::OUString
 SwVbaColumn::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaColumn"));
+    return rtl::OUString("SwVbaColumn");
 }
 
 uno::Sequence< rtl::OUString >
@@ -90,7 +90,7 @@ SwVbaColumn::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Column" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Column" );
     }
     return aServiceNames;
 }

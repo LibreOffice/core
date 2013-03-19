@@ -518,7 +518,7 @@ namespace pcr
                 {
                     xKeys->getByIndex( key ) >>= xKey;
                     sal_Int32 nKeyType = 0;
-                    xKey->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) >>= nKeyType;
+                    xKey->getPropertyValue( ::rtl::OUString( "Type" ) ) >>= nKeyType;
                     if ( nKeyType != KeyType::FOREIGN )
                         continue;
 
@@ -542,7 +542,7 @@ namespace pcr
                         if ( xKeyColumn.is() )
                         {
                             xKeyColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
-                            xKeyColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelatedColumn" ) ) ) >>= sRelatedColumnName;
+                            xKeyColumn->getPropertyValue( ::rtl::OUString( "RelatedColumn" ) ) >>= sRelatedColumnName;
 
                             _rLeftFields[ column ]  = sColumnName;
                             _rRightFields[ column ] = sRelatedColumnName;

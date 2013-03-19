@@ -1398,7 +1398,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
                 if ( !pActEntry->bHasGraphic )
                 {   // ALT text only if not any image loaded
                     if (!pActEntry->aAltText.isEmpty())
-                        pActEntry->aAltText += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("; "));
+                        pActEntry->aAltText += rtl::OUString("; ");
 
                     pActEntry->aAltText += rOption.GetString();
                 }

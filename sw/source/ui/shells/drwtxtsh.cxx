@@ -328,7 +328,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
+                                    rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
                                     , xContext), UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -338,7 +338,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
+                            aParam.Name = rtl::OUString("ParentWindow");
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );

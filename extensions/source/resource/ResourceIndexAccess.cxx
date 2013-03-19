@@ -122,7 +122,7 @@ Reference<XInterface> initResourceIndexAccess(ResourceIndexAccess* pResourceInde
         // and will crash on getByIndex calls, better just give back an empty Reference
         // so that such ResourceStringIndexAccess instances are never release into the wild
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("resource manager could not get initialized")),
+            OUString("resource manager could not get initialized"),
             /* xResult */ Reference<XInterface>());
     return xResult;
 }
@@ -153,8 +153,8 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
     if( aResult.getLength() == 0)
     {
         aResult.realloc(2);
-        aResult[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("String"));
-        aResult[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("StringList"));
+        aResult[0] = OUString("String");
+        aResult[1] = OUString("StringList");
     }
     return aResult;
 }
@@ -174,7 +174,7 @@ Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
     SolarMutexGuard aGuard;
     if(!m_pResMgr.get())
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("resource manager not available")),
+            OUString("resource manager not available"),
             Reference<XInterface>());
 
     const ResId aId(static_cast<sal_uInt16>(nIdx), *m_pResMgr);
@@ -182,7 +182,7 @@ Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
 
     if(!m_pResMgr->IsAvailable(aId))
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("string resource for id not available")),
+            OUString("string resource for id not available"),
             Reference<XInterface>());
 
     return makeAny(OUString(String(aId)));
@@ -197,14 +197,14 @@ Any SAL_CALL ResourceStringListIndexAccess::getByIndex(sal_Int32 nIdx)
 
     if(!m_pResMgr.get())
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("resource manager not available")),
+            OUString("resource manager not available"),
             Reference<XInterface>());
 
     const ResId aId(static_cast<sal_uInt16>(nIdx), *m_pResMgr);
     aId.SetRT(RSC_STRINGARRAY);
     if(!m_pResMgr->IsAvailable(aId))
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("string list resource for id not available")),
+            OUString("string list resource for id not available"),
             Reference<XInterface>());
     const ResStringArray aStringList(aId);
     Sequence<PropertyValue> aPropList(aStringList.Count());

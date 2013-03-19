@@ -149,7 +149,7 @@ namespace param
                 sal_Int32 nProperties( aProperties.getLength() );
                 aProperties.realloc( nProperties + 1 );
                 aProperties[ nProperties ] = Property(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value" ) ),
+                    ::rtl::OUString( "Value" ),
                     PROPERTY_ID_VALUE,
                     ::cppu::UnoType< Any >::get(),
                     PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID
@@ -186,11 +186,11 @@ namespace param
             {
                 // TODO : aParamType & nScale can be obtained within the constructor ....
                 sal_Int32 nParamType = DataType::VARCHAR;
-                OSL_VERIFY( m_xDelegator->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) >>= nParamType );
+                OSL_VERIFY( m_xDelegator->getPropertyValue( ::rtl::OUString( "Type" ) ) >>= nParamType );
 
                 sal_Int32 nScale = 0;
-                if ( m_xDelegatorPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scale" ) ) ) )
-                    OSL_VERIFY( m_xDelegator->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scale" ) ) ) >>= nScale );
+                if ( m_xDelegatorPSI->hasPropertyByName( ::rtl::OUString( "Scale" ) ) )
+                    OSL_VERIFY( m_xDelegator->getPropertyValue( ::rtl::OUString( "Scale" ) ) >>= nScale );
 
                 if ( m_xValueDestination.is() )
                 {

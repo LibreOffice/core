@@ -171,7 +171,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Autoincrement" )), getBOOL( rValue ) );
+                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString( "Autoincrement" ), getBOOL( rValue ) );
                 break;
 
             case PROPERTY_ID_IM001:
@@ -218,7 +218,7 @@ void OAdoColumn::fillPropertyValues()
             OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                             pTypeInfoMap->end(),
                                                             ::o3tl::compose1(
-                                                            ::std::bind2nd(aCase, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VarBinary"))),
+                                                            ::std::bind2nd(aCase, ::rtl::OUString("VarBinary")),
                                                                 ::o3tl::compose1(
                                                                     ::std::mem_fun(&OExtendedTypeInfo::getDBName),
                                                                     ::o3tl::select2nd<OTypeInfoMap::value_type>())
@@ -252,11 +252,11 @@ void OAdoColumn::fillPropertyValues()
 
             if ( aProps.IsValid() )
             {
-                m_IsAutoIncrement = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")) );
+                m_IsAutoIncrement = OTools::getValue( aProps, ::rtl::OUString("Autoincrement") );
 
-                m_Description = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")) );
+                m_Description = OTools::getValue( aProps, ::rtl::OUString("Description") );
 
-                m_DefaultValue = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default")) );
+                m_DefaultValue = OTools::getValue( aProps, ::rtl::OUString("Default") );
 
 #if OSL_DEBUG_LEVEL > 0
                 sal_Int32 nCount = aProps.GetItemCount();

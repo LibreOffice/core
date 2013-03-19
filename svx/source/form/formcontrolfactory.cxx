@@ -216,7 +216,7 @@ namespace svxform
                 if ( !sDataSourceName.isEmpty() )
                     xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext.getUNOContext() ) );
                 if ( xDsProperties.is() )
-                    xDsProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Info" ) ) ) >>= aInfo;
+                    xDsProperties->getPropertyValue( ::rtl::OUString( "Info" ) ) >>= aInfo;
             }
             catch( const Exception& )
             {
@@ -405,7 +405,7 @@ namespace svxform
             switch ( nClassId )
             {
                 case FormComponentType::SCROLLBAR:
-                    _rxControlModel->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LiveScroll" ) ), makeAny( (sal_Bool)sal_True ) );
+                    _rxControlModel->setPropertyValue( ::rtl::OUString( "LiveScroll" ), makeAny( (sal_Bool)sal_True ) );
                     // NO break!
                 case FormComponentType::SPINBUTTON:
                 {

@@ -203,7 +203,7 @@ ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ConditionalFormat")), uno::makeAny( mxSheetConditionalEntries ));
+        mxParentRangePropertySet->setPropertyValue( rtl::OUString("ConditionalFormat"), uno::makeAny( mxSheetConditionalEntries ));
     }
     catch (uno::Exception& )
     {
@@ -228,7 +228,7 @@ ScVbaFormatConditions::getStyleName()
     if ( !pStyles )
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
     uno::Sequence< rtl::OUString > sCellStyleNames = pStyles->getStyleNames();
-    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_") ));
+    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, rtl::OUString("_"));
 }
 
 void
@@ -263,7 +263,7 @@ ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, 
 rtl::OUString
 ScVbaFormatConditions::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatConditions"));
+    return rtl::OUString("ScVbaFormatConditions");
 }
 
 uno::Sequence< rtl::OUString >
@@ -273,7 +273,7 @@ ScVbaFormatConditions::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.FormatConditions" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.FormatConditions" );
     }
     return aServiceNames;
 }

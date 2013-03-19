@@ -272,7 +272,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
             sLoaderURL,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
+            ::rtl::OUString( "_self" ),
             0,
             aLoadArgs
         );
@@ -339,7 +339,7 @@ void SfxFrame::SetPresentationMode( sal_Bool bSet )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
         aValue >>= xLayoutManager;
     }
 
@@ -391,7 +391,7 @@ void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
         aValue >>= xLayoutManager;
     }
 

@@ -34,7 +34,7 @@ SwVbaTabStop::~SwVbaTabStop()
 rtl::OUString
 SwVbaTabStop::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTabStop"));
+    return rtl::OUString("SwVbaTabStop");
 }
 
 uno::Sequence< rtl::OUString >
@@ -44,7 +44,7 @@ SwVbaTabStop::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.TabStop" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.TabStop" );
     }
     return aServiceNames;
 }

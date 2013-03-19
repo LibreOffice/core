@@ -201,8 +201,8 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
 {
     switch ((TriState)m_xBox->getState())
     {
-        case STATE_NOCHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-        case STATE_CHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+        case STATE_NOCHECK: return rtl::OUString("0");
+        case STATE_CHECK: return rtl::OUString("1");
         default: break;
     }
     return rtl::OUString();

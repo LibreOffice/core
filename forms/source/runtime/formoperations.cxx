@@ -144,14 +144,14 @@ namespace frm
     //--------------------------------------------------------------------
     ::rtl::OUString FormOperations::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms.FormOperations" ) );
+        return ::rtl::OUString( "com.sun.star.comp.forms.FormOperations" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.runtime.FormOperations" ) );
+        aNames[0] = ::rtl::OUString( "com.sun.star.form.runtime.FormOperations" );
         return aNames;
     }
 
@@ -402,7 +402,7 @@ namespace frm
 
                 ::rtl::OUString sValue = ::rtl::OUString::valueOf( sal_Int32( nCount ) );
                 if ( !bFinalCount )
-                    sValue += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" *") );
+                    sValue += ::rtl::OUString(" *");
 
                 aState.State <<= sValue;
                 aState.Enabled = sal_True;
@@ -1137,7 +1137,7 @@ namespace frm
                 Reference< XMultiServiceFactory > xFactory( ::dbtools::getConnection( m_xCursor ), UNO_QUERY );
                 if ( xFactory.is() )
                 {
-                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
                     OSL_ENSURE( m_xParser.is(), "FormOperations::impl_ensureInitializedParser_nothrow: factory did not create a parser for us!" );
                 }
             }

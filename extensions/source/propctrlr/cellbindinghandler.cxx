@@ -63,14 +63,14 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL CellBindingPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.extensions.CellBindingPropertyHandler" ) );
+        return ::rtl::OUString( "com.sun.star.comp.extensions.CellBindingPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL CellBindingPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.inspection.CellBindingPropertyHandler" ) );
+        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.CellBindingPropertyHandler" );
         return aSupported;
     }
 

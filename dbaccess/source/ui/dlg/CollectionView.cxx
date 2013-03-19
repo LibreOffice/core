@@ -154,12 +154,12 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                 {
                     Sequence< Any > aValues(2);
                     PropertyValue aValue;
-                    aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceName"));
+                    aValue.Name = ::rtl::OUString("ResourceName");
                     aValue.Value <<= sSubFolder;
                     aValues[0] <<= aValue;
 
-                    aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceType"));
-                    aValue.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("folder"));
+                    aValue.Name = ::rtl::OUString("ResourceType");
+                    aValue.Value <<= ::rtl::OUString("folder");
                     aValues[1] <<= aValue;
 
                     InteractionClassification eClass = InteractionClassification_ERROR;

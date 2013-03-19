@@ -425,7 +425,7 @@ rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
             break;
         }
         case USCRIPT_LATIN:
-            sSampleText = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lorem ipsum"));
+            sSampleText = rtl::OUString("Lorem ipsum");
             break;
         default:
             break;

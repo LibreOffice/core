@@ -130,7 +130,7 @@ namespace dbtools
                 _rData.m_xColumnUpdate.set( _rxColumn, UNO_QUERY );
 
                 // determine the field type, and whether it's a numeric field
-                OSL_VERIFY( _rxColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) >>= _rData.m_nFieldType );
+                OSL_VERIFY( _rxColumn->getPropertyValue( ::rtl::OUString( "Type" ) ) >>= _rData.m_nFieldType );
 
                 switch ( _rData.m_nFieldType )
                 {
@@ -157,7 +157,7 @@ namespace dbtools
                 // get the format key of our bound field
                 Reference< XPropertySetInfo > xPSI( _rxColumn->getPropertySetInfo(), UNO_QUERY_THROW );
                 bool bHaveFieldFormat = false;
-                const ::rtl::OUString sFormatKeyProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormatKey" ) ) );
+                const ::rtl::OUString sFormatKeyProperty( ::rtl::OUString( "FormatKey" ) );
                 if ( xPSI->hasPropertyByName( sFormatKeyProperty ) )
                 {
                     bHaveFieldFormat = ( _rxColumn->getPropertyValue( sFormatKeyProperty ) >>= _rData.m_nFormatKey );
@@ -173,7 +173,7 @@ namespace dbtools
                 // some more formatter settings
                 _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
                 Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_QUERY_THROW );
-                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "NullDate" )) ) >>= _rData.m_aNullDate );
+                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString( "NullDate" ) ) >>= _rData.m_aNullDate );
 
                 // remember the formatter
                 _rData.m_xFormatter = i_rNumberFormatter;

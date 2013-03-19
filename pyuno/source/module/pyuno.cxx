@@ -72,7 +72,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 {
     OSL_ASSERT( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
-        return OUString( RTL_CONSTASCII_USTRINGPARAM("void") );
+        return OUString("void");
 
     OUStringBuffer buf( 64 );
     buf.append( (sal_Unicode)'(' );

@@ -95,7 +95,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     ::rtl::OUString OAdvancedSettingsDialog::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OAdvancedSettingsDialog"));
+        return ::rtl::OUString("org.openoffice.comp.dbu.OAdvancedSettingsDialog");
     }
 
     //-------------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace dbaui
     ::comphelper::StringSequence OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.AdvancedDatabaseSettingsDialog"));
+        aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.AdvancedDatabaseSettingsDialog");
         return aSupported;
     }
 

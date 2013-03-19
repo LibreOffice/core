@@ -73,10 +73,10 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
 uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xProps ) throw (uno::RuntimeException)
 {
     rtl::OUString aPageStyleName;
-    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))) >>= aPageStyleName;
+    xProps->getPropertyValue( rtl::OUString("PageStyleName")) >>= aPageStyleName;
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageStyles") ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName( rtl::OUString("PageStyles") ), uno::UNO_QUERY_THROW );
     uno::Reference< style::XStyle > xStyle( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
 
     return xStyle;
@@ -93,8 +93,8 @@ uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< 
 {
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xParaStyles( xSytleFamNames->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") ) ), uno::UNO_QUERY_THROW );
-    uno::Reference< style::XStyle > xStyle( xParaStyles->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xParaStyles( xSytleFamNames->getByName( rtl::OUString("ParagraphStyles") ), uno::UNO_QUERY_THROW );
+    uno::Reference< style::XStyle > xStyle( xParaStyles->getByName( rtl::OUString("Standard") ), uno::UNO_QUERY_THROW );
 
     return xStyle;
 }
@@ -108,7 +108,7 @@ uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference<
     if( xParaEnum->hasMoreElements() )
     {
         uno::Reference< lang::XServiceInfo > xServiceInfo( xParaEnum->nextElement(), uno::UNO_QUERY_THROW );
-        if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable") ) ) )
+        if( xServiceInfo->supportsService( rtl::OUString("com.sun.star.text.TextTable") ) )
         {
             uno::Reference< table::XCellRange > xCellRange( xServiceInfo, uno::UNO_QUERY_THROW );
             uno::Reference< text::XText> xFirstCellText( xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
@@ -149,14 +149,14 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
         //catch exception "no text selection"
     }
     uno::Reference< beans::XPropertySet > xVCProps( xTextRange, uno::UNO_QUERY_THROW );
-    while( xVCProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextTable") ) ) >>= xTextContent )
+    while( xVCProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextContent )
     {
         xText = xTextContent->getAnchor()->getText();
         xVCProps.set( xText->createTextCursor(), uno::UNO_QUERY_THROW );
     }
 
     if( !xText.is() )
-        throw  uno::RuntimeException( rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), uno::Reference< uno::XInterface >() );
+        throw  uno::RuntimeException( rtl::OUString( "no text selection" ), uno::Reference< uno::XInterface >() );
 
     return xText;
 }

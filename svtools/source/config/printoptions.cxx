@@ -41,20 +41,20 @@ static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
 #define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 
-#define ROOTNODE_START                                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print/Option"))
-#define ROOTNODE_PRINTOPTION                            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option"))
+#define ROOTNODE_START                                  OUString("Office.Common/Print/Option")
+#define ROOTNODE_PRINTOPTION                            OUString("org.openoffice.Office.Common/Print/Option")
 
-#define PROPERTYNAME_REDUCETRANSPARENCY                 OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceTransparency"))
-#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedTransparencyMode"))
-#define PROPERTYNAME_REDUCEGRADIENTS                    OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceGradients"))
-#define PROPERTYNAME_REDUCEDGRADIENTMODE                OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientMode"))
-#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientStepCount"))
-#define PROPERTYNAME_REDUCEBITMAPS                      OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceBitmaps"))
-#define PROPERTYNAME_REDUCEDBITMAPMODE                  OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapMode"))
-#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapResolution"))
-#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
-#define PROPERTYNAME_CONVERTTOGREYSCALES                OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
-#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        OUString(RTL_CONSTASCII_USTRINGPARAM("PDFAsStandardPrintJobFormat"))
+#define PROPERTYNAME_REDUCETRANSPARENCY                 OUString("ReduceTransparency")
+#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            OUString("ReducedTransparencyMode")
+#define PROPERTYNAME_REDUCEGRADIENTS                    OUString("ReduceGradients")
+#define PROPERTYNAME_REDUCEDGRADIENTMODE                OUString("ReducedGradientMode")
+#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           OUString("ReducedGradientStepCount")
+#define PROPERTYNAME_REDUCEBITMAPS                      OUString("ReduceBitmaps")
+#define PROPERTYNAME_REDUCEDBITMAPMODE                  OUString("ReducedBitmapMode")
+#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            OUString("ReducedBitmapResolution")
+#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  OUString("ReducedBitmapIncludesTransparency")
+#define PROPERTYNAME_CONVERTTOGREYSCALES                OUString("ConvertToGreyscales")
+#define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        OUString("PDFAsStandardPrintJobFormat")
 
 using namespace ::utl;
 using namespace ::rtl;
@@ -724,7 +724,7 @@ SvtPrinterOptions::SvtPrinterOptions()
     if( m_pStaticDataContainer == NULL )
     {
         OUString aRootPath( ROOTNODE_START );
-        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/Printer" ) ) );
+        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( "/Printer" ) );
         pPrinterOptionsDataContainer = m_pStaticDataContainer;
         svtools::ItemHolder2::holdConfigItem(E_PRINTOPTIONS);
     }
@@ -758,7 +758,7 @@ SvtPrintFileOptions::SvtPrintFileOptions()
     if( m_pStaticDataContainer == NULL )
     {
         OUString aRootPath( ROOTNODE_START );
-        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/File" ) ) );
+        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( "/File" ) );
         pPrintFileOptionsDataContainer = m_pStaticDataContainer;
 
         svtools::ItemHolder2::holdConfigItem(E_PRINTFILEOPTIONS);

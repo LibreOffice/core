@@ -50,16 +50,16 @@ void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
     CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAscii("abc"));
     CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAsciiL(
                        RTL_CONSTASCII_STRINGPARAM("abc")));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+    CPPUNIT_ASSERT(!rtl::OUString("abc").
                    equalsIgnoreAsciiCaseAscii(""));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+    CPPUNIT_ASSERT(!rtl::OUString("abc").
                    equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
-    CPPUNIT_ASSERT(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+    CPPUNIT_ASSERT(rtl::OUString("abc").
                    equalsIgnoreAsciiCaseAscii("abc"));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abcd")).
+    CPPUNIT_ASSERT(!rtl::OUString("abcd").
                    equalsIgnoreAsciiCaseAscii("abc"));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+    CPPUNIT_ASSERT(!rtl::OUString("abc").
                    equalsIgnoreAsciiCaseAscii("abcd"));
 }
 

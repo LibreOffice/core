@@ -173,11 +173,11 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 // ====================
 
 SvxChartOptions::SvxChartOptions() :
-    ::utl::ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Chart") ) ),
+    ::utl::ConfigItem( rtl::OUString("Office.Chart") ),
     mbIsInitialized( sal_False )
 {
     maPropertyNames.realloc( 1 );
-    maPropertyNames[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultColor/Series") );
+    maPropertyNames[ 0 ] = ::rtl::OUString("DefaultColor/Series");
 }
 
 SvxChartOptions::~SvxChartOptions()

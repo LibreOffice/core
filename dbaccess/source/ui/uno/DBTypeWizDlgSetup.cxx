@@ -52,10 +52,10 @@ ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XMultiServiceFacto
     ,m_bOpenDatabase(sal_True)
     ,m_bStartTableWizard(sal_False)
 {
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenDatabase")), 3, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString("OpenDatabase"), 3, PropertyAttribute::TRANSIENT,
         &m_bOpenDatabase, getBooleanCppuType());
 
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartTableWizard")), 4, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString("StartTableWizard"), 4, PropertyAttribute::TRANSIENT,
         &m_bStartTableWizard, getBooleanCppuType());
 }
 //-------------------------------------------------------------------------
@@ -81,7 +81,7 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
 //-------------------------------------------------------------------------
 ::rtl::OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ODBTypeWizDialogSetup"));
+    return ::rtl::OUString("org.openoffice.comp.dbu.ODBTypeWizDialogSetup");
 }
 
 //-------------------------------------------------------------------------
@@ -94,7 +94,7 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
 ::comphelper::StringSequence ODBTypeWizDialogSetup::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseWizardDialog"));
+    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.DatabaseWizardDialog");
     return aSupported;
 }
 

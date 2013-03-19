@@ -239,7 +239,7 @@ void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & valu
         // We have no good XInterface Reference to pass here, so just give NULL
         throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
                            NULL,
-                           OUString(RTL_CONSTASCII_USTRINGPARAM("22018")),
+                           OUString("22018"),
                            -1,
                            Any());
     }
@@ -285,7 +285,7 @@ static inline void ibufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl:
         // Implementation-defined SQLACCESS error
         throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
                            NULL,
-                           OUString(RTL_CONSTASCII_USTRINGPARAM("22018")),
+                           OUString("22018"),
                            -1,
                            Any());
     }

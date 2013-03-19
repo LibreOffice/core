@@ -76,7 +76,7 @@ SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException )
 rtl::OUString
 SwVbaRevision::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRevision"));
+    return rtl::OUString("SwVbaRevision");
 }
 
 uno::Sequence< rtl::OUString >
@@ -86,7 +86,7 @@ SwVbaRevision::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Revision" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Revision" );
     }
     return aServiceNames;
 }

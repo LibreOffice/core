@@ -70,16 +70,16 @@ const StringSequence& getColumnTypes()
     if (aColumnTypes.getConstArray()[0].isEmpty())
     {
         ::rtl::OUString* pNames = aColumnTypes.getArray();
-        pNames[TYPE_CHECKBOX]       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CheckBox" ) );
-        pNames[TYPE_COMBOBOX]       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ComboBox" ) );
-        pNames[TYPE_CURRENCYFIELD]  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrencyField" ) );
-        pNames[TYPE_DATEFIELD]      = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateField" ) );
-        pNames[TYPE_FORMATTEDFIELD] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormattedField" ) );
-        pNames[TYPE_LISTBOX]        = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ) );
-        pNames[TYPE_NUMERICFIELD]   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumericField" ) );
-        pNames[TYPE_PATTERNFIELD]   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PatternField" ) );
-        pNames[TYPE_TEXTFIELD]      = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextField" ) );
-        pNames[TYPE_TIMEFIELD]      = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TimeField" ) );
+        pNames[TYPE_CHECKBOX]       = ::rtl::OUString( "CheckBox" );
+        pNames[TYPE_COMBOBOX]       = ::rtl::OUString( "ComboBox" );
+        pNames[TYPE_CURRENCYFIELD]  = ::rtl::OUString( "CurrencyField" );
+        pNames[TYPE_DATEFIELD]      = ::rtl::OUString( "DateField" );
+        pNames[TYPE_FORMATTEDFIELD] = ::rtl::OUString( "FormattedField" );
+        pNames[TYPE_LISTBOX]        = ::rtl::OUString( "ListBox" );
+        pNames[TYPE_NUMERICFIELD]   = ::rtl::OUString( "NumericField" );
+        pNames[TYPE_PATTERNFIELD]   = ::rtl::OUString( "PatternField" );
+        pNames[TYPE_TEXTFIELD]      = ::rtl::OUString( "TextField" );
+        pNames[TYPE_TIMEFIELD]      = ::rtl::OUString( "TimeField" );
     }
     return aColumnTypes;
 }
@@ -341,7 +341,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_VERTICAL_ALIGN );
     aForbiddenProperties.insert( PROPERTY_IMAGE_URL );
     aForbiddenProperties.insert( PROPERTY_IMAGE_POSITION );
-    aForbiddenProperties.insert( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableVisible" ) ) );
+    aForbiddenProperties.insert( ::rtl::OUString( "EnableVisible" ) );
     if ( !bAllowDropDown )
         aForbiddenProperties.insert( PROPERTY_DROPDOWN );
 

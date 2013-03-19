@@ -120,7 +120,7 @@ void SAL_CALL OShape::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OShape::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.Shape"));
+    return ::rtl::OUString("com.sun.star.comp.report.Shape");
 }
 
 //--------------------------------------------------------------------------
@@ -414,7 +414,7 @@ void SAL_CALL OShape::setSize( const awt::Size& aSize ) throw (beans::PropertyVe
 // XShapeDescriptor
 ::rtl::OUString SAL_CALL OShape::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
+   return ::rtl::OUString("com.sun.star.drawing.CustomShape");
 }
 // -----------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL OShape::getZOrder() throw (uno::RuntimeException)

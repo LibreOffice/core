@@ -54,14 +54,14 @@ namespace connectivity
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
                 aArguments[0] <<= PropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                    ::rtl::OUString("nodepath"),
                     0,
                     makeAny( sCompleteNodePath ),
                     PropertyState_DIRECT_VALUE
                 );
                 // the depth: -1 means unlimited
                 aArguments[1] <<= PropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("depth")),
+                    ::rtl::OUString("depth"),
                     0,
                     makeAny( (sal_Int32)-1 ),
                     PropertyState_DIRECT_VALUE
@@ -70,7 +70,7 @@ namespace connectivity
                 //=========================================================
                 // create the access
                 Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess" )),
+                    ::rtl::OUString("com.sun.star.configuration.ConfigurationAccess" ),
                     aArguments
                 );
                 OSL_ENSURE( xAccess.is(), "createDriverConfigNode: invalid access returned (should throw an exception instead)!" );
@@ -125,10 +125,10 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MozillaPreferences" )) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue( ::rtl::OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ProfileName" )) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue( ::rtl::OUString("ProfileName" ) ) >>= sPreferredName;
                     if ( xMozPrefsNode.is() )
                         xMozPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii(sNode) ) >>= sDescription;
                     if (sDescription.getLength() == 0)
@@ -157,10 +157,10 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MozillaPreferences" )) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue( ::rtl::OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ProfileName" )) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue( ::rtl::OUString("ProfileName" ) ) >>= sPreferredName;
                 }
                 catch( const Exception& )
                 {
@@ -198,7 +198,7 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void )
     {
         usPabDescription = ::connectivity::mozab::getDescription(
                             "PabDescription" ,
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Personal Address Book" )));
+                            ::rtl::OUString("Personal Address Book" ));
         sPabDescription = ::rtl::OUStringToOString( usPabDescription,
                                                  RTL_TEXTENCODING_UTF8);
         bReadConfig = sal_True;
@@ -218,7 +218,7 @@ extern "C" const sal_Char* SAL_CALL getHisDescription( void )
     {
         usHisDescription = ::connectivity::mozab::getDescription(
                             "HisDescription" ,
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Collected Addresses" )));
+                            ::rtl::OUString("Collected Addresses" ));
         sHisDescription = ::rtl::OUStringToOString( usHisDescription,
                                                  RTL_TEXTENCODING_UTF8);
         bReadConfig = sal_True;

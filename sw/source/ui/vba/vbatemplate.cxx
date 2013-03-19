@@ -86,7 +86,7 @@ uno::Any SAL_CALL
 SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-    uno::Reference< text::XAutoTextContainer > xAutoTextContainer( xMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AutoTextContainer") ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XAutoTextContainer > xAutoTextContainer( xMgr->createInstance( rtl::OUString("com.sun.star.text.AutoTextContainer") ), uno::UNO_QUERY_THROW );
 
     // the default template is "Normal.dot" in Word.
     rtl::OUString sGroup( RTL_CONSTASCII_USTRINGPARAM("Normal") );
@@ -105,7 +105,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Auto Text Entry doesn't exist") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Auto Text Entry doesn't exist"), uno::Reference< uno::XInterface >() );
     }
 
     uno::Reference< XCollection > xCol( new SwVbaAutoTextEntries( this, mxContext, xGroup ) );
@@ -117,7 +117,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
 rtl::OUString
 SwVbaTemplate::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTemplate"));
+    return rtl::OUString("SwVbaTemplate");
 }
 
 uno::Sequence< rtl::OUString >
@@ -127,7 +127,7 @@ SwVbaTemplate::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Template" ) );
+                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Template" );
         }
         return aServiceNames;
 }

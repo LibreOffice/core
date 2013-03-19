@@ -134,7 +134,7 @@ namespace framework
                            );
 
         void dispatchURL( const rtl::OUString& i_rURL,
-                          const rtl::OUString& i_rTarget = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
+                          const rtl::OUString& i_rTarget = rtl::OUString( "_default" ),
                           const com::sun::star::uno::Reference< com::sun::star::frame::XDispatchProvider >& i_xProv = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchProvider >(),
                           const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& = com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >()
                           );

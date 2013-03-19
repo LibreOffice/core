@@ -97,8 +97,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
             = PropertyValue(
                 uno::makeAny(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "*** unknown ***" ) ) ),
+                    rtl::OUString( "*** unknown ***" ) ),
                 true );
     }
 
@@ -578,17 +577,17 @@ namespace
             DAVProperties::LOCKDISCOVERY,
 
             DAVProperties::GETETAG,
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ETag" ) ),
+            rtl::OUString( "ETag" ),
 
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Last-Modified" ) ),
+            rtl::OUString( "DateModified" ),
+            rtl::OUString( "Last-Modified" ),
             DAVProperties::GETLASTMODIFIED,
 
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Content-Length" ) ),
+            rtl::OUString( "Size" ),
+            rtl::OUString( "Content-Length" ),
             DAVProperties::GETCONTENTLENGTH,
 
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Date" ) )
+            rtl::OUString( "Date" )
         };
 
         for ( sal_uInt32 n = 0;

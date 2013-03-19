@@ -170,7 +170,7 @@ namespace pcr
     //--------------------------------------------------------------------
     ::rtl::OUString ObjectInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.extensions.ObjectInspectorModel" ) );
+        return ::rtl::OUString( "org.openoffice.comp.extensions.ObjectInspectorModel" );
     }
 
     //--------------------------------------------------------------------
@@ -190,7 +190,7 @@ namespace pcr
     void ObjectInspectorModel::createDefault()
     {
         m_aFactories.realloc( 1 );
-        m_aFactories[0] <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.GenericPropertyHandler" ) );
+        m_aFactories[0] <<= ::rtl::OUString( "com.sun.star.inspection.GenericPropertyHandler" );
     }
 
     //--------------------------------------------------------------------

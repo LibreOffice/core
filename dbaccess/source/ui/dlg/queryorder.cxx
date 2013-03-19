@@ -154,8 +154,8 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
 {
     try
     {
-        const ::rtl::OUString sNameProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
-        const ::rtl::OUString sAscendingProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAscending" ) );
+        const ::rtl::OUString sNameProperty = ::rtl::OUString( "Name" );
+        const ::rtl::OUString sAscendingProperty = ::rtl::OUString( "IsAscending" );
 
         Reference< XIndexAccess > xOrderColumns( m_xQueryComposer->getOrderColumns(), UNO_QUERY_THROW );
         sal_Int32 nColumns = xOrderColumns->getCount();
@@ -231,7 +231,7 @@ void DlgOrderCrit::EnableLines()
         if(m_aColumnList[i]->GetSelectEntryPos() != 0)
         {
             if(!sOrder.isEmpty())
-                sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                sOrder += ::rtl::OUString(",");
 
             String sName = m_aColumnList[i]->GetSelectEntry();
             try

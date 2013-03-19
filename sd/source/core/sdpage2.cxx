@@ -633,7 +633,7 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
     {
         pModel->SetChanged();
         Reference< XInterface > xSource( xAnnotation, UNO_QUERY );
-        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAnnotationRemoved" ) ), xSource );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( "OnAnnotationRemoved" ), xSource );
     }
 }
 

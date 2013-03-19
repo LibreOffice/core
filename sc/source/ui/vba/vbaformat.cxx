@@ -50,12 +50,12 @@ using namespace ::com::sun::star;
 #define LOCALE "Locale"
 
 template< typename Ifc1 >
-ScVbaFormat< Ifc1 >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, const uno::Reference< frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( script::BasicErrorException ) : ScVbaFormat_BASE( xParent, xContext ), m_aDefaultLocale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "US") ), rtl::OUString() ), mxPropertySet( _xPropertySet ), mxModel( xModel ), mbCheckAmbiguoity( bCheckAmbiguoity ), mbAddIndent( sal_False )
+ScVbaFormat< Ifc1 >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, const uno::Reference< frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( script::BasicErrorException ) : ScVbaFormat_BASE( xParent, xContext ), m_aDefaultLocale( rtl::OUString("en"), rtl::OUString( "US"), rtl::OUString() ), mxPropertySet( _xPropertySet ), mxModel( xModel ), mbCheckAmbiguoity( bCheckAmbiguoity ), mbAddIndent( sal_False )
 {
     try
     {
         if ( !mxModel.is() )
-            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XModel Interface could not be retrieved") ) );
+            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString( "XModel Interface could not be retrieved") );
         // mxServiceInfo is unused,
         // mxNumberFormatsSupplier is initialized when needed in initializeNumberFormats.
     }
@@ -774,7 +774,7 @@ template< typename Ifc1 >
 rtl::OUString
 ScVbaFormat<Ifc1>::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFormat"));
+    return rtl::OUString("ScVbaFormat");
 }
 
 template< typename Ifc1 >
@@ -785,7 +785,7 @@ ScVbaFormat<Ifc1>::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Format" ) );
+                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Format" );
         }
         return aServiceNames;
 }
@@ -803,7 +803,7 @@ ScVbaFormat<Ifc1>::getCurrentDataSet( ) throw ( uno::RuntimeException )
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't access Itemset for XPropertySet" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "Can't access Itemset for XPropertySet" ), uno::Reference< uno::XInterface >() );
     return pDataSet;
 }
 

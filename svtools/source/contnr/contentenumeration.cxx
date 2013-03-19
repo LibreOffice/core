@@ -159,18 +159,18 @@ namespace svt
             Reference< XResultSet > xResultSet;
             Sequence< OUString > aProps(12);
 
-            aProps[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
-            aProps[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ));
-            aProps[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ));
-            aProps[3] = OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ));
-            aProps[4] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
-            aProps[5] = OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
-            aProps[6] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ));
-            aProps[7] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ));
-            aProps[8] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsRemote" ));
-            aProps[9] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ));
-            aProps[10] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFloppy" ));
-            aProps[11] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsCompactDisc" ));
+            aProps[0] = OUString( "Title" );
+            aProps[1] = OUString( "Size" );
+            aProps[2] = OUString( "DateModified" );
+            aProps[3] = OUString( "DateCreated" );
+            aProps[4] = OUString( "IsFolder" );
+            aProps[5] = OUString( "TargetURL" );
+            aProps[6] = OUString( "IsHidden" );
+            aProps[7] = OUString( "IsVolume" );
+            aProps[8] = OUString( "IsRemote" );
+            aProps[9] = OUString( "IsRemoveable" );
+            aProps[10] = OUString( "IsFloppy" );
+            aProps[11] = OUString( "IsCompactDisc" );
 
             Reference< XCommandEnvironment > xEnvironment;
             try
@@ -266,8 +266,8 @@ namespace svt
                                 ::ucbhelper::Content aCnt( aTargetURL, xEnvironment, comphelper::getProcessComponentContext() );
                                 try
                                 {
-                                aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" )) ) >>= pData->maSize;
-                                aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDT;
+                                aCnt.getPropertyValue( OUString( "Size" ) ) >>= pData->maSize;
+                                aCnt.getPropertyValue( OUString( "DateModified" ) ) >>= aDT;
                                 }
                                 catch (...) {}
                             }

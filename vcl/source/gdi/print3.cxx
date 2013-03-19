@@ -236,7 +236,7 @@ static rtl::OUString queryFile( Printer* pPrinter )
             xFilePicker->appendFilter( OUString( "Portable Document Format" ), OUString( "*.pdf" ) );
 #elif defined WNT
         (void)pPrinter;
-        xFilePicker->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
+        xFilePicker->appendFilter( ::rtl::OUString( "*.PRN" ), ::rtl::OUString( "*.prn" ) );
 #endif
         // add arbitrary files
         xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");

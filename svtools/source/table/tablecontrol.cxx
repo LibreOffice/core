@@ -295,16 +295,16 @@ namespace svt { namespace table
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
-                aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Grid control" ) );
+                aRetText = ::rtl::OUString( "Grid control" );
                 break;
             case TCTYPE_TABLE:
-                aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Grid conrol" ) );
+                aRetText = ::rtl::OUString( "Grid conrol" );
                 break;
             case TCTYPE_ROWHEADERBAR:
-                aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderBar" ) );
+                aRetText = ::rtl::OUString( "RowHeaderBar" );
                 break;
             case TCTYPE_COLUMNHEADERBAR:
-                aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
+                aRetText = ::rtl::OUString( "ColumnHeaderBar" );
                 break;
             case TCTYPE_TABLECELL:
                 //the name of the cell constists of column name and row name if defined
@@ -340,16 +340,16 @@ namespace svt { namespace table
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
-                aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Grid control description" ) );
+                aRetText = ::rtl::OUString( "Grid control description" );
                 break;
             case TCTYPE_TABLE:
-                    aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
+                    aRetText = ::rtl::OUString( "TABLE description" );
                 break;
             case TCTYPE_ROWHEADERBAR:
-                    aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
+                    aRetText = ::rtl::OUString( "ROWHEADERBAR description" );
                 break;
             case TCTYPE_COLUMNHEADERBAR:
-                    aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
+                    aRetText = ::rtl::OUString( "COLUMNHEADERBAR description" );
                 break;
             case TCTYPE_TABLECELL:
                 // the description of the cell consists of column name and row name if defined
@@ -365,10 +365,10 @@ namespace svt { namespace table
                 }
                 break;
             case TCTYPE_ROWHEADERCELL:
-                    aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
+                    aRetText = ::rtl::OUString( "ROWHEADERCELL description" );
                 break;
             case TCTYPE_COLUMNHEADERCELL:
-                    aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
+                    aRetText = ::rtl::OUString( "COLUMNHEADERCELL description" );
                 break;
         }
         return aRetText;
@@ -378,7 +378,7 @@ namespace svt { namespace table
     ::rtl::OUString TableControl::GetRowDescription( sal_Int32 _nRow) const
     {
         (void)_nRow;
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "row description" ) );
+        return rtl::OUString( "row description" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -393,7 +393,7 @@ namespace svt { namespace table
     ::rtl::OUString TableControl::GetColumnDescription( sal_uInt16 _nColumn) const
     {
         (void)_nColumn;
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "col description" ) );
+        return rtl::OUString( "col description" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -84,14 +84,14 @@ void ODriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.ado.ODriver"));
+    return rtl::OUString("com.sun.star.comp.sdbc.ado.ODriver");
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
-    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
+    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
+    aSNS[1] = ::rtl::OUString("com.sun.star.sdbcx.Driver");
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -162,26 +162,26 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< ::rtl::OUString > aBooleanValues(2);
-        aBooleanValues[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
-        aBooleanValues[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+        aBooleanValues[0] = ::rtl::OUString( "false" );
+        aBooleanValues[1] = ::rtl::OUString( "true" );
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the privileges from the database driver."))
+                ::rtl::OUString("IgnoreDriverPrivileges")
+                ,::rtl::OUString("Ignore the privileges from the database driver.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,::rtl::OUString( "false" )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EscapeDateTime"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Escape date time format."))
+                ::rtl::OUString("EscapeDateTime")
+                ,::rtl::OUString("Escape date time format.")
                 ,sal_False
-                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,::rtl::OUString( "true" )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings"))
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines how the type info of the database metadata should be manipulated."))
+                ::rtl::OUString("TypeInfoSettings")
+                ,::rtl::OUString("Defines how the type info of the database metadata should be manipulated.")
                 ,sal_False
                 ,::rtl::OUString( )
                 ,Sequence< ::rtl::OUString > ())

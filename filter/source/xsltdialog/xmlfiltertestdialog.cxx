@@ -117,7 +117,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
                 if ( rServiceName == "com.sun.star.drawing.DrawingDocument" )
                 {
                     // so if we want a draw we need to check if its not an impress
-                    if( !xInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument") ) ) )
+                    if( !xInfo->supportsService( OUString( "com.sun.star.presentation.PresentationDocument") ) )
                         return true;
                 }
                 else
@@ -297,8 +297,8 @@ void XMLFilterTestDialog::onExportBrowse()
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
 
-        Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
-        Reference< XNameAccess > xTypeDetection( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ), UNO_QUERY );
+        Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( "com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
+        Reference< XNameAccess > xTypeDetection( mxMSF->createInstance( OUString( "com.sun.star.document.TypeDetection" ) ), UNO_QUERY );
         if( xFilterContainer.is() && xTypeDetection.is() )
         {
             Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
@@ -372,7 +372,7 @@ void XMLFilterTestDialog::onExportBrowse()
                                         {
                                             if( n > 0 )
                                                 aExtension += OUString( sal_Unicode(';') );
-                                            aExtension += OUString( RTL_CONSTASCII_USTRINGPARAM( "*." ));
+                                            aExtension += OUString( "*." );
                                             aExtension += (*pExtensions++);
                                         }
                                     }
@@ -406,7 +406,7 @@ void XMLFilterTestDialog::onExportBrowse()
             Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
             OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
             Sequence< PropertyValue > aArguments(1);
-            aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+            aArguments[0].Name = OUString( "InteractionHandler" );
             aArguments[0].Value <<= xInter;
             Reference< XComponent > xComp( xLoader->loadComponentFromURL( m_sExportRecentFile, aFrame, 0, aArguments ) );
             if( xComp.is() )
@@ -453,19 +453,19 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                 int i = 0;
 
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
+                aSourceData[i  ].Name = OUString( "OutputStream" );
                 aSourceData[i++].Value <<= xIS;
 
-                aSourceData[i].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Indent" ) );
+                aSourceData[i].Name = OUString( "Indent" );
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
 
                 if( bUseDocType )
                     {
-                        aSourceData[i  ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("DocType_Public"));
+                        aSourceData[i  ].Name = OUString("DocType_Public");
                         aSourceData[i++].Value <<= m_pFilterInfo->maDocType;
                     }
 
-                Reference< XExportFilter > xExporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" )) ), UNO_QUERY );
+                Reference< XExportFilter > xExporter( mxMSF->createInstance( OUString( "com.sun.star.documentconversion.XSLTFilter" ) ), UNO_QUERY );
                 Reference< XDocumentHandler > xHandler( xExporter, UNO_QUERY );
                 if( xHandler.is() )
                 {
@@ -481,8 +481,8 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     {
                         try
                         {
-                            xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportGraphicObjectResolver" )) ) );
-                            xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportEmbeddedObjectResolver" )) ) );
+                            xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance( OUString( "com.sun.star.document.ExportGraphicObjectResolver" ) ) );
+                            xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance( OUString( "com.sun.star.document.ExportEmbeddedObjectResolver" ) ) );
                         }
                         catch( const Exception& )
                         {
@@ -506,7 +506,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                             xExporter2->setSourceDocument( xComp );
 
                             Sequence< PropertyValue > aDescriptor( 1 );
-                            aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
+                            aDescriptor[0].Name = OUString( "FileName" );
                             aDescriptor[0].Value <<= aTempFileURL;
 
                             if( xFilter->filter( aDescriptor ) )
@@ -592,9 +592,9 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
         OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
         Sequence< PropertyValue > aArguments(2);
-        aArguments[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+        aArguments[0].Name = OUString( "FilterName" );
         aArguments[0].Value <<= m_pFilterInfo->maFilterName;
-        aArguments[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+        aArguments[1].Name = OUString( "InteractionHandler" );
         aArguments[1].Value <<= xInter;
 
         xLoader->loadComponentFromURL( rURL, aFrame, 0, aArguments );
@@ -606,7 +606,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
             TempFile aTempFile(lead, &ext);
             OUString aTempFileURL( aTempFile.GetURL() );
 
-            Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" )) ), UNO_QUERY );
+            Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString( "com.sun.star.documentconversion.XSLTFilter" ) ), UNO_QUERY );
             if( xImporter.is() )
             {
                 osl::File aInputFile( rURL );
@@ -617,13 +617,13 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 Sequence< PropertyValue > aSourceData( 3 );
                 int i = 0;
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ));
+                aSourceData[i  ].Name = OUString( "InputStream" );
                 aSourceData[i++].Value <<= xIS;
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
+                aSourceData[i  ].Name = OUString( "FileName" );
                 aSourceData[i++].Value <<= rURL;
 
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Indent" ));
+                aSourceData[i  ].Name = OUString( "Indent" );
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
 
                 Reference< XWriter > xWriter = Writer::create( comphelper::getComponentContext(mxMSF) );

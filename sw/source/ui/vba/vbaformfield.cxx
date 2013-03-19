@@ -67,7 +67,7 @@ rtl::OUString SAL_CALL SwVbaFormField::getResult() throw ( uno::RuntimeException
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
     return sResult;
 }
@@ -87,7 +87,7 @@ void SAL_CALL SwVbaFormField::setResult( const rtl::OUString& result ) throw ( u
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -110,7 +110,7 @@ uno::Any SAL_CALL SwVbaFormField::CheckBox() throw ( uno::RuntimeException )
 rtl::OUString
 SwVbaFormField::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFormField"));
+    return rtl::OUString("SwVbaFormField");
 }
 
 uno::Sequence< rtl::OUString >
@@ -120,7 +120,7 @@ SwVbaFormField::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.FormField" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.FormField" );
     }
     return aServiceNames;
 }

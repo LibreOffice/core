@@ -823,7 +823,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
                     if ( aCommands.is() )
                         bEnableDelete
                             = aCommands->hasCommandByName(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )) );
+                                OUString( "delete" ) );
                     else
                         bEnableDelete = false;
                 }
@@ -842,7 +842,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
                     {
                         Property aProp
                             = aProps->getPropertyByName(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) );
+                                OUString( "Title" ) );
                         bEnableRename
                             = !( aProp.Attributes & PropertyAttribute::READONLY );
                     }
@@ -926,7 +926,7 @@ void ViewTabListBox_Impl::DeleteEntries()
             if ( aCommands.is() )
                 canDelete
                     = aCommands->hasCommandByName(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )) );
+                        OUString( "delete" ) );
             else
                 canDelete = false;
         }
@@ -1118,7 +1118,7 @@ sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     try
     {
         ::ucbhelper::Content aCnt( rContent, mxCmdEnv, comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( OUString( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException const & )
     {

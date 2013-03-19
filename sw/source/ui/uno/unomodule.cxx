@@ -33,13 +33,13 @@ using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL SwUnoModule_getImplementationName() throw( uno::RuntimeException )
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Writer.WriterModule" ) );
+    return rtl::OUString( "com.sun.star.comp.Writer.WriterModule" );
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw( uno::RuntimeException )
 {
     uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ModuleDispatcher"));
+    aSeq[0] = ::rtl::OUString("com.sun.star.text.ModuleDispatcher");
     return aSeq;
 }
 

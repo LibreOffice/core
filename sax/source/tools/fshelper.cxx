@@ -33,7 +33,7 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
     Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), UNO_SET_THROW );
-    mxTokenHandler.set( xFactory->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.FastTokenHandler") ), xContext ), UNO_QUERY_THROW );
+    mxTokenHandler.set( xFactory->createInstanceWithContext( rtl::OUString( "com.sun.star.xml.sax.FastTokenHandler"), xContext ), UNO_QUERY_THROW );
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
     mpSerializer->setOutputStream( xOutputStream );

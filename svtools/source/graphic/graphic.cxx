@@ -119,7 +119,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
 ::rtl::OUString Graphic::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.graphic.Graphic" ) );
+    return ::rtl::OUString( "com.sun.star.comp.graphic.Graphic" );
 }
 
 // ------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ uno::Sequence< ::rtl::OUString > Graphic::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.Graphic" ) );
+    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.Graphic" );
 
     return aSeq;
 }

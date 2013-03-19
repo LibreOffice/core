@@ -50,7 +50,7 @@ struct SvtFontSubstConfig_Impl
 };
 
 SvtFontSubstConfig::SvtFontSubstConfig() :
-    ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Font/Substitution"))),
+    ConfigItem(rtl::OUString("Office.Common/Font/Substitution")),
     bIsEnabled(sal_False),
     pImpl(new SvtFontSubstConfig_Impl)
 {
@@ -69,13 +69,13 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
     OUString* pNames = aPropNames.getArray();
     sal_Int32 nName = 0;
-    sPropPrefix += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    sPropPrefix += rtl::OUString("/");
     sal_Int32 nNode;
     for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
         OUString sStart(sPropPrefix);
         sStart += pNodeNames[nNode];
-        sStart += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        sStart += rtl::OUString("/");
         pNames[nName] = sStart;     pNames[nName++] += cReplaceFont;
         pNames[nName] = sStart;     pNames[nName++] += cSubstituteFont;
         pNames[nName] = sStart;     pNames[nName++] += cAlways;

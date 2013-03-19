@@ -230,10 +230,10 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     sheet::ValidationType nValType = sheet::ValidationType_ANY;
     xProps->getPropertyValue( STYPE )  >>= nValType;
     if ( nValType  != sheet::ValidationType_ANY  )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "validation object already exists" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "validation object already exists" ), uno::Reference< uno::XInterface >() );
     sal_Int32 nType = -1;
     if ( !Type.hasValue()  || !( Type >>= nType ) )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "missing required param" ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( "missing required param" ), uno::Reference< uno::XInterface >() );
 
     Delete(); // set up defaults
     rtl::OUString sFormula1;
@@ -247,7 +247,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 // for validate list
                 // at least formula1 is required
                 if ( !Formula1.hasValue() )
-                    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "missing param" ) ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( rtl::OUString( "missing param" ), uno::Reference< uno::XInterface >() );
                 nValType = sheet::ValidationType_LIST;
                 xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
                 // #TODO validate required params
@@ -259,7 +259,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
             xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
             break;
         default:
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unsupported operation..." ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "unsupported operation..." ), uno::Reference< uno::XInterface >() );
     }
 
     sheet::ValidationAlertStyle eStyle = sheet::ValidationAlertStyle_STOP;
@@ -280,7 +280,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 eStyle = sheet::ValidationAlertStyle_INFO;
                 break;
             default:
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bad param..." ) ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString( "bad param..." ), uno::Reference< uno::XInterface >() );
 
         }
     }
@@ -330,7 +330,7 @@ ScVbaValidation::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Validation" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Validation" );
     }
     return aServiceNames;
 }

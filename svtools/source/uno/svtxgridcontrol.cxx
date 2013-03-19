@@ -404,7 +404,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         {
             Reference< XGridDataModel > const xDataModel( aValue, UNO_QUERY );
             if ( !xDataModel.is() )
-                throw GridInvalidDataException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid data model." ) ), *this );
+                throw GridInvalidDataException( ::rtl::OUString( "Invalid data model." ), *this );
 
             m_pTableModel->setDataModel( xDataModel );
             impl_checkTableModelInit();
@@ -416,7 +416,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             // obtain new col model
             Reference< XGridColumnModel > const xColumnModel( aValue, UNO_QUERY );
             if ( !xColumnModel.is() )
-                throw GridInvalidModelException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid column model." ) ), *this );
+                throw GridInvalidModelException( ::rtl::OUString( "Invalid column model." ), *this );
 
             // remove all old columns
             m_pTableModel->removeAllColumns();

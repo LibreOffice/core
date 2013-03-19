@@ -129,7 +129,7 @@ SwVbaFont::setUnderline( const uno::Any& _underline ) throw (uno::RuntimeExcepti
 rtl::OUString
 SwVbaFont::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFont"));
+    return rtl::OUString("SwVbaFont");
 }
 
 void SAL_CALL
@@ -227,7 +227,7 @@ SwVbaFont::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Font" ) );
+                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Font" );
         }
         return aServiceNames;
 }

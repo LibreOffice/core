@@ -44,7 +44,7 @@ SwVbaListGallery::ListTemplates( const uno::Any& index ) throw (uno::RuntimeExce
 rtl::OUString
 SwVbaListGallery::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaListGallery"));
+    return rtl::OUString("SwVbaListGallery");
 }
 
 uno::Sequence< rtl::OUString >
@@ -54,7 +54,7 @@ SwVbaListGallery::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.ListGallery" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.ListGallery" );
     }
     return aServiceNames;
 }

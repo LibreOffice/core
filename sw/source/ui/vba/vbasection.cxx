@@ -68,7 +68,7 @@ SwVbaSection::PageSetup( ) throw (uno::RuntimeException)
 rtl::OUString
 SwVbaSection::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSection"));
+    return rtl::OUString("SwVbaSection");
 }
 
 uno::Sequence< rtl::OUString >
@@ -78,7 +78,7 @@ SwVbaSection::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Section" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Section" );
     }
     return aServiceNames;
 }

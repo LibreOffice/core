@@ -840,7 +840,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     // Get the style families
     uno::Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
     // Get the Frame family (and keep it for later)
-    const ::uno::Any aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "FrameStyles" ) ) );
+    const ::uno::Any aAny = xFamilies->getByName ( OUString( "FrameStyles" ) );
     aAny >>= mxStyleFamily;
     // In the derived class, we'll ask mxStyleFamily for the relevant default style
     // mxStyleFamily is initialised in the SwXFrame constructor
@@ -848,21 +848,21 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     {
         case FLYCNTTYPE_FRM:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Frame" ) ) );
+            uno::Any aAny2 = mxStyleFamily->getByName ( OUString( "Frame" ) );
             aAny2 >>= mxStyleData;
             pProps = new SwFrameProperties_Impl( );
         }
         break;
         case FLYCNTTYPE_GRF:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Graphics" ) ) );
+            uno::Any aAny2 = mxStyleFamily->getByName ( OUString( "Graphics" ) );
             aAny2 >>= mxStyleData;
             pProps = new SwGraphicProperties_Impl( );
         }
         break;
         case FLYCNTTYPE_OLE:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
+            uno::Any aAny2 = mxStyleFamily->getByName ( OUString( "OLE" ) );
             aAny2 >>= mxStyleData;
             pProps = new SwOLEProperties_Impl( );
         }
@@ -1015,13 +1015,13 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
     const :: SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     if(pFmt)
     {
         bool bNextFrame = false;
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         SwDoc* pDoc = pFmt->GetDoc();
         if ( ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
@@ -1482,7 +1482,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
-        throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     if(FN_UNO_ANCHOR_TYPES == pEntry->nWID)
     {
@@ -1842,7 +1842,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
         {
             const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(pNames[i]);
             if (!pEntry)
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
             if(pEntry->nWID == FN_UNO_ANCHOR_TYPES||
                 pEntry->nWID == FN_PARAM_LINK_DISPLAY_NAME||
@@ -1899,9 +1899,9 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     {
         const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if (!pEntry)
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertyToDefault: property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw uno::RuntimeException( OUString( "setPropertyToDefault: property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         bool bNextFrame;
         if( pEntry->nWID &&
@@ -2005,7 +2005,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
             }
         }
         else
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else if(!IsDescriptor())
         throw uno::RuntimeException();
@@ -2324,7 +2324,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     if( !aClassName.MakeId( aCLSID ) )
                     {
                         lang::IllegalArgumentException aExcept;
-                        aExcept.Message = OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID invalid"));
+                        aExcept.Message = OUString("CLSID invalid");
                         throw aExcept;
                     }
 

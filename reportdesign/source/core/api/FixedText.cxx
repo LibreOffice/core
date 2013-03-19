@@ -99,7 +99,7 @@ void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFixedText::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OFixedText"));
+    return ::rtl::OUString("com.sun.star.comp.report.OFixedText");
 }
 
 //--------------------------------------------------------------------------
@@ -321,7 +321,7 @@ void SAL_CALL OFixedText::setSize( const awt::Size& aSize ) throw (beans::Proper
 // XShapeDescriptor
 ::rtl::OUString SAL_CALL OFixedText::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"));
+   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

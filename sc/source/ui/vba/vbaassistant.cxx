@@ -107,7 +107,7 @@ ScVbaAssistant::Name(  ) throw (css::script::BasicErrorException, css::uno::Runt
 rtl::OUString
 ScVbaAssistant::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaAssistant"));
+    return rtl::OUString("ScVbaAssistant");
 }
 
 uno::Sequence< rtl::OUString >
@@ -117,7 +117,7 @@ ScVbaAssistant::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.Assistant" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.Assistant" );
     }
     return aServiceNames;
 }

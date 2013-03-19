@@ -247,7 +247,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 )   : svt::PopupWindowController(
         rServiceManager,
         Reference< frame::XFrame >(),
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirectionFloater" ) )
+        OUString( ".uno:ExtrusionDirectionFloater" )
     )
 {
 }
@@ -265,7 +265,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 
 OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionDirectionController" ));
+    return OUString( "com.sun.star.comp.svx.ExtrusionDirectionController" );
 }
 
 // --------------------------------------------------------------------
@@ -273,7 +273,7 @@ OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 
@@ -469,9 +469,9 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
 
             Any a;
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Depth" ));
+            aArgs[0].Name = rtl::OUString( "Depth" );
             aArgs[0].Value <<= mfDepth;
-            aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ));
+            aArgs[1].Name = rtl::OUString( "Metric" );
             aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
 
             mrController.dispatchCommand( aCommand, aArgs );
@@ -512,7 +512,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 )   : svt::PopupWindowController(
         rServiceManager,
         Reference< frame::XFrame >(),
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthFloater" ) )
+        OUString( ".uno:ExtrusionDepthFloater" )
     )
 {
 }
@@ -531,7 +531,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 
 OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionDepthController" ));
+    return OUString( "com.sun.star.comp.svx.ExtrusionDepthController" );
 }
 
 // --------------------------------------------------------------------
@@ -539,7 +539,7 @@ OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuController" ));
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.PopupMenuController" );
     return aSNS;
 }
 
@@ -774,7 +774,7 @@ ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< lang::XMultiServiceFactory >& rServiceManager
 )   : svt::PopupWindowController( rServiceManager,
                 Reference< frame::XFrame >(),
-                OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirectionFloater" ) )
+                OUString( ".uno:ExtrusionDirectionFloater" )
     )
 {
 }
@@ -792,7 +792,7 @@ ExtrusionLightingControl::ExtrusionLightingControl(
 
 OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionLightingController" ));
+    return OUString( "com.sun.star.comp.svx.ExtrusionLightingController" );
 }
 
 // --------------------------------------------------------------------
@@ -800,7 +800,7 @@ OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 
@@ -919,7 +919,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 :   svt::PopupWindowController(
         rServiceManager,
         Reference< frame::XFrame >(),
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurfaceFloater" ) )
+        OUString( ".uno:ExtrusionSurfaceFloater" )
     )
 {
 }
@@ -937,7 +937,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 
 OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionSurfaceController" ));
+    return OUString( "com.sun.star.comp.svx.ExtrusionSurfaceController" );
 }
 
 // --------------------------------------------------------------------
@@ -945,7 +945,7 @@ OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 
@@ -1004,7 +1004,7 @@ SfxPopupWindowType ExtrusionColorControl::GetPopupWindowType() const
 SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Extrusion3DColor" )),
+        rtl::OUString( ".uno:Extrusion3DColor" ),
         SID_EXTRUSION_3D_COLOR,
         m_xFrame,
         SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ),

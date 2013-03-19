@@ -82,36 +82,36 @@ namespace svxform
 //............................................................................
 
     // properties of instance
-    #define PN_INSTANCE_MODEL       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Instance" ) )
-    #define PN_INSTANCE_ID          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
-    #define PN_INSTANCE_URL         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) )
+    #define PN_INSTANCE_MODEL       ::rtl::OUString( "Instance" )
+    #define PN_INSTANCE_ID          ::rtl::OUString( "ID" )
+    #define PN_INSTANCE_URL         ::rtl::OUString( "URL" )
 
     // properties of binding
-    #define PN_BINDING_ID           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingID" ) )
-    #define PN_BINDING_EXPR         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BindingExpression" ) )
-    #define PN_BINDING_MODEL        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
-    #define PN_BINDING_NAMESPACES   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModelNamespaces" ) )
-    #define PN_READONLY_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadonlyExpression" ) )
-    #define PN_RELEVANT_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelevantExpression" ) )
-    #define PN_REQUIRED_EXPR        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RequiredExpression" ) )
-    #define PN_CONSTRAINT_EXPR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConstraintExpression" ) )
-    #define PN_CALCULATE_EXPR       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CalculateExpression" ) )
-    #define PN_BINDING_TYPE         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) )
+    #define PN_BINDING_ID           ::rtl::OUString( "BindingID" )
+    #define PN_BINDING_EXPR         ::rtl::OUString( "BindingExpression" )
+    #define PN_BINDING_MODEL        ::rtl::OUString( "Model" )
+    #define PN_BINDING_NAMESPACES   ::rtl::OUString( "ModelNamespaces" )
+    #define PN_READONLY_EXPR        ::rtl::OUString( "ReadonlyExpression" )
+    #define PN_RELEVANT_EXPR        ::rtl::OUString( "RelevantExpression" )
+    #define PN_REQUIRED_EXPR        ::rtl::OUString( "RequiredExpression" )
+    #define PN_CONSTRAINT_EXPR      ::rtl::OUString( "ConstraintExpression" )
+    #define PN_CALCULATE_EXPR       ::rtl::OUString( "CalculateExpression" )
+    #define PN_BINDING_TYPE         ::rtl::OUString( "Type" )
 
     // properties of submission
-    #define PN_SUBMISSION_ID        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) )
-    #define PN_SUBMISSION_BIND      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bind" ) )
-    #define PN_SUBMISSION_REF       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Ref" ) )
-    #define PN_SUBMISSION_ACTION    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) )
-    #define PN_SUBMISSION_METHOD    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Method" ) )
-    #define PN_SUBMISSION_REPLACE   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Replace" ) )
+    #define PN_SUBMISSION_ID        ::rtl::OUString( "ID" )
+    #define PN_SUBMISSION_BIND      ::rtl::OUString( "Bind" )
+    #define PN_SUBMISSION_REF       ::rtl::OUString( "Ref" )
+    #define PN_SUBMISSION_ACTION    ::rtl::OUString( "Action" )
+    #define PN_SUBMISSION_METHOD    ::rtl::OUString( "Method" )
+    #define PN_SUBMISSION_REPLACE   ::rtl::OUString( "Replace" )
 
     // other const strings
     #define TRUE_VALUE              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true()" ) )
-    #define NEW_ELEMENT             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newElement" ) )
-    #define NEW_ATTRIBUTE           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "newAttribute" ) )
-    #define EVENTTYPE_CHARDATA      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMCharacterDataModified" ) )
-    #define EVENTTYPE_ATTR          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DOMAttrModified" ) )
+    #define NEW_ELEMENT             ::rtl::OUString( "newElement" )
+    #define NEW_ATTRIBUTE           ::rtl::OUString( "newAttribute" )
+    #define EVENTTYPE_CHARDATA      ::rtl::OUString( "DOMCharacterDataModified" )
+    #define EVENTTYPE_ATTR          ::rtl::OUString( "DOMAttrModified" )
 
     #define MIN_PAGE_COUNT          3 // at least one instance, one submission and one binding page
 
@@ -1683,7 +1683,7 @@ namespace svxform
 
                                     Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
                                     xModelProps->setPropertyValue(
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ),
+                                        ::rtl::OUString( "ExternalData" ),
                                         makeAny( sal_Bool( !bDocumentData ) ) );
 
                                     sal_uInt16 nNewPos = m_aModelsBox.InsertEntry( sNewName );
@@ -1713,7 +1713,7 @@ namespace svxform
                         Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
                         sal_Bool bExternalData = sal_False;
                         OSL_VERIFY( xModelProps->getPropertyValue(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ) ) >>= bExternalData );
+                            ::rtl::OUString( "ExternalData" ) ) >>= bExternalData );
                         bDocumentData = ( bExternalData == sal_False );
                     }
                     catch( const Exception& )
@@ -1733,7 +1733,7 @@ namespace svxform
                                 Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                                 Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
                                 xModelProps->setPropertyValue(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ),
+                                    ::rtl::OUString( "ExternalData" ),
                                     makeAny( sal_Bool( !bDocumentData ) ) );
                                 bIsDocModified = true;
                             }

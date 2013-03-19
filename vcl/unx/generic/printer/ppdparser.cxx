@@ -476,7 +476,7 @@ void PPDParser::initPPDFiles()
         INetURLObject aPPDDir( *ppd_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         scanPPDDir( aPPDDir.GetMainURL( INetURLObject::NO_DECODE ) );
     }
-    if( rPPDCache.pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == rPPDCache.pAllPPDFiles->end() )
+    if( rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() )
     {
         // last try: search in directory of executable (mainly for setup)
         OUString aExe;
@@ -489,7 +489,7 @@ void PPDParser::initPPDFiles()
 #endif
             scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
 #ifdef DEBUG
-            fprintf( stderr, "SGENPRT %s\n", rPPDCache.pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == rPPDCache.pAllPPDFiles->end() ? "not found" : "found" );
+            fprintf( stderr, "SGENPRT %s\n", rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() ? "not found" : "found" );
 #endif
         }
     }
@@ -1978,7 +1978,7 @@ int PPDContext::getRenderResolution() const
 void PPDContext::getPageSize( rtl::OUString& rPaper, int& rWidth, int& rHeight ) const
 {
     // initialize to reasonable default, if parser is not set
-    rPaper  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "A4" ) );
+    rPaper  = rtl::OUString( "A4" );
     rWidth  = 595;
     rHeight = 842;
     if( m_pParser )

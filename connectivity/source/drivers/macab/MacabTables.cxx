@@ -38,11 +38,11 @@ using namespace ::com::sun::star::lang;
 sdbcx::ObjectType MacabTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
-    aSchema = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
+    aSchema = ::rtl::OUString("%");
     aName = _rName;
 
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
+    aTypes[0] = ::rtl::OUString("%");
     ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);

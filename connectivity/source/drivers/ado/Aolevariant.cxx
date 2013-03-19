@@ -436,7 +436,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
             throw ::com::sun::star::sdbc::SQLException(
                 sError,
                 NULL,
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "S1000" )),
+                ::rtl::OUString( "S1000" ),
                 1000,
                 ::com::sun::star::uno::Any()
             );

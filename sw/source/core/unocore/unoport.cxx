@@ -428,7 +428,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
                 GetPropertyValue( pValues[nProp], *pEntry, pUnoCrsr, pSet );
             }
             else
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         }
         delete pSet;
     }
@@ -463,9 +463,9 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
         {
             const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if (!pEntry)
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             SwUnoCursorHelper::SetPropertyValue( *pUnoCrsr, *m_pPropSet,
                      pPropertyNames[nProp], pValues[nProp]);
@@ -510,11 +510,11 @@ uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "Unknown property exception caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException(OUString( "WrappedTargetException caught" ), static_cast < cppu::OWeakObject * > ( this ) );
     }
 
     return aValues;

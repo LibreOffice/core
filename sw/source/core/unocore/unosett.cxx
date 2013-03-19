@@ -331,7 +331,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwFtnInfo aFtnInfo(pDoc->GetFtnInfo());
             switch(pEntry->nWID)
             {
@@ -437,7 +437,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
             pDoc->SetFtnInfo(aFtnInfo);
         }
         else
-            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -557,7 +557,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -642,7 +642,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
             switch(pEntry->nWID)
             {
@@ -705,7 +705,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
             pDoc->SetEndNoteInfo(aEndInfo);
         }
         else
-            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
 }
 
@@ -792,7 +792,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     return aRet;
 }
@@ -874,7 +874,7 @@ void SwXLineNumberingProperties::setPropertyValue(
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwLineNumberInfo  aInfo(pDoc->GetLineNumberInfo());
             switch(pEntry->nWID)
             {
@@ -976,7 +976,7 @@ void SwXLineNumberingProperties::setPropertyValue(
             pDoc->SetLineNumberInfo(aInfo);
         }
         else
-            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -1079,7 +1079,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     else
         throw uno::RuntimeException();
@@ -2510,9 +2510,9 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
 {
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
-        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
-        throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     switch(pEntry->nWID)
     {
@@ -2585,7 +2585,7 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
 {
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
-        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     Any aRet;
     switch(pEntry->nWID)

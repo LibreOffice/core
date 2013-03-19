@@ -80,7 +80,7 @@ namespace svxform
         // ------------------------------------------------------------------------
         // FormController
         REGISTER_SERVICE( FormController, OUString( "com.sun.star.form.runtime.FormController" ) );
-        REGISTER_SERVICE( LegacyFormController, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.FormController" ) ) );
+        REGISTER_SERVICE( LegacyFormController, ::rtl::OUString( "com.sun.star.form.FormController" ) );
 
         // ------------------------------------------------------------------------
         // FormController

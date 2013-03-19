@@ -782,7 +782,7 @@ namespace
     public:
         MainSequenceSearcher()
         {
-            maSearchKey.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "node-type" ) );
+            maSearchKey.Name = ::rtl::OUString( "node-type" );
             maSearchKey.Value <<= presentation::EffectNodeType::MAIN_SEQUENCE;
         }
 
@@ -978,8 +978,8 @@ bool SlideImpl::applyInitialShapeAttributes(
 
         xPropsCreator.set(
             xFac->createInstanceWithContext(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                     "com.sun.star.animations.TargetPropertiesCreator") ),
+                ::rtl::OUString(
+                                     "com.sun.star.animations.TargetPropertiesCreator"),
                 maContext.mxComponentContext ),
             uno::UNO_QUERY_THROW );
     }
@@ -1231,8 +1231,8 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
 
     sal_Int32 nDocWidth = 0;
     sal_Int32 nDocHeight = 0;
-    xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ) ) >>= nDocWidth;
-    xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ) ) >>= nDocHeight;
+    xPropSet->getPropertyValue( ::rtl::OUString("Width") ) >>= nDocWidth;
+    xPropSet->getPropertyValue( ::rtl::OUString("Height") ) >>= nDocHeight;
 
     return basegfx::B2ISize( nDocWidth, nDocHeight );
 }

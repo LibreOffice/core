@@ -60,14 +60,14 @@ SvxUnoGradientTable::~SvxUnoGradientTable() throw()
 
 OUString SAL_CALL SvxUnoGradientTable::getImplementationName() throw( uno::RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoGradientTable") );
+    return OUString("SvxUnoGradientTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoGradientTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable" ));
+    aSNS.getArray()[0] = OUString("com.sun.star.drawing.GradientTable" );
     return aSNS;
 }
 

@@ -109,86 +109,86 @@ void ScMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestAddress.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("TestAddress."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vba.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document")),
+            rtl::OUString("vba."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"),
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MiscRangeTests.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("MiscRangeTests."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bytearraystring.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document"))
+            rtl::OUString("bytearraystring."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoFilter.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("AutoFilter."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CalcFont.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("CalcFont."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestIntersection.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("TestIntersection."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestUnion.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("TestUnion."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("range-4.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("range-4."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges-3.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("Ranges-3."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestCalc_Rangetest.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("TestCalc_Rangetest."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestCalc_Rangetest2.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("TestCalc_Rangetest2."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #if FIXRANGEADDRESSING
 //ScVbaRange::getRangeForName()/getScRangeListForAddress() seems to get confused
 //about the addressing mode of the document vs the addressing mode of a named
 //range ( need to fix that )
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges-2.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("Ranges-2."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #endif
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pagesetup.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("pagesetup."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Window.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("Window."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("window2.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("window2."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageBreaks.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("PageBreaks."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shapes.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("Shapes."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #if VBA_TEST_WORKING
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+            rtl::OUString("Ranges."),
+            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #endif
     };

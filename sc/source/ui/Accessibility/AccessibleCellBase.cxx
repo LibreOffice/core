@@ -290,7 +290,7 @@ uno::Any SAL_CALL
 ::rtl::OUString SAL_CALL ScAccessibleCellBase::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleCellBase"));
+    return rtl::OUString("ScAccessibleCellBase");
 }
 
     //=====  XTypeProvider  ===================================================

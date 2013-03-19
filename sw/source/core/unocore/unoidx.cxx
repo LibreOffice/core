@@ -366,8 +366,8 @@ public:
                 : 0));
         if (!pTOXSection)
         {
-            throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "SwXDocumentIndex: disposed or invalid")), 0);
+            throw uno::RuntimeException(OUString(
+                    "SwXDocumentIndex: disposed or invalid"), 0);
         }
         return *pTOXSection;
     }
@@ -560,14 +560,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw beans::PropertyVetoException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only: " ))
+            OUString("Property is read-only: " )
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
@@ -876,7 +876,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast< cppu::OWeakObject * >(this));
     }
@@ -2093,14 +2093,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw beans::PropertyVetoException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only: "))
+            OUString("Property is read-only: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
@@ -2218,7 +2218,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown property: "))
+            OUString("Unknown property: ")
                 + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
@@ -3003,7 +3003,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[nCurrentElement].Name = "TokenType";
                 pArr[nCurrentElement++].Value <<=
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryNumber"));
+                    OUString("TokenEntryNumber");
 
                 pArr[nCurrentElement].Name = "CharacterStyleName";
                 pArr[nCurrentElement++].Value <<= aProgCharStyle;
@@ -3042,7 +3042,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryText"));
+                pArr[0].Value <<= OUString("TokenEntryText");
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -3054,7 +3054,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenTabStop"));
+                pArr[0].Value <<= OUString("TokenTabStop");
 
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
@@ -3085,7 +3085,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenText"));
+                pArr[0].Value <<= OUString("TokenText");
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -3100,7 +3100,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenPageNumber"));
+                pArr[0].Value <<= OUString("TokenPageNumber");
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -3112,7 +3112,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = "TokenType";
-                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenChapterInfo"));
+                pArr[0].Value <<= OUString("TokenChapterInfo");
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
@@ -3150,7 +3150,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkStart"));
+                    OUString("TokenHyperlinkStart");
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;
             }
@@ -3162,7 +3162,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkEnd"));
+                    OUString("TokenHyperlinkEnd");
             }
             break;
             case TOKEN_AUTHORITY:
@@ -3172,7 +3172,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = "TokenType";
                 pArr[0].Value <<=
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenBibliographyDataField"));
+                    OUString("TokenBibliographyDataField");
 
                 pArr[1].Name = "CharacterStyleName";
                 pArr[1].Value <<= aProgCharStyle;

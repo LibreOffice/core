@@ -394,7 +394,7 @@ bool getJavaProps(const OUString & exePath,
 
     //prepare the arguments
     sal_Int32 cArgs = 3;
-    OUString arg1 = OUString(RTL_CONSTASCII_USTRINGPARAM("-classpath"));// + sClassPath;
+    OUString arg1 = OUString("-classpath");// + sClassPath;
     OUString arg2 = sClassPath;
     OUString arg3(RTL_CONSTASCII_USTRINGPARAM("JREProperties"));
     OUString arg4 = "noaccessibility";
@@ -904,7 +904,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                 sFullPath = sResolvedDir + (*i);
             else
                 sFullPath = sResolvedDir +
-                OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + (*i);
+                OUString("/") + (*i);
 
 
             sFilePath = resolveFilePath(sFullPath);

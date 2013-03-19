@@ -195,7 +195,7 @@ namespace dbaui
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")), m_pViewSwitch->getORB()),UNO_QUERY );
+            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Frame"), m_pViewSwitch->getORB()),UNO_QUERY );
             m_xBeamer.set( xBeamerFrame );
             OSL_ENSURE(m_xBeamer.is(),"No frame created!");
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );

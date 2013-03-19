@@ -108,8 +108,8 @@ void SvObjectServerList::FillInsertObjects()
         ::rtl::OUString sReaderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue aPathProp;
-        aPathProp.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
-        aPathProp.Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/ObjectNames" ));
+        aPathProp.Name = ::rtl::OUString( "nodepath" );
+        aPathProp.Value <<= ::rtl::OUString( "/org.openoffice.Office.Embedding/ObjectNames" );
         aArguments[0] <<= aPathProp;
 
         uno::Reference< container::XNameAccess > xNameAccess(
@@ -135,8 +135,8 @@ void SvObjectServerList::FillInsertObjects()
                 {
                     ::rtl::OUString aUIName;
                     ::rtl::OUString aClassID;
-                    xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectUIName" )) ) >>= aUIName;
-                    xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" )) ) >>= aClassID;
+                    xEntry->getByName( ::rtl::OUString( "ObjectUIName" ) ) >>= aUIName;
+                    xEntry->getByName( ::rtl::OUString( "ClassID" ) ) >>= aClassID;
 
                     if ( !aUIName.isEmpty() )
                     {

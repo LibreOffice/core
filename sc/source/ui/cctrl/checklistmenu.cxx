@@ -93,7 +93,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sa
     maLabelFont.SetHeight(nPopupFontHeight);
     SetFont(maLabelFont);
 
-    SetText( OUString(RTL_CONSTASCII_USTRINGPARAM("ScMenuFloatingWindow")) );
+    SetText( OUString("ScMenuFloatingWindow") );
 }
 
 ScMenuFloatingWindow::~ScMenuFloatingWindow()

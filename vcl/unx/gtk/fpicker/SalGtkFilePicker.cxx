@@ -906,7 +906,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
             if( !bExtensionTypedIn && ( sToken != "*" ) )
             {
                 //if the filename does not already have the auto extension, stick it on
-                OUString sExtension = OUString(RTL_CONSTASCII_USTRINGPARAM( "." )) + sToken;
+                OUString sExtension = OUString( "." ) + sToken;
                 OUString &rBase = aSelectedFiles[nIndex];
                 sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
                 OSL_TRACE( "idx are %d %d", rBase.lastIndexOf( sExtension ), nExtensionIdx );
@@ -1469,7 +1469,7 @@ void SalGtkFilePicker::implChangeType( GtkTreeSelection *selection )
     {
         gchar *title;
         gtk_tree_model_get (model, &iter, 2, &title, -1);
-        aLabel += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ": " ));
+        aLabel += rtl::OUString( ": " );
         aLabel += rtl::OUString( title, strlen(title), RTL_TEXTENCODING_UTF8 );
         g_free (title);
     }
@@ -1604,7 +1604,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
         throw lang::IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
+            rtl::OUString( "no arguments" ),
             static_cast<XFilePicker2*>( this ), 1 );
 
     aAny = aArguments[0];
@@ -1612,7 +1612,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if( ( aAny.getValueType() != ::getCppuType( ( sal_Int16* )0 ) ) &&
          (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
          throw lang::IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
+            rtl::OUString( "invalid argument type" ),
             static_cast<XFilePicker2*>( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -1701,7 +1701,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 break;
         default:
                 throw lang::IllegalArgumentException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
+                rtl::OUString( "Unknown template" ),
                 static_cast< XFilePicker2* >( this ),
                 1 );
     }
@@ -1855,7 +1855,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             if (!aToken.isEmpty())
             {
                 if (!aTokens.isEmpty())
-                    aTokens += OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                    aTokens += OUString(",");
                 aTokens = aTokens += aToken;
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,

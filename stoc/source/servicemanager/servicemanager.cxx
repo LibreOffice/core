@@ -82,43 +82,39 @@ namespace stoc_bootstrap
 Sequence< OUString > smgr_wrapper_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
+    seqNames.getArray()[0] = OUString("com.sun.star.lang.MultiServiceFactory");
     return seqNames;
 }
 
 OUString smgr_wrapper_getImplementationName()
 {
-    return OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManagerWrapper"));
+    return OUString("com.sun.star.comp.stoc.OServiceManagerWrapper");
 }
 
 Sequence< OUString > smgr_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory") );
-    seqNames.getArray()[1] = OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.ServiceManager") );
+    seqNames.getArray()[0] = OUString("com.sun.star.lang.MultiServiceFactory");
+    seqNames.getArray()[1] = OUString("com.sun.star.lang.ServiceManager");
     return seqNames;
 }
 
 OUString smgr_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.OServiceManager"));
+    return OUString("com.sun.star.comp.stoc.OServiceManager");
 }
 
 Sequence< OUString > regsmgr_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(2);
-    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.MultiServiceFactory"));
-    seqNames.getArray()[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.RegistryServiceManager"));
+    seqNames.getArray()[0] = OUString("com.sun.star.lang.MultiServiceFactory");
+    seqNames.getArray()[1] = OUString("com.sun.star.lang.RegistryServiceManager");
     return seqNames;
 }
 
 OUString regsmgr_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.ORegistryServiceManager" ) );
+    return OUString( "com.sun.star.comp.stoc.ORegistryServiceManager" );
 }
 }
 
@@ -702,7 +698,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
         else
         {
             throw IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("no XComponentContext given!") ),
+                OUString("no XComponentContext given!"),
                 (OWeakObject *)this, 1 );
         }
     }
@@ -755,7 +751,7 @@ OServiceManagerWrapper::OServiceManagerWrapper(
     if (! m_root.is())
     {
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no service manager to wrap") ),
+            OUString("no service manager to wrap"),
             Reference< XInterface >() );
     }
 }
@@ -980,14 +976,14 @@ void OServiceManager::setPropertyValue(
         else
         {
             throw IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("no XComponentContext given!") ),
+                OUString("no XComponentContext given!"),
                 (OWeakObject *)this, 1 );
         }
     }
     else
     {
         throw UnknownPropertyException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property ") ) + PropertyName,
+            OUString("unknown property ") + PropertyName,
             (OWeakObject *)this );
     }
 }
@@ -1007,7 +1003,7 @@ Any OServiceManager::getPropertyValue(const OUString& PropertyName)
     else
     {
         UnknownPropertyException except;
-        except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager : unknown property " ) );
+        except.Message = OUString( "ServiceManager : unknown property " );
         except.Message += PropertyName;
         throw except;
     }
@@ -1096,7 +1092,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     {
         Reference< XComponentContext > xDefContext;
         xProps->getPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xDefContext;
+            OUString("DefaultContext") ) >>= xDefContext;
         OSL_ENSURE(
             xContext == xDefContext,
             "### default context of service manager singleton differs from context holding it!" );
@@ -1160,7 +1156,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     {
         Reference< XComponentContext > xDefContext;
         xProps->getPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xDefContext;
+            OUString("DefaultContext") ) >>= xDefContext;
         OSL_ENSURE(
             xContext == xDefContext,
             "### default context of service manager singleton differs from context holding it!" );
@@ -1385,7 +1381,7 @@ void OServiceManager::insert( const Any & Element )
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no interface given!") ),
+            OUString("no interface given!"),
             Reference< XInterface >(), 0 );
     }
     Reference<XInterface > xEle( Element, UNO_QUERY_THROW );
@@ -1396,7 +1392,7 @@ void OServiceManager::insert( const Any & Element )
     if( aIt != m_ImplementationMap.end() )
     {
         throw ElementExistException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("element already exists!") ),
+            OUString("element already exists!"),
             Reference< XInterface >() );
     }
 
@@ -1457,7 +1453,7 @@ void OServiceManager::remove( const Any & Element )
         if (iFind == m_ImplementationNameMap.end())
         {
             throw NoSuchElementException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("element is not in: ") )
+                OUString("element is not in: ")
                 + implName, static_cast< OWeakObject * >(this) );
         }
         xEle = iFind->second;
@@ -1465,8 +1461,8 @@ void OServiceManager::remove( const Any & Element )
     else
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                          "neither interface nor string given!") ),
+            OUString(
+                          "neither interface nor string given!"),
             Reference< XInterface >(), 0 );
     }
 
@@ -1480,7 +1476,7 @@ void OServiceManager::remove( const Any & Element )
     if( aIt == m_ImplementationMap.end() )
     {
         throw NoSuchElementException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("element is not in!") ),
+            OUString("element is not in!"),
             static_cast< OWeakObject * >(this) );
     }
     //First remove all factories which have been loaded by ORegistryServiceManager.
@@ -1631,7 +1627,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
 
             m_xRegistry.set(
                 createInstanceWithContext(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.DefaultRegistry") ),
+                    OUString("com.sun.star.registry.DefaultRegistry"),
                     m_xContext ),
                 UNO_QUERY );
         }
@@ -1656,7 +1652,7 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
 
     try
     {
-        OUString implementationName = OUString( RTL_CONSTASCII_USTRINGPARAM("/IMPLEMENTATIONS/") ) + name;
+        OUString implementationName = OUString("/IMPLEMENTATIONS/") + name;
         Reference<XRegistryKey > xImpKey = m_xRootKey->openKey(implementationName);
 
         if( xImpKey.is() )
@@ -1723,7 +1719,7 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
     try
     {
         Reference<XRegistryKey > xServicesKey = xRootKey->openKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("SERVICES") ) );
+            OUString("SERVICES") );
         // root + /Services + /
         if( xServicesKey.is() )
         {

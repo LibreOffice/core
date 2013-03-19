@@ -40,7 +40,7 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION(test::oustringbuffer::ToString);
 
 void test::oustringbuffer::ToString::testToString() {
-    rtl::OUStringBuffer sb(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test string")));
+    rtl::OUStringBuffer sb(rtl::OUString("test string"));
     rtl::OUString str = sb.toString();
     CPPUNIT_ASSERT( str == "test string" );
     // returned OUString must be independent from sb

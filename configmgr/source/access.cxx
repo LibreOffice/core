@@ -486,7 +486,7 @@ void Access::addContainerListener(
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
+                OUString("null listener"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         if (!disposed_) {

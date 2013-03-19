@@ -64,7 +64,7 @@ void SAL_CALL OFormatCondition::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFormatCondition::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OFormatCondition"));
+    return ::rtl::OUString("com.sun.star.comp.report.OFormatCondition");
 }
 
 //--------------------------------------------------------------------------

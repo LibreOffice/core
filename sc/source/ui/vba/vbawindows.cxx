@@ -228,7 +228,7 @@ ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWor
 rtl::OUString
 ScVbaWindows::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWindows"));
+    return rtl::OUString("ScVbaWindows");
 }
 
 css::uno::Sequence<rtl::OUString>
@@ -238,7 +238,7 @@ ScVbaWindows::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Windows") );
+        sNames[0] = rtl::OUString("ooo.vba.excel.Windows");
     }
     return sNames;
 }

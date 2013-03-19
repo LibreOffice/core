@@ -145,10 +145,10 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     uno::Sequence< uno::Any > aArgs(2);
     beans::PropertyValue      aPropValue;
-    aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    aPropValue.Name  = rtl::OUString( "Frame" );
     aPropValue.Value = uno::makeAny( xFrame );
     aArgs[0] <<= aPropValue;
-    aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
+    aPropValue.Name  = rtl::OUString( "ResourceURL" );
 
     // create a resource URL from the nId provided by the sfx2
     ::rtl::OUString aResourceURL( aDockWindowResourceURL );

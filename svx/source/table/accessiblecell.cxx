@@ -296,7 +296,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == NULL)
-            throw uno::RuntimeException (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleCell has no valid view forwarder")),static_cast<uno::XWeak*>(this));
+            throw uno::RuntimeException (::rtl::OUString("AccessibleCell has no valid view forwarder"),static_cast<uno::XWeak*>(this));
 
         ::Size aPixelSize( maShapeTreeInfo.GetViewForwarder()->LogicToPixel(::Size(aCellRect.GetWidth(), aCellRect.GetHeight())) );
         ::Point aPixelPosition( maShapeTreeInfo.GetViewForwarder()->LogicToPixel( aCellRect.TopLeft() ));
@@ -475,7 +475,7 @@ void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAc
 
 OUString SAL_CALL AccessibleCell::getImplementationName(void) throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleCell"));
+    return OUString("AccessibleCell");
 }
 
 // --------------------------------------------------------------------

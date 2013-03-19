@@ -110,30 +110,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                rtl::OUString( "ContentType" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                rtl::OUString( "IsDocument" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                rtl::OUString( "IsFolder" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                rtl::OUString( "Title" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
@@ -142,8 +140,8 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "CreatableContentsInfo" ) ),
+                rtl::OUString(
+                    "CreatableContentsInfo" ),
                 -1,
                 getCppuType( static_cast<
                     const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
@@ -170,30 +168,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                rtl::OUString( "ContentType" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                rtl::OUString( "IsDocument" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                rtl::OUString( "IsFolder" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                rtl::OUString( "Title" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
@@ -202,8 +198,8 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "CreatableContentsInfo" ) ),
+                rtl::OUString(
+                    "CreatableContentsInfo" ),
                 -1,
                 getCppuType( static_cast<
                     const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
@@ -214,7 +210,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             // New properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Storage" ) ),
+                rtl::OUString( "Storage" ),
                 -1,
                 getCppuType( static_cast<
                     const uno::Reference< embed::XStorage > * >( 0 ) ),
@@ -238,30 +234,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                rtl::OUString( "ContentType" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                rtl::OUString( "IsDocument" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                rtl::OUString( "IsFolder" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                rtl::OUString( "Title" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
@@ -271,8 +265,8 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "CreatableContentsInfo" ) ),
+                rtl::OUString(
+                    "CreatableContentsInfo" ),
                 -1,
                 getCppuType( static_cast<
                     const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
@@ -283,7 +277,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             // New properties
             ///////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentModel" ) ),
+                rtl::OUString( "DocumentModel" ),
                 -1,
                 getCppuType( static_cast<
                     const uno::Reference< frame::XModel > * >( 0 ) ),
@@ -309,28 +303,28 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Mandatory properties
             ///////////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                rtl::OUString( "ContentType" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                rtl::OUString( "IsDocument" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                rtl::OUString( "IsFolder" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                rtl::OUString( "Title" ),
                 -1,
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
@@ -340,8 +334,8 @@ uno::Sequence< beans::Property > Content::getProperties(
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "CreatableContentsInfo" ) ),
+                rtl::OUString(
+                    "CreatableContentsInfo" ),
                 -1,
                 getCppuType( static_cast<
                     const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
@@ -383,27 +377,23 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 // Mandatory commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                    rtl::OUString( "getCommandInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                    rtl::OUString( "getPropertySetInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                    rtl::OUString( "getPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                    rtl::OUString( "setPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast<
@@ -413,12 +403,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                    rtl::OUString( "delete" ),
                     -1,
                     getCppuBooleanType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                    rtl::OUString( "open" ),
                     -1,
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
@@ -442,27 +432,23 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                rtl::OUString( "getCommandInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                rtl::OUString( "getPropertySetInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                rtl::OUString( "getPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast< uno::Sequence< beans::Property > * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                rtl::OUString( "setPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast<
@@ -472,17 +458,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                rtl::OUString( "delete" ),
                 -1,
                 getCppuBooleanType()
             ),
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                rtl::OUString( "insert" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                rtl::OUString( "open" ),
                 -1,
                 getCppuType(
                     static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
@@ -507,27 +493,23 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                rtl::OUString( "getCommandInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                rtl::OUString( "getPropertySetInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                rtl::OUString( "getPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast< uno::Sequence< beans::Property > * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                rtl::OUString( "setPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast<
@@ -537,29 +519,28 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                rtl::OUString( "delete" ),
                 -1,
                 getCppuBooleanType()
             ),
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+                rtl::OUString( "insert" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                rtl::OUString( "open" ),
                 -1,
                 getCppuType(
                     static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+                rtl::OUString( "transfer" ),
                 -1,
                 getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+                rtl::OUString( "createNewContent" ),
                 -1,
                 getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
             )
@@ -583,27 +564,23 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                rtl::OUString( "getCommandInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                rtl::OUString( "getPropertySetInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                rtl::OUString( "getPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast< uno::Sequence< beans::Property > * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                rtl::OUString( "setPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast<
@@ -613,19 +590,18 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                rtl::OUString( "open" ),
                 -1,
                 getCppuType(
                     static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+                rtl::OUString( "transfer" ),
                 -1,
                 getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+                rtl::OUString( "createNewContent" ),
                 -1,
                 getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
             )
@@ -651,27 +627,23 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Mandatory commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                rtl::OUString( "getCommandInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                rtl::OUString( "getPropertySetInfo" ),
                 -1,
                 getCppuVoidType()
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                rtl::OUString( "getPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast< uno::Sequence< beans::Property > * >( 0 ) )
             ),
             ucb::CommandInfo(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                rtl::OUString( "setPropertyValues" ),
                 -1,
                 getCppuType(
                     static_cast<
@@ -681,7 +653,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             // Optional standard commands
             ///////////////////////////////////////////////////////////
             ucb::CommandInfo(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                rtl::OUString( "open" ),
                 -1,
                 getCppuType(
                     static_cast< ucb::OpenCommandArgument2 * >( 0 ) )

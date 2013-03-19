@@ -780,7 +780,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
     if( m_xStatusIndicator.is() )
     {
         if( nNextPageNr == 1 )
-            startIndicator( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+            startIndicator( rtl::OUString( " " ) );
         m_xStatusIndicator->setValue( nNextPageNr );
     }
     m_pCurPage = m_pElFactory->createPageElement(m_pDocument.get(), nNextPageNr);
@@ -802,7 +802,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     ElementTreeVisitorSharedPtr optimizingVisitor(
         rVisitorFactory.createOptimizingVisitor(*this));
     // FIXME: localization
-    startIndicator( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+    startIndicator( rtl::OUString( " " ) );
     m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::const_iterator());
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1015,7 +1015,7 @@ rtl::OUString PDFIProcessor::mirrorString( const rtl::OUString& i_rString )
     {
         m_bMirrorMapperTried = true;
         uno::Reference< lang::XMultiComponentFactory > xMSF(  m_xContext->getServiceManager(), uno::UNO_SET_THROW );
-        uno::Reference < uno::XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.StringMirror")), m_xContext);
+        uno::Reference < uno::XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString("com.sun.star.awt.StringMirror"), m_xContext);
         m_xMirrorMapper = uno::Reference< util::XStringMapping >( xInterface, uno::UNO_QUERY );
         #if OSL_DEBUG_LEVEL > 1
         if( m_xMirrorMapper.is() )

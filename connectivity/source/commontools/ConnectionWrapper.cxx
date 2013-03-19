@@ -106,7 +106,7 @@ OConnectionWrapper::~OConnectionWrapper()
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.drivers.OConnectionWrapper" ) );
+    return ::rtl::OUString( "com.sun.star.sdbc.drivers.OConnectionWrapper" );
 }
 
 // --------------------------------------------------------------------------------

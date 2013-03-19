@@ -44,8 +44,7 @@ SwVbaVariable::getName() throw ( css::uno::RuntimeException )
 void SAL_CALL
 SwVbaVariable::setName( const rtl::OUString& ) throw ( css::uno::RuntimeException )
 {
-    throw uno::RuntimeException( rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(" Fail to set name")), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(" Fail to set name"), uno::Reference< uno::XInterface >() );
 }
 
 uno::Any SAL_CALL
@@ -79,7 +78,7 @@ SwVbaVariable::getIndex() throw ( css::uno::RuntimeException )
 rtl::OUString
 SwVbaVariable::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaVariable"));
+    return rtl::OUString("SwVbaVariable");
 }
 
 uno::Sequence< rtl::OUString >
@@ -89,7 +88,7 @@ SwVbaVariable::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Variable" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Variable" );
     }
     return aServiceNames;
 }

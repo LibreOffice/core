@@ -1045,7 +1045,7 @@ Reference<XInvocation > SAL_CALL OComponent::in_methodInvocation( const Referenc
     Sequence<sal_Int16> outIndex;
     Sequence<Any> outParams;
     try{
-    inv->invoke( OUString(RTL_CONSTASCII_USTRINGPARAM("disposing")),
+    inv->invoke( OUString("disposing"),
                 params, outIndex, outParams);
     }catch(IllegalArgumentException &) {
     }
@@ -1065,8 +1065,8 @@ SimpleStruct SAL_CALL OComponent::in_methodStruct( const SimpleStruct& aStruct )
         throw (RuntimeException)
 {
     SimpleStruct& s= const_cast<SimpleStruct&>(aStruct);
-    s.message= s.message + OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "This string was set in OleTest"));
+    s.message= s.message + OUString(
+        "This string was set in OleTest");
     return aStruct;
 }
 void SAL_CALL OComponent::in_methodAll(
@@ -1493,7 +1493,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
         if( any.getValueTypeClass() == TypeClass_STRUCT)
         {
             SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-            pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
+            pStruct->message= OUString("This struct was created in OleTest");
 
             SimpleStruct aStruct;
             any >>= aStruct;
@@ -1641,7 +1641,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             if( any.getValueTypeClass() == TypeClass_STRUCT)
             {
                 SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
+                pStruct->message= OUString("This struct was created in OleTest");
                 any >>= aStruct;
             }
         }
@@ -1797,7 +1797,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
                 if( any.getValueTypeClass() == TypeClass_STRUCT)
                 {
                     SimpleStruct* pStruct= ( SimpleStruct*) any.getValue();
-                    pStruct->message= OUString(RTL_CONSTASCII_USTRINGPARAM("This struct was created in OleTest"));
+                    pStruct->message= OUString("This struct was created in OleTest");
                     any >>= aStruct;
                 }
             }

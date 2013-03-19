@@ -434,7 +434,7 @@ void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeExceptio
 ::rtl::OUString Impl2::fn12( const ::rtl::OUString& arg )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12")) + arg;
+    return ::rtl::OUString("12") + arg;
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(
@@ -447,14 +447,12 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create(
 
 ::rtl::OUString SAL_CALL getImplementationName() {
     return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "comp.test.testtools.bridgetest.Constructors"));
+            "comp.test.testtools.bridgetest.Constructors");
 }
 
 css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() {
     css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("test.testtools.bridgetest.Constructors"));
+    s[0] = ::rtl::OUString("test.testtools.bridgetest.Constructors");
     return s;
 }
 
@@ -468,14 +466,12 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create2(
 
 ::rtl::OUString SAL_CALL getImplementationName2() {
     return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "comp.test.testtools.bridgetest.Constructors2"));
+            "comp.test.testtools.bridgetest.Constructors2");
 }
 
 css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames2() {
     css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("test.testtools.bridgetest.Constructors2"));
+    s[0] = ::rtl::OUString("test.testtools.bridgetest.Constructors2");
     return s;
 }
 

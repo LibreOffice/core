@@ -69,8 +69,7 @@ rtl::OString convertToUtf8(
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot convert to UTF-8")),
+            OUString("cannot convert to UTF-8"),
             css::uno::Reference< css::uno::XInterface >());
     }
     return s;

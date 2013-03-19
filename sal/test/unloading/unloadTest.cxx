@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
   // Test if the servicemanager can be created and if the sample libs
   // can be loaded
 //  Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-//     OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+//     OUString("applicat.rdb"));
 //    if( !serviceManager.is())
 //    {
 //      printf("\n ####################################################\n"
@@ -120,7 +120,7 @@ int main(int argc, char* argv[])
 //      }
 //        //destroy servicemanager
 //        Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-//        Any any_prop= xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+//        Any any_prop= xSet->getPropertyValue( OUString("DefaultContext"));
 //        Reference<XComponentContext> xContext;
 //        any_prop >>= xContext;
 //        Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -179,7 +179,7 @@ sal_Bool test1()
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+        OUString("applicat.rdb"));
     Reference<XInterface> xint= serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
@@ -189,7 +189,7 @@ sal_Bool test1()
     xint=0;
 
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=   xSet->getPropertyValue( OUString("DefaultContext"));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -216,7 +216,7 @@ sal_Bool test2()
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+         OUString("applicat.rdb"));
 
     Reference<XInterface> xint= serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
@@ -233,7 +233,7 @@ sal_Bool test2()
     rtl_registerModuleForUnloading(mod3);
     // ----------------------------------------------------------
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=   xSet->getPropertyValue( OUString("DefaultContext"));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -261,7 +261,7 @@ sal_Bool test3()
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+         OUString("applicat.rdb"));
 
     Reference<XInterface> xint= serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
@@ -277,7 +277,7 @@ sal_Bool test3()
     rtl_registerModuleForUnloading(mod2);
     // ----------------------------------------------------------
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=   xSet->getPropertyValue( OUString("DefaultContext"));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -309,7 +309,7 @@ sal_Bool test4()
     OUString lib2Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+         OUString("applicat.rdb"));
 
     Reference<XInterface> xint= serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
@@ -325,7 +325,7 @@ sal_Bool test4()
     //-----------------------------------------------------------
     // ----------------------------------------------------------
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=   xSet->getPropertyValue( OUString("DefaultContext"));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -357,7 +357,7 @@ sal_Bool test5()
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+         OUString("applicat.rdb"));
 
     //-----------------------------------------------------------
     Reference<XInterface> xint= serviceManager->createInstance( OUString(
@@ -381,7 +381,7 @@ sal_Bool test5()
 
     // get rid of the service manager
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=   xSet->getPropertyValue( OUString("DefaultContext"));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -426,7 +426,7 @@ sal_Bool test6()
     OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+         OUString("applicat.rdb"));
     Reference<XInterface> xint= serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));
 
@@ -436,7 +436,7 @@ sal_Bool test6()
 
     // get rid of the service manager
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=   xSet->getPropertyValue( OUString("DefaultContext"));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -530,7 +530,7 @@ sal_Bool test8()
 
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+         OUString("applicat.rdb"));
     Reference<XContentEnumerationAccess> xContent( serviceManager, UNO_QUERY);
     Reference<XEnumeration> xenum=  xContent->createContentEnumeration(
         OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME4)));
@@ -580,7 +580,7 @@ sal_Bool test8()
 
     // get rid of the service manager
     Reference<XPropertySet> xSet( serviceManager, UNO_QUERY);
-    Any any_prop=   xSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
+    Any any_prop=   xSet->getPropertyValue( OUString("DefaultContext"));
     Reference<XComponentContext> xContext;
     any_prop >>= xContext;
     Reference<XComponent> xComponent( xContext, UNO_QUERY);
@@ -616,7 +616,7 @@ sal_Bool test9()
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
 
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
-         OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")));
+         OUString("applicat.rdb"));
 
     Reference<XInterface> xint= serviceManager->createInstance( OUString(
                 RTL_CONSTASCII_USTRINGPARAM(SERVICENAME1)));

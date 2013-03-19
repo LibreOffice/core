@@ -78,7 +78,7 @@ OUString convertToURL( const OUString& rPath )
         {
                 osl::FileBase::getFileURLFromSystemPath( rPath, aURL );
                 if ( aURL.equals( rPath ) )
-                    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "could'nt convert " )).concat( rPath ).concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " to a URL, is it a fully qualified path name? " )) ), Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( rtl::OUString( "could'nt convert " ).concat( rPath ).concat( rtl::OUString( " to a URL, is it a fully qualified path name? " ) ), Reference< uno::XInterface >() );
         }
         return aURL;
 }
@@ -123,9 +123,9 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
     rtl::OUString getLogLocation() throw (  beans::UnknownPropertyException,  lang::IllegalArgumentException, lang::WrappedTargetException,  uno::Exception )
     {
         rtl::OUString sLogLocation;
-        Reference< XPropertySet > pathSettings( mxMCF->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.PathSettings" )), mxContext), uno::UNO_QUERY_THROW );
-        pathSettings->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Work" )) ) >>= sLogLocation;
-        sLogLocation = sLogLocation.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) ).concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HelperAPI-test.log" )) );
+        Reference< XPropertySet > pathSettings( mxMCF->createInstanceWithContext( rtl::OUString( "com.sun.star.comp.framework.PathSettings" ), mxContext), uno::UNO_QUERY_THROW );
+        pathSettings->getPropertyValue( rtl::OUString( "Work" ) ) >>= sLogLocation;
+        sLogLocation = sLogLocation.concat( rtl::OUString( "/" ) ).concat( rtl::OUString( "HelperAPI-test.log" ) );
         return sLogLocation;
     }
     rtl::OUString getLogLocationWithName( OUString fileName ) throw (  beans::UnknownPropertyException,  lang::IllegalArgumentException, lang::WrappedTargetException,  uno::Exception )
@@ -133,9 +133,9 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
         printf("%s\n", getenv("HOME") );
         printf("file name %s\n", rtl::OUStringToOString( fileName, RTL_TEXTENCODING_UTF8 ).getStr() );
         rtl::OUString sLogLocation;
-        Reference< XPropertySet > pathSettings( mxMCF->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.PathSettings" )), mxContext), uno::UNO_QUERY_THROW );
-        pathSettings->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Work" )) ) >>= sLogLocation;
-        sLogLocation = sLogLocation.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) ).concat( fileName.copy ( 0, fileName.lastIndexOf( EXTN )  ) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".log" )) );
+        Reference< XPropertySet > pathSettings( mxMCF->createInstanceWithContext( rtl::OUString( "com.sun.star.comp.framework.PathSettings" ), mxContext), uno::UNO_QUERY_THROW );
+        pathSettings->getPropertyValue( rtl::OUString( "Work" ) ) >>= sLogLocation;
+        sLogLocation = sLogLocation.concat( rtl::OUString( "/" ) ).concat( fileName.copy ( 0, fileName.lastIndexOf( EXTN )  ) + rtl::OUString( ".log" ) );
         return sLogLocation;
     }
 
@@ -150,13 +150,13 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
                     printf( "processing %s\n",  rtl::OUStringToOString( sUrl, RTL_TEXTENCODING_UTF8 ).getStr() );
                     // Loading the wanted document
                     Sequence< PropertyValue > propertyValues(1);
-                    propertyValues[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
+                    propertyValues[0].Name = rtl::OUString( "Hidden" );
                     propertyValues[0].Value <<= false;
 
                     rtl::OUString sfileUrl = convertToURL( sUrl );
                     printf( "try to get xDoc %s\n", rtl::OUStringToOString( sfileUrl, RTL_TEXTENCODING_UTF8 ).getStr() );
                     Reference< uno::XInterface > xDoc =
-                        mxCompLoader->loadComponentFromURL( sfileUrl, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, propertyValues);
+                        mxCompLoader->loadComponentFromURL( sfileUrl, rtl::OUString( "_blank" ), 0, propertyValues);
                     printf( "got xDoc\n" );
 
                     OUString logFileURL = convertToURL( getLogLocation() );
@@ -173,15 +173,15 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
                         Reference< script::provider::XScript > xScript;
                         try
                         {
-                            xScript = xProv->getScript( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:VBAProject.TestMacros.Main?language=Basic&location=document") ));
+                            xScript = xProv->getScript( rtl::OUString( "vnd.sun.star.script:VBAProject.TestMacros.Main?language=Basic&location=document"));
                         } catch ( uno::Exception& e )
                         {
                             try
                             {
-                                xScript = xProv->getScript( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:VBAProject.testMacro.Main?language=Basic&location=document" )));
+                                xScript = xProv->getScript( rtl::OUString( "vnd.sun.star.script:VBAProject.testMacro.Main?language=Basic&location=document" ));
                             } catch ( uno::Exception& e2 )
                             {
-                                xScript = xProv->getScript( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:VBAProject.testMain.Main?language=Basic&location=document" )));
+                                xScript = xProv->getScript( rtl::OUString( "vnd.sun.star.script:VBAProject.testMain.Main?language=Basic&location=document" ));
                             }
                         }
                         OSL_TRACE("Got script for doc %s", rtl::OUStringToOString( sUrl, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -193,7 +193,7 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
                         xScript->invoke(aArgs, aOutArgsIndex, aOutArgs);
 
                         OUString fileName = sUrl.copy ( sUrl.lastIndexOf( '/' ) );
-                        OUString newLocation = msOutDirPath + fileName.copy ( 0, fileName.lastIndexOf( EXTN )  ) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".log" ));
+                        OUString newLocation = msOutDirPath + fileName.copy ( 0, fileName.lastIndexOf( EXTN )  ) + rtl::OUString( ".log" );
                         try
                         {
                             printf("move log file\n");
@@ -253,7 +253,7 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
         rtl::OUString sFileDirectoryURL = convertToURL( sFileDirectory );
         if ( !mxSFA->isFolder( sFileDirectoryURL) )
         {
-            throw lang::IllegalArgumentException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "not a directory: ")).concat( sFileDirectoryURL ), Reference<uno::XInterface>(), 1 );
+            throw lang::IllegalArgumentException( rtl::OUString( "not a directory: ").concat( sFileDirectoryURL ), Reference<uno::XInterface>(), 1 );
         }
         // Getting all files and directories in the current directory
         Sequence<OUString> entries = mxSFA->getFolderContents( sFileDirectoryURL, false );

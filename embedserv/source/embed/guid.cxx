@@ -27,34 +27,34 @@
 ::rtl::OUString getStorageTypeFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarWriterDocument.6" ) );
+        return ::rtl::OUString( "soffice.StarWriterDocument.6" );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.WriterDocument.1" ) );
+        return ::rtl::OUString( "LibreOffice.WriterDocument.1" );
 
     if ( *guid == OID_CalcServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarCalcDocument.6" ) );
+        return ::rtl::OUString( "soffice.StarCalcDocument.6" );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.CalcDocument.1" ) );
+        return ::rtl::OUString( "LibreOffice.CalcDocument.1" );
 
     if ( *guid == OID_DrawingServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarDrawDocument.6" ) );
+        return ::rtl::OUString( "soffice.StarDrawDocument.6" );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.DrawDocument.1" ) );
+        return ::rtl::OUString( "LibreOffice.DrawDocument.1" );
 
     if ( *guid == OID_PresentationServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarImpressDocument.6" ) );
+        return ::rtl::OUString( "soffice.StarImpressDocument.6" );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.ImpressDocument.1" ) );
+        return ::rtl::OUString( "LibreOffice.ImpressDocument.1" );
 
     if ( *guid == OID_MathServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarMathDocument.6" ) );
+        return ::rtl::OUString( "soffice.StarMathDocument.6" );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "LibreOffice.MathDocument.1" ) );
+        return ::rtl::OUString( "LibreOffice.MathDocument.1" );
 
     return ::rtl::OUString();
 }
@@ -62,34 +62,34 @@
 ::rtl::OUString getServiceNameFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.TextDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Writer.TextDocument" );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.TextDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Writer.TextDocument" );
 
     if ( *guid == OID_CalcServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Calc.SpreadsheetDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Calc.SpreadsheetDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 
     if ( *guid == OID_DrawingServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.DrawingDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Draw.DrawingDocument" );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.DrawingDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Draw.DrawingDocument" );
 
     if ( *guid == OID_PresentationServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.PresentationDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Draw.PresentationDocument" );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.PresentationDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Draw.PresentationDocument" );
 
     if ( *guid == OID_MathServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Math.FormulaDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Math.FormulaDocument" );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Math.FormulaDocument" ) );
+        return ::rtl::OUString( "com.sun.star.comp.Math.FormulaDocument" );
 
     return ::rtl::OUString();
 }
@@ -100,31 +100,31 @@
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Writer)" ) );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer8" ) );
+        return ::rtl::OUString( "writer8" );
 
     if ( *guid == OID_CalcServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Calc)" ) );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "calc8" ) );
+        return ::rtl::OUString( "calc8" );
 
     if ( *guid == OID_DrawingServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Draw)" ) );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw8" ) );
+        return ::rtl::OUString( "draw8" );
 
     if ( *guid == OID_PresentationServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Impress)" ) );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "impress8" ) );
+        return ::rtl::OUString( "impress8" );
 
     if ( *guid == OID_MathServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Math)" ) );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "math8" ) );
+        return ::rtl::OUString( "math8" );
 
     return ::rtl::OUString();
 }
@@ -132,34 +132,34 @@
 ::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxw" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxw" );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odt" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odt" );
 
     if ( *guid == OID_CalcServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxc" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxc" );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.ods" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.ods" );
 
     if ( *guid == OID_DrawingServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxd" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxd" );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odg" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odg" );
 
     if ( *guid == OID_PresentationServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxi" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxi" );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odp" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odp" );
 
     if ( *guid == OID_MathServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.sxm" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxm" );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "file:///d:/OLE_TEST/test.odf" ) );
+        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odf" );
 
     return ::rtl::OUString();
 }

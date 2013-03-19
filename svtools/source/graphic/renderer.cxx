@@ -67,7 +67,7 @@ GraphicRendererVCL::~GraphicRendererVCL()
 ::rtl::OUString GraphicRendererVCL::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.graphic.GraphicRendererVCL" ) );
+    return ::rtl::OUString( "com.sun.star.comp.graphic.GraphicRendererVCL" );
 }
 
 // ------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ uno::Sequence< ::rtl::OUString > GraphicRendererVCL::getSupportedServiceNames_St
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicRendererVCL" ) );
+    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.GraphicRendererVCL" );
 
     return aSeq;
 }

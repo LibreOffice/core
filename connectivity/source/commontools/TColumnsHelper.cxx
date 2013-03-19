@@ -93,7 +93,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
     {
         ::rtl::OUString sComposedName = ::dbtools::composeTableNameForSelect( xConnection, m_pTable );
-        collectColumnInformation(xConnection,sComposedName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) ,m_pImpl->m_aColumnInfo);
+        collectColumnInformation(xConnection,sComposedName,::rtl::OUString("*") ,m_pImpl->m_aColumnInfo);
         aFind = m_pImpl->m_aColumnInfo.find(_rName);
     }
     if ( aFind != m_pImpl->m_aColumnInfo.end() )
@@ -180,7 +180,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
     ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD "));
+    aSql += ::rtl::OUString(" ADD ");
     aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -203,7 +203,7 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
         ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 
         aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP "));
+        aSql += ::rtl::OUString(" DROP ");
         aSql += ::dbtools::quoteName( aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

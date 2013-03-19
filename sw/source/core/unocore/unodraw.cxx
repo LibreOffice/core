@@ -1108,7 +1108,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException ( rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException ( rtl::OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             //mit Layout kann der Anker umgesetzt werden, ohne dass sich die Position aendert
             if(pFmt)
             {
@@ -1541,7 +1541,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::Transformation>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")) );
+                    aRet = _getPropAtAggrObj( rtl::OUString("Transformation") );
                 }
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
                 {
@@ -1552,13 +1552,13 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::StartPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")) );
+                    aRet = _getPropAtAggrObj( rtl::OUString("StartPosition") );
                 }
                 else if ( FN_SHAPE_ENDPOSITION_IN_HORI_L2R == pEntry->nWID )
                 {
                     // get property <::drawing::Shape::EndPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")) );
+                    aRet = _getPropAtAggrObj( rtl::OUString("EndPosition") );
                 }
                 else
                 {
@@ -1618,7 +1618,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::Transformation>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")) );
+                        aRet = _getPropAtAggrObj( rtl::OUString("Transformation") );
                     }
                     break;
                     case FN_SHAPE_POSITION_LAYOUT_DIR:
@@ -1631,14 +1631,14 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")) );
+                        aRet = _getPropAtAggrObj( rtl::OUString("StartPosition") );
                     }
                     break;
                     case FN_SHAPE_ENDPOSITION_IN_HORI_L2R:
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")) );
+                        aRet = _getPropAtAggrObj( rtl::OUString("EndPosition") );
                     }
                     break;
                 }
@@ -1829,7 +1829,7 @@ void SwXShape::setPropertyToDefault( const rtl::OUString& rPropertyName )
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw uno::RuntimeException( rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException( rtl::OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pFmt)
             {
                 const SfxItemSet& rSet = pFmt->GetAttrSet();
@@ -1923,7 +1923,7 @@ void SwXShape::addPropertyChangeListener(
            uno::RuntimeException )
 {
     if ( !xShapeAgg.is() )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no shape aggregate" ) ), *this );
+        throw uno::RuntimeException( ::rtl::OUString( "no shape aggregate" ), *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -1938,7 +1938,7 @@ void SwXShape::removePropertyChangeListener(
            uno::RuntimeException )
 {
     if ( !xShapeAgg.is() )
-        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no shape aggregate" ) ), *this );
+        throw uno::RuntimeException( ::rtl::OUString( "no shape aggregate" ), *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -2367,9 +2367,9 @@ awt::Point SwXShape::_GetAttrPosition()
 {
     awt::Point aAttrPos;
 
-    uno::Any aHoriPos( getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")) ) );
+    uno::Any aHoriPos( getPropertyValue( rtl::OUString("HoriOrientPosition") ) );
     aHoriPos >>= aAttrPos.X;
-    uno::Any aVertPos( getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")) ) );
+    uno::Any aVertPos( getPropertyValue( rtl::OUString("VertOrientPosition") ) );
     aVertPos >>= aAttrPos.Y;
     // #i35798# - fallback, if attribute position is (0,0)
     // and no anchor position is applied to the drawing object

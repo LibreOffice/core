@@ -733,11 +733,11 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     aOperator == sheet::ConditionOperator_NOT_BETWEEN)
                                                 {
                                                     if (aOperator == sheet::ConditionOperator_BETWEEN)
-                                                        sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-between("));
+                                                        sCondition = rtl::OUString("cell-content-is-between(");
                                                     else
-                                                        sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-not-between("));
+                                                        sCondition = rtl::OUString("cell-content-is-not-between(");
                                                     sCondition += xSheetCondition->getFormula1();
-                                                    sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                                                    sCondition += rtl::OUString(",");
                                                     sCondition += xSheetCondition->getFormula2();
                                                     sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                                                 }
@@ -747,22 +747,22 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     switch (aOperator)
                                                     {
                                                         case sheet::ConditionOperator_LESS:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+                                                            sCondition += rtl::OUString("<");
                                                         break;
                                                         case sheet::ConditionOperator_GREATER:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+                                                            sCondition += rtl::OUString(">");
                                                         break;
                                                         case sheet::ConditionOperator_LESS_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+                                                            sCondition += rtl::OUString("<=");
                                                         break;
                                                         case sheet::ConditionOperator_GREATER_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+                                                            sCondition += rtl::OUString(">=");
                                                         break;
                                                         case sheet::ConditionOperator_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                                                            sCondition += rtl::OUString("=");
                                                         break;
                                                         case sheet::ConditionOperator_NOT_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
+                                                            sCondition += rtl::OUString("!=");
                                                         break;
                                                         default:
                                                         {
@@ -1080,7 +1080,7 @@ sal_Bool XmlScPropHdl_CellProtection::exportXML(
         else if (aCellProtection.IsFormulaHidden && aCellProtection.IsLocked)
         {
             rStrExpValue = GetXMLToken(XML_PROTECTED);
-            rStrExpValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+            rStrExpValue += rtl::OUString(" ");
             rStrExpValue += GetXMLToken(XML_FORMULA_HIDDEN);
             bRetval = sal_True;
         }

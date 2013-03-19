@@ -301,35 +301,35 @@ static void lcl_addFrameProperties(
         return;
 
     ::rtl::OUString aURL;
-    Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")) );
+    Any aAny = xSet->getPropertyValue( ::rtl::OUString("FrameURL") );
     aAny >>= aURL;
 
     ::rtl::OUString aName;
-    aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")));
+    aAny = xSet->getPropertyValue( ::rtl::OUString("FrameName"));
     aAny >>= aName;
 
     sal_Bool bIsAutoScroll = sal_False, bIsScrollingMode;
-    aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")));
+    aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsAutoScroll"));
     aAny >>= bIsAutoScroll;
     if ( !bIsAutoScroll )
     {
-        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsScrollingMode") );
         aAny >>= bIsScrollingMode;
     }
 
     sal_Bool bIsBorderSet, bIsAutoBorder = sal_False;
-    aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")) );
+    aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsAutoBorder") );
     aAny >>= bIsAutoBorder;
     if ( !bIsAutoBorder )
     {
-        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsBorder") );
         aAny >>= bIsBorderSet;
     }
 
     sal_Int32 nWidth, nHeight;
-    aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")) );
+    aAny = xSet->getPropertyValue( ::rtl::OUString("FrameMarginWidth") );
     aAny >>= nWidth;
-    aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")) );
+    aAny = xSet->getPropertyValue( ::rtl::OUString("FrameMarginHeight") );
     aAny >>= nHeight;
 
     if( !bIsAutoScroll )
@@ -551,27 +551,27 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
-                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")) );
+                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString("AppletCodeBase") );
                 aAny2 >>= aStr;
                 if (!aStr.isEmpty() )
                     lcl_addURL(rXMLExport, aStr);
 
-                aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")) );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString("AppletName") );
                 aAny2 >>= aStr;
                 if (!aStr.isEmpty())
                     rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
 
-                aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")) );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString("AppletCode") );
                 aAny2 >>= aStr;
                 rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
 
                 sal_Bool bScript = sal_False;
-                aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletIsScript")) );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString("AppletIsScript") );
                 aAny2 >>= bScript;
                 rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bScript ? XML_TRUE : XML_FALSE );
 
                 uno::Sequence < beans::PropertyValue > aProps;
-                aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands")) );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString("AppletCommands") );
                 aAny2 >>= aProps;
 
                 sal_Int32 i = aProps.getLength();
@@ -598,11 +598,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
-                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")) );
+                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString("PluginURL") );
                 aAny2 >>= aStr;
                 lcl_addURL( rXMLExport, aStr );
 
-                aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")) );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString("PluginMimeType") );
                 aAny2 >>= aStr;
                 if (!aStr.isEmpty())
                     rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
@@ -617,12 +617,12 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
-                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")) );
+                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString("FrameURL") );
                 aAny2 >>= aStr;
 
                 lcl_addURL( rXMLExport, aStr );
 
-                aAny2 = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")) );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString("FrameName") );
                 aAny2 >>= aStr;
 
                 if (!aStr.isEmpty())
@@ -656,7 +656,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 sURL += rOLEObj.GetCurrentPersistName();
 
                 if ( ( rXMLExport.getExportFlags() & EXPORT_OASIS ) == 0 )
-                    sURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?oasis=false" ) );
+                    sURL += ::rtl::OUString( "?oasis=false" );
 
                 rXMLExport.AddEmbeddedObjectAsBase64( sURL );
             }
@@ -667,7 +667,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 {
                     uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                     uno::Sequence < beans::PropertyValue > aProps;
-                    aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands")) );
+                    aAny = xSet->getPropertyValue( ::rtl::OUString("AppletCommands") );
                     aAny >>= aProps;
 
                     sal_Int32 i = aProps.getLength();
@@ -693,7 +693,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 {
                     uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                     uno::Sequence < beans::PropertyValue > aProps;
-                    aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")) );
+                    aAny = xSet->getPropertyValue( ::rtl::OUString("PluginCommands") );
                     aAny >>= aProps;
 
                     sal_Int32 i = aProps.getLength();

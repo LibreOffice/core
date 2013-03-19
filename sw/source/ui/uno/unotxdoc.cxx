@@ -1713,7 +1713,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 if ( bShape &&
                      rServiceName.compareToAscii( "com.sun.star.drawing.temporaryForXMLImportOLE2Shape" ) == 0 )
                 {
-                    aTmpServiceName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape"));
+                    aTmpServiceName = OUString("com.sun.star.drawing.OLE2Shape");
                 }
                 //here search for the draw service
                 Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(aTmpServiceName);
@@ -2128,7 +2128,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_VBA_DOCOBJ:
         {
             beans::PropertyValue aProp;
-            aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisWordDoc") );
+            aProp.Name = rtl::OUString("ThisWordDoc");
             aProp.Value <<= pDocShell->GetModel();
             aAny <<= aProp;
         }
@@ -2801,22 +2801,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
         sal_Int32 nLen = 2;
         aRenderer.realloc(2);
-        aRenderer[0].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+        aRenderer[0].Name  = OUString( "PageSize" );
         aRenderer[0].Value <<= aPageSize;
-        aRenderer[1].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageIncludesNonprintableArea" ) );
+        aRenderer[1].Name  = OUString( "PageIncludesNonprintableArea" );
         aRenderer[1].Value <<= sal_True;
         if (aPreferredPageSize.Width && aPreferredPageSize.Height)
         {
             ++nLen;
             aRenderer.realloc( nLen );
-            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredPageSize" ) );
+            aRenderer[ nLen - 1 ].Name  = OUString( "PreferredPageSize" );
             aRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
         }
         if (nPrinterPaperTray >= 0)
         {
             ++nLen;
             aRenderer.realloc( nLen );
-            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PrinterPaperTray" ) );
+            aRenderer[ nLen - 1 ].Name  = OUString( "PrinterPaperTray" );
             aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
     }
@@ -2837,22 +2837,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             aRenderer.realloc( nLen );
             // put page print settings attribute into render data
             const sal_Int32 nRow = pPagePrintSettings->GetRow();
-            aRenderer[ nRenderDataIdxStart + 0 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpRows" ) );
+            aRenderer[ nRenderDataIdxStart + 0 ].Name  = OUString( "NUpRows" );
             aRenderer[ nRenderDataIdxStart + 0 ].Value <<= ( nRow > 1 ? nRow : 1 );
             const sal_Int32 nCol = pPagePrintSettings->GetCol();
-            aRenderer[ nRenderDataIdxStart + 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpColumns" ) );
+            aRenderer[ nRenderDataIdxStart + 1 ].Name  = OUString( "NUpColumns" );
             aRenderer[ nRenderDataIdxStart + 1 ].Value <<= ( nCol > 1 ? nCol : 1 );
-            aRenderer[ nRenderDataIdxStart + 2 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginLeft" ) );
+            aRenderer[ nRenderDataIdxStart + 2 ].Name  = OUString( "NUpPageMarginLeft" );
             aRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
-            aRenderer[ nRenderDataIdxStart + 3 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginRight" ) );
+            aRenderer[ nRenderDataIdxStart + 3 ].Name  = OUString( "NUpPageMarginRight" );
             aRenderer[ nRenderDataIdxStart + 3 ].Value <<= pPagePrintSettings->GetRightSpace();
-            aRenderer[ nRenderDataIdxStart + 4 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginTop" ) );
+            aRenderer[ nRenderDataIdxStart + 4 ].Name  = OUString( "NUpPageMarginTop" );
             aRenderer[ nRenderDataIdxStart + 4 ].Value <<= pPagePrintSettings->GetTopSpace();
-            aRenderer[ nRenderDataIdxStart + 5 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginBottom" ) );
+            aRenderer[ nRenderDataIdxStart + 5 ].Name  = OUString( "NUpPageMarginBottom" );
             aRenderer[ nRenderDataIdxStart + 5 ].Value <<= pPagePrintSettings->GetBottomSpace();
-            aRenderer[ nRenderDataIdxStart + 6 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpHorizontalSpacing" ) );
+            aRenderer[ nRenderDataIdxStart + 6 ].Name  = OUString( "NUpHorizontalSpacing" );
             aRenderer[ nRenderDataIdxStart + 6 ].Value <<= pPagePrintSettings->GetHorzSpace();
-            aRenderer[ nRenderDataIdxStart + 7 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpVerticalSpacing" ) );
+            aRenderer[ nRenderDataIdxStart + 7 ].Name  = OUString( "NUpVerticalSpacing" );
             aRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
             {
                 Printer* pPrinter = pDocShell->GetDoc()->getPrinter( false );
@@ -2868,7 +2868,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     {
                         aNewPageSize = awt::Size( aPageSize.Height(), aPageSize.Width() );
                     }
-                    aRenderer[ nRenderDataIdxStart + 8 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPaperSize" ) );
+                    aRenderer[ nRenderDataIdxStart + 8 ].Name  = OUString( "NUpPaperSize" );
                     aRenderer[ nRenderDataIdxStart + 8 ].Value <<= aNewPageSize;
                 }
             }
@@ -3158,7 +3158,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     const bool bComplex = 0 != (nScriptTypes & nComplex);
 
     if (nScriptTypes < nLatin || nScriptTypes > (nLatin | nAsian | nComplex))
-        throw IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nScriptTypes ranges from 1 to 7!")), Reference< XInterface >(), 1);
+        throw IllegalArgumentException(::rtl::OUString("nScriptTypes ranges from 1 to 7!"), Reference< XInterface >(), 1);
     if (!pDocShell)
         throw DisposedException();
     SwDoc* pDoc = pDocShell->GetDoc();

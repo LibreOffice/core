@@ -318,7 +318,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     {
         try
         {
-            Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            Any a = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
             a >>= xLayoutManager;
         }
         catch ( const uno::Exception& )
@@ -327,7 +327,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     }
 
     if ( xLayoutManager.is() )
-        xLayoutManager->createElement( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
+        xLayoutManager->createElement( OUString( "private:resource/menubar/menubar" ));
 }
 
 BibDataManager* BibliographyLoader::GetDataManager()const

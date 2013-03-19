@@ -420,7 +420,7 @@ public:
 // -----------------------------------------------------------------------
 
 FontWorkAlignmentControl::FontWorkAlignmentControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
-: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ) ) )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( ".uno:FontworkAlignment" ) )
 {
 }
 
@@ -437,7 +437,7 @@ FontWorkAlignmentControl::FontWorkAlignmentControl( const Reference< lang::XMult
 
 OUString SAL_CALL FontWorkAlignmentControl_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontworkAlignmentController" ));
+    return OUString( "com.sun.star.comp.svx.FontworkAlignmentController" );
 }
 
 // --------------------------------------------------------------------
@@ -445,7 +445,7 @@ OUString SAL_CALL FontWorkAlignmentControl_getImplementationName()
 Sequence< OUString > SAL_CALL FontWorkAlignmentControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 
@@ -610,7 +610,7 @@ IMPL_LINK_NOARG(FontWorkCharacterSpacingWindow, SelectHdl)
         aArgs[0].Name = msFontworkCharacterSpacing.copy(5);
         aArgs[0].Value <<= (sal_Int32)nCharacterSpacing;
 
-        mrController.dispatchCommand( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacingDialog" )), aArgs );
+        mrController.dispatchCommand( OUString( ".uno:FontworkCharacterSpacingDialog" ), aArgs );
     }
     else if ( nSelection == 6 ) // KernCharacterPairs
     {
@@ -656,7 +656,7 @@ public:
 
 
 FontWorkCharacterSpacingControl::FontWorkCharacterSpacingControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
-: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacingFloater" ) ) )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( ".uno:FontworkCharacterSpacingFloater" ) )
 {
 }
 
@@ -673,7 +673,7 @@ FontWorkCharacterSpacingControl::FontWorkCharacterSpacingControl( const Referenc
 
 OUString SAL_CALL FontWorkCharacterSpacingControl_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontworkCharacterSpacingController" ));
+    return OUString( "com.sun.star.comp.svx.FontworkCharacterSpacingController" );
 }
 
 // --------------------------------------------------------------------
@@ -681,7 +681,7 @@ OUString SAL_CALL FontWorkCharacterSpacingControl_getImplementationName()
 Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 

@@ -643,7 +643,7 @@ namespace {
 rtl::OUString createLocalRangeName(const rtl::OUString& rName, const rtl::OUString& rTableName)
 {
     rtl::OUStringBuffer aString (rName);
-    aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")));
+    aString.append(rtl::OUString(" ("));
     aString.append(rTableName);
     aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
     return aString.makeStringAndClear();

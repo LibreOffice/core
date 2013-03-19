@@ -273,9 +273,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         if ( xFPNotifier.is( ) )
             xFPNotifier->addFilePickerListener( xFPListener );
 
-        xFilePicker->setTitle( OUString(RTL_CONSTASCII_USTRINGPARAM("FileOpen Simple...")));
+        xFilePicker->setTitle( OUString("FileOpen Simple..."));
         xFilePicker->setMultiSelectionMode( sal_True );
-        xFilePicker->setDefaultName( OUString(RTL_CONSTASCII_USTRINGPARAM("d:\\test2.sxw")));
+        xFilePicker->setDefaultName( OUString("d:\\test2.sxw"));
 
         OUString aDirURL;
         OUString aSysPath = OStringToOUString( "d:\\ueaeoe", osl_getThreadTextEncoding( ) );

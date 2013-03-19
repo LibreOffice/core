@@ -2339,7 +2339,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         SC_MOD()->SetInSharedDocLoading( true );
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence < beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
+        aArgs[0].Name = ::rtl::OUString( "Hidden" );
         aArgs[0].Value <<= sal_True;
 
         if ( GetMedium() )
@@ -2354,7 +2354,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         }
 
         xModel.set(
-            xLoader->loadComponentFromURL( GetSharedFileURL(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0, aArgs ),
+            xLoader->loadComponentFromURL( GetSharedFileURL(), ::rtl::OUString( "_blank" ), 0, aArgs ),
             uno::UNO_QUERY_THROW );
         SC_MOD()->SetInSharedDocLoading( false );
     }

@@ -2776,7 +2776,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 if (!aReplace.equalsAsciiL("'", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
+                        rtl::OUString("'"));
 
                 aReplace = rtl::OUString(pAuto->GetEndSingleQuote());
                 if (aReplace.isEmpty())
@@ -2784,7 +2784,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 if (!aReplace.equalsAsciiL("'", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
+                        rtl::OUString("'"));
             }
         }
 

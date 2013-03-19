@@ -74,7 +74,7 @@ uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
 ScNamedRangeObj::ScNamedRangeObj():
         UnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XNamed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRange"))),
+        apitest::XNamed(rtl::OUString("NamedRange")),
         apitest::XCellRangeReferrer(table::CellRangeAddress(0,1,7,1,7))
 {
 }
@@ -82,7 +82,7 @@ ScNamedRangeObj::ScNamedRangeObj():
 uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()
 {
     rtl::OUString aFileURL;
-    createFileURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScNamedRangeObj.ods")), aFileURL);
+    createFileURL(rtl::OUString("ScNamedRangeObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
@@ -106,7 +106,7 @@ uno::Reference< sheet::XNamedRange> ScNamedRangeObj::getNamedRange(const rtl::OU
 
 uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 {
-    return getNamedRange(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRange")));
+    return getNamedRange(rtl::OUString("NamedRange"));
 }
 
 void ScNamedRangeObj::setUp()

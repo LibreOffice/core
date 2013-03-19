@@ -160,7 +160,7 @@ public:
 
 OUString    ConnectionGetImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.connectivity.pq.Connection.noext" ) );
+    return OUString( "org.openoffice.comp.connectivity.pq.Connection.noext" );
 }
 com::sun::star::uno::Sequence<rtl::OUString> ConnectionGetSupportedServiceNames(void)
 {
@@ -331,8 +331,7 @@ Reference< XPreparedStatement > Connection::prepareCall( const ::rtl::OUString& 
         throw (SQLException, RuntimeException)
 {
     throw SQLException(
-        OUString(
-            RTL_CONSTASCII_USTRINGPARAM( "pq_driver: Callable statements not supported" ) ),
+        OUString( "pq_driver: Callable statements not supported" ),
         Reference< XInterface > (), OUString() , 1, Any() );
 }
 
@@ -546,7 +545,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     if( ! tc.is() )
     {
         throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("pq_driver: Couldn't instantiate converter service" )),
+            OUString("pq_driver: Couldn't instantiate converter service" ),
             Reference< XInterface > () );
     }
     if( aArguments.getLength() != 2 )
@@ -594,7 +593,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                     free(err);
                 }
                 else
-                    errorMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("#no error message#"));
+                    errorMessage = OUString("#no error message#");
                 OUStringBuffer buf( 128 );
                 buf.appendAscii( "Error in database URL '" );
                 buf.append( url );
@@ -602,7 +601,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 buf.append( errorMessage );
                 // HY092 is "Invalid attribute/option identifier."
                 // Just the most likely error; the error might be  HY024 "Invalid attribute value".
-                throw SQLException( buf.makeStringAndClear(), *this, OUString(RTL_CONSTASCII_USTRINGPARAM("HY092")), 5, Any() );
+                throw SQLException( buf.makeStringAndClear(), *this, OUString("HY092"), 5, Any() );
             }
 
             for (  PQconninfoOption * opt = oOpts.get(); opt->keyword != NULL; ++opt)
@@ -621,7 +620,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         m_settings.pConnection = PQconnectdbParams( keywords.c_array(), values.c_array(), 0 );
     }
     if( ! m_settings.pConnection )
-        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "pq_driver: out of memory" ) ),
+        throw RuntimeException( OUString( "pq_driver: out of memory" ),
                                 Reference< XInterface > () );
     if( PQstatus( m_settings.pConnection ) == CONNECTION_BAD )
     {

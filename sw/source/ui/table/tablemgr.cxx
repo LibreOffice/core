@@ -303,16 +303,16 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+            ::rtl::OUString("CellRangeRepresentation"), -1,
             uno::makeAny( rCellRange ), beans::PropertyState_DIRECT_VALUE );
         aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+            ::rtl::OUString("HasCategories"), -1,
             uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+            ::rtl::OUString("FirstCellAsLabel"), -1,
             uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+            ::rtl::OUString("DataRowSource"), -1,
             uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xDataReceiver->setArguments( aArgs );
     }

@@ -823,7 +823,7 @@ void ODatabaseExport::ensureFormatter()
         SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
         m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
         Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
-        xNumberFormatSettings->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= m_aNullDate;
+        xNumberFormatSettings->getPropertyValue(::rtl::OUString("NullDate")) >>= m_aNullDate;
     }
 }
 // -----------------------------------------------------------------------------
@@ -832,11 +832,11 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const TPositions& _rvColumns)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::createPreparedStatment" );
-    ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
+    ::rtl::OUString aSql(::rtl::OUString("INSERT INTO "));
     ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 
     aSql += sComposedTableName;
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( "));
+    aSql += ::rtl::OUString(" ( ");
     // set values and column names
     ::rtl::OUString aValues(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
     static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));

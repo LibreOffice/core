@@ -138,16 +138,14 @@ void Test::test() {
     rtl::OUString doc;
     CPPUNIT_ASSERT(
         test::getTestArgument(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smoketest.doc")), &doc));
+            rtl::OUString("smoketest.doc"), &doc));
     css::uno::Sequence< css::beans::PropertyValue > args(2);
-    args[0].Name = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
+    args[0].Name = rtl::OUString("MacroExecutionMode");
     args[0].Handle = -1;
     args[0].Value <<=
         com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = css::beans::PropertyState_DIRECT_VALUE;
-    args[1].Name = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+    args[1].Name = rtl::OUString("ReadOnly");
     args[1].Handle = -1;
     args[1].Value <<= sal_True;
     args[1].State = css::beans::PropertyState_DIRECT_VALUE;
@@ -165,12 +163,12 @@ void Test::test() {
                 css::uno::Reference< css::frame::XModel >(
                     xDesktop->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
+                            rtl::OUString("_default"),
                             0, args),
                     css::uno::UNO_QUERY_THROW)->getCurrentController(),
                 css::uno::UNO_SET_THROW)->getFrame(),
             css::uno::UNO_QUERY_THROW)->queryDispatch(
-                url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0),
+                url, rtl::OUString("_self"), 0),
         css::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):

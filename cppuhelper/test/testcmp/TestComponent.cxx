@@ -98,7 +98,7 @@ uno::Reference<uno::XInterface> SAL_CALL TestComponent::create(
     }
     catch (std::bad_alloc &)
     {
-        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")),
+        throw uno::RuntimeException(rtl::OUString("std::bad_alloc"),
                                      uno::Reference<uno::XInterface>());
     }
 }
@@ -106,7 +106,7 @@ uno::Reference<uno::XInterface> SAL_CALL TestComponent::create(
 uno::Sequence<rtl::OUString> SAL_CALL TestComponent::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> serviceNames(1);
-    serviceNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.ServiceInfo"));
+    serviceNames[0] = rtl::OUString("com.sun.star.lang.ServiceInfo");
 
     return serviceNames;
 }

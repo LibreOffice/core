@@ -36,11 +36,11 @@ namespace mysqlc_sdbc_driver
 void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
-    const ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": feature not implemented." ) );
+    const ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( ": feature not implemented." );
     throw SQLException(
         sMessage,
         _rxContext,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYC00")),
+        ::rtl::OUString("HYC00"),
         0,
         _pNextException ? *_pNextException : Any()
     );
@@ -50,11 +50,11 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
 void throwInvalidArgumentException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
-    const ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": invalid arguments." ) );
+    const ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( ": invalid arguments." );
     throw SQLException(
         sMessage,
         _rxContext,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYC00")),
+        ::rtl::OUString("HYC00"),
         0,
         _pNextException ? *_pNextException : Any()
     );

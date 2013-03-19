@@ -110,7 +110,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
             sal_Bool bAutoIncrement = sal_False;
             pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
             if ( bAutoIncrement )
-                OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
+                OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString("Autoincrement"), bAutoIncrement );
 
             if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
                 aColumn.put_Type(aFind->first);

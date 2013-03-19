@@ -181,7 +181,7 @@ namespace connectivity { namespace hsqldb
                 if ( !m_bReadOnly )
                 {
                     Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-                    xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT DEFRAG" ) ) );
+                    xStmt->execute( ::rtl::OUString( "CHECKPOINT DEFRAG" ) );
                 }
             }
 
@@ -359,7 +359,7 @@ namespace connectivity { namespace hsqldb
 
             // ask the provider to obtain a graphic
             Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMediaProperties[0].Name = ::rtl::OUString( "URL" );
             aMediaProperties[0].Value <<= sImageURL;
             xGraphic = xProvider->queryGraphic( aMediaProperties );
             OSL_ENSURE( xGraphic.is(), "OHsqlConnection::impl_getTextTableIcon_nothrow: the provider did not give us a graphic object!" );

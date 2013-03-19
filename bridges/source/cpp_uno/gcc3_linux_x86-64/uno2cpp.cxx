@@ -248,8 +248,7 @@ static void cpp_call(
         } catch (...) {
             throw RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "C++ code threw unknown exception")),
+                        "C++ code threw unknown exception"),
                 Reference< XInterface >());
         }
 
@@ -435,7 +434,7 @@ void unoInterfaceProxyDispatch(
     default:
     {
         ::com::sun::star::uno::RuntimeException aExc(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal member type description!") ),
+            OUString("illegal member type description!"),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
         Type const & rExcType = ::getCppuType( &aExc );

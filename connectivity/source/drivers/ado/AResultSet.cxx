@@ -54,14 +54,14 @@ using namespace com::sun::star::sdbc;
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)  \
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ado.ResultSet"));
+    return ::rtl::OUString("com.sun.star.sdbcx.ado.ResultSet");
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
-    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
+    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -901,7 +901,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
     ADOS::ThrowException(*((OConnection*)m_pStmt->getConnection().get())->getConnection(),*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
-    WpADOProperty aProp(aProps.GetItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmarks Ordered"))));
+    WpADOProperty aProp(aProps.GetItem(::rtl::OUString("Bookmarks Ordered")));
     OLEVariant aVar;
     if(aProp.IsValid())
         aVar = aProp.GetValue();

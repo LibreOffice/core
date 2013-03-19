@@ -91,7 +91,7 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
         // As this is a linked graphic the GfxLink is not needed if saving/loading our own format.
         // But this link is required by some filters to access the native graphic (PDF export/MS export),
         // there we should create a new service to provide this data if needed
-        aFilterData[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
+        aFilterData[ 0 ].Name = rtl::OUString( "CreateNativeLink" );
         aFilterData[ 0 ].Value = Any( true );
         rGF.ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
     }

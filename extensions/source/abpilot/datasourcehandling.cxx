@@ -125,7 +125,7 @@ namespace abp
             if (xNewDataSource.is())
             {
                 xNewDataSource->setPropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" )),
+                    ::rtl::OUString( "URL" ),
                     makeAny( ::rtl::OUString::createFromAscii( _pInitialAsciiURL ) )
                 );
             }

@@ -257,7 +257,7 @@ Any EnumerationImpl::nextElement()
     if (_nPos >= _pMgr->_aProviders.size())
     {
         throw NoSuchElementException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("there is no further element!") ),
+            OUString("there is no further element!"),
             (XWeak *)(OWeakObject *)this );
     }
     return makeAny( _pMgr->_aProviders[_nPos++] );
@@ -423,7 +423,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
             if (find( newProvs.begin(), newProvs.end(), xElem ) != newProvs.end())
             {
                 throw ElementExistException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("provider already inserted!") ),
+                    OUString("provider already inserted!"),
                     (XWeak *)(OWeakObject *)this );
             }
 
@@ -530,7 +530,7 @@ void SAL_CALL ManagerImpl::remove( const Any & rElement )
         if (! (rElement >>= xElem))
         {
             throw IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("no type description provider given!") ),
+                OUString("no type description provider given!"),
                 (XWeak *)(OWeakObject *)this, 0 );
         }
 
@@ -539,7 +539,7 @@ void SAL_CALL ManagerImpl::remove( const Any & rElement )
         if (iFind == _aProviders.end())
         {
             throw NoSuchElementException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("provider not found!") ),
+                OUString("provider not found!"),
                 (XWeak *)(OWeakObject *)this );
         }
         _aProviders.erase( iFind );
@@ -654,7 +654,7 @@ TypeClass SequenceTypeDescriptionImpl::getTypeClass()
 OUString SequenceTypeDescriptionImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return (OUString( RTL_CONSTASCII_USTRINGPARAM("[]") ) + _xElementTD->getName());
+    return (OUString("[]") + _xElementTD->getName());
 }
 
 // XIndirectTypeDescription

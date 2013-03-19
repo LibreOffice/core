@@ -344,7 +344,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString("sdbc:dbase:") );
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), sal_True );
 
@@ -482,13 +482,13 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
         switch( m_pMySQLIntroPage->getMySQLMode() )
         {
             case OMySQLIntroPageSetup::VIA_JDBC:
-                sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:jdbc:"));
+                sRet = ::rtl::OUString("sdbc:mysql:jdbc:");
                 break;
             case OMySQLIntroPageSetup::VIA_NATIVE:
-                sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:"));
+                sRet = ::rtl::OUString("sdbc:mysql:mysqlc:");
                 break;
             case OMySQLIntroPageSetup::VIA_ODBC:
-                sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:odbc:"));
+                sRet = ::rtl::OUString("sdbc:mysql:odbc:");
                 break;
         }
     }
@@ -539,16 +539,16 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:odbc:")))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString("sdbc:mysql:odbc:"))));
             pPage = OConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:jdbc:")))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString("sdbc:mysql:jdbc:"))));
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( this, *m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:")))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString("sdbc:mysql:mysqlc:"))));
             pPage = MySQLNativeSetupPage::Create( this, *m_pOutSet);
             break;
 
@@ -627,13 +627,13 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
     switch( _pMySQLIntroPageSetup->getMySQLMode() )
     {
         case  OMySQLIntroPageSetup::VIA_ODBC:
-            sURLPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:odbc:"));
+            sURLPrefix = ::rtl::OUString("sdbc:mysql:odbc:");
             break;
         case  OMySQLIntroPageSetup::VIA_JDBC:
-            sURLPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:jdbc:"));
+            sURLPrefix = ::rtl::OUString("sdbc:mysql:jdbc:");
             break;
         case  OMySQLIntroPageSetup::VIA_NATIVE:
-            sURLPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:"));
+            sURLPrefix = ::rtl::OUString("sdbc:mysql:mysqlc:");
             break;
     }
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), sal_True);
@@ -814,11 +814,11 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         try
         {
         if ( aDriverConfig.getDriverFactoryName(sEmbeddedURL).isEmpty() || !m_pImpl->getDriver(sEmbeddedURL).is() )
-            sEmbeddedURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"));
+            sEmbeddedURL = ::rtl::OUString("sdbc:dbase:");
         }
         catch(const Exception&)
         {
-            sEmbeddedURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"));
+            sEmbeddedURL = ::rtl::OUString("sdbc:dbase:");
         }
 
         return sEmbeddedURL;
@@ -1028,7 +1028,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                     aLoadArgs >>= aLoadArgPV;
 
                     m_xFrameLoader->loadComponentFromURL( m_sURL,
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
+                        ::rtl::OUString( "_default" ),
                         FrameSearchFlag::ALL,
                         aLoadArgPV
                     );

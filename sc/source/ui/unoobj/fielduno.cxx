@@ -392,7 +392,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFieldEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.text.TextFieldEnumeration"));
 }
 
 void SAL_CALL ScCellFieldsObj::addContainerListener(
@@ -572,7 +572,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumer
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFieldEnumeration")));
+    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.text.TextFieldEnumeration"));
 }
 
 void SAL_CALL ScHeaderFieldsObj::addContainerListener(

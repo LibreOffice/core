@@ -318,7 +318,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccess
 
 rtl::OUString SAL_CALL ScAccessiblePageHeader::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessiblePageHeader"));
+    return rtl::OUString("ScAccessiblePageHeader");
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceNames()
@@ -329,7 +329,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServic
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AccessibleHeaderFooterView"));
+    pNames[nOldSize] = rtl::OUString("com.sun.star.text.AccessibleHeaderFooterView");
 
     return aSequence;
 }

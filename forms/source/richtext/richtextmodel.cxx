@@ -244,13 +244,13 @@ namespace frm
     //--------------------------------------------------------------------
     IMPLEMENT_SERVICE_REGISTRATION_8( ORichTextModel, OControlModel,
         FRM_SUN_COMPONENT_RICHTEXTCONTROL,
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextRange" ) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterProperties" ) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphProperties" ) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterPropertiesAsian" ) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CharacterPropertiesComplex" ) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphPropertiesAsian" ) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.ParagraphPropertiesComplex" ) )
+        ::rtl::OUString( "com.sun.star.text.TextRange" ),
+        ::rtl::OUString( "com.sun.star.style.CharacterProperties" ),
+        ::rtl::OUString( "com.sun.star.style.ParagraphProperties" ),
+        ::rtl::OUString( "com.sun.star.style.CharacterPropertiesAsian" ),
+        ::rtl::OUString( "com.sun.star.style.CharacterPropertiesComplex" ),
+        ::rtl::OUString( "com.sun.star.style.ParagraphPropertiesAsian" ),
+        ::rtl::OUString( "com.sun.star.style.ParagraphPropertiesComplex" )
     )
 
     //------------------------------------------------------------------------------
@@ -409,7 +409,7 @@ namespace frm
                 // forward to our aggregate, so the EditEngine knows about it
                 if ( m_xAggregateSet.is() )
                     m_xAggregateSet->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) ), _rValue );
+                        ::rtl::OUString( "WritingMode" ), _rValue );
             }
             break;
 

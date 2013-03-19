@@ -268,7 +268,7 @@ void NeonUri::calculateURI ()
         return aTemp;
     }
     else
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/"));
+        return rtl::OUString("/");
 }
 
 bool NeonUri::operator== ( const NeonUri & rOther ) const
@@ -284,7 +284,7 @@ bool NeonUri::operator== ( const NeonUri & rOther ) const
 void NeonUri::AppendPath (const rtl::OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/"));
+        mPath += rtl::OUString("/");
 
     mPath += rPath;
     calculateURI ();

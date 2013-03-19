@@ -92,8 +92,7 @@ css::uno::Reference< css::reflection::XTypeDescription > Parameter::getType()
     } catch (const css::container::NoSuchElementException & e) {
         throw new css::uno::RuntimeException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.container.NoSuchElementException: "))
+                    "com.sun.star.container.NoSuchElementException: ")
              + e.Message),
             static_cast< cppu::OWeakObject * >(this));
     }

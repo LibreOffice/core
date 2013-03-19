@@ -287,8 +287,8 @@ namespace frm
     Any OScrollBarModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMin" ) ),
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMax" ) ) );
+            ::rtl::OUString( "ScrollValueMin" ),
+            ::rtl::OUString( "ScrollValueMax" ) );
     }
 
     //--------------------------------------------------------------------

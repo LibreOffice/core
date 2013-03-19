@@ -665,7 +665,7 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
         uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
             task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
         uno::Sequence < beans::PropertyValue> aProps(1);
-        aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+        aProps[0].Name = ::rtl::OUString( "InteractionHandler" );
         aProps[0].Value <<= xInteractionHandler;
         m_xDocProps->loadFromMedium( rURL, aProps );
         pEditWin->fill( m_xDocProps, rURL );
@@ -747,7 +747,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
 
                         uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
                             task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
-                        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
+                        aArgs[3].Name = ::rtl::OUString( "InteractionHandler" );
                         aArgs[3].Value <<= xInteractionHandler;
 
                         b = sal_False;

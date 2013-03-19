@@ -147,10 +147,10 @@ namespace rptui
                 for ( sal_Int32 i=0; i<nCount; ++i )
                 {
                     xColumn.set( _rxColumns->getByIndex( i ), UNO_QUERY_THROW );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name"       ) ) ) >>= aField.sName       );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type"       ) ) ) >>= aField.nDataType   );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scale"      ) ) ) >>= aField.nScale      );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsCurrency" ) ) ) >>= aField.bIsCurrency );
+                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "Name"       ) ) >>= aField.sName       );
+                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "Type"       ) ) >>= aField.nDataType   );
+                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "Scale"      ) ) >>= aField.nScale      );
+                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "IsCurrency" ) ) >>= aField.bIsCurrency );
                     _inout_rFields.push_back( aField );
                 }
             }

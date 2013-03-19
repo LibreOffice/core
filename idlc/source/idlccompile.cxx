@@ -289,7 +289,7 @@ sal_Int32 compileFile(const OString * pathname)
         } while( nIndex != -1 );
     }
 
-    lCppArgs.push_back(OUString(RTL_CONSTASCII_USTRINGPARAM("-o")));
+    lCppArgs.push_back(OUString("-o"));
 
 	cppArgs.append(preprocFile);
     lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
@@ -308,9 +308,9 @@ sal_Int32 compileFile(const OString * pathname)
     cpp = cpp.copy(0, idx);
 
 #if defined(SAL_W32)
-    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("ucpp.exe"));
+    cpp += OUString("ucpp.exe");
 #else
-    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("ucpp"));
+    cpp += OUString("ucpp");
 #endif
 #else // SYSTEM_UCPP
     cpp = OUString( RTL_CONSTASCII_USTRINGPARAM(UCPP));

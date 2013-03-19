@@ -679,7 +679,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 {
     SetText(
         utl::ConfigManager::getProductName() +
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " Base" ) ) );
+        rtl::OUString( " Base" ) );
 
     // position and size the controls and the dialog, depending on whether we have one or two texts to display
     impl_positionControls();

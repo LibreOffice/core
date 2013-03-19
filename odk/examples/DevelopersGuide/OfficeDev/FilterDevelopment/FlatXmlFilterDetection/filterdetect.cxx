@@ -208,7 +208,7 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
 OUString FilterDetect_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "devguide.officedev.samples.filter.FlatXmlDetect" ) );
+    return OUString( "devguide.officedev.samples.filter.FlatXmlDetect" );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"

@@ -133,8 +133,8 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
         Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext() );
         Sequence< OUString > aProps( 2 );
 
-        aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
-        aProps.getArray()[ 1 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ));
+        aProps.getArray()[ 0 ] = OUString( "IsFolder" );
+        aProps.getArray()[ 1 ] = OUString( "IsDocument" );
         ::com::sun::star::uno::Reference< XResultSet > xResultSet(
             aCnt.createCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS ) );
 

@@ -305,7 +305,7 @@ namespace frm
 
                     Sequence<PropertyValue> aArgs(1);
                     PropertyValue& rProp = aArgs.getArray()[0];
-                    rProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer") );
+                    rProp.Name = ::rtl::OUString("Referer");
                     rProp.Value <<= xModel->getURL();
 
                     if (xDisp.is())
@@ -320,13 +320,13 @@ namespace frm
                     if ( xDisp.is() )
                     {
                         Sequence<PropertyValue> aProps(3);
-                        aProps[0].Name  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+                        aProps[0].Name  = ::rtl::OUString("URL");
                         aProps[0].Value <<= aURL.Complete;
 
-                        aProps[1].Name  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName"));
+                        aProps[1].Name  = ::rtl::OUString("FrameName");
                         aProps[1].Value = xSet->getPropertyValue(PROPERTY_TARGET_FRAME);
 
-                        aProps[2].Name  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+                        aProps[2].Name  = ::rtl::OUString("Referer");
                         aProps[2].Value <<= xModel->getURL();
 
                         xDisp->dispatch( aHyperLink, aProps );
@@ -679,7 +679,7 @@ namespace frm
         ImageProducer *pImgProd = GetImageProducer();
         // grab the ImageURL
         rtl::OUString sURL;
-        getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ) ) >>= sURL;
+        getPropertyValue( rtl::OUString("ImageURL") ) >>= sURL;
         if (!m_pMedium)
         {
             if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )

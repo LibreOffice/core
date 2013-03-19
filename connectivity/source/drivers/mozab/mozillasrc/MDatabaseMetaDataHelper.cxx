@@ -108,7 +108,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
 
-        Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+        Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
         m_bProfileExists = xMozillaBootstrap->shutdownProfile() > 0;
@@ -440,7 +440,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
 
         // Insert table into map
         if ( aTableName.isEmpty() )
-            aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
+            aTableName = rtl::OUString("AddressBook");
 
         OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
@@ -454,12 +454,12 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
             //map mailing lists as views
             _rStrings->push_back( aTableName ); // Table name
             if (!bIsMailList) {
-                ::rtl::OUString aTableType(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TABLE")));
+                ::rtl::OUString aTableType(::rtl::OUString("TABLE"));
                 _rTypes->push_back( aTableType ); // Table type
             }
             else
             {
-                ::rtl::OUString aTableType(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VIEW")));
+                ::rtl::OUString aTableType(::rtl::OUString("VIEW"));
                 _rTypes->push_back( aTableType ); // Table type
             }
         }
@@ -550,7 +550,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
         Reference<XMozillaBootstrap> xMozillaBootstrap;
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
-         Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+         Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
         m_bProfileExists = sal_False;
@@ -624,7 +624,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > tabletypes;
-    ::rtl::OUString matchAny = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
+    ::rtl::OUString matchAny = rtl::OUString("%");
 
     if ( !getTableStrings( _pCon, tables,tabletypes ) )
         return sal_False;
@@ -643,7 +643,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                        0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
                        0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength())) {
             if ( aTableName.isEmpty() ) {
-                aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
+                aTableName = rtl::OUString("AddressBook");
             }
 
             OSL_TRACE( "TableName = %s ; TableType = %s", OUtoCStr(aTableName), OUtoCStr(aTableType) );

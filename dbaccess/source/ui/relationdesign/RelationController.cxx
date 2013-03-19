@@ -98,13 +98,13 @@ using namespace ::osl;
 //------------------------------------------------------------------------------
 ::rtl::OUString ORelationController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ORelationDesign"));
+    return ::rtl::OUString("org.openoffice.comp.dbu.ORelationDesign");
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> ORelationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RelationDesign"));
+    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.RelationDesign");
     return aSupported;
 }
 //-------------------------------------------------------------------------

@@ -173,7 +173,7 @@ void SAL_CALL OImageControl::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OImageControl::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OImageControl"));
+    return ::rtl::OUString("com.sun.star.comp.report.OImageControl");
 }
 
 //--------------------------------------------------------------------------
@@ -458,7 +458,7 @@ void SAL_CALL OImageControl::setSize( const awt::Size& aSize ) throw (beans::Pro
 // XShapeDescriptor
 ::rtl::OUString SAL_CALL OImageControl::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"));
+   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 ::sal_Int16 SAL_CALL OImageControl::getScaleMode() throw (uno::RuntimeException)

@@ -572,7 +572,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
-        aMediaDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+        aMediaDescriptor[0].Name = ::rtl::OUString("URL");
         aMediaDescriptor[0].Value <<= ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
         {
@@ -581,7 +581,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             if ( xInteraction.is() )
             {
                 aMediaDescriptor.realloc( 2 );
-                aMediaDescriptor[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+                aMediaDescriptor[1].Name = ::rtl::OUString( "InteractionHandler" );
                 aMediaDescriptor[1].Value <<= xInteraction;
             }
         }
@@ -718,10 +718,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             if ( xSet.is() )
             {
                 if( bValidURL )
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
+                    xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
                         makeAny( ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 if( bValidMimeType )
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")),
+                    xSet->setPropertyValue( ::rtl::OUString("PluginMimeType"),
                         makeAny( ::rtl::OUString( rMimeType ) ) );
             }
 
@@ -848,31 +848,31 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")),
+                xSet->setPropertyValue( ::rtl::OUString("FrameURL"),
                     makeAny( ::rtl::OUString( URIHelper::SmartRel2Abs(
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")),
+                xSet->setPropertyValue( ::rtl::OUString("FrameName"),
                     makeAny( ::rtl::OUString( rName ) ) );
 
                 if ( eScrollMode == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
+                    xSet->setPropertyValue( ::rtl::OUString("FrameIsAutoScroll"),
                         makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
+                    xSet->setPropertyValue( ::rtl::OUString("FrameIsScrollingMode"),
                         makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
 
                 if ( bIsBorderSet )
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
+                    xSet->setPropertyValue( ::rtl::OUString("FrameIsBorder"),
                         makeAny( bHasBorder ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
+                    xSet->setPropertyValue( ::rtl::OUString("FrameIsAutoBorder"),
                         makeAny( sal_True ) );
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
+                xSet->setPropertyValue( ::rtl::OUString("FrameMarginWidth"),
                     makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
+                xSet->setPropertyValue( ::rtl::OUString("FrameMarginHeight"),
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 
@@ -942,7 +942,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             }
             catch ( uno::Exception& )
             {
-                aParaName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands"));
+                aParaName = ::rtl::OUString("PluginCommands");
                 try
                 {
                     xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );

@@ -78,7 +78,7 @@ namespace pq_sdbc_driver
 ::rtl::OUString Array::getBaseTypeName(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "varchar" ) );
+    return OUString( "varchar" );
 }
 
 sal_Int32 Array::getBaseType(  )

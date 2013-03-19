@@ -284,7 +284,7 @@ void ScUndoEnterData::Undo()
         {
             aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
     }
 }
 
@@ -318,7 +318,7 @@ void ScUndoEnterData::Redo()
         {
             aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
     }
 }
 

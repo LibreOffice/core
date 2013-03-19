@@ -161,7 +161,7 @@ ScVbaOLEObjects::getElementType() throw (uno::RuntimeException)
 rtl::OUString
 ScVbaOLEObjects::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaOLEObjects"));
+    return rtl::OUString("ScVbaOLEObjects");
 }
 
 uno::Sequence< rtl::OUString >
@@ -171,7 +171,7 @@ ScVbaOLEObjects::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.OLEObjects" ) );
+        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.OLEObjects" );
     }
     return aServiceNames;
 }

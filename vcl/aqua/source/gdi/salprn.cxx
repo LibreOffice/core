@@ -400,7 +400,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
 
     // do we want a progress panel ?
     sal_Bool bShowProgressPanel = sal_True;
-    beans::PropertyValue* pMonitor = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
+    beans::PropertyValue* pMonitor = i_rController.getValue( rtl::OUString( "MonitorVisible" ) );
     if( pMonitor )
         pMonitor->Value >>= bShowProgressPanel;
     if( ! i_rController.isShowDialogs() )
@@ -408,7 +408,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
 
     // possibly create one job for collated output
     sal_Bool bSinglePrintJobs = sal_False;
-    beans::PropertyValue* pSingleValue = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
+    beans::PropertyValue* pSingleValue = i_rController.getValue( rtl::OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
     {
         pSingleValue->Value >>= bSinglePrintJobs;

@@ -153,7 +153,7 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*Confirm
 rtl::OUString
 SwVbaDocuments::getServiceImplName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaDocuments"));
+    return rtl::OUString("SwVbaDocuments");
 }
 
 uno::Sequence<rtl::OUString>
@@ -163,7 +163,7 @@ SwVbaDocuments::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Documents") );
+        sNames[0] = rtl::OUString("ooo.vba.word.Documents");
     }
     return sNames;
 }

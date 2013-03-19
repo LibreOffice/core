@@ -133,10 +133,10 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
     try
     {
         // determine the datatype of the column
-        _xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"))) >>= nDataType;
+        _xColumn->getPropertyValue(::rtl::OUString("Type")) >>= nDataType;
 
         if (DataType::NUMERIC == nDataType || DataType::DECIMAL == nDataType)
-            _xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scale"))) >>= nScale;
+            _xColumn->getPropertyValue(::rtl::OUString("Scale")) >>= nScale;
     }
     catch (Exception&)
     {
@@ -144,7 +144,7 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
     }
     return getDefaultNumberFormat(nDataType,
                     nScale,
-                    ::cppu::any2bool(_xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsCurrency")))),
+                    ::cppu::any2bool(_xColumn->getPropertyValue(::rtl::OUString("IsCurrency"))),
                     _xTypes,
                     _rLocale);
 }
@@ -295,8 +295,8 @@ Reference< XConnection > getConnection_allowException(
             try
             {
                 xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
-                bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsPasswordRequired"))));
-                xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("User"))) >>= sUser;
+                bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString("IsPasswordRequired")));
+                xProp->getPropertyValue(::rtl::OUString("User")) >>= sUser;
             }
             catch(Exception&)
             {
@@ -349,7 +349,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
     Reference< XConnection> xReturn;
     Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
-        xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) >>= xReturn;
+        xRowSetProps->getPropertyValue(::rtl::OUString("ActiveConnection")) >>= xReturn;
     return xReturn;
 }
 
@@ -371,7 +371,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         // 1. already connected?
         Reference< XConnection > xExistingConn(
-            xRowSetProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ) ),
+            xRowSetProps->getPropertyValue( ::rtl::OUString( "ActiveConnection" ) ),
             UNO_QUERY );
 
         if  (   xExistingConn.is()
@@ -383,7 +383,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
         {
             if ( _bSetAsActiveConnection )
             {
-                xRowSetProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ), makeAny( xExistingConn ) );
+                xRowSetProps->setPropertyValue( ::rtl::OUString( "ActiveConnection" ), makeAny( xExistingConn ) );
                 // no auto disposer needed, since we did not create the connection
             }
 
@@ -395,9 +395,9 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         const ::rtl::OUString sUserProp( RTL_CONSTASCII_USTRINGPARAM( "User" ));
         ::rtl::OUString sDataSourceName;
-        xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sDataSourceName;
+        xRowSetProps->getPropertyValue(::rtl::OUString("DataSourceName")) >>= sDataSourceName;
         ::rtl::OUString sURL;
-        xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))) >>= sURL;
+        xRowSetProps->getPropertyValue(::rtl::OUString("URL")) >>= sURL;
 
         Reference< XConnection > xPureConnection;
         if (!sDataSourceName.isEmpty())
@@ -429,9 +429,9 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
                 if (!sUser.isEmpty())
                 {   // use user and pwd together with the url
                     Sequence< PropertyValue> aInfo(2);
-                    aInfo.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
+                    aInfo.getArray()[0].Name = ::rtl::OUString("user");
                     aInfo.getArray()[0].Value <<= sUser;
-                    aInfo.getArray()[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password"));
+                    aInfo.getArray()[1].Name = ::rtl::OUString("password");
                     aInfo.getArray()[1].Value <<= sPwd;
                     xPureConnection = xDriverManager->getConnectionWithInfo( sURL, aInfo );
                 }
@@ -458,7 +458,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
                 }
                 else
                     xRowSetProps->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ),
+                        ::rtl::OUString( "ActiveConnection" ),
                         makeAny( xConnection.getTyped() )
                     );
             }
@@ -672,14 +672,14 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
 
                         if ( xComposerFac.is() )
                         {
-                            Reference< XSingleSelectQueryComposer > xComposer(xComposerFac->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.SingleSelectQueryComposer"))),UNO_QUERY);
+                            Reference< XSingleSelectQueryComposer > xComposer(xComposerFac->createInstance( ::rtl::OUString("com.sun.star.sdb.SingleSelectQueryComposer")),UNO_QUERY);
                             if ( xComposer.is() )
                             {
                                 xComposer->setQuery( sStatementToExecute );
 
                                 // Now set the filter to a dummy restriction which will result in an empty
                                 // result set.
-                                xComposer->setFilter( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0=1" )) );
+                                xComposer->setFilter( ::rtl::OUString( "0=1" ) );
                                 sStatementToExecute = xComposer->getQuery( );
                             }
                         }
@@ -703,7 +703,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                     {
                         if ( xStatementProps.is() )
                             xStatementProps->setPropertyValue(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxRows" ) ),
+                                ::rtl::OUString( "MaxRows" ),
                                 makeAny( sal_Int32( 0 ) )
                             );
                     }
@@ -1235,19 +1235,19 @@ catch(const Exception&)
 //------------------------------------------------------------------------------
 sal_Bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Privileges")))) & Privilege::INSERT) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString("Privileges"))) & Privilege::INSERT) != 0));
 }
 
 //------------------------------------------------------------------------------
 sal_Bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Privileges")))) & Privilege::UPDATE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString("Privileges"))) & Privilege::UPDATE) != 0));
 }
 
 //------------------------------------------------------------------------------
 sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Privileges")))) & Privilege::DELETE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString("Privileges"))) & Privilege::DELETE) != 0));
 }
 // -----------------------------------------------------------------------------
 Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
@@ -1284,19 +1284,19 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
             ::rtl::OUString sCommand;
             sal_Bool bEscapeProcessing = sal_False;
 
-            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CommandType" ))      ) >>= nCommandType      );
-            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Command" ))          ) >>= sCommand          );
-            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "EscapeProcessing" )) ) >>= bEscapeProcessing );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString( "CommandType" )      ) >>= nCommandType      );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString( "Command" )          ) >>= sCommand          );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString( "EscapeProcessing" ) ) >>= bEscapeProcessing );
 
             StatementComposer aComposer( xConn, sCommand, nCommandType, bEscapeProcessing );
             // append sort
-            aComposer.setOrder( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Order" )) ) ) );
+            aComposer.setOrder( getString( _rxRowSet->getPropertyValue( ::rtl::OUString( "Order" ) ) ) );
 
             // append filter
             sal_Bool bApplyFilter = sal_True;
-            _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" )) ) >>= bApplyFilter;
+            _rxRowSet->getPropertyValue( ::rtl::OUString( "ApplyFilter" ) ) >>= bApplyFilter;
             if ( bApplyFilter )
-                aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Filter" )) ) ) );
+                aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString( "Filter" ) ) ) );
 
             aComposer.getQuery();
 
@@ -1352,8 +1352,8 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
 ::rtl::OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnection,
     const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName )
 {
-    sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled( _rxConnection, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCatalogInSelect" ) ), sal_True );
-    sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled( _rxConnection, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseSchemaInSelect" ) ), sal_True );
+    sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled( _rxConnection, ::rtl::OUString( "UseCatalogInSelect" ), sal_True );
+    sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled( _rxConnection, ::rtl::OUString( "UseSchemaInSelect" ), sal_True );
 
     return impl_doComposeTableName(
         _rxConnection->getMetaData(),

@@ -49,13 +49,13 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
 {
 
     ::comphelper::SequenceAsHashMap aTemp(Descriptor);
-    ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),::rtl::OUString());
+    ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString("URL"),::rtl::OUString());
 
     if ( !sTemp.isEmpty() )
     {
         INetURLObject aURL(sTemp);
         if ( aURL.GetExtension().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("orp")) )
-            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBaseReport"));
+            return ::rtl::OUString("StarBaseReport");
         else
         {
             try
@@ -64,9 +64,9 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
                 if ( xProp.is() )
                 {
                     ::rtl::OUString sMediaType;
-                    xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
+                    xProp->getPropertyValue( ::rtl::OUString("MediaType") ) >>= sMediaType;
                     if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII )
-                        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBaseReport"));
+                        return ::rtl::OUString("StarBaseReport");
                     ::comphelper::disposeComponent(xProp);
                 }
             }
@@ -107,7 +107,7 @@ Sequence< ::rtl::OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames
 Sequence< ::rtl::OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExtendedTypeDetection"));
+    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.document.ExtendedTypeDetection");
     return aSNS;
 }
 // -----------------------------------------------------------------------------

@@ -458,7 +458,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
 
 rtl::OUString SAL_CALL ScCellCursorObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellCursorObj" ));
+    return rtl::OUString( "ScCellCursorObj" );
 }
 
 sal_Bool SAL_CALL ScCellCursorObj::supportsService( const rtl::OUString& rServiceName )

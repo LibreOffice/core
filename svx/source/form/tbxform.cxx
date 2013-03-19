@@ -85,10 +85,10 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Position" ));
+        aArgs[0].Name = rtl::OUString( "Position" );
         aPositionParam.QueryValue( a );
         aArgs[0].Value = a;
-        m_pController->Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AbsoluteRecord" )),
+        m_pController->Dispatch( rtl::OUString( ".uno:AbsoluteRecord" ),
                                  aArgs );
         m_pController->updateStatus();
 

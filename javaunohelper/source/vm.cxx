@@ -74,13 +74,11 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     css::uno::Any arg(
         css::uno::makeAny(
             css::beans::NamedValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "UnoVirtualMachine" ) ),
+                rtl::OUString( "UnoVirtualMachine" ),
                 css::uno::makeAny( handle ) ) ) );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         ::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.java.JavaVirtualMachine")),
+                "com.sun.star.java.JavaVirtualMachine"),
         css::uno::Sequence< css::uno::Any >( &arg, 1 ), xContext );
 }
 
@@ -90,8 +88,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         ::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.java.JavaVirtualMachine")),
+                "com.sun.star.java.JavaVirtualMachine"),
         args, xContext );
 }
 
@@ -126,8 +123,7 @@ css::uno::Reference< css::uno::XComponentContext > install_vm_singleton(
     css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
     ::cppu::ContextEntry_Init entry(
         ::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "/singletons/com.sun.star.java.theJavaVirtualMachine")),
+                "/singletons/com.sun.star.java.theJavaVirtualMachine"),
         css::uno::makeAny( xFac ), true );
     return ::cppu::createComponentContext( &entry, 1, xContext );
 }

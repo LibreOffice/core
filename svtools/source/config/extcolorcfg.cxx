@@ -269,7 +269,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
             m_aComponentDisplayNames.insert(TDisplayNames::value_type(pIter->getToken(1,'/',nIndex),sComponentDisplayName));
         }
 
-        *pIter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Entries"));
+        *pIter += ::rtl::OUString("/Entries");
         uno::Sequence < ::rtl::OUString > aDisplayNames = GetPropertyNames(*pIter);
         lcl_addString(aDisplayNames,sDisplayName);
 
@@ -296,7 +296,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
     {
         //detect current scheme name
         uno::Sequence < ::rtl::OUString > aCurrent(1);
-        aCurrent.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/CurrentColorScheme"));
+        aCurrent.getArray()[0] = ::rtl::OUString("ExtendedColorScheme/CurrentColorScheme");
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     } // if(!sScheme.getLength())
@@ -313,7 +313,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
     }
 
     if ( m_sLoadedScheme.isEmpty() )
-        m_sLoadedScheme = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
+        m_sLoadedScheme = ::rtl::OUString("default");
 
     if ( sScheme != "default" )
     {
@@ -473,7 +473,7 @@ sal_Bool ExtendedColorConfig_Impl::ExistsScheme(const ::rtl::OUString& _sSchemeN
     ::rtl::OUString sBase(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes"));
 
     uno::Sequence < ::rtl::OUString > aComponentNames = GetPropertyNames(sBase);
-    sBase += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + _sSchemeName;
+    sBase += ::rtl::OUString("/") + _sSchemeName;
     const ::rtl::OUString* pCompIter = aComponentNames.getConstArray();
     const ::rtl::OUString* pCompEnd  = pCompIter + aComponentNames.getLength();
     for(;pCompIter != pCompEnd && *pCompIter != sBase;++pCompIter)

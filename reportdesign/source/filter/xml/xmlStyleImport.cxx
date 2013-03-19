@@ -78,7 +78,7 @@ OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
-    sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
+    sNumberFormat(rtl::OUString("NumberFormat")),
     pStyles(&rStyles),
     m_nNumberFormat(-1),
     m_rImport(rImport),
@@ -319,7 +319,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xTableStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TableStyles" ) ));
+                     ::rtl::OUString( rtl::OUString( "TableStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_CELL:
@@ -328,7 +328,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xCellStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) ));
+                     ::rtl::OUString( rtl::OUString( "CellStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
@@ -337,7 +337,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xColumnStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnStyles" ) ));
+                     ::rtl::OUString( rtl::OUString( "ColumnStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_ROW:
@@ -346,7 +346,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xRowStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowStyles" ) ));
+                     ::rtl::OUString( rtl::OUString( "RowStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
