@@ -660,7 +660,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.equalsIgnoreAsciiCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCase("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -669,7 +669,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 name = StrTitle::getTitle( ucbContent );
             }
 
-            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.uno-component"))
+            if (subType.equalsIgnoreAsciiCase("vnd.sun.star.uno-component"))
             {
                 // xxx todo: probe and evaluate component xml description
 
@@ -714,7 +714,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     }
                 }
             }
-            else if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.uno-components"))
+            else if (subType.equalsIgnoreAsciiCase("vnd.sun.star.uno-components"))
             {
                 INetContentTypeParameter const * param = params.find(rtl::OString("platform"));
                 if (param == 0 || platform_fits( param->m_sValue )) {
@@ -723,7 +723,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                         identifier);
                 }
             }
-            else if (subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.uno-typelibrary"))
+            else if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.uno-typelibrary"))
             {
                 INetContentTypeParameter const * param = params.find(rtl::OString("type"));
                 if (param != 0) {

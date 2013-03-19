@@ -1146,7 +1146,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
                 // Check that we only create:
                 // - Toolbars (the statusbar is also member of the persistent window state)
                 // - Not custom toolbars, there are created with their own method (implts_createCustomToolbars)
-                if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("toolbar")) &&
+                if ( aElementType.equalsIgnoreAsciiCase("toolbar") &&
                      aElementName.indexOf( m_aCustomTbxPrefix ) == -1 )
                 {
                     UIElement aNewToolbar = implts_findToolbar( aName );

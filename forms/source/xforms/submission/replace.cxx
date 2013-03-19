@@ -51,8 +51,8 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
 
     try {
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-        if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("all"))
-         || aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("document"))) {
+        if (aReplace.equalsIgnoreAsciiCase("all")
+         || aReplace.equalsIgnoreAsciiCase("document")) {
             Reference< XComponentLoader > xLoader;
             if (aFrame.is())
                 xLoader = Reference< XComponentLoader >(aFrame, UNO_QUERY);
@@ -74,7 +74,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
 
             return CSubmission::SUCCESS;
 
-        } else if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("instance"))) {
+        } else if (aReplace.equalsIgnoreAsciiCase("instance")) {
             if (aDocument.is()) {
                 // parse the result stream into a new document
                 Reference< XDocumentBuilder > xBuilder(DocumentBuilder::create(xContext));
@@ -95,7 +95,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
                 // nothing to replace
                 return CSubmission::UNKNOWN_ERROR;
             }
-        } else if (aReplace.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("none"))) {
+        } else if (aReplace.equalsIgnoreAsciiCase("none")) {
             // do nothing \o/
             return CSubmission::SUCCESS;
         }

@@ -222,9 +222,9 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.equalsIgnoreAsciiCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCase("application"))
         {
-            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.framework-script"))
+            if (subType.equalsIgnoreAsciiCase("vnd.sun.star.framework-script"))
             {
                 OUString lang = OUString("Script");
                 OUString sParcelDescURL = makeURL(

@@ -580,13 +580,13 @@ namespace frm
                 {
                     Any aValue;
                     if  (   aText == "1"
-                        ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("TRUE"))
-                        ||  aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("IS TRUE"))
+                        ||  aText.equalsIgnoreAsciiCase("TRUE")
+                        ||  aText.equalsIgnoreAsciiCase("IS TRUE")
                         )
                     {
                         aValue <<= (sal_Int32)STATE_CHECK;
                     }
-                    else if ( aText == "0" || aText.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("FALSE")) )
+                    else if ( aText == "0" || aText.equalsIgnoreAsciiCase("FALSE") )
                     {
                         aValue <<= (sal_Int32)STATE_NOCHECK;
                     }

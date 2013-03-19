@@ -499,9 +499,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
         rValue >>= aValue;
 
         // Map DAV:resourceype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
-        sal_Bool bFolder =
-            aValue.equalsIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "collection" ) );
+        sal_Bool bFolder = aValue.equalsIgnoreAsciiCase( "collection" );
 
         (*m_xProps)[ rtl::OUString("IsFolder") ]
             = PropertyValue( uno::makeAny( bFolder ), true );

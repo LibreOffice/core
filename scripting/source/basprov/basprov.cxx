@@ -144,11 +144,11 @@ namespace basprov
                 if ( xUriRef.is() )
                 {
                     ::rtl::OUString aScheme = xUriRef->getScheme();
-                    if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
+                    if ( aScheme.equalsIgnoreAsciiCase("file") )
                     {
                         aFileURL = aLinkURL;
                     }
-                    else if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg")) )
+                    else if ( aScheme.equalsIgnoreAsciiCase("vnd.sun.star.pkg") )
                     {
                         ::rtl::OUString aAuthority = xUriRef->getAuthority();
                         if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )

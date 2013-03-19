@@ -44,13 +44,13 @@ static OUString FilePicker_getSystemPickerServiceName()
 {
 #ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
-    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde")))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCase("tde"))
         return OUString ("com.sun.star.ui.dialogs.TDEFilePicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde"))
         return OUString ("com.sun.star.ui.dialogs.KDEFilePicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde4"))
         return OUString ("com.sun.star.ui.dialogs.KDE4FilePicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("macosx")))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
         return OUString ("com.sun.star.ui.dialogs.AquaFilePicker");
     else
         return OUString ("com.sun.star.ui.dialogs.SystemFilePicker");
@@ -124,11 +124,11 @@ static OUString FolderPicker_getSystemPickerServiceName()
 {
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
 #ifdef UNX
-    if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde")))
+    if (aDesktopEnvironment.equalsIgnoreAsciiCase("tde"))
         return OUString("com.sun.star.ui.dialogs.TDEFolderPicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("kde"))
         return OUString("com.sun.star.ui.dialogs.KDEFolderPicker");
-    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("macosx")))
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCase("macosx"))
         return OUString("com.sun.star.ui.dialogs.AquaFolderPicker");
 #endif
     return OUString("com.sun.star.ui.dialogs.SystemFolderPicker");

@@ -328,7 +328,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.equalsIgnoreAsciiCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCase("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -338,13 +338,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
 
             ::ucbhelper::Content ucbContent( url, xCmdEnv, m_xComponentContext );
-            if (subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.configuration-data"))
+            if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.configuration-data"))
             {
                 return new PackageImpl(
                     this, url, name, m_xConfDataTypeInfo, false /* data file */,
                     bRemoved, identifier);
             }
-            else if (subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.configuration-schema")) {
+            else if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.configuration-schema")) {
                 return new PackageImpl(
                     this, url, name, m_xConfSchemaTypeInfo, true /* schema file */,
                     bRemoved, identifier);

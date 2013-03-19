@@ -99,9 +99,9 @@ void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttrib
             OUString sEditAs = rAttribs.getXString( XML_editAs, OUString() );
             if ( !sEditAs.isEmpty() )
             {
-                if ( sEditAs.equalsIgnoreAsciiCaseAscii("absolute" ) )
+                if ( sEditAs.equalsIgnoreAsciiCase("absolute" ) )
                     meEditAs = ANCHOR_ABSOLUTE;
-                else if ( sEditAs.equalsIgnoreAsciiCaseAscii("oneCell") )
+                else if ( sEditAs.equalsIgnoreAsciiCase("oneCell") )
                     meEditAs = ANCHOR_ONECELL;
             }
         }

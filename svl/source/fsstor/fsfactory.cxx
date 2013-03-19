@@ -132,8 +132,8 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 
     // allow to use other ucp's
     // if ( !isLocalNotFile_Impl( aURL ) )
-    if ( aURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg"))
-      || aURL.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip"))
+    if ( aURL.equalsIgnoreAsciiCase("vnd.sun.star.pkg")
+      || aURL.equalsIgnoreAsciiCase("vnd.sun.star.zip")
       || ::utl::UCBContentHelper::IsDocument( aURL ) )
     {
         throw lang::IllegalArgumentException(

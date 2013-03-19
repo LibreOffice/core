@@ -674,7 +674,7 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
 sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) const
 {
     // color attribute not present or 'auto' - use passed default color
-    if( rTextColor.isEmpty() || rTextColor.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "auto" ) ) )
+    if( rTextColor.isEmpty() || rTextColor.equalsIgnoreAsciiCase( "auto" ) )
         return AX_SYSCOLOR_WINDOWTEXT;
 
     if( rTextColor[ 0 ] == '#' )

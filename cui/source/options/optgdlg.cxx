@@ -115,7 +115,7 @@ namespace
         {
             const OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
 
-            if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")) )
+            if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde4") )
             {
                 #ifdef ENABLE_KDE4
                 return OUString("com.sun.star.ui.dialogs.KDE4FilePicker" );
@@ -123,7 +123,7 @@ namespace
                 return OUString();
                 #endif
             }
-            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) )
+            else if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde") )
             {
                 #ifdef ENABLE_KDE
                 return OUString("com.sun.star.ui.dialogs.KDEFilePicker");
@@ -131,7 +131,7 @@ namespace
                 return OUString();
                 #endif
             }
-            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("tde")) )
+            else if ( rDesktopEnvironment.equalsIgnoreAsciiCase("tde") )
             {
                 #ifdef ENABLE_TDE
                 return OUString("com.sun.star.ui.dialogs.TDEFilePicker");

@@ -779,12 +779,12 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     while( !bExitLoop && !aFrameTextStrm.isEof() )
     {
         aLine = aFrameTextStrm.readLine().trim();
-        bExitLoop = aLine.equalsIgnoreAsciiCaseAscii( "End" );
+        bExitLoop = aLine.equalsIgnoreAsciiCase( "End" );
         if( !bExitLoop && VbaHelper::extractKeyValue( aKey, aValue, aLine ) )
         {
-            if( aKey.equalsIgnoreAsciiCaseAscii( "Caption" ) )
+            if( aKey.equalsIgnoreAsciiCase( "Caption" ) )
                 mxCtrlModel->importProperty( XML_Caption, lclGetQuotedString( aValue ) );
-            else if( aKey.equalsIgnoreAsciiCaseAscii( "Tag" ) )
+            else if( aKey.equalsIgnoreAsciiCase( "Tag" ) )
                 mxSiteModel->importProperty( XML_Tag, lclGetQuotedString( aValue ) );
         }
     }

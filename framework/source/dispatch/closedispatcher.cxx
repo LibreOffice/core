@@ -593,7 +593,7 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
 css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
                                                                                               const ::rtl::OUString&                           sTarget)
 {
-    if (sTarget.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("_self")))
+    if (sTarget.equalsIgnoreAsciiCase("_self"))
         return xFrame;
 
     OSL_ENSURE(sTarget.isEmpty(), "CloseDispatch used for unexpected target. Magic things will happen now .-)");

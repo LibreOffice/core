@@ -1044,7 +1044,7 @@ const FunctionInfo* FunctionProvider::getFuncInfoFromMacroName( const OUString& 
 
 FunctionLibraryType FunctionProvider::getFuncLibTypeFromLibraryName( const OUString& rLibraryName ) const
 {
-#define OOX_XLS_IS_LIBNAME( libname, basename ) (libname.equalsIgnoreAsciiCaseAscii( basename ".XLA" ) || libname.equalsIgnoreAsciiCaseAscii( basename ".XLAM" ))
+#define OOX_XLS_IS_LIBNAME( libname, basename ) (libname.equalsIgnoreAsciiCase( basename ".XLA" ) || libname.equalsIgnoreAsciiCase( basename ".XLAM" ))
 
     // the EUROTOOL add-in containing the EUROCONVERT function
     if( OOX_XLS_IS_LIBNAME( rLibraryName, "EUROTOOL" ) )

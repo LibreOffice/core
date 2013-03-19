@@ -186,7 +186,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType_, type, subType, &params ))
     {
-        if (type.equalsIgnoreAsciiCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCase("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -196,7 +196,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 name = StrTitle::getTitle( ucbContent );
             }
 
-            if (subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.help"))
+            if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.help"))
             {
                 return new PackageImpl(
                     this, url, name, m_xHelpTypeInfo, bRemoved,

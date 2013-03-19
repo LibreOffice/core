@@ -309,17 +309,17 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
 
     // strip whitespace-only text node for get submission
     Reference< XDocumentFragment > aFragment = createSubmissionDocument(
-        xResult, aMethod.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("get")));
+        xResult, aMethod.equalsIgnoreAsciiCase("get"));
 
     // submit result; set encoding, etc.
     auto_ptr<CSubmission> xSubmission;
-    if (aMethod.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("PUT")))
+    if (aMethod.equalsIgnoreAsciiCase("PUT"))
         xSubmission = auto_ptr<CSubmission>(
             new CSubmissionPut( getAction(), aFragment));
-    else if (aMethod.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("post")))
+    else if (aMethod.equalsIgnoreAsciiCase("post"))
         xSubmission = auto_ptr<CSubmission>(
             new CSubmissionPost( getAction(), aFragment));
-    else if (aMethod.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("get")))
+    else if (aMethod.equalsIgnoreAsciiCase("get"))
         xSubmission = auto_ptr<CSubmission>(
             new CSubmissionGet( getAction(), aFragment));
     else

@@ -46,8 +46,8 @@ sal_uInt16 SwApplet_Impl::GetOptionType( const ::rtl::OUString& rName, sal_Bool 
     {
     case 'A':
     case 'a':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
-            rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_align ) ||
+            rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_alt ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         else if( bApplet &&
                  (rName.equalsIgnoreAsciiCaseAscii( sHTML_O_archive ) ||
@@ -56,32 +56,32 @@ sal_uInt16 SwApplet_Impl::GetOptionType( const ::rtl::OUString& rName, sal_Bool 
         break;
     case 'C':
     case 'c':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
-            (bApplet && (rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
-                         rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_class ) ||
+            (bApplet && (rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_code ) ||
+                         rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'H':
     case 'h':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_height ) )
             nType = SWHTML_OPTTYPE_SIZE;
-        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
-            (!bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
+        else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
+            (!bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SW_HTML_O_Hidden )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'I':
     case 'i':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_id ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'M':
     case 'm':
-        if( bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
+        if( bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'N':
     case 'n':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_name ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'O':
@@ -91,23 +91,23 @@ sal_uInt16 SwApplet_Impl::GetOptionType( const ::rtl::OUString& rName, sal_Bool 
         break;
     case 'S':
     case 's':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
-            (!bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_style ) ||
+            (!bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_src )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'T':
     case 't':
-        if( !bApplet && rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
+        if( !bApplet && rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_type ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'V':
     case 'v':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'W':
     case 'w':
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_width ) )
             nType = SWHTML_OPTTYPE_SIZE;
         break;
     }
@@ -158,13 +158,13 @@ sal_Bool SwApplet_Impl::CreateApplet( const ::rtl::OUString& rBaseURL )
     {
         const SvCommand& rArg = aCommandList[i];
         const ::rtl::OUString& rName = rArg.GetCommand();
-        if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) )
+        if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_code ) )
             aCode = rArg.GetArgument();
-        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ) )
+        else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_codebase ) )
             aCodeBase = INetURLObject::GetAbsURL( rBaseURL, rArg.GetArgument() );
-        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
+        else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_name ) )
             aName = rArg.GetArgument();
-        else if( rName.equalsIgnoreAsciiCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
+        else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
             bMayScript = sal_True;
     }
 

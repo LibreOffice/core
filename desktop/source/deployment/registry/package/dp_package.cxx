@@ -415,7 +415,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.equalsIgnoreAsciiCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCase("application"))
         {
 
             //In case a XPackage is created for a removed extension, we cannot
@@ -427,13 +427,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     url, xCmdEnv, getComponentContext() );
                 name = StrTitle::getTitle( ucbContent );
             }
-            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.package-bundle"))
+            if (subType.equalsIgnoreAsciiCase("vnd.sun.star.package-bundle"))
             {
                 return new PackageImpl(
                     this, url, name, m_xBundleTypeInfo, false, bRemoved,
                     identifier);
             }
-            else if (subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.legacy-package-bundle"))
+            else if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.legacy-package-bundle"))
             {
                 return new PackageImpl(
                     this, url, name, m_xLegacyBundleTypeInfo, true, bRemoved,
@@ -1309,9 +1309,9 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
                 OUString type, subType;
                 INetContentTypeParameterList params;
                 if (INetContentTypes::parse( mediaType, type, subType, &params ) &&
-                    type.equalsIgnoreAsciiCaseAscii("application") &&
-                    (subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.uno-component") ||
-                     subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.configuration-data")))
+                    type.equalsIgnoreAsciiCase("application") &&
+                    (subType.equalsIgnoreAsciiCase( "vnd.sun.star.uno-component") ||
+                     subType.equalsIgnoreAsciiCase( "vnd.sun.star.configuration-data")))
                 {
                     --upper_end;
                     pret[ upper_end ] = *iPos;
@@ -1458,8 +1458,8 @@ void BackendImpl::PackageImpl::scanBundle(
         const OUString url( makeURL( packageRootURL, fullPath ) );
 
         // check for bundle description:
-        if (type.equalsIgnoreAsciiCaseAscii("application") &&
-            subType.equalsIgnoreAsciiCaseAscii( "vnd.sun.star.package-bundle-description"))
+        if (type.equalsIgnoreAsciiCase("application") &&
+            subType.equalsIgnoreAsciiCase( "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
             param = params.find("locale");

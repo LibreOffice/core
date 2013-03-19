@@ -106,7 +106,7 @@ namespace pq_sdbc_driver
 
 static Any isCurrency( const rtl::OUString & typeName )
 {
-    sal_Bool b = typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("money"));
+    sal_Bool b = typeName.equalsIgnoreAsciiCase("money");
     return Any( &b, getBooleanCppuType() );
 }
 

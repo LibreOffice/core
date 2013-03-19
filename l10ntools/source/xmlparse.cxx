@@ -715,7 +715,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
-                if( !pElement->GetName().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("comment")) ){
+                if( !pElement->GetName().equalsIgnoreAsciiCase("comment") ){
                     buffer.append( OUString("\\<") );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){

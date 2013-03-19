@@ -703,7 +703,7 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
         return pEntry ? pEntry->m_eTypeID : Registration::GetContentType(aType);
     }
     else
-        return rTypeName.equalsIgnoreAsciiCaseAscii(CONTENT_TYPE_STR_X_STARMAIL) ?
+        return rTypeName.equalsIgnoreAsciiCase(CONTENT_TYPE_STR_X_STARMAIL) ?
             CONTENT_TYPE_X_STARMAIL : CONTENT_TYPE_UNKNOWN;
             // the content type "x-starmail" has no sub type
 }
@@ -774,7 +774,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
     OUString aToken = rURL.getToken(0, ':');
     if (!aToken.isEmpty())
     {
-        if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_FILE))
+        if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_FILE))
             if (rURL[ rURL.getLength() - 1 ] == (sal_Unicode)'/') // folder
                 if (rURL.getLength() > RTL_CONSTASCII_LENGTH("file:///"))
                     if (WildCard("*/{*}/").Matches(rURL)) // special folder
@@ -796,10 +796,10 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
             {
                 //@@@
             }
-        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_HTTP)
-                 || aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_HTTPS))
+        else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_HTTP)
+                 || aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_HTTPS))
             eTypeID = CONTENT_TYPE_TEXT_HTML;
-        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_PRIVATE))
+        else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_PRIVATE))
         {
             OUString aSecondPart = rURL.getToken(1, ':');
             aToken = aSecondPart.getToken(0, '/');
@@ -833,7 +833,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
             else if (aToken.equalsAscii(INETTYPE_URL_SUB_HELPID))
                 eTypeID = CONTENT_TYPE_APP_STARHELP;
         }
-        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_COMPONENT))
+        else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_COMPONENT))
         {
             aToken = rURL.getToken(1, ':'); // aToken now equals ss / *
             aToken = aToken.getToken(0, '/');
@@ -856,11 +856,11 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
                 }
             }
         }
-        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_MAILTO))
+        else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_MAILTO))
             eTypeID = CONTENT_TYPE_APP_VND_OUTTRAY;
-        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_MACRO))
+        else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_MACRO))
             eTypeID = CONTENT_TYPE_APP_MACRO;
-        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_DATA))
+        else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_DATA))
         {
             OUString aSecondPart = rURL.getToken(1, ':');
             aToken = aSecondPart.getToken(0, ',');

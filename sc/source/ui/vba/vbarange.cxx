@@ -567,7 +567,7 @@ public:
     {
         // #163288# treat "General" as "Standard" format
         sal_Int32 nNewIndex = 0;
-        if( !rFormat.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "General" ) ) )
+        if( !rFormat.equalsIgnoreAsciiCase( "General" ) )
         {
             lang::Locale aLocale;
             uno::Reference< beans::XPropertySet > xNumProps = getNumberProps();

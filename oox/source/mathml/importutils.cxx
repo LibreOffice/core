@@ -128,15 +128,15 @@ bool XmlStream::AttributeList::attribute( int token, bool def ) const
     if( find != attrs.end())
     {
         const OUString sValue = find->second;
-        if( sValue.equalsIgnoreAsciiCaseAscii("true") ||
-            sValue.equalsIgnoreAsciiCaseAscii("on") ||
-            sValue.equalsIgnoreAsciiCaseAscii("t") ||
-            sValue.equalsIgnoreAsciiCaseAscii("1") )
+        if( sValue.equalsIgnoreAsciiCase("true") ||
+            sValue.equalsIgnoreAsciiCase("on") ||
+            sValue.equalsIgnoreAsciiCase("t") ||
+            sValue.equalsIgnoreAsciiCase("1") )
             return true;
-        if( sValue.equalsIgnoreAsciiCaseAscii("false") ||
-            sValue.equalsIgnoreAsciiCaseAscii("off") ||
-            sValue.equalsIgnoreAsciiCaseAscii("f") ||
-            sValue.equalsIgnoreAsciiCaseAscii("0") )
+        if( sValue.equalsIgnoreAsciiCase("false") ||
+            sValue.equalsIgnoreAsciiCase("off") ||
+            sValue.equalsIgnoreAsciiCase("f") ||
+            sValue.equalsIgnoreAsciiCase("0") )
             return false;
         SAL_WARN( "oox.xmlstream", "Cannot convert \'" << sValue << "\' to bool." );
     }

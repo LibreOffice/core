@@ -210,7 +210,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
 
         if ( aType == "bool" )
         {
-            sal_Bool bValue = !aList.empty() && aList.front().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
+            sal_Bool bValue = !aList.empty() && aList.front().equalsIgnoreAsciiCase("true");
 
             m_aGetValue <<= bValue;
             m_aGetValueCondition.set();

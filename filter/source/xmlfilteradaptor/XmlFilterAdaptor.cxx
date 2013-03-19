@@ -251,13 +251,13 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
         // pretty printing is confusing for some filters so it is disabled by default
         sal_Bool bPrettyPrint =
-            (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")));
+            (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCase("true"));
 
         // export of <text:number> element for <text:list-item> elements are
         // needed for certain filters.
         sal_Bool bExportTextNumberElementForListItems =
                             ( msUserData.getLength() > 7 &&
-                              msUserData[7].equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) );
+                              msUserData[7].equalsIgnoreAsciiCase("true") );
 
         // get the base URI, so we can use relative links
         OUString aBaseURI;

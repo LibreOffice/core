@@ -1191,8 +1191,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     // use UCB for case sensitive/insensitive file name comparison
     if ( pMedium
-      && !pMedium->GetName().equalsIgnoreAsciiCaseAscii("private:stream")
-      && !rMedium.GetName().equalsIgnoreAsciiCaseAscii("private:stream")
+      && !pMedium->GetName().equalsIgnoreAsciiCase("private:stream")
+      && !rMedium.GetName().equalsIgnoreAsciiCase("private:stream")
       && ::utl::UCBContentHelper::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
         bStoreToSameLocation = sal_True;

@@ -408,14 +408,14 @@ namespace slideshow
 
             // we also take the strings "true" and "false",
             // as well as "on" and "off" here
-            if( aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ||
-                aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("on")) )
+            if( aString.equalsIgnoreAsciiCase("true") ||
+                aString.equalsIgnoreAsciiCase("on") )
             {
                 o_rValue = true;
                 return true;
             }
-            if( aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) ||
-                aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("off")) )
+            if( aString.equalsIgnoreAsciiCase("false") ||
+                aString.equalsIgnoreAsciiCase("off") )
             {
                 o_rValue = false;
                 return true;

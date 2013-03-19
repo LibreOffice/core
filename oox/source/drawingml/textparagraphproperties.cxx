@@ -308,15 +308,15 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
             aFontDesc.Name = aBulletFontName;
             aFontDesc.Pitch = nBulletFontPitch;
             aFontDesc.Family = nBulletFontFamily;
-            if ( aBulletFontName.equalsIgnoreAsciiCaseAscii("Wingdings") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Wingdings 2") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Wingdings 3") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Monotype Sorts") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Monotype Sorts 2") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("Webdings") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("StarBats") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("StarMath") ||
-                 aBulletFontName.equalsIgnoreAsciiCaseAscii("ZapfDingbats") ) {
+            if ( aBulletFontName.equalsIgnoreAsciiCase("Wingdings") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("Wingdings 2") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("Wingdings 3") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("Monotype Sorts") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("Monotype Sorts 2") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("Webdings") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("StarBats") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("StarMath") ||
+                 aBulletFontName.equalsIgnoreAsciiCase("ZapfDingbats") ) {
                 aFontDesc.CharSet = RTL_TEXTENCODING_SYMBOL;
                 bSymbolFont = sal_True;
             }

@@ -380,7 +380,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             if( !bExitLoop && VbaHelper::extractKeyValue( aKey, aValue, aLine ) )
             {
                 sal_Int32 nType = ModuleType::UNKNOWN;
-                if( aKey.equalsIgnoreAsciiCaseAscii( "Document" ) )
+                if( aKey.equalsIgnoreAsciiCase( "Document" ) )
                 {
                     nType = ModuleType::DOCUMENT;
                     // strip automation server version from module names
@@ -388,11 +388,11 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                     if( nSlashPos >= 0 )
                         aValue = aValue.copy( 0, nSlashPos );
                 }
-                else if( aKey.equalsIgnoreAsciiCaseAscii( "Module" ) )
+                else if( aKey.equalsIgnoreAsciiCase( "Module" ) )
                     nType = ModuleType::NORMAL;
-                else if( aKey.equalsIgnoreAsciiCaseAscii( "Class" ) )
+                else if( aKey.equalsIgnoreAsciiCase( "Class" ) )
                     nType = ModuleType::CLASS;
-                else if( aKey.equalsIgnoreAsciiCaseAscii( "BaseClass" ) )
+                else if( aKey.equalsIgnoreAsciiCase( "BaseClass" ) )
                     nType = ModuleType::FORM;
 
                 if( (nType != ModuleType::UNKNOWN) && !aValue.isEmpty() )

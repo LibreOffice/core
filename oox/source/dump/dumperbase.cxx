@@ -2455,7 +2455,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
         matching start/end elements and the element text on the same line. */
     OUStringBuffer aOldStartElem;
     // special handling for VML
-    bool bIsVml = InputOutputHelper::getFileNameExtension( maSysFileName ).equalsIgnoreAsciiCaseAscii("vml");
+    bool bIsVml = InputOutputHelper::getFileNameExtension( maSysFileName ).equalsIgnoreAsciiCase("vml");
 
     while( !rTextStrm.isEof() )
     {

@@ -1079,7 +1079,7 @@ bool SlideImpl::applyInitialShapeAttributes(
             for( ::std::size_t j=0; j<nShapePropSize; ++j )
             {
                 bool bVisible=false;
-                if( rShapeProps[j].Name.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("visibility")) &&
+                if( rShapeProps[j].Name.equalsIgnoreAsciiCase("visibility") &&
                     extractValue( bVisible,
                                   rShapeProps[j].Value,
                                   pShape,

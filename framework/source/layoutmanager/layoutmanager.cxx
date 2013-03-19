@@ -477,15 +477,15 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( const rtl::O
     ::rtl::OUString aElementName;
 
     parseResourceURL( aName, aElementType, aElementName );
-    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
-         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
+    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+         aElementName.equalsIgnoreAsciiCase("menubar") )
         return m_xMenuBar;
-    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
-               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+    else if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
+               aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
              ( m_aStatusBarElement.m_aName == aName ))
         return m_aStatusBarElement.m_xUIElement;
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
-              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
+    else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
+              aElementName.equalsIgnoreAsciiCase("progressbar") )
         return m_aProgressBarElement.m_xUIElement;
 
     return uno::Reference< ui::XUIElement >();
@@ -1476,13 +1476,13 @@ throw (RuntimeException)
 
         parseResourceURL( aName, aElementType, aElementName );
 
-        if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_pToolbarManager != NULL )
+        if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ) && m_pToolbarManager != NULL )
         {
             bNotify         = m_pToolbarManager->createToolbar( aName );
             bMustBeLayouted = m_pToolbarManager->isLayoutDirty();
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
-                  aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
+        else if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+                  aElementName.equalsIgnoreAsciiCase("menubar") )
         {
             // #i38743# don't create a menubar if frame isn't top
             if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
@@ -1533,20 +1533,20 @@ throw (RuntimeException)
             }
             aWriteLock.unlock();
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
+        else if ( aElementType.equalsIgnoreAsciiCase("statusbar") &&
                   ( implts_isFrameOrWindowTop(xFrame) || implts_isEmbeddedLayoutManager() ))
         {
             implts_createStatusBar( aName );
             bNotify = sal_True;
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
-                  aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
+        else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
+                  aElementName.equalsIgnoreAsciiCase("progressbar") &&
                   implts_isFrameOrWindowTop(xFrame) )
         {
             implts_createProgressBar();
             bNotify = sal_True;
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
+        else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
         {
             // Add layout manager as listener for docking and other window events
             uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject* >(this), uno::UNO_QUERY );
@@ -1589,8 +1589,8 @@ throw (RuntimeException)
     Reference< XComponent > xComponent;
     parseResourceURL( aName, aElementType, aElementName );
 
-    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
-         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
+    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+         aElementName.equalsIgnoreAsciiCase("menubar") )
     {
         if ( !m_bInplaceMenuSet )
         {
@@ -1599,8 +1599,8 @@ throw (RuntimeException)
             bNotify = true;
         }
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
-               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+    else if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
+               aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
              ( m_aStatusBarElement.m_aName == aName ))
     {
         aWriteLock.unlock();
@@ -1608,21 +1608,21 @@ throw (RuntimeException)
         bMustBeLayouted = true;
         bNotify         = true;
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
-              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
+    else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
+              aElementName.equalsIgnoreAsciiCase("progressbar") )
     {
         aWriteLock.unlock();
         implts_createProgressBar();
         bMustBeLayouted = true;
         bNotify = sal_True;
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_pToolbarManager != NULL )
+    else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ) && m_pToolbarManager != NULL )
     {
         aWriteLock.unlock();
         bNotify         = m_pToolbarManager->destroyToolbar( aName );
         bMustBeLayouted = m_pToolbarManager->isLayoutDirty();
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
+    else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
@@ -1664,8 +1664,8 @@ throw (uno::RuntimeException)
     ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s requested.", aResName.getStr() );
 
-    if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
-          aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+    if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
+          aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
         ( m_aStatusBarElement.m_aName == rResourceURL ))
     {
         implts_readStatusBarState( rResourceURL );
@@ -1693,15 +1693,15 @@ throw (uno::RuntimeException)
             }
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
-              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
+    else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
+              aElementName.equalsIgnoreAsciiCase("progressbar") )
     {
         aWriteLock.unlock();
         implts_showProgressBar();
         bResult   = true;
         bNotify   = true;
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_bVisible )
+    else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ) && m_bVisible )
     {
         bool bComponentAttached( !m_aModuleIdentifier.isEmpty() );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager, uno::UNO_QUERY );
@@ -1713,7 +1713,7 @@ throw (uno::RuntimeException)
                 bNotify   = pToolbarManager->requestToolbar( rResourceURL );
             }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
+    else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         aWriteLock.unlock();
@@ -1798,8 +1798,8 @@ throw (RuntimeException)
     ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
 
-    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
-         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
+    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+         aElementName.equalsIgnoreAsciiCase("menubar") )
     {
         WriteGuard aWriteLock( m_aLock );
         m_bMenuVisible = sal_True;
@@ -1808,8 +1808,8 @@ throw (RuntimeException)
         bResult = implts_resetMenuBar();
         bNotify = bResult;
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
-               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+    else if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
+               aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
              ( m_aStatusBarElement.m_aName == aName ))
     {
         WriteGuard aWriteLock( m_aLock );
@@ -1824,12 +1824,12 @@ throw (RuntimeException)
             bNotify     = true;
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
-              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
+    else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
+              aElementName.equalsIgnoreAsciiCase("progressbar") )
     {
         bNotify = bResult = implts_showProgressBar();
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< awt::XWindowListener > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -1842,7 +1842,7 @@ throw (RuntimeException)
             bMustLayout = pToolbarManager->isLayoutDirty();
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
+    else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -1851,7 +1851,7 @@ throw (RuntimeException)
 
         impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, true );
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("toolpanel")))
+    else if ( aElementType.equalsIgnoreAsciiCase("toolpanel"))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -1882,8 +1882,8 @@ throw (RuntimeException)
     ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
 
-    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
-         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
+    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+         aElementName.equalsIgnoreAsciiCase("menubar") )
     {
         WriteGuard aWriteLock( m_aLock );
 
@@ -1904,8 +1904,8 @@ throw (RuntimeException)
             }
         }
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
-               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+    else if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
+               aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
              ( m_aStatusBarElement.m_aName == aName ))
     {
         WriteGuard aWriteLock( m_aLock );
@@ -1917,12 +1917,12 @@ throw (RuntimeException)
             bNotify     = sal_True;
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
-              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
+    else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
+              aElementName.equalsIgnoreAsciiCase("progressbar") )
     {
         bNotify = implts_hideProgressBar();
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -1932,7 +1932,7 @@ throw (RuntimeException)
         bNotify     = pToolbarManager->hideToolbar( aName );
         bMustLayout = pToolbarManager->isLayoutDirty();
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
+    else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -1958,7 +1958,7 @@ throw (RuntimeException)
     ::rtl::OUString aElementName;
 
     parseResourceURL( aName, aElementType, aElementName );
-    if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
@@ -1996,7 +1996,7 @@ sal_Bool SAL_CALL LayoutManager::floatWindow( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
     bool bResult( false );
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
@@ -2017,7 +2017,7 @@ throw (RuntimeException)
 throw (uno::RuntimeException)
 {
     bool bResult( false );
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
@@ -2038,7 +2038,7 @@ throw (uno::RuntimeException)
 throw (uno::RuntimeException)
 {
     bool bResult( false );
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
@@ -2058,7 +2058,7 @@ throw (uno::RuntimeException)
 void SAL_CALL LayoutManager::setElementSize( const ::rtl::OUString& aName, const awt::Size& aSize )
 throw (RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager );
@@ -2077,7 +2077,7 @@ throw (RuntimeException)
 void SAL_CALL LayoutManager::setElementPos( const ::rtl::OUString& aName, const awt::Point& aPos )
 throw (RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
@@ -2096,7 +2096,7 @@ throw (RuntimeException)
 void SAL_CALL LayoutManager::setElementPosSize( const ::rtl::OUString& aName, const awt::Point& aPos, const awt::Size& aSize )
 throw (RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
@@ -2119,8 +2119,8 @@ throw (RuntimeException)
     ::rtl::OUString aElementName;
 
     parseResourceURL( aName, aElementType, aElementName );
-    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
-         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
+    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+         aElementName.equalsIgnoreAsciiCase("menubar") )
     {
         ReadGuard aReadLock( m_aLock );
         if ( m_xContainerWindow.is() )
@@ -2142,8 +2142,8 @@ throw (RuntimeException)
             }
         }
     }
-    else if (( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) &&
-               aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("statusbar")) ) ||
+    else if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
+               aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
              ( m_aStatusBarElement.m_aName == aName ))
     {
         if ( m_aStatusBarElement.m_xUIElement.is() )
@@ -2159,13 +2159,13 @@ throw (RuntimeException)
             }
         }
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) &&
-              aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("progressbar")) )
+    else if ( aElementType.equalsIgnoreAsciiCase("progressbar") &&
+              aElementName.equalsIgnoreAsciiCase("progressbar") )
     {
         if ( m_aProgressBarElement.m_xUIElement.is() )
             return m_aProgressBarElement.m_bVisible;
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< frame::XLayoutManager > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -2175,7 +2175,7 @@ throw (RuntimeException)
         if ( pToolbarManager )
             return pToolbarManager->isToolbarVisible( aName );
     }
-    else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("dockingwindow")))
+    else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -2190,7 +2190,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL LayoutManager::isElementFloating( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -2207,7 +2207,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL LayoutManager::isElementDocked( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -2224,7 +2224,7 @@ throw (RuntimeException)
 ::sal_Bool SAL_CALL LayoutManager::isElementLocked( const ::rtl::OUString& aName )
 throw (uno::RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -2241,7 +2241,7 @@ throw (uno::RuntimeException)
 awt::Size SAL_CALL LayoutManager::getElementSize( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -2258,7 +2258,7 @@ throw (RuntimeException)
 awt::Point SAL_CALL LayoutManager::getElementPos( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
         ReadGuard aReadLock( m_aLock );
         uno::Reference< uno::XInterface > xToolbarManager( m_xToolbarManager, uno::UNO_QUERY );
@@ -2986,7 +2986,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
         bool            bRefreshLayout(false);
 
         parseResourceURL( Event.ResourceURL, aElementType, aElementName );
-        if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+        if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
         {
             if ( xUICfgListener.is() )
             {
@@ -2994,7 +2994,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
                 bRefreshLayout = pToolbarManager->isLayoutDirty();
             }
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_MENUBAR ))
+        else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_MENUBAR ))
         {
             Reference< XUIElement >         xUIElement = implts_findElement( Event.ResourceURL );
             Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
@@ -3035,7 +3035,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
        bool            bRefreshLayout(false);
 
        parseResourceURL( Event.ResourceURL, aElementType, aElementName );
-        if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+        if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
         {
             if ( xToolbarManager.is() )
             {
@@ -3081,8 +3081,8 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                 // No settings anymore, element must be destroyed
                     if ( xContainerWindow.is() && bNoSettings )
                 {
-                    if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) &&
-                         aElementName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("menubar")) )
+                    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+                         aElementName.equalsIgnoreAsciiCase("menubar") )
                     {
                         SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
                         if ( pSysWindow && !m_bInplaceMenuSet )
@@ -3119,7 +3119,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
         bool            bRefreshLayout(false);
 
         parseResourceURL( Event.ResourceURL, aElementType, aElementName );
-        if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
+        if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
         {
             if ( xToolbarManager.is() )
             {

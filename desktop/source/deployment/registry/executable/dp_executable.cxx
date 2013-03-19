@@ -171,7 +171,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.equalsIgnoreAsciiCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCase("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -180,7 +180,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     url, xCmdEnv, getComponentContext() );
                 name = StrTitle::getTitle( ucbContent );
             }
-            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.executable"))
+            if (subType.equalsIgnoreAsciiCase("vnd.sun.star.executable"))
             {
                 return new BackendImpl::ExecutablePackageImpl(
                     this, url, name,  m_xExecutableTypeInfo, bRemoved,

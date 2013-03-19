@@ -2311,7 +2311,7 @@ static void pgTypeInfo2ResultSet(
 
         if( dataType == com::sun::star::sdbc::DataType::CHAR  ||
             ( dataType == com::sun::star::sdbc::DataType::VARCHAR &&
-              xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("varchar")) ) )
+              xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCase("varchar") ) )
         {
             // reflect varchar as varchar with upper limit !
             //NOTE: the sql spec requires varchar to have an upper limit, however

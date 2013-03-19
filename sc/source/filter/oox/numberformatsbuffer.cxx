@@ -1848,7 +1848,7 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
     catch( Exception& )
     {
         // BIFF2-BIFF4 stores standard format explicitly in stream
-        if( rFmtCode.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "general" ) ) )
+        if( rFmtCode.equalsIgnoreAsciiCase( "general" ) )
         {
             nIndex = lclCreatePredefinedFormat( rxNumFmts, 0, rToLocale );
         }

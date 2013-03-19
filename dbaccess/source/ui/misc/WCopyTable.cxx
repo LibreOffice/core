@@ -1417,7 +1417,7 @@ bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnect
                 while ( xRs->next() )
                 {
                     ::rtl::OUString sValue = xRow->getString( 1 );
-                    if ( !xRow->wasNull() && sValue.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("View")) )
+                    if ( !xRow->wasNull() && sValue.equalsIgnoreAsciiCase("View") )
                     {
                         bSupportsViews = true;
                         break;

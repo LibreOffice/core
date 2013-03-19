@@ -336,7 +336,7 @@ String XclControlHelper::ExtractFromMacroDescriptor(
         const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType, SfxObjectShell* /*pShell*/ )
 {
     if( (!rDescriptor.ScriptCode.isEmpty()) &&
-            rDescriptor.ScriptType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) &&
+            rDescriptor.ScriptType.equalsIgnoreAsciiCase("Script") &&
             rDescriptor.ListenerType.equalsAscii( spTbxListenerData[ eEventType ].mpcListenerType ) &&
             rDescriptor.EventMethod.equalsAscii( spTbxListenerData[ eEventType ].mpcEventMethod ) )
         return XclTools::GetXclMacroName( rDescriptor.ScriptCode );

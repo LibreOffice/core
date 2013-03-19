@@ -993,8 +993,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                         // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
-                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCaseAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("tabpagecontainer") ) )
+                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        "tabpagecontainer" ) )
                 {
                     pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;

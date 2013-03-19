@@ -1150,7 +1150,7 @@ GtkPrintDialog::impl_readFromSettings()
     }
 
     const gboolean bOldCollate(m_pWrapper->print_settings_get_collate(pSettings));
-    const bool bCollate(aCollate.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")));
+    const bool bCollate(aCollate.equalsIgnoreAsciiCase("true"));
     if (bOldCollate != bCollate)
     {
         bChanged = true;

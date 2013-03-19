@@ -93,11 +93,11 @@ void xforms_booleanFromStringFunction(xmlXPathParserContextPtr ctxt, int nargs)
     xmlChar *pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
-    if (aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ||
-        aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("1")))
+    if (aString.equalsIgnoreAsciiCase("true") ||
+        aString.equalsIgnoreAsciiCase("1"))
         xmlXPathReturnTrue(ctxt);
-    else if (aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("false")) ||
-             aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("0")))
+    else if (aString.equalsIgnoreAsciiCase("false") ||
+             aString.equalsIgnoreAsciiCase("0"))
         xmlXPathReturnFalse(ctxt);
     else
         XP_ERROR(XPATH_NUMBER_ERROR);
@@ -225,9 +225,9 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
-    if (aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("version")))
+    if (aString.equalsIgnoreAsciiCase("version"))
         xmlXPathReturnString(ctxt, (xmlChar*)_version);
-    else if (aString.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("conformance-level")))
+    else if (aString.equalsIgnoreAsciiCase("conformance-level"))
         xmlXPathReturnString(ctxt, (xmlChar*)_conformance);
     else
         xmlXPathReturnEmptyString(ctxt);

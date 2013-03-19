@@ -48,40 +48,40 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
 void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     OUString aExt = InputOutputHelper::getFileNameExtension( rStrmName );
-    if( aExt.equalsIgnoreAsciiCaseAscii("pptx") ||
-        aExt.equalsIgnoreAsciiCaseAscii("potx") )
+    if( aExt.equalsIgnoreAsciiCase("pptx") ||
+        aExt.equalsIgnoreAsciiCase("potx") )
     {
         Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
 #ifdef FIXME
     else if(
-        aExt.equalsIgnoreAsciiCaseAscii("xlsb") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xlsm") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xlsx") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xltm") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xltx") )
+        aExt.equalsIgnoreAsciiCase("xlsb") ||
+        aExt.equalsIgnoreAsciiCase("xlsm") ||
+        aExt.equalsIgnoreAsciiCase("xlsx") ||
+        aExt.equalsIgnoreAsciiCase("xltm") ||
+        aExt.equalsIgnoreAsciiCase("xltx") )
     {
         ::oox::dump::xlsb::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
     else if(
-        aExt.equalsIgnoreAsciiCaseAscii("xla") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xlc") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xlm") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xls") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xlt") ||
-        aExt.equalsIgnoreAsciiCaseAscii("xlw") )
+        aExt.equalsIgnoreAsciiCase("xla") ||
+        aExt.equalsIgnoreAsciiCase("xlc") ||
+        aExt.equalsIgnoreAsciiCase("xlm") ||
+        aExt.equalsIgnoreAsciiCase("xls") ||
+        aExt.equalsIgnoreAsciiCase("xlt") ||
+        aExt.equalsIgnoreAsciiCase("xlw") )
     {
         ::oox::dump::biff::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
 #endif
     else if(
-        aExt.equalsIgnoreAsciiCaseAscii("xml") ||
-        aExt.equalsIgnoreAsciiCaseAscii("vml") ||
-        aExt.equalsIgnoreAsciiCaseAscii("rels") )
+        aExt.equalsIgnoreAsciiCase("xml") ||
+        aExt.equalsIgnoreAsciiCase("vml") ||
+        aExt.equalsIgnoreAsciiCase("rels") )
     {
         XmlStreamObject( *this, rxStrm, rSysFileName ).dump();
     }
-    else if( aExt.equalsIgnoreAsciiCaseAscii("bin") )
+    else if( aExt.equalsIgnoreAsciiCase("bin") )
     {
         if( rStrgPath == "ppt" && rStrmName == "vbaProject.bin" )
         {

@@ -386,7 +386,7 @@ SdFilterDetect::~SdFilterDetect()
                                 if( SvtModuleOptions().IsImpress() )
                                 {
                                     INetURLObject aCheckURL( aFileName );
-                                    if( aCheckURL.getExtension().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("cgm")) )
+                                    if( aCheckURL.getExtension().equalsIgnoreAsciiCase("cgm") )
                                     {
                                         sal_uInt8 n8;
                                         pStm->Seek( STREAM_SEEK_TO_BEGIN );

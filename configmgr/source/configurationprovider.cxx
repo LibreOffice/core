@@ -204,17 +204,13 @@ Service::createInstanceWithArguments(
         }
         // For backwards compatibility, allow "nodepath" and "Locale" in any
         // case:
-        if (name.equalsIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("nodepath")))
-        {
+        if (name.equalsIgnoreAsciiCase("nodepath")) {
             if (!nodepath.isEmpty() || !(value >>= nodepath) ||
                 nodepath.isEmpty())
             {
                 badNodePath();
             }
-        } else if (name.equalsIgnoreAsciiCaseAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM("locale")))
-        {
+        } else if (name.equalsIgnoreAsciiCase("locale")) {
             if (!locale.isEmpty() || !(value >>= locale) ||
                 locale.isEmpty())
             {
@@ -441,9 +437,7 @@ Factory::createInstanceWithArgumentsAndContext(
             }
             // For backwards compatibility, allow "Locale" and (ignored)
             // "EnableAsync" in any case:
-            if (name.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("locale")))
-            {
+            if (name.equalsIgnoreAsciiCase("locale")) {
                 if (!locale.isEmpty() || !(value >>= locale) ||
                     locale.isEmpty())
                 {
@@ -453,9 +447,7 @@ Factory::createInstanceWithArgumentsAndContext(
                                 " one, non-empty, string Locale argument"),
                         0);
                 }
-            } else if (!name.equalsIgnoreAsciiCaseAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("enableasync")))
-            {
+            } else if (!name.equalsIgnoreAsciiCase("enableasync")) {
                 throw css::uno::Exception(
                     OUString("com.sun.star.configuration.ConfigurationProvider"
                             " factory: unknown argument ") + name,
