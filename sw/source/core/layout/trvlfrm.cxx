@@ -50,6 +50,9 @@
 #include <dcontact.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+#include <txatbase.hxx>
+#include <fmtfld.hxx>
+#include <fldbas.hxx>
 
 // FLT_MAX
 #include <cfloat>
@@ -290,10 +293,24 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 bValidTextDistance = true;
             }
 
+            bool bConsiderBackground = true;
+            // If the text position if a macro field, then that should have priority.
+            if (pTextNd->IsTxtNode())
+            {
+                SwTxtNode* pTxtNd = pTextNd->GetTxtNode();
+                SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
+                if (pTxtAttr)
+                {
+                    const SwField* pField = pTxtAttr->GetFld().GetFld();
+                    if (pField->Which() == RES_MACROFLD)
+                        bConsiderBackground = false;
+                }
+            }
+
             double nBackDistance = 0;
             bool bValidBackDistance = false;
             SwCntntNode* pBackNd = aBackPos.nNode.GetNode( ).GetCntntNode( );
-            if ( pBackNd )
+            if ( pBackNd && bConsiderBackground)
             {
                 // FIXME There are still cases were we don't have the proper node here.
                 SwCntntFrm* pBackFrm = pBackNd->getLayoutFrm( getRootFrm( ) );
