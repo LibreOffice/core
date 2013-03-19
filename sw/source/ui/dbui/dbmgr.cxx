@@ -2322,14 +2322,14 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 
                 if( bTextConnection )
                 {
-                    uno::Reference < ui::dialogs::XExecutableDialog > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
+                    uno::Reference < sdb::XTextConnectionSettings > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
                     if( xSettingsDlg->execute() )
                     {
                         uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );
                         uno::Reference < beans::XPropertySet > xDSSettings;
                         aSettings >>= xDSSettings;
                         ::comphelper::copyProperties(
-                            uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY ),
+                            uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ),
                             xDSSettings );
                         xDSSettings->setPropertyValue( "Extension", uno::makeAny( ::rtl::OUString( sExt )));
                     }

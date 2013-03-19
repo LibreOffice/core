@@ -18,17 +18,23 @@
  */
 
 
-#ifndef __com_sun_star_sdb_TextConnectionSettings_idl__
-#define __com_sun_star_sdb_TextConnectionSettings_idl__
+#ifndef __com_sun_star_sdb_XTextConnectionSettings_idl__
+#define __com_sun_star_sdb_XTextConnectionSettings_idl__
 
-#include <com/sun/star/sdb/XTextConnectionSettings.idl>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
 
 module com {  module sun {  module star {  module sdb {
 
 /**
     @since LibreOffice 4.1
 */
-service TextConnectionSettings : XTextConnectionSettings;
+interface XTextConnectionSettings {
+
+    interface com::sun::star::ui::dialogs::XExecutableDialog;
+
+    interface com::sun::star::beans::XPropertySet;
+};
 
 
 }; }; }; };

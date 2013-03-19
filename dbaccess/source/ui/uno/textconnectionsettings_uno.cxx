@@ -28,9 +28,11 @@
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdb/XTextConnectionSettings.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <svtools/genericunodialog.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 //........................................................................
 namespace dbaui
@@ -58,12 +60,15 @@ namespace dbaui
     //====================================================================
 
     class OTextConnectionSettingsDialog;
-    typedef ODatabaseAdministrationDialog                                               OTextConnectionSettingsDialog_BASE;
+    typedef ::cppu::ImplInheritanceHelper1  <   ODatabaseAdministrationDialog
+                                            ,   ::com::sun::star::sdb::XTextConnectionSettings
+                                            >   OTextConnectionSettingsDialog_BASE;
     typedef ::comphelper::OPropertyArrayUsageHelper< OTextConnectionSettingsDialog >    OTextConnectionSettingsDialog_PBASE;
 
     class OTextConnectionSettingsDialog
             :public OTextConnectionSettingsDialog_BASE
             ,public OTextConnectionSettingsDialog_PBASE
+            ,public ::cppu::WeakImplHelper1< com::sun::star::sdb::XTextConnectionSettings >
     {
         OModuleClient   m_aModuleClient;
         PropertyValues  m_aPropertyValues;
@@ -80,6 +85,24 @@ namespace dbaui
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(Exception);
         virtual sal_Bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw(IllegalArgumentException);
         virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const;
+
+        // Overrides to resolve inheritance ambiguity
+        virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
+            { ODatabaseAdministrationDialog::setPropertyValue(p1, p2); }
+        virtual css::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+            { return ODatabaseAdministrationDialog::getPropertyValue(p1); }
+        virtual void SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+            { ODatabaseAdministrationDialog::addPropertyChangeListener(p1, p2); }
+        virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+            { ODatabaseAdministrationDialog::removePropertyChangeListener(p1, p2); }
+        virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+            { ODatabaseAdministrationDialog::addVetoableChangeListener(p1, p2); }
+        virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+            { ODatabaseAdministrationDialog::removeVetoableChangeListener(p1, p2); }
+        virtual void SAL_CALL setTitle(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+            { ODatabaseAdministrationDialog::setTitle(p1); }
+        virtual sal_Int16 SAL_CALL execute() throw (css::uno::RuntimeException)
+            { return ODatabaseAdministrationDialog::execute(); }
 
     protected:
         // OGenericUnoDialog overridables
