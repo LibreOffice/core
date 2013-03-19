@@ -154,7 +154,6 @@ const sal_Char sAPI_full_name[]         = "FullName";
 const sal_Char sAPI_place_holder_type[] = "PlaceHolderType";
 const sal_Char sAPI_place_holder[]      = "PlaceHolder";
 const sal_Char sAPI_hint[]              = "Hint";
-const sal_Char sAPI_variable_name[]     = "VariableName";
 const sal_Char sAPI_name[]              = "Name";
 const sal_Char sAPI_sub_type[]          = "SubType";
 const sal_Char sAPI_numbering_separator[] = "NumberingSeparator";
