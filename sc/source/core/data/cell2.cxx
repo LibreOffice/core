@@ -1748,7 +1748,7 @@ ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
 
     if ( !pThis || !pOther )
     {
-        fprintf( stderr, "Error: no compiled code for cells !" );
+//        fprintf( stderr, "Error: no compiled code for cells !" );
         return NULL;
     }
 
@@ -1817,12 +1817,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if( !xGroup.get() )
         return false;
 
-    fprintf( stderr, "Interpret cell %d, %d\n", (int)aPos.Col(), (int)aPos.Row() );
+//    fprintf( stderr, "Interpret cell %d, %d\n", (int)aPos.Col(), (int)aPos.Row() );
 
     if ( xGroup->mpDelta->IsInvariant() )
     {
-        fprintf( stderr, "struck gold - completely invariant for %d items !\n",
-                 (int)xGroup->mnLength );
+//        fprintf( stderr, "struck gold - completely invariant for %d items !\n",
+//                 (int)xGroup->mnLength );
 
         // calculate ourselves:
         InterpretTail( SCITP_NORMAL );

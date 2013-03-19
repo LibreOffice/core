@@ -2119,7 +2119,7 @@ void ScColumn::RebuildFormulaGroups()
         }
     }
 
-#if 1 // OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0
     if ( maDoubles.size() + maFnGroups.size() > 0 )
     {
         rtl::OUString aStr;

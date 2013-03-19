@@ -6224,6 +6224,9 @@ void Test::testCellTextWidth()
 
 void Test::testFormulaGrouping()
 {
+    if ( !getenv("SC_FORMULAGROUP") )
+        return;
+
     static const struct {
         const char *pFormula[3];
         const bool  bGroup[3];

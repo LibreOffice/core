@@ -697,6 +697,11 @@ void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
 
 void ScDocument::RebuildFormulaGroups()
 {
+    static const char *pEnableFormulaGroups = getenv("SC_FORMULAGROUP");
+
+    if ( !pEnableFormulaGroups )
+        return;
+
     SCTAB nTab;
     for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
         if (maTabs[nTab])
