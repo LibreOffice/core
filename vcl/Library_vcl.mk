@@ -444,7 +444,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/dtrans/aqua_clipboard \
     vcl/aqua/source/dtrans/service_entry \
     vcl/quartz/salbmp \
-    vcl/aqua/source/gdi/salcolorutils \
     vcl/aqua/source/gdi/salgdicommon \
     vcl/aqua/source/gdi/salgdiutils \
     vcl/aqua/source/gdi/salmathutils \

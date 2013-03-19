@@ -20,7 +20,6 @@
 #ifndef _SV_SALVD_H
 #define _SV_SALVD_H
 
-#include "ios/salcolorutils.hxx"
 #include "coretext/salgdi.h"
 
 #include "salvd.hxx"

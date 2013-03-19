@@ -37,7 +37,6 @@
 
 #include "aqua/atsui/salgdi.h"
 #include "aqua/salframe.h"
-#include "aqua/salcolorutils.hxx"
 #include "aqua/atsui/salatsuifontutils.hxx"
 
 #include "fontsubset.hxx"
