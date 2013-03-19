@@ -77,7 +77,6 @@ struct SC_DLLPUBLIC ScSetStringParam
      * interpreted and the input string is taken instead. This can be used
      * during text file import so the leading apostrophe is not lost if it
      * precedes a numeric value.
-     * Usually set mbHandleApostrophe = !mbSetTextCellFormat
      */
     bool mbHandleApostrophe;
 
