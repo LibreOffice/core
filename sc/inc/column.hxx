@@ -25,6 +25,7 @@
 #include "address.hxx"
 #include "rangenam.hxx"
 #include "types.hxx"
+#include <boost/intrusive_ptr.hpp>
 
 #include <set>
 #include <vector>
@@ -71,6 +72,8 @@ class ScFlatBoolRowSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
 class ScColumnTextWidthIterator;
+class ScFormulaCellGroup;
+typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
 
 struct ScNeededSizeOptions
 {
@@ -87,6 +90,12 @@ struct ColEntry
 {
     SCROW       nRow;
     ScBaseCell* pCell;
+};
+
+struct ColDoubleEntry
+{
+    SCROW               mnStart;
+    std::vector<double> maData;
 };
 
 class ScColumn
@@ -108,6 +117,10 @@ class ScColumn
     SCTAB           nTab;
 
     std::vector<ColEntry> maItems;
+
+    // temporary until we switch to mdds container
+    std::vector<ColDoubleEntry *> maDoubles;
+    std::vector<ScFormulaCellGroupRef> maFnGroups;
 
     ScAttrArray*          pAttrArray;
     ScDocument*           pDocument;

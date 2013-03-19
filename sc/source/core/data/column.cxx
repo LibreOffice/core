@@ -2022,7 +2022,6 @@ void ScColumn::UpdateCompile( bool bForceIfNameInUse )
 {
     if ( !maItems.empty() )
     {
-        fprintf( stderr, "UpdateCompile - column !?\n" );
         for (SCSIZE i = 0; i < maItems.size(); i++)
         {
             ScFormulaCell* p = (ScFormulaCell*) maItems[i].pCell;

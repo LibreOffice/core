@@ -1733,15 +1733,12 @@ ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
 
     if ( !pThis || !pOther )
     {
-        fprintf( stderr, "no compiled code for cells !" );
+        fprintf( stderr, "Error: no compiled code for cells !" );
         return NULL;
     }
 
     if ( pThisLen != pOtherLen )
-    {
-        fprintf( stderr, "different length formulae !" );
         return NULL;
-    }
 
     // check we are basically the same function
     for ( sal_uInt16 i = 0; i < pThisLen; i++ )
@@ -1750,7 +1747,7 @@ ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
              pThis[ i ]->GetOpCode() != pOther[ i ]->GetOpCode() ||
              pThis[ i ]->GetParamCount() != pOther[ i ]->GetParamCount() )
         {
-            fprintf( stderr, "Incompatible type, op-code or param counts\n" );
+//            fprintf( stderr, "Incompatible type, op-code or param counts\n" );
             return NULL;
         }
         switch( pThis[ i ]->GetType() )
@@ -1758,32 +1755,33 @@ ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
         case formula::svMatrix:
         case formula::svExternalSingleRef:
         case formula::svExternalDoubleRef:
-            fprintf( stderr, "Ignoring matrix and external references for now\n" );
+//            fprintf( stderr, "Ignoring matrix and external references for now\n" );
             return NULL;
         default:
             break;
         }
     }
 
-    fprintf( stderr, "matching formulae !\n" );
     ScSimilarFormulaDelta *pDelta = new ScSimilarFormulaDelta();
 
     for ( sal_uInt16 i = 0; i < pThisLen; i++ )
     {
-        if ( pThis[i]->GetType() != formula::svSingleRef &&
-             pThis[i]->GetType() != formula::svDoubleRef )
-            continue;
-
         ScToken *pThisTok = static_cast< ScToken * >( pThis[ i ] );
         ScToken *pOtherTok = static_cast< ScToken * >( pOther[ i ] );
 
-        const ScSingleRefData& aThisRef = pThisTok->GetSingleRef();
-        const ScSingleRefData& aOtherRef = pOtherTok->GetSingleRef();
-        pDelta->push_delta( aThisRef, aOtherRef );
-
-        const ScSingleRefData& aThisRef2 = pThisTok->GetSingleRef2();
-        const ScSingleRefData& aOtherRef2 = pOtherTok->GetSingleRef2();
-        pDelta->push_delta( aThisRef2, aOtherRef2 );
+        if ( pThis[i]->GetType() == formula::svSingleRef ||
+             pThis[i]->GetType() == formula::svDoubleRef )
+        {
+            const ScSingleRefData& aThisRef = pThisTok->GetSingleRef();
+            const ScSingleRefData& aOtherRef = pOtherTok->GetSingleRef();
+            pDelta->push_delta( aThisRef, aOtherRef );
+        }
+        if ( pThis[i]->GetType() == formula::svDoubleRef )
+        {
+            const ScSingleRefData& aThisRef2 = pThisTok->GetSingleRef2();
+            const ScSingleRefData& aOtherRef2 = pOtherTok->GetSingleRef2();
+            pDelta->push_delta( aThisRef2, aOtherRef2 );
+        }
     }
 
     return pDelta;

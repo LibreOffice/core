@@ -2014,6 +2014,12 @@ void ScColumn::RebuildFormulaGroups()
     if ( maItems.empty() || !bDirtyGroups )
         return;
 
+    // clear double groups
+    for (std::vector< ColDoubleEntry *>::iterator it = maDoubles.begin();
+         it != maDoubles.end(); ++it )
+        delete *it;
+    maDoubles.clear();
+
     // clear previous groups
     ScFormulaCellGroupRef xNone;
     for (size_t i = 0; i < maItems.size(); i++)
@@ -2024,21 +2030,42 @@ void ScColumn::RebuildFormulaGroups()
     }
 
     // re-build groups
+    ColDoubleEntry *pLastDouble = NULL;
     for (size_t i = 1; i < maItems.size(); i++)
     {
         ColEntry &rCur = maItems[ i ];
         ColEntry &rPrev = maItems[ i - 1 ];
-        if ( ( rPrev.nRow != rCur.nRow - 1 ) ||               // not contiguous
-             !rCur.pCell || !rPrev.pCell ||                   // paranoia
-             rCur.pCell->GetCellType() != CELLTYPE_FORMULA || // not formulae
-             rPrev.pCell->GetCellType() != CELLTYPE_FORMULA )
+        if ( ( rPrev.nRow != rCur.nRow - 1 ) ||                        // not contiguous
+             !rCur.pCell || !rPrev.pCell ||                            // paranoia
+             rCur.pCell->GetCellType() != rPrev.pCell->GetCellType() ) // same type
+        {
+            pLastDouble = NULL;
+            continue;
+        }
+
+        // collate doubles
+        if ( rCur.pCell->GetCellType() == CELLTYPE_VALUE )
+        {
+            if ( !pLastDouble )
+            {
+                pLastDouble = new ColDoubleEntry();
+                pLastDouble->mnStart = i - 1;
+                pLastDouble->maData.push_back(
+                        static_cast< ScValueCell * >( rPrev.pCell )->GetValue() );
+                maDoubles.push_back( pLastDouble );
+            }
+            pLastDouble->maData.push_back(
+                        static_cast< ScValueCell * >( rCur.pCell )->GetValue() );
+            continue;
+        }
+
+        if ( rCur.pCell->GetCellType() != CELLTYPE_FORMULA )
             continue;
 
         // see if these formulae are similar
         ScFormulaCell *pCur = static_cast< ScFormulaCell *>( rCur.pCell );
         ScFormulaCell *pPrev = static_cast< ScFormulaCell *>( rPrev.pCell );
 
-        fprintf( stderr, "column has contiguous formulae\n" );
         ScSimilarFormulaDelta *pDelta = pPrev->BuildDeltaTo( pCur );
 
         if ( !pDelta )
@@ -2058,6 +2085,8 @@ void ScColumn::RebuildFormulaGroups()
             pGroup->mnLength = 2;
 
             xGroup.reset( pGroup );
+            maFnGroups.push_back( xGroup );
+
             pCur->SetCellGroup( xGroup );
             pPrev->SetCellGroup( xGroup );
         }
@@ -2070,6 +2099,7 @@ void ScColumn::RebuildFormulaGroups()
         }
         else
         {
+#if OSL_DEBUG_LEVEL > 1
             OUString aFormula;
             pCur->GetFormula( aFormula );
             ScAddress aAddr( nCol, rCur.nRow, nTab );
@@ -2079,10 +2109,39 @@ void ScColumn::RebuildFormulaGroups()
             fprintf( stderr, "unusual incompatible extension in cell '%s' of formulae '%s'\n" ,
                      OUStringToOString( aCellAddr, RTL_TEXTENCODING_UTF8 ).getStr(),
                      OUStringToOString( aFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
-
+#endif
             pCur->ReleaseDelta( pDelta );
         }
     }
+
+#if 1 // OSL_DEBUG_LEVEL > 0
+    if ( maDoubles.size() + maFnGroups.size() > 0 )
+    {
+        rtl::OUString aStr;
+        fprintf( stderr, "column %2d has %2d double span(s): ", (int)nCol, (int)maDoubles.size() );
+        for (std::vector< ColDoubleEntry *>::iterator it = maDoubles.begin();
+             it != maDoubles.end(); ++it )
+        {
+            ScRange aDoubleRange( nCol, (*it)->mnStart, nTab,
+                                  nCol, (*it)->mnStart + (*it)->maData.size() - 1, nTab );
+            aDoubleRange.Format( aStr, SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW, pDocument );
+            fprintf( stderr, "%s, ", OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        fprintf( stderr, "\n" );
+
+        fprintf( stderr, "column %2d has %2d formula span(s): ", (int)nCol, (int)maFnGroups.size() );
+        for (std::vector< ScFormulaCellGroupRef>::iterator it = maFnGroups.begin();
+             it != maFnGroups.end(); ++it )
+        {
+            ScRange aDoubleRange( nCol, (*it)->mnStart, nTab,
+                                  nCol, (*it)->mnStart + (*it)->mnLength - 1, nTab );
+            aDoubleRange.Format( aStr, SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW, pDocument );
+            fprintf( stderr, "%s, ", OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        fprintf( stderr, "\n" );
+    }
+#endif
+
 
     bDirtyGroups = false;
 }
