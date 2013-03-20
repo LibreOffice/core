@@ -411,6 +411,10 @@ public:
 
                     ~ScFormulaCell();
 
+    using ScBaseCell::Clone;
+
+    ScFormulaCell* Clone() const;
+
     /** Empty formula cell, or with a preconstructed token array. */
     ScFormulaCell( ScDocument*, const ScAddress&, const ScTokenArray* = NULL,
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,

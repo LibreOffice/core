@@ -808,6 +808,67 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
     return sal_True;
 }
 
+void ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
+{
+    ScDocShellModificator aModificator( rDocShell );
+    ScDocument* pDoc = rDocShell.GetDocument();
+    bool bUndo = pDoc->IsUndoEnabled();
+
+    bool bHeight = pDoc->HasAttrib(ScRange(rPos), HASATTR_NEEDHEIGHT);
+
+    if (bUndo)
+    {
+        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        switch (pDoc->GetCellType(rPos))
+        {
+            case CELLTYPE_NONE:
+            case CELLTYPE_NOTE:
+                // Empty cell.
+                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, fVal));
+            break;
+            case CELLTYPE_VALUE:
+            {
+                double fOldVal = pDoc->GetValue(rPos);
+                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, fOldVal, fVal));
+            }
+            break;
+            case CELLTYPE_STRING:
+            {
+                OUString aOldStr = pDoc->GetString(rPos);
+                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldStr, fVal));
+            }
+            break;
+            case CELLTYPE_EDIT:
+            {
+                const EditTextObject* pOldText = pDoc->GetEditText(rPos);
+                if (pOldText)
+                    pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pOldText, fVal));
+            }
+            break;
+            case CELLTYPE_FORMULA:
+            {
+                const ScFormulaCell* pFCell = static_cast<const ScFormulaCell*>(pDoc->GetCell(rPos));
+                if (pFCell)
+                    pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pFCell, fVal));
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    pDoc->SetValue(rPos, fVal);
+
+    if (bHeight)
+        AdjustRowHeight( ScRange(rPos) );
+
+    aModificator.SetDocumentModified();
+
+    // #103934#; notify editline and cell in edit mode
+    if (!bInteraction)
+        NotifyInputHandler( rPos );
+}
+
 sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );

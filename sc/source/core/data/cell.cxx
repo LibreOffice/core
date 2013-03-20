@@ -884,6 +884,11 @@ ScFormulaCell::~ScFormulaCell()
 #endif
 }
 
+ScFormulaCell* ScFormulaCell::Clone() const
+{
+    return new ScFormulaCell(*this, *pDocument, aPos);
+}
+
 size_t ScFormulaCell::GetHash() const
 {
     return pCode->GetHash();

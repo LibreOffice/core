@@ -126,6 +126,13 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
     return true; // needs some code auditing action
 }
 
+void ScDocFuncSend::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
+{
+    // TODO: How do we implement this?
+
+    return true; // needs some code auditing action
+}
+
 sal_Bool ScDocFuncSend::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
 {
     ScChangeOpWriter aOp( "putCell" );

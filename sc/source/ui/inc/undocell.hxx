@@ -34,8 +34,6 @@ class ScDetOpList;
 class ScDetOpData;
 class ScRangeName;
 
-//----------------------------------------------------------------------------
-
 class ScUndoCursorAttr: public ScSimpleUndo
 {
 public:
@@ -160,6 +158,45 @@ private:
     void            SetChangeTrack();
 };
 
+class ScUndoSetCell : public ScSimpleUndo
+{
+public:
+    struct Value
+    {
+        CellType meType;
+        union {
+            double mfValue;
+            OUString* mpString;
+            EditTextObject* mpEditText;
+            ScFormulaCell* mpFormulaCell;
+        };
+
+        Value();
+        Value( double fValue );
+        Value( const OUString& rString );
+        Value( const EditTextObject& rEditText );
+        Value( const ScFormulaCell& rFormula );
+        Value( const Value& r );
+        ~Value();
+    };
+
+    TYPEINFO();
+    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rNewVal );
+    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rOldVal, const Value& rNewVal );
+
+    virtual ~ScUndoSetCell();
+
+    virtual void Undo();
+    virtual void Redo();
+    virtual void Repeat( SfxRepeatTarget& rTarget );
+    virtual sal_Bool CanRepeat( SfxRepeatTarget& rTarget ) const;
+    virtual OUString GetComment() const;
+
+private:
+    ScAddress maPos;
+    Value maOldValue;
+    Value maNewValue;
+};
 
 class ScUndoPageBreak: public ScSimpleUndo
 {

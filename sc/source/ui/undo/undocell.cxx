@@ -48,6 +48,7 @@ TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterValue, ScSimpleUndo);
 TYPEINIT1(ScUndoPutCell, ScSimpleUndo);
+TYPEINIT1(ScUndoSetCell, ScSimpleUndo);
 TYPEINIT1(ScUndoPageBreak, ScSimpleUndo);
 TYPEINIT1(ScUndoPrintZoom, ScSimpleUndo);
 TYPEINIT1(ScUndoThesaurus, ScSimpleUndo);
@@ -494,6 +495,76 @@ void ScUndoPutCell::Repeat(SfxRepeatTarget& /* rTarget */)
 sal_Bool ScUndoPutCell::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
+}
+
+ScUndoSetCell::Value::Value() : meType(CELLTYPE_NONE), mfValue(0.0) {}
+ScUndoSetCell::Value::Value( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
+ScUndoSetCell::Value::Value( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
+ScUndoSetCell::Value::Value( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
+ScUndoSetCell::Value::Value( const ScFormulaCell& rFormula ) : meType(CELLTYPE_FORMULA), mpFormulaCell(rFormula.Clone()) {}
+
+ScUndoSetCell::Value::Value( const Value& r ) : meType(r.meType), mfValue(r.mfValue)
+{
+    switch (r.meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = new OUString(*r.mpString);
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = r.mpEditText->Clone();
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormulaCell = r.mpFormulaCell->Clone();
+        default:
+            ;
+    }
+}
+
+ScUndoSetCell::Value::~Value()
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            delete mpString;
+        break;
+        case CELLTYPE_EDIT:
+            delete mpEditText;
+        case CELLTYPE_FORMULA:
+            mpFormulaCell->Delete();
+        default:
+            ;
+    }
+}
+
+ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rNewVal ) :
+    ScSimpleUndo(pDocSh), maPos(rPos), maNewValue(rNewVal) {}
+
+ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rOldVal, const Value& rNewVal ) :
+    ScSimpleUndo(pDocSh), maPos(rPos), maOldValue(rOldVal), maNewValue(rNewVal) {}
+
+ScUndoSetCell::~ScUndoSetCell() {}
+
+void ScUndoSetCell::Undo()
+{
+}
+
+void ScUndoSetCell::Redo()
+{
+}
+
+void ScUndoSetCell::Repeat( SfxRepeatTarget& /*rTarget*/ )
+{
+    // Makes no sense.
+}
+
+sal_Bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
+{
+    return false;
+}
+
+OUString ScUndoSetCell::GetComment() const
+{
+    return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); // "Input"
 }
 
 ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,
