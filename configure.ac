@@ -8124,6 +8124,7 @@ if test "$with_system_npapi_headers" = "yes"; then
         ])
     CFLAGS=$save_CFLAGS
     AC_LANG_POP([C])
+    NPAPI_HEADERS_CFLAGS="`echo $NPAPI_HEADERS_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
 else
     AC_MSG_RESULT([internal])
         dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER or
