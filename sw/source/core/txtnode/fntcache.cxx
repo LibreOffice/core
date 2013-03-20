@@ -665,115 +665,136 @@ static void lcl_DrawLineForWrongListData(
     const CalcLinePosData   &rCalcLinePosData,
     const Size              &rPrtFontSize )
 {
-    if (!pWList)
-        return;
+    if (!pWList) return;
 
     xub_StrLen nStart = rInf.GetIdx();
     xub_StrLen nWrLen = rInf.GetLen();
 
     // check if respective data is available in the current text range
-    if (pWList->Check( nStart, nWrLen ))
+    if (!pWList->Check( nStart, nWrLen ))
     {
-        // get line color to use...
-        Color aLineColor;
-        if (pWList == rInf.GetWrong())  // ... for spell checking
-            aLineColor = SwViewOption::GetSpellColor();
-        else if (pWList == rInf.GetGrammarCheck())  // ... for grammar checking
-            // currently there is no specific color for grammar check errors available in the configuration
-            aLineColor = Color( COL_LIGHTBLUE );
-        else if (pWList == rInf.GetSmartTags())  // ... for smart tags
-            aLineColor = SwViewOption::GetSmarttagColor();
+        return;
+    }
 
-        long nHght = rInf.GetOut().LogicToPixel( rPrtFontSize ).Height();
+    long nHght = rInf.GetOut().LogicToPixel( rPrtFontSize ).Height();
 
-        // Draw wavy lines for spell and grammar errors only if font is large enough.
-        // Lines for smart tags will always be drawn.
-        if (pWList == rInf.GetSmartTags() || WRONG_SHOW_MIN < nHght)
+    // Draw wavy lines for spell and grammar errors only if font is large enough.
+    // Lines for smart tags will always be drawn.
+    if (pWList != rInf.GetSmartTags() && WRONG_SHOW_MIN >= nHght)
+    {
+        return;
+    }
+
+    SwForbidden::iterator pIter = rForbidden.begin();
+    if (rInf.GetOut().GetConnectMetaFile())
+        rInf.GetOut().Push();
+
+    const Color aCol( rInf.GetOut().GetLineColor() );
+
+    // iterate over all ranges stored in the respective SwWrongList
+    do
+    {
+        nStart = nStart - rInf.GetIdx();
+
+        const xub_StrLen nEnd = nStart + nWrLen;
+        xub_StrLen nNext = nStart;
+        while( nNext < nEnd )
         {
-            SwForbidden::iterator pIter = rForbidden.begin();
-            if (rInf.GetOut().GetConnectMetaFile())
-                rInf.GetOut().Push();
+            while( pIter != rForbidden.end() && pIter->second <= nNext )
+                ++pIter;
 
-            const Color aCol( rInf.GetOut().GetLineColor() );
-            const bool bColSave = aCol != aLineColor;
-            if (bColSave)
-                rInf.GetOut().SetLineColor( aLineColor );
+            xub_StrLen nNextStart = nNext;
+            xub_StrLen nNextEnd = nEnd;
 
-            // iterate over all ranges stored in the respective SwWrongList
-            do
+            if( pIter == rForbidden.end() || nNextEnd <= pIter->first )
             {
-                nStart = nStart - rInf.GetIdx();
-
-                const xub_StrLen nEnd = nStart + nWrLen;
-                xub_StrLen nNext = nStart;
-                while( nNext < nEnd )
+                // No overlapping mark up found
+                std::pair< xub_StrLen, xub_StrLen > aNew;
+                aNew.first = nNextStart;
+                aNew.second = nNextEnd;
+                rForbidden.insert( pIter, aNew );
+                pIter = rForbidden.begin();
+                nNext = nEnd;
+            }
+            else
+            {
+                nNext = pIter->second;
+                if( nNextStart < pIter->first )
                 {
-                    while( pIter != rForbidden.end() && pIter->second <= nNext )
-                        ++pIter;
-                    xub_StrLen nNextStart = nNext;
-                    xub_StrLen nNextEnd = nEnd;
-                    if( pIter == rForbidden.end() || nNextEnd <= pIter->first )
-                    {
-                        // No overlapping mark up found
-                        std::pair< xub_StrLen, xub_StrLen > aNew;
-                        aNew.first = nNextStart;
-                        aNew.second = nNextEnd;
-                        rForbidden.insert( pIter, aNew );
-                        pIter = rForbidden.begin();
-                        nNext = nEnd;
-                    }
-                    else
-                    {
-                        nNext = pIter->second;
-                        if( nNextStart < pIter->first )
-                        {
-                            nNextEnd = pIter->first;
-                            pIter->first = nNextStart;
-                        }
-                        else
-                            continue;
-                    }
-                    // determine line pos
-                    Point aStart( rInf.GetPos() );
-                    Point aEnd;
-                    lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nNextStart, nNextEnd - nNextStart );
+                    nNextEnd = pIter->first;
+                    pIter->first = nNextStart;
+                }
+                else
+                    continue;
+            }
+            // determine line pos
+            Point aStart( rInf.GetPos() );
+            Point aEnd;
+            lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nNextStart, nNextEnd - nNextStart );
 
-                    // draw line for smart tags?
-                    if (pWList == rInf.GetSmartTags())
-                    {
-                        aStart.Y() +=30;
-                        aEnd.Y() +=30;
 
-                        LineInfo aLineInfo( LINE_DASH );
-                        aLineInfo.SetDistance( 40 );
-                        aLineInfo.SetDashLen( 1 );
-                        aLineInfo.SetDashCount(1);
+            sal_uInt16 wrongPos = pWList->GetWrongPos(nNextStart + rInf.GetIdx());
 
-                        rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
-                    }
-                    else    // draw wavy lines for spell or grammar errors
-                    {
-                        // get wavy line type to use
-                        sal_uInt16 nWave =
-                            WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
-                            ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL : WAVE_FLAT );
+            const SwWrongArea* wrongArea = pWList->GetElement(wrongPos);
 
-                        rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
-                    }
+            if (wrongArea != 0)
+            {
+                if (WRONGAREA_DASHED == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    aStart.Y() +=30;
+                    aEnd.Y() +=30;
+
+                    LineInfo aLineInfo( LINE_DASH );
+                    aLineInfo.SetDistance( 40 );
+                    aLineInfo.SetDashLen( 1 );
+                    aLineInfo.SetDashCount(1);
+
+                    rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
+                }
+                else if (WRONGAREA_WAVE == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    // get wavy line type to use
+                    sal_uInt16 nWave =
+                        WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
+                        ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL : WAVE_FLAT );
+
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
+                }
+                else if (WRONGAREA_WAVE_NORMAL == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, WAVE_NORMAL);
                 }
 
-                nStart = nEnd + rInf.GetIdx();
-                nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
+                else if (WRONGAREA_WAVE_SMALL == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, WAVE_SMALL);
+                }
+                else if (WRONGAREA_WAVE_FLAT == wrongArea->mLineType)
+                {
+                    rInf.GetOut().SetLineColor( wrongArea->mColor );
+
+                    rInf.GetOut().DrawWaveLine( aStart, aEnd, WAVE_FLAT);
+                }
             }
-            while (nWrLen && pWList->Check( nStart, nWrLen ));
-
-            if (bColSave)
-                rInf.GetOut().SetLineColor( aCol );
-
-            if (rInf.GetOut().GetConnectMetaFile())
-                rInf.GetOut().Pop();
         }
+
+        nStart = nEnd + rInf.GetIdx();
+        nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
     }
+    while (nWrLen && pWList->Check( nStart, nWrLen ));
+
+    rInf.GetOut().SetLineColor( aCol );
+
+    if (rInf.GetOut().GetConnectMetaFile())
+        rInf.GetOut().Pop();
 }
 
 

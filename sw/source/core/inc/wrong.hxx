@@ -22,11 +22,36 @@
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
 
+#include <com/sun/star/util/Color.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/uno/Any.hxx>
+
 #include <vector>
 
 #include <tools/string.hxx>
+#include <tools/color.hxx>
+#include <viewopt.hxx>
 
 class SwWrongList;
+
+enum WrongAreaLineType
+{
+    WRONGAREA_DASHED,
+    WRONGAREA_WAVE,
+    WRONGAREA_WAVE_NORMAL,
+    WRONGAREA_WAVE_SMALL,
+    WRONGAREA_WAVE_FLAT,
+    WRONGAREA_NONE
+};
+
+enum WrongListType
+{
+    WRONGLIST_SPELL,
+    WRONGLIST_GRAMMAR,
+    WRONGLIST_SMARTTAG,
+    WRONGLIST_CHANGETRACKING
+};
+
 
 // ST2
 class SwWrongArea
@@ -38,21 +63,122 @@ public:
     xub_StrLen mnLen;
     SwWrongList* mpSubList;
 
-    SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL) {}
+    Color mColor;
+    WrongAreaLineType mLineType;
+
+    SwWrongArea( const OUString& rType,
+                 WrongListType listType,
+                 com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                 xub_StrLen nPos,
+                 xub_StrLen nLen);
+
     SwWrongArea( const OUString& rType,
                  com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
                  xub_StrLen nPos,
                  xub_StrLen nLen,
-                 SwWrongList* pSubList )
-        : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList) {}
-};
+                 SwWrongList* pSubList);
+private:
 
-enum WrongListType
-{
-    WRONGLIST_SPELL,
-    WRONGLIST_GRAMMAR,
-    WRONGLIST_SMARTTAG,
-    WRONGLIST_CHANGETRACKING
+    SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL), mColor(0,0,0), mLineType(WRONGAREA_WAVE) {}
+
+    Color getSmartColor ( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag)
+    {
+        try
+        {
+            if (xPropertyBag.is())
+            {
+                const ::rtl::OUString colorKey  = ::rtl::OUString::createFromAscii ("LineColor");
+                com::sun::star::uno::Any aLineColor = xPropertyBag->getValue(colorKey).get< com::sun::star::uno::Any>();
+                com::sun::star::util::Color lineColor = 0;
+
+                if (aLineColor >>= lineColor)
+                {
+                    return Color( lineColor );
+                }
+            }
+        }
+        catch(::com::sun::star::container::NoSuchElementException& ex)
+        {
+        }
+        catch(::com::sun::star::uno::RuntimeException& ex)
+        {
+        }
+
+        return SwViewOption::GetSmarttagColor( );
+    }
+
+    WrongAreaLineType getSmartLineType( com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
+    {
+        try
+        {
+            if (xPropertyBag.is())
+            {
+                const ::rtl::OUString typeKey  = ::rtl::OUString::createFromAscii ("LineType");
+                com::sun::star::uno::Any aLineType = xPropertyBag->getValue(typeKey).get< com::sun::star::uno::Any>();
+                ::sal_Int16 lineType = 0;
+
+                if (!(aLineType >>= lineType))
+                {
+                    return WRONGAREA_DASHED;
+                }
+                if (::com::sun::star::awt::FontUnderline::WAVE == lineType)
+                {
+                    return WRONGAREA_WAVE_NORMAL;
+                }
+                if (::com::sun::star::awt::FontUnderline::SMALLWAVE == lineType)
+                {
+                    return WRONGAREA_WAVE_SMALL;
+                }
+            }
+        }
+        catch(::com::sun::star::container::NoSuchElementException& ex)
+        {
+        }
+        catch(::com::sun::star::uno::RuntimeException& ex)
+        {
+        }
+
+        return WRONGAREA_DASHED;
+    }
+
+    Color getWrongAreaColor(WrongListType listType,
+                            com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
+    {
+        if (WRONGLIST_SPELL == listType)
+        {
+            return SwViewOption::GetSpellColor();
+        }
+        else if (WRONGLIST_GRAMMAR == listType)
+        {
+            return Color( COL_LIGHTBLUE );
+        }
+        else if (WRONGLIST_SMARTTAG == listType)
+        {
+            return  getSmartColor(xPropertyBag);
+        }
+
+        return SwViewOption::GetSpellColor();
+    }
+
+    WrongAreaLineType getWrongAreaLineType(WrongListType listType,
+                                           com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag )
+    {
+        if (WRONGLIST_SPELL == listType)
+        {
+            return WRONGAREA_WAVE;
+        }
+        else if (WRONGLIST_GRAMMAR == listType)
+        {
+            return WRONGAREA_WAVE;
+        }
+        else if (WRONGLIST_SMARTTAG == listType)
+        {
+            return getSmartLineType(xPropertyBag);
+        }
+
+        return WRONGAREA_WAVE;
+    }
+
 };
 
 class SwWrongList
@@ -131,7 +257,8 @@ public:
             i = maList.end(); // robust
         else
             i += nWhere;
-        maList.insert(i, SwWrongArea( rType, xPropertyBag, nNewPos, nNewLen, 0 ) );
+
+        maList.insert(i, SwWrongArea( rType, meType, xPropertyBag, nNewPos, nNewLen) );
     }
 
     void Insert( const OUString& rType,

@@ -22,6 +22,33 @@
 
 #include "SwGrammarMarkUp.hxx"
 
+/*************************************************************************
+ *SwWrongArea::SwWrongArea
+ *************************************************************************/
+
+SwWrongArea::SwWrongArea( const rtl::OUString& rType, WrongListType listType,
+        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+        xub_StrLen nPos,
+        xub_StrLen nLen)
+: maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(0)
+{
+    mColor =  getWrongAreaColor(listType, xPropertyBag);
+    mLineType = getWrongAreaLineType(listType, xPropertyBag);
+}
+
+SwWrongArea::SwWrongArea( const rtl::OUString& rType,
+        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+        xub_StrLen nPos,
+        xub_StrLen nLen,
+        SwWrongList* pSubList)
+: maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList), mLineType(WRONGAREA_NONE)
+{
+    if (pSubList != 0)
+    {
+        mColor =  getWrongAreaColor(pSubList->GetWrongListType(), xPropertyBag);
+        mLineType = getWrongAreaLineType(pSubList->GetWrongListType(), xPropertyBag);
+    }
+}
 
 /*************************************************************************
  * SwWrongList::SwWrongList()
@@ -622,7 +649,7 @@ void SwWrongList::Insert( const OUString& rType,
         ++aIter;
     }
 
-    maList.insert(aIter, SwWrongArea( rType, xPropertyBag, nNewPos, nNewLen, 0 ) );
+    maList.insert(aIter, SwWrongArea( rType, meType, xPropertyBag, nNewPos, nNewLen) );
 }
 
 
