@@ -233,7 +233,7 @@ namespace svt { namespace table
     //====================================================================
     DBG_NAME( TableControl_Impl )
 
-#if DBG_UTIL
+#ifdef DBG_UTIL
     //====================================================================
     //= SuspendInvariants
     //====================================================================
@@ -263,7 +263,7 @@ namespace svt { namespace table
     #define DBG_SUSPEND_INV( flags )
 #endif
 
-#if DBG_UTIL
+#ifdef DBG_UTIL
     //====================================================================
     const char* TableControl_Impl_checkInvariants( const void* _pInstance )
     {
@@ -448,7 +448,7 @@ namespace svt { namespace table
         ,m_nAnchor              ( -1                            )
         ,m_bUpdatingColWidths   ( false                         )
         ,m_pAccessibleTable     ( NULL                          )
-#if DBG_UTIL
+#ifdef DBG_UTIL
         ,m_nRequiredInvariants ( INV_SCROLL_POSITION )
 #endif
     {

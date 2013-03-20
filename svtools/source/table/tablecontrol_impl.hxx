@@ -147,7 +147,7 @@ namespace svt { namespace table
         AccessibleFactoryAccess     m_aFactoryAccess;
         IAccessibleTableControl*    m_pAccessibleTable;
 
-#if DBG_UTIL
+#ifdef DBG_UTIL
     #define INV_SCROLL_POSITION     1
         /** represents a bitmask of invariants to check
 
@@ -178,7 +178,7 @@ namespace svt { namespace table
         TableControl_Impl( TableControl& _rAntiImpl );
         ~TableControl_Impl();
 
-#if DBG_UTIL
+#ifdef DBG_UTIL
         const sal_Char* impl_checkInvariants() const;
 #endif
         /** to be called when the anti-impl instance has been resized
