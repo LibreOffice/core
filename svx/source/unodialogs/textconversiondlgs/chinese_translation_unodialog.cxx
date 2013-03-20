@@ -128,7 +128,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno
         beans::PropertyValue aProperty;
         if(*pArguments >>= aProperty)
         {
-            if( aProperty.Name.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) == 0 )
+            if( aProperty.Name == "ParentWindow" )
             {
                 aProperty.Value >>= m_xParentWindow;
             }
