@@ -65,6 +65,7 @@
 #include "userlist.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
+#include "stringutil.hxx"
 
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
@@ -2029,7 +2030,11 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
             rtl::OUString aStr;
             double fVal;
             if (rAny >>= aStr)
-                pInsDoc->PutCell( ScAddress(nCol, nRow, nNewTab), new ScStringCell(String(aStr)) );
+            {
+                ScSetStringParam aParam;
+                aParam.setTextInput();
+                pInsDoc->SetString(ScAddress(nCol,nRow,nNewTab), aStr);
+            }
             else if (rAny >>= fVal)
                 pInsDoc->SetValue(nCol, nRow, nNewTab, fVal);
         }

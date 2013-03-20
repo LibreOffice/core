@@ -72,15 +72,26 @@ struct SC_DLLPUBLIC ScSetStringParam
     TextFormatPolicy meSetTextNumFormat;
 
     /**
-     * When true, treat input with a leading apostrophe / single quote special
-     * in that it escapes numeric or date/time input such that it is not
-     * interpreted and the input string is taken instead. This can be used
-     * during text file import so the leading apostrophe is not lost if it
-     * precedes a numeric value.
+     * When true, treat input with a leading apostrophe as an escape character
+     * for a numeric value content, to treat the numeric value as a text. When
+     * false, the whole string input including the leading apostrophe will be
+     * entered literally as string.
      */
     bool mbHandleApostrophe;
 
     ScSetStringParam();
+
+    /**
+     * Call this whenever you need to unconditionally set input as text, no
+     * matter what the input is.
+     */
+    void setTextInput();
+
+    /**
+     * Call this whenever you need to maximize the chance of input being
+     * detected as a numeric value (numbers, dates, times etc).
+     */
+    void setNumericInput();
 };
 
 // ============================================================================

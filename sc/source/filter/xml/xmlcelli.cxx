@@ -1037,9 +1037,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
             {
                 // This is a normal text without format runs.
                 ScSetStringParam aParam;
-                aParam.mbDetectNumberFormat = false;
-                aParam.mbHandleApostrophe = false;
-                aParam.meSetTextNumFormat = ScSetStringParam::Always;
+                aParam.setTextInput();
                 pDoc->SetString(rCurrentPos, mpEditEngine->GetText(), &aParam);
             }
             else

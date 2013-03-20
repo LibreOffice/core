@@ -246,9 +246,7 @@ void XclImpStringHelper::SetToDocument(
         {
             // Normal text cell.
             ScSetStringParam aParam;
-            aParam.mbDetectNumberFormat = false;
-            aParam.mbHandleApostrophe = false;
-            aParam.meSetTextNumFormat = ScSetStringParam::Always;
+            aParam.setTextInput();
             rDoc.SetString(rPos, aStr, &aParam);
         }
     }

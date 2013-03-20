@@ -3005,9 +3005,7 @@ void ScDocument::SetTextCell( const ScAddress& rPos, const OUString& rStr )
     else
     {
         ScSetStringParam aParam;
-        aParam.mbDetectNumberFormat = false;
-        aParam.mbHandleApostrophe = false;
-        aParam.meSetTextNumFormat = ScSetStringParam::Always;
+        aParam.setTextInput();
         maTabs[rPos.Tab()]->SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rStr, &aParam);
     }
 }

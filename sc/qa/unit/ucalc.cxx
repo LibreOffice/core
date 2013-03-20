@@ -498,9 +498,7 @@ void Test::testInput()
 
     // Customized string handling policy.
     ScSetStringParam aParam;
-    aParam.mbDetectNumberFormat = false;
-    aParam.meSetTextNumFormat = ScSetStringParam::Always;
-    aParam.mbHandleApostrophe = false;
+    aParam.setTextInput();
     m_pDoc->SetString(0, 0, 0, "000123", &aParam);
     test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Text content should have been treated as string, not number.", test == "000123");

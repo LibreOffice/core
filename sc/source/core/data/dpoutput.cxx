@@ -795,17 +795,10 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         bool bNumeric = (nFlags & sheet::MemberResultFlags::NUMERIC) != 0;
         ScSetStringParam aParam;
         if (bNumeric)
-        {
-            aParam.mbDetectNumberFormat = true;
-            aParam.meSetTextNumFormat = ScSetStringParam::Never;
-            aParam.mbHandleApostrophe = true;
-        }
+            aParam.setNumericInput();
         else
-        {
-            aParam.mbDetectNumberFormat = false;
-            aParam.meSetTextNumFormat = ScSetStringParam::Always;
-            aParam.mbHandleApostrophe = false;
-        }
+            aParam.setTextInput();
+
         pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
     }
 

@@ -30,6 +30,20 @@ ScSetStringParam::ScSetStringParam() :
 {
 }
 
+void ScSetStringParam::setTextInput()
+{
+    mbDetectNumberFormat = false;
+    mbHandleApostrophe = false;
+    meSetTextNumFormat = Always;
+}
+
+void ScSetStringParam::setNumericInput()
+{
+    mbDetectNumberFormat = true;
+    mbHandleApostrophe = true;
+    meSetTextNumFormat = Never;
+}
+
 // ============================================================================-
 
 bool ScStringUtil::parseSimpleNumber(

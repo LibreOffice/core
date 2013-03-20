@@ -179,9 +179,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             else
             {
                 ScSetStringParam aParam;
-                aParam.mbDetectNumberFormat = false;
-                aParam.mbHandleApostrophe = false;
-                aParam.meSetTextNumFormat = ScSetStringParam::Always;
+                aParam.setTextInput();
                 pDoc->SetString(aPos, aString, &aParam);
                 if (pStrData)
                     pStrData->mbSimpleText = true;

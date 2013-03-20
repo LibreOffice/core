@@ -134,9 +134,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
         DATASET             eAkt = D_UNKNOWN;
 
         ScSetStringParam aStrParam; // used to set string value without number detection.
-        aStrParam.mbDetectNumberFormat = false;
-        aStrParam.mbHandleApostrophe = false;
-        aStrParam.meSetTextNumFormat = ScSetStringParam::Always;
+        aStrParam.setTextInput();
 
         while( eAkt != D_EOD )
         {
