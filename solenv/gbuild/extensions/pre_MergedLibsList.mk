@@ -38,6 +38,8 @@ gb_MERGEDLIBS := \
 	drawinglayer \
 	editeng \
 	filterconfig \
+	for \
+	forui \
 	fsstorage \
 	fwe \
 	fwi \
@@ -50,6 +52,7 @@ gb_MERGEDLIBS := \
 	package2 \
 	sax \
 	sb \
+	sc \
 	sfx \
 	sofficeapp \
 	sot \
