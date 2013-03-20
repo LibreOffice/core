@@ -308,10 +308,9 @@ void OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
         uno::Reference< ucb::XCommandEnvironment > xCmdEnv(
             static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
         uno::Reference< task::XAbortChannel > xAbortChannel;
-        uno::Reference< deployment::XPackage > xPackage =
-            extMgr->addExtension(
-                sSourceDir, uno::Sequence<beans::NamedValue>(),
-                "user", xAbortChannel, xCmdEnv );
+        extMgr->addExtension(
+            sSourceDir, uno::Sequence<beans::NamedValue>(), "user",
+            xAbortChannel, xCmdEnv );
     }
     catch ( css::uno::Exception & e )
     {
