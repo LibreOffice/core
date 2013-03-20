@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_coverage, \
     utl \
     vcl \
     xmlscript \
+    i18nisolang1 \
     $(gb_UWINAPI) \
 ))
 

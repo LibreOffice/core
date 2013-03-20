@@ -11,7 +11,8 @@
 #include <osl/file.hxx>
 #include "basic/sbmod.hxx"
 #include "basic/sbmeth.hxx"
-
+#include <i18npool/languagetag.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 namespace
 {
@@ -19,6 +20,7 @@ namespace
 class Coverage : public test::BootstrapFixture
 {
 private:
+    typedef std::vector< OUString > StringVec;
     int  m_nb_tests;
     int  m_nb_tests_ok;
     int  m_nb_tests_skipped;
@@ -29,6 +31,7 @@ private:
     void test_failed(void);
     void test_success(void);
     void print_summary() {};
+    StringVec get_subdirnames( const OUString& sDirName );
 
 public:
     Coverage();
@@ -101,6 +104,24 @@ void Coverage::run_test(OUString sFileURL)
     }
 }
 
+Coverage::StringVec Coverage::get_subdirnames( const OUString& sDirName )
+{
+    Coverage::StringVec sSubDirNames;
+    osl::Directory aDir(sDirName);
+    osl::DirectoryItem aItem;
+    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+
+    if(osl::FileBase::E_None == aDir.open())
+    {
+        while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
+        {
+            aItem.getFileStatus(aFileStatus);
+            if(aFileStatus.isDirectory())
+                sSubDirNames.push_back( aFileStatus.getFileURL() );
+        }
+    }
+    return sSubDirNames;
+}
 void Coverage::process_directory(OUString sDirName)
 {
     osl::Directory aDir(sDirName);
@@ -129,7 +150,26 @@ void Coverage::Coverage_Iterator(void)
     OUString sDirName = getURLFromSrc("/basic/qa/basic_coverage/");
 
     CPPUNIT_ASSERT(!sDirName.isEmpty());
-    process_directory(sDirName);
+    process_directory(sDirName); // any files in the root test dir are run in test harness default locale ( en-US )
+    Coverage::StringVec sLangDirs = get_subdirnames( sDirName );
+
+    for ( Coverage::StringVec::iterator it = sLangDirs.begin(), it_end = sLangDirs.end(); it != it_end; ++it )
+    {
+        OUString sDir( *it );
+        sal_Int32 nSlash = (*it).lastIndexOf('/');
+        if ( nSlash != -1 )
+        {
+            OUString sLangISO = sDir.copy( nSlash + 1 );
+            LanguageTag aLocale( sLangISO );
+            if ( aLocale.isValidBcp47() )
+            {
+                SvtSysLocaleOptions aLocalOptions;
+                // set locale for test dir
+                aLocalOptions.SetLocaleConfigString( sLangISO );
+                process_directory(sDir);
+            }
+        }
+    }
 }
 
   CPPUNIT_TEST_SUITE_REGISTRATION(Coverage);
