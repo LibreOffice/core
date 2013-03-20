@@ -15,10 +15,22 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from WebWizardDialog import *
-from WebWizardDialog import *
-from common.SystemDialog import SystemDialog
-from ui.event.ListModelBinder import ListModelBinder
+import traceback
+
+from .WebWizardDialog import WebWizardDialog
+from .StatusDialog import StatusDialog
+from .AbstractErrorHandler import AbstractErrorHandler
+from .ErrorHandler import ErrorHandler
+from .WebWizardConst import *
+from .WWHID import *
+from .FTPDialog import FTPDialog
+from ..common.SystemDialog import SystemDialog
+from ..common.FileAccess import FileAccess
+from ..common.HelpIds import HelpIds
+from ..common.PropertyNames import PropertyNames
+from ..ui.event.ListModelBinder import ListModelBinder
+
+from com.sun.star.lang import IllegalArgumentException
 
 '''
 @author rpiterman
@@ -29,6 +41,11 @@ This class implements general methods, used by different sub-classes
 class WWD_General(WebWizardDialog):
 
     settings = None
+    folderDialog = None
+    ftpDialog = None
+    zipDialog = None
+    docAddDialog = None
+    fileAccess = None
 
     def __init__(self, xmsf):
         super(WWD_General, self).__init__(xmsf)
@@ -41,7 +58,7 @@ class WWD_General(WebWizardDialog):
             [self.resources.prodName, "", "", "", "", ""],
             HelpIds.getHelpIdString(HID0_STATUS_DIALOG))
         try:
-            statusDialog.createWindowPeer(xControl.Peer)
+            statusDialog.createWindowPeer(self.xUnoDialog.Peer)
         except Exception:
             traceback.print_exc()
 
@@ -53,7 +70,7 @@ class WWD_General(WebWizardDialog):
 
     def getDocAddDialog(self):
         self.docAddDialog = SystemDialog.createOpenDialog(self.xMSF)
-        for i in xrange(WWD_General.settings.cp_Filters.getSize()):
+        for i in range(WWD_General.settings.cp_Filters.getSize()):
             f = WWD_General.settings.cp_Filters.getElementAt(i)
             if f is not None:
                 self.docAddDialog.addFilter(
@@ -63,7 +80,7 @@ class WWD_General(WebWizardDialog):
 
     def getZipDialog(self):
         if self.zipDialog is None:
-            self.zipDialog = SystemDialog.createStoreDialog(xMSF)
+            self.zipDialog = SystemDialog.createStoreDialog(self.xMSF)
             self.zipDialog.addFilter(self.resources.resZipFiles, "*.zip", True)
 
         return self.zipDialog
@@ -71,18 +88,24 @@ class WWD_General(WebWizardDialog):
     def getFTPDialog(self, pub):
         if self.ftpDialog is None:
             try:
-                self.ftpDialog = FTPDialog.FTPDialog_unknown(xMSF, pub)
-                self.ftpDialog.createWindowPeer(xControl.getPeer())
+                self.ftpDialog = FTPDialog(self.xMSF, pub)
+                self.ftpDialog.createWindowPeer(self.xUnoDialog.getPeer())
             except Exception:
                 traceback.print_exc()
-
         return self.ftpDialog
 
-    def showFolderDialog(self, title, description, dir):
+    def showFolderDialog(self, title, description, folder):
         if self.folderDialog is None:
-            self.folderDialog = SystemDialog.createFolderDialog(xMSF)
+            self.folderDialog = SystemDialog.createFolderDialog(self.xMSF)
+        return self.folderDialog.callFolderDialog(title, description, folder)
 
-        return self.folderDialog.callFolderDialog(title, description, dir)
+    def getFileAccess(self):
+        if (self.fileAccess is None):
+            try:
+                self.fileAccess = FileAccess(self.xMSF)
+            except Exception:
+                traceback.print_exc()
+        return self.fileAccess
 
     '''
     returns the document specified
@@ -91,22 +114,20 @@ class WWD_General(WebWizardDialog):
     @return
     '''
 
-    @classmethod
     def getDoc(self, s):
-        if len(s) == 0:
+        print ("DEBUG !!! getDoc -- ", s)
+        if (len(s) == 0):
             return None
-        elif WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]:
+        elif (WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]):
             return None
         else:
-            return \
-                WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.childrenList[s[0]]
+            return WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
 
     '''
     how many documents are in the list?
     @return the number of documents in the docs list.
     '''
 
-    @classmethod
     def getDocsCount(self):
         return WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()
 
@@ -132,15 +153,14 @@ class WWD_General(WebWizardDialog):
     '''
 
     def isSaveSession(self):
-        return int(Helper.getUnoPropertyValue(
-            chkSaveSettings.Model, PropertyNames.PROPERTY_STATE) == 1)
+        return int(self.chkSaveSettings.Model.State == 1)
 
     '''
     @return the name to save the session (step 7)
     '''
 
     def getSessionSaveName(self):
-        return Helper.getUnoPropertyValue(getModel(cbSaveSettings), "Text")
+        return self.cbSaveSettings.Model.Text
 
     '''
     This method checks the status of the wizards and
@@ -165,7 +185,7 @@ class WWD_General(WebWizardDialog):
             #disbale steps 3-7
             return
 
-        for i in xrange(3,8):
+        for i in range(3,8):
             self.setStepEnabled(i, enabled, True)
             '''
             in this place i just disable the finish button.
@@ -200,7 +220,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkSaveSession(self):
-        return (not isSaveSession() or not getSessionSaveName() == "")
+        return (not self.isSaveSession() or not self.getSessionSaveName() == "")
 
     '''
     @return false if this publisher is not active, or, if it
@@ -209,14 +229,16 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkPublish2(self, s, text, _property):
+        print ("DEBUG !!! checkPublish2")
         p = self.getPublisher(s)
         if p.cp_Publish:
-            url = Helper.getUnoPropertyValue(text.Model, _property)
+            print ("DEBUG !!! Property: ", _property)
+            url = getattr(text.Model, _property)
+            print ("DEBUG !!! URL: ", url)
             if url is None or url == "":
                 raise IllegalArgumentException ()
             else:
                 return True
-
         else:
             return False
 
@@ -231,13 +253,14 @@ class WWD_General(WebWizardDialog):
 
     def checkPublish_(self):
         try:
+            print ("DEBUG !!! checkPublish_")
             return \
                 self.checkPublish2(LOCAL_PUBLISHER, self.txtLocalDir, "Text") \
-                or (not self.proxies and self.checkPublish(
-                    FTP_PUBLISHER, lblFTP, PropertyNames.PROPERTY_LABEL) \
+                or (not self.proxies and self.checkPublish2(
+                    FTP_PUBLISHER, self.lblFTP, PropertyNames.PROPERTY_LABEL) \
                 or self.checkPublish2(ZIP_PUBLISHER, self.txtZip, "Text")) \
                 and self.checkSaveSession()
-        except IllegalArgumentException, ex:
+        except IllegalArgumentException as ex:
             return False
 
     '''
@@ -249,6 +272,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkPublish(self):
+        print ("DEBUG !!! checkPublish")
         self.enableFinishButton(self.checkPublish_())
 
     '''
@@ -257,9 +281,9 @@ class WWD_General(WebWizardDialog):
     '''
 
     def unexpectedError(self, ex):
-        ex.printStackTrace()
-        peer = xControl.getPeer()
-        AbstractErrorHandler.showMessage(
+        traceback.print_exc()
+        peer = self.xUnoDialog.getPeer()
+        AbstractErrorHandler.showMessage1(
             self.xMSF, peer, self.resources.resErrUnexpected,
             ErrorHandler.ERROR_PROCESS_FATAL)
 
@@ -272,5 +296,6 @@ class WWD_General(WebWizardDialog):
     def substitute(self, path):
         try:
             return self.xStringSubstitution.substituteVariables(path, False)
-        except Exception, ex:
+        except Exception as ex:
+            traceback.print_exc()
             return path
