@@ -6243,16 +6243,16 @@ void Test::testFormulaGrouping()
 
     m_pDoc->InsertTab( 0, "sheet" );
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS( aGroupTests ); i++)
+    for (unsigned i = 0; i < SAL_N_ELEMENTS( aGroupTests ); i++)
     {
-        for (size_t j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
+        for (unsigned j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
         {
             OUString aFormula = OUString::createFromAscii(aGroupTests[i].pFormula[j]);
             m_pDoc->SetString(0, (SCROW)j, 0, aFormula);
         }
         m_pDoc->RebuildFormulaGroups();
 
-        for (size_t j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
+        for (unsigned j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
         {
             ScBaseCell *pCell = NULL;
             m_pDoc->GetCell( 0, (SCROW)j, 0, pCell );
@@ -6268,7 +6268,7 @@ void Test::testFormulaGrouping()
 
             if( !!pCur->GetCellGroup().get() ^ aGroupTests[i].bGroup[j] )
             {
-                printf("expected group test %lu at row %lu to be %d but is %d\n",
+                printf("expected group test %u at row %u to be %d but is %d\n",
                        i, j, aGroupTests[i].bGroup[j], !!pCur->GetCellGroup().get());
                 CPPUNIT_ASSERT_MESSAGE("Failed", false);
             }
