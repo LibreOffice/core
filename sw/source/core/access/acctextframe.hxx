@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCTEXTFRAME_HXX
 #define _ACCTEXTFRAME_HXX
+
 #include "accframebase.hxx"
 
 class SwFlyFrm;
@@ -34,13 +36,10 @@ private:
     OUString msDesc;
 
 protected:
-
     virtual ~SwAccessibleTextFrame();
-
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-
     SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm* pFlyFrm );
 
     //=====  XAccessibleContext  ==============================================
@@ -78,7 +77,6 @@ public:
     //====== XTypeProvider ====================================================
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
-
     //=====  XAccessibleContext::getAccessibleRelationSet  ====================
 
     // text frame may have accessible relations to their
@@ -92,13 +90,11 @@ private:
         sal_Int16 nType, const SwFlyFrm* pFrm );
 
 public:
-
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 };
-
 
 #endif
 

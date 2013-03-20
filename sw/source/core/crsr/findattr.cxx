@@ -41,7 +41,6 @@
 #include <swundo.hxx>
 #include <crsskip.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -69,7 +68,6 @@ int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
     return rItem1 == rItem2;
 }
 
-
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
                                     xub_StrLen nCntntPos )
 {
@@ -82,7 +80,6 @@ const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     }
     return 0; // invalid text attribute
 }
-
 
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
                                   xub_StrLen nCntntPos )
@@ -198,8 +195,6 @@ public:
     int SetAttrFwd( const SwTxtAttr& rAttr );
     int SetAttrBwd( const SwTxtAttr& rAttr );
 };
-
-
 
 SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, int bFwd,
                                 int bNoCollections )
@@ -461,7 +456,6 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
     return Found();
 }
 
-
 int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 {
     _SwSrchChrAttr aTmp( rAttr.GetAttr(), *rAttr.GetStart(), *rAttr.GetAnyEnd() );
@@ -611,7 +605,6 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
     return Found();
 }
 
-
 xub_StrLen SwAttrCheckArr::Start() const
 {
     xub_StrLen nStart = nNdStt;
@@ -623,7 +616,6 @@ xub_StrLen SwAttrCheckArr::Start() const
     return nStart;
 }
 
-
 xub_StrLen SwAttrCheckArr::End() const
 {
     _SwSrchChrAttr* pArrPtr = pFndArr;
@@ -634,7 +626,6 @@ xub_StrLen SwAttrCheckArr::End() const
 
     return nEnd;
 }
-
 
 int SwAttrCheckArr::CheckStack()
 {
@@ -668,8 +659,6 @@ int SwAttrCheckArr::CheckStack()
     }
     return nFound == aCmpSet.Count();
 }
-
-
 
 static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
@@ -740,7 +729,6 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_True );
     return sal_True;
 }
-
 
 static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
@@ -817,7 +805,6 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     return sal_True;
 }
 
-
 static int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNoColls )
 {
     // search only hard attribution?
@@ -853,7 +840,6 @@ static int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_B
     }
     return sal_True; // found
 }
-
 
 bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly )
@@ -937,7 +923,6 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
     delete pPam;
     return bFound;
 }
-
 
 typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 
@@ -1053,7 +1038,6 @@ struct SwFindParaAttr : public SwFindParas
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
     virtual int IsReplaceMode() const;
 };
-
 
 int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                             sal_Bool bInReadOnly )
@@ -1194,7 +1178,6 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         return FIND_FOUND;
 }
 
-
 int SwFindParaAttr::IsReplaceMode() const
 {
     return ( pSearchOpt && !pSearchOpt->replaceString.isEmpty() ) ||
@@ -1237,7 +1220,5 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
 
     return nRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

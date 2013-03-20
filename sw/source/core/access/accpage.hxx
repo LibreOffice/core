@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCPAGE_HXX
 #define _ACCPAGE_HXX
 
 #include "acccontext.hxx"
-
 
 /**
  * accessibility implementation for the page (SwPageFrm)
@@ -38,7 +38,6 @@ class SwAccessiblePage : public SwAccessibleContext
     using SwAccessibleFrame::GetBounds;
 
 protected:
-
     // return the bounding box for the page in page preview mode
     SwRect GetBounds( /* const SwFrm *pFrm =0 */ );
 

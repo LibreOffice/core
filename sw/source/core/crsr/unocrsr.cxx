@@ -80,7 +80,6 @@ SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
     return pNewCrsr;
 }
 
-
 bool SwUnoCrsr::IsReadOnlyAvailable() const
 {
     return true;
@@ -185,8 +184,6 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
     }
     return SwCursor::IsSelOvr( eFlags );
 }
-
-
 
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
     : SwCursor(rPos,0,false), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos,0,false)

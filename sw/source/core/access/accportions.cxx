@@ -279,7 +279,6 @@ const OUString& SwAccessiblePortionData::GetAccessibleString() const
     return sAccessibleString;
 }
 
-
 void SwAccessiblePortionData::GetLineBoundary(
     Boundary& rBound,
     sal_Int32 nPos ) const
@@ -372,7 +371,6 @@ void SwAccessiblePortionData::FillBoundary(
     rBound.startPos = rPositions[nPos];
     rBound.endPos = rPositions[nPos+1];
 }
-
 
 size_t SwAccessiblePortionData::FindBreak(
     const Positions_t& rPositions,
