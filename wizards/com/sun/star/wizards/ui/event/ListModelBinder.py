@@ -15,7 +15,6 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ...common.Helper import Helper
 
 class ListModelBinder(object):
 
@@ -33,45 +32,45 @@ class ListModelBinder(object):
         self.listModel.addListDataListener(this)
 
     def contentsChanged(self, lde):
-        selected = getSelectedItems()
+        selected = self.getSelectedItems()
         i = lde.getIndex0()
         while i <= lde.getIndex1():
-            update(i)
+            self.update(i)
             i += 1
-        setSelectedItems(selected)
+        self.setSelectedItems(selected)
 
     def update(self, i):
-        remove(i, i)
-        insert(i)
+        self.remove(i, i)
+        self.insert(i)
 
     def remove(self, i1, i2):
         self.unoList.removeItems(i1, i2 - i1 + 1)
 
     def insert(self, i):
-        self.unoList.addItem(getItemString(i), i)
+        self.unoList.addItem(self.getItemString(i), i)
 
     def getItemString(self, i):
-        return getItemString(self.listModel.getElementAt(i))
+        return self.getItemString(self.listModel.getElementAt(i))
 
     def getItemString(self, item):
         return self.renderer.render(item)
 
     def getSelectedItems(self):
-        return Helper.getUnoPropertyValue(self.unoListModel, "SelectedItems")
+        return self.unoListModel.SelectedItems
 
     def setSelectedItems(self, selected):
-        Helper.setUnoPropertyValue(self.unoListModel, "SelectedItems", selected)
+        self.unoListModel.SelectedItems = selected;
 
     def intervalAdded(self, lde):
         for i in xrange(lde.Index0, lde.Index1):
-            insert(i)
+            self.insert(i)
 
     def intervalRemoved(self, lde):
-        remove(lde.Index0, lde.Index1)
+        self.remove(lde.Index0, lde.Index1)
 
     @classmethod
     def fillList(self, xlist, items, renderer):
-        Helper.setUnoPropertyValue(xlist.Model, "StringItemList", ())
+        xlist.Model.StringItemList = ()
         for index,item in enumerate(items):
             if item is not None:
                 if renderer is not None:
@@ -82,7 +81,7 @@ class ListModelBinder(object):
 
     @classmethod
     def fillComboBox(self, xComboBox, items, renderer):
-        Helper.setUnoPropertyValue(xComboBox.Model, "StringItemList", ())
+        xComboBox.Model.StringItemList = ()
         for index,item in enumerate(items):
             if item is not None:
                 if renderer is not None:
