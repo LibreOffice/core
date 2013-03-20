@@ -6342,66 +6342,65 @@ void ScCellObj::InputEnglishString( const ::rtl::OUString& rText )
     // but all parsing is in English.
 
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
+    if (!pDocSh)
+        return;
+
+    String aString(rText);
+    ScDocument* pDoc = pDocSh->GetDocument();
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    sal_uInt32 nOldFormat = pDoc->GetNumberFormat( aCellPos );
+    if (pFormatter->GetType(nOldFormat) == NUMBERFORMAT_TEXT)
     {
-        String aString(rText);
-        ScDocument* pDoc = pDocSh->GetDocument();
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        sal_uInt32 nOldFormat = pDoc->GetNumberFormat( aCellPos );
-        if ( pFormatter->GetType( nOldFormat ) == NUMBERFORMAT_TEXT )
-        {
-            SetString_Impl(aString, false, false);      // text cell
-        }
-        else
-        {
-            ScDocFunc &rFunc = pDocSh->GetDocFunc();
+        SetString_Impl(aString, false, false);      // text cell
+        return;
+    }
 
-            ScInputStringType aRes =
-                ScStringUtil::parseInputString(*pFormatter, aString, LANGUAGE_ENGLISH_US);
+    ScDocFunc &rFunc = pDocSh->GetDocFunc();
 
-            if (aRes.meType != ScInputStringType::Unknown)
+    ScInputStringType aRes =
+        ScStringUtil::parseInputString(*pFormatter, aString, LANGUAGE_ENGLISH_US);
+
+    if (aRes.meType != ScInputStringType::Unknown)
+    {
+        if ((nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && aRes.mnFormatType)
+        {
+            // apply a format for the recognized type and the old format's language
+            sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat(*pFormatter, nOldFormat, aRes.mnFormatType);
+            if (nNewFormat != nOldFormat)
             {
-                if ((nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && aRes.mnFormatType)
-                {
-                    // apply a format for the recognized type and the old format's language
-                    sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat(*pFormatter, nOldFormat, aRes.mnFormatType);
-                    if (nNewFormat != nOldFormat)
-                    {
-                        ScPatternAttr aPattern( pDoc->GetPool() );
-                        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
-                        // ATTR_LANGUAGE_FORMAT remains unchanged
-                        rFunc.ApplyAttributes( *GetMarkData(), aPattern, true, true );
-                    }
-                }
-            }
-            switch (aRes.meType)
-            {
-                case ScInputStringType::Formula:
-                    rFunc.SetFormulaCell(
-                        aCellPos,
-                        new ScFormulaCell(pDoc, aCellPos, aRes.maText, formula::FormulaGrammar::GRAM_PODF_A1),
-                        false);
-                break;
-                case ScInputStringType::Number:
-                    rFunc.SetValueCell(aCellPos, aRes.mfValue, false);
-                break;
-                case ScInputStringType::Text:
-                {
-                    if (ScStringUtil::isMultiline(aRes.maText))
-                    {
-                        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
-                        rEngine.SetText(aRes.maText);
-                        boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
-                        rFunc.SetEditCell(aCellPos, *pEditText, false);
-                    }
-                    else
-                        rFunc.SetStringCell(aCellPos, aRes.maText, false);
-                }
-                break;
-                default:
-                    SetString_Impl(aString, false, false); // probably empty string
+                ScPatternAttr aPattern( pDoc->GetPool() );
+                aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+                // ATTR_LANGUAGE_FORMAT remains unchanged
+                rFunc.ApplyAttributes( *GetMarkData(), aPattern, true, true );
             }
         }
+    }
+    switch (aRes.meType)
+    {
+        case ScInputStringType::Formula:
+            rFunc.SetFormulaCell(
+                aCellPos,
+                new ScFormulaCell(pDoc, aCellPos, aRes.maText, formula::FormulaGrammar::GRAM_PODF_A1),
+                false);
+        break;
+        case ScInputStringType::Number:
+            rFunc.SetValueCell(aCellPos, aRes.mfValue, false);
+        break;
+        case ScInputStringType::Text:
+        {
+            if (ScStringUtil::isMultiline(aRes.maText))
+            {
+                ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+                rEngine.SetText(aRes.maText);
+                boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
+                rFunc.SetEditCell(aCellPos, *pEditText, false);
+            }
+            else
+                rFunc.SetStringCell(aCellPos, aRes.maText, false);
+        }
+        break;
+        default:
+            SetString_Impl(aString, false, false); // probably empty string
     }
 }
 
