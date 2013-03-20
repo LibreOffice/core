@@ -41,6 +41,7 @@
 #include "chgtrack.hxx"
 #include "sc.hrc"
 #include "docuno.hxx"
+#include "stringutil.hxx"
 
 using ::boost::shared_ptr;
 
@@ -546,10 +547,12 @@ ScUndoSetCell::~ScUndoSetCell() {}
 
 void ScUndoSetCell::Undo()
 {
+    SetValue(maOldValue);
 }
 
 void ScUndoSetCell::Redo()
 {
+    SetValue(maNewValue);
 }
 
 void ScUndoSetCell::Repeat( SfxRepeatTarget& /*rTarget*/ )
@@ -565,6 +568,37 @@ sal_Bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 OUString ScUndoSetCell::GetComment() const
 {
     return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); // "Input"
+}
+
+void ScUndoSetCell::SetValue( const Value& rVal )
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    switch (rVal.meType)
+    {
+        case CELLTYPE_NONE:
+            // empty cell
+            pDoc->SetEmptyCell(maPos);
+        break;
+        case CELLTYPE_VALUE:
+            pDoc->SetValue(maPos, rVal.mfValue);
+        break;
+        case CELLTYPE_STRING:
+        {
+            ScSetStringParam aParam;
+            aParam.setTextInput();
+            pDoc->SetString(maPos, *rVal.mpString);
+        }
+        break;
+        case CELLTYPE_EDIT:
+            pDoc->SetEditText(maPos, rVal.mpEditText->Clone());
+        break;
+        case CELLTYPE_FORMULA:
+            pDoc->SetFormula(maPos, *rVal.mpFormulaCell->GetCode());
+        break;
+        default:
+            ;
+    }
 }
 
 ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,

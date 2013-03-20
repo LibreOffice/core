@@ -193,6 +193,9 @@ public:
     virtual OUString GetComment() const;
 
 private:
+    void SetValue( const Value& rVal );
+
+private:
     ScAddress maPos;
     Value maOldValue;
     Value maNewValue;
