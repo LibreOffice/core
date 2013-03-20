@@ -120,6 +120,7 @@ public:
     void testFdo53985();
     void testFdo59638();
     void testFdo61343();
+    void testToolsLineNumbering();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -191,6 +192,7 @@ void Test::run()
         {"fdo53985.docx", &Test::testFdo53985},
         {"fdo59638.docx", &Test::testFdo59638},
         {"fdo61343.docx", &Test::testFdo61343},
+        {"tools-line-numbering.docx", &Test::testToolsLineNumbering},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1241,6 +1243,41 @@ void Test::testFdo61343()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testToolsLineNumbering()
+{
+    /*
+     * Test the line numbering feature import (Tools->Line Numbering ...)
+     *
+     * xray ThisComponent.getLineNumberingProperties().IsOn == True
+     * xray ThisComponent.getLineNumberingProperties().CountEmptyLines == True
+     * xray ThisComponent.getLineNumberingProperties().NumberPosition == 0
+     * xray ThisComponent.getLineNumberingProperties().NumberingType == 4
+     * xray ThisComponent.getLineNumberingProperties().SeparatorInterval == 3
+     */
+
+    sal_Bool bValue = sal_False;
+    sal_Int32 nValue = -1;
+
+    uno::Reference< text::XTextDocument > xtextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference< text::XLineNumberingProperties > xLineProperties( xtextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropertySet = xLineProperties->getLineNumberingProperties();
+
+    xPropertySet->getPropertyValue("IsOn") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(sal_True, bValue);
+
+    xPropertySet->getPropertyValue("CountEmptyLines") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(sal_True, bValue);
+
+    xPropertySet->getPropertyValue("NumberPosition") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValue);
+
+    xPropertySet->getPropertyValue("NumberingType") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nValue);
+
+    xPropertySet->getPropertyValue("SeparatorInterval") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
