@@ -41,6 +41,7 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/deployment/XExtensionManager.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -296,47 +297,29 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
     return true;
 }
 
-bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir )
+void OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir )
 {
-    if ( !m_xExtensionManager.is() )
+    css::uno::Reference< css::deployment::XExtensionManager > extMgr(
+        deployment::ExtensionManager::get( m_ctx ) );
+    try
     {
-        try
-        {
-            m_xExtensionManager = deployment::ExtensionManager::get( m_ctx );
-        }
-        catch ( const ucb::CommandFailedException & ){}
-        catch ( const uno::RuntimeException & ) {}
-    }
+        TmpRepositoryCommandEnv* pCmdEnv = new TmpRepositoryCommandEnv();
 
-    if ( m_xExtensionManager.is() )
+        uno::Reference< ucb::XCommandEnvironment > xCmdEnv(
+            static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
+        uno::Reference< task::XAbortChannel > xAbortChannel;
+        uno::Reference< deployment::XPackage > xPackage =
+            extMgr->addExtension(
+                sSourceDir, uno::Sequence<beans::NamedValue>(),
+                "user", xAbortChannel, xCmdEnv );
+    }
+    catch ( css::uno::Exception & e )
     {
-        try
-        {
-            TmpRepositoryCommandEnv* pCmdEnv = new TmpRepositoryCommandEnv();
-
-            uno::Reference< ucb::XCommandEnvironment > xCmdEnv(
-                static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
-            uno::Reference< task::XAbortChannel > xAbortChannel;
-            uno::Reference< deployment::XPackage > xPackage =
-                m_xExtensionManager->addExtension(
-                    sSourceDir, uno::Sequence<beans::NamedValue>(),
-                    "user", xAbortChannel, xCmdEnv );
-
-            if ( xPackage.is() )
-                return true;
-        }
-        catch ( const ucb::CommandFailedException& )
-        {
-        }
-        catch ( const ucb::CommandAbortedException& )
-        {
-        }
-        catch ( const lang::IllegalArgumentException& )
-        {
-        }
+        SAL_WARN(
+            "desktop.migration",
+            "Ignoring UNO Exception while migrating extension from <"
+            << sSourceDir << ">: \"" << e.Message << "\"");
     }
-
-    return false;
 }
 
 
