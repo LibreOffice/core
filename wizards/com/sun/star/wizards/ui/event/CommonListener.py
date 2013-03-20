@@ -93,3 +93,12 @@ class KeyListenerProcAdapter( unohelper.Base, XKeyListener ):
     def keyPressed(self, KeyEvent):
         if callable( self.oProcToCall ):
             self.oProcToCall(KeyEvent)
+
+from com.sun.star.awt import XMouseListener
+class OMouseListenerProcAdapter( unohelper.Base, XMouseListener ):
+    def __init__(self, oProcToCall):
+        self.oProcToCall = oProcToCall
+
+    def mousePressed(self, MouseEvent):
+        if callable( self.oProcToCall ):
+            self.oProcToCall(MouseEvent)

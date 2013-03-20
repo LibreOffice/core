@@ -21,6 +21,7 @@ from abc import abstractmethod
 
 from threading import RLock
 from .PeerConfig import PeerConfig
+from .event.CommonListener import OMouseListenerProcAdapter
 from ..common.PropertyNames import PropertyNames
 from ..common.HelpIds import HelpIds
 from ..common.IRenderer import IRenderer
@@ -130,7 +131,7 @@ class ImageList(object):
                 self.step, True, selectionWidth))
         print ("DEBUG !!!! ImageList create 2")
         xWindow = self.grbxSelectedImage
-        xWindow.addMouseListener(None)
+        xWindow.addMouseListener(OMouseListenerProcAdapter(self.onMousePressed))
         pNames1 = (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -205,7 +206,7 @@ class ImageList(object):
              False,
              self.imageSize.Width))
         #COMMENTED
-        image.addMouseListener(None)
+        image.addMouseListener(OMouseListenerProcAdapter(self.mousePressed))
         image.addKeyListener(None)
         return image
 
