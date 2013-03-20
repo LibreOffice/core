@@ -91,8 +91,8 @@ class SystemDialog(object):
 
     def callFolderDialog(self, title, description, displayDir):
         try:
-            self.systemDialog.setDisplayDirectoryxPropertyValue(
-                subst(displayDir))
+            self.systemDialog.setDisplayDirectory(
+                self.subst(displayDir))
         except IllegalArgumentException as iae:
             traceback.print_exc()
             raise AttributeError(iae.getMessage());
