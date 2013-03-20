@@ -883,7 +883,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
         // and, last but not least, SFX wants the ids to be sorted
         ::std::sort( aSlotIds.begin(), aSlotIds.end() - 1 );
 
-        sal_uInt16 *pSlotIds = aSlotIds.empty() ? 0 : &(aSlotIds[0]);
+        sal_uInt16 *pSlotIds = &(aSlotIds[0]);
         m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( pSlotIds );
     }
 }
