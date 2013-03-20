@@ -62,8 +62,7 @@ $(call gb_JunitTest_get_target,%) :
 		&& echo "    make debugrun" \
 		&& echo "    make gb_JunitTest_DEBUGRUN=T JunitTest_$*" \
 		&& echo \
-		&& false)) && \
-        rm -rf $(call gb_JunitTest_get_userdir,$*))
+		&& false)))
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
