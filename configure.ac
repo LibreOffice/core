@@ -6411,7 +6411,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
 
     darwin*)
         x_JAVALIB=[\#]
-        JAVAINC="-I$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers -I$FRAMEWORKSHOME/JavaVM/Headers"
+        JAVAINC="${ISYSTEM}$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers ${ISYSTEM}$FRAMEWORKSHOME/JavaVM/Headers"
         ;;
 
     dragonfly*)
