@@ -19,6 +19,12 @@ $(eval $(call gb_Executable_add_defs,ucpp,\
 	-DSTAND_ALONE \
 ))
 
+# suppress warning spam
+$(eval $(call gb_Executable_add_cflags,ucpp,\
+	-w \
+))
+
+
 $(eval $(call gb_Executable_add_generated_cobjects,ucpp,\
 	UnpackedTarball/ucpp/assert \
 	UnpackedTarball/ucpp/cpp \

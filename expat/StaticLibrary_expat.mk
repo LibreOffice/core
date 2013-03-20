@@ -42,6 +42,11 @@ $(eval $(call gb_StaticLibrary_add_defs,expat,\
 ))
 endif
 
+# suppress warning spam
+$(eval $(call gb_StaticLibrary_add_cflags,expat,\
+	-w \
+))
+
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
 	UnpackedTarball/expat/lib/xmlparse \
 	UnpackedTarball/expat/lib/xmlrole \
