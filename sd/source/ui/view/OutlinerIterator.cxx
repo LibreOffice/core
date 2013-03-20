@@ -757,6 +757,10 @@ void ViewIteratorImpl::Reverse (void)
     // Move iterator to the current object.
     SdrObjectWeakRef xObject = maPosition.mxObject;
     maPosition.mxObject.reset(NULL);
+
+    if (!mpObjectIterator)
+        return;
+
     while (mpObjectIterator->IsMore() && maPosition.mxObject != xObject)
         maPosition.mxObject.reset(mpObjectIterator->Next());
 }
