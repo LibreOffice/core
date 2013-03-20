@@ -756,6 +756,18 @@ lcl_ExportHints(
                         Reference<XTextField> xField =
                             SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFld());
                         pPortion->SetTextField(xField);
+
+                        // If this is a postit field and it has a fieldmark
+                        // associated, set the fieldmark as a bookmark.
+                        const SwField* pField = pAttr->GetFld().GetFld();
+                        if (pField->Which() == RES_POSTITFLD)
+                        {
+                            const SwPostItField* pPostItField = dynamic_cast<const SwPostItField*>(pField);
+                            IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+                            IDocumentMarkAccess::const_iterator_t it = pMarkAccess->findMark(pPostItField->GetName());
+                            if (it != pMarkAccess->getMarksEnd())
+                                pPortion->SetBookmark(SwXFieldmark::CreateXFieldmark(*pDoc, *it->get()));
+                        }
                     }
                 break;
                 case RES_TXTATR_FLYCNT   :
