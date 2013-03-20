@@ -362,12 +362,12 @@ void X11SalGraphics::DrawLines( sal_uLong              nPoints,
                                 bool               bClose
                                 )
 {
-    // errechne wie viele Linien XWindow auf einmal zeichnen kann
+    // calculate how many lines XWindow can draw in one go
     sal_uLong nMaxLines = (GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
                       / sizeof(xPoint);
     if( nMaxLines > nPoints ) nMaxLines = nPoints;
 
-    // gebe alle Linien aus, die XWindows zeichnen kann.
+    // print all lines that XWindows can draw
     sal_uLong n;
     for( n = 0; nPoints - n > nMaxLines; n += nMaxLines - 1 )
         XDrawLines( GetXDisplay(),
@@ -391,7 +391,7 @@ void X11SalGraphics::DrawLines( sal_uLong              nPoints,
     }
 }
 
-// Dithern: Calculate a dither-pixmap and make a brush of it
+// Calculate a dither-pixmap and make a brush of it
 #define P_DELTA         51
 #define DMAP( v, m )    ((v % P_DELTA) > m ? (v / P_DELTA) + 1 : (v / P_DELTA))
 
@@ -766,7 +766,7 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
                         SelectBrush(),
                         nX, nY, nDX, nDY );
     }
-    // Beschreibung DrawRect verkehrt, deshalb -1
+    // description DrawRect is wrong; thus -1
     if( nPenColor_ != SALCOLOR_NONE )
         XDrawRectangle( GetXDisplay(),
                         GetDrawable(),
@@ -886,7 +886,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
             XClipBox( pXRegA, &aXRect );
 
             GC pGC = SelectBrush();
-            SetClipRegion( pGC, pXRegA ); // ??? doppelt
+            SetClipRegion( pGC, pXRegA ); // ??? twice
             XDestroyRegion( pXRegA );
             bBrushGC_ = sal_False;
 
