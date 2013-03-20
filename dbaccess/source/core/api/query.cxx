@@ -217,7 +217,7 @@ void OQuery::rebuildColumns()
 }
 
 // XServiceInfo
-IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS.ascii, SERVICE_SDB_QUERY.ascii, SERVICE_SDB_QUERYDEFINITION.ascii)
+IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS.ascii, SERVICE_SDB_QUERY.ascii, "com.sun.star.sdb.QueryDefinition")
 
 // ::com::sun::star::beans::XPropertyChangeListener
 void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) throw(RuntimeException)
