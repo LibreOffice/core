@@ -99,10 +99,9 @@ namespace pdfi
 
         void sortElements( Element* pElement, bool bDeep = false );
 
-        rtl::OUString mirrorString( const rtl::OUString& i_rInString );
+        rtl::OUString mirrorString( const rtl::OUString& i_rInString ) const;
 
     private:
-        void prepareMirrorMap();
         void processGlyphLine();
         void processGlyph(   double       fPreAvarageSpaceValue,
                              CharGlyph&   rGlyph,
@@ -233,11 +232,6 @@ namespace pdfi
                                            m_xStatusIndicator;
 
         bool                               m_bHaveTextOnDocLevel;
-        std::vector< sal_Unicode >         m_aMirrorMap;
-        com::sun::star::uno::Reference<
-            com::sun::star::util::XStringMapping >
-                                           m_xMirrorMapper;
-        bool                               m_bMirrorMapperTried;
     };
     class CharGlyph
     {

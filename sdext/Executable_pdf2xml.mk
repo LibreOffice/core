@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_set_include,pdf2xml,\
 
 $(eval $(call gb_Executable_use_libraries,pdf2xml,\
     basegfx \
+    vcl \
     comphelper \
     cppu \
     cppuhelper \

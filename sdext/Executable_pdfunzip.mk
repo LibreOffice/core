@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_set_include,pdfunzip,\
 
 $(eval $(call gb_Executable_use_libraries,pdfunzip,\
     basegfx \
+    vcl \
     cppu \
     cppuhelper \
     sal \
