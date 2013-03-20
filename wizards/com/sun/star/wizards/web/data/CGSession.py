@@ -15,12 +15,17 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from common.ConfigGroup import ConfigGroup
-from common.ConfigSet import ConfigSet
-from CGContent import CGContent
-from CGDesign import CGDesign
-from CGGeneralInfo import CGGeneralInfo
-from CGPublish import CGPublish
+import uno
+
+from ...common.ConfigGroup import ConfigGroup
+from ...common.ConfigSet import ConfigSet
+from ...common.XMLHelper import XMLHelper
+from .CGContent import CGContent
+from .CGDesign import CGDesign
+from .CGGeneralInfo import CGGeneralInfo
+from .CGPublish import CGPublish
+
+from xml.dom.minidom import Document
 
 class CGSession(ConfigGroup):
 
@@ -37,7 +42,7 @@ class CGSession(ConfigGroup):
     def createDOM(self, parent):
         root = XMLHelper.addElement(
             parent, "session", ["name", "screen-size"],
-            [self.cp_Name, getScreenSize()])
+            [self.cp_Name, self.getScreenSize()])
         self.cp_GeneralInfo.createDOM(root)
         self.cp_Content.createDOM(root)
         return root
@@ -54,13 +59,12 @@ class CGSession(ConfigGroup):
             return "800"
 
     def getLayout(self):
-        return self. root.cp_Layouts.getElement(self.cp_Design.cp_Layout)
+        return self.root.cp_Layouts.getElement(self.cp_Design.cp_Layout)
 
     def getStyle(self):
-        return self.root.cp_Styles.getElement(self.cp_Design.cp_Style)
+        return self.root.cp_Styles.getElementAt(self.cp_Design.cp_Style)
 
-    def createDOM(self):
-        factory = DocumentBuilderFactory.newInstance()
-        doc = factory.newDocumentBuilder().newDocument()
-        createDOM(doc)
+    def createDOM1(self):
+        doc = Document()
+        self.createDOM(doc)
         return doc
