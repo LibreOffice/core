@@ -30,14 +30,11 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     HelpIndexer \
     HelpLinker \
     bestreversemap \
-    bmp \
-    bmpsum \
     cfgex \
 	concat-deps \
     cpp \
     cppunit/cppunittester \
     $(call gb_Helper_optional,CRASHREP,crashrep) \
-    g2g \
     gencoll_rule \
     genconv_dict \
     gendict \
