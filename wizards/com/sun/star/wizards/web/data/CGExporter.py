@@ -15,9 +15,9 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from common.ConfigSet import ConfigSet
-from CGArgument import CGArgument
-from common.ConfigGroup import ConfigGroup
+from ...common.ConfigSet import ConfigSet
+from ...common.ConfigGroup import ConfigGroup
+from .CGArgument import CGArgument
 
 class CGExporter(ConfigGroup):
     cp_Index = -1
@@ -37,4 +37,4 @@ class CGExporter(ConfigGroup):
 
     def supports(self, mime):
         return CGExporter.cp_SupportedMimeTypes == "" or \
-            CGExporter.cp_SupportedMimeTypes.index(mime) > -1
+            CGExporter.cp_SupportedMimeTypes.find(mime) > -1
