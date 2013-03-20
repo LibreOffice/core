@@ -326,6 +326,7 @@ private:
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
 
     void WriteFFData( const FieldInfos& rInfos );
+    void WritePendingPlaceholder();
 
     void EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
         FontPitch pitch, rtl_TextEncoding encoding );
@@ -532,6 +533,7 @@ protected:
     virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd );
     virtual void PostitField( const SwField* pFld );
     virtual bool DropdownField( const SwField* pFld );
+    virtual bool PlaceholderField( const SwField* pFld );
 
     virtual bool AnalyzeURL( const String& rURL, const String& rTarget, String* pLinkURL, String* pMark );
 
@@ -627,6 +629,7 @@ private:
     };
     std::list< PostponedGraphic >* m_postponedGraphic;
     const SwOLENode* m_postponedMath;
+    const SwField* pendingPlaceholder;
     std::vector< const SwPostItField* > m_postitFields;
     unsigned int m_postitFieldsMaxId;
     int m_anchorId;

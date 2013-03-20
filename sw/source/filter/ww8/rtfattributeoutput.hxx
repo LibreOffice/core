@@ -407,6 +407,7 @@ protected:
     virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd );
     virtual void PostitField( const SwField* pFld );
     virtual bool DropdownField( const SwField* pFld );
+    virtual bool PlaceholderField( const SwField* pFld );
 
     /// Reference to the export, where to get the data from
     RtfExport &m_rExport;

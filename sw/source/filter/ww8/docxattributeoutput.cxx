@@ -622,6 +622,7 @@ void DocxAttributeOutput::EndRun()
     m_pSerializer->endElementNS( XML_w, XML_r );
 
     WritePostponedMath();
+    WritePendingPlaceholder();
 
     if ( m_closeHyperlinkInThisRun )
     {
@@ -3781,6 +3782,36 @@ bool DocxAttributeOutput::DropdownField( const SwField* pFld )
     return bExpand;
 }
 
+bool DocxAttributeOutput::PlaceholderField( const SwField* pFld )
+{
+    assert( pendingPlaceholder == NULL );
+    pendingPlaceholder = pFld;
+    return false; // do not expand
+}
+
+void DocxAttributeOutput::WritePendingPlaceholder()
+{
+    if( pendingPlaceholder == NULL )
+        return;
+    const SwField* pFld = pendingPlaceholder;
+    pendingPlaceholder = NULL;
+    m_pSerializer->startElementNS( XML_w, XML_sdt, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
+    if( !pFld->GetPar2().isEmpty())
+        m_pSerializer->singleElementNS( XML_w, XML_alias,
+            FSNS( XML_w, XML_val ), OUStringToOString( pFld->GetPar2(), RTL_TEXTENCODING_UTF8 ), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_temporary, FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_showingPlcHdr, FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_text, FSEND );
+    m_pSerializer->endElementNS( XML_w, XML_sdtPr );
+    m_pSerializer->startElementNS( XML_w, XML_sdtContent, FSEND );
+    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+    RunText( pFld->GetPar1());
+    m_pSerializer->endElementNS( XML_w, XML_r );
+    m_pSerializer->endElementNS( XML_w, XML_sdtContent );
+    m_pSerializer->endElementNS( XML_w, XML_sdt );
+}
+
 void DocxAttributeOutput::SetField( const SwField& rFld, ww::eField eType, const String& rCmd )
 {
     // field bookmarks are handled in the EndRun method
@@ -4834,6 +4865,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_postponedGraphic( NULL ),
       m_postponedMath( NULL ),
+      pendingPlaceholder( NULL ),
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 0 ),
       m_nextFontId( 1 ),

@@ -3074,6 +3074,11 @@ bool RtfAttributeOutput::DropdownField( const SwField* /*pFld*/ )
     return true;
 }
 
+bool RtfAttributeOutput::PlaceholderField( const SwField* )
+{
+    return true; // expand to text?
+}
+
 RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     : m_rExport( rExport ),
     m_bStrikeDouble( false ),

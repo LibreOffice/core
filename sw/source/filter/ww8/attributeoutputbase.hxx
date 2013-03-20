@@ -568,6 +568,7 @@ protected:
     virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd ) = 0;
     virtual void PostitField( const SwField* pFld ) = 0;
     virtual bool DropdownField( const SwField* pFld ) = 0;
+    virtual bool PlaceholderField( const SwField* pFld ) = 0;
 
     virtual bool AnalyzeURL( const String& rUrl, const String& rTarget, String* pLinkURL, String* pMark );
 

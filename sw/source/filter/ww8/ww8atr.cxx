@@ -2473,6 +2473,11 @@ bool WW8AttributeOutput::DropdownField( const SwField* pFld )
     return bExpand;
 }
 
+bool WW8AttributeOutput::PlaceholderField( const SwField* )
+{
+    return true; // expand to text?
+}
+
 void WW8AttributeOutput::RefField( const SwField &rFld, const String &rRef)
 {
     String sStr( FieldString( ww::eREF ) );
@@ -2922,7 +2927,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             }
         }
         break;
-        case RES_HIDDENTXTFLD:
+    case RES_HIDDENTXTFLD:
         {
             String sExpand(pFld->GetPar2());
             if (sExpand.Len())
@@ -2930,6 +2935,9 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 HiddenField( *pFld );
             }
         }
+        break;
+    case RES_JUMPEDITFLD:
+        bWriteExpand = PlaceholderField( pFld );
         break;
     default:
         bWriteExpand = true;
