@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCFOOTNOTE_HXX
 #define _ACCFOOTNOTE_HXX
 
 #include <sal/types.h>
-
 #include <acccontext.hxx>
 
 class SwAccessibleMap;
@@ -28,18 +28,14 @@ class SwFtnFrm;
 
 class SwAccessibleFootnote : public SwAccessibleContext
 {
-
 protected:
-
     virtual ~SwAccessibleFootnote();
 
 public:
-
     SwAccessibleFootnote( SwAccessibleMap* pInitMap,
                           sal_Bool bIsEndnote,
                           sal_Int32 nFootEndNote,
                           const SwFtnFrm *pFtnFrm );
-
 
     // XAccessibleContext
 
@@ -71,7 +67,6 @@ public:
 
     static sal_Bool IsEndnote( const SwFtnFrm *pFrm );
 };
-
 
 #endif
 

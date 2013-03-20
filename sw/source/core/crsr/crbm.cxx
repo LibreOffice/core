@@ -67,7 +67,6 @@ namespace
         SwCrsrSaveState m_aSaveState;
     };
 
-
     static bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
         const IDocumentMarkAccess::pMark_t& rpSecond)
     {

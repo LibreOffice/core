@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCBASE_HXX
 #define _ACCBASE_HXX
+
 #include <accframe.hxx>
 #include <accmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -56,14 +58,11 @@ class SwAccessibleContext :
     // GetMap, GetChild, GetParent, and GetFrm.
     friend class SwAccessibleSelectionHelper;
 
-
 protected:
-
     mutable ::osl::Mutex aListenerMutex;
     mutable ::osl::Mutex aMutex;
 
 private:
-
     OUString sName;  // immutable outside constructor
 
     // The parent if it has been retrieved. This is always an
@@ -162,11 +161,9 @@ protected:
     virtual void _InvalidateFocus();
 
 public:
-
     void FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
 protected:
-
     // broadcast visual data event
     void FireVisibleDataEvent();
 
@@ -194,7 +191,6 @@ protected:
     virtual ~SwAccessibleContext();
 
 public:
-
     SwAccessibleContext( SwAccessibleMap *pMap, sal_Int16 nRole,
                          const SwFrm *pFrm );
 
@@ -302,7 +298,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException);
 
-
     // XServiceInfo
 
     /** Returns an identifier for the implementation of this object. */
@@ -380,8 +375,6 @@ public:
     static OUString GetResource( sal_uInt16 nResId,
                                         const OUString *pArg1 = 0,
                                         const OUString *pArg2 = 0 );
-
-
 };
 
 // some heaviliy used exception support

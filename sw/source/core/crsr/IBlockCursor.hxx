@@ -63,7 +63,6 @@ class Point;
     */
     virtual const Point* getStartPoint() const = 0;
 
-
     /** The document coordinates where the block selection ends (at the moment)
 
         @return 0, if no end point has been set

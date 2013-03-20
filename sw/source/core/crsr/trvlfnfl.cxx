@@ -121,7 +121,6 @@ sal_Bool SwCrsrShell::GotoFtnTxt()
     return bRet;
 }
 
-
 sal_Bool SwCursor::GotoFtnAnchor()
 {
     // jump from footnote to anchor
@@ -336,8 +335,5 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
                     SwCrsrShell::READONLY );
     return bRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

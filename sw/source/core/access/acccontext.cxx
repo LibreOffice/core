@@ -121,7 +121,6 @@ const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
     return pCrsrShell;
 }
 
-
 enum Action { NONE, SCROLLED, SCROLLED_WITHIN,
                           SCROLLED_IN, SCROLLED_OUT };
 
@@ -791,7 +790,6 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
     return xAcc;
 }
 
-
 /**
    Get bounding box.
 
@@ -854,7 +852,6 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
     return aBox;
 }
 
-
 awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
         throw (uno::RuntimeException)
 {
@@ -870,8 +867,6 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
     return aPoint;
 }
 
-
-
 awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
         throw (uno::RuntimeException)
 {
@@ -885,7 +880,6 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
 
     return aPoint;
 }
-
 
 awt::Size SAL_CALL SwAccessibleContext::getSize()
         throw (uno::RuntimeException)
@@ -937,7 +931,6 @@ void SAL_CALL SwAccessibleContext::grabFocus()
     }
 }
 
-
 uno::Any SAL_CALL SwAccessibleContext::getAccessibleKeyBinding()
         throw (uno::RuntimeException)
 {
@@ -956,7 +949,6 @@ sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
 {
     return 0xffffff;
 }
-
 
 OUString SAL_CALL SwAccessibleContext::getImplementationName()
         throw( uno::RuntimeException )
@@ -1443,6 +1435,7 @@ bool SwAccessibleContext::HasAdditionalAccessibleChildren()
 
     return bRet;
 }
+
 /** #i88070# - get additional accessible child by index */
 Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 nIndex )
 {

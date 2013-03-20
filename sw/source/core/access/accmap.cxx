@@ -103,10 +103,9 @@ class SwDrawModellListener_Impl : public SfxListener,
     SdrModel *mpDrawModel;
 protected:
     virtual ~SwDrawModellListener_Impl();
+
 public:
-
     SwDrawModellListener_Impl( SdrModel *pDrawModel );
-
 
     virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException);
@@ -436,7 +435,6 @@ public:
     {
         return mnStates;
     }
-
 };
 
 typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
@@ -446,7 +444,6 @@ class SwAccessibleEventList_Impl: public _SwAccessibleEventList_Impl
     bool mbFiring;
 
 public:
-
     SwAccessibleEventList_Impl()
         : mbFiring( false )
     {}
@@ -477,7 +474,6 @@ typedef ::std::list < uno::Reference < drawing::XShape > > _SwShapeList_Impl;
 class SwShapeList_Impl: public _SwShapeList_Impl
 {
 public:
-
     SwShapeList_Impl() {}
 };
 
@@ -499,6 +495,7 @@ struct SwAccessibleChildFunc
         return p1 < p2;
     }
 };
+
 typedef ::std::map < SwAccessibleChild, SwAccessibleEventList_Impl::iterator,
                      SwAccessibleChildFunc > _SwAccessibleEventMap_Impl;
 
@@ -2251,12 +2248,10 @@ void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
         InvalidateCursorPosition( xAcc );
 }
 
-
 bool SwAccessibleMap::IsPageSelected( const SwPageFrm *pPageFrm ) const
 {
     return mpPreview && mpPreview->GetSelPage() == pPageFrm;
 }
-
 
 void SwAccessibleMap::FireEvents()
 {

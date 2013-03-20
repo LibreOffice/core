@@ -83,7 +83,6 @@ SwPosition &SwPosition::operator=(const SwPosition &rPos)
     return *this;
 }
 
-
 bool SwPosition::operator<(const SwPosition &rPos) const
 {
     if( nNode < rPos.nNode )
@@ -105,7 +104,6 @@ bool SwPosition::operator<(const SwPosition &rPos) const
     }
     return false;
 }
-
 
 bool SwPosition::operator>(const SwPosition &rPos) const
 {
@@ -129,7 +127,6 @@ bool SwPosition::operator>(const SwPosition &rPos) const
     return false;
 }
 
-
 bool SwPosition::operator<=(const SwPosition &rPos) const
 {
     if(nNode < rPos.nNode )
@@ -151,7 +148,6 @@ bool SwPosition::operator<=(const SwPosition &rPos) const
     }
     return false;
 }
-
 
 bool SwPosition::operator>=(const SwPosition &rPos) const
 {
@@ -175,7 +171,6 @@ bool SwPosition::operator>=(const SwPosition &rPos) const
     return false;
 }
 
-
 bool SwPosition::operator==(const SwPosition &rPos) const
 {
     return (nNode == rPos.nNode)
@@ -183,7 +178,6 @@ bool SwPosition::operator==(const SwPosition &rPos) const
         && (nContent.GetIdxReg() == rPos.nContent.GetIdxReg())
         && (nContent == rPos.nContent);
 }
-
 
 bool SwPosition::operator!=(const SwPosition &rPos) const
 {
@@ -198,9 +192,7 @@ SwDoc * SwPosition::GetDoc() const
     return nNode.GetNode().GetDoc();
 }
 
-
 enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
-
 
 static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndNd )
 {
@@ -210,7 +202,6 @@ static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode
         return( eSec == Chk_One ? Chk_Both : Chk_One );
     return eSec;
 }
-
 
 static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
                     const SwNode& rBaseEnd, sal_uLong nStt, sal_uLong nEnd )
@@ -242,7 +233,6 @@ static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
     return nSttIdx <= nStt && nStt <= nEndIdx &&
            nSttIdx <= nEnd && nEnd <= nEndIdx;
 }
-
 
 bool CheckNodesRange( const SwNodeIndex& rStt,
                       const SwNodeIndex& rEnd, bool bChkSection )
@@ -276,7 +266,6 @@ bool CheckNodesRange( const SwNodeIndex& rStt,
     return false; // somewhere in between => error
 }
 
-
 sal_Bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsCntntNode() )
@@ -284,14 +273,12 @@ sal_Bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
     return sal_False;
 }
 
-
 sal_Bool GoPrevious( SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsCntntNode() )
         return ((SwCntntNode*)pNd)->GoPrevious( pIdx, nMode );
     return sal_False;
 }
-
 
 SwCntntNode* GoNextNds( SwNodeIndex* pIdx, sal_Bool bChk )
 {
@@ -308,7 +295,6 @@ SwCntntNode* GoNextNds( SwNodeIndex* pIdx, sal_Bool bChk )
     return pNd;
 }
 
-
 SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
@@ -323,7 +309,6 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool bChk )
     }
     return pNd;
 }
-
 
 SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
     : Ring( pRing )
@@ -482,7 +467,6 @@ void SwPaM::SetMark()
 }
 
 #ifdef DBG_UTIL
-
 void SwPaM::Exchange()
 {
     if (m_pPoint != m_pMark)
@@ -826,7 +810,6 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
     return pNd;
 }
 
-
 void GoStartDoc( SwPosition * pPos )
 {
     SwNodes& rNodes = pPos->nNode.GetNodes();
@@ -837,7 +820,6 @@ void GoStartDoc( SwPosition * pPos )
         pCNd->MakeStartIndex( &pPos->nContent );
 }
 
-
 void GoEndDoc( SwPosition * pPos )
 {
     SwNodes& rNodes = pPos->nNode.GetNodes();
@@ -846,7 +828,6 @@ void GoEndDoc( SwPosition * pPos )
     if( pCNd )
         pCNd->MakeEndIndex( &pPos->nContent );
 }
-
 
 void GoStartSection( SwPosition * pPos )
 {
@@ -876,21 +857,17 @@ void GoEndSection( SwPosition * pPos )
         pPos->nNode.GetNode().GetCntntNode()->MakeEndIndex( &pPos->nContent );
 }
 
-
-
 bool GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
 {
     (*fnMove->fnDoc)( rPam.GetPoint() );
     return true;
 }
 
-
 bool GoInSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     (*fnMove->fnSections)( (SwPosition*)rPam.GetPoint() );
     return true;
 }
-
 
 bool GoInNode( SwPaM & rPam, SwMoveFn fnMove )
 {
@@ -900,7 +877,6 @@ bool GoInNode( SwPaM & rPam, SwMoveFn fnMove )
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
     return pNd;
 }
-
 
 bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove )
 {
@@ -934,10 +910,6 @@ bool GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
     return GoInNode( rPam, fnMove );
 }
 
-
-
-
-
 sal_Bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveBackward, fnGoNode ) )
@@ -951,7 +923,6 @@ sal_Bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
     }
     return sal_False;
 }
-
 
 sal_Bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
 {
@@ -981,7 +952,6 @@ sal_Bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
     return sal_False;
 }
 
-
 sal_Bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveForward, fnGoNode ) )
@@ -995,8 +965,6 @@ sal_Bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
     }
     return sal_False;
 }
-
-
 
 sal_Bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 {
@@ -1017,7 +985,6 @@ sal_Bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
     return aSavePos != rPos;
 }
 
-
 sal_Bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
@@ -1037,7 +1004,6 @@ sal_Bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
     return sal_True;
 }
-
 
 sal_Bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
 {

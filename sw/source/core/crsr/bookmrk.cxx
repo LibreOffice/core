@@ -31,7 +31,6 @@
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>
 
-
 SV_IMPL_REF( SwServerObject )
 
 using namespace ::sw::mark;
@@ -185,7 +184,6 @@ namespace sw { namespace mark
         // putting the counter in front of the random parts will speed up string comparisons
         return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
     }
-
 
     void MarkBase::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
     {

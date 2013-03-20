@@ -65,7 +65,6 @@ void SwCache::Check()
 #define CHECK
 #endif
 
-
 SwCache::SwCache( const sal_uInt16 nInitSize
 #ifdef DBG_UTIL
     , const OString &rNm

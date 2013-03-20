@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCTABLE_HXX
 #define _ACCTABLE_HXX
+
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
@@ -52,7 +54,6 @@ class SwAccessibleTable :
     sal_Int32 GetIndexOfSelectedChild( sal_Int32 nSelectedChildIndex ) const;
 
 protected:
-
     // Set states for getAccessibleStateSet.
     // This drived class additinaly sets MULTISELECTABLE(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
@@ -82,7 +83,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-
     SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrm* pTableFrm );
 
     //=====  XInterface  ======================================================
@@ -261,7 +261,6 @@ inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
 class SwAccessibleTableColHeaders : public SwAccessibleTable
 {
 protected:
-
     virtual ~SwAccessibleTableColHeaders()
     {}
 
@@ -269,7 +268,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-
     SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrm *pTabFrm );
 
     //=====  XInterface  ======================================================

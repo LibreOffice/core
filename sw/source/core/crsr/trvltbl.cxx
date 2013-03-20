@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-
 #include <vcl/svapp.hxx>
 #include <editeng/protitem.hxx>
 #include <crsrsh.hxx>
@@ -100,7 +99,6 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
     }
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::GoPrevCell()
 {
@@ -282,7 +280,6 @@ sal_Bool SwCrsrShell::SelTbl()
     return sal_True;
 }
 
-
 sal_Bool SwCrsrShell::SelTblBox()
 {
     // if we're in a table, create a table cursor, and select the cell
@@ -303,7 +300,6 @@ sal_Bool SwCrsrShell::SelTblBox()
 
     if( pStartNode == NULL )
         return sal_False;
-
 
     SET_CURR_SHELL( this );
 
@@ -484,7 +480,6 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
     return true;
 }
 
-
 sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                         sal_Bool bInReadOnly )
 {
@@ -548,7 +543,6 @@ sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     return sal_False;
 }
 
-
 sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                         sal_Bool bInReadOnly )
 {
@@ -601,7 +595,6 @@ sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     return sal_False;
 }
 
-
 sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                         sal_Bool bInReadOnly )
 {
@@ -635,7 +628,6 @@ sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 
     return sal_True;
 }
-
 
 sal_Bool SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
@@ -766,7 +758,6 @@ String SwCrsrShell::GetBoxNms() const
     return sNm;
 }
 
-
 bool SwCrsrShell::GotoTable( const String& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -779,7 +770,6 @@ bool SwCrsrShell::GotoTable( const String& rName )
     }
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
 {
@@ -844,7 +834,6 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
     return 0 != pChkBox;
 }
 
-
 void SwCrsrShell::SaveTblBoxCntnt( const SwPosition* pPos )
 {
     if( IsSelTblCells() || !IsAutoUpdateCells() )
@@ -884,7 +873,6 @@ void SwCrsrShell::SaveTblBoxCntnt( const SwPosition* pPos )
     }
 }
 
-
 void SwCrsrShell::ClearTblBoxCntnt()
 {
     delete m_pBoxIdx, m_pBoxIdx = 0;
@@ -903,8 +891,5 @@ sal_Bool SwCrsrShell::EndAllTblBoxEdit()
     } while( this != (pSh = (ViewShell *)pSh->GetNext()) );
     return bRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

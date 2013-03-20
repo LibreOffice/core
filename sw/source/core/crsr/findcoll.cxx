@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/resid.hxx>
 
 #include <swcrsr.hxx>
@@ -42,7 +41,6 @@ struct SwFindParaFmtColl : public SwFindParas
     virtual int IsReplaceMode() const;
 };
 
-
 int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                             sal_Bool bInReadOnly )
 {
@@ -59,7 +57,6 @@ int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion
     }
     return nRet;
 }
-
 
 int SwFindParaFmtColl::IsReplaceMode() const
 {
@@ -103,7 +100,5 @@ sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
     }
     return nRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

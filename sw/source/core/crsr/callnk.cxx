@@ -38,7 +38,6 @@
 
 #include<vcl/window.hxx>
 
-
 SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
                         sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
     : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ),
@@ -46,7 +45,6 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCn
       bHasSelection( bAktSelection )
 {
 }
-
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh )
     : rShell( rSh )

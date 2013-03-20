@@ -46,7 +46,6 @@ sal_Bool SwCrsrShell::IsEndSentence() const
     return m_pCurCrsr->IsStartEndSentence( true );
 }
 
-
 sal_Bool SwCrsrShell::GoStartWord()
 {
     return CallCrsrFN( &SwCursor::GoStartWord );

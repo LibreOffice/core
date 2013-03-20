@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCHYPERLINK_HXX
 #define _ACCHYPERLINK_HXX
+
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -45,7 +47,6 @@ class SwAccessibleHyperlink :
     void Invalidate();
 
 public:
-
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount()
         throw (::com::sun::star::uno::RuntimeException);

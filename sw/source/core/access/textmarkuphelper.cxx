@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <textmarkuphelper.hxx>
 #include <accportions.hxx>
 
 #include <vector>
 #include <algorithm>
 #include <comphelper/stlunosequence.hxx>
-
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -108,6 +106,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 
     return nTextMarkupCount;
 }
+
 ::com::sun::star::accessibility::TextSegment
         SwTextMarkupHelper::getTextMarkup( const sal_Int32 nTextMarkupIndex,
                                            const sal_Int32 nTextMarkupType )
