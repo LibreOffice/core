@@ -282,12 +282,9 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         nPos = aURLNoPar.indexOf( ':' );
         if( -1 == nPos )
             return sal_False;
-        sal_Bool bObjUrl =
-            0 == aURLNoPar.compareToAscii( XML_EMBEDDEDOBJECT_URL_BASE,
-                                 sizeof( XML_EMBEDDEDOBJECT_URL_BASE ) -1 );
+        sal_Bool bObjUrl = aURLNoPar.startsWith( XML_EMBEDDEDOBJECT_URL_BASE );
         sal_Bool bGrUrl = !bObjUrl &&
-              0 == aURLNoPar.compareToAscii( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE,
-                         sizeof( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE ) -1 );
+              aURLNoPar.startsWith( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE );
         if( !(bObjUrl || bGrUrl) )
             return sal_False;
 

@@ -286,8 +286,6 @@ namespace frm
     //--------------------------------------------------------------------------
     //- URLs
     //--------------------------------------------------------------------------
-    FORMS_CONSTASCII_STRING( URL_CONTROLLER_PREFIX, ".uno:FormController/" );
-
     FORMS_CONSTASCII_STRING( URL_FORM_POSITION,     ".uno:FormController/positionForm"  );
     FORMS_CONSTASCII_STRING( URL_FORM_RECORDCOUNT,  ".uno:FormController/RecordCount"  );
     FORMS_CONSTASCII_STRING( URL_RECORD_FIRST,      ".uno:FormController/moveToFirst"   );

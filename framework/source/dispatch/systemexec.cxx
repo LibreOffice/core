@@ -94,7 +94,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch(
                                                                                        sal_Int32 ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
-    if (aURL.Complete.compareToAscii(PROTOCOL_VALUE,PROTOCOL_LENGTH)==0)
+    if (aURL.Complete.startsWith(PROTOCOL_VALUE))
         xDispatcher = this;
     return xDispatcher;
 }

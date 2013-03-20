@@ -1256,7 +1256,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
                     {
                         aProp[i].Value >>= aCommandURL;
-                        if ( aCommandURL.compareToAscii(MENUPREFIX, RTL_CONSTASCII_LENGTH(MENUPREFIX) ) == 0  )
+                        if ( aCommandURL.startsWith(MENUPREFIX) )
                         {
                             try
                             {

@@ -1661,7 +1661,7 @@ OUString string_decode( const OUString & rText )
 
 bool isFileURL( const ::rtl::OUString & rURL )
 {
-    return rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("file:") ) == 0;
+    return rURL.startsWith("file:");
 }
 
 // -----------------------------------------------------------------------

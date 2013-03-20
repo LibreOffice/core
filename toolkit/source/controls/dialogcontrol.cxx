@@ -379,7 +379,7 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
         ( !aImageURL.isEmpty() ))
     {
         ::rtl::OUString absoluteUrl = aImageURL;
-        if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+        if ( !aImageURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
             absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
                                  uno::makeAny( aImageURL ) );
 
@@ -608,7 +608,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
                 ( !aImageURL.isEmpty() ))
             {
                 ::rtl::OUString absoluteUrl = aImageURL;
-                if ( aImageURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) != 0 )
+                if ( !aImageURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
 
                     absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
                                          uno::makeAny(aImageURL));

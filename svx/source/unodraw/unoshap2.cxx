@@ -1505,7 +1505,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
         OUString aURL;
         if( rValue >>= aURL )
         {
-            if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
+            if( aURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
             {
                 // graphic manager url
                 aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
@@ -1522,7 +1522,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
                     static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicObject( aGrafObj );
                 }
             }
-            else if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
+            else if( !aURL.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
             {
                 // normal link
                 String              aFilterName;
@@ -1570,7 +1570,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
         if( rValue >>= aStreamURL )
         {
-            if( aStreamURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
+            if( !aStreamURL.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
                 aStreamURL = OUString();
 
             if( mpObj.is() )

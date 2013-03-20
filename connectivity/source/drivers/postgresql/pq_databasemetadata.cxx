@@ -1263,11 +1263,11 @@ struct SortInternalSchemasLastAndPublicFirst
         a[0] >>= valueA;
         b[0] >>= valueB;
         bool ret = false;
-        if( valueA.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "public" ) ) == 0 )
+        if( valueA.startsWith( "public" ) )
         {
             ret = true;
         }
-        else if( valueB.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "public" ) ) == 0 )
+        else if( valueB.startsWith( "public" ) )
         {
             ret = false;
         }
@@ -2202,9 +2202,9 @@ struct TypeInfoByDataTypeSorter
             OUString nameB;
             a[0 /*TYPE_NAME*/] >>= nameA;
             b[0 /*TYPE_NAME*/] >>= nameB;
-            if( nameA.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "int4" ) ) == 0 )
+            if( nameA.startsWith( "int4" ) )
                 return 1;
-            if( nameB.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "int4" ) ) == 0 )
+            if( nameB.startsWith( "int4" ) )
                 return 0;
             return nameA.compareTo( nameB ) < 0;
         }

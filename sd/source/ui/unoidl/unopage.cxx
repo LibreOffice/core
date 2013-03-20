@@ -110,7 +110,7 @@ enum WID_PAGE
  #endif
 #endif
 
-static sal_Char sEmptyPageName[sizeof("page")] = "page";
+static sal_Char const sEmptyPageName[sizeof("page")] = "page";
 
 /** this function stores the property maps for draw pages in impress and draw */
 const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKind ePageKind )
@@ -2256,7 +2256,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
     if(GetPage() && GetPage()->GetPageKind() != PK_NOTES)
     {
         // check if this is the default 'page1234' name
-        if(aName.compareToAscii( sEmptyPageName, sizeof( sEmptyPageName ) - 1 ) == 0)
+        if(aName.startsWith( sEmptyPageName ))
         {
             // ok, it maybe is, first get the number part after 'page'
             OUString aNumber( aName.copy( sizeof( sEmptyPageName ) - 1 ) );

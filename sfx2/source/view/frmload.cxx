@@ -531,7 +531,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     // check for factory URLs to create a new doc, instead of loading one
     const ::rtl::OUString sURL = aDescriptor.getOrDefault( "URL", ::rtl::OUString() );
-    const bool bIsFactoryURL = ( sURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "private:factory/" ) ) == 0 );
+    const bool bIsFactoryURL = sURL.startsWith( "private:factory/" );
     bool bInitNewModel = bIsFactoryURL;
     if ( bIsFactoryURL && !bExternalModel )
     {

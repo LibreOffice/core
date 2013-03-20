@@ -695,7 +695,7 @@ void ElementDescriptor::readImageURLAttr( OUString const & rPropName, OUString c
         OUString sURL;
         _xProps->getPropertyValue( rPropName ) >>= sURL;
 
-        if ( !sURL.isEmpty() && sURL.compareToAscii( XMLSCRIPT_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( XMLSCRIPT_GRAPHOBJ_URLPREFIX ) ) == 0 )
+        if ( sURL.startsWith( XMLSCRIPT_GRAPHOBJ_URLPREFIX ) )
         {
             Reference< document::XStorageBasedDocument > xDocStorage( _xDocument, UNO_QUERY );
             if ( xDocStorage.is() )

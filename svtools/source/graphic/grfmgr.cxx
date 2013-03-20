@@ -1157,7 +1157,7 @@ GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& x
         {
             rtl::OUString sURL;
             xProps->getPropertyValue( sImageURL ) >>= sURL;
-            if ( !sURL.isEmpty() && sURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
+            if ( !sURL.isEmpty() && sURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
                 rvEmbedImgUrls.push_back( sURL );
         }
     }

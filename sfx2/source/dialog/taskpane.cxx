@@ -169,9 +169,9 @@ namespace sfx2
                     aMediaProperties.put( "URL", sImageURL );
 
                     // special handling: if the ImageURL denotes a CommandName, then retrieve the image for that command
-                    const sal_Char* pCommandImagePrefix = "private:commandimage/";
+                    static const sal_Char pCommandImagePrefix[] = "private:commandimage/";
                     const sal_Int32 nCommandImagePrefixLen = strlen( pCommandImagePrefix );
-                    if ( sImageURL.compareToAscii( pCommandImagePrefix, nCommandImagePrefixLen ) == 0 )
+                    if ( sImageURL.startsWith( pCommandImagePrefix ) )
                     {
                         ::rtl::OUStringBuffer aCommandName;
                         aCommandName.appendAscii(RTL_CONSTASCII_STRINGPARAM(".uno:"));

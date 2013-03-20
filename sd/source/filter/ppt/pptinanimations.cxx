@@ -2246,7 +2246,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                 {
                     nCommand = EffectCommands::PLAY;
                 }
-                else if( aParam.compareToAscii( RTL_CONSTASCII_STRINGPARAM("playFrom") ) == 0 )
+                else if( aParam.startsWith( "playFrom" ) )
                 {
                     const OUString aMediaTime( aParam.copy( 9, aParam.getLength() - 10 ) );
                     rtl_math_ConversionStatus eStatus;

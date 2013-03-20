@@ -339,7 +339,7 @@ FilePermission::FilePermission(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/-") );
             m_url = buf.makeStringAndClear();
         }
-        else if (0 != m_url.compareToAscii( RTL_CONSTASCII_STRINGPARAM("file:///") ))
+        else if (!m_url.startsWith("file:///"))
         {
             // relative path
             OUString out;

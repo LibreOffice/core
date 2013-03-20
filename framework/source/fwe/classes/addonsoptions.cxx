@@ -1277,7 +1277,7 @@ sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 //*****************************************************************************************************************
 void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 {
-    if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) )
+    if ( aURL.startsWith( EXPAND_PROTOCOL ) )
     {
         // cut protocol
         OUString macro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );

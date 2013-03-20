@@ -81,7 +81,7 @@ using namespace ::toolkit;
 uno::Reference< graphic::XGraphic >
 ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const OUString& _rURL )
 {
-    if( ( _rURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 ) )
+    if ( _rURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
         // graphic manager uniqueid
         rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );

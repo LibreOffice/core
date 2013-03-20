@@ -55,9 +55,6 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
 
-const char*     PROTOCOL_VALUE      = "vnd.sun.star.popup:";
-const sal_Int32 PROTOCOL_LENGTH     = 19;
-
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
@@ -216,7 +213,7 @@ throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
 
-    if ( rURL.Complete.compareToAscii( PROTOCOL_VALUE, PROTOCOL_LENGTH ) == 0 )
+    if ( rURL.Complete.startsWith( "vnd.sun.star.popup:" ) )
     {
         // --- SAFE ---
         ResetableGuard aGuard( m_aLock );

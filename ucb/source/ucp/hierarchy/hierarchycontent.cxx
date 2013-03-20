@@ -1602,10 +1602,7 @@ void HierarchyContent::transfer(
     }
 
     // Is source a hierarchy content?
-    if ( ( rInfo.SourceURL.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 2 ) ||
-         ( rInfo.SourceURL.compareToAscii( HIERARCHY_URL_SCHEME ":/",
-                                           HIERARCHY_URL_SCHEME_LENGTH + 2 )
-            != 0 ) )
+    if ( !rInfo.SourceURL.startsWith( HIERARCHY_URL_SCHEME ":/" ) )
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::InteractiveBadTransferURLException(

@@ -45,10 +45,10 @@ TypeDetectionExporter::TypeDetectionExporter( Reference< XComponentContext >& xC
 static OUString createRelativeURL( const OUString& rFilterName, const OUString& rURL )
 {
     if( !rURL.isEmpty() &&
-        (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
-        (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("https:") ) != 0) &&
-        (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
-        (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("ftp:") ) != 0))
+        !rURL.startsWith("http:") &&
+        !rURL.startsWith("https:") &&
+        !rURL.startsWith("jar:") &&
+        !rURL.startsWith("ftp:") )
     {
         INetURLObject aURL( rURL );
         OUString aName( aURL.GetName() );

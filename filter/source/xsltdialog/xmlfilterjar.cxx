@@ -128,10 +128,10 @@ static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleSe
 void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception )
 {
     if( !rSourceFile.isEmpty() &&
-        (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
-        (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("https:") ) != 0) &&
-        (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
-        (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("ftp:") ) != 0))
+        !rSourceFile.startsWith("http:") &&
+        !rSourceFile.startsWith("https:") &&
+        !rSourceFile.startsWith("jar:") &&
+        !rSourceFile.startsWith("ftp:") )
     {
         OUString aFileURL( rSourceFile );
 

@@ -30,9 +30,6 @@
 
 namespace framework{
 
-#define PROTOCOL_VALUE      "mailto:"
-#define PROTOCOL_LENGTH     7
-
 //_________________________________________________________________________________________________________________
 // XInterface, XTypeProvider, XServiceInfo
 
@@ -111,7 +108,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDis
                                                                                              sal_Int32        /*nFlags*/  ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
-    if (aURL.Complete.compareToAscii(PROTOCOL_VALUE,PROTOCOL_LENGTH)==0)
+    if (aURL.Complete.startsWith("mailto:"))
         xDispatcher = this;
     return xDispatcher;
 }

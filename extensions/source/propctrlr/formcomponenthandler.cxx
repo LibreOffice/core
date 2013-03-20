@@ -2792,7 +2792,7 @@ namespace pcr
 
         OUString sCurValue;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sCurValue );
-        if ( !sCurValue.isEmpty() && sCurValue.compareToAscii(GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH(GRAPHOBJ_URLPREFIX) ) != 0 )
+        if ( !sCurValue.isEmpty() && !sCurValue.startsWith(GRAPHOBJ_URLPREFIX) )
         {
             aFileDlg.SetDisplayDirectory( sCurValue );
             // TODO: need to set the display directory _and_ the default name

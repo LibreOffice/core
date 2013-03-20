@@ -3703,13 +3703,11 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 OUString sLink;
                 rVal >>= sLink;
-                if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX,
-                                  sizeof(UNO_NAME_GRAPHOBJ_URLPKGPREFIX)-1 ) )
+                if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
                 {
                     OSL_FAIL( "package urls aren't implemented" );
                 }
-                else if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX,
-                                   sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ) )
+                else if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
                 {
                     DELETEZ( pStrLink );
                     String sTmp( sLink );

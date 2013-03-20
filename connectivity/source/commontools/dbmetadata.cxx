@@ -406,7 +406,7 @@ namespace dbtools
         {
             Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
             ::rtl::OUString sConnectionURL( xMeta->getURL() );
-            doDisplay = sConnectionURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:mysqlc" ) ) == 0;
+            doDisplay = sConnectionURL.startsWith( "sdbc:mysql:mysqlc" );
         }
         catch( const Exception& )
         {
@@ -423,7 +423,7 @@ namespace dbtools
         {
             Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
             ::rtl::OUString sConnectionURL( xMeta->getURL() );
-            bSupported = sConnectionURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:mysqlc" ) ) != 0;
+            bSupported = !sConnectionURL.startsWith( "sdbc:mysql:mysqlc" );
         }
         catch( const Exception& )
         {

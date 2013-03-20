@@ -35,7 +35,6 @@ using namespace ::com::sun::star;
 
 using ::rtl::OUString;
 
-static const char* cURLStart           = ".uno:DataSourceBrowser/";
 static const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
 static const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
 static const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
@@ -71,7 +70,7 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
     DispatchMutexLock_Impl aLock(*this);
     uno::Reference< frame::XDispatch> xResult;
     // create some dispatch ...
-    if(m_pView && !aURL.Complete.compareToAscii(cURLStart, 23))
+    if(m_pView && aURL.Complete.startsWith(".uno:DataSourceBrowser/"))
     {
         if(!aURL.Complete.compareToAscii(cURLFormLetter) ||
             !aURL.Complete.compareToAscii(cURLInsertContent) ||

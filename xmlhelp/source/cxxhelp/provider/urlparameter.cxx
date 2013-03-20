@@ -537,7 +537,7 @@ bool URLParameter::scheme()
 
     for( sal_Int32 nPrefixLen = 20 ; nPrefixLen >= 18 ; --nPrefixLen )
     {
-        if( m_aExpr.compareToAscii( "vnd.sun.star.help://", nPrefixLen ) == 0 )
+        if( m_aExpr.matchAsciiL( "vnd.sun.star.help://", nPrefixLen ) )
         {
             m_aExpr = m_aExpr.copy( nPrefixLen );
             return true;

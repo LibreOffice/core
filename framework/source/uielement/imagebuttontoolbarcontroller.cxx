@@ -83,7 +83,7 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
 
 static void SubstituteVariables( OUString& aURL )
 {
-    if ( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 )
+    if ( aURL.startsWith( EXPAND_PROTOCOL ) )
     {
         uno::Reference< util::XMacroExpander > xMacroExpander = GetMacroExpander();
 

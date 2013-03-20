@@ -177,8 +177,7 @@ OUString ExpandContentProviderImpl::expandUri(
     uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const
 {
     OUString uri( xIdentifier->getContentIdentifier() );
-    if (uri.compareToAscii(
-            RTL_CONSTASCII_STRINGPARAM(EXPAND_PROTOCOL ":") ) != 0)
+    if (!uri.startsWith(EXPAND_PROTOCOL ":"))
     {
         throw ucb::IllegalIdentifierException(
             "expected protocol " EXPAND_PROTOCOL "!",

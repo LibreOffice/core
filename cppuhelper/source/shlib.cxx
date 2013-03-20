@@ -136,7 +136,7 @@ static bool checkAccessPath( OUString * pComp ) throw ()
 
     if (pPath)
     {
-        sal_Bool bAbsolute = (pComp->compareToAscii( "file://" , 7 ) == 0);
+        sal_Bool bAbsolute = pComp->startsWith( "file://" );
         for ( ::std::vector< OUString >::const_iterator iPos( pPath->begin() );
               iPos != pPath->end(); ++iPos )
         {

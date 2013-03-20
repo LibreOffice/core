@@ -147,7 +147,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const ::rtl::OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
-    if( rResourceURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
+    if( rResourceURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
         // graphic manager url
         String aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );

@@ -176,7 +176,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
             rtl::OUString aURL = aFiles[i];
-            if( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 )
+            if( aURL.startsWith( EXPAND_PROTOCOL ) )
             {
                 // cut protocol
                 rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );

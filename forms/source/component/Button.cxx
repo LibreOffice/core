@@ -654,9 +654,8 @@ namespace
 {
     bool isFormControllerURL( const ::rtl::OUString& _rURL )
     {
-        const sal_Int32 nPrefixLen = URL_CONTROLLER_PREFIX.length;
-        return  ( _rURL.getLength() > nPrefixLen )
-            &&  ( _rURL.compareToAscii( URL_CONTROLLER_PREFIX.ascii, nPrefixLen ) == 0 );
+        return  ( _rURL.getLength() > RTL_CONSTASCII_LENGTH( ".uno:FormController/" ) )
+            &&  ( _rURL.startsWith( ".uno:FormController/" ) );
     }
 }
 
