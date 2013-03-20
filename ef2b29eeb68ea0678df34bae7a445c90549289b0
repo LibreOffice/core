@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///CE\u003d",
+        "filename": "editeng/source/rtf/rtfitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-03-20T14:15:21Z",
+      "side": 1,
+      "message": "maybe it\u0027s just me but returns in the middle of a switch statement is just ugly and unexpected ( I\u0027m sure there are sometimes when you just have to ) however here it seems easier to just leave the breaks where they are and if you want to return early just follow with\n\nif ( !pNormal \u0026\u0026 !pCJK \u0026\u0026 !pCTL )\n    return;",
+      "revId": "ef2b29eeb68ea0678df34bae7a445c90549289b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
