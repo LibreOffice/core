@@ -27,6 +27,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
+#include "editeng/editobj.hxx"
 #include <svx/fmdpage.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -6354,29 +6355,52 @@ void ScCellObj::InputEnglishString( const ::rtl::OUString& rText )
         else
         {
             ScDocFunc &rFunc = pDocSh->GetDocFunc();
-            short nFormatType = 0;
-            ScBaseCell* pNewCell = rFunc.InterpretEnglishString( aCellPos, aString,
-                                    EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1, &nFormatType );
-            if (pNewCell)
+
+            ScInputStringType aRes =
+                ScStringUtil::parseInputString(*pFormatter, aString, LANGUAGE_ENGLISH_US);
+
+            if (aRes.meType != ScInputStringType::Unknown)
             {
-                if ( ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 && nFormatType != 0 )
+                if ((nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && aRes.mnFormatType)
                 {
                     // apply a format for the recognized type and the old format's language
-                    sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat( *pFormatter, nOldFormat, nFormatType );
-                    if ( nNewFormat != nOldFormat )
+                    sal_uInt32 nNewFormat = ScGlobal::GetStandardFormat(*pFormatter, nOldFormat, aRes.mnFormatType);
+                    if (nNewFormat != nOldFormat)
                     {
                         ScPatternAttr aPattern( pDoc->GetPool() );
                         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
                         // ATTR_LANGUAGE_FORMAT remains unchanged
-                        rFunc.ApplyAttributes( *GetMarkData(), aPattern, sal_True, sal_True );
+                        rFunc.ApplyAttributes( *GetMarkData(), aPattern, true, true );
                     }
                 }
-                // put the cell into the document
-                // (after applying the format, so possible formula recalculation already uses the new format)
-                (void)rFunc.PutCell( aCellPos, pNewCell, sal_True );
             }
-            else
-                SetString_Impl(aString, false, false);      // no cell from InterpretEnglishString, probably empty string
+            switch (aRes.meType)
+            {
+                case ScInputStringType::Formula:
+                    rFunc.SetFormulaCell(
+                        aCellPos,
+                        new ScFormulaCell(pDoc, aCellPos, aRes.maText, formula::FormulaGrammar::GRAM_PODF_A1),
+                        false);
+                break;
+                case ScInputStringType::Number:
+                    rFunc.SetValueCell(aCellPos, aRes.mfValue, false);
+                break;
+                case ScInputStringType::Text:
+                {
+                    if (ScStringUtil::isMultiline(aRes.maText))
+                    {
+                        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+                        rEngine.SetText(aRes.maText);
+                        boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
+                        rFunc.SetEditCell(aCellPos, *pEditText, false);
+                    }
+                    else
+                        rFunc.SetStringCell(aCellPos, aRes.maText, false);
+                }
+                break;
+                default:
+                    SetString_Impl(aString, false, false); // probably empty string
+            }
         }
     }
 }

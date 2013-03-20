@@ -338,6 +338,7 @@ ScInputStringType ScStringUtil::parseInputString(
     SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang )
 {
     ScInputStringType aRet;
+    aRet.mnFormatType = 0;
     aRet.meType = ScInputStringType::Unknown;
     aRet.maText = rStr;
 
