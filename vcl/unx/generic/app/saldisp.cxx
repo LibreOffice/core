@@ -763,8 +763,7 @@ void SalDisplay::ModifierMapping()
     nShiftKeySym_   = sal_XModifier2Keysym( pDisp_, pXModMap, ShiftMapIndex );
     nCtrlKeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, ControlMapIndex );
     nMod1KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod1MapIndex );
-    // Auf Sun-Servern und SCO-Severn beruecksichtigt XLookupString
-    // nicht den NumLock Modifier.
+    // on Sun and SCO servers XLookupString does not account for NumLock
     if( GetServerVendor() == vendor_sun )
     {
         XLIB_KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
@@ -813,7 +812,7 @@ rtl::OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         nKeySym = XK_0 + (nKeyCode - KEY_0);
     else if( KEY_A <= nKeyCode && nKeyCode <= KEY_Z )
         nKeySym = XK_A + (nKeyCode - KEY_A);
-    else if( KEY_F1 <= nKeyCode && nKeyCode <= KEY_F26 ) // Existiert die Taste
+    else if( KEY_F1 <= nKeyCode && nKeyCode <= KEY_F26 ) // does this key exist?
         nKeySym = XK_F1 + (nKeyCode - KEY_F1);
     else switch( nKeyCode )
     {
@@ -1087,7 +1086,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
         }
         else switch( keysym )
         {
-            // - - - - - Sun X-Server Tastatur ohne Cursorblock ??? - - -
+            // - - - - - Sun X-Server keyboard without Cursorblock ??? - - -
             case XK_R7: // XK_F27:
                 nKey = KEY_HOME;
                 break;
@@ -1115,7 +1114,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             case XK_R15: // XK_F35:
                 nKey = KEY_PAGEDOWN;
                 break;
-            // - - - - - Sun X-Server Tastatur ??? - - - - - - - - - - - -
+            // - - - - - Sun X-Server keyboard ??? - - - - - - - - - - - -
             case XK_L1: // XK_F11:
                 nKey = KEY_F11; // on a sun keyboard this actually is usally SunXK_Stop,
                 // but VCL doesn't have a key defintion for that
@@ -1436,11 +1435,11 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
             || IsKeypadKey(nKeySym)
             || XK_Delete == nKeySym ) )
     {
-        // Bei einigen X-Servern muss man bei den Keypadtasten
-        // schon sehr genau hinschauen. ZB. Solaris XServer:
-        // 2, 4, 6, 8 werden als Cursorkeys klassifiziert (Up, Down, Left, Right
-        // 1, 3, 5, 9 werden als Functionkeys klassifiziert (F27,F29,F33,F35)
-        // 0 als Keypadkey und der Dezimalpunkt gar nicht (KP_Insert)
+        // For some X-servers special care is needed for Keypad keys.
+        // For example Solaris XServer:
+        // 2, 4, 6, 8 are classified as Cursorkeys (Up, Down, Left, Right)
+        // 1, 3, 5, 9 are classified as Funtionkeys (F27,F29,F33,F35)
+        // 0 as Keypadkey, and the decimal point key not at all (KP_Insert)
         KeySym nNewKeySym = XLookupKeysym( pEvent, nNumLockIndex_ );
         if( nNewKeySym != NoSymbol )
             nKeySym = nNewKeySym;
@@ -1492,7 +1491,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
         case POINTER_WAIT:
             aCur = XCreateFontCursor( pDisp_, XC_watch );
             break;
-        case POINTER_TEXT:          // Mouse Pointer ist ein "I" Beam
+        case POINTER_TEXT:          // Mouse Pointer is a "I" Beam
             aCur = XCreateFontCursor( pDisp_, XC_xterm );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
@@ -1500,7 +1499,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             aCur = XCreateFontCursor( pDisp_, XC_question_arrow );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
-        case POINTER_CROSS:         // Mouse Pointer ist ein Kreuz
+        case POINTER_CROSS:         // Mouse Pointer is a cross
             aCur = XCreateFontCursor( pDisp_, XC_crosshair );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
@@ -1675,7 +1674,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
         case POINTER_DRAW_CAPTION:
             MAKE_CURSOR( drawcaption_ );
             break;
-        case POINTER_PEN:       // Mouse Pointer ist ein Stift
+        case POINTER_PEN:       // Mouse Pointer is a pencil
             aCur = XCreateFontCursor( pDisp_, XC_pencil );
             DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
             break;
@@ -2404,8 +2403,8 @@ SalVisual::~SalVisual()
     if( -1 == screen && VisualID(-1) == visualid ) delete visual;
 }
 
-// Konvertiert die Reihenfolge der Bytes eines Pixel in Bytes eines SalColors
-// fuer die 6 XXXA ist das nicht reversibel
+// Converts the order of bytes of a Pixel into bytes of a SalColor
+// This is not reversible for the 6 XXXA
 
 // SalColor is RGB (ABGR) a=0xFF000000, r=0xFF0000, g=0xFF00, b=0xFF
 
