@@ -423,7 +423,7 @@ class WWD_Startup(WWD_General):
         '''
         self.designAware.append(UnoDataAware.attachListBox(
             WWD_General.settings.cp_DefaultSession.cp_Design,
-            "cp_Style", self.lstStyles, False))
+            "Style", self.lstStyles, False))
         #page 6 : site general props
         self.genAware.append(UnoDataAware.attachEditControl(
             WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
