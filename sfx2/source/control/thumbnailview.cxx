@@ -576,12 +576,29 @@ void ThumbnailView::Paint( const Rectangle &aRect)
 
 void ThumbnailView::GetFocus()
 {
-    Control::GetFocus();
+    // Select the first item if nothing selected
+    int nSelected = -1;
+    for (size_t i = 0, n = mItemList.size(); i < n && nSelected == -1; ++i)
+    {
+        if (mItemList[i]->isSelected())
+            nSelected = i;
+    }
+
+    if ( nSelected == -1 && mItemList.size( ) > 0 )
+    {
+        mItemList[0]->setSelection(true);
+        maItemStateHdl.Call(mItemList[0]);
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+    }
 
     // Tell the accessible object that we got the focus.
     ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( sal_False ) );
     if( pAcc )
         pAcc->GetFocus();
+
+    Control::GetFocus();
 }
 
 void ThumbnailView::LoseFocus()
