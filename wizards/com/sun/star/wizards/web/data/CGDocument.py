@@ -15,14 +15,16 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+import uno
+
 from os import sep as separator
-from common.ConfigGroup import ConfigGroup
-from document.OfficeDocument import OfficeDocument
-from common.Properties import Properties
-from common.PropertyNames import PropertyNames
-from common.FileAccess import FileAccess
-from TypeDetection import *
-from common.Desktop import Desktop
+from ...common.ConfigGroup import ConfigGroup
+from ...document.OfficeDocument import OfficeDocument
+from ...common.Properties import Properties
+from ...common.PropertyNames import PropertyNames
+from ...common.FileAccess import FileAccess
+from ..TypeDetection import *
+from ...common.Desktop import Desktop
 
 from com.sun.star.document.MacroExecMode import NEVER_EXECUTE
 from com.sun.star.document.UpdateDocMode import NO_UPDATE
@@ -49,6 +51,7 @@ class CGDocument(ConfigGroup):
     PAGE_TYPE_SLIDE = 2
     cp_Title = ""
     cp_Description = ""
+    cp_URL = ""
     cp_Author = ""
     localFilename = ""
     urlFilename = ""
@@ -60,6 +63,17 @@ class CGDocument(ConfigGroup):
     valid = False
     appType = None
 
+    def __init__(self, url = "", xmsf = None, Task = None):
+        if (xmsf is None):
+            return
+        cp_URL = self.getSettings().getFileAccess(xmsf).getURL(url);
+        if (task is None):
+            task = Task("", "", 5)
+        self.validate(xmsf, task);
+
+    def getSettings(self):
+        return ConfigGroup.root
+
     '''
     the task will advance 5 times during validate.
     @param xmsf
@@ -68,6 +82,7 @@ class CGDocument(ConfigGroup):
     '''
 
     def validate(self, xmsf, task):
+        print ("WARNING !!! VALIDATING DOCUMENT ....")
         if not self.root.getFileAccess(xmsf).exists(self.cp_URL, False):
             raise FileNotFoundException (
                 "The given URL does not point to a file");
@@ -79,35 +94,36 @@ class CGDocument(ConfigGroup):
 
         self.mediaDescriptor = OfficeDocument.getFileMediaDecriptor(
             xmsf, self.cp_URL)
-        #task.advance(True)
+        task.advance(True)
         #1
         self.analyzeFileType(self.mediaDescriptor)
-        #task.advance(True)
+        task.advance(True)
         #2
         path = self.root.getFileAccess(xmsf).getPath(self.cp_URL, "")
-        localFilename = FileAccess.getFilename(path, separator)
+        self.localFilename = FileAccess.getFilename(path, separator)
         '''
         if the type is a star office convertable document
         We try to open the document to get some properties
         '''
         xProps = None
-        #task.advance(True)
+        task.advance(True)
         #3
         if self.isSOOpenable:
             # for documents which are openable through SO,
             # use DocumentProperties service.
             desktop = Desktop.getDesktop(xmsf)
-            props = range(3)
-            props[0] = Properties.createProperty("Hidden", True)
-            props[1] = Properties.createProperty(
-                "MacroExecutionMode", NEVER_EXECUTE)
-            props[2] = Properties.createProperty(
-                "UpdateDocMode", NO_UPDATE)
+            props = []
+            props.append(Properties.createProperty("Hidden", True))
+            props.append(Properties.createProperty(
+                "MacroExecutionMode", NEVER_EXECUTE))
+            props.append(Properties.createProperty(
+                "UpdateDocMode", NO_UPDATE))
+            print ("DEBUG !!! validate -- URL: ", self.cp_URL)
             component = desktop.loadComponentFromURL(
                 self.cp_URL, "_default", 0, tuple(props))
             xProps = component.DocumentProperties
 
-        #task.advance(True)
+        task.advance(True)
         #4
         #now use the object to read some document properties.
         if xProps is not None:
@@ -121,9 +137,9 @@ class CGDocument(ConfigGroup):
             #get some information from OS.
             title = self.localFilename
             updateDate = \
-                getSettings().getFileAccess(xmsf).getLastModified(self.cp_URL)
+                self.getSettings().getFileAccess(xmsf).getLastModified(self.cp_URL)
 
-        #task.advance(True)
+        task.advance(True)
         #5
         valid = True
         if self.cp_Title == "":
@@ -139,8 +155,13 @@ class CGDocument(ConfigGroup):
             cp_Author = self.author
 
         if self.cp_Exporter is None or self.cp_Exporter == "":
-            cp_Exporter = \
-                self.root.cp_Exporters.getKey(self.root.getExporters(CGDocument.appType))
+            print ("WARNING !!! settign exporter for key:", CGDocument.appType)
+            exp = self.root.getExporters(CGDocument.appType)
+            print ("WARNING !!! got N exporters:", len(exp))
+            print ("WARNING !!! got exporter:", exp[0])
+            self.cp_Exporter = \
+                self.root.cp_Exporters.getKey(exp[0])
+            print ("WARNING !!! exporter: ", self.cp_Exporter)
 
     '''
     Analyzes a type-detection string, returned from the TypeDetection service,
@@ -148,18 +169,28 @@ class CGDocument(ConfigGroup):
     '''
 
     def analyzeFileType(self, mediaDesc):
+        print ("DEBUG !!! analyzeFileType -- mediaDesc : ", mediaDesc)
         if mediaDesc is None:
             media = ""
         else:
             media = Properties.getPropertyValue(
                 self.mediaDescriptor, PropertyNames.PROPERTY_NAME)
         CGDocument.appType = self.getDocType(media)
+        print ("DEBUG !!! analyzeFileType --  appType: ", CGDocument.appType)
         self.isSOOpenable = (CGDocument.appType == WRITER_DOC or CGDocument.appType == CALC_DOC or CGDocument.appType == IMPRESS_DOC or CGDocument.appType == DRAW_DOC) or CGDocument.appType == HTML_DOC
+        if (self.isSOOpenable):
+            print ("DEBUG !!! analyzeFileType -- isSOOpenable .")
+        else:
+            print ("DEBUG !!! analyzeFileType -- NOT isSOOpenable .")
         parts = media.split("_")
         if len(parts) < 2:
             self.isSODocument = False
         else:
             self.isSODocument = self.isSOOpenable and (parts[1].startswith("Star"))
+        if (self.isSODocument):
+            print ("DEBUG !!! analyzeFileType -- isSODocument .")
+        else:
+            print ("DEBUG !!! analyzeFileType -- NOT isSODocument .")
 
     '''
     @param media is the media description string returned by an UNO TypeDetection object.
@@ -168,6 +199,7 @@ class CGDocument(ConfigGroup):
     '''
 
     def getDocType(self, media):
+        print ("DEBUG !!! getDocType -- media: ", media)
         if media == "":
             return NO_TYPE
         elif media.startswith("generic_HTML"):
@@ -190,8 +222,8 @@ class CGDocument(ConfigGroup):
             return NO_TYPE
 
     def createDOM(self, parent):
-        d = getSettings().cp_DefaultSession.cp_Design
-        exp = getSettings().cp_Exporters.getElement(self.cp_Exporter)
+        d = self.getSettings().cp_DefaultSession.cp_Design
+        exp = self.getSettings().cp_Exporters.getElement(self.cp_Exporter)
         '''return XMLHelper.addElement(parent, "document", ["title", "description", "author", "format", "filename", "create-date", "update-date", "pages", "size", "icon", "dir", "fn"], [d.cp_DisplayTitle ? self.cp_Title : "", d.cp_DisplayDescription ? self.cp_Description : "", d.cp_DisplayAuthor ? self.cp_Author : "", d.cp_DisplayFileFormat ? getTargetTypeName(exp) : "", d.cp_DisplayFilename ? self.localFilename : "", d.cp_DisplayCreateDate ? self.createDate() : "", d.cp_DisplayUpdateDate ? self.updateDate() : "", d.cp_DisplayPages and (self.pages > -1) ? "" + self.pages() : "", #TODO when do i calculate pages?
         d.cp_DisplaySize ? sizeKB() : "", #TODO when do i calculate size?
         d.cp_DisplayFormatIcon ? getIcon(exp) : "", self.dirName, self.urlFilename])'''
@@ -200,19 +232,19 @@ class CGDocument(ConfigGroup):
         if self.updateDate is None:
             return ""
 
-        return getSettings().formatter.formatCreated(self.updateDate)
+        return self.getSettings().formatter.formatCreated(self.updateDate)
 
     def createDate(self):
         if self.createDate is None:
             return ""
 
-        return getSettings().formatter.formatCreated(self.createDate)
+        return self.getSettings().formatter.formatCreated(self.createDate)
 
     def sizeKB(self):
         if self.sizeBytes == -1:
             return ""
         else:
-            return getSettings().formatter.formatFileSize(self.sizeBytes)
+            return self.getSettings().formatter.formatFileSize(self.sizeBytes)
 
     def pages(self):
         if self.pages == -1:
@@ -222,13 +254,13 @@ class CGDocument(ConfigGroup):
 
     def pagesTemplate(self):
         pagesType = \
-            getSettings().cp_Exporters.getElement(self.cp_Exporter).cp_PageType
+            self.getSettings().cp_Exporters.getElement(self.cp_Exporter).cp_PageType
         if pagesType == PAGE_TYPE_PAGE:
             return \
-                getSettings().resources[CGSettings.RESOURCE_PAGES_TEMPLATE]
+                self.getSettings().resources[CGSettings.RESOURCE_PAGES_TEMPLATE]
         elif pagesType == PAGE_TYPE_SLIDE:
             return \
-                getSettings().resources[CGSettings.RESOURCE_SLIDES_TEMPLATE]
+                self.getSettings().resources[CGSettings.RESOURCE_SLIDES_TEMPLATE]
         else:
             return ""
 
@@ -256,15 +288,15 @@ class CGDocument(ConfigGroup):
     '''
 
     def getExporter(self):
-        return [getExporterIndex()]
+        return [self.getExporterIndex()]
 
     '''
     @see getExporter()
     '''
 
     def setExporter(self, exporter_):
-        exp = getSettings().getExporters(CGDocument.appType)[exporter_[0]]
-        cp_Exporter = getSettings().cp_Exporters.getKey(exp)
+        exp = self.getSettings().getExporters(CGDocument.appType)[exporter_[0]]
+        self.cp_Exporter = self.getSettings().cp_Exporters.getKey(exp)
 
     '''
     @see getExporter()
@@ -275,10 +307,10 @@ class CGDocument(ConfigGroup):
         if self.cp_Exporter is None:
             return 0
 
-        exporter = getSettings().cp_Exporters.getElement(self.cp_Exporter)
-        exporters = getSettings().getExporters(CGDocument.appType)
+        exporter = self.getSettings().cp_Exporters.getElement(self.cp_Exporter)
+        exporters = self.getSettings().getExporters(CGDocument.appType)
         i = 0
-        while i < exporters.length:
+        while i < len(exporters):
             if exporters[i] == exporter:
                 return i
 
