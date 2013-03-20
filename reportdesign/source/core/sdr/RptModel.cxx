@@ -57,7 +57,6 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     ,m_pReportDefinition(_pReportDefinition)
 {
     DBG_CTOR( rpt_OReportModel,0);
-    SetAllowShapePropertyChangeListener(true);
     m_pUndoEnv = new OXUndoEnvironment(*this);
     m_pUndoEnv->acquire();
     SetSdrUndoFactory(new OReportUndoFactory);

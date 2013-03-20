@@ -233,9 +233,6 @@ public:
 
     // for import
     void SetUniqueCommentID(sal_uInt32 nNewID) { if(nNewID != mnUniqueCommentID) { mnUniqueCommentID = nNewID; } }
-    /** cl: added this for OJ to complete his reporting engine, does not work
-        correctly so only enable it for his model */
-    void SetAllowShapePropertyChangeListener( bool bAllow );
 
     sal_uInt16          nStarDrawPreviewMasterPageNum;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;

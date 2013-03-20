@@ -98,7 +98,6 @@ struct SdrModelImpl
 {
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
-    bool mbAllowShapePropertyChangeListener;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +110,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mpImpl = new SdrModelImpl;
     mpImpl->mpUndoManager=0;
     mpImpl->mpUndoFactory=0;
-    mpImpl->mbAllowShapePropertyChangeListener = false;
     mbInDestruction = false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
@@ -2060,16 +2058,6 @@ void SdrModel::SetSdrUndoFactory( SdrUndoFactory* pUndoFactory )
     {
         delete mpImpl->mpUndoFactory;
         mpImpl->mpUndoFactory = pUndoFactory;
-    }
-}
-
-/* added for the reporting engine, but does not work
-   correctly, so only enable it for this model */
-void SdrModel::SetAllowShapePropertyChangeListener( bool bAllow )
-{
-    if( mpImpl )
-    {
-        mpImpl->mbAllowShapePropertyChangeListener = bAllow;
     }
 }
 
