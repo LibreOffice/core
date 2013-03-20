@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GRAPH_HXX
-#define _SV_GRAPH_HXX
+#pragma once
+#if 1
 
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_UNOHELP2_HXX
-#define _VCL_UNOHELP2_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/weak.hxx>

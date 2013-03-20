@@ -25,8 +25,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFSTRINGBUFFER_HXX_
-#define _RTFSTRINGBUFFER_HXX_
+#pragma once
+#if 1
 
 #include <rtl/strbuf.hxx>
 #include <vector>

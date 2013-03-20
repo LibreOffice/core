@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_VECTOR_B2ISIZE_HXX
-#define _BGFX_VECTOR_B2ISIZE_HXX
+#pragma once
+#if 1
 
 #include <basegfx/vector/b2ivector.hxx>
 

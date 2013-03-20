@@ -57,8 +57,8 @@
  * @file
  * Style of Fontwork object.
  ************************************************************************/
- #ifndef _XFFONTWORKSTYLE_HXX
- #define _XFFONTWORKSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 

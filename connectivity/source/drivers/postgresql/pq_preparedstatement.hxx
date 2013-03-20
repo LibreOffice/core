@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_PREPARED_STATEMENT_HXX_
-#define _PQ_PREPARED_STATEMENT_HXX_
+#pragma once
+#if 1
 #include <vector>
 
 #include <libpq-fe.h>

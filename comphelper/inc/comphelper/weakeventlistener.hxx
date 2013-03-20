@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_WEAKEVENTLISTENER_HXX
-#define COMPHELPER_WEAKEVENTLISTENER_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

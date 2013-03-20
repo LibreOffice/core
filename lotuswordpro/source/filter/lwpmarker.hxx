@@ -63,8 +63,8 @@
  ************************************************************************/
 
 
-#ifndef _LWPMARKER_HXX_
-#define _LWPMARKER_HXX_
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpobjid.hxx"

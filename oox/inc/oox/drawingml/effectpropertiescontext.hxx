@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
-#define OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
+#pragma once
+#if 1
 
 #include "oox/core/contexthandler.hxx"
 #include "oox/dllapi.h"

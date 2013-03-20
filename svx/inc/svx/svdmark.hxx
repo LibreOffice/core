@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDMARK_HXX
-#define _SVDMARK_HXX
+#pragma once
+#if 1
 
 #include <vector>
 

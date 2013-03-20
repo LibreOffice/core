@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_RANDOM_HXX
-#define SC_RANDOM_HXX
+#pragma once
+#if 1
 
 namespace sc
 {

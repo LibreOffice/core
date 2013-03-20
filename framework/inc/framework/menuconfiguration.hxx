@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
-#define __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>

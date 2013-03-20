@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UDM_LUXENUM_HXX
-#define UDM_LUXENUM_HXX
+#pragma once
+#if 1
 
 
 

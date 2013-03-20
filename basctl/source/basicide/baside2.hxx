@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_BASIDE2_HXX
-#define BASCTL_BASIDE2_HXX
+#pragma once
+#if 1
 
 #include "layout.hxx"
 #include "bastypes.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_TEXTLAYOUT_HXX
-#define VCL_TEXTLAYOUT_HXX
+#pragma once
+#if 1
 
 #include "vcl/outdev.hxx"
 

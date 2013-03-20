@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_KEYCODES_HXX
-#define _SV_KEYCODES_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 #include <rsc/rsc-vcl-shared-types.hxx>

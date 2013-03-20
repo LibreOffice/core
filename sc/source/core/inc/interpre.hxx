@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_INTERPRE_HXX
-#define SC_INTERPRE_HXX
+#pragma once
+#if 1
 
 #include <math.h>
 #include <rtl/math.hxx>

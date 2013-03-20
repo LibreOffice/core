@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _VISIOIMPORTFILTER_HXX
-#define _VISIOIMPORTFILTER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>

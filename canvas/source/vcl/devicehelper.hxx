@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_DEVICEHELPER_HXX
-#define _VCLCANVAS_DEVICEHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>

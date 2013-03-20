@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEMPLATE_SCANNER_HXX
-#define _TEMPLATE_SCANNER_HXX
+#pragma once
+#if 1
 
 #include "tools/AsynchronousTask.hxx"
 #include "sddllapi.h"

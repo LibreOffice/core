@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_SOURCE_XFORMS_DATATYPES_HXX
-#define FORMS_SOURCE_XFORMS_DATATYPES_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>

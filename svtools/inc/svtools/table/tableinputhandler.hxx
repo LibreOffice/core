@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_INC_TABLE_TABLEINPUTHANDLER_HXX
-#define SVTOOLS_INC_TABLE_TABLEINPUTHANDLER_HXX
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 

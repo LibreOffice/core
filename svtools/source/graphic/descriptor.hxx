@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GOODIES_DESCRIPTOR_HXX
-#define _GOODIES_DESCRIPTOR_HXX
+#pragma once
+#if 1
 
 #include <comphelper/propertysethelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

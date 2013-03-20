@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
-#define SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xforms/XModel.hpp>
 #include <svtools/genericunodialog.hxx>

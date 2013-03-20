@@ -57,8 +57,8 @@
  * @file
  * Property for styles. ie. Margins,shadow,columns and so on.
  ************************************************************************/
-#ifndef     _IXFPROPERTY_HXX
-#define     _IXFPROPERTY_HXX
+#pragma once
+#if 1
 
 #include "ixfobject.hxx"
 

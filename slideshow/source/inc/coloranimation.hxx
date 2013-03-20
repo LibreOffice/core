@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_COLORANIMATION_HXX
-#define INCLUDED_SLIDESHOW_COLORANIMATION_HXX
+#pragma once
+#if 1
 
 #include "animation.hxx"
 #include "rgbcolor.hxx"

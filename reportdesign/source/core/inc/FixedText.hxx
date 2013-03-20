@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPT_FIXEDTEXT_HXX
-#define RPT_FIXEDTEXT_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XFixedText.hpp>

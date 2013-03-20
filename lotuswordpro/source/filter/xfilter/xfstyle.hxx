@@ -57,8 +57,8 @@
  * @file
  * Base style object .
  ************************************************************************/
-#ifndef     _XFSTYLE_HXX
-#define     _XFSTYLE_HXX
+#pragma once
+#if 1
 
 #include "ixfstyle.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOSHAPE_HXX
-#define _SVX_UNOSHAPE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>

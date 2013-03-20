@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADC_CPP_TOKPROCT_HXX
-#define ADC_CPP_TOKPROCT_HXX
+#pragma once
+#if 1
 
 
 

@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __TEST_BEANS_XPROPERTYSET_HXX__
-#define __TEST_BEANS_XPROPERTYSET_HXX__
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

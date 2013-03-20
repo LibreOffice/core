@@ -64,8 +64,8 @@
  ************************************************************************/
 
 
-#ifndef _LWPBASETYPE_HXX
-#define _LWPBASETYPE_HXX
+#pragma once
+#if 1
 
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"

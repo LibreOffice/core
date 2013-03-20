@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTABE_HXX
-#define _XMLOFF_XMLTABE_HXX
+#pragma once
+#if 1
 
 // prevent funny things like "#define sun 1" from the compiler
 #include <sal/config.h>

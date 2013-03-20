@@ -28,8 +28,8 @@
  * instead of those above.
  */
 
-#ifndef SVXMLATTRCOLLECTION_HXX_
-#define SVXMLATTRCOLLECTION_HXX_
+#pragma once
+#if 1
 
 #include "SvXMLAttr.hxx"
 

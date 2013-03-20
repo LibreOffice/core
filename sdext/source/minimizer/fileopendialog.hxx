@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FILEOPEN_DIALOG_HXX_
-#define _FILEOPEN_DIALOG_HXX_
+#pragma once
+#if 1
 
 #include <vector>
 #include <com/sun/star/beans/StringPair.hpp>

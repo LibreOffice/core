@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BRWHEAD_HXX
-#define _BRWHEAD_HXX
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 #include <svtools/headbar.hxx>

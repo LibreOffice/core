@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVGFONTEXPORT_HXX
-#define SVGFONTEXPORT_HXX
+#pragma once
+#if 1
 
 #include <comphelper/stl_types.hxx>
 #include <tools/fontenum.hxx>

@@ -62,8 +62,8 @@
  Mar 2005           created
  ************************************************************************/
 
-#ifndef _LWPDROPCAPMGR_HXX
-#define _LWPDROPCAPMGR_HXX
+#pragma once
+#if 1
 
 #include "xfilter/xfparagraph.hxx"
 

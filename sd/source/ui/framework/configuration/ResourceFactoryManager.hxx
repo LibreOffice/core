@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_RESOURCE_FACTORY_MANAGER_HXX
-#define SD_FRAMEWORK_RESOURCE_FACTORY_MANAGER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XModuleController.hpp>

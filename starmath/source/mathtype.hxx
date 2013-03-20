@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef MATHTYPE_HXX
-#define MATHTYPE_HXX
+#pragma once
+#if 1
 
 #include "node.hxx"
 #include "eqnolefilehdr.hxx"

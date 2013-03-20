@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_SOURCE_INC_URLTRANSFORMER_HXX
-#define FORMS_SOURCE_INC_URLTRANSFORMER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

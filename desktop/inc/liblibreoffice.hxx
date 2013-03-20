@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _LIBLIBREOFFICE_HXX
-#define _LIBLIBREOFFICE_HXX
+#pragma once
+#if 1
 
 typedef struct _LODocument LODocument;
 

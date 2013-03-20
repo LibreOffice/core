@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#define _CONNECTIVITY_SDBCX_COLLECTION_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase10.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

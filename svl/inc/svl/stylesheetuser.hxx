@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SVL_STYLESHEETUSER_HXX_INCLUDED
-#define SVL_STYLESHEETUSER_HXX_INCLUDED
+#pragma once
+#if 1
 
 namespace svl
 {

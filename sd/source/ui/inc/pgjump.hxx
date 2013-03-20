@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_PGJUMP_HXX
-#define _SD_PGJUMP_HXX
+#pragma once
+#if 1
 
 enum PageJump
 {

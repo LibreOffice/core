@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_STDCONSTITER_HXX
-#define ARY_STDCONSTITER_HXX
+#pragma once
+#if 1
 //  KORR_DEPRECATED_3.0
 
 

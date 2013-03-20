@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_F3DCHILD_HXX
-#define _SVX_F3DCHILD_HXX
+#pragma once
+#if 1
 
 
 #include <sfx2/childwin.hxx>

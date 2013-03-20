@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STOC_RDBTDP_BASE_HXX
-#define _STOC_RDBTDP_BASE_HXX
+#pragma once
+#if 1
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

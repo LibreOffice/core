@@ -27,8 +27,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _VCL_GTKSYS_HXX_
-#define _VCL_GTKSYS_HXX_
+#pragma once
+#if 1
 
 #include "generic/gensys.h"
 #include <gtk/gtk.h>

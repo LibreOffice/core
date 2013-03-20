@@ -19,8 +19,8 @@
 struct RSHEADER_TYPE;
 class  RscPtrPtr;
 
-#ifndef _RSCTOOLS_HXX
-#define _RSCTOOLS_HXX
+#pragma once
+#if 1
 
 #ifdef UNX
 #include <stdlib.h>

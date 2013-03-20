@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TASKPANE_CONTROLS_MASTER_PAGES_PANEL_HXX
-#define SD_TASKPANE_CONTROLS_MASTER_PAGES_PANEL_HXX
+#pragma once
+#if 1
 
 #include "taskpane/ScrollPanel.hxx"
 

@@ -57,8 +57,8 @@
  * @file
  * Polygon object.
  ************************************************************************/
-#ifndef     _XFPOLYGON_HXX
-#define     _XFPOLYGON_HXX
+#pragma once
+#if 1
 
 #include "xfdrawpolyline.hxx"
 #include <vector>

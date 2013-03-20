@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOCONTROL_TABLEMODEL_HXX_
-#define _UNOCONTROL_TABLEMODEL_HXX_
+#pragma once
+#if 1
 
 #include "svtools/table/tablemodel.hxx"
 #include "svtools/table/tablecontrol.hxx"

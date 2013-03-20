@@ -28,8 +28,8 @@
  * instead of those above.
  */
 
-#ifndef EXTENSIONS_RESOURCE_RESOURCESTRINGINDEXACCESS_HXX
-#define EXTENSIONS_RESOURCE_RESOURCESTRINGINDEXACCESS_HXX
+#pragma once
+#if 1
 
 
 #include <boost/shared_ptr.hpp>

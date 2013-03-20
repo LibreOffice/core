@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_ADO_AOLEVARIANT_HXX_
-#define _CONNECTIVITY_ADO_AOLEVARIANT_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #ifdef __MINGW32__

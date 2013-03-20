@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
-#define SD_DRAW_SUB_CONTROLLER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

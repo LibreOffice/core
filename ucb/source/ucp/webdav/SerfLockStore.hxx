@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_SERFLOCKSTORE_HXX
-#define INCLUDED_SERFLOCKSTORE_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include "osl/mutex.hxx"

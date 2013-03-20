@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_RENDERMODULE_HXX
-#define _DXCANVAS_RENDERMODULE_HXX
+#pragma once
+#if 1
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2irectangle.hxx>

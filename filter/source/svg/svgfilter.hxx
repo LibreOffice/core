@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVGFILTER_HXX
-#define SVGFILTER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>

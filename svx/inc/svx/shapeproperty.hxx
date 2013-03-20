@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SHAPEPROPERTY_HXX
-#define SVX_SHAPEPROPERTY_HXX
+#pragma once
+#if 1
 
 //........................................................................
 namespace svx

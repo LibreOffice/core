@@ -21,8 +21,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef SVTOOLS_INCLUDED_FILECHANGEDCHECKER_HXX
-#define SVTOOLS_INCLUDED_FILECHANGEDCHECKER_HXX
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 #include <boost/function.hpp>

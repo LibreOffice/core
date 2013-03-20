@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_RELATIONDESIGNVIEW_HXX
-#define DBAUI_RELATIONDESIGNVIEW_HXX
+#pragma once
+#if 1
 
 #include "JoinDesignView.hxx"
 #ifndef _VECTOR_

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHARSETLISTBOX_HXX
-#define CHARSETLISTBOX_HXX
+#pragma once
+#if 1
 
 #include "charsets.hxx"
 

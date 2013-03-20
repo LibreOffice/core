@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_FIELDMAPPINGIMPL_HXX
-#define EXTENSIONS_ABP_FIELDMAPPINGIMPL_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include "abptypes.hxx"

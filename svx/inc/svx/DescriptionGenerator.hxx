@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
-#define _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

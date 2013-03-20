@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
-#define TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <vcl/button.hxx>

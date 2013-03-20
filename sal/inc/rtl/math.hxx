@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_MATH_HXX
-#define INCLUDED_RTL_MATH_HXX
+#pragma once
+#if 1
 
 #include "rtl/math.h"
 #include "rtl/string.hxx"

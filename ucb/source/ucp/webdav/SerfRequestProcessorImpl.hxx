@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SERFREQUESTPROCESSORIMPL_HXX
-#define INCLUDED_SERFREQUESTPROCESSORIMPL_HXX
+#pragma once
+#if 1
 
 #include <serf.h>
 

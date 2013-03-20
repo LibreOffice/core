@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_GRAMMARCHECKINGITERATOR_HXX_
-#define _LINGUISTIC_GRAMMARCHECKINGITERATOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

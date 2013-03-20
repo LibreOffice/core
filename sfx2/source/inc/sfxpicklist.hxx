@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_PICKLIST_HXX_
-#define _SFX_PICKLIST_HXX_
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 #include <vcl/menu.hxx>

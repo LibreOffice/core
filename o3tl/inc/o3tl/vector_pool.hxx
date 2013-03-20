@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_O3TL_VECTOR_POOL_HXX
-#define INCLUDED_O3TL_VECTOR_POOL_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <vector>

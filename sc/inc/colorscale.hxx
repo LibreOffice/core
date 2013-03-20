@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_COLORSCALE_HXX
-#define SC_COLORSCALE_HXX
+#pragma once
+#if 1
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>

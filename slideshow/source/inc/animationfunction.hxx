@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_ANIMATIONFUNCTION_HXX
-#define INCLUDED_SLIDESHOW_ANIMATIONFUNCTION_HXX
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>

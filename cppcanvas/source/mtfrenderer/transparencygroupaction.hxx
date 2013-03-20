@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_TRANSPARENCYGROUPACTION_HXX
-#define _CPPCANVAS_TRANSPARENCYGROUPACTION_HXX
+#pragma once
+#if 1
 
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/renderer.hxx>

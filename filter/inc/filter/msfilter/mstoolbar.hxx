@@ -28,8 +28,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _MSTOOLBAR_HXX
-#define _MSTOOLBAR_HXX
+#pragma once
+#if 1
 #include "filter/msfilter/msfilterdllapi.h"
 #include <sot/storage.hxx>
 #include <ostream>

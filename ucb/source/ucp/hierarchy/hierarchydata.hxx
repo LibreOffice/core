@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HIERARCHYDATA_HXX
-#define _HIERARCHYDATA_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>

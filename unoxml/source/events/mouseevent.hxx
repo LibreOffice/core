@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EVENT_MOUSEEVENT_HXX
-#define EVENT_MOUSEEVENT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/XMouseEvent.hpp>

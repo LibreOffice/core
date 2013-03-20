@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _THESSUBMENU_HXX_
-#define _THESSUBMENU_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>

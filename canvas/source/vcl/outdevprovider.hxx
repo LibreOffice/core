@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_OUTDEVPROVIDER_HXX
-#define _VCLCANVAS_OUTDEVPROVIDER_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <boost/shared_ptr.hpp>

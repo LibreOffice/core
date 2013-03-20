@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_CORE_SHARED_CONNECTION_HXX
-#define DBA_CORE_SHARED_CONNECTION_HXX
+#pragma once
+#if 1
 
 #include "connectivity/ConnectionWrapper.hxx"
 #include <cppuhelper/component.hxx>

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_NEONINPUTSTREAM_HXX
-#define INCLUDED_NEONINPUTSTREAM_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

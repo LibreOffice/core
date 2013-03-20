@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLNCAPIT_HXX
-#define _SVX_XLNCAPIT_HXX
+#pragma once
+#if 1
 
 #include <svx/svxdllapi.h>
 #include <svl/eitem.hxx>

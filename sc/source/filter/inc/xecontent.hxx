@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XECONTENT_HXX
-#define SC_XECONTENT_HXX
+#pragma once
+#if 1
 
 #include "rangelst.hxx"
 #include "xlcontent.hxx"

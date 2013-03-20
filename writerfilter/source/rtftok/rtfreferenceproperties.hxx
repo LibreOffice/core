@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFREFERENCEPROPERTIES_HXX_
-#define _RTFREFERENCEPROPERTIES_HXX_
+#pragma once
+#if 1
 
 #include <rtfsprm.hxx>
 

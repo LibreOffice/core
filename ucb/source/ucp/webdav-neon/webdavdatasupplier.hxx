@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef WEBDAV_UCP_DATASUPPLIER_HXX
-#define WEBDAV_UCP_DATASUPPLIER_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>

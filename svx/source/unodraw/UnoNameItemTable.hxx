@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNONAMEITEMTABLE_HXX_
-#define _SVX_UNONAMEITEMTABLE_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_METAFUNCTIONS_HXX
-#define INCLUDED_BASEBMP_METAFUNCTIONS_HXX
+#pragma once
+#if 1
 
 #include <boost/mpl/integral_c.hpp>
 #include <vigra/metaprogramming.hxx>

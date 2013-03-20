@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FOPEVENTDISPATCHER_HXX_
-#define _FOPEVENTDISPATCHER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/EventObject.hpp>
 

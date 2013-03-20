@@ -25,8 +25,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFDOCUMENT_HXX_
-#define _RTFDOCUMENT_HXX_
+#pragma once
+#if 1
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

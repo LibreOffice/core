@@ -19,8 +19,8 @@
 
 // ZipException.h: interface for the ZipException class.
 
-#ifndef ZIPEXCPTN_HXX_INCLUDED
-#define ZIPEXCPTN_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <stdexcept>
 

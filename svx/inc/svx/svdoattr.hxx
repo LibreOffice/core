@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOATTR_HXX
-#define _SVDOATTR_HXX
+#pragma once
+#if 1
 
 #include <svx/xfillit0.hxx>
 #include <svx/xflasit.hxx>

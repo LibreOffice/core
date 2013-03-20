@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DATASOURCECONNECTOR_HXX_
-#define _DBAUI_DATASOURCECONNECTOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_COLUMNCONTROLWINDOW_HXX
-#define DBAUI_COLUMNCONTROLWINDOW_HXX
+#pragma once
+#if 1
 
 #include "FieldDescControl.hxx"
 #include "TypeInfo.hxx"

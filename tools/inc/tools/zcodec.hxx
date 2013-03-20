@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ZCODEC_HXX
-#define _ZCODEC_HXX
+#pragma once
+#if 1
 
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>

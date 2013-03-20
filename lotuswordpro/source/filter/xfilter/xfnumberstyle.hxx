@@ -57,8 +57,8 @@
  * @file
  * Number style for table cell.
  ************************************************************************/
-#ifndef     _XFNUMBERSTYLE_HXX
-#define     _XFNUMBERSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 #include "xfstylemanager.hxx"

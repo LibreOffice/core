@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVP_SVPVD_HXX
-#define _SVP_SVPVD_HXX
+#pragma once
+#if 1
 
 #include <salvd.hxx>
 #include "svpelement.hxx"

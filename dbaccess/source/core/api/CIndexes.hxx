@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_INDEXES_HXX_
-#define DBACCESS_INDEXES_HXX_
+#pragma once
+#if 1
 
 #include "connectivity/TIndexes.hxx"
 

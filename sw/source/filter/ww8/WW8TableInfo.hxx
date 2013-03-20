@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef WW8_TABLE_INFO_HXX
-#define WW8_TABLE_INFO_HXX
+#pragma once
+#if 1
 #include <boost/unordered_map.hpp>
 #include <string>
 #include <map>

@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef _VCLFONTCAPABILITIES_HXX
-#define _VCLFONTCAPABILITIES_HXX
+#pragma once
+#if 1
 
 #include <boost/dynamic_bitset.hpp>
 #include <vector>

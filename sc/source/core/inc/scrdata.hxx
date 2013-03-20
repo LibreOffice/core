@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SCRDATA_HXX
-#define SC_SCRDATA_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Reference.hxx>
 

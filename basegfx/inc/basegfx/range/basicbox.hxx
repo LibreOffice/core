@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_BASICBOX_HXX
-#define _BGFX_RANGE_BASICBOX_HXX
+#pragma once
+#if 1
 
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/basegfxdllapi.h>

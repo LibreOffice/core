@@ -57,8 +57,8 @@
  * @file
  * Wrapper the attibute list of a xml element.
  ************************************************************************/
-#ifndef     _XFSAXATTRLIST_HXX
-#define     _XFSAXATTRLIST_HXX
+#pragma once
+#if 1
 
 #include "ixfattrlist.hxx"
 #include "xmloff/attrlist.hxx"

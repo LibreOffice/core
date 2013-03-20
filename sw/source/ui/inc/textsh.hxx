@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWTEXTSH_HXX
-#define _SWTEXTSH_HXX
+#pragma once
+#if 1
 
 #include <basesh.hxx>
 #include <unotools/caserotate.hxx>

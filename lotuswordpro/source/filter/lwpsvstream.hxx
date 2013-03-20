@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _SVSTREAM_HXX
-#define _SVSTREAM_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpunoheader.hxx"

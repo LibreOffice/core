@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_STATICS_HXX_
-#define _PQ_STATICS_HXX_
+#pragma once
+#if 1
 
 #include <boost/unordered_map.hpp>
 #include <vector>

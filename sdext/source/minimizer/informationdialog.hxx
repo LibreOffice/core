@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INFORMATIONDIALOG_HXX
-#define INFORMATIONDIALOG_HXX
+#pragma once
+#if 1
 #include <vector>
 #include "unodialog.hxx"
 #include "configurationaccess.hxx"

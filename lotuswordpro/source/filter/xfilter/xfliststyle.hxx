@@ -57,8 +57,8 @@
 * @file
 * Styles for ordered list and unordered list.
 ************************************************************************/
-#ifndef     _XFLISTSTYLE_HXX
-#define     _XFLISTSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

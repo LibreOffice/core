@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef INCLUDED_SVX_COUNTRYID_HXX
-#define INCLUDED_SVX_COUNTRYID_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <i18npool/lang.h>

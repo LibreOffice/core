@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DRDEFUNO_HXX
-#define SC_DRDEFUNO_HXX
+#pragma once
+#if 1
 
 #include <svx/unopool.hxx>
 #include <svl/lstner.hxx>

@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPFRIBFOOTNOTE_HXX_
-#define _LWPFRIBFOOTNOTE_HXX_
+#pragma once
+#if 1
 
 #include "lwpfrib.hxx"
 #include "lwpobj.hxx"

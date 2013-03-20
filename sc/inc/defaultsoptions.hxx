@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_DEFAULTSOPT_HXX
-#define SC_DEFAULTSOPT_HXX
+#pragma once
+#if 1
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>

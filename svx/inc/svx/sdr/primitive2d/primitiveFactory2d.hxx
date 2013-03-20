@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
-#define INCLUDED_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <cppuhelper/compbase1.hxx>

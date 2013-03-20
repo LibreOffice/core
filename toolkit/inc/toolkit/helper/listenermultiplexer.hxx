@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
-#define _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
+#pragma once
+#if 1
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/lang/XEventListener.hpp>

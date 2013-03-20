@@ -57,8 +57,8 @@
 * @file
 * Breaks override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPBREAKSOVERRIDE_HXX
-#define     _LWPBREAKSOVERRIDE_HXX
+#pragma once
+#if 1
 
 #include "lwpoverride.hxx"
 

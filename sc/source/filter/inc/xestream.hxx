@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef SC_XESTREAM_HXX
-#define SC_XESTREAM_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/NamedValue.hpp>
 

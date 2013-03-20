@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMMANDIMAGEPROVIDER_HXX
-#define COMMANDIMAGEPROVIDER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XModel.hpp>
 

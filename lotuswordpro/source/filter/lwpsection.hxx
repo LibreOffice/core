@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPSECTION_HXX
-#define _LWPSECTION_HXX
+#pragma once
+#if 1
 #include "lwppagelayout.hxx"
 
 /**

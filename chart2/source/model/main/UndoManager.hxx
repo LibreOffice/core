@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHART2_UNDOMANAGER_HXX
-#define CHART2_UNDOMANAGER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SALHELPER_TIMER_HXX_
-#define _SALHELPER_TIMER_HXX_
+#pragma once
+#if 1
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <osl/time.h>

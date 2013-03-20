@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_DATAFDLG_HXX
-#define SC_DATAFDLG_HXX
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

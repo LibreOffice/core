@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBCOMP_HXX
-#define _SBCOMP_HXX
+#pragma once
+#if 1
 
 // I've taken the following from the new file by MD! (MT)
 #include "sbintern.hxx"

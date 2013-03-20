@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_XRENDER_PEER_HXX
-#define _SV_XRENDER_PEER_HXX
+#pragma once
+#if 1
 
 #include <tools/prex.h>
 struct _XTrap; // on some older systems this is not declared within Xrender.h

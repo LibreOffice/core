@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFCHARSETS_HXX_
-#define _RTFCHARSETS_HXX_
+#pragma once
+#if 1
 
 namespace writerfilter {
     namespace rtftok {

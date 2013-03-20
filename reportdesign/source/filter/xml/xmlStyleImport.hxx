@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPT_XMLSTYLEIMPORT_HXX
-#define RPT_XMLSTYLEIMPORT_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlimp.hxx>

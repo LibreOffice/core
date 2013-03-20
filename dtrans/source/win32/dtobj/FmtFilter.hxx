@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FMTFILTER_HXX_
-#define _FMTFILTER_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

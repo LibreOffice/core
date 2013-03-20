@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_TYPES_HXX__
-#define __SC_TYPES_HXX__
+#pragma once
+#if 1
 
 #include <boost/intrusive_ptr.hpp>
 

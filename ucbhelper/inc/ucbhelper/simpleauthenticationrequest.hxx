@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
-#define _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDMRKV_HXX
-#define _SVDMRKV_HXX
+#pragma once
+#if 1
 
 #include <svx/svdmark.hxx>
 #include <svx/svdhdl.hxx>

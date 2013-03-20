@@ -57,8 +57,8 @@
  * @file
  * Table object.
  ************************************************************************/
-#ifndef     _XFTABLE_HXX
-#define     _XFTABLE_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 #include "xfrow.hxx"

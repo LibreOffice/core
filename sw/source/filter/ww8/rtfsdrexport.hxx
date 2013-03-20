@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFSDREXPORT_HXX_
-#define _RTFSDREXPORT_HXX_
+#pragma once
+#if 1
 
 #include <filter/msfilter/escherex.hxx>
 #include <editeng/outlobj.hxx>

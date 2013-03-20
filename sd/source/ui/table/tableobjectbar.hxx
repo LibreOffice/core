@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TABLE_OBJECT_BAR_HXX
-#define SD_TABLE_OBJECT_BAR_HXX
+#pragma once
+#if 1
 
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>

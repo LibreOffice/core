@@ -57,8 +57,8 @@
  * @file
  * Polyline.
  ************************************************************************/
-#ifndef     _XFPOLYLINE_HXX
-#define     _XFPOLYLINE_HXX
+#pragma once
+#if 1
 
 #include "xfdrawobj.hxx"
 #include <vector>

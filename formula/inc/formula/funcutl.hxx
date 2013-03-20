@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FUNCUTL_HXX
-#define FORMULA_FUNCUTL_HXX
+#pragma once
+#if 1
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

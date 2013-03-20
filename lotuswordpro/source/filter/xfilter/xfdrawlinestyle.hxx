@@ -57,8 +57,8 @@
  * @file
  * Line style of Drawing object.
  ************************************************************************/
-#ifndef     _XFDRAWLINESTYLE_HXX
-#define     _XFDRAWLINESTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"

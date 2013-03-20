@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_CORETEXT_SALCORETEXTFONTUTILS_HXX
-#define _VCL_CORETEXT_SALCORETEXTFONTUTILS_HXX
+#pragma once
+#if 1
 
 #include <boost/unordered_map.hpp>
 

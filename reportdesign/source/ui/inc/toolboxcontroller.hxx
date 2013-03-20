@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_TOOLBOXCONTROLLER_HXX
-#define RPTUI_TOOLBOXCONTROLLER_HXX
+#pragma once
+#if 1
 
 #include <svtools/toolboxcontroller.hxx>
 #include <comphelper/stl_types.hxx>

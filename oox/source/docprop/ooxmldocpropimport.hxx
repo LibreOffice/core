@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DOCPROP_OOXMLDOCPROPIMPORT_HXX
-#define OOX_DOCPROP_OOXMLDOCPROPIMPORT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

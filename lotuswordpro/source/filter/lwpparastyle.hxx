@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPPARASTYLE_HXX
-#define _LWPPARASTYLE_HXX
+#pragma once
+#if 1
 
 #include "lwpcharacterstyle.hxx"
 #include "lwppiece.hxx"

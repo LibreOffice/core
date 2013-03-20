@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WRTWW8_HXX
-#define _WRTWW8_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>        // UINTXX
 #include <tools/gen.hxx>

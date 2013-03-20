@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REF_AND_POINTER_HXX
-#define INCLUDED_REF_AND_POINTER_HXX
+#pragma once
+#if 1
 
 #include <iostream>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

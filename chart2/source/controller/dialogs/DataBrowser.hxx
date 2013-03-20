@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHART_DATA_BROWSER_HXX
-#define CHART_DATA_BROWSER_HXX
+#pragma once
+#if 1
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/outdev.hxx>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INPUTDLG_HXX
-#define INPUTDLG_HXX
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 

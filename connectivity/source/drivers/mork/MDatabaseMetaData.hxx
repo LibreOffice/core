@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CONNECTIVITY_MORK_METADATA_HXX
-#define CONNECTIVITY_MORK_METADATA_HXX
+#pragma once
+#if 1
 
 #include "connectivity/CommonTools.hxx"
 #include "connectivity/OSubComponent.hxx"

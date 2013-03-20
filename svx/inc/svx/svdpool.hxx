@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDPOOL_HXX
-#define _SVDPOOL_HXX
+#pragma once
+#if 1
 
 #include <svx/xpool.hxx>
 #include <svx/svddef.hxx>

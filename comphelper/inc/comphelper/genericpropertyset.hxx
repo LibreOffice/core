@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
-#define _COMPHELPER_GENERICPROPERTYSET_HXX_
+#pragma once
+#if 1
 
 #include <comphelper/propertysetinfo.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

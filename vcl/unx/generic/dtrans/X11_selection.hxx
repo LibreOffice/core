@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DTRANS_X11_SELECTION_HXX_
-#define _DTRANS_X11_SELECTION_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/compbase4.hxx>

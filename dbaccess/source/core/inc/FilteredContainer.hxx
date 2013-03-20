@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
-#define DBACCESS_CORE_FILTERED_CONTAINER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

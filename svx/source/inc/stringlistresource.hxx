@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_STRINGLISTRESOURCE_HXX
-#define SVX_STRINGLISTRESOURCE_HXX
+#pragma once
+#if 1
 
 #include <tools/rc.hxx>
 

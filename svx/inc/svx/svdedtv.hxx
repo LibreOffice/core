@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDEDTV_HXX
-#define _SVDEDTV_HXX
+#pragma once
+#if 1
 
 #include <svx/svdmrkv.hxx>
 #include <svx/xpoly.hxx>

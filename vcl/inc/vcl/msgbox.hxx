@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_MSGBOX_HXX
-#define _SV_MSGBOX_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>

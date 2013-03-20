@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLPANEL_TASK_PANE_SHELL_MANAGER_HXX
-#define SD_TOOLPANEL_TASK_PANE_SHELL_MANAGER_HXX
+#pragma once
+#if 1
 
 #include "ShellFactory.hxx"
 #include "ViewShellManager.hxx"

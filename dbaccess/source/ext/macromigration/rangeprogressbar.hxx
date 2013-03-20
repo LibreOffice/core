@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_RANGEPROGRESSBAR_HXX
-#define DBACCESS_RANGEPROGRESSBAR_HXX
+#pragma once
+#if 1
 
 #include <vcl/prgsbar.hxx>
 

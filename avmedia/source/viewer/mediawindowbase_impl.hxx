@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
-#define AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
+#pragma once
+#if 1
 
 #include <avmedia/mediawindow.hxx>
 

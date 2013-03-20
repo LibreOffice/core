@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSTREAMCONTAINER_HXX_
-#define _OSTREAMCONTAINER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

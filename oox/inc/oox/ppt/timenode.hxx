@@ -18,8 +18,8 @@
  */
 
 
-#ifndef OOX_DRAWINGML_TIMENODE_HXX
-#define OOX_DRAWINGML_TIMENODE_HXX
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 #include <vector>

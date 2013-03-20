@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DBAOBJECTEX_HXX
-#define SVX_DBAOBJECTEX_HXX
+#pragma once
+#if 1
 
 #include <svtools/transfer.hxx>
 #include <comphelper/stl_types.hxx>

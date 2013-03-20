@@ -18,8 +18,8 @@
  */
 
 
-#ifndef DBAUI_CONNECTIONPAGESETUP_HXX
-#define DBAUI_CONNECTIONPAGESETUP_HXX
+#pragma once
+#if 1
 #include "ConnectionHelper.hxx"
 
 #include "adminpages.hxx"

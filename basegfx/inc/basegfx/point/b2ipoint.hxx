@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POINT_B2IPOINT_HXX
-#define _BGFX_POINT_B2IPOINT_HXX
+#pragma once
+#if 1
 
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/basegfxdllapi.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_FILTERDETECT_HXX
-#define OOX_CORE_FILTERDETECT_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>

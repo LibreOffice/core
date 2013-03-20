@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WW8_CP_AND_FC_HXX
-#define INCLUDED_WW8_CP_AND_FC_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <doctok/WW8Document.hxx>

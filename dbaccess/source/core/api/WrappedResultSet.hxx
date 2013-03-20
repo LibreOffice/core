@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
-#define DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
+#pragma once
+#if 1
 
 #include "CacheSet.hxx"
 #include <com/sun/star/sdbc/XRowUpdate.hpp>

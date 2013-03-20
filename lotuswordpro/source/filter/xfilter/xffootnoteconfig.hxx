@@ -57,8 +57,8 @@
  * @file
  * Footnote config.
  ************************************************************************/
-#ifndef     _XFFOOTNOTECONFIG_HXX
-#define     _XFFOOTNOTECONFIG_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 

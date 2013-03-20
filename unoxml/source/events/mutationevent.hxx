@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EVENT_MUTATIONEVENT_HXX
-#define EVENT_MUTATIONEVENT_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

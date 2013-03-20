@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
-#define _EXTENSIONS_COMPONENT_MODULE_HXX_
+#pragma once
+#if 1
 
 /** you may find this file helpfull if you implement a component (in it's own library) which can't use
     the usual infrastructure.<br/>

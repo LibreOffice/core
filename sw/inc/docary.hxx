@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DOCARY_HXX
-#define _DOCARY_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <vector>

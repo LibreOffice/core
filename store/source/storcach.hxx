@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_STORCACH_HXX
-#define _STORE_STORCACH_HXX
+#pragma once
+#if 1
 
 #include "sal/types.h"
 #include "rtl/ref.hxx"

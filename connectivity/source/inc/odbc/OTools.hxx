@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_OTOOLS_HXX_
-#define _CONNECTIVITY_OTOOLS_HXX_
+#pragma once
+#if 1
 
 #include "odbc/OFunctiondefs.hxx"
 #include "odbc/odbcbasedllapi.hxx"

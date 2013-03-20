@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PARCLASS_HXX
-#define SC_PARCLASS_HXX
+#pragma once
+#if 1
 
 #include "formula/opcode.hxx"
 #include <sys/types.h>  // size_t

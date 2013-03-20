@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef _XMLCHAFF_HXX
-#define _XMLCHAFF_HXX
+#pragma once
+#if 1
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>

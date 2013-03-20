@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_IMPLSPRITECANVAS_HXX
-#define _CPPCANVAS_IMPLSPRITECANVAS_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <basegfx/vector/b2dsize.hxx>

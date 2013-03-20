@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _DTRANSHELPER_HXX_
-#define _DTRANSHELPER_HXX_
+#pragma once
+#if 1
 
 #if defined _MSC_VER
 #pragma warning(push,1)

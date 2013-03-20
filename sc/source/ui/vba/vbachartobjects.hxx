@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_CHARTOBJECTS_HXX
-#define SC_VBA_CHARTOBJECTS_HXX
+#pragma once
+#if 1
 #include <ooo/vba/excel/XChartObjects.hpp>
 #include <ooo/vba/excel/XChartObject.hpp>
 #include <cppuhelper/implbase1.hxx>

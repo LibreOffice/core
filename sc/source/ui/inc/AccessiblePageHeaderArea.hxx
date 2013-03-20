@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEPAGEHEADERAREA_HXX
-#define _SC_ACCESSIBLEPAGEHEADERAREA_HXX
+#pragma once
+#if 1
 
 #include "AccessibleContextBase.hxx"
 #include <editeng/svxenum.hxx>

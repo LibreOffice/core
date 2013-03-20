@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZIP_PACKAGE_STREAM_HXX
-#define _ZIP_PACKAGE_STREAM_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

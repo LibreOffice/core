@@ -57,8 +57,8 @@
  * @file
  * Table row object. A table is consist by rows.
  ************************************************************************/
-#ifndef     _XFROW_HXX
-#define     _XFROW_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 #include <map>

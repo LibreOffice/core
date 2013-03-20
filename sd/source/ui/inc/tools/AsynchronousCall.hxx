@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ASYNCHRONOUS_CALL_HXX
-#define SD_ASYNCHRONOUS_CALL_HXX
+#pragma once
+#if 1
 
 #include <vcl/timer.hxx>
 #include <memory>

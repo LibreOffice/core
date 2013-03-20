@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef HELPCOMPILER_HXX
-#define HELPCOMPILER_HXX
+#pragma once
+#if 1
 
 #include <string>
 #ifndef HAVE_CXX0X

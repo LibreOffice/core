@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef SC_ASCIIOPT_HXX
-#define SC_ASCIIOPT_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include <vcl/dialog.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPUHELPER_BASEMUTEX_HXX_
-#define _CPPUHELPER_BASEMUTEX_HXX_
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 

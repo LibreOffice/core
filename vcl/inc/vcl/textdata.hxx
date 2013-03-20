@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEXTDATA_HXX
-#define _TEXTDATA_HXX
+#pragma once
+#if 1
 
 #include <vcl/dllapi.h>
 #include <svl/brdcst.hxx>

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_PRESENT_HXX_
-#define _SD_PRESENT_HXX_
+#pragma once
+#if 1
 
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>

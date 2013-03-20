@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
-#define UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
+#pragma once
+#if 1
 
 #include <comphelper/componentmodule.hxx>
 #include <unotools/unotoolsdllapi.h>

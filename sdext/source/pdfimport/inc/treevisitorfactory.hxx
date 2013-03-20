@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFI_TREEVISITORFACTORY_HXX
-#define INCLUDED_PDFI_TREEVISITORFACTORY_HXX
+#pragma once
+#if 1
 
 #include "pdfihelper.hxx"
 #include <boost/shared_ptr.hpp>

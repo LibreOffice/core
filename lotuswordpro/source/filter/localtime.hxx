@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPTIME_HXX_
-#define _LWPTIME_HXX_
+#pragma once
+#if 1
 
 struct LtTm
 {

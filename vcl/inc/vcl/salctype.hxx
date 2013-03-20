@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALCTYPE_HXX
-#define _SV_SALCTYPE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/uno/Reference.hxx>

@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_GETDIGITLANGUAGE_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_GETDIGITLANGUAGE_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
-#define _ASCHARANCHOREDOBJECTPOSITION_HXX
+#pragma once
+#if 1
 
 #include <anchoredobjectposition.hxx>
 #include <sal/types.h>

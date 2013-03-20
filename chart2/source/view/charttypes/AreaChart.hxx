@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_AREACHART_HXX
-#define _CHART2_AREACHART_HXX
+#pragma once
+#if 1
 
 #include "VSeriesPlotter.hxx"
 #include <com/sun/star/chart2/CurveStyle.hpp>

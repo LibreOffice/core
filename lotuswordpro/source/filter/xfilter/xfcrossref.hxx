@@ -57,8 +57,8 @@
  * @file
  * cross reference object.
  ************************************************************************/
-#ifndef     _XFCROSSREF_HXX
-#define     _XFCROSSREF_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 

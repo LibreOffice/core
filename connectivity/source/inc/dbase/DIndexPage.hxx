@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
-#define _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <tools/stream.hxx>

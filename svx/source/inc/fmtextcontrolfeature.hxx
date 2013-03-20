@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
-#define SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

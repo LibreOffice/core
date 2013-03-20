@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DOCLINKDIALOG_HXX_
-#define _SVX_DOCLINKDIALOG_HXX_
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_CONNECTIONHELPER_HXX
-#define DBAUI_CONNECTIONHELPER_HXX
+#pragma once
+#if 1
 
 #include "adminpages.hxx"
 #include <ucbhelper/content.hxx>

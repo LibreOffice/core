@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFFLY_HXX_
-#define _RTFFLY_HXX_
+#pragma once
+#if 1
 
 namespace writerfilter {
     namespace rtftok {

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPT_SHARED_GROUPS_PROPERTIES_HXX
-#define RPT_SHARED_GROUPS_PROPERTIES_HXX
+#pragma once
+#if 1
 
 namespace rptshared
 {

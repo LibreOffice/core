@@ -57,8 +57,8 @@
  * @file
  * place holder object.
  ************************************************************************/
-#ifndef     _XFPLACEHOLDER_HXX
-#define     _XFPLACEHOLDER_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TYPES_HXX
-#define _TYPES_HXX
+#pragma once
+#if 1
 
 #include <rtl/strbuf.hxx>
 #include <tools/ref.hxx>

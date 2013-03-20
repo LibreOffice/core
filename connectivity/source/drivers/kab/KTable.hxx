@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_KAB_TABLE_HXX_
-#define _CONNECTIVITY_KAB_TABLE_HXX_
+#pragma once
+#if 1
 
 #include "KConnection.hxx"
 #include "connectivity/sdbcx/VTable.hxx"

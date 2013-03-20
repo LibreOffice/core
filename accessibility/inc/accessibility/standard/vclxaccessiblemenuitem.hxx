@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENUITEM_HXX
-#define ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENUITEM_HXX
+#pragma once
+#if 1
 
 #include <accessibility/standard/accessiblemenuitemcomponent.hxx>
 

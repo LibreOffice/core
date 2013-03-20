@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_PROPERTIES_HXX
-#define INCLUDED_DP_PROPERTIES_HXX
+#pragma once
+#if 1
 
 
 

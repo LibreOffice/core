@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SPIRALWIPE_HXX
-#define INCLUDED_SLIDESHOW_SPIRALWIPE_HXX
+#pragma once
+#if 1
 
 #include "parametricpolypolygon.hxx"
 #include <basegfx/numeric/ftools.hxx>

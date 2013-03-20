@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSV_STD_OUTP_HXX
-#define CSV_STD_OUTP_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
     // BASE CLASSES

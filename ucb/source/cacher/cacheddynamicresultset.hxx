@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CACHED_DYNAMIC_RESULTSET_HXX
-#define _CACHED_DYNAMIC_RESULTSET_HXX
+#pragma once
+#if 1
 
 #include <dynamicresultsetwrapper.hxx>
 #include <com/sun/star/ucb/XContentIdentifierMapping.hpp>

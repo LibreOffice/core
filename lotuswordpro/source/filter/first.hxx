@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef FIRST_HXX
-#define FIRST_HXX
+#pragma once
+#if 1
 
 #include "bento.hxx"        // Public header
 

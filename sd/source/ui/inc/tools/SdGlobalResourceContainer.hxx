@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_GLOBAL_RESOURCE_CONTAINER_HXX
-#define SD_GLOBAL_RESOURCE_CONTAINER_HXX
+#pragma once
+#if 1
 
 #include "sdmod.hxx"
 #include <memory>

@@ -20,8 +20,8 @@
 // a simple resource manager : no stacks, no sharing of the impl class, only loading of strings and blobs
 // but thread-safety !! :)
 
-#ifndef _TOOLS_SIMPLERESMGR_HXX_
-#define _TOOLS_SIMPLERESMGR_HXX_
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 #include <tools/resid.hxx>

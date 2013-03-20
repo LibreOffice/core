@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDGMOITM_HXX
-#define _SDGMOITM_HXX
+#pragma once
+#if 1
 
 #include <svtools/grfmgr.hxx>
 #include <svl/eitem.hxx>

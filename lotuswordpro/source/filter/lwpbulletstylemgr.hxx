@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPBULLETSTYLEMGR_HXX
-#define _LWPBULLETSTYLEMGR_HXX
+#pragma once
+#if 1
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>

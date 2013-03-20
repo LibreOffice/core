@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_PRESENTATION_GRAPHIC_SHAPE_HXX
-#define _SD_ACCESSIBILITY_ACCESSIBLE_PRESENTATION_GRAPHIC_SHAPE_HXX
+#pragma once
+#if 1
 
 #include <svx/AccessibleGraphicShape.hxx>
 

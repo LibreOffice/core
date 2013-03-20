@@ -29,8 +29,8 @@
  */
 
 
-#ifndef UNX_GTK_GTKPRN_HXX_INCLUDED
-#define UNX_GTK_GTKPRN_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "generic/genprn.h"
 

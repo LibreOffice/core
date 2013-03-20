@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __EDITENG_JUSTIFYITEM_HXX__
-#define __EDITENG_JUSTIFYITEM_HXX__
+#pragma once
+#if 1
 
 #include "editeng/editengdllapi.h"
 #include "editeng/svxenum.hxx"

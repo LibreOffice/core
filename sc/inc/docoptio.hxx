@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DOCOPTIO_HXX
-#define SC_DOCOPTIO_HXX
+#pragma once
+#if 1
 
 #include <unotools/configitem.hxx>
 #include <svl/poolitem.hxx>

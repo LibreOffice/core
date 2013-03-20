@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSI_XML_XMLITEM_HXX
-#define CSI_XML_XMLITEM_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
     // BASE CLASSES

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
-#define CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

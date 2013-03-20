@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_CLIPUTIL_HXX__
-#define __SC_CLIPUTIL_HXX__
+#pragma once
+#if 1
 
 #include "address.hxx"
 

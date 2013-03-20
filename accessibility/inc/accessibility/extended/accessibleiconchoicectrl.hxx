@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEICONCHOICECTRL_HXX_
-#define ACCESSIBILITY_EXT_ACCESSIBLEICONCHOICECTRL_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

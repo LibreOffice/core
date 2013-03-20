@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CRSSKIP_HXX
-#define _CRSSKIP_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 

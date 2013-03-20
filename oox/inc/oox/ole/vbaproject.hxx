@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_OLE_VBAPROJECT_HXX
-#define OOX_OLE_VBAPROJECT_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <com/sun/star/uno/XInterface.hpp>

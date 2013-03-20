@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX
-#define SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <vcl/event.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_SCRIPT_PROVIDER_FUNCTIONIMPL_HXX_
-#define  _FRAMEWORK_SCRIPT_PROVIDER_FUNCTIONIMPL_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx> // helper for XInterface, XTypeProvider etc.
 #include <osl/mutex.hxx>

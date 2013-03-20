@@ -22,8 +22,8 @@
  *  XML import of all variable related text fields plus database display field
  */
 
-#ifndef _XMLOFF_TXTVFLDI_HXX
-#define _XMLOFF_TXTVFLDI_HXX
+#pragma once
+#if 1
 
 #include "txtvfldi.hxx"
 #include "txtfldi.hxx"

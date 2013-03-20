@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FILLINFO_HXX
-#define SC_FILLINFO_HXX
+#pragma once
+#if 1
 
 #include <svx/framelinkarray.hxx>
 #include "global.hxx"

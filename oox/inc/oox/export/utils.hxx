@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OOX_EXPORT_UTILS_HXX_
-#define _OOX_EXPORT_UTILS_HXX_
+#pragma once
+#if 1
 
 #define I32S(x) rtl::OString::valueOf( (sal_Int32) x ).getStr()
 #define I64S(x) rtl::OString::valueOf( (sal_Int64) x ).getStr()

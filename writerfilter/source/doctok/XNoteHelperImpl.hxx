@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_X_NOTE_HELPER_IMPL_HXX
-#define INCLUDED_X_NOTE_HELPER_IMPL_HXX
+#pragma once
+#if 1
 
 namespace writerfilter {
 namespace doctok

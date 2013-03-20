@@ -57,8 +57,8 @@
  * @file
  * Line object.
  ************************************************************************/
-#ifndef     _XFDRAWLINE_HXX
-#define     _XFDRAWLINE_HXX
+#pragma once
+#if 1
 
 #include "xfdrawobj.hxx"
 #include "xfpoint.hxx"

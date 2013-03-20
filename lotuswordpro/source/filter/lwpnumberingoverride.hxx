@@ -57,8 +57,8 @@
 * @file
 * Numbering override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPNUMBERINGOVERRIDE_HXX
-#define     _LWPNUMBERINGOVERRIDE_HXX
+#pragma once
+#if 1
 
 #include "lwpoverride.hxx"
 

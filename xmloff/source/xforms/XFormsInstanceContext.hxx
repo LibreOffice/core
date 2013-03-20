@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XFORMSINSTANCECONTEXT_HXX
-#define _XMLOFF_XFORMSINSTANCECONTEXT_HXX
+#pragma once
+#if 1
 
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>

@@ -54,8 +54,8 @@ Implementation Name
 */
 
 
-#ifndef _I18N_SERVICENAME_HXX_
-#define _I18N_SERVICENAME_HXX_
+#pragma once
+#if 1
 
 #define TRLT_SERVICELNAME "com.sun.star.i18n.Transliteration"
 #define TRLT_SERVICELNAME_PREFIX TRLT_SERVICELNAME "."

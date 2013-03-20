@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROLHEADER_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROLHEADER_HXX
+#pragma once
+#if 1
 
 
 #include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"

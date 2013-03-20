@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_PORTIONHANDLER_HXX
-#define _SW_PORTIONHANDLER_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 #include <txttypes.hxx>

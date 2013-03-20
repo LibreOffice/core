@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEXTDOC_HXX
-#define _TEXTDOC_HXX
+#pragma once
+#if 1
 
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>

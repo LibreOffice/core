@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
-#define INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>

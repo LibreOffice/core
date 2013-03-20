@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef LWPOBJFACTORY_HXX_
-#define LWPOBJFACTORY_HXX_
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpobjid.hxx"

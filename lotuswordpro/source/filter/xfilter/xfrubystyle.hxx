@@ -57,8 +57,8 @@
  * @file
  * ruby style.
  ************************************************************************/
-#ifndef     _XFRUBYSTYLE_HXX
-#define     _XFRUBYSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

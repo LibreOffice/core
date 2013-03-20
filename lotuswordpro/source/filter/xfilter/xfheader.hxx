@@ -57,8 +57,8 @@
  * @file
  * Header object. Sub object of master page.
  ************************************************************************/
-#ifndef     _XFHEADER_HXX
-#define     _XFHEADER_HXX
+#pragma once
+#if 1
 
 #include "xfcontentcontainer.hxx"
 #include "xfparagraph.hxx"

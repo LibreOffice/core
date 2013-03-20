@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LUIDL_DISTRIB_HXX
-#define LUIDL_DISTRIB_HXX
+#pragma once
+#if 1
 
 
 

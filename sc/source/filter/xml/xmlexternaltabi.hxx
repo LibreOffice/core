@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLEXTERNALTABI_HXX
-#define SC_XMLEXTERNALTABI_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlictxt.hxx>
 #include "rtl/ustrbuf.hxx"

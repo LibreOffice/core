@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#define _DBHELPER_DBEXCEPTION_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include "connectivity/standardsqlstate.hxx"

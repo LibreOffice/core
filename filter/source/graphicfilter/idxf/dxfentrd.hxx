@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXFENTRD_HXX
-#define _DXFENTRD_HXX
+#pragma once
+#if 1
 
 #include <dxfgrprd.hxx>
 #include <dxfvec.hxx>

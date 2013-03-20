@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GRADTRANS_HXX
-#define _GRADTRANS_HXX
+#pragma once
+#if 1
 
 #include <svx/xgrad.hxx>
 #include <basegfx/point/b2dpoint.hxx>

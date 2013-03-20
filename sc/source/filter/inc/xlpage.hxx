@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XLPAGE_HXX
-#define SC_XLPAGE_HXX
+#pragma once
+#if 1
 
 #include <tools/gen.hxx>
 #include <boost/noncopyable.hpp>

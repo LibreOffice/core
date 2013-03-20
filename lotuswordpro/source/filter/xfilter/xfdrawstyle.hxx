@@ -57,8 +57,8 @@
  * @file
  * Style for all draw object.
  ************************************************************************/
-#ifndef     _XFDRAWSTYLE_HXX
-#define     _XFDRAWSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"

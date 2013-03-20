@@ -57,8 +57,8 @@
  * @file
  * Manager for all config object,include line number config.
  ************************************************************************/
-#ifndef     _XFCONFIGMANAGER_HXX
-#define     _XFCONFIGMANAGER_HXX
+#pragma once
+#if 1
 
 #include "xfstylecont.hxx"
 #include "xflinenumberconfig.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef W1STRUCT_HXX
-#define W1STRUCT_HXX
+#pragma once
+#if 1
 
 // star view
 #include <string.h>

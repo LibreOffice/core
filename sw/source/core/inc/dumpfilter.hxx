@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _LAYOUTDUMP_HXX
-#define _LAYOUTDUMP_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>

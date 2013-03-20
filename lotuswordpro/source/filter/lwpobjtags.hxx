@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPOBJTAGS_HXX_
-#define _LWPOBJTAGS_HXX_
+#pragma once
+#if 1
 
 // file header object
 #define TAG_AMI             0x3750574CUL        // "LWP7"

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _REPORT_RPTUIOBJ_HXX
-#define _REPORT_RPTUIOBJ_HXX
+#pragma once
+#if 1
 
 #include "dllapi.h"
 #include <svx/svdoole2.hxx>

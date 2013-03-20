@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONNECTIVITY_MAB_QUERY_HXX_
-#define _CONNECTIVITY_MAB_QUERY_HXX_
+#pragma once
+#if 1
 
 #include "MColumnAlias.hxx"
 #include "MErrorResource.hxx"

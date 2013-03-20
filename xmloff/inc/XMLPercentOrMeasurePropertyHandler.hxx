@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLPERCENTORMEASUREPROPERTYHANDLER_HXX
-#define _XMLOFF_XMLPERCENTORMEASUREPROPERTYHANDLER_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlprhdl.hxx>
 

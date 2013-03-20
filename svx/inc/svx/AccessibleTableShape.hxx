@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_TABLE_SHAPE_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_TABLE_SHAPE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>

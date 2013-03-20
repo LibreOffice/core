@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _SV_GENDATA_HXX
-#define _SV_GENDATA_HXX
+#pragma once
+#if 1
 
 #include <osl/socket.hxx>
 #include <saldatabasic.hxx>

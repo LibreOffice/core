@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_SERFREQUESTPROCESSOR_HXX
-#define INCLUDED_SERFREQUESTPROCESSOR_HXX
+#pragma once
+#if 1
 
 #include <apr_errno.h>
 #include <apr_pools.h>

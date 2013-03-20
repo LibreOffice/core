@@ -57,8 +57,8 @@
  * @file
  * Page number field.
  ************************************************************************/
-#ifndef     _XFPAGECOUNT_HXX
-#define     _XFPAGECOUNT_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

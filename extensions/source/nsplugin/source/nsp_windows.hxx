@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __NSP_WINDOWS_HXX__
-#define __NSP_WINDOWS_HXX__
+#pragma once
+#if 1
 
 
 int NSP_ResetWinStyl(long hParent);

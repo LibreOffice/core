@@ -57,8 +57,8 @@
  * @file
  * Line Arrow.
  ************************************************************************/
-#ifndef     _XFARROWSTYLE_HXX
-#define     _XFARROWSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 

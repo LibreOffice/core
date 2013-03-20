@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XLCHART_HXX
-#define SC_XLCHART_HXX
+#pragma once
+#if 1
 
 // disable/enable support for varied point colors property
 #define EXC_CHART2_VARYCOLORSBY_PROP 0

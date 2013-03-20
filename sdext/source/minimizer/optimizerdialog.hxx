@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OPTIMIZERDIALOG_HXX
-#define OPTIMIZERDIALOG_HXX
+#pragma once
+#if 1
 #include "optimizerdialog.hrc"
 #include <vector>
 #include "unodialog.hxx"

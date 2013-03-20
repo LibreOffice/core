@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_BRKDLG_HXX
-#define BASCTL_BRKDLG_HXX
+#pragma once
+#if 1
 
 #include <svheader.hxx>
 #include <bastypes.hxx>

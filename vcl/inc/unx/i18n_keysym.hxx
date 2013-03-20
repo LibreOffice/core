@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_I18N_KEYSYM_HXX
-#define _SAL_I18N_KEYSYM_HXX
+#pragma once
+#if 1
 
 /*
  convert a keysym as defined in /usr/{X11R6|openwin}/include/X11/keysymdef.h

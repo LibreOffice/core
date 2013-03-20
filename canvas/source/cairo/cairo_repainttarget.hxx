@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_REPAINTTARGET_HXX
-#define _CAIROCANVAS_REPAINTTARGET_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 

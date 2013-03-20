@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSV_TPLTOOLS_HXX
-#define CSV_TPLTOOLS_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <map>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_PRINTERUTIL_HXX_
-#define _PSPRINT_PRINTERUTIL_HXX_
+#pragma once
+#if 1
 
 #include "osl/file.hxx"
 

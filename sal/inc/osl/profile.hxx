@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_PROFILE_HXX_
-#define _OSL_PROFILE_HXX_
+#pragma once
+#if 1
 
 #include "profile.h"
 #include <rtl/ustring.hxx>

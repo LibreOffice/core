@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COSV_STRINGDATA_HXX
-#define COSV_STRINGDATA_HXX
+#pragma once
+#if 1
 
 
 #include <cosv/str_types.hxx>

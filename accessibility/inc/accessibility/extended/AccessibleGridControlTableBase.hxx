@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROLTABLEBASE_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROLTABLEBASE_HXX
+#pragma once
+#if 1
 
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
 #include <cppuhelper/implbase1.hxx>

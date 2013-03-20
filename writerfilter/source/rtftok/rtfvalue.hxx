@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFVALUE_HXX_
-#define _RTFVALUE_HXX_
+#pragma once
+#if 1
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/io/XInputStream.hpp>

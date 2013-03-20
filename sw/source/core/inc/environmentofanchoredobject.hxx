@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENVIRONMENTOFANCHOREDOBJECT_HXX
-#define _ENVIRONMENTOFANCHOREDOBJECT_HXX
+#pragma once
+#if 1
 
 class SwFrm;
 class SwLayoutFrm;

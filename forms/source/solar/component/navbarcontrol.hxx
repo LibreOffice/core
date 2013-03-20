@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_NAVBARCONTROL_HXX
-#define FORMS_NAVBARCONTROL_HXX
+#pragma once
+#if 1
 
 #include "formnavigation.hxx"
 

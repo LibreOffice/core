@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_BASELISTBOX_HXX_
-#define _FORMS_BASELISTBOX_HXX_
+#pragma once
+#if 1
 
 //.........................................................................
 namespace frm

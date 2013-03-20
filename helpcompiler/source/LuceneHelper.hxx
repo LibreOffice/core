@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef LUCENEHELPER_HXX
-#define LUCENEHELPER_HXX
+#pragma once
+#if 1
 
 #if defined _MSC_VER
 #pragma warning(push)

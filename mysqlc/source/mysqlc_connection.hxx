@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef MYSQLC_CONNECTION_HXX
-#define MYSQLC_CONNECTION_HXX
+#pragma once
+#if 1
 
 #include "mysqlc_subcomponent.hxx"
 #include "mysqlc_types.hxx"

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef BASCTL_DLGEDVIEW_HXX
-#define BASCTL_DLGEDVIEW_HXX
+#pragma once
+#if 1
 
 #include <svx/svdview.hxx>
 

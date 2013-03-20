@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_SOURCE_STRIMP_HXX
-#define INCLUDED_RTL_SOURCE_STRIMP_HXX
+#pragma once
+#if 1
 
 #include <osl/interlck.h>
 

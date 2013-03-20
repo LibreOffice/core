@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_PROPERTY_GROUP_HXX
-#define XMLOFF_PROPERTY_GROUP_HXX
+#pragma once
+#if 1
 
 //......................................................................................................................
 namespace xmloff

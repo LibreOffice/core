@@ -64,8 +64,8 @@
 March 2005          Created
  ************************************************************************/
 
-#ifndef _LWPVERSIONEDPOINTER_HXX_
-#define _LWPVERSIONEDPOINTER_HXX_
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 class LwpVersionedPointer : public LwpObject

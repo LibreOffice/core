@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SIMPLETAG_HXX_INCLUDED
-#define SIMPLETAG_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "itag.hxx"
 

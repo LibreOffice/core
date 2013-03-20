@@ -61,8 +61,8 @@
  * Change History
  Jun 2005           Created
  ************************************************************************/
-#ifndef _LWPCHANGEMGR_HXX_
-#define _LWPCHANGEMGR_HXX_
+#pragma once
+#if 1
 
 #include <map>
 #include <vector>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCRIPTING_BASMETHNODE_HXX
-#define SCRIPTING_BASMETHNODE_HXX
+#pragma once
+#if 1
 
 #include "bcholder.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>

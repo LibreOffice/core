@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_CUPSMGR_HXX_
-#define _PSPRINT_CUPSMGR_HXX_
+#pragma once
+#if 1
 
 #include "vcl/printerinfomanager.hxx"
 #include "osl/module.h"

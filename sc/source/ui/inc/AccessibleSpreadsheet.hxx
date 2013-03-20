@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLESPREADSHEET_HXX
-#define _SC_ACCESSIBLESPREADSHEET_HXX
+#pragma once
+#if 1
 
 #include "AccessibleTableBase.hxx"
 #include "viewdata.hxx"

@@ -61,8 +61,8 @@
  * Change History
  April 2005         Created
  ************************************************************************/
-#ifndef _LWPROWLAYOUT_HXX
-#define _LWPROWLAYOUT_HXX
+#pragma once
+#if 1
 
 #include "lwplayout.hxx"
 #include "lwptablelayout.hxx"

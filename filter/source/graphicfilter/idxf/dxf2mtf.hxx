@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXF2MTF_HXX
-#define _DXF2MTF_HXX
+#pragma once
+#if 1
 
 #include "dxfreprd.hxx"
 #include <vcl/font.hxx>

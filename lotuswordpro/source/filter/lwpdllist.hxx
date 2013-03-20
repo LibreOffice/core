@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDLLIST_HXX_
-#define _LWPDLLIST_HXX_
+#pragma once
+#if 1
 #include "lwpheader.hxx"
 class LwpDLList
 {

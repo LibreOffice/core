@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SGFFILT_HXX
-#define _SGFFILT_HXX
+#pragma once
+#if 1
 #include <tools/urlobj.hxx>
 
 sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion);

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IDOCUMENTLISTITEMS_HXX_INCLUDED
-#define IDOCUMENTLISTITEMS_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <vector>
 #include <tools/string.hxx>

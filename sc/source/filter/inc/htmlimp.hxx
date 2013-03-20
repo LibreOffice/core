@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_HTMLIMP_HXX
-#define SC_HTMLIMP_HXX
+#pragma once
+#if 1
 
 #include "eeimport.hxx"
 

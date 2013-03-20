@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
-#define EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

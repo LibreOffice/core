@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTKSALMENU_HXX
-#define GTKSALMENU_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #ifdef ENABLE_GIO

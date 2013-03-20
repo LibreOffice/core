@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_LIMITED_FORMATS_HXX_
-#define _FORMS_LIMITED_FORMATS_HXX_
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>

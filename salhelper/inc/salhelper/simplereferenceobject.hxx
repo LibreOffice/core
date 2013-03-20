@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#define _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#pragma once
+#if 1
 
 #include "osl/interlck.h"
 #include "sal/types.h"

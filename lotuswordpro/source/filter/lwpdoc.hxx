@@ -63,8 +63,8 @@
  Jun 2005           Code cleaning by change some members to local variables in Read()
  ************************************************************************/
 
-#ifndef _LWPDOCUMENT_HXX
-#define _LWPDOCUMENT_HXX
+#pragma once
+#if 1
 
 
 #include "lwpobj.hxx"

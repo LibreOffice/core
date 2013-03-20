@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_FLOATINGWINDOWACCESSIBLE_HXX
-#define ACCESSIBILITY_FLOATINGWINDOWACCESSIBLE_HXX
+#pragma once
+#if 1
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 

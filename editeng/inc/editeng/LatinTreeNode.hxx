@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LATINTREENODE_HXX
-#define LATINTREENODE_HXX
+#pragma once
+#if 1
 
 #include <editeng/Node.hxx>
 

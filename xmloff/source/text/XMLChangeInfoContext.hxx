@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _XMLOFF_XMLCHANGEINFOCONTEXT_HXX
-#define _XMLOFF_XMLCHANGEINFOCONTEXT_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>

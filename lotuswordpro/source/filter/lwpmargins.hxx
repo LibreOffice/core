@@ -54,8 +54,8 @@
  *
  ************************************************************************/
 //
-#ifndef     _LWPMARGINS_HXX
-#define     _LWPMARGINS_HXX
+#pragma once
+#if 1
 
 #include "lwpobjstrm.hxx"
 #include "lwptools.hxx"

@@ -57,8 +57,8 @@
  * @file
  * Image object.
  ************************************************************************/
-#ifndef     _XFIMAGE_HXX
-#define     _XFIMAGE_HXX
+#pragma once
+#if 1
 
 #include "xfframe.hxx"
 

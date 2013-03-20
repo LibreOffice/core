@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_PAGE_SHAPE_HXX
-#define _SD_ACCESSIBILITY_ACCESSIBLE_PAGE_SHAPE_HXX
+#pragma once
+#if 1
 
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>

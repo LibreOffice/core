@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IIPAOBJ_HXX_
-#define _IIPAOBJ_HXX_
+#pragma once
+#if 1
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
 #endif

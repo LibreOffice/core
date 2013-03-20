@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
-#define _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
+#pragma once
+#if 1
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 
 namespace com { namespace sun { namespace star {

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_B2DPOLYRANGE_HXX
-#define _BGFX_RANGE_B2DPOLYRANGE_HXX
+#pragma once
+#if 1
 
 #include <o3tl/cow_wrapper.hxx>
 #include <boost/tuple/tuple.hpp>

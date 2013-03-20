@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_COLORTRAITS_HXX
-#define INCLUDED_BASEBMP_COLORTRAITS_HXX
+#pragma once
+#if 1
 
 #include <basebmp/accessoradapters.hxx>
 #include <basebmp/metafunctions.hxx>

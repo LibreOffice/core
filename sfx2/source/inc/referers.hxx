@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_REFERERS_HXX
-#define _SFX_REFERERS_HXX
+#pragma once
+#if 1
 
 #define SFX_REFERER_USER        "private:user"
 #define SFX_REFERER_APPEVENT    "private:appevent"

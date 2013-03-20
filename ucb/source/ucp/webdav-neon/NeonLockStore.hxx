@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_NEONLOCKSTORE_HXX
-#define INCLUDED_NEONLOCKSTORE_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include "warnings_guard_ne_locks.h"

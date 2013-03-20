@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BOOKMRK_HXX
-#define _BOOKMRK_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/Metadatable.hxx>

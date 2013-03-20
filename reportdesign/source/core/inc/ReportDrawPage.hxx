@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef REPORTDRAWPAGE_HXX_INCLUDED
-#define REPORTDRAWPAGE_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <svx/unopage.hxx>
 #include <com/sun/star/report/XSection.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_PRESENTER_PANE_BORDER_PAINTER_HXX
-#define SDEXT_PRESENTER_PRESENTER_PANE_BORDER_PAINTER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

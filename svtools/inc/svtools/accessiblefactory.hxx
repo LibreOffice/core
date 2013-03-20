@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_ACCESSIBLE_FACTORY_HXX
-#define SVTOOLS_ACCESSIBLE_FACTORY_HXX
+#pragma once
+#if 1
 
 #include "AccessibleBrowseBoxObjType.hxx"
 #include "accessibletableprovider.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_XMLBLOCKIMPORT_HXX
-#define _SW_XMLBLOCKIMPORT_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlimp.hxx>
 #include <tools/string.hxx>

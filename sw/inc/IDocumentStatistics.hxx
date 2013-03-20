@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTSTATISTICS_HXX_INCLUDED
- #define IDOCUMENTSTATISTICS_HXX_INCLUDED
+#pragma once
+#if 1
 
  struct SwDocStat;
 

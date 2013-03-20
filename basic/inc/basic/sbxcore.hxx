@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBXCORE_HXX
-#define _SBXCORE_HXX
+#pragma once
+#if 1
 
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>

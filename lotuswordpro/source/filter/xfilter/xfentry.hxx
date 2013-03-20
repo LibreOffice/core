@@ -57,8 +57,8 @@
  * @file
  * index entry object.
  ************************************************************************/
-#ifndef     _XFENTRY_HXX
-#define     _XFENTRY_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 

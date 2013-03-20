@@ -57,8 +57,8 @@
  * @file
  * List item.
  ************************************************************************/
-#ifndef     _XFLISTITEM_HXX
-#define     _XFLISTITEM_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 #include "xfcontentcontainer.hxx"

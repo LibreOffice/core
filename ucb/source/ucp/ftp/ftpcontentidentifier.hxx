@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPCONTENTIDENTIFIER_HXX_
-#define _FTP_FTPCONTENTIDENTIFIER_HXX_
+#pragma once
+#if 1
 
 #include <vector>
 #include "curl.hxx"

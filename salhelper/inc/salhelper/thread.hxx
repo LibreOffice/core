@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SALHELPER_THREAD_HXX
-#define INCLUDED_SALHELPER_THREAD_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

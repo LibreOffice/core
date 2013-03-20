@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FMUNDO_HXX
-#define _SVX_FMUNDO_HXX
+#pragma once
+#if 1
 
 #include <svx/svdundo.hxx>
 #include <svx/svdouno.hxx>

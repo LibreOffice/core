@@ -57,8 +57,8 @@
  * @file
  * Breaks of paragraph.
  ************************************************************************/
-#ifndef     _XFBREAKS_HXX
-#define     _XFBREAKS_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

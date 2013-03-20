@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SM_WORDEXPORTBASE_HXX
-#define SM_WORDEXPORTBASE_HXX
+#pragma once
+#if 1
 
 #include "node.hxx"
 

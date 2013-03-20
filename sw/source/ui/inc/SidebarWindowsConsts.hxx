@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SIDEBARWINDOWSCONSTS_HXX
-#define _SIDEBARWINDOWSCONSTS_HXX
+#pragma once
+#if 1
 
 namespace sw { namespace sidebarwindows {
 

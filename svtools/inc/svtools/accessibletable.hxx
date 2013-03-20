@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_ACCESSIBLETABLE_HXX
-#define _SVTOOLS_ACCESSIBLETABLE_HXX
+#pragma once
+#if 1
 
 #include <vcl/window.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

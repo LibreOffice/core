@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_CONSTRUCT_BEZIER_HXX
-#define SD_FU_CONSTRUCT_BEZIER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Any.hxx>
 #include "fuconstr.hxx"

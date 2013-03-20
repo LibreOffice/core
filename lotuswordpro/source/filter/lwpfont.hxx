@@ -65,8 +65,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPFONT_HXX
-#define _LWPFONT_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpobjstrm.hxx"

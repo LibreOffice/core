@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_LINE_HXX
-#define SD_FU_LINE_HXX
+#pragma once
+#if 1
 
 #include "fupoor.hxx"
 

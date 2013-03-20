@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPTOOLS_HXX
-#define _LWPTOOLS_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpobjstrm.hxx"

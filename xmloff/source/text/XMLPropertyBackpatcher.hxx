@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _XMLOFF_XMLPROPERTYBACKPATCHER_HXX
-#define _XMLOFF_XMLPROPERTYBACKPATCHER_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <vector>

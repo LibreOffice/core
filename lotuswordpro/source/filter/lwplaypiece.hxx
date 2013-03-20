@@ -61,8 +61,8 @@
  * Change History
  Jan 28 2005            Created
  ************************************************************************/
-#ifndef _LWPLAYOUTPIECE_HXX
-#define _LWPLAYOUTPIECE_HXX
+#pragma once
+#if 1
 
 #include "lwppiece.hxx"
 #include "lwpbasetype.hxx"

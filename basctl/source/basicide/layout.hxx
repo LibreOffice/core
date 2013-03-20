@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_LAYOUT_HXX
-#define BASCTL_LAYOUT_HXX
+#pragma once
+#if 1
 
 #include <vcl/window.hxx>
 #include <vcl/split.hxx>

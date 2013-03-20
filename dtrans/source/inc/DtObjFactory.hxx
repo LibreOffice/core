@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _DTOBJFACTORY_HXX_
-#define _DTOBJFACTORY_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

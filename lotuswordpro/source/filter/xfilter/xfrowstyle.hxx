@@ -57,8 +57,8 @@
  * @file
  * Table row style, ie. table row height.
  ************************************************************************/
-#ifndef     _XFROWSTYLE_HXX
-#define     _XFROWSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

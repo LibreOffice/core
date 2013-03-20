@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_ERRORBROADCASTER_HXX
-#define FORMS_ERRORBROADCASTER_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>

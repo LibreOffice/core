@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_COMPHELPER_CONFIGURATION_HXX
-#define INCLUDED_COMPHELPER_CONFIGURATION_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSILE_STATIC_TEXT_BASE_HXX_
-#define _SVX_ACCESSILE_STATIC_TEXT_BASE_HXX_
+#pragma once
+#if 1
 
 #include <memory>
 #include <tools/gen.hxx>

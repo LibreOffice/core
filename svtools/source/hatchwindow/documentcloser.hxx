@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __DOCUMENTCLOSER_HXX_
-#define __DOCUMENTCLOSER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

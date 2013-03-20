@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_VECTDLG_HXX
-#define _SD_VECTDLG_HXX
+#pragma once
+#if 1
 
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>

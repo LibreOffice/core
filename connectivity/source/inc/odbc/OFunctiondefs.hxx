@@ -18,8 +18,8 @@
  */
 
 //--------------------------------------------------------------------------
-#ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
-#define _CONNECTIVITY_OFUNCTIONDEFS_HXX_
+#pragma once
+#if 1
 
 #if defined(WNT)
 

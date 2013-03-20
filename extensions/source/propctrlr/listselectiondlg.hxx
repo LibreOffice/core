@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
-#define EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

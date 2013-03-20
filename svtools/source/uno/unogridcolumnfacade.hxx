@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_GRIDCOLUMNFACADE_HXX
-#define SVTOOLS_GRIDCOLUMNFACADE_HXX
+#pragma once
+#if 1
 
 #include "svtools/table/tablemodel.hxx"
 #include "svtools/table/tablecontrol.hxx"

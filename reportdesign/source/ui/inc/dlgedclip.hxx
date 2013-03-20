@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_RPTUICLIP_HXX
-#define _REPORT_RPTUICLIP_HXX
+#pragma once
+#if 1
 
 #include <svtools/transfer.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

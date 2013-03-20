@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_IDL_NNFINDER_HXX
-#define ARY_IDL_NNFINDER_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
 #include "is_ce.hxx"

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OFF_OFAITEM_HXX
-#define _OFF_OFAITEM_HXX
+#pragma once
+#if 1
 
 #include <svl/poolitem.hxx>
 #include <rtl/ref.hxx>

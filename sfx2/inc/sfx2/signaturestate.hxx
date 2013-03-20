@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_SIGNATURESTATE_HXX
-#define SFX2_SIGNATURESTATE_HXX
+#pragma once
+#if 1
 
 // xmlsec05, check with SFX team
 #define SIGNATURESTATE_UNKNOWN                  (sal_Int16)(-1)

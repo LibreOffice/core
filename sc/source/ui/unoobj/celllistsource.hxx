@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CELLLISTSOURCE_HXX
-#define SC_CELLLISTSOURCE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <cppuhelper/compbase4.hxx>

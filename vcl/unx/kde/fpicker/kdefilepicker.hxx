@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _KDEFILEPICKER_HXX_
-#define _KDEFILEPICKER_HXX_
+#pragma once
+#if 1
 
 #include <config_vclplug.h>
 

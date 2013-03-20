@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
-#define _SC_ACCESSIBLEDOCUMENT_HXX
+#pragma once
+#if 1
 
 #include "AccessibleDocumentBase.hxx"
 #include "viewdata.hxx"

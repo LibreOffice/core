@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EPPT_TEXT_HXX
-#define EPPT_TEXT_HXX
+#pragma once
+#if 1
 
 #include "epptbase.hxx"
 #include "epptdef.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PAD_ADDDLG_HXX_
-#define _PAD_ADDDLG_HXX_
+#pragma once
+#if 1
 
 #include "helper.hxx"
 #include "titlectrl.hxx"

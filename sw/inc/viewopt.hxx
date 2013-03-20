@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _VIEWOPT_HXX
-#define _VIEWOPT_HXX
+#pragma once
+#if 1
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <tools/color.hxx>

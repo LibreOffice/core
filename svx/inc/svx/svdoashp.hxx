@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOASHP_HXX
-#define _SVDOASHP_HXX
+#pragma once
+#if 1
 
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OFFAPP_CONNPOOLSETTINGS_HXX_
-#define _OFFAPP_CONNPOOLSETTINGS_HXX_
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>

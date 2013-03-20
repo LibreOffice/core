@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
-#define INCLUDED_JAVAUNOHELPER_SOURCE_VM_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

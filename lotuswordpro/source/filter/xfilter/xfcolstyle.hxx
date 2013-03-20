@@ -57,8 +57,8 @@
  * @file
  * Column style object.
  ************************************************************************/
-#ifndef     _XFCOLSTYLE_HXX
-#define     _XFCOLSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 

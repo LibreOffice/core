@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
-#define _DBACCESS_UI_CALLBACKS_HXX_
+#pragma once
+#if 1
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>

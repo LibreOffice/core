@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_COLROWST_HXX
-#define SC_COLROWST_HXX
+#pragma once
+#if 1
 
 #include "xiroot.hxx"
 #include <mdds/flat_segment_tree.hpp>

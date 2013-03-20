@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _LABFMT_HXX
-#define _LABFMT_HXX
+#pragma once
+#if 1
 
 #include "swuilabimp.hxx"
 #include "labimg.hxx"

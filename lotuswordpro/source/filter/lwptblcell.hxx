@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPLAYOUTNUMERICSOVERRIDE_HXX_
-#define _LWPLAYOUTNUMERICSOVERRIDE_HXX_
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpatomholder.hxx"

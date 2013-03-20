@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef _CUI_CERTPATH_HXX
-#define _CUI_CERTPATH_HXX
+#pragma once
+#if 1
 
 #include <sfx2/basedlgs.hxx>
 #include <svx/simptabl.hxx>

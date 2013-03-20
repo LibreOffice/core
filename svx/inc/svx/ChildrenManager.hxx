@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_HXX
-#define _SVX_ACCESSIBILITY_CHILDREN_MANAGER_HXX
+#pragma once
+#if 1
 
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>

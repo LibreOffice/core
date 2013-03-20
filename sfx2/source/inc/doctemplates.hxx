@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_DOCTEMPLATES_HXX_
-#define _SFX_DOCTEMPLATES_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>

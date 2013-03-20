@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNODEVTOOLS_TYPEMANAGER_HXX
-#define INCLUDED_UNODEVTOOLS_TYPEMANAGER_HXX
+#pragma once
+#if 1
 
 #include <codemaker/typemanager.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_SCRIPTINFO_HXX
-#define SW_SCRIPTINFO_HXX
+#pragma once
+#if 1
 
 #include <list>
 #include <deque>

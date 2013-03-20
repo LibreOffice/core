@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __SO_ENVIRON_HXX__
-#define __SO_ENVIRON_HXX__
+#pragma once
+#if 1
 
 
 

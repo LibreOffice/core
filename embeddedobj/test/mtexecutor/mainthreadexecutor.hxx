@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MAINTHREADEXECUTOR_HXX_
-#define __MAINTHREADEXECUTOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

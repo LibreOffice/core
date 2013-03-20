@@ -21,8 +21,8 @@
  * Copyright 2008 by Novell, Inc.
  */
 
-#ifndef _ODFFIELDS_HXX
-#define _ODFFIELDS_HXX
+#pragma once
+#if 1
 
 
 #define ODF_FORMTEXT "vnd.oasis.opendocument.field.FORMTEXT"

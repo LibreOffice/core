@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _STARMATHIMPORTUTILS_HXX
-#define _STARMATHIMPORTUTILS_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <oox/token/tokens.hxx>

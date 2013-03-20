@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NULLCANVAS_USAGECOUNTER_HXX
-#define _NULLCANVAS_USAGECOUNTER_HXX
+#pragma once
+#if 1
 
 #include <osl/interlck.h>
 #include <boost/current_function.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TARGET_HXX
-#define SC_TARGET_HXX
+#pragma once
+#if 1
 
 #include <svl/undo.hxx>
 

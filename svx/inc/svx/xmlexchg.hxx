@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XMLEXCHG_HXX_
-#define _SVX_XMLEXCHG_HXX_
+#pragma once
+#if 1
 
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"

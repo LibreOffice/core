@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_CUSTOMSPRITE_HXX
-#define _CPPCANVAS_CUSTOMSPRITE_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

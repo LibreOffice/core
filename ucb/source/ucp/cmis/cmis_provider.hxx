@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef CMIS_PROVIDER_HXX
-#define CMIS_PROVIDER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/Property.hpp>
 #include <ucbhelper/providerhelper.hxx>

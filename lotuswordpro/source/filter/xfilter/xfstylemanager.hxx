@@ -57,8 +57,8 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
-#ifndef     _XFSTYLEMANAGER_HXX
-#define     _XFSTYLEMANAGER_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xffontdecl.hxx"

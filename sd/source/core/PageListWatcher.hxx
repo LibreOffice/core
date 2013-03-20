@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PAGE_LIST_WATCHER_HXX
-#define PAGE_LIST_WATCHER_HXX
+#pragma once
+#if 1
 
 #include "pres.hxx"
 #include <sal/types.h>

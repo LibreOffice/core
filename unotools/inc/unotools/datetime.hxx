@@ -20,8 +20,8 @@
 //= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_DATETIME_HXX_
-#define _UNOTOOLS_DATETIME_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>

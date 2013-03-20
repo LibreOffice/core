@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SCRIPT_FRAMEWORK_MISCUTILS_HXX_
-#define _SCRIPT_FRAMEWORK_MISCUTILS_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <tools/urlobj.hxx>

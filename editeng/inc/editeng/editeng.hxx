@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // MyEDITENG, due to exported EditEng
-#ifndef _MyEDITENG_HXX
-#define _MyEDITENG_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <vector>

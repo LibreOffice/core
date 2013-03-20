@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PASSWORDDLG_HXX
-#define PASSWORDDLG_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <svtools/stdctrl.hxx>

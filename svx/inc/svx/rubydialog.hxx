@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_RUBYDLG_HXX_
-#define _SVX_RUBYDLG_HXX_
+#pragma once
+#if 1
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>

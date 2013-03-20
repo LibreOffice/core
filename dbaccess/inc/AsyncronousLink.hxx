@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_ASYNCRONOUSLINK_HXX
-#define DBAUI_ASYNCRONOUSLINK_HXX
+#pragma once
+#if 1
 
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>

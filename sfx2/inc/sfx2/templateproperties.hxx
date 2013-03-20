@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_TEMPLATEPROPERTIES_HXX__
-#define __SFX2_TEMPLATEPROPERTIES_HXX__
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>

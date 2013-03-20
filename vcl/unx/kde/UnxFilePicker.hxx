@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNXFILEPICKER_HXX_
-#define _UNXFILEPICKER_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase5.hxx>
 #include <osl/conditn.hxx>

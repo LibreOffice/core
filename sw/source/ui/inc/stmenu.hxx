@@ -19,8 +19,8 @@
 
 // SMARTTAGS
 
-#ifndef _STMENU_HXX
-#define _STMENU_HXX
+#pragma once
+#if 1
 
 #include <vcl/menu.hxx>
 

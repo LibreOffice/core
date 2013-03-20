@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
-#define _BGFX_VECTOR_B2DVECTOR_HXX
+#pragma once
+#if 1
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2ivector.hxx>

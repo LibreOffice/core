@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_BREAKITERATOR_TH_HXX_
-#define _I18N_BREAKITERATOR_TH_HXX_
+#pragma once
+#if 1
 #include <breakiterator_ctl.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {

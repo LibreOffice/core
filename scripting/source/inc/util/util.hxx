@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
-#define _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
+#pragma once
+#if 1
 
 #endif //_COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 

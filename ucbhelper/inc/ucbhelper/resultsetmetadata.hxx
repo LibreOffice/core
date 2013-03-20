@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_RESULTSETMETADATA_HXX
-#define _UCBHELPER_RESULTSETMETADATA_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>

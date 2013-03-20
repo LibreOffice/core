@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_GLUECTRL_HXX
-#define SD_GLUECTRL_HXX
+#pragma once
+#if 1
 
 #include <vcl/lstbox.hxx>
 #include <sfx2/tbxctrl.hxx>

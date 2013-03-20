@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLCNITM_HXX
-#define _XMLOFF_XMLCNITM_HXX
+#pragma once
+#if 1
 
 // This has class been moved to editeng, or why was there a dupe?
 #include <editeng/xmlcnitm.hxx>

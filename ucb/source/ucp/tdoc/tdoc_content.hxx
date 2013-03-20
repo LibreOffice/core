@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TDOC_CONTENT_HXX
-#define INCLUDED_TDOC_CONTENT_HXX
+#pragma once
+#if 1
 
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>

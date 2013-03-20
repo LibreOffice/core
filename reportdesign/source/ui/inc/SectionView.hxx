@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_SECTIONVIEW_HXX
-#define _REPORT_SECTIONVIEW_HXX
+#pragma once
+#if 1
 
 
 #include <svx/svdview.hxx>

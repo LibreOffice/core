@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLIMP_HXX
-#define _XMLOFF_XMLIMP_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"

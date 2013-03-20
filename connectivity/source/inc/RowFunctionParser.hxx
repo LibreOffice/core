@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED
-#define CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>

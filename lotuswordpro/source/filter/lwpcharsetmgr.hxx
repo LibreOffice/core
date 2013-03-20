@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPCHARSETMGR_HXX
-#define _LWPCHARSETMGR_HXX
+#pragma once
+#if 1
 
 #include "lwpfilehdr.hxx"
 #include <map>

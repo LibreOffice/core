@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _STARMATHIMPORT_HXX
-#define _STARMATHIMPORT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/gen.hxx>

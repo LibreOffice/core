@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_ROOTNODE_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_ROOTNODE_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

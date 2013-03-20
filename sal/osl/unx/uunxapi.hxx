@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_UUNXAPI_HXX_
-#define _OSL_UUNXAPI_HXX_
+#pragma once
+#if 1
 
 #ifndef _OSL_UUNXAPI_H_
 #include "uunxapi.h"

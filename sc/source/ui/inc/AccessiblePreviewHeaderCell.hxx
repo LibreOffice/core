@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEPREVIEWHEADERCELL_HXX
-#define _SC_ACCESSIBLEPREVIEWHEADERCELL_HXX
+#pragma once
+#if 1
 
 #include "AccessibleContextBase.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>

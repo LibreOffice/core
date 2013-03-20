@@ -19,8 +19,8 @@
 
 
 
-#ifndef INCLUDED_SERFSESSION_HXX
-#define INCLUDED_SERFSESSION_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

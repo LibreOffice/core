@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef ACCESSIBILITY_EXT_ACCESSIBILEBROWSEBOXTABLECELL_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBILEBROWSEBOXTABLECELL_HXX
+#pragma once
+#if 1
 
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
 #include <comphelper/accessibletexthelper.hxx>

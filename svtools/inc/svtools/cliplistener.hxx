@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CLIPLISTENER_HXX
-#define _CLIPLISTENER_HXX
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>

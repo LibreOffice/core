@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DTRANS_X11_DNDCONTEXT_HXX
-#define _DTRANS_X11_DNDCONTEXT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>

@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _FPS_OFFICE_RESMGR_HXX_
-#define _FPS_OFFICE_RESMGR_HXX_
+#pragma once
+#if 1
 
 #include <rtl/instance.hxx>
 #include <tools/resmgr.hxx>

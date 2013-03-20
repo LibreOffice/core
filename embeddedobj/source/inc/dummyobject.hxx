@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INC_DUMMYOBJECT_HXX_
-#define _INC_DUMMYOBJECT_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>

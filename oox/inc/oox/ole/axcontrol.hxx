@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_OLE_AXCONTROL_HXX
-#define OOX_OLE_AXCONTROL_HXX
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/binarystreambase.hxx"

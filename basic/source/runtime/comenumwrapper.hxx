@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMENUMWRAPPER_HXX
-#define _COMENUMWRAPPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/script/XInvocation.hpp>

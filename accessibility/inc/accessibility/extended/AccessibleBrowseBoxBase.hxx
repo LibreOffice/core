@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXBASE_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXBASE_HXX
+#pragma once
+#if 1
 
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <rtl/ustring.hxx>

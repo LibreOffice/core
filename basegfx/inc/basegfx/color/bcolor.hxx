@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_COLOR_BCOLOR_HXX
-#define _BGFX_COLOR_BCOLOR_HXX
+#pragma once
+#if 1
 
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <com/sun/star/uno/Reference.hxx>

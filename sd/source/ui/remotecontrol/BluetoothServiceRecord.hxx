@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef BLUETOOTH_SERVICE_RECORD_HXX
-#define BLUETOOTH_SERVICE_RECORD_HXX
+#pragma once
+#if 1
 
 // FIXME: look into sharing definitions across OS's (i.e. UUID and port ).
 // Look into dynamically determining which ports are available.

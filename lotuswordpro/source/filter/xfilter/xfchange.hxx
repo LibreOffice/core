@@ -61,8 +61,8 @@
  * Change History
  Jun 2005           Created
  ************************************************************************/
-#ifndef _XFCHANGE_HXX_
-#define _XFCHANGE_HXX_
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "ixfstream.hxx"

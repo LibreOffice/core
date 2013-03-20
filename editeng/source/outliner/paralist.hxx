@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PARALIST_HXX
-#define _PARALIST_HXX
+#pragma once
+#if 1
 
 #include <vector>
 

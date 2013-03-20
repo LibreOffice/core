@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _RESOURCE_HXX
-#define     _RESOURCE_HXX
+#pragma once
+#if 1
 
 #define     IMPLEMENTATION_NAME         "com.ibm.ILWPImportFilter"
 

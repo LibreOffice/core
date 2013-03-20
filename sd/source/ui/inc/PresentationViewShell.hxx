@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
-#define SD_PRESENTATION_VIEW_SHELL_HXX
+#pragma once
+#if 1
 
 #ifndef SD_DRAW_VIEW_SHELL
 #include "DrawViewShell.hxx"

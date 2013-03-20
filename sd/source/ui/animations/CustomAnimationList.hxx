@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_CUSTOMANIMATIONLIST_HXX
-#define _SD_CUSTOMANIMATIONLIST_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <svtools/treelistbox.hxx>

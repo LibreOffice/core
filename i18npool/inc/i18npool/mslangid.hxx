@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NISOLANG_MSLANGID_HXX
-#define INCLUDED_I18NISOLANG_MSLANGID_HXX
+#pragma once
+#if 1
 
 #include <sal/config.h>
 

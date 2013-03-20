@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBXFORM_HXX
-#define _SBXFORM_HXX
+#pragma once
+#if 1
 
 //====================================================================
 // Implementation class for Basic command: Format$( d,formatStr )

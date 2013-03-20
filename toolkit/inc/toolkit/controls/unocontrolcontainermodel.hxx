@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_CONTROLS_UNOCONTROLCONTAINERMODEL_HXX_
-#define _TOOLKIT_CONTROLS_UNOCONTROLCONTAINERMODEL_HXX_
+#pragma once
+#if 1
 
 
 #include <toolkit/controls/unocontrolmodel.hxx>

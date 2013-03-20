@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_HTMLATTR_HXX
-#define _SD_HTMLATTR_HXX
+#pragma once
+#if 1
 
 #include <vcl/ctrl.hxx>
 #include <tools/color.hxx>

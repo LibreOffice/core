@@ -57,8 +57,8 @@
  * @file
  * Interfer for all style object.
  ************************************************************************/
-#ifndef     _IXFSTYLE_HXX
-#define     _IXFSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 /**

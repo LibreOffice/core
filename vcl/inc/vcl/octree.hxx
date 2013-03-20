@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_OCTREE_HXX
-#define _SV_OCTREE_HXX
+#pragma once
+#if 1
 
 #include <vcl/salbtype.hxx>
 #include <vcl/dllapi.h>

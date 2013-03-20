@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPHEADERS_HXX
-#define _LWPHEADERS_HXX
+#pragma once
+#if 1
 
 #include <math.h>
 #include <vector>

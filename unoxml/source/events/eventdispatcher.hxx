@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EVENT_EVENT_DISPATCHER_HXX
-#define EVENT_EVENT_DISPATCHER_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <vector>

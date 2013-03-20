@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RESULTSET_HXX
-#define _RESULTSET_HXX
+#pragma once
+#if 1
 
 #include <ucbhelper/resultsethelper.hxx>
 #include <rtl/ref.hxx>

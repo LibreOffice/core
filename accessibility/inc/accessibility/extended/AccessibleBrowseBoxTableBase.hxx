@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXTABLEBASE_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXTABLEBASE_HXX
+#pragma once
+#if 1
 
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
 #include <cppuhelper/implbase1.hxx>

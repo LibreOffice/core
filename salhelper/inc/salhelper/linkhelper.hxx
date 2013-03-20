@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef _SALHELPER_LINKHELPER_HXX
-#define _SALHELPER_LINKHELPER_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_RESTRICTEDPATHS_HXX
-#define SVTOOLS_RESTRICTEDPATHS_HXX
+#pragma once
+#if 1
 
 #include <svl/urlfilter.hxx>
 #include <svl/svldllapi.h>

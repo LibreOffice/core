@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFTOKENIZER_HXX_
-#define _RTFTOKENIZER_HXX_
+#pragma once
+#if 1
 
 #include <rtfdocumentimpl.hxx>
 

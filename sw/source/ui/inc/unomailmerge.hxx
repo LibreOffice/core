@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOMAILMERGE_HXX_
-#define _UNOMAILMERGE_HXX_
+#pragma once
+#if 1
 
 #include <functional>
 #include <cppuhelper/implbase5.hxx> // WeakImplHelper4

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_HTOOLS_HXX
-#define CONNECTIVITY_HTOOLS_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustrbuf.hxx>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_RANGE_HXX
-#define SC_VBA_RANGE_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

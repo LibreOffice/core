@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RPTUI_PROPERTYSETFORWARD_HXX
-#define RPTUI_PROPERTYSETFORWARD_HXX
+#pragma once
+#if 1
 
 #include "dllapi.h"
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

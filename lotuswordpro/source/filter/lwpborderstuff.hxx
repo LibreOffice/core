@@ -57,8 +57,8 @@
 * @file
 * Border stuff of Wordpro.
 ************************************************************************/
-#ifndef     _LWPBORDERSTUFF_HXX
-#define     _LWPBORDERSTUFF_HXX
+#pragma once
+#if 1
 
 #include "lwpcolor.hxx"
 

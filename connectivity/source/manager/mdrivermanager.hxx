@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_DRIVERMANAGER_HXX_
-#define _CONNECTIVITY_DRIVERMANAGER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

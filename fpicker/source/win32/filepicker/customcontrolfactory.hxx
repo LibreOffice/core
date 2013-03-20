@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUSTOMCONTROLFACTORY_HXX_
-#define _CUSTOMCONTROLFACTORY_HXX_
+#pragma once
+#if 1
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

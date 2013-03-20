@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SM_OOXMLEXPORT_HXX
-#define SM_OOXMLEXPORT_HXX
+#pragma once
+#if 1
 
 #include "wordexportbase.hxx"
 

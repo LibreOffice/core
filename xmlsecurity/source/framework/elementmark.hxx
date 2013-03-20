@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ELEMENTMARK_HXX
-#define _ELEMENTMARK_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkType.hpp>

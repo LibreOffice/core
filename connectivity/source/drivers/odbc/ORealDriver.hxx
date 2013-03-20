@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_ODBC_OREALDRIVER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_ODBC_OREALDRIVER_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

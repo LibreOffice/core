@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDHDL_HXX
-#define _SVDHDL_HXX
+#pragma once
+#if 1
 
 #include <tools/gen.hxx>
 

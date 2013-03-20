@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_TRANSITIONFACTORY_HXX
-#define INCLUDED_SLIDESHOW_TRANSITIONFACTORY_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/presentation/XTransitionFactory.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_IDERID_HXX
-#define BASCTL_IDERID_HXX
+#pragma once
+#if 1
 
 #include <tools/resid.hxx>
 

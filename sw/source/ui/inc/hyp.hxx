@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HYP_HXX
-#define _HYP_HXX
+#pragma once
+#if 1
 
 #include <tools/link.hxx>
 #include <editeng/splwrap.hxx>

@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPINDEXMANAGER_HXX
-#define _LWPINDEXMANAGER_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include "lwpobjhdr.hxx"

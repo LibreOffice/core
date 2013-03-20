@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_DEBUG_HELPER_HXX
-#define SC_DEBUG_HELPER_HXX
+#pragma once
+#if 1
 
 /**
  * Print nicely formatted sheet content to stdout.  Indispensable when

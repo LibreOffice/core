@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FORMULA_HXX
-#define SC_FORMULA_HXX
+#pragma once
+#if 1
 
 #include "anyrefdg.hxx"
 #include "global.hxx"       // ScAddress

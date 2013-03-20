@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FILTER_CONFIG_ITEM_HXX_
-#define _FILTER_CONFIG_ITEM_HXX_
+#pragma once
+#if 1
 
 #include <vcl/dllapi.h>
 

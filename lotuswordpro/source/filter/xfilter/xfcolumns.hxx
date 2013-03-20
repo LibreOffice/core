@@ -57,8 +57,8 @@
  * @file
  * Columns styles for section, or paragraph.
  ************************************************************************/
-#ifndef     _XFCOLUMNS_HXX
-#define     _XFCOLUMNS_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcolor.hxx"

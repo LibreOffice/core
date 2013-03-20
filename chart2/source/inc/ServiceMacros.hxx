@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _APPHELPER_SERVICEMACROS_HXX
-#define _APPHELPER_SERVICEMACROS_HXX
+#pragma once
+#if 1
 
 /*
 to use these macros the supported services and the implementation name needs to be static

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HIERARCHYPROVIDER_HXX
-#define _HIERARCHYPROVIDER_HXX
+#pragma once
+#if 1
 
 #include <boost/unordered_map.hpp>
 #include <ucbhelper/providerhelper.hxx>

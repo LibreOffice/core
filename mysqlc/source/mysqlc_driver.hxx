@@ -24,8 +24,8 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef MYSQLC_SDRIVER_HXX
-#define MYSQLC_SDRIVER_HXX
+#pragma once
+#if 1
 
 #include "mysqlc_connection.hxx"
 

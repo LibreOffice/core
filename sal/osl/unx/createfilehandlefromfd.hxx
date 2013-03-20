@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_CREATEFILEHANDLEFROMFD_HXX
-#define INCLUDED_SAL_OSL_UNX_CREATEFILEHANDLEFROMFD_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EPPT_HXX_
-#define _EPPT_HXX_
+#pragma once
+#if 1
 #include <vector>
 #include "escherex.hxx"
 #include <sal/types.h>

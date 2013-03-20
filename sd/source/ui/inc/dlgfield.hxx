@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_DLGFIELD_HXX
-#define _SD_DLGFIELD_HXX
+#pragma once
+#if 1
 
 
 #include <vcl/lstbox.hxx>

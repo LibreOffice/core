@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LUIDL_CX_IDLCO_HXX
-#define LUIDL_CX_IDLCO_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
     // BASE CLASSES

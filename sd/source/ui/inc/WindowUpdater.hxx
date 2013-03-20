@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_OUTPUT_DEVICE_UPDATER_HXX
-#define SD_OUTPUT_DEVICE_UPDATER_HXX
+#pragma once
+#if 1
 
 #include <svl/lstner.hxx>
 #include <svl/ctloptions.hxx>

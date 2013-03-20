@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASOBJ_HXX
-#define _BASOBJ_HXX
+#pragma once
+#if 1
 
 #include <tools/ref.hxx>
 #include <bastype.hxx>

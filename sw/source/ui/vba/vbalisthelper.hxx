@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef SW_VBA_LISTHELPER_HXX
-#define SW_VBA_LISTHELPER_HXX
+#pragma once
+#if 1
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>

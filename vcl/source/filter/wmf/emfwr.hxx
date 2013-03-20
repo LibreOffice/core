@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EMFWR_HXX
-#define _EMFWR_HXX
+#pragma once
+#if 1
 
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>

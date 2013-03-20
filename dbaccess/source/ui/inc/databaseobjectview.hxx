@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_DATABASE_OBJECT_VIEW_HXX
-#define DBACCESS_DATABASE_OBJECT_VIEW_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>

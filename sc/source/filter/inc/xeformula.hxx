@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XEFORMULA_HXX
-#define SC_XEFORMULA_HXX
+#pragma once
+#if 1
 
 #include "xlformula.hxx"
 #include "xeroot.hxx"

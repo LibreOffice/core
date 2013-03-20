@@ -18,8 +18,8 @@
  */
 
 
-#ifndef KEYWORDSTAG_HXX_INCLUDED
-#define KEYWORDSTAG_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "itag.hxx"
 

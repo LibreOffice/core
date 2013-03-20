@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
-#define CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 

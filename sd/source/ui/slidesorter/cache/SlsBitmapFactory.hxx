@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_PREVIEW_BITMAP_FACTORY_HXX
-#define SD_SLIDESORTER_PREVIEW_BITMAP_FACTORY_HXX
+#pragma once
+#if 1
 
 #include "PreviewRenderer.hxx"
 #include <boost/shared_ptr.hpp>

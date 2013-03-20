@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _XFTEXTBOXSTYLE_HXX
-#define     _XFTEXTBOXSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

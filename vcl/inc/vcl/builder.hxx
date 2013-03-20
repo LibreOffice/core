@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _VCLBUILDER_HXX
-#define _VCLBUILDER_HXX
+#pragma once
+#if 1
 
 #include <typeinfo>
 #include <vcl/dllapi.h>

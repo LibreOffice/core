@@ -19,8 +19,8 @@
 
 
 
-#ifndef INCLUDED_SERFTYPES_HXX
-#define INCLUDED_SERFTYPES_HXX
+#pragma once
+#if 1
 
 #include <serf.h>
 

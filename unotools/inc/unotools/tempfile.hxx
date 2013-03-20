@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#define _UNOTOOLS_TEMPFILE_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include <tools/stream.hxx>

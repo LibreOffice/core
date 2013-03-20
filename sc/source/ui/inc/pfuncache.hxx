@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PFUNCACHE_HXX
-#define SC_PFUNCACHE_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <tools/gen.hxx>

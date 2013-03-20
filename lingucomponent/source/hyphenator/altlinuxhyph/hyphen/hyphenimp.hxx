@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _LINGU2_HYPHENIMP_HXX_
-#define _LINGU2_HYPHENIMP_HXX_
+#pragma once
+#if 1
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations

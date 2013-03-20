@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_ARRAY_HXX
-#define HEADER_PQ_ARRAY_HXX
+#pragma once
+#if 1
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdbc/XArray.hpp>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TRANSFORMER_HXX
-#define _XMLOFF_TRANSFORMER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

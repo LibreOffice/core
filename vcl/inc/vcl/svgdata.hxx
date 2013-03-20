@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SVGDATA_HXX
-#define _SV_SVGDATA_HXX
+#pragma once
+#if 1
 
 #include <basegfx/range/b2drange.hxx>
 #include <boost/shared_array.hpp>

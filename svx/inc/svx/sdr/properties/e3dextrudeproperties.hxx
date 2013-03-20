@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_PROPERTIES_E3DEXTRUDEPROPERTIES_HXX
-#define _SDR_PROPERTIES_E3DEXTRUDEPROPERTIES_HXX
+#pragma once
+#if 1
 
 #include <svx/sdr/properties/e3dcompoundproperties.hxx>
 #include "svx/svxdllapi.h"

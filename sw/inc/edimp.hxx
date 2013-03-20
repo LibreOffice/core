@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDIMP_HXX
-#define _EDIMP_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>

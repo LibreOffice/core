@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef LIMIT_BOX_HXX
-#define LIMIT_BOX_HXX
+#pragma once
+#if 1
 
 #include <vcl/field.hxx>
 #include <rtl/ustring.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLETABLISTBOXTABLE_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBLETABLISTBOXTABLE_HXX
+#pragma once
+#if 1
 
 #include "AccessibleBrowseBoxTable.hxx"
 #include <comphelper/uno3.hxx>

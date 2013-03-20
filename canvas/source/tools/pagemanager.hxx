@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_PAGEMANAGER_HXX
-#define INCLUDED_CANVAS_PAGEMANAGER_HXX
+#pragma once
+#if 1
 
 #include <basegfx/vector/b2isize.hxx>
 #include <canvas/rendering/irendermodule.hxx>

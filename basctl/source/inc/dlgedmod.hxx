@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_DLGEDMOD_HXX
-#define BASCTL_DLGEDMOD_HXX
+#pragma once
+#if 1
 
 #include <svx/svdmodel.hxx>
 

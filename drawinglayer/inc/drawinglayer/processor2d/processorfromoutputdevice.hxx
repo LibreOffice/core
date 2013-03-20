@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PROCESSOR_FROM_OUTPUTDEVICE_HXX
-#define _PROCESSOR_FROM_OUTPUTDEVICE_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include "drawinglayer/drawinglayerdllapi.h"

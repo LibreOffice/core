@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPDIRP_HXX_
-#define _FTP_FTPDIRP_HXX_
+#pragma once
+#if 1
 
 #include <osl/time.h>
 #include <rtl/ustring.hxx>

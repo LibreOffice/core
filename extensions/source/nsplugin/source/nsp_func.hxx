@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __NSP_FUNC_HXX
-#define __NSP_FUNC_HXX
+#pragma once
+#if 1
 
 
 // Some function different from UNIX and Window.

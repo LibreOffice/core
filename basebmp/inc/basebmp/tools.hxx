@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_TOOLS_HXX
-#define INCLUDED_BASEBMP_TOOLS_HXX
+#pragma once
+#if 1
 
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/point/b2ipoint.hxx>

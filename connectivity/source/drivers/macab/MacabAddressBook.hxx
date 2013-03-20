@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MACAB_ADDRESSBOOK_HXX_
-#define _CONNECTIVITY_MACAB_ADDRESSBOOK_HXX_
+#pragma once
+#if 1
 
 #include "MacabRecords.hxx"
 #include "MacabGroup.hxx"

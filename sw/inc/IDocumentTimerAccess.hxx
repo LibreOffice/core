@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
- #define IDOCUMENTTIMERACCESS_HXX_INCLUDED
+#pragma once
+#if 1
 
  /** Manipulate background jobs of the document. It starts with a mode of
  'started' and a block count of 0.

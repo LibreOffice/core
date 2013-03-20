@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef UNOTOOLS_CONFIGVALUECONTAINER_HXX
-#define UNOTOOLS_CONFIGVALUECONTAINER_HXX
+#pragma once
+#if 1
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 

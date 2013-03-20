@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GOODIES_RENDERER_HXX
-#define _GOODIES_RENDERER_HXX
+#pragma once
+#if 1
 
 #include <tools/gen.hxx>
 #include <comphelper/propertysethelper.hxx>

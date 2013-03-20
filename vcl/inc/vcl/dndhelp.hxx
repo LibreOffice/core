@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_DNDHELP_HXX
-#define _VCL_DNDHELP_HXX
+#pragma once
+#if 1
 
 #include <vcl/dllapi.h>
 #include <cppuhelper/weak.hxx>

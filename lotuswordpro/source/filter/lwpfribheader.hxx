@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPFRIBHEADER_HXX
-#define _LWPFRIBHEADER_HXX
+#pragma once
+#if 1
 
 #define FRIB_TAG_NOUNICODE 0x40 // Don't xlate text to/from Unicode
 #define FRIB_TAG_MODIFIER 0x80  // This frib has a modifier on it

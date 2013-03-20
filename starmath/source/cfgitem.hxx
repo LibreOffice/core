@@ -21,8 +21,8 @@
 #pragma hdrstop
 #endif
 
-#ifndef _MATH_CFGITEM_HXX_
-#define _MATH_CFGITEM_HXX_
+#pragma once
+#if 1
 
 #include <deque>
 #include <vector>

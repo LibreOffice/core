@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLPANEL_CONTROLS_MASTER_PAGE_DESCRIPTOR_HXX
-#define SD_TOOLPANEL_CONTROLS_MASTER_PAGE_DESCRIPTOR_HXX
+#pragma once
+#if 1
 
 #include "MasterPageContainer.hxx"
 #include <boost/shared_ptr.hpp>

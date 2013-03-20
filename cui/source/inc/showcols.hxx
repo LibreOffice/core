@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_SHOWCOLS_HXX
-#define _SVX_SHOWCOLS_HXX
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>

@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef UNX_GTK_INC_GTKPRINTWRAPPER_HXX_INCLUDED
-#define UNX_GTK_INC_GTKPRINTWRAPPER_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <boost/noncopyable.hpp>
 

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_TPACTION_HXX
-#define _SD_TPACTION_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>

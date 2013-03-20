@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _BGFX_TOOLS_ZOOMTOOLS_HXX
-#define _BGFX_TOOLS_ZOOMTOOLS_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>

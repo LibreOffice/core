@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_UNDORANGENAME_HXX__
-#define __SC_UNDORANGENAME_HXX__
+#pragma once
+#if 1
 
 #include "undobase.hxx"
 #include "rangenam.hxx"

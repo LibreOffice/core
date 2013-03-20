@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWFORMATCLIPBOARD_HXX
-#define _SWFORMATCLIPBOARD_HXX
+#pragma once
+#if 1
 
 // header for class SwWrtShell
 #include <wrtsh.hxx>

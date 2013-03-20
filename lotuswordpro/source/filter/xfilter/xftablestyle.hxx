@@ -57,8 +57,8 @@
  * @file
  * Table style.
  ************************************************************************/
-#ifndef     _XFTABLESTYLE_HXX
-#define     _XFTABLESTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 #include "xfmargins.hxx"

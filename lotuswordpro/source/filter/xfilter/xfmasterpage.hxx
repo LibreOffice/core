@@ -57,8 +57,8 @@
  * @file
  * Master page object which was used to apply a layout to the pages.
  ************************************************************************/
-#ifndef     _XFMASTERPAGE_HXX
-#define     _XFMASTERPAGE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 #include "xfcontentcontainer.hxx"

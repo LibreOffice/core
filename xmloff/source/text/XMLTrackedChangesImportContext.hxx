@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _XMLOFF_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
-#define _XMLOFF_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>

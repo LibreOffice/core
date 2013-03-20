@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_VIEW_LabelAlignment_HXX
-#define _CHART2_VIEW_LabelAlignment_HXX
+#pragma once
+#if 1
 
 namespace chart {
 

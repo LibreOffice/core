@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#define _SVX_DATACCESSDESCRIPTOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

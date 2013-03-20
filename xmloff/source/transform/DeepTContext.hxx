@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_DEEPTCONTEXT_HXX
-#define _XMLOFF_DEEPTCONTEXT_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 

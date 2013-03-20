@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_DIALOGCONTROLLING_HXX
-#define SVTOOLS_DIALOGCONTROLLING_HXX
+#pragma once
+#if 1
 
 #include <svtools/svtdllapi.h>
 

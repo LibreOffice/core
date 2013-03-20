@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOSETT_HXX
-#define _UNOSETT_HXX
+#pragma once
+#if 1
 
 #include <swtypes.hxx>
 #include <calbck.hxx>

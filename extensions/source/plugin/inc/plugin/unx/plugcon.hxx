@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _PLUGCON_HXX
-#define _PLUGCON_HXX
+#pragma once
+#if 1
 
 #include <stdarg.h>
 #include <string.h>

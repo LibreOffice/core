@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_CHARTTYPE_DIALOG_CONTROLLER_HXX
-#define _CHART2_CHARTTYPE_DIALOG_CONTROLLER_HXX
+#pragma once
+#if 1
 
 #include "ChangingResource.hxx"
 #include "ThreeDHelper.hxx"

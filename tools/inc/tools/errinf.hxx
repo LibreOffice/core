@@ -19,8 +19,8 @@
 
 #ifndef __RSC
 
-#ifndef _EINF_HXX
-#define _EINF_HXX
+#pragma once
+#if 1
 
 #include <limits.h>
 #include <tools/rtti.hxx>
