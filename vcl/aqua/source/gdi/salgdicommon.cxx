@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <osl/endian.h>
 #include <osl/file.hxx>
 
 #include "basegfx/polygon/b2dpolygon.hxx"
@@ -1130,7 +1131,7 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     // prepare creation of matching a CGBitmapContext
     CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
     CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big;
-#if defined __BIG_ENDIAN__
+#if defined OSL_BIGENDIAN
     struct{ unsigned char b, g, r, a; } aPixel;
 #else
     struct{ unsigned char a, r, g, b; } aPixel;
