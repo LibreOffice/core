@@ -29,6 +29,7 @@
 #include "aqua/aquaprintview.h"
 #include "aqua/salgdi.h"
 #include "aqua/saldata.hxx"
+#include "quartz/utils.h"
 
 #include "jobset.h"
 #include "salptype.hxx"

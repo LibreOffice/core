@@ -5,15 +5,19 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
 
 #include <stdlib.h>
 
 #import <UIKit/UIKit.h>
 
+#include <osl/detail/ios-bootstrap.h>
+
 #import "LOViewerAppDelegate.h"
+#import "LOViewerWindow.h"
 
 #include "lo-viewer.h"
+
+static UIWindow *theWindow;
 
 @implementation LOViewerAppDelegate
 
@@ -22,9 +26,24 @@
     (void) application;
     (void) launchOptions;
 
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    self.window = [[LOViewerWindow alloc] initWithFrame:bounds];
+
+    theWindow = self.window;
 
     self.window.backgroundColor = [UIColor whiteColor];
+
+    nbytes = bounds.size.width * bounds.size.height * 4;
+
+    pixelBuffer = (char *) malloc(nbytes);
+    memset(pixelBuffer, 0xFF, nbytes);
+
+    CGDataProviderRef provider = CGDataProviderCreateWithData( NULL, pixelBuffer, nbytes, NULL);
+    image = CGImageCreate(bounds.size.width, bounds.size.height, 8, 32, bounds.size.width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaFirst, provider, NULL, false, kCGRenderingIntentDefault);
+
+    self.window.bounds = bounds;
+    self.window.pixelBuffer = pixelBuffer;
+    self.window.image = image;
 
     [self.window makeKeyAndVisible];
 
@@ -41,9 +60,8 @@
     (void) argument;
 
     @autoreleasepool {
-
         lo_initialize();
-
+        lo_runMain();
     }
 }
 
@@ -85,5 +103,10 @@
 }
 
 @end
+
+extern "C" void lo_damaged()
+{
+    [theWindow performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:YES];
+}
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

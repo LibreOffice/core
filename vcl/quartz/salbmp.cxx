@@ -25,11 +25,16 @@
 
 #include "tools/color.hxx"
 
-#include "vcl/bitmap.hxx" // for BitmapSystemData
+#include "vcl/bitmap.hxx"
 #include "vcl/salbtype.hxx"
 
 #include "quartz/salbmp.h"
-//#include "aqua/salinst.h"
+
+#ifdef MACOSX
+#include "aqua/saldata.hxx"
+#else
+#include "saldatabasic.hxx"
+#endif
 
 #include "bmpfast.hxx"
 

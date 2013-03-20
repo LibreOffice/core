@@ -20,27 +20,20 @@
 #ifndef _VCL_CORETEXT_SALGDI_H
 #define _VCL_CORETEXT_SALGDI_H
 
-#ifdef MACOSX
+#ifndef MACOSX
+#error This file should be included only for OS X
+#endif
+
 #include "premac.h"
 #include <ApplicationServices/ApplicationServices.h>
 #include "postmac.h"
-#endif
 
-#ifdef MACOSX
 #include "aqua/aquavcltypes.h"
-#else
-#include "ios/iosvcltypes.h"
-#endif
 
 #include "coretext/salcoretextfontutils.hxx"
 
-#ifdef MACOSX
 #include "aqua/salframe.h"
-#include "aqua/salgdicommon.hxx"
-#else
-#include "ios/salframe.h"
-#include "ios/salgdicommon.hxx"
-#endif
+#include "quartz/salgdicommon.hxx"
 
 #include "salgdi.hxx"
 
@@ -50,19 +43,13 @@ class CoreTextStyleInfo;
 // - QuartzSalGraphics -
 // -------------------
 
-#ifdef MACOSX
 #define QuartzSalGraphics AquaSalGraphics
-#endif
 
 class QuartzSalGraphics : public SalGraphics
 {
     friend class CoreTextLayout;
 protected:
-#ifdef MACOSX
     AquaSalFrame* mpFrame;
-#else
-    IosSalFrame* mpFrame;
-#endif
     CGLayerRef mxLayer;    //< Quartz graphics layer
     CGContextRef mrContext;  //< Quartz drawing context
     class XorEmulation* mpXorEmulation;
@@ -93,9 +80,7 @@ protected:
     bool mbVirDev; //< is this a virtual device graphics
     bool mbWindow; //< is this a window graphics
 
-#ifdef MACOSX
     RGBColor m_TextColor;
-#endif
 
 public:
     QuartzSalGraphics();
@@ -104,17 +89,10 @@ public:
     bool IsPenVisible() const { return maLineColor.IsVisible(); }
     bool IsBrushVisible() const { return maFillColor.IsVisible(); }
 
-#ifdef MACOSX
     void SetWindowGraphics( AquaSalFrame* pFrame );
     AquaSalFrame* getGraphicsFrame() const { return mpFrame; }
     void setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
     void initResolution( NSWindow* );
-#else
-    void SetWindowGraphics( IosSalFrame* pFrame );
-    IosSalFrame* getGraphicsFrame() const { return mpFrame; }
-    void setGraphicsFrame( IosSalFrame* pFrame ) { mpFrame = pFrame; }
-    void initResolution( UIWindow* );
-#endif
 
     void SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
     void SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
@@ -129,19 +107,13 @@ public:
     bool CheckContext();
     CGContextRef GetContext();
 
-#ifdef MACOSX
     void UpdateWindow( NSRect& ); // delivered in NSView coordinates
-#else
-    void UpdateWindow( CGRect& ); // delivered in UIView coordinates
-#endif
 
-#if (defined(MACOSX) && !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)) || defined(IOS)
+#if !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)
     void RefreshRect( const CGRect& );
 #endif
 
-#ifdef MACOSX
     void RefreshRect( const NSRect& );
-#endif
     void RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void SetState();
@@ -342,7 +314,7 @@ private:
                          bool* pJustCFF );
 };
 
-#if (defined(MACOSX) && !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)) || defined(IOS)
+#if !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)
 
 inline void QuartzSalGraphics::RefreshRect( const CGRect& rRect )
 {
@@ -351,14 +323,10 @@ inline void QuartzSalGraphics::RefreshRect( const CGRect& rRect )
 
 #endif
 
-#ifdef MACOSX
-
 inline void QuartzSalGraphics::RefreshRect( const NSRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
-
-#endif
 
 #endif /*  _VCL_CORETEXT_SALGDI_H */
 

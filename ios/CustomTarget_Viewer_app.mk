@@ -114,7 +114,7 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 		echo '[Bootstrap]' && \
 		echo 'InstallMode=<installmode>' && \
 		echo 'ProductKey=LibreOffice Viewer $(PRODUCTVERSION)' && \
-		echo 'UserInstallation=file://$$APP_DATA_DIR' && \
+		echo 'UserInstallation=file://$$APP_DATA_DIR/../Library/Application%20Support' && \
 	: ) > $(appdir)/program/bootstraprc
 #
 # Is this really needed?

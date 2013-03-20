@@ -116,6 +116,7 @@ namespace desktop {
         }
     }
 
+#if !defined(ANDROID) && !defined(IOS)
     static osl::FileBase::RC copy_recursive( const rtl::OUString& srcUnqPath, const rtl::OUString& dstUnqPath)
     {
         FileBase::RC err;
@@ -166,14 +167,9 @@ namespace desktop {
             err = File::copy( srcUnqPath,dstUnqPath );
         }
 
-#ifdef ANDROID
-        fprintf (stderr, "copy_recursive '%s' to '%s' returns (%d)0x%x\n",
-                 rtl::OUStringToOString(srcUnqPath, RTL_TEXTENCODING_UTF8).getStr(),
-                 rtl::OUStringToOString(dstUnqPath, RTL_TEXTENCODING_UTF8).getStr(),
-                 (int)err, (int)err);
-#endif
         return err;
     }
+#endif
 
     static UserInstall::UserInstallStatus create_user_install(OUString& aUserPath)
     {
@@ -185,12 +181,12 @@ namespace desktop {
         FileBase::RC rc = Directory::createPath(aUserPath);
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
-#ifdef UNIX
+#if defined(UNIX) && !defined(ANDROID) && !defined(IOS)
         // Set safer permissions for the user directory by default:
         File::setAttributes(aUserPath, osl_File_Attribute_OwnWrite| osl_File_Attribute_OwnRead| osl_File_Attribute_OwnExe);
 #endif
 
-#ifndef ANDROID
+#if !defined(ANDROID) && !defined(IOS)
         // as of now osl_copyFile does not work on Android => don't do this.
 
         // Copy data from shared data directory of base installation:

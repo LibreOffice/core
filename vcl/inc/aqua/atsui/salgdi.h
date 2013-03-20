@@ -35,7 +35,7 @@
 #include "aqua/salframe.h"
 #include "salgdi.hxx"
 
-#include "aqua/salgdicommon.hxx"
+#include "quartz/salgdicommon.hxx"
 
 class AquaSalFrame;
 class ImplDevFontAttributes;

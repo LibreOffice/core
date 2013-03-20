@@ -26,6 +26,8 @@
 #include "aqua/aqua11yfactory.h"
 #include "aqua/aqua11yfocustracker.hxx"
 
+#include "quartz/utils.h"
+
 #include "aqua11yfocuslistener.hxx"
 #include "aqua11yactionwrapper.h"
 #include "aqua11ycomponentwrapper.h"

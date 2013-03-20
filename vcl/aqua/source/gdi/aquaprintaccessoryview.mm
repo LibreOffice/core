@@ -28,6 +28,7 @@
 
 #include "aqua/aquaprintview.h"
 #include "aqua/salinst.h"
+#include "quartz/utils.h"
 
 #include "svdata.hxx"
 #include "svids.hrc"

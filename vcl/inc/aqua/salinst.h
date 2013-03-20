@@ -167,11 +167,6 @@ class YieldMutexReleaser
     ~YieldMutexReleaser();
 };
 
-rtl::OUString GetOUString( CFStringRef );
-rtl::OUString GetOUString( NSString* );
-CFStringRef CreateCFString( const rtl::OUString& );
-NSString* CreateNSString( const rtl::OUString& );
-
 CGImageRef CreateCGImage( const Image& );
 NSImage*   CreateNSImage( const Image& );
 

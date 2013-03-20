@@ -29,7 +29,7 @@
 #ifdef MACOSX
 #include "aqua/salgdi.h"
 #else
-#include "coretext/salgdi.h"
+#include "headless/svpgdi.hxx"
 #endif
 
 #include "salinst.hxx"

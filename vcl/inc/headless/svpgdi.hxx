@@ -23,10 +23,18 @@
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>
 
-#include <salgdi.hxx>
-#include <sallayout.hxx>
+#include "salgdi.hxx"
+#include "sallayout.hxx"
+
+#ifdef IOS
+#include "coretext/salcoretextstyle.hxx"
+#endif
 
 class ServerFont;
+
+#ifdef IOS
+#define QuartzSalGraphics SvpSalGraphics
+#endif
 
 class SvpSalGraphics : public SalGraphics
 {
@@ -49,6 +57,7 @@ class SvpSalGraphics : public SalGraphics
 protected:
     Region                               m_aClipRegion;
     basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
+
 private:
     bool                                 m_bClipSetup;
     struct ClipUndoHandle {
@@ -61,6 +70,16 @@ private:
     void ensureClip();
 
 protected:
+
+#ifdef IOS
+    friend class CoreTextLayout;
+
+    CGContextRef                         mrContext;
+    CoreTextStyleInfo*                   m_style;
+    double                               mfFakeDPIScale;
+    bool                                 mbNonAntialiasedText;
+#endif
+
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap );
     virtual bool drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
@@ -71,7 +90,6 @@ public:
     const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aDevice; }
     void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
 
-    // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     virtual sal_uInt16      GetBitCount() const;
     virtual long            GetGraphicsWidth() const;
@@ -178,6 +196,11 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const;
+
+#ifdef IOS
+    bool CheckContext();
+    CGContextRef GetContext();
+#endif
 };
 
 #endif

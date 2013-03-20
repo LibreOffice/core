@@ -87,6 +87,11 @@ SvpSalGraphics::SvpSalGraphics() :
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
         m_pServerFont[i] = NULL;
+#ifdef IOS
+    mrContext = nil;
+    mfFakeDPIScale = 1.0;
+    m_style = new CoreTextStyleInfo();
+#endif
 }
 
 SvpSalGraphics::~SvpSalGraphics()
@@ -690,8 +695,12 @@ SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
     if (nFallbacklevel < 0 ) nFallbacklevel = 0;
 
     aSysFontData.nSize = sizeof( SystemFontData );
+#ifdef IOS
+    aSysFontData.rCTFont = NULL;
+#else
     aSysFontData.nFontId = 0;
     aSysFontData.nFontFlags = 0;
+#endif
     aSysFontData.bFakeBold = false;
     aSysFontData.bFakeItalic = false;
     aSysFontData.bAntialias = true;

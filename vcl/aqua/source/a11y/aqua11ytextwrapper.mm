@@ -19,7 +19,7 @@
 
 
 #include "aqua/salinst.h"
-
+#include "quartz/utils.h"
 #include "aqua11ytextwrapper.h"
 #include "aqua11ytextattributeswrapper.h"
 #include "aqua11yutil.h"

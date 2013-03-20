@@ -389,7 +389,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     return bRet;
 }
 
-#ifndef MACOSX
+#if !defined(MACOSX) && !defined(IOS)
 
 #define DOT_CONFIG "/.config"
 
@@ -431,7 +431,7 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
  * support for Objective-C in the build environment
  */
 
-#define MACOSX_CONFIG_DIR "/Library/Application Support"
+#define MACOSX_CONFIG_DIR "/Library/Application Support" /* Used on iOS, too */
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax)
 {
     if( osl_psz_getHomeDir(Security, pszDirectory, nMax - sizeof(MACOSX_CONFIG_DIR) + 1) )

@@ -24,6 +24,7 @@
 
 #include <vcl/fontcapabilities.hxx>
 
+#include "coretext/common.h"
 #include "outfont.hxx"
 #include "impfont.hxx"
 

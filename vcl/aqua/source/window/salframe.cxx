@@ -36,6 +36,7 @@
 #include "aqua/salinst.h"
 #include "aqua/salframeview.h"
 #include "aqua/aqua11yfactory.h"
+#include "quartz/utils.h"
 
 #include "salwtype.hxx"
 

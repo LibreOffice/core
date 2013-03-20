@@ -32,10 +32,6 @@
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
-#elif defined ( IOS )
-#include "premac.h"
-#include <UIKit/UIKit.h>
-#include "postmac.h"
 #endif
 #include <vcl/sysdata.hxx>
 
@@ -89,8 +85,6 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( MACOSX )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);
-#elif defined( IOS )
-    aSysParentData.pView = reinterpret_cast<UIView*>(nHandle);
 #elif defined( UNX )
     aSysParentData.aWindow = (long)nHandle;
     aSysParentData.bXEmbedSupport = bXEmbed;

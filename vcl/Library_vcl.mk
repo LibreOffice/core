@@ -346,11 +346,15 @@ $(eval $(call gb_Library_use_packages,vcl,\
 	basebmp_inc \
 ))
 
-vcl_coretext_code=\
+vcl_quartz_code= \
+    vcl/quartz/salbmp \
+    vcl/quartz/utils \
+
+vcl_coretext_code= \
     vcl/coretext/salcoretextfontutils \
     vcl/coretext/salcoretextlayout \
     vcl/coretext/salcoretextstyle \
-    vcl/coretext/salgdi
+    vcl/coretext/salgdi \
 
 # GUIBASE specific stuff
 
@@ -442,7 +446,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/dtrans/PictToBmpFlt \
     vcl/aqua/source/dtrans/aqua_clipboard \
     vcl/aqua/source/dtrans/service_entry \
-    vcl/quartz/salbmp \
+    $(vcl_quartz_code) \
     vcl/aqua/source/gdi/salgdicommon \
     vcl/aqua/source/gdi/salgdiutils \
     vcl/aqua/source/gdi/salmathutils \
@@ -468,9 +472,12 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 ))
 endif
 
-vcl_generic_code=\
+vcl_really_generic_code= \
     vcl/generic/app/gensys \
     vcl/generic/app/geninst \
+
+vcl_generic_code= \
+	$(vcl_really_generic_code) \
     vcl/generic/app/gendisp \
     vcl/generic/print/bitmap_gfx \
     vcl/generic/print/common_gfx \
@@ -489,9 +496,9 @@ vcl_generic_code=\
     vcl/generic/fontmanager/fontconfig \
     vcl/generic/fontmanager/fontmanager \
     vcl/generic/fontmanager/helper \
-    vcl/generic/fontmanager/parseAFM
+    vcl/generic/fontmanager/parseAFM \
 
-vcl_headless_code=\
+vcl_headless_code= \
     vcl/headless/svpbmp \
     vcl/headless/svpdummies \
     vcl/headless/svpelement \
@@ -499,9 +506,11 @@ vcl_headless_code=\
     vcl/headless/svpgdi \
     vcl/headless/svpinst \
     vcl/headless/svpdata \
+    vcl/headless/svpvd \
+
+vcl_headless_freetype_code=\
     vcl/headless/svpprn \
     vcl/headless/svptext \
-    vcl/headless/svpvd
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -544,6 +553,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/null/printerinfomanager \
     vcl/headless/headlessinst \
 	$(vcl_headless_code) \
+	$(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_use_libraries,vcl,\
@@ -574,6 +584,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/null/printerinfomanager \
     vcl/android/androidinst \
 	$(vcl_headless_code) \
+	$(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,vcl,\
@@ -591,28 +602,13 @@ ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))
-$(eval $(call gb_Library_add_objcxxobjects,vcl,\
-    vcl/ios/source/app/salnstimer \
-    vcl/ios/source/app/vcluiapp \
-    vcl/ios/source/window/salframeview \
-))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/ios/source/app/saldata \
-    vcl/ios/source/app/salinst \
-    vcl/ios/source/app/salsys \
-    vcl/ios/source/app/saltimer \
-    vcl/ios/source/dtrans/iOSTransferable \
-    vcl/ios/source/dtrans/ios_clipboard \
-    vcl/ios/source/dtrans/service_entry \
+    vcl/ios/iosinst \
+    vcl/ios/dummies \
+    $(vcl_really_generic_code) \
     $(vcl_coretext_code) \
-    vcl/quartz/salbmp \
-    vcl/ios/source/gdi/salgdicommon \
-    vcl/ios/source/gdi/salnativewidgets \
-    vcl/ios/source/gdi/salgdiutils \
-    vcl/ios/source/gdi/salvd \
-    vcl/ios/source/window/salframe \
-    vcl/ios/source/window/salmenu \
-    vcl/ios/source/window/salobj \
+	$(vcl_quartz_code) \
+	$(vcl_headless_code) \
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 	UIKit \

@@ -26,6 +26,10 @@
 
 #include "vcl/dllapi.h"
 
+#ifdef IOS
+#include "coretext/salcoretextfontutils.hxx"
+#endif
+
 namespace psp
 {
     class PrinterInfoManager;
@@ -40,6 +44,11 @@ public:
 
     SalData();
     virtual ~SalData();
+#ifdef IOS
+    CGColorSpaceRef               mxRGBSpace;
+    CGColorSpaceRef               mxGraySpace;
+    SystemFontList*               mpFontList;
+#endif
 };
 
 inline void SetSalData( SalData* pData )

@@ -17,28 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALMENU_H
-#define _SV_SALMENU_H
+#ifndef INCLUDED_QUARTZ_UTILS_HXX
+#define INCLUDED_QUARTZ_UTILS_HXX
 
-#include "premac.h"
-#include <UIKit/UIKit.h>
-#include "postmac.h"
+#include <rtl/ustring.hxx>
 
-#include "salmenu.hxx"
+#include <premac.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <Foundation/Foundation.h>
+#include <postmac.h>
 
-#include <vector>
+rtl::OUString GetOUString( CFStringRef );
+rtl::OUString GetOUString( NSString* );
+CFStringRef CreateCFString( const rtl::OUString& );
+NSString* CreateNSString( const rtl::OUString& );
 
-class IosSalFrame;
-class IosSalMenuItem;
-
-class IosSalMenu : public SalMenu
-{
-};
-
-class IosSalMenuItem : public SalMenuItem
-{
-};
-
-#endif // _SV_SALMENU_H
+#endif // INCLUDED_QUARTZ_UTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

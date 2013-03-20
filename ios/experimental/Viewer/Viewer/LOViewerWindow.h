@@ -5,16 +5,13 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
 
 #import <UIKit/UIKit.h>
 
-#import "LOViewerAppDelegate.h"
-
-int main(int argc, char *argv[])
-{
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([LOViewerAppDelegate class]));
-    }
-}
-
-// vim:set shiftwidth=4 softtabstop=4 expandtab:
+@interface LOViewerWindow : UIWindow
+@property CGRect bounds;
+@property char *pixelBuffer;
+@property CGImageRef image;
+- (void)drawRect:(CGRect)rect;
+@end

@@ -25,6 +25,7 @@
 #include "aqua/salsys.h"
 #include "aqua/saldata.hxx"
 #include "aqua/salinst.h"
+#include "quartz/utils.h"
 
 #include "svids.hrc"
 

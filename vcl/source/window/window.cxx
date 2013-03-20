@@ -8325,6 +8325,8 @@ uno::Reference< XDragSource > Window::GetDragSource()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
+#if !defined(ANDROID) && !defined(IOS)
+
     if( mpWindowImpl->mpFrameData )
     {
         if( ! mpWindowImpl->mpFrameData->mxDragSource.is() )
@@ -8346,16 +8348,6 @@ uno::Reference< XDragSource > Window::GetDragSource()
 #elif defined MACOSX
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
-                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
-                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
-                    aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
-                    aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
-#elif defined IOS
-            /* What does LibreOffice's use of DND concepts mean on
-             * iOS, huh, is this both inter-app DND (which clearly is
-             * meaningless), or intra-app? Anyway, use the same code
-             * as for MacOSX for now, even if meaningless...
-             */
                     aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
                     aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
                     aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
@@ -8391,7 +8383,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
 
         return mpWindowImpl->mpFrameData->mxDragSource;
     }
-
+#endif
     return uno::Reference< XDragSource > ();
 }
 

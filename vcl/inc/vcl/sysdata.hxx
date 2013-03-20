@@ -40,12 +40,6 @@ class NSView;
 #ifdef IOS
 typedef const struct __CTFont * CTFontRef;
 typedef struct CGContext *CGContextRef;
-typedef struct CGLayer *CGLayerRef;
-#ifdef __OBJC__
-@class UIView;
-#else
-class UIView;
-#endif
 #endif
 
 #if defined( WNT )
@@ -70,8 +64,6 @@ struct SystemEnvData
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
-#elif defined( IOS )
-    UIView*               pView;          // the CocoaTouch (UIView *) implementing this object
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
     long                aWindow;        // the window of the object
@@ -100,8 +92,6 @@ struct SystemParentData
     HWND            hWnd;             // the window hwnd
 #elif defined( MACOSX )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
-#elif defined( IOS )
-    UIView*         pView;            // the CocoaTouch (UIView *) implementing this object
 #elif defined( UNX )
     long            aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question

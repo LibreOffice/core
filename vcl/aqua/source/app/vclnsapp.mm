@@ -28,6 +28,7 @@
 #include "aqua/saldata.hxx"
 #include "aqua/salframe.h"
 #include "aqua/salframeview.h"
+#include "quartz/utils.h"
 
 #include "impimagetree.hxx"
 

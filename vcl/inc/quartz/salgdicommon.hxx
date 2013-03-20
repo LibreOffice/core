@@ -20,6 +20,14 @@
 #ifndef _VCL_AQUA_SALGDICOMMON_H
 #define _VCL_AQUA_SALGDICOMMON_H
 
+#include <premac.h>
+#ifdef IOS
+#include <CoreGraphics/CoreGraphics.h>
+#else
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+#include <postmac.h>
+
 #include <vcl/salgtype.hxx>
 
 // abstracting quartz color instead of having to use an CGFloat[] array

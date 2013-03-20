@@ -89,16 +89,24 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
 }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(IOS)
 
+#ifdef ANDROID
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_runMain(JNIEnv* /* env */,
                                                           jobject /* clazz */)
+#else
+extern "C"
+void
+lo_runMain()
+#endif
 {
     int nRet;
     do {
         nRet = soffice_main();
-        LOGI("soffice_main returned %d", nRet );
+#ifdef ANDROID
+        LOGI("soffice_main returned %d", nRet);
+#endif
     } while (nRet == EXITHELPER_NORMAL_RESTART ||
              nRet == EXITHELPER_CRASH_WITH_RESTART); // pretend to re-start.
 

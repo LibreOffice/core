@@ -29,6 +29,7 @@
 #include "aqua/salframe.h"
 #include "aqua/salframeview.h"
 #include "aqua/aqua11yfactory.h"
+#include "quartz/utils.h"
 
 #define WHEEL_EVENT_FACTOR 1.5
 

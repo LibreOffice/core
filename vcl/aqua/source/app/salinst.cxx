@@ -38,6 +38,7 @@
 #include "aqua/salsys.h"
 #include "aqua/salvd.h"
 #include "quartz/salbmp.h"
+#include "quartz/utils.h"
 #include "aqua/salprn.h"
 #include "aqua/saltimer.h"
 #include "aqua/vclnsapp.h"
@@ -1137,49 +1138,6 @@ YieldMutexReleaser::~YieldMutexReleaser()
 {
     if( mnCount != 0 )
         GetSalData()->mpFirstInstance->AcquireYieldMutex( mnCount );
-}
-
-//////////////////////////////////////////////////////////////
-rtl::OUString GetOUString( CFStringRef rStr )
-{
-    if( rStr == 0 )
-        return rtl::OUString();
-    CFIndex nLength = CFStringGetLength( rStr );
-    if( nLength == 0 )
-        return rtl::OUString();
-    const UniChar* pConstStr = CFStringGetCharactersPtr( rStr );
-    if( pConstStr )
-        return rtl::OUString( pConstStr, nLength );
-    UniChar* pStr = reinterpret_cast<UniChar*>( rtl_allocateMemory( sizeof(UniChar)*nLength ) );
-    CFRange aRange = { 0, nLength };
-    CFStringGetCharacters( rStr, aRange, pStr );
-    rtl::OUString aRet( pStr, nLength );
-    rtl_freeMemory( pStr );
-    return aRet;
-}
-
-rtl::OUString GetOUString( NSString* pStr )
-{
-    if( ! pStr )
-        return rtl::OUString();
-    int nLen = [pStr length];
-    if( nLen == 0 )
-        return rtl::OUString();
-
-    rtl::OUStringBuffer aBuf( nLen+1 );
-    aBuf.setLength( nLen );
-    [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
-    return aBuf.makeStringAndClear();
-}
-
-CFStringRef CreateCFString( const rtl::OUString& rStr )
-{
-    return CFStringCreateWithCharacters(kCFAllocatorDefault, rStr.getStr(), rStr.getLength() );
-}
-
-NSString* CreateNSString( const rtl::OUString& rStr )
-{
-    return [[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()];
 }
 
 CGImageRef CreateCGImage( const Image& rImage )

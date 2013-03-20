@@ -18,16 +18,16 @@
  */
 
 #include "coretext/common.h"
-
 #include "coretext/salcoretextfontutils.hxx"
-#include "coretext/salgdi.h"
+#include "quartz/utils.h"
 
 #include "sft.hxx"
 
 #ifdef MACOSX
+#include "coretext/salgdi.h"
 #include "aqua/salinst.h"
 #else // IOS
-#include "ios/salinst.h"
+#include "headless/svpinst.hxx"
 #endif
 
 static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFontAttributes& rDFA  )

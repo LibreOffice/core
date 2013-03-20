@@ -22,7 +22,12 @@
 
 #include "coretext/common.h"
 #include "coretext/salcoretextstyle.hxx"
+
+#ifdef MACOSX
 #include "coretext/salgdi.h"
+#else
+#include "headless/svpgdi.hxx"
+#endif
 
 class CoreTextLayout : public SalLayout
 {

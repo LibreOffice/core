@@ -5,7 +5,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
 
 #include <stdlib.h>
 
@@ -72,6 +71,7 @@ extern "C" {
     extern void * textfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unordf_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * uui_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xmlfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xmlsecurity_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xo_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -108,6 +108,7 @@ lo_get_libmap(void)
         { "libsdlo.a", sd_component_getFactory },
         { "libsmdlo.a", smd_component_getFactory },
         { "libsmlo.a", sm_component_getFactory },
+        { "libspelllo.a", spell_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
         { "libswdlo.a", swd_component_getFactory },
         { "libswlo.a", sw_component_getFactory },
@@ -115,6 +116,7 @@ lo_get_libmap(void)
         { "libtextfdlo.a", textfd_component_getFactory },
         { "libunordflo.a", unordf_component_getFactory },
         { "libunoxmllo.a", unoxml_component_getFactory },
+        { "libuuilo.a", uui_component_getFactory },
         { "libxmlfdlo.a", xmlfd_component_getFactory },
         { "libxmlsecurity.a", xmlsecurity_component_getFactory },
         { "libxoflo.a", xof_component_getFactory },
@@ -134,7 +136,8 @@ lo_initialize(void)
         "placeholder-exe",
         "-env:URE_INTERNAL_LIB_DIR=file:///",
         "placeholder-uno-types",
-        "placeholder-uno-services"
+        "placeholder-uno-services",
+        "placeholder-document"
     };
 
     const int argc = sizeof(argv)/sizeof(*argv);
@@ -154,8 +157,8 @@ lo_initialize(void)
     uno_types = [uno_types stringByAppendingString: @" file://"];
     uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"offapi.rdb"]];
 
-    assert(strcmp(argv[argc-2], "placeholder-uno-types") == 0);
-    argv[argc-2] = [uno_types UTF8String];
+    assert(strcmp(argv[2], "placeholder-uno-types") == 0);
+    argv[2] = [uno_types UTF8String];
 
     NSString *uno_services = @"-env:UNO_SERVICES=";
 
@@ -165,59 +168,11 @@ lo_initialize(void)
     uno_services = [uno_services stringByAppendingString: @" file://"];
     uno_services = [uno_services stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"services.rdb"]];
 
-    assert(strcmp(argv[argc-1], "placeholder-uno-services") == 0);
-    argv[argc-1] = [uno_services UTF8String];
+    assert(strcmp(argv[3], "placeholder-uno-services") == 0);
+    argv[3] = [uno_services UTF8String];
+
+    assert(strcmp(argv[4], "placeholder-document") == 0);
+    argv[4] = [[app_root_escaped stringByAppendingPathComponent: @"test1.odt"] UTF8String];
 
     osl_setCommandArgs(argc, (char **) argv);
-
-    try {
-
-        // Should start a background thread to do all this UNO
-        // initialisation crap
-
-        uno::Reference< uno::XComponentContext > xContext(::cppu::defaultBootstrap_InitialComponentContext());
-
-        uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager() );
-
-        uno::Reference< lang::XMultiServiceFactory > xSM( xFactory, uno::UNO_QUERY_THROW );
-
-        comphelper::setProcessServiceFactory( xSM );
-
-        InitVCL();
-
-        // Yes, this code does of course not belong here. Once this
-        // turns into something that actually displays something and
-        // has a proper app lifecycle etc that willl be fixed. But for
-        // now this is just a test, not supposed to work in any sane
-        // way from a "user" POV, and it doesn't matter that we do
-        // this here.
-
-        uno::Reference< uno::XInterface > xDesktop =
-            xFactory->createInstanceWithContext( "com.sun.star.frame.Desktop", xContext );
-        uno::Reference< frame::XComponentLoader > xComponentLoader( xDesktop, uno::UNO_QUERY_THROW );
-
-        uno::Reference< uno::XInterface > xToolkitService =
-            xFactory->createInstanceWithContext( "com.sun.star.awt.Toolkit", xContext );
-
-        uno::Reference< awt::XToolkitExperimental > xToolkit( xToolkitService, uno::UNO_QUERY_THROW );
-
-        char *smallbb = new char[ SMALLSIZE*SMALLSIZE*4 ];
-
-        uno::Reference< awt::XDevice > xDummyDevice = xToolkit->createScreenCompatibleDeviceUsingBuffer( SMALLSIZE, SMALLSIZE, 1, 1, 0, 0, (sal_Int64) (intptr_t) smallbb);
-
-        uno::Sequence< beans::PropertyValue > loadProps(3);
-
-        loadProps[0].Name = "Hidden";
-        loadProps[0].Value <<= sal_True;
-        loadProps[1].Name = "ReadOnly";
-        loadProps[1].Value <<= sal_True;
-        loadProps[2].Name = "Preview";
-        loadProps[2].Value <<= sal_True;
-
-        OUString test1_odt( OUString( "file://" ) + OUString::createFromAscii( [[app_root_escaped stringByAppendingPathComponent: @"test1.odt"] UTF8String] ));
-        uno::Reference< lang::XComponent > xDoc = xComponentLoader->loadComponentFromURL ( test1_odt, "_blank", 0, loadProps );
-    }
-    catch ( uno::Exception e ) {
-        SAL_WARN("Viewer", e.Message);
-    }
 }

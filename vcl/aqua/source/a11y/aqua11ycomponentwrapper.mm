@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include "quartz/utils.h"
 #include "aqua11ycomponentwrapper.h"
 #include "aqua11yrolehelper.h"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

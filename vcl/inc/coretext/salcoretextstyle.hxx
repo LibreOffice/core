@@ -20,11 +20,7 @@
 #ifndef _VCL_CORETEXT_SALCORETEXTSTYLE_HXX
 #define _VCL_CORETEXT_SALCORETEXTSTYLE_HXX
 
-#ifdef MACOSX
-#include "aqua/salgdicommon.hxx"
-#else // IOS
-#include "ios/salgdicommon.hxx"
-#endif
+#include "quartz/salgdicommon.hxx"
 
 #include "coretext/salcoretextfontutils.hxx"
 #include "outfont.hxx"

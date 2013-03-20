@@ -20,13 +20,25 @@
 #include "coretext/common.h"
 
 #ifdef MACOSX
+
 #include "aqua/salframe.h"
+#include "coretext/salgdi.h"
+
 #else
-#include "ios/salframe.h"
+
+#include <premac.h>
+#include <UIKit/UIKit.h>
+#include <postmac.h>
+
+#include "saldatabasic.hxx"
+#include "headless/svpframe.hxx"
+#include "headless/svpgdi.hxx"
+
 #endif
 
-#include "coretext/salgdi.h"
 #include "coretext/salcoretextstyle.hxx"
+
+#ifdef MACOSX
 
 QuartzSalGraphics::QuartzSalGraphics()
     : mpFrame( NULL )
@@ -63,6 +75,8 @@ QuartzSalGraphics::~QuartzSalGraphics()
         m_style = NULL;
     }
 }
+
+#endif
 
 inline bool QuartzSalGraphics::AddTempDevFont( ImplDevFontList*,
                                              const rtl::OUString& ,
@@ -200,6 +214,8 @@ const ImplFontCharMap* QuartzSalGraphics::GetImplFontCharMap() const
     return font_face->GetImplFontCharMap();
 }
 
+#ifndef IOS
+
 bool QuartzSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
                      std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
@@ -207,6 +223,8 @@ bool QuartzSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,
 
     return font_face->GetRawFontData(rBuffer, pJustCFF);
 }
+
+#endif
 
 SystemFontData QuartzSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
@@ -256,5 +274,26 @@ void QuartzSalGraphics::SetTextColor( SalColor nSalColor )
 {
     m_style->SetColor(nSalColor);
 }
+
+#ifdef IOS
+
+// Note that "QuartzSalGraphics" *is* SvpSalGraphics for iOS
+
+bool SvpSalGraphics::CheckContext()
+{
+    SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
+
+    return (mrContext != NULL);
+}
+
+CGContextRef SvpSalGraphics::GetContext()
+{
+    if (!mrContext)
+        CheckContext();
+
+    return mrContext;
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

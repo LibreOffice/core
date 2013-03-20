@@ -32,6 +32,7 @@
 #include "aqua/salnsmenu.h"
 #include "aqua/salframe.h"
 #include "aqua/aqua11ywrapper.h"
+#include "quartz/utils.h"
 
 #include "svids.hrc"
 #include "window.h"
