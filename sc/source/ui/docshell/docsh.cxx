@@ -1874,6 +1874,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
             nNextCol = nCol + 1;
 
         CellType eType = pCell->GetCellType();
+        ScAddress aPos(nCol, nRow, nTab);
         if ( bTabProtect )
         {
             const ScProtectionAttr* pProtAttr =
@@ -1907,12 +1908,11 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     }
                     else if ( ((ScFormulaCell*)pCell)->IsValue() )
                     {
-                        sal_uInt32 nFormat;
-                        aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
+                        sal_uInt32 nFormat = aDocument.GetNumberFormat(aPos);
                         if ( bFixedWidth || bSaveAsShown )
                         {
                             Color* pDummy;
-                            ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                            aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                             bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
                         }
                         else
@@ -1925,10 +1925,9 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     {
                         if ( bSaveAsShown )
                         {
-                            sal_uInt32 nFormat;
-                            aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
+                            sal_uInt32 nFormat = aDocument.GetNumberFormat(aPos);
                             Color* pDummy;
-                            ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                            aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                         }
                         else
                             aString = ((ScFormulaCell*)pCell)->GetString();
@@ -1939,10 +1938,9 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
             case CELLTYPE_STRING :
                 if ( bSaveAsShown )
                 {
-                    sal_uInt32 nFormat;
-                    aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
+                    sal_uInt32 nFormat = aDocument.GetNumberFormat(aPos);
                     Color* pDummy;
-                    ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                    aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                 }
                 else
                     aString = ((ScStringCell*)pCell)->GetString();
@@ -1964,7 +1962,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     if ( bFixedWidth || bSaveAsShown )
                     {
                         Color* pDummy;
-                        ScCellFormat::GetString( pCell, nFormat, aString, &pDummy, rFormatter );
+                        aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                         bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
                     }
                     else

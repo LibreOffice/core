@@ -6273,7 +6273,7 @@ String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellP
                 //  wie in GetString am Dokument (column)
                 Color* pColor;
                 sal_uLong nNumFmt = pDoc->GetNumberFormat( aCellPos );
-                ScCellFormat::GetString( pCell, nNumFmt, aVal, &pColor, *pDoc->GetFormatTable() );
+                aVal = ScCellFormat::GetString(*pDoc, aCellPos, nNumFmt, &pColor, *pDoc->GetFormatTable());
             }
         }
     }

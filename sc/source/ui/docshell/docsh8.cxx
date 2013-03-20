@@ -768,14 +768,13 @@ inline void lcl_getLongVarCharEditString( rtl::OUString& rString,
     rString = rEditEngine.GetText( LINEEND_CRLF );
 }
 
-inline void lcl_getLongVarCharString( rtl::OUString& rString, ScBaseCell* pCell,
-        ScDocument& rDocument, SCCOL nCol, SCROW nRow, SCTAB nTab,
-        SvNumberFormatter& rNumFmt )
+inline void lcl_getLongVarCharString(
+    OUString& rString, ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, SvNumberFormatter& rNumFmt )
 {
-    sal_uInt32 nFormat;
     Color* pColor;
-    rDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
-    ScCellFormat::GetString( pCell, nFormat, rString, &pColor, rNumFmt );
+    ScAddress aPos(nCol, nRow, nTab);
+    sal_uInt32 nFormat = rDoc.GetNumberFormat(aPos);
+    rString = ScCellFormat::GetString(rDoc, aPos, nFormat, &pColor, rNumFmt);
 }
 
 }
@@ -981,9 +980,8 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                                 }
                                 else
                                 {
-                                    lcl_getLongVarCharString( aString, pCell,
-                                            aDocument, nDocCol, nDocRow, nTab,
-                                            *pNumFmt);
+                                    lcl_getLongVarCharString(
+                                        aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);
                                 }
                                 xRowUpdate->updateString( nCol+1, aString );
                             }
@@ -1095,9 +1093,8 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                                     lcl_getLongVarCharEditString( aString,
                                             pCell, aEditEngine);
                                 else
-                                    lcl_getLongVarCharString( aString,
-                                            pCell, aDocument, nDocCol,
-                                            nDocRow, nTab, *pNumFmt);
+                                    lcl_getLongVarCharString(
+                                        aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);
                             }
                         }
                         break;

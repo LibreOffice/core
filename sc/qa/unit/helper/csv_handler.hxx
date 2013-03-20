@@ -51,7 +51,7 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
     const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
-    ScCellFormat::GetString( pCell, nFormat, aString, &pColor, *pFormatter);
+    aString = ScCellFormat::GetString(*pDoc, ScAddress(nCol, nRow, nTab), nFormat, &pColor, *pFormatter);
     return aString;
 }
 
