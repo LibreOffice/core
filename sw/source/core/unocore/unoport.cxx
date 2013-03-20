@@ -763,7 +763,7 @@ beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyN
         throw uno::RuntimeException();
 
     if (GetTextPortionType() == PORTION_RUBY_START &&
-        rPropertyName.startsWith("Ruby")) //TODO: startsWith or ==?
+        rPropertyName.startsWith("Ruby"))
     {
         eRet = beans::PropertyState_DIRECT_VALUE;
     }
@@ -794,7 +794,7 @@ uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
         beans::PropertyState* pStates = aRet.getArray();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength();nProp++)
         {
-            if (pNames[nProp].startsWith("Ruby")) //TODO: startsWith or ==?
+            if (pNames[nProp].startsWith("Ruby"))
                 pStates[nProp] = beans::PropertyState_DIRECT_VALUE;
         }
     }
