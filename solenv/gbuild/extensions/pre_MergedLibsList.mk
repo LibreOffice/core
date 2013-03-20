@@ -49,10 +49,12 @@ gb_MERGEDLIBS := \
 	lng \
 	localebe1 \
 	msfilter \
+	oox \
 	package2 \
 	sax \
 	sb \
 	sc \
+	sd \
 	sfx \
 	sofficeapp \
 	sot \
@@ -73,6 +75,7 @@ gb_MERGEDLIBS := \
 	vcl \
 	$(if $(filter-out IOS,$(OS)),wpftwriter) \
 	xmlscript \
+	xmlsecurity \
 	xo \
 
 

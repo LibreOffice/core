@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	lcms2 \
 	libxml2 \
 	nss3 \
+	openssl \
 	$(if $(filter-out IOS,$(OS)),\
 	wpd \
 	wpg \

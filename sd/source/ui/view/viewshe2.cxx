@@ -72,7 +72,7 @@
 
 using namespace com::sun::star;
 
-#ifndef DISABLE_DYNLOADING // otherwise use the one in sw...
+#if !defined(DISABLE_DYNLOADING) && !defined(LIBO_MERGELIBS) // otherwise use the one in sw...
 const String aEmptyStr;
 #endif
 
