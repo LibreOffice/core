@@ -79,7 +79,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include "SchXMLSeriesHelper.hxx"
+#include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 #include <set>
 #include <time.h>

@@ -32,6 +32,7 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/PropertySetInfoHash.hxx,
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/PropertySetInfoKey.hxx,xmloff/PropertySetInfoKey.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SchXMLExportHelper.hxx,xmloff/SchXMLExportHelper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SchXMLImportHelper.hxx,xmloff/SchXMLImportHelper.hxx))
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SchXMLSeriesHelper.hxx,xmloff/SchXMLSeriesHelper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SettingsExportHelper.hxx,xmloff/SettingsExportHelper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SinglePropertySetInfoCache.hxx,xmloff/SinglePropertySetInfoCache.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/WordWrapPropertyHdl.hxx,xmloff/WordWrapPropertyHdl.hxx))

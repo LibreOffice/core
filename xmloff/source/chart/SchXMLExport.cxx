@@ -24,7 +24,6 @@
 
 #include "SchXMLExport.hxx"
 #include "XMLChartPropertySetMapper.hxx"
-#include "SchXMLSeriesHelper.hxx"
 #include "ColorPropertySet.hxx"
 #include "SchXMLTools.hxx"
 #include "SchXMLEnumConverter.hxx"
@@ -42,6 +41,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetae.hxx>
+#include <xmloff/SchXMLSeriesHelper.hxx>
 #include "xexptran.hxx"
 #include <rtl/math.hxx>
 // header for any2enum
