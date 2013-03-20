@@ -96,11 +96,16 @@ published service LineDiagram
     /** determines if the chart is a spline-chart type and specifies
         the type of splines.
 
+        @see CurveStyle
         <p>You can set the following values:
         <table border>
         <tr><td>0</td><td>lines are used instead of splines</td></tr>
         <tr><td>1</td><td>use cubic splines</td></tr>
         <tr><td>2</td><td>use B-splines</td></tr>
+        <tr><td>3</td><td>use stepped line with step start</td></tr>
+        <tr><td>4</td><td>use stepped line with step end</td></tr>
+        <tr><td>5</td><td>use stepped line with step center x</td></tr>
+        <tr><td>6</td><td>use stepped line with step center y</td></tr>
         </table>
         </p>
      */
