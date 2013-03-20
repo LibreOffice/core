@@ -31,6 +31,7 @@
 #include "editeng/contouritem.hxx"
 #include "editeng/crossedoutitem.hxx"
 #include "editeng/editdata.hxx"
+#include "editeng/editobj.hxx"
 #include "editeng/editstat.hxx"
 #include "editeng/eeitem.hxx"
 #include "editeng/emphasismarkitem.hxx"
@@ -173,6 +174,9 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -431,6 +435,7 @@
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>

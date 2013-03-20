@@ -153,6 +153,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/DrawViewMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -272,6 +273,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -301,6 +303,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>

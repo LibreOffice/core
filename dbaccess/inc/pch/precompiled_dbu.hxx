@@ -174,6 +174,7 @@
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdb/XTextConnectionSettings.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/application/CopyTableWizard.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
@@ -286,6 +287,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>

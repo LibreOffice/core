@@ -231,7 +231,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
@@ -348,7 +347,6 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/tools/converter.hxx>
@@ -363,13 +361,11 @@
 #include <svx/svdotext.hxx>
 #include <svx/unoapi.hxx>
 #include <time.h>
-#include <tools/debug.hxx>
 #include <tools/globname.hxx>
 #include <tools/multisel.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <typeinfo>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/streamwrap.hxx>
@@ -378,6 +374,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>
+#include <xmloff/SchXMLSeriesHelper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

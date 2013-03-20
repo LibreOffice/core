@@ -205,6 +205,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <com/sun/star/i18n/IndexEntrySupplier.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -215,7 +216,6 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -234,6 +234,7 @@
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
@@ -252,6 +253,7 @@
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
+#include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -388,6 +390,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -403,6 +406,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/DateTimeRange.hpp>
 #include <com/sun/star/util/Duration.hpp>
+#include <com/sun/star/util/JobManager.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
@@ -481,6 +485,7 @@
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
@@ -490,6 +495,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <editeng/acorrcfg.hxx>

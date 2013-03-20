@@ -129,7 +129,6 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/document/XMimeTypeInfo.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
@@ -179,6 +178,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -199,9 +199,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
+#include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
-#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -367,6 +367,7 @@
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
+#include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>

@@ -517,6 +517,7 @@
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>

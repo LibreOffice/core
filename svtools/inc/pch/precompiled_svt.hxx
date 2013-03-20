@@ -118,10 +118,9 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -155,11 +154,11 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
-#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
