@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/sfxuno.hxx>
@@ -89,17 +90,9 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
 *//*-*************************************************************************************************************/
 SfxFilterListener::SfxFilterListener()
 {
-    uno::Reference< lang::XMultiServiceFactory > xSmgr = ::comphelper::getProcessServiceFactory();
-    if( xSmgr.is() == sal_True )
-    {
-        uno::Reference< util::XRefreshable > xNotifier( xSmgr->createInstance( "com.sun.star.document.FilterConfigRefresh" ), uno::UNO_QUERY );
-        if( xNotifier.is() == sal_True )
-        {
-            m_xFilterCache = xNotifier;
-            m_xFilterCacheListener = new SfxRefreshListener(this);
-            m_xFilterCache->addRefreshListener( m_xFilterCacheListener );
-        }
-    }
+    m_xFilterCache = document::FilterConfigRefresh::create( comphelper::getProcessComponentContext() );
+    m_xFilterCacheListener = new SfxRefreshListener(this);
+    m_xFilterCache->addRefreshListener( m_xFilterCacheListener );
 }
 
 SfxFilterListener::~SfxFilterListener()
