@@ -16,6 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
+import uno
 from abc import ABCMeta, abstractmethod
 from ...common.PropertyNames import PropertyNames
 
@@ -74,7 +75,11 @@ class DataAware(object):
     '''
 
     def updateUI(self):
-        data = getattr(self._dataObject, self._field)
+        try:
+            data = getattr(self._dataObject, self._field)
+        except Exception:
+            print ("DEBUG !!! dataObject hasn't the attribute, su using the 'getter' method.")
+            data = uno.invoke(self._dataObject, "get" + self._field, ())
         ui = self.getFromUI()
         if data is not ui:
             try:
@@ -107,7 +112,11 @@ class DataAware(object):
 
     def updateData(self):
         try:
-            data = getattr(self._dataObject, self._field)
+            try:
+                data = getattr(self._dataObject, self._field)
+            except Exception:
+                print ("DEBUG !!! dataObject hasn't the attribute, su using the 'getter' method.")
+                data = uno.invoke(self._dataObject, "get" + self._field, ())
             ui = self.getFromUI()
             if data is not ui:
                 if isinstance(ui,tuple):
