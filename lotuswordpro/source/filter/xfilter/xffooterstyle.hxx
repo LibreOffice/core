@@ -57,8 +57,8 @@
  * @file
  * Footer style,exist in page-master object.
  ************************************************************************/
-#ifndef     _XFFOOTERSTYLE_HXX
-#define     _XFFOOTERSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfheaderstyle.hxx"
 #include "xfmargins.hxx"

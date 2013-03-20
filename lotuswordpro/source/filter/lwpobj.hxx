@@ -62,8 +62,8 @@
  *  Base class of all Lwp VO objects
  */
 
-#ifndef _LWPOBJ_HXX_
-#define _LWPOBJ_HXX_
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 

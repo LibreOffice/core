@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef  __AXHOST_HXX
-#define __AXHOST_HXX
+#pragma once
+#if 1
 
 #include <atlbase.h>
 extern CComModule _Module;

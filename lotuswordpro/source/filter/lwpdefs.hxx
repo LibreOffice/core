@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDEFS_HXX
-#define _LWPDEFS_HXX
+#pragma once
+#if 1
 
 #define BAD_OFFSET 0xFFFFFFFFUL
 #define BAD_ATOM ((sal_Int32)(-1))              // Invalid Atom ID

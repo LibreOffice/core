@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLTABLESHAPERESIZER_HXX
-#define SC_XMLTABLESHAPERESIZER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/table/CellAddress.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
-#define ACC_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
+#pragma once
+#if 1
 
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>

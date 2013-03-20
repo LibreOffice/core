@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_DLGCTRLS_HXX
-#define SD_DLGCTRLS_HXX
+#pragma once
+#if 1
 
 #include "TransitionPreset.hxx"
 #include <vcl/lstbox.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_ATTRIBUTE_LIST_HXX
-#define _COMPHELPER_ATTRIBUTE_LIST_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>

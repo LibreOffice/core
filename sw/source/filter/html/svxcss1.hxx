@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVXCSS1_HXX
-#define _SVXCSS1_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include <svl/itemset.hxx>

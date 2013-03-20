@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef BASIC_SBGLOBAL_HXX
-#define BASIC_SBGLOBAL_HXX
+#pragma once
+#if 1
 
 namespace utl {
     class TransliterationWrapper;

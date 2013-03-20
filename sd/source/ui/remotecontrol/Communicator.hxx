@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SD_IMPRESSREMOTE_COMMUNICATOR_HXX
-#define _SD_IMPRESSREMOTE_COMMUNICATOR_HXX
+#pragma once
+#if 1
 
 #include <stdlib.h>
 #include <unistd.h>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SW_COMMENT_RULER_HXX
-#define SW_COMMENT_RULER_HXX
+#pragma once
+#if 1
 
 #include <svx/ruler.hxx>
 

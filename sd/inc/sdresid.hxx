@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_RESID_HXX
-#define SD_RESID_HXX
+#pragma once
+#if 1
 
 #include <tools/resid.hxx>
 #include "sddllapi.h"

@@ -57,8 +57,8 @@
  * @file
  * Base list object.
  ************************************************************************/
-#ifndef     _XFLIST_HXX
-#define     _XFLIST_HXX
+#pragma once
+#if 1
 
 #include "xflistitem.hxx"
 #include "xfcontentcontainer.hxx"

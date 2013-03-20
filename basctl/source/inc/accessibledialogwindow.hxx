@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_ACCESSIBLEDIALOGWINDOW_HXX
-#define BASCTL_ACCESSIBLEDIALOGWINDOW_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

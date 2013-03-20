@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CGM_BITMAP_HXX_
-#define CGM_BITMAP_HXX_
+#pragma once
+#if 1
 
 #include "cgm.hxx"
 #include <vcl/bmpacc.hxx>

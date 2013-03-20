@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HEADERTABLISTBOX_HXX
-#define _HEADERTABLISTBOX_HXX
+#pragma once
+#if 1
 
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>

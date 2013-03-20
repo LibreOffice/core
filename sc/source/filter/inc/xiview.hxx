@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XIVIEW_HXX
-#define SC_XIVIEW_HXX
+#pragma once
+#if 1
 
 #include "xlview.hxx"
 #include "xiroot.hxx"

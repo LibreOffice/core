@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FTRANSL_HXX_
-#define _FTRANSL_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

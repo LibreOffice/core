@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_CINFO_CI_TEXT2_HXX
-#define ARY_CINFO_CI_TEXT2_HXX
+#pragma once
+#if 1
 
 
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITUNDO_HXX
-#define _EDITUNDO_HXX
+#pragma once
+#if 1
 
 #include <editdoc.hxx>
 #include <editeng/editund2.hxx>

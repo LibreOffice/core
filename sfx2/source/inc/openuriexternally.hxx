@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_INC_OPENURIEXTERNALLY_HXX
-#define INCLUDED_SFX2_SOURCE_INC_OPENURIEXTERNALLY_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

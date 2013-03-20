@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REGISTRY_REFLTYPE_HXX_
-#define _REGISTRY_REFLTYPE_HXX_
+#pragma once
+#if 1
 
 #include "registry/types.h"
 #include <sal/types.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ADDINLIS_HXX
-#define SC_ADDINLIS_HXX
+#pragma once
+#if 1
 
 #include "adiasync.hxx" // for ScAddInDocs PtrArr
 #include <com/sun/star/sheet/XResultListener.hpp>

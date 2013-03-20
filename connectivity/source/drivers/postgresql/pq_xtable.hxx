@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_TABLE_HXX_
-#define _PQ_TABLE_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/propshlp.hxx>

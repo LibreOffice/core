@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef GRAPHICCOLLECTOR_HXX
-#define GRAPHICCOLLECTOR_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>

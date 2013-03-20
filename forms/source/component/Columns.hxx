@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_COLUMNS_HXX
-#define _FRM_COLUMNS_HXX
+#pragma once
+#if 1
 
 #include "cloneable.hxx"
 #include "frm_strings.hxx"

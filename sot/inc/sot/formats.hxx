@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOT_FORMATS_HXX
-#define _SOT_FORMATS_HXX
+#pragma once
+#if 1
 
 #ifdef _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_HELPER_REFMAP_HXX
-#define OOX_HELPER_REFMAP_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <boost/bind.hpp>

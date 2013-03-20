@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_AREASDLG_HXX
-#define SC_AREASDLG_HXX
+#pragma once
+#if 1
 
 #include "address.hxx"
 

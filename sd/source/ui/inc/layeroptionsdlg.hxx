@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_LAYER_DLG_HXX_
-#define _SD_LAYER_DLG_HXX_
+#pragma once
+#if 1
 
 #include <sddllapi.h>
 

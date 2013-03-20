@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_KAB_CATALOG_HXX_
-#define _CONNECTIVITY_KAB_CATALOG_HXX_
+#pragma once
+#if 1
 
 #include "connectivity/sdbcx/VCatalog.hxx"
 

@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef PG_UPDATEABLERESULTSET_HXX_
-#define PG_UPDATEABLERESULTSET_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>

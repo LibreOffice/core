@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPCELLLAYOUT_HXX
-#define _LWPCELLLAYOUT_HXX
+#pragma once
+#if 1
 #include <vector>
 #include <map>
 #include "lwplayout.hxx"

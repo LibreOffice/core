@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FETC_HXX_
-#define _FETC_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

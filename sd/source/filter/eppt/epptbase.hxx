@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EPPT_EPPTBASE_HXX
-#define EPPT_EPPTBASE_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>

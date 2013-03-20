@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLPANEL_I_LAYOUTABLE_WINDOW_HXX
-#define SD_TOOLPANEL_I_LAYOUTABLE_WINDOW_HXX
+#pragma once
+#if 1
 
 #include <tools/gen.hxx>
 #include <sal/types.h>

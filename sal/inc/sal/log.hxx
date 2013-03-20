@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SAL_LOG_HXX
-#define INCLUDED_SAL_LOG_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

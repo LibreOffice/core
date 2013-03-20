@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
-#define _SVTOOLS_EDITBROWSEBOX_HXX_
+#pragma once
+#if 1
 #define SVTOOLS_IN_EDITBROWSEBOX_HXX
 
 #include "svtools/svtdllapi.h"

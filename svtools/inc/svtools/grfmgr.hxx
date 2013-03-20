@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GRFMGR_HXX
-#define _GRFMGR_HXX
+#pragma once
+#if 1
 
 #include <vcl/graph.hxx>
 #include <svtools/svtdllapi.h>

@@ -61,8 +61,8 @@
  * Change History
  May 2005           Created
  ************************************************************************/
-#ifndef _LWPBOOKMARKMGR_HXX_
-#define _LWPBOOKMARKMGR_HXX_
+#pragma once
+#if 1
 
 #include "lwpfilehdr.hxx"
 #include <map>

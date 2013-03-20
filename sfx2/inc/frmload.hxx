@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_FRMLOAD_HXX
-#define _SFX_FRMLOAD_HXX
+#pragma once
+#if 1
 
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/objsh.hxx"

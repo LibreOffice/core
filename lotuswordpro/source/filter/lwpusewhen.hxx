@@ -58,8 +58,8 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef _LWPUSEWHEN_HXX
-#define _LWPUSEWHEN_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 

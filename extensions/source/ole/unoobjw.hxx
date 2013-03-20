@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOOBJW_HXX
-#define _UNOOBJW_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/beans/XExactName.hpp>

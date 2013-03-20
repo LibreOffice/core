@@ -57,8 +57,8 @@
  * @file
  * Drop cap of a paragraph.
  ************************************************************************/
-#ifndef     _XFDROPCAP_HXX
-#define     _XFDROPCAP_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

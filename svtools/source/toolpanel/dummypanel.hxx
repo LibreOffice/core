@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DUMMYPANEL_HXX
-#define DUMMYPANEL_HXX
+#pragma once
+#if 1
 
 #include "svtools/toolpanel/toolpanel.hxx"
 #include "svtools/toolpanel/refbase.hxx"

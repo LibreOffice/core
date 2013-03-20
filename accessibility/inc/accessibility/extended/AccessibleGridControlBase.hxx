@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROLBASE_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROLBASE_HXX
+#pragma once
+#if 1
 
 #include <svtools/accessibletable.hxx>
 #include <rtl/ustring.hxx>

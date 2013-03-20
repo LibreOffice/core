@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OPTIMIZATIONSTATS_HXX
-#define OPTIMIZATIONSTATS_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>

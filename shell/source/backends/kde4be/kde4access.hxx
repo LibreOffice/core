@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_SOURCE_BACKENDS_KDE4BE_KDE4ACCESS_HXX
-#define INCLUDED_SHELL_SOURCE_BACKENDS_KDE4BE_KDE4ACCESS_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

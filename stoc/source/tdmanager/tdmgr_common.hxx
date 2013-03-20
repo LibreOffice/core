@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STOC_TDMGR_COMMON_HXX
-#define _STOC_TDMGR_COMMON_HXX
+#pragma once
+#if 1
 
 #include <rtl/unload.h>
 

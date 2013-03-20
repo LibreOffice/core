@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef INCLUDED_SVTOOLS_SAMPLETEXT_HXX
-#define INCLUDED_SVTOOLS_SAMPLETEXT_HXX
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 #include <rtl/ustring.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DUMP_OLEDUMPER_HXX
-#define OOX_DUMP_OLEDUMPER_HXX
+#pragma once
+#if 1
 
 #include "oox/helper/storagebase.hxx"
 #include "oox/dump/dumperbase.hxx"

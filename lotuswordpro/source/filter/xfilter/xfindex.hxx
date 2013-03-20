@@ -57,8 +57,8 @@
  * @file
  * Represente index source,index body and index index entry.
  ************************************************************************/
-#ifndef     _XFINDEX_HXX
-#define     _XFINDEX_HXX
+#pragma once
+#if 1
 #include <map>
 #include <vector>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FMSEARCH_HXX
-#define _FMSEARCH_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <vcl/dialog.hxx>

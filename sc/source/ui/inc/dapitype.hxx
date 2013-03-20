@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DAPITYPE_HXX
-#define SC_DAPITYPE_HXX
+#pragma once
+#if 1
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

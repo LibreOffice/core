@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_ZOOMCTRL_HXX
-#define _SVX_ZOOMCTRL_HXX
+#pragma once
+#if 1
 
 #include <sfx2/stbitem.hxx>
 #include "svx/svxdllapi.h"

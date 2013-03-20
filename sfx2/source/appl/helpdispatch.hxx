@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX_HELPDISPATCH_HXX
-#define SFX_HELPDISPATCH_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase1.hxx>

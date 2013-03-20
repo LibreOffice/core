@@ -35,8 +35,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  ************************************************************************/
 
-#ifndef SC_PVLAYDLG_HXX
-#define SC_PVLAYDLG_HXX
+#pragma once
+#if 1
 
 #include <memory>
 #include <vector>

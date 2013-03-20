@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_PROPCTRLR_BROWSERVIEW_HXX_
-#define _EXTENSIONS_PROPCTRLR_BROWSERVIEW_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

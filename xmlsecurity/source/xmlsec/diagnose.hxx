@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLSECURITY_DIAGNOSE_HXX
-#define XMLSECURITY_DIAGNOSE_HXX
+#pragma once
+#if 1
 
 
 namespace xmlsecurity

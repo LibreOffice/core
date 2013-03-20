@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_OPCODE_HXX
-#define FORMULA_OPCODE_HXX
+#pragma once
+#if 1
 
 #include "formula/compiler.hrc"                     // OpCodes
 #include <tools/solar.h>

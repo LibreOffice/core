@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_XMLAUTOSTYLE_HXX
-#define DBA_XMLAUTOSTYLE_HXX
+#pragma once
+#if 1
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmltypes.hxx>

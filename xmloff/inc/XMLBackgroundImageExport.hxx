@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLBACKGROUNDIMAGEEXPORT_HXX
-#define _XMLBACKGROUNDIMAGEEXPORT_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

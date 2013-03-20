@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WW8ATTRIBUTEOUTPUT_HXX_
-#define _WW8ATTRIBUTEOUTPUT_HXX_
+#pragma once
+#if 1
 
 #include "attributeoutputbase.hxx"
 #include "wrtww8.hxx"

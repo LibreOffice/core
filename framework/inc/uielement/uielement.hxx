@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_LAYOUTMANAGER_UIELEMENT_HXX_
-#define __FRAMEWORK_LAYOUTMANAGER_UIELEMENT_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>

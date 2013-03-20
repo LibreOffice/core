@@ -57,8 +57,8 @@
  * @file
  * Reperesent a point.
  ************************************************************************/
-#ifndef     _XFPOINT_HXX
-#define     _XFPOINT_HXX
+#pragma once
+#if 1
 
 class XFPoint
 {

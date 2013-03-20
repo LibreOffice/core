@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_TABLENAME_HXX
-#define DBACCESS_SOURCE_SDBTOOLS_CONNECTION_TABLENAME_HXX
+#pragma once
+#if 1
 
 #include "connectiondependent.hxx"
 

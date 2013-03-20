@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XIMPSHAPE_HXX
-#define _XIMPSHAPE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>

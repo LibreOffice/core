@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBA_SHEETOBJECTS_HXX
-#define SC_VBA_SHEETOBJECTS_HXX
+#pragma once
+#if 1
 
 #include <ooo/vba/excel/XGraphicObjects.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SHAPEMAPS_HXX
-#define INCLUDED_SLIDESHOW_SHAPEMAPS_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/uno/Reference.hxx>

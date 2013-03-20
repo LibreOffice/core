@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_PROPERTIES_CIRCLEPROPERTIES_HXX
-#define _SDR_PROPERTIES_CIRCLEPROPERTIES_HXX
+#pragma once
+#if 1
 
 #include <svx/sdr/properties/rectangleproperties.hxx>
 

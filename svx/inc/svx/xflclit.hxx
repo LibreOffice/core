@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XFLCLIT_HXX
-#define _SVX_XFLCLIT_HXX
+#pragma once
+#if 1
 
 #include <svx/xcolit.hxx>
 #include "svx/svxdllapi.h"

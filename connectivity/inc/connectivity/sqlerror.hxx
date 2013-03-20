@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_SQLERROR_HXX
-#define CONNECTIVITY_SQLERROR_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

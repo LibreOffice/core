@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_TBX_WW_HXX
-#define _SD_TBX_WW_HXX
+#pragma once
+#if 1
 
 #include <sdresid.hxx>
 #include <sfx2/tbxctrl.hxx>

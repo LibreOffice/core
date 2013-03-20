@@ -24,8 +24,8 @@
  * instead of those above.
  */
 
-#ifndef _SVTOOLS_LANGHELP_HXX_
-#define _SVTOOLS_LANGHELP_HXX_
+#pragma once
+#if 1
 
 #include <svtools/svtdllapi.h>
 

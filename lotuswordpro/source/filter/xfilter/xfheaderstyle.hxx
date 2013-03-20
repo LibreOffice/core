@@ -57,8 +57,8 @@
  * @file
  * Header style,exist in page-master object.
  ************************************************************************/
-#ifndef     _XFHEADERSTYLE_HXX
-#define     _XFHEADERSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 #include "xfmargins.hxx"

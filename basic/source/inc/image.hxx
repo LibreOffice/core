@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBIMAGE_HXX
-#define _SBIMAGE_HXX
+#pragma once
+#if 1
 
 #include "sbintern.hxx"
 #include <rtl/ustring.hxx>

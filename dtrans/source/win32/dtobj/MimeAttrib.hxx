@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _MIMEATTRIB_HXX_
-#define _MIMEATTRIB_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 

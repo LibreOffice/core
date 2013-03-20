@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLBASICI_HXX
-#define _XMLOFF_XMLBASICI_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XXMLOasisBasicImporter.hpp>

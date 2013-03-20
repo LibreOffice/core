@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_CHARTARR_HXX
-#define SC_CHARTARR_HXX
+#pragma once
+#if 1
 
 // -----------------------------------------------------------------------
 

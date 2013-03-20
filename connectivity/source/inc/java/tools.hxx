@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
-#define _CONNECTIVITY_JAVA_TOOLS_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>

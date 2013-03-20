@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SELECTIONSTATE_HXX
-#define SC_SELECTIONSTATE_HXX
+#pragma once
+#if 1
 
 #include <editeng/editdata.hxx>
 #include "rangelst.hxx"

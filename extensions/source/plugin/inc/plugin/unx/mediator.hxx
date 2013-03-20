@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _MEDIATOR_HXX
-#define _MEDIATOR_HXX
+#pragma once
+#if 1
 
 #include <string.h>
 #include <tools/link.hxx>

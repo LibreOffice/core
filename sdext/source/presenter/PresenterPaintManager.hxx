@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_PRESENTER_PAINT_MANAGER_HXX
-#define SDEXT_PRESENTER_PRESENTER_PAINT_MANAGER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>

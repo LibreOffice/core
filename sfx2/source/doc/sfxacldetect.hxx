@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SFXACLDETECT_HXX__
-#define __SFXACLDETECT_HXX__
+#pragma once
+#if 1
 
 // Let's check if this extra ACL check is still necessary...  If disabling it
 // causes no regressions, then we can safely remove this code.

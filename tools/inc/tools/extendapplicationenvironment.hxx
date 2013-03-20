@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_TOOLS_EXTENDAPPLICATIONENVIRONMENT_HXX
-#define INCLUDED_TOOLS_EXTENDAPPLICATIONENVIRONMENT_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 #include "tools/toolsdllapi.h"

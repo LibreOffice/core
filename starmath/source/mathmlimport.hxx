@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MATHMLIMPORT_HXX_
-#define _MATHMLIMPORT_HXX_
+#pragma once
+#if 1
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlexp.hxx>

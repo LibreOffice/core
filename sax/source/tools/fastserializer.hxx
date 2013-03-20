@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SAX_FASTSERIALIZER_HXX
-#define SAX_FASTSERIALIZER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

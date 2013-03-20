@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOM_ENTITY_HXX
-#define DOM_ENTITY_HXX
+#pragma once
+#if 1
 
 #include <libxml/tree.h>
 #include <libxml/entities.h>

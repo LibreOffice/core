@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UINUMS_HXX
-#define _UINUMS_HXX
+#pragma once
+#if 1
 
 #include <numrule.hxx>
 #include "swdllapi.h"

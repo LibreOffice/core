@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SUBMISSION_HXX
-#define _SUBMISSION_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase2.hxx>
 #include <propertysetbase.hxx>

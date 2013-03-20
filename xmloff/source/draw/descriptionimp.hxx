@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_DESCRIPTIONIMP_HXX
-#define _XMLOFF_DESCRIPTIONIMP_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>

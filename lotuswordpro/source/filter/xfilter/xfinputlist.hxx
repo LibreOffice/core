@@ -57,8 +57,8 @@
  * @file
  * input list field.
  ************************************************************************/
-#ifndef     _XFINPUTLIST_HXX
-#define     _XFINPUTLIST_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 

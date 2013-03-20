@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWP_FNLAYOUT_HXX
-#define _LWP_FNLAYOUT_HXX
+#pragma once
+#if 1
 
 #include "lwptablelayout.hxx"
 

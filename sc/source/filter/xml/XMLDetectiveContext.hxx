@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLDETECTIVECONTEXT_HXX
-#define SC_XMLDETECTIVECONTEXT_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>

@@ -23,8 +23,8 @@
 |* checked in and does only contain the enumerator.
 \************************************************************************/
 
-#ifndef _SD_PRLAYOUT_HXX_
-#define _SD_PRLAYOUT_HXX_
+#pragma once
+#if 1
 
 enum PresentationObjects
 {

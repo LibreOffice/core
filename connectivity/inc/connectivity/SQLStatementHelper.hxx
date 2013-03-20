@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SQLSTATEMENTHELPER_HXX_
-#define _CONNECTIVITY_SQLSTATEMENTHELPER_HXX_
+#pragma once
+#if 1
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>

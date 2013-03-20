@@ -57,8 +57,8 @@
  * @file
  * Annotation object.
  ************************************************************************/
-#ifndef     _XFANNOTATION_HXX
-#define     _XFANNOTATION_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

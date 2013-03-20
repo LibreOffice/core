@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef PLUGIN_INC_MACPLUG_HXX
-#define PLUGIN_INC_MACPLUG_HXX
+#pragma once
+#if 1
 
 #include <unistd.h>
 

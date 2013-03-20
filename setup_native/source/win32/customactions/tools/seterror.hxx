@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SETERROR_HXX_
-#define _SETERROR_HXX_
+#pragma once
+#if 1
 
 //----------------------------------------------------------
 // list of own error codes

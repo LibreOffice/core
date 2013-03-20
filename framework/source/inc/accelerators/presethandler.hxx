@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
-#define __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
+#pragma once
+#if 1
 
 #include <accelerators/storageholder.hxx>
 #include <threadhelp/threadhelpbase.hxx>

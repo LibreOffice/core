@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ACCNOTEXTFRAME_HXX
-#define _ACCNOTEXTFRAME_HXX
+#pragma once
+#if 1
 #include "accframebase.hxx"
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 

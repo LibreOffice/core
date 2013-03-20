@@ -62,8 +62,8 @@
  * For LWP filter architecture prototype
  * Implementation file of SdwRectangle.
  */
-#ifndef _SDWRECTANGLE_HXX
-#define _SDWRECTANGLE_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include <tools/gen.hxx>

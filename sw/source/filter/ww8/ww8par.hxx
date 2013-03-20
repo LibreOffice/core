@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WW8PAR_HXX
-#define _WW8PAR_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include <filter/msfilter/msdffimp.hxx>

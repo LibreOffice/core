@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef OOX_OLE_AXBINARYWRITER_HXX
-#define OOX_OLE_AXBINARYWRITER_HXX
+#pragma once
+#if 1
 
 #include <utility>
 #include "oox/helper/binaryoutputstream.hxx"

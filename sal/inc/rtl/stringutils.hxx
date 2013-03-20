@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTL_STRINGUTILS_HXX_
-#define _RTL_STRINGUTILS_HXX_
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

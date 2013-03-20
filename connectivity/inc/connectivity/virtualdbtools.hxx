@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_VIRTUAL_DBTOOLS_HXX
-#define CONNECTIVITY_VIRTUAL_DBTOOLS_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>

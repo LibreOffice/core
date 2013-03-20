@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
-#define OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "oox/helper/propertymap.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FTP_FTPINTREQ_HXX
-#define _FTP_FTPINTREQ_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>

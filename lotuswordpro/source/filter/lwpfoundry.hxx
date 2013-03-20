@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPFOUNDRY_HXX
-#define _LWPFOUNDRY_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 

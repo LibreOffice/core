@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSI_DSAPI_D_TOKEN_HXX
-#define CSI_DSAPI_D_TOKEN_HXX
+#pragma once
+#if 1
 
 // BASE CLASSES
 #include <ary_i/ci_text2.hxx>

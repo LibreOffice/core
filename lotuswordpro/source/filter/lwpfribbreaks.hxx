@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPFRIBBREAKS_HXX_
-#define _LWPFRIBBREAKS_HXX_
+#pragma once
+#if 1
 
 #include "lwpfrib.hxx"
 #include "xfilter/xfparastyle.hxx"

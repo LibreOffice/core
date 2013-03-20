@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_CHARMAP_HXX
-#define _SVX_CHARMAP_HXX
+#pragma once
+#if 1
 
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>

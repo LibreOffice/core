@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef _SC_CSVSPLITS_HXX
-#define _SC_CSVSPLITS_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

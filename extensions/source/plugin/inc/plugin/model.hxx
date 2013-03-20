@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __PLUGIN_MODEL_HXX
-#define __PLUGIN_MODEL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>

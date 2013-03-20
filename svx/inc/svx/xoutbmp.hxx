@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XOUTBMP_HXX
-#define _XOUTBMP_HXX
+#pragma once
+#if 1
 
 #include <vcl/graph.hxx>
 #include <com/sun/star/uno/Sequence.h>

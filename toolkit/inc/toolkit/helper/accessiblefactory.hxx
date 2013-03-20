@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
-#define TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Reference.hxx>
 

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _IMAPIMP_HXX_
-#define _IMAPIMP_HXX_
+#pragma once
+#if 1
 
 // ---------------
 // - IMapOwnData -

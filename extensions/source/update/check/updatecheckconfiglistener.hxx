@@ -19,8 +19,8 @@
 
 #include <rtl/ref.hxx>
 
-#ifndef _UPDATECHECKCONFIGLISTENER_HXX_
-#define _UPDATECHECKCONFIGLISTENER_HXX_
+#pragma once
+#if 1
 
 /* This interface should be implemented by classes acting
  * as controller (as in the MVC pattern).

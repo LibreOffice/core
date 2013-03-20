@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_BASICIDECTRLR_HXX
-#define BASCTL_BASICIDECTRLR_HXX
+#pragma once
+#if 1
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>

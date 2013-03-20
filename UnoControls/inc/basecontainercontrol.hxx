@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOCONTROLS_BASECONTAINERCONTROL_CTRL_HXX
-#define _UNOCONTROLS_BASECONTAINERCONTROL_CTRL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_TOGGLESTATE_HXX
-#define FORMS_TOGGLESTATE_HXX
+#pragma once
+#if 1
 
 //........................................................................
 namespace frm

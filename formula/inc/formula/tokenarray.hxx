@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_TOKENARRAY_HXX
-#define FORMULA_TOKENARRAY_HXX
+#pragma once
+#if 1
 
 #include <limits.h>
 #include "formula/token.hxx"

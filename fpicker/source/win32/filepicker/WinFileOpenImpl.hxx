@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _WINFILEOPENIMPL_HXX_
-#define _WINFILEOPENIMPL_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>

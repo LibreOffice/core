@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_REFL_BASE_HXX_
-#define _PQ_REFL_BASE_HXX_
+#pragma once
+#if 1
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/component.hxx>
 

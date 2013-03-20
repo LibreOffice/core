@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __OWNVIEW_HXX_
-#define __OWNVIEW_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>

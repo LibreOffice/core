@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDIBROW_HXX
-#define _SVDIBROW_HXX
+#pragma once
+#if 1
 
 #include <svtools/brwbox.hxx>
 #include <vcl/edit.hxx>

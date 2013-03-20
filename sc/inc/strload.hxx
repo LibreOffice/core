@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STRLOAD_HXX
-#define SC_STRLOAD_HXX
+#pragma once
+#if 1
 
 #include "scresid.hxx"
 #include <tools/rc.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AVMEDIA_MEDIAWINDOW_IMPL_HXX
-#define _AVMEDIA_MEDIAWINDOW_IMPL_HXX
+#pragma once
+#if 1
 
 #include <svtools/transfer.hxx>
 #include <vcl/syschild.hxx>

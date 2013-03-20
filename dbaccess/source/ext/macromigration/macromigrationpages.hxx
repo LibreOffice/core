@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MACROMIGRATIONPAGES_HXX
-#define DBACCESS_MACROMIGRATIONPAGES_HXX
+#pragma once
+#if 1
 
 #include "migrationprogress.hxx"
 #include "rangeprogressbar.hxx"

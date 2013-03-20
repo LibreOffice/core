@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SIMPREF_HXX
-#define SC_SIMPREF_HXX
+#pragma once
+#if 1
 
 #include <vcl/group.hxx>
 

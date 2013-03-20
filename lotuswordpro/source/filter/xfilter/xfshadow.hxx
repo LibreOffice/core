@@ -57,8 +57,8 @@
  * @file
  * Shadow object,now only used by paragraph object.
  ************************************************************************/
-#ifndef     _XFSHADOW_HXX
-#define     _XFSHADOW_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

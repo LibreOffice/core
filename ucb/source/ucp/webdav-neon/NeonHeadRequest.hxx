@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _NEONHEADREQUEST_HXX_
-#define _NEONHEADREQUEST_HXX_
+#pragma once
+#if 1
 
 #include <vector>
 #include "NeonTypes.hxx"

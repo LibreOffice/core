@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SHOW_WINDOW_HXX
-#define SD_SHOW_WINDOW_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <sal/types.h>

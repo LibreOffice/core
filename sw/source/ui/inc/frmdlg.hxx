@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRMDLG_HXX
-#define _FRMDLG_HXX
+#pragma once
+#if 1
 
 #include "globals.hrc"
 #include <sfx2/tabdlg.hxx>

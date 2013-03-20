@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALAQUAFOLDERPICKER_HXX_
-#define _SALAQUAFOLDERPICKER_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/util/XCancellable.hpp>

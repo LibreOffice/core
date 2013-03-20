@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PARCSS1_HXX
-#define _PARCSS1_HXX
+#pragma once
+#if 1
 
 // Die Tokens des CSS1-Parsers
 enum CSS1Token

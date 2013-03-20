@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PG_RESULTSET_HXX_
-#define _PG_RESULTSET_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/component.hxx>

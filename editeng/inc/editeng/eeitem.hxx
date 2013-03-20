@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EEITEM_HXX
-#define EEITEM_HXX
+#pragma once
+#if 1
 
 #include <svl/solar.hrc>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TRANSFORMERACTION_HXX
-#define _XMLOFF_TRANSFORMERACTION_HXX
+#pragma once
+#if 1
 
 #define XML_TACTION_EOT 0x0000
 #define XML_TACTION_END 0xffff

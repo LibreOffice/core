@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDGCPITM_HXX
-#define _SDGCPITM_HXX
+#pragma once
+#if 1
 
 #include <svx/grfcrop.hxx>
 #include <svx/svddef.hxx>

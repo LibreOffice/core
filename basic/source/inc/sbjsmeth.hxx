@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SB_SBJSMETH_HXX
-#define _SB_SBJSMETH_HXX
+#pragma once
+#if 1
 
 #include <basic/sbmeth.hxx>
 

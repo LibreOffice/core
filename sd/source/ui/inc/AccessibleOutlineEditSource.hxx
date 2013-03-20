@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
-#define SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
+#pragma once
+#if 1
 
 #include <memory>
 #include <vcl/svapp.hxx>

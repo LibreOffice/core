@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
-#define DBAUI_JOINDESIGNVIEW_HXX
+#pragma once
+#if 1
 
 #include "dataview.hxx"
 #ifndef _VECTOR_

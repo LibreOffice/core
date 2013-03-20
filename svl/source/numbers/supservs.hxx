@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_NUMBERS_SUPPLIERSERVICE_HXX_
-#define _SVTOOLS_NUMBERS_SUPPLIERSERVICE_HXX_
+#pragma once
+#if 1
 
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>

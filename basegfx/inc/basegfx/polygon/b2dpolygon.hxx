@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
-#define _BGFX_POLYGON_B2DPOLYGON_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef AUTOSTYLETAG_HXX_INCLUDED
-#define AUTOSTYLETAG_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "itag.hxx"
 

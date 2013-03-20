@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_SDPOPUP_HXX
-#define _SD_SDPOPUP_HXX
+#pragma once
+#if 1
 
 
 #include <vcl/menu.hxx>

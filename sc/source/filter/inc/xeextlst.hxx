@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_EXCEL_EXTLST_HXX
-#define SC_EXCEL_EXTLST_HXX
+#pragma once
+#if 1
 
 #include "xerecord.hxx"
 #include "xeroot.hxx"

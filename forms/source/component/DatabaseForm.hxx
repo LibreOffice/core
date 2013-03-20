@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_DATABASEFORM_HXX_
-#define _FRM_DATABASEFORM_HXX_
+#pragma once
+#if 1
 
 #include "propertybaghelper.hxx"
 #include <com/sun/star/sdbc/XDataSource.hpp>

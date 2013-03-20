@@ -57,8 +57,8 @@
  * @file
  * Tab override for VO_PARASTYLE.
  ************************************************************************/
-#ifndef     _LWPTABOVERRIDE_HXX
-#define     _LWPTABOVERRIDE_HXX
+#pragma once
+#if 1
 
 #include "lwpoverride.hxx"
 #include "lwpobjid.hxx"

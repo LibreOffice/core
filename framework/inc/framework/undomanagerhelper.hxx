@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FRAMEWORK_UNDOMANAGERHELPER_HXX
-#define FRAMEWORK_UNDOMANAGERHELPER_HXX
+#pragma once
+#if 1
 
 #include "framework/fwedllapi.h"
 #include "framework/iguard.hxx"

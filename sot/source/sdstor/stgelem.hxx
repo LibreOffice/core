@@ -20,8 +20,8 @@
 // This file reflects the structure of MS file elements.
 // It is very sensitive to alignment!
 
-#ifndef _STGELEM_HXX
-#define _STGELEM_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 

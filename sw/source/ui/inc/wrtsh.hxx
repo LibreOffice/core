@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WRTSH_HXX
-#define _WRTSH_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include "swdllapi.h"

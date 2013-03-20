@@ -31,8 +31,8 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _MORK_PARSER_HXX_
-#define _MORK_PARSER_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

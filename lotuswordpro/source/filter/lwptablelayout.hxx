@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPTABLELAYOUT_HXX
-#define _LWPTABLELAYOUT_HXX
+#pragma once
+#if 1
 #include <vector>
 #include <map>
 #include "lwplayout.hxx"

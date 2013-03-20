@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_RESULTSETMETADATA_HXX_
-#define _PQ_RESULTSETMETADATA_HXX_
+#pragma once
+#if 1
 #include <vector>
 
 #include "pq_connection.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ERROBJECT_HXX
-#define ERROBJECT_HXX
+#pragma once
+#if 1
 #include "sbunoobj.hxx"
 #include <ooo/vba/XErrObject.hpp>
 

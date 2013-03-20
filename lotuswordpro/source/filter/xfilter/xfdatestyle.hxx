@@ -57,8 +57,8 @@
  * @file
  * Date style. The date format for date field.
  ************************************************************************/
-#ifndef     _XFDATESTYLE_HXX
-#define     _XFDATESTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

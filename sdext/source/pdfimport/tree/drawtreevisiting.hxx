@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFI_DRAWTREEVISITING_HXX
-#define INCLUDED_PDFI_DRAWTREEVISITING_HXX
+#pragma once
+#if 1
 
 #include "treevisiting.hxx"
 

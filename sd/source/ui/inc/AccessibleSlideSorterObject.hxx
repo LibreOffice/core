@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_SLIDE_SORTER_OBJECT_HXX
-#define SD_ACCESSIBILITY_ACCESSIBLE_SLIDE_SORTER_OBJECT_HXX
+#pragma once
+#if 1
 
 #include "MutexOwner.hxx"
 #include <cppuhelper/compbase5.hxx>

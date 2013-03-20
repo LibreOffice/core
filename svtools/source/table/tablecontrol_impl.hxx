@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_TABLECONTROL_IMPL_HXX
-#define SVTOOLS_TABLECONTROL_IMPL_HXX
+#pragma once
+#if 1
 
 #include "svtools/table/tablemodel.hxx"
 #include "svtools/table/tablecontrolinterface.hxx"

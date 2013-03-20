@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_INFO_INFODISP_HXX
-#define ARY_INFO_INFODISP_HXX
+#pragma once
+#if 1
 //  KORR_DEPRECATED_3.0
 
 // BASE CLASSES

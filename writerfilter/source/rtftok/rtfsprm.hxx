@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFSPRM_HXX_
-#define _RTFSPRM_HXX_
+#pragma once
+#if 1
 
 #include <boost/intrusive_ptr.hpp>
 #include <rtfcontrolwords.hxx>

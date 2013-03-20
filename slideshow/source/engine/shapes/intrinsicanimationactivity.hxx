@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_INTRINSICANIMATIONACTIVITY_HXX
-#define INCLUDED_SLIDESHOW_INTRINSICANIMATIONACTIVITY_HXX
+#pragma once
+#if 1
 
 #include "wakeupevent.hxx"
 #include "activity.hxx"

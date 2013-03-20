@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
-#define _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
+#pragma once
+#if 1
 
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimp.hxx>

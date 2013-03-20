@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_GRIDEVENTFORWARDER_HXX
-#define TOOLKIT_GRIDEVENTFORWARDER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>

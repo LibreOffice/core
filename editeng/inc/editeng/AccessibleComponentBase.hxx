@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_EXTENDED_COMPONENT_BASE_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_EXTENDED_COMPONENT_BASE_HXX
+#pragma once
+#if 1
 
 
 #include <com/sun/star/accessibility/XAccessible.hpp>

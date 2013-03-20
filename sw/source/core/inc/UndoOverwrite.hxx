@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_OVERWRITE_HXX
-#define SW_UNDO_OVERWRITE_HXX
+#pragma once
+#if 1
 
 #include <undobj.hxx>
 #include <com/sun/star/uno/Sequence.h>

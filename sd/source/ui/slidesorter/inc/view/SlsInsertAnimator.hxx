@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VIEW_INSERT_ANIMATOR_HXX
-#define SD_SLIDESORTER_VIEW_INSERT_ANIMATOR_HXX
+#pragma once
+#if 1
 
 #include "controller/SlsAnimator.hxx"
 #include <boost/scoped_ptr.hpp>

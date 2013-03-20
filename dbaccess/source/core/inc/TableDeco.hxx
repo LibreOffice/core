@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_CORE_TABLEDECORATOR_HXX_
-#define _DBA_CORE_TABLEDECORATOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

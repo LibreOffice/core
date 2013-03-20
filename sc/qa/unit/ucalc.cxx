@@ -6268,8 +6268,8 @@ void Test::testFormulaGrouping()
 
             if( !!pCur->GetCellGroup().get() ^ aGroupTests[i].bGroup[j] )
             {
-                printf("expected group test %lu at row %lu to be %d but is %d\n",
-                       i, j, aGroupTests[i].bGroup[j], !!pCur->GetCellGroup().get());
+//                printf("expected group test %lu at row %lu to be %d but is %d\n",
+//                       i, j, aGroupTests[i].bGroup[j], !!pCur->GetCellGroup().get());
                 CPPUNIT_ASSERT_MESSAGE("Failed", false);
             }
         }

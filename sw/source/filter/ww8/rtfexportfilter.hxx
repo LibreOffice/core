@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFEXPORTFILTER_HXX_
-#define _RTFEXPORTFILTER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_EVENTSUPPLIER_HXX_
-#define _SFX_EVENTSUPPLIER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>

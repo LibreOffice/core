@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UTL_BOOTSTRAP_HXX
-#define _UTL_BOOTSTRAP_HXX
+#pragma once
+#if 1
 
 namespace rtl
 {

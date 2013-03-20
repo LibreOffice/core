@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLS_PROPERTY_SET_HXX
-#define SD_TOOLS_PROPERTY_SET_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>

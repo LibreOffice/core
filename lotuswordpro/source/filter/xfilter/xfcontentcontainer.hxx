@@ -57,8 +57,8 @@
  * @file
  * Container for content.It will destroy all children when destroy.
  ************************************************************************/
-#ifndef     _XFCONTENTCONTAINER_HXX
-#define     _XFCONTENTCONTAINER_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 #include <vector>

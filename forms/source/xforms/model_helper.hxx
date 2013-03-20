@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _MODEL_HELPER_HXX
-#define _MODEL_HELPER_HXX
+#pragma once
+#if 1
 
 //
 // some helper definitions that must be available for model.cxx and

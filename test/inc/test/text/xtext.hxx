@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __TEST_TEXT_XTEXT_HXX__
-#define __TEST_TEXT_XTEXT_HXX__
+#pragma once
+#if 1
 
 #include "test/testdllapi.hxx"
 

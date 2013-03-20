@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_DLGSNAP_HXX
-#define _SD_DLGSNAP_HXX
+#pragma once
+#if 1
 
 
 #include <vcl/button.hxx>

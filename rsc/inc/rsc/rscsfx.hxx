@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCSFX_HXX
-#define _RSCSFX_HXX
+#pragma once
+#if 1
 
 // StarView     (RSC_NOTYPE) bis (RSC_NOTYPE + 0x190)
 // Sfx          (RSC_NOTYPE + 0x200) bis (RSC_NOTYPE + 0x20F)

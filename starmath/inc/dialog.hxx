@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DIALOG_HXX
-#define DIALOG_HXX
+#pragma once
+#if 1
 
 #include <vcl/image.hxx>
 #include <vcl/dialog.hxx>

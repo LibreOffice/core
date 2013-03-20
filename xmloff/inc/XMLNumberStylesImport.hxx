@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
-#define _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlnumfi.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

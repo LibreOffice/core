@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FILEDLG_HXX
-#define _FILEDLG_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include <tools/errcode.hxx>

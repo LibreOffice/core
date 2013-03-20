@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_REPORTHELPERDEFINES_HXX
-#define INCLUDED_REPORTHELPERDEFINES_HXX
+#pragma once
+#if 1
 
 #define REPORTCONTROLMODEL_HEADER()  \
     virtual ::rtl::OUString SAL_CALL getDataField() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \

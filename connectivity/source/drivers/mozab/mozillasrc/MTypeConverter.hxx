@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONNECTIVITY_MAB_TYPECONVERTER_HXX_
-#define _CONNECTIVITY_MAB_TYPECONVERTER_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 

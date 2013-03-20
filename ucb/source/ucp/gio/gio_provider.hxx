@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef GIO_PROVIDER_HXX
-#define GIO_PROVIDER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/Property.hpp>
 #include <ucbhelper/providerhelper.hxx>

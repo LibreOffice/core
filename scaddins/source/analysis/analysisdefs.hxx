@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ANALYSISDEFS_HXX
-#define ANALYSISDEFS_HXX
+#pragma once
+#if 1
 
 #define XPROPSET            ::com::sun::star::beans::XPropertySet
 #define REF(c)              ::com::sun::star::uno::Reference< c >

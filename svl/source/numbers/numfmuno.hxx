@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NUMFMUNO_HXX
-#define _NUMFMUNO_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XNumberFormatter2.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>

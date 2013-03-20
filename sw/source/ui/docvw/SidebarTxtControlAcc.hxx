@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SIDEBARTXTCONTROLACC_HXX
-#define _SIDEBARTXTCONTROLACC_HXX
+#pragma once
+#if 1
 
 #include <toolkit/awt/vclxwindow.hxx>
 

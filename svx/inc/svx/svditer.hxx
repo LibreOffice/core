@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDITER_HXX
-#define _SVDITER_HXX
+#pragma once
+#if 1
 
 #include <vector>
 

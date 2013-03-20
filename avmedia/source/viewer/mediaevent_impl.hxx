@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AVMEDIA_MEDIAEVENT_IMPL_HXX
-#define _AVMEDIA_MEDIAEVENT_IMPL_HXX
+#pragma once
+#if 1
 
 #include <avmedia/mediawindow.hxx>
 #include <cppuhelper/compbase4.hxx>

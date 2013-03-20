@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAMPLEADDIN_HXX_
-#define _SAMPLEADDIN_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase9.hxx>
 

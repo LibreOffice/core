@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _EXPLODE_HXX_
-#define _EXPLODE_HXX_
+#pragma once
+#if 1
 
 #include <tools/stream.hxx>
 

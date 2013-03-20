@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDGLUE_HXX
-#define _SVDGLUE_HXX
+#pragma once
+#if 1
 
 class Window;
 class OutputDevice;

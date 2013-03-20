@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_IDL_IK_MODULE_HXX
-#define ARY_IDL_IK_MODULE_HXX
+#pragma once
+#if 1
 
 
 

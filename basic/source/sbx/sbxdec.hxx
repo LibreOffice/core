@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __SBX_SBX_DEC_HXX
-#define __SBX_SBX_DEC_HXX
+#pragma once
+#if 1
 
 #ifdef WIN32
 

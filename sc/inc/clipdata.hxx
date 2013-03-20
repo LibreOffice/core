@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_CLIPDATA_HXX__
-#define __SC_CLIPDATA_HXX__
+#pragma once
+#if 1
 
 class ScTransferObj;
 class ScDrawTransferObj;

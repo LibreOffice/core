@@ -23,8 +23,8 @@
 
  *************************************************************************/
 
-#ifndef _FTP_FTPLOADERTHREAD_HXX_
-#define _FTP_FTPLOADERTHREAD_HXX_
+#pragma once
+#if 1
 
 #include <osl/thread.h>
 #include "curl.hxx"

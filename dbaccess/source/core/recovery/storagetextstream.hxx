@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef STORAGETEXTSTREAM_HXX
-#define STORAGETEXTSTREAM_HXX
+#pragma once
+#if 1
 
 #include "storagestream.hxx"
 

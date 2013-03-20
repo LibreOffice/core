@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LOGHANDLER_HXX
-#define LOGHANDLER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/logging/XLogFormatter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

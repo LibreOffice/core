@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
-#define DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
+#pragma once
+#if 1
 
 #include <svtools/editbrowsebox.hxx>
 #include "TableFieldDescription.hxx"

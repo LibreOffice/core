@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_GENERIC_CONFIGURATTION_CHANGE_REQUEST_HXX
-#define SD_FRAMEWORK_GENERIC_CONFIGURATTION_CHANGE_REQUEST_HXX
+#pragma once
+#if 1
 
 #include "MutexOwner.hxx"
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>

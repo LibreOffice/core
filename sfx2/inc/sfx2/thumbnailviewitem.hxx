@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef THUMBNAILVIEWITEM_HXX
-#define THUMBNAILVIEWITEM_HXX
+#pragma once
+#if 1
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>

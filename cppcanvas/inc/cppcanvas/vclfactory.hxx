@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_VCLFACTORY_HXX
-#define _CPPCANVAS_VCLFACTORY_HXX
+#pragma once
+#if 1
 
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>

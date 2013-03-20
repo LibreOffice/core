@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PORTOX_HXX
-#define _PORTOX_HXX
+#pragma once
+#if 1
 
 #include "portxt.hxx"
 

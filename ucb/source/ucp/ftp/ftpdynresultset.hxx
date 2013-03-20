@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FTP_FTPDYNRESULTSET_HXX
-#define _FTP_FTPDYNRESULTSET_HXX
+#pragma once
+#if 1
 
 #include "rtl/ref.hxx"
 #include "ucbhelper/resultsethelper.hxx"

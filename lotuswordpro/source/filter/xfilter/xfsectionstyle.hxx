@@ -57,8 +57,8 @@
  * @file
  * Section style,whose family is "section"
  ************************************************************************/
-#ifndef     _XFSECTIONSTYLE_HXX
-#define     _XFSECTIONSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

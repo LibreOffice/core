@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IBLOCKCURSOR_HXX_INCLUDED
-#define IBLOCKCURSOR_HXX_INCLUDED
+#pragma once
+#if 1
 
 class SwShellCrsr;
 class Point;

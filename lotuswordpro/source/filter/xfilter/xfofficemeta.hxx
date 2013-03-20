@@ -58,8 +58,8 @@
  * Meta info for the full document.
  * You can see this by click: File->Properties.
  ************************************************************************/
-#ifndef     _XFOFFICEMETA_HXX
-#define     _XFOFFICEMETA_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLITMAP_HXX
-#define _XMLITMAP_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <tools/ref.hxx>

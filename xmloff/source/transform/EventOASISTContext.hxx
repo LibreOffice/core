@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_EVENTOASISTCONTEXT_HXX
-#define _XMLOFF_EVENTOASISTCONTEXT_HXX
+#pragma once
+#if 1
 
 #include "RenameElemTContext.hxx"
 

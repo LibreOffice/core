@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
-#define _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
+#pragma once
+#if 1
 
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>

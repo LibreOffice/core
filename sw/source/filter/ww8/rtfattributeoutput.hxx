@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFATTRIBUTEOUTPUT_HXX_
-#define _RTFATTRIBUTEOUTPUT_HXX_
+#pragma once
+#if 1
 
 #include "attributeoutputbase.hxx"
 #include "rtfexport.hxx"

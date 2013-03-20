@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACC_ACCESSIBLETOOLPANELDECK_HXX
-#define ACC_ACCESSIBLETOOLPANELDECK_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>

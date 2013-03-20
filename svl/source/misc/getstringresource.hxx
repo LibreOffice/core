@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVL_SOURCE_INC_GETSTRINGRESOURCE_HXX
-#define INCLUDED_SVL_SOURCE_INC_GETSTRINGRESOURCE_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

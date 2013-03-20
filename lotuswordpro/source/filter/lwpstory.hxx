@@ -64,8 +64,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPSTORY_HXX
-#define _LWPSTORY_HXX
+#pragma once
+#if 1
 #include "lwpcontent.hxx"
 
 class LwpPageLayout;

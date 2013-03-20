@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
-#define _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
+#pragma once
+#if 1
 
 // ============================================================================
 

@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CLIPPEDBORDERLINEPRIMITIVE2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CLIPPEDBORDERLINEPRIMITIVE2D_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/drawinglayerdllapi.h>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PASTEDLG_HXX
-#define _PASTEDLG_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <sot/formats.hxx>

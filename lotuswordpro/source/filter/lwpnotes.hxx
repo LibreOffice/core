@@ -61,8 +61,8 @@
  * Change History
  May 2005       Created
  ************************************************************************/
-#ifndef _LWPNOTES_HXX_
-#define _LWPNOTES_HXX_
+#pragma once
+#if 1
 
 #include "lwpfrib.hxx"
 #include "lwpframelayout.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_STORE_S_ITERATOR_HXX
-#define ARY_STORE_S_ITERATOR_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
 #include <ary/getncast.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FORMCONTROLLING_HXX
-#define SVX_FORMCONTROLLING_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/XForm.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_DRAWSHAPE_HXX
-#define INCLUDED_SLIDESHOW_DRAWSHAPE_HXX
+#pragma once
+#if 1
 
 #include <osl/diagnose.hxx>
 #include <com/sun/star/drawing/XShape.hpp>

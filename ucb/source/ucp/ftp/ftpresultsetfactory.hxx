@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_FTPRESULTSETFACTORY_HXX_
-#define _FTP_FTPRESULTSETFACTORY_HXX_
+#pragma once
+#if 1
 
 #include "ftpresultsetbase.hxx"
 

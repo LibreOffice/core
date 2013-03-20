@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_HELPER_UNOWRAPPER_HXX_
-#define _TOOLKIT_HELPER_UNOWRAPPER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>

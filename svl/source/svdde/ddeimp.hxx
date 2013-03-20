@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DDEIMP_HXX
-#define _DDEIMP_HXX
+#pragma once
+#if 1
 
 #include <windows.h>
 #include <ddeml.h>

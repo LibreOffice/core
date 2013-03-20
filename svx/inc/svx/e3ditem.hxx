@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVXE3DITEM_HXX
-#define _SVXE3DITEM_HXX
+#pragma once
+#if 1
 
 #include <svl/poolitem.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include "svx/svxdllapi.h"
 
-#ifndef _SVXVECT3DITEM_HXX
-#define _SVXVECT3DITEM_HXX
+#pragma once
+#if 1
 
 class SvStream;
 

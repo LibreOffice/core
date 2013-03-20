@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_QUEUE_PROCESSOR_HXX
-#define SD_SLIDESORTER_QUEUE_PROCESSOR_HXX
+#pragma once
+#if 1
 
 #include "cache/SlsPageCache.hxx"
 #include "SlsRequestPriorityClass.hxx"

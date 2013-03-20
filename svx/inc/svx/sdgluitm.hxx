@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDGLUITM_HXX
-#define _SDGLUITM_HXX
+#pragma once
+#if 1
 
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>

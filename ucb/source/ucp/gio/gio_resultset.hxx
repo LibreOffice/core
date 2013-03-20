@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef GIO_RESULTSET_HXX
-#define GIO_RESULTSET_HXX
+#pragma once
+#if 1
 
 #include <ucbhelper/resultsethelper.hxx>
 #include "gio_content.hxx"

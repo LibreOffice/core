@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVDOMEDIA_HXX
-#define SVDOMEDIA_HXX
+#pragma once
+#if 1
 
 #include <svx/svdorect.hxx>
 #include <avmedia/mediaitem.hxx>

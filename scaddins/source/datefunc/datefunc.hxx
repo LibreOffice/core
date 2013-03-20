@@ -23,8 +23,8 @@
 //
 //------------------------------------------------------------------
 
-#ifndef _SCA_DATEFUNC_HXX
-#define _SCA_DATEFUNC_HXX
+#pragma once
+#if 1
 
 #include <string.h>
 #include <com/sun/star/lang/XServiceName.hpp>

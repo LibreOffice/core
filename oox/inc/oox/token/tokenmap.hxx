@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_TOKEN_TOKENMAP_HXX
-#define OOX_TOKEN_TOKENMAP_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <rtl/instance.hxx>

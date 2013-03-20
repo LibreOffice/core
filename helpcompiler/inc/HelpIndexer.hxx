@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef HELPINDEXER_HXX
-#define HELPINDEXER_HXX
+#pragma once
+#if 1
 
 #include <helpcompiler/dllapi.h>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_TABLETREE_HXX_
-#define _DBAUI_TABLETREE_HXX_
+#pragma once
+#if 1
 
 #include "marktree.hxx"
 

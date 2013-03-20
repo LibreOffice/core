@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
-#define XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlprhdl.hxx>
 

@@ -15,8 +15,8 @@
  * Major Contributor(s):
  * [ Copyright (C) 2009 Tzvetelina Tzeneva <tzvetelina@gmail.com> (initial developer) ]
  */
-#ifndef _SVX_RSIDITEM_HXX
-#define _SVX_RSIDITEM_HXX
+#pragma once
+#if 1
 
 #include <svl/intitem.hxx>
 #include "editeng/editengdllapi.h"

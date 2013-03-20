@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef _LINEEND_HXX
-#define _LINEEND_HXX
+#pragma once
+#if 1
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

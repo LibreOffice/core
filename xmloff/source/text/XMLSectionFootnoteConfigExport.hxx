@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _XMLOFF_XMLSECTIONFOOTNOTECONFIGEXPORT_HXX
-#define _XMLOFF_XMLSECTIONFOOTNOTECONFIGEXPORT_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

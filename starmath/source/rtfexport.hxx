@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SM_RTFEXPORT_HXX
-#define SM_RTFEXPORT_HXX
+#pragma once
+#if 1
 
 #include "wordexportbase.hxx"
 

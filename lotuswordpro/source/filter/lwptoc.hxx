@@ -59,8 +59,8 @@ April 2005          Created
  April 2005                 Modified - add LwpTocLevelData class
  ************************************************************************/
 
-#ifndef _LWPTOCSUPERTABLELAYOUT_HXX
-#define _LWPTOCSUPERTABLELAYOUT_HXX
+#pragma once
+#if 1
 #include "lwptablelayout.hxx"
 class XFIndex;
 class LwpFoundry;

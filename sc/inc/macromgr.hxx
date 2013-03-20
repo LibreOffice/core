@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_MACROMGR_HXX
-#define SC_MACROMGR_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/container/XContainerListener.hpp>
 

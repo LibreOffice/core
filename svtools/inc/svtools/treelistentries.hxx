@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SVTOOLS_TREELISTENTRIES_HXX__
-#define __SVTOOLS_TREELISTENTRIES_HXX__
+#pragma once
+#if 1
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

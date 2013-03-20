@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SM_OOXMLIMPORT_HXX
-#define SM_OOXMLIMPORT_HXX
+#pragma once
+#if 1
 
 #include <oox/mathml/importutils.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_SHEETDATACONTEXT_HXX
-#define OOX_XLS_SHEETDATACONTEXT_HXX
+#pragma once
+#if 1
 
 #include "excelhandlers.hxx"
 #include "richstring.hxx"

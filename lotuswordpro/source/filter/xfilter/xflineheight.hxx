@@ -57,8 +57,8 @@
  * @file
  * Line height for paragraph.
  ************************************************************************/
-#ifndef     _XFLINEHEIGHT_HXX
-#define     _XFLINEHEIGHT_HXX
+#pragma once
+#if 1
 
 #include <string.h>
 

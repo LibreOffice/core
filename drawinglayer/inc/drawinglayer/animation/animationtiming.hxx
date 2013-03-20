@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
-#define INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/drawinglayerdllapi.h>
 

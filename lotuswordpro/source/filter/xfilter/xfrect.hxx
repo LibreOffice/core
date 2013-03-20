@@ -57,8 +57,8 @@
  * @file
  * Rect object
  ************************************************************************/
-#ifndef     _XFRECT_HXX
-#define     _XFRECT_HXX
+#pragma once
+#if 1
 
 #include "xfpoint.hxx"
 

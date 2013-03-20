@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UCB_UCPEXT_CONTENT_HXX
-#define UCB_UCPEXT_CONTENT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

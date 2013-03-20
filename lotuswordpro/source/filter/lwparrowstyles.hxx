@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _LWPARROWSTYLES_HXX
-#define     _LWPARROWSTYLES_HXX
+#pragma once
+#if 1
 
 #include "xfilter/xfarrowstyle.hxx"
 #include "xfilter/xfstylemanager.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOPOOL_HXX_
-#define _SVX_UNOPOOL_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/propertysethelper.hxx>

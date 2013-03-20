@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WW8_FIB_DATA_HXX
-#define INCLUDED_WW8_FIB_DATA_HXX
+#pragma once
+#if 1
 #include <IDocumentExternalData.hxx>
 
 namespace ww8

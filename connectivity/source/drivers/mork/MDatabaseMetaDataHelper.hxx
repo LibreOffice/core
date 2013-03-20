@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CONNECTIVITY_MORK_DBMETADATAHELPER_HXX
-#define CONNECTIVITY_MORK_DBMETADATAHELPER_HXX
+#pragma once
+#if 1
 
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>

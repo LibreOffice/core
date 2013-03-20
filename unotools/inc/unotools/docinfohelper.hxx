@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTOOLS_DOCINFOHELPER_HXX_
-#define _UNOTOOLS_DOCINFOHELPER_HXX_
+#pragma once
+#if 1
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>

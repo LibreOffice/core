@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGNML__TEXTSPACING_HXX
-#define OOX_DRAWINGNML__TEXTSPACING_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 

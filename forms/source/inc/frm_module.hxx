@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FRM_MODULE_HXX
-#define FRM_MODULE_HXX
+#pragma once
+#if 1
 
 #define FORMS_MODULE_INCLUDE_CONTEXT
     #define FORMS_MODULE_NAMESPACE frm

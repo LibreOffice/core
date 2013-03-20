@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAX_FS_HELPER_HXX_
-#define _SAX_FS_HELPER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/XReference.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

@@ -57,8 +57,8 @@
  * @file
  * Tool for sax writer.
  ************************************************************************/
-#ifndef     _XFSAXSTREAM_HXX
-#define     _XFSAXSTREAM_HXX
+#pragma once
+#if 1
 
 #include "ixfstream.hxx"
 

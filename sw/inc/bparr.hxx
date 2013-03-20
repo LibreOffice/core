@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_BPARR_HXX
-#define SW_BPARR_HXX
+#pragma once
+#if 1
 
 #include <assert.h>
 

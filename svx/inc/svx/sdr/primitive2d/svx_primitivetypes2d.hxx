@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#define INCLUDED_SVX_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 

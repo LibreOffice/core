@@ -57,8 +57,8 @@
  * @file
  * doc field.
  ************************************************************************/
-#ifndef     _XFDOCFIELD_HXX
-#define     _XFDOCFIELD_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 #include "xfpagecount.hxx"

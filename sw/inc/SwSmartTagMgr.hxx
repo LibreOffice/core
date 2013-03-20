@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWSMARTTAGMGR_HXX
-#define _SWSMARTTAGMGR_HXX
+#pragma once
+#if 1
 
 #include <svx/SmartTagMgr.hxx>
 

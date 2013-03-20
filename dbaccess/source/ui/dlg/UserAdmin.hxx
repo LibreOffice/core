@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_USERADMIN_HXX
-#define DBAUI_USERADMIN_HXX
+#pragma once
+#if 1
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>

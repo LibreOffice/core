@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_PROPERTYSETHELPER_HXX
-#define INCLUDED_CANVAS_PROPERTYSETHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ADO_ARESULTSET_HXX_
-#define _CONNECTIVITY_ADO_ARESULTSET_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

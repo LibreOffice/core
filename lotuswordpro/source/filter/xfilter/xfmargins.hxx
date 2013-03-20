@@ -57,8 +57,8 @@
  * @file
  * Margins object, include left margin,right margin,top margin and bottom margin.
  ************************************************************************/
-#ifndef     _XFMARGINS_HXX
-#define     _XFMARGINS_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

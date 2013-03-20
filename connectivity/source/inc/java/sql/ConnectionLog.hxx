@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_CONNECTIONLOG_HXX
-#define CONNECTIVITY_CONNECTIONLOG_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/logging/LogLevel.hpp>
 

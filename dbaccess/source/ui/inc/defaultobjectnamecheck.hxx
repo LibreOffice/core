@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
-#define DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
+#pragma once
+#if 1
 
 #include "objectnamecheck.hxx"
 

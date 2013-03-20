@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_UNO_WIZARD_HXX
-#define SVT_UNO_WIZARD_HXX
+#pragma once
+#if 1
 
 #include "svtools/genericunodialog.hxx"
 

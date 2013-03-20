@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VIEW_FONT_PROVIDER_HXX
-#define SD_SLIDESORTER_VIEW_FONT_PROVIDER_HXX
+#pragma once
+#if 1
 
 #include "tools/SdGlobalResourceContainer.hxx"
 

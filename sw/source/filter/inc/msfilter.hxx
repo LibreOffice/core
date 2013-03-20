@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_MS_MSFILTER_HXX
-#define SW_MS_MSFILTER_HXX
+#pragma once
+#if 1
 
 #include <set>
 #include <map>

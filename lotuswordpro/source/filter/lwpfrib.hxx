@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPFRIB_HXX_
-#define _LWPFRIB_HXX_
+#pragma once
+#if 1
 #include "lwpobjid.hxx"
 #include "lwpobjstrm.hxx"
 #include "lwpbasetype.hxx"

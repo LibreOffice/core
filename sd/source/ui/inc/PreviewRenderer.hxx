@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PREVIEW_RENDERER_HXX
-#define SD_PREVIEW_RENDERER_HXX
+#pragma once
+#if 1
 
 #include "drawview.hxx"
 #include <vcl/image.hxx>

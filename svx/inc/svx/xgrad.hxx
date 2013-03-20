@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX__XGRADIENT_HXX
-#define _SVX__XGRADIENT_HXX
+#pragma once
+#if 1
 
 #include <svx/xenum.hxx>
 #include <tools/color.hxx>

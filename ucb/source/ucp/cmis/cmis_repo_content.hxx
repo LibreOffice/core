@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef CMIS_REPO_CONTENT_HXX
-#define CMIS_REPO_CONTENT_HXX
+#pragma once
+#if 1
 
 #include "cmis_url.hxx"
 #include "children_provider.hxx"

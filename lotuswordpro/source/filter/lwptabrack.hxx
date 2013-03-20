@@ -57,8 +57,8 @@
  * @file
  * Tabrack for LwpTabPiece object.
  ************************************************************************/
-#ifndef     _LWPTABRACK_HXX
-#define     _LWPTABRACK_HXX
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 

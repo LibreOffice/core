@@ -57,8 +57,8 @@
  * @file
  * Padding for paragraph.
  ************************************************************************/
-#ifndef     _XFPADDING_HXX
-#define     _XFPADDING_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

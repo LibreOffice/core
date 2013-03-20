@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_L10NTOOLS_SOURCE_COMMON_HXX
-#define INCLUDED_L10NTOOLS_SOURCE_COMMON_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

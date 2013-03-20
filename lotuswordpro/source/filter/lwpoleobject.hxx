@@ -61,8 +61,8 @@
  * Change History
  Feb 2005           Created
  ************************************************************************/
-#ifndef _LWPOLEOBJECT_HXX_
-#define _LWPOLEOBJECT_HXX_
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpobjhdr.hxx"

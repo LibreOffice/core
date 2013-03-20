@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_INTLWRAPPER_HXX
-#define _UNOTOOLS_INTLWRAPPER_HXX
+#pragma once
+#if 1
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>

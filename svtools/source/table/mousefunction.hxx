@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_MOUSEFUNCTION_HXX
-#define SVTOOLS_MOUSEFUNCTION_HXX
+#pragma once
+#if 1
 
 #include "svtools/table/tabletypes.hxx"
 

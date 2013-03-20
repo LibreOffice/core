@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_LISTLEVEL_HXX
-#define SW_VBA_LISTLEVEL_HXX
+#pragma once
+#if 1
 
 #include <ooo/vba/word/XListLevel.hpp>
 #include <vbahelper/vbahelperinterface.hxx>

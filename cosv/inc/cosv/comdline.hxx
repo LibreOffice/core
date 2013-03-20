@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSV_COMDLINE_HXX
-#define CSV_COMDLINE_HXX
+#pragma once
+#if 1
 //  KORR_DEPRECATED_3.0
 //      Replace by cosv/commandline.hxx.
 

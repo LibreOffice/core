@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_BASICMIGRATION_HXX_
-#define _DESKTOP_BASICMIGRATION_HXX_
+#pragma once
+#if 1
 
 #include "misc.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ACCSELECTIONHELPER_HXX_
-#define _ACCSELECTIONHELPER_HXX_
+#pragma once
+#if 1
 class SwAccessibleContext;
 class SwFEShell;
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>

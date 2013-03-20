@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_CONVERTSIMPLE_HXX
-#define INCLUDED_SAL_TEXTENC_CONVERTSIMPLE_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

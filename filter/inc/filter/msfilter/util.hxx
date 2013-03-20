@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_MSFILTER_UTIL_HXX
-#define INCLUDED_MSFILTER_UTIL_HXX
+#pragma once
+#if 1
 
 #include <rtl/textenc.h>
 #include <tools/datetime.hxx>

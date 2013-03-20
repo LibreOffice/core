@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_OLE_VBACONTROL_HXX
-#define OOX_OLE_VBACONTROL_HXX
+#pragma once
+#if 1
 
 #include "oox/ole/axcontrol.hxx"
 #include <com/sun/star/frame/XModel.hpp>

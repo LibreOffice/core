@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
-#define COMPHELPER_PROPERTYSTATECONTAINER_HXX
+#pragma once
+#if 1
 
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>

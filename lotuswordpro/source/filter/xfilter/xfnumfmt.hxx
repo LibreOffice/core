@@ -57,8 +57,8 @@
  * @file
  * Number format. a),A),i),1),(1)
  ************************************************************************/
-#ifndef     _XFNUMFMT_HXX
-#define     _XFNUMFMT_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "ixfproperty.hxx"

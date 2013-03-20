@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_NFSYMBOL_HXX
-#define INCLUDED_SVTOOLS_NFSYMBOL_HXX
+#pragma once
+#if 1
 
 /* ATTENTION! If new types arrive that had its content previously handled as
  * SYMBOLTYPE_STRING, they have to be added at several places in zforscan.cxx

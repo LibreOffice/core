@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SELFTERMINATEFILESTREAM_HXX_
-#define _SELFTERMINATEFILESTREAM_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

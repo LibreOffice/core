@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONFIGURATION_ACCESS_HXX_
-#define _CONFIGURATION_ACCESS_HXX_
+#pragma once
+#if 1
 #include <vector>
 #include "pppoptimizertoken.hxx"
 #include <com/sun/star/awt/Size.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTOFSDRMEDIAOBJ_HXX
-#define _SDR_CONTACT_VIEWOBJECTCONTACTOFSDRMEDIAOBJ_HXX
+#pragma once
+#if 1
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>

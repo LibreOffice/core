@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
-#define COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "com/sun/star/uno/Sequence.hxx"
 #include "boost/preprocessor/cat.hpp"

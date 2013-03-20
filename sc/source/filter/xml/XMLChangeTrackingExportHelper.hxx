@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
-#define SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmltoken.hxx>
 #include <list>

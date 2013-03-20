@@ -18,8 +18,8 @@
  */
 
 
-#ifndef __JVM_HXX
-#define __JVM_HXX
+#pragma once
+#if 1
 
 
 #include <vector>

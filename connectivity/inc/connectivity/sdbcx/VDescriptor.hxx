@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
-#define _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
+#pragma once
+#if 1
 
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

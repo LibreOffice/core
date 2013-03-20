@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef _SC_CSVTABLEBOX_HXX
-#define _SC_CSVTABLEBOX_HXX
+#pragma once
+#if 1
 
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>

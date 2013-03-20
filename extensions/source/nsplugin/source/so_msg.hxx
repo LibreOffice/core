@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __PLUGIN_MSG_HXX
-#define __PLUGIN_MSG_HXX
+#pragma once
+#if 1
 enum msg_type
 {
     SO_EMPTY,        // 0

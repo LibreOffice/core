@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEXTLAYOUT_DRAWHELPER_HXX
-#define _TEXTLAYOUT_DRAWHELPER_HXX
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 

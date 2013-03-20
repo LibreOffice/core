@@ -24,8 +24,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _BASEGFX_B2DELLIPSE_HXX
-#define _BASEGFX_B2DELLIPSE_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

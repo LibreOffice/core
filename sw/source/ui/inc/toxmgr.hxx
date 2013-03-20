@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOXMGR_HXX
-#define _TOXMGR_HXX
+#pragma once
+#if 1
 
 #include "swdllapi.h"
 #include "tox.hxx"

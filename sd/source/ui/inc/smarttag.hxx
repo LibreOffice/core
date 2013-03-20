@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SMARTTAG_HXX_
-#define _SD_SMARTTAG_HXX_
+#pragma once
+#if 1
 
 #include "helper/simplereferencecomponent.hxx"
 #include <rtl/ref.hxx>

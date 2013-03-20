@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MODULE_SDBT_HXX
-#define DBACCESS_MODULE_SDBT_HXX
+#pragma once
+#if 1
 
 #include <unotools/componentresmodule.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_SOURCE_REGKEY_HXX
-#define INCLUDED_REGISTRY_SOURCE_REGKEY_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 #include "registry/regtype.h"

@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPSORTOPTION_HXX
-#define _LWPSORTOPTION_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpobjstrm.hxx"

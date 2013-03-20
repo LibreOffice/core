@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLBACKGROUNDIMAGECONTEXT_HXX
-#define _XMLBACKGROUNDIMAGECONTEXT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include "XMLElementPropertyContext.hxx"

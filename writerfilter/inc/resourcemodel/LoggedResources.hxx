@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_LOGGED_RESOURCES_HXX
-#define INCLUDED_LOGGED_RESOURCES_HXX
+#pragma once
+#if 1
 
 #include "WW8ResourceModel.hxx"
 #include "TagLogger.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASRDLL_HXX
-#define _BASRDLL_HXX
+#pragma once
+#if 1
 
 class ResMgr;
 

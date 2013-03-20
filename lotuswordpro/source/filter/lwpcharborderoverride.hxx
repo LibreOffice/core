@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPCHARBORDEROVERRIDE_HXX
-#define _LWPCHARBORDEROVERRIDE_HXX
+#pragma once
+#if 1
 
 #include "lwpoverride.hxx"
 

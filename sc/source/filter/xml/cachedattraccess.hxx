@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_FILTER_XML_CACHEDATTRACCESS_HXX__
-#define __SC_FILTER_XML_CACHEDATTRACCESS_HXX__
+#pragma once
+#if 1
 
 #include "sal/types.h"
 

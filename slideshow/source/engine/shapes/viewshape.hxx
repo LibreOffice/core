@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_VIEWSHAPE_HXX
-#define INCLUDED_SLIDESHOW_VIEWSHAPE_HXX
+#pragma once
+#if 1
 
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/bitmap.hxx>

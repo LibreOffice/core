@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_CONTEXTHANDLER_HXX
-#define OOX_CORE_CONTEXTHANDLER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <boost/shared_ptr.hpp>

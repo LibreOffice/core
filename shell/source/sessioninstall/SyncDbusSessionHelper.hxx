@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SHELL_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
-#define SHELL_SESSIONINSTALL_SYNCDBUSSESSIONHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

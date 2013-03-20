@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef VBA_TEXTFRAME_HXX
-#define VBA_TEXTFRAME_HXX
+#pragma once
+#if 1
 #include <ooo/vba/msforms/XTextFrame.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

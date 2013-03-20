@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __XDIALOGCREATOR_HXX_
-#define __XDIALOGCREATOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>

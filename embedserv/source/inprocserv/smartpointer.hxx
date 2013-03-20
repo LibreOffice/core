@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INPROCSERV_SMARTPOINTER_HXX_
-#define _INPROCSERV_SMARTPOINTER_HXX_
+#pragma once
+#if 1
 
 namespace inprocserv{
 

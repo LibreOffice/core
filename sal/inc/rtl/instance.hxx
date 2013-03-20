@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RTL_INSTANCE_HXX
-#define INCLUDED_RTL_INSTANCE_HXX
+#pragma once
+#if 1
 
 #if defined LIBO_INTERNAL_ONLY
 #include <config_global.h>

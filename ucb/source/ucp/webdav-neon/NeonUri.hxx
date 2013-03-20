@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NEONURI_HXX_
-#define _NEONURI_HXX_
+#pragma once
+#if 1
 
 #include <ne_uri.h>
 #include <rtl/ustring.hxx>

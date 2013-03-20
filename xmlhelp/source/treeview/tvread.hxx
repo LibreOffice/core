@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TREEVIEW_TVREAD_HXX_
-#define _TREEVIEW_TVREAD_HXX_
+#pragma once
+#if 1
 
 #include <vector>
 #include <rtl/ref.hxx>

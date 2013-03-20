@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLNSTWIT_HXX
-#define _SVX_XLNSTWIT_HXX
+#pragma once
+#if 1
 
 #include <svl/metitem.hxx>
 #include "svx/svxdllapi.h"

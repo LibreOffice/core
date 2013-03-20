@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XIMPLINK_HXX
-#define _XIMPLINK_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"

@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPHYPERLINKMGR_HXX_
-#define _LWPHYPERLINKMGR_HXX_
+#pragma once
+#if 1
 
 #include "lwpfilehdr.hxx"
 

@@ -57,8 +57,8 @@
  * @file
  * Line numbering config for the full document.
  ************************************************************************/
-#ifndef     _XFLINENUMBERCONFIG_HXX
-#define     _XFLINENUMBERCONFIG_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 

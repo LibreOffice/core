@@ -57,8 +57,8 @@
  * @file
  * Draw path object.
  ************************************************************************/
-#ifndef     _XFDRAWPATH_HXX
-#define     _XFDRAWPATH_HXX
+#pragma once
+#if 1
 
 #include "xfdrawobj.hxx"
 #include <vector>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SVTOOLS_VIEWDATAENTRY_HXX__
-#define __SVTOOLS_VIEWDATAENTRY_HXX__
+#pragma once
+#if 1
 
 #include "svtdllapi.h"
 #include "tools/solar.h"

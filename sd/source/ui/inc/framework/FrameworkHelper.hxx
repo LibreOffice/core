@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_FRAMEWORK_HELPER_HXX
-#define SD_FRAMEWORK_FRAMEWORK_HELPER_HXX
+#pragma once
+#if 1
 
 #include "ViewShell.hxx"
 

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_BASE_HXX
-#define SC_BASE_HXX
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include "filter.hxx"

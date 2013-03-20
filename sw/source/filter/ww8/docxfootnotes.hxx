@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCXFOOTNOTES_HXX_
-#define _DOCXFOOTNOTES_HXX_
+#pragma once
+#if 1
 
 #include <fmtftn.hxx>
 

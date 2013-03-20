@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UCBDEMO_SRCHARG_HXX
-#define UCBDEMO_SRCHARG_HXX
+#pragma once
+#if 1
 
 class String;
 namespace com { namespace sun { namespace star { namespace ucb {

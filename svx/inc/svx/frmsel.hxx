@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FRMSEL_HXX
-#define SVX_FRMSEL_HXX
+#pragma once
+#if 1
 
 #include <memory>
 #include <tools/color.hxx>

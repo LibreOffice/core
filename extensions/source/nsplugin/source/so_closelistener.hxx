@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __SO_CLOSELISTENER_HXX_
-#define __SO_CLOSELISTENER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <cppuhelper/implbase1.hxx>

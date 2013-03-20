@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VIEWPT3D_HXX
-#define _VIEWPT3D_HXX
+#pragma once
+#if 1
 
 #include "svx/svxdllapi.h"
 #include <basegfx/matrix/b3dhommatrix.hxx>

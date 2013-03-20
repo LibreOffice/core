@@ -59,8 +59,8 @@
  *  WordPro Pattern Table
  */
 
-#ifndef _LTPATTERNTABLE_HXX
-#define _LTPATTERNTABLE_HXX
+#pragma once
+#if 1
 
 static sal_uInt8 s_pLwpPatternTab[][8] = {                //Id  Name
     { 0xDF, 0xAF, 0x77, 0x77, 0x77, 0x77, 0xFA, 0xFD },//0  Transparent

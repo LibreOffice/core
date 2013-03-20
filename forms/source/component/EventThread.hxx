@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_EVENT_THREAD_HXX_
-#define _FRM_EVENT_THREAD_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>

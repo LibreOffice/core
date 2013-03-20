@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FILTER_CONFIG_CACHEITEM_HXX_
-#define __FILTER_CONFIG_CACHEITEM_HXX_
+#pragma once
+#if 1
 
 #include <boost/unordered_map.hpp>
 #include <deque>

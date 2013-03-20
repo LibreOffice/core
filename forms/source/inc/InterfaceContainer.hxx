@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_INTERFACE_CONTAINER_HXX_
-#define _FRM_INTERFACE_CONTAINER_HXX_
+#pragma once
+#if 1
 
 #include <boost/unordered_map.hpp>
 #include <comphelper/stl_types.hxx>

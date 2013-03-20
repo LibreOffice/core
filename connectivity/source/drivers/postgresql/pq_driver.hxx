@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PG_DRIVER_HXX_
-#define _PG_DRIVER_HXX_
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DBFUNC_HXX
-#define SC_DBFUNC_HXX
+#pragma once
+#if 1
 
 #include "viewfunc.hxx"
 #include "dptypes.hxx"

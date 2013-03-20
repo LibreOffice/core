@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DSAPI_TK_ATAG2_HXX
-#define DSAPI_TK_ATAG2_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
     // BASE CLASSES

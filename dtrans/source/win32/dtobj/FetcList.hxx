@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FETCLIST_HXX_
-#define _FETCLIST_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

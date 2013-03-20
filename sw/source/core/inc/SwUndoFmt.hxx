@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UNDO_TXT_FMT_COLL_HXX
-#define SW_UNDO_TXT_FMT_COLL_HXX
+#pragma once
+#if 1
 
 #include <undobj.hxx>
 #include <swundo.hxx>

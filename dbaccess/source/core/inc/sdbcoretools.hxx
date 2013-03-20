@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACORE_SDBCORETOOLS_HXX
-#define DBACORE_SDBCORETOOLS_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

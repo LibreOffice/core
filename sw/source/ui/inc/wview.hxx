@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWWVIEW_HXX
-#define _SWWVIEW_HXX
+#pragma once
+#if 1
 
 #include "swdllapi.h"
 #include "view.hxx"

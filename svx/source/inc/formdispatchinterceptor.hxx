@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FORMDISPATCHINTERCEPTOR_HXX
-#define SVX_FORMDISPATCHINTERCEPTOR_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>

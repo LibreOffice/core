@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_MSFILTER_RTFUTIL_HXX
-#define INCLUDED_MSFILTER_RTFUTIL_HXX
+#pragma once
+#if 1
 
 #include "filter/msfilter/msfilterdllapi.h"
 #include <rtl/string.hxx>

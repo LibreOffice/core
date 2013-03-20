@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FMDISPATCH_HXX
-#define SVX_FMDISPATCH_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

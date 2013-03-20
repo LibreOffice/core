@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_FORMATTED_FIELD_WRAPPER_HXX_
-#define _FRM_FORMATTED_FIELD_WRAPPER_HXX_
+#pragma once
+#if 1
 
 #include "FormComponent.hxx"
 #include <cppuhelper/implbase3.hxx>

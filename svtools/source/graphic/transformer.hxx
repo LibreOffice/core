@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GOODIES_GRAPHICTRANSFORMER_HXX
-#define _GOODIES_GRAPHICTRANSFORMER_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

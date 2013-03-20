@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_QA_HELPER_HXX
-#define SC_QA_HELPER_HXX
+#pragma once
+#if 1
 
 #include "helper/csv_handler.hxx"
 #include "helper/debughelper.hxx"

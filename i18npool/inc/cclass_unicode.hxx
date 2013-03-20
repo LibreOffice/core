@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_CCLASS_UNICODE_HXX_
-#define _I18N_CCLASS_UNICODE_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>

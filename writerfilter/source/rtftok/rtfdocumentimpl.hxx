@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFDOCUMENTIMPL_HXX_
-#define _RTFDOCUMENTIMPL_HXX_
+#pragma once
+#if 1
 
 #include <stack>
 #include <queue>

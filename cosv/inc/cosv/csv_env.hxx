@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSV_CSV_ENV_HXX
-#define CSV_CSV_ENV_HXX
+#pragma once
+#if 1
 
 
 

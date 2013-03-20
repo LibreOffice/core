@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_CONFIGURATIONBACKENDDB_HXX
-#define INCLUDED_DP_CONFIGURATIONBACKENDDB_HXX
+#pragma once
+#if 1
 
 #include "rtl/ustring.hxx"
 #include "rtl/string.hxx"

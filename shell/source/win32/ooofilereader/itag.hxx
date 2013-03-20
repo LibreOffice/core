@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ITAG_HXX_INCLUDED
-#define ITAG_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "internal/config.hxx"
 #include "internal/types.hxx"

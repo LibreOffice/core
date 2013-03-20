@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXMENU_HXX_
-#define _TOOLKIT_AWT_VCLXMENU_HXX_
+#pragma once
+#if 1
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XMenuBarExtended.hpp>

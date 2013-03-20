@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_HSQLDB_CONNECTION_HXX
-#define CONNECTIVITY_HSQLDB_CONNECTION_HXX
+#pragma once
+#if 1
 
 #include "connectivity/ConnectionWrapper.hxx"
 #include <com/sun/star/util/XFlushable.hpp>

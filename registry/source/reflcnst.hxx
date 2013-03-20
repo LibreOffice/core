@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REFLCNST_HXX_
-#define _REFLCNST_HXX_
+#pragma once
+#if 1
 
 #include <registry/refltype.hxx>
 #include <sal/macros.h>

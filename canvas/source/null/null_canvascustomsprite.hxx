@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NULLCANVAS_CANVASCUSTOMSPRITE_HXX
-#define _NULLCANVAS_CANVASCUSTOMSPRITE_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase4.hxx>
 #include <comphelper/uno3.hxx>

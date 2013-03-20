@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef _SC_ACCESSIBLECSVCONTROL_HXX
-#define _SC_ACCESSIBLECSVCONTROL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>

@@ -15,8 +15,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SVG_ODFSERIALIZER_HXX
-#define INCLUDED_SVG_ODFSERIALIZER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

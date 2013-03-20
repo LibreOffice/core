@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_CONFIGITEMLISTENER_HXX
-#define CHART2_CONFIGITEMLISTENER_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_CHART_CONVERTERBASE_HXX
-#define OOX_DRAWINGML_CHART_CONVERTERBASE_HXX
+#pragma once
+#if 1
 
 #include "oox/drawingml/chart/chartcontextbase.hxx"
 #include "oox/drawingml/chart/objectformatter.hxx"

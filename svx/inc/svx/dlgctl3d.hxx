@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DLGCTL3D_HXX
-#define _SVX_DLGCTL3D_HXX
+#pragma once
+#if 1
 
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>

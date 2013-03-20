@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_MODULE_HELPER_RPT_HXX_
-#define FORMULA_MODULE_HELPER_RPT_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/resmgr.hxx>

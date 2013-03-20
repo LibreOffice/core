@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FILTER_OPTIONS_DIALOG_HXX_
-#define _SV_FILTER_OPTIONS_DIALOG_HXX_
+#pragma once
+#if 1
 
 #include <tools/fldunit.hxx>
 #include <cppuhelper/implbase5.hxx>

@@ -28,8 +28,8 @@
  * instead of those above.
  */
 
-#ifndef _XMLOFF_SVXMLATTR_HXX
-#define _XMLOFF_SVXMLATTR_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>   //rtl::OUString
 

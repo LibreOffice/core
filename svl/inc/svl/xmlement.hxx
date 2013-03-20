@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_XMLEMENT_HXX
-#define _SVTOOLS_XMLEMENT_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONTROLACCESS_HXX_
-#define _CONTROLACCESS_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

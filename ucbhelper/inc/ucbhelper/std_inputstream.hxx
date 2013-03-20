@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _UCBHELPER_STD_INPUTSTREAM_HXX_
-#define _UCBHELPER_STD_INPUTSTREAM_HXX_
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 #include <istream>

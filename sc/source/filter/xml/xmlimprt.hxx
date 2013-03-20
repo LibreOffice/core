@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLIMPRT_HXX
-#define SC_XMLIMPRT_HXX
+#pragma once
+#if 1
 
 #include <rsc/rscsfx.hxx>
 #include <xmloff/xmlictxt.hxx>

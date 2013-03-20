@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SCMOD_HXX
-#define SC_SCMOD_HXX
+#pragma once
+#if 1
 
 #include "scdllapi.h"
 #include "scdll.hxx"

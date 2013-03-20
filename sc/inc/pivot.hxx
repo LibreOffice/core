@@ -34,8 +34,8 @@
 */
 
 
-#ifndef SC_PIVOT_HXX
-#define SC_PIVOT_HXX
+#pragma once
+#if 1
 
 #include "global.hxx"
 #include "address.hxx"

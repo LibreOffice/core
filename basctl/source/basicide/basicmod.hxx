@@ -18,8 +18,8 @@
  */
 
 
-#ifndef BASCTL_BASICMOD_HXX
-#define BASCTL_BASICMOD_HXX
+#pragma once
+#if 1
 
 #include <sfx2/module.hxx>
 #include <tools/shl.hxx>

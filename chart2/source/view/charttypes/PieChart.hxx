@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_PIECHART_HXX
-#define _CHART2_PIECHART_HXX
+#pragma once
+#if 1
 
 #include "VSeriesPlotter.hxx"
 #include <basegfx/vector/b2dvector.hxx>

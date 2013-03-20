@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_SERVICES_LICENSE_HXX_
-#define __FRAMEWORK_SERVICES_LICENSE_HXX_
+#pragma once
+#if 1
 
 /** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
                with solaris headers ...

@@ -28,8 +28,8 @@
 //
 //------------------------------------------------------------------
 
-#ifndef _SCA_PRICING_HXX
-#define _SCA_PRICING_HXX
+#pragma once
+#if 1
 
 
 #include <string.h>

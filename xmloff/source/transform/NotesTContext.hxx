@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_NOTESTCONTEXT_HXX
-#define _XMLOFF_NOTESTCONTEXT_HXX
+#pragma once
+#if 1
 
 #include "DeepTContext.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX
-#define INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>

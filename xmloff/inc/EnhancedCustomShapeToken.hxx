@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCED_CUSTOMSHAPE_TOKEN_HXX
-#define _ENHANCED_CUSTOMSHAPE_TOKEN_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 

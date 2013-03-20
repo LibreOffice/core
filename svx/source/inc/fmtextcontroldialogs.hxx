@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_FORM_FMTEXTCONTROLDIALOGS_HXX
-#define SVX_SOURCE_FORM_FMTEXTCONTROLDIALOGS_HXX
+#pragma once
+#if 1
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tabdlg.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
-#define IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <swtypes.hxx>
 

@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef OLEHANDLER_HXX_
-#define OLEHANDLER_HXX_
+#pragma once
+#if 1
 #include <cstdio>
 #include <cstring>
 #include <list>

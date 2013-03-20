@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VISUAL_STATE_HXX
-#define SD_SLIDESORTER_VISUAL_STATE_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <tools/gen.hxx>

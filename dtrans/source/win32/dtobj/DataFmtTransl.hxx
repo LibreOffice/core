@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _DATAFMTTRANSL_HXX_
-#define _DATAFMTTRANSL_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

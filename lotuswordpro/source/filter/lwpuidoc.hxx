@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPUIDOCUMENT_HXX
-#define _LWPUIDOCUMENT_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpdefs.hxx"

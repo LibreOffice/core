@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_AWT_SCROLLABLEDIALOG_HXX
-#define TOOLKIT_AWT_SCROLLABLEDIALOG_HXX
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/scrbar.hxx>

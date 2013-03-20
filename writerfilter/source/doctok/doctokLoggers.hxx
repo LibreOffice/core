@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DOCTOK_LOGGERS_HXX
-#define INCLUDED_DOCTOK_LOGGERS_HXX
+#pragma once
+#if 1
 
 #if OSL_DEBUG_LEVEL > 1
 

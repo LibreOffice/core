@@ -26,8 +26,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef SW_NAVMGR_HXX
-#define SW_NAVMGR_HXX
+#pragma once
+#if 1
 
 #include <vector>
 

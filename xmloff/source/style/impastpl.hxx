@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLASTPL_IMPL_HXX
-#define _XMLOFF_XMLASTPL_IMPL_HXX
+#pragma once
+#if 1
 
 #include <boost/ptr_container/ptr_set.hpp>
 #include <sal/types.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
-#define _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase4.hxx>

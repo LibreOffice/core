@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef PQ_XVIEW_HXX
-#define PQ_XVIEW_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/propshlp.hxx>

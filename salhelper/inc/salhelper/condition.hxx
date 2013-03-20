@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SALHELPER_CONDITION_HXX_
-#define _SALHELPER_CONDITION_HXX_
+#pragma once
+#if 1
 
 
 #include <osl/conditn.h>

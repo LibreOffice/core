@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_AXISITEMCONVERTER_HXX
-#define CHART_AXISITEMCONVERTER_HXX
+#pragma once
+#if 1
 
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/chart2/XAxis.hpp>

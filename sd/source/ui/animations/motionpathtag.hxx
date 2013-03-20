@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_MOTIONPATHTAG_HXX_
-#define _SD_MOTIONPATHTAG_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/drawing/XShape.hpp>

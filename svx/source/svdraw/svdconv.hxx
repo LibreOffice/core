@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SVDCONV_HXX
-#define _SVDCONV_HXX
+#pragma once
+#if 1
 
 template<typename T> inline T ImplMMToTwips(T val);
 template<>

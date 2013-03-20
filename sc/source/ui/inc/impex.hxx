@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_IMPEX_HXX
-#define SC_IMPEX_HXX
+#pragma once
+#if 1
 
 #include <osl/endian.h>
 #include <sot/exchange.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PROPREAD_HXX_
-#define _PROPREAD_HXX_
+#pragma once
+#if 1
 
 #include <map>
 #include <boost/ptr_container/ptr_vector.hpp>

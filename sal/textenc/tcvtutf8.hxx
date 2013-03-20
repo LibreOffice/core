@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
-#define INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

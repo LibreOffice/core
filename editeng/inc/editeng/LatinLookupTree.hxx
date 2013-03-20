@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LATINLOOKUPTREE_HXX
-#define LATINLOOKUPTREE_HXX
+#pragma once
+#if 1
 
 #include <editeng/LookupTree.hxx>
 #include <editeng/TreeHead.hxx>

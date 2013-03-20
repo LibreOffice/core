@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
-#define _SVX_ACCESSILE_TEXT_HELPER_HXX_
+#pragma once
+#if 1
 
 #include <memory>
 #include <sal/types.h>

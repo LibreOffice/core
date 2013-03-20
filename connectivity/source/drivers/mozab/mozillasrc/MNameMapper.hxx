@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MAB_NAMEMAPPER_HXX_
-#define _CONNECTIVITY_MAB_NAMEMAPPER_HXX_ 1
+#pragma once
+#if 1
 
 #include <map>
 

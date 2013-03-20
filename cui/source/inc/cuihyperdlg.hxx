@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUI_TAB_HYPERLINK_HXX
-#define _CUI_TAB_HYPERLINK_HXX
+#pragma once
+#if 1
 
 #include <svx/hlnkitem.hxx>
 #include <sfx2/childwin.hxx>

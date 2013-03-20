@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_BUTTON_HXX_
-#define _FRM_BUTTON_HXX_
+#pragma once
+#if 1
 
 #include "clickableimage.hxx"
 #include "togglestate.hxx"

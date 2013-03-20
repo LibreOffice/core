@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FPICKER_WIN32_VISTA_ASYNCREQUESTS_HXX
-#define FPICKER_WIN32_VISTA_ASYNCREQUESTS_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>

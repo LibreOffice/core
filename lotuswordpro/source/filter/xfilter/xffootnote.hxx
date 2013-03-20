@@ -57,8 +57,8 @@
  * @file
  * Foot note object.
  ************************************************************************/
-#ifndef     _XFFOOTNOTE_HXX
-#define     _XFFOOTNOTE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

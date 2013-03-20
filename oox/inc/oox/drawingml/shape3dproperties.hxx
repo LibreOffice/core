@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_SHAPE3DPROPERTIES_HXX
-#define OOX_DRAWINGML_SHAPE3DPROPERTIES_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <com/sun/star/graphic/XGraphic.hpp>

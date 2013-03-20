@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ZCONNECTIONWEAKWRAPPER_HXX_
-#define _CONNECTIVITY_ZCONNECTIONWEAKWRAPPER_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>

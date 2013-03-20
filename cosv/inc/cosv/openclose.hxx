@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSV_OPENCLOSE_HXX
-#define CSV_OPENCLOSE_HXX
+#pragma once
+#if 1
 
 
 namespace csv

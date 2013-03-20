@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDSTOR_STGOLE_HXX
-#define _SDSTOR_STGOLE_HXX
+#pragma once
+#if 1
 
 #include <string.h> // memset()
 

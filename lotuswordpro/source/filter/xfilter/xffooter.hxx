@@ -57,8 +57,8 @@
  * @file
  * Footer object.
  ************************************************************************/
-#ifndef     _XFFOOTER_HXX
-#define     _XFFOOTER_HXX
+#pragma once
+#if 1
 
 #include "xfcontentcontainer.hxx"
 #include <vector>

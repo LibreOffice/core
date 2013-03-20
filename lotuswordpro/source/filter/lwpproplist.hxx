@@ -62,8 +62,8 @@
  Mar 2005           Created
  ************************************************************************/
 
-#ifndef _LWPPROPLIST_HXX_
-#define _LWPPROPLIST_HXX_
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"

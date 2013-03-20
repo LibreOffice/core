@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_FUINSERT_HXX
-#define SC_FUINSERT_HXX
+#pragma once
+#if 1
 
 #include "fupoor.hxx"
 

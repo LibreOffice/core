@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WW8PAR2_HXX
-#define _WW8PAR2_HXX
+#pragma once
+#if 1
 
 #include <swtypes.hxx>  // enum RndStdIds
 #include <fmtfsize.hxx>

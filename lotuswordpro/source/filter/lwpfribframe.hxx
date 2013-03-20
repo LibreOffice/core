@@ -61,8 +61,8 @@
  * Change History
  Mar 2005       Created
  ************************************************************************/
-#ifndef _LWPFRIBFRAME_HXX_
-#define _LWPFRIBFRAME_HXX_
+#pragma once
+#if 1
 #include "lwpfrib.hxx"
 #include "lwplayout.hxx"
 #include "lwppara.hxx"

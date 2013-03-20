@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ONDEMAND_HXX
-#define INCLUDED_SVTOOLS_ONDEMAND_HXX
+#pragma once
+#if 1
 
 #include <unotools/syslocale.hxx>
 #include <i18npool/lang.h>

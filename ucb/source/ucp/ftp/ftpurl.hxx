@@ -23,8 +23,8 @@
 
  *************************************************************************/
 
-#ifndef _FTP_FTPURL_HXX_
-#define _FTP_FTPURL_HXX_
+#pragma once
+#if 1
 
 #include "curl.hxx"
 #include <curl/easy.h>

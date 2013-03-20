@@ -58,8 +58,8 @@
  * Frame object for OOo.This is the basic object for all Shape Layer.
  * You can reference to the XFFrame object.
  ************************************************************************/
-#ifndef     _XFFRAME_HXX
-#define     _XFFRAME_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

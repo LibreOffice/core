@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_DIALOG_CONTROL_HXX
-#define TOOLKIT_DIALOG_CONTROL_HXX
+#pragma once
+#if 1
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>

@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_INFOHIERARCHYPRIMITIVE2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_INFOHIERARCHYPRIMITIVE2D_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>

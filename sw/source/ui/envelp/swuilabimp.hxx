@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWUILABIMP_HXX
-#define _SWUILABIMP_HXX
+#pragma once
+#if 1
 #include "labimp.hxx"
 
 class SwLabPage : public SfxTabPage

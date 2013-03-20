@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_DBP_GRIDWIZARD_HXX_
-#define _EXTENSIONS_DBP_GRIDWIZARD_HXX_
+#pragma once
+#if 1
 
 #include "controlwizard.hxx"
 #include "commonpagesdbp.hxx"

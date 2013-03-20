@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_DOCPASSWORDHELPR_HXX
-#define COMPHELPER_DOCPASSWORDHELPR_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "comphelper/comphelperdllapi.h"

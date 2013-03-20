@@ -57,8 +57,8 @@
  * @file
  * Style container,which response for special style,ie. text style.
  ************************************************************************/
-#ifndef     _XFSTYLECONTAINER_HXX
-#define     _XFSTYLECONTAINER_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include <vector>

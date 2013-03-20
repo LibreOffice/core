@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFSDRIMPORT_HXX_
-#define _RTFSDRIMPORT_HXX_
+#pragma once
+#if 1
 
 #include <rtfdocumentimpl.hxx>
 

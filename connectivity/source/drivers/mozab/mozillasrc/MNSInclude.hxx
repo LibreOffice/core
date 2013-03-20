@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
-#define _CONNECTIVITY_MAB_NS_INCLUDE_HXX_ 1
+#pragma once
+#if 1
 
 //
 // Only include Mozilla include files once and using this file...

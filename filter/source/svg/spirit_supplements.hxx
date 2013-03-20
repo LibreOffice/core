@@ -24,8 +24,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef INCLUDED_SPIRIT_SUPPLEMENTS_HXX
-#define INCLUDED_SPIRIT_SUPPLEMENTS_HXX
+#pragma once
+#if 1
 
 # ifndef USE_MODERN_SPIRIT
 # include <boost/spirit.hpp>

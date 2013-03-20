@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_STYLEUNO_HXX
-#define SC_STYLEUNO_HXX
+#pragma once
+#if 1
 
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>

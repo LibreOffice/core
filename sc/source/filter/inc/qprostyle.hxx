@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_QPROSTYLE_HXX
-#define SC_QPROSTYLE_HXX
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include "filter.hxx"

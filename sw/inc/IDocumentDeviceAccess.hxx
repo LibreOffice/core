@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
- #define IDOCUMENTDEVICEACCESS_HXX_INCLUDED
+#pragma once
+#if 1
 
  class SfxPrinter;
  class JobSetup;

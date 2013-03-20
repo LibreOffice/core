@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_LAYER_TAB_BAR_HXX
-#define SD_LAYER_TAB_BAR_HXX
+#pragma once
+#if 1
 
 #include <svtools/tabbar.hxx>
 #include <svtools/transfer.hxx>

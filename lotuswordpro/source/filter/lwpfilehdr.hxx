@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPFILEHEADER_HXX
-#define _LWPFILEHEADER_HXX
+#pragma once
+#if 1
 
 #include "lwpobjid.hxx"
 /**

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
-#define SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
+#pragma once
+#if 1
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 

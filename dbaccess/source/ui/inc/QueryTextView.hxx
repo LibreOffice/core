@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_QUERYVIEW_TEXT_HXX
-#define DBAUI_QUERYVIEW_TEXT_HXX
+#pragma once
+#if 1
 
 #include "queryview.hxx"
 #include "querycontainerwindow.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OFFAPP_CONNPOOLOPTIONS_HXX_
-#define _OFFAPP_CONNPOOLOPTIONS_HXX_
+#pragma once
+#if 1
 
 #include <svl/solar.hrc>
 #include <sfx2/tabdlg.hxx>

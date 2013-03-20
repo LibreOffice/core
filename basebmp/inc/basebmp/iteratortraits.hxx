@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_ITERATORTRAITS_HXX
-#define INCLUDED_BASEBMP_ITERATORTRAITS_HXX
+#pragma once
+#if 1
 
 #include <basebmp/accessor.hxx>
 #include <basebmp/nonstandarditerator.hxx>

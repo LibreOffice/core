@@ -58,8 +58,8 @@
  * Style for <text:p> or <text:h> or <text:span>
  * Now we have only font attributes.
  ************************************************************************/
-#ifndef     _XFTEXTSTYLE_HXX
-#define     _XFTEXTSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

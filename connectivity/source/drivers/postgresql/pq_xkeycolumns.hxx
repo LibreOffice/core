@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_KEYCOLUMNS_HXX
-#define HEADER_PQ_KEYCOLUMNS_HXX
+#pragma once
+#if 1
 
 #include "pq_xcontainer.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_TENCHELP_HXX
-#define INCLUDED_SAL_TEXTENC_TENCHELP_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

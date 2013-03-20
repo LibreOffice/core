@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNOMODULE_HXX
-#define _SD_UNOMODULE_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

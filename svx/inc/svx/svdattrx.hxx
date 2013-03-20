@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDATTRX_HXX
-#define _SVDATTRX_HXX
+#pragma once
+#if 1
 
 #include <svx/sxmlhitm.hxx>
 #include <svx/sxallitm.hxx>

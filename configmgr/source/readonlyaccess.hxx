@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_READONLYACCESS_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_READONLYACCESS_HXX
+#pragma once
+#if 1
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"

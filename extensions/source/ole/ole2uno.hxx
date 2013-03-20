@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OLE2UNO_HXX
-#define _OLE2UNO_HXX
+#pragma once
+#if 1
 
 
 #ifdef _MSC_VER

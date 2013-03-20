@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHART2_TEXTDIRECTIONLISTBOX_HXX
-#define CHART2_TEXTDIRECTIONLISTBOX_HXX
+#pragma once
+#if 1
 
 #include <svx/frmdirlbox.hxx>
 

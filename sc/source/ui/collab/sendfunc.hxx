@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SENDFUNC_HXX_
-#define _SENDFUNC_HXX_
+#pragma once
+#if 1
 
 #include <sal/config.h>
 

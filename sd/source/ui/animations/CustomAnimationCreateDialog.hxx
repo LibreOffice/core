@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HXX
-#define _SD_CUSTOMANIMATIONCREATEDIALOG_HXX
+#pragma once
+#if 1
 
 #include "CustomAnimationPreset.hxx"
 #include <vcl/tabdlg.hxx>

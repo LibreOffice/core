@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWCONT_HXX
-#define _SWCONT_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 

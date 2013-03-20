@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_HVIEW_HXX
-#define CONNECTIVITY_HVIEW_HXX
+#pragma once
+#if 1
 
 #include "connectivity/sdbcx/VView.hxx"
 

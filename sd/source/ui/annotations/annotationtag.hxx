@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_ANNOTATIONTAG_HXX_
-#define _SD_ANNOTATIONTAG_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

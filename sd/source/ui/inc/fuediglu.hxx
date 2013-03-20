@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_EDIT_GLUE_POINTS_HXX
-#define SD_FU_EDIT_GLUE_POINTS_HXX
+#pragma once
+#if 1
 
 #include "fudraw.hxx"
 

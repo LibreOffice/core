@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDIVINFO_HXX
-#define _LWPDIVINFO_HXX
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpobjid.hxx"

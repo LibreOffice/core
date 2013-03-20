@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
+#pragma once
+#if 1
 
 #include <editeng/AccessibleContextBase.hxx>
 #include <editeng/AccessibleComponentBase.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSV_COMFUNC_HXX
-#define CSV_COMFUNC_HXX
+#pragma once
+#if 1
 
 #include <stdlib.h>
 

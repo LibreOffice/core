@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADDRCONT_HXX
-#define ADDRCONT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/splitwin.hxx>

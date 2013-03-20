@@ -57,8 +57,8 @@
  * @file
  * ruby text.
  ************************************************************************/
-#ifndef     _XFRUBY_HXX
-#define     _XFRUBY_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 

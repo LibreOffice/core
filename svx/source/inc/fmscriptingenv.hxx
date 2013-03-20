@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FMSCRIPTINGENV_HXX
-#define SVX_FMSCRIPTINGENV_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <rtl/ref.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SCH_XMLIMPORT_HXX_
-#define SCH_XMLIMPORT_HXX_
+#pragma once
+#if 1
 
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/xmlimp.hxx>

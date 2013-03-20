@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef FORMS_SOURCE_COMPONENT_SCROLLBAR_HXX
-#define FORMS_SOURCE_COMPONENT_SCROLLBAR_HXX
+#pragma once
+#if 1
 
 #include "FormComponent.hxx"
 #include "frm_module.hxx"

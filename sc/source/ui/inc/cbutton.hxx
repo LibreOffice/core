@@ -19,8 +19,8 @@
 
 //------------------------------------------------------------------
 
-#ifndef SC_CBUTTON_HXX
-#define SC_CBUTTON_HXX
+#pragma once
+#if 1
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _LOCKENTRYSEQUENCE_HXX_
-#define _LOCKENTRYSEQUENCE_HXX_
+#pragma once
+#if 1
 
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_DOC_D_OLDIDLDOCU_HXX
-#define ARY_DOC_D_OLDIDLDOCU_HXX
+#pragma once
+#if 1
 
 // BASE CLASSES
 #include <ary/doc/d_node.hxx>

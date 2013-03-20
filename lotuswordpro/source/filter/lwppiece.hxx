@@ -62,8 +62,8 @@
  Jan 2005       Created
  ************************************************************************/
 
-#ifndef     _LWPPIECE_HXX
-#define     _LWPPIECE_HXX
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpoverride.hxx"

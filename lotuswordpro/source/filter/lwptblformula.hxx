@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPTBLFORMULA_HXX_
-#define _LWPTBLFORMULA_HXX_
+#pragma once
+#if 1
 
 using namespace std;
 

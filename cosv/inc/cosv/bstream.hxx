@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CSV_BSTREAM_HXX
-#define CSV_BSTREAM_HXX
+#pragma once
+#if 1
 
 #include <string.h>
 #include <cosv/string.hxx>

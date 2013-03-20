@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
- #define IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
+#pragma once
+#if 1
 
  #ifndef _SAL_TYPES_H_
  #include <sal/types.h>

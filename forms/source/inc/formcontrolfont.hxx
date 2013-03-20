@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_SOURCE_COMPONENT_FORMCONTROLFONT_HXX
-#define FORMS_SOURCE_COMPONENT_FORMCONTROLFONT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>

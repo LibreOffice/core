@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_SERFURI_HXX
-#define INCLUDED_SERFURI_HXX
+#pragma once
+#if 1
 
 #include <apr-util/apr_uri.h>
 #include <rtl/ustring.hxx>

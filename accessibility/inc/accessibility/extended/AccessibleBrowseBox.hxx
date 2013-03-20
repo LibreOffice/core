@@ -18,8 +18,8 @@
  */
 
 
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOX_HXX
-#define ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOX_HXX
+#pragma once
+#if 1
 
 #include <accessibility/extended/AccessibleBrowseBoxBase.hxx>
 #include <cppuhelper/weakref.hxx>

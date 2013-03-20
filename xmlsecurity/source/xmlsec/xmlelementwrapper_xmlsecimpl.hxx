@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLELEMENTWRAPPER_XMLSECIMPL_HXX
-#define _XMLELEMENTWRAPPER_XMLSECIMPL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

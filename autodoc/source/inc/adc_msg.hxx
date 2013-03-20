@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADC_ADC_MSG_HXX
-#define ADC_ADC_MSG_HXX
+#pragma once
+#if 1
 
 
 

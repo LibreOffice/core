@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef LWPDOCDATA_HXX_
-#define LWPDOCDATA_HXX_
+#pragma once
+#if 1
 #include "lwpobj.hxx"
 #include "lwpatomholder.hxx"
 #include "localtime.hxx"

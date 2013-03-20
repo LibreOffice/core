@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX
-#define COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX
+#pragma once
+#if 1
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>

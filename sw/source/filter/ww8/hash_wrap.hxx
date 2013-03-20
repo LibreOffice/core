@@ -19,8 +19,8 @@
 
 //this is a shameless rip from sortedarray.hxx but changed to boost::unordered_set
 
-#ifndef WW_HASH_WRAP_HXX
-#define WW_HASH_WRAP_HXX
+#pragma once
+#if 1
 
 #include <boost/unordered_set.hpp>
 

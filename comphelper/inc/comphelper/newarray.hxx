@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_NEW_ARRAY_HXX
-#define COMPHELPER_NEW_ARRAY_HXX
+#pragma once
+#if 1
 
 #include <limits>
 #include <new>

@@ -57,8 +57,8 @@
  * @file
  * Text content, it's an adapter for string to IXFObject.
  ************************************************************************/
-#ifndef     _XFTEXTCONTENT_HXX
-#define     _XFTEXTCONTENT_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

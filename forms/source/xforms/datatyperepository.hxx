@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OFFAPI_COM_SUN_STAR_XFORMS_DATATYPEREPOSITORY_HXX
-#define OFFAPI_COM_SUN_STAR_XFORMS_DATATYPEREPOSITORY_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 #include <cppuhelper/implbase1.hxx>

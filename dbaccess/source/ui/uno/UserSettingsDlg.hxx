@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_USERSETTINGSDLG_HXX
-#define _DBAUI_USERSETTINGSDLG_HXX
+#pragma once
+#if 1
 
 #ifndef _DBAUI_UNOADMIN_
 #include "unoadmin.hxx"

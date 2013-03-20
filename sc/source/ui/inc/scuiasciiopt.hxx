@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef SCUI_ASCIIOPT_HXX
-#define SCUI_ASCIIOPT_HXX
+#pragma once
+#if 1
 
 
 #include "asciiopt.hxx"

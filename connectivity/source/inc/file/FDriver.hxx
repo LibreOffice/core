@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_FILE_ODRIVER_HXX_
-#define _CONNECTIVITY_FILE_ODRIVER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

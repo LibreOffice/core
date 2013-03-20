@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOCONTROLS_MULTIPLEXER_HXX
-#define _UNOCONTROLS_MULTIPLEXER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
