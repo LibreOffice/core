@@ -26,7 +26,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/deployment/XExtensionManager.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
 
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
@@ -68,7 +69,6 @@ namespace migration
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_ctx;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XDocumentBuilder >  m_xDocBuilder;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >       m_xSimpleFileAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
         ::osl::Mutex            m_aMutex;
         ::rtl::OUString         m_sSourceDir;
         ::rtl::OUString         m_sTargetDir;
@@ -85,7 +85,7 @@ namespace migration
         ScanResult              scanExtensionFolder( const ::rtl::OUString& sExtFolder );
         void                    scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions );
         bool                    scanDescriptionXml( const ::rtl::OUString& sDescriptionXmlFilePath );
-        bool                    migrateExtension( const ::rtl::OUString& sSourceDir );
+        void                    migrateExtension( const ::rtl::OUString& sSourceDir );
 
     public:
         OO3ExtensionMigration(::com::sun::star::uno::Reference<
