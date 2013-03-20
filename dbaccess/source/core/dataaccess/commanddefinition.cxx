@@ -72,6 +72,62 @@ void OCommandDefinition::registerProperties()
                     &rCommandDefinition.m_aLayoutInformation, ::getCppuType(&rCommandDefinition.m_aLayoutInformation));
 }
 
+rtl::OUString OCommandDefinition::getName() throw( ::com::sun::star::uno::RuntimeException )
+{
+    return getDefinition().m_aProps.aTitle;
+}
+
+rtl::OUString OCommandDefinition::getCommand() throw( ::com::sun::star::uno::RuntimeException )
+{
+    return getCommandDefinition().m_sCommand;
+}
+
+void OCommandDefinition::setCommand(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+{
+    setPropertyValue(PROPERTY_COMMAND, Any(p1) );
+}
+
+sal_Bool OCommandDefinition::getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException )
+{
+    return getCommandDefinition().m_bEscapeProcessing;
+}
+
+void OCommandDefinition::setEscapeProcessing(sal_Bool p1) throw( ::com::sun::star::uno::RuntimeException )
+{
+    setPropertyValue(PROPERTY_ESCAPE_PROCESSING, Any(p1) );
+}
+
+rtl::OUString OCommandDefinition::getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException )
+{
+    return getCommandDefinition().m_sUpdateTableName;
+}
+
+void OCommandDefinition::setUpdateTableName(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+{
+    setPropertyValue(PROPERTY_UPDATE_TABLENAME, Any(p1) );
+}
+
+rtl::OUString OCommandDefinition::getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException )
+{
+    return getCommandDefinition().m_sUpdateCatalogName;
+}
+
+void OCommandDefinition::setUpdateCatalogName(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+{
+    setPropertyValue(PROPERTY_UPDATE_CATALOGNAME, Any(p1) );
+}
+
+rtl::OUString OCommandDefinition::getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException )
+{
+    return getCommandDefinition().m_sUpdateSchemaName;
+}
+
+void OCommandDefinition::setUpdateSchemaName(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+{
+    setPropertyValue(PROPERTY_UPDATE_SCHEMANAME, Any(p1) );
+}
+
+
 OCommandDefinition::OCommandDefinition(const Reference< XComponentContext >& _xORB
                                        ,const Reference< XInterface >& _rxContainer
                                        ,const TContentPtr& _pImpl)
@@ -114,7 +170,7 @@ OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeExcep
 Sequence< OUString > OCommandDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< OUString > aServices(3);
-    aServices.getArray()[0] = SERVICE_SDB_QUERYDEFINITION;
+    aServices.getArray()[0] = "com.sun.star.sdb.QueryDefinition";
     aServices.getArray()[1] = "com.sun.star.sdb.CommandDefinition";
     aServices.getArray()[2] = "com.sun.star.ucb.Content";
     return aServices;

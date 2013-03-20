@@ -21,16 +21,18 @@
 #define _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
 
 #include "commandbase.hxx"
-#include <comphelper/propertycontainer.hxx>
 #include "apitools.hxx"
-#include <comphelper/uno3.hxx>
-#include <com/sun/star/sdbcx/XRename.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include "datasettings.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdbcx/XRename.hpp>
+#include <com/sun/star/sdb/XQueryDefinition.hpp>
+#include "datasettings.hxx"
 #include "ContentHelper.hxx"
 #include "ComponentDefinition.hxx"
+
+#include <comphelper/propertycontainer.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 
 //........................................................................
@@ -42,18 +44,19 @@ namespace dbaccess
 //= OCommandDefinition - a database "document" which describes a query
 //=========================================================================
     class OCommandDefinition_Impl : public OComponentDefinition_Impl
-                                  ,public OCommandBase
+                                   ,public OCommandBase
     {
     public:
     };
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::sdbcx::XRename
+typedef ::cppu::ImplHelper2 <   ::com::sun::star::sdbcx::XRename,
+                                ::com::sun::star::sdb::XQueryDefinition
                                 >   OCommandDefinition_Base;
 class OCommandDefinition;
 typedef ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >
                         OCommandDefinition_PROP;
 
-class OCommandDefinition    :public OComponentDefinition
+class OCommandDefinition   : public OComponentDefinition
                             ,public OCommandDefinition_Base
                             ,public OCommandDefinition_PROP
 {
@@ -95,6 +98,47 @@ public:
 
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+
+    // overrides to resolve ambiguity
+    virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+        { OComponentDefinition::setPropertyValue(p1, p2); }
+    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+        { return OComponentDefinition::getPropertyValue(p1); }
+    virtual void SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::addPropertyChangeListener(p1, p2); }
+    virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::removePropertyChangeListener(p1, p2); }
+    virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::addVetoableChangeListener(p1, p2); }
+    virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::removeVetoableChangeListener(p1, p2); }
+    virtual com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> SAL_CALL getIdentifier() throw( ::com::sun::star::uno::RuntimeException )
+        { return OComponentDefinition::getIdentifier(); }
+    virtual rtl::OUString SAL_CALL getContentType() throw( ::com::sun::star::uno::RuntimeException )
+        { return OComponentDefinition::getContentType(); }
+    virtual void SAL_CALL addContentEventListener(const com::sun::star::uno::Reference<com::sun::star::ucb::XContentEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::addContentEventListener(p1); }
+    virtual void SAL_CALL removeContentEventListener(const com::sun::star::uno::Reference<com::sun::star::ucb::XContentEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::removeContentEventListener(p1); }
+     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::dispose(); }
+    virtual void SAL_CALL addEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::addEventListener(p1); }
+     virtual void SAL_CALL removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
+        { OComponentDefinition::removeEventListener(p1); }
+
+    // XQueryDefinition properties
+    virtual rtl::OUString getName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString getCommand() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setCommand(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setEscapeProcessing(sal_Bool) throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setUpdateTableName(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setUpdateCatalogName(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    virtual rtl::OUString getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setUpdateSchemaName(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
 
     // OPropertySetHelper
     DECLARE_PROPERTYCONTAINER_DEFAULTS( );

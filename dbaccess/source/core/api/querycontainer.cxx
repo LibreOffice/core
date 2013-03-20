@@ -27,8 +27,9 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/container/XContainerApproveBroadcaster.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdb/QueryDefinition.hpp>
 
 #include <connectivity/dbexception.hxx>
 
@@ -154,10 +155,9 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
         throw DisposedException( ::rtl::OUString(), *this );
 
     // first clone this object's CommandDefinition part
-    Reference< XPropertySet > xCommandDefinitionPart(
-           m_aContext->getServiceManager()->createInstanceWithContext( SERVICE_SDB_QUERYDEFINITION, m_aContext),
-           UNO_QUERY_THROW );
-    ::comphelper::copyProperties( _rxDesc, xCommandDefinitionPart );
+    Reference< css::sdb::XQueryDefinition > xCommandDefinitionPart = css::sdb::QueryDefinition::create(m_aContext);
+
+    ::comphelper::copyProperties( _rxDesc, Reference<XPropertySet>(xCommandDefinitionPart, UNO_QUERY_THROW) );
     // TODO : the columns part of the descriptor has to be copied
 
     // create a wrapper for the object (*before* inserting into our command definition container)
