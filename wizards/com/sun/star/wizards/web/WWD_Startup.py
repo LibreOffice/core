@@ -15,19 +15,25 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from WWD_General import *
-from WWD_General import *
-from common.Configuration import Configuration
-from common.FileAccess import FileAccess
-from data.CGSettings import CGSettings
-from data.CGSessionName import CGSessionName
-from ui.event.ListModelBinder import ListModelBinder
-from ui.event.UnoDataAware import UnoDataAware
-from ui.event.RadioDataAware import RadioDataAware
-from data.CGDocument import CGDocument
-from ui.DocumentPreview import DocumentPreview
-from StylePreview import StylePreview
-from ui.event.DataAware import DataAware
+import traceback
+import uno
+
+from .WWD_General import WWD_General
+from .WebWizardConst import *
+from .StylePreview import StylePreview
+from ..common.Configuration import Configuration
+from ..common.FileAccess import FileAccess
+from ..common.Desktop import Desktop
+from ..document.OfficeDocument import OfficeDocument
+from .data.CGSettings import CGSettings
+from .data.CGDocument import CGDocument
+from .data.CGSessionName import CGSessionName
+from ..ui.event.ListModelBinder import ListModelBinder
+from ..ui.event.UnoDataAware import UnoDataAware
+from ..ui.event.RadioDataAware import RadioDataAware
+from ..ui.DocumentPreview import DocumentPreview
+from ..ui.event.DataAware import DataAware
+from ..ui.event.Task import Task
 
 from com.sun.star.lang import IllegalArgumentException
 
@@ -74,7 +80,8 @@ are the controller inbetween.
 
 class WWD_Startup(WWD_General):
 
-    selectedDoc = ()
+    selectedDoc = []
+    ftp = False
 
     '''
     He - my constructor !
@@ -128,7 +135,7 @@ class WWD_Startup(WWD_General):
         self.ilLayouts.listModel = WWD_General.settings.cp_Layouts
         self.ilLayouts.create(self)
         #COMMENTED
-        self.checkContent(WWD_General.settings.cp_DefaultSession.cp_Content, None, self.xUnoDialog)
+        self.checkContent(WWD_General.settings.cp_DefaultSession.cp_Content, Task("", "", 99999), self.xUnoDialog)
         #saved sessions, styles, combobox save session.
         # also set the chosen saved session...
         self.fillLists()
@@ -140,8 +147,8 @@ class WWD_Startup(WWD_General):
         self.fillDocumentList(self.settings.cp_DefaultSession.cp_Content)
 
         if self.proxies:
-            self.setEnabled(btnFTP, False)
-            self.setEnabled(chkFTP, False)
+            self.btnFTP.Model.Enabled = False
+            self.chkFTP.Model.Enabled = False
 
     '''
     return true if http proxies or other proxies
@@ -175,7 +182,7 @@ class WWD_Startup(WWD_General):
         length = self.resources.resSessionName
         # traverse between the sessions and find the one that
         # has the biggest number.
-        for i in xrange(WWD_General.settings.cp_SavedSessions.getSize()):
+        for i in range(WWD_General.settings.cp_SavedSessions.getSize()):
             sessionName = \
                 WWD_General.settings.cp_SavedSessions.getElementAt(i).cp_Name
             if sessionName.startswith(self.resources.resSessionName):
@@ -229,6 +236,7 @@ class WWD_Startup(WWD_General):
             self.addRoadMapItems()
             self.addStylePreview()
             self.checkSteps()
+            print ("WARNING !!! show() : executeDialogFromComponent")
             self.executeDialogFromComponent(self.myFrame)
             self.removeTerminateListener()
         except Exception:
@@ -243,9 +251,9 @@ class WWD_Startup(WWD_General):
             self.dpStylePreview = DocumentPreview(self.xMSF, self.imgPreview)
             self.stylePreview = StylePreview(
                 self.xMSF, WWD_General.settings.workPath)
-            self.stylePreview.refresh(
-                WWD_General.settings.cp_DefaultSession.getStyle(),
-                WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
+            style = WWD_General.settings.cp_DefaultSession.getStyle()
+            bg = WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage
+            self.stylePreview.refresh(style, bg)
             self.dpStylePreview.setDocument(
                 self.stylePreview.htmlFilename, DocumentPreview.PREVIEW_MODE)
         except Exception:
@@ -268,22 +276,25 @@ class WWD_Startup(WWD_General):
                 self.xMSF, WWD_General.settingsResources, document)
             # get configuration view
             confRoot = Configuration.getConfigurationRoot(
-                self.xMSF, CONFIG_PATH, False)
+                self.xMSF, CONFIG_PATH, True)
             # read
             WWD_General.settings.readConfiguration(
                 confRoot, CONFIG_READ_PARAM)
             configSet = WWD_General.settings.cp_DefaultSession.cp_Publishing
             # now if path variables are used in publisher paths, they
             # are getting replaced here...
-            for i in xrange(configSet.getSize()):
+            for i in range(configSet.getSize()):
                 p = configSet.getElementAt(i)
-                p.cp_URL = self.substitute(p.cp_URL)
+                try:
+                    p.cp_URL = self.substitute(p.cp_URL)
+                except Exception:
+                    traceback.print_exc()
             # initialize the WWD_General.settings.
             WWD_General.settings.configure(self.xMSF)
             # set resource needed for web page.
             # sort the styles alphabetically
-            #COMMENTED
-            WWD_General.settings.cp_Styles.sort(None)
+            #COMMENTED - FIXME: to be impemented
+            #WWD_General.settings.cp_Styles.sort(None)
             self.prepareSessionLists()
             if self.proxies:
                 self.__ftp = self.getPublisher(FTP_PUBLISHER).cp_Publish
@@ -315,29 +326,34 @@ class WWD_Startup(WWD_General):
     def fillLists(self):
         # fill the saved session list.
 
+        print ("Filling lstLoadSettings with cp_SavedSessions ...")
         ListModelBinder.fillList(self.lstLoadSettings,
             WWD_General.settings.cp_SavedSessions.childrenList, None)
+        print ("lstLoadSettings filled !!!")
         # set the selected session to load. (step 1)
         self.selectSession()
         # fill the styles list.
+        print ("Filling lstStyles with cp_Styles ...")
         ListModelBinder.fillList(self.lstStyles,
             WWD_General.settings.cp_Styles.childrenList, None)
+        print ("lstStyles filled !!!")
         # fill the save session combobox (step 7)
+        print ("Filling cbSaveSettings with savedSessions ...")
         ListModelBinder.fillComboBox(self.cbSaveSettings,
             WWD_General.settings.savedSessions.childrenList, None)
+        print ("cbSaveSettings filled !!!")
 
     def selectSession(self):
         selectedSession = 0
         if WWD_General.settings.cp_LastSavedSession is not None \
                 and not WWD_General.settings.cp_LastSavedSession == "":
             ses = WWD_General.settings.cp_SavedSessions.getElement(
-                settings.cp_LastSavedSession)
+                WWD_General.settings.cp_LastSavedSession)
             if ses is not None:
                 selectedSession = \
                     WWD_General.settings.cp_SavedSessions.getIndexOf(ses)
 
-        Helper.setUnoPropertyValue(
-            self.lstLoadSettings.Model, "SelectedItems", (selectedSession,))
+        self.lstLoadSettings.Model.SelectedItems = (selectedSession,)
 
     '''
     attaches to each ui-data-control (like checkbox, groupbox or
@@ -358,8 +374,7 @@ class WWD_Startup(WWD_General):
                 self.lblDocAuthor, self.txtDocAuthor, self.lblDocExportFormat,
                 self.lstDocTargetType]
         self.docListDA.updateUI()
-        doc = CGDocument
-        #dummy
+        doc = CGDocument #dummy
         self.docsBinder = ListModelBinder(self.lstDocuments,
             WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents)
         self.docAware.append(UnoDataAware.attachEditControl(
@@ -479,20 +494,19 @@ class WWD_Startup(WWD_General):
         This checks the documents. If the user
         chooses to cancel, the session is not loaded.
         '''
-        checkContent(session.cp_Content, task, xC)
-        settings.cp_DefaultSession = session;
-        mount(session.cp_Content)
+        self.checkContent(session.cp_Content, task, xC)
+        WWD_General.settings.cp_DefaultSession = session
+        self.fillDocumentList(session.cp_Content)
         task.advance(True)
-        mount(session.cp_Design, self.designAware)
-        mount(session.cp_GeneralInfo, self.genAware)
+        self.mountList(session.cp_Design, self.designAware)
+        self.mountList(session.cp_GeneralInfo, self.genAware)
         task.advance(True)
-        mount(session.cp_Publishing.getElement(LOCAL_PUBLISHER), 0)
-        mount(session.cp_Publishing.getElement(FTP_PUBLISHER), 1)
-        mount(session.cp_Publishing.getElement(ZIP_PUBLISHER), 2)
+        self.mountDataAware(session.cp_Publishing.getElement(LOCAL_PUBLISHER), 0)
+        self.mountDataAware(session.cp_Publishing.getElement(FTP_PUBLISHER), 1)
+        self.mountDataAware(session.cp_Publishing.getElement(ZIP_PUBLISHER), 2)
         task.advance(True)
         self.sessionNameDA.setDataObject(session, True)
-        Helper.setUnoPropertyValue(
-            chkSaveSettings.Model, PropertyNames.PROPERTY_STATE, 1)
+        self.chkSaveSettings.Model.State = 1
         self.docListDA.updateUI()
         task.advance(True)
         if refreshStyle:
@@ -511,8 +525,8 @@ class WWD_Startup(WWD_General):
     '''
 
     def mountDataAware(self, data, i):
-        self.pubAware.get(i * 2).setDataObject(data, True)
-        self.pubAware.get(i * 2 + 1).setDataObject(data, True)
+        self.pubAware[i * 2].setDataObject(data, True)
+        self.pubAware[i * 2 + 1].setDataObject(data, True)
 
     '''
     Fills the documents listbox.
@@ -534,6 +548,7 @@ class WWD_Startup(WWD_General):
     '''
 
     def mountList(self, data, _list):
+        print ("DEBUG !!! mountList -- data: ", data)
         for i in _list:
             i.setDataObject(data, True)
 
@@ -550,8 +565,12 @@ class WWD_Startup(WWD_General):
     '''
 
     @classmethod
-    def checkDocument(self,xmsf, doc, task, xC):
+    def checkDocument1(self, xmsf, doc, task, xC):
         doc.validate(xmsf, task)
+        return True
+
+    def checkDocument(self, doc, task, xC):
+        doc.validate(self.xMSF, task)
         return True
         '''except IOError:
             relocate = SystemDialog.showMessageBox(
@@ -599,7 +618,7 @@ class WWD_Startup(WWD_General):
     def checkContent(self, content, task, xC):
         i = 0
         while i < content.cp_Documents.getSize():
-            if not checkDocument(content.cp_Documents.getElementAt(i), task, xC):
+            if not self.checkDocument(content.cp_Documents.getElementAt(i), task, xC):
                 # I use here 'i--' since, when the document is removed
                 # an index change accures
                 content.cp_Documents.remove(i)
@@ -623,15 +642,13 @@ class WWD_Startup(WWD_General):
                     aux = False
                 else:
                     aux = True
-
                 if WWD_Startup.selectedDoc[0] + 1 < \
                     WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize():
                     aux2 = True
                 else:
                     aux2 = False
-
-            self.setEnabled(self.btnDocUp, aux)
-            self.setEnabled(self.btnDocDown, aux2)
+            self.btnDocUp.Model.Enabled = aux
+            self.btnDocDown.Model.Enabled = aux2
         except Exception:
             traceback.print_exc()
 
@@ -641,10 +658,9 @@ class WWD_Startup(WWD_General):
         if bg is None or bg == "":
             bg = self.resources.resBackgroundNone
         else:
-            bg = FileAccess.getPathFilename(getFileAccess().getPath(bg, None))
+            bg = FileAccess.getPathFilename(self.getFileAccess().getPath(bg, None))
 
-        Helper.setUnoPropertyValue(
-            self.txtBackground.Model, PropertyNames.PROPERTY_LABEL, bg)
+        self.txtBackground.Model.Label = bg
 
     def updateIconsetText(self):
         iconset = WWD_General.settings.cp_DefaultSession.cp_Design.cp_IconSet
@@ -657,8 +673,7 @@ class WWD_Startup(WWD_General):
             else:
                 iconsetName = IconSet.cp_Name
 
-        Helper.setUnoPropertyValue(
-            txtIconset.Model, PropertyNames.PROPERTY_LABEL, iconsetName)
+        self.txtIconset.Model.Label = iconsetName
 
     '''
     refreshes the style preview.
@@ -669,11 +684,10 @@ class WWD_Startup(WWD_General):
 
     def refreshStylePreview(self):
         try:
-            WWD_General.settings.cp_DefaultSession.cp_Design.cp_Style = \
-                "style" + \
-                str(WWD_General.settings.cp_DefaultSession.cp_Design.cp_Style)
+            print ("WARNING !!! refreshStylePreview")
             self.updateBackgroundText()
-            self.stylePreview.refresh(WWD_General.settings.cp_DefaultSession.getStyle(), WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
+            self.stylePreview.refresh(WWD_General.settings.cp_DefaultSession.getStyle(),
+                                      WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
             self.dpStylePreview.reload(self.xMSF)
         except Exception:
             traceback.print_exc()
