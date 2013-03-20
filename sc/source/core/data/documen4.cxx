@@ -526,7 +526,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
     return !aData.bError;
 }
 
-double ScDocument::RoundValueAsShown( double fVal, sal_uLong nFormat )
+double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
 {
     short nType;
     if ( (nType = GetFormatTable()->GetType( nFormat )) != NUMBERFORMAT_DATE

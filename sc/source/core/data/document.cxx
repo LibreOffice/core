@@ -3035,7 +3035,7 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
     maTabs[rPos.Tab()]->SetValue(rPos.Col(), rPos.Row(), fVal);
 }
 
-OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab )
+OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
@@ -3045,6 +3045,16 @@ OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
     else
         return EMPTY_OUSTRING;
+}
+
+OUString ScDocument::GetString( const ScAddress& rPos ) const
+{
+    if (!TableExists(rPos.Tab()))
+        return EMPTY_OUSTRING;
+
+    OUString aStr;
+    maTabs[rPos.Tab()]->GetString(rPos.Col(), rPos.Row(), aStr);
+    return aStr;
 }
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
@@ -3116,7 +3126,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
 }
 
 
-void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue )
+void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         rValue = maTabs[nTab]->GetValue( nCol, nRow );
@@ -3133,11 +3143,11 @@ const EditTextObject* ScDocument::GetEditText( const ScAddress& rPos ) const
     return maTabs[nTab]->GetEditText(rPos.Col(), rPos.Row());
 }
 
-double ScDocument::GetValue( const ScAddress& rPos )
+double ScDocument::GetValue( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetValue( rPos );
+        return maTabs[nTab]->GetValue(rPos.Col(), rPos.Row());
     return 0.0;
 }
 
@@ -3276,7 +3286,6 @@ ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
     OSL_FAIL("GetCell without a table");
     return NULL;
 }
-
 
 bool ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {

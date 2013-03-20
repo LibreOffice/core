@@ -244,10 +244,10 @@ sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
     throw (uno::RuntimeException)
 {
-     SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
     IsObjectValid();
     double fValue = 0;
-    sal_Bool bResult(false);
+    bool bResult = false;
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
     {
         uno::Reference<XAccessibleStateSet> xParentStates;
@@ -259,7 +259,7 @@ sal_Bool SAL_CALL
         if (IsEditable(xParentStates))
         {
             ScDocShell* pDocShell = (ScDocShell*) mpDoc->GetDocumentShell();
-            bResult = pDocShell->GetDocFunc().PutCell( maCellAddress, new ScValueCell(fValue), sal_True );
+            bResult = pDocShell->GetDocFunc().PutCell( maCellAddress, new ScValueCell(fValue), true);
         }
     }
     return bResult;

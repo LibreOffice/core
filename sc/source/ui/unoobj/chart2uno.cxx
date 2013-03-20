@@ -2597,24 +2597,17 @@ void ScChart2DataSequence::BuildDataCache()
                         ++nDataCount;
 
                         ScAddress aAdr(nCol, nRow, nTab);
-                        ScBaseCell* pCell = m_pDocument->GetCell(aAdr);
-                        if (!pCell)
-                            continue;
+                        rItem.maString = m_pDocument->GetString(aAdr);
 
-                        if (pCell->HasStringData())
-                            rItem.maString = pCell->GetStringData();
-                        else
-                            rItem.maString = m_pDocument->GetString(nCol, nRow, nTab);
-
-                        switch (pCell->GetCellType())
+                        switch (m_pDocument->GetCellType(aAdr))
                         {
                             case CELLTYPE_VALUE:
-                                rItem.mfValue = static_cast< ScValueCell*>(pCell)->GetValue();
+                                rItem.mfValue = m_pDocument->GetValue(aAdr);
                                 rItem.mbIsValue = true;
                             break;
                             case CELLTYPE_FORMULA:
                             {
-                                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(m_pDocument->GetCell(aAdr));
                                 sal_uInt16 nErr = pFCell->GetErrCode();
                                 if (nErr)
                                     break;

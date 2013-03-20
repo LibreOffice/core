@@ -798,15 +798,16 @@ public:
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
-    SC_DLLPUBLIC OUString GetString( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    SC_DLLPUBLIC OUString GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    OUString GetString( const ScAddress& rPos ) const;
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     sal_uInt16                  GetStringForFormula( const ScAddress& rPos, rtl::OUString& rString );
-    SC_DLLPUBLIC double         GetValue( const ScAddress& );
-    SC_DLLPUBLIC double         GetValue( const SCCOL nCol, SCROW nRow, SCTAB nTab) { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
-    SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
+    SC_DLLPUBLIC double GetValue( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC double GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
+    SC_DLLPUBLIC void GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
     SC_DLLPUBLIC const EditTextObject* GetEditText( const ScAddress& rPos ) const;
-    SC_DLLPUBLIC double         RoundValueAsShown( double fVal, sal_uLong nFormat );
+    SC_DLLPUBLIC double RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const;
     SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      sal_uInt32& rFormat ) const;
     sal_uInt32      GetNumberFormat( const ScRange& rRange ) const;

@@ -1093,22 +1093,17 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
             SetFormulaCell(pFCell);
         }
-
     }
     else  //regular value cell
     {
-        // #i62435# Initialize the value cell's script type
-        // if the default style's number format is latin-only.
-        // If the cell uses a different format, the script type
-        // will be reset when the style is applied.
+        // #i62435# Initialize the value cell's script type if the default
+        // style's number format is latin-only. If the cell uses a different
+        // format, the script type will be reset when the style is applied.
 
-        ScBaseCell* pNewCell = new ScValueCell(fValue);
         ScDocument* pDoc = rXMLImport.GetDocument();
+        pDoc->SetValue(rCurrentPos, fValue);
         if ( rXMLImport.IsLatinDefaultStyle() )
             pDoc->SetScriptType(rCurrentPos, SCRIPTTYPE_LATIN);
-        pDoc->PutCell(
-            rCurrentPos.Col(), rCurrentPos.Row(),
-            rCurrentPos.Tab(), pNewCell );
     }
     rXMLImport.ProgressBarIncrement(false);
 }
@@ -1227,38 +1222,43 @@ bool ScXMLTableRowCellContext::CellsAreRepeated() const
 namespace {
 
 // from ScCellObj::GetOutputString_Imp().  all of it may not be necessary.
-rtl::OUString getOutputString(ScDocument* pDoc, const ScAddress& aCellPos)
+OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
 {
-    rtl::OUString aVal;
-    if ( pDoc )
+    if (!pDoc)
+        return EMPTY_OUSTRING;
+
+    CellType eType = pDoc->GetCellType(aCellPos);
+    switch (eType)
     {
-        ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
+        case CELLTYPE_NONE:
+        case CELLTYPE_NOTE:
+            return EMPTY_OUSTRING;
+        case CELLTYPE_EDIT:
         {
-            if ( pCell->GetCellType() == CELLTYPE_EDIT )
+            //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
+            //  hier werden die Umbrueche aber gebraucht
+            const EditTextObject* pData = pDoc->GetEditText(aCellPos);
+            if (pData)
             {
-                //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-                //  hier werden die Umbrueche aber gebraucht
-                const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
-                if (pData)
-                {
-                    EditEngine& rEngine = pDoc->GetEditEngine();
-                    rEngine.SetText( *pData );
-                    aVal = rEngine.GetText( LINEEND_LF );
-                }
-                //  Edit-Zellen auch nicht per NumberFormatter formatieren
-                //  (passend zur Ausgabe)
+                EditEngine& rEngine = pDoc->GetEditEngine();
+                rEngine.SetText(*pData);
+                return rEngine.GetText(LINEEND_LF);
             }
-            else
-            {
-                //  wie in GetString am Dokument (column)
-                Color* pColor;
-                sal_uLong nNumFmt = pDoc->GetNumberFormat( aCellPos );
-                ScCellFormat::GetString( pCell, nNumFmt, aVal, &pColor, *pDoc->GetFormatTable() );
-            }
+            //  Edit-Zellen auch nicht per NumberFormatter formatieren
+            //  (passend zur Ausgabe)
+        }
+        break;
+        default:
+        {
+            //  wie in GetString am Dokument (column)
+            Color* pColor;
+            sal_uLong nNumFmt = pDoc->GetNumberFormat(aCellPos);
+            return ScCellFormat::GetString(
+                *pDoc, aCellPos, nNumFmt, &pColor, *pDoc->GetFormatTable());
         }
     }
-    return aVal;
+
+    return EMPTY_OUSTRING;
 }
 
 }

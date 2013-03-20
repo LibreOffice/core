@@ -183,30 +183,31 @@ OUString lcl_GetRawString( ScDocument* pDoc, const ScAddress& rPos )
 {
     // return text/edit cell string content, with line feeds in edit cells
 
-    String aVal;        // document uses tools-strings
-    if (pDoc)
+    if (!pDoc)
+        return EMPTY_OUSTRING;
+
+    switch (pDoc->GetCellType(rPos))
     {
-        ScBaseCell* pCell = pDoc->GetCell( rPos );
-        if (pCell)
+        case CELLTYPE_STRING:
+            return pDoc->GetString(rPos);
+        case CELLTYPE_EDIT:
         {
-            CellType eType = pCell->GetCellType();
-            if ( eType == CELLTYPE_STRING )
-                aVal = static_cast<ScStringCell*>(pCell)->GetString();     // string cell: content
-            else if ( eType == CELLTYPE_EDIT )
-            {
-                // edit cell: text with line breaks
-                const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
-                if (pData)
-                {
-                    EditEngine& rEngine = pDoc->GetEditEngine();
-                    rEngine.SetText( *pData );
-                    aVal = rEngine.GetText( LINEEND_LF );
-                }
-            }
+            const EditTextObject* pData = pDoc->GetEditText(rPos);
+            if (!pData)
+                return EMPTY_OUSTRING;
+
+            EditEngine& rEngine = pDoc->GetEditEngine();
+            rEngine.SetText(*pData);
+            return rEngine.GetText(LINEEND_LF);
         }
+        break;
+        default:
+            ;
     }
-    return aVal;
+
+    return EMPTY_OUSTRING;
 }
+
 } // anonymous namespace
 
 //----------------------------------------------------------------------------

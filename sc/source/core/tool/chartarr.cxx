@@ -114,6 +114,40 @@ ScMemChart* ScChartArray::CreateMemChart()
         return CreateMemChartMulti();   // kann 0 Range besser ab als Single
 }
 
+namespace {
+
+double getCellValue( const ScDocument& rDoc, const ScAddress& rPos, double fDefault, bool bCalcAsShown )
+{
+    double fRet = fDefault;
+
+    CellType eType = rDoc.GetCellType(rPos);
+    switch (eType)
+    {
+        case CELLTYPE_VALUE:
+        {
+            fRet = rDoc.GetValue(rPos);
+            if (bCalcAsShown && fRet != 0.0)
+            {
+                sal_uInt32 nFormat = rDoc.GetNumberFormat(rPos);
+                fRet = rDoc.RoundValueAsShown(fRet, nFormat);
+            }
+        }
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(rDoc.GetCell(rPos));
+            if (!pFCell->GetErrCode() && pFCell->IsValue())
+                fRet = pFCell->GetValue();
+        }
+        break;
+        default:
+            ;
+    }
+    return fRet;
+}
+
+}
+
 ScMemChart* ScChartArray::CreateMemChartSingle()
 {
     SCSIZE nCol;
@@ -221,35 +255,13 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         if ( bValidData )
         {
             bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
-            ScBaseCell* pCell;
             for (nCol=0; nCol<nColCount; nCol++)
             {
                 for (nRow=0; nRow<nRowCount; nRow++)
                 {
-                    double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
-
-                    pDocument->GetCell( aCols[nCol], aRows[nRow], nTab1, pCell );
-                    if (pCell)
-                    {
-                        CellType eType = pCell->GetCellType();
-                        if (eType == CELLTYPE_VALUE)
-                        {
-                            nVal = ((ScValueCell*)pCell)->GetValue();
-                            if ( bCalcAsShown && nVal != 0.0 )
-                            {
-                                sal_uInt32 nFormat;
-                                pDocument->GetNumberFormat( aCols[nCol],
-                                    aRows[nRow], nTab1, nFormat );
-                                nVal = pDocument->RoundValueAsShown( nVal, nFormat );
-                            }
-                        }
-                        else if (eType == CELLTYPE_FORMULA)
-                        {
-                            ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                            if ( (pFCell->GetErrCode() == 0) && pFCell->IsValue() )
-                                nVal = pFCell->GetValue();
-                        }
-                    }
+                    // DBL_MIN is a Hack for Chart to recognize empty cells.
+                    ScAddress aPos(aCols[nCol], aRows[nRow], nTab1);
+                    double nVal = getCellValue(*pDocument, aPos, DBL_MIN, bCalcAsShown);
                     pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
                 }
             }
@@ -358,29 +370,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                 {
                     double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
                     const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
-                    if ( pPos )
-                    {   // sonst: Luecke
-                        ScBaseCell* pCell = pDocument->GetCell( *pPos );
-                        if (pCell)
-                        {
-                            CellType eType = pCell->GetCellType();
-                            if (eType == CELLTYPE_VALUE)
-                            {
-                                nVal = ((ScValueCell*)pCell)->GetValue();
-                                if ( bCalcAsShown && nVal != 0.0 )
-                                {
-                                    sal_uLong nFormat = pDocument->GetNumberFormat( *pPos );
-                                    nVal = pDocument->RoundValueAsShown( nVal, nFormat );
-                                }
-                            }
-                            else if (eType == CELLTYPE_FORMULA)
-                            {
-                                ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                                if ( (pFCell->GetErrCode() == 0) && pFCell->IsValue() )
-                                    nVal = pFCell->GetValue();
-                            }
-                        }
-                    }
+                    if (pPos)
+                        // otherwise: Gap
+                        nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
+
                     pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
                 }
             }
@@ -391,29 +384,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             {
                 double nVal = DBL_MIN;      // Hack for Chart to recognize empty cells
                 const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
-                if ( pPos )
-                {   // otherwise: Gap
-                    ScBaseCell* pCell = pDocument->GetCell( *pPos );
-                    if (pCell)
-                    {
-                        CellType eType = pCell->GetCellType();
-                        if (eType == CELLTYPE_VALUE)
-                        {
-                            nVal = ((ScValueCell*)pCell)->GetValue();
-                            if ( bCalcAsShown && nVal != 0.0 )
-                            {
-                                sal_uLong nFormat = pDocument->GetNumberFormat( *pPos );
-                                nVal = pDocument->RoundValueAsShown( nVal, nFormat );
-                            }
-                        }
-                        else if (eType == CELLTYPE_FORMULA)
-                        {
-                            ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                            if ( (pFCell->GetErrCode() == 0) && pFCell->IsValue() )
-                                nVal = pFCell->GetValue();
-                        }
-                    }
-                }
+                if (pPos)
+                    // otherwise: Gap
+                    nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
+
                 pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
             }
         }

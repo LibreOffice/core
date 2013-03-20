@@ -26,6 +26,8 @@
 class ScBaseCell;
 class SvNumberFormatter;
 class Color;
+class ScDocument;
+class ScAddress;
 
 enum ScForceTextFmt {
     ftDontForce,            // numbers as numbers
@@ -45,6 +47,10 @@ public:
                                ScForceTextFmt eForceTextFmt = ftDontForce,
                                bool bUseStarFormat = false );
 
+    static OUString GetString(
+        const ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat,
+        Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
+        bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce, bool bUseStarFormat = false );
 
     static void     GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
                                       SvNumberFormatter& rFormatter );
