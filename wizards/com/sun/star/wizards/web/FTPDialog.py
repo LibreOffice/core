@@ -38,9 +38,9 @@ from .data.CGSettings import CGSettings
 #from com.sun.star.ucb import OpenCommandArgument2
 #from com.sun.star.ucb import OpenMode
 
-PushButtonType_OK_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.OK" )
-PushButtonType_CANCEL_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.CANCEL" )
-PushButtonType_HELP_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.HELP" )
+#PushButtonType_OK_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.OK" )
+#PushButtonType_CANCEL_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.CANCEL" )
+#PushButtonType_HELP_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.HELP" )
 
 
 # This is the FTP Dialog. <br/>
