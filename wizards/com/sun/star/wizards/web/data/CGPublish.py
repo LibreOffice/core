@@ -15,7 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from common.ConfigGroup import ConfigGroup
+from ...common.ConfigGroup import ConfigGroup
 
 '''
 A Class which describes the publishing arguments
@@ -30,18 +30,20 @@ class CGPublish(ConfigGroup):
     cp_URL = str()
     cp_Username = str()
     password = str()
+    overwriteApproved = bool()
+    url = str()
 
     def setURL(self, path):
         try:
             self.cp_URL = (self.root).getFileAccess().getURL(path)
             self.overwriteApproved = False
-        except Exception, ex:
+        except Exception as ex:
             ex.printStackTrace()
 
     def getURL(self):
         try:
             return (self.root).getFileAccess().getPath(self.cp_URL, None)
-        except Exception, e:
+        except Exception as e:
             e.printStackTrace()
             return ""
 
