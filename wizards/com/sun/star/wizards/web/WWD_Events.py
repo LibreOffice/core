@@ -16,10 +16,28 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from common.Desktop import Desktop
-from WWD_Startup import *
-from BackgroundsDialog import BackgroundsDialog
-from IconsDialog import IconsDialog
+import uno
+#from common.Desktop import Desktop
+from .WWD_Startup import WWD_Startup
+from .WWD_General import WWD_General
+from .WebWizardConst import *
+from ..common.FileAccess import FileAccess
+from ..common.Configuration import Configuration
+from ..ui.event.ListModelBinder import ListModelBinder
+from ..ui.event.Task import Task
+from .data.CGDocument import CGDocument
+from .data.CGSession import CGSession
+from .ProcessStatusRenderer import ProcessStatusRenderer
+from .FTPDialog import FTPDialog
+from .ErrorHandler import ErrorHandler
+from .AbstractErrorHandler import AbstractErrorHandler
+from .ProcessErrorHandler import ProcessErrorHandler
+from .Process import Process
+from .BackgroundsDialog import BackgroundsDialog
+from .IconsDialog import IconsDialog
+from .TOCPreview import TOCPreview
+
+from com.sun.star.container import NoSuchElementException
 
 '''
 This class implements the ui-events of the
@@ -35,6 +53,7 @@ class WWD_Events(WWD_Startup):
 
     iconsDialog = None
     bgDialog = None
+    docPreview = None
 
     '''
     He - my constructor !
@@ -70,15 +89,15 @@ class WWD_Events(WWD_Startup):
     def enterStep(self, old, newStep):
         if old == 1:
             sessionToLoad = ""
-            s = Helper.getUnoPropertyValue(lstLoadWWD_Startup.settings.Model, "SelectedItems")
-            if s.length == 0 or s[0] == 0:
+            s = self.lstLoadSettings.Model.SelectedItems
+            if len(s) == 0 or s[0] == 0:
                 sessionToLoad = ""
             else:
                 sessionToLoad = \
                     WWD_Startup.settings.cp_SavedSessions.getElementAt(s[0]).cp_Name
 
-            if not sessionToLoad.equals(self.currentSession):
-                loadSession(sessionToLoad)
+            if sessionToLoad is not self.currentSession:
+                self.loadSession(sessionToLoad)
 
     '''
     **************
@@ -91,71 +110,71 @@ class WWD_Events(WWD_Startup):
     user selects a saved session.
     '''
     def sessionSelected(self):
-        s = Helper.getUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems")
-        setEnabled(btnDelSession, s.length > 0 and s[0] > 0)
+        s = self.getModel(self.lstLoadSettings).SelectedItems
+        self.setEnabled(self.btnDelSession, len(s) > 0 and s[0] > 0)
 
     '''
     Ha ! the session should be loaded :-)
     '''
 
     def loadSession(self, sessionToLoad):
+        print ("DEBUG !!! loadSession -- sessionToLoad: ", sessionToLoad)
         try:
             sd = self.getStatusDialog()
-            #task = Task("LoadDocs", "", 10)
-            sd.execute(this, task, resources.resLoadingSession)
-            #task.start()
-            self.setSelectedDoc(WWD_Events.EMPTY_SHORT_ARRAY)
-            Helper.setUnoPropertyValue(
-                lstDocuments.Model, "SelectedItems", WWD_Events.EMPTY_SHORT_ARRAY)
-            Helper.setUnoPropertyValue(
-                lstDocuments.Model, "StringItemList", WWD_Events.EMPTY_STRING_ARRAY)
-            if not sessionToLoad:
+            task = Task("LoadDocs", "", 10)
+            sd.execute(self, task, self.resources.resLoadingSession)
+            task.start()
+            self.setSelectedDoc([])
+            self.lstDocuments.Model.SelectedItems = tuple([])
+            self.lstDocuments.Model.StringItemList = tuple([])
+            if sessionToLoad == "":
                 view = Configuration.getConfigurationRoot(
-                    xMSF, CONFIG_PATH + "/DefaultSession", False)
+                    self.xMSF, CONFIG_PATH + "/DefaultSession", False)
             else:
                 view = Configuration.getConfigurationRoot(
-                    xMSF, CONFIG_PATH + "/SavedSessions", False)
+                    self.xMSF, CONFIG_PATH + "/SavedSessions", False)
                 view = Configuration.getNode(sessionToLoad, view)
 
             session = CGSession()
-            session.root = settings
+            session.root = WWD_Startup.settings
+            print ("DEBUG !!! loadSession -- reading configuration ...")
             session.readConfiguration(view, CONFIG_READ_PARAM)
-            #task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 7)
-            #task.advance(True)
+            numDocs = session.cp_Content.cp_Documents.getSize()
+            print ("DEBUG !!! loadSession -- numDocs: ", numDocs)
+            task.setMax(numDocs * 5 + 7)
+            task.advance(True)
             if sessionToLoad == "":
-                setSaveSessionName(session)
+                self.setSaveSessionName(session)
 
-            mount(session, task, False, sd.self.xUnoDialog)
-            checkSteps()
+            self.mount(session, task, False, sd.xUnoDialog)
+            self.checkSteps()
             self.currentSession = sessionToLoad
-            '''while task.getStatus() <= task.getMax():
+            while task.getStatus() <= task.getMax():
                 task.advance(False)
-            task.removeTaskListener(sd)'''
-        except Exception, ex:
-            unexpectedError(ex)
+            task.removeTaskListener(sd)
+        except Exception as ex:
+            self.unexpectedError(ex)
 
         try:
-            refreshStylePreview()
-            updateIconsetText()
-        except Exception, e:
-            # TODO Auto-generated catch block
-            e.printStackTrace()
+            self.refreshStylePreview()
+            self.updateIconsetText()
+        except Exception:
+           traceback.print_exc()
 
     '''
     hmm. the user clicked the delete button.
     '''
 
     def delSession(self):
-        selected = Helper.getUnoPropertyValue(
-            lstLoadWWD_Startup.settings.Model, "SelectedItems")
+        selected = self.lstLoadSettings.Model.SelectedItems
         if selected.length == 0:
             return
 
         if selected[0] == 0:
             return
 
-        confirm = AbstractErrorHandler.showMessage(
-            self.xMSF, self.xUnoDialog.Peer, resources.resDelSessionConfirm,
+        confirm = AbstractErrorHandler.showMessage1(
+            self.xMSF, self.xUnoDialog.Peer, self.resources.resDelSessionConfirm,
             ErrorHandler.ERROR_QUESTION_NO)
         if confirm:
             try:
@@ -177,17 +196,14 @@ class WWD_Events(WWD_Startup):
                     # if the <none> session will
                     # be selected, disable the remove button...
                     if nextSelected[0] == 0:
-                        Helper.setUnoPropertyValue(
-                            btnDelSession.Model,
-                            PropertyNames.PROPERTY_ENABLED, False)
+                        self.btnDelSession.Model.Enabled = False
                         # select...
 
-                    Helper.setUnoPropertyValue(
-                        lstLoadWWD_Startup.settings.Model, "SelectedItems", nextSelected)
+                    self.lstLoadSettings.Model.SelectedItems = nextSelected
 
-            except Exception, ex:
-                ex.printStackTrace()
-                unexpectedError(ex)
+            except Exception as ex:
+                traceback.print_exc()
+                self.unexpectedError(ex)
 
     '''
     **************
@@ -204,13 +220,16 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setSelectedDoc(self, s):
-        oldDoc = self.getDoc([WWD_Startup.selectedDoc])
+        print ("DEBUG !!! setSelectedDoc -- s: ", s)
+        oldDoc = self.getDoc(WWD_Startup.selectedDoc)
         doc = self.getDoc(s)
         if doc is None:
+            print ("DEBUG !!! setSelectedDoc -- doc is None.")
             self.fillExportList([])
             #I try to avoid refreshing the export list if
             #the same type of document is chosen.
         elif oldDoc is None or oldDoc.appType != doc.appType:
+            print ("DEBUG !!! setSelectedDoc -- oddDoc is None.")
             self.fillExportList(WWD_Startup.settings.getExporters(doc.appType))
 
         WWD_Startup.selectedDoc = s
@@ -229,9 +248,11 @@ class WWD_Events(WWD_Startup):
             files = self.getDocAddDialog().callOpenDialog(
                 True, WWD_Startup.settings.cp_DefaultSession.cp_InDirectory)
             if files is None:
+                print ("DEBUG !!! addDocument -- files is None")
                 return
+            print ("DEBUG !!! addDocument -- number of files: ", len(files))
 
-            task = None #Task("", "", len(files) * 5)
+            task = Task("", "", len(files) * 5)
             '''
             If more than a certain number
             of documents have been added,
@@ -239,17 +260,17 @@ class WWD_Events(WWD_Startup):
             '''
             if (len(files) > MIN_ADD_FILES_FOR_DIALOG):
                 sd = self.getStatusDialog()
-                sd.setLabel(resources.resValidatingDocuments)
-                sd.execute(this, task, resources.prodName)
+                sd.setLabel(self.resources.resValidatingDocuments)
+                sd.execute(self, task, self.resources.prodName)
                 oLoadDocs = self.LoadDocs(self.xMSF, self.xUnoDialog, files, self)
                 oLoadDocs.loadDocuments()
-                #task.removeTaskListener(sd)
+                task.removeTaskListener(sd)
             else:
                 '''
                 When adding a single document, do not use a
                 status dialog...
                 '''
-                oLoadDocs = self.LoadDocs(self.xMSF, self.xUnoDialog, files, self)
+                oLoadDocs = self.LoadDocs(self.xMSF, self.xUnoDialog, files, task, self)
                 oLoadDocs.loadDocuments()
         except Exception:
             traceback.print_exc()
@@ -259,29 +280,30 @@ class WWD_Events(WWD_Startup):
     '''
 
     def removeDocument(self):
-        if WWD_Startup.selectedDoc.length == 0:
+        if len(WWD_Startup.selectedDoc) == 0:
             return
 
         WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
             WWD_Startup.selectedDoc[0])
         # update the selected document
-        while WWD_Startup.selectedDoc[0] >= getDocsCount():
+        while WWD_Startup.selectedDoc[0] >= self.getDocsCount():
             WWD_Startup.selectedDoc[0] -= 1
             # if there are no documents...
         if WWD_Startup.selectedDoc[0] == -1:
-            WWD_Startup.selectedDoc = WWD_Events.EMPTY_SHORT_ARRAY
+            WWD_Startup.selectedDoc = []
             # update the list to show the right selection.
 
         docListDA.updateUI()
         # disables all the next steps, if the list of docuemnts
         # is empty.
-        checkSteps()
+        self.checkSteps()
 
     '''
     doc up.
     '''
 
     def docUp(self):
+        print ("DEBUG !!! docUp --")
         doc = WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(
             WWD_Startup.selectedDoc[0])
         WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
@@ -296,6 +318,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def docDown(self):
+        print ("DEBUG !!! docDown --")
         doc = WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(
             WWD_Startup.selectedDoc[0])
         WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
@@ -329,11 +352,11 @@ class WWD_Events(WWD_Startup):
             i = WWD_Events.bgDialog.executeDialogFromParent(self)
             if i == 1:
                 #ok
-                setBackground(WWD_Events.bgDialog.getSelected())
+                self.setBackground(WWD_Events.bgDialog.getSelected())
         except Exception:
             traceback.print_exc()
         finally:
-            self.setEnabled(btnBackgrounds, True)
+            self.setEnabled(self.btnBackgrounds, True)
 
     '''
     invoked when the BackgorundsDialog is "OKed".
@@ -345,7 +368,7 @@ class WWD_Events(WWD_Startup):
 
         WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage \
             = background
-        refreshStylePreview()
+        self.refreshStylePreview()
 
     '''
     is called when the user clicks "Icon sets" button.
@@ -369,7 +392,7 @@ class WWD_Events(WWD_Startup):
         except Exception:
             traceback.print_exc()
         finally:
-            self.setEnabled(btnIconSets, True)
+            self.setEnabled(self.btnIconSets, True)
 
     '''
     invoked when the Iconsets Dialog is OKed.
@@ -377,7 +400,7 @@ class WWD_Events(WWD_Startup):
 
     def setIconset(self, icon):
         WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_IconSet = icon
-        updateIconsetText()
+        self.updateIconsetText()
 
     '''
     **************
@@ -393,10 +416,12 @@ class WWD_Events(WWD_Startup):
         if url is None:
             return None
 
-        p = getPublisher(publisher)
+        print ("DEBUG !!! setPublishUrl - publisher: " + publisher + " url: " + url)
+
+        p = self.getPublisher(publisher)
         p.cp_URL = url
         p.cp_Publish = True
-        updatePublishUI(number)
+        self.updatePublishUI(number)
         p.overwriteApproved = True
         return p
 
@@ -407,30 +432,29 @@ class WWD_Events(WWD_Startup):
     '''
 
     def updatePublishUI(self, number):
-        (pubAware.get(number)).updateUI()
-        (pubAware.get(number + 1)).updateUI()
-        checkPublish()
+        (self.pubAware[number]).updateUI()
+        (self.pubAware[number + 1]).updateUI()
+        self.checkPublish()
 
     '''
     The user clicks the local "..." button.
     '''
 
     def setPublishLocalDir(self):
-        dir = showFolderDialog(
+        folder = self.showFolderDialog(
             "Local destination directory", "",
             WWD_Startup.settings.cp_DefaultSession.cp_OutDirectory)
         #if ok was pressed...
-        setPublishUrl(LOCAL_PUBLISHER, dir, 0)
+        self.setPublishUrl(LOCAL_PUBLISHER, folder, 0)
 
     '''
     The user clicks the "Configure" FTP button.
     '''
 
     def setFTPPublish(self):
-        if showFTPDialog(getPublisher(FTP_PUBLISHER)):
-            getPublisher
-            (FTP_PUBLISHER).cp_Publish = True
-            updatePublishUI(2)
+        if self.showFTPDialog(self.getPublisher(FTP_PUBLISHER)):
+            self.getPublisher(FTP_PUBLISHER).cp_Publish = True
+            self.updatePublishUI(2)
 
     '''
     show the ftp dialog
@@ -440,9 +464,9 @@ class WWD_Events(WWD_Startup):
 
     def showFTPDialog(self, pub):
         try:
-            return getFTPDialog(pub).execute(this) == 1
-        except Exception, ex:
-            ex.printStackTrace()
+            return self.getFTPDialog(pub).execute(self) == 1
+        except Exception:
+            traceback.print_exc()
             return False
 
     '''
@@ -451,13 +475,12 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setZipFilename(self):
-        sd = getZipDialog()
+        sd = self.getZipDialog()
         zipFile = sd.callStoreDialog(
             WWD_Startup.settings.cp_DefaultSession.cp_OutDirectory,
-            resources.resDefaultArchiveFilename)
-        setPublishUrl(ZIP_PUBLISHER, zipFile, 4)
-        getPublisher
-        (ZIP_PUBLISHER).overwriteApproved = True
+            self.resources.resDefaultArchiveFilename)
+        self.setPublishUrl(ZIP_PUBLISHER, zipFile, 4)
+        self.getPublisher(ZIP_PUBLISHER).overwriteApproved = True
 
     '''
     the user clicks the "Preview" button.
@@ -467,12 +490,12 @@ class WWD_Events(WWD_Startup):
         try:
             if self.docPreview is None:
                 self.docPreview = TOCPreview(
-                    self.xMSF, settings, resources,
-                    stylePreview.tempDir, myFrame)
+                    self.xMSF, self.settings, self.resources,
+                    self.stylePreview.tempDir, self.myFrame)
 
-            self.docPreview.refresh(settings)
-        except Exception, ex:
-            unexpectedError(ex)
+            self.docPreview.refresh(self.settings)
+        except Exception as ex:
+            self.unexpectedError(ex)
 
     '''
     **************
@@ -491,25 +514,26 @@ class WWD_Events(WWD_Startup):
     def publishTargetApproved(self):
         result = True
         # 1. check local publish target
-        p = getPublisher(LOCAL_PUBLISHER)
+        p = self.getPublisher(LOCAL_PUBLISHER)
         # should publish ?
         if (p.cp_Publish):
-            path = getFileAccess().getPath(p.url, None)
+            fileAccess = self.getFileAccess()
+            path = fileAccess.getPath(p.url, None)
             # target exists?
-            if getFileAccess().exists(p.url, False):
+            if fileAccess.exists(p.url, False):
                 #if its a directory
-                if getFileAccess().isDirectory(p.url):
+                if fileAccess.isDirectory(p.url):
                     #check if its empty
-                    files = getFileAccess().listFiles(p.url, True)
-                    if files.length > 0:
+                    files = fileAccess.listFiles(p.url, True)
+                    if len(files) > 0:
                         '''
                         it is not empty :-(
                         it either a local publisher or an ftp
                         (zip uses no directories as target...)
                         '''
-                        message = resources.resLocalTragetNotEmpty.replace(
+                        message = self.resources.resLocalTragetNotEmpty.replace(
                             "%FILENAME", path)
-                        result = AbstractErrorHandler.showMessage(
+                        result = AbstractErrorHandler.showMessage2(
                             self.xMSF, self.xUnoDialog.Peer, message,
                             ErrorHandler.MESSAGE_WARNING,
                             ErrorHandler.BUTTONS_YES_NO, ErrorHandler.DEF_NO,
@@ -519,9 +543,9 @@ class WWD_Events(WWD_Startup):
 
                 else:
                     #not a directory, but still exists
-                    message = resources.resLocalTargetExistsAsfile.replace(
+                    message = self.resources.resLocalTargetExistsAsfile.replace(
                         "%FILENAME", path)
-                    AbstractErrorHandler.showMessage(
+                    AbstractErrorHandler.showMessage1(
                         self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
@@ -529,73 +553,76 @@ class WWD_Events(WWD_Startup):
                 # try to write to the path...
             else:
                 # the local target directory does not exist.
-                message = resources.resLocalTargetCreate.replace(
+                message = self.resources.resLocalTargetCreate.replace(
                     "%FILENAME", path)
                 try:
-                    result = AbstractErrorHandler.showMessage(
+                    result = AbstractErrorHandler.showMessage1(
                         self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_QUESTION_YES)
-                except Exception, ex:
-                    ex.printStackTrace()
+                except Exception:
+                    traceback.print_exc()
 
                 if not result:
                     return result
                     # try to create the directory...
 
                 try:
-                    getFileAccess().fileAccess.createFolder(p.cp_URL)
-                except Exception, ex:
-                    message = resources.resLocalTargetCouldNotCreate.replace(
+                    print ("WARNING !!! publishTargetApproved -- URL: ", p.cp_URL)
+                    fileAccess.xInterface.createFolder(p.cp_URL)
+                except Exception as ex:
+                    message = self.resources.resLocalTargetCouldNotCreate.replace(
                         "%FILENAME", path)
-                    AbstractErrorHandler.showMessage(
+                    AbstractErrorHandler.showMessage1(
                         self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
 
-        p = getPublisher(ZIP_PUBLISHER)
+        # 2. Check ZIP
+        # should publish ?
+        p = self.getPublisher(ZIP_PUBLISHER)
         if p.cp_Publish:
-            path = getFileAccess().getPath(p.cp_URL, None)
+            path = fileAccess.getPath(p.cp_URL, None)
             # target exists?
-            if getFileAccess().exists(p.cp_URL, False):
+            if fileAccess.exists(p.cp_URL, False):
                 #if its a directory
-                if getFileAccess().isDirectory(p.cp_URL):
-                    message = resources.resZipTargetIsDir.replace(
+                if fileAccess.isDirectory(p.cp_URL):
+                    message = self.resources.resZipTargetIsDir.replace(
                         "%FILENAME", path)
-                    AbstractErrorHandler.showMessage(
+                    AbstractErrorHandler.showMessage1(
                         self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
                 else:
                     #not a directory, but still exists ( a file...)
                     if not p.overwriteApproved:
-                        message = resources.resZipTargetExists.replace(
+                        message = self.resources.resZipTargetExists.replace(
                             "%FILENAME", path)
-                        result = AbstractErrorHandler.showMessage(
+                        result = AbstractErrorHandler.showMessage1(
                             self.xMSF, self.xUnoDialog.Peer, message,
                             ErrorHandler.ERROR_QUESTION_YES)
                         if not result:
                             return False
-        # 3. check FTP
 
-        p = getPublisher(FTP_PUBLISHER)
+        # 3. check FTP
+        p = self.getPublisher(FTP_PUBLISHER)
         # should publish ?
         if p.cp_Publish:
-            path = getFileAccess().getPath(p.cp_URL, None)
+            path = fileAccess.getPath(p.cp_URL, None)
             # target exists?
-            if getFileAccess().exists(p.url, False):
+            if fileAccess.exists(p.url, False):
                 #if its a directory
-                if getFileAccess().isDirectory(p.url):
+                if fileAccess.isDirectory(p.url):
                     #check if its empty
-                    files = getFileAccess().listFiles(p.url, True)
-                    if files.length > 0:
+                    files = fileAccess.listFiles(p.url, True)
+                    if len(files) > 0:
                         '''
                         it is not empty :-(
                         it either a local publisher or an ftp
                         (zip uses no directories as target...)
                         '''
-                        message = resources.resFTPTargetNotEmpty.replace(
+                        message = self.resources.resFTPTargetNotEmpty.replace(
                             "%FILENAME", path)
-                        result = AbstractErrorHandler.showMessage(
+                        result = AbstractErrorHandler.showMessage1(
                             self.xMSF, self.xUnoDialog.Peer, message,
                             ErrorHandler.ERROR_QUESTION_CANCEL)
                         if not result:
@@ -603,9 +630,9 @@ class WWD_Events(WWD_Startup):
 
                 else:
                     #not a directory, but still exists (as a file)
-                    message = resources.resFTPTargetExistsAsfile.replace(
+                    message = self.resources.resFTPTargetExistsAsfile.replace(
                         "%FILENAME", path)
-                    AbstractErrorHandler.showMessage(
+                    AbstractErrorHandler.showMessage1(
                         self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
@@ -613,9 +640,9 @@ class WWD_Events(WWD_Startup):
                 # try to write to the path...
             else:
                 # the ftp target directory does not exist.
-                message = resources.resFTPTargetCreate.replace(
+                message = self.resources.resFTPTargetCreate.replace(
                     "%FILENAME", path)
-                result = AbstractErrorHandler.showMessage(
+                result = AbstractErrorHandler.showMessage1(
                     self.xMSF, self.xUnoDialog.Peer, message,
                     ErrorHandler.ERROR_QUESTION_YES)
                 if not result:
@@ -623,11 +650,11 @@ class WWD_Events(WWD_Startup):
                     # try to create the directory...
 
                 try:
-                    getFileAccess().fileAccess.createFolder(p.url)
-                except Exception, ex:
-                    message = resources.resFTPTargetCouldNotCreate.replace(
+                    fileAccess.mkdir(p.url)
+                except Exception as ex:
+                    message = self.resources.resFTPTargetCouldNotCreate.replace(
                         "%FILENAME", path)
-                    AbstractErrorHandler.showMessage(
+                    AbstractErrorHandler.showMessage1(
                         self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
@@ -639,9 +666,10 @@ class WWD_Events(WWD_Startup):
     '''
 
     def saveSession(self):
+        print ("DEBUG !!! saveSession")
         try:
             node = None
-            name = getSessionSaveName()
+            name = self.getSessionSaveName()
             #set documents index field.
             docs = WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents
             i = 0
@@ -652,25 +680,26 @@ class WWD_Events(WWD_Startup):
                 self.xMSF, CONFIG_PATH + "/SavedSessions", True)
             # first I check if a session with the given name exists
             try:
+                print ("DEBUG !!! saveSession -- check if a session with the given name exists")
+                print ("DEBUG !!! saveSession -- name: ", name)
                 node = Configuration.getNode(name, conf)
                 if node is not None:
-                    if not AbstractErrorHandler.showMessage(
+                    if not AbstractErrorHandler.showMessage1(
                             self.xMSF, self.xUnoDialog.Peer,
-                            resources.resSessionExists.replace("${NAME}", name),
+                            self.resources.resSessionExists.replace("${NAME}", name),
                             ErrorHandler.ERROR_NORMAL_IGNORE):
-                        return False
-                        #remove the old session
-
+                        return False  #remove the old session
                 Configuration.removeNode(conf, name)
-            except NoSuchElementException, nsex:
-                traceb
+            except NoSuchElementException as nsex:
+                print ("DEBUG !!! saveSession -- node not found in Configuration - name: ", name)
+                pass
 
-            WWD_Startup.settings.cp_DefaultSession.cp_Index = 0;
+            WWD_Startup.settings.cp_DefaultSession.cp_Index = 0
             node = Configuration.addConfigNode(conf, name)
-            WWD_Startup.settings.cp_DefaultSession.cp_Name = name;
+            WWD_Startup.settings.cp_DefaultSession.cp_Name = name
             WWD_Startup.settings.cp_DefaultSession.writeConfiguration(
                 node, CONFIG_READ_PARAM)
-            WWD_Startup.settings.cp_SavedSessions.reindexSet(conf, name, "Index")
+            WWD_Startup.settings.cp_SavedSessions.reindexSet(conf, name, "cp_Index")
             Configuration.commit(conf)
             # now I reload the sessions to actualize the list/combo
             # boxes load/save sessions.
@@ -679,27 +708,27 @@ class WWD_Events(WWD_Startup):
                 self.xMSF, CONFIG_PATH + "/SavedSessions", False)
             WWD_Startup.settings.cp_SavedSessions.readConfiguration(
                 confView, CONFIG_READ_PARAM)
-            WWD_Startup.settings.cp_LastSavedSession = name;
+            WWD_Startup.settings.cp_LastSavedSession = name
             self.currentSession = name
             # now save the name of the last saved session...
-            WWD_Startup.settings.cp_LastSavedSession = name;
+            WWD_Startup.settings.cp_LastSavedSession = name
             # TODO add the <none> session...
-            prepareSessionLists()
+            self.prepareSessionLists()
             ListModelBinder.fillList(
-                lstLoadSettings, WWD_Startup.settings.cp_SavedSessions.items(), None)
+                self.lstLoadSettings, WWD_Startup.settings.cp_SavedSessions.childrenList, None)
             ListModelBinder.fillComboBox(
-                cbSaveSettings, WWD_Startup.settings.savedSessions.items(), None)
-            selectSession()
+                self.cbSaveSettings, WWD_Startup.settings.savedSessions.childrenList, None)
+            self.selectSession()
             self.currentSession = WWD_Startup.settings.cp_LastSavedSession
             return True
-        except Exception, ex:
-            ex.printStackTrace()
+        except Exception:
+            traceback.print_exc()
             return False
 
     def targetStringFor(self, publisher):
-        p = getPublisher(publisher)
+        p = self.getPublisher(publisher)
         if p.cp_Publish:
-            return "\n" + getFileAccess().getPath(p.cp_URL, None)
+            return "\n" + self.getFileAccess().getPath(p.cp_URL, None)
         else:
             return ""
 
@@ -712,30 +741,30 @@ class WWD_Events(WWD_Startup):
 
     def finishWizardFinished(self):
         if self.process.getResult():
-            targets = targetStringFor(LOCAL_PUBLISHER) + \
-                targetStringFor(ZIP_PUBLISHER) + \
-                targetStringFor(FTP_PUBLISHER)
-            message = resources.resFinishedSuccess.replace(
+            targets = self.targetStringFor(LOCAL_PUBLISHER) + \
+                self.targetStringFor(ZIP_PUBLISHER) + \
+                self.targetStringFor(FTP_PUBLISHER)
+            message = self.resources.resFinishedSuccess.replace(
                 "%FILENAME", targets)
-            AbstractErrorHandler.showMessage(
+            AbstractErrorHandler.showMessage1(
                 self.xMSF, self.xUnoDialog.Peer, message, ErrorHandler.ERROR_MESSAGE)
             if self.exitOnCreate:
-                self.xDialog.endExecute()
+                self.xUnoDialog.endExecute()
 
         else:
-            AbstractErrorHandler.showMessage(
-                self.xMSF, self.xUnoDialog.Peer, resources.resFinishedNoSuccess,
+            AbstractErrorHandler.showMessage1(
+                self.xMSF, self.xUnoDialog.Peer, self.resources.resFinishedNoSuccess,
                 ErrorHandler.ERROR_WARNING)
 
     def cancel(self):
-        xDialog.endExecute()
+        self.xUnoDialog.endExecute()
 
     '''
     the user clicks the finish/create button.
     '''
 
     def finishWizard(self):
-        finishWizard(True)
+        self.finishWizard1(True)
         return True
 
     '''
@@ -746,24 +775,25 @@ class WWD_Events(WWD_Startup):
     I have a hidden feature which enables false here
     '''
 
-    def finishWizard(self, exitOnCreate_):
+    def finishWizard1(self, exitOnCreate_):
         self.exitOnCreate = exitOnCreate_
         '''
         First I check if ftp password was set, if not - the ftp dialog pops up
         This may happen when a session is loaded, since the
         session saves the ftp url and username, but not the password.
         '''
-        p = getPublisher(FTP_PUBLISHER)
+        p = self.getPublisher(FTP_PUBLISHER)
         # if ftp is checked, and no proxies are set, and password is empty...
-        if p.cp_Publish and not proxies and p.password is None or \
-                p.password == "":
-            if showFTPDialog(p):
-                updatePublishUI(2)
+        password = getattr(p, "password", "")
+        print ("FTP checked: ", p.cp_Publish)
+        if p.cp_Publish and not proxies and (password is None or password == ""):
+            if self.showFTPDialog(p):
+                self.updatePublishUI(2)
                 #now continue...
-                finishWizard2()
+                self.finishWizard2()
 
         else:
-            finishWizard2()
+            self.finishWizard2()
 
     '''
     this method is only called
@@ -773,27 +803,30 @@ class WWD_Events(WWD_Startup):
     '''
 
     def finishWizard2(self):
-        p = getPublisher(LOCAL_PUBLISHER)
+        p = self.getPublisher(LOCAL_PUBLISHER)
         p.url = p.cp_URL
+
         '''
         zip publisher is using another url form...
         '''
-        p = getPublisher(ZIP_PUBLISHER)
+        p = self.getPublisher(ZIP_PUBLISHER)
         #replace the '%' with '%25'
-        url1 = JavaTools.replaceSubString(p.cp_URL, "%25", "%")
+        url1 = p.cp_URL.replace("%25", "%")
         #replace all '/' with '%2F'
-        url1 = JavaTools.replaceSubString(url1, "%2F", "/")
-        p.url = "vnd.sun.star.zip:#" + url1 + "/";
+        url1 = url1.replace("%F", "/")
+        p.url = "vnd.sun.star.zip://" + url1 + "/";
+
         '''
         and now ftp...
         '''
-        p = getPublisher(FTP_PUBLISHER)
-        p.url = FTPDialog.getFullURL(p);
+        p = self.getPublisher(FTP_PUBLISHER)
+        p.url = FTPDialog.getFullURL1(p);
+
         ''' first we check the publishing targets. If they exist we warn and
         ask what to do. a False here means the user said "cancel"
         (or rather:clicked)
         '''
-        if not publishTargetApproved():
+        if not self.publishTargetApproved():
             return
             '''
             In order to save the session correctly,
@@ -801,30 +834,30 @@ class WWD_Events(WWD_Startup):
             property to its original value...
             '''
 
-        p.cp_Publish = __ftp;
+        p.cp_Publish = self.ftp
         #if the "save settings" checkbox is on...
 
-        if isSaveSession():
+        if self.isSaveSession():
             # if canceled by user
-            if not saveSession():
+            if not self.saveSession():
+                print ("DEBUG !!! finishWizard2 - saveSession canceled !!!")
                 return
-
         else:
             WWD_Startup.settings.cp_LastSavedSession = ""
 
         try:
-            conf = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH, True)
+            conf = Configuration.getConfigurationRoot(self.xMSF, CONFIG_PATH, True)
             Configuration.set(
                 WWD_Startup.settings.cp_LastSavedSession, "LastSavedSession", conf)
             Configuration.commit(conf)
-        except Exception, ex:
-            ex.printStackTrace()
+        except Exception:
+            traceback.print_exc()
 
         '''
         again, if proxies are on, I disable ftp before the creation process
         starts.
         '''
-        if proxies:
+        if self.proxies:
             p.cp_Publish = False
             '''
             There is currently a bug, which crashes office when
@@ -832,22 +865,22 @@ class WWD_Events(WWD_Startup):
             its content, so I "manually" delete it here...
             '''
 
-        p = getPublisher(ZIP_PUBLISHER)
-        if getFileAccess().exists(p.cp_URL, False):
-            getFileAccess().delete(p.cp_URL)
+        p = self.getPublisher(ZIP_PUBLISHER)
+        if self.getFileAccess().exists(p.cp_URL, False):
+            self.getFileAccess().delete(p.cp_URL)
 
         try:
-            eh = ProcessErrorHandler(xMSF, self.xUnoDialog.Peer, resources)
-            self.process = Process(settings, xMSF, eh)
-            pd = getStatusDialog()
-            pd.setRenderer(ProcessStatusRenderer (resources))
-            pd.execute(self, self.process.myTask, resources.prodName)
+            eh = ProcessErrorHandler(self.xMSF, self.xUnoDialog.Peer, self.resources)
+            self.process = Process(self.settings, self.xMSF, eh)
+            pd = self.getStatusDialog()
+            pd.setRenderer(ProcessStatusRenderer (self.resources))
+            pd.execute(self, self.process.myTask, self.resources.prodName)
             #process,
             self.process.runProcess()
-            finishWizardFinished()
+            self.finishWizardFinished()
             self.process.myTask.removeTaskListener(pd)
-        except Exception, ex:
-            ex.printStackTrace()
+        except Exception:
+            traceback.print_exc()
 
     '''
     is called on the WindowHidden event,
@@ -860,35 +893,34 @@ class WWD_Events(WWD_Startup):
             self.stylePreview.cleanup()
 
             if WWD_Events.bgDialog is not None:
-                WWD_Events.bgDialog.xComponent.dispose()
+                WWD_Events.bgDialog.xUnoDialog.dispose()
 
             if WWD_Events.iconsDialog is not None:
-                WWD_Events.iconsDialog.xComponent.dispose()
+                WWD_Events.iconsDialog.xUnoDialog.dispose()
 
-            if ftpDialog is not None:
-                ftpDialog.xComponent.dispose()
+            if self.ftpDialog is not None:
+                self.ftpDialog.xUnoDialog.dispose()
 
-            xComponent.dispose()
+            #self.dispose()
 
-            if ProcessStatusRenderer is not None:
-                ProcessStatusRenderer.close(False)
+            #if ProcessStatusRenderer is not None:
+            #    ProcessStatusRenderer.close(False)
 
-        except Exception, ex:
+        except Exception as ex:
             traceback.print_exc()
 
     class LoadDocs(object):
 
-        def __init__(self,xmsf, xC_, files_, parent_):
+        def __init__(self, xmsf, xC_, files_, task_, parent_):
             self.xMSF = xmsf
             self.xC = xC_
             self.files = files_
             self.parent = parent_
+            self.task = task_
 
         def loadDocuments(self):
-            if len(WWD_Startup.selectedDoc) > 0:
-                offset = WWD_Startup.selectedDoc[0] + 1
-            else:
-                offset = WWD_General.getDocsCount()
+            offset = WWD_Startup.selectedDoc[0] + 1 if (len(WWD_Startup.selectedDoc) > 0) else self.parent.getDocsCount()
+            print ("DEBUG !!! loadDocuments -- offset: ", offset)
 
             '''
             if the user chose one file, the list starts at 0,
@@ -899,13 +931,15 @@ class WWD_Events(WWD_Startup):
                 start = 1
             else:
                 start = 0
+            print ("DEBUG !!! loadDocuments -- start: ", start)
 
             #Number of documents failed to validate.
             failed = 0
 
             # store the directory
+            print ("DEBUG !!! loadDocuments (Store the directory) -- dir: ", self.files[0])
             if start == 1:
-                WWD_General.settings.cp_DefaultSession.cp_InDirectory = files[0]
+                WWD_General.settings.cp_DefaultSession.cp_InDirectory = self.files[0]
             else:
                 WWD_General.settings.cp_DefaultSession.cp_InDirectory = \
                     FileAccess.getParentDir(self.files[0])
@@ -915,13 +949,14 @@ class WWD_Events(WWD_Startup):
             If its ok, I add it to the ListModel/ConfigSet
             '''
 
-            for i in xrange(start, len(self.files)):
+            for i in range(start, len(self.files)):
                 doc = CGDocument()
 
                 if start == 0:
                     doc.cp_URL = self.files[i]
                 else:
-                    doc.cp_URL = FileAccess.connectURLs(files[0], files[i])
+                    doc.cp_URL = FileAccess.connectURLs(files[0], self.files[i])
+                print ("DEBUG !!! loadDocuments (new Document) -- cp_URL: ", doc.cp_URL)
 
                 '''
                 so - i check each document and if it is ok I add it.
@@ -929,19 +964,24 @@ class WWD_Events(WWD_Startup):
                 Error reporting to the user is (or should (-:  )
                 done in the checkDocument(...) method
                 '''
-                if WWD_Startup.checkDocument(self.xMSF, doc, None, self.xC):
-                    WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.add(
-                        offset + i - failed - start, doc)
+                if WWD_Startup.checkDocument1(self.xMSF, doc, self.task, self.xC):
+                    index = offset + i - failed - start
+                    print ("DEBUG !!! loadDocuments (checkDocument) -- index: ", index)
+                    WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.add(index, doc)
                 else:
+                    print ("DEBUG !!! loadDocuments (checkDocument) -- failed validation.")
                     failed += 1
 
             # if any documents where added,
             # set the first one to be the current-selected document.
             if len(self.files) > start + failed:
+                print ("DEBUG !!! loadDocuments (setSelectedDoc) -- offset: ", offset)
                 self.parent.setSelectedDoc([offset])
+            else:
+                print ("DEBUG !!! loadDocuments (setSelectedDoc) -- no documents were added")
 
             # update the ui...
-            self.parent.docListDA.updateUI();
+            self.parent.docListDA.updateUI()
             # this enables/disables the next steps.
             # when no documents in the list, all next steps are disabled
             self.parent.checkSteps()
@@ -950,5 +990,5 @@ class WWD_Events(WWD_Startup):
             really close...
             '''
 
-            #while (self.task.getStatus() < self.task.getMax()):
-            #    self.task.advance(false)
+            while (self.task.getStatus() < self.task.getMax()):
+                self.task.advance(False)
