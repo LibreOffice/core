@@ -20,7 +20,6 @@
 #include <vcl/window.hxx>
 #include <rootfrm.hxx>
 
-
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -39,7 +38,6 @@
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentView";
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -145,7 +143,6 @@ uno::Reference< XAccessible> SAL_CALL
     return SwAccessibleContext::getAccessibleChild( nIndex );
 }
 
-
 uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent (void)
         throw (uno::RuntimeException)
 {
@@ -191,7 +188,6 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
     return aBox;
 }
 
-
 awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
         throw (uno::RuntimeException)
 {
@@ -207,7 +203,6 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     return aLoc;
 }
 
-
 ::com::sun::star::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
         throw (uno::RuntimeException)
 {
@@ -222,7 +217,6 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 
     return aLoc;
 }
-
 
 ::com::sun::star::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
         throw (uno::RuntimeException)
@@ -287,7 +281,6 @@ void SwAccessibleDocument::GetStates(
     // MULTISELECTABLE
     rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
 }
-
 
 SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
     SwAccessibleDocumentBase( pInitMap ),
@@ -366,7 +359,6 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
     }
     return 0;
 }
-
 
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()
         throw( uno::RuntimeException )

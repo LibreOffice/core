@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCNOTEXTFRAME_HXX
 #define _ACCNOTEXTFRAME_HXX
+
 #include "accframebase.hxx"
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 
@@ -32,7 +34,6 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
     OUString msDesc;
 
 protected:
-
     virtual ~SwAccessibleNoTextFrame();
 
     const SwNoTxtNode *GetNoTxtNode() const;
@@ -40,7 +41,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-
     SwAccessibleNoTextFrame( SwAccessibleMap* pInitMap,
                              sal_Int16 nInitRole,
                              const SwFlyFrm *pFlyFrm );
@@ -90,7 +90,6 @@ public:
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );
 };
-
 
 #endif
 

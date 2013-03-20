@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <txtfrm.hxx>
 #include <flyfrm.hxx>
 #include <ndtxt.hxx>
@@ -91,7 +90,6 @@ namespace com { namespace sun { namespace star {
         class XText;
     }
 } } }
-
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
@@ -732,7 +730,6 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
 
     return bRet;
 }
-
 
 sal_Bool SwAccessibleParagraph::GetTextBoundary(
     i18n::Boundary& rBound,

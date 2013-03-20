@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCHEADERFOOTER_HXX
 #define _ACCHEADERFOOTER_HXX
+
 #include "acccontext.hxx"
 
 class SwHeaderFrm;
@@ -25,18 +27,14 @@ class SwFooterFrm;
 
 class SwAccessibleHeaderFooter : public SwAccessibleContext
 {
-
 protected:
-
     virtual ~SwAccessibleHeaderFooter();
 
 public:
-
     SwAccessibleHeaderFooter( SwAccessibleMap* pInitMap,
                               const SwHeaderFrm* pHdFrm );
     SwAccessibleHeaderFooter( SwAccessibleMap* pInitMap,
                               const SwFooterFrm* pFtFrm );
-
 
     // XAccessibleContext
 
@@ -66,7 +64,6 @@ public:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-
 
 #endif
 

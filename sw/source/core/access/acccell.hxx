@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCCELL_HXX
 #define _ACCCELL_HXX
 
@@ -37,7 +38,6 @@ class SwAccessibleCell : public SwAccessibleContext,
     sal_Bool _InvalidateChildrenCursorPos( const SwFrm *pFrm );
 
 protected:
-
     // Set states for getAccessibleStateSet.
     // This drived class additionaly sets SELECTABLE(1) and SELECTED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
@@ -47,7 +47,6 @@ protected:
     virtual ~SwAccessibleCell();
 
 public:
-
     SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrm *pCellFrm );
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
@@ -120,7 +119,6 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
         throw (::com::sun::star::uno::RuntimeException);
 };
-
 
 #endif
 

@@ -18,7 +18,6 @@
  */
 
 #include "tabcol.hxx"
-
 #include <limits.h>
 #include <osl/diagnose.h>
 

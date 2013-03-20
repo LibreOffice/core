@@ -69,7 +69,6 @@ protected:
     ~SwAccTableSelHander_Impl() {}
 };
 
-
 class SwAccessibleTableData_Impl
 {
     SwAccessibleMap& mrAccMap;
@@ -507,7 +506,6 @@ class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
     sal_Int32 nCount;
 
 public:
-
     inline SwAccAllTableSelHander_Impl( sal_Int32 nSize );
 
     uno::Sequence < sal_Int32 > GetSelSequence();
@@ -594,7 +592,6 @@ void SwAccessibleTable::FireTableChangeEvent(
 
     FireAccessibleEvent( aEvent );
 }
-
 
 const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
 {
@@ -1257,7 +1254,6 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
     return nRet;
 }
 
-
 OUString SAL_CALL SwAccessibleTable::getImplementationName()
         throw( uno::RuntimeException )
 {
@@ -1357,7 +1353,6 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
     SwAccessibleContext::InvalidateChildPosOrSize( rChildFrmOrObj, rOldBox );
 }
 
-
 // XAccessibleSelection
 
 void SAL_CALL SwAccessibleTable::selectAccessibleChild(
@@ -1438,7 +1433,6 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
 
     }
 }
-
 
 sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
     sal_Int32 nChildIndex )

@@ -49,7 +49,6 @@ SwUpdateAttr::SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW )
 {
 }
 
-
 /** Is sent if reference marks should be updated.
 
     To get the page/chapter number, the frame has to be asked. For that we need

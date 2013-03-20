@@ -20,7 +20,6 @@
 #include <doc.hxx>
 #include <pamtyp.hxx>
 
-
 bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly  )
 {
@@ -70,6 +69,5 @@ bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
     delete pPam;
     return bFound;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

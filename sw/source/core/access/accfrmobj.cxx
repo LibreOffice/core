@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <accfrmobj.hxx>
 
 #include <accmap.hxx>
@@ -67,7 +66,6 @@ SwAccessibleChild::SwAccessibleChild( Window* pWindow )
 {
     Init( pWindow );
 }
-
 
 SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm,
                                       const SdrObject* pDrawObj,

@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCDOC_HXX
 #define _ACCDOC_HXX
+
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <accselectionhelper.hxx>
@@ -26,7 +28,6 @@ class VclSimpleEvent;
 
 // base class for SwAccessibleDocument (in this same header file) and
 // SwAccessiblePreview
-
 class SwAccessibleDocumentBase : public SwAccessibleContext
 {
     ::com::sun::star::uno::Reference<
@@ -37,11 +38,9 @@ class SwAccessibleDocumentBase : public SwAccessibleContext
     using SwAccessibleFrame::SetVisArea;
 
 protected:
-
     virtual ~SwAccessibleDocumentBase();
 
 public:
-
     SwAccessibleDocumentBase( SwAccessibleMap* pInitMap );
 
     void SetVisArea();
@@ -98,8 +97,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 };
 
-
-
 /**
  * access to an accessible Writer document
  */
@@ -110,7 +107,6 @@ class SwAccessibleDocument : public SwAccessibleDocumentBase,
     SwAccessibleSelectionHelper maSelectionHelper;
 
 protected:
-
     // Set states for getAccessibleStateSet.
     // This drived class additinaly sets MULTISELECTABLE(1)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
@@ -118,7 +114,6 @@ protected:
     virtual ~SwAccessibleDocument();
 
 public:
-
     SwAccessibleDocument( SwAccessibleMap* pInitMap );
 
     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
