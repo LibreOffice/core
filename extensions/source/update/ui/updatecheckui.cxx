@@ -393,7 +393,7 @@ void SAL_CALL UpdateCheckUI::notifyEvent(const document::EventObject& rEvent)
 {
     SolarMutexGuard aGuard;
 
-    if( rEvent.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnPrepareViewClosing") ) == 0 )
+    if( rEvent.EventName.startsWith( "OnPrepareViewClosing" ) )
     {
         RemoveBubbleWindow( true );
     }

@@ -52,7 +52,7 @@ const ::rtl::OUString DAVProperties::EXECUTABLE =
 void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
                                         SerfPropName & rName )
 {
-    if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "DAV:" ) ) == 0 )
+    if ( rFullName.startsWith( "DAV:" ) )
     {
         rName.nspace = "DAV:";
         rName.name
@@ -60,8 +60,7 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
                         rFullName.copy( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
                                         RTL_TEXTENCODING_UTF8 ) );
     }
-    else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
-                "http://apache.org/dav/props/" ) ) == 0 )
+    else if ( rFullName.startsWith( "http://apache.org/dav/props/" ) )
     {
         rName.nspace = "http://apache.org/dav/props/";
         rName.name
@@ -71,8 +70,7 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
                                 "http://apache.org/dav/props/" ) ),
                             RTL_TEXTENCODING_UTF8 ) );
     }
-    else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
-                "http://ucb.openoffice.org/dav/props/" ) ) == 0 )
+    else if ( rFullName.startsWith( "http://ucb.openoffice.org/dav/props/" ) )
     {
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
@@ -82,8 +80,7 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
                                 "http://ucb.openoffice.org/dav/props/" ) ),
                             RTL_TEXTENCODING_UTF8 ) );
     }
-    else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
-                "<prop:" ) ) == 0 )
+    else if ( rFullName.startsWith( "<prop:" ) )
     {
         // Support for 3rd party namespaces/props
 
@@ -147,18 +144,15 @@ void DAVProperties::createUCBPropName( const char * nspace,
     rFullName  = aNameSpace;
     rFullName += aName;
 
-    if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
-                "DAV:" ) ) == 0 )
+    if ( rFullName.startsWith( "DAV:" ) )
     {
         // Okay, Just concat strings.
     }
-    else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
-                "http://apache.org/dav/props/" ) ) == 0 )
+    else if ( rFullName.startsWith( "http://apache.org/dav/props/" ) )
     {
         // Okay, Just concat strings.
     }
-    else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
-                "http://ucb.openoffice.org/dav/props/" ) ) == 0 )
+    else if ( rFullName.startsWith( "http://ucb.openoffice.org/dav/props/" ) )
     {
         // Remove namespace from our own properties.
         rFullName = rFullName.copy(
