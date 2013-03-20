@@ -33,6 +33,10 @@ $(eval $(call gb_Library_use_externals,tdeab1,\
 
 $(eval $(call gb_Library_set_componentfile,tdeab1,connectivity/source/drivers/kab/tdeab1))
 
+$(eval $(call gb_Library_use_packages,tdeab1,\
+        shell_inc \
+))
+
 $(eval $(call gb_Library_set_include,tdeab1,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
