@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///CU\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-03-20T12:35:10Z",
+      "side": 1,
+      "message": "maybe modifying SQL_ISRULE would be more efficient\nalso Isn\u0027t the same change relevant for SQL_ISRULE(pColumnRef,general_set_fct) above also ?",
+      "revId": "d5fbaf381357cb27817757152081ce021cb236ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
