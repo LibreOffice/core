@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNamed.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/io/XPersistObject.idl>
-#include <com/sun/star/beans/PropertyBag.idl>
+#include <com/sun/star/beans/XPropertyBag.idl>
 
 
 
@@ -84,7 +84,7 @@ published service FormComponent
 
         @since OOo 2.3
     */
-    [optional] service com::sun::star::beans::PropertyBag;
+    [optional] interface com::sun::star::beans::XPropertyBag;
 
 
     /** the name of the component.

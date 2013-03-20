@@ -28,7 +28,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/XPropertyBag.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -245,7 +245,7 @@ public:
     sal_Bool                                            m_bSuppressVersionColumns : 1;
     sal_Bool                                            m_bModified : 1;
     sal_Bool                                            m_bDocumentReadOnly : 1;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyAccess >
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyBag >
                                                         m_xSettings;
     ::com::sun::star::uno::Sequence< OUString >  m_aTableFilter;
     ::com::sun::star::uno::Sequence< OUString >  m_aTableTypeFilter;

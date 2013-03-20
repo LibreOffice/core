@@ -80,6 +80,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/document/XCompatWriterDocProperties.hpp>
+#include <com/sun/star/beans/PropertyBag.hpp>
 
 /**
  * This file contains the implementation of the service
@@ -641,12 +642,7 @@ css::uno::Reference< css::beans::XPropertySet > SAL_CALL
 SfxDocumentMetaData::getURLProperties(
     const css::uno::Sequence< css::beans::PropertyValue > & i_rMedium) const
 {
-    css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
-        m_xContext->getServiceManager());
-    css::uno::Reference< css::beans::XPropertyContainer> xPropArg(
-        xMsf->createInstanceWithContext(OUString(
-                "com.sun.star.beans.PropertyBag"), m_xContext),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::beans::XPropertyBag> xPropArg = css::beans::PropertyBag::createDefault( m_xContext );
     try {
         OUString dburl("DocumentBaseURL");
         OUString hdn("HierarchicalDocumentName");
@@ -2287,26 +2283,10 @@ void SfxDocumentMetaData::createUserDefined()
         types[9] = ::cppu::UnoType<sal_Int64>::get();
         // Time is supported for backward compatibility with OOo 3.x, x<=2
         types[10] = ::cppu::UnoType<css::util::Time>::get();
-        css::uno::Sequence<css::uno::Any> args(2);
-        args[0] <<= css::beans::NamedValue(
-            OUString("AllowedTypes"),
-            css::uno::makeAny(types));
         // #i94175#:  ODF allows empty user-defined property names!
-        args[1] <<= css::beans::NamedValue( OUString(
-                        "AllowEmptyPropertyName"),
-            css::uno::makeAny(sal_True));
-
-        const css::uno::Reference<css::lang::XMultiComponentFactory> xMsf(
-                m_xContext->getServiceManager());
         m_xUserDefined.set(
-            xMsf->createInstanceWithContext(
-                OUString("com.sun.star.beans.PropertyBag"), m_xContext),
+            css::beans::PropertyBag::createWithTypes( m_xContext, types, sal_True/*AllowEmptyPropertyName*/, sal_False/*AutomaticAddition*/ ),
             css::uno::UNO_QUERY_THROW);
-        const css::uno::Reference<css::lang::XInitialization> xInit(
-            m_xUserDefined, css::uno::UNO_QUERY);
-        if (xInit.is()) {
-            xInit->initialize(args);
-        }
 
         const css::uno::Reference<css::util::XModifyBroadcaster> xMB(
             m_xUserDefined, css::uno::UNO_QUERY);

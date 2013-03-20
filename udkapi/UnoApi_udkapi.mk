@@ -40,7 +40,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star,\
 	udk-modules \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/beans,\
-	PropertyBag \
 	PropertySet \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/bridge,\
@@ -97,6 +96,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util,\
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/beans,\
+	PropertyBag \
 	Introspection \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/bridge,\
@@ -196,6 +196,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/beans,\
 	XPropertiesChangeNotifier \
 	XProperty \
 	XPropertyAccess \
+	XPropertyBag \
 	XPropertyChangeListener \
 	XPropertyContainer \
 	XPropertySet \

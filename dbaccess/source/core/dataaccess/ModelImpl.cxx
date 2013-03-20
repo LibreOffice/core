@@ -30,17 +30,18 @@
 #include "userinformation.hxx"
 #include "sdbcoretools.hxx"
 
+#include <com/sun/star/beans/PropertyBag.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 #include <comphelper/interaction.hxx>
@@ -488,11 +489,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
         *pAllowedType++ = ::getCppuType( static_cast< sal_Int16* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< Sequence< Any >* >( NULL ) );
 
-        Sequence< Any > aInitArgs( 2 );
-        aInitArgs[0] <<= NamedValue("AutomaticAddition", makeAny( (sal_Bool)sal_True ));
-        aInitArgs[1] <<= NamedValue("AllowedTypes", makeAny( aAllowedTypes ));
-
-        m_xSettings.set( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.beans.PropertyBag", aInitArgs, m_aContext), UNO_QUERY_THROW );
+        m_xSettings = PropertyBag::createWithTypes( m_aContext, aAllowedTypes, sal_False/*AllowEmptyPropertyName*/, sal_True/*AutomaticAddition*/ );
 
         // insert the default settings
         Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY_THROW );

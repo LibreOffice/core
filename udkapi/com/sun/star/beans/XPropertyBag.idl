@@ -16,28 +16,29 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_beans_PropertyBag_idl__
-#define __com_sun_star_beans_PropertyBag_idl__
+#ifndef __com_sun_star_beans_XPropertyBag_idl__
+#define __com_sun_star_beans_XPropertyBag_idl__
 
-#include <com/sun/star/beans/XPropertyBag.idl>
-
-
-
-module com {  module sun {  module star {  module beans {
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/XPropertyContainer.idl>
+#include <com/sun/star/beans/XPropertyAccess.idl>
 
 
-/** Implementation of this service can keep any properties and is useful
-    when an <type>XPropertySet</type> is to be used, for example, as parameters for a method call.
 
-    <p>Scripting engines might not be able to use such objects as normal
-    property sets, giving direct access to the properties.  In this case,
-    use the methods like <member>XPropertySet::getPropertyValue</member>.
+ module com {  module sun {  module star {  module beans {
+
+
+/**
+    @since LibreOffice 4.1
  */
-published service PropertyBag : XPropertyBag
+published interface XPropertyBag
 {
-    createDefault();
+    interface com::sun::star::beans::XPropertySet;
 
-    createWithTypes( [in] sequence<type> AllowedTypes, [in] boolean AllowEmptyPropertyName, [in] boolean AutomaticAddition );
+    interface com::sun::star::beans::XPropertyContainer;
+
+    interface com::sun::star::beans::XPropertyAccess;
+
 };
 
 

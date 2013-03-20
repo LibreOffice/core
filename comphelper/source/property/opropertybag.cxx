@@ -88,20 +88,36 @@ namespace comphelper
     //--------------------------------------------------------------------
     void SAL_CALL OPropertyBag::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
-        ::comphelper::NamedValueCollection aArguments( _rArguments );
-
         Sequence< Type > aTypes;
-        if ( aArguments.get_ensureType( "AllowedTypes", aTypes ) )
+        bool AllowEmptyPropertyName(false);
+        bool AutomaticAddition(false);
+
+        if (_rArguments.getLength() == 3
+           && (_rArguments[0] >>= aTypes)
+           && (_rArguments[1] >>= AllowEmptyPropertyName)
+           && (_rArguments[2] >>= AutomaticAddition))
+        {
             ::std::copy(
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
                 ::std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
             );
+            m_bAutoAddProperties = AutomaticAddition;
 
-        aArguments.get_ensureType( "AutomaticAddition", m_bAutoAddProperties );
-        bool AllowEmptyPropertyName(false);
-        aArguments.get_ensureType( "AllowEmptyPropertyName",
-            AllowEmptyPropertyName );
+        } else {
+            ::comphelper::NamedValueCollection aArguments( _rArguments );
+
+            if ( aArguments.get_ensureType( "AllowedTypes", aTypes ) )
+                ::std::copy(
+                    aTypes.getConstArray(),
+                    aTypes.getConstArray() + aTypes.getLength(),
+                    ::std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
+                );
+
+            aArguments.get_ensureType( "AutomaticAddition", m_bAutoAddProperties );
+            aArguments.get_ensureType( "AllowEmptyPropertyName",
+                AllowEmptyPropertyName );
+        }
         if (AllowEmptyPropertyName) {
             m_aDynamicProperties.setAllowEmptyPropertyName(
                 AllowEmptyPropertyName);

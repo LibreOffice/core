@@ -880,7 +880,7 @@ namespace
         @param  _rAllNewPropertyValues
             the new property values to set for the bag
     */
-    void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyAccess >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
+    void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyBag >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
     {
         // sequences are ugly to operate on
         typedef ::std::set< OUString >   StringSet;
