@@ -15,10 +15,12 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ui.UnoDialog2 import *
-from ui.UnoDialog2 import *
-from ui.ImageList import ImageList
-from common.HelpIds import HelpIds
+import uno
+
+from ..ui.UnoDialog2 import UnoDialog2
+from ..ui.ImageList import ImageList
+from ..common.HelpIds import HelpIds
+from ..common.PropertyNames import PropertyNames
 
 from com.sun.star.awt import FontDescriptor
 from com.sun.star.awt.PushButtonType import OK, CANCEL, HELP, STANDARD
@@ -91,6 +93,7 @@ class ImageListDialog(UnoDialog2):
     '''
 
     def build(self):
+        print ("DEBUG !!!! ImageListDialog build 1")
         #set dialog properties...
         ilWidth = (self.il.imageSize.Width + self.il.gap.Width) \
             * self.il.cols + self.il.gap.Width
@@ -98,8 +101,7 @@ class ImageListDialog(UnoDialog2):
             * self.il.rows + self.il.gap.Height
         dialogWidth = 6 + ilWidth + 6 + 50 + 6
         dialogHeight = 3 + 16 + 3 + (ilHeight + 8 + 14) + 6
-        Helper.setUnoPropertyValues(
-            self.xDialogModel,
+        uno.invoke(self.xDialogModel, "setPropertyValues",(
             ("Closeable",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -112,7 +114,7 @@ class ImageListDialog(UnoDialog2):
                 PropertyNames.PROPERTY_WIDTH),
             (True, dialogHeight, HelpIds.getHelpIdString(self.hid), True,
                 "imgDialog", 59, 24, 1,
-                self.resources[ImageListDialog.RES_TITLE],dialogWidth))
+                self.resources[ImageListDialog.RES_TITLE],dialogWidth)))
         #Set member- FontDescriptors...
         self.fontDescriptor1.Weight = 150
         PROPNAMES = ("DefaultButton",
@@ -167,6 +169,7 @@ class ImageListDialog(UnoDialog2):
         self.il.helpURL = self.hid + 5
         self.il.tabIndex = 1
         self.il.create(self)
+        print ("DEBUG !!!! ImageListDialog build 2")
         self.lblTitle = self.insertLabel("lblTitle",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
