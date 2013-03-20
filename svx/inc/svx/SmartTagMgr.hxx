@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star { namespace smarttags {
 
 namespace com { namespace sun { namespace star { namespace text {
     class XTextMarkup;
+    class XTextRange;
 } } } }
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -155,11 +156,16 @@ public:
             The length of the text to be scanned.
 
     */
-    void Recognize( const rtl::OUString& rText,
+    void RecognizeString( const rtl::OUString& rText,
                     const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xMarkup,
                     const com::sun::star::uno::Reference< com::sun::star::frame::XController > xController,
                     const com::sun::star::lang::Locale& rLocale,
                     sal_uInt32 nStart, sal_uInt32 nLen ) const;
+
+   void RecognizeTextRange(const com::sun::star::uno::Reference< com::sun::star::text::XTextRange> xRange,
+                    const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xMarkup,
+                    const com::sun::star::uno::Reference< com::sun::star::frame::XController > xController) const;
+
 
     /** Returns all action references associated with a given list of smart tag types
 
