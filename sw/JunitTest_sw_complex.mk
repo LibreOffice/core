@@ -39,6 +39,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/writer/LoadSaveTest \
     sw/qa/complex/writer/TestDocument \
     sw/qa/complex/writer/TextPortionEnumerationTest \
+    sw/qa/complex/writer/VarFields \
 ))
 
 $(eval $(call gb_JunitTest_use_jars,sw_complex,\
@@ -60,6 +61,7 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.writer.CheckIndexedPropertyValues \
     complex.writer.CheckNamedPropertyValues \
     complex.writer.TextPortionEnumerationTest \
+    complex.writer.VarFields\
 ))
 
 # FIXME has never worked on windows, hashes are different
