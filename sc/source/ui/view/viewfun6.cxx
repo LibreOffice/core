@@ -259,7 +259,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
         (aActTime.GetMin() * 60.0) + (aActTime.GetHour() * 3600.0);
     fTime /= D_TIMEFACTOR;
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
-    pDocSh->GetDocFunc().PutCell(aCurPos, new ScValueCell(fDate+fTime), false);
+    pDocSh->GetDocFunc().SetValueCell(aCurPos, fDate+fTime, true);
 
     // Set the new cell format only when it differs from the current cell
     // format type.

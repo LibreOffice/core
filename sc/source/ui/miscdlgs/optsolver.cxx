@@ -1017,7 +1017,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             {
                 ScAddress aCellPos;
                 ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-                rFunc.PutCell( aCellPos, new ScValueCell( aSolution[nVarPos] ), sal_True );
+                rFunc.SetValueCell(aCellPos, aSolution[nVarPos], false);
             }
             mpDocShell->UnlockPaint();
         }
@@ -1054,7 +1054,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         {
             ScAddress aCellPos;
             ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-            rFunc.PutCell( aCellPos, new ScValueCell( aOldValues[nVarPos] ), sal_True );
+            rFunc.SetValueCell(aCellPos, aOldValues[nVarPos], false);
         }
         mpDocShell->UnlockPaint();
     }

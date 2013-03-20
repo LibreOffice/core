@@ -86,6 +86,12 @@ public:
         appendString( cellToString( pCell ) );
     }
 
+    void appendDouble( double fVal )
+    {
+        aMessage.append(fVal);
+        appendSeparator();
+    }
+
     rtl::OString toString()
     {
         return rtl::OUStringToOString( aMessage.toString(), RTL_TEXTENCODING_UTF8 );
@@ -195,6 +201,11 @@ public:
     {
         return stringToCell( getString( n ) );
     }
+
+    double getDouble( sal_Int32 n )
+    {
+        return getString(n).toDouble();
+    }
 };
 
 } // anonymous namespace
@@ -217,7 +228,7 @@ public:
     virtual void        EndListAction();
 
     virtual sal_Bool    SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi );
-    virtual void SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
+    virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
     virtual sal_Bool    PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool    PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 sal_Bool bInterpret, sal_Bool bApi );

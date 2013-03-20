@@ -6313,7 +6313,7 @@ void ScCellObj::SetValue_Impl(double fValue)
 {
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        (void)pDocSh->GetDocFunc().PutCell( aCellPos, new ScValueCell(fValue), sal_True );
+        pDocSh->GetDocFunc().SetValueCell(aCellPos, fValue, false);
 }
 
 // only for XML import

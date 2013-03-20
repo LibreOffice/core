@@ -53,6 +53,11 @@ void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
             if ( pNewCell )
                 mpDirect->PutCell( aReader.getAddress( 1 ), pNewCell, aReader.getBool( 3 ) );
         }
+        else if (aReader.getMethod() == "setValueCell")
+        {
+            mpDirect->SetValueCell(
+                aReader.getAddress(1), aReader.getDouble(2), aReader.getBool(3));
+        }
         else if ( aReader.getMethod() == "enterListAction" )
             mpDirect->EnterListAction( aReader.getInt( 1 ) );
         else if ( aReader.getMethod() == "endListAction" )
@@ -126,10 +131,13 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
     return true; // needs some code auditing action
 }
 
-void ScDocFuncSend::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
+bool ScDocFuncSend::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
 {
-    // TODO: How do we implement this?
-
+    ScChangeOpWriter aOp("setValueCell");
+    aOp.appendAddress( rPos );
+    aOp.appendDouble( fVal );
+    aOp.appendBool( bInteraction );
+    SendMessage( aOp );
     return true; // needs some code auditing action
 }
 

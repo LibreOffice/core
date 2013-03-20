@@ -808,7 +808,7 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
     return sal_True;
 }
 
-void ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
+bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -867,6 +867,8 @@ void ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     // #103934#; notify editline and cell in edit mode
     if (!bInteraction)
         NotifyInputHandler( rPos );
+
+    return true;
 }
 
 sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
