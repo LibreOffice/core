@@ -15,11 +15,17 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ImageListDialog import *
-from ImageListDialog import *
-from WWHID import HID_BG
-from common.SystemDialog import SystemDialog
-from common.FileAccess import FileAccess
+import uno
+import traceback
+
+from .ImageListDialog import ImageListDialog
+from .WWHID import HID_BG
+from .WebWizardConst import *
+from ..common.SystemDialog import SystemDialog
+from ..common.FileAccess import FileAccess
+from ..common.Configuration import Configuration
+
+from com.sun.star.awt import Size
 
 class BackgroundsDialog(ImageListDialog):
 
@@ -59,7 +65,7 @@ class BackgroundsDialog(ImageListDialog):
         if filename is not None and filename.length > 0 and filename[0] is not None:
             self.settings.cp_DefaultSession.cp_InDirectory = \
                 FileAccess.getParentDir(filename[0])
-            i = add(filename[0])
+            i = self.add(filename[0])
             il.setSelected(i)
             il.display(i)
 
@@ -74,7 +80,7 @@ class BackgroundsDialog(ImageListDialog):
         #first i check the item does not already exists in the list...
         i = 0
         while i < il.getListModel().getSize():
-            if il.getListModel().getElementAt(i).equals(s):
+            if il.getListModel().getElementAt(i) == s:
                 return i
 
             i += 1
@@ -82,13 +88,13 @@ class BackgroundsDialog(ImageListDialog):
         try:
             configView = Configuration.getConfigurationRoot(
                 self.xMSF, FileAccess.connectURLs(
-                    WebWizardConst.CONFIG_PATH, "BackgroundImages"), True)
+                    CONFIG_PATH, "BackgroundImages"), True)
             i = Configuration.getChildrenNames(configView).length + 1
             o = Configuration.addConfigNode(configView, "" + i)
             Configuration.set(s, "Href", o)
             Configuration.commit(configView)
-        except Exception, ex:
-            ex.printStackTrace()
+        except Exception:
+            traceback.print_exc()
 
         return il.getListModel().getSize() - 1
 
@@ -107,9 +113,9 @@ class BackgroundsDialog(ImageListDialog):
             self.cut = cut_
 
         def getImageUrls(self, listItem):
-            if listItem is not None:
-                sRetUrls = range(1)
-                sRetUrls[0] = listItem
+            sRetUrls = []
+            if (listItem is not None):
+                sRetUrls.append(listItem)
                 return sRetUrls
 
             return None
@@ -153,8 +159,8 @@ class BackgroundsDialog(ImageListDialog):
                         remove(model.getKey(image))
 
                     i += 1
-            except Exception, ex:
-                ex.printStackTrace()
+            except Exception:
+                traceback.print_exc()
 
         '''
         when instanciating the model, it checks if each image
@@ -170,8 +176,8 @@ class BackgroundsDialog(ImageListDialog):
                     self.xMSF, WebWizardConst.CONFIG_PATH + "/BackgroundImages",
                     True)
                 Configuration.removeNode(conf, imageName)
-            except Exception, ex:
-                ex.printStackTrace()
+            except Exception:
+                traceback.print_exc()
 
         '''
         if the given url is a directory
@@ -182,9 +188,9 @@ class BackgroundsDialog(ImageListDialog):
 
         def addDir(self, url):
             if self.fileAccess.isDirectory(url):
-                add(self.fileAccess.listFiles(url, False))
+                self.add(self.fileAccess.listFiles(url, False))
             else:
-                add(url)
+                self.add(url)
 
         '''
         adds the given filenames (urls) to
@@ -194,8 +200,8 @@ class BackgroundsDialog(ImageListDialog):
 
         def add(self, filenames):
             i = 0
-            while i < filenames.length:
-                add(filenames[i])
+            while i < len(filenames):
+                self.add1(filenames[i])
                 i += 1
 
         '''
@@ -205,7 +211,7 @@ class BackgroundsDialog(ImageListDialog):
         @param filename image url.
         '''
 
-        def add(self, filename):
+        def add1(self, filename):
             lcase = filename.toLowerCase()
             if lcase.endsWith("jpg") or lcase.endsWith("jpeg") or \
                     lcase.endsWith("gif"):
