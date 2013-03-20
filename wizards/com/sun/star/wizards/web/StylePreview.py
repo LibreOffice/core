@@ -15,8 +15,9 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from common.FileAccess import FileAccess
 import traceback
+
+from ..common.FileAccess import FileAccess
 
 '''
 @author rpiterman
@@ -46,7 +47,9 @@ class StylePreview(object):
         self.cssFilename = FileAccess.connectURLs(self.tempDir, "style.css")
         self.backgroundFilename = FileAccess.connectURLs(
             self.tempDir, "images/background.gif")
+
         self.wwRoot = wwRoot_
+        print ("WARNING !!! StylePreview init (review) - source, target: ", self.wwRoot, self.htmlFilename)
         self.fileAccess.copy(FileAccess.connectURLs(
             self.wwRoot, "preview.html"), self.htmlFilename)
 
@@ -68,9 +71,11 @@ class StylePreview(object):
             # a solaris bug workaround
             # TODO
             #copy the background image to the temp directory.
+            print ("WARNING !!! refresh (background) - source, target: ", background, self.backgroundFilename)
             self.fileAccess.copy(background, self.backgroundFilename)
 
         #copy the actual css to the temp directory
+        print ("WARNING !!! refresh (css) - source, target: ", css, self.tempDir)
         self.fileAccess.copy(css, self.cssFilename)
 
     def cleanup(self):

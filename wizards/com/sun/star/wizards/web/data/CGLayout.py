@@ -15,8 +15,8 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from common.ConfigGroup import ConfigGroup
-from ui.UIConsts import RID_IMG_WEB
+from ...common.ConfigGroup import ConfigGroup
+from ...ui.UIConsts import UIConsts
 
 class CGLayout(ConfigGroup):
 
@@ -42,7 +42,7 @@ class CGLayout(ConfigGroup):
 
     def getImageUrls(self):
         sRetUrls = range(1)
-        ResId = RID_IMG_WEB + (self.cp_Index * 2)
+        ResId = UIConsts.RID_IMG_WEB + (self.cp_Index * 2)
         return [ResId, ResId + 1]
 
     def getTemplates(self, xmsf):
