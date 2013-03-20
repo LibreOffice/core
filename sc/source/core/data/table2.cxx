@@ -1400,12 +1400,20 @@ const EditTextObject* ScTable::GetEditText( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].GetEditText(nRow);
 }
 
-void ScTable::GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula )
+void ScTable::GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetFormula( nRow, rFormula );
     else
         rFormula = rtl::OUString();
+}
+
+const ScTokenArray* ScTable::GetFormula( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return NULL;
+
+    return aCol[nCol].GetFormula(nRow);
 }
 
 ScNotes* ScTable::GetNotes()

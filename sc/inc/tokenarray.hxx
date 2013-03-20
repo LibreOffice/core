@@ -44,7 +44,7 @@ public:
     ScTokenArray();
     /// Assignment with references to ScToken entries (not copied!)
     ScTokenArray( const ScTokenArray& );
-   virtual ~ScTokenArray();
+    virtual ~ScTokenArray();
     ScTokenArray* Clone() const;    /// True copy!
 
     void GenHash();

@@ -273,6 +273,7 @@ public:
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
+    const ScTokenArray* GetFormula( SCROW nRow ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const;
     sal_uInt32 GetWeightedCount() const;

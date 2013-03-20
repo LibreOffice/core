@@ -324,7 +324,8 @@ public:
                     }
     double      GetValue( SCCOL nCol, SCROW nRow ) const;
     const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
-    void        GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula );
+    void GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const;
+    const ScTokenArray* GetFormula( SCCOL nCol, SCROW nRow ) const;
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {

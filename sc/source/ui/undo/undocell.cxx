@@ -502,7 +502,7 @@ ScUndoSetCell::Value::Value() : meType(CELLTYPE_NONE), mfValue(0.0) {}
 ScUndoSetCell::Value::Value( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
 ScUndoSetCell::Value::Value( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
 ScUndoSetCell::Value::Value( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
-ScUndoSetCell::Value::Value( const ScFormulaCell& rFormula ) : meType(CELLTYPE_FORMULA), mpFormulaCell(rFormula.Clone()) {}
+ScUndoSetCell::Value::Value( const ScTokenArray& rFormula ) : meType(CELLTYPE_FORMULA), mpFormula(rFormula.Clone()) {}
 
 ScUndoSetCell::Value::Value( const Value& r ) : meType(r.meType), mfValue(r.mfValue)
 {
@@ -515,7 +515,7 @@ ScUndoSetCell::Value::Value( const Value& r ) : meType(r.meType), mfValue(r.mfVa
             mpEditText = r.mpEditText->Clone();
         break;
         case CELLTYPE_FORMULA:
-            mpFormulaCell = r.mpFormulaCell->Clone();
+            mpFormula = r.mpFormula->Clone();
         default:
             ;
     }
@@ -531,7 +531,7 @@ ScUndoSetCell::Value::~Value()
         case CELLTYPE_EDIT:
             delete mpEditText;
         case CELLTYPE_FORMULA:
-            mpFormulaCell->Delete();
+            delete mpFormula;
         default:
             ;
     }
@@ -594,7 +594,7 @@ void ScUndoSetCell::SetValue( const Value& rVal )
             pDoc->SetEditText(maPos, rVal.mpEditText->Clone());
         break;
         case CELLTYPE_FORMULA:
-            pDoc->SetFormula(maPos, *rVal.mpFormulaCell->GetCode());
+            pDoc->SetFormula(maPos, *rVal.mpFormula);
         break;
         default:
             ;

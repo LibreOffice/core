@@ -1823,6 +1823,18 @@ void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
         rFormula = rtl::OUString();
 }
 
+const ScTokenArray* ScColumn::GetFormula( SCROW nRow ) const
+{
+    SCSIZE nIndex;
+    if (!Search(nRow, nIndex))
+        return NULL;
+
+    const ScBaseCell* pCell = maItems[nIndex].pCell;
+    if (pCell->GetCellType() != CELLTYPE_FORMULA)
+        return NULL;
+
+    return static_cast<const ScFormulaCell*>(pCell)->GetCode();
+}
 
 CellType ScColumn::GetCellType( SCROW nRow ) const
 {

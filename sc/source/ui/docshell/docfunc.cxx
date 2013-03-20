@@ -847,9 +847,9 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
             break;
             case CELLTYPE_FORMULA:
             {
-                const ScFormulaCell* pFCell = static_cast<const ScFormulaCell*>(pDoc->GetCell(rPos));
-                if (pFCell)
-                    pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pFCell, fVal));
+                const ScTokenArray* pTokens = pDoc->GetFormula(rPos);
+                if (pTokens)
+                    pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pTokens, fVal));
             }
             break;
             default:
