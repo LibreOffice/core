@@ -218,7 +218,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         }
 
         // Two adjoining FlyPortions are merged
-        if( pRight && pLeft->GetPortion() == pRight )
+        if( pRight && pLeft && pLeft->GetPortion() == pRight )
         {
             pRight->MoveAllGlue( pLeft );
             pRight = 0;
