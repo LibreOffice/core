@@ -1219,7 +1219,7 @@ sal_Bool ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
     //  SetCellText ruft PutCell oder SetNormalString
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    ScBaseCell* pNewCell = NULL;
+
     if ( bInterpret )
     {
         if ( bEnglish )
@@ -1231,23 +1231,22 @@ sal_Bool ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
             //  code moved to own method InterpretEnglishString because it is also used in
             //  ScCellRangeObj::setFormulaArray
 
-            pNewCell = InterpretEnglishString( rPos, rText, rFormulaNmsp, eGrammar );
+            ScBaseCell* pNewCell = InterpretEnglishString( rPos, rText, rFormulaNmsp, eGrammar );
+            if (pNewCell)
+                return PutCell( rPos, pNewCell, bApi );
         }
         // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
     }
     else if ( rText.Len() )
     {
         OSL_ENSURE( rFormulaNmsp.Len() == 0, "ScDocFunc::SetCellText - formula namespace, but do not interpret?" );
-        pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );   // immer Text
+        ScBaseCell* pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );   // immer Text
+        if (pNewCell)
+            return PutCell( rPos, pNewCell, bApi );
     }
 
-    if (pNewCell)
-        return PutCell( rPos, pNewCell, bApi );
-    else
-    {
-        bool bNumFmtSet = false;
-        return SetNormalString( bNumFmtSet, rPos, rText, bApi );
-    }
+    bool bNumFmtSet = false;
+    return SetNormalString( bNumFmtSet, rPos, rText, bApi );
 }
 
 //------------------------------------------------------------------------
