@@ -26,11 +26,13 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include "xmloff/dllapi.h"
+
 #include <vector>
 #include <map>
 #include <iterator>
 
-class SchXMLSeriesHelper
+class XMLOFF_DLLPUBLIC SchXMLSeriesHelper
 {
 public:
     static ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > >
