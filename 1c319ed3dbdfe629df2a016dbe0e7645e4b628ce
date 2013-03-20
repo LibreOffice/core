@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///FM\u003d",
+        "filename": "sc/source/ui/Accessibility/AccessibleDocument.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-03-20T08:45:00Z",
+      "side": 1,
+      "message": "Are you sure about that? there is code a bit further down in this method doing an explicit SetState(FOCUSED) with this aFocusedItr?",
+      "revId": "1c319ed3dbdfe629df2a016dbe0e7645e4b628ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
