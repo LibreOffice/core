@@ -294,7 +294,7 @@ static int parseMimeResource( CFBundleRef i_xBundle,
     int nAdded = 0;
     // just to hurt our eyes more there is an alternative mimetype function plus the possibility
     // of a resource fork. Must be a case of think different.
-    #if __LP64__
+    #if defined __LP64__
     int
     #else
     SInt16
