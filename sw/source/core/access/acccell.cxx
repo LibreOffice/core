@@ -257,7 +257,6 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 
-
 // XAccessibleInterface
 
 uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )

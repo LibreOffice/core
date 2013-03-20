@@ -778,7 +778,6 @@ void _FinitCore()
     delete SwStyleNameMapper::pFrameProgMap;
     delete SwStyleNameMapper::pNumRuleProgMap;
 
-
     // delete all default attributes
     SfxPoolItem* pHt;
     for( sal_uInt16 n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
@@ -840,6 +839,7 @@ CollatorWrapper& GetAppCollator()
     }
     return *pCollator;
 }
+
 CollatorWrapper& GetAppCaseCollator()
 {
     if( !pCaseCollator )

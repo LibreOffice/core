@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCPORTIONS_HXX
 #define _ACCPORTIONS_HXX
+
 #include <SwPortionHandler.hxx>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
@@ -100,7 +102,6 @@ public:
     virtual void Skip(sal_uInt16 nLength);
     virtual void Finish();
 
-
     // access to the portion data
 
     /// get the text string, as presented by the layout
@@ -134,7 +135,6 @@ public:
                            SwSpecialPos& rPos,
                            SwSpecialPos*& rpPos ) const;
 
-
     // get boundaries of words/sentences. The data structures are
     // created on-demand.
     void GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
@@ -160,7 +160,6 @@ public:
     sal_uInt16 GetFirstValidCorePosition() const;
     sal_uInt16 GetLastValidCorePosition() const;
 };
-
 
 #endif
 

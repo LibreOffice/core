@@ -52,7 +52,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-
 static const sal_uInt16 coSrchRplcThreshold = 60000;
 
 struct _PercentHdl
@@ -318,7 +317,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 }
             }
         }
-
     }
 
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
@@ -487,7 +485,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
 #else
 #define IDX     aCellStt
 #endif
-
 
 sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
 {
@@ -701,7 +698,6 @@ SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
                 ? fnMoveForward : fnMoveBackward;
 }
 
-
 static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                         SwMoveFn fnMove, SwCursor*& pFndRing,
                         SwPaM& aRegion, FindRanges eFndRngs,
@@ -826,7 +822,6 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
     return nFound;
 }
 
-
 static int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
                         SwPaM& rPam, int bFirst )
 {
@@ -858,7 +853,6 @@ static int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 
     return *rPam.GetMark() < *rPam.GetPoint();
 }
-
 
 static int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
                         SwPaM& rPam, int bFirst )
@@ -1051,7 +1045,6 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     return nFound;
 }
 
-
 void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
 {
     bool bIsStart = true;
@@ -1098,7 +1091,6 @@ short SwCursor::MaxReplaceArived()
 {
     return RET_YES;
 }
-
 
 sal_Bool SwCursor::IsStartWord( sal_Int16 nWordType ) const
 {
@@ -1479,7 +1471,6 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
     return bRet;
 }
 
-
 sal_Bool SwCursor::ExpandToSentenceBorders()
 {
     sal_Bool bRes = sal_False;
@@ -1523,14 +1514,12 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
     return bRes;
 }
 
-
 sal_Bool SwTableCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 /*nMode*/,
     sal_Bool /*bVisualAllowed*/, sal_Bool /*bSkipHidden*/, sal_Bool /*bInsertCrsr*/ )
 {
     return bLeft ? GoPrevCell( nCnt )
                  : GoNextCell( nCnt );
 }
-
 
 // calculate cursor bidi level: extracted from LeftRight()
 const SwCntntFrm*
@@ -2039,7 +2028,6 @@ sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
-
 sal_Bool SwCursor::MoveSection( SwWhichSection fnWhichSect,
                                 SwPosSection fnPosSect)
 {
@@ -2077,8 +2065,6 @@ void SwCursor::RestoreSavePos()
     }
 }
 
-
-
 SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false )
 {
@@ -2089,7 +2075,6 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
 }
 
 SwTableCursor::~SwTableCursor() {}
-
 
 static bool
 lcl_SeekEntry(const SwSelBoxes& rTmp, SwStartNode const*const pSrch,
@@ -2120,7 +2105,6 @@ lcl_SeekEntry(const SwSelBoxes& rTmp, SwStartNode const*const pSrch,
     }
     return sal_False;
 }
-
 
 SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 {
@@ -2229,14 +2213,12 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
     return pAktCrsr;
 }
 
-
 void SwTableCursor::InsertBox( const SwTableBox& rTblBox )
 {
     SwTableBox* pBox = (SwTableBox*)&rTblBox;
     m_SelectedBoxes.insert(pBox);
     bChg = sal_True;
 }
-
 
 void SwTableCursor::DeleteBox(size_t const nPos)
 {
@@ -2331,7 +2313,6 @@ void SwTableCursor::ParkCrsr()
     bChg = sal_True;
     bParked = sal_True;
 }
-
 
 sal_Bool SwTableCursor::HasReadOnlyBoxSel() const
 {

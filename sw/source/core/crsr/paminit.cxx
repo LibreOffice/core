@@ -19,7 +19,6 @@
 
 #include <pamtyp.hxx>
 
-
 static SwMoveFnCollection aFwrd = {
     /* fnNd         */  &GoNext,
     /* fnNds        */  &GoNextNds,

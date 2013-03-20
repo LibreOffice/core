@@ -36,7 +36,6 @@ using uno::RuntimeException;
 using uno::Sequence;
 using ::rtl::OUString;
 
-
 const sal_Char sServiceName[] = "com.sun.star.text.AccessiblePageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
 

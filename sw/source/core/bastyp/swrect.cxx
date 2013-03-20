@@ -127,7 +127,6 @@ sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
     return IsInside(rPoint) || bIsNearby;
 }
 
-
 sal_Bool SwRect::IsOver( const SwRect& rRect ) const
 {
     return (Top()   <= rRect.Bottom()) &&

@@ -16,13 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCFRMOBJMAP_HXX
 #define _ACCFRMOBJMAP_HXX
 
 #include <accfrmobj.hxx>
-
 #include <svx/svdtypes.hxx>
-
 #include <map>
 
 class SwAccessibleMap;
@@ -54,7 +53,6 @@ public:
     }
 
 private:
-
     LayerId eLayerId;
     sal_uInt32 nOrdNum;
 
@@ -75,7 +73,6 @@ class SwAccessibleChildMap : public _SwAccessibleChildMap
                                           const sw::access::SwAccessibleChild& rLower );
 
 public:
-
     SwAccessibleChildMap( const SwRect& rVisArea,
                           const SwFrm& rFrm,
                           SwAccessibleMap& rAccMap );

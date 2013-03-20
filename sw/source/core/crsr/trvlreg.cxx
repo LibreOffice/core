@@ -27,8 +27,6 @@
 #include <pamtyp.hxx>
 #include <section.hxx>
 
-
-
 sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         sal_Bool bInReadOnly )
 {
@@ -82,7 +80,6 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     } while( pNd );
     return sal_False;
 }
-
 
 sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         sal_Bool bInReadOnly )
@@ -139,7 +136,6 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     return sal_False;
 }
 
-
 sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         sal_Bool bInReadOnly )
 {
@@ -170,7 +166,6 @@ sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     }
     return 0 != pCNd;
 }
-
 
 sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                                 sal_Bool bInReadOnly )
@@ -218,8 +213,6 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     return sal_False;
 }
 
-
-
 sal_Bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCrsrSaveState aSaveState( *this );
@@ -238,7 +231,6 @@ sal_Bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPos
         UpdateCrsr();
     return bRet;
 }
-
 
 bool SwCursor::GotoRegion( const String& rName )
 {
@@ -274,7 +266,5 @@ bool SwCrsrShell::GotoRegion( const String& rName )
                     SwCrsrShell::READONLY );
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

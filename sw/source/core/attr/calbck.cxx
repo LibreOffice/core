@@ -411,8 +411,6 @@ SwClientIter::SwClientIter( const SwModify& rModify )
     pDelNext = pAct;
 }
 
-
-
 SwClientIter::~SwClientIter()
 {
     if( pClientIters )

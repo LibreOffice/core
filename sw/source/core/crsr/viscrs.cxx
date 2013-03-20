@@ -63,8 +63,6 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
     aTxtCrsr.SetWidth( 0 );
 }
 
-
-
 SwVisCrsr::~SwVisCrsr()
 {
     if( bIsVisible && aTxtCrsr.IsVisible() )
@@ -72,9 +70,6 @@ SwVisCrsr::~SwVisCrsr()
 
     pCrsrShell->GetWin()->SetCursor( 0 );
 }
-
-
-
 
 void SwVisCrsr::Show()
 {
@@ -87,8 +82,6 @@ void SwVisCrsr::Show()
             _SetPosAndShow();
     }
 }
-
-
 
 void SwVisCrsr::Hide()
 {
@@ -189,7 +182,6 @@ void SwVisCrsr::_SetPosAndShow()
         aTxtCrsr.Show();
     }
 }
-
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
 :   SwRects(),
@@ -336,7 +328,6 @@ void SwSelPaintRects::Paint( const Rectangle& /*rRect*/ )
     // nothing to do with overlays
 }
 
-
 // check current MapMode of the shell and set possibly the static members.
 // Optional set the parameters pX, pY
 void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
@@ -363,12 +354,9 @@ void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
         *pY = nPixPtY;
 }
 
-
-
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos )
     : SwCursor(rPos,0,false), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
 {}
-
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
                             const Point& rPtPos, SwPaM* pRing )
@@ -376,14 +364,12 @@ SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
     aPtPt(rPtPos), pPt(SwPaM::GetPoint())
 {}
 
-
 SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
     : SwCursor(rICrsr), SwSelPaintRects(*rICrsr.GetShell()),
     aMkPt(rICrsr.GetMkPos()), aPtPt(rICrsr.GetPtPos()), pPt(SwPaM::GetPoint())
 {}
 
 SwShellCrsr::~SwShellCrsr() {}
-
 
 bool SwShellCrsr::IsReadOnlyAvailable() const
 {
@@ -410,7 +396,6 @@ void SwShellCrsr::FillRects()
          GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
         GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );  //swmod 071107//swmod 071225
 }
-
 
 void SwShellCrsr::Show()
 {
@@ -444,7 +429,6 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
     while( this != pTmp );
 }
 
-
 void SwShellCrsr::Hide()
 {
     SwShellCrsr * pTmp = this;
@@ -457,7 +441,6 @@ SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
 {
     return new SwShellCrsr( *GetShell(), *GetPoint(), GetPtPos(), pRing );
 }
-
 
 short SwShellCrsr::MaxReplaceArived()
 {
@@ -518,7 +501,6 @@ sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
     return SwCursor::IsAtValidPos( bPoint );
 }
 
-
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                                     const SwPosition& rPos )
     : SwCursor(rPos,0,false), SwShellCrsr(rCrsrSh, rPos), SwTableCursor(rPos)
@@ -552,7 +534,6 @@ void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 {
     SwShellCrsr::SaveTblBoxCntnt( pPos );
 }
-
 
 void SwShellTableCrsr::FillRects()
 {
@@ -601,7 +582,6 @@ void SwShellTableCrsr::FillRects()
     aReg.Invert();
     insert( begin(), aReg.begin(), aReg.end() );
 }
-
 
 // Check if the SPoint is within the Table-SSelection.
 sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const

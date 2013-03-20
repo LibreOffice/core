@@ -57,7 +57,6 @@ const SwTxtAttr *SwAccessibleHyperlink::GetTxtAttr() const
     return pTxtAttr;
 }
 
-
 // XAccessibleAction
 sal_Int32 SAL_CALL SwAccessibleHyperlink::getAccessibleActionCount()
         throw (uno::RuntimeException)

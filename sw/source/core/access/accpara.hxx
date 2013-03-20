@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCPARA_HXX
 #define _ACCPARA_HXX
 
@@ -37,7 +38,6 @@ class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
-
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace i18n { struct Boundary; }
@@ -110,7 +110,6 @@ class SwAccessibleParagraph :
     //  be selected)
     SwXTextPortion* CreateUnoPortion( sal_Int32 nStart, sal_Int32 nEnd );
 
-
     // methods for checking the parameter range:
 
     // does nPos point to a char?
@@ -142,11 +141,9 @@ class SwAccessibleParagraph :
             tAccParaPropValMap& rRunAttrSeq );
 
 public:
-
     sal_Bool IsHeading() const;
 
 protected:
-
     // Set states for getAccessibleStateSet.
     // This drived class additinaly sets MULTILINE(1), MULTISELECTABLE(+),
     // FOCUSABLE(+) and FOCUSED(+)
@@ -218,7 +215,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew);
 
 public:
-
     SwAccessibleParagraph( SwAccessibleMap& rInitMap,
                            const SwTxtFrm& rTxtFrm );
 
@@ -272,7 +268,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
-
 
     // XInterface
 

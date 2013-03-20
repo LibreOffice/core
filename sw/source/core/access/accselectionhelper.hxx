@@ -16,17 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCSELECTIONHELPER_HXX_
 #define _ACCSELECTIONHELPER_HXX_
+
 class SwAccessibleContext;
 class SwFEShell;
+
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 class SwAccessibleSelectionHelper
 {
     /// the context on which this helper works
     SwAccessibleContext& rContext;
-
 
     /// get FE-Shell
     SwFEShell* GetFEShell();
@@ -35,10 +37,8 @@ class SwAccessibleSelectionHelper
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
 public:
-
     SwAccessibleSelectionHelper( SwAccessibleContext& rContext );
     ~SwAccessibleSelectionHelper();
-
 
     //=====  XAccessibleSelection  ============================================
 
@@ -67,7 +67,6 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 };
-
 
 #endif
 

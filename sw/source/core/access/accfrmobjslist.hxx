@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCFRMOBJSLIST_HXX
 #define _ACCFRMOBJSLIST_HXX
 
@@ -23,7 +24,6 @@
 #include <swrect.hxx>
 
 class SwAccessibleMap;
-
 class SwAccessibleChildSList;
 
 class SwAccessibleChildSList_const_iterator
@@ -47,7 +47,6 @@ private:
     SwAccessibleChildSList_const_iterator& next_visible();
 
 public:
-
     inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList_const_iterator& rIter )
         : rList( rIter.rList )
         , aCurr( rIter.aCurr )
@@ -82,7 +81,6 @@ class SwAccessibleChildSList
     SwAccessibleMap& mrAccMap;
 
 public:
-
     typedef SwAccessibleChildSList_const_iterator const_iterator;
 
     inline SwAccessibleChildSList( const SwFrm& rFrm,

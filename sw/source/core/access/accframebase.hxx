@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCFRAMEBASE_HXX
 #define _ACCFRAMEBASE_HXX
 
 #include <acccontext.hxx>
-
 #include <calbck.hxx>
 
 class SwFlyFrm;
@@ -29,11 +29,9 @@ class SwAccessibleFrameBase : public SwAccessibleContext,
                               public SwClient
 {
     sal_Bool    bIsSelected;    // protected by base class mutex
-
     sal_Bool    IsSelected();
 
 protected:
-
     // Set states for getAccessibleStateSet.
     // This drived class additionaly sets SELECTABLE(1), SELECTED(+),
     // FOCUSABLE(1) and FOCUSED(+)
@@ -46,7 +44,6 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-
     SwAccessibleFrameBase( SwAccessibleMap* pInitMap,
                            sal_Int16 nInitRole,
                            const SwFlyFrm *pFlyFrm );
@@ -58,7 +55,6 @@ public:
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );
 };
-
 
 #endif
 

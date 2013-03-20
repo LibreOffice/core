@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCFRAME_HXX
 #define _ACCFRAME_HXX
 
@@ -75,7 +76,6 @@ private:
                              sal_Bool bInPagePreview );
 
 protected:
-
     sal_Bool IsEditable( ViewShell *pVSh ) const;
 
     sal_Bool IsOpaque( ViewShell *pVSh ) const;
@@ -111,7 +111,6 @@ public:
                              const sw::access::SwAccessibleChild& rChild ) const;
 
 protected:
-
     // Return the bounding box of the frame clipped to the vis area. If
     // no frame is specified, use this' frame.
     SwRect GetBounds( const SwAccessibleMap& rAccMap,
@@ -140,7 +139,6 @@ protected:
     {
         return maVisArea;
     }
-
 
     String GetFormattedPageNumber() const;
 };

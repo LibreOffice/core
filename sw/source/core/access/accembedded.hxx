@@ -16,19 +16,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCEMBEDDED_HXX
 #define _ACCEMBEDDED_HXX
+
 #include "accnotextframe.hxx"
 
 class SwAccessibleEmbeddedObject : public   SwAccessibleNoTextFrame
 {
-
 protected:
-
     virtual ~SwAccessibleEmbeddedObject();
 
 public:
-
     SwAccessibleEmbeddedObject( SwAccessibleMap* pInitMap,
                                 const SwFlyFrm* pFlyFrm );
 
@@ -53,7 +52,6 @@ public:
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-
 
 #endif
 

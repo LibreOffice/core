@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _CALLNK_HXX
 #define _CALLNK_HXX
 
@@ -43,8 +44,6 @@ public:
 
     static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
 };
-
-
 
 #endif  // _CALLNK_HXX
 

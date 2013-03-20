@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <osl/mutex.hxx>
@@ -157,6 +156,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
 
     return SwAccessibleFrameBase::getAccessibleName();
 }
+
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
@@ -205,11 +205,9 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
     return theSwAccessibleTextFrameImplementationId::get().getSeq();
 }
 
-
 //
 // XAccessibleRelationSet
 //
-
 
 SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
 {
@@ -231,7 +229,6 @@ AccessibleRelation SwAccessibleTextFrame::makeRelation( sal_Int16 nType, const S
     aSequence[0] = GetMap()->GetContext( pFrm );
     return AccessibleRelation( nType, aSequence );
 }
-
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccessibleRelationSet( )
     throw ( uno::RuntimeException )

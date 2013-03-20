@@ -107,7 +107,6 @@ bool SwCrsrShell::GotoNextNum()
     return bRet;
 }
 
-
 bool SwCrsrShell::GotoPrevNum()
 {
     bool bRet = GetDoc()->GotoPrevNum( *pCurCrsr->GetPoint() );
@@ -619,7 +618,6 @@ static void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
         }
 }
 
-
 sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
                                             sal_uInt16 nSubType, sal_uInt16 nResType )
 {
@@ -747,7 +745,6 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
     return bRet;
 }
 
-
 sal_Bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
 {
     sal_Bool bRet = sal_False;
@@ -770,7 +767,6 @@ sal_Bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
     return bRet;
 }
 
-
 void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
 {
     SwCursor* pCrsr = getShellCrsr( true );
@@ -787,7 +783,6 @@ void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
     if( !pCrsr->IsSelOvr() )
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
 }
-
 
 bool SwCrsrShell::GotoOutline( const String& rName )
 {
@@ -888,7 +883,6 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     return USHRT_MAX; // no more left
 }
 
-
 sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
                                     sal_Bool bWithChildren )
 {
@@ -946,7 +940,6 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return bRet;
 }
-
 
 /// jump to reference marker
 sal_Bool SwCrsrShell::GotoRefMark( const String& rRefMark, sal_uInt16 nSubType,
@@ -1634,7 +1627,6 @@ sal_Bool SwCrsrShell::SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand,
     return bRet;
 }
 
-
 bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 {
     bool bRet = false;
@@ -1655,7 +1647,6 @@ bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
     }
     return bRet;
 }
-
 
 const SwFmtINetFmt* SwCrsrShell::FindINetAttr( const String& rName ) const
 {
@@ -2038,7 +2029,6 @@ const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect 
     }
     return pFnd;
 }
-
 
 bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
 {

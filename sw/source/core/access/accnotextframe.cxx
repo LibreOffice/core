@@ -198,7 +198,6 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
         return SwAccessibleContext::queryInterface( aType );
 }
 
-
 // XTypeProvider
 
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(uno::RuntimeException)

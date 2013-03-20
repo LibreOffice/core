@@ -87,7 +87,6 @@ void SwAccessibleFrameBase::GetStates(
     }
 }
 
-
 sal_uInt8 SwAccessibleFrameBase::GetNodeType( const SwFlyFrm *pFlyFrm )
 {
     sal_uInt8 nType = ND_TEXTNODE;
@@ -198,7 +197,6 @@ sal_Bool SwAccessibleFrameBase::HasCursor()
     osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
 }
-
 
 SwAccessibleFrameBase::~SwAccessibleFrameBase()
 {

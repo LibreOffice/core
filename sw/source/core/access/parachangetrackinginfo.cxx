@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <parachangetrackinginfo.hxx>
 
 #include <wrong.hxx>
@@ -151,7 +150,6 @@ SwParaChangeTrackingInfo::SwParaChangeTrackingInfo( const SwTxtFrm& rTxtFrm )
     , mpChangeTrackFormatChangeTextMarkupList( 0 )
 {
 }
-
 
 SwParaChangeTrackingInfo::~SwParaChangeTrackingInfo()
 {

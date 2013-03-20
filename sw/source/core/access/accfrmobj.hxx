@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _ACCFRMOBJ_HXX
 #define _ACCFRMOBJ_HXX
 
@@ -77,7 +78,6 @@ class SwAccessibleChild
         void Init( const SwFrm* pFrm );
         void Init( Window* pWindow );
 };
-
 
 } } // eof of namespace sw::access
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 
@@ -614,12 +613,10 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;
 }
 
-
 int SwFindParaText::IsReplaceMode() const
 {
     return bReplace;
 }
-
 
 sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes,
                           SwDocPositions nStart, SwDocPositions nEnd,
@@ -678,6 +675,5 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
     }
     return pRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
