@@ -164,7 +164,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchEdit->SetUpdateDataHdl(LINK(this,SfxTemplateManagerDlg,SearchUpdateHdl));
     mpSearchEdit->EnableUpdateData();
 
-    maView->SetStyle(WB_VSCROLL);
+    maView->SetStyle(maView->GetStyle() | WB_VSCROLL);
     maView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
     maView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
