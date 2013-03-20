@@ -104,7 +104,7 @@ void SvxSmartTagsControl::FillMenu()
 
         const sal_Int32 nSmartTagIndex = rActionIndices[0];
         const rtl::OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
-        const rtl::OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, rLocale );
+        const rtl::OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, rLocale);
 
         // no sub-menues if there's only one smart tag type listed:
         PopupMenu* pSbMenu = mpMenu;
@@ -127,7 +127,7 @@ void SvxSmartTagsControl::FillMenu()
         {
             xAction = rActionComponents[i];
 
-            for ( sal_Int32 k = 0; k < xAction->getActionCount( aSmartTagType, xController ); ++k )
+            for ( sal_Int32 k = 0; k < xAction->getActionCount( aSmartTagType, xController, xSmartTagProperties ); ++k )
             {
                 const sal_uInt32 nActionID = xAction->getActionID( aSmartTagType, k, xController );
                 rtl::OUString aActionCaption = xAction->getActionCaptionFromID( nActionID,
