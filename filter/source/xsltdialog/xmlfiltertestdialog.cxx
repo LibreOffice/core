@@ -91,8 +91,7 @@ GlobalEventListenerImpl::GlobalEventListenerImpl( XMLFilterTestDialog* pDialog )
 void SAL_CALL GlobalEventListenerImpl::notifyEvent( const com::sun::star::document::EventObject& Event ) throw (RuntimeException)
 {
     ::SolarMutexGuard aGuard;
-    if( (Event.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnFocus") ) == 0) ||
-        (Event.EventName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("OnUnload") ) == 0) )
+    if( Event.EventName == "OnFocus" || Event.EventName == "OnUnload" )
     {
         Reference< XComponent > xComp( Event.Source, UNO_QUERY );
         mpDialog->updateCurrentDocumentButtonState( &xComp );
