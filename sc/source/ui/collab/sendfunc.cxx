@@ -58,6 +58,16 @@ void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
             mpDirect->SetValueCell(
                 aReader.getAddress(1), aReader.getDouble(2), aReader.getBool(3));
         }
+        else if (aReader.getMethod() == "setStringCell")
+        {
+            mpDirect->SetStringCell(
+                aReader.getAddress(1), aReader.getString(2), aReader.getBool(3));
+        }
+        else if (aReader.getMethod() == "setEditCell")
+        {
+            mpDirect->SetEditCell(
+                aReader.getAddress(1), aReader.getEdit(2), aReader.getBool(3));
+        }
         else if ( aReader.getMethod() == "enterListAction" )
             mpDirect->EnterListAction( aReader.getInt( 1 ) );
         else if ( aReader.getMethod() == "endListAction" )
@@ -136,6 +146,26 @@ bool ScDocFuncSend::SetValueCell( const ScAddress& rPos, double fVal, bool bInte
     ScChangeOpWriter aOp("setValueCell");
     aOp.appendAddress( rPos );
     aOp.appendDouble( fVal );
+    aOp.appendBool( bInteraction );
+    SendMessage( aOp );
+    return true; // needs some code auditing action
+}
+
+bool ScDocFuncSend::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
+{
+    ScChangeOpWriter aOp("setStringCell");
+    aOp.appendAddress( rPos );
+    aOp.appendString( rStr );
+    aOp.appendBool( bInteraction );
+    SendMessage( aOp );
+    return true; // needs some code auditing action
+}
+
+bool ScDocFuncSend::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction )
+{
+    ScChangeOpWriter aOp("setEditCell");
+    aOp.appendAddress( rPos );
+    aOp.appendEditText( rStr );
     aOp.appendBool( bInteraction );
     SendMessage( aOp );
     return true; // needs some code auditing action

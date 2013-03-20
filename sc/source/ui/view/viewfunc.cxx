@@ -502,13 +502,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
                      ( ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' ) && nError && rString.Equals( aFormula ) ) )
                 {
-                    ScBaseCell *pCell;
                     if ( pData )
+                    {
                         // A clone of pData will be stored in the cell.
-                        pCell = new ScEditCell(*pData, pDoc, NULL);
+                        rFunc.SetEditCell(aPos, *pData, true);
+                    }
                     else
-                        pCell = new ScStringCell( aFormula );
-                    rFunc.PutCell( aPos, pCell, sal_False );
+                        rFunc.SetStringCell(aPos, aFormula, true);
                 }
                 else
                 {

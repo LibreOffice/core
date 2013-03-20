@@ -80,6 +80,7 @@
 #include "undorangename.hxx"
 #include "progress.hxx"
 #include "dpobject.hxx"
+#include "stringutil.hxx"
 
 #include <memory>
 #include <basic/basmgr.hxx>
@@ -808,59 +809,118 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
     return sal_True;
 }
 
+namespace {
+
+void pushUndoSetCell( ScDocShell& rDocShell, ScDocument* pDoc, const ScAddress& rPos, const ScUndoSetCell::Value& rNewVal )
+{
+    svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+    switch (pDoc->GetCellType(rPos))
+    {
+        case CELLTYPE_NONE:
+        case CELLTYPE_NOTE:
+            // Empty cell.
+            pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, rNewVal));
+        break;
+        case CELLTYPE_VALUE:
+        {
+            double fOldVal = pDoc->GetValue(rPos);
+            pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, fOldVal, rNewVal));
+        }
+        break;
+        case CELLTYPE_STRING:
+        {
+            OUString aOldStr = pDoc->GetString(rPos);
+            pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldStr, rNewVal));
+        }
+        break;
+        case CELLTYPE_EDIT:
+        {
+            const EditTextObject* pOldText = pDoc->GetEditText(rPos);
+            if (pOldText)
+                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pOldText, rNewVal));
+        }
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            const ScTokenArray* pTokens = pDoc->GetFormula(rPos);
+            if (pTokens)
+                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pTokens, rNewVal));
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+}
+
 bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
     bool bUndo = pDoc->IsUndoEnabled();
 
-    bool bHeight = pDoc->HasAttrib(ScRange(rPos), HASATTR_NEEDHEIGHT);
+    bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
 
     if (bUndo)
-    {
-        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-        switch (pDoc->GetCellType(rPos))
-        {
-            case CELLTYPE_NONE:
-            case CELLTYPE_NOTE:
-                // Empty cell.
-                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, fVal));
-            break;
-            case CELLTYPE_VALUE:
-            {
-                double fOldVal = pDoc->GetValue(rPos);
-                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, fOldVal, fVal));
-            }
-            break;
-            case CELLTYPE_STRING:
-            {
-                OUString aOldStr = pDoc->GetString(rPos);
-                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldStr, fVal));
-            }
-            break;
-            case CELLTYPE_EDIT:
-            {
-                const EditTextObject* pOldText = pDoc->GetEditText(rPos);
-                if (pOldText)
-                    pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pOldText, fVal));
-            }
-            break;
-            case CELLTYPE_FORMULA:
-            {
-                const ScTokenArray* pTokens = pDoc->GetFormula(rPos);
-                if (pTokens)
-                    pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pTokens, fVal));
-            }
-            break;
-            default:
-                ;
-        }
-    }
+        pushUndoSetCell(rDocShell, pDoc, rPos, fVal);
 
     pDoc->SetValue(rPos, fVal);
 
     if (bHeight)
-        AdjustRowHeight( ScRange(rPos) );
+        AdjustRowHeight(rPos);
+
+    aModificator.SetDocumentModified();
+
+    // #103934#; notify editline and cell in edit mode
+    if (!bInteraction)
+        NotifyInputHandler( rPos );
+
+    return true;
+}
+
+bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
+{
+    ScDocShellModificator aModificator( rDocShell );
+    ScDocument* pDoc = rDocShell.GetDocument();
+    bool bUndo = pDoc->IsUndoEnabled();
+
+    bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
+
+    if (bUndo)
+        pushUndoSetCell(rDocShell, pDoc, rPos, rStr);
+
+    ScSetStringParam aParam;
+    aParam.setTextInput();
+    pDoc->SetString(rPos, rStr, &aParam);
+
+    if (bHeight)
+        AdjustRowHeight(rPos);
+
+    aModificator.SetDocumentModified();
+
+    // #103934#; notify editline and cell in edit mode
+    if (!bInteraction)
+        NotifyInputHandler( rPos );
+
+    return true;
+}
+
+bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction )
+{
+    ScDocShellModificator aModificator( rDocShell );
+    ScDocument* pDoc = rDocShell.GetDocument();
+    bool bUndo = pDoc->IsUndoEnabled();
+
+    bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
+
+    if (bUndo)
+        pushUndoSetCell(rDocShell, pDoc, rPos, rStr);
+
+    pDoc->SetEditText(rPos, rStr.Clone());
+
+    if (bHeight)
+        AdjustRowHeight(rPos);
 
     aModificator.SetDocumentModified();
 
@@ -1009,9 +1069,7 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
 
         // A copy of pNewData will be stored in the cell.
         boost::scoped_ptr<EditTextObject> pNewData(rEngine.CreateTextObject());
-        bRet = PutCell( rPos,
-                        new ScEditCell(*pNewData, pDoc, rEngine.GetEditTextObjectPool()),
-                        bApi );
+        bRet = SetEditCell(rPos, *pNewData, !bApi);
 
         // Set the paragraph attributes back to the EditEngine.
         if (!aRememberItems.empty())
@@ -1040,7 +1098,7 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
             bRet = SetNormalString( bNumFmtSet, rPos, aText, bApi );
         }
         else
-            bRet = PutCell( rPos, new ScStringCell( aText ), bApi );
+            bRet = SetStringCell(rPos, aText, !bApi);
     }
 
     if ( bRet && aTester.NeedsCellAttr() )

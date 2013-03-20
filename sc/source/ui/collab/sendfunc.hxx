@@ -24,6 +24,18 @@ rtl::OUString cellToString( ScBaseCell *pCell )
     return rtl::OUString();
 }
 
+OUString editToString( const EditTextObject& /*rEditText*/ )
+{
+    // FIXME: implement me.
+    return OUString();
+}
+
+EditTextObject stringToEdit( const OUString& rStr )
+{
+    // FIXME: implement me.
+    return EditTextObject();
+}
+
 ScBaseCell *stringToCell( const rtl::OUString &rString )
 {
     (void)rString; // FIXME: implement me
@@ -84,6 +96,11 @@ public:
     void appendCell( ScBaseCell *pCell )
     {
         appendString( cellToString( pCell ) );
+    }
+
+    void appendEditText( const EditTextObject& rStr )
+    {
+        appendString( editToString(rStr) );
     }
 
     void appendDouble( double fVal )
@@ -206,6 +223,12 @@ public:
     {
         return getString(n).toDouble();
     }
+
+    EditTextObject getEdit( sal_Int32 n )
+    {
+        return stringToEdit(getString(n));
+    }
+
 };
 
 } // anonymous namespace
@@ -229,6 +252,8 @@ public:
 
     virtual sal_Bool    SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi );
     virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
+    virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
+    virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
     virtual sal_Bool    PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool    PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 sal_Bool bInterpret, sal_Bool bApi );
