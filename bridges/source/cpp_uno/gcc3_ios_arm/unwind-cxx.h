@@ -33,6 +33,10 @@
 #ifndef _UNWIND_CXX_H
 #define _UNWIND_CXX_H 1
 
+#ifndef __LP64__
+#define __LP64__ 0
+#endif
+
 // Level 2: C++ ABI
 
 #include <typeinfo>
