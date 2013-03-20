@@ -43,6 +43,12 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	$(gb_UWINAPI) \
 ))
 
+ifneq ($(OS),IOS)
+$(eval $(call gb_Library_use_static_libraries,merged,\
+	writerperfect \
+))
+endif
+
 $(eval $(call gb_Library_use_externals,merged,\
 	cups \
 	icui18n \
@@ -52,6 +58,12 @@ $(eval $(call gb_Library_use_externals,merged,\
 	lcms2 \
 	libxml2 \
 	nss3 \
+	$(if $(filter-out IOS,$(OS)),\
+	wpd \
+	wpg \
+	wps \
+	mwaw \
+	) \
 	zlib \
 ))
 
