@@ -16,10 +16,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from common.Resource import Resource
-from common.Configuration import Configuration
-from common.Properties import Properties
-from document.OfficeDocument import OfficeDocument
+from ..common.Resource import Resource
+from ..common.Configuration import Configuration
+from ..common.Properties import Properties
+from ..document.OfficeDocument import OfficeDocument
 
 class WebWizardDialogResources(Resource):
     UNIT_NAME = "dbwizres"
@@ -311,5 +311,5 @@ class WebWizardDialogResources(Resource):
             self.resGifFiles = Properties.getPropertyValue(
                 OfficeDocument.getTypeMediaDescriptor(
                     xmsf, "gif_Graphics_Interchange"), "UIName")
-        except Exception, ex:
+        except Exception as ex:
             traceback.print_exc()
