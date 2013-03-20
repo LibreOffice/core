@@ -1367,9 +1367,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
     SwAccessibleContext::InvalidateChildPosOrSize( rChildFrmOrObj, rOldBox );
 }
 
-//
-//  XAccessibleSelection
-//
+//=====  XAccessibleSelection =============================================
 
 void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     sal_Int32 nChildIndex )
