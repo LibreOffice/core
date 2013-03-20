@@ -20,23 +20,9 @@
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #define _SDR_CONTACT_DISPLAYINFO_HXX
 
-#include <sal/types.h>
 #include <svx/svdsob.hxx>
-#include <svtools/colorcfg.hxx>
 #include <vcl/region.hxx>
-#include <vector>
 #include "svx/svxdllapi.h"
-
-//////////////////////////////////////////////////////////////////////////////
-// predeclarations
-
-class SdrPage;
-
-namespace sdr { namespace contact {
-    class ViewObjectContact;
-}}
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {

@@ -18,6 +18,8 @@
  */
 
 
+#include <svtools/colorcfg.hxx>
+
 #include <svx/sdr/contact/viewobjectcontactofpageobj.hxx>
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
 #include <svx/svdopage.hxx>

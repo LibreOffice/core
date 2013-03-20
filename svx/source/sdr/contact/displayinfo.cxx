@@ -18,12 +18,6 @@
  */
 
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
-#include <svx/svdobj.hxx>
-#include <vcl/gdimtf.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
