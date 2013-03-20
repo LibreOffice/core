@@ -153,6 +153,9 @@ void PresenterCanvasHelper::PaintTiledBitmap (
 
     // Tile the bitmap over the repaint box.
     const geometry::IntegerSize2D aBitmapSize (rxTexture->getSize());
+    if( aBitmapSize.Width < 1 || aBitmapSize.Height < 1)
+        return;
+
     const sal_Int32 nLeft = (rRepaintBox.X / aBitmapSize.Width) * aBitmapSize.Width;
     const sal_Int32 nTop = (rRepaintBox.Y / aBitmapSize.Height) * aBitmapSize.Height;
     const sal_Int32 nRight = ((rRepaintBox.X + rRepaintBox.Width - 1 + aBitmapSize.Width - 1)
