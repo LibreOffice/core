@@ -15,12 +15,14 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ui.WizardDialog import *
-from ui.WizardDialog import *
-from WebWizardDialogResources import WebWizardDialogResources
-from WebWizardConst import *
-from WWHID import *
-from ui.ImageList import ImageList
+import unohelper
+
+from ..ui.WizardDialog import WizardDialog, uno, PropertyNames
+from .WebWizardDialogResources import WebWizardDialogResources
+from .WebWizardConst import *
+from .WWHID import *
+from ..ui.ControlScroller import HelpIds
+from ..ui.ImageList import ImageList
 from com.sun.star.awt import Size
 from com.sun.star.awt.FontUnderline import SINGLE
 from com.sun.star.awt.FontFamily import ROMAN
@@ -87,8 +89,8 @@ class WebWizardDialog(WizardDialog):
         #Load Resources
         self.resources = WebWizardDialogResources(xmsf)
         #set dialog properties...
-        Helper.setUnoPropertyValues(self.xDialogModel,(
-            "Closeable",
+        uno.invoke(self.xDialogModel, "setPropertyValues",(
+            ("Closeable",
             PropertyNames.PROPERTY_HEIGHT,
             PropertyNames.PROPERTY_HELPURL, "Moveable",
             PropertyNames.PROPERTY_NAME,
@@ -99,7 +101,7 @@ class WebWizardDialog(WizardDialog):
             PropertyNames.PROPERTY_WIDTH),
         (True, 210, HelpIds.getHelpIdString(HID0_WEBWIZARD), True,
             "WebWizardDialog", 102, 52, 1, 6,
-            self.resources.resWebWizardDialog_title, 330))
+            self.resources.resWebWizardDialog_title, 330)))
         self.fontDescriptor0 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor1 = \
@@ -446,7 +448,7 @@ class WebWizardDialog(WizardDialog):
                 274, 43, 5, 53, 50), self)
         self.insertLabel("lblIconset", WebWizardDialog.PROPNAMES_LBL,
             (8, self.resources.reslblIconset, "lblIconset", 97, 64, 5, 51, 70))
-        self.insertLabel("txtIconset",
+        self.txtIconset = self.insertLabel("txtIconset",
             ("Border",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -727,5 +729,4 @@ class WebWizardDialog(WizardDialog):
             return oResIds
 
         def render(self, listItem):
-            print "implementar"
-            #return listItem == None ? "" : (listItem).cp_Name
+            return "" if (listItem is None) else listItem.cp_Name
