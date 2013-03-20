@@ -21,6 +21,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/math.hxx"
 #include "global.hxx"
+#include "svl/zforlist.hxx"
 
 ScSetStringParam::ScSetStringParam() :
     mpNumFormatter(NULL),
@@ -331,6 +332,40 @@ bool ScStringUtil::isMultiline( const OUString& rStr )
         return true;
 
     return false;
+}
+
+ScInputStringType ScStringUtil::parseInputString(
+    SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang )
+{
+    ScInputStringType aRet;
+    aRet.meType = ScInputStringType::Unknown;
+    aRet.maText = rStr;
+
+    if (rStr.getLength() > 1 && rStr[0] == '=')
+    {
+        aRet.meType = ScInputStringType::Formula;
+    }
+    else if (rStr.getLength() > 1 && rStr[0] == '\'')
+    {
+        //  for bEnglish, "'" at the beginning is always interpreted as text
+        //  marker and stripped
+        aRet.maText = rStr.copy(1);
+        aRet.meType = ScInputStringType::Text;
+    }
+    else        // (nur) auf englisches Zahlformat testen
+    {
+        sal_uInt32 nNumFormat = rFormatter.GetStandardIndex(eLang);
+
+        if (rFormatter.IsNumberFormat(rStr, nNumFormat, aRet.mfValue))
+            aRet.mnFormatType = rFormatter.GetType(nNumFormat);
+        else if (!rStr.isEmpty())
+            aRet.meType = ScInputStringType::Text;
+
+        //  das (englische) Zahlformat wird nicht gesetzt
+        //! passendes lokales Format suchen und setzen???
+    }
+
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

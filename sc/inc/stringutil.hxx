@@ -23,6 +23,7 @@
 #include "rtl/ustring.hxx"
 #include "tools/string.hxx"
 #include "scdllapi.h"
+#include "i18npool/lang.h"
 
 class SvNumberFormatter;
 
@@ -96,9 +97,21 @@ struct SC_DLLPUBLIC ScSetStringParam
 
 // ============================================================================
 
+struct ScInputStringType
+{
+    enum StringType { Unknown = 0, Text, Formula, Number };
+
+    StringType meType;
+
+    OUString maText;
+    double mfValue;
+    short mnFormatType;
+};
+
 class ScStringUtil
 {
 public:
+
     /**
      * Check if a given string is a simple decimal number (e.g. 12.345). We
      * don't do any elaborate parsing here; we only check for the simplest
@@ -121,6 +134,9 @@ public:
                                         sal_Unicode cTok,  sal_Int32& rIndex );
 
     static bool SC_DLLPUBLIC isMultiline( const OUString& rStr );
+
+    static ScInputStringType parseInputString(
+        SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang );
 };
 
 

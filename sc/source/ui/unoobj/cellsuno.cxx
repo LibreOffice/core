@@ -118,6 +118,7 @@
 #include "unoreflist.hxx"
 #include "formula/grammar.hxx"
 #include "editeng/escapementitem.hxx"
+#include "stringutil.hxx"
 
 #include <list>
 #include <boost/scoped_ptr.hpp>
@@ -1282,7 +1283,7 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
 static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         const uno::Sequence< uno::Sequence<rtl::OUString> >& aData,
-        const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
+        const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     SCTAB nTab = rRange.aStart.Tab();
@@ -1320,7 +1321,7 @@ static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRang
 
     pDoc->DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, IDF_CONTENTS );
 
-    sal_Bool bError = false;
+    bool bError = false;
     SCROW nDocRow = nStartRow;
     for (long nRow=0; nRow<nRows; nRow++)
     {
@@ -1333,15 +1334,30 @@ static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRang
             {
                 String aText(pColArr[nCol]);
                 ScAddress aPos( nDocCol, nDocRow, nTab );
-                ScBaseCell* pNewCell = rDocShell.GetDocFunc().InterpretEnglishString(
-                                                aPos, aText, rFormulaNmsp, eGrammar );
-                pDoc->PutCell( aPos, pNewCell );
+
+                ScInputStringType aRes =
+                    ScStringUtil::parseInputString(
+                        *pDoc->GetFormatTable(), aText, LANGUAGE_ENGLISH_US);
+                switch (aRes.meType)
+                {
+                    case ScInputStringType::Formula:
+                        pDoc->SetFormula(aPos, aRes.maText, eGrammar);
+                    break;
+                    case ScInputStringType::Number:
+                        pDoc->SetValue(aPos, aRes.mfValue);
+                    break;
+                    case ScInputStringType::Text:
+                        pDoc->SetTextCell(aPos, aRes.maText);
+                    break;
+                    default:
+                        ;
+                }
 
                 ++nDocCol;
             }
         }
         else
-            bError = sal_True;                          // wrong size
+            bError = true;                          // wrong size
 
         ++nDocRow;
     }
@@ -5370,7 +5386,7 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
         ScExternalRefManager::ApiGuard aExtRefGuard(pDocSh->GetDocument());
 
         // GRAM_PODF_A1 for API compatibility.
-        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, formula::FormulaGrammar::GRAM_PODF_A1 );
     }
 
     if (!bDone)
