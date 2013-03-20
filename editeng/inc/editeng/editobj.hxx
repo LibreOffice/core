@@ -62,12 +62,12 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
     EditTextObject(); // disabled
 
     EditTextObject( SfxItemPool* pPool );
-    EditTextObject( const EditTextObject& r );
 
     void StoreData( SvStream& rStrm ) const;
     void CreateData( SvStream& rStrm );
 
 public:
+    EditTextObject( const EditTextObject& r );
     virtual ~EditTextObject();
 
     sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
