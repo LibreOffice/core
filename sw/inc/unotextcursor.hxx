@@ -34,10 +34,17 @@
 #include <com/sun/star/text/XWordCursor.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XRedline.hpp>
+#include <com/sun/star/text/XMarkingAccess.hpp>
 
 #include <cppuhelper/implbase13.hxx>
 
 #include <comphelper/uno3.hxx>
+
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
+#include <comphelper/implbase_var.hxx>
+#endif
 
 #include <unobaseclass.hxx>
 #include <TextCursorHelper.hxx>
@@ -47,8 +54,7 @@ class SwDoc;
 struct SwPosition;
 class SwUnoCrsr;
 
-
-typedef ::cppu::WeakImplHelper13
+typedef ::comphelper::WeakImplHelper14
 <   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet
 ,   ::com::sun::star::beans::XPropertyState
@@ -62,6 +68,7 @@ typedef ::cppu::WeakImplHelper13
 ,   ::com::sun::star::text::XWordCursor
 ,   ::com::sun::star::text::XParagraphCursor
 ,   ::com::sun::star::text::XRedline
+,   ::com::sun::star::text::XMarkingAccess
 > SwXTextCursor_Base;
 
 class SwXTextCursor
@@ -361,6 +368,10 @@ public:
                 ::com::sun::star::beans::PropertyValue >& RedlineProperties)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
+
+    //XMarkingAccess
+    virtual void SAL_CALL invalidateMarkings(::sal_Int32 nType)
+    throw (::com::sun::star::uno::RuntimeException);
 
 };
 

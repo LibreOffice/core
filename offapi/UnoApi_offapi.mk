@@ -3732,6 +3732,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	XLineNumberingProperties \
 	XMailMergeBroadcaster \
 	XMailMergeListener \
+	XMarkingAccess \
 	XMultiTextMarkup \
 	XNumberingFormatter \
 	XNumberingRulesSupplier \
