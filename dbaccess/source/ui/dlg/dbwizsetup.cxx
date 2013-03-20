@@ -587,7 +587,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
     }
 
-    if ((_nState != PAGE_DBSETUPWIZARD_INTRO) && (_nState != PAGE_DBSETUPWIZARD_AUTHENTIFICATION))
+    if (pPage && (_nState != PAGE_DBSETUPWIZARD_INTRO) && (_nState != PAGE_DBSETUPWIZARD_AUTHENTIFICATION))
     {
         pPage->SetModifiedHandler(LINK( this, ODbTypeWizDialogSetup, ImplModifiedHdl ) );
     }
