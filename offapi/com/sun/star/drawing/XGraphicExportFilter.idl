@@ -28,7 +28,7 @@
 
 
 /**
-    @since LibreOffcei 4.1
+    @since LibreOffice 4.1
 */
 published interface XGraphicExportFilter
 {
