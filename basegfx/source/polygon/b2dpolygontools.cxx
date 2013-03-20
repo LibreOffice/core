@@ -32,7 +32,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <osl/mutex.hxx>
 
 #include <numeric>
 #include <limits>
@@ -1769,31 +1768,65 @@ namespace basegfx
             return aUnitCircle;
         }
 
+        namespace
+        {
+            struct theUnitHalfCircle :
+                public rtl::StaticWithInit<B2DPolygon, theUnitHalfCircle>
+            {
+                B2DPolygon operator()()
+                {
+                    B2DPolygon aUnitHalfCircle;
+                    const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
+                    const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
+                    const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
+                    B2DPoint aPoint(1.0, 0.0);
+                    B2DPoint aForward(1.0, fScaledKappa);
+                    B2DPoint aBackward(1.0, -fScaledKappa);
+
+                    aUnitHalfCircle.append(aPoint);
+
+                    for(sal_uInt32 a(0); a < STEPSPERQUARTER * 2; a++)
+                    {
+                        aPoint *= aRotateMatrix;
+                        aBackward *= aRotateMatrix;
+                        aUnitHalfCircle.appendBezierSegment(aForward, aBackward, aPoint);
+                        aForward *= aRotateMatrix;
+                    }
+                    return aUnitHalfCircle;
+                }
+            };
+        }
+
         B2DPolygon createHalfUnitCircle()
         {
-            static B2DPolygon aUnitHalfCircle;
+            return theUnitHalfCircle::get();
+        }
 
-            if(!aUnitHalfCircle.count())
+        namespace
+        {
+            struct theUnitCircleStartQuadrantOne :
+                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantOne>
             {
-                const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
-                const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
-                const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
-                B2DPoint aPoint(1.0, 0.0);
-                B2DPoint aForward(1.0, fScaledKappa);
-                B2DPoint aBackward(1.0, -fScaledKappa);
+                B2DPolygon operator()() { return impCreateUnitCircle(1); }
+            };
 
-                aUnitHalfCircle.append(aPoint);
+            struct theUnitCircleStartQuadrantTwo :
+                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantTwo>
+            {
+                B2DPolygon operator()() { return impCreateUnitCircle(2); }
+            };
 
-                for(sal_uInt32 a(0); a < STEPSPERQUARTER * 2; a++)
-                {
-                    aPoint *= aRotateMatrix;
-                    aBackward *= aRotateMatrix;
-                    aUnitHalfCircle.appendBezierSegment(aForward, aBackward, aPoint);
-                    aForward *= aRotateMatrix;
-                }
-            }
+            struct theUnitCircleStartQuadrantThree :
+                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantThree>
+            {
+                B2DPolygon operator()() { return impCreateUnitCircle(3); }
+            };
 
-            return aUnitHalfCircle;
+            struct theUnitCircleStartQuadrantZero :
+                public rtl::StaticWithInit<B2DPolygon, theUnitCircleStartQuadrantZero>
+            {
+                B2DPolygon operator()() { return impCreateUnitCircle(0); }
+            };
         }
 
         B2DPolygon createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant)
@@ -1801,53 +1834,16 @@ namespace basegfx
             switch(nStartQuadrant % 4)
             {
                 case 1 :
-                {
-                    static B2DPolygon aUnitCircleStartQuadrantOne;
+                    return theUnitCircleStartQuadrantOne::get();
 
-                    if(!aUnitCircleStartQuadrantOne.count())
-                    {
-                        ::osl::Mutex m_mutex;
-                        aUnitCircleStartQuadrantOne = impCreateUnitCircle(1);
-                    }
-
-                    return aUnitCircleStartQuadrantOne;
-                }
                 case 2 :
-                {
-                    static B2DPolygon aUnitCircleStartQuadrantTwo;
+                    return theUnitCircleStartQuadrantTwo::get();
 
-                    if(!aUnitCircleStartQuadrantTwo.count())
-                    {
-                        ::osl::Mutex m_mutex;
-                        aUnitCircleStartQuadrantTwo = impCreateUnitCircle(2);
-                    }
-
-                    return aUnitCircleStartQuadrantTwo;
-                }
                 case 3 :
-                {
-                    static B2DPolygon aUnitCircleStartQuadrantThree;
+                    return theUnitCircleStartQuadrantThree::get();
 
-                    if(!aUnitCircleStartQuadrantThree.count())
-                    {
-                        ::osl::Mutex m_mutex;
-                        aUnitCircleStartQuadrantThree = impCreateUnitCircle(3);
-                    }
-
-                    return aUnitCircleStartQuadrantThree;
-                }
                 default : // case 0 :
-                {
-                    static B2DPolygon aUnitCircleStartQuadrantZero;
-
-                    if(!aUnitCircleStartQuadrantZero.count())
-                    {
-                        ::osl::Mutex m_mutex;
-                        aUnitCircleStartQuadrantZero = impCreateUnitCircle(0);
-                    }
-
-                    return aUnitCircleStartQuadrantZero;
-                }
+                    return theUnitCircleStartQuadrantZero::get();
             }
         }
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/instance.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
@@ -25,7 +26,6 @@
 #include <numeric>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <osl/mutex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -53,127 +53,139 @@ namespace basegfx
             return aRetval;
         }
 
+        namespace
+        {
+            struct theUnitCubePolyPolygon : public rtl::StaticWithInit<B3DPolyPolygon,
+                                                                       theUnitCubePolyPolygon>
+            {
+                B3DPolyPolygon operator()()
+                {
+                    B3DPolyPolygon aRetval;
+                    B3DPolygon aTemp;
+                    aTemp.append(B3DPoint(0.0, 0.0, 1.0));
+                    aTemp.append(B3DPoint(0.0, 1.0, 1.0));
+                    aTemp.append(B3DPoint(1.0, 1.0, 1.0));
+                    aTemp.append(B3DPoint(1.0, 0.0, 1.0));
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
+
+                    aTemp.clear();
+                    aTemp.append(B3DPoint(0.0, 0.0, 0.0));
+                    aTemp.append(B3DPoint(0.0, 1.0, 0.0));
+                    aTemp.append(B3DPoint(1.0, 1.0, 0.0));
+                    aTemp.append(B3DPoint(1.0, 0.0, 0.0));
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
+
+                    aTemp.clear();
+                    aTemp.append(B3DPoint(0.0, 0.0, 0.0));
+                    aTemp.append(B3DPoint(0.0, 0.0, 1.0));
+                    aRetval.append(aTemp);
+
+                    aTemp.clear();
+                    aTemp.append(B3DPoint(0.0, 1.0, 0.0));
+                    aTemp.append(B3DPoint(0.0, 1.0, 1.0));
+                    aRetval.append(aTemp);
+
+                    aTemp.clear();
+                    aTemp.append(B3DPoint(1.0, 1.0, 0.0));
+                    aTemp.append(B3DPoint(1.0, 1.0, 1.0));
+                    aRetval.append(aTemp);
+
+                    aTemp.clear();
+                    aTemp.append(B3DPoint(1.0, 0.0, 0.0));
+                    aTemp.append(B3DPoint(1.0, 0.0, 1.0));
+                    aRetval.append(aTemp);
+                    return aRetval;
+                }
+            };
+        }
+
         B3DPolyPolygon createUnitCubePolyPolygon()
         {
-            static B3DPolyPolygon aRetval;
-            ::osl::Mutex m_mutex;
+            return theUnitCubePolyPolygon::get();
+        }
 
-            if(!aRetval.count())
+        namespace
+        {
+            struct theUnitCubeFillPolyPolygon : public rtl::StaticWithInit<B3DPolyPolygon,
+                                                                           theUnitCubeFillPolyPolygon>
             {
-                B3DPolygon aTemp;
-                aTemp.append(B3DPoint(0.0, 0.0, 1.0));
-                aTemp.append(B3DPoint(0.0, 1.0, 1.0));
-                aTemp.append(B3DPoint(1.0, 1.0, 1.0));
-                aTemp.append(B3DPoint(1.0, 0.0, 1.0));
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
+                B3DPolyPolygon operator()()
+                {
+                    B3DPolyPolygon aRetval;
+                    B3DPolygon aTemp;
 
-                aTemp.clear();
-                aTemp.append(B3DPoint(0.0, 0.0, 0.0));
-                aTemp.append(B3DPoint(0.0, 1.0, 0.0));
-                aTemp.append(B3DPoint(1.0, 1.0, 0.0));
-                aTemp.append(B3DPoint(1.0, 0.0, 0.0));
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
+                    // all points
+                    const B3DPoint A(0.0, 0.0, 0.0);
+                    const B3DPoint B(0.0, 1.0, 0.0);
+                    const B3DPoint C(1.0, 1.0, 0.0);
+                    const B3DPoint D(1.0, 0.0, 0.0);
+                    const B3DPoint E(0.0, 0.0, 1.0);
+                    const B3DPoint F(0.0, 1.0, 1.0);
+                    const B3DPoint G(1.0, 1.0, 1.0);
+                    const B3DPoint H(1.0, 0.0, 1.0);
 
-                aTemp.clear();
-                aTemp.append(B3DPoint(0.0, 0.0, 0.0));
-                aTemp.append(B3DPoint(0.0, 0.0, 1.0));
-                aRetval.append(aTemp);
+                    // create bottom
+                    aTemp.append(D);
+                    aTemp.append(A);
+                    aTemp.append(E);
+                    aTemp.append(H);
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
 
-                aTemp.clear();
-                aTemp.append(B3DPoint(0.0, 1.0, 0.0));
-                aTemp.append(B3DPoint(0.0, 1.0, 1.0));
-                aRetval.append(aTemp);
+                    // create front
+                    aTemp.clear();
+                    aTemp.append(B);
+                    aTemp.append(A);
+                    aTemp.append(D);
+                    aTemp.append(C);
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
 
-                aTemp.clear();
-                aTemp.append(B3DPoint(1.0, 1.0, 0.0));
-                aTemp.append(B3DPoint(1.0, 1.0, 1.0));
-                aRetval.append(aTemp);
+                    // create left
+                    aTemp.clear();
+                    aTemp.append(E);
+                    aTemp.append(A);
+                    aTemp.append(B);
+                    aTemp.append(F);
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
 
-                aTemp.clear();
-                aTemp.append(B3DPoint(1.0, 0.0, 0.0));
-                aTemp.append(B3DPoint(1.0, 0.0, 1.0));
-                aRetval.append(aTemp);
-            }
+                    // create top
+                    aTemp.clear();
+                    aTemp.append(C);
+                    aTemp.append(G);
+                    aTemp.append(F);
+                    aTemp.append(B);
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
 
-            return aRetval;
+                    // create right
+                    aTemp.clear();
+                    aTemp.append(H);
+                    aTemp.append(G);
+                    aTemp.append(C);
+                    aTemp.append(D);
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
+
+                    // create back
+                    aTemp.clear();
+                    aTemp.append(F);
+                    aTemp.append(G);
+                    aTemp.append(H);
+                    aTemp.append(E);
+                    aTemp.setClosed(true);
+                    aRetval.append(aTemp);
+                    return aRetval;
+                }
+            };
         }
 
         B3DPolyPolygon createUnitCubeFillPolyPolygon()
         {
-            static B3DPolyPolygon aRetval;
-            ::osl::Mutex m_mutex;
-
-            if(!aRetval.count())
-            {
-                B3DPolygon aTemp;
-
-                // all points
-                const B3DPoint A(0.0, 0.0, 0.0);
-                const B3DPoint B(0.0, 1.0, 0.0);
-                const B3DPoint C(1.0, 1.0, 0.0);
-                const B3DPoint D(1.0, 0.0, 0.0);
-                const B3DPoint E(0.0, 0.0, 1.0);
-                const B3DPoint F(0.0, 1.0, 1.0);
-                const B3DPoint G(1.0, 1.0, 1.0);
-                const B3DPoint H(1.0, 0.0, 1.0);
-
-                // create bottom
-                aTemp.append(D);
-                aTemp.append(A);
-                aTemp.append(E);
-                aTemp.append(H);
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
-
-                // create front
-                aTemp.clear();
-                aTemp.append(B);
-                aTemp.append(A);
-                aTemp.append(D);
-                aTemp.append(C);
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
-
-                // create left
-                aTemp.clear();
-                aTemp.append(E);
-                aTemp.append(A);
-                aTemp.append(B);
-                aTemp.append(F);
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
-
-                // create top
-                aTemp.clear();
-                aTemp.append(C);
-                aTemp.append(G);
-                aTemp.append(F);
-                aTemp.append(B);
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
-
-                // create right
-                aTemp.clear();
-                aTemp.append(H);
-                aTemp.append(G);
-                aTemp.append(C);
-                aTemp.append(D);
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
-
-                // create back
-                aTemp.clear();
-                aTemp.append(F);
-                aTemp.append(G);
-                aTemp.append(H);
-                aTemp.append(E);
-                aTemp.setClosed(true);
-                aRetval.append(aTemp);
-            }
-
-            return aRetval;
+            return theUnitCubeFillPolyPolygon::get();
         }
 
         B3DPolyPolygon createCubePolyPolygonFromB3DRange( const B3DRange& rRange)
