@@ -70,8 +70,8 @@
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
 #include <shellio.hxx>
-#include <uinums.hxx>  // fuer Anwenden einer
-#include <swundo.hxx>  // fuer Undo-Ids
+#include <uinums.hxx>
+#include <swundo.hxx>  // for Undo-Ids
 #include <swcli.hxx>
 #include <poolfmt.hxx>
 #include <wview.hxx>
@@ -133,7 +133,6 @@ using namespace com::sun::star;
         mbRetainSelection = sal_False; \
         bIsInClickToEdit = false;
 
-
 static SvxAutoCorrect* lcl_IsAutoCorr()
 {
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -150,8 +149,6 @@ void SwWrtShell::NoEdit(bool bHideCrsr)
         HideCrsr();
 }
 
-
-
 void SwWrtShell::Edit()
 {
     if (CanInsert())
@@ -159,8 +156,6 @@ void SwWrtShell::Edit()
         ShowCrsr();
     }
 }
-
-
 
 sal_Bool SwWrtShell::IsEndWrd()
 {
@@ -171,10 +166,7 @@ sal_Bool SwWrtShell::IsEndWrd()
     return IsEndWord();
 }
 
-
-/*------------------------------------------------------------------------
- Beschreibung:  String einfuegen
-------------------------------------------------------------------------*/
+// Insert string
 
 void SwWrtShell::InsertByWord( const String & rStr)
 {
@@ -196,7 +188,6 @@ void SwWrtShell::InsertByWord( const String & rStr)
     }
 }
 
-
 void SwWrtShell::Insert( const String &rStr )
 {
     ResetCursorStack();
@@ -210,8 +201,8 @@ void SwWrtShell::Insert( const String &rStr )
 
     if( bHasSel || ( !bIns && SelectHiddenRange() ) )
     {
-            // nur hier klammern, da das normale Insert schon an der
-            // Editshell geklammert ist
+            // Only here parenthesizing, because the normal
+            // insert is already in parentheses at Editshell.
         StartAllAction();
 
         // #111827#
@@ -236,7 +227,6 @@ void SwWrtShell::Insert( const String &rStr )
     bCallIns ?
         SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
 
-
     if( bStarted )
     {
         EndAllAction();
@@ -244,10 +234,8 @@ void SwWrtShell::Insert( const String &rStr )
     }
 }
 
-/* Begrenzung auf maximale Hoehe geht nicht, da die maximale Hoehe
- * des aktuellen Frames nicht erfragt werden kann. */
-
-
+// Maximum height limit not possible, because the maximum height
+// of the current frame can not be obtained.
 
 void SwWrtShell::Insert( const String &rPath, const String &rFilter,
                          const Graphic &rGrf, SwFlyFrmAttrMgr *pFrmMgr,
@@ -266,8 +254,8 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
 
     if ( HasSelection() )
         DelRight();
-        // eingefuegte Grafik in eigenen Absatz, falls am Ende
-        // eines nichtleeren Absatzes
+        // Inserted graphics in its own paragraph,
+        // if at the end of a non-empty paragraph.
     //For i120928,avoid to split node
 
     EnterSelFrmMode();
@@ -280,11 +268,11 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
         bOwnMgr = true;
         pFrmMgr = new SwFlyFrmAttrMgr( sal_True, this, FRMMGR_TYPE_GRF );
 
-        // VORSICHT
-        // GetAttrSet nimmt einen Abgleich vor
-        // Beim Einfuegen ist eine SwFrmSize vorhanden wegen der
-        // DEF-Rahmengroesse
-        // Diese muss fuer die optimale Groesse explizit entfernt werden
+        // CAUTION
+        // GetAttrSet makes an adjustment
+        // While pasting is a SwFrmSize present
+        // because of the DEF-Framesize
+        // These must be removed explicitly for the optimal size.
         pFrmMgr->DelAttr(RES_FRM_SIZE);
     }
     else
@@ -302,7 +290,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
 
     }
 
-    // Einfuegen der Grafik
+    // Insert the graphic
     SwFEShell::Insert(rPath, rFilter, &rGrf, &pFrmMgr->GetAttrSet());
     if ( bOwnMgr )
         pFrmMgr->UpdateAttrMgr();
@@ -312,21 +300,21 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
         Size aGrfSize, aBound = GetGraphicDefaultSize();
         GetGrfSize( aGrfSize );
 
-        //Die GrafikSize noch um die Randattribute vergroessern, denn die
-        //Zaehlen beim Rahmen mit.
+        // Add the margin attributes to GrfSize,
+        // because these counts at the margin additionaly
         aGrfSize.Width() += pFrmMgr->CalcWidthBorder();
         aGrfSize.Height()+= pFrmMgr->CalcHeightBorder();
 
         const BigInt aTempWidth( aGrfSize.Width() );
         const BigInt aTempHeight( aGrfSize.Height());
 
-        // ggf. Breite anpassen, Hoehe dann proportional verkleinern
+        // Fit width if necessary, scale down the height proportional thereafter.
         if( aGrfSize.Width() > aBound.Width() )
         {
             aGrfSize.Width()  = aBound.Width();
             aGrfSize.Height() = ((BigInt)aBound.Width()) * aTempHeight / aTempWidth;
         }
-        // ggf. Hoehe anpassen, Breite dann proportional verkleinern
+        // Fit hight if necessary, scale down the width proportional thereafter.
         if( aGrfSize.Height() > aBound.Height() )
         {
             aGrfSize.Height() = aBound.Height();
@@ -342,12 +330,8 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
     EndAllAction();
 }
 
-
-/*------------------------------------------------------------------------
-   Beschreibung: Fuegt ein OLE-Objekt in die CORE ein.
-                 Wenn kein Object uebergeben wird, so wird eins erzeugt.
-------------------------------------------------------------------------*/
-
+// Insert an OLE-Objekt into the CORE.
+// if no object is transfered, then one will be created.
 
 void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName *pName,
                             sal_Bool bActivate, sal_uInt16 nSlotId )
@@ -454,10 +438,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:   Object in die Core einfuegen.
-                 Vom ClipBoard oder Insert
-------------------------------------------------------------------------*/
+// Insert object into the Core.
+// From ClipBoard or Insert
 
 sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFmt **pFlyFrmFmt )
 {
@@ -528,7 +510,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     //Object size can be limited
     if ( aSz.Width() > aBound.Width() )
     {
-        //Immer proportional begrenzen.
+        //Always limit proportional.
         aSz.Height() = aSz.Height() * aBound.Width() / aSz.Width();
         aSz.Width() = aBound.Width();
     }
@@ -584,12 +566,8 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     return bActivate;
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung: Das aktuelle selektierte OLE-Objekt wird mit dem
-                  Verb in den Server geladen.
-------------------------------------------------------------------------*/
-
-
+// The current selected OLE object will be loaded with the
+// verb into the server.
 
 void SwWrtShell::LaunchOLEObj( long nVerb )
 {
@@ -637,14 +615,13 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
     }
 }
 
-
 void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect,
                                   const SwRect *pFlyFrmRect,
                                   const bool bNoTxtFrmPrtAreaChanged )
 {
-    //Einstellen der Skalierung am Client. Diese ergibt sich aus der Differenz
-    //zwischen der VisArea des Objektes und der ObjArea.
+    // Setting the scale of the client. This arises from the difference
+    // between the VisArea of the object and the ObjArea.
     OSL_ENSURE( xObj.is(), "ObjectRef not  valid" );
 
     sal_Int64 nAspect = xObj.GetViewAspect();
@@ -658,8 +635,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     {
         nMisc = xObj->getStatus( nAspect );
 
-        //Das kann ja wohl nur ein nicht aktives Objekt sein. Diese bekommen
-        //auf Wunsch die neue Groesse als VisArea gesetzt (StarChart)
+        // This can surely only be a non-active object, if desired they
+        // get the new size set as VisArea (StarChart).
         if( embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc )
         {
             // TODO/MBA: testing
@@ -763,8 +740,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     bool bUseObjectSize = false;
 
-    // solange keine vernuenftige Size vom Object kommt, kann nichts
-    // skaliert werden
+    // As long as there comes no reasonable size from the object,
+    // nothing can be scaled.
     if( _aVisArea.Width() && _aVisArea.Height() )
     {
         const MapMode aTmp( MAP_TWIP );
@@ -803,15 +780,16 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                     SwRect aTmp( Point( LONG_MIN, LONG_MIN ), _aVisArea );
                     RequestObjectResize( aTmp, xObj );
                 }
-                //Der Rest erledigt sich, weil wir eh wiederkommen sollten, evtl.
-                //sogar rekursiv.
+                // The rest will be done, because we need to come back anyway,
+                // possibly even recursively.
                 return;
             }
             else*/
 
             if ( nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE )
             {
-                // the object must not be scaled, the size stored in object must be used for restoring
+                // the object must not be scaled,
+                // the size stored in object must be used for restoring
                 bUseObjectSize = true;
             }
             else
@@ -822,8 +800,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         }
     }
 
-    //Jetzt ist auch der guenstige Zeitpunkt die ObjArea einzustellen.
-    //Die Scalierung muss beruecksichtigt werden.
+    // Now is the favorable time to set the ObjArea.
+    // The Scaling must be considered.
     SwRect aArea;
     if ( pFlyPrtRect )
     {
@@ -872,12 +850,8 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
     CalcAndSetScale( xObj, &rPrt, &rFrm );
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Einfuegen harter Seitenumbruch;
-                Selektionen werden ueberschrieben
-------------------------------------------------------------------------*/
-
-
+// Insert hard page break;
+// Selections will be overwritten
 
 void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
 {
@@ -909,11 +883,9 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
         EndUndo(UNDO_UI_INSERT_PAGE_BREAK);
     }
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Einfuegen harter Zeilenumbruch;
-                Selektionen werden ueberschrieben
-------------------------------------------------------------------------*/
 
+// Insert hard page break;
+// Selections will be overwritten
 
 void SwWrtShell::InsertLineBreak()
 {
@@ -931,11 +903,9 @@ void SwWrtShell::InsertLineBreak()
             SwWrtShell::Insert( rtl::OUString( cIns ) );
     }
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Einfuegen harter Spaltenumbruch;
-                Selektionen werden ueberschrieben
-------------------------------------------------------------------------*/
 
+// Insert hard column break;
+// Selections will be overwritten
 
 void SwWrtShell::InsertColumnBreak()
 {
@@ -957,11 +927,8 @@ void SwWrtShell::InsertColumnBreak()
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Einfuegen Fussnote
- Parameter:     rStr -- optionales Fussnotenzeichen
-------------------------------------------------------------------------*/
-
+// Insert footnote
+// rStr - optional footnote mark
 
 void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool bEdit )
 {
@@ -984,19 +951,17 @@ void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool 
 
         if( bEdit )
         {
-            // zur Bearbeiung des Fussnotentextes
+            // For editing the footnote text.
             Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
             GotoFtnTxt();
         }
         aNavigationMgr.addEntry(aPos);
     }
 }
-/*------------------------------------------------------------------------
- Beschreibung:  SplitNode; hier auch, da
-                    - selektierter Inhalt geloescht wird;
-                    - der Cursorstack gfs. zurueckgesetzt wird.
-------------------------------------------------------------------------*/
 
+// SplitNode; also, because
+//                  - of deleting selected content;
+//                  - of reset of the Cursorstack if necessary.
 
 void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 {
@@ -1019,16 +984,13 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Numerierung anschalten
- Parameter:     Optionale Angabe eines Namens fuer die benannte Liste;
-                dieser bezeichnet eine Position, wenn er in eine
-                Zahl konvertierbar ist und kleiner ist als nMaxRules.
--------------------------------------------------------------------------*/
-
+// Turn on numbering
+// Parameter:   Optional specification of a name for the named list;
+//              this indicates a position if it is possible to convert them
+//              into a number and less than nMaxRules.
 
 // zum Testen der CharFormate an der Numerierung
-// extern void SetNumChrFmt( SwWrtShell*, SwNumRules& );
+// external void SetNumChrFmt( SwWrtShell*, SwNumRules& );
 
 // -> #i40041#
 // Preconditions (as far as OD has figured out):
@@ -1239,7 +1201,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                     numfunc::GetDefaultPositionAndSpaceMode() );
         SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
-        // Zeichenvorlage an die Numerierung haengen
+        // Append the character template at the numbering.
         SwCharFmt* pChrFmt;
         SwDocShell* pDocSh = GetView().GetDocShell();
         // #i63395#
@@ -1290,7 +1252,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             {
                 if(bHtml && nLvl)
                 {
-                    // 1/2" fuer HTML
+                    // 1/2" for HTML
                     aFmt.SetLSpace(720);
                     aFmt.SetAbsLSpace(nLvl * 720);
                 }
@@ -1385,23 +1347,19 @@ void SwWrtShell::NumOrBulletOff()
 }
 // <- #i29560#
 
-/*------------------------------------------------------------------------
- Beschreibung:  Default-Bulletliste erfragen
-------------------------------------------------------------------------*/
+// Request Default-Bulletlist
 
 void SwWrtShell::BulletOn()
 {
     NumOrBulletOn(sal_False);
 }
 
-
-
 SelectionType SwWrtShell::GetSelectionType() const
 {
-    // ContentType kann nicht ermittelt werden innerhalb einer
-    // Start-/Endactionklammerung.
-    // Da es keinen ungueltigen Wert gibt, wird TEXT geliefert.
-    // Der Wert ist egal, da in EndAction ohnehin aktualisiert wird.
+    // ContentType cannot be determined within a
+    // Start-/Endaction parentheses.
+    // Because there is no invalid value TEXT will be returned.
+    // The value does not matter, it may be updated in endaction anyway.
 
     if ( BasicActionPend() )
         return IsSelFrmMode() ? nsSelectionType::SEL_FRM : nsSelectionType::SEL_TXT;
@@ -1411,7 +1369,7 @@ SelectionType SwWrtShell::GetSelectionType() const
         return nsSelectionType::SEL_POSTIT;
      int nCnt;
 
-    // Rahmen einfuegen ist kein DrawMode
+    // Inserting a frame is not a DrawMode
     if ( !_rView.GetEditWin().IsFrmAction() &&
             (IsObjSelected() || (_rView.IsDrawMode() && !IsFrmSelected()) ))
     {
@@ -1419,10 +1377,10 @@ SelectionType SwWrtShell::GetSelectionType() const
             nCnt = nsSelectionType::SEL_DRW_TXT;
         else
         {
-            if (GetView().IsFormMode()) // Nur Forms selektiert
+            if (GetView().IsFormMode()) // Only Form selected
                 nCnt = nsSelectionType::SEL_DRW_FORM;
             else
-                nCnt = nsSelectionType::SEL_DRW;            // Irgendein Draw-Objekt
+                nCnt = nsSelectionType::SEL_DRW;            // Any draw object
 
             if (_rView.IsBezierEditMode())
                 nCnt |= nsSelectionType::SEL_BEZ;
@@ -1451,7 +1409,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( IsFrmSelected() )
     {
         if (_rView.IsDrawMode())
-            _rView.LeaveDrawCreate();   // Aufraeumen (Bug #45639)
+            _rView.LeaveDrawCreate();   // clean up (Bug #45639)
         if ( !(nCnt & (CNT_GRF | CNT_OLE)) )
             return nsSelectionType::SEL_FRM;
     }
@@ -1482,13 +1440,10 @@ SelectionType SwWrtShell::GetSelectionType() const
     return nCnt;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Finden der TextCollection mit dem Name rCollname
- Return:                Pointer auf die Collection oder 0, wenn keine
-                                TextCollection mit diesem Namen existiert oder
-                                diese eine Defaultvorlage ist.
-------------------------------------------------------------------------*/
-
+// Find the text collection with the name rCollname
+// Returns:   Pointer at the collection or 0, if no
+//            text collection with this name exists, or
+//            this is a default template.
 
 SwTxtFmtColl *SwWrtShell::GetParaStyle(const String &rCollName, GetStyle eCreate )
 {
@@ -1501,14 +1456,11 @@ SwTxtFmtColl *SwWrtShell::GetParaStyle(const String &rCollName, GetStyle eCreate
     }
     return pColl;
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Finden der Zeichenvorlage mit dem Name rCollname
- Return:                Pointer auf die Collection oder 0, wenn keine
-                                Zeichenvorlage mit diesem Namen existiert oder
-                                diese eine Defaultvorlage oder automatische Vorlage ist.
-------------------------------------------------------------------------*/
 
-
+// Find the text collection with the name rCollname
+// Returns:   Pointer at the collection or 0, if no
+//            character template with this name exists, or
+//            this is a default template or template is automatic.
 
 SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
 {
@@ -1522,14 +1474,10 @@ SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
     return pFmt;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Finden des Tabellenformates mit dem Name rFmtname
- Return:                Pointer auf das Format oder 0, wenn kein
-                                Rahmenformat mit diesem Namen existiert oder
-                                dieses eine Defaultformat oder automatisches Format ist.
-------------------------------------------------------------------------*/
-
-
+// Find the table format with the name rFmtname
+// Returns:   Pointer at the collection or 0, if no
+//            frame format with this name exists or
+//            this is a default format or the format is automatic.
 
 SwFrmFmt *SwWrtShell::GetTblStyle(const String &rFmtName)
 {
@@ -1549,11 +1497,8 @@ void SwWrtShell::addCurrentPosition() {
     SwPaM* pPaM = GetCrsr();
     aNavigationMgr.addEntry(*pPaM->GetPoint());
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Anwenden der Vorlagen
-------------------------------------------------------------------------*/
 
-
+// Applying templates
 
 void SwWrtShell::SetPageStyle(const String &rCollName)
 {
@@ -1565,36 +1510,27 @@ void SwWrtShell::SetPageStyle(const String &rCollName)
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Zugriff Vorlagen
-------------------------------------------------------------------------*/
-
-
+// Access templates
 
 String SwWrtShell::GetCurPageStyle( const sal_Bool bCalcFrm ) const
 {
     return GetPageDesc(GetCurPageDesc( bCalcFrm )).GetName();
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Aktuelle Vorlage anhand der geltenden Attribute aendern
-------------------------------------------------------------------------*/
-
+// Change the current template referring to the existing change.
 
 void SwWrtShell::QuickUpdateStyle()
 {
     SwTxtFmtColl *pColl = GetCurTxtFmtColl();
 
-    // Standard kann nicht geaendert werden
+    // Default cannot be changed
     if(pColl && !pColl->IsDefault())
     {
         FillByEx(pColl);
-            // Vorlage auch anwenden, um harte Attributierung
-            // zu entfernen
+            // Also apply the template to remove hard attribute assignment.
         SetTxtFmtColl(pColl);
     }
 }
-
 
 void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM )
 {
@@ -1657,8 +1593,8 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
         bool bStarted = false;
         if(HasSelection())
         {
-                // nur hier klammern, da das normale Insert schon an der
-                // Editshell geklammert ist
+                // Only parenthese here, because the regular insert
+                // is already clipped to the editshell
             StartAllAction();
             StartUndo(UNDO_INSERT);
             bStarted = true;
@@ -1674,10 +1610,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
     }
 }
 
-
-/*
- * eine Art kontrollierter copy ctor
- */
+// Some kind of controlled copy ctor
 
 SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *_pWin, SwView &rShell )
     : SwFEShell( rSh, _pWin ),
@@ -1714,12 +1647,6 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, Window *_pWin, SwView &rShell,
     }
 }
 
-/*
- * ctor
- */
-
-
-
 SwWrtShell::~SwWrtShell()
 {
     SET_CURR_SHELL( this );
@@ -1746,7 +1673,6 @@ bool SwWrtShell::CanInsert()
     return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
 
-// --------------
 void SwWrtShell::ChgDBData(const SwDBData& aDBData)
 {
     SwEditShell::ChgDBData(aDBData);
@@ -1800,10 +1726,9 @@ void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
     ViewShell::SetReadonlyOption( bSet );
 }
 
-/*
- *  Switch on/off header or footer of a page style - if an empty name is
- *  given all styles are changed
- */
+// Switch on/off header or footer of a page style - if an empty name is
+// given all styles are changed
+
 void SwWrtShell::ChangeHeaderOrFooter(
     const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
 {
