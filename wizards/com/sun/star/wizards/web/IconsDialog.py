@@ -15,10 +15,12 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ImageListDialog import *
-from ImageListDialog import *
-from WWHID import HID_IS
-from common.FileAccess import FileAccess
+
+from .ImageListDialog import ImageListDialog
+from .WWHID import HID_IS
+from ..common.FileAccess import FileAccess
+
+from com.sun.star.awt import Size
 
 '''
 @author rpiterman
@@ -61,10 +63,10 @@ class IconsDialog(ImageListDialog):
         self.build()
 
     def getIconset(self):
-        if getSelected() is None:
+        if self.getSelected() is None:
             return None
         else:
-            return self.set.getKey((getSelected()) / len(self.icons))
+            return self.set.getKey((self.getSelected()) / len(self.icons))
 
     def setIconset(self, iconset):
         #COMMENTED
@@ -86,29 +88,28 @@ class IconsDialog(ImageListDialog):
         icon = getIconNum(i)
         sRetUrls = range(2)
         sRetUrls[0] = self.htmlexpDirectory + "/htmlexpo/" \
-            + getIconsetPref(iset) + self.icons[icon] + getIconsetPostfix(iset)
+            + self.getIconsetPref(iset) + self.icons[icon] + self.getIconsetPostfix(iset)
         sRetUrls[1] = sRetUrls[0]
         return sRetUrls
 
     def render(self, object):
         if object is None:
             return ""
-
         i = (object).intValue()
-        iset = getIconsetNum(i)
-        return getIconset(iset).cp_Name
+        iset = self.getIconsetNum(i)
+        return self.getIconset1(iset).cp_Name
 
     def getIconsetNum(self, i):
         return i / self.icons.length
 
     def getIconNum(self, i):
-        return i % self.icons.length
+        return i % len(self.icons)
 
     def getIconsetPref(self, iconset):
-        return getIconset(iconset).cp_FNPrefix
+        return self.getIconset1(iconset).cp_FNPrefix
 
     def getIconsetPostfix(self, iconset):
-        return getIconset(iconset).cp_FNPostfix
+        return self.getIconset1(iconset).cp_FNPostfix
 
-    def getIconset(self, i):
+    def getIconset1(self, i):
         return self.set.getElementAt(i)
