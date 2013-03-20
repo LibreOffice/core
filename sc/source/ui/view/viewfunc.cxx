@@ -520,7 +520,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                         if(pCell->GetCode()->IsHyperLink())
                             pCell->GetCode()->SetHyperLink(false);
                     }
-                    rFunc.PutCell( aPos, pCell, sal_False );
+                    rFunc.SetFormulaCell(aPos, pCell, true);
                 }
             }
         }

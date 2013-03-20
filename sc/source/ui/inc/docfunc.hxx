@@ -39,6 +39,7 @@ class ScPatternAttr;
 class ScRange;
 class ScRangeList;
 class ScBaseCell;
+class ScFormulaCell;
 class ScTokenArray;
 struct ScTabOpParam;
 class ScTableProtection;
@@ -91,6 +92,12 @@ public:
     virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
+
+    /**
+     * This method takes ownership of the formula cell instance. The caller
+     * must not delete it after passing it to this call.
+     */
+    virtual bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
     virtual sal_Bool        PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool        PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                       sal_Bool bInterpret, sal_Bool bApi );

@@ -68,6 +68,11 @@ void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
             mpDirect->SetEditCell(
                 aReader.getAddress(1), aReader.getEdit(2), aReader.getBool(3));
         }
+        else if (aReader.getMethod() == "setFormulaCell")
+        {
+            mpDirect->SetFormulaCell(
+                aReader.getAddress(1), aReader.getFormulaCell(2), aReader.getBool(3));
+        }
         else if ( aReader.getMethod() == "enterListAction" )
             mpDirect->EnterListAction( aReader.getInt( 1 ) );
         else if ( aReader.getMethod() == "endListAction" )
@@ -171,6 +176,17 @@ bool ScDocFuncSend::SetEditCell( const ScAddress& rPos, const EditTextObject& rS
     return true; // needs some code auditing action
 }
 
+bool ScDocFuncSend::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction )
+{
+    ScChangeOpWriter aOp("setFormulaCell");
+    aOp.appendAddress( rPos );
+    aOp.appendFormulaCell( pCell );
+    aOp.appendBool( bInteraction );
+    SendMessage( aOp );
+    pCell->Delete();
+    return true; // needs some code auditing action
+}
+
 sal_Bool ScDocFuncSend::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
 {
     ScChangeOpWriter aOp( "putCell" );
@@ -178,6 +194,7 @@ sal_Bool ScDocFuncSend::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sa
     aOp.appendCell( pNewCell );
     aOp.appendBool( bApi );
     SendMessage( aOp );
+    pCell->Delete();
     return true; // needs some code auditing action
 }
 

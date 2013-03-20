@@ -6576,7 +6576,7 @@ void SAL_CALL ScCellObj::setFormulaString( const rtl::OUString& aFormula) throw(
     {
         ScFormulaCell* pCell = new ScFormulaCell( pDocSh->GetDocument(), aCellPos );
         pCell->SetHybridFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE );
-        pDocSh->GetDocFunc().PutCell( aCellPos, pCell, sal_True );
+        pDocSh->GetDocFunc().SetFormulaCell(aCellPos, pCell, false);
     }
 }
 void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeException)
@@ -6690,8 +6690,8 @@ void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rT
         ScTokenArray aTokenArray;
         (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, rTokens );
 
-        ScBaseCell* pNewCell = new ScFormulaCell( pDoc, aCellPos, &aTokenArray );
-        (void)pDocSh->GetDocFunc().PutCell( aCellPos, pNewCell, sal_True );
+        ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aCellPos, &aTokenArray );
+        (void)pDocSh->GetDocFunc().SetFormulaCell(aCellPos, pNewCell, false);
     }
 }
 

@@ -931,6 +931,35 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
     return true;
 }
 
+bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction )
+{
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr<ScFormulaCell> xCell(pCell);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+
+    ScDocShellModificator aModificator( rDocShell );
+    ScDocument* pDoc = rDocShell.GetDocument();
+    bool bUndo = pDoc->IsUndoEnabled();
+
+    bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
+
+    if (bUndo)
+        pushUndoSetCell(rDocShell, pDoc, rPos, *xCell);
+
+    pDoc->SetFormulaCell(rPos, xCell.release());
+
+    if (bHeight)
+        AdjustRowHeight(rPos);
+
+    aModificator.SetDocumentModified();
+
+    // #103934#; notify editline and cell in edit mode
+    if (!bInteraction)
+        NotifyInputHandler( rPos );
+
+    return true;
+}
+
 sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );

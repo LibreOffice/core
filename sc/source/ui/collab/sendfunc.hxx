@@ -24,6 +24,12 @@ rtl::OUString cellToString( ScBaseCell *pCell )
     return rtl::OUString();
 }
 
+OUString formulaCellToString( ScFormulaCell *pCell )
+{
+    (void)pCell; // FIXME: implement me
+    return OUString();
+}
+
 OUString editToString( const EditTextObject& /*rEditText*/ )
 {
     // FIXME: implement me.
@@ -36,7 +42,13 @@ EditTextObject stringToEdit( const OUString& rStr )
     return EditTextObject();
 }
 
-ScBaseCell *stringToCell( const rtl::OUString &rString )
+ScBaseCell* stringToCell( const rtl::OUString &rString )
+{
+    (void)rString; // FIXME: implement me
+    return NULL;
+}
+
+ScFormulaCell* stringToFormulaCell( const OUString &rString )
 {
     (void)rString; // FIXME: implement me
     return NULL;
@@ -96,6 +108,11 @@ public:
     void appendCell( ScBaseCell *pCell )
     {
         appendString( cellToString( pCell ) );
+    }
+
+    void appendFormulaCell( ScFormulaCell *pCell )
+    {
+        appendString( formulaCellToString( pCell ) );
     }
 
     void appendEditText( const EditTextObject& rStr )
@@ -219,6 +236,11 @@ public:
         return stringToCell( getString( n ) );
     }
 
+    ScFormulaCell* getFormulaCell( sal_Int32 n )
+    {
+        return stringToFormulaCell( getString( n ) );
+    }
+
     double getDouble( sal_Int32 n )
     {
         return getString(n).toDouble();
@@ -254,6 +276,7 @@ public:
     virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
+    virtual bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
     virtual sal_Bool    PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool    PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 sal_Bool bInterpret, sal_Bool bApi );
