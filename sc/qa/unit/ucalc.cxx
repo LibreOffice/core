@@ -6229,7 +6229,7 @@ void Test::testFormulaGrouping()
 
     static const struct {
         const char *pFormula[3];
-        const bool  bGroup[3];
+        bool  bGroup[3];
     } aGroupTests[] = {
         { { "=SUM(B1)",  "=SUM(C1)",    "" },            // single increments
           { true,        true,          false } },
