@@ -732,12 +732,19 @@ public:
       127. The ASCII string must be NULL-terminated.
       This function can't be used for language specific sorting.
 
+      @deprecated  This is a confusing overload with unexpectedly different
+      semantics from the one-parameter form, so it is marked as deprecated.
+      Practically all uses compare the return value against zero and can thus
+      be replaced with uses of startsWith.
+
       @param  asciiStr          the 8-Bit ASCII character string to be compared.
       @param  maxLength         the maximum count of characters to be compared.
       @return   0 - if both strings are equal
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
+    SAL_DEPRECATED(
+        "replace s1.compareToAscii(s2, strlen(s2)) == 0 with s1.startsWith(s2)")
     sal_Int32 compareToAscii( const sal_Char * asciiStr, sal_Int32 maxLength ) const SAL_THROW(())
     {
         return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer, pData->length,

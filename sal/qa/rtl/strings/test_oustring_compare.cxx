@@ -30,13 +30,10 @@ class Compare: public CppUnit::TestFixture
 private:
     void equalsIgnoreAsciiCaseAscii();
 
-    void compareToAscii();
-
     void compareToIgnoreAsciiCase();
 
 CPPUNIT_TEST_SUITE(Compare);
 CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
-CPPUNIT_TEST(compareToAscii);
 CPPUNIT_TEST(compareToIgnoreAsciiCase);
 CPPUNIT_TEST_SUITE_END();
 };
@@ -61,16 +58,6 @@ void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
                    equalsIgnoreAsciiCaseAscii("abc"));
     CPPUNIT_ASSERT(!rtl::OUString("abc").
                    equalsIgnoreAsciiCaseAscii("abcd"));
-}
-
-void test::oustring::Compare::compareToAscii()
-{
-    // The different overloads of compareToAscii exhibit potentially confusing
-    // behavior:
-    rtl::OUString abc("abc");
-    CPPUNIT_ASSERT(abc.compareToAscii("a") > 0);
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0), abc.compareToAscii(RTL_CONSTASCII_STRINGPARAM("a")));
 }
 
 void test::oustring::Compare::compareToIgnoreAsciiCase()
