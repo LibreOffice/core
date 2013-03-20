@@ -15,11 +15,12 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+import uno
+
 from threading import RLock
 from .PeerConfig import PeerConfig
 from ..common.PropertyNames import PropertyNames
 from ..common.HelpIds import HelpIds
-from ..common.Helper import Helper
 
 from com.sun.star.awt import Size
 
@@ -74,9 +75,10 @@ class ImageList(object):
         self.pageStart = 0
         self.helpURL = 0
         self.counterRenderer = self.SimpleCounterRenderer()
-        self.MOVE_SELECTION_VALS = range(3)
+        self.MOVE_SELECTION_VALS = list(range(3))
 
     def create(self, dialog):
+        print ("DEBUG !!!! ImageList create 1")
         self.oUnoDialog = dialog
         self.dialogModel = dialog.xDialogModel
         imageTextHeight = self.imageTextLines * ImageList.LINE_HEIGHT
@@ -93,7 +95,7 @@ class ImageList(object):
             (ImageList.BACKGROUND_COLOR, 1,
                 (self.imageSize.Height + self.gap.Height) \
                     * self.rows + self.gap.Height + imageTextHeight + 1,
-                self.pos.Width,self.pos.Height, self.step,
+                self.pos.Width, self.pos.Height, self.step,
                 (self.imageSize.Width + self.gap.Width) \
                     * self.cols + self.gap.Width))
         opeerConfig.setPeerProperties(imgContainer,"MouseTransparent", True)
@@ -114,10 +116,10 @@ class ImageList(object):
                 PropertyNames.PROPERTY_WIDTH),
             (ImageList.TRANSPARENT, 1,
                 self.imageSize.Height + (self.selectionGap.Height * 2),
-                0, #height
                 0, #posx
                 0, #posy
                 self.step, True, selectionWidth))
+        print ("DEBUG !!!! ImageList create 2")
         xWindow = self.grbxSelectedImage
         xWindow.addMouseListener(None)
         pNames1 = (PropertyNames.PROPERTY_HEIGHT,
@@ -134,6 +136,7 @@ class ImageList(object):
                     * self.rows + self.gap.Height, self.step, 0, False,
                 self.cols * (self.imageSize.Width + self.gap.Width) \
                     + self.gap.Width - 2))
+        print ("DEBUG !!!! ImageList create 3")
         if self.showButtons:
             ImageList.btnBack = dialog.insertButton(
                 self.name + "_btnBack", "prevPage", pNames1,
@@ -142,6 +145,7 @@ class ImageList(object):
                     (self.imageSize.Height + self.gap.Height) * \
                     self.rows + self.gap.Height + imageTextHeight + 1,
                 self.step, self.tabIndex + 1, True, 14), self)
+            print ("DEBUG !!!! ImageList create 3.1")
             ImageList.btnNext = dialog.insertButton(
                 self.name + "_btnNext", "nextPage", pNames1,
                 (14, HelpIds.getHelpIdString((self.helpURL + 1)),
@@ -150,6 +154,7 @@ class ImageList(object):
                 self.pos.Height + (self.imageSize.Height + self.gap.Height) \
                     * self.rows + self.gap.Height + imageTextHeight + 1,
                 self.step, self.tabIndex + 2, True, 14), self)
+            print ("DEBUG !!!! ImageList create 3.2")
             self.lblCounter = dialog.insertLabel(
                 self.name + "_lblCounter", pNames1,
                 (ImageList.LINE_HEIGHT, "", self.pos.Width + 14 + 1,
@@ -159,16 +164,15 @@ class ImageList(object):
                     self.step, 0, False, self.cols * \
                         (self.imageSize.Width + self.gap.Width) + \
                         self.gap.Width - 2 * 14 - 1))
-            Helper.setUnoPropertyValue(self.lblCounter.Model, "Align", 1)
-            Helper.setUnoPropertyValue(ImageList.btnBack.Model,
-                PropertyNames.PROPERTY_LABEL, "<")
-            Helper.setUnoPropertyValue(ImageList.btnNext.Model,
-                PropertyNames.PROPERTY_LABEL, ">")
+            print ("DEBUG !!!! ImageList create 3.3")
+            self.lblCounter.Model.Align = 1
+            ImageList.btnBack.Model.Label = "<"
+            ImageList.btnNext.Model.Label = ">"
 
         self.m_aImages = [None] * (self.rows * self.cols)
 
-        for r in xrange(self.rows):
-            for c in xrange(self.cols):
+        for r in range(self.rows):
+            for c in range(self.cols):
                 self.m_aImages[r * self.cols + c] = self.createImage(dialog, r, c)
 
         self.refreshImages()
@@ -216,14 +220,12 @@ class ImageList(object):
             oResources = None #self.renderer.getImageUrls(self.getObjectFor(index))
             if oResources is not None:
                 if len(oResources) == 1:
-                    Helper.setUnoPropertyValue(item.Model,
-                PropertyNames.PROPERTY_IMAGEURL, oResources[0])
+                    item.Model.ImageURL = oResources[0]
                 elif len(oResources) == 2:
                     self.oUnoDialog.getPeerConfiguration().setImageUrl(
                         item.Model, oResources[0], oResources[1])
 
-                Helper.setUnoPropertyValue(
-                    item.Model, "Tabstop", bool(focusable))
+                item.Model.Tabstop = bool(focusable)
                 if self.refreshOverNull:
                     item.Visible =  True
 
@@ -232,11 +234,9 @@ class ImageList(object):
         self.refreshSelection()
 
     def refreshCounterText(self):
-        Helper.setUnoPropertyValue(
-                self.lblCounter.Model, PropertyNames.PROPERTY_LABEL,
-                self.counterRenderer.render(
-                    self.Counter (self.pageStart + 1,
-                        self.pageEnd, len(ImageList.listModel))))
+        self.lblCounter.Model.Label = self.counterRenderer.render(
+            self.Counter (self.pageStart + 1, self.pageEnd,
+                          len(ImageList.listModel)))
 
     def pageEnd(self):
         i = self.pageStart + self.cols * self.rows
@@ -253,8 +253,7 @@ class ImageList(object):
             self.moveSelection(self.getImageIndexFor(self.selected))
 
     def hideSelection(self):
-        Helper.setUnoPropertyValue(self.grbxSelectedImage.Model,
-                PropertyNames.PROPERTY_STEP, ImageList.HIDE_PAGE)
+        self.grbxSelectedImage.Model.Step = ImageList.HIDE_PAGE
         self.grbxSelectedImage.Visible = False
 
     '''
@@ -262,6 +261,7 @@ class ImageList(object):
     '''
 
     def moveSelection(self, image):
+        print ("DEBUG !!! moveSelection - image: ", image)
         self.grbxSelectedImage.Visible = False
         row = image / self.cols
         if self.rowSelect:
@@ -273,11 +273,10 @@ class ImageList(object):
             (self.getImagePosX(col) - self.selectionGap.Width)
         self.MOVE_SELECTION_VALS[1] = \
             (self.getImagePosY(row) - self.selectionGap.Height)
-        Helper.setUnoPropertyValues(
-            self.grbxSelectedImage.Model, ImageList.MOVE_SELECTION,
-            self.MOVE_SELECTION_VALS)
-        if (Helper.getUnoPropertyValue(self.dialogModel,
-                PropertyNames.PROPERTY_STEP)) == self.step:
+        uno.invoke(self.grbxSelectedImage.Model, "setPropertyValues",
+                   ((ImageList.MOVE_SELECTION),
+                    (tuple(self.MOVE_SELECTION_VALS))))
+        if (self.grbxSelectedImage.Model.Step == self.step):
             self.grbxSelectedImage.Visible = True
             #now focus...
 
@@ -285,8 +284,7 @@ class ImageList(object):
             if index != image:
                 self.defocus(index)
             else:
-                Helper.setUnoPropertyValue(
-                    self.m_aImages[image].Model, "Tabstop", True)
+                self.m_aImages[image].Model.Tabstop = True
 
     '''
     @param i
@@ -309,9 +307,11 @@ class ImageList(object):
         return self.pageStart + i
 
     def getImageIndexFor(self, i):
+        print ("DEBUG !!! getImageIndexFor - i: ", i)
         return i - self.pageStart
 
     def intervalAdded(self, event):
+        print ("DEBUG !!!! intervalAdded - event: ", event)
         if event.getIndex0() <= self.selected:
             if event.getIndex1() <= self.selected:
                 self.selected += event.getIndex1() - event.getIndex0() + 1
@@ -358,6 +358,7 @@ class ImageList(object):
             i.itemStateChanged(None)
 
     def setSelected(self, _object):
+        print ("DEBUG !!!! setSelected - _object: ", _object)
         if not isinstance(_object, int):
             _object = -1
             if _object is not None:
@@ -385,10 +386,7 @@ class ImageList(object):
         else:
             item = None
 
-        Helper.setUnoPropertyValue(
-                self.lblImageText.Model, PropertyNames.PROPERTY_LABEL,
-                " " + self.renderer.render(item))
-
+        self.lblImageText.Model.Label = " " + self.renderer.render(item)
 
     def nextPage(self):
         if self.pageStart < listModel().getSize() - self.rows * self.cols:
@@ -411,16 +409,14 @@ class ImageList(object):
         self.enable(ImageList.btnBack, bool(self.pageStart > 0))
 
     def enable(self, control, enable):
-        Helper.setUnoPropertyValue(control.Model,
-                PropertyNames.PROPERTY_ENABLED, enable)
+        control.Model.Enabled = enable
 
     def setBorder(self, control, border):
-        Helper.setUnoPropertyValue(control.Model, "Border", border)
+        uno.invoke(control.Model, "setPropertyValues",(("Border"), (enable)))
 
     def getImageFromEvent(self, event):
         image = (event).Source
-        controlName = Helper.getUnoPropertyValue(image.Model,
-                PropertyNames.PROPERTY_NAME)
+        controlName = image.Model.Name
         return Integer.valueOf(controlName.substring(6 + self.name.length()))
 
     def mousePressed(self, event):
@@ -486,14 +482,12 @@ class ImageList(object):
         setSelected(getIndexFor(getImageFromEvent(ke)))
 
     def focus(self, image):
-        Helper.setUnoPropertyValue(
-            self.m_aImages[image].Model, "Tabstop", True)
+        self.m_aImages[image].Model.Tabstop = True
         xWindow = self.m_aImages[image]
         xWindow.setFocus()
 
     def defocus(self, image):
-        Helper.setUnoPropertyValue(
-            self.m_aImages[image].Model, "Tabstop", False)
+        self.m_aImages[image].Model.Tabstop = False
 
     '''jump to the given item (display the screen
     that contains the given item).
