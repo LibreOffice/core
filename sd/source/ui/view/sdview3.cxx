@@ -20,6 +20,7 @@
 #include "View.hxx"
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <sot/filelist.hxx>
 #include <unotools/pathoptions.hxx>
@@ -1007,9 +1008,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     try
                     {
                         uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance("com.sun.star.embed.MSOLEObjectSystemCreator"),
-                            uno::UNO_QUERY_THROW );
+                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator =
+                            embed::MSOLEObjectSystemCreator::create( ::comphelper::getProcessComponentContext() );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                                 xTmpStor,

@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 
 #include <svtools/embedtransfer.hxx>
 #include <svtools/insdlg.hxx>
@@ -1733,9 +1734,8 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                     try
                     {
                         xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
-                            uno::UNO_QUERY_THROW );
+                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator =
+                            embed::MSOLEObjectSystemCreator::create( ::comphelper::getProcessComponentContext() );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,

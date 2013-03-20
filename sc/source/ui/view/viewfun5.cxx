@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 
 
 #include <svx/unomodel.hxx>
@@ -215,9 +216,8 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     try
                     {
                         uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
-                            uno::UNO_QUERY_THROW );
+                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator =
+                            embed::MSOLEObjectSystemCreator::create( ::comphelper::getProcessComponentContext() );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,

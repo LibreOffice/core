@@ -17,19 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XInsertObjectDialog.hpp>
+#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/embed/XInsertObjectDialog.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/task/InteractionHandler.hpp>
 
 #include "insdlg.hxx"
 #include <dialmgr.hxx>
@@ -227,8 +228,7 @@ short SvInsertOleDlg::Execute()
                     try
                     {
                         uno::Reference < embed::XInsertObjectDialog > xDialogCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance(
-                                "com.sun.star.embed.MSOLEObjectSystemCreator" ),
+                            embed::MSOLEObjectSystemCreator::create( ::comphelper::getProcessComponentContext() ),
                             uno::UNO_QUERY );
 
                         if ( xDialogCreator.is() )

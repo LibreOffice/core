@@ -137,6 +137,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
 	FileSystemStorageFactory \
 	HatchWindowFactory \
 	InstanceLocker \
+	MSOLEObjectSystemCreator \
 	OLESimpleStorage \
 	OLEEmbeddedObjectFactory \
 	OOoEmbeddedObjectFactory \
