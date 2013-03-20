@@ -72,7 +72,7 @@ class ScFlatBoolRowSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
 class ScColumnTextWidthIterator;
-class ScFormulaCellGroup;
+struct ScFormulaCellGroup;
 typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
 
 struct ScNeededSizeOptions
