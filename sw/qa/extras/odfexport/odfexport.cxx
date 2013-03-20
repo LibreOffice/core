@@ -33,6 +33,7 @@ class Test : public SwModelTestBase
 public:
     void testFdo38244();
     void testFirstHeaderFooter();
+    void testFdo60769();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -49,6 +50,7 @@ void Test::run()
     MethodEntry<Test> aMethods[] = {
         {"fdo38244.odt", &Test::testFdo38244},
         {"first-header-footer.odt", &Test::testFirstHeaderFooter},
+        {"fdo60769.odt", &Test::testFdo60769},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -114,6 +116,32 @@ void Test::testFirstHeaderFooter()
     CPPUNIT_ASSERT_EQUAL(OUString("Right footer2"), parseDump("/root/page[5]/footer/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Left header2"),  parseDump("/root/page[6]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Left footer2"),  parseDump("/root/page[6]/footer/txt/text()"));
+}
+
+void Test::testFdo60769()
+{
+    // Test multi-paragraph comment range feature.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+        OUString aType =  getProperty<OUString>(xPropertySet, "TextPortionType");
+        // First paragraph: no field end, no anchor
+        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldStart");
+    }
+
+    xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+        OUString aType =  getProperty<OUString>(xPropertySet, "TextPortionType");
+        // Second paragraph: no field start
+        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldEnd" || aType == "TextFieldEnd");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
