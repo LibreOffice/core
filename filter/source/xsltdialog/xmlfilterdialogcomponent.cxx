@@ -380,7 +380,7 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
         PropertyValue aProperty;
         if(*pArguments >>= aProperty)
         {
-            if( aProperty.Name.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) == 0 )
+            if( aProperty.Name == "ParentWindow" )
             {
                 aProperty.Value >>= mxParent;
             }
