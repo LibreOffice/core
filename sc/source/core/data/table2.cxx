@@ -1360,6 +1360,17 @@ void ScTable::SetFormula(
     aCol[nCol].SetFormula(nRow, rFormula, eGram);
 }
 
+void ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell )
+{
+    if (!ValidColRow(nCol, nRow))
+    {
+        pCell->Delete();
+        return;
+    }
+
+    aCol[nCol].SetFormulaCell(nRow, pCell);
+}
+
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 {
     if (ValidColRow(nCol, nRow))
@@ -1408,12 +1419,20 @@ void ScTable::GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) cons
         rFormula = rtl::OUString();
 }
 
-const ScTokenArray* ScTable::GetFormula( SCCOL nCol, SCROW nRow ) const
+const ScTokenArray* ScTable::GetFormulaTokens( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))
         return NULL;
 
-    return aCol[nCol].GetFormula(nRow);
+    return aCol[nCol].GetFormulaTokens(nRow);
+}
+
+const ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return NULL;
+
+    return aCol[nCol].GetFormulaCell(nRow);
 }
 
 ScNotes* ScTable::GetNotes()

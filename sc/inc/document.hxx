@@ -787,6 +787,8 @@ public:
         const ScAddress& rPos, const OUString& rFormula,
         formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT );
 
+    void SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
+
     SC_DLLPUBLIC void           InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark,
@@ -820,7 +822,8 @@ public:
     SC_DLLPUBLIC void           GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
                         const ScAddress& rPos, const ScBaseCell* pCell ) const;
     void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const;
-    const ScTokenArray* GetFormula( const ScAddress& rPos ) const;
+    const ScTokenArray* GetFormulaTokens( const ScAddress& rPos ) const;
+    const ScFormulaCell* GetFormulaCell( const ScAddress& rPos ) const;
     SC_DLLPUBLIC void           GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula ) const;
     SC_DLLPUBLIC void           GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
     SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;

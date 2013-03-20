@@ -1500,6 +1500,11 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
     Insert(nRow, new ScFormulaCell(pDocument, aPos, rFormula, eGram));
 }
 
+void ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
+{
+    Insert(nRow, pCell);
+}
+
 void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     bool bHasDates = false;
@@ -1823,17 +1828,18 @@ void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
         rFormula = rtl::OUString();
 }
 
-const ScTokenArray* ScColumn::GetFormula( SCROW nRow ) const
+const ScTokenArray* ScColumn::GetFormulaTokens( SCROW nRow ) const
 {
-    SCSIZE nIndex;
-    if (!Search(nRow, nIndex))
+    const ScFormulaCell* pCell = FetchFormulaCell(nRow);
+    if (!pCell)
         return NULL;
 
-    const ScBaseCell* pCell = maItems[nIndex].pCell;
-    if (pCell->GetCellType() != CELLTYPE_FORMULA)
-        return NULL;
+    return pCell->GetCode();
+}
 
-    return static_cast<const ScFormulaCell*>(pCell)->GetCode();
+const ScFormulaCell* ScColumn::GetFormulaCell( SCROW nRow ) const
+{
+    return FetchFormulaCell(nRow);
 }
 
 CellType ScColumn::GetCellType( SCROW nRow ) const

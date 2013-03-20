@@ -84,6 +84,7 @@
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
 #include "macromgr.hxx"
+#include "cell.hxx"
 
 using namespace com::sun::star;
 
@@ -1054,6 +1055,17 @@ void ScDocument::SetFormula(
         return;
 
     maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rFormula, eGram);
+}
+
+void ScDocument::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell )
+{
+    if (!TableExists(rPos.Tab()))
+    {
+        pCell->Delete();
+        return;
+    }
+
+    maTabs[rPos.Tab()]->SetFormulaCell(rPos.Col(), rPos.Row(), pCell);
 }
 
 void ScDocument::SetConsolidateDlgData( const ScConsolidateParam* pData )

@@ -311,6 +311,8 @@ public:
     void SetFormula(
         SCCOL nCol, SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
 
+    void SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell );
+
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
@@ -325,7 +327,8 @@ public:
     double      GetValue( SCCOL nCol, SCROW nRow ) const;
     const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
     void GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const;
-    const ScTokenArray* GetFormula( SCCOL nCol, SCROW nRow ) const;
+    const ScTokenArray* GetFormulaTokens( SCCOL nCol, SCROW nRow ) const;
+    const ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow ) const;
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {

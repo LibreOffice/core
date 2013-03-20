@@ -264,6 +264,7 @@ public:
     void SetEditText( SCROW nRow, EditTextObject* pEditText );
     void SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram );
     void SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
+    void SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
 
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const sal_uInt16 nError);
@@ -273,7 +274,8 @@ public:
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
-    const ScTokenArray* GetFormula( SCROW nRow ) const;
+    const ScTokenArray* GetFormulaTokens( SCROW nRow ) const;
+    const ScFormulaCell* GetFormulaCell( SCROW nRow ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const;
     sal_uInt32 GetWeightedCount() const;

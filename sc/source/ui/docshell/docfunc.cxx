@@ -842,9 +842,9 @@ void pushUndoSetCell( ScDocShell& rDocShell, ScDocument* pDoc, const ScAddress& 
         break;
         case CELLTYPE_FORMULA:
         {
-            const ScTokenArray* pTokens = pDoc->GetFormula(rPos);
-            if (pTokens)
-                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pTokens, rNewVal));
+            const ScFormulaCell* pCell = pDoc->GetFormulaCell(rPos);
+            if (pCell)
+                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pCell, rNewVal));
         }
         break;
         default:

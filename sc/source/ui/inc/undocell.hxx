@@ -168,14 +168,14 @@ public:
             double mfValue;
             OUString* mpString;
             EditTextObject* mpEditText;
-            ScTokenArray* mpFormula;
+            ScFormulaCell* mpFormula;
         };
 
         Value();
         Value( double fValue );
         Value( const OUString& rString );
         Value( const EditTextObject& rEditText );
-        Value( const ScTokenArray& rFormula );
+        Value( const ScFormulaCell& rFormula );
         Value( const Value& r );
         ~Value();
     };
