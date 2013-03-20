@@ -22,6 +22,7 @@
 
 #include <com/sun/star/container/XStringKeyMap.idl>
 #include <com/sun/star/text/TextMarkupType.idl>
+#include <com/sun/star/text/XTextRange.idl>
 
 
 module com {  module sun {  module star {  module text {
@@ -61,11 +62,17 @@ interface XTextMarkup
         @param xMarkupInfoContainer
                 contains additional information about the markup.
      */
-    void commitTextMarkup( [in] long nType,
+    void commitStringMarkup( [in] long nType,
                            [in] string aIdentifier,
                            [in] long nStart,
                            [in] long nLength,
                            [in] com::sun::star::container::XStringKeyMap xMarkupInfoContainer );
+
+    void commitTextRangeMarkup( [in] long nType,
+                                [in] string aIdentifier,
+                                [in] com::sun::star::text::XTextRange xRange,
+                                [in] com::sun::star::container::XStringKeyMap xMarkupInfoContainer );
+
 };
 
 }; }; }; };

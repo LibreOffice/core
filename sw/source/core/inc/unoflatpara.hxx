@@ -34,6 +34,10 @@ namespace com { namespace sun { namespace star { namespace container {
     class XStringKeyMap;
 } } } }
 
+namespace com { namespace sun { namespace star { namespace text {
+    class XTextRange;
+} } } }
+
 class SwTxtNode;
 class SwDoc;
 
@@ -62,7 +66,12 @@ public:
 
     // text::XTextMarkup:
     virtual css::uno::Reference< css::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL commitTextMarkup(::sal_Int32 nType, const OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL commitStringMarkup(::sal_Int32 nType, const OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength,
+                                   const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange> & xRange,
+                                                const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) throw (css::uno::RuntimeException);
 
     // text::XFlatParagraph:
     virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);

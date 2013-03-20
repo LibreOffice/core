@@ -44,6 +44,9 @@
 #include <viewopt.hxx>
 #include <comphelper/servicehelper.hxx>
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+
 using namespace ::com::sun::star;
 
 namespace SwUnoCursorHelper {
@@ -119,10 +122,17 @@ css::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::
     return SwXTextMarkup::getMarkupInfoContainer();
 }
 
-void SAL_CALL SwXFlatParagraph::commitTextMarkup(::sal_Int32 nType, const OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer) throw (css::uno::RuntimeException)
+void SAL_CALL SwXFlatParagraph::commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const uno::Reference< text::XTextRange> & xRange,
+                                                      const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwXTextMarkup::commitTextMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );
+    SwXTextMarkup::commitTextRangeMarkup( nType, aIdentifier, xRange,  xMarkupInfoContainer );
+}
+
+void SAL_CALL SwXFlatParagraph::commitStringMarkup(::sal_Int32 nType, const OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer) throw (css::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    SwXTextMarkup::commitStringMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );
 }
 
 // text::XFlatParagraph:

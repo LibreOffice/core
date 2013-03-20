@@ -30,6 +30,15 @@
 
 #include <IGrammarContact.hxx>
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+
+#include <pam.hxx>
+
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
+
+
 using namespace ::com::sun::star;
 
 /*
@@ -55,7 +64,52 @@ uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfo
     return xProp;
 }
 
-void SAL_CALL SwXTextMarkup::commitTextMarkup(
+void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const ::rtl::OUString & aIdentifier, const uno::Reference< text::XTextRange> & xRange,
+                                                   const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer) throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
+
+    if(!xRangeTunnel.is()) return;
+
+    SwXTextRange* pRange = 0;
+    OTextCursorHelper* pCursor = 0;
+
+    if(xRangeTunnel.is())
+    {
+        pRange  = reinterpret_cast<SwXTextRange*>( sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething(SwXTextRange::getUnoTunnelId())));
+        pCursor = reinterpret_cast<OTextCursorHelper*>( sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())));
+    }
+
+    if (pRange)
+    {
+        SwDoc* pDoc = reinterpret_cast<SwDoc*>(pRange->GetDoc());
+
+        if (!pDoc) return;
+
+        SwUnoInternalPaM aPam(*pDoc);
+
+        ::sw::XTextRangeToSwPaM(aPam, xRange);
+
+        SwPosition* startPos = aPam.Start();
+        SwPosition* endPos   = aPam.End();
+
+        commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
+    }
+    else if (pCursor)
+    {
+        SwPaM aPam(*pCursor->GetPaM());
+
+        SwPosition* startPos = aPam.Start();
+        SwPosition* endPos   = aPam.End();
+
+        commitStringMarkup (nType, aIdentifier, startPos->nContent.GetIndex(), endPos->nContent.GetIndex() - startPos->nContent.GetIndex(), xMarkupInfoContainer);
+    }
+}
+
+
+void SAL_CALL SwXTextMarkup::commitStringMarkup(
     ::sal_Int32 nType,
     const OUString & rIdentifier,
     ::sal_Int32 nStart,
