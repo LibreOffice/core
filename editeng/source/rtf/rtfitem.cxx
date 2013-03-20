@@ -148,10 +148,9 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
        break;
     }
 
-
     if( DOUBLEBYTE_CHARTYPE == eType )
     {
-        if( bIsLeftToRightDef && *pCJK )
+        if( bIsLeftToRightDef && pCJK )
         {
             rItem.SetWhich( *pCJK );
             rSet.Put( rItem );
@@ -159,7 +158,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
     }
     else if( !bIsLeftToRightDef )
     {
-        if( *pCTL )
+        if( pCTL )
         {
             rItem.SetWhich( *pCTL );
             rSet.Put( rItem );
@@ -169,7 +168,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
     {
         if( LOW_CHARTYPE == eType )
         {
-            if( *pNormal )
+            if( pNormal )
             {
                 rItem.SetWhich( *pNormal );
                 rSet.Put( rItem );
@@ -177,7 +176,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
         }
         else if( HIGH_CHARTYPE == eType )
         {
-            if( *pCTL )
+            if( pCTL )
             {
                 rItem.SetWhich( *pCTL );
                 rSet.Put( rItem );
@@ -185,17 +184,17 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
         }
         else
         {
-            if( *pCJK )
+            if( pCJK )
             {
                 rItem.SetWhich( *pCJK );
                 rSet.Put( rItem );
             }
-            if( *pCTL )
+            if( pCTL )
             {
                 rItem.SetWhich( *pCTL );
                 rSet.Put( rItem );
             }
-            if( *pNormal )
+            if( pNormal )
             {
                 rItem.SetWhich( *pNormal );
                 rSet.Put( rItem );
