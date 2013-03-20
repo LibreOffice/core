@@ -237,7 +237,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 SwFlyPortion *pFly = (SwFlyPortion *)pRight;
                 if ( pFly->GetBlankWidth() < nRightGlue )
                 {
-                    // Creating new TxtPortion that takes over the
+                    // Creating new TxtPortion, that takes over the
                     // Blank previously swallowed by the Fly.
                     nRightGlue = nRightGlue - pFly->GetBlankWidth();
                     pFly->SubPrtWidth( pFly->GetBlankWidth() );
@@ -267,7 +267,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                     // pPrev is moved behind pRight. For this the
                     // Glue value between pRight and pLeft gets balanced.
                     pRight->MoveGlue( pLeft, short( pPrev->PrtWidth() ) );
-                    // The chain is linked.
+                    // Now fix the linking of our portions.
                     SwLinePortion *pPrevPrev = pPrev->FindPrevPortion( pLeft );
                     pPrevPrev->SetPortion( pRight );
                     pPrev->SetPortion( pRight->GetPortion() );
