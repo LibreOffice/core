@@ -56,7 +56,7 @@ typedef int NSColorRenderingIntent;
 #endif
 #endif
 
-#if MACOSX_SDK_VERSION < 1050
+#if defined(MACOSX_SDK_VERSION) && MACOSX_SDK_VERSION < 1050
 typedef float CGFloat;
 typedef int NSInteger;
 typedef unsigned NSUInteger;
