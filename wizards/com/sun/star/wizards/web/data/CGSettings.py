@@ -16,19 +16,22 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from common.FileAccess import FileAccess
-from common.ConfigGroup import ConfigGroup
-from common.ConfigSet import ConfigSet
-from CGExporter import CGExporter
-from CGLayout import CGLayout
-from CGStyle import CGStyle
-from CGIconSet import CGIconSet
-from CGImage import CGImage
-from CGFilter import CGFilter
-from common.Helper import Helper
-from CGSessionName import CGSessionName
-from CGSession import CGSession
-from common.Properties import Properties
+import uno
+from datetime import date as dateTimeObject
+
+from ...common.FileAccess import FileAccess
+from ...common.ConfigGroup import ConfigGroup
+from ...common.ConfigSet import ConfigSet
+from ...common.NumberFormatter import NumberFormatter
+from ...common.Properties import Properties
+from .CGExporter import CGExporter
+from .CGLayout import CGLayout
+from .CGStyle import CGStyle
+from .CGIconSet import CGIconSet
+from .CGImage import CGImage
+from .CGFilter import CGFilter
+from .CGSessionName import CGSessionName
+from .CGSession import CGSession
 
 from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DMMMYYYY
 from com.sun.star.i18n.NumberFormatIndex import NUMBER_1000DEC2
@@ -57,10 +60,8 @@ class CGSettings(ConfigGroup):
     def __init__(self, xmsf_, resources_, document):
         self.xmsf = xmsf_
         try:
-            self.soTemplateDir = FileAccess.getOfficePath2(
-                self.xmsf, "Config", "", "")
-            self.soGalleryDir = FileAccess.getOfficePath2(
-                self.xmsf, "Gallery", "share", "")
+            self.soTemplateDir = FileAccess.getOfficePath2(self.xmsf, "Config", "", "");
+            self.soGalleryDir = FileAccess.getOfficePath2(self.xmsf, "Gallery", "share", "");
             ConfigGroup.root = self
             self.formatter = self.Formatter(self.xmsf, document)
             self.resources = resources_
@@ -85,9 +86,10 @@ class CGSettings(ConfigGroup):
                 if i.supports(mime):
                     try:
                         v.append(i)
-                    except Exception, ex:
+                    except Exception:
                         traceback.print_exc()
-
+            else:
+                print ("DEBUG !!! Exporter is None")
         return v
 
     '''
@@ -100,19 +102,25 @@ class CGSettings(ConfigGroup):
         self.workPath = FileAccess.connectURLs(
             self.soTemplateDir, self.cp_WorkDir)
         #COMMENTED
-        #self.calcExportersTargetTypeNames(xmsf)
+        self.calcExportersTargetTypeNames(xmsf)
 
     def calcExportersTargetTypeNames(self, xmsf):
         typeDetect = xmsf.createInstance(
             "com.sun.star.document.TypeDetection")
-        for i in xrange(self.cp_Exporters.getSize()):
+        for i in range(self.cp_Exporters.getSize()):
             self.calcExporterTargetTypeName(
                 typeDetect, self.cp_Exporters.getElementAt(i))
 
     def calcExporterTargetTypeName(self, typeDetect, exporter):
-        if not exporter.cp_TargetType == "":
-            exporter.targetTypeName = Properties.getPropertyValue(
+        if (exporter is None):
+            print ("WARNING !!!! calcExporterTargetTypeName - received None as exporter argument.")
+            return
+        print ("WARNING !!!! calcExporterTargetTypeName - targetType: ", exporter.cp_TargetType)
+        if not (exporter.cp_TargetType == "" or exporter.cp_TargetType is None):
+            targetTypeName = Properties.getPropertyValue(
                 typeDetect.getByName(exporter.cp_TargetType), "UIName")
+            print ("WARNING !!!! calcExporterTargetTypeName - targetTypeName: ", targetTypeName)
+            exporter.cp_targetTypeName = targetTypeName
 
     @classmethod
     def getFileAccess(self, xmsf = None):
@@ -124,8 +132,32 @@ class CGSettings(ConfigGroup):
         return CGSettings.fileAccess
 
     class Formatter(object):
+        class DateUtils(object):
+
+            def __init__(self, xmsf, document):
+                self.formatSupplier = document
+                formatSettings = self.formatSupplier.getNumberFormatSettings()
+                date = formatSettings.NullDate
+                self.calendar = dateTimeObject(date.Year, date.Month, date.Day)
+                self.formatter = NumberFormatter.createNumberFormatter(xmsf, self.formatSupplier)
+
+            '''
+            @param format a constant of the enumeration NumberFormatIndex
+            @return
+            '''
+            def getFormat(self, format):
+                return NumberFormatter.getNumberFormatterKey(self.formatSupplier, format)
+
+            '''
+            @param date a VCL date in form of 20041231
+            @return a document relative date
+            '''
+            def format(self, formatIndex, date):
+                difference =  date - self.calendar
+                return self.formatter.convertNumberToString(formatIndex,  difference.days)
+
         def __init__(self, xmsf, document):
-            self.dateUtils = Helper.DateUtils(xmsf, document)
+            self.dateUtils = self.DateUtils(xmsf, document)
             self.dateFormat = self.dateUtils.getFormat(DATE_SYS_DMMMYYYY)
             self.numberFormat = self.dateUtils.getFormat(NUMBER_1000DEC2)
 
