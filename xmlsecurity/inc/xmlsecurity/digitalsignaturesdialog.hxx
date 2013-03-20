@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
-#define _XMLSECURITY_DIGITALSIGNATURESDIALOG_HXX
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

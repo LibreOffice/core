@@ -24,8 +24,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef INCLUDED_GFXTYPES_HXX
-#define INCLUDED_GFXTYPES_HXX
+#pragma once
+#if 1
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_TABLEDESIGNPANE_HXX
-#define _SD_TABLEDESIGNPANE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>

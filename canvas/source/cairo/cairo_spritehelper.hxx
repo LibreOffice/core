@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_SPRITEHELPER_HXX
-#define _CAIROCANVAS_SPRITEHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 

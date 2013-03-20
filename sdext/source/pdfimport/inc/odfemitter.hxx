@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_PDFI_ODFEMITTER_HXX
-#define INCLUDED_PDFI_ODFEMITTER_HXX
+#pragma once
+#if 1
 
 #include "xmlemitter.hxx"
 #include <com/sun/star/uno/Reference.hxx>

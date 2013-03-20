@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WINMTF_HXX
-#define _WINMTF_HXX
+#pragma once
+#if 1
 
 #ifdef DBG_UTIL
 #define WIN_MTF_ASSERT

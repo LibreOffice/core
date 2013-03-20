@@ -57,8 +57,8 @@
  * @file
  * Table cell style. Number format, string value, and so on...
  ************************************************************************/
-#ifndef     _XFCELLSTYLE_HXX
-#define     _XFCELLSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"

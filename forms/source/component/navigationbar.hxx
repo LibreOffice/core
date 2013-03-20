@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMS_COMPONENT_NAVIGATION_BAR_HXX
-#define FORMS_COMPONENT_NAVIGATION_BAR_HXX
+#pragma once
+#if 1
 
 #include "FormComponent.hxx"
 #include <com/sun/star/io/XPersistObject.hpp>

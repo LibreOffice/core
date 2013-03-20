@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ACCBASE_HXX
-#define _ACCBASE_HXX
+#pragma once
+#if 1
 #include <accframe.hxx>
 #include <accmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>

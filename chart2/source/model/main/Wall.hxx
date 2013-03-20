@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_WALL_HXX
-#define CHART_WALL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>

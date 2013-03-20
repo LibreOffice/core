@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ERRORCODES_HXX
-#define SC_ERRORCODES_HXX
+#pragma once
+#if 1
 
 #include <rtl/math.hxx>
 #include <tools/solar.h>

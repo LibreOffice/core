@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOCUMENT_STATISTIC_HXX_INCLUDED
-#define DOCUMENT_STATISTIC_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <utility>
 #include <string>

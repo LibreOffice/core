@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_LAYER_DIALOG_CONTENT_HXX
-#define SD_LAYER_DIALOG_CONTENT_HXX
+#pragma once
+#if 1
 
 #include <sfx2/dockwin.hxx>
 #include "LayerTabBar.hxx"

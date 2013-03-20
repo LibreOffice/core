@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADC_DISPLAY_HI_LINKHELPER_HXX
-#define ADC_DISPLAY_HI_LINKHELPER_HXX
+#pragma once
+#if 1
 
 #include "hi_ary.hxx"
 #include "hi_env.hxx"

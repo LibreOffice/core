@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _VCL_THUMBPOS_HXX
-#define _VCL_THUMBPOS_HXX
+#pragma once
+#if 1
 
 inline long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
 {

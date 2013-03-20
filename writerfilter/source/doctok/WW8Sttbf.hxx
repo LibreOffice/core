@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WW8_STTBF_HXX
-#define INCLUDED_WW8_STTBF_HXX
+#pragma once
+#if 1
 
 #include "WW8StructBase.hxx"
 #include "WW8ResourceModelImpl.hxx"

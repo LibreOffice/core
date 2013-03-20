@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NUTIL_PAPER_HXX
-#define INCLUDED_I18NUTIL_PAPER_HXX
+#pragma once
+#if 1
 
 #include "i18nutildllapi.h"
 #include <rtl/string.hxx>

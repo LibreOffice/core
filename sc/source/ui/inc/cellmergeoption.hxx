@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_CELLMERGEOPTION_HXX
-#define SC_CELLMERGEOPTION_HXX
+#pragma once
+#if 1
 
 #include "address.hxx"
 

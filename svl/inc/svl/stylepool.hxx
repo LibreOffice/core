@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_STYLEPOOL_HXX
-#define INCLUDED_SVTOOLS_STYLEPOOL_HXX
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>

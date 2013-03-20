@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SC_EXPFTEXT_HXX
-#define _SC_EXPFTEXT_HXX
+#pragma once
+#if 1
 
 #include <vcl/fixed.hxx>
 #include "scdllapi.h"

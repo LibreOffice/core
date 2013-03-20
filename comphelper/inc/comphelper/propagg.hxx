@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
-#define _COMPHELPER_PROPERTY_AGGREGATION_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/propstate.hxx>

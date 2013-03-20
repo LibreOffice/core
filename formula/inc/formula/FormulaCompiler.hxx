@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_COMPILER_HXX_INCLUDED
-#define FORMULA_COMPILER_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "formula/formuladllapi.h"
 #include <tools/string.hxx>

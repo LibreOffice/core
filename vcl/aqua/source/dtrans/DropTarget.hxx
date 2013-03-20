@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DROPTARGET_HXX_
-#define _DROPTARGET_HXX_
+#pragma once
+#if 1
 
 #include "DataFlavorMapping.hxx"
 #include <cppuhelper/compbase5.hxx>

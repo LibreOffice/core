@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CNODES_HXX
-#define _CNODES_HXX
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include <cppuhelper/factory.hxx>

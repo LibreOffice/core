@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef _SC_CSVGRID_HXX
-#define _SC_CSVGRID_HXX
+#pragma once
+#if 1
 
 #include <vcl/virdev.hxx>
 #include <vcl/menu.hxx>

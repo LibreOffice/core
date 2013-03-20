@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XSECERROR_HXX_
-#define _XSECERROR_HXX_
+#pragma once
+#if 1
 
 const char *
 getCertError(PRErrorCode errNum);

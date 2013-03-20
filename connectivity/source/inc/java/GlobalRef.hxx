@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_GLOBALREF_HXX
-#define CONNECTIVITY_GLOBALREF_HXX
+#pragma once
+#if 1
 
 #include "java/LocalRef.hxx"
 #include "java/lang/Object.hxx"

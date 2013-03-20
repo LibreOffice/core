@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_VIEW_SHELL_FACTORY_HXX
-#define SD_VIEW_SHELL_FACTORY_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <memory>

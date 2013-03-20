@@ -57,8 +57,8 @@
  * @file
  * Background image.
  ************************************************************************/
-#ifndef     _XFBGIMAGE_HXX
-#define     _XFBGIMAGE_HXX
+#pragma once
+#if 1
 
 #include "xfstyle.hxx"
 

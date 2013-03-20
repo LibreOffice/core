@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LUIDL_TOKRECV_HXX
-#define LUIDL_TOKRECV_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
     // BASE CLASSES

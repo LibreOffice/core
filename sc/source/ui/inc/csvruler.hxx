@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef _SC_CSVRULER_HXX
-#define _SC_CSVRULER_HXX
+#pragma once
+#if 1
 
 #include <vcl/virdev.hxx>
 #include "csvcontrol.hxx"

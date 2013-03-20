@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
-#define EXTENSIONS_SOURCE_PROPCTRLR_ENUMREPRESENTATION_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ref.hxx>

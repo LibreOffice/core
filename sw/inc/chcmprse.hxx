@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHCMPRSE_HXX
-#define _CHCMPRSE_HXX
+#pragma once
+#if 1
 
 enum SwCharCompressType{    CHARCOMPRESS_NONE,
                             CHARCOMPRESS_PUNCTUATION,

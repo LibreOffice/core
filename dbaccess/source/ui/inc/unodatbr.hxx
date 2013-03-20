@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBA_UNODATBR_HXX_
-#define _SBA_UNODATBR_HXX_
+#pragma once
+#if 1
 
 #include "brwctrlr.hxx"
 #include <com/sun/star/sdbc/XConnection.hpp>

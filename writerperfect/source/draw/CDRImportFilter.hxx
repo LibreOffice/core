@@ -8,8 +8,8 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _CDRIMPORTFILTER_HXX
-#define _CDRIMPORTFILTER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>

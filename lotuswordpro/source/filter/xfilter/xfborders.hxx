@@ -57,8 +57,8 @@
  * @file
  * Border object,now only used by paragraph object.
  ************************************************************************/
-#ifndef     _XFBORDERS_HXX
-#define     _XFBORDERS_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcolor.hxx"

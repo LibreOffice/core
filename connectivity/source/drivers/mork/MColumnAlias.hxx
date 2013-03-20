@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONNECTIVITY_MORK_COLUMNALIAS_HXX_
-#define _CONNECTIVITY_MORK_COLUMNALIAS_HXX_
+#pragma once
+#if 1
 
 #include <unotools/confignode.hxx>
 

@@ -57,8 +57,8 @@
  * @file
  * Factory object for XFFont.It also manages all font life cycle.
  ************************************************************************/
-#ifndef     _XFFONTFACTORY_HXX
-#define     _XFFONTFACTORY_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xffont.hxx"

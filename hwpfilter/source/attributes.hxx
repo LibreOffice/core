@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONFIGMGR_MISC_ATTRIBUTES_HXX_
-#define _CONFIGMGR_MISC_ATTRIBUTES_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>

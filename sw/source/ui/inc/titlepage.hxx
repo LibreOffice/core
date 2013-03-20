@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef _SWTITLEPAGE_HXX
-#define _SWTITLEPAGE_HXX
+#pragma once
+#if 1
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/button.hxx>

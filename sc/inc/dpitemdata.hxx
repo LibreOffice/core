@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_DPITEMDATA_HXX__
-#define __SC_DPITEMDATA_HXX__
+#pragma once
+#if 1
 
 #include "scdllapi.h"
 #include "address.hxx"

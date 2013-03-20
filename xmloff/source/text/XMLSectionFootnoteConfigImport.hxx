@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _XMLOFF_XMLSECTIONFOOTNOTECONFIGIMPORT_HXX
-#define _XMLOFF_XMLSECTIONFOOTNOTECONFIGIMPORT_HXX
+#pragma once
+#if 1
 
 
 #include <xmloff/xmlictxt.hxx>

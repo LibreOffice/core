@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BIB_GENERAL_HXX
-#define _BIB_GENERAL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

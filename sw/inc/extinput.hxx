@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _EXTINPUT_HXX
-#define _EXTINPUT_HXX
+#pragma once
+#if 1
 
 #include <pam.hxx>
 #include <i18npool/lang.h>

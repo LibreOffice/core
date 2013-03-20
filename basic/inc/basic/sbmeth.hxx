@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_SBMETH_HXX
-#define _SB_SBMETH_HXX
+#pragma once
+#if 1
 
 #include <tools/errcode.hxx>
 #include <basic/sbxmeth.hxx>

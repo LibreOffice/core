@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XPOLYIMP_HXX
-#define _XPOLYIMP_HXX
+#pragma once
+#if 1
 
 #include <svx/xpoly.hxx>
 #include <vector>

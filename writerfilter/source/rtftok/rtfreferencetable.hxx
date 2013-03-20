@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef _RTFREFERENCETABLE_HXX_
-#define _RTFREFERENCETABLE_HXX_
+#pragma once
+#if 1
 
 #include <map>
 #include <resourcemodel/WW8ResourceModel.hxx>

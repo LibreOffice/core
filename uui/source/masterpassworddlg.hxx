@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UUI_MASTERPASSWORDDLG_HXX
-#define UUI_MASTERPASSWORDDLG_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <svtools/stdctrl.hxx>

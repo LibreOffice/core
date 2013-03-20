@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MISC_HELPER_HXX_
-#define __MISC_HELPER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SVTOOLS_TREELISTBOX_HXX__
-#define __SVTOOLS_TREELISTBOX_HXX__
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 

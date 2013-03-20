@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_TABPAGE_CONTAINER_HXX
-#define TOOLKIT_TABPAGE_CONTAINER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <com/sun/star/awt/tab/XTabPageContainerModel.hpp>

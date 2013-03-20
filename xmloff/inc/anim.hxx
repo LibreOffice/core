@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ANIM_HXX
-#define _XMLOFF_ANIM_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/drawing/XShape.hpp>

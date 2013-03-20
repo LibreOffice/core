@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_HELPER_PROPERTYSET_HXX
-#define OOX_HELPER_PROPERTYSET_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

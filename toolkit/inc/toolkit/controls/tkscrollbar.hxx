@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef TOOLKIT_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
-#define TOOLKIT_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
+#pragma once
+#if 1
 
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>

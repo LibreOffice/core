@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_REGBAND_HXX
-#define _SV_REGBAND_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 #include <tools/poly.hxx>

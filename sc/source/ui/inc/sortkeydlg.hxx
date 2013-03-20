@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_SORTKEYDLG_HXX
-#define SC_SORTKEYDLG_HXX
+#pragma once
+#if 1
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

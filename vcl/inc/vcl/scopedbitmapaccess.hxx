@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_SCOPEDBITMAPACCESS_HXX_INCLUDED
-#define VCL_SCOPEDBITMAPACCESS_HXX_INCLUDED
+#pragma once
+#if 1
 
 namespace vcl
 {

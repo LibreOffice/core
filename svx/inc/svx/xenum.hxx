@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XENUM_HXX
-#define _XENUM_HXX
+#pragma once
+#if 1
 
 enum XLineStyle         { XLINE_NONE, XLINE_SOLID, XLINE_DASH };
 enum XLineJoint

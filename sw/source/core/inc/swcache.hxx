@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWCACHE_HXX
-#define _SWCACHE_HXX
+#pragma once
+#if 1
 
 /*
  * Es werden Pointer auf Objekte verwaltet. Diese werden in einem einfachen

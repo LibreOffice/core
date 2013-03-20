@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEDOCUMENTBASE_HXX
-#define _SC_ACCESSIBLEDOCUMENTBASE_HXX
+#pragma once
+#if 1
 
 #include "AccessibleContextBase.hxx"
 

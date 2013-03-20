@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_BASEGFX_UNOTOOLS_HXX
-#define INCLUDED_BASEGFX_UNOTOOLS_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>

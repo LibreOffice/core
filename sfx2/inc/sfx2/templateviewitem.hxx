@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef TEMPLATEVIEWITEM_HXX
-#define TEMPLATEVIEWITEM_HXX
+#pragma once
+#if 1
 
 #include <sfx2/thumbnailviewitem.hxx>
 

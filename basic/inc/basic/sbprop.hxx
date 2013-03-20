@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_SBPROPERTY_HXX
-#define _SB_SBPROPERTY_HXX
+#pragma once
+#if 1
 
 #include <basic/sbxprop.hxx>
 #include <basic/sbdef.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_PVFUNDLG_HXX
-#define SC_PVFUNDLG_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>

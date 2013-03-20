@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SHL_HXX
-#define _SHL_HXX
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 #include "tools/toolsdllapi.h"

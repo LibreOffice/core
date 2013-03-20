@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEPREVIEWCELL_HXX
-#define _SC_ACCESSIBLEPREVIEWCELL_HXX
+#pragma once
+#if 1
 
 #include "AccessibleCellBase.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCUI_IMOPTDLG_HXX
-#define SCUI_IMOPTDLG_HXX
+#pragma once
+#if 1
 
 #include "imoptdlg.hxx"
 

@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_USERS_HXX_
-#define HEADER_PQ_USERS_HXX_
+#pragma once
+#if 1
 
 #include "pq_xcontainer.hxx"
 

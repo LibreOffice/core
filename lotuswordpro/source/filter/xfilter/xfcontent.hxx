@@ -57,8 +57,8 @@
  * @file
  * Base class for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-#ifndef     _XFCONTENT_HXX
-#define     _XFCONTENT_HXX
+#pragma once
+#if 1
 
 #include "ixfcontent.hxx"
 

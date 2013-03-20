@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VIEW_LAYERED_DEVICE_HXX
-#define SD_SLIDESORTER_VIEW_LAYERED_DEVICE_HXX
+#pragma once
+#if 1
 
 #include "view/SlsILayerPainter.hxx"
 #include "SlideSorter.hxx"

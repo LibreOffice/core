@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DBFINDEX_HXX_
-#define _DBAUI_DBFINDEX_HXX_
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

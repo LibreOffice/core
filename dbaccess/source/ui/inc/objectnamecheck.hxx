@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
-#define DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
+#pragma once
+#if 1
 
 namespace rtl { class OUString; }
 namespace dbtools { class SQLExceptionInfo; }

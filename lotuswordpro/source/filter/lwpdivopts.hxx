@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPDIVISIONOPTIONS_HXX
-#define _LWPDIVISIONOPTIONS_HXX
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpobjid.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_OVERLAY_OVERLAYOBJECTLIST_HXX
-#define _SDR_OVERLAY_OVERLAYOBJECTLIST_HXX
+#pragma once
+#if 1
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <sal/types.h>

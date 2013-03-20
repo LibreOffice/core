@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_VBA_FIELD_HXX
-#define SW_VBA_FIELD_HXX
+#pragma once
+#if 1
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextField.hpp>

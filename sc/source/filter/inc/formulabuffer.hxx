@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OOX_XLS_FORMULABUFFER_HXX
-#define OOX_XLS_FORMULABUFFER_HXX
+#pragma once
+#if 1
 
 #include <utility>
 #include "oox/helper/refmap.hxx"

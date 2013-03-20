@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHART2_THREEDHELPER_HXX
-#define CHART2_THREEDHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>

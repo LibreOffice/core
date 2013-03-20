@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_B2IBOX_HXX
-#define _BGFX_RANGE_B2IBOX_HXX
+#pragma once
+#if 1
 
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b2dpoint.hxx>

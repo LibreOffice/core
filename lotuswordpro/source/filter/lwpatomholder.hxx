@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPATOMHOLDER_HXX
-#define _LWPATOMHOLDER_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpdefs.hxx"

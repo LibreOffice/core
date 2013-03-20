@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_DOCUMENTMETADATAACCESS_HXX_
-#define _SFX_DOCUMENTMETADATAACCESS_HXX_
+#pragma once
+#if 1
 
 #include <sal/config.h>
 

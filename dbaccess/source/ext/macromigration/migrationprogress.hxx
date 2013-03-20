@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MIGRATIONPROGRESS_HXX
-#define DBACCESS_MIGRATIONPROGRESS_HXX
+#pragma once
+#if 1
 
 //........................................................................
 namespace dbmm

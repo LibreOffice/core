@@ -18,8 +18,8 @@
  */
 
 /// @HTML
-#ifndef WW_FIELDS_HXX
-#define WW_FIELDS_HXX
+#pragma once
+#if 1
 
 namespace ww
 {

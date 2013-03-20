@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX
-#define _SDR_PRIMITIVE3D_SDRATTRIBUTECREATOR3D_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

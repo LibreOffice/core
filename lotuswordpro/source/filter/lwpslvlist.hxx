@@ -57,8 +57,8 @@
  * @file
  * single list.
  ************************************************************************/
-#ifndef     _LWPSLVLIST_HXX
-#define     _LWPSLVLIST_HXX
+#pragma once
+#if 1
 
 #include "lwpobjstrm.hxx"
 #include "lwpfilehdr.hxx"

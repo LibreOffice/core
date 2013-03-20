@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#define _UNOTOOLS_COLLATORWRAPPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/i18n/XCollator.hpp>
 

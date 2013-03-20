@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_RPTUI_NAVIGATOR_HXX
-#define INCLUDED_RPTUI_NAVIGATOR_HXX
+#pragma once
+#if 1
 
 #include <vcl/floatwin.hxx>
 #include "ModuleHelper.hxx"

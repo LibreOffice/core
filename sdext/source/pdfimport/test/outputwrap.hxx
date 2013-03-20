@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_PDFIMPORT_OUTPUTWRAP_HXX
-#define INCLUDED_PDFIMPORT_OUTPUTWRAP_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>

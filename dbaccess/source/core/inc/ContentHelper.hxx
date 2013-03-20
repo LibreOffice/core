@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBA_CONTENTHELPER_HXX
-#define DBA_CONTENTHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>

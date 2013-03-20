@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DMAPPER_LOGGERS_HXX
-#define INCLUDED_DMAPPER_LOGGERS_HXX
+#pragma once
+#if 1
 
 #include <resourcemodel/TagLogger.hxx>
 

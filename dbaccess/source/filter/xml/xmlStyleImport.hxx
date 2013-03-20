@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBA_XMLSTYLEIMPORT_HXX
-#define DBA_XMLSTYLEIMPORT_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlimp.hxx>

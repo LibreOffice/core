@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_DOC_D_NODE_HXX
-#define ARY_DOC_D_NODE_HXX
+#pragma once
+#if 1
 
 // BASE CLASSES
 #include <cosv/tpl/processor.hxx>

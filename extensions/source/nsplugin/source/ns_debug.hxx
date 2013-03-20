@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __NSDEBUG_HXX_
-#define __NSDEBUG_HXX_
+#pragma once
+#if 1
 
 #define NPP_PATH_MAX    1024
 #define NPP_BUFFER_SIZE 1024

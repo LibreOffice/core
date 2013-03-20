@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SDXFER_HXX
-#define _SD_SDXFER_HXX
+#pragma once
+#if 1
 
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>

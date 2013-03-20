@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWMAILMERGECHILDWINDOW_HXX
-#define _SWMAILMERGECHILDWINDOW_HXX
+#pragma once
+#if 1
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/toolbox.hxx>

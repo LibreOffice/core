@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_B3IRANGE_HXX
-#define _BGFX_RANGE_B3IRANGE_HXX
+#pragma once
+#if 1
 
 #include <basegfx/point/b3ipoint.hxx>
 #include <basegfx/point/b3dpoint.hxx>

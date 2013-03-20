@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
-#define UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
+#pragma once
+#if 1
 #include <sal/types.h>
 
 namespace rtl

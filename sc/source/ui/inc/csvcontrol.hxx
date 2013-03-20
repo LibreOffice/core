@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef _SC_CSVCONTROL_HXX
-#define _SC_CSVCONTROL_HXX
+#pragma once
+#if 1
 
 #include <vcl/ctrl.hxx>
 #include "scdllapi.h"

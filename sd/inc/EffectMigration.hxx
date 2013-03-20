@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_EFFECT_MIGRATION_HXX
-#define _SD_EFFECT_MIGRATION_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>

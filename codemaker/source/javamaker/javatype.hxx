@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
-#define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
+#pragma once
+#if 1
 
 namespace codemaker { class GeneratedTypeSet; }
 namespace rtl { class OString; }

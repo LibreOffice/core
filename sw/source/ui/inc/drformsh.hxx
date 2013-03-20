@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SWDRWFORMSH_HXX
-#define _SWDRWFORMSH_HXX
+#pragma once
+#if 1
 
 #include "drwbassh.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef WW_STATICASSERT_HXX
-#define WW_STATICASSERT_HXX
+#pragma once
+#if 1
 
 /*
  Lifted direct from:

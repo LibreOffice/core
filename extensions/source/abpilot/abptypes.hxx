@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_ABP_ABPTYPES_HXX
-#define EXTENSIONS_ABP_ABPTYPES_HXX
+#pragma once
+#if 1
 
 #include <comphelper/stl_types.hxx>
 #include <rtl/ustring.hxx>

@@ -57,8 +57,8 @@
  * @file
  * Interface for the all content object,ie. text,paragraph,picture,and so on.
  ************************************************************************/
-#ifndef     _IXFCONTENT_HXX
-#define     _IXFCONTENT_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 

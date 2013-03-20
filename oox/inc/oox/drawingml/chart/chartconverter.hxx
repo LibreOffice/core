@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_CHART_CHARTCONVERTER_HXX
-#define OOX_DRAWINGML_CHART_CHARTCONVERTER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>

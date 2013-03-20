@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
-#define _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <cppuhelper/compbase3.hxx>

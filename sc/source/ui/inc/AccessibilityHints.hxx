@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ACCESSIBILITYHINTS_HXX
-#define SC_ACCESSIBILITYHINTS_HXX
+#pragma once
+#if 1
 
 #include "viewdata.hxx"
 #include <com/sun/star/uno/XInterface.hpp>

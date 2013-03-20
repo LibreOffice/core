@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_CONTENTHELPER_HXX
-#define _UCBHELPER_CONTENTHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>

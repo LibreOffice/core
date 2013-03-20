@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_UNOEVENT_HXX_
-#define _SVTOOLS_UNOEVENT_HXX_
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 #include <com/sun/star/container/XNameReplace.hpp>

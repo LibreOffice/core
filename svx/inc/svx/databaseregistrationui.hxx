@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DATABASE_REGISTRATION_UI_HXX
-#define SVX_DATABASE_REGISTRATION_UI_HXX
+#pragma once
+#if 1
 
 #include "svx/svxdllapi.h"
 #include <tools/solar.h>

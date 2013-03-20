@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SW_UNDO_FLY_STR_ATTR_HXX
-#define SW_UNDO_FLY_STR_ATTR_HXX
+#pragma once
+#if 1
 
 #include <undobj.hxx>
 #include <swundo.hxx>

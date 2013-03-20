@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POLYGON_B2DTRAPEZOID_HXX
-#define _BGFX_POLYGON_B2DTRAPEZOID_HXX
+#pragma once
+#if 1
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

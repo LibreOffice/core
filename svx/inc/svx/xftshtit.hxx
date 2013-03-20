@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XFTSHTIT_HXX
-#define _SVX_XFTSHTIT_HXX
+#pragma once
+#if 1
 
 #include <svl/intitem.hxx>
 

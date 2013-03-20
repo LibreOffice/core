@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef MYSQLC_SRESULTSET_HXX
-#define MYSQLC_SRESULTSET_HXX
+#pragma once
+#if 1
 
 #include "mysqlc_preparedstatement.hxx"
 #include "mysqlc_statement.hxx"

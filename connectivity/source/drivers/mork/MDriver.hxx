@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DRIVER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DRIVER_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

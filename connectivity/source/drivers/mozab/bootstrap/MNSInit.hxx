@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MAB_NS_INIT_HXX_
-#define _CONNECTIVITY_MAB_NS_INIT_HXX_ 1
+#pragma once
+#if 1
 #include "mozillasrc/MNSDeclares.hxx"
 
 #include <sal/types.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FILTDLG_HXX
-#define SC_FILTDLG_HXX
+#pragma once
+#if 1
 
 #include <vcl/morebtn.hxx>
 #include <vcl/combobox.hxx>

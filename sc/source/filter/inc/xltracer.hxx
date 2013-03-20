@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef SC_XLTRACER_HXX
-#define SC_XLTRACER_HXX
+#pragma once
+#if 1
 
 #include "global.hxx"        // ScAddress
 #include "xltools.hxx"

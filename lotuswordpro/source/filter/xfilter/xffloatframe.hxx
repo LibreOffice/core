@@ -57,8 +57,8 @@
  * @file
  * Float frame whose anchor is page.
  ************************************************************************/
-#ifndef     _XFFLOATFRAME_HXX
-#define     _XFFLOATFRAME_HXX
+#pragma once
+#if 1
 
 #include "xfframe.hxx"
 #include <vector>

@@ -57,8 +57,8 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
-#ifndef     _XFCOLOR_HXX
-#define     _XFCOLOR_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 

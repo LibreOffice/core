@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOT_OBJECT_HXX
-#define _SOT_OBJECT_HXX
+#pragma once
+#if 1
 
 #include <sot/sotdata.hxx>
 #include <tools/globname.hxx>

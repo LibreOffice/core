@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_CANVASHELPER_HXX_
-#define _VCLCANVAS_CANVASHELPER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>

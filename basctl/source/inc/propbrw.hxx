@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_PROPBRW_HXX
-#define BASCTL_PROPBRW_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/stl_types.hxx>

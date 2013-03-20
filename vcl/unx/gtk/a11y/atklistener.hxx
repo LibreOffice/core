@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ATK_LISTENER_HXX_
-#define _ATK_LISTENER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <cppuhelper/implbase1.hxx>

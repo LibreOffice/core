@@ -19,8 +19,8 @@
 
 
 
-#ifndef _WEBDAV_UCP_DATASUPPLIER_HXX
-#define _WEBDAV_UCP_DATASUPPLIER_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <rtl/ref.hxx>

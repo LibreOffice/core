@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // MyEDITVIEW, due to exported EditView
-#ifndef _MyEDITVIEW_HXX
-#define _MyEDITVIEW_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/i18n/WordType.hpp>
 

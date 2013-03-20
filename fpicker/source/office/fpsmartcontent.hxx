@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_SOURCE_FILEPICKER_FPSMARTCONTENT_HXX
-#define SVTOOLS_SOURCE_FILEPICKER_FPSMARTCONTENT_HXX
+#pragma once
+#if 1
 
 #include "fpinteraction.hxx"
 

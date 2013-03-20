@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_BOOKMARK_MARKMANAGER_HXX
-#define _SW_BOOKMARK_MARKMANAGER_HXX
+#pragma once
+#if 1
 
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>

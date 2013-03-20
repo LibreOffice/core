@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FMSRCIMP_HXX
-#define _FMSRCIMP_HXX
+#pragma once
+#if 1
 
 #include <svx/fmtools.hxx>
 #include "svx/svxdllapi.h"

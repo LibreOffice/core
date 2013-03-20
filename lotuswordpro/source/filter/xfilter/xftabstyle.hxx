@@ -57,8 +57,8 @@
  * @file
  * Tab style for paragraph.include tab offset and tab char properties.
  ************************************************************************/
-#ifndef     _XFTABSSTYLE_HXX
-#define     _XFTABSSTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

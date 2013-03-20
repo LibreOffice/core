@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_SLIDE_SHOW_VIEW_HXX
-#define SDEXT_PRESENTER_SLIDE_SHOW_VIEW_HXX
+#pragma once
+#if 1
 
 #include "PresenterViewFactory.hxx"
 #include <com/sun/star/presentation/XSlideShowView.hpp>

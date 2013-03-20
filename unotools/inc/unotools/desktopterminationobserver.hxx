@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
-#define UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
+#pragma once
+#if 1
 
 //........................................................................
 namespace utl

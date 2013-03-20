@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACCESS_OAUTHENTICATIONCONTINUATION_HXX_
-#define _DBACCESS_OAUTHENTICATIONCONTINUATION_HXX_
+#pragma once
+#if 1
 
 #include "dbadllapi.hxx"
 

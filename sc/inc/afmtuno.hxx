@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_AFMTUNO_HXX
-#define SC_AFMTUNO_HXX
+#pragma once
+#if 1
 
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>

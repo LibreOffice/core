@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORBIDDENCHARACTERSTABLE_HXX
-#define _FORBIDDENCHARACTERSTABLE_HXX
+#pragma once
+#if 1
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/uno/Reference.hxx>

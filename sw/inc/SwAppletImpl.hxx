@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SW_APPLET_IMPL_HXX
-#define _SW_APPLET_IMPL_HXX
+#pragma once
+#if 1
 
 #define SWHTML_OPTTYPE_IGNORE 0
 #define SWHTML_OPTTYPE_TAG 1

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_DOCUMENTINFO_HXX
-#define COMPHELPER_DOCUMENTINFO_HXX
+#pragma once
+#if 1
 
 #include "comphelper/comphelperdllapi.h"
 

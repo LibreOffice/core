@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_CHECKLISTMENU_HXX__
-#define __SC_CHECKLISTMENU_HXX__
+#pragma once
+#if 1
 
 #include "vcl/popupmenuwindow.hxx"
 #include "vcl/button.hxx"

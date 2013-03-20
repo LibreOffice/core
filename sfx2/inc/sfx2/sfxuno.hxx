@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_SFXUNO_HXX
-#define _SFX_SFXUNO_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"

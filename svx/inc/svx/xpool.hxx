@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XPOOL_HXX
-#define _XPOOL_HXX
+#pragma once
+#if 1
 
 #include <svl/itempool.hxx>
 #include <svx/xdef.hxx>

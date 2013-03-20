@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADC_PE_TYPE2_HXX
-#define ADC_PE_TYPE2_HXX
+#pragma once
+#if 1
 
 
 

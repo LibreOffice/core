@@ -8,8 +8,8 @@
  */
 
 
-#ifndef OOX_PPT_COMMENTS_HXX
-#define OOX_PPT_COMMENTS_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <com/sun/star/util/DateTime.hpp>

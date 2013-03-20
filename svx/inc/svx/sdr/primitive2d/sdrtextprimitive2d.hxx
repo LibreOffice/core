@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX
-#define INCLUDED_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

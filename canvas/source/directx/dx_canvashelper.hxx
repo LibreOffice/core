@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_CANVASHELPER_HXX_
-#define _DXCANVAS_CANVASHELPER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 

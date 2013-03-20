@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX
-#define INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX
+#pragma once
+#if 1
 
 #include <basegfx/tools/rectcliptools.hxx>
 #include <basegfx/point/b2ipoint.hxx>

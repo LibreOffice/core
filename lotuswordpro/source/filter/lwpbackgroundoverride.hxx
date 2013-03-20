@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef     _LWPBACKGROUNDOVERRIDE_HXX
-#define     _LWPBACKGROUNDOVERRIDE_HXX
+#pragma once
+#if 1
 
 
 #include "lwpoverride.hxx"

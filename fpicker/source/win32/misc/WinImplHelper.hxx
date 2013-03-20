@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _WINIMPLHELPER_HXX_
-#define _WINIMPLHELPER_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

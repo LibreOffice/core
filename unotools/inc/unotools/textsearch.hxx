@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_TEXTSEARCH_HXX
-#define _UNOTOOLS_TEXTSEARCH_HXX
+#pragma once
+#if 1
 #include <i18npool/lang.h>
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>

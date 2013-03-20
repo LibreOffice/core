@@ -7,8 +7,8 @@
  * For further information visit http://libwpg.sourceforge.net
  */
 
-#ifndef __ODGEXPORTER_HXX__
-#define __ODGEXPORTER_HXX__
+#pragma once
+#if 1
 
 #include <libwpd/libwpd.h>
 #include <libwpg/libwpg.h>

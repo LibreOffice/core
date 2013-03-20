@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLS_RESID_HXX
-#define _TOOLS_RESID_HXX
+#pragma once
+#if 1
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>

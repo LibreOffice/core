@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVXGRAPHACCESSIBLECONTEXT_HXX
-#define _SVXGRAPHACCESSIBLECONTEXT_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase7.hxx>
 #include <com/sun/star/uno/Reference.hxx>

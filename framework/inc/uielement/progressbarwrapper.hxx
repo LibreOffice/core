@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
-#define _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
+#pragma once
+#if 1
 
 #include <helper/uielementwrapperbase.hxx>
 #include <threadhelp/threadhelpbase.hxx>

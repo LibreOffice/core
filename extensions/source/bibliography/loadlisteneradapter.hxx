@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_BIB_LOADLISTENERADAPTER_HXX
-#define EXTENSIONS_BIB_LOADLISTENERADAPTER_HXX
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

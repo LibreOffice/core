@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _MRC_MULTIPLX_HXX
-#define _MRC_MULTIPLX_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XKeyListener.hpp>

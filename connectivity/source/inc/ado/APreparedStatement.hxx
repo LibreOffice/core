@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ADO_APREPAREDSTATEMENT_HXX_
-#define _CONNECTIVITY_ADO_APREPAREDSTATEMENT_HXX_
+#pragma once
+#if 1
 
 #include "ado/AStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>

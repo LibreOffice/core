@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XPATH_XPATHAPI_HXX
-#define XPATH_XPATHAPI_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <vector>

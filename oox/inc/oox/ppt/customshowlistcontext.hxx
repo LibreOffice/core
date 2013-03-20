@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_POWERPOINT_CUSTOMSHOWLISTCONTEXT_HXX
-#define OOX_POWERPOINT_CUSTOMSHOWLISTCONTEXT_HXX
+#pragma once
+#if 1
 
 #include "oox/core/fragmenthandler2.hxx"
 #include <vector>

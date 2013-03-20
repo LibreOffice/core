@@ -63,8 +63,8 @@
  ************************************************************************/
 
 
-#ifndef _LWPPARAGRAPH_HXX_
-#define _LWPPARAGRAPH_HXX_
+#pragma once
+#if 1
 
 #include <boost/scoped_ptr.hpp>
 

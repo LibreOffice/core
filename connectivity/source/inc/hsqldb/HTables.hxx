@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_HSQLDB_TABLES_HXX
-#define CONNECTIVITY_HSQLDB_TABLES_HXX
+#pragma once
+#if 1
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

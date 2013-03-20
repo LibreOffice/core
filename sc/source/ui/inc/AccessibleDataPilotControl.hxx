@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEDATAPILOTCONTROL_HXX
-#define _SC_ACCESSIBLEDATAPILOTCONTROL_HXX
+#pragma once
+#if 1
 
 #include "AccessibleContextBase.hxx"
 

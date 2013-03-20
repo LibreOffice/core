@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_INFO_ALL_DTS_HXX
-#define ARY_INFO_ALL_DTS_HXX
+#pragma once
+#if 1
 
 
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_RECENTLY_USED_FILE_HXX
-#define INCLUDED_RECENTLY_USED_FILE_HXX
+#pragma once
+#if 1
 
 #include <stdio.h>
 #include <unistd.h>

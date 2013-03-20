@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PREVIEWPAGES_HXX
-#define _PREVIEWPAGES_HXX
+#pragma once
+#if 1
 
 // classes <Point>, <Size> and <Rectangle>
 #include <tools/gen.hxx>

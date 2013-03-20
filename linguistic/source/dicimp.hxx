@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_DICIMP_HXX_
-#define _LINGUISTIC_DICIMP_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/frame/XStorable.hpp>

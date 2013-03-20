@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __LIBXSLTTRANSFORMER_HXX__
-#define __LIBXSLTTRANSFORMER_HXX__
+#pragma once
+#if 1
 
 #include <stdio.h>
 

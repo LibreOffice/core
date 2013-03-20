@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_URL_FILTER_HXX
-#define SVTOOLS_URL_FILTER_HXX
+#pragma once
+#if 1
 
 #include <tools/wldcrd.hxx>
 #include <functional>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_MIGRATIONENGINE_HXX
-#define DBACCESS_MIGRATIONENGINE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 

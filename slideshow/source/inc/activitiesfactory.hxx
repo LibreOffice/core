@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_ACTIVITIESFACTORY_HXX
-#define INCLUDED_SLIDESHOW_ACTIVITIESFACTORY_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>

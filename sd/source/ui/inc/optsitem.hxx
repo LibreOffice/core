@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_OPTSITEM_HXX
-#define _SD_OPTSITEM_HXX
+#pragma once
+#if 1
 
 #include <unotools/configitem.hxx>
 #include <sfx2/module.hxx>

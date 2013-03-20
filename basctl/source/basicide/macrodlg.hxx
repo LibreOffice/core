@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 //
-#ifndef BASCTL_MACRODLG_HXX
-#define BASCTL_MACRODLG_HXX
+#pragma once
+#if 1
 
 #include <svheader.hxx>
 

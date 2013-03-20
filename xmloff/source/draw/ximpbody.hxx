@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XIMPBODY_HXX
-#define _XIMPBODY_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"

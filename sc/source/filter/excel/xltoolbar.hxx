@@ -28,8 +28,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _XLTOOLBAR_HXX
-#define _XLTOOLBAR_HXX
+#pragma once
+#if 1
 
 #include <filter/msfilter/mstoolbar.hxx>
 

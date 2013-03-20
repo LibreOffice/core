@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef OSL_DIAGNOSE_HXX_INCLUDED
-#define OSL_DIAGNOSE_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

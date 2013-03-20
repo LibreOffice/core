@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UCB_UCPEXT_DATA_SUPPLIER_HXX
-#define UCB_UCPEXT_DATA_SUPPLIER_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>

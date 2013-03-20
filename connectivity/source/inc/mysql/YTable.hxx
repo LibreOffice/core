@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_MYSQL_TABLE_HXX
-#define CONNECTIVITY_MYSQL_TABLE_HXX
+#pragma once
+#if 1
 
 #include "connectivity/TTableHelper.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

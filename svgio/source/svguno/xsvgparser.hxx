@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVGIO_SOURCE_SVGUNO_XSVGPARSER_HXX
-#define INCLUDED_SVGIO_SOURCE_SVGUNO_XSVGPARSER_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

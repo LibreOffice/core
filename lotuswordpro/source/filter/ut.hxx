@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef UT_HXX
-#define UT_HXX
+#pragma once
+#if 1
 # include <sal/types.h>
 
 namespace OpenStormBento

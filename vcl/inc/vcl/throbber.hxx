@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_THROBBER_HXX
-#define VCL_THROBBER_HXX
+#pragma once
+#if 1
 
 #include "vcl/dllapi.h"
 #include "vcl/imgctrl.hxx"

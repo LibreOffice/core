@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_TEXT_HXX
-#define _CPPCANVAS_TEXT_HXX
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 #include <cppcanvas/canvasgraphic.hxx>

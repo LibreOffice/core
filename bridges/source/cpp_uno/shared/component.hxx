@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_SHARED_COMPONENT_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_SHARED_COMPONENT_HXX
+#pragma once
+#if 1
 
 #include "rtl/unload.h"
 

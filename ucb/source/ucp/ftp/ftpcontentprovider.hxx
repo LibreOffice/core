@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FTP_FTPCONTENTPROVIDER_HXX_
-#define _FTP_FTPCONTENTPROVIDER_HXX_
+#pragma once
+#if 1
 
 #include <vector>
 #include <osl/mutex.hxx>

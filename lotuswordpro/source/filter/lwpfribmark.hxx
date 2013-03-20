@@ -63,8 +63,8 @@
  ************************************************************************/
 
 
-#ifndef _LWPFRIBMARKER_HXX_
-#define _LWPFRIBMARKER_HXX_
+#pragma once
+#if 1
 
 #include "lwpfrib.hxx"
 #include "lwpstory.hxx"

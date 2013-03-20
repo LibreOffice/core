@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPU_THREADPOOL_JOBQUEUE_HXX_
-#define _CPPU_THREADPOOL_JOBQUEUE_HXX_
+#pragma once
+#if 1
 
 #include <list>
 #include <sal/types.h>

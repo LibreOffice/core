@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SCH_XMLCHARTCONTEXT_HXX_
-#define _SCH_XMLCHARTCONTEXT_HXX_
+#pragma once
+#if 1
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Sequence.h>

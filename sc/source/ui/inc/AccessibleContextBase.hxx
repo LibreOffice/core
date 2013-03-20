@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLECONTEXTBASE_HXX
-#define _SC_ACCESSIBLECONTEXTBASE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>

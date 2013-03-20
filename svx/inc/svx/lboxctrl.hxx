@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_LBOXCTRL_HXX_
-#define _SVX_LBOXCTRL_HXX_
+#pragma once
+#if 1
 
 #include <sfx2/tbxctrl.hxx>
 #include <rtl/ustring.hxx>

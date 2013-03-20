@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEPREVIEWTABLE_HXX
-#define _SC_ACCESSIBLEPREVIEWTABLE_HXX
+#pragma once
+#if 1
 
 #include "AccessibleContextBase.hxx"
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>

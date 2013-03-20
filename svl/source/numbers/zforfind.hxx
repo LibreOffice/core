@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ZFORFIND_HXX
-#define _ZFORFIND_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>

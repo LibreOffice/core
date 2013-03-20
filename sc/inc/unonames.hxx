@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_UNONAMES_HXX
-#define SC_UNONAMES_HXX
+#pragma once
+#if 1
 
 // service names
 #define SC_SERVICENAME_VALBIND          "com.sun.star.table.CellValueBinding"

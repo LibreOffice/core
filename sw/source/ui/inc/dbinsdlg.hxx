@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBINSDLG_HXX
-#define _DBINSDLG_HXX
+#pragma once
+#if 1
 
 
 #include <vcl/button.hxx>

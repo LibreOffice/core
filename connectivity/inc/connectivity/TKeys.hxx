@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_TKEYS_HXX
-#define CONNECTIVITY_TKEYS_HXX
+#pragma once
+#if 1
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EEHTML_HXX
-#define _EEHTML_HXX
+#pragma once
+#if 1
 
 #include <editdoc.hxx>
 #include <svtools/parhtml.hxx>

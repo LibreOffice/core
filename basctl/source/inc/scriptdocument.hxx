@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASCTL_SCRIPTDOCUMENT_HXX
-#define BASCTL_SCRIPTDOCUMENT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>

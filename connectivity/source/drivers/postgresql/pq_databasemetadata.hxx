@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_DATABASEMETADATA_HXX_
-#define _PQ_DATABASEMETADATA_HXX_
+#pragma once
+#if 1
 
 #include "pq_connection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>

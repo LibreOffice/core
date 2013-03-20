@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_SLIDE_SORTER_MODEL_HXX
-#define SD_SLIDESORTER_SLIDE_SORTER_MODEL_HXX
+#pragma once
+#if 1
 
 class SdDrawDocument;
 

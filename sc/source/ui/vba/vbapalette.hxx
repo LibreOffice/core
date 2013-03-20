@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBAPALETTE_HXX
-#define SC_VBAPALETTE_HXX
+#pragma once
+#if 1
 
 #include <vbahelper/vbahelper.hxx>
 

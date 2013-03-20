@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_FUDRAW_HXX
-#define SC_FUDRAW_HXX
+#pragma once
+#if 1
 
 #include "fupoor.hxx"
 #include <vcl/pointr.hxx>

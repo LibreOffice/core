@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_I18N_XKBDEXTENSION_HXX
-#define _SAL_I18N_XKBDEXTENSION_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <vclpluginapi.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADC_CX_DSAPI_HXX
-#define ADC_CX_DSAPI_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
     // BASE CLASSES

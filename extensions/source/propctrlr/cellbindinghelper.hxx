@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
-#define EXTENSIONS_PROPCTRLR_CELLBINDINGHELPER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

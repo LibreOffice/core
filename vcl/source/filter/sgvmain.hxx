@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SGVMAIN_HXX
-#define _SGVMAIN_HXX
+#pragma once
+#if 1
 
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>

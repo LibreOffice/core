@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _EXPORTDIALOG_HXX_
-#define _EXPORTDIALOG_HXX_
+#pragma once
+#if 1
 
 #include <vcl/fltcall.hxx>
 #include <vcl/dialog.hxx>

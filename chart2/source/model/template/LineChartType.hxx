@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_LINECHARTTYPE_HXX
-#define CHART_LINECHARTTYPE_HXX
+#pragma once
+#if 1
 
 #include "ChartType.hxx"
 #include "ServiceMacros.hxx"

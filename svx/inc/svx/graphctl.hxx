@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GRAPHCTL_HXX
-#define _GRAPHCTL_HXX
+#pragma once
+#if 1
 
 #include <vcl/ctrl.hxx>
 #include <vcl/graph.hxx>

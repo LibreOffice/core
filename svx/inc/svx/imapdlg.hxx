@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _IMAPDLG_HXX_
-#define _IMAPDLG_HXX_
+#pragma once
+#if 1
 
 #include <svtools/inettbc.hxx>
 #include <sfx2/childwin.hxx>
@@ -66,8 +66,8 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 };
 
 
-#ifndef _REDUCED_IMAPDLG_HXX_
-#define _REDUCED_IMAPDLG_HXX_
+#pragma once
+#if 1
 
 class SvxIMapDlg;
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
-#define INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
+#pragma once
+#if 1
 
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

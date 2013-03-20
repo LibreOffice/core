@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_HELPWIN_HXX
-#define _SV_HELPWIN_HXX
+#pragma once
+#if 1
 
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>

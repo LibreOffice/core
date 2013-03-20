@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ESCHER_HXX
-#define _ESCHER_HXX
+#pragma once
+#if 1
 
 #include <filter/msfilter/escherex.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_DESKTOPS_HXX
-#define INCLUDED_VCL_DESKTOPS_HXX
+#pragma once
+#if 1
 
 enum DesktopType {
     DESKTOP_NONE, // headless, i.e. no X connection at all

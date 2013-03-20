@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef SC_FORMULAOPT_HXX
-#define SC_FORMULAOPT_HXX
+#pragma once
+#if 1
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>

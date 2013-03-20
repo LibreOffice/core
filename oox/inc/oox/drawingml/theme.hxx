@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_THEME_HXX
-#define OOX_DRAWINGML_THEME_HXX
+#pragma once
+#if 1
 
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/shape.hxx"

@@ -7,8 +7,8 @@
  *
  * For further information visit http://libwpd.sourceforge.net
  */
-#ifndef __FILTERINTERNAL_HXX__
-#define __FILTERINTERNAL_HXX__
+#pragma once
+#if 1
 
 #include <string.h> // for strcmp
 

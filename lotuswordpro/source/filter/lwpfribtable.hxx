@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPFRIBTABLE_HXX_
-#define _LWPFRIBTABLE_HXX_
+#pragma once
+#if 1
 
 #include "lwpfrib.hxx"
 

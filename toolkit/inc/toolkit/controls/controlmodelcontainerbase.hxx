@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_CONTROL_MODEL_CONTAINERBASE_HXX
-#define TOOLKIT_CONTROL_MODEL_CONTAINERBASE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>

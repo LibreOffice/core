@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_PROPCTRLR_MODULEPRC_HXX
-#define EXTENSIONS_PROPCTRLR_MODULEPRC_HXX
+#pragma once
+#if 1
 
 #include <unotools/componentresmodule.hxx>
 

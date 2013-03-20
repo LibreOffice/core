@@ -18,8 +18,8 @@
  */
 
 // MyEDITDATA, wegen exportiertem EditData
-#ifndef _MyEDITDATA_HXX
-#define _MyEDITDATA_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include "editeng/editengdllapi.h"

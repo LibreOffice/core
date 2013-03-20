@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIELEMENT_UIELEMENTTYPENAMES_HXX_
-#define __FRAMEWORK_UIELEMENT_UIELEMENTTYPENAMES_HXX_
+#pragma once
+#if 1
 
 #define UIELEMENTTYPE_MENUBAR_NAME          "menubar"
 #define UIELEMENTTYPE_POPUPMENU_NAME        "popupmenu"

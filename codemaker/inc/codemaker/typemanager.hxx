@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
-#define INCLUDED_CODEMAKER_TYPEMANAGER_HXX
+#pragma once
+#if 1
 
 #include "codemaker/global.hxx"
 #include "registry/registry.hxx"

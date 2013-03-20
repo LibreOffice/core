@@ -57,8 +57,8 @@
  * @file
  * An span of text with style.
  ************************************************************************/
-#ifndef     _XFTEXTSPAN_HXX
-#define     _XFTEXTSPAN_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

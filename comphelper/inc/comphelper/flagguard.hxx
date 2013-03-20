@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_FLAGGUARD_HXX
-#define COMPHELPER_FLAGGUARD_HXX
+#pragma once
+#if 1
 
 #include "comphelper/scopeguard.hxx"
 

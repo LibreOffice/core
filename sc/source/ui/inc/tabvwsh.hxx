@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TABVWSH_HXX
-#define SC_TABVWSH_HXX
+#pragma once
+#if 1
 
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewsh.hxx>

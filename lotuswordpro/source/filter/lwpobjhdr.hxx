@@ -63,8 +63,8 @@
  ************************************************************************/
 
 
-#ifndef _LWPOBJECTHEADER_HXX
-#define _LWPOBJECTHEADER_HXX
+#pragma once
+#if 1
 
 #include "lwpobjid.hxx"
 #include "lwpobjtags.hxx"

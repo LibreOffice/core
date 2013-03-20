@@ -57,8 +57,8 @@
  * @file
  * Date field with date style.
  ************************************************************************/
-#ifndef     _XFDATE_HXX
-#define     _XFDATE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

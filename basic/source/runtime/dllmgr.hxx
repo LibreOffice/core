@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
-#define INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

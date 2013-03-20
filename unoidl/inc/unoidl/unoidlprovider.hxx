@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOIDL_UNOIDLPROVIDER_HXX
-#define INCLUDED_UNOIDL_UNOIDLPROVIDER_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FMVIEW_HXX
-#define _SVX_FMVIEW_HXX
+#pragma once
+#if 1
 
 #include <svx/view3d.hxx>
 #include <comphelper/uno3.hxx>

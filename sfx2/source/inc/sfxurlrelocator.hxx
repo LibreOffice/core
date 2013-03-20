@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_SFXURLRELOCATOR_HXX_
-#define _SFX_SFXURLRELOCATOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>

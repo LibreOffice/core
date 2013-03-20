@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
-#define _SVTOOLS_LOCALRESACCESS_HXX_
+#pragma once
+#if 1
 
 #include <tools/rc.hxx>
 #include <tools/rcid.h>

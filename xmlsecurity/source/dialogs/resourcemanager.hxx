@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RESOURCEMANAGER_HXX
-#define _RESOURCEMANAGER_HXX
+#pragma once
+#if 1
 
 #include <tools/resmgr.hxx>
 #include <tools/datetime.hxx>

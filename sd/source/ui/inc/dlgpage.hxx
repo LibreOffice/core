@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_DLGPAGE_HXX
-#define _SD_DLGPAGE_HXX
+#pragma once
+#if 1
 
 #include <sfx2/tabdlg.hxx>
 #include "dlgpage.hrc"

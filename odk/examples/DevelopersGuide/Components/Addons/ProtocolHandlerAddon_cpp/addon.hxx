@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef _Addon_HXX
-#define _Addon_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

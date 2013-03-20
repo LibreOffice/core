@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_PARAWIN_HXX
-#define FORMULA_PARAWIN_HXX
+#pragma once
+#if 1
 
 #include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>

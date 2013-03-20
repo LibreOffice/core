@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _MCNTTYPE_HXX_
-#define _MCNTTYPE_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/ustring.hxx>

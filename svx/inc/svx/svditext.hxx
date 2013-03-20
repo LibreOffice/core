@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDITEXT_HXX
-#define _SVDITEXT_HXX
+#pragma once
+#if 1
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
 

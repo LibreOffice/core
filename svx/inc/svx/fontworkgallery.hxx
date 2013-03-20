@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
-#define _SVX_FONTWORK_GALLERY_DIALOG_HXX
+#pragma once
+#if 1
 
 #include "svx/svxdllapi.h"
 

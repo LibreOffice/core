@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPCOLOR_HXX
-#define _LWPCOLOR_HXX
+#pragma once
+#if 1
 
 #include "lwpobjstrm.hxx"
 #include "lwpheader.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLTABLEIMPORT_HXX_
-#define XMLTABLEIMPORT_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/table/XColumnRowRange.hpp>
 

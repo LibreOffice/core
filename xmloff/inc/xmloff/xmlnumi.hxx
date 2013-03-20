@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLNUMI_HXX
-#define _XMLOFF_XMLNUMI_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 

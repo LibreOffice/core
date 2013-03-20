@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCEDCUSTOMSHAPE3D_HXX
-#define _ENHANCEDCUSTOMSHAPE3D_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <com/sun/star/drawing/ProjectionMode.hpp>

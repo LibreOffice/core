@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __PLUGIN_INC_WINPLUG_HXX
-#define __PLUGIN_INC_WINPLUG_HXX
+#pragma once
+#if 1
 
 #pragma warning (push,1)
 #pragma warning (disable:4005)

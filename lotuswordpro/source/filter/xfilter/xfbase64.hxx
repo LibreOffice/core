@@ -57,8 +57,8 @@
  * @file
  * Base64 tool.
  ************************************************************************/
-#ifndef     _XFBASE64_HXX
-#define     _XFBASE64_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 

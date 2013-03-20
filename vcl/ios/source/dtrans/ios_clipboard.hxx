@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _IOS_CLIPBOARD_HXX_
-#define _IOS_CLIPBOARD_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

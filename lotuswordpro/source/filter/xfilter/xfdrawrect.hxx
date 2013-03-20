@@ -57,8 +57,8 @@
  * @file
  * Rect object.
  ************************************************************************/
-#ifndef     _XFDRAWRECT_HXX
-#define     _XFDRAWRECT_HXX
+#pragma once
+#if 1
 
 #include "xfdrawobj.hxx"
 

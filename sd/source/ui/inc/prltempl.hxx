@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_PRLTEMPL_HXX
-#define SD_PRLTEMPL_HXX
+#pragma once
+#if 1
 
 #include "sdresid.hxx"
 #include <sfx2/tabdlg.hxx>

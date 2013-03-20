@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_DBP_CONTROLWIZARD_HXX
-#define _EXTENSIONS_DBP_CONTROLWIZARD_HXX
+#pragma once
+#if 1
 
 #include <svtools/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -57,8 +57,8 @@
 * @file
 * Backgound object of Wordpro.
 ************************************************************************/
-#ifndef     _LWPBACKGROUNDSTUFF_HXX
-#define     _LWPBACKGROUNDSTUFF_HXX
+#pragma once
+#if 1
 #include "lwpcolor.hxx"
 
 /* background patterns */

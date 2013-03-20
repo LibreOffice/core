@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_BASEGFXHELPER_HXX
-#define CHART2_BASEGFXHELPER_HXX
+#pragma once
+#if 1
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>

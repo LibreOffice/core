@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADC_UIDL_PE_ENUM2_HXX
-#define ADC_UIDL_PE_ENUM2_HXX
+#pragma once
+#if 1
 
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>

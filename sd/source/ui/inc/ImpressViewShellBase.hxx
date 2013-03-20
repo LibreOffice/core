@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_IMPRESS_VIEW_SHELL_BASE_HXX
-#define SD_IMPRESS_VIEW_SHELL_BASE_HXX
+#pragma once
+#if 1
 
 #include "ViewShellBase.hxx"
 

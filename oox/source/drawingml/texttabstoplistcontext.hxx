@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TEXTTABSTOPLISTCONTEXT_HXX
-#define OOX_DRAWINGML_TEXTTABSTOPLISTCONTEXT_HXX
+#pragma once
+#if 1
 
 #include <list>
 

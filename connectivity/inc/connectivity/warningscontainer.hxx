@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
-#define DBTOOLS_WARNINGSCONTAINER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>

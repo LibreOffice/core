@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PKGPROVIDER_HXX
-#define _PKGPROVIDER_HXX
+#pragma once
+#if 1
 
 #include <ucbhelper/providerhelper.hxx>
 #include "pkguri.hxx"

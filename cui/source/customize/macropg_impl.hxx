@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MACROPG_IMPL_HXX
-#define _MACROPG_IMPL_HXX
+#pragma once
+#if 1
 
 class _SvxMacroTabPage_Impl
 {

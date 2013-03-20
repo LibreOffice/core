@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SD_IMPRESSREMOTE_TRANSMITTER_HXX
-#define _SD_IMPRESSREMOTE_TRANSMITTER_HXX
+#pragma once
+#if 1
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>

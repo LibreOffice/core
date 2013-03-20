@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ADC_DISPLAY_HFI_HIERARCHY_HXX
-#define ADC_DISPLAY_HFI_HIERARCHY_HXX
+#pragma once
+#if 1
 
 // USED SERVICES
     // BASE CLASSES

@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _PAGEBREAKWINDOW_HXX
-#define _PAGEBREAKWINDOW_HXX
+#pragma once
+#if 1
 
 #include <FrameControl.hxx>
 

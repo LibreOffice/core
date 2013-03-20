@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_COMMONPICKER_HXX
-#define SVTOOLS_COMMONPICKER_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase5.hxx>
 #include <com/sun/star/ui/dialogs/XControlInformation.hpp>

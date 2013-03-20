@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_UI_SHARED_CONNECTION_HXX
-#define SW_UI_SHARED_CONNECTION_HXX
+#pragma once
+#if 1
 
 #include <unotools/sharedunocomponent.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>

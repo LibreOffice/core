@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WRTHTML_HXX
-#define _WRTHTML_HXX
+#pragma once
+#if 1
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>

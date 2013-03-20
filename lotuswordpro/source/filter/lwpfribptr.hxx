@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPFRIBPTR_HXX_
-#define _LWPFRIBPTR_HXX_
+#pragma once
+#if 1
 
 #include "lwpobjstrm.hxx"
 #include "lwpfrib.hxx"

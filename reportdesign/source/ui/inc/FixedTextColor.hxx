@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FIXEDTEXTCOLOR_HXX
-#define INCLUDED_FIXEDTEXTCOLOR_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XChild.hpp>

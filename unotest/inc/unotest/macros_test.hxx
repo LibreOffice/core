@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_UNOTEST_MACROS_TEST_HXX
-#define INCLUDED_UNOTEST_MACROS_TEST_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include "unotest/detail/unotestdllapi.hxx"

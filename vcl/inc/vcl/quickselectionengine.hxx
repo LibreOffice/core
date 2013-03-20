@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_QUICKSELECTIONENGINE_HXX
-#define VCL_QUICKSELECTIONENGINE_HXX
+#pragma once
+#if 1
 
 #include "dllapi.h"
 

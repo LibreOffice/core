@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _UNO_MTF_RENDERER_HXX_
-#define _UNO_MTF_RENDERER_HXX_
+#pragma once
+#if 1
 #include <com/sun/star/rendering/MtfRenderer.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

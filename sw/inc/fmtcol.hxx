@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FMTCOL_HXX
-#define _FMTCOL_HXX
+#pragma once
+#if 1
 
 #include "swdllapi.h"
 #include <format.hxx>

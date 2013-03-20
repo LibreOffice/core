@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SC_QPROFORM_HXX
-#define SC_QPROFORM_HXX
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include "formel.hxx"

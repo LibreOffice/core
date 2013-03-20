@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLENCRYPTION_NSSIMPL_HXX_
-#define _XMLENCRYPTION_NSSIMPL_HXX_
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>

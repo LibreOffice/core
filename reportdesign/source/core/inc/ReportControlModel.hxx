@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPT_REPORTCONTROLMODEL_HXX
-#define RPT_REPORTCONTROLMODEL_HXX
+#pragma once
+#if 1
 
 #include "ReportComponent.hxx"
 #include "com/sun/star/style/VerticalAlignment.hpp"

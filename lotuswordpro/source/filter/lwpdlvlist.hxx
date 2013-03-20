@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef LWPDLVLIST_HXX_
-#define LWPDLVLIST_HXX_
+#pragma once
+#if 1
 
 #include "lwpatomholder.hxx"
 #include "lwpobj.hxx"

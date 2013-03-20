@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_SHEETDATA_HXX
-#define SC_SHEETDATA_HXX
+#pragma once
+#if 1
 
 #include <xmloff/maptype.hxx>
 #include <editeng/editdata.hxx>

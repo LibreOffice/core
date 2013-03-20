@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XESTYLE_HXX
-#define SC_XESTYLE_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <tools/mempool.hxx>

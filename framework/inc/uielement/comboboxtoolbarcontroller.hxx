@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX_
-#define __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

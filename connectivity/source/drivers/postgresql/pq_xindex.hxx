@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef HEADER_PQ_XINDEX_HXX
-#define HEADER_PQ_XINDEX_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/propshlp.hxx>

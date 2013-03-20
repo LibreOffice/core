@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef __SO_INSTANCE_HXX__
-#define __SO_INSTANCE_HXX__
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/diagnose.h>

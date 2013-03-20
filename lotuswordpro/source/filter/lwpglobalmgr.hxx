@@ -61,8 +61,8 @@
  * Change History
  Nov 2005           Created
  ************************************************************************/
-#ifndef _LWPGLOBALMGR_HXX_
-#define _LWPGLOBALMGR_HXX_
+#pragma once
+#if 1
 
 #include <map>
 #include "lwpheader.hxx"

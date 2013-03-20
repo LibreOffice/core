@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __EDITENG_FIELDUPDATER_HXX__
-#define __EDITENG_FIELDUPDATER_HXX__
+#pragma once
+#if 1
 
 #include "editengdllapi.h"
 

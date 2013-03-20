@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTBREAKUPHELPER_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTBREAKUPHELPER_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>

@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _FRAMECONTROLSMANAGER_HXX
-#define _FRAMECONTROLSMANAGER_HXX
+#pragma once
+#if 1
 
 #include <viewsh.hxx>
 #include <FrameControl.hxx>

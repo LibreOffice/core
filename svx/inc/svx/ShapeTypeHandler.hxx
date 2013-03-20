@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
-#define _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
+#pragma once
+#if 1
 
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/AccessibleShapeInfo.hxx>

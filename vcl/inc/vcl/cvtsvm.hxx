@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_CVTMTF_HXX
-#define _SV_CVTMTF_HXX
+#pragma once
+#if 1
 
 #include <stack>
 #include <vcl/dllapi.h>

@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef SC_VBA_MENUS_HXX
-#define SC_VBA_MENUS_HXX
+#pragma once
+#if 1
 
 #include <ooo/vba/excel/XMenus.hpp>
 #include <ooo/vba/excel/XMenu.hpp>

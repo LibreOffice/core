@@ -29,8 +29,8 @@
  * Strba and Thorsten Behrens
  */
 
-#ifndef INCLUDED_O3TL_COMPAT_FUNCTIONAL_HXX
-#define INCLUDED_O3TL_COMPAT_FUNCTIONAL_HXX
+#pragma once
+#if 1
 
 #include <functional>
 

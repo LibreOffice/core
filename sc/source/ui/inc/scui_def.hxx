@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SCUI_DEF_HXX
-#define SCUI_DEF_HXX
+#pragma once
+#if 1
 
 #define SCRET_COLS 0x42
 #define SCRET_ROWS 0x43

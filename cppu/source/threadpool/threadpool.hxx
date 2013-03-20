@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
-#define INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
+#pragma once
+#if 1
 
 #include <list>
 

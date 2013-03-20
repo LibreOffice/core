@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_SBMOD_HXX
-#define _SB_SBMOD_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/script/XInvocation.hpp>
 #include <basic/sbdef.hxx>

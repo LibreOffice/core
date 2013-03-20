@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_HELPER_TKARESMGR_HXX
-#define ACCESSIBILITY_HELPER_TKARESMGR_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 

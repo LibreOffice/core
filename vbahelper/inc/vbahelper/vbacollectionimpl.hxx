@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOVBAAPI_VBA_COLLECTION_IMPL_HXX
-#define OOVBAAPI_VBA_COLLECTION_IMPL_HXX
+#pragma once
+#if 1
 
 #include <ooo/vba/XCollection.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDDRGM1_HXX
-#define _SVDDRGM1_HXX
+#pragma once
+#if 1
 
 #include <svx/xpoly.hxx>
 #include <svx/svdhdl.hxx>

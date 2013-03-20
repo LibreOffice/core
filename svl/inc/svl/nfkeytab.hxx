@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
-#define INCLUDED_SVTOOLS_NFKEYTAB_HXX
+#pragma once
+#if 1
 
 #include <vector>
 #include <tools/string.hxx>

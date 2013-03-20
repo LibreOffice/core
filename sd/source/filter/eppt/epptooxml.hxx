@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EPPT_POWERPOINT_EXPORT_HXX
-#define EPPT_POWERPOINT_EXPORT_HXX
+#pragma once
+#if 1
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/zipstorage.hxx>

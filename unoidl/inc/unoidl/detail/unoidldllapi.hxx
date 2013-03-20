@@ -8,8 +8,8 @@
  */
 
 
-#ifndef INCLUDED_UNOIDL_DETAIL_UNOIDLDLLAPI_HXX
-#define INCLUDED_UNOIDL_DETAIL_UNOIDLDLLAPI_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 

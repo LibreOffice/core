@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
-#define _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 #include <cppuhelper/implbase2.hxx>

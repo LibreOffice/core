@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_BASMGR_HXX
-#define _SFX_BASMGR_HXX
+#pragma once
+#if 1
 
 #include <basic/basmgr.hxx>
 #include <svtools/svtools.hrc>

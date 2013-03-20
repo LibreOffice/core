@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GRAPHITELAYOUT_HXX
-#define _SV_GRAPHITELAYOUT_HXX
+#pragma once
+#if 1
 // Description: An implementation of the SalLayout interface that uses the
 //              Graphite engine.
 

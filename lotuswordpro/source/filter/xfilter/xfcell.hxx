@@ -58,8 +58,8 @@
  * Table cell.
  ************************************************************************/
 
-#ifndef     _XFCell_HXX
-#define     _XFCell_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 #include "xfcontentcontainer.hxx"

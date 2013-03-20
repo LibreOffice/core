@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WW8_BIN_TABLE_HXX
-#define INCLUDED_WW8_BIN_TABLE_HXX
+#pragma once
+#if 1
 
 #include <boost/shared_ptr.hpp>
 #include <string>

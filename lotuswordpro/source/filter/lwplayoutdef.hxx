@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWPLAYOUTDEF_HXX
-#define _LWPLAYOUTDEF_HXX
+#pragma once
+#if 1
 
 #define STYLE_AUTOLINK      0x01UL  /* content span's to next container */
 #define STYLE_SELECTABLE    0x02UL  /* selectable container */

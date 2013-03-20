@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MANIFEST_IMPORT_HXX
-#define _MANIFEST_IMPORT_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

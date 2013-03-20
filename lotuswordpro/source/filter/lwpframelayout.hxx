@@ -62,8 +62,8 @@
 Mar 2005            Created
  ************************************************************************/
 
-#ifndef _LWPFRAMELAYOUT_HXX
-#define _LWPFRAMELAYOUT_HXX
+#pragma once
+#if 1
 
 #include "lwplayout.hxx"
 #include "lwpstory.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_NAMESORT_HXX
-#define ARY_NAMESORT_HXX
+#pragma once
+#if 1
 
 
 

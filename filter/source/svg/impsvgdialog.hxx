@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IMPSVGDIALOG_HXX
-#define IMPSVGDIALOG_HXX
+#pragma once
+#if 1
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>

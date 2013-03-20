@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _MCNTTFACTORY_HXX_
-#define _MCNTTFACTORY_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _FTP_STRCONT_HXX_
-#define _FTP_STRCONT_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

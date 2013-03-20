@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LUIDL_PE_EVALU_HXX
-#define LUIDL_PE_EVALU_HXX
+#pragma once
+#if 1
 
 
 

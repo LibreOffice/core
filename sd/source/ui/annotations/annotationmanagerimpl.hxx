@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_ANNOTATIONMANAGER_IMPL_HXX
-#define _SD_ANNOTATIONMANAGER_IMPL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>

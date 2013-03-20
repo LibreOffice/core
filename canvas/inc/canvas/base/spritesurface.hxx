@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SPRITESURFACE_HXX
-#define INCLUDED_CANVAS_SPRITESURFACE_HXX
+#pragma once
+#if 1
 
 #include <canvas/base/sprite.hxx>
 

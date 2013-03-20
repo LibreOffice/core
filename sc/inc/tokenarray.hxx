@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TOKENARRAY_HXX
-#define SC_TOKENARRAY_HXX
+#pragma once
+#if 1
 
 #include "formula/token.hxx"
 #include "scmatrix.hxx"

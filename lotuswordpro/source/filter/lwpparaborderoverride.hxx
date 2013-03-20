@@ -57,8 +57,8 @@
 * @file
 * Border override of Wordpro.
 ************************************************************************/
-#ifndef     _LWPPARABORDEROVERRIDE_HXX
-#define     _LWPPARABORDEROVERRIDE_HXX
+#pragma once
+#if 1
 
 #include "lwpoverride.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_HTMLEX_HXX
-#define _SD_HTMLEX_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>

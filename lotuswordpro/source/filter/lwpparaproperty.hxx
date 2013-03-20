@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPPARAPROPERTY_HXX_
-#define _LWPPARAPROPERTY_HXX_
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpobjstrm.hxx"

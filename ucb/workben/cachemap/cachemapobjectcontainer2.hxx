@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_CACHEMAPOBJECTCONTAINER2_HXX
-#define INCLUDED_UCB_CACHEMAPOBJECTCONTAINER2_HXX
+#pragma once
+#if 1
 
 #include "cppuhelper/weakref.hxx"
 #include "osl/mutex.hxx"

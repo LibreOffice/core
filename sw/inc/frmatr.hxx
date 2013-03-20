@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FRMATR_HXX
-#define _FRMATR_HXX
+#pragma once
+#if 1
 
 #include <hintids.hxx> // IDs of attributes before frmitems to make sure
 #include <format.hxx>  // they are available for implementation of the inlines.

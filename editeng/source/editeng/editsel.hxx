@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITSEL_HXX
-#define _EDITSEL_HXX
+#pragma once
+#if 1
 
 #include <vcl/seleng.hxx>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef XMLOFF_SCHXMLSERIES2CONTEXT_HXX
-#define XMLOFF_SCHXMLSERIES2CONTEXT_HXX
+#pragma once
+#if 1
 
 #include "transporttypes.hxx"
 #include "SchXMLChartContext.hxx"

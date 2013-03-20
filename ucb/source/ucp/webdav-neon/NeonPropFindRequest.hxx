@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _NEONPROPFINDREQUEST_HXX_
-#define _NEONPROPFINDREQUEST_HXX_
+#pragma once
+#if 1
 
 #include <vector>
 #include <rtl/ustring.hxx>

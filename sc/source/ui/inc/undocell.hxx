@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_UNDOCELL_HXX
-#define SC_UNDOCELL_HXX
+#pragma once
+#if 1
 
 #include "undobase.hxx"
 #include "postit.hxx"

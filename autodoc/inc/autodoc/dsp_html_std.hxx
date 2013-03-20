@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef AUTODOC_DSP_HTML_STD_HXX
-#define AUTODOC_DSP_HTML_STD_HXX
+#pragma once
+#if 1
 
 
 

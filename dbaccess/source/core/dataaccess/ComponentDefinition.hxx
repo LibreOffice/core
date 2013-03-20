@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBA_COREDATAACESS_COMPONENTDEFINITION_HXX
-#define DBA_COREDATAACESS_COMPONENTDEFINITION_HXX
+#pragma once
+#if 1
 
 #include "commandbase.hxx"
 #include <comphelper/propertycontainer.hxx>

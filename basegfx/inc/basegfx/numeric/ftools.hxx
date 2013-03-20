@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#define _BGFX_NUMERIC_FTOOLS_HXX
+#pragma once
+#if 1
 
 #include <rtl/math.hxx>
 #include <basegfx/basegfxdllapi.h>

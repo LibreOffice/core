@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_TOKEN_HXX
-#define FORMULA_TOKEN_HXX
+#pragma once
+#if 1
 
 #include <memory>
 #include <string.h>

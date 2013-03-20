@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPCHARACTERSTYLE_HXX
-#define _LWPCHARACTERSTYLE_HXX
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpdlvlist.hxx"

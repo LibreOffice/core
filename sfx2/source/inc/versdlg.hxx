@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VERSDLG_HXX
-#define _VERSDLG_HXX
+#pragma once
+#if 1
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

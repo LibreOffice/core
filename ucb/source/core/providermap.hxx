@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCB_PROVIDERMAP_HXX_
-#define _UCB_PROVIDERMAP_HXX_
+#pragma once
+#if 1
 
 #include <list>
 #include <com/sun/star/uno/Reference.h>

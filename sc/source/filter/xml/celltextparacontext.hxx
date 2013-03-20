@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_XML_CELLTEXTPARACONTEXT_HXX__
-#define __SC_XML_CELLTEXTPARACONTEXT_HXX__
+#pragma once
+#if 1
 
 #include "importcontext.hxx"
 

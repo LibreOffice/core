@@ -58,8 +58,8 @@
  * Page master used bye XFMasterPage.
  * It is the real object to define header and footer of pages.
  ************************************************************************/
-#ifndef     _XFPAGEMASTER_HXX
-#define     _XFPAGEMASTER_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

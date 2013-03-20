@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
-#define COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#pragma once
+#if 1
 
 #include <comphelper/comphelperdllapi.h>
 

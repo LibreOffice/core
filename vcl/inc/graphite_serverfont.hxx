@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GRAPHITESERVERFONT_HXX
-#define _SV_GRAPHITESERVERFONT_HXX
+#pragma once
+#if 1
 
 // We need this to enable namespace support in libgrengine headers.
 #define GR_NAMESPACE

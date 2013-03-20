@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SVTOOLS_POPUPMENUCONTROLLERBASE_HXX_
-#define __SVTOOLS_POPUPMENUCONTROLLERBASE_HXX_
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 

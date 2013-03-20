@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
-#define INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
+#pragma once
+#if 1
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <svl/lstner.hxx>

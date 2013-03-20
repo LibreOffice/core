@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XCL97REC_HXX
-#define SC_XCL97REC_HXX
+#pragma once
+#if 1
 
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"

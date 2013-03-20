@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PptEscherEX_HXX
-#define _PptEscherEX_HXX
+#pragma once
+#if 1
 #include <filter/msfilter/escherex.hxx>
 
 /// Values for the sal_uLong in PPT_PST_TextHeaderAtom.

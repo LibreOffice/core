@@ -22,8 +22,8 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef _TEST_ACTIVEDATASINK_HXX_
-#define _TEST_ACTIVEDATASINK_HXX_
+#pragma once
+#if 1
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>

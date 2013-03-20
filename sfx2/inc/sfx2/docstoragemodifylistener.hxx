@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_DOCSTORAGEMODIFYLISTENER_HXX
-#define SFX2_DOCSTORAGEMODIFYLISTENER_HXX
+#pragma once
+#if 1
 
 #include "sfx2/dllapi.h"
 

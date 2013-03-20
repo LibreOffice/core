@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GLOSBIB_HXX
-#define _GLOSBIB_HXX
+#pragma once
+#if 1
 
 #include <vcl/edit.hxx>
 #include <svx/stddlg.hxx>

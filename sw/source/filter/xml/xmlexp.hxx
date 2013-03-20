@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLEXP_HXX
-#define _XMLEXP_HXX
+#pragma once
+#if 1
 
 #include <xmloff/xmlexp.hxx>
 #include "xmlitmap.hxx"

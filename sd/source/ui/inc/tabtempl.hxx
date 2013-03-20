@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_TABTEMPL_HXX
-#define SD_TABTEMPL_HXX
+#pragma once
+#if 1
 
 #include <svx/tabarea.hxx>
 #include <sfx2/styledlg.hxx>

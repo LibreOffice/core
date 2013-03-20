@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOFORBIDDENCHARSTABLE_HXX_
-#define _SVX_UNOFORBIDDENCHARSTABLE_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>

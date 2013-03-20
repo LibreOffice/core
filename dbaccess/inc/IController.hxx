@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_ICONTROLLER_HXX
-#define DBAUI_ICONTROLLER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

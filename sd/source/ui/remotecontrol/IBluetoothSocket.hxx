@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SD_IMPRESSREMOTE_IBLUETOOTHSOCKET_HXX
-#define _SD_IMPRESSREMOTE_IBLUETOOTHSOCKET_HXX
+#pragma once
+#if 1
 
 #include <rtl/string.hxx>
 #include <boost/noncopyable.hpp>

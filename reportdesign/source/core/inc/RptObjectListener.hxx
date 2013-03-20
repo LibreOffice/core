@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REPORT_RPTUILIST_HXX
-#define _REPORT_RPTUILIST_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

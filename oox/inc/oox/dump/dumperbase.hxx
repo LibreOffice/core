@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DUMP_DUMPERBASE_HXX
-#define OOX_DUMP_DUMPERBASE_HXX
+#pragma once
+#if 1
 
 #include <math.h>
 #include <vector>

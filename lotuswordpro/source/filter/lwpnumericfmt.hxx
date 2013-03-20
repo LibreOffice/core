@@ -61,8 +61,8 @@
  * Change History
  Mar 2005           Created
  ************************************************************************/
-#ifndef _LWPNUMBERICFMT_HXX
-#define _LWPNUMBERICFMT_HXX
+#pragma once
+#if 1
 
 #include "lwpatomholder.hxx"
 #include "lwptblcell.hxx"

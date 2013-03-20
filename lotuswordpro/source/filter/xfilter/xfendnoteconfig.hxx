@@ -57,8 +57,8 @@
  * @file
  * Endnote config.
  ************************************************************************/
-#ifndef     _XFENDNOTECONFIG_HXX
-#define     _XFENDNOTECONFIG_HXX
+#pragma once
+#if 1
 
 #include "xfendnoteconfig.hxx"
 

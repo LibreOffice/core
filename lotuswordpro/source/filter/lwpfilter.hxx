@@ -57,8 +57,8 @@
  * @file
  * Circle object.
  ************************************************************************/
-#ifndef _LWPFILTER_HXX
-#define _LWPFILTER_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_UNDO_HXX
-#define _E3D_UNDO_HXX
+#pragma once
+#if 1
 
 #include <svx/svdundo.hxx>
 #include <svx/scene3d.hxx>

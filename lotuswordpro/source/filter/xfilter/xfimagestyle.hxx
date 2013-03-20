@@ -57,8 +57,8 @@
  * @file
  * Image style object.
  ************************************************************************/
-#ifndef     _XFIMAGESTYLE_HXX
-#define     _XFIMAGESTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfframestyle.hxx"
 #include "xfrect.hxx"

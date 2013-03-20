@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVXSWFRAMEEXAMPLE_HXX
-#define _SVXSWFRAMEEXAMPLE_HXX
+#pragma once
+#if 1
 
 #include <vcl/window.hxx>
 #include <tools/color.hxx>

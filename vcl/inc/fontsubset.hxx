@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FONTSUBSET_HXX
-#define _SV_FONTSUBSET_HXX
+#pragma once
+#if 1
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>

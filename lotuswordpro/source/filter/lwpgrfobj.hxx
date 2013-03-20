@@ -58,8 +58,8 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#ifndef LWPGRFOBJECT_HXX_
-#define LWPGRFOBJECT_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

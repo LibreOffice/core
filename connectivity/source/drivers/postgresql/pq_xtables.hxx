@@ -55,8 +55,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_TABLES_HXX_
-#define _PQ_TABLES_HXX_
+#pragma once
+#if 1
 
 #include "pq_xcontainer.hxx"
 

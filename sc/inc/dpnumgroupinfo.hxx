@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_DPNUMGROUPINFO_HXX__
-#define __SC_DPNUMGROUPINFO_HXX__
+#pragma once
+#if 1
 
 #include "scdllapi.h"
 #include "dpmacros.hxx"

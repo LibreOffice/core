@@ -18,8 +18,8 @@
  */
 
 
-#ifndef DUMMYTAG_HXX_INCLUDED
-#define DUMMYTAG_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "itag.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_TABLEROW_HXX_
-#define _SVX_TABLEROW_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/container/XNamed.hpp>

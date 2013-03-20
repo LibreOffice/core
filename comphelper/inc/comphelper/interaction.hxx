@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_INTERACTION_HXX_
-#define _COMPHELPER_INTERACTION_HXX_
+#pragma once
+#if 1
 
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>

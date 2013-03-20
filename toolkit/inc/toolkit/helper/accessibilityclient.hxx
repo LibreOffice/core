@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_HELPER_ACCESSIBILITY_CLIENT_HXX
-#define TOOLKIT_HELPER_ACCESSIBILITY_CLIENT_HXX
+#pragma once
+#if 1
 
 #include <toolkit/helper/accessiblefactory.hxx>
 

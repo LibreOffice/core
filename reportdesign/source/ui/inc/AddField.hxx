@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPTUI_ADDFIELDWINDOW_HXX
-#define RPTUI_ADDFIELDWINDOW_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

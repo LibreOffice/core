@@ -57,8 +57,8 @@
  * @file
  * Line break object,<text:line-break/>
  *************************************************************************/
-#ifndef     _XFLINEBREAK_HXX
-#define     _XFLINEBREAK_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"

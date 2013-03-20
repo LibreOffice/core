@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SHELL_HXX_
-#define _SHELL_HXX_
+#pragma once
+#if 1
 
 
 #include <cppuhelper/weak.hxx>

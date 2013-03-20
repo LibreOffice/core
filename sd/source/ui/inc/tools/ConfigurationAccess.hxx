@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLS_CONFIGURATION_ACCESS_HXX
-#define SD_TOOLS_CONFIGURATION_ACCESS_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPCONTENT_HXX
-#define _LWPCONTENT_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpobj.hxx"

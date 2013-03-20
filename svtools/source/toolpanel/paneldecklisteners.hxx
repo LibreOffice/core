@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PANELDECKLISTENERS_HXX
-#define PANELDECKLISTENERS_HXX
+#pragma once
+#if 1
 
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 

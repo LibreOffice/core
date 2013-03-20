@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_STATUSBARCONTROLLER_HXX
-#define _SVTOOLS_STATUSBARCONTROLLER_HXX
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __XCREATOR_HXX_
-#define __XCREATOR_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

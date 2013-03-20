@@ -57,8 +57,8 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
-#ifndef     _XFFONT_HXX
-#define     _XFFONT_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfcolor.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FLOWFRM_HXX
-#define _FLOWFRM_HXX
+#pragma once
+#if 1
 
 class SwPageFrm;
 class SwRect;

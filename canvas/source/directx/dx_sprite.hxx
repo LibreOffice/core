@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DXCANVAS_SPRITE_HXX
-#define INCLUDED_DXCANVAS_SPRITE_HXX
+#pragma once
+#if 1
 
 #include <canvas/base/sprite.hxx>
 

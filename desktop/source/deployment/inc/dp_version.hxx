@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_VERSION_HXX
-#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_VERSION_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 #include "com/sun/star/uno/Reference.hxx"

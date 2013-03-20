@@ -58,8 +58,8 @@
  * Global functions or include files that are needed.
  * It's all for the full filter.
  ************************************************************************/
-#ifndef     _GLOBAL_HXX
-#define     _GLOBAL_HXX
+#pragma once
+#if 1
 
 #include <cassert>
 

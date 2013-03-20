@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
-#define SFX2_TEMPLATEFOLDERCACHE_HXX
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 #include <sal/types.h>

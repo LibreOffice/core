@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
-#define FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
+#pragma once
+#if 1
 
 #include <framework/fwedllapi.h>
 #include <tools/string.hxx>

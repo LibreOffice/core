@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UTL_PROGRESSHANDLERWRAP_HXX_
-#define _UTL_PROGRESSHANDLERWRAP_HXX_
+#pragma once
+#if 1
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>

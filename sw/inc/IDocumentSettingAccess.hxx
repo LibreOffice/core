@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
-#define IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include <tools/solar.h>
 #include <rtl/ref.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_TREE_CONTROL_HXX
-#define TOOLKIT_TREE_CONTROL_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/awt/tree/XTreeControl.hpp>
 #include <toolkit/controls/unocontrols.hxx>

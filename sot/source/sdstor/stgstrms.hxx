@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STGSTRMS_HXX
-#define _STGSTRMS_HXX
+#pragma once
+#if 1
 
 #include <tools/stream.hxx>
 #include <rtl/ref.hxx>

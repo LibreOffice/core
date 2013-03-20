@@ -58,8 +58,8 @@
 Mar 2005            Created
  ************************************************************************/
 
-#ifndef _LWPPAGELAYOUT_HXX
-#define _LWPPAGELAYOUT_HXX
+#pragma once
+#if 1
 
 #include "lwplayout.hxx"
 

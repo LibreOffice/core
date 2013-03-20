@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONTNR_HXX
-#define _CONTNR_HXX
+#pragma once
+#if 1
 
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>

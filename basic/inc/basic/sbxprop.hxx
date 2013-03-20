@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SBX_SBXPROPERTY_HXX
-#define __SBX_SBXPROPERTY_HXX
+#pragma once
+#if 1
 
 #include <basic/sbxvar.hxx>
 #include "basicdllapi.h"

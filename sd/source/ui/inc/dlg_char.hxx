@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_DLG_CHAR_HXX
-#define SD_DLG_CHAR_HXX
+#pragma once
+#if 1
 
 #include <sfx2/tabdlg.hxx>
 

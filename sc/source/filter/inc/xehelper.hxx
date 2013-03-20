@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XEHELPER_HXX
-#define SC_XEHELPER_HXX
+#pragma once
+#if 1
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XBMREAD_HXX
-#define _XBMREAD_HXX
+#pragma once
+#if 1
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>

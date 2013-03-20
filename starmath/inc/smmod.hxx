@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SMMOD_HXX
-#define _SMMOD_HXX
+#pragma once
+#if 1
 
 #include <tools/resary.hxx>
 #include <svl/lstner.hxx>

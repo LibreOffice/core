@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_LNGSVCMGR_HXX_
-#define _LINGUISTIC_LNGSVCMGR_HXX_
+#pragma once
+#if 1
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase3.hxx> // helper for implementations

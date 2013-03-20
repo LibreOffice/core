@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
-#define _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
+#pragma once
+#if 1
 
 #include "composeduiupdate.hxx"
 #include "formbrowsertools.hxx"

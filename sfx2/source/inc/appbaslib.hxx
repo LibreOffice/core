@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef APPBASLIB_HXX
-#define APPBASLIB_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPPRINTERINFO_HXX
-#define _LWPPRINTERINFO_HXX
+#pragma once
+#if 1
 
 #include "lwpatomholder.hxx"
 #include "lwpobjstrm.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DTRANS_BMP_HXX_
-#define _DTRANS_BMP_HXX_
+#pragma once
+#if 1
 
 #include "tools/prex.h"
 #include <X11/Xatom.h>

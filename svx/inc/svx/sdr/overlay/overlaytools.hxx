@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_OVERLAY_OVERLAYTOOLS_HXX
-#define _SDR_OVERLAY_OVERLAYTOOLS_HXX
+#pragma once
+#if 1
 
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>

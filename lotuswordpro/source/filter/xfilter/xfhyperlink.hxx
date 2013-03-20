@@ -57,8 +57,8 @@
  * @file
  * Hyperlink object for OOo xml filter.
  ************************************************************************/
-#ifndef     _XFHYPERLINK_HXX
-#define     _XFHYPERLINK_HXX
+#pragma once
+#if 1
 
 class XFHyperlink : public XFContent
 {

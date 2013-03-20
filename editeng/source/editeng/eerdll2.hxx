@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EERDLL2_HXX
-#define _EERDLL2_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <editeng/forbiddencharacterstable.hxx>

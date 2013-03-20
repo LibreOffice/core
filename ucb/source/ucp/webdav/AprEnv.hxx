@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_APRENV_HXX
-#define INCLUDED_APRENV_HXX
+#pragma once
+#if 1
 
 #include <apr/apr_pools.h>
 

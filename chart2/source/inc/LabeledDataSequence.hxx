@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_LABELEDDATASEQUENCE_HXX
-#define CHART2_LABELEDDATASEQUENCE_HXX
+#pragma once
+#if 1
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
 #include <comphelper/uno3.hxx>

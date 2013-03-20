@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RSCKEY_HXX
-#define _RSCKEY_HXX
+#pragma once
+#if 1
 
 /****************** C l a s s   F o r w a r d s **************************/
 class RscTop;

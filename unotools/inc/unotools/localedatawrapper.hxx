@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#define _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#pragma once
+#if 1
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>

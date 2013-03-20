@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OOX_EXPORT_CHART_HXX_
-#define _OOX_EXPORT_CHART_HXX_
+#pragma once
+#if 1
 
 #include <oox/dllapi.h>
 #include <com/sun/star/uno/XReference.hpp>

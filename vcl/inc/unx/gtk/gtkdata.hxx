@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GTKDATA_HXX
-#define _VCL_GTKDATA_HXX
+#pragma once
+#if 1
 
 #include <tools/prex.h>
 #include <gdk/gdk.h>

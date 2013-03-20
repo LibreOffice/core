@@ -53,8 +53,8 @@
  *
  *
  ************************************************************************/
-#ifndef _LWP9READER_HXX
-#define _LWP9READER_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwpunoheader.hxx"

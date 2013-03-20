@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef VBA_DIALOGS_BASE_HXX
-#define VBA_DIALOGS_BASE_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/XHelperInterface.hpp>

@@ -58,8 +58,8 @@
  * Font declaration for OOo xml file.This is needed for every font that was
  * used.
  ************************************************************************/
-#ifndef     _XFFONTDECL_HXX
-#define     _XFFONTDECL_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 

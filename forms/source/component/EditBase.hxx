@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FORMS_EDITBASE_HXX_
-#define _FORMS_EDITBASE_HXX_
+#pragma once
+#if 1
 
 #include "FormComponent.hxx"
 #include <com/sun/star/util/XNumberFormatter.hpp>

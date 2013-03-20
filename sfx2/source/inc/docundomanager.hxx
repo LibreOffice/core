@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOCUMENT_UNDO_MANAGER_HXX
-#define DOCUMENT_UNDO_MANAGER_HXX
+#pragma once
+#if 1
 
 #include "sfx2/sfxbasemodel.hxx"
 

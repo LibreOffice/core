@@ -62,8 +62,8 @@
  Jan 2005           Created
  ************************************************************************/
 
-#ifndef _LWPLINENUMBEROPTIONS_HXX
-#define _LWPLINENUMBEROPTIONS_HXX
+#pragma once
+#if 1
 
 #include "lwpobjstrm.hxx"
 #include "lwptools.hxx"

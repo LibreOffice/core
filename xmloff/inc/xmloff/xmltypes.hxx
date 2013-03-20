@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTYPES_HXX
-#define _XMLOFF_XMLTYPES_HXX
+#pragma once
+#if 1
 
 ///////////////////////////////////////////////////////////////////////////////
 // Flags to specify how to im/export the property

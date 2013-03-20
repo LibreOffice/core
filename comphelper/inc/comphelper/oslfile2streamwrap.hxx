@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
-#define _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>

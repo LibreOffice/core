@@ -11,8 +11,8 @@
  */
 
 
-#ifndef BLACK_SCHOLES_HXX
-#define BLACK_SCHOLES_HXX
+#pragma once
+#if 1
 
 // options prices and greeks in the Black-Scholes model
 // also known as TV (theoretical value)

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLSEARCH_UTIL_DECOMPRESSOR_HXX_
-#define _XMLSEARCH_UTIL_DECOMPRESSOR_HXX_
+#pragma once
+#if 1
 
 #include <vector>
 #include <excep/XmlSearchExceptions.hxx>

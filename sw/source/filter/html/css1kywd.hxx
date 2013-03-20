@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CSS1KYWD_HXX
-#define _CSS1KYWD_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 

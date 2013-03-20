@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALGTKFPICKER_HXX_
-#define _SALGTKFPICKER_HXX_
+#pragma once
+#if 1
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase2.hxx>

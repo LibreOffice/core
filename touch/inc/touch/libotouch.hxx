@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _TOUCH_LIBOTOUCH_HXX
-#define _TOUCH_LIBOTOUCH_HXX
+#pragma once
+#if 1
 
 #endif // _TOUCH_LIBOTOUCH_HXX
 

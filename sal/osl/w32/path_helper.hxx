@@ -21,8 +21,8 @@
 #pragma warning (disable : 4800)
 #endif
 
-#ifndef _PATH_HELPER_HXX_
-#define _PATH_HELPER_HXX_
+#pragma once
+#if 1
 
 #include "path_helper.h"
 #include <rtl/ustring.hxx>

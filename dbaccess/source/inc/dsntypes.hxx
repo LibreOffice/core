@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACCESS_DSNTYPES_HXX_
-#define _DBACCESS_DSNTYPES_HXX_
+#pragma once
+#if 1
 
 #include <comphelper/stl_types.hxx>
 #include "dbadllapi.hxx"

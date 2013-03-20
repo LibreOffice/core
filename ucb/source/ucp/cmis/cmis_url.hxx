@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef CMIS_URL_HXX
-#define CMIS_URL_HXX
+#pragma once
+#if 1
 
 #include <map>
 #include <string>

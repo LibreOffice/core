@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_TEXTENC_CONVERTISO2022JP_HXX
-#define INCLUDED_SAL_TEXTENC_CONVERTISO2022JP_HXX
+#pragma once
+#if 1
 
 #include "sal/config.h"
 #include "sal/types.h"

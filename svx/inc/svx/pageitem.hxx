@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_PAGEITEM_HXX
-#define _SVX_PAGEITEM_HXX
+#pragma once
+#if 1
 
 #include <svl/poolitem.hxx>
 #include <tools/string.hxx>

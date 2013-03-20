@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WW8_BIN_TABLE_IMPL_HXX
-#define INCLUDED_WW8_BIN_TABLE_IMPL_HXX
+#pragma once
+#if 1
 
 #include <istream>
 #include <WW8BinTable.hxx>

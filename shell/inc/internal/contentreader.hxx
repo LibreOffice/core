@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONTENTREADER_HXX_INCLUDED
-#define CONTENTREADER_HXX_INCLUDED
+#pragma once
+#if 1
 
 #include "internal/basereader.hxx"
 

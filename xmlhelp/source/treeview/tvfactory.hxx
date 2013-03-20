@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TREEVIEW_TVFACTORY_HXX_
-#define _TREEVIEW_TVFACTORY_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>

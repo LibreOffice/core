@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
-#define OOX_DRAWINGML_SHAPEPROPERTYMAP_HXX
+#pragma once
+#if 1
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/dllapi.h"

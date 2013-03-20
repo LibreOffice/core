@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_VIEW_POLARLABELPOSITIONHELPER_HXX
-#define _CHART2_VIEW_POLARLABELPOSITIONHELPER_HXX
+#pragma once
+#if 1
 
 #include "LabelPositionHelper.hxx"
 #include <com/sun/star/awt/Point.hpp>

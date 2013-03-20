@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_STATEMENTCOMPOSER_HXX
-#define CONNECTIVITY_STATEMENTCOMPOSER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>

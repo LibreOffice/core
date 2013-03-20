@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
-#define _FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
+#pragma once
+#if 1
 
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>

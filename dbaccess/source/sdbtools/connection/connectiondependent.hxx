@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_CONNECTION_DEPENDENT_HXX
-#define DBACCESS_CONNECTION_DEPENDENT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

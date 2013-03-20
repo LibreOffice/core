@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDRHITTESTHELPER_HXX
-#define _SDRHITTESTHELPER_HXX
+#pragma once
+#if 1
 
 #include "svx/svxdllapi.h"
 #include <tools/gen.hxx>

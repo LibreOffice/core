@@ -57,8 +57,8 @@
  * @file
  * Time style. The TIme format for time field.
  ************************************************************************/
-#ifndef     _XFTIMESTYLE_HXX
-#define     _XFTIMESTYLE_HXX
+#pragma once
+#if 1
 
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"

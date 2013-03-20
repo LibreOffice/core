@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_PICKER_CALLBACKS_HXX
-#define SVTOOLS_PICKER_CALLBACKS_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include <sal/types.h>

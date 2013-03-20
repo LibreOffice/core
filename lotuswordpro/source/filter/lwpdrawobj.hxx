@@ -59,8 +59,8 @@
  *  and so on.
  */
 
-#ifndef _LWPDRAWOBJ_HXX
-#define _LWPDRAWOBJ_HXX
+#pragma once
+#if 1
 
 #include "lwpsdwdrawheader.hxx"
 

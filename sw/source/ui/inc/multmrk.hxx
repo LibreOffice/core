@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MULTMRK_HXX
-#define _MULTMRK_HXX
+#pragma once
+#if 1
 
 
 #include <svx/stddlg.hxx>

@@ -19,8 +19,8 @@
 
 
 
-#ifndef OOX_POWERPOINT_ANIMATIONTYPES_HXX
-#define OOX_POWERPOINT_ANIMATIONTYPES_HXX
+#pragma once
+#if 1
 
 
 #include <com/sun/star/uno/Any.hxx>

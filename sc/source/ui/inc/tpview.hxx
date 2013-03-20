@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_TPVIEW_HXX
-#define SC_TPVIEW_HXX
+#pragma once
+#if 1
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/field.hxx>

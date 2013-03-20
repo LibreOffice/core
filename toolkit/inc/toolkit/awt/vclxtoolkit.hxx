@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
-#define _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XToolkitExperimental.hpp>

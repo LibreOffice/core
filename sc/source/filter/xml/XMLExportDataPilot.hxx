@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_XMLEXPORTDATAPILOT_HXX
-#define SC_XMLEXPORTDATAPILOT_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <rtl/ustring.hxx>

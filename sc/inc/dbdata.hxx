@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_DBCOLECT_HXX
-#define SC_DBCOLECT_HXX
+#pragma once
+#if 1
 
 #include "scdllapi.h"
 #include "refreshtimer.hxx"

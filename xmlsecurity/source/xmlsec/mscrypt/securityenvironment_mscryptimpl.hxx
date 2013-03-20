@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
-#define _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
+#pragma once
+#if 1
 
 #ifdef _MSC_VER
 #pragma warning(push,1)

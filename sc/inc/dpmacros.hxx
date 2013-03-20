@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_DPMACROS_HXX__
-#define __SC_DPMACROS_HXX__
+#pragma once
+#if 1
 
 #define DEBUG_PIVOT_TABLE 0
 

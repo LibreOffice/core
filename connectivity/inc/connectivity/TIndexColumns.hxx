@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_INDEXCOLUMNSHELPER_HXX
-#define CONNECTIVITY_INDEXCOLUMNSHELPER_HXX
+#pragma once
+#if 1
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _NEONTYPES_HXX_
-#define _NEONTYPES_HXX_
+#pragma once
+#if 1
 
 #include <ne_session.h>
 #include <ne_utils.h>

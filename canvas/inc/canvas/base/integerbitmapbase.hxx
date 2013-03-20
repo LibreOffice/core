@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_INTEGERBITMAPBASE_HXX
-#define INCLUDED_CANVAS_INTEGERBITMAPBASE_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <canvas/base/bitmapcanvasbase.hxx>

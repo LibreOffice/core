@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef INCLUDED_TUBES_MANAGER_HXX
-#define INCLUDED_TUBES_MANAGER_HXX
+#pragma once
+#if 1
 
 #include <sal/config.h>
 #include <tubes/tubesdllapi.h>

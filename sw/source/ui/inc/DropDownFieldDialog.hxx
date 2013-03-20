@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SW_DROPDOWNFIELDDIALOG_HXX
-#define _SW_DROPDOWNFIELDDIALOG_HXX
+#pragma once
+#if 1
 
 #include <svx/stddlg.hxx>
 #include <vcl/fixed.hxx>

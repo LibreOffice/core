@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_CHARCLASS_HXX
-#define _UNOTOOLS_CHARCLASS_HXX
+#pragma once
+#if 1
 
 #include <ctype.h>      // isdigit(), isalpha()
 #include <boost/noncopyable.hpp>

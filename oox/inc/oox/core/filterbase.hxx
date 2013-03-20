@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_FILTERBASE_HXX
-#define OOX_CORE_FILTERBASE_HXX
+#pragma once
+#if 1
 
 #include <memory>
 #include <com/sun/star/beans/NamedValue.hpp>

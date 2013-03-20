@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_INC_FORMTOOLBARS_HXX
-#define SVX_SOURCE_INC_FORMTOOLBARS_HXX
+#pragma once
+#if 1
 
 #include "fmdocumentclassification.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>

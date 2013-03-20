@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBAEVENTSHELPER_HXX
-#define SC_VBAEVENTSHELPER_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <vbahelper/vbaeventshelperbase.hxx>

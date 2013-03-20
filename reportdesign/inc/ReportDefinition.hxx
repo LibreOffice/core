@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef REPORTDESIGN_API_REPORTDEFINITION_HXX
-#define REPORTDESIGN_API_REPORTDEFINITION_HXX
+#pragma once
+#if 1
 
 #include "dllapi.h"
 

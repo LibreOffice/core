@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#ifndef __SC_GLOBALNAMES_HXX__
-#define __SC_GLOBALNAMES_HXX__
+#pragma once
+#if 1
 
 #define STR_DB_LOCAL_NONAME  "__Anonymous_Sheet_DB__"
 #define STR_DB_GLOBAL_NONAME "__Anonymous_DB__"

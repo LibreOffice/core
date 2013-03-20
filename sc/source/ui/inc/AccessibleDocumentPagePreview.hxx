@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SC_ACCESSIBLEDOCUMENTPAGEPREVIEW_HXX
-#define _SC_ACCESSIBLEDOCUMENTPAGEPREVIEW_HXX
+#pragma once
+#if 1
 
 #include "AccessibleDocumentBase.hxx"
 

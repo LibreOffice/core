@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NOTEURL_HXX
-#define _NOTEURL_HXX
+#pragma once
+#if 1
 
 
 #include <tools/string.hxx>

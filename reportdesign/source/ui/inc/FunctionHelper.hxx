@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RPTUI_FUNCTIONHELPER_HXX
-#define RPTUI_FUNCTIONHELPER_HXX
+#pragma once
+#if 1
 
 #include <formula/IFunctionDescription.hxx>
 #include <com/sun/star/report/meta/XFunctionManager.hpp>

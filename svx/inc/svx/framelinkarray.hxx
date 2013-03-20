@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FRAMELINKARRAY_HXX
-#define SVX_FRAMELINKARRAY_HXX
+#pragma once
+#if 1
 
 #include <svx/framelink.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>

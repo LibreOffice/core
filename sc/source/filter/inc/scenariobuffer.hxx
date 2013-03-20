@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_XLS_SCENARIOBUFFER_HXX
-#define OOX_XLS_SCENARIOBUFFER_HXX
+#pragma once
+#if 1
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include "oox/helper/refmap.hxx"

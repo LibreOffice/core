@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
-#define SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
+#pragma once
+#if 1
 
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>

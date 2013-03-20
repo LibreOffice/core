@@ -57,8 +57,8 @@
  * @file
  * Group of drawing objects.
  ************************************************************************/
-#ifndef     _XFDRAWGROUP_HXX
-#define     _XFDRAWGROUP_HXX
+#pragma once
+#if 1
 
 #include "xfdrawobj.hxx"
 #include "xfframe.hxx"

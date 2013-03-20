@@ -21,8 +21,8 @@
 //!! This file is an exact copy of the same file in chart2 project
 //!!
 
-#ifndef XMLRANGEHELPER_HXX
-#define XMLRANGEHELPER_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

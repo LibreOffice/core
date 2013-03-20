@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FORMULA_HXX
-#define FORMULA_FORMULA_HXX
+#pragma once
+#if 1
 
 #include <sfx2/basedlgs.hxx>
 #include <memory>

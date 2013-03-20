@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_PROPERTY_META_DATA_HXX
-#define XMLOFF_PROPERTY_META_DATA_HXX
+#pragma once
+#if 1
 
 #include "property_description.hxx"
 

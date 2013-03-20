@@ -57,8 +57,8 @@
  * @file
  * Interfer for all Drawing object.
  ************************************************************************/
-#ifndef     _XFDRAWOBJ_HXX
-#define     _XFDRAWOBJ_HXX
+#pragma once
+#if 1
 
 #include "xfframe.hxx"
 #include "xfrect.hxx"

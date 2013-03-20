@@ -61,8 +61,8 @@
  * Change History
  Jan 2005           Created
  ************************************************************************/
-#ifndef _LWPFRIBTEXT_HXX_
-#define _LWPFRIBTEXT_HXX_
+#pragma once
+#if 1
 
 #include "lwpfrib.hxx"
 #include "lwpstory.hxx"

@@ -59,8 +59,8 @@
  * The file declares structures and enums used by Lwp-Drawing-Module
  */
 
-#ifndef _LWPSDWRAWHEADER_HXX
-#define _LWPSDWRAWHEADER_HXX
+#pragma once
+#if 1
 
 #include "lwpheader.hxx"
 #include "lwptools.hxx"

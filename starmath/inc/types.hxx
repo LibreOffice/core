@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TYPES_HXX
-#define TYPES_HXX
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #define FONTNAME_MATH   "OpenSymbol"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBA_DATASUPPLIER_HXX
-#define DBA_DATASUPPLIER_HXX
+#pragma once
+#if 1
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>

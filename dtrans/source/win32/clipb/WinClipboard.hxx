@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _WINCLIPBOARD_HXX_
-#define _WINCLIPBOARD_HXX_
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

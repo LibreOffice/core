@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _unotools_LINGUCFG_HXX_
-#define _unotools_LINGUCFG_HXX_
+#pragma once
+#if 1
 
 #include "unotools/unotoolsdllapi.h"
 #include <com/sun/star/beans/PropertyValues.hpp>

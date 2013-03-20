@@ -7,8 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef __SFX2_TEMPLATEINFODLG_HXX__
-#define __SFX2_TEMPLATEINFODLG_HXX__
+#pragma once
+#if 1
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

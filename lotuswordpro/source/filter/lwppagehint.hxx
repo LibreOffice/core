@@ -61,8 +61,8 @@
  * Change History
  Feb 2005           Created
  ************************************************************************/
-#ifndef _LWPPAGEHINT_HXX
-#define _LWPPAGEHINT_HXX
+#pragma once
+#if 1
 
 #include "lwpobj.hxx"
 #include "lwpobjid.hxx"

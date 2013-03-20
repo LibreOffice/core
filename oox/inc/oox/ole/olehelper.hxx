@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_OLE_OLEHELPER_HXX
-#define OOX_OLE_OLEHELPER_HXX
+#pragma once
+#if 1
 
 #include <rtl/ustring.hxx>
 #include "oox/helper/binarystreambase.hxx"

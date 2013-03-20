@@ -57,8 +57,8 @@
  * @file
  * Section object.
  ************************************************************************/
-#ifndef     _XFSECTION_HXX
-#define     _XFSECTION_HXX
+#pragma once
+#if 1
 
 #include "xfcontentcontainer.hxx"
 #include "xfcontent.hxx"

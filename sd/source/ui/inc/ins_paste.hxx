@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_INS_PASTE_HXX_
-#define _SD_INS_PASTE_HXX_
+#pragma once
+#if 1
 
 #include <sddllapi.h>
 

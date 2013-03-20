@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _IMPLHELPER_HXX_
-#define _IMPLHELPER_HXX_
+#pragma once
+#if 1
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NULLCANVAS_CANVASBITMAP_HXX
-#define _NULLCANVAS_CANVASBITMAP_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/compbase3.hxx>
 

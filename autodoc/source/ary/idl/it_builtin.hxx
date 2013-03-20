@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ARY_IDL_IT_BUILTIN_HXX
-#define ARY_IDL_IT_BUILTIN_HXX
+#pragma once
+#if 1
 
 // BASE CLASSES
 #include "it_named.hxx"

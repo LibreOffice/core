@@ -27,8 +27,8 @@
  * instead of those above.
  */
 
-#ifndef HELPSEARCH_HXX
-#define HELPSEARCH_HXX
+#pragma once
+#if 1
 
 #include <helpcompiler/dllapi.h>
 

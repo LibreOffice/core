@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WW8GLSY_HXX
-#define _WW8GLSY_HXX
+#pragma once
+#if 1
 
 #include <sot/storage.hxx>
 #include "ww8scan.hxx"

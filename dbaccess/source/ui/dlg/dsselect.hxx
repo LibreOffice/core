@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DSSELECT_HXX_
-#define _DBAUI_DSSELECT_HXX_
+#pragma once
+#if 1
 
 #include "dsntypes.hxx"
 #include "odbcconfig.hxx"

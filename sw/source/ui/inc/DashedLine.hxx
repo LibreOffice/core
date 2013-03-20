@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _DASHEDLINE_HXX
-#define _DASHEDLINE_HXX
+#pragma once
+#if 1
 
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/fixed.hxx>

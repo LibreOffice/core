@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVLBOXITM_HXX
-#define _SVLBOXITM_HXX
+#pragma once
+#if 1
 
 #include "svtools/svtdllapi.h"
 

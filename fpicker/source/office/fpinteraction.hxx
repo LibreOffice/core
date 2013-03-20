@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_FILEPICKER_INTERACTION_HXX
-#define SVTOOLS_FILEPICKER_INTERACTION_HXX
+#pragma once
+#if 1
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>

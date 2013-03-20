@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ACCESSIBLE_WRAPPER_HXX
-#define COMPHELPER_ACCESSIBLE_WRAPPER_HXX
+#pragma once
+#if 1
 
 #include <comphelper/proxyaggregation.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>

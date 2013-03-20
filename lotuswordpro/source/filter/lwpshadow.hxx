@@ -57,8 +57,8 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-#ifndef     _LWPSHADOW_HXX
-#define     _LWPSHADOW_HXX
+#pragma once
+#if 1
 
 #include "lwpcolor.hxx"
 #include "lwptools.hxx"

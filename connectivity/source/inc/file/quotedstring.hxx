@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_QUOTED_STRING_HXX
-#define CONNECTIVITY_QUOTED_STRING_HXX
+#pragma once
+#if 1
 
 #include <tools/string.hxx>
 #include "file/filedllapi.hxx"

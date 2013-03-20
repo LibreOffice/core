@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_JAVA_SQL_CLOB_HXX_
-#define _CONNECTIVITY_JAVA_SQL_CLOB_HXX_
+#pragma once
+#if 1
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/XClob.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITDBG_HXX
-#define _EDITDBG_HXX
+#pragma once
+#if 1
 
 #include <svl/solar.hrc>
 #include <stdio.h>

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _TXTCNVTHLP_HXX_
-#define _TXTCNVTHLP_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 

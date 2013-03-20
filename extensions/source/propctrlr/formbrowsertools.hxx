@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
-#define _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
+#pragma once
+#if 1
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/Property.hpp>

@@ -57,8 +57,8 @@
  * @file
  * Bookmark ref.
  ************************************************************************/
-#ifndef     _XFBOOKMARK_HXX
-#define     _XFBOOKMARK_HXX
+#pragma once
+#if 1
 
 #include "xfcontent.hxx"
 
