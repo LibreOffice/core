@@ -141,17 +141,17 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
 
     case 0:
         // it exist no WhichId - don't set this item
-        break;
+        return;
 
     default:
        rSet.Put( rItem );
-       break;
+       return;
     }
 
 
     if( DOUBLEBYTE_CHARTYPE == eType )
     {
-        if( bIsLeftToRightDef && *pCJK )
+        if( bIsLeftToRightDef && pCJK )
         {
             rItem.SetWhich( *pCJK );
             rSet.Put( rItem );
@@ -159,7 +159,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
     }
     else if( !bIsLeftToRightDef )
     {
-        if( *pCTL )
+        if( pCTL )
         {
             rItem.SetWhich( *pCTL );
             rSet.Put( rItem );
@@ -169,7 +169,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
     {
         if( LOW_CHARTYPE == eType )
         {
-            if( *pNormal )
+            if( pNormal )
             {
                 rItem.SetWhich( *pNormal );
                 rSet.Put( rItem );
@@ -177,7 +177,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
         }
         else if( HIGH_CHARTYPE == eType )
         {
-            if( *pCTL )
+            if( pCTL )
             {
                 rItem.SetWhich( *pCTL );
                 rSet.Put( rItem );
@@ -185,17 +185,17 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
         }
         else
         {
-            if( *pCJK )
+            if( pCJK )
             {
                 rItem.SetWhich( *pCJK );
                 rSet.Put( rItem );
             }
-            if( *pCTL )
+            if( pCTL )
             {
                 rItem.SetWhich( *pCTL );
                 rSet.Put( rItem );
             }
-            if( *pNormal )
+            if( pNormal )
             {
                 rItem.SetWhich( *pNormal );
                 rSet.Put( rItem );
