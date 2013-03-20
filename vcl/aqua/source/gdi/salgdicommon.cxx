@@ -1130,7 +1130,7 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     // prepare creation of matching a CGBitmapContext
     CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
     CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big;
-#if __BIG_ENDIAN__
+#if defined __BIG_ENDIAN__
     struct{ unsigned char b, g, r, a; } aPixel;
 #else
     struct{ unsigned char a, r, g, b; } aPixel;
