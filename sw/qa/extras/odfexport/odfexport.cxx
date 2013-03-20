@@ -35,6 +35,7 @@ public:
     void testFdo38244();
     void testFirstHeaderFooter();
     void testTextframeGradient();
+    void testFdo60769();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -52,6 +53,7 @@ void Test::run()
         {"fdo38244.odt", &Test::testFdo38244},
         {"first-header-footer.odt", &Test::testFirstHeaderFooter},
         {"textframe-gradient.odt", &Test::testTextframeGradient},
+        {"fdo60769.odt", &Test::testFdo60769},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -131,6 +133,32 @@ void Test::testTextframeGradient()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+}
+
+void Test::testFdo60769()
+{
+    // Test multi-paragraph comment range feature.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+        OUString aType =  getProperty<OUString>(xPropertySet, "TextPortionType");
+        // First paragraph: no field end, no anchor
+        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldStart");
+    }
+
+    xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+        OUString aType =  getProperty<OUString>(xPropertySet, "TextPortionType");
+        // Second paragraph: no field start
+        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldEnd" || aType == "TextFieldEnd");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -2194,7 +2194,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
     static const OUString sMeta("InContentMetadata");
     static const OUString sFieldMarkName("__FieldMark_");
     bool bPrevCharIsSpace = bPrvChrIsSpc;
-    bool bAnnotationStarted = false;
 
     /* This is  used for exporting to strict OpenDocument 1.2, in which case traditional
      * bookmarks are used instead of fieldmarks. */
@@ -2218,11 +2217,17 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if( sType.equals(sTextField))
             {
-                if (bAnnotationStarted)
+                Reference< ::com::sun::star::text::XFormField > xFormField;
+                try
                 {
-                    bAnnotationStarted = false;
+                    xFormField.set(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                 }
-                else
+                catch( const uno::Exception& )
+                {
+                    SAL_WARN("xmloff", "unexpected bookmark exception");
+                }
+
+                if (!xFormField.is() || xFormField->getFieldType() != ODF_COMMENTRANGE)
                 {
                     exportTextField( xTxtRange, bAutoStyles, bIsProgress );
                     bPrevCharIsSpace = false;
@@ -2287,10 +2292,9 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if (sType.equals(sTextFieldStart))
             {
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                if (xFormField->getFieldType() == ODF_COMMENTRANGE)
+                if (xFormField.is() && xFormField->getFieldType() == ODF_COMMENTRANGE)
                 {
                     exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                    bAnnotationStarted = true;
                     continue;
                 }
 
@@ -2354,7 +2358,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldEnd))
             {
-                if (bAnnotationStarted)
+                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (xFormField.is() && xFormField->getFieldType() == ODF_COMMENTRANGE)
                 {
                     Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                     const OUString& rName = xBookmark->getName();
@@ -2374,7 +2379,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 }
                 else
                 {
-                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                     if (xFormField.is())
                     {
                         OUString sName;
