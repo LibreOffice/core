@@ -46,6 +46,7 @@ gb_MERGEDLIBS := \
 	i18nutil \
 	lng \
 	localebe1 \
+	msfilter \
 	package2 \
 	sax \
 	sb \
@@ -57,16 +58,19 @@ gb_MERGEDLIBS := \
 	svt \
 	svx \
 	svxcore \
+	sw \
+	swd \
 	tk \
+	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
 	ucpfile1 \
 	utl \
 	uui \
+	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
 	xmlscript \
 	xo \
 
-gb_MERGEDLIBS += $(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes)
 
 ifeq ($(OS),ANDROID)
 gb_MERGEDLIBS += \

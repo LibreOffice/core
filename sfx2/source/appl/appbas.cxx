@@ -76,32 +76,9 @@
 #include <svl/srchitem.hxx>
 #include <osl/socket.hxx>
 
-#if defined(LIBO_MERGELIBS) || defined(IOS)
-/* Avoid clash with the ones from svx/source/form/typemap.cxx */
-#define aSfxBoolItem_Impl sfx2_source_appl_appbas_aSfxBoolItem_Impl
-#ifdef IOS
-#define aSfxInt16Item_Impl sfx2_source_appl_appbas_aSfxInt16Item_Impl
-#endif
-#define aSfxStringItem_Impl sfx2_source_appl_appbas_aSfxStringItem_Impl
-#define aSfxUInt16Item_Impl sfx2_source_appl_appbas_aSfxUInt16Item_Impl
-#define aSfxUInt32Item_Impl sfx2_source_appl_appbas_aSfxUInt32Item_Impl
-#define aSfxVoidItem_Impl sfx2_source_appl_appbas_aSfxVoidtem_Impl
-#endif
-
 #define SFX_TYPEMAP
 #define Selection
 #include "sfxslots.hxx"
-
-#if defined(LIBO_MERGELIBS) || defined(IOS)
-#undef aSfxBoolItem_Impl
-#ifdef IOS
-#undef aSfxInt16Item_Impl
-#endif
-#undef aSfxStringItem_Impl
-#undef aSfxUInt16Item_Impl
-#undef aSfxUInt32Item_Impl
-#undef aSfxVoidItem_Impl
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
