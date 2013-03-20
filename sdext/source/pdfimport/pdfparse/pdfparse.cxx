@@ -553,32 +553,27 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 
     try
     {
-        #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info<const char*> aInfo =
-        #endif
+#endif
             boost::spirit::parse( pBuffer,
                                   pBuffer+nLen,
                                   aGrammar,
                                   boost::spirit::space_p );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "parseinfo: stop = %p (buff=%p, offset = %d), hit = %s, full = %s, length = %d\n",
-                 aInfo.stop, pBuffer, aInfo.stop - pBuffer,
-                 aInfo.hit ? "true" : "false",
-                 aInfo.full ? "true" : "false",
-                 (int)aInfo.length );
-        #endif
+#if OSL_DEBUG_LEVEL > 1
+        SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop = " << aInfo.stop << " (buff=" << pBuffer << ", offset = " << aInfo.stop - pBuffer << "), hit = " << aInfo.hit ? "true" : "false" << ", full = " << aInfo.full ? "true" : "false" << ", length = " << (int)aInfo.length );
+#endif
     }
     catch( const parser_error<const char*, const char*>& rError )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "parse error: %s at buffer pos %u\nobject stack:\n",
-                 rError.descriptor, rError.where - pBuffer );
-        unsigned int nElem = aGrammar.m_aObjectStack.size();
+#if OSL_DEBUG_LEVEL > 1
+        OUString aTmp;
+        unsigned int nElem = aGrammar.m_aObjectStack.size()
         for( unsigned int i = 0; i < nElem; i++ )
-        {
-            fprintf( stderr, "   %s\n", typeid( *(aGrammar.m_aObjectStack[i]) ).name() );
-        }
-        #endif
+            aTmp += "   " + OUString(typeid( *(aGrammar.m_aObjectStack[i]) ).name());
+
+        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - pBuffer << ", object stack: " << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr());
+#endif
     }
 
     PDFEntry* pRet = NULL;
@@ -588,10 +583,10 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
         pRet = aGrammar.m_aObjectStack.back();
         aGrammar.m_aObjectStack.pop_back();
     }
-    #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
     else if( nEntries > 1 )
-        fprintf( stderr, "error got %u stack objects in parse\n", nEntries );
-    #endif
+        SAL_WARN("sdext.pdfimport.pdfparse", "error got " << nEntries << " stack objects in parse" );
+#endif
 
     return pRet;
 }
@@ -634,32 +629,31 @@ PDFEntry* PDFReader::read( const char* pFileName )
 
     try
     {
-        #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info< file_iterator<> > aInfo =
-        #endif
+#endif
             boost::spirit::parse( file_start,
                                   file_end,
                                   aGrammar,
                                   boost::spirit::space_p );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "parseinfo: stop at offset = %ld, hit = %s, full = %s, length = %lu\n",
-                 aInfo.stop - file_start,
-                 aInfo.hit ? "true" : "false",
-                 aInfo.full ? "true" : "false",
-                 aInfo.length );
-        #endif
+#if OSL_DEBUG_LEVEL > 1
+        SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop at offset = " << aInfo.stop - file_start << ", hit = " << (aInfo.hit ? "true" : "false") << ", full = " << (aInfo.full ? "true" : "false") << ", length = " << aInfo.length);
+#endif
     }
     catch( const parser_error< const char*, file_iterator<> >& rError )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "parse error: %s at buffer pos %lu\nobject stack:\n",
-                 rError.descriptor, rError.where - file_start );
-        size_t nElem = aGrammar.m_aObjectStack.size();
-        for( size_t i = 0; i < nElem; ++i )
+#if OSL_DEBUG_LEVEL > 1
+        OUString aTmp;
+        unsigned int nElem = aGrammar.m_aObjectStack.size();
+        for( unsigned int i = 0; i < nElem; i++ )
         {
-            fprintf( stderr, "   %s\n", typeid( *(aGrammar.m_aObjectStack[i]) ).name() );
+            aTmp += "   ";
+            aTmp += OUString(typeid( *(aGrammar.m_aObjectStack[i]) ).name(),
+                             strlen(typeid( *(aGrammar.m_aObjectStack[i]) ).name()),
+                             RTL_TEXTENCODING_ASCII_US);
         }
-        #endif
+        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - file_start << ", object stack: " << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr());
+#endif
     }
 
     PDFEntry* pRet = NULL;
@@ -669,21 +663,21 @@ PDFEntry* PDFReader::read( const char* pFileName )
         pRet = aGrammar.m_aObjectStack.back();
         aGrammar.m_aObjectStack.pop_back();
     }
-    #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
     else if( nEntries > 1 )
     {
-        fprintf( stderr, "error got %u stack objects in parse\n", nEntries );
+        SAL_WARN("sdext.pdfimport.pdfparse", "error got " << nEntries << " stack objects in parse");
         for( unsigned int i = 0; i < nEntries; i++ )
         {
-            fprintf( stderr, "%s\n", typeid(*aGrammar.m_aObjectStack[i]).name() );
+            SAL_WARN("sdext.pdfimport.pdfparse", typeid(*aGrammar.m_aObjectStack[i]).name());
             PDFObject* pObj = dynamic_cast<PDFObject*>(aGrammar.m_aObjectStack[i]);
             if( pObj )
-                fprintf( stderr, "   -> object %d generation %d\n", pObj->m_nNumber, pObj->m_nGeneration );
+                SAL_WARN("sdext.pdfimport.pdfparse", "   -> object " << pObj->m_nNumber << " generation " << pObj->m_nGeneration);
             else
-                fprintf( stderr, "(type %s)\n", typeid(*aGrammar.m_aObjectStack[i]).name() );
+                SAL_WARN("sdext.pdfimport.pdfparse", "(type " << typeid(*aGrammar.m_aObjectStack[i]).name() << ")");
         }
     }
-    #endif
+#endif
     return pRet;
 #endif // WIN32
 }

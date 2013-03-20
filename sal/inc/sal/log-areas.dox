@@ -141,6 +141,7 @@ certain functionality.
 
 @li @c sdext.minimizer
 @li @c sdext.pdfimport
+@li @c sdext.pdfimport.pdfparse
 @li @c sdext.presenter
 
 @section sfx2

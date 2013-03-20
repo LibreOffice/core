@@ -1316,12 +1316,12 @@ PDFFileImplData* PDFFile::impl_getData() const
                     PDFString* pStr = dynamic_cast<PDFString*>(pArr->m_aSubElements[0]);
                     if( pStr )
                         m_pData->m_aDocID = pStr->getFilteredString();
-                    #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "DocId is <" );
+#if OSL_DEBUG_LEVEL > 1
+                    OUString aTmp;
                     for( int i = 0; i < m_pData->m_aDocID.getLength(); i++ )
-                        fprintf( stderr, "%.2x", (unsigned int)sal_uInt8(m_pData->m_aDocID.getStr()[i]) );
-                    fprintf( stderr, ">\n" );
-                    #endif
+                        aTmp += OUString::number((unsigned int)sal_uInt8(m_pData->m_aDocID.getStr()[i]), 16);
+                    SAL_INFO("sdext.pdfimport.pdfparse", "DocId is <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">");
+#endif
                 }
             }
             // search Encrypt entry
@@ -1378,15 +1378,16 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 OString aEnt = pString->getFilteredString();
                                 if( aEnt.getLength() == 32 )
                                     memcpy( m_pData->m_aOEntry, aEnt.getStr(), 32 );
-                                #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
                                 else
                                 {
-                                    fprintf( stderr, "O entry has length %d, should be 32 <", (int)aEnt.getLength() );
+                                    OUString aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        fprintf( stderr, " %.2X", (unsigned int)sal_uInt8(aEnt.getStr()[i]) );
-                                    fprintf( stderr, ">\n" );
+                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt.getStr()[i]), 16);
+                                    SAL_WARN("sdext.pdfimport.pdfparse",
+                                             "O entry has length " << (int)aEnt.getLength() << ", should be 32 <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">" );
                                 }
-                                #endif
+#endif
                             }
                         }
                         if( u_ent != pDict->m_aMap.end() )
@@ -1397,15 +1398,16 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 OString aEnt = pString->getFilteredString();
                                 if( aEnt.getLength() == 32 )
                                     memcpy( m_pData->m_aUEntry, aEnt.getStr(), 32 );
-                                #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
                                 else
                                 {
-                                    fprintf( stderr, "U entry has length %d, should be 32 <", (int)aEnt.getLength() );
+                                    OUString aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        fprintf( stderr, " %.2X", (unsigned int)sal_uInt8(aEnt.getStr()[i]) );
-                                    fprintf( stderr, ">\n" );
+                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt.getStr()[i]), 16);
+                                    SAL_WARN("sdext.pdfimport.pdfparse",
+                                             "U entry has length " << (int)aEnt.getLength() << ", should be 32 <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">" );
                                 }
-                                #endif
+#endif
                             }
                         }
                         if( r_ent != pDict->m_aMap.end() )
@@ -1419,15 +1421,10 @@ PDFFileImplData* PDFFile::impl_getData() const
                             PDFNumber* pNum = dynamic_cast<PDFNumber*>(p_ent->second);
                             if( pNum )
                                 m_pData->m_nPEntry = static_cast<sal_uInt32>(static_cast<sal_Int32>(pNum->m_fValue));
-                        #if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "p entry is %" SAL_PRIxUINT32 "\n", m_pData->m_nPEntry );
-                        #endif
+                            SAL_INFO("sdext.pdfimport.pdfparse", "p entry is " << m_pData->m_nPEntry );
                         }
-                        #if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "Encryption dict: sec handler: %s, version = %d, revision = %d, key length = %d\n",
-                                 pFilter ? OUStringToOString( pFilter->getFilteredName(), RTL_TEXTENCODING_UTF8 ).getStr() : "<unknown>",
-                                 (int)m_pData->m_nAlgoVersion, (int)m_pData->m_nStandardRevision, (int)m_pData->m_nKeyLength );
-                        #endif
+
+                        SAL_INFO("sdext.pdfimport.pdfparse", "Encryption dict: sec handler: " << (pFilter ? OUStringToOString( pFilter->getFilteredName(), RTL_TEXTENCODING_UTF8 ).getStr() : "<unknown>") << ", version = " << (int)m_pData->m_nAlgoVersion << ", revision = " << (int)m_pData->m_nStandardRevision << ", key length = " << m_pData->m_nKeyLength );
                         break;
                     }
                 }
