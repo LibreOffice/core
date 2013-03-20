@@ -28,11 +28,6 @@ $(eval $(call gb_Module_add_targets,svtools,\
 ))
 
 ifneq ($(CROSS_COMPILING),YES)
-$(eval $(call gb_Module_add_targets,svtools,\
-    Executable_bmp \
-    Executable_bmpsum \
-    Executable_g2g \
-))
 
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,svtools,\
