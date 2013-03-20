@@ -27,7 +27,7 @@
 #include <comphelper/property.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/awt/XTabController.hpp>
+#include <com/sun/star/form/runtime/FormController.hpp>
 #include <vcl/scrbar.hxx>
 #include "svtools/treelistentry.hxx"
 
@@ -241,12 +241,7 @@ namespace pcr
     {
         try
         {
-            Reference< XTabController > xTabController;
-            if ( m_xORB.is() )
-                xTabController.set( m_xORB->getServiceManager()->createInstanceWithContext("com.sun.star.form.FormController", m_xORB), UNO_QUERY_THROW );
-            DBG_ASSERT( xTabController.is(), "TabOrderDialog::AutoOrderClickHdl: could not instantiate a tab controller!" );
-            if ( !xTabController.is() )
-                return 0;
+            Reference< css::form::runtime::XFormController > xTabController = css::form::runtime::FormController::create( m_xORB );
 
             xTabController->setModel( m_xTempModel );
             xTabController->setContainer( m_xControlContainer );
