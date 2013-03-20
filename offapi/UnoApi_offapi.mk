@@ -292,6 +292,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 	InteractionHandler \
     FilterDialog \
     OrderDialog \
+	QueryDefinition \
 	ReportDesign \
 	TableDefinition \
 	TextConnectionSettings \
@@ -1042,7 +1043,6 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb,
 	OrderColumn \
 	PreparedStatement \
 	Query \
-	QueryDefinition \
 	QueryDescriptor \
 	QueryDesign \
 	RelationDesign \
@@ -3125,6 +3125,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb,\
 	XOfficeDatabaseDocument \
 	XParametersSupplier \
 	XQueriesSupplier \
+	XQueryDefinition \
 	XQueryDefinitionsSupplier \
 	XReportDocumentsSupplier \
 	XResultSetAccess \

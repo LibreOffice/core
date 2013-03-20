@@ -70,7 +70,8 @@ Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _r
     const TContentPtr& pElementContent( rDefinitions.find( _rName )->second );
     if ( m_bTables )
         return new OComponentDefinition( *this, _rName, m_aContext, pElementContent, m_bTables );
-    return new OCommandDefinition( *this, _rName, m_aContext, pElementContent );
+    else
+        return static_cast< css::sdb::XQueryDefinition * > ( new OCommandDefinition( *this, _rName, m_aContext, pElementContent ) );
 }
 
 Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException)
