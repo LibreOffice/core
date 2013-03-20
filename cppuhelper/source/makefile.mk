@@ -78,6 +78,7 @@ UNOTYPES= \
         com.sun.star.lang.XServiceInfo \
         com.sun.star.lang.XSingleComponentFactory \
         com.sun.star.lang.XSingleServiceFactory \
+        com.sun.star.lang.XUnoTunnel \
         com.sun.star.lang.XTypeProvider \
         com.sun.star.loader.XImplementationLoader \
         com.sun.star.reflection.XArrayTypeDescription \
@@ -123,6 +124,7 @@ SLOFILES= \
         $(SLO)$/exc_thrower.obj 	\
         $(SLO)$/servicefactory.obj 	\
         $(SLO)$/bootstrap.obj 		\
+        $(SLO)$/primeweak.obj 		\
         $(SLO)$/implbase.obj 		\
         $(SLO)$/implbase_ex.obj 	\
         $(SLO)$/propshlp.obj 		\
@@ -174,7 +176,8 @@ SHL1VERSIONMAP=msvc_win32_intel.map
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(GUI)$(COMNAME)"=="OS2gcc3"
 SHL1VERSIONMAP=gcc3os2.map
-.ELIF "$(COMNAME)"=="gcc3"
+#.ELIF "$(COMNAME)"=="gcc3" || "$(COMNAME)"=="Clang"
+.ELSE
 SHL1VERSIONMAP=gcc3.map
 .ENDIF
 
