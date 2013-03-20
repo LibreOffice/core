@@ -3534,6 +3534,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/smarttags,\
 	SmartTagRecognizerMode \
+	XRangeBasedSmartTagRecognizer \
 	XSmartTagAction \
 	XSmartTagRecognizer \
 ))

@@ -1,0 +1,68 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_smarttags_XRangeBasedSmartTagRecognizer_idl__
+#define __com_sun_star_smarttags_XRangeBasedSmartTagRecognizer_idl__
+
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/smarttags/SmartTagRecognizerMode.idl>
+#include <com/sun/star/text/XTextMarkup.idl>
+#include <com/sun/star/frame/XController.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/text/XTextRange.idl>
+
+module com {  module sun {  module star {  module smarttags {
+
+/**
+    provides access to a range based smart tag recognizer.
+ */
+
+interface XRangeBasedSmartTagRecognizer: com::sun::star::lang::XInitialization
+{
+    /** recognizes smart tags.
+
+        @param xRange
+                The text that should be scanned by the recognizer.
+
+        @param eDataType
+                This value indicates the type of the passed text.
+
+        @param aLocale
+                Is used to indicate the language of the passed text.
+
+        @param xTextMarkup
+                This object is used to submit any recognized smart tags
+                to the calling application.
+
+        @param aApplicationName
+                A string containing the name of the calling application.
+
+        @param xController
+                The current controller of the document.
+     */
+
+    void recognizeTextRange( [in] com::sun::star::text::XTextRange xRange,
+                       [in] SmartTagRecognizerMode eDataType,
+                       [in] com::sun::star::text::XTextMarkup xTextMarkup,
+                       [in] string aApplicationName,
+                       [in] com::sun::star::frame::XController xController);
+};
+
+}; }; }; };
+
+#endif

@@ -25,9 +25,9 @@
 #include <com/sun/star/i18n/XBreakIterator.idl>
 #include <com/sun/star/smarttags/SmartTagRecognizerMode.idl>
 #include <com/sun/star/text/XTextMarkup.idl>
+#include <com/sun/star/text/XTextRange.idl>
 #include <com/sun/star/frame/XController.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-
 
 module com {  module sun {  module star {  module smarttags {
 
@@ -145,7 +145,6 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
                     [in] string aApplicationName,
                     [in] com::sun::star::frame::XController xController,
                     [in] com::sun::star::i18n::XBreakIterator xTokenizer );
-
 
     /** indicates whether there is a property page for a smart tag type.
 

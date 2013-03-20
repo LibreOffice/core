@@ -24,6 +24,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
+#include <com/sun/star/smarttags/XRangeBasedSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/text/XTextMarkup.hpp>
@@ -43,6 +44,8 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
+
+#include <com/sun/star/text/XTextRange.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -86,7 +89,7 @@ void SmartTagMgr::CreateBreakIterator() const
 
 /** Dispatches the recognize call to all installed smart tag recognizers
 */
-void SmartTagMgr::Recognize( const OUString& rText,
+void SmartTagMgr::RecognizeString( const OUString& rText,
                              const Reference< text::XTextMarkup > xMarkup,
                              const Reference< frame::XController > xController,
                              const lang::Locale& rLocale,
@@ -116,6 +119,39 @@ void SmartTagMgr::Recognize( const OUString& rText,
                                             mxBreakIter );
         }
     }
+}
+
+void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange> xRange,
+                             const Reference< text::XTextMarkup > xMarkup,
+                             const Reference< frame::XController > xController) const
+{
+    for ( sal_uInt32 i = 0; i < maRecognizerList.size(); i++ )
+    {
+        Reference < smarttags::XSmartTagRecognizer > xRecognizer = maRecognizerList[i];
+
+        Reference< smarttags::XRangeBasedSmartTagRecognizer > xRangeBasedRecognizer = Reference< smarttags::XRangeBasedSmartTagRecognizer >( xRecognizer, UNO_QUERY);
+
+        if (!xRangeBasedRecognizer.is()) continue;
+
+        // if all smart tag types supported by this recognizer have been
+        // disabled, we do not have to call the recognizer:
+        bool bCallRecognizer = false;
+        const sal_uInt32 nSmartTagCount = xRecognizer->getSmartTagCount();
+        for ( sal_uInt32 j = 0; j < nSmartTagCount && !bCallRecognizer; ++j )
+        {
+            const rtl::OUString aSmartTagName = xRecognizer->getSmartTagName(j);
+            if ( IsSmartTagTypeEnabled( aSmartTagName ) )
+                bCallRecognizer = true;
+        }
+
+        if ( bCallRecognizer )
+        {
+            xRangeBasedRecognizer->recognizeTextRange( xRange,
+                                                       smarttags::SmartTagRecognizerMode_PARAGRAPH,
+                                                       xMarkup, maApplicationName, xController);
+        }
+    }
+
 }
 
 typedef std::multimap < OUString, ActionReference >::const_iterator SmartTagMapIter;
