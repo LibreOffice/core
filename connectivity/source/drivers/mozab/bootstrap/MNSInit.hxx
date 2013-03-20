@@ -18,7 +18,7 @@
  */
 
 #ifndef _CONNECTIVITY_MAB_NS_INIT_HXX_
-#define _CONNECTIVITY_MAB_NS_INIT_HXX_ 1
+#define _CONNECTIVITY_MAB_NS_INIT_HXX_
 #include "mozillasrc/MNSDeclares.hxx"
 
 #include <sal/types.h>
@@ -33,6 +33,6 @@ typedef struct UI_Thread_ARGS
 }UI_Thread_ARGS;
 void MNS_XPCOM_EventLoop();
 
-#endif // _CONNECTIVITY_MAB_NS_INIT_HXX_ 1
+#endif // _CONNECTIVITY_MAB_NS_INIT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

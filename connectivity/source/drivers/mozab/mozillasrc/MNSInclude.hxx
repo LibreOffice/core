@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #ifndef _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
-#define _CONNECTIVITY_MAB_NS_INCLUDE_HXX_ 1
+#define _CONNECTIVITY_MAB_NS_INCLUDE_HXX_
 
 //
 // Only include Mozilla include files once and using this file...
