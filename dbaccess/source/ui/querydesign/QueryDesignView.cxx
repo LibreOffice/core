@@ -2242,7 +2242,7 @@ namespace
                             pParamRef = pColumnRef->getChild(nColumnRefPos);
 
                         if (    SQL_ISRULE(pColumnRef,general_set_fct)
-                            &&  SQL_ISRULE(pParamRef,column_ref) )
+                            &&  pParamRef && SQL_ISRULE(pParamRef,column_ref) )
                         {
                             // Check the parameters for Column references
                             InsertColumnRef(_pView,pParamRef,aColumnName,aColumnAlias,aTableRange,aInfo,pTabList);
