@@ -99,6 +99,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 #include <unoidx.hxx>
 #include <unoframe.hxx>
 #include <fmthdft.hxx>
@@ -2682,6 +2683,47 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
     return aRet;
 }
+
+void SAL_CALL SwXTextCursor::invalidateMarkings(::sal_Int32 nType)
+throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+
+    SwNode* node = rUnoCursor.GetNode();
+
+    if (node == 0) return;
+
+    SwTxtNode* txtNode = node->GetTxtNode();
+
+    if (txtNode == 0) return;
+
+    if ( text::TextMarkupType::SPELLCHECK == nType )
+    {
+        txtNode->SetWrongDirty(true);
+        txtNode->SetWrong(0, true);
+    }
+    else if( text::TextMarkupType::PROOFREADING == nType )
+    {
+        txtNode->SetGrammarCheckDirty(true);
+        txtNode->SetGrammarCheck(0,true);
+    }
+    else if ( text::TextMarkupType::SMARTTAG == nType )
+    {
+        txtNode->SetSmartTagDirty(true);
+        txtNode->SetSmartTags (0, true);
+    }
+    else return;
+
+    SwFmtColl* fmtColl=txtNode->GetFmtColl();
+
+    if (fmtColl == 0) return;
+
+    SwFmtChg aNew( fmtColl );
+    txtNode->NotifyClients( 0, &aNew );
+}
+
 
 /*-- 10.03.2008 09:58:47---------------------------------------------------
 
