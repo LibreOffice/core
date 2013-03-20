@@ -104,7 +104,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
         {
             xAction = rActionComponents[i];
 
-            for ( sal_Int32 k = 0; k < xAction->getActionCount( aSmartTagType, xController ); ++k )
+            for ( sal_Int32 k = 0; k < xAction->getActionCount( aSmartTagType, xController, xSmartTagProperties ); ++k )
             {
                 const sal_uInt32 nActionID = xAction->getActionID( aSmartTagType, k, xController  );
                 OUString aActionCaption = xAction->getActionCaptionFromID( nActionID,

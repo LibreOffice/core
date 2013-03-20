@@ -82,7 +82,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
         @throws com::sun::star::lang::IndexOutOfBoundsException
                 if nSmartTagIndex is greater than SmartTagCount.
     */
-    string getSmartTagName( [in] long nSmartTagIndex )
+    string getSmartTagName( [in] long nSmartTagIndex)
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
 
@@ -104,7 +104,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
                 if nSmartTagIndex is greater than SmartTagCount
      */
     string getSmartTagCaption( [in] long nSmartTagIndex,
-                               [in] ::com::sun::star::lang::Locale aLocale )
+                               [in] ::com::sun::star::lang::Locale aLocale)
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
 
@@ -123,7 +123,8 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
                 type.
     */
     long getActionCount( [in] string aSmartTagName,
-                         [in] com::sun::star::frame::XController xController );
+                         [in] com::sun::star::frame::XController xController,
+                         [in] com::sun::star::container::XStringKeyMap xProperties);
 
     /** obtains a unique integer identifier for an action.
 
@@ -210,7 +211,7 @@ interface XSmartTagAction: com::sun::star::lang::XInitialization
                 if the ActionID is not recognized.
     */
     string getActionNameFromID( [in] long nActionID,
-                                [in] com::sun::star::frame::XController xController )
+                                [in] com::sun::star::frame::XController xController)
         raises( com::sun::star::lang::IllegalArgumentException );
 
 
