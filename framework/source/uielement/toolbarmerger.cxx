@@ -23,6 +23,7 @@
 #include <framework/imageproducer.hxx>
 
 #include <svtools/miscopt.hxx>
+#include <comphelper/processfactory.hxx>
 
 namespace framework
 {
@@ -649,8 +650,8 @@ bool ToolBarMerger::RemoveItems(
      false.
 */
 ::cppu::OWeakObject* ToolBarMerger::CreateController(
-    uno::Reference< lang::XMultiServiceFactory > xSMGR,
-    uno::Reference< frame::XFrame > xFrame,
+    const uno::Reference< uno::XComponentContext >& rxContext,
+    const uno::Reference< frame::XFrame > & xFrame,
     ToolBox*               pToolbar,
     const OUString& rCommandURL,
     sal_uInt16             nId,
@@ -660,25 +661,25 @@ bool ToolBarMerger::RemoveItems(
     ::cppu::OWeakObject* pResult( 0 );
 
     if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_BUTTON, TOOLBARCONTROLLER_BUTTON_LEN ))
-        pResult = new ButtonToolbarController( xSMGR, pToolbar, rCommandURL );
+        pResult = new ButtonToolbarController( rxContext, pToolbar, rCommandURL );
     else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_COMBOBOX, TOOLBARCONTROLLER_COMBOBOX_LEN ))
-        pResult = new ComboboxToolbarController( xSMGR, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new ComboboxToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
     else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_EDIT, TOOLBARCONTROLLER_EDIT_LEN ))
-        pResult = new EditToolbarController( xSMGR, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new EditToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
     else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_SPINFIELD, TOOLBARCONTROLLER_SPINFIELD_LEN ))
-        pResult = new SpinfieldToolbarController( xSMGR, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new SpinfieldToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
     else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_IMGBUTTON, TOOLBARCONTROLLER_IMGBUTTON_LEN ))
-        pResult = new ImageButtonToolbarController( xSMGR, xFrame, pToolbar, nId, rCommandURL );
+        pResult = new ImageButtonToolbarController( rxContext, xFrame, pToolbar, nId, rCommandURL );
     else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_DROPDOWNBOX, TOOLBARCONTROLLER_DROPDOWNBOX_LEN ))
-        pResult = new DropdownToolbarController( xSMGR, xFrame, pToolbar, nId, nWidth, rCommandURL );
+        pResult = new DropdownToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
     else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_DROPDOWNBTN, TOOLBARCONTROLLER_DROPDOWNBTN_LEN ))
-        pResult = new ToggleButtonToolbarController( xSMGR, xFrame, pToolbar, nId,
+        pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
                                                      ToggleButtonToolbarController::STYLE_DROPDOWNBUTTON, rCommandURL );
     else if ( rControlType.equalsAsciiL( TOOLBARCONTROLLER_TOGGLEDDBTN, TOOLBARCONTROLLER_TOGGLEDDBTN_LEN ))
-        pResult = new ToggleButtonToolbarController( xSMGR, xFrame, pToolbar, nId,
+        pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
                                                      ToggleButtonToolbarController::STYLE_TOGGLE_DROPDOWNBUTTON, rCommandURL );
     else
-        pResult = new GenericToolbarController( xSMGR, xFrame, pToolbar, nId, rCommandURL );
+        pResult = new GenericToolbarController( rxContext, xFrame, pToolbar, nId, rCommandURL );
 
     return pResult;
 }

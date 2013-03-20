@@ -322,7 +322,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     ::cppu::OWeakObject* pController = 0;
 
-                    pController = ToolBarMerger::CreateController( m_xServiceManager, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
+                    pController = ToolBarMerger::CreateController( xComponentContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
                     xController = Reference< XStatusListener >( pController, UNO_QUERY );
                 }
 

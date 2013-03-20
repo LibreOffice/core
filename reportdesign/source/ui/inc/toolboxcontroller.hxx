@@ -45,7 +45,7 @@ namespace rptui
         OToolboxController(const OToolboxController&);
         void operator =(const OToolboxController&);
     public:
-        OToolboxController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        OToolboxController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         virtual ~OToolboxController();
 
         // XInterface

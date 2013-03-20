@@ -86,18 +86,18 @@ Sequence< OUString> SAL_CALL OToolboxController::getSupportedServiceNames() thro
 // -------------------------------------------------------------------------
 Reference< XInterface > OToolboxController::create(Reference< XComponentContext > const & xContext)
 {
-    return *(new OToolboxController(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY)));
+    return * new OToolboxController(xContext);
 }
 // -----------------------------------------------------------------------------
 DBG_NAME(rpt_OToolboxController)
-OToolboxController::OToolboxController(const Reference< XMultiServiceFactory >& _rxORB)
+OToolboxController::OToolboxController(const Reference< XComponentContext >& _rxORB)
     : m_pToolbarController(NULL)
     ,m_nToolBoxId(1)
     ,m_nSlotId(0)
 {
     DBG_CTOR(rpt_OToolboxController,NULL);
     osl_atomic_increment(&m_refCount);
-    m_xServiceManager = _rxORB;
+    m_xContext = _rxORB;
     osl_atomic_decrement(&m_refCount);
 
 }

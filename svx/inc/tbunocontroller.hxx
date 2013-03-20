@@ -23,6 +23,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace svx
 {
@@ -33,7 +34,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
 {
     public:
         FontHeightToolBoxControl(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rServiceManager );
         ~FontHeightToolBoxControl();
 
         // XInterface

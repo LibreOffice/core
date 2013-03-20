@@ -69,7 +69,7 @@ private:
 class ExtrusionDirectionControl : public svt::PopupWindowController
 {
 public:
-    ExtrusionDirectionControl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+    ExtrusionDirectionControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
@@ -117,7 +117,7 @@ public:
 class ExtrusionDepthController : public svt::PopupWindowController
 {
 public:
-    ExtrusionDepthController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+    ExtrusionDepthController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
@@ -168,7 +168,7 @@ public:
 class ExtrusionLightingControl : public svt::PopupWindowController
 {
 public:
-    ExtrusionLightingControl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+    ExtrusionLightingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
@@ -208,7 +208,7 @@ public:
 class ExtrusionSurfaceControl : public svt::PopupWindowController
 {
 public:
-    ExtrusionSurfaceControl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+    ExtrusionSurfaceControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ::Window* createPopupWindow( ::Window* pParent );
 

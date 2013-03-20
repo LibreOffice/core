@@ -16,6 +16,7 @@
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "LimitBox.hxx"
 #include "dbu_reghelper.hxx"
@@ -91,8 +92,8 @@ long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
 
 
 LimitBoxController::LimitBoxController(
-    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager ) :
-    svt::ToolboxController( rServiceManager,
+    const uno::Reference< uno::XComponentContext >& rxContext ) :
+    svt::ToolboxController( rxContext,
                             uno::Reference< frame::XFrame >(),
                             OUString( ".uno:DBLimit" ) ),
     m_pLimitBox( NULL )
@@ -126,7 +127,15 @@ void SAL_CALL LimitBoxController::release() throw ()
 
 
 /// XServiceInfo
-IMPLEMENT_SERVICE_INFO1_STATIC(LimitBoxController,"org.libreoffice.comp.dbu.LimitBoxController","com.sun.star.frame.ToolboxController")
+IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LimitBoxController, "org.libreoffice.comp.dbu.LimitBoxController")
+IMPLEMENT_SERVICE_INFO_SUPPORTS(LimitBoxController)
+IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LimitBoxController, "com.sun.star.frame.ToolboxController")
+
+uno::Reference< uno::XInterface >
+    SAL_CALL LimitBoxController::Create(const uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)
+{
+    return static_cast< XServiceInfo* >(new LimitBoxController( comphelper::getComponentContext(_rxORB) ));
+}
 
 /// XComponent
 void SAL_CALL LimitBoxController::dispose()

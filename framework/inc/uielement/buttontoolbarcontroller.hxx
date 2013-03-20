@@ -20,7 +20,6 @@
 #ifndef __FRAMEWORK_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX_
 #define __FRAMEWORK_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX_
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -49,7 +48,7 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
                                 public ::cppu::OWeakObject
 {
     public:
-        ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                  ToolBox*             pToolBar,
                                  const OUString& aCommand );
         virtual ~ButtonToolbarController();
@@ -88,7 +87,7 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
                                                                                          m_bDisposed : 1;
         OUString                                                                    m_aCommandURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >      m_xURLTransformer;
         ToolBox*                                                                         m_pToolbar;
 };

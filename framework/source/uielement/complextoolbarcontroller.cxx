@@ -53,17 +53,17 @@ namespace framework
 // ------------------------------------------------------------------
 
 ComplexToolbarController::ComplexToolbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
-    const Reference< XFrame >&               rFrame,
-    ToolBox*                                 pToolbar,
-    sal_uInt16                                   nID,
-    const OUString&                          aCommand ) :
-    svt::ToolboxController( rServiceManager, rFrame, aCommand )
+    const Reference< XComponentContext >& rxContext,
+    const Reference< XFrame >&            rFrame,
+    ToolBox*                              pToolbar,
+    sal_uInt16                            nID,
+    const OUString&                       aCommand ) :
+    svt::ToolboxController( rxContext, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
     ,   m_bMadeInvisible( sal_False )
 {
-    m_xURLTransformer.set( URLTransformer::create(::comphelper::getComponentContext(m_xServiceManager)) );
+    m_xURLTransformer.set( URLTransformer::create(m_xContext) );
 }
 
 // ------------------------------------------------------------------
@@ -115,7 +115,6 @@ throw ( RuntimeException )
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xServiceManager.is() &&
              !m_aCommandURL.isEmpty() )
         {
             xURLTransformer = m_xURLTransformer;
@@ -301,7 +300,7 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
 {
     uno::Reference< frame::XDispatch > xDispatch;
 
-    if ( m_bInitialized && m_xFrame.is() && m_xServiceManager.is() && !aCommand.isEmpty() )
+    if ( m_bInitialized && m_xFrame.is() && !aCommand.isEmpty() )
     {
         URLToDispatchMap::const_iterator pIter = m_aListenerMap.find( aCommand );
         if ( pIter != m_aListenerMap.end() )

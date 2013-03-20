@@ -36,7 +36,7 @@ class PopupWindowControllerImpl;
 class SVT_DLLPUBLIC PopupWindowController : public svt::ToolboxController, public ::com::sun::star::lang::XServiceInfo
 {
 public:
-    PopupWindowController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+    PopupWindowController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
     ~PopupWindowController();

@@ -42,6 +42,7 @@
 #include <svtools/valueset.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <sfx2/imagemgr.hxx>
 
@@ -331,7 +332,7 @@ Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( Ru
 Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
     return static_cast< cppu::OWeakObject * >(
-        new SlideLayoutController( rSMgr, ".uno:AssignLayout", false ));
+        new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:AssignLayout", false ));
 }
 
 // --------------------------------------------------------------------
@@ -355,15 +356,15 @@ Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( Ru
 Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
     return static_cast< cppu::OWeakObject * >(
-        new SlideLayoutController( rSMgr, ".uno:InsertPage" , true ) );
+        new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:InsertPage" , true ) );
 }
 
 //========================================================================
 // class SlideLayoutController
 //========================================================================
 
-SlideLayoutController::SlideLayoutController( const Reference< lang::XMultiServiceFactory >& rServiceManager, const OUString& sCommandURL, bool bInsertPage )
-: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), sCommandURL )
+SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentContext >& rxContext, const OUString& sCommandURL, bool bInsertPage )
+: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), sCommandURL )
 , mbInsertPage( bInsertPage )
 {
 }

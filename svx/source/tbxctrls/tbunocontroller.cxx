@@ -30,6 +30,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <memory>
 
@@ -238,12 +239,11 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 // class FontHeightToolBoxControl
 //========================================================================
 
-FontHeightToolBoxControl::FontHeightToolBoxControl(
-    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager ) :
-    svt::ToolboxController( rServiceManager,
-                            uno::Reference< frame::XFrame >(),
-                            OUString( ".uno:FontHeight" ) ),
-    m_pBox( NULL )
+FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
+ : svt::ToolboxController( rxContext,
+                           uno::Reference< frame::XFrame >(),
+                           OUString( ".uno:FontHeight" ) ),
+   m_pBox( NULL )
 {
     addStatusListener( OUString( ".uno:CharFontName" ));
 }
@@ -413,7 +413,7 @@ void FontHeightToolBoxControl::dispatchCommand(
 uno::Reference< uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstance(
     const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new FontHeightToolBoxControl( rSMgr );
+    return *new FontHeightToolBoxControl( comphelper::getComponentContext(rSMgr) );
 }
 
 }

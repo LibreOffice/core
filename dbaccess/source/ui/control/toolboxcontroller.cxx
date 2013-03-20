@@ -68,16 +68,26 @@ namespace dbaui
         }
     }
 
-    OToolboxController::OToolboxController(const Reference< XMultiServiceFactory >& _rxORB)
+    OToolboxController::OToolboxController(const Reference< XComponentContext >& _rxORB)
         : m_nToolBoxId(1)
     {
         osl_atomic_increment(&m_refCount);
-        m_xServiceManager = _rxORB;
+        m_xContext = _rxORB;
         osl_atomic_decrement(&m_refCount);
 
     }
     // -----------------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC(OToolboxController,"com.sun.star.sdb.ApplicationToolboxController","com.sun.star.frame.ToolboxController")
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OToolboxController, "com.sun.star.sdb.ApplicationToolboxController")
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(OToolboxController)
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(OToolboxController, "com.sun.star.frame.ToolboxController")
+
+    Reference< XInterface >
+        SAL_CALL OToolboxController::Create(const Reference< XMultiServiceFactory >& _rxORB)
+    {
+        return static_cast< XServiceInfo* >(new OToolboxController( comphelper::getComponentContext(_rxORB) ));
+    }
+
+
     // -----------------------------------------------------------------------------
     // XInterface
     Any SAL_CALL OToolboxController::queryInterface( const Type& _rType ) throw (RuntimeException)
@@ -186,10 +196,9 @@ namespace dbaui
 
             try
             {
-                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(getServiceManager())));
-                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(OUString("com.sun.star.sdb.OfficeDatabaseDocument"));
+                Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier = ModuleUIConfigurationManagerSupplier::create( getContext() );
+                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( OUString("com.sun.star.sdb.OfficeDatabaseDocument") );
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
-
 
                 short nImageType = hasBigImages() ? ImageType::SIZE_LARGE : ImageType::SIZE_DEFAULT;
 

@@ -47,7 +47,7 @@ class FindTextFieldControl : public ComboBox
 public:
     FindTextFieldControl( Window* pParent, WinBits nStyle,
         css::uno::Reference< css::frame::XFrame >& xFrame,
-        css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
     virtual ~FindTextFieldControl();
 
     virtual long PreNotify( NotifyEvent& rNEvt );
@@ -91,7 +91,7 @@ class FindTextToolbarController : public svt::ToolboxController,
 {
 public:
 
-    FindTextToolbarController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager );
+    FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
     ~FindTextToolbarController();
 
     // XInterface
@@ -139,7 +139,7 @@ class ExitSearchToolboxController   : public svt::ToolboxController,
                                       public css::lang::XServiceInfo
 {
 public:
-    ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager );
+    ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     ~ExitSearchToolboxController();
 
     // XInterface
@@ -178,7 +178,7 @@ class UpDownSearchToolboxController : public svt::ToolboxController,
 public:
     enum Type { UP, DOWN };
 
-    UpDownSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager, Type eType );
+    UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
     ~UpDownSearchToolboxController();
 
     // XInterface

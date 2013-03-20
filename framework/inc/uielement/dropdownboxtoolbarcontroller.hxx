@@ -51,7 +51,7 @@ class DropdownToolbarController : public IListBoxListener,
 
 {
     public:
-        DropdownToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        DropdownToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                    const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                    ToolBox*     pToolBar,
                                    sal_uInt16       nID,

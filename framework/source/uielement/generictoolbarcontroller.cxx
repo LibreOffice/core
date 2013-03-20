@@ -101,12 +101,12 @@ struct ExecuteInfo
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
 };
 
-GenericToolbarController::GenericToolbarController( const Reference< XMultiServiceFactory >& rServiceManager,
+GenericToolbarController::GenericToolbarController( const Reference< XComponentContext >&    rxContext,
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbar,
-                                                    sal_uInt16                                   nID,
+                                                    sal_uInt16                               nID,
                                                     const OUString&                          aCommand ) :
-    svt::ToolboxController( rServiceManager, rFrame, aCommand )
+    svt::ToolboxController( rxContext, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
     ,   m_bEnumCommand( isEnumCommand( aCommand ))
@@ -147,10 +147,9 @@ throw ( RuntimeException )
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xServiceManager.is() &&
              !m_aCommandURL.isEmpty() )
         {
-            xURLTransformer = URLTransformer::create(::comphelper::getComponentContext(m_xServiceManager));
+            xURLTransformer = URLTransformer::create(m_xContext);
 
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );
@@ -297,7 +296,17 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
-MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, sal_uInt16   nID, const OUString& aCommand, const OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
+MenuToolbarController::MenuToolbarController( const Reference< XComponentContext >& rxContext,
+                                              const Reference< XFrame >& rFrame,
+                                              ToolBox* pToolBar,
+                                              sal_uInt16   nID,
+                                              const OUString& aCommand,
+                                              const OUString& aModuleIdentifier,
+                                              const Reference< XIndexAccess >& xMenuDesc )
+    : GenericToolbarController( rxContext, rFrame, pToolBar, nID, aCommand ),
+      m_xMenuDesc( xMenuDesc ),
+      pMenu( NULL ),
+      m_aModuleIdentifier( aModuleIdentifier )
 {
 }
 
@@ -345,9 +354,9 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
     if ( !pMenu )
     {
         Reference< XDispatchProvider > xDispatch;
-        Reference< XURLTransformer > xURLTransformer = URLTransformer::create(::comphelper::getComponentContext(m_xServiceManager));
+        Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         pMenu = new Toolbarmenu();
-        m_xMenuManager.set( new MenuBarManager( m_xServiceManager, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
+        m_xMenuManager.set( new MenuBarManager( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
         if ( m_xMenuManager.is() )
         {
             MenuBarManager* pMgr = dynamic_cast< MenuBarManager* >( m_xMenuManager.get() );

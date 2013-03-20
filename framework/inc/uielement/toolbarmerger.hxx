@@ -128,8 +128,8 @@ class ToolBarMerger
                                        const OUString&    rMergeCommandParameter );
 
         static ::cppu::OWeakObject* CreateController(
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame,
             ToolBox*               pToolbar,
             const OUString& rCommandURL,
             sal_uInt16             nId,

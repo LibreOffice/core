@@ -404,7 +404,7 @@ IMPL_LINK_NOARG(FontWorkAlignmentWindow, SelectHdl)
 class FontWorkAlignmentControl : public svt::PopupWindowController
 {
 public:
-    FontWorkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+    FontWorkAlignmentControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
@@ -418,8 +418,8 @@ public:
 
 // -----------------------------------------------------------------------
 
-FontWorkAlignmentControl::FontWorkAlignmentControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
-: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( ".uno:FontworkAlignment" ) )
+FontWorkAlignmentControl::FontWorkAlignmentControl( const Reference< XComponentContext >& rxContext )
+: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), OUString( ".uno:FontworkAlignment" ) )
 {
 }
 
@@ -452,7 +452,7 @@ Sequence< OUString > SAL_CALL FontWorkAlignmentControl_getSupportedServiceNames(
 
 Reference< XInterface > SAL_CALL SAL_CALL FontWorkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new FontWorkAlignmentControl( rSMgr );
+    return *new FontWorkAlignmentControl( comphelper::getComponentContext(rSMgr) );
 }
 
 // --------------------------------------------------------------------
@@ -642,7 +642,7 @@ IMPL_LINK_NOARG(FontWorkCharacterSpacingWindow, SelectHdl)
 class FontWorkCharacterSpacingControl : public svt::PopupWindowController
 {
 public:
-    FontWorkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+    FontWorkCharacterSpacingControl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
@@ -654,8 +654,8 @@ public:
 };
 
 
-FontWorkCharacterSpacingControl::FontWorkCharacterSpacingControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
-: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( ".uno:FontworkCharacterSpacingFloater" ) )
+FontWorkCharacterSpacingControl::FontWorkCharacterSpacingControl( const Reference< XComponentContext >& rxContext )
+: svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), OUString( ".uno:FontworkCharacterSpacingFloater" ) )
 {
 }
 
@@ -688,7 +688,7 @@ Sequence< OUString > SAL_CALL FontWorkCharacterSpacingControl_getSupportedServic
 
 Reference< XInterface > SAL_CALL SAL_CALL FontWorkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new FontWorkCharacterSpacingControl( rSMgr );
+    return *new FontWorkCharacterSpacingControl( comphelper::getComponentContext(rSMgr) );
 }
 
 // --------------------------------------------------------------------

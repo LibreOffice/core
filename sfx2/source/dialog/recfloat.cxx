@@ -182,7 +182,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 
     // create a generic toolbox controller for our internal toolbox
     svt::GenericToolboxController* pController = new svt::GenericToolboxController(
-                                                    ::comphelper::getProcessServiceFactory(),
+                                                    ::comphelper::getProcessComponentContext(),
                                                     xFrame,
                                                     &aTbx,
                                                     SID_STOP_RECORDING,

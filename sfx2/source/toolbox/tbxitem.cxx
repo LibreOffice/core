@@ -783,7 +783,6 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
             return;
 
         // create element with factory
-        Reference< XMultiServiceFactory >   xServiceManager = getServiceManager();
         Reference< XFrame >                 xFrame          = getFrameInterface();
         Reference< XUIElement >             xUIElement;
         Reference< XUIElementFactoryManager >  xUIElementFactory;
@@ -791,7 +790,7 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBar
         xUIElementFactory = xWeakUIElementFactory;
         if ( !xUIElementFactory.is() )
         {
-            xUIElementFactory = UIElementFactoryManager::create( comphelper::getComponentContext(xServiceManager) );
+            xUIElementFactory = UIElementFactoryManager::create( m_xContext );
             xWeakUIElementFactory = xUIElementFactory;
         }
 
@@ -1484,7 +1483,7 @@ SfxPopupWindow* SfxAppToolBoxControl_Impl::CreatePopupWindow()
 
     if ( !pMenu )
     {
-        ::framework::MenuConfiguration aConf( comphelper::getComponentContext(m_xServiceManager) );
+        ::framework::MenuConfiguration aConf( m_xContext );
         if ( m_aCommandURL == ".uno:AddDirect" )
             pMenu = aConf.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU );
         else
@@ -1551,7 +1550,7 @@ void SfxAppToolBoxControl_Impl::StateChanged
         // to check for supported URLs ...
         if ( !pMenu )
         {
-            ::framework::MenuConfiguration aConf( comphelper::getComponentContext(m_xServiceManager) );
+            ::framework::MenuConfiguration aConf( m_xContext );
             // This toolbox controller is used for two popup menus (new documents and wizards!). Create the correct
             // popup menu according to the slot ID our controller has been initialized with.
             if ( nSlotId == SID_NEWDOCDIRECT )

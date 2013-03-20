@@ -31,7 +31,7 @@ class LimitBoxController: public svt::ToolboxController,
 {
     public:
         LimitBoxController(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
         ~LimitBoxController();
 
         /// XInterface

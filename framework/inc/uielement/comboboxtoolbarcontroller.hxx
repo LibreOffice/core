@@ -52,7 +52,7 @@ class ComboboxToolbarController : public IComboBoxListener,
 
 {
     public:
-        ComboboxToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        ComboboxToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                    const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                    ToolBox*     pToolBar,
                                    sal_uInt16       nID,

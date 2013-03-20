@@ -52,9 +52,9 @@ static const char COMMAND_APPENDSEARCHHISTORY[] = "AppendSearchHistory";
 
 static const sal_Int32       REMEMBER_SIZE = 10;
 
-void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
+void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
-    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create(::comphelper::getComponentContext(rSMgr)) );
+    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( rxContext ) );
     css::util::URL aURL;
     aURL.Complete = OUString(COMMAND_EXECUTESEARCH);
     xURLTransformer->parseStrict(aURL);
@@ -70,7 +70,7 @@ void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFact
 
 FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle,
     css::uno::Reference< css::frame::XFrame >& xFrame,
-    css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager) :
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager) :
     ComboBox( pParent, nStyle ),
     m_xFrame(xFrame),
     m_xServiceManager(xServiceManager)
@@ -178,7 +178,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
                 lArgs[2].Value <<= (sal_Int32)0;
 
-                impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
+                impl_executeSearch( comphelper::getComponentContext(m_xServiceManager), m_xFrame, lArgs);
                 nRet = 1;
             }
             break;
@@ -303,8 +303,8 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
 //-----------------------------------------------------------------------------------------------------------
 // FindTextToolbarController
 
-FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager )
-    :svt::ToolboxController( rServiceManager,
+FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+    :svt::ToolboxController( rxContext,
     css::uno::Reference< css::frame::XFrame >(),
     OUString(COMMAND_FINDTEXT) )
 {
@@ -420,7 +420,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
     if ( pParent )
     {
         ToolBox* pToolbar =  ( ToolBox* )pParent;
-        m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xServiceManager );
+        m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)  );
 
         Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
         m_pFindTextFieldControl->SetSizePixel( aSize );
@@ -475,8 +475,8 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
 //-----------------------------------------------------------------------------------------------------------
 // class UpDownSearchToolboxController
 
-UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager, Type eType )
-    : svt::ToolboxController( rServiceManager,
+UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
+    : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             (eType == UP) ? OUString( COMMAND_UPSEARCH ):  OUString( COMMAND_DOWNSEARCH ) ),
       meType( eType )
@@ -587,7 +587,7 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
     lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
     lArgs[2].Value <<= (sal_Int32)0;
 
-    impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
+    impl_executeSearch(m_xContext, m_xFrame, lArgs);
 
     css::frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL.Complete = OUString(COMMAND_APPENDSEARCHHISTORY);
@@ -606,8 +606,8 @@ void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::Fe
 //-----------------------------------------------------------------------------------------------------------
 // class ExitSearchToolboxController
 
-ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager )
-    : svt::ToolboxController( rServiceManager,
+ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
+    : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
             OUString( COMMAND_EXITSEARCH ) )
 {
@@ -881,7 +881,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_c
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
     return static_cast< cppu::OWeakObject * >(
-        new FindTextToolbarController( rSMgr ) );
+        new FindTextToolbarController( comphelper::getComponentContext(rSMgr) ) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance(
@@ -889,7 +889,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController
 {
     return static_cast< cppu::OWeakObject * >(
         new UpDownSearchToolboxController(
-            rSMgr, UpDownSearchToolboxController::DOWN ) );
+            comphelper::getComponentContext(rSMgr), UpDownSearchToolboxController::DOWN ) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance(
@@ -897,13 +897,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_c
 {
     return static_cast< cppu::OWeakObject * >(
         new UpDownSearchToolboxController(
-            rSMgr, UpDownSearchToolboxController::UP ) );
+            comphelper::getComponentContext(rSMgr), UpDownSearchToolboxController::UP ) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxController_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
 {
-    return *new ExitSearchToolboxController( rSMgr );
+    return *new ExitSearchToolboxController( comphelper::getComponentContext(rSMgr) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance(

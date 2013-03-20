@@ -242,9 +242,9 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
 // =======================================================================
 
 ExtrusionDirectionControl::ExtrusionDirectionControl(
-    const Reference< lang::XMultiServiceFactory >& rServiceManager
+    const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController(
-        rServiceManager,
+        rxContext,
         Reference< frame::XFrame >(),
         OUString( ".uno:ExtrusionDirectionFloater" )
     )
@@ -282,7 +282,7 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstan
     const Reference< XMultiServiceFactory >& rSMgr
 )   throw( RuntimeException )
 {
-    return *new ExtrusionDirectionControl( rSMgr );
+    return *new ExtrusionDirectionControl( comphelper::getComponentContext(rSMgr) );
 }
 
 // --------------------------------------------------------------------
@@ -507,9 +507,9 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
 // =======================================================================
 
 ExtrusionDepthController::ExtrusionDepthController(
-    const Reference< lang::XMultiServiceFactory >& rServiceManager
+    const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController(
-        rServiceManager,
+        rxContext,
         Reference< frame::XFrame >(),
         OUString( ".uno:ExtrusionDepthFloater" )
     )
@@ -546,7 +546,7 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames(
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    return *new ExtrusionDepthController( rSMgr );
+    return *new ExtrusionDepthController( comphelper::getComponentContext(rSMgr) );
 }
 
 // --------------------------------------------------------------------
@@ -770,8 +770,8 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
 // ========================================================================
 
 ExtrusionLightingControl::ExtrusionLightingControl(
-    const Reference< lang::XMultiServiceFactory >& rServiceManager
-)   : svt::PopupWindowController( rServiceManager,
+    const Reference< XComponentContext >& rxContext
+)   : svt::PopupWindowController( rxContext,
                 Reference< frame::XFrame >(),
                 OUString( ".uno:ExtrusionDirectionFloater" )
     )
@@ -809,7 +809,7 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstanc
     const Reference< XMultiServiceFactory >& rSMgr
 )   throw( RuntimeException )
 {
-    return *new ExtrusionLightingControl( rSMgr );
+    return *new ExtrusionLightingControl( comphelper::getComponentContext(rSMgr) );
 }
 
 // --------------------------------------------------------------------
@@ -913,10 +913,10 @@ IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
 // ========================================================================
 
 ExtrusionSurfaceControl::ExtrusionSurfaceControl(
-    const Reference< lang::XMultiServiceFactory >& rServiceManager
+    const Reference< XComponentContext >& rxContext
 )
 :   svt::PopupWindowController(
-        rServiceManager,
+        rxContext,
         Reference< frame::XFrame >(),
         OUString( ".uno:ExtrusionSurfaceFloater" )
     )
@@ -954,7 +954,7 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance
     const Reference< XMultiServiceFactory >& rSMgr
 )   throw( RuntimeException )
 {
-    return *new ExtrusionSurfaceControl( rSMgr );
+    return *new ExtrusionSurfaceControl( comphelper::getComponentContext(rSMgr) );
 }
 
 // --------------------------------------------------------------------

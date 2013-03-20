@@ -99,12 +99,12 @@ static void SubstituteVariables( OUString& aURL )
 // ------------------------------------------------------------------
 
 ImageButtonToolbarController::ImageButtonToolbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     const OUString&                          aCommand ) :
-    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
+    ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
 {
     sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
 

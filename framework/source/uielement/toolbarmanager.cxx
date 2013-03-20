@@ -970,7 +970,7 @@ void ToolBarManager::CreateControllers()
                     OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
 
                     Reference< XStatusListener > xStatusListener(
-                        ToolBarMerger::CreateController( m_xServiceManager,
+                        ToolBarMerger::CreateController( comphelper::getComponentContext(m_xServiceManager),
                                                          m_xFrame,
                                                          m_pToolBar,
                                                          aCommandURL,
@@ -986,7 +986,7 @@ void ToolBarManager::CreateControllers()
                     if ( it == m_aMenuMap.end() )
                     {
                         xController = Reference< XStatusListener >(
-                            new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL ));
+                            new GenericToolbarController( comphelper::getComponentContext(m_xServiceManager), m_xFrame, m_pToolBar, nId, aCommandURL ));
 
                         // Accessibility support: Set toggle button role for specific commands
                         sal_Int32 nProps = RetrievePropertiesFromCommand( aCommandURL );
@@ -995,7 +995,7 @@ void ToolBarManager::CreateControllers()
                     }
                     else
                         xController = Reference< XStatusListener >(
-                            new MenuToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
+                            new MenuToolbarController( comphelper::getComponentContext(m_xServiceManager), m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
                 }
             }
             else if ( pController )

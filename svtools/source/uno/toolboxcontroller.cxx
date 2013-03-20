@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/mutex.hxx>
@@ -73,8 +74,7 @@ struct ToolboxController_Impl
 };
 
 ToolboxController::ToolboxController(
-
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
     const OUString& aCommandURL ) :
     OPropertyContainer(GetBroadcastHelper())
@@ -83,20 +83,21 @@ ToolboxController::ToolboxController(
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_xFrame(xFrame)
-    ,   m_xServiceManager( rServiceManager )
+    ,   m_xContext( rxContext )
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
 {
-    registerProperty(OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+    OSL_ASSERT( m_xContext.is() );
+    registerProperty( OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE),
+        TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
+        css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;
 
     try
     {
-        m_pImpl->m_xUrlTransformer.set(
-            ::com::sun::star::util::URLTransformer::create(
-                ::comphelper::getComponentContext(m_xServiceManager) ) );
+        m_pImpl->m_xUrlTransformer = URLTransformer::create( rxContext );
     }
     catch(const Exception&)
     {
@@ -111,7 +112,9 @@ ToolboxController::ToolboxController() :
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
 {
-    registerProperty(OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+    registerProperty( OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE),
+        TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
+        css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;
@@ -128,10 +131,10 @@ Reference< XFrame > ToolboxController::getFrameInterface() const
     return m_xFrame;
 }
 
-Reference< XMultiServiceFactory > ToolboxController::getServiceManager() const
+const Reference< XComponentContext > & ToolboxController::getContext() const
 {
     SolarMutexGuard aSolarMutexGuard;
-    return m_xServiceManager;
+    return m_xContext;
 }
 
 Reference< XLayoutManager > ToolboxController::getLayoutManager() const
@@ -221,7 +224,11 @@ throw ( Exception, RuntimeException )
                 else if ( aPropValue.Name == "CommandURL" )
                     aPropValue.Value >>= m_aCommandURL;
                 else if ( aPropValue.Name == "ServiceManager" )
-                    m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
+                {
+                    Reference<XMultiServiceFactory> xMSF(aPropValue.Value, UNO_QUERY);
+                    if (xMSF.is())
+                        m_xContext = comphelper::getComponentContext(xMSF);
+                }
                 else if ( aPropValue.Name == "ParentWindow" )
                     m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
                 else if ( aPropValue.Name == "ModuleName" )
@@ -231,10 +238,8 @@ throw ( Exception, RuntimeException )
 
         try
         {
-            if ( !m_pImpl->m_xUrlTransformer.is() && m_xServiceManager.is() )
-                m_pImpl->m_xUrlTransformer.set(
-                    ::com::sun::star::util::URLTransformer::create(
-                        ::comphelper::getComponentContext(m_xServiceManager) ) );
+            if ( !m_pImpl->m_xUrlTransformer.is() && m_xContext.is() )
+                m_pImpl->m_xUrlTransformer = URLTransformer::create( m_xContext );
         }
         catch(const Exception&)
         {
@@ -360,7 +365,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xServiceManager.is() &&
+             m_xContext.is() &&
              !m_aCommandURL.isEmpty() )
         {
 
@@ -441,7 +446,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
         {
             // Add status listener directly as intialize has already been called.
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-            if ( m_xServiceManager.is() && xDispatchProvider.is() )
+            if ( m_xContext.is() && xDispatchProvider.is() )
             {
                 aTargetURL.Complete = aCommandURL;
                 if ( m_pImpl->m_xUrlTransformer.is() )
@@ -521,7 +526,7 @@ void ToolboxController::bindListener()
 
         // Collect all registered command URL's and store them temporary
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        if ( m_xServiceManager.is() && xDispatchProvider.is() )
+        if ( m_xContext.is() && xDispatchProvider.is() )
         {
             xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
             URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
@@ -610,7 +615,7 @@ void ToolboxController::unbindListener()
 
     // Collect all registered command URL's and store them temporary
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    if ( m_xServiceManager.is() && xDispatchProvider.is() )
+    if ( m_xContext.is() && xDispatchProvider.is() )
     {
         Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
         URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
@@ -679,7 +684,7 @@ void ToolboxController::updateStatus( const OUString aCommandURL )
         // Try to find a dispatch object for the requested command URL
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        if ( m_xServiceManager.is() && xDispatchProvider.is() )
+        if ( m_xContext.is() && xDispatchProvider.is() )
         {
             aTargetURL.Complete = aCommandURL;
             if ( m_pImpl->m_xUrlTransformer.is() )

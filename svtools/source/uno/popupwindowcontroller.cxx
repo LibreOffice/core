@@ -133,10 +133,10 @@ IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window*, pWin
 // class PopupWindowController
 //========================================================================
 
-PopupWindowController::PopupWindowController( const Reference< lang::XMultiServiceFactory >& rServiceManager,
+PopupWindowController::PopupWindowController( const Reference< uno::XComponentContext >& rxContext,
                                               const Reference< frame::XFrame >& xFrame,
                                               const OUString& aCommandURL )
-: svt::ToolboxController( rServiceManager, xFrame, aCommandURL )
+: svt::ToolboxController( rxContext, xFrame, aCommandURL )
 , mpImpl( new PopupWindowControllerImpl() )
 {
 }

@@ -101,7 +101,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ 
         return;
 
     Reference< XDispatchProvider > xDispatchProvider( getFrameInterface(), UNO_QUERY );
-    if ( xDispatchProvider.is() && m_xServiceManager.is() )
+    if ( xDispatchProvider.is() )
     {
         URL             aTargetURL;
         OUString aTarget( OUString("_default"));
@@ -181,18 +181,15 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
     SvtURLBox* pURLBox = GetURLBox();
     OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );
 
-    if ( m_xServiceManager.is() )
+    Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
+    Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
+    if ( xFrame.is() )
     {
-        Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(m_xServiceManager) );
-        Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
-        if ( xFrame.is() )
+        Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        if ( pWin )
         {
-            Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-            if ( pWin )
-            {
-                pWin->GrabFocus();
-                pWin->ToTop( TOTOP_RESTOREWHENMIN );
-            }
+            pWin->GrabFocus();
+            pWin->ToTop( TOTOP_RESTOREWHENMIN );
         }
     }
 

@@ -57,13 +57,13 @@ namespace framework
 // ------------------------------------------------------------------
 
 ToggleButtonToolbarController::ToggleButtonToolbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     Style                                    eStyle,
     const OUString&                          aCommand ) :
-    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand ),
+    ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand ),
     m_eStyle( eStyle )
 {
     if ( eStyle == STYLE_DROPDOWNBUTTON )

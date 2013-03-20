@@ -34,7 +34,7 @@ class ToolBar;
 class GenericToolbarController : public svt::ToolboxController
 {
     public:
-        GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16   nID,
@@ -67,7 +67,7 @@ class MenuToolbarController : public GenericToolbarController
     com::sun::star::uno::Reference< com::sun::star::lang::XComponent > m_xMenuManager;
     OUString m_aModuleIdentifier;
     public:
-        MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16   nID,

@@ -121,13 +121,13 @@ long EditControl::PreNotify( NotifyEvent& rNEvt )
 // ------------------------------------------------------------------
 
 EditToolbarController::EditToolbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
-    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
+    ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pEditControl( 0 )
 {
     m_pEditControl = new EditControl( m_pToolbar, WB_BORDER, this );

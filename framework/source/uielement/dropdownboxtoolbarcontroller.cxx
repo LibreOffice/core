@@ -122,13 +122,13 @@ long ListBoxControl::PreNotify( NotifyEvent& rNEvt )
 // ------------------------------------------------------------------
 
 DropdownToolbarController::DropdownToolbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
-    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
+    ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pListBoxControl( 0 )
 {
     m_pListBoxControl = new ListBoxControl( m_pToolbar, WB_DROPDOWN|WB_AUTOHSCROLL|WB_BORDER, this );

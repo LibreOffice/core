@@ -52,7 +52,7 @@ class ShapeToolbarController : public ::svt::ToolboxController
     void operator =( const ShapeToolbarController& );
 
 public:
-    ShapeToolbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFact );
+    ShapeToolbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~ShapeToolbarController();
 
     // ::com::sun::star::uno::XInterface

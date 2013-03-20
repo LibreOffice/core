@@ -46,7 +46,7 @@ using namespace ::com::sun::star::beans;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   PopupMenuController                         ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2        (   PopupMenuController                         ,
                                             OWeakObject                      ,
                                             OUString( "com.sun.star.frame.ToolbarController" )            ,
                                             OUString( "com.sun.star.comp.framework.PopupMenuController" )
@@ -62,8 +62,8 @@ class PopupMenuControllerImpl
 // class PopupMenuController
 //========================================================================
 
-PopupMenuController::PopupMenuController( const Reference< lang::XMultiServiceFactory >& rServiceManager )
-: svt::ToolboxController( rServiceManager, Reference< frame::XFrame >(), OUString() )
+PopupMenuController::PopupMenuController( const Reference< uno::XComponentContext >& rxContext )
+: svt::ToolboxController( rxContext, Reference< frame::XFrame >(), OUString() )
 {
 }
 
@@ -156,10 +156,7 @@ void SAL_CALL PopupMenuController::doubleClick() throw (RuntimeException)
 
 bool PopupMenuController::CreatePopupMenuController() throw (Exception)
 {
-    Reference< XComponentContext > xComponentContext(
-        comphelper::getComponentContext( getServiceManager() ) );
-
-    Reference< XToolbarControllerFactory > xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( xComponentContext );
+    Reference< XToolbarControllerFactory > xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( m_xContext );
 
     Sequence< Any > aSeq( 2 );
     PropertyValue aPropValue;
@@ -171,7 +168,7 @@ bool PopupMenuController::CreatePopupMenuController() throw (Exception)
     aPropValue.Value <<= m_xFrame;
     aSeq[1] <<= aPropValue;
 
-    Reference< XPopupMenuController > xPopupMenuController( xPopupMenuControllerRegistration->createInstanceWithArgumentsAndContext( getCommandURL(), aSeq, xComponentContext ), UNO_QUERY );
+    Reference< XPopupMenuController > xPopupMenuController( xPopupMenuControllerRegistration->createInstanceWithArgumentsAndContext( getCommandURL(), aSeq, m_xContext ), UNO_QUERY );
     if ( xPopupMenuController.is() )
     {
         mxPopupMenuController = xPopupMenuController;
@@ -204,7 +201,8 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
 
         if( !mxPopupMenu.is() )
         {
-            mxPopupMenu = Reference< awt::XPopupMenu >( getServiceManager()->createInstance( DECLARE_ASCII( "stardiv.Toolkit.VCLXPopupMenu" ) ), UNO_QUERY_THROW );
+            mxPopupMenu = Reference< awt::XPopupMenu >(
+                m_xContext->getServiceManager()->createInstanceWithContext("stardiv.Toolkit.VCLXPopupMenu", m_xContext), UNO_QUERY_THROW );
             mxPopupMenuController->setPopupMenu( mxPopupMenu );
         }
         else

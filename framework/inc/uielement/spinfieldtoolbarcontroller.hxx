@@ -58,7 +58,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
 
 {
     public:
-        SpinfieldToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        SpinfieldToolbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                     const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                     ToolBox*             pToolBar,
                                     sal_uInt16               nID,

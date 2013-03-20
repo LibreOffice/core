@@ -140,13 +140,13 @@ long ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
 // ------------------------------------------------------------------
 
 ComboboxToolbarController::ComboboxToolbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
-    const Reference< XFrame >&               rFrame,
-    ToolBox*                                 pToolbar,
-    sal_uInt16                                   nID,
-    sal_Int32                                nWidth,
-    const OUString&                          aCommand ) :
-    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
+    const Reference< XComponentContext >& rxContext,
+    const Reference< XFrame >&            rFrame,
+    ToolBox*                              pToolbar,
+    sal_uInt16                            nID,
+    sal_Int32                             nWidth,
+    const OUString&                       aCommand ) :
+    ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pComboBox( 0 )
 {
     m_pComboBox = new ComboBoxControl( m_pToolbar, WB_DROPDOWN, this );

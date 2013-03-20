@@ -21,15 +21,15 @@
 #define _SVTOOLS_TOOLBOXCONTROLLER_HXX
 
 #include "svtools/svtdllapi.h"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -59,14 +59,14 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
     private:
         sal_Bool  m_bSupportVisible; //shizhoubo
     public:
-        ToolboxController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        ToolboxController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
         ToolboxController();
         virtual ~ToolboxController();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getFrameInterface() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() const;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
 
         void updateStatus( const OUString aCommandURL );
@@ -149,8 +149,8 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
                                                                                             m_bDisposed : 1;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
         ToolboxController_Impl*                                                             m_pImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-        OUString                                                                       m_aCommandURL;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
+        OUString                                                                            m_aCommandURL;
         URLToDispatchMap                                                                    m_aListenerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
 };

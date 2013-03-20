@@ -37,7 +37,7 @@ class PopupMenuControllerImpl;
 class PopupMenuController : public svt::ToolboxController, public ::com::sun::star::lang::XServiceInfo
 {
 public:
-    PopupMenuController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+    PopupMenuController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
     ~PopupMenuController();
 
     // XInterface

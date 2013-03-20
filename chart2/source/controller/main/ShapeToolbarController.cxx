@@ -68,16 +68,16 @@ Sequence< OUString > ShapeToolbarController::getSupportedServiceNames() throw (u
 
 Reference< uno::XInterface > ShapeToolbarController::create( const Reference< uno::XComponentContext >& xContext )
 {
-    return *( new ShapeToolbarController( Reference< lang::XMultiServiceFactory >( xContext->getServiceManager(), uno::UNO_QUERY ) ) );
+    return * new ShapeToolbarController( xContext );
 }
 
-ShapeToolbarController::ShapeToolbarController( const Reference< lang::XMultiServiceFactory >& rxFact )
+ShapeToolbarController::ShapeToolbarController( const Reference< uno::XComponentContext >& xContext )
     :m_pToolbarController( NULL )
     ,m_nToolBoxId( 1 )
     ,m_nSlotId( 0 )
 {
     osl_atomic_increment( &m_refCount );
-    m_xServiceManager = rxFact;
+    m_xContext = xContext;
     osl_atomic_decrement( &m_refCount );
 }
 

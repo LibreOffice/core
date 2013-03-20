@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
@@ -55,14 +56,14 @@ namespace framework
 {
 
 ButtonToolbarController::ButtonToolbarController(
-    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     ToolBox*                                            pToolBar,
     const OUString&                                aCommand ) :
     cppu::OWeakObject(),
     m_bInitialized( sal_False ),
     m_bDisposed( sal_False ),
     m_aCommandURL( aCommand ),
-    m_xServiceManager( rServiceManager ),
+    m_xContext( rxContext ),
     m_pToolbar( pToolBar )
 {
 }
@@ -130,7 +131,10 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
                 else if ( aPropValue.Name == "CommandURL" )
                     aPropValue.Value >>= m_aCommandURL;
                 else if ( aPropValue.Name == "ServiceManager" )
-                    m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
+                {
+                    Reference<XMultiServiceFactory> xServiceManager(aPropValue.Value,UNO_QUERY);
+                    m_xContext = comphelper::getComponentContext(xServiceManager);
+                }
             }
         }
     }
@@ -146,7 +150,7 @@ void SAL_CALL ButtonToolbarController::dispose() throw (::com::sun::star::uno::R
         if ( m_bDisposed )
             throw DisposedException();
 
-        m_xServiceManager.clear();
+        m_xContext.clear();
         m_xURLTransformer.clear();
         m_xFrame.clear();
         m_pToolbar = 0;
@@ -220,12 +224,12 @@ throw (::com::sun::star::uno::RuntimeException)
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xServiceManager.is() &&
+             m_xContext.is() &&
              !m_aCommandURL.isEmpty() )
         {
             if ( !m_xURLTransformer.is() )
             {
-                m_xURLTransformer = util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) );
+                m_xURLTransformer = util::URLTransformer::create( m_xContext );
             }
 
             xFrame          = m_xFrame;

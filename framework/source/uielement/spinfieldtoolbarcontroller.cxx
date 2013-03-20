@@ -175,13 +175,13 @@ long SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
 // ------------------------------------------------------------------
 
 SpinfieldToolbarController::SpinfieldToolbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
-    ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
+    ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_bFloat( false )
     ,   m_bMaxSet( false )
     ,   m_bMinSet( false )

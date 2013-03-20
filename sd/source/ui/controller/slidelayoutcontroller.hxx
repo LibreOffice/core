@@ -28,7 +28,9 @@ namespace sd
 class SlideLayoutController : public svt::PopupWindowController
 {
 public:
-    SlideLayoutController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, const OUString& sCommandURL, bool bInsertPage );
+    SlideLayoutController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+                           const OUString& sCommandURL,
+                           bool bInsertPage );
 
     virtual ::Window* createPopupWindow( ::Window* pParent );
 

@@ -49,12 +49,12 @@ struct ExecuteInfo
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
 };
 
-GenericToolboxController::GenericToolboxController( const Reference< XMultiServiceFactory >& rServiceManager,
-                                                    const Reference< XFrame >&               rFrame,
-                                                    ToolBox*                                 pToolbox,
-                                                    sal_uInt16                                   nID,
-                                                    const OUString&                          aCommand ) :
-    svt::ToolboxController( rServiceManager, rFrame, aCommand )
+GenericToolboxController::GenericToolboxController( const Reference< XComponentContext >& rxContext,
+                                                    const Reference< XFrame >&            rFrame,
+                                                    ToolBox*                              pToolbox,
+                                                    sal_uInt16                            nID,
+                                                    const OUString&                       aCommand ) :
+    svt::ToolboxController( rxContext, rFrame, aCommand )
     ,   m_pToolbox( pToolbox )
     ,   m_nID( nID )
 {
@@ -96,10 +96,10 @@ throw ( RuntimeException )
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xServiceManager.is() &&
+             m_xContext.is() &&
              !m_aCommandURL.isEmpty() )
         {
-            xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) );
+            xURLTransformer = URLTransformer::create( m_xContext );
 
             aCommandURL = m_aCommandURL;
             URLToDispatchMap::iterator pIter = m_aListenerMap.find( m_aCommandURL );
