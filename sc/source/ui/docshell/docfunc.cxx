@@ -792,7 +792,7 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
     if (bUndo)
     {
         //  wegen ChangeTracking darf UndoAction erst nach SetString angelegt werden
-        rDocShell.GetUndoManager()->AddUndoAction(new ScUndoEnterData( &rDocShell, rPos.Col(),rPos.Row(),rPos.Tab(), 1,pTabs,
+        rDocShell.GetUndoManager()->AddUndoAction(new ScUndoEnterData( &rDocShell, rPos, 1, pTabs,
                                      ppOldCells, pHasFormat, pOldFormats, rText, NULL ) );
     }
 

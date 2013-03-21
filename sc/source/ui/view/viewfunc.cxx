@@ -717,7 +717,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( bRecord )
             {   //  because of ChangeTrack current first
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterData( pDocSh, nCol, nRow, nTab, nPos, pTabs,
+                    new ScUndoEnterData( pDocSh, ScAddress(nCol, nRow, nTab), nPos, pTabs,
                                         ppOldCells, NULL, NULL, aString,
                                         pUndoData ) );
             }

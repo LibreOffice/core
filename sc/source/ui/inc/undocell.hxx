@@ -75,8 +75,7 @@ class ScUndoEnterData: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoEnterData( ScDocShell* pNewDocShell,
-                            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
+                    ScUndoEnterData( ScDocShell* pNewDocShell, const ScAddress& rPos,
                             SCTAB nNewCount, SCTAB* pNewTabs,
                             ScBaseCell** ppOldData, sal_Bool* pHasForm, sal_uLong* pOldForm,
                             const String& rNewStr, EditTextObject* pObj = NULL );
@@ -97,9 +96,7 @@ private:
     sal_uLong*          pOldFormats;
     EditTextObject* pNewEditData;
     sal_uLong           nEndChangeAction;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
+    ScAddress maPos;
     SCTAB           nCount;             //  Marked sheet
 
     void            DoChange() const;
