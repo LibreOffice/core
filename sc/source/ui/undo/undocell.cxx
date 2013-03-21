@@ -45,106 +45,6 @@
 
 using ::boost::shared_ptr;
 
-ScUndoCellValue::ScUndoCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
-ScUndoCellValue::ScUndoCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
-ScUndoCellValue::ScUndoCellValue( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
-ScUndoCellValue::ScUndoCellValue( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
-ScUndoCellValue::ScUndoCellValue( const ScFormulaCell& rFormula ) : meType(CELLTYPE_FORMULA), mpFormula(rFormula.Clone()) {}
-
-ScUndoCellValue::ScUndoCellValue( const ScUndoCellValue& r ) : meType(r.meType), mfValue(r.mfValue)
-{
-    switch (r.meType)
-    {
-        case CELLTYPE_STRING:
-            mpString = new OUString(*r.mpString);
-        break;
-        case CELLTYPE_EDIT:
-            mpEditText = r.mpEditText->Clone();
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula = r.mpFormula->Clone();
-        break;
-        default:
-            ;
-    }
-}
-
-ScUndoCellValue::~ScUndoCellValue()
-{
-    clear();
-}
-
-void ScUndoCellValue::clear()
-{
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-            delete mpString;
-        break;
-        case CELLTYPE_EDIT:
-            delete mpEditText;
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula->Delete();
-        break;
-        default:
-            ;
-    }
-
-    // Reset to empty value.
-    meType = CELLTYPE_NONE;
-    mfValue = 0.0;
-}
-
-void ScUndoCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
-{
-    clear();
-
-    meType = rDoc.GetCellType(rPos);
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-            mpString = new OUString(rDoc.GetString(rPos));
-        break;
-        case CELLTYPE_EDIT:
-            mpEditText = rDoc.GetEditText(rPos)->Clone();
-        break;
-        case CELLTYPE_VALUE:
-            mfValue = rDoc.GetValue(rPos);
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula = rDoc.GetFormulaCell(rPos)->Clone();
-        break;
-        default:
-            meType = CELLTYPE_NONE; // reset to empty.
-    }
-}
-
-void ScUndoCellValue::commit( ScDocument& rDoc, const ScAddress& rPos )
-{
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-        {
-            ScSetStringParam aParam;
-            aParam.setTextInput();
-            rDoc.SetString(rPos, *mpString, &aParam);
-        }
-        break;
-        case CELLTYPE_EDIT:
-            rDoc.SetEditText(rPos, mpEditText->Clone());
-        break;
-        case CELLTYPE_VALUE:
-            rDoc.SetValue(rPos, mfValue);
-        break;
-        case CELLTYPE_FORMULA:
-            rDoc.SetFormulaCell(rPos, mpFormula->Clone());
-        break;
-        default:
-            rDoc.SetEmptyCell(rPos);
-    }
-}
-
 TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterValue, ScSimpleUndo);
@@ -515,10 +415,10 @@ sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rNewVal ) :
+ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rNewVal ) :
     ScSimpleUndo(pDocSh), maPos(rPos), maNewValue(rNewVal) {}
 
-ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rOldVal, const ScUndoCellValue& rNewVal ) :
+ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal ) :
     ScSimpleUndo(pDocSh), maPos(rPos), maOldValue(rOldVal), maNewValue(rNewVal) {}
 
 ScUndoSetCell::~ScUndoSetCell() {}
@@ -554,7 +454,7 @@ OUString ScUndoSetCell::GetComment() const
     return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); // "Input"
 }
 
-void ScUndoSetCell::SetValue( const ScUndoCellValue& rVal )
+void ScUndoSetCell::SetValue( const ScCellValue& rVal )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 

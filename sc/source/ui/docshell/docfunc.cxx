@@ -81,6 +81,7 @@
 #include "progress.hxx"
 #include "dpobject.hxx"
 #include "stringutil.hxx"
+#include "cellvalue.hxx"
 
 #include <memory>
 #include <basic/basmgr.hxx>
@@ -809,7 +810,7 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
 
 namespace {
 
-void pushUndoSetCell( ScDocShell& rDocShell, ScDocument* pDoc, const ScAddress& rPos, const ScUndoCellValue& rNewVal )
+void pushUndoSetCell( ScDocShell& rDocShell, ScDocument* pDoc, const ScAddress& rPos, const ScCellValue& rNewVal )
 {
     svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
     switch (pDoc->GetCellType(rPos))

@@ -22,6 +22,7 @@
 
 #include "undobase.hxx"
 #include "postit.hxx"
+#include "cellvalue.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -35,40 +36,6 @@ class ScDetOpList;
 class ScDetOpData;
 class ScRangeName;
 class ScDocument;
-
-/**
- * Store arbitrary cell value of any kind for undo objects.
- */
-struct ScUndoCellValue
-{
-    CellType meType;
-    union {
-        double mfValue;
-        OUString* mpString;
-        EditTextObject* mpEditText;
-        ScFormulaCell* mpFormula;
-    };
-
-    ScUndoCellValue();
-    ScUndoCellValue( double fValue );
-    ScUndoCellValue( const OUString& rString );
-    ScUndoCellValue( const EditTextObject& rEditText );
-    ScUndoCellValue( const ScFormulaCell& rFormula );
-    ScUndoCellValue( const ScUndoCellValue& r );
-    ~ScUndoCellValue();
-
-    void clear();
-
-    /**
-     * Take cell value from specified position in specified document.
-     */
-    void assign( const ScDocument& rDoc, const ScAddress& rPos );
-
-    /**
-     * Set cell value at specified position in specified document.
-     */
-    void commit( ScDocument& rDoc, const ScAddress& rPos );
-};
 
 class ScUndoCursorAttr: public ScSimpleUndo
 {
@@ -179,8 +146,8 @@ class ScUndoSetCell : public ScSimpleUndo
 {
 public:
     TYPEINFO();
-    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rNewVal );
-    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rOldVal, const ScUndoCellValue& rNewVal );
+    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rNewVal );
+    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal );
 
     virtual ~ScUndoSetCell();
 
@@ -191,12 +158,12 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    void SetValue( const ScUndoCellValue& rVal );
+    void SetValue( const ScCellValue& rVal );
 
 private:
     ScAddress maPos;
-    ScUndoCellValue maOldValue;
-    ScUndoCellValue maNewValue;
+    ScCellValue maOldValue;
+    ScCellValue maNewValue;
 };
 
 class ScUndoPageBreak: public ScSimpleUndo
