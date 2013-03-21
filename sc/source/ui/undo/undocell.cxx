@@ -516,6 +516,7 @@ ScUndoSetCell::Value::Value( const Value& r ) : meType(r.meType), mfValue(r.mfVa
         break;
         case CELLTYPE_FORMULA:
             mpFormula = r.mpFormula->Clone();
+        break;
         default:
             ;
     }
@@ -530,8 +531,10 @@ ScUndoSetCell::Value::~Value()
         break;
         case CELLTYPE_EDIT:
             delete mpEditText;
+        break;
         case CELLTYPE_FORMULA:
             mpFormula->Delete();
+        break;
         default:
             ;
     }
