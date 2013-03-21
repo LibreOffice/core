@@ -100,7 +100,6 @@ public:
      * must not delete it after passing it to this call.
      */
     virtual bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
-    virtual sal_Bool        PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool        PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                       sal_Bool bInterpret, sal_Bool bApi );
     virtual sal_Bool        SetCellText( const ScAddress& rPos, const String& rText,

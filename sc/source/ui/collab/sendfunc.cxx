@@ -47,12 +47,6 @@ void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
             mpDirect->SetNormalString( bNumFmtSet, aReader.getAddress( 1 ), aReader.getString( 2 ),
                                       aReader.getBool( 3 ) );
         }
-        else if ( aReader.getMethod() == "putCell" )
-        {
-            ScBaseCell *pNewCell = aReader.getCell( 2 );
-            if ( pNewCell )
-                mpDirect->PutCell( aReader.getAddress( 1 ), pNewCell, aReader.getBool( 3 ) );
-        }
         else if (aReader.getMethod() == "setValueCell")
         {
             mpDirect->SetValueCell(
@@ -182,17 +176,6 @@ bool ScDocFuncSend::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell,
     aOp.appendAddress( rPos );
     aOp.appendFormulaCell( pCell );
     aOp.appendBool( bInteraction );
-    SendMessage( aOp );
-    pCell->Delete();
-    return true; // needs some code auditing action
-}
-
-sal_Bool ScDocFuncSend::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
-{
-    ScChangeOpWriter aOp( "putCell" );
-    aOp.appendAddress( rPos );
-    aOp.appendCell( pNewCell );
-    aOp.appendBool( bApi );
     SendMessage( aOp );
     pCell->Delete();
     return true; // needs some code auditing action

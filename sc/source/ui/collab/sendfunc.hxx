@@ -277,7 +277,6 @@ public:
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
     virtual bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
-    virtual sal_Bool    PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool    PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 sal_Bool bInterpret, sal_Bool bApi );
     virtual sal_Bool    SetCellText( const ScAddress& rPos, const String& rText,
