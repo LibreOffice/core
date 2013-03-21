@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef SD_DLLIMPLEMENTATION
-#undef SD_DLLIMPLEMENTATION
-#endif
-
 #include "sddlgfact.hxx"
 #include "sal/types.h"
 

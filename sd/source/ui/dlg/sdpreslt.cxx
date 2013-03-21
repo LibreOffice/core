@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef SD_DLLIMPLEMENTATION
-#undef SD_DLLIMPLEMENTATION
-#endif
-
-
 #include <svl/itemset.hxx>
 #include <sfx2/new.hxx>
 #include <vcl/msgbox.hxx>

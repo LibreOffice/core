@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef SD_DLLIMPLEMENTATION
-#undef SD_DLLIMPLEMENTATION
-#endif
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

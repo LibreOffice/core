@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef SD_DLLIMPLEMENTATION
-#undef SD_DLLIMPLEMENTATION
-#endif
-
-
 #include "sdattr.hxx"
 #include "optsitem.hxx"
 #include "prntopts.hrc"

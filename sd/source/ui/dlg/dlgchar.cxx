@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef SD_DLLIMPLEMENTATION
-#undef SD_DLLIMPLEMENTATION
-#endif
-
-
 #include <svx/dialogs.hrc>
 #include <editeng/flstitem.hxx>
 #include <svx/flagsdef.hxx>

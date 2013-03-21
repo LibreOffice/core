@@ -33,10 +33,6 @@ $(eval $(call gb_Library_set_include,sdui,\
     -I$(SRCDIR)/sd/source/ui/inc \
 ))
 
-$(eval $(call gb_Library_add_defs,sdui,\
-    -DSD_DLLIMPLEMENTATION \
-))
-
 ifeq ($(ENABLE_SDREMOTE),YES)
 $(eval $(call gb_Library_add_defs,sdui,\
     -DENABLE_SDREMOTE \
