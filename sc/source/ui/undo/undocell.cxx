@@ -48,7 +48,6 @@ using ::boost::shared_ptr;
 TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterValue, ScSimpleUndo);
-TYPEINIT1(ScUndoPutCell, ScSimpleUndo);
 TYPEINIT1(ScUndoSetCell, ScSimpleUndo);
 TYPEINIT1(ScUndoPageBreak, ScSimpleUndo);
 TYPEINIT1(ScUndoPrintZoom, ScSimpleUndo);
@@ -412,88 +411,6 @@ void ScUndoEnterValue::Repeat(SfxRepeatTarget& /* rTarget */)
 }
 
 sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
-{
-    return false;
-}
-
-ScUndoPutCell::ScUndoPutCell( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
-                            ScBaseCell* pUndoCell, ScBaseCell* pRedoCell ) :
-    ScSimpleUndo( pNewDocShell ),
-    aPos        ( rNewPos ),
-    pOldCell    ( pUndoCell ),
-    pEnteredCell( pRedoCell )
-{
-    SetChangeTrack();
-}
-
-ScUndoPutCell::~ScUndoPutCell()
-{
-    if (pOldCell)
-        pOldCell->Delete();
-    if (pEnteredCell)
-        pEnteredCell->Delete();
-}
-
-rtl::OUString ScUndoPutCell::GetComment() const
-{
-    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
-}
-
-void ScUndoPutCell::SetChangeTrack()
-{
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-    if ( pChangeTrack )
-    {
-        nEndChangeAction = pChangeTrack->GetActionMax() + 1;
-        pChangeTrack->AppendContent( aPos, pOldCell );
-        if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // Nothing is appended
-    }
-    else
-        nEndChangeAction = 0;
-}
-
-void ScUndoPutCell::Undo()
-{
-    BeginUndo();
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pOldCell ? pOldCell->Clone( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
-
-    pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
-
-    pDocShell->PostPaintCell( aPos );
-
-    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-    if ( pChangeTrack )
-        pChangeTrack->Undo( nEndChangeAction, nEndChangeAction );
-
-    EndUndo();
-}
-
-void ScUndoPutCell::Redo()
-{
-    BeginRedo();
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pEnteredCell ? pEnteredCell->Clone( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
-
-    pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
-
-    pDocShell->PostPaintCell( aPos );
-
-    SetChangeTrack();
-
-    EndRedo();
-}
-
-void ScUndoPutCell::Repeat(SfxRepeatTarget& /* rTarget */)
-{
-    // makes no sense
-}
-
-sal_Bool ScUndoPutCell::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return false;
 }

@@ -132,32 +132,6 @@ private:
     void            SetChangeTrack();
 };
 
-
-class ScUndoPutCell: public ScSimpleUndo
-{
-public:
-                    TYPEINFO();
-                    ScUndoPutCell( ScDocShell* pNewDocShell,
-                            const ScAddress& rNewPos,
-                            ScBaseCell* pUndoCell, ScBaseCell* pRedoCell );
-    virtual         ~ScUndoPutCell();
-
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
-
-    virtual rtl::OUString GetComment() const;
-
-private:
-    ScAddress       aPos;
-    ScBaseCell*     pOldCell;
-    ScBaseCell*     pEnteredCell;
-    sal_uLong           nEndChangeAction;
-
-    void            SetChangeTrack();
-};
-
 class ScUndoSetCell : public ScSimpleUndo
 {
 public:
