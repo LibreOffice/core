@@ -429,7 +429,13 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(BOOL)isOpaque
 {
-    return mpFrame ? (mpFrame->getClipPath() != 0 ? NO : YES) : YES;
+	if( !mpFrame)
+		return YES;
+	if( !AquaSalFrame::isAlive( mpFrame))
+		return YES;
+	if( !mpFrame->getClipPath())
+		return YES;
+	return NO;
 }
 
 // helper class similar to a osl::SolarGuard for the SalYieldMutex
