@@ -173,6 +173,12 @@ cut -f 1001- -d ' ' $${RESPONSEFILE} >> $${RESPONSEFILE}.1 && \
 mv $${RESPONSEFILE}.1 $${RESPONSEFILE} &&
 endef
 
+ifeq ($(CPUNAME),X86_64)
+MSC_SUBSYSTEM_VERSION=$(COMMA)5.02
+else
+MSC_SUBSYSTEM_VERSION=$(COMMA)5.01
+endif
+
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
@@ -192,7 +198,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(filter YES,$(LIBRARY_X64)),,$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(COMMA)5.01, -SUBSYSTEM:CONSOLE$(COMMA)5.01)) \
+		$(if $(filter YES,$(LIBRARY_X64)),,$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS$(MSC_SUBSYSTEM_VERSION), -SUBSYSTEM:CONSOLE$(MSC_SUBSYSTEM_VERSION))) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64) \
 		$(if $(filter YES,$(LIBRARY_X64)), \
 			-LIBPATH:$(OUTDIR)/lib/x64 \
