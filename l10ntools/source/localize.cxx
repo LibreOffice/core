@@ -284,7 +284,13 @@ void handleFilesOfDir(
         aPOStream.close();
         if( bDel )
         {
-            system(OString("rm " + sPotFile).getStr());
+            if ( system(OString("rm " + sPotFile).getStr()) != 0 )
+            {
+                cerr
+                    << "Error: Cannot remove entryless pot file: "
+                    << sPotFile.getStr() << "\n";
+                    throw false; //TODO
+            }
         }
     }
     //Remove empty pot directories
