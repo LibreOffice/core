@@ -542,7 +542,7 @@ sal_uInt16 ImpLineListData::GetStyle( )
 void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
 {
     sal_uInt16 nOldAA = rDev.GetAntialiasing();
-    rDev.SetAntialiasing( nOldAA & !ANTIALIASING_ENABLE_B2DDRAW );
+    rDev.SetAntialiasing( nOldAA & ~ANTIALIASING_ENABLE_B2DDRAW );
 
     basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing( rPolygon, nDashing, rDev.GetMapMode().GetMapUnit() );
     for ( sal_uInt32 i = 0; i < aPolygons.count( ); i++ )
