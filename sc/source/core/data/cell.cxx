@@ -277,14 +277,6 @@ void ScBaseCell::DeleteBroadcaster()
     DELETEZ( mpBroadcaster );
 }
 
-ScBaseCell* ScBaseCell::CreateTextCell( const rtl::OUString& rString, ScDocument* pDoc )
-{
-    if ( rString.indexOf('\n') != -1 || rString.indexOf(CHAR_CR) != -1 )
-        return new ScEditCell( rString, pDoc );
-    else
-        return new ScStringCell( rString );
-}
-
 void ScBaseCell::StartListeningTo( ScDocument* pDoc )
 {
     if ( eCellType == CELLTYPE_FORMULA && !pDoc->IsClipOrUndo()

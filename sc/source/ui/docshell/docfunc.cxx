@@ -1109,59 +1109,6 @@ static ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, con
     return pCode;
 }
 
-
-ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
-        const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar, short* pRetFormatType )
-{
-    ScDocument* pDoc = rDocShell.GetDocument();
-    ScBaseCell* pNewCell = NULL;
-
-    if ( rText.Len() > 1 && rText.GetChar(0) == '=' )
-    {
-        ScTokenArray* pCode;
-        if ( pDoc->IsImportingXML() )
-        {   // temporary formula string as string tokens
-            pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText, rFormulaNmsp, eGrammar );
-            pDoc->IncXMLImportedFormulaCount( rText.Len() );
-        }
-        else
-        {
-            ScCompiler aComp( pDoc, rPos );
-            aComp.SetGrammar(eGrammar);
-            pCode = aComp.CompileString( rText );
-        }
-        pNewCell = new ScFormulaCell( pDoc, rPos, pCode, eGrammar, MM_NONE );
-        delete pCode;   // Zell-ctor hat das TokenArray kopiert
-    }
-    else if ( rText.Len() > 1 && rText.GetChar(0) == '\'' )
-    {
-        //  for bEnglish, "'" at the beginning is always interpreted as text
-        //  marker and stripped
-        pNewCell = ScBaseCell::CreateTextCell( rText.Copy( 1 ), pDoc );
-    }
-    else        // (nur) auf englisches Zahlformat testen
-    {
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
-        double fVal;
-        if ( pFormatter->IsNumberFormat( rText, nEnglish, fVal ) )
-        {
-            pNewCell = new ScValueCell( fVal );
-            // return the format type from the English format, so a localized format can be created
-            if ( pRetFormatType )
-                *pRetFormatType = pFormatter->GetType( nEnglish );
-        }
-        else if ( rText.Len() )
-            pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );
-
-        //  das (englische) Zahlformat wird nicht gesetzt
-        //! passendes lokales Format suchen und setzen???
-    }
-
-    return pNewCell;
-}
-
-
 bool ScDocFunc::SetCellText(
     const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
     const formula::FormulaGrammar::Grammar eGrammar )

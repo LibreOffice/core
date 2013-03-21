@@ -112,9 +112,6 @@ public:
     /** Deletes the own cell broadcaster. */
     void            DeleteBroadcaster();
 
-                        // String- oder EditCell
-    static ScBaseCell* CreateTextCell( const rtl::OUString& rString, ScDocument* );
-
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
     void            StartListeningTo( ScDocument* pDoc );
     void            EndListeningTo( ScDocument* pDoc,
