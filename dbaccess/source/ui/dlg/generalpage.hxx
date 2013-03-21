@@ -172,6 +172,8 @@ namespace dbaui
         void                    SetChooseDocumentHandler( const Link& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
         DocumentDescriptor      GetSelectedDocument() const;
 
+        virtual bool            canAdvance() const;
+
     protected:
         virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
 
