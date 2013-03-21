@@ -6401,7 +6401,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         JAVA_TOOLKIT="classic"
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/aix"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     cygwin*)
@@ -6428,7 +6428,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
             ;;
         esac
         JAVAINC="-I$JAVA_HOME/include"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     freebsd*)
@@ -6451,7 +6451,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/freebsd"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/bsd"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/linux"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     k*bsd*-gnu*)
@@ -6466,7 +6466,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
             ;;
         esac
         JAVAINC="-I$JAVA_HOME/include"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     linux-gnu*)
@@ -6561,7 +6561,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/linux"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     linux-androideabi*)
@@ -6602,7 +6602,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/netbsd"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
        ;;
 
     openbsd*)
@@ -6618,7 +6618,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/openbsd"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
     solaris*)
@@ -6634,7 +6634,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         esac
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/solaris"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
+        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
     esac
 
