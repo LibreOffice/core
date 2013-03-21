@@ -133,11 +133,6 @@ SvFileStream::~SvFileStream()
         delete pInstanceData;
 }
 
-sal_uIntPtr SvFileStream::GetFileHandle() const
-{
-    return (sal_uIntPtr)pInstanceData->hFile;
-}
-
 sal_uInt16 SvFileStream::IsA() const
 {
     return ID_FILESTREAM;
