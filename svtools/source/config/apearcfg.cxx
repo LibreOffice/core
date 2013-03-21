@@ -190,7 +190,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
     sal_uLong         nMouseOptions  = hMouseSettings.GetOptions();
 
-    nMouseOptions &=  ! (MOUSE_OPTION_AUTOCENTERPOS | MOUSE_OPTION_AUTODEFBTNPOS);
+    nMouseOptions &=  ~ (MOUSE_OPTION_AUTOCENTERPOS | MOUSE_OPTION_AUTODEFBTNPOS);
 
     switch ( nSnapMode )
     {
