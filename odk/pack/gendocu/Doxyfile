@@ -47,6 +47,12 @@ HTML_OUTPUT = .
 
 GENERATE_LATEX = NO
 
+ALIASES = "derive=\par Derive: \n"
+
 MACRO_EXPANSION = YES
 EXPAND_ONLY_PREDEF = YES
-PREDEFINED = __cplusplus SAL_CALL= "SAL_THROW(x)=throw x"
+PREDEFINED = __cplusplus \
+	SAL_CALL= \
+	SAL_DEPRECATED_INTERNAL= \
+	SAL_DEPRECATED= \
+	"SAL_THROW(x)=throw x"
