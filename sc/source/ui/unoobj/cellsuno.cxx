@@ -6312,8 +6312,8 @@ void ScCellObj::SetString_Impl(const String& rString, sal_Bool bInterpret, sal_B
     if ( pDocSh )
     {
         // GRAM_PODF_A1 for API compatibility.
-        (void)pDocSh->GetDocFunc().SetCellText( aCellPos, rString, bInterpret, bEnglish,
-                                                   sal_True, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+        (void)pDocSh->GetDocFunc().SetCellText(
+            aCellPos, rString, bInterpret, bEnglish, true, formula::FormulaGrammar::GRAM_PODF_A1 );
     }
 }
 

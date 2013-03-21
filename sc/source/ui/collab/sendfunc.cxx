@@ -188,13 +188,12 @@ sal_Bool ScDocFuncSend::PutData( const ScAddress& rPos, ScEditEngineDefaulter& r
     return ScDocFunc::PutData( rPos, rEngine, bInterpret, bApi );
 }
 
-sal_Bool ScDocFuncSend::SetCellText( const ScAddress& rPos, const String& rText,
-                              sal_Bool bInterpret, sal_Bool bEnglish, sal_Bool bApi,
-                              const String& rFormulaNmsp,
-                              const formula::FormulaGrammar::Grammar eGrammar )
+bool ScDocFuncSend::SetCellText(
+    const ScAddress& rPos, const String& rText, bool bInterpret, bool bEnglish, bool bApi,
+    const formula::FormulaGrammar::Grammar eGrammar )
 {
     SAL_INFO( "sc.tubes", "SetCellText not implemented!" );
-    return ScDocFunc::SetCellText( rPos, rText, bInterpret, bEnglish, bApi, rFormulaNmsp, eGrammar );
+    return ScDocFunc::SetCellText( rPos, rText, bInterpret, bEnglish, bApi, eGrammar );
 }
 
 bool ScDocFuncSend::ShowNote( const ScAddress& rPos, bool bShow )

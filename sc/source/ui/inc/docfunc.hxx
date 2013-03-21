@@ -102,10 +102,9 @@ public:
     virtual bool SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction );
     virtual sal_Bool        PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                       sal_Bool bInterpret, sal_Bool bApi );
-    virtual sal_Bool        SetCellText( const ScAddress& rPos, const String& rText,
-                                         sal_Bool bInterpret, sal_Bool bEnglish, sal_Bool bApi,
-                                         const String& rFormulaNmsp,
-                                         const formula::FormulaGrammar::Grammar eGrammar );
+    virtual bool SetCellText(
+        const ScAddress& rPos, const String& rText, bool bInterpret, bool bEnglish, bool bApi,
+        const formula::FormulaGrammar::Grammar eGrammar );
 
     // creates a new cell for use with PutCell
     ScBaseCell* InterpretEnglishString( const ScAddress& rPos, const String& rText,
