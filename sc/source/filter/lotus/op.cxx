@@ -93,8 +93,8 @@ void OP_Integer( SvStream& r, sal_uInt16 /*n*/ )
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
-        ScValueCell*  pZelle = new ScValueCell( ( double ) nValue );
-        pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, true );
+        pDoc->EnsureTable(nTab);
+        pDoc->SetValue(ScAddress(nCol,nRow,nTab), static_cast<double>(nValue));
 
         // 0 Stellen nach'm Komma!
         SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, 0 );
@@ -114,8 +114,8 @@ void OP_Number( SvStream& r, sal_uInt16 /*n*/ )
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
         fValue = ::rtl::math::round( fValue, 15 );
-        ScValueCell*  pZelle = new ScValueCell( fValue );
-        pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, true );
+        pDoc->EnsureTable(nTab);
+        pDoc->SetValue(ScAddress(nCol,nRow,nTab), fValue);
 
         SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
     }
@@ -169,11 +169,10 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
-        ScFormulaCell*    pZelle = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
-
-        pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
-
-        pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, true );
+        ScFormulaCell* pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
+        pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+        pDoc->EnsureTable(nTab);
+        pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
 
         // nFormat = Standard -> Nachkommastellen wie Float
         SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
@@ -391,9 +390,8 @@ void OP_Number123( SvStream& r, sal_uInt16 /*n*/ )
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
         double fValue = Snum32ToDouble( nValue );
-
-        ScValueCell *pCell = new ScValueCell( fValue );
-        pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, true );
+        pDoc->EnsureTable(nTab);
+        pDoc->SetValue(ScAddress(nCol,nRow,nTab), fValue);
     }
 }
 
@@ -416,10 +414,9 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
         ScFormulaCell* pCell = new ScFormulaCell( pLotusRoot->pDoc, aAddress, pErg );
-
         pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
-
-        pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, true );
+        pDoc->EnsureTable(nTab);
+        pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
     }
 }
 
@@ -433,8 +430,8 @@ void OP_IEEENumber123( SvStream& r, sal_uInt16 /*n*/ )
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= pDoc->GetMaxTableNumber())
     {
-        ScValueCell *pCell = new ScValueCell(dValue);
-        pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, true );
+        pDoc->EnsureTable(nTab);
+        pDoc->SetValue(ScAddress(nCol,nRow,nTab), dValue);
     }
 }
 

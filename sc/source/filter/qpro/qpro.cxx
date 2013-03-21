@@ -82,20 +82,20 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
             case 0x000d:{ // Integer cell
                 sal_Int16 nValue;
                 *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nValue;
-                ScValueCell* pInteger = new ScValueCell( ( double ) nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell(nCol ,nRow, nTab ,pInteger,true);
+                pDoc->EnsureTable(nTab);
+                pDoc->SetValue(ScAddress(nCol,nRow,nTab), static_cast<double>(nValue));
                 }
                 break;
 
             case 0x000e:{ // Floating point cell
                 double nValue;
                 *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nValue;
-                ScValueCell* pFloat = new ScValueCell( nValue );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, pFloat, true );
+                pDoc->EnsureTable(nTab);
+                pDoc->SetValue(ScAddress(nCol,nRow,nTab), nValue);
                 }
                 break;
 
@@ -114,7 +114,8 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                     nStyle = nStyle >> 3;
                     pFormula->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
                     pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                    pDoc->PutCell( nCol, nRow, nTab, pFormula, true );
+                    pDoc->EnsureTable(nTab);
+                    pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pFormula);
                 }
                 }
                 break;
