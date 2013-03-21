@@ -71,6 +71,11 @@ ScUndoCellValue::ScUndoCellValue( const ScUndoCellValue& r ) : meType(r.meType),
 
 ScUndoCellValue::~ScUndoCellValue()
 {
+    clear();
+}
+
+void ScUndoCellValue::clear()
+{
     switch (meType)
     {
         case CELLTYPE_STRING:
@@ -84,6 +89,59 @@ ScUndoCellValue::~ScUndoCellValue()
         break;
         default:
             ;
+    }
+
+    // Reset to empty value.
+    meType = CELLTYPE_NONE;
+    mfValue = 0.0;
+}
+
+void ScUndoCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
+{
+    clear();
+
+    meType = rDoc.GetCellType(rPos);
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = new OUString(rDoc.GetString(rPos));
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = rDoc.GetEditText(rPos)->Clone();
+        break;
+        case CELLTYPE_VALUE:
+            mfValue = rDoc.GetValue(rPos);
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = rDoc.GetFormulaCell(rPos)->Clone();
+        break;
+        default:
+            meType = CELLTYPE_NONE; // reset to empty.
+    }
+}
+
+void ScUndoCellValue::commit( ScDocument& rDoc, const ScAddress& rPos )
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+        {
+            ScSetStringParam aParam;
+            aParam.setTextInput();
+            rDoc.SetString(rPos, *mpString, &aParam);
+        }
+        break;
+        case CELLTYPE_EDIT:
+            rDoc.SetEditText(rPos, mpEditText->Clone());
+        break;
+        case CELLTYPE_VALUE:
+            rDoc.SetValue(rPos, mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+            rDoc.SetFormulaCell(rPos, mpFormula->Clone());
+        break;
+        default:
+            rDoc.SetEmptyCell(rPos);
     }
 }
 

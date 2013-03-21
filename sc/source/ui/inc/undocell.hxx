@@ -34,7 +34,11 @@ class SdrUndoAction;
 class ScDetOpList;
 class ScDetOpData;
 class ScRangeName;
+class ScDocument;
 
+/**
+ * Store arbitrary cell value of any kind for undo objects.
+ */
 struct ScUndoCellValue
 {
     CellType meType;
@@ -52,6 +56,18 @@ struct ScUndoCellValue
     ScUndoCellValue( const ScFormulaCell& rFormula );
     ScUndoCellValue( const ScUndoCellValue& r );
     ~ScUndoCellValue();
+
+    void clear();
+
+    /**
+     * Take cell value from specified position in specified document.
+     */
+    void assign( const ScDocument& rDoc, const ScAddress& rPos );
+
+    /**
+     * Set cell value at specified position in specified document.
+     */
+    void commit( ScDocument& rDoc, const ScAddress& rPos );
 };
 
 class ScUndoCursorAttr: public ScSimpleUndo
@@ -94,6 +110,8 @@ private:
 class ScUndoEnterData: public ScSimpleUndo
 {
 public:
+    TYPEINFO();
+
     struct Value
     {
         SCTAB mnTab;
@@ -106,7 +124,6 @@ public:
 
     typedef std::vector<Value> ValuesType;
 
-                    TYPEINFO();
     ScUndoEnterData(
         ScDocShell* pNewDocShell, const ScAddress& rPos,
         ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj = NULL );
