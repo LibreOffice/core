@@ -68,7 +68,7 @@ namespace boost
 
 namespace sd {
 
-    struct HeaderFooterSettings
+    struct SD_DLLPUBLIC HeaderFooterSettings
     {
         bool mbHeaderVisible;
         String maHeaderText;
@@ -83,9 +83,9 @@ namespace sd {
         String maDateTimeText;
         int meDateTimeFormat;
 
-        SD_DLLPUBLIC HeaderFooterSettings();
+        HeaderFooterSettings();
 
-        SD_DLLPUBLIC bool operator==(const HeaderFooterSettings& rSettings) const;
+        bool operator==( const HeaderFooterSettings& rSettings ) const;
     };
 
     typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > > AnnotationVector;
