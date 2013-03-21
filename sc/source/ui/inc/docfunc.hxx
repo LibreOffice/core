@@ -93,6 +93,8 @@ public:
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
 
+    bool SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
+
     /**
      * This method takes ownership of the formula cell instance. The caller
      * must not delete it after passing it to this call.

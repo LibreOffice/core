@@ -6387,17 +6387,7 @@ void ScCellObj::InputEnglishString( const ::rtl::OUString& rText )
             rFunc.SetValueCell(aCellPos, aRes.mfValue, false);
         break;
         case ScInputStringType::Text:
-        {
-            if (ScStringUtil::isMultiline(aRes.maText))
-            {
-                ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
-                rEngine.SetText(aRes.maText);
-                boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
-                rFunc.SetEditCell(aCellPos, *pEditText, false);
-            }
-            else
-                rFunc.SetStringCell(aCellPos, aRes.maText, false);
-        }
+            rFunc.SetStringOrEditCell(aCellPos, aRes.maText, false);
         break;
         default:
             SetString_Impl(aString, false, false); // probably empty string

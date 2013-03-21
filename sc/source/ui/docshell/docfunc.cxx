@@ -931,6 +931,21 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
     return true;
 }
 
+bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (ScStringUtil::isMultiline(rStr))
+    {
+        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+        rEngine.SetText(rStr);
+        boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
+        return SetEditCell(rPos, *pEditText, bInteraction);
+    }
+    else
+        return SetStringCell(rPos, rStr, bInteraction);
+}
+
 bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1216,33 +1231,39 @@ sal_Bool ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
         sal_Bool bInterpret, sal_Bool bEnglish, sal_Bool bApi,
         const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
-    //  SetCellText ruft PutCell oder SetNormalString
-
-    ScDocument* pDoc = rDocShell.GetDocument();
-
     if ( bInterpret )
     {
         if ( bEnglish )
         {
+            ScDocument* pDoc = rDocShell.GetDocument();
+
             ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
             if (bApi)
                 pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
 
-            //  code moved to own method InterpretEnglishString because it is also used in
-            //  ScCellRangeObj::setFormulaArray
+            ScInputStringType aRes =
+                ScStringUtil::parseInputString(*pDoc->GetFormatTable(), rText, LANGUAGE_ENGLISH_US);
 
-            ScBaseCell* pNewCell = InterpretEnglishString( rPos, rText, rFormulaNmsp, eGrammar );
-            if (pNewCell)
-                return PutCell( rPos, pNewCell, bApi );
+            switch (aRes.meType)
+            {
+                case ScInputStringType::Formula:
+                    SetFormulaCell(rPos, new ScFormulaCell(pDoc, rPos, aRes.maText, eGrammar), !bApi);
+                break;
+                case ScInputStringType::Number:
+                    SetValueCell(rPos, aRes.mfValue, !bApi);
+                break;
+                case ScInputStringType::Text:
+                    SetStringOrEditCell(rPos, aRes.maText, !bApi);
+                break;
+                default:
+                    ;
+            }
         }
         // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
     }
     else if ( rText.Len() )
     {
-        OSL_ENSURE( rFormulaNmsp.Len() == 0, "ScDocFunc::SetCellText - formula namespace, but do not interpret?" );
-        ScBaseCell* pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );   // immer Text
-        if (pNewCell)
-            return PutCell( rPos, pNewCell, bApi );
+        SetStringOrEditCell(rPos, rText, !bApi);
     }
 
     bool bNumFmtSet = false;
