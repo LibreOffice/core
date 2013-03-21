@@ -264,7 +264,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
     }
     else if ( !mpData->maKeyMap.insert( std::make_pair( nCode, pEntry ) ).second )
     {
-        OSL_TRACE( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
+        SAL_WARN( "vcl.layout", "Accelerator::InsertItem(): KeyCode (Key: " << nCode << ") already exists" );
         delete pEntry;
     }
     else

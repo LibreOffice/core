@@ -2417,8 +2417,7 @@ void ChartExport::exportDataPoints(
                 catch( const uno::Exception & rEx )
                 {
                     (void)rEx; // avoid warning for pro build
-                    OSL_TRACE( "Exception caught during Export of data point: %s",
-                                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                    SAL_WARN( "oox", "Exception caught during Export of data point: " << rEx.Message );
                 }
             }
             else
