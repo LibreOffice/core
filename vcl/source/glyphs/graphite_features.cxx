@@ -24,6 +24,7 @@
 
 
 #include <sal/types.h>
+#include <osl/endian.h>
 
 #ifdef WNT
 #include <windows.h>
@@ -88,7 +89,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const ::rtl::OString fea
                     gr_uint32 nFaceLang = gr_face_lang_by_index(pFace, i);
                     FeatId aSupportedLang;
                     aSupportedLang.num = nFaceLang;
-#ifdef __BIG_ENDIAN__
+#ifdef OSL_BIGENDIAN
                     // here we only expect full 3 letter codes
                     if (aLang.label[0] == aSupportedLang.label[0] &&
                         aLang.label[1] == aSupportedLang.label[1] &&
@@ -163,7 +164,7 @@ void GrFeatureParser::setLang(const gr_face * pFace, const rtl::OString & lang)
             FeatId aSupportedLang;
             aSupportedLang.num = nFaceLang;
             // here we only expect full 2 & 3 letter codes
-#ifdef __BIG_ENDIAN__
+#ifdef OSL_BIGENDIAN
             if (aLang.label[0] == aSupportedLang.label[0] &&
                 aLang.label[1] == aSupportedLang.label[1] &&
                 aLang.label[2] == aSupportedLang.label[2] &&
