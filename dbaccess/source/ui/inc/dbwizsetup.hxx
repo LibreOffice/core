@@ -57,6 +57,7 @@ class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
 class OMySQLIntroPageSetup;
+class OFinalDBPageSetup;
 
 class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
 {
@@ -89,6 +90,8 @@ private:
     String                  m_sWorkPath;
     OGeneralPage*           m_pGeneralPage;
     OMySQLIntroPageSetup*   m_pMySQLIntroPage;
+    OFinalDBPageSetup*      m_pFinalPage;
+
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
 
