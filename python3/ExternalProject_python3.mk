@@ -29,13 +29,13 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(call gb_ExternalProject_get_state_target,python3,build) :
 ifeq ($(VCVER),110)
 	$(call gb_ExternalProject_run,build,\
-	MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
+	MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
 	&& cd $(EXTERNAL_WORKDIR) \
 	&& ln -s PCbuild LO_lib \
 	,PCBuild)
 else ifeq ($(VCVER),100)
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0 \
+		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64" /ToolsVersion:4.0 \
 		&& cd $(EXTERNAL_WORKDIR) \
 		&& ln -s PCbuild LO_lib \
 	,PCBuild)

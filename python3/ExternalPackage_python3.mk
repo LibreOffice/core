@@ -12,27 +12,30 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,python3,python3))
 $(eval $(call gb_ExternalPackage_use_external_project,python3,python3))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
-$(eval $(call gb_ExternalPackage_add_file,python3,bin/python.exe,LO_lib/python.exe))
-$(eval $(call gb_ExternalPackage_add_file,python3,bin/python$(PYTHON_VERSION_MAJOR).dll,LO_lib/python$(PYTHON_VERSION_MAJOR).dll))
-$(eval $(call gb_ExternalPackage_add_file,python3,bin/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).dll,LO_lib/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).dll))
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/python$(PYTHON_VERSION_MAJOR).lib,LO_lib/python$(PYTHON_VERSION_MAJOR).lib))
-$(eval $(call gb_ExternalPackage_add_file,python3,lib/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib,LO_lib/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib))
+ifeq ($(CPUNAME),X86_64)
+python_arch_subdir=amd64/
+endif
+$(eval $(call gb_ExternalPackage_add_file,python3,bin/python.exe,LO_lib/$(python_arch_subdir)python.exe))
+$(eval $(call gb_ExternalPackage_add_file,python3,bin/python$(PYTHON_VERSION_MAJOR).dll,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,bin/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).dll,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,lib/python$(PYTHON_VERSION_MAJOR).lib,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).lib))
+$(eval $(call gb_ExternalPackage_add_file,python3,lib/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR).lib))
 $(eval $(call gb_ExternalPackage_add_files,python3,lib/python,\
-	LO_lib/_ctypes.pyd \
-	LO_lib/_ctypes_test.pyd \
-	LO_lib/_decimal.pyd \
-	LO_lib/_elementtree.pyd \
-	LO_lib/_msi.pyd \
-	LO_lib/_multiprocessing.pyd \
-	LO_lib/_socket.pyd \
-	LO_lib/_ssl.pyd \
-	LO_lib/_testbuffer.pyd \
-	LO_lib/_testcapi.pyd \
-	LO_lib/pyexpat.pyd \
-	LO_lib/select.pyd \
-	LO_lib/unicodedata.pyd \
-	LO_lib/winsound.pyd \
-	LO_lib/xxlimited.pyd \
+	LO_lib/$(python_arch_subdir)_ctypes.pyd \
+	LO_lib/$(python_arch_subdir)_ctypes_test.pyd \
+	LO_lib/$(python_arch_subdir)_decimal.pyd \
+	LO_lib/$(python_arch_subdir)_elementtree.pyd \
+	LO_lib/$(python_arch_subdir)_msi.pyd \
+	LO_lib/$(python_arch_subdir)_multiprocessing.pyd \
+	LO_lib/$(python_arch_subdir)_socket.pyd \
+	LO_lib/$(python_arch_subdir)_ssl.pyd \
+	LO_lib/$(python_arch_subdir)_testbuffer.pyd \
+	LO_lib/$(python_arch_subdir)_testcapi.pyd \
+	LO_lib/$(python_arch_subdir)pyexpat.pyd \
+	LO_lib/$(python_arch_subdir)select.pyd \
+	LO_lib/$(python_arch_subdir)unicodedata.pyd \
+	LO_lib/$(python_arch_subdir)winsound.pyd \
+	LO_lib/$(python_arch_subdir)xxlimited.pyd \
 ))
 else ifeq ($(OS),WNT) # MinGW
 # TODO how are C modules called on this platform?

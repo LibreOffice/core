@@ -227,3 +227,136 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
  		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Release|Win32.ActiveCfg = Release|Win32
  		{19C0C13F-47CA-4432-AFF3-799A296A4DDC}.Release|x64.ActiveCfg = Release|x64
  	EndGlobalSection
+--- python3/PCbuild/make_buildinfo.vcxproj
++++ python3/PCbuild/make_buildinfo.vcxproj
+@@ -5,6 +5,10 @@
+       <Configuration>Release</Configuration>
+       <Platform>Win32</Platform>
+     </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|x64">
++      <Configuration>Release</Configuration>
++      <Platform>x64</Platform>
++    </ProjectConfiguration>
+   </ItemGroup>
+   <PropertyGroup Label="Globals">
+     <ProjectGuid>{C73F0EC1-358B-4177-940F-0846AC8B04CD}</ProjectGuid>
+@@ -16,6 +20,10 @@
+     <ConfigurationType>Application</ConfigurationType>
+     <CharacterSet>NotSet</CharacterSet>
+   </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
++    <ConfigurationType>Application</ConfigurationType>
++    <CharacterSet>NotSet</CharacterSet>
++  </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <ImportGroup Label="ExtensionSettings">
+   </ImportGroup>
+@@ -24,17 +32,38 @@
+     <Import Project="pyproject.props" />
+     <Import Project="release.props" />
+   </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="pyproject.props" />
++    <Import Project="x64.props" />
++    <Import Project="release.props" />
++  </ImportGroup>
+   <PropertyGroup Label="UserMacros" />
+   <PropertyGroup>
+     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
++    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
++    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+   </PropertyGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+     <ClCompile>
+       <Optimization>Disabled</Optimization>
+       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
++      <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
++    </ClCompile>
++    <Link>
++      <OutputFile>$(OutDir)make_buildinfo.exe</OutputFile>
++      <SubSystem>Console</SubSystem>
++    </Link>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
++    <ClCompile>
++      <Optimization>Disabled</Optimization>
++      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+     </ClCompile>
+--- python3/PCbuild/make_versioninfo.vcxproj
++++ python3/PCbuild/make_versioninfo.vcxproj
+@@ -114,24 +114,25 @@
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <CustomBuildStep>
+       <Message>Build PC/pythonnt_rc(_d).h</Message>
+       <Command>cd $(SolutionDir)
+-make_versioninfo.exe &gt; ..\PC\pythonnt_rc.h
++amd64\make_versioninfo.exe &gt; ..\PC\pythonnt_rc.h
+ </Command>
+       <Outputs>$(SolutionDir)..\PC\pythonnt_rc.h;%(Outputs)</Outputs>
+     </CustomBuildStep>
+     <ClCompile>
+       <Optimization>MaxSpeed</Optimization>
+       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+       <IntrinsicFunctions>true</IntrinsicFunctions>
+       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <OutputFile>$(SolutionDir)make_versioninfo.exe</OutputFile>
++      <OutputFile>$(SolutionDir)amd64\make_versioninfo.exe</OutputFile>
++      <SubSystem>Console</SubSystem>
+     </Link>
+     <PostBuildEvent>
+       <Command>cd $(SolutionDir)
+-make_versioninfo.exe &gt; ..\PC\python_nt.h
++amd64\make_versioninfo.exe &gt; ..\PC\python_nt.h
+ </Command>
+     </PostBuildEvent>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+--- python3/PCbuild/pythoncore.vcxproj
++++ python3/PCbuild/pythoncore.vcxproj
+@@ -185,35 +185,35 @@
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+     <Midl>
+       <TargetEnvironment>X64</TargetEnvironment>
+     </Midl>
+     <ClCompile>
+       <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
+       <AdditionalIncludeDirectories>..\Python;..\Modules\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+     </ClCompile>
+     <ResourceCompile>
+       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <Culture>0x0409</Culture>
+       <AdditionalIncludeDirectories>..\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ResourceCompile>
+     <PreLinkEvent>
+       <Message>Generate build information...</Message>
+-      <Command>"$(SolutionDir)make_buildinfo.exe" Release "$(IntDir)"</Command>
++      <Command>"$(SolutionDir)amd64\make_buildinfo.exe" Release "$(IntDir)"</Command>
+     </PreLinkEvent>
+     <Link>
+       <AdditionalDependencies>$(IntDir)getbuildinfo.o;%(AdditionalDependencies)</AdditionalDependencies>
+       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+       <BaseAddress>0x1e000000</BaseAddress>
+     </Link>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+     <ClCompile>
+       <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
+       <Optimization>Disabled</Optimization>
+       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+       <IntrinsicFunctions>false</IntrinsicFunctions>
+       <AdditionalIncludeDirectories>..\Python;..\Modules\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+     </ClCompile>
