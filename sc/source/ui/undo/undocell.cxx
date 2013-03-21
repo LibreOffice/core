@@ -550,12 +550,16 @@ ScUndoSetCell::~ScUndoSetCell() {}
 
 void ScUndoSetCell::Undo()
 {
+    BeginUndo();
     SetValue(maOldValue);
+    EndUndo();
 }
 
 void ScUndoSetCell::Redo()
 {
+    BeginRedo();
     SetValue(maNewValue);
+    EndRedo();
 }
 
 void ScUndoSetCell::Repeat( SfxRepeatTarget& /*rTarget*/ )
