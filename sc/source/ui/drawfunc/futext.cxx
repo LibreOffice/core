@@ -132,7 +132,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( pView->IsTextEdit() )
     {
-        if ( IsEditingANote(rMEvt) )
+        if ( IsEditingANote() )
         {
             if( !IsSizingOrMovingNote(rMEvt) )
             {

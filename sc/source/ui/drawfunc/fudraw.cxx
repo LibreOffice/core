@@ -768,7 +768,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     }
 }
 
-sal_Bool FuDraw::IsEditingANote( const MouseEvent& rMEvt ) const
+sal_Bool FuDraw::IsEditingANote() const
 {
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     sal_Int32 backval=rMarkList.GetMarkCount();
