@@ -107,7 +107,7 @@
 //========================================================================
 // tab pages
 
-#define PAGE_GENERAL                    RID_PAGE_START +  0
+    // FREE
 #define PAGE_DBASE                      RID_PAGE_START +  1
 #define PAGE_ODBC                       RID_PAGE_START +  3
 #define PAGE_TEXT                       RID_PAGE_START +  4

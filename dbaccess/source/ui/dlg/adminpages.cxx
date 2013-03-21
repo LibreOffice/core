@@ -155,8 +155,7 @@ namespace dbaui
         if (!aEnumeration.isLoaded())
         {
             // show an error message
-            LocalResourceAccess aLocRes( PAGE_GENERAL, RSC_TABPAGE );
-            String sError(ModuleRes(STR_COULDNOTLOAD_ODBCLIB));
+            String sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
             sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
             ErrorBox aDialog(this, WB_OK, sError);
             aDialog.Execute();

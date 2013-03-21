@@ -335,7 +335,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
 {
     switch ( m_pGeneralPage->GetDatabaseCreationMode() )
     {
-    case OGeneralPage::eCreateNew:
+    case OGeneralPageWizard::eCreateNew:
     {
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
@@ -347,7 +347,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         enableButtons( WZB_FINISH, sal_True);
     }
     break;
-    case OGeneralPage::eConnectExternal:
+    case OGeneralPageWizard::eConnectExternal:
     {
         ::rtl::OUString sOld = m_sURL;
         m_sURL = m_pGeneralPage->GetSelectedType();
@@ -360,7 +360,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         updateTypeDependentStates();
     }
     break;
-    case OGeneralPage::eOpenExisting:
+    case OGeneralPageWizard::eOpenExisting:
     {
         activatePath( static_cast<PathId>(m_pCollection->size() + 1), sal_True );
         enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
@@ -370,7 +370,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         OSL_FAIL( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
     }
 
-    enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPage::eOpenExisting );
+    enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPageWizard::eOpenExisting );
         // TODO: this should go into the base class. Point is, we activate a path whose *last*
         // step is also the current one. The base class should automatically disable
         // the Next button in such a case. However, not for this patch ...
@@ -504,9 +504,9 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
     switch(_nState)
     {
         case PAGE_DBSETUPWIZARD_INTRO:
-            pFirstPage = OGeneralPage::Create(this,*m_pOutSet, sal_True);
+            pFirstPage = new OGeneralPageWizard(this,*m_pOutSet);
             pPage = static_cast<OGenericAdministrationPage*> (pFirstPage);
-            m_pGeneralPage = static_cast<OGeneralPage*>(pFirstPage);
+            m_pGeneralPage = static_cast<OGeneralPageWizard*>(pFirstPage);
             m_pGeneralPage->SetTypeSelectHandler(LINK(this, ODbTypeWizDialogSetup, OnTypeSelected));
             m_pGeneralPage->SetCreationModeHandler(LINK( this, ODbTypeWizDialogSetup, OnChangeCreationMode ) );
             m_pGeneralPage->SetDocumentSelectionHandler(LINK( this, ODbTypeWizDialogSetup, OnRecentDocumentSelected ) );
@@ -636,21 +636,21 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPage*, /*_pGeneralPage*/)
+IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
     activateDatabasePath();
     return sal_True;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPage*, /*_pGeneralPage*/)
+IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
     enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
     return 0L;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPage*, /*_pGeneralPage*/)
+IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
     if ( prepareLeaveCurrentState( eFinish ) )
         onFinish();
@@ -738,7 +738,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             Reference< XModel > xModel( getDataSourceOrModel( xDatasource ), UNO_QUERY_THROW );
             Reference< XStorable > xStore( xModel, UNO_QUERY_THROW );
 
-            if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eCreateNew )
+            if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eCreateNew )
                 CreateDatabase();
 
             ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
@@ -780,7 +780,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     // ------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened() const
     {
-        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
             return sal_True;
 
         if ( m_pFinalPage != NULL )
@@ -792,7 +792,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     // ------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted() const
     {
-        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
             return sal_False;
 
         if ( m_pFinalPage != NULL )
@@ -1065,7 +1065,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     // -----------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::onFinish()
     {
-        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
+        if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
         {
             // we're not going to re-use the XModel we have - since the document the user
             // wants us to load could be a non-database document. Instead, we asynchronously

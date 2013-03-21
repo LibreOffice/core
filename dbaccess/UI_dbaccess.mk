@@ -11,6 +11,8 @@ $(eval $(call gb_UI_UI,dbaccess))
 
 $(eval $(call gb_UI_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
+    dbaccess/uiconfig/ui/generalpagedialog \
+    dbaccess/uiconfig/ui/generalpagewizard \
 ))
 
 # vim: set noet sw=4 ts=4:

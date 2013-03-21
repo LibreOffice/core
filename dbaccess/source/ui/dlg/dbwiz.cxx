@@ -250,10 +250,9 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     {
         case START_PAGE: // start state
         {
-            pPage = OGeneralPage::Create(this,*m_pOutSet);
+            pPage = new OGeneralPageDialog(this,*m_pOutSet);
             OGeneralPage* pGeneralPage = static_cast< OGeneralPage* >( pPage );
             pGeneralPage->SetTypeSelectHandler( LINK( this, ODbTypeWizDialog, OnTypeSelected));
-//            pGeneralPage->SetCreationModeHandler( LINK( this, ODbTypeWizDialog, TODO ) );
             nStringId = STR_PAGETITLE_GENERAL;
         }
         break;
