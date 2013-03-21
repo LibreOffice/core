@@ -195,6 +195,7 @@ certain functionality.
 
 @li @c tools.debug
 @li @c tools.datetime
+@li @c tools.generic
 @li @c tools.memtools
 @li @c tools.rc - resource manager
 @li @c tools.stream - SvStream class
