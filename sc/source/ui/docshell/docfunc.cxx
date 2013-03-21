@@ -1163,7 +1163,7 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
 
 
 bool ScDocFunc::SetCellText(
-    const ScAddress& rPos, const String& rText, bool bInterpret, bool bEnglish, bool bApi,
+    const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
     const formula::FormulaGrammar::Grammar eGrammar )
 {
     if ( bInterpret )
@@ -1196,7 +1196,7 @@ bool ScDocFunc::SetCellText(
         }
         // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
     }
-    else if ( rText.Len() )
+    else if (!rText.isEmpty())
     {
         SetStringOrEditCell(rPos, rText, !bApi);
     }

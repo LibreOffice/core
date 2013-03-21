@@ -280,7 +280,7 @@ public:
     virtual sal_Bool    PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 sal_Bool bInterpret, sal_Bool bApi );
     virtual bool SetCellText(
-        const ScAddress& rPos, const String& rText, bool bInterpret, bool bEnglish,
+        const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish,
         bool bApi, const formula::FormulaGrammar::Grammar eGrammar );
     virtual bool        ShowNote( const ScAddress& rPos, bool bShow = true );
     virtual bool        SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi );

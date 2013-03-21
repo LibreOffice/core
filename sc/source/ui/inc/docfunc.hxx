@@ -103,7 +103,7 @@ public:
     virtual sal_Bool        PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                       sal_Bool bInterpret, sal_Bool bApi );
     virtual bool SetCellText(
-        const ScAddress& rPos, const String& rText, bool bInterpret, bool bEnglish, bool bApi,
+        const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
         const formula::FormulaGrammar::Grammar eGrammar );
 
     // creates a new cell for use with PutCell

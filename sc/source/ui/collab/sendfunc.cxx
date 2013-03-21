@@ -189,7 +189,7 @@ sal_Bool ScDocFuncSend::PutData( const ScAddress& rPos, ScEditEngineDefaulter& r
 }
 
 bool ScDocFuncSend::SetCellText(
-    const ScAddress& rPos, const String& rText, bool bInterpret, bool bEnglish, bool bApi,
+    const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
     const formula::FormulaGrammar::Grammar eGrammar )
 {
     SAL_INFO( "sc.tubes", "SetCellText not implemented!" );
