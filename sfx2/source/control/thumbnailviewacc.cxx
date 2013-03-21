@@ -788,7 +788,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewItemA
         //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
-        if( mpParent->mrParent.GetSelectItemId() == mpParent->mnId )
+        if( mpParent->isSelected() )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
             //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
