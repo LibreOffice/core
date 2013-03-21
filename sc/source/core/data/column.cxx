@@ -1406,6 +1406,23 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
         rDestCol.maTextWidths.set<unsigned short>(it->nRow, TEXTWIDTH_DIRTY);
 }
 
+void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol )
+{
+    SCSIZE nIndex;
+    if (!Search(nSrcRow, nIndex))
+    {
+        // Source cell is empty.  Remove the destination cell if one exists.
+        rDestCol.Delete(nDestRow);
+        return;
+    }
+
+    ScBaseCell* pDestCell =
+        maItems[nSrcRow].pCell->Clone(
+            *rDestCol.pDocument, ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab));
+
+    rDestCol.Insert(nDestRow, pDestCell);
+}
+
 void ScColumn::CopyToColumn(
     SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
     const ScMarkData* pMarkData, bool bAsLink) const

@@ -677,6 +677,16 @@ void ScTable::CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     }
 }
 
+void ScTable::CopyCellToDocument(SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, SCROW nDestRow, ScTable& rDestTab )
+{
+    if (!ValidColRow(nSrcCol, nSrcRow) || !ValidColRow(nDestCol, nDestRow))
+        return;
+
+    ScColumn& rSrcCol = aCol[nSrcCol];
+    ScColumn& rDestCol = rDestTab.aCol[nDestCol];
+    rSrcCol.CopyCellToDocument(nSrcRow, nDestRow, rDestCol);
+}
+
 void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCsCOL nDx, SCsROW nDy, ScTable* pTable)
 {
@@ -1334,6 +1344,14 @@ void ScTable::SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText )
     aCol[nCol].SetEditText(nRow, pEditText);
 }
 
+void ScTable::SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool )
+{
+    if (!ValidColRow(nCol, nRow))
+        return;
+
+    aCol[nCol].SetEditText(nRow, rEditText, pEditPool);
+}
+
 void ScTable::SetEmptyCell( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol, nRow))
@@ -1428,6 +1446,14 @@ const ScTokenArray* ScTable::GetFormulaTokens( SCCOL nCol, SCROW nRow ) const
 }
 
 const ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return NULL;
+
+    return aCol[nCol].GetFormulaCell(nRow);
+}
+
+ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol, nRow))
         return NULL;

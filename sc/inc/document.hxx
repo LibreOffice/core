@@ -765,6 +765,8 @@ public:
      */
     SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
 
+    void SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
+
     SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, const OUString& rStr );
 
     /**
@@ -824,6 +826,7 @@ public:
     void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( const ScAddress& rPos ) const;
     const ScFormulaCell* GetFormulaCell( const ScAddress& rPos ) const;
+    ScFormulaCell* GetFormulaCell( const ScAddress& rPos );
     SC_DLLPUBLIC void           GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula ) const;
     SC_DLLPUBLIC void           GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
     SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;
@@ -1087,6 +1090,15 @@ public:
      * @param pDestDoc document to copy to
      */
     void CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument* pDestDoc);
+
+    /**
+     * Copy only cell, nothing but cell to another document.
+     *
+     * @param rSrcPos source cell position
+     * @param rDestPos destination cell position
+     * @param rDestDoc destination document
+     */
+    void CopyCellToDocument( const ScAddress& rSrcPos, const ScAddress& rDestPos, ScDocument& rDestDoc );
 
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);

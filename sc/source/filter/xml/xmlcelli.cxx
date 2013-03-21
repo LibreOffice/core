@@ -986,11 +986,10 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     //cell was already put in document, just need to set text here.
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
-        ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCurrentPos );
-        bDoIncrement = ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA );
+        bDoIncrement = rXMLImport.GetDocument()->GetCellType(rCurrentPos) == CELLTYPE_FORMULA;
         if ( bDoIncrement )
         {
-            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+            ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCurrentPos);
             OUString aCellString;
             if (maStringValue)
                 aCellString = *maStringValue;
@@ -1013,8 +1012,8 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                     ScAddress aTopLeftMatrixCell;
                     if(pFCell->GetMatrixOrigin(aTopLeftMatrixCell))
                     {
-                        ScBaseCell* pMatrixCell = rXMLImport.GetDocument()->GetCell( aTopLeftMatrixCell );
-                        static_cast<ScFormulaCell*>(pMatrixCell)->SetDirty();
+                        ScFormulaCell* pMatrixCell = rXMLImport.GetDocument()->GetFormulaCell(aTopLeftMatrixCell);
+                        pMatrixCell->SetDirty();
                     }
                     else
                         SAL_WARN("sc", "matrix cell without matrix");
@@ -1085,10 +1084,9 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
     //cell was already put in document, just need to set value here.
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
-        ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCurrentPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+        if (rXMLImport.GetDocument()->GetCellType(rCurrentPos) == CELLTYPE_FORMULA)
         {
-            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+            ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCurrentPos);
             SetFormulaCell(pFCell);
         }
     }
@@ -1110,8 +1108,8 @@ namespace {
 
 bool isEmptyOrNote( ScDocument* pDoc, const ScAddress& rCurrentPos )
 {
-    ScBaseCell* pCell = pDoc->GetCell( rCurrentPos );
-    return ( !pCell || pCell->GetCellType() == CELLTYPE_NOTE );
+    CellType eType = pDoc->GetCellType(rCurrentPos);
+    return (eType == CELLTYPE_NONE) || (eType == CELLTYPE_NOTE);
 }
 
 }
@@ -1310,7 +1308,6 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 
     if ( !aText.isEmpty() )
     {
-        ScBaseCell* pNewCell = NULL;
         if ( aText[0] == '=' && aText.getLength() > 1 )
         {
             // temporary formula string as string tokens
@@ -1320,11 +1317,9 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
                 pCode->AddStringXML( aFormulaNmsp );
 
             pDoc->IncXMLImportedFormulaCount( aText.getLength() );
-            pNewCell = new ScFormulaCell( pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE );
-
-            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
-            SetFormulaCell(pFCell);
-            pDoc->PutCell( rCellPos, pNewCell );
+            ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE);
+            SetFormulaCell(pNewCell);
+            pDoc->SetFormulaCell(rCellPos, pNewCell);
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {

@@ -1488,6 +1488,11 @@ void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
     Insert(nRow, new ScEditCell(pEditText, pDocument));
 }
 
+void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool )
+{
+    Insert(nRow, new ScEditCell(rEditText, pDocument, pEditPool));
+}
+
 void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )
 {
     ScAddress aPos(nCol, nRow, nTab);
@@ -1840,6 +1845,11 @@ const ScTokenArray* ScColumn::GetFormulaTokens( SCROW nRow ) const
 const ScFormulaCell* ScColumn::GetFormulaCell( SCROW nRow ) const
 {
     return FetchFormulaCell(nRow);
+}
+
+ScFormulaCell* ScColumn::GetFormulaCell( SCROW nRow )
+{
+    return const_cast<ScFormulaCell*>(FetchFormulaCell(nRow));
 }
 
 CellType ScColumn::GetCellType( SCROW nRow ) const

@@ -1990,6 +1990,17 @@ void ScDocument::CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, 
         rSrcRange.aStart.Col(), rSrcRange.aStart.Row(), rSrcRange.aEnd.Col(), rSrcRange.aEnd.Row(), pDestTab);
 }
 
+void ScDocument::CopyCellToDocument( const ScAddress& rSrcPos, const ScAddress& rDestPos, ScDocument& rDestDoc )
+{
+    if (!TableExists(rSrcPos.Tab()) || !rDestDoc.TableExists(rDestPos.Tab()))
+        return;
+
+    ScTable& rSrcTab = *maTabs[rSrcPos.Tab()];
+    ScTable& rDestTab = *rDestDoc.maTabs[rDestPos.Tab()];
+
+    rSrcTab.CopyCellToDocument(rSrcPos.Col(), rSrcPos.Row(), rDestPos.Col(), rDestPos.Row(), rDestTab);
+}
+
 void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
                                 SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc)
@@ -2981,6 +2992,14 @@ void ScDocument::SetEditText( const ScAddress& rPos, EditTextObject* pEditText )
     maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), pEditText);
 }
 
+void ScDocument::SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEditText, pEditPool);
+}
+
 void ScDocument::SetEditText( const ScAddress& rPos, const OUString& rStr )
 {
     if (!TableExists(rPos.Tab()))
@@ -3251,6 +3270,14 @@ const ScTokenArray* ScDocument::GetFormulaTokens( const ScAddress& rPos ) const
 }
 
 const ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos ) const
+{
+    if (!TableExists(rPos.Tab()))
+        return NULL;
+
+    return maTabs[rPos.Tab()]->GetFormulaCell(rPos.Col(), rPos.Row());
+}
+
+ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos )
 {
     if (!TableExists(rPos.Tab()))
         return NULL;

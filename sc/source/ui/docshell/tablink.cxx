@@ -39,9 +39,9 @@
 #include "undotab.hxx"
 #include "global.hxx"
 #include "hints.hxx"
-#include "cell.hxx"
 #include "dociter.hxx"
 #include "formula/opcode.hxx"
+#include "cell.hxx"
 
 using ::rtl::OUString;
 
@@ -344,8 +344,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                                 for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
                                 {
                                     ScAddress aDestPos( nCol, nRow, nTab );
-                                    ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aDestPos, &aTokenArr );
-                                    pDoc->PutCell( aDestPos, pNewCell );
+                                    pDoc->SetFormula(aDestPos, aTokenArr);
                                 }
                         }
 

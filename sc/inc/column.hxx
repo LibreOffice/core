@@ -207,6 +207,7 @@ public:
     void        DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag );
     void CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags) const;
     void CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol);
+    void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
     void        CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                                 sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScColumn& rColumn);
     void        StartListeningInArea( SCROW nRow1, SCROW nRow2 );
@@ -262,6 +263,7 @@ public:
         ScSetStringParam* pParam = NULL );
 
     void SetEditText( SCROW nRow, EditTextObject* pEditText );
+    void SetEditText( SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
     void SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram );
     void SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
     void SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
@@ -276,6 +278,7 @@ public:
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCROW nRow ) const;
+    ScFormulaCell* GetFormulaCell( SCROW nRow );
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const;
     sal_uInt32 GetWeightedCount() const;

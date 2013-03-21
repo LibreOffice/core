@@ -23,7 +23,6 @@
 #include <svl/zforlist.hxx>
 #include <tools/solar.h>
 
-#include "cell.hxx"
 #include "rangenam.hxx"
 #include "compiler.hxx"
 
@@ -33,6 +32,8 @@
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 #include "ftools.hxx"
+#include "stringutil.hxx"
+#include "tokenarray.hxx"
 
 #include <math.h>
 
@@ -98,8 +99,9 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     }
 
     pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
-    ScStringCell*	pZelle = new ScStringCell( String( pString, pLotusRoot->eCharsetQ ) );
-    pDoc->PutCell( nCol, nRow, nTab, pZelle, true );
+    ScSetStringParam aParam;
+    aParam.setTextInput();
+    pDoc->SetString(ScAddress(nCol,nRow,nTab), String(pString, pLotusRoot->eCharsetQ), &aParam);
 }
 
 

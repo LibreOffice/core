@@ -304,6 +304,7 @@ public:
                            ScSetStringParam* pParam = NULL );
 
     void SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
+    void SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
 
     void SetEmptyCell( SCCOL nCol, SCROW nRow );
     void SetFormula(
@@ -329,6 +330,7 @@ public:
     void GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( SCCOL nCol, SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow ) const;
+    ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow );
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     {
@@ -369,6 +371,7 @@ public:
     void        CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
                            bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
+    void CopyCellToDocument( SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, SCROW nDestRow, ScTable& rDestTab );
     void        CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy,
                                 sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable);
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,

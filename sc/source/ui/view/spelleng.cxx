@@ -81,10 +81,10 @@ bool ScConversionEngineBase::FindNextConversionCell()
 {
     ScMarkData& rMark = mrViewData.GetMarkData();
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    ScBaseCell* pCell = NULL;
     const ScPatternAttr* pPattern = NULL;
     const ScPatternAttr* pLastPattern = NULL;
-    ::std::auto_ptr< SfxItemSet > pEditDefaults( new SfxItemSet( GetEmptyItemSet() ) );
+
+    boost::scoped_ptr<SfxItemSet> pEditDefaults(new SfxItemSet(GetEmptyItemSet()));
 
     if( IsModified() )
     {
@@ -107,40 +107,27 @@ bool ScConversionEngineBase::FindNextConversionCell()
             {
                 ScAddress aPos( mnCurrCol, mnCurrRow, nTab );
                 CellType eCellType = mrDoc.GetCellType( aPos );
-                pCell = mrDoc.GetCell( aPos );
+                bool bEmptyCell = eCellType == CELLTYPE_NONE || eCellType == CELLTYPE_NOTE;
 
-                if( mpUndoDoc && pCell )
-                {
-                    ScBaseCell* pUndoCell = pCell->Clone( *mpUndoDoc );
-                    mpUndoDoc->PutCell( aPos, pUndoCell );
-                }
+                if (mpUndoDoc && !bEmptyCell)
+                    mrDoc.CopyCellToDocument(aPos, aPos, *mpUndoDoc);
 
-                if( eCellType == CELLTYPE_EDIT )
+                if (eCellType == CELLTYPE_EDIT)
                 {
-                    if( pCell )
-                    {
-                        ScEditCell* pEditCell = static_cast< ScEditCell* >( pCell );
-                        boost::scoped_ptr<EditTextObject> pEditObj(CreateTextObject());
-                        pEditCell->SetData(*pEditObj, GetEditTextObjectPool());
-                    }
+                    boost::scoped_ptr<EditTextObject> pEditObj(CreateTextObject());
+                    mrDoc.SetEditText(aPos, *pEditObj, GetEditTextObjectPool());
                 }
                 else
-                {
-                    mrDoc.SetString( mnCurrCol, mnCurrRow, nTab, aNewStr );
-                    pCell = mrDoc.GetCell( aPos );
-                }
+                    mrDoc.SetString(aPos, aNewStr);
 
-                if( mpRedoDoc && pCell )
-                {
-                    ScBaseCell* pRedoCell = pCell->Clone( *mpRedoDoc );
-                    mpRedoDoc->PutCell( aPos, pRedoCell );
-                }
+                if (mpRedoDoc && !bEmptyCell)
+                    mrDoc.CopyCellToDocument(aPos, aPos, *mpRedoDoc);
 
-                mrDocShell.PostPaintCell( mnCurrCol, mnCurrRow, nTab );
+                mrDocShell.PostPaintCell(aPos);
             }
         }
     }
-    pCell = NULL;
+
     SCCOL nNewCol = mnCurrCol;
     SCROW nNewRow = mnCurrRow;
 
