@@ -87,7 +87,7 @@ public class VarFields
         assertNotNull("could not get component context.", m_xContext);
         m_xDoc = util.WriterTools.createTextDoc(m_xMSF);
         m_TmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
-        m_FileName = m_TmpDir + File.separator + "VarFields.odt";
+        m_FileName = m_TmpDir + "VarFields.odt";
         System.out.println("file: " + m_FileName);
     }
 
