@@ -61,6 +61,8 @@ using namespace com::sun::star::beans;
 
 using ::rtl::OUString;
 
+#define NOOFPAGES 6
+
 extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
 //ID for the config-data with the HTML-settings
