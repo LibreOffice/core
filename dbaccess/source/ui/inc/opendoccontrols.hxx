@@ -45,6 +45,7 @@ namespace dbaui
 
     public:
         OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId );
+        OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName );
 
     protected:
         void    impl_init( const sal_Char* _pAsciiModuleName );
@@ -64,6 +65,7 @@ namespace dbaui
 
     public:
         OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId );
+        OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName );
 
         String  GetSelectedDocumentURL() const;
         String  GetSelectedDocumentFilter() const;

@@ -38,6 +38,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/filenotation.hxx>
 #include <osl/diagnose.h>
+#include <vcl/builder.hxx>
 
 //........................................................................
 namespace dbaui
@@ -168,6 +169,19 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
+    OpenDocumentButton::OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName )
+        :PushButton( _pParent )
+    {
+        impl_init( _pAsciiModuleName );
+    }
+
+    //--------------------------------------------------------------------
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOpenDocumentButton( Window *pParent, VclBuilder::stringmap & )
+    {
+        return new OpenDocumentButton( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
+    }
+
+    //--------------------------------------------------------------------
     void OpenDocumentButton::impl_init( const sal_Char* _pAsciiModuleName )
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
@@ -195,6 +209,19 @@ namespace dbaui
         :ListBox( _pParent, _rResId )
     {
         impl_init( _pAsciiModuleName );
+    }
+
+    //--------------------------------------------------------------------
+    OpenDocumentListBox::OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName )
+        :ListBox( _pParent, WB_BORDER | WB_DROPDOWN )
+    {
+        impl_init( _pAsciiModuleName );
+    }
+
+    //--------------------------------------------------------------------
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOpenDocumentListBox( Window *pParent, VclBuilder::stringmap & )
+    {
+        return new OpenDocumentListBox( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
     }
 
     //--------------------------------------------------------------------
