@@ -214,7 +214,7 @@ SalInstance *CreateSalInstance()
         aUsePlugin = "svp";
 
     if( !aUsePlugin.isEmpty() )
-        pInst = tryInstance( aUsePlugin );
+        pInst = tryInstance( aUsePlugin, true );
 
     if( ! pInst )
         pInst = autodetect_plugin();
