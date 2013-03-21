@@ -1809,7 +1809,7 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             }
             else if ( bCtrl )
             {
-                // <STRG><TAB> moves through the pages
+                // <CTRL><TAB> moves through the pages
                 if ( nPageId < HELP_INDEX_PAGE_LAST )
                     nPageId++;
                 else
@@ -2316,8 +2316,8 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
     bool bRet = false;
     sal_uInt16 nCode = _rKeyCode.GetCode();
 
-    // the keys <STRG><A> (select all), <STRG><C> (copy),
-    //          <STRG><F> (find), <STRG><P> (print) and <STRG><W> (close window)
+    // the keys <CTRL><A> (select all), <CTRL><C> (copy),
+    //          <CTRL><F> (find), <CTRL><P> (print) and <CTRL><W> (close window)
     // were handled in help
     if ( _rKeyCode.IsMod1() &&
          ( KEY_A == nCode || KEY_C == nCode || KEY_F == nCode || KEY_P == nCode || KEY_W == nCode ) )
@@ -2632,7 +2632,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
          }
         else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
-            // <STRG><F4> or <STRG><W> -> close top frame
+            // <CTRL><F4> or <CTRL><W> -> close top frame
             pHelpWin->CloseWindow();
             nDone = 1;
         }
@@ -3229,7 +3229,7 @@ long SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         }
         else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
-            // <STRG><F4> or <STRG><W> -> close top frame
+            // <CTRL><F4> or <CTRL><W> -> close top frame
             CloseWindow();
             bHandled = sal_True;
         }

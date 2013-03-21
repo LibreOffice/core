@@ -1291,7 +1291,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window*
         {
             if( bMod1 && !bMod2 )
             {
-                // strg + home jumps to first cell
+                // ctrl + home jumps to first cell
                 nAction = ACTION_GOTO_FIRST_CELL;
             }
             else if( !bMod1 && bMod2 )
@@ -1309,7 +1309,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window*
         {
             if( bMod1 && !bMod2 )
             {
-                // strg + end jumps to last cell
+                // ctrl + end jumps to last cell
                 nAction = ACTION_GOTO_LAST_CELL;
             }
             else if( !bMod1 && bMod2 )
