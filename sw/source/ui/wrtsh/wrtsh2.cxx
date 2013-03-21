@@ -34,7 +34,7 @@
 #include <swtypes.hxx>      // SET_CURR_SHELL
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <fldbas.hxx>       // Felder
+#include <fldbas.hxx>       // Fields
 #include <expfld.hxx>
 #include <ddefld.hxx>
 #include <docufld.hxx>
@@ -43,8 +43,8 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <viewopt.hxx>      // SwViewOptions
-#include <frmfmt.hxx>       // fuer UpdateTable
-#include <swtable.hxx>      // fuer UpdateTable
+#include <frmfmt.hxx>       // for UpdateTable
+#include <swtable.hxx>      // for UpdateTable
 #include <mdiexp.hxx>
 #include <view.hxx>
 #include <swevent.hxx>
@@ -96,15 +96,11 @@ void SwWrtShell::Insert(SwField &rFld, SwPaM *pCommentRange)
     EndAllAction();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Felder Update anschmeissen
- --------------------------------------------------------------------*/
-
-
+// Start the field update
 
 void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
 {
-    // ueber die Liste der Eingabefelder gehen und Updaten
+    // Go through the list of fields and updating
     SwInputFieldList* pTmp = pLst;
     if( !pTmp )
         pTmp = new SwInputFieldList( this );
@@ -128,7 +124,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
             else
                 bCancel = StartInputFldDlg( pField, sal_True, 0, &aDlgPos);
 
-            // Sonst Updatefehler bei Multiselektion:
+            // Otherwise update error at multi-selection:
             pTmp->GetField( i )->GetTyp()->UpdateFlds();
         }
         pTmp->PopCrsr();
@@ -138,12 +134,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
         delete pTmp;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: EingabeDialog fuer ein bestimmtes Feld starten
- --------------------------------------------------------------------*/
-
-
+// Start input dialog for a specific field
 
 sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
                                     Window* pParentWin, rtl::OString* pWindowState )
@@ -187,11 +178,7 @@ sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, rt
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Verzeichnis einfuegen Selektion loeschen
- --------------------------------------------------------------------*/
-
-
+// Insert directory - remove selection
 
 void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
@@ -204,10 +191,7 @@ void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     SwEditShell::InsertTableOf(rTOX, pSet);
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Verzeichnis Updaten Selektion loeschen
- --------------------------------------------------------------------*/
+// Update directory - remove selection
 
 sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
@@ -285,7 +269,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             String sRet( sText );
             ExecMacro( pFld->GetSvxMacro(), &sRet );
 
-            // return Wert veraendert?
+            // return value changed?
             if( sRet != sText )
             {
                 StartAllAction();
@@ -322,8 +306,6 @@ void SwWrtShell::ClickToField( const SwField& rFld )
     bIsInClickToEdit = false;
 }
 
-
-
 void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter )
 {
     if( !rItem.GetValue().Len() )
@@ -331,7 +313,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
 
     bIsInClickToEdit = true;
 
-    // erstmal das evt. gesetzte ObjectSelect Macro ausfuehren
+    // At first run the possibly set ObjectSelect Macro
     const SvxMacro* pMac = rItem.GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
     if( pMac )
     {
@@ -340,7 +322,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
         GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, false );
     }
 
-    // damit die Vorlagenumsetzung sofort angezeigt wird
+    // So that the implementation of templates is displayed immediately
     ::LoadURL( *this, rItem.GetValue(), nFilter, rItem.GetTargetFrame() );
     const SwTxtINetFmt* pTxtAttr = rItem.GetTxtINetFmt();
     if( pTxtAttr )
@@ -352,8 +334,6 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
     bIsInClickToEdit = false;
 }
 
-
-
 bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
 {
     bool bRet = false;
@@ -363,7 +343,7 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
     if( pFnd && sURL.Len() )
     {
         bRet = true;
-        // erstmal das evt. gesetzte ObjectSelect Macro ausfuehren
+        // At first run the possibly set ObjectSelect Macro
         const SvxMacro* pMac = &pFnd->GetMacro().GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
         if( pMac )
         {
@@ -385,11 +365,11 @@ void LoadURL( ViewShell& rVSh, const rtl::OUString& rURL, sal_uInt16 nFilter,
     if( rURL.isEmpty() )
         return ;
 
-    // die Shell kann auch 0 sein !!!!!
+    // The shell could be 0 also!!!!!
     if ( !rVSh.ISA(SwCrsrShell) )
         return;
 
-    //Eine CrsrShell ist auch immer eine WrtShell
+    //A CrsrShell is always a WrtShell
     SwWrtShell &rSh = (SwWrtShell&)rVSh;
 
     SwDocShell* pDShell = rSh.GetView().GetDocShell();
@@ -415,7 +395,7 @@ void LoadURL( ViewShell& rVSh, const rtl::OUString& rURL, sal_uInt16 nFilter,
     SfxStringItem aReferer( SID_REFERER, sReferer );
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
-    //#39076# Silent kann lt. SFX entfernt werden.
+    //#39076# Silent can be removed accordingly to SFX.
     SfxBoolItem aBrowse( SID_BROWSE, sal_True );
 
     if( nFilter & URLLOAD_NEWVIEW )
@@ -439,9 +419,9 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
 {
     if( EXCHG_IN_ACTION_COPY == nAction )
     {
-        // Einfuegen
+        // Insert
         String sURL = rBkmk.GetURL();
-        //handelt es sich um ein Sprung innerhalb des akt. Docs?
+        // Is this is a jump within the current Doc?
         const SwDocShell* pDocShell = GetView().GetDocShell();
         if(pDocShell->HasName())
         {

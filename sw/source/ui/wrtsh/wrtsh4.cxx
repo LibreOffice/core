@@ -20,34 +20,26 @@
 #include <wrtsh.hxx>
 #include <crsskip.hxx>
 
+// Private methods, which move the cursor over search.
+// The removal of the selection must be made on the level above.
 
-/*
-* private Methoden, die den Cursor ueber Suchen bewegen. Das
-* Aufheben der Selektion muss auf der Ebene darueber erfolgen.
-*/
-
-/*
-* Der Anfang eines Wortes ist das Folgen eines nicht-
-* Trennzeichens auf Trennzeichen. Ferner das Folgen von
-* nicht-Satztrennern auf Satztrenner. Der Absatzanfang ist
-* ebenfalls Wortanfang.
-*/
-
+// The beginning of a word is the follow of a
+// non-delimiter to delimiter. Furthermore, the follow of
+// non-sentence separators on sentence separator.
+// The begin of paragraph is also the word beginning.
 
 bool SwWrtShell::_SttWrd()
 {
     if ( IsSttPara() )
         return true;
-        /*
-            * temporaeren Cursor ohne Selektion erzeugen
-            */
+        // Create temporary cursor without selection.
     Push();
     ClearMark();
     if( !GoStartWord() )
-            // nicht gefunden --> an den Absatzanfang
+            // not found --> go to the beginning of the paragraph.
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
-        // falls vorher Mark gesetzt war, zusammenfassen
+        // If Mark was previously set, summarize.
     Combine();
     return true;
 }
@@ -64,14 +56,14 @@ bool SwWrtShell::_EndWrd()
 {
     if ( IsEndWrd() )
         return true;
-        // temporaeren Cursor ohne Selektion erzeugen
+        // Create temporary cursor without selection.
     Push();
     ClearMark();
     if( !GoEndWord() )
-            // nicht gefunden --> an das Absatz Ende
+            // not found --> go to the end of the paragraph.
         SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
     ClearMark();
-        // falls vorher Mark gesetzt war, zusammenfassen
+        // If Mark was previously set, summarize.
     Combine();
     return true;
 }
@@ -81,9 +73,9 @@ bool SwWrtShell::_EndWrd()
 sal_Bool SwWrtShell::_NxtWrd()
 {
     sal_Bool bRet = sal_False;
-    while( IsEndPara() )                // wenn schon am Ende, dann naechsten ???
+    while( IsEndPara() )               // If already at the end, then the next???
     {
-        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - Ende ??
+        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - end ??
         {
             Pop( sal_False );
             return bRet;
@@ -113,9 +105,9 @@ sal_Bool SwWrtShell::_PrvWrd()
 {
     sal_Bool bRet = sal_False;
     while( IsSttPara() )
-    {                               // wenn schon am Anfang, dann naechsten ???
+    {                            // if already at the beginning, then the next???
         if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
-        {                           // Document - Anfang ??
+        {                        // Document - beginning ??
             Pop( sal_False );
             return bRet;
         }
@@ -214,7 +206,7 @@ sal_Bool SwWrtShell::_BwdSentence()
         return 0;
     }
     if( !GoStartSentence()  && !IsSttPara() )
-            // nicht gefunden --> an den Absatz Anfang
+            // not found --> go to the beginning of the paragraph
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
     Combine();
@@ -232,7 +224,6 @@ sal_Bool SwWrtShell::_FwdPara()
     return bRet;
 }
 
-
 sal_Bool SwWrtShell::_BwdPara()
 {
     Push();
@@ -248,6 +239,5 @@ sal_Bool SwWrtShell::_BwdPara()
     Combine();
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
