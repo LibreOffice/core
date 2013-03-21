@@ -1321,7 +1321,7 @@ static sal_Bool getLine(osl_TFile* pFile, const sal_Char *pszLine, int MaxLen)
              (pChr < (pFile->m_ReadBuf + sizeof(pFile->m_ReadBuf) - 1));
              pChr++);
 
-        Max = min(pChr - pFile->m_pReadPtr, MaxLen);
+        Max = min((int) (pChr - pFile->m_pReadPtr), MaxLen);
         memcpy(pLine, pFile->m_pReadPtr, Max);
         MaxLen -= Max;
         pLine  += Max;
