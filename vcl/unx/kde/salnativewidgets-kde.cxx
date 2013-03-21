@@ -514,7 +514,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( "QSpinWidget", pClassName ) == 0 )
     {
-    const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue *> ( &aValue );
+    const SpinbuttonValue* pValue = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
 
     // Is any of the buttons pressed?
     QStyle::SCFlags eActive = QStyle::SC_None;
@@ -603,7 +603,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( "QScrollBar", pClassName ) == 0 )
     {
-    const ScrollbarValue *pValue = static_cast<const ScrollbarValue *> ( &aValue );
+    const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
 
     QStyle::SCFlags eActive = QStyle::SC_None;
     if ( pValue )
@@ -1008,7 +1008,7 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     m_pScrollBar->resize( qRect.size() );
     m_pScrollBar->setOrientation( bHorizontal? Qt::Horizontal: Qt::Vertical );
 
-    const ScrollbarValue *pValue = static_cast<const ScrollbarValue *> ( &aValue );
+    const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
     if ( pValue )
     {
     m_pScrollBar->setMinValue( pValue->mnMin );
