@@ -36,7 +36,6 @@
 
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -106,10 +105,7 @@ bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: FontWork-Slots invalidieren
- --------------------------------------------------------------------*/
-
+// Invalidate FontWork-Slots
 
 void SwWrtShell::DrawSelChanged( )
 {
@@ -122,7 +118,7 @@ void SwWrtShell::DrawSelChanged( )
     GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
 
     bool bOldVal = bNoInterrupt;
-    bNoInterrupt = true;    // Trick, um AttrChangedNotify ueber Timer auszufuehren
+    bNoInterrupt = true;    // Trick to run AttrChangedNotify by timer.
     GetView().AttrChangedNotify(this);
     bNoInterrupt = bOldVal;
 }
@@ -134,24 +130,20 @@ sal_Bool SwWrtShell::GotoMark( const ::rtl::OUString& rName )
     return MoveBookMark( BOOKMARK_INDEX, ppMark->get() );
 }
 
-
 sal_Bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
 {
     return MoveBookMark( BOOKMARK_INDEX, pMark );
 }
-
 
 sal_Bool SwWrtShell::GoNextBookmark()
 {
     return MoveBookMark( BOOKMARK_NEXT );
 }
 
-
 sal_Bool SwWrtShell::GoPrevBookmark()
 {
     return MoveBookMark( BOOKMARK_PREV );
 }
-
 
 void SwWrtShell::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 {
@@ -171,15 +163,15 @@ sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCa
 }
 
 
-    // fall ein util::URL-Button selektiert ist, dessen util::URL returnen, ansonsten
-    // einen LeerString
+    // If a util::URL-Button is selected, return its util::URL
+    // otherwise an emtpy string.
 bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
 {
     bool bRet = false;
     const SdrView *pDView = GetDrawView();
     if( pDView )
     {
-        // Ein Fly ist genau dann erreichbar, wenn er selektiert ist.
+        // A fly is precisely achievable if it is selected.
         const SdrMarkList &rMarkList = pDView->GetMarkedObjectList();
 
         if (rMarkList.GetMark(0))

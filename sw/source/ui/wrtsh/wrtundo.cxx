@@ -21,7 +21,7 @@
 #include <sfx2/app.hxx>
 #include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>                   // for Undo-Ids
 #include <IDocumentUndoRedo.hxx>
 #include <swdtflvr.hxx>
 #include <svtools/svtresid.hxx>
@@ -29,10 +29,8 @@
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>
 
-
-// Undo beendet alle Modi. Falls eine Selektion durch das Undo entstanden
-// ist, muss die fuer die weiteren Aktionen beruecksichtigt werden.
-
+// Undo ends all modes. If a selection is emerged by the Undo,
+// this must be considered for further action.
 
 void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 {
@@ -44,13 +42,13 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
     {
         case UNDO:
             DoUndo(sal_False); // #i21739#
-            // Modi zuruecksetzen
+            // Reset modes
             EnterStdMode();
             SwEditShell::Undo(nCnt);
             break;
         case REDO:
             DoUndo(sal_False); // #i21739#
-            // Modi zuruecksetzen
+            // Reset modes
             EnterStdMode();
             SwEditShell::Redo( nCnt );
             break;
@@ -70,8 +68,8 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
         if ( bFrmSelected )
             UnSelectFrm();
 
-        // Funktionspointer fuer das Aufheben der Selektion setzen
-        // bei Cursor setzen
+        // Set the function pointer for canceling the selection at the
+        // cursor position.
         fnKillSel = &SwWrtShell::ResetSelect;
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         bCreateXSelection = true;
@@ -91,11 +89,10 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
     if( bCreateXSelection )
         SwTransferable::CreateSelection( *this );
 
-    // Bug 32918: nach loeschen der Numerierung bleibt die Obj. Leiste stehen
-    //          Warum wird hier nicht immer ein CallChgLink gerufen?
+    // Bug 32918: After deleting of the numbering the object panel remains.
+    //            Why is not here always a CallChgLink called?
     CallChgLnk();
 }
-
 
 String SwWrtShell::GetDoString( DoType eDoType ) const
 {
@@ -154,6 +151,5 @@ String SwWrtShell::GetRepeatString() const
 
     return SvtResId(STR_REPEAT).toString() + str;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
