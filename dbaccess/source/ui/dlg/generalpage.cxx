@@ -634,6 +634,22 @@ namespace dbaui
         return 0L;
     }
 
+    // -----------------------------------------------------------------------
+    bool OGeneralPageWizard::canAdvance() const
+    {
+        switch ( GetDatabaseCreationMode() )
+        {
+        case eConnectExternal:
+            return !GetSelectedType().isEmpty();
+        case eOpenExisting:
+            return false;
+        case eCreateNew:
+            break;
+        }
+
+        return true;
+    }
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
