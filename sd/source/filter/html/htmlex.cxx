@@ -71,6 +71,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 
 #include "drawdoc.hxx"
+#include "htmlpublishmode.hxx"
 #include "Outliner.hxx"
 #include "sdpage.hxx"
 #include "sdattr.hxx"

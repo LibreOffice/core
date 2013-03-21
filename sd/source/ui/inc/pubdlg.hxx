@@ -33,8 +33,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-enum HtmlPublishMode { PUBLISH_HTML, PUBLISH_FRAMES, PUBLISH_WEBCAST, PUBLISH_KIOSK };
-
 class FixedText;
 class RadioButton;
 class ListBox;

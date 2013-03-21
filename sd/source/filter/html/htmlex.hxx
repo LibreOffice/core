@@ -35,7 +35,7 @@
 #include "assclass.hxx"
 
 #include "sdresid.hxx"
-#include "pubdlg.hxx"
+#include "htmlpublishmode.hxx"
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>

@@ -50,8 +50,10 @@
 #include "sdresid.hxx"
 #include "sdattr.hxx"
 #include "pubdlg.hrc"
+#include "pubdlg.hxx"
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
+#include "htmlpublishmode.hxx"
 #include "helpids.h"
 #include "buttonset.hxx"
 
