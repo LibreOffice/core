@@ -84,8 +84,8 @@ private:
     sal_Bool                    mbInit          : 1;
     sal_Bool                    mbEnableModify  : 1;
 
-    SD_DLLPRIVATE void Commit( SdOptionsItem& rCfgItem ) const;
-    SD_DLLPRIVATE ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const;
+    SAL_DLLPRIVATE void Commit( SdOptionsItem& rCfgItem ) const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const;
 
 protected:
 

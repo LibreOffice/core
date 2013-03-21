@@ -59,7 +59,7 @@ class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
-    static sal_Bool  SD_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
+    static sal_Bool  SAL_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
 
 public:
 
@@ -95,13 +95,13 @@ public:
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType   meDragType;
         const ::com::sun::star::uno::Any maTreeListBoxData;
-        SD_DLLPRIVATE virtual               ~SdPageObjsTransferable();
+        SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable();
 
-        SD_DLLPRIVATE virtual void      AddSupportedFormats();
-        SD_DLLPRIVATE virtual sal_Bool  GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-        SD_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction );
+        SAL_DLLPRIVATE virtual void      AddSupportedFormats();
+        SAL_DLLPRIVATE virtual sal_Bool  GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        SAL_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction );
 
-        SD_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+        SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
     };
 
     friend class SdPageObjsTLB::SdPageObjsTransferable;

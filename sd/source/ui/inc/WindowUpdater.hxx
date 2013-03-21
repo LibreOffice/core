@@ -133,7 +133,7 @@ private:
             The output device to update.  When it is <null/> then the call
             is ignored.
     */
-    SD_DLLPRIVATE void UpdateWindow (OutputDevice* pDevice) const;
+    SAL_DLLPRIVATE void UpdateWindow (OutputDevice* pDevice) const;
 };
 
 } // end of namespace sd
