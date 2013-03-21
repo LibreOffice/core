@@ -198,7 +198,7 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	-fno-omit-frame-pointer \
 	-fno-strict-aliasing \
 	$(if $(filter TRUE,$(ENABLE_LTO)),-fno-lto) \
-	$(if $(filter TRUE,$(HAVE_GCC_AVX)),-mno-avx)) \
+	$(if $(filter TRUE,$(HAVE_GCC_AVX)),-mno-avx) \
 ))
 
 ifeq ($(filter ANDROID WNT,$(OS)),)
