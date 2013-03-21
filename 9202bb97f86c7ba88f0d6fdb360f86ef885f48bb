@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+9U\u003d",
+        "filename": "sw/source/ui/wrtsh/wrtsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-21T13:06:19Z",
+      "side": 1,
+      "message": "Ummm... not following this comment :(",
+      "revId": "9202bb97f86c7ba88f0d6fdb360f86ef885f48bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
