@@ -31,7 +31,7 @@ OPENSSL_PLATFORM := $(if $(filter LINUX FREEBSD ANDROID,$(OS)),\
 	$(if $(filter GCC,$(COM)),\
 	mingw,\
 	$(if $(filter I,$(CPU)),\
-	VC-WIN32,VC_WIN64A))))))
+	VC-WIN32,VC-WIN64A))))))
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,openssl,build):
