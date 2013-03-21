@@ -651,6 +651,8 @@ void ClassFile::write(FileStream & file) const {
     writeU4(file, 0xCAFEBABE);
     writeU2(file, 0);
     writeU2(file, 49); // class file version of JRE 1.5
+    //writeU2(file, 50); // class file version of JRE 1.6
+    //writeU2(file, 51); // class file version of JRE 1.7
     writeU2(file, m_constantPoolCount);
     writeStream(file, m_constantPool);
     writeU2(file, static_cast< sal_uInt16 >(m_accessFlags));

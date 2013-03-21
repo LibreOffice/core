@@ -1620,6 +1620,14 @@ AC_ARG_WITH(junit,
     ],
 ,with_junit=yes)
 
+AC_ARG_WITH(java-version,
+    AS_HELP_STRING([--with-java-version],
+        [Specifiy java version. Default is 1.5.])
+    [
+                          Usage:     --with-java-version=1.6|1.7|...>
+    ],
+,)
+
 AC_ARG_WITH(perl-home,
     AS_HELP_STRING([--with-perl-home],
         [If you have installed Perl 5 Distribution, on your system, please
@@ -6127,8 +6135,13 @@ dnl ===================================================================
 dnl Set target Java bytecode version
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
-    _java_target_ver="1.5"
-
+AC_MSG_CHECKING([which java version to use])
+    if test -z "$with_java_version"; then
+        _java_target_ver="1.5"
+    else
+       _java_target_ver="$with_java_version"
+    fi
+    AC_MSG_RESULT([$_java_target_ver])
     JAVA_SOURCE_VER="$_java_target_ver"
     JAVA_TARGET_VER="$_java_target_ver"
 fi
