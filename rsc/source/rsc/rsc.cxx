@@ -167,10 +167,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                     ;
                 if( *pEqual )
                 {
-                    OString aSPath(pEqual + 1);
-                    if (aSPath.endsWith(OString(SAL_PATHDELIMITER)))
-                        aSPath = aSPath.copy(0, aSPath.getLength()-1);
-                    m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ), aSPath) );
+                    const rtl::OString aSPath( pEqual + 1 );
+                    DirEntry            aSDir(rtl::OStringToOUString(aSPath, RTL_TEXTENCODING_ASCII_US));
+
+                    m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
+                        rtl::OUStringToOString(aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US) ) );
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
