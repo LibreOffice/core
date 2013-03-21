@@ -537,15 +537,8 @@ static void ImplReadConfig( ImplConfigData* pData )
 
 static void ImplWriteConfig( ImplConfigData* pData )
 {
-#ifdef DBG_UTIL
-    if ( DbgIsAssert() )
-    {
-        if ( pData->mnTimeStamp != ImplSysGetConfigTimeStamp( pData->maFileName ) )
-        {
-            OSL_TRACE( "Config overwrites modified configfile:\n %s", rtl::OUStringToOString(pData->maFileName, RTL_TEXTENCODING_UTF8).getStr() );
-        }
-    }
-#endif
+    SAL_WARN_IF( pData->mnTimeStamp != ImplSysGetConfigTimeStamp( pData->maFileName ),
+        "tools.generic", "Config overwrites modified configfile: " << pData->maFileName );
 
     // Read config list from buffer
     sal_uIntPtr nBufLen;

@@ -26,8 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.h>
-// header for define DBG_ERROR1
-#include <tools/debug.hxx>
 
 #include <typeinfo>
 
@@ -201,8 +199,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
         catch( const uno::Exception & rEx )
         {
             (void)rEx; // avoid warning for pro build
-            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: %s",
-                        OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_WARN( "oox", "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: " << rEx.Message );
         }
     }
 
@@ -240,8 +237,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
         {
             (void)rEx; // avoid warning for pro build
 
-            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: %s",
-                        OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_WARN( "oox", "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: " << rEx.Message );
         }
     }
 
