@@ -60,11 +60,13 @@ $(eval $(call gb_Library_use_externals,merged,\
 	nss3 \
 	openssl \
 	$(if $(filter-out IOS,$(OS)),\
+	cdr \
 	wpd \
 	wpg \
 	wps \
 	mwaw \
-	) \
+	mspub \
+	visio) \
 	zlib \
 ))
 

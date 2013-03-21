@@ -73,7 +73,9 @@ gb_MERGEDLIBS := \
 	uui \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
-	$(if $(filter-out IOS,$(OS)),wpftwriter) \
+	$(if $(filter-out IOS,$(OS)), \
+	wpftdraw \
+	wpftwriter) \
 	xmlscript \
 	xmlsecurity \
 	xo \
