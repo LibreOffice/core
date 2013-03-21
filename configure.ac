@@ -4824,8 +4824,10 @@ find_msvc_dlls()
 {
     if test "$CPUNAME" = "INTEL"; then
         vsarch=x86
-    else
+    elif test $VCVER = 9; then
         vsarch=amd64
+    else
+        vsarch=x64
     fi
 
     msvcdllpath="$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT"
