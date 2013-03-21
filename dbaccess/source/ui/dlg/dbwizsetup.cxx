@@ -373,7 +373,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         OSL_FAIL( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
     }
 
-    enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPageWizard::eOpenExisting );
+    enableButtons( WZB_NEXT, m_pGeneralPage->canAdvance() );
         // TODO: this should go into the base class. Point is, we activate a path whose *last*
         // step is also the current one. The base class should automatically disable
         // the Next button in such a case. However, not for this patch ...
@@ -595,9 +595,11 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
         pPage->SetServiceFactory( m_pImpl->getORB() );
         pPage->SetAdminDialog(this, this);
 
-        defaultButton( _nState == PAGE_DBSETUPWIZARD_FINAL ? WZB_FINISH : WZB_NEXT );
-        enableButtons( WZB_FINISH, _nState == PAGE_DBSETUPWIZARD_FINAL );
-        enableButtons( WZB_NEXT, _nState == PAGE_DBSETUPWIZARD_FINAL ? sal_False : sal_True);
+        const bool bEnableFinish = _nState == PAGE_DBSETUPWIZARD_FINAL;
+        const bool bEnableNext = !bEnableFinish && pPage->canAdvance();
+        defaultButton( bEnableFinish ? WZB_FINISH : WZB_NEXT);
+        enableButtons( WZB_FINISH, bEnableFinish );
+        enableButtons( WZB_NEXT, bEnableNext );
         pPage->Show();
     }
     return pPage;
@@ -668,6 +670,7 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
     switch(_nState)
     {
         case PAGE_DBSETUPWIZARD_INTRO:
+            enableButtons( WZB_NEXT, m_pGeneralPage->canAdvance() );
             m_sOldURL = m_sURL;
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
