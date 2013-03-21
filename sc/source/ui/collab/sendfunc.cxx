@@ -181,11 +181,10 @@ bool ScDocFuncSend::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell,
     return true; // needs some code auditing action
 }
 
-sal_Bool ScDocFuncSend::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
-                          sal_Bool bInterpret, sal_Bool bApi )
+bool ScDocFuncSend::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
     SAL_INFO( "sc.tubes", "PutData not implemented!" );
-    return ScDocFunc::PutData( rPos, rEngine, bInterpret, bApi );
+    return ScDocFunc::PutData( rPos, rEngine, bApi );
 }
 
 bool ScDocFuncSend::SetCellText(

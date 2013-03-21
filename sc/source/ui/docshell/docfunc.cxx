@@ -1005,7 +1005,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 
         typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
 
-sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, sal_Bool bInterpret, sal_Bool bApi )
+bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
     //  PutData ruft PutCell oder SetNormalString
 
@@ -1053,7 +1053,6 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
         // Set the paragraph attributes back to the EditEngine.
         if (!aRememberItems.empty())
         {
-//            ScMyRememberItem* pRememberItem = NULL;
             ScMyRememberItemList::iterator aItr = aRememberItems.begin();
             while (aItr != aRememberItems.end())
             {
@@ -1070,8 +1069,8 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
     }
     else
     {
-        String aText = rEngine.GetText();
-        if ( bInterpret || !aText.Len() )
+        OUString aText = rEngine.GetText();
+        if (aText.isEmpty())
         {
             bool bNumFmtSet = false;
             bRet = SetNormalString( bNumFmtSet, rPos, aText, bApi );
