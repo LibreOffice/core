@@ -805,7 +805,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_SCROLLBAR:
         {
-            ScrollbarValue* pScrollbarVal = (ScrollbarValue *)&aValue;
+            const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
 
             if( nPart == PART_DRAW_BACKGROUND_VERT ||
                 nPart == PART_DRAW_BACKGROUND_HORZ )
@@ -1025,16 +1025,13 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
 
                 //buttons:
-                SpinbuttonValue* pSpinButtonVal = (SpinbuttonValue *)&aValue;
+                const SpinbuttonValue* pSpinButtonVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
                 ControlState nUpperState = CTRL_STATE_ENABLED;//state of the upper button
                 ControlState nLowerState = CTRL_STATE_ENABLED;//and of the lower button
                 if(pSpinButtonVal) {//pSpinButtonVal is sometimes null
                     nUpperState = (ControlState) pSpinButtonVal->mnUpperState;
                     nLowerState = (ControlState) pSpinButtonVal->mnLowerState;
-                }
 
-                if( pSpinButtonVal )
-                {
                     HIThemeButtonDrawInfo aSpinInfo;
                     aSpinInfo.kind = kThemeIncDecButton;
                     aSpinInfo.state = kThemeStateActive;

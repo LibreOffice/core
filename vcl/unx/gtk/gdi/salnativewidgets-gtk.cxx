@@ -1749,7 +1749,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                                           const OUString& )
 {
     OSL_ASSERT( aValue.getType() == CTRL_SCROLLBAR );
-    const ScrollbarValue* pScrollbarVal = static_cast<const ScrollbarValue *>(&aValue);
+    const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
     GdkPixmap*      pixmap = NULL;
     Rectangle        pixmapRect, scrollbarRect;
     GtkStateType    stateType;
