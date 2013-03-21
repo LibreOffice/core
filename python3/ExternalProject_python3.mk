@@ -35,7 +35,7 @@ ifeq ($(VCVER),110)
 	,PCBuild)
 else ifeq ($(VCVER),100)
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64" /ToolsVersion:4.0 \
+		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /ToolsVersion:4.0 \
 		&& cd $(EXTERNAL_WORKDIR) \
 		&& ln -s PCbuild LO_lib \
 	,PCBuild)
