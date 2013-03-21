@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 
 #define JPEGMINREAD 512
 
-extern "C" void* CreateBitmap( void* pJPEGReader, void* pJPEGCreateBitmapParam )
+extern "C" void* CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapParam )
 {
     return ( (JPEGReader*) pJPEGReader )->CreateBitmap( pJPEGCreateBitmapParam );
 }

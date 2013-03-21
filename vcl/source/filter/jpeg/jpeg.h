@@ -53,7 +53,7 @@ long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight, lo
 void*   GetScanline( void* pJPEGWriter, long nY );
 
 void    ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines );
-void*   CreateBitmap( void* pJPEGReader, void* pJPEGCreateBitmapParam );
+void*   CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapParam );
 
 /* TODO: when incompatible changes are possible again
    the preview size hint should be redone */

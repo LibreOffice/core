@@ -146,7 +146,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     aCreateBitmapParam.X_density = cinfo.X_density;
     aCreateBitmapParam.Y_density = cinfo.Y_density;
     aCreateBitmapParam.bGray = cinfo.output_components == 1;
-    pDIB = CreateBitmap( pJPEGReader, &aCreateBitmapParam );
+    pDIB = CreateBitmapFromJPEGReader( pJPEGReader, &aCreateBitmapParam );
     nAlignedWidth = aCreateBitmapParam.nAlignedWidth;
     range_limit=cinfo.sample_range_limit;
 
