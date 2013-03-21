@@ -169,9 +169,9 @@ void E3dLatheObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralLathe3d);
 }
 
-sal_Bool E3dLatheObj::IsBreakObjPossible()
+bool E3dLatheObj::IsBreakObjPossible()
 {
-    return sal_True;
+    return true;
 }
 
 SdrAttrObj* E3dLatheObj::GetBreakObj()

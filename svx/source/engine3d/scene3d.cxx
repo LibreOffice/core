@@ -54,7 +54,7 @@ class ImpRemap3DDepth
     double                      mfMinimalDepth;
 
     // bit field
-    unsigned                    mbIsScene : 1;
+    bool                        mbIsScene : 1;
 
 public:
     ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth);
@@ -65,20 +65,20 @@ public:
     bool operator<(const ImpRemap3DDepth& rComp) const;
 
     sal_uInt32 GetOrdNum() const { return mnOrdNum; }
-    sal_Bool IsScene() const { return mbIsScene; }
+    bool IsScene() const { return mbIsScene; }
 };
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth)
 :   mnOrdNum(nOrdNum),
     mfMinimalDepth(fMinimalDepth),
-    mbIsScene(sal_False)
+    mbIsScene(false)
 {
 }
 
 ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum)
 :   mnOrdNum(nOrdNum),
     mfMinimalDepth(0.0),
-    mbIsScene(sal_True)
+    mbIsScene(true)
 {
 }
 
@@ -90,13 +90,13 @@ bool ImpRemap3DDepth::operator<(const ImpRemap3DDepth& rComp) const
 {
     if(IsScene())
     {
-        return sal_False;
+        return false;
     }
     else
     {
         if(rComp.IsScene())
         {
-            return sal_True;
+            return true;
         }
         else
         {
@@ -661,7 +661,7 @@ void E3dScene::RecalcSnapRect()
     }
 }
 
-sal_Bool E3dScene::IsBreakObjPossible()
+bool E3dScene::IsBreakObjPossible()
 {
     // Break scene, if all members are able to break
     SdrObjListIter a3DIterator(maSubList, IM_DEEPWITHGROUPS);
@@ -671,10 +671,10 @@ sal_Bool E3dScene::IsBreakObjPossible()
         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
         DBG_ASSERT(pObj->ISA(E3dObject), "only 3D objects are allowed in scenes!");
         if(!pObj->IsBreakObjPossible())
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 basegfx::B2DPolyPolygon E3dScene::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
@@ -689,7 +689,7 @@ bool E3dScene::BegCreate(SdrDragStat& rStat)
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
-    return sal_True;
+    return true;
 }
 
 bool E3dScene::MovCreate(SdrDragStat& rStat)
@@ -701,7 +701,7 @@ bool E3dScene::MovCreate(SdrDragStat& rStat)
     NbcSetSnapRect(aRect1);
     SetBoundRectDirty();
     bSnapRectDirty=sal_True;
-    return sal_True;
+    return true;
 }
 
 bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -716,7 +716,7 @@ bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 bool E3dScene::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return sal_False;
+    return false;
 }
 
 void E3dScene::BrkCreate(SdrDragStat& /*rStat*/)

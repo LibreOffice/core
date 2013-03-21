@@ -141,9 +141,9 @@ void E3dExtrudeObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralExtrude3d);
 }
 
-sal_Bool E3dExtrudeObj::IsBreakObjPossible()
+bool E3dExtrudeObj::IsBreakObjPossible()
 {
-    return sal_True;
+    return true;
 }
 
 SdrAttrObj* E3dExtrudeObj::GetBreakObj()

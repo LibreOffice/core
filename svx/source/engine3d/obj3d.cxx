@@ -213,9 +213,9 @@ void E3dObject::SetSelected(bool bNew)
 
 // Break, default implementations
 
-sal_Bool E3dObject::IsBreakObjPossible()
+bool E3dObject::IsBreakObjPossible()
 {
-    return sal_False;
+    return false;
 }
 
 SdrAttrObj* E3dObject::GetBreakObj()
@@ -960,17 +960,17 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::
     return aRetval;
 }
 
-sal_Bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
+bool E3dCompoundObject::IsAOrdNumRemapCandidate(E3dScene*& prScene) const
 {
     if(GetObjList()
         && GetObjList()->GetOwnerObj()
         && GetObjList()->GetOwnerObj()->ISA(E3dScene))
     {
         prScene = (E3dScene*)GetObjList()->GetOwnerObj();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

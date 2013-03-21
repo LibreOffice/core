@@ -93,7 +93,7 @@ public:
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);
     const basegfx::B2DPolyPolygon &GetExtrudePolygon() { return maExtrudePolygon; }
 
-    virtual sal_Bool IsBreakObjPossible();
+    virtual bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 

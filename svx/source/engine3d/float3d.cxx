@@ -523,11 +523,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     if( SFX_ITEM_SET == eState )
     {
         sal_uInt32 nState = ( ( const SfxUInt32Item* )pItem )->GetValue();
-        sal_Bool bExtrude = (sal_Bool) ( nState & 2 );
-        sal_Bool bSphere  = (sal_Bool) ( nState & 4 );
-        sal_Bool bCube    = (sal_Bool) ( nState & 8 );
+        bool bExtrude = ( nState & 2 );
+        bool bSphere  = ( nState & 4 );
+        bool bCube    = ( nState & 8 );
 
-        sal_Bool bChart = (sal_Bool) ( nState & 32 ); // Chart
+        bool bChart = ( nState & 32 ); // Chart
 
         if( !bChart )
         {
@@ -2614,7 +2614,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
 // -----------------------------------------------------------------------
 IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
 {
-    sal_Bool bUpdatePreview = sal_False;
+    bool bUpdatePreview = false;
 
     if( pBtn )
     {
@@ -2636,7 +2636,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             aBtnNormalsObj.Check( pBtn == &aBtnNormalsObj );
             aBtnNormalsFlat.Check( pBtn == &aBtnNormalsFlat );
             aBtnNormalsSphere.Check( pBtn == &aBtnNormalsSphere );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pBtn == &aBtnLight1 ||
                  pBtn == &aBtnLight2 ||
@@ -2705,7 +2705,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             pLb->Enable( bEnable );
 
             ClickLight(*pBtn);
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         // Textures
         else if( pBtn == &aBtnTexLuminance ||
@@ -2713,14 +2713,14 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
         {
             aBtnTexLuminance.Check( pBtn == &aBtnTexLuminance );
             aBtnTexColor.Check( pBtn == &aBtnTexColor );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pBtn == &aBtnTexReplace ||
                  pBtn == &aBtnTexModulate )
         {
             aBtnTexReplace.Check( pBtn == &aBtnTexReplace );
             aBtnTexModulate.Check( pBtn == &aBtnTexModulate );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pBtn == &aBtnTexParallelX ||
                  pBtn == &aBtnTexCircleX ||
@@ -2729,7 +2729,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             aBtnTexParallelX.Check( pBtn == &aBtnTexParallelX );
             aBtnTexCircleX.Check( pBtn == &aBtnTexCircleX );
             aBtnTexObjectX.Check( pBtn == &aBtnTexObjectX );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pBtn == &aBtnTexParallelY ||
                  pBtn == &aBtnTexCircleY ||
@@ -2738,20 +2738,20 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             aBtnTexParallelY.Check( pBtn == &aBtnTexParallelY );
             aBtnTexCircleY.Check( pBtn == &aBtnTexCircleY );
             aBtnTexObjectY.Check( pBtn == &aBtnTexObjectY );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pBtn == &aBtnShadow3d  )
         {
             pBtn->Check( !pBtn->IsChecked() );
             aFtSlant.Enable( pBtn->IsChecked() );
             aMtrSlant.Enable( pBtn->IsChecked() );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         // Other (no groups)
         else if( pBtn != NULL )
         {
             pBtn->Check( !pBtn->IsChecked() );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
 
         if( nSId > 0 )
@@ -2764,7 +2764,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
                     nSId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }
-        else if( bUpdatePreview == sal_True )
+        else if( bUpdatePreview )
             UpdatePreview();
     }
     return( 0L );
@@ -2805,7 +2805,7 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
 {
     if( p )
     {
-        sal_Bool bUpdatePreview = sal_False;
+        bool bUpdatePreview = false;
 
         // Material
         if( p == &aLbMatFavorites )
@@ -2868,19 +2868,19 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
             LBSelectColor( &aLbMatSpecular, aColSpec );
             aMtrMatSpecularIntensity.SetValue( nSpecIntens );
 
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( p == &aLbMatColor ||
                  p == &aLbMatEmission ||
                  p == &aLbMatSpecular )
         {
             aLbMatFavorites.SelectEntryPos( 0 );
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         // Lighting
         else if( p == &aLbAmbientlight )
         {
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( p == &aLbLight1 ||
                  p == &aLbLight2 ||
@@ -2891,12 +2891,12 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
                  p == &aLbLight7 ||
                  p == &aLbLight8 )
         {
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( p == &aLbShademode )
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
 
-        if( bUpdatePreview == sal_True )
+        if( bUpdatePreview )
             UpdatePreview();
     }
     return( 0L );
@@ -2907,27 +2907,27 @@ IMPL_LINK( Svx3DWin, ModifyHdl, void*, pField )
 {
     if( pField )
     {
-        sal_Bool bUpdatePreview = sal_False;
+        bool bUpdatePreview = false;
 
         // Material
         if( pField == &aMtrMatSpecularIntensity )
         {
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pField == &aNumHorizontal )
         {
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pField == &aNumVertical )
         {
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
         else if( pField == &aMtrSlant )
         {
-            bUpdatePreview = sal_True;
+            bUpdatePreview = true;
         }
 
-        if( bUpdatePreview == sal_True )
+        if( bUpdatePreview )
             UpdatePreview();
     }
     return( 0L );

@@ -221,7 +221,7 @@ public:
     B3dCamera& GetCameraSet() { return aCameraSet; }
 
     // break up
-    virtual sal_Bool IsBreakObjPossible();
+    virtual bool IsBreakObjPossible();
 
     // polygon which is built during creation
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;

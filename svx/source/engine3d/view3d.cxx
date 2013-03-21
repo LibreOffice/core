@@ -234,7 +234,7 @@ E3dView::E3dView(SdrModel* pModel, OutputDevice* pOut) :
 void E3dView::DrawMarkedObj(OutputDevice& rOut) const
 {
     // Does 3D objects exist which scenes are not selected?
-    sal_Bool bSpecialHandling = sal_False;
+    bool bSpecialHandling = false;
     E3dScene *pScene = NULL;
 
     long nCnt = GetMarkedObjectCount();
@@ -246,7 +246,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             // related scene
             pScene = ((E3dCompoundObject*)pObj)->GetScene();
             if(pScene && !IsObjMarked(pScene))
-                bSpecialHandling = sal_True;
+                bSpecialHandling = true;
         }
         // Reset all selection flags
         if(pObj && pObj->ISA(E3dObject))
@@ -492,9 +492,9 @@ sal_Bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLs
 }
 
 // Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point /*aOffset*/)
+bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point /*aOffset*/)
 {
-    sal_Bool bRetval(sal_False);
+    bool bRetval(false);
 
     if(pSrcScene && pDstScene)
     {
@@ -588,7 +588,7 @@ sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene*
                     pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
                     pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), sal_True);
                     pDstScene->Insert3DObj(pNewCompoundObj);
-                    bRetval = sal_True;
+                    bRetval = true;
 
                     // Create undo
                     if( GetModel()->IsUndoEnabled() )
@@ -601,11 +601,11 @@ sal_Bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene*
     return bRetval;
 }
 
-sal_Bool E3dView::IsConvertTo3DObjPossible() const
+bool E3dView::IsConvertTo3DObjPossible() const
 {
     sal_Bool bAny3D(sal_False);
     sal_Bool bGroupSelected(sal_False);
-    sal_Bool bRetval(sal_True);
+    bool bRetval(true);
 
     for(sal_uInt32 a=0;!bAny3D && a<GetMarkedObjectCount();a++)
     {
@@ -1194,25 +1194,25 @@ sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     }
     else
     {
-        sal_Bool bOwnActionNecessary;
+        bool bOwnActionNecessary;
         if (pHdl == NULL)
         {
-           bOwnActionNecessary = sal_True;
+           bOwnActionNecessary = true;
         }
         else if (pHdl->IsVertexHdl() || pHdl->IsCornerHdl())
         {
-           bOwnActionNecessary = sal_True;
+           bOwnActionNecessary = true;
         }
         else
         {
-           bOwnActionNecessary = sal_False;
+           bOwnActionNecessary = false;
         }
 
         if(bOwnActionNecessary && GetMarkedObjectCount() >= 1)
         {
             E3dDragConstraint eConstraint = E3DDRAG_CONSTR_XYZ;
-            sal_Bool bThereAreRootScenes = sal_False;
-            sal_Bool bThereAre3DObjects = sal_False;
+            bool bThereAreRootScenes = false;
+            bool bThereAre3DObjects = false;
             long nCnt = GetMarkedObjectCount();
             for(long nObjs = 0;nObjs < nCnt;nObjs++)
             {
@@ -1220,9 +1220,9 @@ sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                 if(pObj)
                 {
                     if(pObj->ISA(E3dScene) && ((E3dScene*)pObj)->GetScene() == pObj)
-                        bThereAreRootScenes = sal_True;
+                        bThereAreRootScenes = true;
                     if(pObj->ISA(E3dObject))
-                        bThereAre3DObjects = sal_True;
+                        bThereAre3DObjects = true;
                 }
             }
             if( bThereAre3DObjects )
@@ -1537,7 +1537,7 @@ void E3dView::InitView ()
     mpMirrorOverlay = 0L;
 }
 
-sal_Bool E3dView::IsBreak3DObjPossible() const
+bool E3dView::IsBreak3DObjPossible() const
 {
     sal_uIntPtr nCount = GetMarkedObjectCount();
 
@@ -1552,11 +1552,11 @@ sal_Bool E3dView::IsBreak3DObjPossible() const
             if (pObj && pObj->ISA(E3dObject))
             {
                 if(!(((E3dObject*)pObj)->IsBreakObjPossible()))
-                    return sal_False;
+                    return false;
             }
             else
             {
-                return sal_False;
+                return false;
             }
 
             i++;
@@ -1564,10 +1564,10 @@ sal_Bool E3dView::IsBreak3DObjPossible() const
     }
     else
     {
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void E3dView::Break3DObj()
@@ -1622,15 +1622,15 @@ void E3dView::CheckPossibilities()
     if(bGroupPossible || bUnGroupPossible || bGrpEnterPossible)
     {
         sal_Int32 nMarkCnt = GetMarkedObjectCount();
-        sal_Bool bCoumpound = sal_False;
-        sal_Bool b3DObject = sal_False;
+        bool bCoumpound = false;
+        bool b3DObject = false;
         for(sal_Int32 nObjs = 0L; (nObjs < nMarkCnt) && !bCoumpound; nObjs++)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
-                bCoumpound = sal_True;
+                bCoumpound = true;
             if(pObj && pObj->ISA(E3dObject))
-                b3DObject = sal_True;
+                b3DObject = true;
         }
 
         // So far: there are two or more of any objects selected. See if

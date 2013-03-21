@@ -28,14 +28,14 @@
 #include "svx/objfac3d.hxx"
 #include <svx/svdobj.hxx>
 
-static sal_Bool bInit = sal_False;
+static bool bInit = false;
 
 E3dObjFactory::E3dObjFactory()
 {
     if ( !bInit )
     {
         SdrObjFactory::InsertMakeObjectHdl(LINK(this, E3dObjFactory, MakeObject));
-        bInit = sal_True;
+        bInit = true;
     }
 }
 

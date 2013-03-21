@@ -199,7 +199,7 @@ public:
     void SetSelected(bool bNew);
 
     // break up
-    virtual sal_Bool IsBreakObjPossible();
+    virtual bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 
@@ -311,7 +311,7 @@ public :
     // material of the object
     const Color& GetMaterialAmbientColor() const { return aMaterialAmbientColor; }
 
-    sal_Bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
+    bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };
 
 #endif          // _E3D_OBJ3D_HXX

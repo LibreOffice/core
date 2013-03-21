@@ -1361,9 +1361,9 @@ sal_Bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, sal_Bool bPrev)
     sal_uInt32 nSearchBeg;
     E3dScene* pScene = NULL;
     SdrObject* pObjHit = (bPrev) ? pBtmObjHit : pTopObjHit;
-    sal_Bool bRemap = pObjHit->ISA(E3dCompoundObject)
+    bool bRemap = pObjHit->ISA(E3dCompoundObject)
         ? ((E3dCompoundObject*)pObjHit)->IsAOrdNumRemapCandidate(pScene)
-        : sal_False;
+        : false;
 
     if(bPrev)
     {

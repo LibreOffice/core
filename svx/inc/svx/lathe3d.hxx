@@ -105,7 +105,7 @@ private:
     const basegfx::B2DPolyPolygon& GetPolyPoly2D() { return maPolyPoly2D; }
 
     // break up
-    virtual sal_Bool IsBreakObjPossible();
+    virtual bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 

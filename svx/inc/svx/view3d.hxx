@@ -105,9 +105,9 @@ public:
     virtual sal_Bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-    sal_Bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
+    bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
 
-    sal_Bool IsConvertTo3DObjPossible() const;
+    bool IsConvertTo3DObjPossible() const;
     void ConvertMarkedObjTo3D(sal_Bool bExtrude=sal_True, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
     // Nachtraeglichhe Korrekturmoeglichkeit um alle Extrudes in einer
@@ -244,7 +244,7 @@ public:
     long GetVDefaultSegments() const { return nVDefaultSegments; }
     void SetVDefaultSegments(long nSegs) { nVDefaultSegments = nSegs; }
 
-    sal_Bool IsBreak3DObjPossible() const;
+    bool IsBreak3DObjPossible() const;
     void Break3DObj();
 
     sal_Bool DoubleSided () const

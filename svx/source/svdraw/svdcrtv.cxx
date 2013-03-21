@@ -650,7 +650,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     && pCreatePV->GetAktGroup()
                     && pCreatePV->GetAktGroup()->ISA(E3dScene))
                 {
-                    sal_Bool bDidInsert = ((E3dView*)this)->ImpCloneAll3DObjectsToDestScene(
+                    bool bDidInsert = ((E3dView*)this)->ImpCloneAll3DObjectsToDestScene(
                         (E3dScene*)pObjMerk, (E3dScene*)pCreatePV->GetAktGroup(), Point(0, 0));
 
                     if(bDidInsert)
