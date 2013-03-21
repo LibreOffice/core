@@ -144,7 +144,7 @@ SdStyleSheet::SdStyleSheet( const SdStyleSheet & r )
 SdStyleSheet::~SdStyleSheet()
 {
     delete pSet;
-    pSet = NULL;    // damit nachfolgende Destruktoren eine Chance haben
+    pSet = NULL;    // that following destructors also get a change
 }
 
 void SdStyleSheet::SetApiName( const OUString& rApiName )
@@ -165,31 +165,19 @@ void SdStyleSheet::Load (SvStream& rIn, sal_uInt16 nVersion)
 {
     SfxStyleSheetBase::Load(rIn, nVersion);
 
-    // Die Default-Maske war frueher 0xAFFE.
-    // Aus dieser Default-Maske wurden die benoetigten Flags ausmaskiert.
-    // Nun wurde das Flag SFXSTYLEBIT_READONLY eingefuehrt, was dazu
-    // das alle StyleSheets read-only waren.
-    // Da im Draw kein StyleSheet read-only sein soll, wird an dieser Stelle
-    // das Flag zurueckgesetzt.
+    /* previously, the default mask was 0xAFFE. The needed flags were masked
+       from this mask. Now the flag SFXSTYLEBIT_READONLY was introduced and with
+       this, all style sheets are read only. Since no style sheet should be read
+       only in Draw, we reset the flag here.  */
     nMask &= ~SFXSTYLEBIT_READONLY;
 }
 
-/*************************************************************************
-|*
-|* Store
-|*
-\************************************************************************/
 
 void SdStyleSheet::Store(SvStream& rOut)
 {
     SfxStyleSheetBase::Store(rOut);
 }
 
-/*************************************************************************
-|*
-|* Parent setzen
-|*
-\************************************************************************/
 
 bool SdStyleSheet::SetParent(const String& rParentName)
 {
@@ -197,7 +185,7 @@ bool SdStyleSheet::SetParent(const String& rParentName)
 
     if (SfxStyleSheet::SetParent(rParentName))
     {
-        // PseudoStyleSheets haben keine eigenen ItemSets
+        // PseudoStyleSheets do not have their own ItemSets
         if (nFamily != SD_STYLE_FAMILY_PSEUDO)
         {
             if( rParentName.Len() )
@@ -226,17 +214,14 @@ bool SdStyleSheet::SetParent(const String& rParentName)
     return bResult;
 }
 
-/*************************************************************************
-|*
-|* ItemSet ggfs. erzeugen und herausreichen
-|*
-\************************************************************************/
-
+/**
+ * create if necessary and return ItemSets
+ */
 SfxItemSet& SdStyleSheet::GetItemSet()
 {
     if (nFamily == SD_STYLE_FAMILY_GRAPHICS || nFamily == SD_STYLE_FAMILY_MASTERPAGE)
     {
-        // ggfs. das ItemSet 'on demand' anlegen
+        // we create the ItemSet 'on demand' if necessary
         if (!pSet)
         {
             sal_uInt16 nWhichPairTable[] = { XATTR_LINE_FIRST,              XATTR_LINE_LAST,
@@ -288,8 +273,8 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         return *pSet;
     }
 
-    // dies ist eine Stellvertretervorlage fuer die interne Vorlage des
-    // aktuellen Praesentationslayouts: dessen ItemSet returnieren
+    // this is a dummy template for the internal template of the
+    // current presentation layout; return the ItemSet of that template
     else
     {
 
@@ -329,13 +314,10 @@ SfxItemSet& SdStyleSheet::GetItemSet()
     }
 }
 
-/*************************************************************************
-|*
-|* IsUsed(), eine Vorlage gilt als benutzt, wenn sie von eingefuegten Objekten
-|*           oder von benutzten Vorlagen referenziert wird
-|*
-\************************************************************************/
-
+/**
+ * A template is used when it is referenced by inserted object or by a used
+ * template.
+ */
 bool SdStyleSheet::IsUsed() const
 {
     bool bResult = false;
@@ -378,12 +360,9 @@ bool SdStyleSheet::IsUsed() const
     return bResult;
 }
 
-/*************************************************************************
-|*
-|* das StyleSheet ermitteln, fuer das dieses StyleSheet steht
-|*
-\************************************************************************/
-
+/**
+ * Determine the style sheet for which this dummy is for.
+ */
 SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
 {
     OUString aRealStyle;
@@ -421,8 +400,8 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         }
         else
         {
-            // Noch keine Seite vorhanden
-            // Dieses kann beim Aktualisieren vonDokumentvorlagen vorkommen
+            /* no page available yet. This can happen when actualising the
+               document templates.  */
             SfxStyleSheetIterator aIter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
             SfxStyleSheetBase* pSheet = aIter.First();
             if( pSheet )
@@ -435,8 +414,8 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
             }
     }
 
-    // jetzt vom Namen (landessprachlich angepasst) auf den internen
-    // Namen (unabhaengig von der Landessprache) mappen
+    /* now map from the name (specified for country language) to the internal
+       name (independent of the country language)  */
     String aInternalName;
 
     if (aName == String(SdResId(STR_PSEUDOSHEET_TITLE)))
@@ -487,18 +466,15 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     return pRealStyle;
 }
 
-/*************************************************************************
-|*
-|* das PseudoStyleSheet ermitteln, durch das dieses StyleSheet vertreten wird
-|*
-\************************************************************************/
-
+/**
+ * Determine pseudo style sheet which stands for this style sheet.
+ */
 SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
 {
     SdStyleSheet* pPseudoStyle = NULL;
     OUString aSep( SD_LT_SEPARATOR );
     OUString aStyleName(aName);
-        // ohne Layoutnamen und Separator
+        // without layout name and seperator
 
     if( aStyleName.indexOf(aSep) >=0 )
     {
@@ -544,20 +520,13 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
 }
 
 
-/*************************************************************************
-|*
-|* Notify
-|*
-\************************************************************************/
-
 void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    // erstmal die Basisklassenfunktionalitaet
+    // first, base class functionality
     SfxStyleSheet::Notify(rBC, rHint);
 
-    // wenn der Stellvertreter ein Notify bezueglich geaenderter Attribute
-    // bekommt, sorgt er dafuer, dass das eigentlich gemeinte StyleSheet
-    // broadcastet
+    /* if the dummy gets a notify about a changed attribute, he takes care that
+       the actual ment style sheet sends broadcasts. */
     SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
     sal_uLong nId = pSimple == NULL ? 0 : pSimple->GetId();
     if (nId == SFX_HINT_DATACHANGED && nFamily == SD_STYLE_FAMILY_PSEUDO)
@@ -568,20 +537,18 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-/*************************************************************************
-|* AdjustToFontHeight passt die Bulletbreite und den linken Texteinzug
-|* des uebergebenen ItemSets dessen Fonthoehe an. Die neuen Werte werden so
-|* berechnet, dass das Verhaeltnis zur Fonthoehe so ist wie im StyleSheet.
-|*
-|* bOnlyMissingItems legt fest, ob lediglich nicht gesetzte Items ergaenzt
-|* (sal_True) oder explizit gesetzte Items ueberschreiben werden sollen (sal_False)
-|*
-\************************************************************************/
-
+/**
+ * Adjust the bullet width and the left text indent of the provided ItemSets to
+ * their font height. The new values are calculated that the ratio to the font
+ * height is as in the style sheet.
+ *
+ * @param bOnlyMissingItems If sal_True, only not set items are completed. With
+ * sal_False, are items are overwritten.
+ */
 void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems)
 {
-    // Bulletbreite und Texteinzug an neue Fonthoehe
-    // anpassen, wenn sie nicht explizit gesetzt wurden
+    /* If not explicit set, ddjust bullet width and text indent to new font
+       height. */
     SfxStyleFamily eFamily = nFamily;
     OUString aStyleName(aName);
     if (eFamily == SD_STYLE_FAMILY_PSEUDO)

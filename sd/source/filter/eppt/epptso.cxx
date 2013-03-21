@@ -1038,8 +1038,9 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
     }
 }
 
-//  ----------------------------------------------------------------------------------------
-//  laedt und konvertiert text aus shape, ergebnis ist mnTextSize gespeichert;
+/**
+ * Loads and converts text from shape, value is stored in mnTextSize.
+ */
 sal_Bool PPTWriter::ImplGetText()
 {
     mnTextSize = 0;
@@ -1079,7 +1080,7 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     maRect.Move( (sal_Int32)( -( fWidthHalf - fXDiff ) ), (sal_Int32)(  - ( fHeightHalf + fYDiff ) ) );
     mnAngle *= 655;
     mnAngle += 0x8000;
-    mnAngle &=~0xffff;                                  // nAngle auf volle Gradzahl runden
+    mnAngle &=~0xffff;                                  // round nAngle to full grads
     rPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
 
     if ( ( mnAngle >= ( 45 << 16 ) && mnAngle < ( 135 << 16 ) ) ||
@@ -3478,7 +3479,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
                 mnAngle *= 655;
                 mnAngle += 0x8000;
-                mnAngle &=~0xffff;  // nAngle auf volle Gradzahl runden
+                mnAngle &=~0xffff;  // round nAngle to full grad
                 aPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
                 mpPptEscherEx->SetGroupSnapRect( nGroupLevel, maRect );
                 mpPptEscherEx->SetGroupLogicRect( nGroupLevel, maRect );

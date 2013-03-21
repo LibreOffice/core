@@ -1350,7 +1350,7 @@ void PPTWriter::ImplWriteOLE( )
 }
 
 // ---------------------------------------------------------------------------------------------
-// PersistantTable und UserEditAtom schreiben
+// write PersistantTable and UserEditAtom
 
 sal_Bool PPTWriter::ImplWriteAtomEnding()
 {
@@ -1364,7 +1364,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
     sal_uInt32  nPersistEntrys = 0;
     *mpStrm << (sal_uInt32)0 << (sal_uInt32)0 << (sal_uInt32)0;         // skip record header and first entry
 
-    // Document pesist schreiben
+    // write document persist
         nPersistEntrys++;
         *mpStrm << (sal_uInt32)0;
     // write MasterPages persists
@@ -1449,7 +1449,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
     *mpStrm << (sal_uInt32)( ( nPersistEntrys << 20 ) | 1 );
     mpStrm->Seek( nPos );
 
-    *mpCurUserStrm << (sal_uInt32)nPos;             // offset to current edit setzen
+    *mpCurUserStrm << (sal_uInt32)nPos;             // set offset to current edit
     mpPptEscherEx->AddAtom( 28, EPP_UserEditAtom );
     *mpStrm << (sal_Int32)0x100                     // last slide ID
             << (sal_uInt32)0x03000dbc               // minor and major app version that did the save
