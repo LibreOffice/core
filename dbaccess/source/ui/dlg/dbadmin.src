@@ -128,158 +128,6 @@ ModalDialog DLG_DATABASE_TYPE_CHANGE
     Text [ en-US ] = "Database properties" ;
 };
 
-//-------------------------------------------------------------------------
-
-TabPage PAGE_GENERAL
-{
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
-    Hide = TRUE;
-    HelpId = HID_DSADMIN_PAGE_GENERAL;
-
-
-    FixedText FT_GENERALHEADERTEXT
-    {
-        Pos = MAP_APPFONT ( START_X , 8 ) ;
-        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Welcome to the %PRODUCTNAME Database Wizard";
-        WordBreak = TRUE;
-    };
-
-    FixedText FT_GENERALHELPTEXT
-    {
-        Pos = MAP_APPFONT (START_X , 27 );
-        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 5* FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ]  = "Use the Database Wizard to create a new database, open an existing database file, or connect to a database stored on a server." ;
-        WordBreak = TRUE ;
-    };
-
-    FixedText FT_DATASOURCEHEADER
-    {
-        Pos = MAP_APPFONT ( START_X , 73 ) ;
-        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "What do you want to do?";
-    };
-
-    RadioButton RB_CREATEDBDATABASE
-    {
-        HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE ;
-        Pos = MAP_APPFONT (START_X + 6 , 85 )  ;
-        Size = MAP_APPFONT ( 205 , 10 ) ;
-        Group = TRUE;
-        Text [ en-US ]  = "Create a n~ew database" ;
-    };
-
-    RadioButton RB_OPENEXISTINGDOC
-    {
-        HelpID = "dbaccess:RadioButton:PAGE_GENERAL:RB_OPENEXISTINGDOC";
-        Pos = MAP_APPFONT (START_X + 6 , 97 );
-        Size = MAP_APPFONT ( 206 , 8 ) ;
-        Text [ en-US ]  = "Open an existing database ~file" ;
-    };
-
-    FixedText FT_DOCLISTLABEL
-    {
-        Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 110 );
-        Size = MAP_APPFONT( 120, 8 );
-        Text [ en-US ] = "Recently used";
-    };
-
-    ListBox LB_DOCUMENTLIST
-    {
-        HelpID = "dbaccess:ListBox:PAGE_GENERAL:LB_DOCUMENTLIST";
-        Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 121 );
-        Size = MAP_APPFONT( 120, 14 );
-        DropDown = TRUE;
-        Border = TRUE;
-    };
-
-    PushButton PB_OPENDOCUMENT
-    {
-        HelpID = "dbaccess:PushButton:PAGE_GENERAL:PB_OPENDOCUMENT";
-        Pos = MAP_APPFONT( START_X + INDENTED_X + INDENT_BELOW_RADIO, 139 );
-        Size = MAP_APPFONT( 50, 16 );
-        OutputSize = TRUE;
-        TabStop = TRUE;
-    };
-
-    RadioButton RB_GETEXISTINGDATABASE
-    {
-          HelpId = HID_PAGE_DBWIZARD_GENERAL_RB_GETEXISTINGDATABASE;
-        Pos = MAP_APPFONT (START_X + 6 , 159 )  ;
-        Size = MAP_APPFONT ( 206 , 8 ) ;
-        Text [ en-US ]  = "Connect to an e~xisting database" ;
-    };
-
-    FixedText FT_DATASOURCETYPE_PRE
-    {
-        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
-        WordBreak = TRUE;
-        Text [ en-US ] = "Select the type of database to which you want to establish a connection.";
-    };
-
-    FixedText FT_DATATYPE
-    {
-        Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS) ;
-        Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
-        Text [ en-US ] = "Database ~type ";
-    };
-
-    ListBox LB_DATATYPE
-    {
-        HelpId = HID_DSADMIN_DSTYPE;
-        Pos = MAP_APPFONT ( 90, 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS -2 ) ;
-        Size = MAP_APPFONT ( 120, 120 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        Sort = FALSE;
-    };
-
-    FixedText FT_DATATYPEAPPENDIX
-    {
-        Pos = MAP_APPFONT ( 90, 2*UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS -2  + 72) ;
-        Size = MAP_APPFONT ( 60, 8 );
-        Text [ en-US ] = "Database";
-    };
-
-    FixedText FT_DATASOURCETYPE_POST
-    {
-        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 5*FIXEDTEXT_HEIGHT ) ;
-        WordBreak = TRUE;
-        Text [ en-US ] = "On the following pages, you can make detailed settings for the connection.\n\nThe new settings you make will overwrite your existing settings.";
-    };
-
-    FixedText FT_SPECIAL_MESSAGE
-    {
-        Pos = MAP_APPFONT ( 6, 4*UNRELATED_CONTROLS + 9*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS  );
-        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12, 3*FIXEDTEXT_HEIGHT );
-        WordBreak = TRUE;
-        HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
-    };
-
-    String STR_MYSQLENTRY
-    {
-        Text [ en-US ] = "MySQL" ;
-    };
-
-    String STR_PARENTTITLE
-    {
-        Text [ en-US ] = "Data Source Properties: #" ;
-    };
-    String STR_COULDNOTLOAD_ODBCLIB
-    {
-        Text [ en-US ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source selection is not available.";
-    };
-    String STR_UNSUPPORTED_DATASOURCE_TYPE
-    {
-        Text [ en-US ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
-    };
-    Text [ en-US ] = "General" ;
-};
-
 //.........................................................................
 
 TabPage PAGE_DBASE
@@ -656,9 +504,24 @@ TabPage PAGE_USERDRIVER
     AUTO_CHARSET( 4*UNRELATED_CONTROLS+ 3*FIXEDTEXT_HEIGHT + RELATED_CONTROLS, PAGE_X)
 };
 
+String STR_PARENTTITLE_GENERAL
+{
+    Text [ en-US ] = "Data Source Properties: #" ;
+};
+
 String STR_ERR_USE_CONNECT_TO
 {
     Text [ en-US ] = "Please choose 'Connect to an existing database' to connect to an existing database instead.";
+};
+
+String STR_COULD_NOT_LOAD_ODBC_LIB
+{
+    Text [ en-US ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source selection is not available.";
+};
+
+String STR_UNSUPPORTED_DATASOURCE_TYPE
+{
+    Text [ en-US ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
