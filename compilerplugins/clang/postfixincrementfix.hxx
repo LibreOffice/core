@@ -30,7 +30,7 @@ class PostfixIncrementFix
         void fixPostfixOperators( const Stmt* stmt, StmtParents& parents );
         bool canChangePostfixToPrefix( const CXXOperatorCallExpr* op, StmtParents& parents, int parent_pos );
         bool canChangeInConditionStatement( const CXXOperatorCallExpr* op, const Expr* condition,
-            const StmtParents& parents, int parent_pos );
+            const StmtParents& parents, unsigned int parent_pos );
         bool shouldDoChange( const Expr* op );
     };
 

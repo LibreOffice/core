@@ -125,7 +125,7 @@ bool PostfixIncrementFix::canChangePostfixToPrefix( const CXXOperatorCallExpr* o
     }
 
 bool PostfixIncrementFix::canChangeInConditionStatement( const CXXOperatorCallExpr* op, const Expr* condition,
-    const StmtParents& parents, int parent_pos )
+    const StmtParents& parents, unsigned int parent_pos )
     {
     // cannot be changed in condition, can be changed in statements
     if( parent_pos == parents.size() - 1 )

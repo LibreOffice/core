@@ -216,12 +216,12 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         }
     }
 
-ASTConsumer* LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile )
+ASTConsumer* LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
     {
     return new PluginHandler( Compiler.getASTContext(), _args );
     }
 
-bool LibreOfficeAction::ParseArgs( const CompilerInstance& CI, const vector< string >& args )
+bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const vector< string >& args )
     {
     _args = args;
     return true;

@@ -11,7 +11,7 @@
 # You may occassionally want to override some of these
 
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
-CLANGCXXFLAGS=-O2 -Wall -g
+CLANGCXXFLAGS=-O2 -Wall -Wextra -g
 
 # The uninteresting rest.
 
