@@ -275,7 +275,6 @@ extern RTLFUNC(Beep);
 
 extern RTLFUNC(Load);
 extern RTLFUNC(Unload);
-extern RTLFUNC(AboutStarBasic);
 extern RTLFUNC(LoadPicture);
 extern RTLFUNC(SavePicture);
 

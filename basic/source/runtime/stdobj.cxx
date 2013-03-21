@@ -80,8 +80,6 @@ struct StringHashCode
 
 static Methods aMethods[] = {
 
-{ "AboutStarBasic", SbxNULL,      1 | _FUNCTION, RTLNAME(AboutStarBasic),0  },
-  { "Name",         SbxSTRING, 0,NULL,0 },
 { "Abs",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Abs),0             },
   { "number",       SbxDOUBLE, 0,NULL,0 },
 { "Array",          SbxOBJECT,        _FUNCTION, RTLNAME(Array),0           },
