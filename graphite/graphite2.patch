@@ -10,3 +10,20 @@
    #if defined GRAPHITE2_STATIC
      #define GR2_API
    #elif defined GRAPHITE2_EXPORTING
+--- misc/graphite2-1.2.0/src/inc/json.h
++++ misc/build/graphite2-1.2.0/src/inc/json.h
+@@ -146,6 +146,14 @@
+ inline
+ json & operator << (json & j, unsigned int d) throw() 		{ return j << json::integer(d); }
+ 
++#if defined(_WIN64)
++inline
++json & operator << (json & j, __int64 d) throw() 		{ return j << json::integer((unsigned int)d); }
++
++inline
++json & operator << (json & j, size_t d) throw() 		{ return j << json::integer((unsigned int)d); }
++
++#endif
+ inline
+ json & operator << (json & j, char c) throw ()
+ {
