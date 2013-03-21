@@ -98,8 +98,7 @@ using namespace ::com::sun::star::document;
 #define RESTOHTML( res ) StringToHTMLString(String(SdResId(res)))
 #define S2H( str ) StringToHTMLString( str )
 
-// when changing, also change NUM_BUTTONS in pubdlg.hxx!!
-const char *pButtonNames[NUM_BUTTONS] =
+const char *pButtonNames[] =
 {
     "first-inactive.png",
     "first.png",
@@ -2629,7 +2628,7 @@ bool HtmlExport::CreateBitmaps()
 {
     if(mnButtonThema != -1 && mpButtonSet.get() )
     {
-        for( int nButton = 0; nButton < NUM_BUTTONS; nButton++ )
+        for( int nButton = 0; nButton != SAL_N_ELEMENTS(pButtonNames); nButton++ )
         {
             if(!mbFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
                 continue;

@@ -40,8 +40,6 @@
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
-#define NUM_BUTTONS 12
-
 #define PUB_LOWRES_WIDTH    640
 #define PUB_LOWRES_HEIGHT   480
 #define PUB_MEDRES_WIDTH    800
