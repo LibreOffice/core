@@ -54,6 +54,7 @@ $(eval $(call gb_ZipPackage_add_files,cppuhelper_odk_headers,inc/cppuhelper,incl
 	cppuhelper/implbase10.hxx \
 	cppuhelper/implbase11.hxx \
 	cppuhelper/implbase12.hxx \
+	cppuhelper/implbase13.hxx \
 	cppuhelper/implbase1.hxx \
 	cppuhelper/implbase2.hxx \
 	cppuhelper/implbase3.hxx \
