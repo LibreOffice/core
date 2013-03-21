@@ -97,7 +97,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
 
     const char* pStart = aBStr.getStr();
     const char* p = pStart;
-    char buf[ 80 ], *q = buf;
+    rtl::OStringBuffer aBuf( rWSrc.getLength());
     sal_Bool bRes = sal_True;
     sal_Bool bMinus = sal_False;
     nVal = 0;
@@ -134,7 +134,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
                 if( ++comma > 1 )
                     continue;
                 else
-                    *q++ = '.';
+                    aBuf.append('.');
             }
             else if( strchr( "DdEe", *p ) )
             {
@@ -144,22 +144,21 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
                 }
                 if( toupper( *p ) == 'D' )
                     eScanType = SbxDOUBLE;
-                *q++ = 'E'; p++;
+                aBuf.append('E'); p++;
 
                 if( *p == '+' )
                     p++;
                 else
                 if( *p == '-' )
-                    *q++ = *p++;
+                    aBuf.append( *p++ );
             }
             else
             {
-                *q++ = *p++;
+                aBuf.append( *p++ );
                 if( comma && !exp ) ncdig++;
             }
             if( !exp ) ndig++;
         }
-        *q = 0;
 
         if( comma > 1 || exp > 1 )
             bRes = sal_False;
@@ -172,7 +171,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
                 eScanType = SbxLONG;
         }
 
-        nVal = atof( buf );
+        nVal = atof( aBuf.makeStringAndClear().getStr() );
         ndig = ndig - comma;
         // too many numbers for SINGLE?
         if( ndig > 15 || ncdig > 6 )
@@ -202,11 +201,11 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         {
             char ch = sal::static_int_cast< char >( toupper( *p ) );
             p++;
-            if( strchr( cmp, ch ) ) *q++ = ch;
+            if( strchr( cmp, ch ) ) aBuf.append( ch );
             else bRes = sal_False;
         }
-        *q = 0;
-        for( q = buf; *q; q++ )
+        rtl::OString aBufStr( aBuf.makeStringAndClear());
+        for( const sal_Char* q = aBufStr.getStr(); *q; q++ )
         {
             i =( *q & 0xFF ) - '0';
             if( i > 9 ) i -= 7;
