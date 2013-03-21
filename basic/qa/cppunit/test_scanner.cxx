@@ -15,6 +15,7 @@
 
 #include "osl/file.hxx"
 #include "osl/process.h"
+#include <rtl/math.hxx>
 
 #include "scanner.hxx"
 
@@ -562,6 +563,7 @@ namespace
     const OUString source14("12e-3+");
     const OUString source15("1,2,3");
     const OUString source16("1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+    const OUString source17("10e308");
 
     std::vector<Symbol> symbols;
     sal_Int32 errors;
@@ -691,6 +693,15 @@ namespace
     // This error is from a "buffer overflow" which is stupid because
     // the buffer is artificially constrained by the scanner.
     CPPUNIT_ASSERT(errors == 1); // HACK
+
+    double fInf = 0.0;
+    rtl::math::setInf( &fInf, false);
+    symbols = getSymbols(source17, errors);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == fInf);
+    CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(errors == 1);    // math error, overflow
   }
 
   void ScannerTest::testDataType()
