@@ -54,7 +54,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     reg2unoidl \
     regsvrex \
     rsc \
-    rscdep \
     saxparser \
     sp2bv \
     svg2odf \
