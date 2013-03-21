@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "SchXMLSeriesHelper.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -26,14 +25,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <rtl/ustring.h>
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
 
 #include <typeinfo>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -69,12 +67,9 @@ using ::com::sun::star::uno::Sequence;
     {
         (void)ex; // avoid warning for pro build
 
-        OSL_FAIL( OUStringToOString( OUString(
-                        OUString(  "Exception caught. Type: " ) +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
-                        ex.Message), RTL_TEXTENCODING_ASCII_US ).getStr());
-
+        OSL_FAIL( OUStringToOString( "Exception caught. Type: " +
+                        OUString::createFromAscii( typeid( ex ).name() ) +
+                        ", Message: " + ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
     return aResult;
@@ -169,7 +164,7 @@ bool SchXMLSeriesHelper::isCandleStickSeries(
                                         xNewDiagram, xSeries ) );
             if( xChartType.is() )
             {
-                rtl::OUString aServiceName( xChartType->getChartType() );
+                OUString aServiceName( xChartType->getChartType() );
                 if( aServiceName == "com.sun.star.chart2.CandleStickChartType" )
                     bRet = true;
             }
@@ -193,7 +188,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
+                    "com.sun.star.comp.chart2.DataSeriesWrapper" ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
@@ -230,7 +225,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
+                     "com.sun.star.comp.chart2.DataSeriesWrapper" ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {

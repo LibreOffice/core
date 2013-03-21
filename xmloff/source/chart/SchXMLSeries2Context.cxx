@@ -20,6 +20,7 @@
 
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLPlotAreaContext.hxx"
+#include "SchXMLSeriesHelper.hxx"
 #include "SchXMLTools.hxx"
 #include "PropertyMap.hxx"
 
@@ -44,7 +45,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/SchXMLSeriesHelper.hxx>
 #include "SchXMLImport.hxx"
 // header for class XMLPropStyleContext
 #include <xmloff/prstylei.hxx>

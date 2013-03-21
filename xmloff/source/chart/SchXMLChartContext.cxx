@@ -24,6 +24,7 @@
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLTableContext.hxx"
+#include "SchXMLSeriesHelper.hxx"
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
 #include <comphelper/mediadescriptor.hxx>
@@ -35,7 +36,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>
-#include <xmloff/SchXMLSeriesHelper.hxx>
 
 #include "vector"
 #include <com/sun/star/chart/XChartDocument.hpp>
