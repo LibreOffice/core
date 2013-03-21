@@ -291,7 +291,7 @@ void ImportExcel::ReadInteger()
         maStrm >> nValue;
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        GetDoc().PutCell( aScPos, new ScValueCell( nValue ) );
+        GetDoc().SetValue(aScPos, nValue);
     }
 }
 
@@ -308,7 +308,7 @@ void ImportExcel::ReadNumber()
         maStrm >> fValue;
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        GetDoc().PutCell( aScPos, new ScValueCell( fValue ) );
+        GetDoc().SetValue(aScPos, fValue);
     }
 }
 
@@ -363,7 +363,7 @@ void ImportExcel::ReadBoolErr()
         const ScTokenArray* pScTokArr = ErrorToFormula( nType, nValue, fValue );
         ScFormulaCell* pCell = new ScFormulaCell( pD, aScPos, pScTokArr );
         pCell->SetHybridDouble( fValue );
-        GetDoc().PutCell( aScPos, pCell );
+        GetDoc().SetFormulaCell(aScPos, pCell);
     }
 }
 
@@ -380,7 +380,7 @@ void ImportExcel::ReadRk()
         maStrm >> nRk;
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRk ) ) );
+        GetDoc().SetValue(aScPos, XclTools::GetDoubleFromRK(nRk));
     }
 }
 
@@ -853,7 +853,7 @@ void ImportExcel::Mulrk( void )
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
         {
             GetXFRangeBuffer().SetXF( aScPos, nXF );
-            GetDoc().PutCell( aScPos, new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) ) );
+            GetDoc().SetValue(aScPos, XclTools::GetDoubleFromRK(nRkNum));
         }
     }
 }

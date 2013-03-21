@@ -36,6 +36,7 @@
 #include "namebuff.hxx"
 #include "lotrange.hxx"
 #include "lotattr.hxx"
+#include "stringutil.hxx"
 
 LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, CharSet eQ )
     :
@@ -208,7 +209,10 @@ void ImportLotus::Errcell( void )
 
     Read( aA );
 
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#ERR!" ) ), true );
+    ScSetStringParam aParam;
+    aParam.setTextInput();
+    pD->EnsureTable(aA.Tab());
+    pD->SetString(aA, "#ERR!", &aParam);
 }
 
 
@@ -218,7 +222,10 @@ void ImportLotus::Nacell( void )
 
     Read( aA );
 
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( CREATE_STRING( "#NA!" ) ), true );
+    ScSetStringParam aParam;
+    aParam.setTextInput();
+    pD->EnsureTable(aA.Tab());
+    pD->SetString(aA, "#NA!", &aParam);
 }
 
 
@@ -232,9 +239,10 @@ void ImportLotus::Labelcell( void )
     Read( cAlign );
     Read( aLabel );
 
-//  aLabel.Convert( pLotusRoot->eCharsetQ );
-
-    pD->PutCell( aA.Col(), aA.Row(), aA.Tab(), new ScStringCell( aLabel ), true );
+    ScSetStringParam aParam;
+    aParam.setTextInput();
+    pD->EnsureTable(aA.Tab());
+    pD->SetString(aA, aLabel, &aParam);
 }
 
 
@@ -246,26 +254,26 @@ void ImportLotus::Numbercell( void )
     Read( aAddr );
     Read( fVal );
 
-    pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(),
-        new ScValueCell( fVal ), true );
-    }
+    pD->EnsureTable(aAddr.Tab());
+    pD->SetValue(aAddr, fVal);
+}
 
 
 void ImportLotus::Smallnumcell( void )
-    {
+{
     ScAddress   aAddr;
     sal_Int16       nVal;
 
     Read( aAddr );
     Read( nVal );
 
-    pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(),
-        new ScValueCell( SnumToDouble( nVal ) ), true );
-    }
+    pD->EnsureTable(aAddr.Tab());
+    pD->SetValue(aAddr, SnumToDouble(nVal));
+}
 
 
 ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
-    {
+{
     OSL_ENSURE( pIn, "-ImportLotus::Formulacell(): Null-Stream -> Rums!" );
 
     ScAddress           aAddr;
@@ -276,17 +284,16 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     n -= (n > 14) ? 14 : n;
 
     const ScTokenArray* pErg;
-    sal_Int32               nRest = n;
+    sal_Int32 nRest = n;
 
     aConv.Reset( aAddr );
     aConv.SetWK3();
     aConv.Convert( pErg, nRest );
 
-    ScFormulaCell*      pZelle = new ScFormulaCell( pD, aAddr, pErg );
-
-    pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
-
-    pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(), pZelle, true );
+    ScFormulaCell* pCell = new ScFormulaCell( pD, aAddr, pErg );
+    pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+    pD->EnsureTable(aAddr.Tab());
+    pD->SetFormulaCell(aAddr, pCell);
 
     return NULL;
 }

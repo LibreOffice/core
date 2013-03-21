@@ -123,7 +123,8 @@ void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& 
     ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
     ScFormulaCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
     pNewCell->StartListeningTo( &rDoc );
-    rDoc.PutCell( aCellPos, pNewCell, sal_True );
+    rDoc.EnsureTable(aCellPos.Tab());
+    rDoc.SetFormulaCell(aCellPos, pNewCell);
 }
 
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )

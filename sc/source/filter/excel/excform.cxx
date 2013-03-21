@@ -123,12 +123,12 @@ void ImportExcel::Formula(
         if (pResult)
         {
             pCell = new ScFormulaCell( pD, aScPos, pResult );
-            pD->PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pCell, true );
+            pD->EnsureTable(aScPos.Tab());
+            pD->SetFormulaCell(aScPos, pCell);
         }
         else
         {
-            CellType        eCellType;
-            pD->GetCellType( aScPos.Col(), aScPos.Row(), aScPos.Tab(), eCellType );
+            CellType eCellType = pD->GetCellType(aScPos);
             if( eCellType == CELLTYPE_FORMULA )
             {
                 ScBaseCell* pBaseCell;

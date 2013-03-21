@@ -749,8 +749,8 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                     aRefArr.AddOpCode(ocStop);
                                     ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                                      sal::static_int_cast<SCROW>(nRow+nArrY+nPos), nTab );
-                                    ScBaseCell* pCell = new ScFormulaCell( pDestDoc, aDest, &aRefArr );
-                                    pDestDoc->PutCell( aDest.Col(), aDest.Row(), aDest.Tab(), pCell );
+                                    ScFormulaCell* pCell = new ScFormulaCell( pDestDoc, aDest, &aRefArr );
+                                    pDestDoc->SetFormulaCell(aDest, pCell);
                                 }
                             }
 
@@ -771,8 +771,8 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                             aArr.AddDoubleReference(aCRef);
                             aArr.AddOpCode(ocClose);
                             aArr.AddOpCode(ocStop);
-                            ScBaseCell* pCell = new ScFormulaCell( pDestDoc, aDest, &aArr );
-                            pDestDoc->PutCell( aDest.Col(), aDest.Row(), aDest.Tab(), pCell );
+                            ScFormulaCell* pCell = new ScFormulaCell( pDestDoc, aDest, &aArr );
+                            pDestDoc->SetFormulaCell(aDest, pCell);
                         }
                     }
 

@@ -42,6 +42,7 @@
 #include "attrib.hxx"
 #include "clipparam.hxx"
 #include "dociter.hxx"
+#include "stringutil.hxx"
 
 using namespace com::sun::star;
 
@@ -417,9 +418,12 @@ public:
     }
     void visitElem( long nCol, long nRow, const rtl::OUString& elem )
     {
-        if ( !elem.isEmpty() )
-            mpDoc->PutCell( (SCCOL) nCol, (SCROW) nRow, 0,
-                                        new ScStringCell( elem ) );
+        if (!elem.isEmpty())
+        {
+            ScSetStringParam aParam;
+            aParam.setTextInput();
+            mpDoc->SetString(ScAddress(nCol,nRow,0), elem, &aParam);
+        }
     }
     void visitElem( long nCol, long nRow, const uno::Any& rElement )
     {
@@ -674,7 +678,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
                 &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (sal_uInt8)(mbArray ? MM_FORMULA : MM_NONE) );
-        pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
+        pDoc->SetFormulaCell(aFormulaPos, pFormula);
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
         //  if there is no matrix result

@@ -5193,8 +5193,10 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
                 pData->UpdateSymbol(aContent, ScAddress( nStartCol, nOutRow, nTab ));
                 aFormula = '=';
                 aFormula += aContent.toString();
-                pDoc->PutCell( nStartCol,nOutRow,nTab, new ScStringCell( aName ) );
-                pDoc->PutCell( nEndCol  ,nOutRow,nTab, new ScStringCell( aFormula ) );
+                ScSetStringParam aParam;
+                aParam.setTextInput();
+                pDoc->SetString(ScAddress(nStartCol,nOutRow,nTab), aName, &aParam);
+                pDoc->SetString(ScAddress(nEndCol,nOutRow,nTab), aFormula, &aParam);
                 ++nOutRow;
             }
 

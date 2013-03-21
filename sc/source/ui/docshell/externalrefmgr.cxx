@@ -49,6 +49,7 @@
 #include "unotools/ucbhelper.hxx"
 #include "unotools/localfilehelper.hxx"
 #include "vcl/msgbox.hxx"
+#include "stringutil.hxx"
 
 #include <memory>
 #include <algorithm>
@@ -174,14 +175,14 @@ public:
         if (pCell->IsValue())
         {
             // Turn this into value cell.
-            double fVal = pCell->GetValue();
-            mpDoc->PutCell(aPos, new ScValueCell(fVal));
+            mpDoc->SetValue(aPos, pCell->GetValue());
         }
         else
         {
             // string cell otherwise.
-            rtl::OUString aVal = pCell->GetString();
-            mpDoc->PutCell(aPos, new ScStringCell(aVal));
+            ScSetStringParam aParam;
+            aParam.setTextInput();
+            mpDoc->SetString(aPos, pCell->GetString(), &aParam);
         }
     }
 private:

@@ -87,6 +87,7 @@
 #include "scresid.hxx"
 #include "columniterator.hxx"
 #include "globalnames.hxx"
+#include "stringutil.hxx"
 
 #include <memory>
 #include <boost/scoped_ptr.hpp>
@@ -815,10 +816,14 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
                         static_cast<ScEditCell*>(pCell)->SetData(pEngine->CreateTextObject());
                     else
                         // The cell will take ownership of pNewData.
-                        PutCell(nCol, nRow, nTab, new ScEditCell(pEngine->CreateTextObject(), this));
+                        SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());
                 }
-                else                    // einfacher String
-                    PutCell( nCol, nRow, nTab, new ScStringCell( pEngine->GetText() ) );
+                else
+                {
+                    ScSetStringParam aParam;
+                    aParam.setTextInput();
+                    SetString(ScAddress(nCol,nRow,nTab), pEngine->GetText(), &aParam);
+                }
 
                 //  Paint
                 if (pShell)
@@ -1652,12 +1657,13 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                             pEngine->SetDefaults( pEmpty, true );
 
                             // The cell will take ownership of the text object instance.
-                            PutCell(nCol, nRow, nTab, new ScEditCell(pEngine->CreateTextObject(), this));
+                            SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());
                         }
                         else
                         {
-                            rtl::OUString aNewStr = pEngine->GetText();
-                            PutCell( nCol, nRow, nTab, new ScStringCell( aNewStr ) );
+                            ScSetStringParam aParam;
+                            aParam.setTextInput();
+                            SetString(ScAddress(nCol,nRow,nTab), pEngine->GetText(), &aParam);
                         }
                     }
                 }
@@ -1680,7 +1686,11 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     rtl::OUString aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
 
                     if ( aNewStr != aOldStr )
-                        PutCell( nCol, nRow, nTab, new ScStringCell( aNewStr ) );
+                    {
+                        ScSetStringParam aParam;
+                        aParam.setTextInput();
+                        SetString(ScAddress(nCol,nRow,nTab), aNewStr, &aParam);
+                    }
                 }
                 bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
             }

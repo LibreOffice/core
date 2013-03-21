@@ -1198,6 +1198,8 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
             const uno::Any* pColArr = rColSeq.getConstArray();
             for (long nCol=0; nCol<nCols; nCol++)
             {
+                ScAddress aPos(nDocCol, nDocRow, nTab);
+
                 const uno::Any& rElement = pColArr[nCol];
                 switch( rElement.getValueTypeClass() )
                 {
@@ -1220,7 +1222,7 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                     {
                         double fVal(0.0);
                         rElement >>= fVal;
-                        pDoc->SetValue( nDocCol, nDocRow, nTab, fVal );
+                        pDoc->SetValue(aPos, fVal);
                     }
                     break;
 
@@ -1229,7 +1231,11 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         rtl::OUString aUStr;
                         rElement >>= aUStr;
                         if ( !aUStr.isEmpty() )
-                            pDoc->PutCell( nDocCol, nDocRow, nTab, new ScStringCell( aUStr ) );
+                        {
+                            ScSetStringParam aParam;
+                            aParam.setTextInput();
+                            pDoc->SetString(aPos, aUStr, &aParam);
+                        }
                     }
                     break;
 
@@ -1241,9 +1247,7 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         {
                             ScTokenArray aTokenArray;
                             ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, aTokens );
-                            ScAddress aPos( nDocCol, nDocRow, nTab );
-                            ScBaseCell* pNewCell = new ScFormulaCell( pDoc, aPos, &aTokenArray );
-                            pDoc->PutCell( aPos, pNewCell );
+                            pDoc->SetFormula(aPos, aTokenArray);
                         }
                         else
                             bError = true;
@@ -3200,9 +3204,9 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
                         {
                             double fVal = pArray[nCol];
                             if ( fVal == DBL_MIN )
-                                pDoc->PutCell( *pPos, NULL );       // empty cell
+                                pDoc->SetEmptyCell(*pPos);
                             else
-                                pDoc->SetValue( pPos->Col(), pPos->Row(), pPos->Tab(), pArray[nCol] );
+                                pDoc->SetValue(*pPos, pArray[nCol]);
                         }
                     }
                 }
@@ -3266,11 +3270,15 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
                                 static_cast<SCSIZE>(nRow) );
                         if (pPos)
                         {
-                            String aStr = pArray[nRow];
-                            if ( aStr.Len() )
-                                pDoc->PutCell( *pPos, new ScStringCell( aStr ) );
+                            const OUString& aStr = pArray[nRow];
+                            if (aStr.isEmpty())
+                                pDoc->SetEmptyCell(*pPos);
                             else
-                                pDoc->PutCell( *pPos, NULL );       // empty cell
+                            {
+                                ScSetStringParam aParam;
+                                aParam.setTextInput();
+                                pDoc->SetString(*pPos, aStr, &aParam);
+                            }
                         }
                     }
 
@@ -3334,11 +3342,15 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                             sal::static_int_cast<SCCOL>(nCol) );
                         if (pPos)
                         {
-                            String aStr(pArray[nCol]);
-                            if ( aStr.Len() )
-                                pDoc->PutCell( *pPos, new ScStringCell( aStr ) );
+                            const OUString& aStr = pArray[nCol];
+                            if (aStr.isEmpty())
+                                pDoc->SetEmptyCell(*pPos);
                             else
-                                pDoc->PutCell( *pPos, NULL );       // empty cell
+                            {
+                                ScSetStringParam aParam;
+                                aParam.setTextInput();
+                                pDoc->SetString(*pPos, aStr, &aParam);
+                            }
                         }
                     }
 

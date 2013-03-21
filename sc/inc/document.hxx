@@ -787,7 +787,7 @@ public:
         const ScAddress& rPos, const OUString& rFormula,
         formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT );
 
-    void SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
+    SC_DLLPUBLIC void SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
 
     SC_DLLPUBLIC void           InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,

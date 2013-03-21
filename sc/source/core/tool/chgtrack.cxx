@@ -1957,10 +1957,10 @@ void ScChangeActionContent::PutValueToDoc(
             }
         }
         else
-            pDoc->PutCell( aPos, NULL );
+            pDoc->SetEmptyCell(aPos);
     }
     else
-        pDoc->SetString( aPos.Col(), aPos.Row(), aPos.Tab(), rValue );
+        pDoc->SetString(aPos, rValue);
 }
 
 
