@@ -17,13 +17,18 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XStorable;
 import com.sun.star.util.XCloseable;
+import com.sun.star.util.XRefreshable;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextField;
 import com.sun.star.text.XTextFieldsSupplier;
+import com.sun.star.text.XTextSectionsSupplier;
 import com.sun.star.text.XTextRange;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextSection;
@@ -48,20 +53,8 @@ import java.net.URI;
 /**
  * This is the efforts to create a unit test to reproduce fdo#55814
  *
- * To preserve the document, set env var MY_TMP_PATH=file:///tmp/foo and run
- * make JunitTest_sw_complex, then check /tmp/foo/foo.odt.
- *
- * We still have problems programmatically reproduce the original bug fdo#61950:
- * 1. variable field is not shown
- *    enter "Enter" and "Remove" or
- *    toggle Invisible/Visible in writer solve it though =>
- *    "0" is shown
- * 2. section is empty
  * TODO:
- * a) fill section with some text
- * b) trigger the value change event of the `foo` var from 0 to 1
- * c) retrieve the section and check that the condition get corrupted:
- *    "foo EQ 1" => "0"
+ * create paragraph outside the section and check that recent fix really works
  **/
 
 public class VarFields
@@ -94,13 +87,7 @@ public class VarFields
         assertNotNull("could not get component context.", m_xContext);
         m_xDoc = util.WriterTools.createTextDoc(m_xMSF);
         m_TmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
-        String myPath = System.getenv("MY_TMP_DIR");
-        if (myPath != null && myPath.length() > 0)
-        {
-            m_TmpDir = myPath;
-            checkTmpDirExists(myPath);
-        }
-        m_FileName = m_TmpDir + File.separator + "foo.odt";
+        m_FileName = m_TmpDir + File.separator + "VarFields.odt";
         System.out.println("file: " + m_FileName);
     }
 
@@ -119,11 +106,15 @@ public class VarFields
         }
     }
 
+    // no paragraph after section: condition get corrupted
     @Test
-    public void test_fdo_55814() throws Exception
+    public void test_fdo_55814_still_problem_create_new_bz_for_that() throws Exception
     {
+        // create MSF
         XMultiServiceFactory xDocFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class, m_xDoc);
+        // create body
         XText xBodyText = m_xDoc.getText();
+        // create cursor
         XTextCursor xCursor = xBodyText.createTextCursor();
         // 0. create text field
         Object xField = xDocFactory.createInstance("com.sun.star.text.textfield.SetExpression");
@@ -131,10 +122,9 @@ public class VarFields
         XPropertySet xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xField);
         xPropSet.setPropertyValue("Content", "0");
         xPropSet.setPropertyValue("IsVisible", true);
-        xPropSet.setPropertyValue("Hint", "trying to reproduce fdo#61950");
+        xPropSet.setPropertyValue("Hint", "trying to reproduce fdo#55814");
         xPropSet.setPropertyValue("SubType", 0);// VAR
         xPropSet.setPropertyValue("Value", 0.0);
-        xPropSet.setPropertyValue("Content", "0");
         // 2. create master field
         Object xMaster = xDocFactory.createInstance("com.sun.star.text.fieldmaster.SetExpression");
         xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xMaster);
@@ -145,9 +135,6 @@ public class VarFields
         // 5. connect real field to the master
         xDependentTextField.attachTextFieldMaster(xPropSet);
         // 6. insert text field into the document
-
-        // TODO: field is no shown ("0" is expected). UNO bug?
-
         xBodyText.insertTextContent(xCursor, UnoRuntime.queryInterface(XTextContent.class, xField), false);
         // 7. retrieve paragraph cursor
         XParagraphCursor xParagraphCursor = UnoRuntime.queryInterface(XParagraphCursor.class, xCursor);
@@ -163,13 +150,63 @@ public class VarFields
         xPropSet.setPropertyValue("IsVisible", false);
         Object readContent = xPropSet.getPropertyValue("Condition");
         assertEquals("foo EQ 1", readContent);
-        // 11. insert section
+        // 11. Insert some text to be content on the section
+        xBodyText.insertString(xCursor,
+                               "The quick brown fox jumps over the lazy dog",
+                               true);
+        // 12. insert section
         XTextContent xTextContext = UnoRuntime.queryInterface(XTextContent.class, xSection);
         xBodyText.insertTextContent(xCursor, xTextContext, true);
-        // 12. tell me what am i missing here? The section is empty.
-        // ???
-        // 12. store document
+
+        // 12.1 insert new paragraph. Note: that's here the difference
+        xParagraphCursor.gotoEndOfParagraph(false /*not select*/);
+
+        // TODO: how to leave the section now?
+        xBodyText.insertControlCharacter( xCursor, ControlCharacter.PARAGRAPH_BREAK, false );
+
+        xBodyText.insertString(xCursor,
+                               "new paragraph",
+                               false);
+
+        // 13. Access fields to refresh the document
+        XTextFieldsSupplier xTextFieldsSupplier = UnoRuntime.queryInterface(XTextFieldsSupplier.class, m_xDoc);
+        XEnumerationAccess xEnumerationAccess = xTextFieldsSupplier.getTextFields();
+        // 14. refresh document to update the fields
+        XRefreshable xRefreshable = UnoRuntime.queryInterface(XRefreshable.class, xEnumerationAccess);
+        xRefreshable.refresh();
+        // 15. retrieve the field
+        XEnumeration xFieldEnum = xEnumerationAccess.createEnumeration();
+        // Note: we have only one field here, that why nextElement() is just fine here
+        xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xFieldEnum.nextElement());
+        // check
+        readContent = xPropSet.getPropertyValue("Content");
+        assertEquals("0", readContent);
+        readContent = xPropSet.getPropertyValue("Value");
+        assertEquals(0.0, readContent);
+        // 16. change the value of the field from 0 to 1 and check
+        xPropSet.setPropertyValue("Value", 1.0);
+        xPropSet.setPropertyValue("Content", "1");
+        readContent = xPropSet.getPropertyValue("Value");
+        assertEquals(1.0, readContent);
+        readContent = xPropSet.getPropertyValue("Content");
+        assertEquals("1", readContent);
+        // 17. refresh document to update the fields again
+        xRefreshable.refresh();
+        // 18. store document
         doStore(m_xDoc, m_FileName);
+        // 19. retrieve the section
+        XTextSectionsSupplier xTextSectionsSupplier = UnoRuntime.queryInterface(XTextSectionsSupplier.class, m_xDoc);
+        XNameAccess xNameAccess = xTextSectionsSupplier.getTextSections();
+        XIndexAccess xIndexAccess = UnoRuntime.queryInterface(XIndexAccess.class, xNameAccess);
+        xPropSet = UnoRuntime.queryInterface(XPropertySet.class, xIndexAccess.getByIndex(0));
+
+        // 20. retrieve the condition property of that section
+        readContent = xPropSet.getPropertyValue("Condition");
+        // 21. check
+        // expected:
+        //assertEquals("foo EQ 1", readContent);
+        // reality:
+        assertEquals("0", readContent);
     }
 
     private void doStore(XComponent xComp, String file) throws Exception
