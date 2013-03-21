@@ -1113,7 +1113,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
     {
         if( rData.HasFormat( SOT_FORMAT_RTF ) )
         {
-            nAction = EXCHG_OUT_ACTION_INSERT_STRING | (nAction & !EXCHG_ACTION_MASK);
+            nAction = EXCHG_OUT_ACTION_INSERT_STRING | (nAction & ~EXCHG_ACTION_MASK);
             nFormat = SOT_FORMAT_RTF;
         }
     }
