@@ -254,8 +254,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Return the parents locale or throw exception if this object has no
-        parent yet/anymore.
-    */
+        parent yet/anymore. */
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale (void)
         throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
@@ -306,21 +305,18 @@ public:
 
     // XServiceInfo
 
-    /** Returns an identifier for the implementation of this object.
-    */
+    /** Returns an identifier for the implementation of this object. */
     virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
-    */
+    /** Return whether the specified service is supported by this class. */
     virtual sal_Bool SAL_CALL
         supportsService (const OUString& sServiceName)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.  In this case that is just
-        the AccessibleContext service.
-    */
+        the AccessibleContext service. */
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
              throw (::com::sun::star::uno::RuntimeException);
