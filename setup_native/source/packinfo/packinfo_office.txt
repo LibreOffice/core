@@ -314,10 +314,10 @@ End
 Start
 module = "gid_Module_Optional_Pyuno_LibreLogo"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-librelogo"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01, SUNWPython"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-writer,SUNWPython"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-librelogo"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-writer"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-writer"
 copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
