@@ -47,7 +47,7 @@
 #include "cppuhelper/com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "cppuhelper/com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "cppuhelper/com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "cppuhelper/com/sun/star/lang/XMulticomponentFactory.hpp"
+#include "cppuhelper/com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "cppuhelper/com/sun/star/lang/XServiceInfo.hpp"
 #include "cppuhelper/com/sun/star/lang/XEventListener.hpp"
 #include "cppuhelper/com/sun/star/lang/XTypeProvider.hpp"
