@@ -2332,6 +2332,68 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     return getPropertyDefaults ( aSequence ).getConstArray()[0];
 }
 
+void SAL_CALL SwXTextCursor::setPropertyValues(
+    const uno::Sequence< ::rtl::OUString >& aPropertyNames,
+    const uno::Sequence< uno::Any >& aValues )
+{
+    if( aValues.getLength() != aPropertyNames.getLength() )
+    {
+        OSL_FAIL( "mis-matched property value sequences" );
+        throw lang::IllegalArgumentException();
+    }
+
+    SolarMutexGuard aGuard;
+
+    SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+
+    // a little lame to have to copy into this.
+    uno::Sequence< beans::PropertyValue > aPropertyValues( aValues.getLength() );
+    for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
+    {
+        if ( aPropertyNames[ i ].equalsAsciiL(
+                SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
+             aPropertyNames[ i ].equalsAsciiL(
+                SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)) )
+        {
+            // the behaviour of these is hard to model in a group
+            OSL_ASSERT("invalid property name for batch setting");
+            throw lang::IllegalArgumentException();
+        }
+        aPropertyValues[ i ].Name = aPropertyNames[ i ];
+        aPropertyValues[ i ].Value = aValues[ i ];
+    }
+    SwUnoCursorHelper::SetPropertyValues( rUnoCursor, m_pImpl->m_rPropSet, aPropertyValues );
+}
+
+uno::Sequence< uno::Any > SAL_CALL
+SwXTextCursor::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+{
+    // a banal implementation for now
+    uno::Sequence< uno::Any > aValues( aPropertyNames.getLength() );
+    for (sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
+        aValues[i] = getPropertyValue( aPropertyNames[ i ] );
+    return aValues;
+}
+
+void SAL_CALL SwXTextCursor::addPropertiesChangeListener(
+        const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
+        const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
+{
+    OSL_FAIL("SwXTextCursor::addPropertiesChangeListener(): not implemented");
+}
+void SAL_CALL SwXTextCursor::removePropertiesChangeListener(
+        const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
+{
+    OSL_FAIL("SwXTextCursor::removePropertiesChangeListener(): not implemented");
+}
+
+void SAL_CALL SwXTextCursor::firePropertiesChangeEvent(
+        const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
+        const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
+{
+    OSL_FAIL("SwXTextCursor::firePropertiesChangeEvent(): not implemented");
+}
+
 // para specific attribut ranges
 static sal_uInt16 g_ParaResetableSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,

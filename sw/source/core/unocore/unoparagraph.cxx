@@ -390,6 +390,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     const uno::Any* pValues = rValues.getConstArray();
     const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
     SwParaSelection aParaSel( aCursor );
+
+    // FIXME: this should be replaced with the significantly faster
+    // SwUnoCursorHelper::SetPropertyValues...
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
