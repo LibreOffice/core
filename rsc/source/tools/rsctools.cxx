@@ -359,10 +359,13 @@ RscWriteRc :: ~RscWriteRc()
 *************************************************************************/
 sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
 {
+    sal_uInt32 nOrigPos = nLen;
     nLen += nSize;
     if( pMem )
         pMem = (char*)rtl_reallocateMemory( pMem, nLen );
-    return( nLen - nSize );
+    if( pMem )
+        memset( pMem + nOrigPos, 0, nSize );
+    return nOrigPos;
 }
 
 /*************************************************************************
