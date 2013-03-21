@@ -133,27 +133,27 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_bApplied(sal_False)
     , m_bUIEnabled( sal_True )
     , m_bIsConnectable( sal_False)
-    , m_sRM_IntroText(ModuleRes(STR_PAGETITLE_INTROPAGE))
-    , m_sRM_dBaseText(ModuleRes(STR_PAGETITLE_DBASE))
-    , m_sRM_TextText(ModuleRes(STR_PAGETITLE_TEXT))
-    , m_sRM_MSAccessText(ModuleRes(STR_PAGETITLE_MSACCESS))
-    , m_sRM_LDAPText(ModuleRes(STR_PAGETITLE_LDAP))
-    , m_sRM_ADOText(ModuleRes(STR_PAGETITLE_ADO))
-    , m_sRM_JDBCText(ModuleRes(STR_PAGETITLE_JDBC))
-    , m_sRM_MySQLNativePageTitle(ModuleRes(STR_PAGETITLE_MYSQL_NATIVE))
+    , m_sRM_IntroText( ModuleRes( STR_PAGETITLE_INTROPAGE ) )
+    , m_sRM_dBaseText( ModuleRes( STR_PAGETITLE_DBASE ) )
+    , m_sRM_TextText( ModuleRes( STR_PAGETITLE_TEXT ) )
+    , m_sRM_MSAccessText( ModuleRes( STR_PAGETITLE_MSACCESS ) )
+    , m_sRM_LDAPText( ModuleRes( STR_PAGETITLE_LDAP ) )
+    , m_sRM_ADOText( ModuleRes( STR_PAGETITLE_ADO ) )
+    , m_sRM_JDBCText( ModuleRes( STR_PAGETITLE_JDBC ) )
+    , m_sRM_MySQLNativePageTitle( ModuleRes( STR_PAGETITLE_MYSQL_NATIVE ) )
+    , m_sRM_OracleText( ModuleRes( STR_PAGETITLE_ORACLE ) )
+    , m_sRM_MySQLText( ModuleRes( STR_PAGETITLE_MYSQL ) )
+    , m_sRM_ODBCText( ModuleRes( STR_PAGETITLE_ODBC ) )
+    , m_sRM_SpreadSheetText( ModuleRes( STR_PAGETITLE_SPREADSHEET ) )
+    , m_sRM_AuthentificationText( ModuleRes( STR_PAGETITLE_AUTHENTIFICATION ) )
+    , m_sRM_FinalText( ModuleRes( STR_PAGETITLE_FINAL ) )
+    , m_sWorkPath( SvtPathOptions().GetWorkPath() )
     , m_pGeneralPage( NULL )
-    , m_pMySQLIntroPage(NULL)
+    , m_pMySQLIntroPage( NULL )
     , m_pCollection( NULL )
 {
     DBG_CTOR(ODbTypeWizDialogSetup,NULL);
     // no local resources needed anymore
-    m_sRM_MySQLText = String(ModuleRes(STR_PAGETITLE_MYSQL));
-    m_sRM_OracleText = String(ModuleRes(STR_PAGETITLE_ORACLE));
-    m_sRM_ODBCText = String(ModuleRes(STR_PAGETITLE_ODBC));
-    m_sRM_SpreadSheetText = String(ModuleRes(STR_PAGETITLE_SPREADSHEET));
-    m_sRM_AuthentificationText = String(ModuleRes(STR_PAGETITLE_AUTHENTIFICATION));
-    m_sRM_FinalText = String(ModuleRes(STR_PAGETITLE_FINAL));
-    m_sWorkPath = SvtPathOptions().GetWorkPath();
     pFinalPage = NULL;
     // extract the datasource type collection from the item set
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
