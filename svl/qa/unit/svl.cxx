@@ -87,10 +87,12 @@ public:
 
     void testNumberFormat();
     void testFdo60915();
+    void testI116701();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
     CPPUNIT_TEST(testFdo60915);
+    CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -359,6 +361,49 @@ void Test::testFdo60915()
         sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
+}
+
+// https://issues.apache.org/ooo/show_bug.cgi?id=116701
+void Test::testI116701()
+{
+    LanguageType eLang = LANGUAGE_CHINESE_TRADITIONAL;
+    OUString sCode, sExpected;
+    double fPreviewNumber = 40573; // equals 30/01/2011
+    SvNumberFormatter aFormatter(m_xContext, eLang);
+    // DateFormatskey25 in i18npool/source/localedata/data/zh_TW.xml
+    sal_Unicode CODE1[] =
+    {
+        0x0047, 0x0047, 0x0047, 0x0045, 0x0045, // GGGEE
+        0x0022, 0x5E74, 0x0022,
+        0x004D, // M
+        0x0022, 0x6708, 0x0022,
+        0x0044, // D
+        0x0022, 0x65E5, 0x0022
+    };
+    sCode = OUString(CODE1, SAL_N_ELEMENTS(CODE1));
+    sal_Unicode EXPECTED[] =
+    {
+        0x4E2D, 0x83EF, 0x6C11, 0x570B,
+        0x0031, 0x0030, 0x0030, // 100
+        0x5E74,
+        0x0031, // 1
+        0x6708,
+        0x0033, 0x0030, // 30
+        0x65E5
+    };
+    sExpected = OUString(EXPECTED, SAL_N_ELEMENTS(EXPECTED));
+    checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    sal_Unicode CODE2[] =
+    {
+        0x0047, 0x0047, 0x0047, 0x0045, // GGGE
+        0x0022, 0x5E74, 0x0022,
+        0x004D, // M
+        0x0022, 0x6708, 0x0022,
+        0x0044, // D
+        0x0022, 0x65E5, 0x0022
+    };
+    sCode = OUString(CODE2, SAL_N_ELEMENTS(CODE2));
+    checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
