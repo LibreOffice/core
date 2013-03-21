@@ -469,6 +469,7 @@ void ScUndoSetCell::Undo()
 {
     BeginUndo();
     SetValue(maOldValue);
+    pDocShell->PostPaintCell(maPos);
     EndUndo();
 }
 
@@ -476,6 +477,7 @@ void ScUndoSetCell::Redo()
 {
     BeginRedo();
     SetValue(maNewValue);
+    pDocShell->PostPaintCell(maPos);
     EndRedo();
 }
 
