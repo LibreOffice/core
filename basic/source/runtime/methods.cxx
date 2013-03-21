@@ -4330,13 +4330,6 @@ RTLFUNC(SavePicture)
 
 //-----------------------------------------------------------------------------------------
 
-RTLFUNC(AboutStarBasic)
-{
-    (void)pBasic;
-    (void)bWrite;
-    (void)rPar;
-}
-
 RTLFUNC(MsgBox)
 {
     (void)pBasic;
