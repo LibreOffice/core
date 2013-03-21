@@ -32,8 +32,8 @@
     steps taken while executing some protocol) should use the facilities
     provided by sal/log.hxx.
 
-    Because the assertion macros (DBG_ASSERT, DBG_BF_ASSERT) have been used for
-    true assertions as well as to log warnings, they map to SAL_WARN instead of
+    Because the assertion macro (DBG_ASSERT) has been used for
+    true assertions as well as to log warnings, it maps to SAL_WARN instead of
     standard assert.  The warning and error macros (DBG_ASSERTWARNING,
     DBG_WARNING, DBG_WARNING1, ..., DBG_WARNING3, DBG_ERRORFILE) all map to
     SAL_INFO.
@@ -477,7 +477,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
 #define DBG_ASSERT( sCon, aError ) ((void)0)
-#define DBG_BF_ASSERT( sCon, aError ) ((void)0)
 #define DBG_WARNING( aWarning ) ((void)0)
 #define DBG_WARNING1( aWarning, x1 ) ((void)0)
 #define DBG_WARNING2( aWarning, x1, x2 ) ((void)0)
