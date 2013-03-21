@@ -113,8 +113,6 @@ using namespace ::cppu;
 #define START_PAGE      0
 #define CONNECTION_PAGE 1
 
-OFinalDBPageSetup*          pFinalPage;
-
 DBG_NAME(ODbTypeWizDialogSetup)
 //=========================================================================
 //= ODbTypeWizDialogSetup
@@ -150,11 +148,11 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_sWorkPath( SvtPathOptions().GetWorkPath() )
     , m_pGeneralPage( NULL )
     , m_pMySQLIntroPage( NULL )
+    , m_pFinalPage( NULL )
     , m_pCollection( NULL )
 {
     DBG_CTOR(ODbTypeWizDialogSetup,NULL);
     // no local resources needed anymore
-    pFinalPage = NULL;
     // extract the datasource type collection from the item set
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
     if (pCollectionItem)
@@ -583,7 +581,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 
         case PAGE_DBSETUPWIZARD_FINAL:
             pPage = OFinalDBPageSetup::CreateFinalDBTabPageSetup(this,*m_pOutSet);
-            pFinalPage = static_cast<OFinalDBPageSetup*> (pPage);
+            m_pFinalPage = static_cast<OFinalDBPageSetup*> (pPage);
             break;
     }
 
@@ -674,8 +672,8 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
             enableButtons( WZB_FINISH, sal_True);
-            if ( pFinalPage )
-                pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_sURL));
+            if ( m_pFinalPage )
+                m_pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_sURL));
             break;
     }
 }
@@ -754,7 +752,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             ::rtl::OUString sPath = m_pImpl->getDocumentUrl( *m_pOutSet );
             xStore->storeAsURL( sPath, aArgs.getPropertyValues() );
 
-            if ( !pFinalPage || pFinalPage->IsDatabaseDocumentToBeRegistered() )
+            if ( !m_pFinalPage || m_pFinalPage->IsDatabaseDocumentToBeRegistered() )
                 RegisterDataSourceByLocation( sPath );
 
             return sal_True;
@@ -788,8 +786,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
             return sal_True;
 
-        if ( pFinalPage != NULL )
-            return pFinalPage->IsDatabaseDocumentToBeOpened();
+        if ( m_pFinalPage != NULL )
+            return m_pFinalPage->IsDatabaseDocumentToBeOpened();
 
         return sal_True;
     }
@@ -800,8 +798,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
             return sal_False;
 
-        if ( pFinalPage != NULL )
-            return pFinalPage->IsTableWizardToBeStarted();
+        if ( m_pFinalPage != NULL )
+            return m_pFinalPage->IsTableWizardToBeStarted();
 
         return sal_False;
     }
