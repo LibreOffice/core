@@ -115,8 +115,8 @@ shopt -s nullglob
 # Title of the documentation
 DOXYGEN_PROJECT_PREFIX="LibreOffice"
 
-# get list of modules in build order - bah, blows RAM & disk, static list below
-INPUT_PROJECTS="sal o3tl basegfx basebmp basic comphelper svl vcl canvas cppcanvas oox svtools goodies drawinglayer xmloff slideshow sfx2 editeng svx writerfilter cui chart2 dbaccess sd starmath sc sw"
+# get list of modules
+INPUT_PROJECTS="`ls */Module_*.mk | sed 's#/.*##'`"
 
 # output directory for generated documentation
 BASE_OUTPUT="$1"
@@ -134,7 +134,7 @@ if test ! -f "$DOXYGEN_CFG"; then
 fi
 
 # strip -I. and bin -I prefix; exlude system headers
-DOXYGEN_INCLUDE_PATH=`echo $SOLARINC | sed -e ' s/-I\.//'g | sed -e ' s/ -I/ /'g | sed -e ' s|/usr/[^ ]*| |g'`
+DOXYGEN_INCLUDE_PATH=`echo $SOLARINC | sed -e 's/-I\.//g' -e 's/ -I/ /'g -e 's/ -isystem/ /g' -e 's|/usr/[^ ]*| |g'`
 
 # setup version string
 DOXYGEN_VERSION="master"
@@ -183,7 +183,7 @@ do
   echo "Ref-Tags:   $DOXYGEN_REF_TAGFILES"
   echo "Title:      $DOXYGEN_PROJECTNAME"
 
-  nice -15 doxygen "$DOXYGEN_CFG" || exit 1
+  nice -15 doxygen "$DOXYGEN_CFG" >>$BASE_OUTPUT/doxygen.log || exit 1
 
   # setup referenced tagfiles for next round
   DOXYGEN_REF_TAGFILES="$DOXYGEN_REF_TAGFILES $DOXYGEN_OUR_TAGFILE=$BASE_URL/$PROJECT/html"
