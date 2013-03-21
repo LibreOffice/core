@@ -25,7 +25,7 @@ namespace loplugin
 
 struct PluginData
     {
-    Plugin* (*create)( ASTContext&, Rewriter& );
+    Plugin* (*create)( CompilerInstance&, Rewriter& );
     Plugin* object;
     const char* optionName;
     bool isRewriter;
@@ -36,9 +36,9 @@ static PluginData plugins[ MAX_PLUGINS ];
 static int pluginCount = 0;
 static bool pluginObjectsCreated = false;
 
-PluginHandler::PluginHandler( ASTContext& context, const vector< string >& args )
-    : context( context )
-    , rewriter( context.getSourceManager(), context.getLangOpts())
+PluginHandler::PluginHandler( CompilerInstance& compiler, const vector< string >& args )
+    : compiler( compiler )
+    , rewriter( compiler.getSourceManager(), compiler.getLangOpts())
     , scope( "mainfile" )
     {
     bool wasPlugin = false;
@@ -95,11 +95,11 @@ void PluginHandler::createPlugin( const string& name )
         if( name.empty())  // no plugin given -> create non-writer plugins
             {
             if( !plugins[ i ].isRewriter )
-                plugins[ i ].object = plugins[ i ].create( context, rewriter );
+                plugins[ i ].object = plugins[ i ].create( compiler, rewriter );
             }
         else if( plugins[ i ].optionName == name )
             {
-            plugins[ i ].object = plugins[ i ].create( context, rewriter );
+            plugins[ i ].object = plugins[ i ].create( compiler, rewriter );
             return;
             }
         }
@@ -107,7 +107,7 @@ void PluginHandler::createPlugin( const string& name )
         report( DiagnosticsEngine::Fatal, "unknown plugin tool %0" ) << name;
     }
 
-void PluginHandler::registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter )
+void PluginHandler::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter )
     {
     assert( !pluginObjectsCreated );
     assert( pluginCount < MAX_PLUGINS );
@@ -120,7 +120,7 @@ void PluginHandler::registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ),
 
 DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
     {
-    return Plugin::report( level, message, context, loc );
+    return Plugin::report( level, message, compiler, loc );
     }
 
 void PluginHandler::HandleTranslationUnit( ASTContext& context )
@@ -218,7 +218,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
 
 ASTConsumer* LibreOfficeAction::CreateASTConsumer( CompilerInstance& Compiler, StringRef )
     {
-    return new PluginHandler( Compiler.getASTContext(), _args );
+    return new PluginHandler( Compiler, _args );
     }
 
 bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const vector< string >& args )

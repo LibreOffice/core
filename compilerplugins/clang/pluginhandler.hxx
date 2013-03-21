@@ -26,15 +26,15 @@ class PluginHandler
     : public ASTConsumer
     {
     public:
-        PluginHandler( ASTContext& context, const vector< string >& args );
+        PluginHandler( CompilerInstance& compiler, const vector< string >& args );
         virtual ~PluginHandler();
         virtual void HandleTranslationUnit( ASTContext& context );
-        static void registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter );
+        static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter );
     private:
         void handleOption( const string& option );
         void createPlugin( const string& name );
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
-        ASTContext& context;
+        CompilerInstance& compiler;
         Rewriter rewriter;
         string scope;
     };

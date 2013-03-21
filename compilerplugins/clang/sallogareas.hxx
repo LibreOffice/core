@@ -23,7 +23,7 @@ class SalLogAreas
     , public Plugin
     {
     public:
-        explicit SalLogAreas( ASTContext& context );
+        explicit SalLogAreas( CompilerInstance& compiler );
         virtual void run();
         bool VisitFunctionDecl( FunctionDecl* function );
         bool VisitCallExpr( CallExpr* call );

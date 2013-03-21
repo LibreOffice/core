@@ -21,7 +21,7 @@ class UnusedVariableCheck
     , public Plugin
     {
     public:
-        explicit UnusedVariableCheck( ASTContext& context );
+        explicit UnusedVariableCheck( CompilerInstance& compiler );
         virtual void run();
         bool VisitVarDecl( VarDecl* var );
     };

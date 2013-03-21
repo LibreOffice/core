@@ -21,7 +21,7 @@ class BodyNotInBlock
     , public Plugin
     {
     public:
-        explicit BodyNotInBlock( ASTContext& context );
+        explicit BodyNotInBlock( CompilerInstance& compiler );
         virtual void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
     private:

@@ -21,9 +21,9 @@ class LiteralAlternative:
     public RecursiveASTVisitor<LiteralAlternative>, public loplugin::Plugin
 {
 public:
-    explicit LiteralAlternative(ASTContext & context): Plugin(context) {}
+    explicit LiteralAlternative(CompilerInstance & compiler): Plugin(compiler) {}
 
-    virtual void run() { TraverseDecl(context.getTranslationUnitDecl()); }
+    virtual void run() { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCallExpr(CallExpr * expr);
 };
@@ -65,7 +65,7 @@ bool LiteralAlternative::VisitCallExpr(CallExpr * expr) {
         // better to handle that at the level of non-expanded macros instead,
         // but I have not found out how to do that yet anyway):
         APSInt res;
-        if (expr->getArg(1)->isIntegerConstantExpr(res, context)) {
+        if (expr->getArg(1)->isIntegerConstantExpr(res, compiler.getASTContext())) {
             Expr const * arg0 = expr->getArg(0)->IgnoreParenImpCasts();
             StringLiteral const * lit = dyn_cast<StringLiteral>(arg0);
             bool match = false;
@@ -82,7 +82,7 @@ bool LiteralAlternative::VisitCallExpr(CallExpr * expr) {
                             subs->getBase()->IgnoreParenImpCasts());
                         match = lit != nullptr
                             && subs->getIdx()->isIntegerConstantExpr(
-                                res, context)
+                                res, compiler.getASTContext())
                             && res == 0;
                     }
                 }

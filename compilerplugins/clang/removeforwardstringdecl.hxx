@@ -21,7 +21,7 @@ class RemoveForwardStringDecl
     , public RewritePlugin
     {
     public:
-        explicit RemoveForwardStringDecl( ASTContext& context, Rewriter& rewriter );
+        explicit RemoveForwardStringDecl( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
         bool VisitNamespaceDecl( NamespaceDecl* declaration );
     private:

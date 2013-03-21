@@ -19,14 +19,14 @@ Change all postfix ++ operators of non-trivial types to prefix if possible.
 namespace loplugin
 {
 
-PostfixIncrementFix::PostfixIncrementFix( ASTContext& context, Rewriter& rewriter )
-    : RewritePlugin( context, rewriter )
+PostfixIncrementFix::PostfixIncrementFix( CompilerInstance& compiler, Rewriter& rewriter )
+    : RewritePlugin( compiler, rewriter )
     {
     }
 
 void PostfixIncrementFix::run()
     {
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 bool PostfixIncrementFix::VisitFunctionDecl( FunctionDecl* declaration )

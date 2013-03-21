@@ -28,14 +28,14 @@ For example:
 Here either both statements should be inside {} or the second statement in indented wrong.
 */
 
-BodyNotInBlock::BodyNotInBlock( ASTContext& context )
-    : Plugin( context )
+BodyNotInBlock::BodyNotInBlock( CompilerInstance& compiler )
+    : Plugin( compiler )
     {
     }
 
 void BodyNotInBlock::run()
     {
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 bool BodyNotInBlock::VisitFunctionDecl( FunctionDecl* declaration )
@@ -110,9 +110,9 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, c
                 if( it != parents[ parent_pos ]->child_end())
                     {
                     bool invalid1, invalid2;
-                    unsigned bodyColumn = context.getSourceManager()
+                    unsigned bodyColumn = compiler.getSourceManager()
                         .getPresumedColumnNumber( body->getLocStart(), &invalid1 );
-                    unsigned nextStatementColumn = context.getSourceManager()
+                    unsigned nextStatementColumn = compiler.getSourceManager()
                         .getPresumedColumnNumber( (*it)->getLocStart(), &invalid2 );
                     if( invalid1 || invalid2 )
                         return;

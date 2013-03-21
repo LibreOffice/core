@@ -19,14 +19,14 @@ Remove all forward declarations of rtl strings. I.e. 'namespace rtl { class OUSt
 namespace loplugin
 {
 
-RemoveForwardStringDecl::RemoveForwardStringDecl( ASTContext& context, Rewriter& rewriter )
-    : RewritePlugin( context, rewriter )
+RemoveForwardStringDecl::RemoveForwardStringDecl( CompilerInstance& compiler, Rewriter& rewriter )
+    : RewritePlugin( compiler, rewriter )
     {
     }
 
 void RemoveForwardStringDecl::run()
     {
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 bool RemoveForwardStringDecl::VisitNamespaceDecl( NamespaceDecl* declaration )

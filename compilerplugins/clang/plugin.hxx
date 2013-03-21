@@ -17,6 +17,7 @@
 #include <clang/AST/RecursiveASTVisitor.h>
 #include <clang/Basic/FileManager.h>
 #include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/CompilerInstance.h>
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 #include <clang/Rewrite/Rewriter.h>
@@ -40,21 +41,21 @@ namespace loplugin
 class Plugin
     {
     public:
-        explicit Plugin( ASTContext& context );
+        explicit Plugin( CompilerInstance& compiler );
         virtual ~Plugin();
         virtual void run() = 0;
         template< typename T > class Registration;
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         static DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message,
-            ASTContext& context, SourceLocation loc = SourceLocation());
+            CompilerInstance& compiler, SourceLocation loc = SourceLocation());
     protected:
         bool ignoreLocation( SourceLocation loc );
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );
-        ASTContext& context;
+        CompilerInstance& compiler;
     private:
-        static void registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter );
-        template< typename T > static Plugin* createHelper( ASTContext& context, Rewriter& rewriter );
+        static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter );
+        template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
         enum { isRewriter = false };
     };
 
@@ -67,7 +68,7 @@ class RewritePlugin
     : public Plugin
     {
     public:
-        explicit RewritePlugin( ASTContext& context, Rewriter& rewriter );
+        explicit RewritePlugin( CompilerInstance& compiler, Rewriter& rewriter );
     protected:
         // This enum allows passing just 'RemoveLineIfEmpty' to functions below.
         enum RemoveLineIfEmpty_t { RemoveLineIfEmpty };
@@ -109,7 +110,7 @@ class RewritePlugin
         Rewriter& rewriter;
     private:
         template< typename T > friend class Plugin::Registration;
-        template< typename T > static Plugin* createHelper( ASTContext& context, Rewriter& rewriter );
+        template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
         enum { isRewriter = true };
         bool reportEditFailure( SourceLocation loc );
         bool adjustForWholeStatement( SourceRange* range );
@@ -136,7 +137,7 @@ class Plugin::Registration
 class RegistrationCreate
     {
     public:
-        template< typename T, bool > static T* create( ASTContext& context, Rewriter& rewriter );
+        template< typename T, bool > static T* create( CompilerInstance& compiler, Rewriter& rewriter );
     };
 
 /////
@@ -159,15 +160,15 @@ bool Plugin::ignoreLocation( const Stmt* stmt )
     }
 
 template< typename T >
-Plugin* Plugin::createHelper( ASTContext& context, Rewriter& )
+Plugin* Plugin::createHelper( CompilerInstance& compiler, Rewriter& )
     {
-    return new T( context );
+    return new T( compiler );
     }
 
 template< typename T >
-Plugin* RewritePlugin::createHelper( ASTContext& context, Rewriter& rewriter )
+Plugin* RewritePlugin::createHelper( CompilerInstance& compiler, Rewriter& rewriter )
     {
-    return new T( context, rewriter );
+    return new T( compiler, rewriter );
     }
 
 template< typename T >

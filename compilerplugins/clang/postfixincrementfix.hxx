@@ -21,7 +21,7 @@ class PostfixIncrementFix
     , public RewritePlugin
     {
     public:
-        explicit PostfixIncrementFix( ASTContext& context, Rewriter& rewriter );
+        explicit PostfixIncrementFix( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
     private:

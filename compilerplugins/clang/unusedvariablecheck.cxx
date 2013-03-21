@@ -30,14 +30,14 @@ SAL_WARN_UNUSED (see e.g. OUString). For external classes such as std::vector
 that cannot be edited there is a manual list below.
 */
 
-UnusedVariableCheck::UnusedVariableCheck( ASTContext& context )
-    : Plugin( context )
+UnusedVariableCheck::UnusedVariableCheck( CompilerInstance& compiler )
+    : Plugin( compiler )
     {
     }
 
 void UnusedVariableCheck::run()
     {
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 bool UnusedVariableCheck::VisitVarDecl( VarDecl* var )

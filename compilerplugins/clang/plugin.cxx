@@ -20,20 +20,20 @@ Base classes for plugin actions.
 namespace loplugin
 {
 
-Plugin::Plugin( ASTContext& context )
-    : context( context )
+Plugin::Plugin( CompilerInstance& compiler )
+    : compiler( compiler )
     {
     }
 
 DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
     {
-    return report( level, message, context, loc );
+    return report( level, message, compiler, loc );
     }
 
-DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, ASTContext& context,
+DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, CompilerInstance& compiler,
     SourceLocation loc )
     {
-    DiagnosticsEngine& diag = context.getDiagnostics();
+    DiagnosticsEngine& diag = compiler.getDiagnostics();
 #if 0
     // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
     if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors())
@@ -50,10 +50,10 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
 
 bool Plugin::ignoreLocation( SourceLocation loc )
     {
-    SourceLocation expansionLoc = context.getSourceManager().getExpansionLoc( loc );
-    if( context.getSourceManager().isInSystemHeader( expansionLoc ))
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
-    const char* bufferName = context.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
+    const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
     if( bufferName == NULL )
         return true;
     if( strncmp( bufferName, OUTDIR, strlen( OUTDIR )) == 0
@@ -64,15 +64,15 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     return true;
     }
 
-void Plugin::registerPlugin( Plugin* (*create)( ASTContext&, Rewriter& ), const char* optionName, bool isRewriter )
+void Plugin::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter )
     {
     PluginHandler::registerPlugin( create, optionName, isRewriter );
     }
 
 /////
 
-RewritePlugin::RewritePlugin( ASTContext& context, Rewriter& rewriter )
-    : Plugin( context )
+RewritePlugin::RewritePlugin( CompilerInstance& compiler, Rewriter& rewriter )
+    : Plugin( compiler )
     , rewriter( rewriter )
     {
     }

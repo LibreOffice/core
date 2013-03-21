@@ -25,8 +25,8 @@ report if the area is not listed there. The fix is either use a proper area or a
 if appropriate.
 */
 
-SalLogAreas::SalLogAreas( ASTContext& context )
-    : Plugin( context )
+SalLogAreas::SalLogAreas( CompilerInstance& compiler )
+    : Plugin( compiler )
     {
     }
 
@@ -34,7 +34,7 @@ void SalLogAreas::run()
     {
     inFunction = NULL;
     lastSalDetailLogStreamMacro = SourceLocation();
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 bool SalLogAreas::VisitFunctionDecl( FunctionDecl* function )
@@ -59,7 +59,7 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                 // The SAL_DETAIL_LOG_STREAM macro expands to two calls to sal::detail::log(),
                 // so do not warn repeatedly about the same macro (the area->getLocStart() of all the calls
                 // from the same macro should be the same).
-                SourceLocation expansionLocation = context.getSourceManager().getExpansionLoc( call->getLocStart());
+                SourceLocation expansionLocation = compiler.getSourceManager().getExpansionLoc( call->getLocStart());
                 if( expansionLocation == lastSalDetailLogStreamMacro )
                     return true;
                 lastSalDetailLogStreamMacro = expansionLocation;
@@ -74,14 +74,15 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                     }
                 if( inFunction->getQualifiedNameAsString() == "sal::detail::log" )
                     return true; // This function only forwards to sal_detail_log, so ok.
-                if( call->getArg( 1 )->isNullPointerConstant( context, Expr::NPC_ValueDependentIsNotNull ) != Expr::NPCK_NotNull )
+                if( call->getArg( 1 )->isNullPointerConstant( compiler.getASTContext(),
+                    Expr::NPC_ValueDependentIsNotNull ) != Expr::NPCK_NotNull )
                     { // If the area argument is a null pointer, that is allowed only for SAL_DEBUG.
-                    const SourceManager& source = context.getSourceManager();
+                    const SourceManager& source = compiler.getSourceManager();
                     for( SourceLocation loc = call->getLocStart();
                          loc.isMacroID();
                          loc = source.getImmediateExpansionRange( loc ).first )
                         {
-                        StringRef inMacro = Lexer::getImmediateMacroName( loc, source, context.getLangOpts());
+                        StringRef inMacro = Lexer::getImmediateMacroName( loc, source, compiler.getLangOpts());
                         if( inMacro == "SAL_DEBUG" )
                             return true; // ok
                         }
