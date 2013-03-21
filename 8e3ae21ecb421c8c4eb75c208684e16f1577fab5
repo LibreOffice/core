@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//++0\u003d",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-21T08:03:28Z",
+      "side": 1,
+      "message": "gemerged -\u003e merged",
+      "revId": "8e3ae21ecb421c8c4eb75c208684e16f1577fab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//++w\u003d",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2232,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-21T08:03:28Z",
+      "side": 1,
+      "message": "table? wasn\u0027t in the english version. are you sure?",
+      "revId": "8e3ae21ecb421c8c4eb75c208684e16f1577fab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//++s\u003d",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-21T08:03:28Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "8e3ae21ecb421c8c4eb75c208684e16f1577fab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//++o\u003d",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2240,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-21T08:03:28Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "8e3ae21ecb421c8c4eb75c208684e16f1577fab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//++k\u003d",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-21T08:03:28Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "8e3ae21ecb421c8c4eb75c208684e16f1577fab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//++Y\u003d",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2470,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-21T08:03:28Z",
+      "side": 1,
+      "message": "eventuell -\u003e possible/maybe :)",
+      "revId": "8e3ae21ecb421c8c4eb75c208684e16f1577fab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
