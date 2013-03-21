@@ -92,7 +92,6 @@ void ThumbnailView::ImplInit()
     mnLines             = 0;
     mnFirstLine         = 0;
     mnScrBarOffset = 1;
-    mnSelItemId         = 0;
     mnHighItemId        = 0;
     mnCols              = 0;
     mnSpacing           = 0;
@@ -586,11 +585,7 @@ void ThumbnailView::GetFocus()
 
     if ( nSelected == -1 && mItemList.size( ) > 0 )
     {
-        mItemList[0]->setSelection(true);
-        maItemStateHdl.Call(mItemList[0]);
-
-        if (IsReallyVisible() && IsUpdateMode())
-            Invalidate();
+        SelectItem( 1 );
     }
 
     // Tell the accessible object that we got the focus.
@@ -707,10 +702,9 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
     }
 
     // reset variables
-    if ( (mnHighItemId == nItemId) || (mnSelItemId == nItemId) )
+    if ( (mnHighItemId == nItemId) )
     {
         mnHighItemId    = 0;
-        mnSelItemId     = 0;
     }
 
     CalculateItemPositions();
@@ -726,7 +720,6 @@ void ThumbnailView::Clear()
     // reset variables
     mnFirstLine     = 0;
     mnHighItemId    = 0;
-    mnSelItemId     = 0;
 
     CalculateItemPositions();
 
@@ -774,19 +767,18 @@ void ThumbnailView::setItemDimensions(long itemWidth, long thumbnailHeight, long
 
 void ThumbnailView::SelectItem( sal_uInt16 nItemId )
 {
-    size_t nItemPos = 0;
+    size_t nItemPos = GetItemPos( nItemId );
+    if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
+        return;
 
-    if ( nItemId )
+    ThumbnailViewItem* pItem = mItemList[nItemPos];
+    if (!pItem->isSelected())
     {
-        nItemPos = GetItemPos( nItemId );
-        if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
-            return;
-    }
+        mItemList[nItemPos]->setSelection(true);
+        maItemStateHdl.Call(mItemList[nItemPos]);
 
-    if ( mnSelItemId != nItemId)
-    {
-        sal_uInt16 nOldItem = mnSelItemId ? mnSelItemId : 1;
-        mnSelItemId = nItemId;
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
 
         bool bNewOut = IsReallyVisible() && IsUpdateMode();
 
@@ -812,44 +804,8 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
 
         if( ImplHasAccessibleListeners() )
         {
-            // focus event (deselect)
-            if( nOldItem )
-            {
-                const size_t nPos = GetItemPos( nItemId );
-
-                if( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-                {
-                    ThumbnailViewAcc* pItemAcc = ThumbnailViewAcc::getImplementation(
-                        mItemList[nPos]->GetAccessible( mbIsTransientChildrenDisabled ) );
-
-                    if( pItemAcc )
-                    {
-                        ::com::sun::star::uno::Any aOldAny, aNewAny;
-                        if( !mbIsTransientChildrenDisabled )
-                        {
-                            aOldAny <<= ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
-                                static_cast< ::cppu::OWeakObject* >( pItemAcc ));
-                            ImplFireAccessibleEvent (::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
-                        }
-                        else
-                        {
-                            aOldAny <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-                            pItemAcc->FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
-                        }
-                    }
-                }
-            }
-
             // focus event (select)
-            const size_t nPos = GetItemPos( mnSelItemId );
-
-            ThumbnailViewItem* pItem = NULL;
-            if( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-                pItem = mItemList[nPos];
-
-            ThumbnailViewAcc* pItemAcc = NULL;
-            if (pItem != NULL)
-                pItemAcc = ThumbnailViewAcc::getImplementation( pItem->GetAccessible( mbIsTransientChildrenDisabled ) );
+            ThumbnailViewAcc* pItemAcc = ThumbnailViewAcc::getImplementation( pItem->GetAccessible( mbIsTransientChildrenDisabled ) );
 
             if( pItemAcc )
             {
@@ -872,6 +828,16 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
             ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
         }
     }
+}
+
+bool ThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const
+{
+    size_t nItemPos = GetItemPos( nItemId );
+    if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
+        return false;
+
+    ThumbnailViewItem* pItem = mItemList[nItemPos];
+    return pItem->isSelected();
 }
 
 void ThumbnailView::deselectItems()
@@ -908,42 +874,6 @@ void ThumbnailView::SetColor( const Color& rColor )
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
-}
-
-bool ThumbnailView::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
-{
-    if ( rCEvt.GetCommand() != COMMAND_STARTDRAG )
-        return false;
-
-    // if necessary abort an existing action
-
-    // Check out if the clicked on page is selected. If this is not the
-    // case set it as the current item. We only check mouse actions since
-    // drag-and-drop can also be triggered by the keyboard
-    sal_uInt16 nSelId;
-    if ( rCEvt.IsMouseEvent() )
-        nSelId = GetItemId( rCEvt.GetMousePosPixel() );
-    else
-        nSelId = mnSelItemId;
-
-    // don't activate dragging if no item was clicked on
-    if ( !nSelId )
-        return false;
-
-    // Check out if the page was selected. If not set as current page and
-    // call select.
-    if ( nSelId != mnSelItemId )
-    {
-        SelectItem( nSelId );
-        Update();
-    }
-
-    Region aRegion;
-
-    // assign region
-    rRegion = aRegion;
-
-    return true;
 }
 
 void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func)
