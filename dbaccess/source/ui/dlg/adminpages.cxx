@@ -78,6 +78,19 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
+    OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const rtl::OString& _rId, const rtl::OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
+        :SfxTabPage(_pParent, _rId, _rUIXMLDescription, _rAttrSet)
+        ,m_abEnableRoadmap(sal_False)
+        ,m_pAdminDialog(NULL)
+        ,m_pItemSetHelper(NULL)
+        ,m_pFT_HeaderText(NULL)
+    {
+        DBG_CTOR(OGenericAdministrationPage,NULL);
+
+        SetExchangeSupport(sal_True);
+    }
+
+    //-------------------------------------------------------------------------
     OGenericAdministrationPage::~OGenericAdministrationPage()
     {
         DELETEZ(m_pFT_HeaderText);
