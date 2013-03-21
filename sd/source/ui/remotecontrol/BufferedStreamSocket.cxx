@@ -90,6 +90,8 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
             aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the empty line
             aRead -= (aLocation + 1);
 
+            SAL_INFO( "sdremote.bluetooth", "recv line '" << aLine << "'" );
+
             return aLine.getLength() + 1;
         }
 
@@ -100,6 +102,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
         else
             aRet = ::recv( mSocket, &aBuffer[aRead], 100, 0 );
 
+        SAL_INFO( "sdremote.bluetooth", "recv " << aRet << " aBuffer len " << aBuffer.size() );
         if ( aRet <= 0 )
         {
             return 0;
