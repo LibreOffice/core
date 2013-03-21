@@ -53,6 +53,7 @@ class OGenericAdministrationPage;
 //= ODbTypeWizDialogSetup
 //=========================================================================
 class OGeneralPage;
+class OGeneralPageWizard;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */
@@ -88,7 +89,7 @@ private:
     String                  m_sRM_FinalText;
     INetURLObject           m_aDocURL;
     String                  m_sWorkPath;
-    OGeneralPage*           m_pGeneralPage;
+    OGeneralPageWizard*     m_pGeneralPage;
     OMySQLIntroPageSetup*   m_pMySQLIntroPage;
     OFinalDBPageSetup*      m_pFinalPage;
 
@@ -182,9 +183,9 @@ private:
     sal_Bool callSaveAsDialog();
     sal_Bool IsConnectionUrlRequired();
     DECL_LINK(OnTypeSelected, OGeneralPage*);
-    DECL_LINK(OnChangeCreationMode, OGeneralPage*);
-    DECL_LINK(OnRecentDocumentSelected, OGeneralPage*);
-    DECL_LINK(OnSingleDocumentChosen, OGeneralPage*);
+    DECL_LINK(OnChangeCreationMode, OGeneralPageWizard*);
+    DECL_LINK(OnRecentDocumentSelected, OGeneralPageWizard*);
+    DECL_LINK(OnSingleDocumentChosen, OGeneralPageWizard*);
     DECL_LINK(ImplClickHdl, OMySQLIntroPageSetup*);
     DECL_LINK(ImplModifiedHdl, OGenericAdministrationPage*);
 };

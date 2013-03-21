@@ -23,8 +23,8 @@
 //========================================================================
 // control ids
 
-#define FT_DATATYPE             1
-#define FT_DATASOURCETYPE_PRE   2
+    // FREE
+    // FREE
 #define FT_USERNAME             3
 #define FT_PASSWORD             4
 #define FT_OPTIONS              5
@@ -36,16 +36,6 @@
 #define FT_BASEDN               11
 #define FT_PORTNUMBER           12
 #define FT_LDAPROWCOUNT         13
-#define FT_DATASOURCETYPE_POST  14
-#define FT_GENERALHEADERTEXT    15
-#define FT_GENERALHELPTEXT      16
-#define FT_DATATYPEAPPENDIX     17
-#define FT_DATASOURCEHEADER     18
-#define FT_DOCLISTLABEL         19
-
-#define LB_DATATYPE             1
-    // FREE
-#define LB_DOCUMENTLIST         3
 
 #define ET_USERNAME             1
 #define ET_PASSWORD             2
@@ -59,7 +49,6 @@
 #define BTN_PASSWORD_CANCEL     3
 #define BTN_PASSWORD_HELP       4
 #define PB_TESTDRIVERCLASS      5
-#define PB_OPENDOCUMENT         6
 
 #define CB_PASSWORD_REQUIRED    1
 #define CB_SHOWDELETEDROWS      2
@@ -75,20 +64,12 @@
 #define NF_PORTNUMBER           1
 #define NF_LDAPROWCOUNT         2
 
-#define RB_CREATEDBDATABASE     1
-#define RB_GETEXISTINGDATABASE  2
-#define RB_OPENEXISTINGDOC      3
-
 //========================================================================
 // string ids (usually relative to other resources, that's why not necessarily unique)
 
 #define STR_PAGETITLE_GENERAL               1
 #define STR_PAGETITLE_CONNECTION            2
 #define STR_PAGETITLE_ADVANCED              3
-#define STR_MYSQLENTRY                      5
-#define STR_PARENTTITLE                     6
-#define STR_COULDNOTLOAD_ODBCLIB            7
-#define STR_UNSUPPORTED_DATASOURCE_TYPE     8
 
 #endif // _DBAUI_DBADMIN_HRC_
 
