@@ -668,28 +668,21 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         //      undo
         //
 
-        SCTAB nSelCount = rMark.GetSelectCount();
-        ScBaseCell** ppOldCells = NULL;
-        SCTAB* pTabs            = NULL;
-        SCTAB nPos = 0;
         EditTextObject* pUndoData = NULL;
+        ScUndoEnterData::ValuesType aOldValues;
+
         if (bRecord && !bSimple)
         {
-            ppOldCells  = new ScBaseCell*[nSelCount];
-            pTabs       = new SCTAB[nSelCount];
-            nPos = 0;
-
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd; ++itr)
             {
-                pTabs[nPos] = *itr;
+                ScUndoEnterData::Value aOldValue;
+                aOldValue.mnTab = *itr;
                 ScBaseCell* pDocCell;
                 pDoc->GetCell( nCol, nRow, *itr, pDocCell );
-                ppOldCells[nPos] = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
-                ++nPos;
+                aOldValue.mpCell = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
+                aOldValues.push_back(aOldValue);
             }
-
-            OSL_ENSURE( nPos==nSelCount, "nPos!=nSelCount" );
 
             pUndoData = rData.Clone();
         }
@@ -717,9 +710,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( bRecord )
             {   //  because of ChangeTrack current first
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterData( pDocSh, ScAddress(nCol, nRow, nTab), nPos, pTabs,
-                                        ppOldCells, NULL, NULL, aString,
-                                        pUndoData ) );
+                    new ScUndoEnterData(pDocSh, ScAddress(nCol,nRow,nTab), aOldValues, aString, pUndoData));
             }
 
             HideAllCursors();

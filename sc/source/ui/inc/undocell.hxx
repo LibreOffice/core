@@ -24,6 +24,7 @@
 #include "postit.hxx"
 
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocShell;
 class ScBaseCell;
@@ -74,12 +75,24 @@ private:
 class ScUndoEnterData: public ScSimpleUndo
 {
 public:
+    struct Value
+    {
+        SCTAB mnTab;
+        bool mbHasFormat;
+        sal_uInt32 mnFormat;
+        ScBaseCell* mpCell;
+
+        Value();
+    };
+
+    typedef std::vector<Value> ValuesType;
+
                     TYPEINFO();
-                    ScUndoEnterData( ScDocShell* pNewDocShell, const ScAddress& rPos,
-                            SCTAB nNewCount, SCTAB* pNewTabs,
-                            ScBaseCell** ppOldData, sal_Bool* pHasForm, sal_uLong* pOldForm,
-                            const String& rNewStr, EditTextObject* pObj = NULL );
-    virtual         ~ScUndoEnterData();
+    ScUndoEnterData(
+        ScDocShell* pNewDocShell, const ScAddress& rPos,
+        ValuesType& rOldValues, const OUString& rNewStr, EditTextObject* pObj = NULL );
+
+    virtual ~ScUndoEnterData();
 
     virtual void    Undo();
     virtual void    Redo();
@@ -89,15 +102,12 @@ public:
     virtual rtl::OUString GetComment() const;
 
 private:
-    String          aNewString;
-    SCTAB*          pTabs;
-    ScBaseCell**    ppOldCells;
-    sal_Bool*           pHasFormat;
-    sal_uLong*          pOldFormats;
-    EditTextObject* pNewEditData;
-    sal_uLong           nEndChangeAction;
+    ValuesType maOldValues;
+
+    OUString maNewString;
+    boost::scoped_ptr<EditTextObject> mpNewEditData;
+    sal_uLong mnEndChangeAction;
     ScAddress maPos;
-    SCTAB           nCount;             //  Marked sheet
 
     void            DoChange() const;
     void            SetChangeTrack();

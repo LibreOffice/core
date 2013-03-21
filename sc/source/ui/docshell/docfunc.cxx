@@ -760,31 +760,29 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
         return false;
     }
 
-    SCTAB* pTabs = NULL;
-    ScBaseCell** ppOldCells = NULL;
-    sal_Bool* pHasFormat = NULL;
-    sal_uLong* pOldFormats = NULL;
     ScBaseCell* pDocCell = pDoc->GetCell( rPos );
     sal_Bool bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
+    ScUndoEnterData::ValuesType aOldValues;
+
     if (bUndo)
     {
-        pTabs = new SCTAB[1];
-        pTabs[0] = rPos.Tab();
-        ppOldCells  = new ScBaseCell*[1];
-        ppOldCells[0] = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
+        ScUndoEnterData::Value aOldValue;
 
-        pHasFormat = new sal_Bool[1];
-        pOldFormats = new sal_uLong[1];
+        aOldValue.mnTab = rPos.Tab();
+        aOldValue.mpCell = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
+
         const SfxPoolItem* pItem;
         const ScPatternAttr* pPattern = pDoc->GetPattern( rPos.Col(),rPos.Row(),rPos.Tab() );
         if ( SFX_ITEM_SET == pPattern->GetItemSet().GetItemState(
                                 ATTR_VALUE_FORMAT,false,&pItem) )
         {
-            pHasFormat[0] = sal_True;
-            pOldFormats[0] = ((const SfxUInt32Item*)pItem)->GetValue();
+            aOldValue.mbHasFormat = true;
+            aOldValue.mnFormat = ((const SfxUInt32Item*)pItem)->GetValue();
         }
         else
-            pHasFormat[0] = false;
+            aOldValue.mbHasFormat = false;
+
+        aOldValues.push_back(aOldValue);
     }
 
     o_rbNumFmtSet = pDoc->SetString( rPos.Col(), rPos.Row(), rPos.Tab(), rText );
@@ -792,8 +790,8 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
     if (bUndo)
     {
         //  wegen ChangeTracking darf UndoAction erst nach SetString angelegt werden
-        rDocShell.GetUndoManager()->AddUndoAction(new ScUndoEnterData( &rDocShell, rPos, 1, pTabs,
-                                     ppOldCells, pHasFormat, pOldFormats, rText, NULL ) );
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoEnterData(&rDocShell, rPos, aOldValues, rText, NULL));
     }
 
     if ( bEditDeleted || pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) )

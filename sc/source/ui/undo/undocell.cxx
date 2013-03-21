@@ -164,35 +164,37 @@ sal_Bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-ScUndoEnterData::ScUndoEnterData( ScDocShell* pNewDocShell, const ScAddress& rPos,
-            SCTAB nNewCount, SCTAB* pNewTabs, ScBaseCell** ppOldData,
-            sal_Bool* pHasForm, sal_uLong* pOldForm,
-            const String& rNewStr, EditTextObject* pObj ) :
+ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0), mpCell(NULL) {}
+
+ScUndoEnterData::ScUndoEnterData(
+    ScDocShell* pNewDocShell, const ScAddress& rPos, ValuesType& rOldValues,
+    const OUString& rNewStr, EditTextObject* pObj ) :
     ScSimpleUndo( pNewDocShell ),
-    aNewString( rNewStr ),
-    pTabs( pNewTabs ),
-    ppOldCells( ppOldData ),
-    pHasFormat( pHasForm ),
-    pOldFormats( pOldForm ),
-    pNewEditData( pObj ),
-    maPos(rPos),
-    nCount( nNewCount )
+    maNewString(rNewStr),
+    mpNewEditData(pObj),
+    mnEndChangeAction(0),
+    maPos(rPos)
 {
+    maOldValues.swap(rOldValues);
+
     SetChangeTrack();
+}
+
+namespace {
+
+struct DeleteCell : std::unary_function<ScUndoEnterData::Value, void>
+{
+    void operator() (ScUndoEnterData::Value& rVal)
+    {
+        rVal.mpCell->Delete();
+    }
+};
+
 }
 
 ScUndoEnterData::~ScUndoEnterData()
 {
-    for (sal_uInt16 i=0; i<nCount; i++)
-        if (ppOldCells[i])
-            ppOldCells[i]->Delete();
-    delete[] ppOldCells;
-
-    delete[] pHasFormat;
-    delete[] pOldFormats;
-    delete[] pTabs;
-
-    delete pNewEditData;
+    std::for_each(maOldValues.begin(), maOldValues.end(), DeleteCell());
 }
 
 rtl::OUString ScUndoEnterData::GetComment() const
@@ -203,8 +205,8 @@ rtl::OUString ScUndoEnterData::GetComment() const
 void ScUndoEnterData::DoChange() const
 {
     // only when needed (old or new Edit cell, or Attribute)?
-    for (sal_uInt16 i=0; i<nCount; i++)
-        pDocShell->AdjustRowHeight(maPos.Row(), maPos.Row(), pTabs[i]);
+    for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
+        pDocShell->AdjustRowHeight(maPos.Row(), maPos.Row(), maOldValues[i].mnTab);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -221,24 +223,21 @@ void ScUndoEnterData::SetChangeTrack()
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
     {
-        nEndChangeAction = pChangeTrack->GetActionMax() + 1;
+        mnEndChangeAction = pChangeTrack->GetActionMax() + 1;
         ScAddress aPos(maPos);
-        for (sal_uInt16 i=0; i<nCount; i++)
+        for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
         {
-            aPos.SetTab( pTabs[i] );
+            aPos.SetTab(maOldValues[i].mnTab);
             sal_uLong nFormat = 0;
-            if ( pHasFormat && pOldFormats )
-            {
-                if ( pHasFormat[i] )
-                    nFormat = pOldFormats[i];
-            }
-            pChangeTrack->AppendContent( aPos, ppOldCells[i], nFormat );
+            if (maOldValues[i].mbHasFormat)
+                nFormat = maOldValues[i].mnFormat;
+            pChangeTrack->AppendContent(aPos, maOldValues[i].mpCell, nFormat);
         }
-        if ( nEndChangeAction > pChangeTrack->GetActionMax() )
-            nEndChangeAction = 0;       // nothing is appended
+        if ( mnEndChangeAction > pChangeTrack->GetActionMax() )
+            mnEndChangeAction = 0;       // nothing is appended
     }
     else
-        nEndChangeAction = 0;
+        mnEndChangeAction = 0;
 }
 
 void ScUndoEnterData::Undo()
@@ -246,29 +245,28 @@ void ScUndoEnterData::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
     {
-        ScBaseCell* pNewCell = ppOldCells[i] ? ppOldCells[i]->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
-        pDoc->PutCell(maPos.Col(), maPos.Row(), pTabs[i], pNewCell);
+        Value& rVal = maOldValues[i];
+        ScBaseCell* pNewCell = rVal.mpCell ? rVal.mpCell->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
+        pDoc->PutCell(maPos.Col(), maPos.Row(), rVal.mnTab, pNewCell);
 
-        if (pHasFormat && pOldFormats)
+        if (rVal.mbHasFormat)
+            pDoc->ApplyAttr(maPos.Col(), maPos.Row(), rVal.mnTab,
+                            SfxUInt32Item(ATTR_VALUE_FORMAT, rVal.mnFormat));
+        else
         {
-            if ( pHasFormat[i] )
-                pDoc->ApplyAttr(maPos.Col(), maPos.Row(), pTabs[i],
-                                SfxUInt32Item(ATTR_VALUE_FORMAT, pOldFormats[i]));
-            else
-            {
-                ScPatternAttr aPattern( *pDoc->GetPattern(maPos.Col(), maPos.Row(), pTabs[i]));
-                aPattern.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
-                pDoc->SetPattern(maPos.Col(), maPos.Row(), pTabs[i], aPattern, true);
-            }
+            ScPatternAttr aPattern(*pDoc->GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab));
+            aPattern.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
+            pDoc->SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, aPattern, true);
         }
-        pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), pTabs[i]);
+        pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), rVal.mnTab);
     }
 
     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-    if ( pChangeTrack && nEndChangeAction >= sal::static_int_cast<sal_uLong>(nCount) )
-        pChangeTrack->Undo( nEndChangeAction - nCount + 1, nEndChangeAction );
+    size_t nCount = maOldValues.size();
+    if ( pChangeTrack && mnEndChangeAction >= sal::static_int_cast<sal_uLong>(nCount) )
+        pChangeTrack->Undo( mnEndChangeAction - nCount + 1, mnEndChangeAction );
 
     DoChange();
     EndUndo();
@@ -278,9 +276,9 @@ void ScUndoEnterData::Undo()
     if ( pModelObj && pModelObj->HasChangesListeners() )
     {
         ScRangeList aChangeRanges;
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
         {
-            aChangeRanges.Append( ScRange(maPos.Col(), maPos.Row(), pTabs[i]));
+            aChangeRanges.Append( ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
         }
         pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
     }
@@ -291,15 +289,20 @@ void ScUndoEnterData::Redo()
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
     {
-        if (pNewEditData)
-            // A clone of pNewEditData will be stored in ScEditCell.
-            pDoc->PutCell(maPos.Col(), maPos.Row(), pTabs[i], new ScEditCell(*pNewEditData,
-                pDoc, NULL));
+        SCTAB nTab = maOldValues[i].mnTab;
+        if (mpNewEditData)
+        {
+            ScAddress aPos = maPos;
+            aPos.SetTab(nTab);
+            // edit text wil be cloned.
+            pDoc->SetEditText(aPos, *mpNewEditData, NULL);
+        }
         else
-            pDoc->SetString(maPos.Col(), maPos.Row(), pTabs[i], aNewString);
-        pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), pTabs[i]);
+            pDoc->SetString(maPos.Col(), maPos.Row(), nTab, maNewString);
+
+        pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), nTab);
     }
 
     SetChangeTrack();
@@ -312,9 +315,9 @@ void ScUndoEnterData::Redo()
     if ( pModelObj && pModelObj->HasChangesListeners() )
     {
         ScRangeList aChangeRanges;
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
         {
-            aChangeRanges.Append( ScRange(maPos.Col(), maPos.Row(), pTabs[i]));
+            aChangeRanges.Append(ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
         }
         pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
     }
@@ -324,7 +327,7 @@ void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        String aTemp = aNewString;
+        OUString aTemp = maNewString;
         ((ScTabViewTarget&)rTarget).GetViewShell()->EnterDataAtCursor( aTemp );
     }
 }
