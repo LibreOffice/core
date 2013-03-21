@@ -809,7 +809,7 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
 
 namespace {
 
-void pushUndoSetCell( ScDocShell& rDocShell, ScDocument* pDoc, const ScAddress& rPos, const ScUndoSetCell::Value& rNewVal )
+void pushUndoSetCell( ScDocShell& rDocShell, ScDocument* pDoc, const ScAddress& rPos, const ScUndoCellValue& rNewVal )
 {
     svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
     switch (pDoc->GetCellType(rPos))

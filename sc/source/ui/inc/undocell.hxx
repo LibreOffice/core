@@ -35,6 +35,25 @@ class ScDetOpList;
 class ScDetOpData;
 class ScRangeName;
 
+struct ScUndoCellValue
+{
+    CellType meType;
+    union {
+        double mfValue;
+        OUString* mpString;
+        EditTextObject* mpEditText;
+        ScFormulaCell* mpFormula;
+    };
+
+    ScUndoCellValue();
+    ScUndoCellValue( double fValue );
+    ScUndoCellValue( const OUString& rString );
+    ScUndoCellValue( const EditTextObject& rEditText );
+    ScUndoCellValue( const ScFormulaCell& rFormula );
+    ScUndoCellValue( const ScUndoCellValue& r );
+    ~ScUndoCellValue();
+};
+
 class ScUndoCursorAttr: public ScSimpleUndo
 {
 public:
@@ -142,28 +161,9 @@ private:
 class ScUndoSetCell : public ScSimpleUndo
 {
 public:
-    struct Value
-    {
-        CellType meType;
-        union {
-            double mfValue;
-            OUString* mpString;
-            EditTextObject* mpEditText;
-            ScFormulaCell* mpFormula;
-        };
-
-        Value();
-        Value( double fValue );
-        Value( const OUString& rString );
-        Value( const EditTextObject& rEditText );
-        Value( const ScFormulaCell& rFormula );
-        Value( const Value& r );
-        ~Value();
-    };
-
     TYPEINFO();
-    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rNewVal );
-    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rOldVal, const Value& rNewVal );
+    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rNewVal );
+    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rOldVal, const ScUndoCellValue& rNewVal );
 
     virtual ~ScUndoSetCell();
 
@@ -174,12 +174,12 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    void SetValue( const Value& rVal );
+    void SetValue( const ScUndoCellValue& rVal );
 
 private:
     ScAddress maPos;
-    Value maOldValue;
-    Value maNewValue;
+    ScUndoCellValue maOldValue;
+    ScUndoCellValue maNewValue;
 };
 
 class ScUndoPageBreak: public ScSimpleUndo

@@ -45,6 +45,48 @@
 
 using ::boost::shared_ptr;
 
+ScUndoCellValue::ScUndoCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
+ScUndoCellValue::ScUndoCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
+ScUndoCellValue::ScUndoCellValue( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
+ScUndoCellValue::ScUndoCellValue( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
+ScUndoCellValue::ScUndoCellValue( const ScFormulaCell& rFormula ) : meType(CELLTYPE_FORMULA), mpFormula(rFormula.Clone()) {}
+
+ScUndoCellValue::ScUndoCellValue( const ScUndoCellValue& r ) : meType(r.meType), mfValue(r.mfValue)
+{
+    switch (r.meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = new OUString(*r.mpString);
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = r.mpEditText->Clone();
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = r.mpFormula->Clone();
+        break;
+        default:
+            ;
+    }
+}
+
+ScUndoCellValue::~ScUndoCellValue()
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            delete mpString;
+        break;
+        case CELLTYPE_EDIT:
+            delete mpEditText;
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula->Delete();
+        break;
+        default:
+            ;
+    }
+}
+
 TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterValue, ScSimpleUndo);
@@ -415,52 +457,10 @@ sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoSetCell::Value::Value() : meType(CELLTYPE_NONE), mfValue(0.0) {}
-ScUndoSetCell::Value::Value( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
-ScUndoSetCell::Value::Value( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
-ScUndoSetCell::Value::Value( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
-ScUndoSetCell::Value::Value( const ScFormulaCell& rFormula ) : meType(CELLTYPE_FORMULA), mpFormula(rFormula.Clone()) {}
-
-ScUndoSetCell::Value::Value( const Value& r ) : meType(r.meType), mfValue(r.mfValue)
-{
-    switch (r.meType)
-    {
-        case CELLTYPE_STRING:
-            mpString = new OUString(*r.mpString);
-        break;
-        case CELLTYPE_EDIT:
-            mpEditText = r.mpEditText->Clone();
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula = r.mpFormula->Clone();
-        break;
-        default:
-            ;
-    }
-}
-
-ScUndoSetCell::Value::~Value()
-{
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-            delete mpString;
-        break;
-        case CELLTYPE_EDIT:
-            delete mpEditText;
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula->Delete();
-        break;
-        default:
-            ;
-    }
-}
-
-ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rNewVal ) :
+ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rNewVal ) :
     ScSimpleUndo(pDocSh), maPos(rPos), maNewValue(rNewVal) {}
 
-ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const Value& rOldVal, const Value& rNewVal ) :
+ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScUndoCellValue& rOldVal, const ScUndoCellValue& rNewVal ) :
     ScSimpleUndo(pDocSh), maPos(rPos), maOldValue(rOldVal), maNewValue(rNewVal) {}
 
 ScUndoSetCell::~ScUndoSetCell() {}
@@ -496,7 +496,7 @@ OUString ScUndoSetCell::GetComment() const
     return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); // "Input"
 }
 
-void ScUndoSetCell::SetValue( const Value& rVal )
+void ScUndoSetCell::SetValue( const ScUndoCellValue& rVal )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
