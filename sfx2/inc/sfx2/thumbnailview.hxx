@@ -202,10 +202,7 @@ public:
 
     void SelectItem( sal_uInt16 nItemId );
 
-    sal_uInt16 GetSelectItemId() const { return mnSelItemId; }
-
-    bool IsItemSelected( sal_uInt16 nItemId ) const
-        { return nItemId == mnSelItemId; }
+    bool IsItemSelected( sal_uInt16 nItemId ) const;
 
     void deselectItem (const sal_uInt16 nItemId);
 
@@ -258,8 +255,6 @@ protected:
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual bool StartDrag( const CommandEvent& rCEvt, Region& rRegion );
-
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 protected:
@@ -310,7 +305,6 @@ protected:
     long mnVisLines;
     long mnLines;
     sal_uInt16 mnScrBarOffset;
-    sal_uInt16 mnSelItemId;
     sal_uInt16 mnHighItemId;
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;
