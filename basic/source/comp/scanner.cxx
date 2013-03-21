@@ -361,8 +361,11 @@ bool SbiScanner::NextSym()
         {   aError = OUString('.');
             GenError( SbERR_BAD_CHAR_IN_NUMBER );   }
 
-        // #57844 use localized function
-        nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', NULL, NULL );
+        rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+        const sal_Unicode* pParseEnd = buf;
+        nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', &eStatus, &pParseEnd );
+        if (eStatus != rtl_math_ConversionStatus_Ok || pParseEnd != buf+(p-buf))
+            GenError( SbERR_MATH_OVERFLOW );
 
         ndig = ndig - comma;
         if( !comma && !exp )
