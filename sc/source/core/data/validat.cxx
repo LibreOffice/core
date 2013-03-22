@@ -453,13 +453,16 @@ sal_Bool ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr
     }
     else
     {
-        ScBaseCell* pCell;
         if (bIsVal)
-            pCell = new ScValueCell( nVal );
+        {
+            ScValueCell aTmpCell( nVal );
+            bRet = IsDataValid( &aTmpCell, rPos );
+        }
         else
-            pCell = new ScStringCell( rTest );
-        bRet = IsDataValid( pCell, rPos );
-        pCell->Delete();
+        {
+            ScStringCell aTmpCell( rTest );
+            bRet = IsDataValid( &aTmpCell, rPos );
+        }
     }
 
     return bRet;
