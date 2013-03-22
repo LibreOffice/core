@@ -160,107 +160,107 @@
  */
 /* Types we may use */
 #define SIZEOF_CHAR 1
-#if SIZEOF_CHAR
+#ifdef SIZEOF_CHAR
 # define HAVE_CHAR 1
 #endif
 
 #define SIZEOF_CHARP 4
-#if SIZEOF_CHARP
+#ifdef SIZEOF_CHARP
 # define HAVE_CHARP 1
 #endif
 
 #define SIZEOF_SHORT 2
-#if SIZEOF_SHORT
+#ifdef SIZEOF_SHORT
 # define HAVE_SHORT 1
 #endif
 
 #define SIZEOF_INT 4
-#if SIZEOF_INT
+#ifdef SIZEOF_INT
 # define HAVE_INT 1
 #endif
 
 #define SIZEOF_LONG 4
-#if SIZEOF_LONG
+#ifdef SIZEOF_LONG
 # define HAVE_LONG 1
 #endif
 
 #define SIZEOF_LONG_LONG 8
-#if SIZEOF_LONG_LONG
+#ifdef SIZEOF_LONG_LONG
 # define HAVE_LONG_LONG 1
 #endif
 
 #define SIZEOF_OFF_T 8
-#if SIZEOF_OFF_T
+#ifdef SIZEOF_OFF_T
 # define HAVE_OFF_T 1
 #endif
 
 #define SIZEOF_SIGSET_T 4
-#if SIZEOF_SIGSET_T
+#ifdef SIZEOF_SIGSET_T
 # define HAVE_SIGSET_T 1
 #endif
 
 #define SIZEOF_SIZE_T 4
-#if SIZEOF_SIZE_T
+#ifdef SIZEOF_SIZE_T
 # define HAVE_SIZE_T 1
 #endif
 
 /* #undef SIZEOF_UCHAR */
-#if SIZEOF_UCHAR
+#ifdef SIZEOF_UCHAR
 # define HAVE_UCHAR 1
 #endif
 
 #define SIZEOF_UINT 4
-#if SIZEOF_UINT
+#ifdef SIZEOF_UINT
 # define HAVE_UINT 1
 #endif
 
 /* #undef SIZEOF_ULONG */
-#if SIZEOF_ULONG
+#ifdef SIZEOF_ULONG
 # define HAVE_ULONG 1
 #endif
 
 /* #undef SIZEOF_INT8 */
-#if SIZEOF_INT8
+#ifdef SIZEOF_INT8
 # define HAVE_INT8 1
 #endif
 /* #undef SIZEOF_UINT8 */
-#if SIZEOF_UINT8
+#ifdef SIZEOF_UINT8
 # define HAVE_UINT8 1
 #endif
 
 /* #undef SIZEOF_INT16 */
-#if SIZEOF_INT16
+#ifdef SIZEOF_INT16
 # define HAVE_INT16 1
 #endif
 /* #undef SIZEOF_UINT16 */
-#if SIZEOF_UINT16
+#ifdef SIZEOF_UINT16
 # define HAVE_UINT16 1
 #endif
 
 /* #undef SIZEOF_INT32 */
-#if SIZEOF_INT32
+#ifdef SIZEOF_INT32
 # define HAVE_INT32 1
 #endif
 /* #undef SIZEOF_UINT32 */
-#if SIZEOF_UINT32
+#ifdef SIZEOF_UINT32
 # define HAVE_UINT32 1
 #endif
 /* #undef SIZEOF_U_INT32_T */
-#if SIZEOF_U_INT32_T
+#ifdef SIZEOF_U_INT32_T
 # define HAVE_U_INT32_T 1
 #endif
 
 /* #undef SIZEOF_INT64 */
-#if SIZEOF_INT64
+#ifdef SIZEOF_INT64
 # define HAVE_INT64 1
 #endif
 /* #undef SIZEOF_UINT64 */
-#if SIZEOF_UINT64
+#ifdef SIZEOF_UINT64
 # define HAVE_UINT64 1
 #endif
 
 /* #undef SIZEOF_SOCKLEN_T */
-#if SIZEOF_SOCKLEN_T
+#ifdef SIZEOF_SOCKLEN_T
 # define HAVE_SOCKLEN_T 1
 #endif
 
