@@ -31,8 +31,6 @@ inline sal_Bool SAL_CALL ascii_isWhitespace( sal_Unicode ch )
     return ((ch <= 0x20) && ch);
 }
 
-#define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
-
 /** Quoted-Printable Encoding */
 class INetMessageEncodeQPStream_Impl : public INetMessageIStream
 {
@@ -1173,14 +1171,13 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             {
                 String aPCT (pMsg->GetParent()->GetContentType());
                 if (aPCT.CompareIgnoreCaseToAscii ("message/rfc822", 14) == 0)
-                    pMsg->SetMIMEVersion (
-                        String(CONSTASCII_STRINGPARAM("1.0")));
+                    pMsg->SetMIMEVersion ("1.0");
                 else
                     pMsg->SetMIMEVersion (String());
             }
             else
             {
-                pMsg->SetMIMEVersion (String(CONSTASCII_STRINGPARAM("1.0")));
+                pMsg->SetMIMEVersion ("1.0");
             }
 
             // Check ContentType.
@@ -1226,14 +1223,12 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             if (eEncoding == INETMSG_ENCODING_BASE64)
             {
                 // Base64.
-                pMsg->SetContentTransferEncoding (
-                    String(CONSTASCII_STRINGPARAM("base64")));
+                pMsg->SetContentTransferEncoding ("base64");
             }
             else if (eEncoding == INETMSG_ENCODING_QUOTED)
             {
                 // Quoted-Printable.
-                pMsg->SetContentTransferEncoding (
-                    String(CONSTASCII_STRINGPARAM("quoted-printable")));
+                pMsg->SetContentTransferEncoding ("quoted-printable");
             }
             else
             {
