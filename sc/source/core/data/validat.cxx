@@ -429,26 +429,39 @@ sal_Bool ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr
 
     // get the value if any
     sal_uInt32 nFormat = rPattern.GetNumberFormat( pFormatter );
-
     double nVal;
     sal_Bool bIsVal = pFormatter->IsNumberFormat( rTest, nFormat, nVal );
-    ScBaseCell* pCell;
-    if (bIsVal)
-        pCell = new ScValueCell( nVal );
-    else
-        pCell = new ScStringCell( rTest );
 
     sal_Bool bRet;
     if (SC_VALID_TEXTLEN == eDataMode)
     {
-        const double nLenVal = static_cast<double>( rTest.Len() );
+        double nLenVal;
+        if (!bIsVal)
+            nLenVal = static_cast<double>( rTest.Len() );
+        else
+        {
+            // For numeric values use the resulting input line string to
+            // determine length, otherwise a once accepted value maybe could
+            // not be edited again, for example abbreviated dates or leading
+            // zeros or trailing zeros after decimal separator change length.
+            String aStr;
+            pFormatter->GetInputLineString( nVal, nFormat, aStr);
+            nLenVal = static_cast<double>( aStr.Len() );
+        }
         ScValueCell aTmpCell( nLenVal );
         bRet = IsCellValid( &aTmpCell, rPos );
     }
     else
+    {
+        ScBaseCell* pCell;
+        if (bIsVal)
+            pCell = new ScValueCell( nVal );
+        else
+            pCell = new ScStringCell( rTest );
         bRet = IsDataValid( pCell, rPos );
+        pCell->Delete();
+    }
 
-    pCell->Delete();
     return bRet;
 }
 
