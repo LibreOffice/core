@@ -29,6 +29,7 @@
 #ifndef SC_QA_HELPER_HXX
 #define SC_QA_HELPER_HXX
 
+#include <test/bootstrapfixture.hxx>
 #include "helper/csv_handler.hxx"
 #include "helper/debughelper.hxx"
 #include "orcus/csv_parser.hpp"

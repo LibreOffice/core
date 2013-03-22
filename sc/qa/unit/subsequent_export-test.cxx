@@ -8,8 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <unotest/filters-test.hxx>
-#include <test/bootstrapfixture.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -21,7 +19,6 @@
 
 
 #define CALC_DEBUG_OUTPUT 0
-#define TEST_BUG_FILES 0
 
 #include "helper/qahelper.hxx"
 
