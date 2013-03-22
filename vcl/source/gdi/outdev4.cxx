@@ -225,9 +225,6 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
             nInc = (nMinRect < 800) ? 10 : 20;
         }
 
-        if ( !nInc )
-            nInc = 1;
-
         nStepCount = nMinRect / nInc;
     }
     // minimal drei Schritte und maximal die Anzahl der Farbunterschiede
