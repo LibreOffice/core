@@ -26,8 +26,6 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 
-// =======================================================================
-
 void MenuButton::ImplInitMenuButtonData()
 {
     mnDDStyle       = PUSHBUTTON_DROPDOWN_MENUBUTTON;
@@ -39,8 +37,6 @@ void MenuButton::ImplInitMenuButtonData()
     mnMenuMode      = 0;
 }
 
-// -----------------------------------------------------------------------
-
 void MenuButton::ImplInit( Window* pParent, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOTABSTOP) )
@@ -49,8 +45,6 @@ void MenuButton::ImplInit( Window* pParent, WinBits nStyle )
     PushButton::ImplInit( pParent, nStyle );
     EnableRTL( Application::GetSettings().GetLayoutRTL() );
 }
-
-// -----------------------------------------------------------------------
 
 void MenuButton::ImplExecuteMenu()
 {
@@ -79,7 +73,6 @@ OString MenuButton::GetCurItemIdent() const
         mpMenu->GetItemIdent(mnCurItemId) : OString();
 }
 
-// -----------------------------------------------------------------------
 
 MenuButton::MenuButton( Window* pParent, WinBits nWinBits )
     : PushButton( WINDOW_MENUBUTTON )
@@ -87,8 +80,6 @@ MenuButton::MenuButton( Window* pParent, WinBits nWinBits )
     ImplInitMenuButtonData();
     ImplInit( pParent, nWinBits );
 }
-
-// -----------------------------------------------------------------------
 
 MenuButton::MenuButton( Window* pParent, const ResId& rResId )
     : PushButton( WINDOW_MENUBUTTON )
@@ -102,8 +93,6 @@ MenuButton::MenuButton( Window* pParent, const ResId& rResId )
     if ( !(nStyle & WB_HIDE) )
         Show();
 }
-
-// -----------------------------------------------------------------------
 
 void MenuButton::ImplLoadRes( const ResId& rResId )
 {
@@ -119,20 +108,15 @@ void MenuButton::ImplLoadRes( const ResId& rResId )
     }
 }
 
-// -----------------------------------------------------------------------
-
 MenuButton::~MenuButton()
 {
     delete mpMenuTimer;
     delete mpOwnMenu;
 }
 
-// -----------------------------------------------------------------------
-
 IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
 {
-    // Abfragen, ob Button-Benutzung noch aktiv ist, da diese ja auch
-    // vorher abgebrochen wurden sein koennte
+    // See if Button Tracking is still active, as it could've been cancelled earler
     if ( IsTracking() )
     {
         if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
@@ -143,14 +127,13 @@ IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
 
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bExecute = true;
     if ( mnMenuMode & MENUBUTTON_MENUMODE_TIMED )
     {
-        // if the separated dropdown symbol is not hit, delay the popup execution
+        // If the separated dropdown symbol is not hit, delay the popup execution
         if( mnDDStyle != PUSHBUTTON_DROPDOWN_MENUBUTTON || // no separator at all
             rMEvt.GetPosPixel().X() <= ImplGetSeparatorX() )
         {
@@ -178,7 +161,6 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
 
 void MenuButton::KeyInput( const KeyEvent& rKEvt )
 {
@@ -194,26 +176,22 @@ void MenuButton::KeyInput( const KeyEvent& rKEvt )
         PushButton::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MenuButton::Activate()
 {
     maActivateHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
 
 void MenuButton::Select()
 {
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
 
 void MenuButton::SetMenuMode( sal_uInt16 nMode )
 {
-    // Fuer die 5.1-Auslieferung besser noch nicht inline, ansonsten kann
-    // diese Funktion zur 6.0 inline werden
+    // FIXME: It's better to not inline this for 5.1; in 6.0 we can make it inline, however
     mnMenuMode = nMode;
 }
 
@@ -221,8 +199,8 @@ void MenuButton::SetPopupMenu( PopupMenu* pNewMenu )
 {
     if (pNewMenu == mpMenu)
         return;
-    // Fuer die 5.1-Auslieferung besser noch nicht inline, ansonsten kann
-    // diese Funktion zur 6.0 inline werden
+
+    // FIXME: It's better to not inline this for 5.1; in 6.0 we can make it inline, however
     mpMenu = pNewMenu;
 }
 

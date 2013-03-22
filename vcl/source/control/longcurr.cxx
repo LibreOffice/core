@@ -35,11 +35,7 @@
 
 using namespace ::comphelper;
 
-// =======================================================================
-
 #define FORMAT_LONGCURRENCY      4
-
-// =======================================================================
 
 static BigInt ImplPower10( sal_uInt16 n )
 {
@@ -52,11 +48,9 @@ static BigInt ImplPower10( sal_uInt16 n )
     return nValue;
 }
 
-// -----------------------------------------------------------------------
-
 static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const String& rCurrSymbol, sal_Bool bShowThousandSep )
 {
-    DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
+    DBG_ASSERT( nDigits < 10, "LongCurrency may only have 9 decimal places" );
 
     if ( rNumber.IsZero() || (long)rNumber )
         return rLocaleDataWrapper.getCurr( (long)rNumber, nDigits, rCurrSymbol, bShowThousandSep );
@@ -100,8 +94,6 @@ static XubString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const
     return aTemplate;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                         sal_Bool bStrictFormat, sal_Bool bThousandSep,
                                         const LocaleDataWrapper& rLocaleDataWrapper )
@@ -125,26 +117,24 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
     }
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  sal_Bool bCurrency = sal_False )
 {
-    XubString   aStr = rStr;
-    XubString   aStr1;
+    XubString aStr = rStr;
+    XubString aStr1;
     rtl::OUStringBuffer aStr2;
-    sal_uInt16      nDecPos;
-    sal_Bool        bNegative = sal_False;
+    sal_uInt16 nDecPos;
+    sal_Bool bNegative = sal_False;
 
-    // Reaktion auf leeren String
+    // On empty string
     if ( !rStr.Len() )
         return sal_False;
 
-    // Fuehrende und nachfolgende Leerzeichen entfernen
+    // Trim leading and trailing spaces
     aStr = string::strip(aStr, ' ');
 
-    // Position des Dezimalpunktes suchen
+    // Find decimal sign's position
     nDecPos = aStr.Search( rLocaleDataWrapper.getNumDecimalSep() );
 
     if ( nDecPos != STRING_NOTFOUND )
@@ -155,7 +145,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     else
         aStr1 = aStr;
 
-    // Negativ ?
+    // Negative?
     if ( bCurrency )
     {
         if ( (aStr.GetChar( 0 ) == '(') && (aStr.GetChar( aStr.Len()-1 ) == ')') )
@@ -198,7 +188,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
             bNegative = sal_True;
     }
 
-    // Alle unerwuenschten Zeichen rauswerfen
+    // Throw out all unwanted chars
     for (xub_StrLen i=0; i < aStr1.Len(); )
     {
         if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
@@ -222,7 +212,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     if ( bNegative )
         aStr1.Insert( '-', 0 );
 
-    // Nachkommateil zurechtstutzen und dabei runden
+    // Cut down decimal part and round while doing so
     bool bRound = false;
     if (aStr2.getLength() > nDecDigits)
     {
@@ -236,7 +226,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     aStr  = aStr1;
     aStr += aStr2.makeStringAndClear();
 
-    // Bereichsueberpruefung
+    // Boundscheck
     BigInt nValue( aStr );
     if ( bRound )
     {
@@ -251,26 +241,18 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     return sal_True;
 }
 
-// =======================================================================
-
 static sal_Bool ImplLongCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                              sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rLocaleDataWrapper )
 {
-    // Es gibt hier kein sinnvolles StrictFormat, also alle
-    // Zeichen erlauben
+    // There's no StrictFormat that makes sense here, thus allow all chars
     return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rLocaleDataWrapper  );
 }
-
-// -----------------------------------------------------------------------
 
 inline sal_Bool ImplLongCurrencyGetValue( const XubString& rStr, BigInt& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
-    // Zahlenwert holen
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, sal_True );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
                                sal_uInt16 nDecDigits,
@@ -307,9 +289,6 @@ sal_Bool ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nM
     }
 }
 
-
-// =======================================================================
-
 void LongCurrencyFormatter::ImpInit()
 {
     mnFieldValue        = 0;
@@ -324,20 +303,14 @@ void LongCurrencyFormatter::ImpInit()
     SetDecimalDigits( 0 );
 }
 
-// -----------------------------------------------------------------------
-
 LongCurrencyFormatter::LongCurrencyFormatter()
 {
     ImpInit();
 }
 
-// -----------------------------------------------------------------------
-
 LongCurrencyFormatter::~LongCurrencyFormatter()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void LongCurrencyFormatter::SetCurrencySymbol( const String& rStr )
 {
@@ -345,14 +318,10 @@ void LongCurrencyFormatter::SetCurrencySymbol( const String& rStr )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 String LongCurrencyFormatter::GetCurrencySymbol() const
 {
     return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
 }
-
-// -----------------------------------------------------------------------
 
 void LongCurrencyFormatter::SetValue( BigInt nNewValue )
 {
@@ -360,8 +329,6 @@ void LongCurrencyFormatter::SetValue( BigInt nNewValue )
     mnFieldValue = mnLastValue;
     SetEmptyFieldValueData( sal_False );
 }
-
-// -----------------------------------------------------------------------
 
 void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
 {
@@ -386,8 +353,6 @@ void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
     MarkToBeReformatted( sal_False );
 }
 
-// -----------------------------------------------------------------------
-
 BigInt LongCurrencyFormatter::GetValue() const
 {
     if ( !GetField() )
@@ -405,8 +370,6 @@ BigInt LongCurrencyFormatter::GetValue() const
     else
         return mnLastValue;
 }
-
-// -----------------------------------------------------------------------
 
 void LongCurrencyFormatter::Reformat()
 {
@@ -432,14 +395,10 @@ void LongCurrencyFormatter::Reformat()
         SetValue( mnLastValue );
 }
 
-// -----------------------------------------------------------------------
-
 void LongCurrencyFormatter::ReformatAll()
 {
     Reformat();
 }
-
-// -----------------------------------------------------------------------
 
 void LongCurrencyFormatter::SetMin( BigInt nNewMin )
 {
@@ -447,15 +406,11 @@ void LongCurrencyFormatter::SetMin( BigInt nNewMin )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 void LongCurrencyFormatter::SetMax( BigInt nNewMax )
 {
     mnMax = nNewMax;
     ReformatAll();
 }
-
-// -----------------------------------------------------------------------
 
 void LongCurrencyFormatter::SetUseThousandSep( sal_Bool b )
 {
@@ -463,12 +418,8 @@ void LongCurrencyFormatter::SetUseThousandSep( sal_Bool b )
     ReformatAll();
 }
 
-
-// -----------------------------------------------------------------------
-
 void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 {
-//  DBG_ASSERT( nDigits < 10, "LongCurrency duerfen nur maximal 9 Nachkommastellen haben" );
 
     if ( nDigits > 9 )
         nDigits = 9;
@@ -477,14 +428,10 @@ void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 LongCurrencyFormatter::GetDecimalDigits() const
 {
     return mnDecimalDigits;
 }
-
-// =======================================================================
 
 void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue )
 {
@@ -508,8 +455,6 @@ void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue 
     pField->Modify();
 }
 
-// =======================================================================
-
 LongCurrencyField::LongCurrencyField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {
@@ -521,13 +466,11 @@ LongCurrencyField::LongCurrencyField( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
 
 LongCurrencyField::~LongCurrencyField()
 {
 }
 
-// -----------------------------------------------------------------------
 
 long LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -539,7 +482,6 @@ long LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
     return SpinField::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
 
 long LongCurrencyField::Notify( NotifyEvent& rNEvt )
 {
@@ -558,7 +500,6 @@ long LongCurrencyField::Notify( NotifyEvent& rNEvt )
     return SpinField::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void LongCurrencyField::Modify()
 {
@@ -566,7 +507,6 @@ void LongCurrencyField::Modify()
     SpinField::Modify();
 }
 
-// -----------------------------------------------------------------------
 
 void LongCurrencyField::Up()
 {
@@ -579,8 +519,6 @@ void LongCurrencyField::Up()
     SpinField::Up();
 }
 
-// -----------------------------------------------------------------------
-
 void LongCurrencyField::Down()
 {
     BigInt nValue = GetValue();
@@ -592,7 +530,6 @@ void LongCurrencyField::Down()
     SpinField::Down();
 }
 
-// -----------------------------------------------------------------------
 
 void LongCurrencyField::First()
 {
@@ -600,15 +537,12 @@ void LongCurrencyField::First()
     SpinField::First();
 }
 
-// -----------------------------------------------------------------------
 
 void LongCurrencyField::Last()
 {
     ImplNewLongCurrencyFieldValue( this, mnLast );
     SpinField::Last();
 }
-
-// =======================================================================
 
 LongCurrencyBox::LongCurrencyBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
@@ -617,13 +551,9 @@ LongCurrencyBox::LongCurrencyBox( Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-// -----------------------------------------------------------------------
-
 LongCurrencyBox::~LongCurrencyBox()
 {
 }
-
-// -----------------------------------------------------------------------
 
 long LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -635,7 +565,6 @@ long LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
 
 long LongCurrencyBox::Notify( NotifyEvent& rNEvt )
 {
@@ -654,15 +583,11 @@ long LongCurrencyBox::Notify( NotifyEvent& rNEvt )
     return ComboBox::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
-
 void LongCurrencyBox::Modify()
 {
     MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
-
-// -----------------------------------------------------------------------
 
 void LongCurrencyBox::ReformatAll()
 {
@@ -680,7 +605,5 @@ void LongCurrencyBox::ReformatAll()
     LongCurrencyFormatter::Reformat();
     SetUpdateMode( sal_True );
 }
-
-// =======================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
