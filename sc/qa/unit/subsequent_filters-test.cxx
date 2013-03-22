@@ -1730,18 +1730,7 @@ void ScFiltersTest::testDataBarODS()
 
 void ScFiltersTest::testNewCondFormatXLSX()
 {
-    const OUString aFileNameBase("new_cond_format_test.");
-    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-
-    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "new_cond_format_test.", XLSX );
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.xlsx", xDocSh.Is());
 
@@ -1757,18 +1746,7 @@ void ScFiltersTest::testNewCondFormatXLSX()
 
 void ScFiltersTest::testFormulaDependency()
 {
-    const OUString aFileNameBase("dependencyTree.");
-    OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
-
-    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "dependencyTree.", ODS );
 
     ScDocument* pDoc = xDocSh->GetDocument();
 
