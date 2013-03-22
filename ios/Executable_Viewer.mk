@@ -40,6 +40,8 @@ $(eval $(call gb_Executable_add_objcobjects,Viewer,\
 # executable is.
 $(eval $(call gb_Executable_use_libraries,Viewer,\
 	msword \
+	sal \
+	sc \
 	scfilt \
 	sdfilt \
 	swui \
