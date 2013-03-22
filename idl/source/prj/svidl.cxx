@@ -23,8 +23,8 @@
 #include <database.hxx>
 #include <globals.hxx>
 #include <command.hxx>
-#include <tools/fsys.hxx>
 #include <tools/string.hxx>
+#include <osl/file.hxx>
 
 #define BR 0x8000
 sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool bImmerVerschieben )
@@ -61,22 +61,46 @@ sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool b
             delete[] pBuf2;
         }
     }
-    DirEntry aF2( rFile2 );
+    OUString fileURL2;
+    osl::FileBase::getFileURLFromSystemPath( rFile2, fileURL2 );
     if( nC1 != nC2 )
     {// something has changed
-        DirEntry aF1( rFile1 );
-        aF1.Kill();
+        OUString fileURL1;
+        osl::FileBase::getFileURLFromSystemPath( rFile1, fileURL1 );
         // move file
-        if( aF2.MoveTo( aF1 ) )
+        if( osl::FileBase::E_None != osl::File::move( fileURL2, fileURL1 ) )
         {
             // delete both files
-            aF1.Kill();
-            aF2.Kill();
+            osl::File::remove( fileURL1 );
+            osl::File::remove( fileURL2 );
             return sal_False;
         }
         return sal_True;
     }
-    return 0 == aF2.Kill();
+    return osl::FileBase::E_None == osl::File::remove( fileURL2 );
+}
+
+//This function gets a system path to a file [fname], creates a temp file in
+//the same folder as [fname] and returns the system path of the temp file.
+inline OUString tempFileHelper(OUString const & fname)
+{
+    OUString aTmpFile;
+
+    sal_Int32 delimIndex = fname.lastIndexOf( '/' );
+    if( delimIndex > 0 )
+    {
+        OUString aTmpDir( fname.copy( 0,  delimIndex ) );
+        osl::FileBase::getFileURLFromSystemPath( aTmpDir, aTmpDir );
+        osl::FileBase::createTempFile( &aTmpDir, 0, &aTmpFile );
+        osl::FileBase::getSystemPathFromFileURL( aTmpFile, aTmpFile );
+    }
+    else
+    {
+        rtl::OStringBuffer aStr("invalid filename: ");
+        aStr.append(rtl::OUStringToOString(fname, RTL_TEXTENCODING_UTF8));
+        fprintf(stderr, "%s\n", aStr.getStr());
+    }
+    return aTmpFile;
 }
 
 #if defined( UNX ) || defined (__MINGW32__)
@@ -87,17 +111,14 @@ int cdecl main ( int argc, char ** argv)
 {
 #endif
 
-    String aTmpListFile;
-    String aTmpSlotMapFile;
-    String aTmpSfxItemFile;
-    String aTmpDataBaseFile;
-    String aTmpCallingFile;
-    String aTmpCxxFile;
-    String aTmpHxxFile;
-    String aTmpHelpIdFile;
-    String aTmpCSVFile;
-    String aTmpDocuFile;
-    String aTmpDepFile;
+    OUString aTmpListFile;
+    OUString aTmpSlotMapFile;
+    OUString aTmpSfxItemFile;
+    OUString aTmpDataBaseFile;
+    OUString aTmpHelpIdFile;
+    OUString aTmpCSVFile;
+    OUString aTmpDocuFile;
+    OUString aTmpDepFile;
 
     SvCommand aCommand( argc, argv );
 
@@ -108,125 +129,105 @@ int cdecl main ( int argc, char ** argv)
     SvIdlWorkingBase * pDataBase = new SvIdlWorkingBase(aCommand);
 
     int nExit = 0;
-    if( aCommand.aExportFile.Len() )
+    if( !aCommand.aExportFile.isEmpty() )
     {
-        DirEntry aDE( aCommand.aExportFile );
-        pDataBase->SetExportFile( aDE.GetName() );
+        osl::DirectoryItem aDI;
+        osl::FileStatus fileStatus( osl_FileStatus_Mask_FileName );
+        osl::DirectoryItem::get( aCommand.aExportFile, aDI );
+        aDI.getFileStatus(fileStatus);
+        pDataBase->SetExportFile( fileStatus.getFileName() );
     }
 
     if( ReadIdl( pDataBase, aCommand ) )
     {
-        if( nExit == 0 && aCommand.aDocuFile.Len() )
+        if( nExit == 0 && !aCommand.aDocuFile.isEmpty() )
         {
-            DirEntry aDE( aCommand.aDocuFile );
-            aDE.ToAbs();
-            aTmpDocuFile = aDE.GetPath().TempName().GetFull();
+            aTmpDocuFile = tempFileHelper(aCommand.aDocuFile);
             SvFileStream aOutStm( aTmpDocuFile, STREAM_READWRITE | STREAM_TRUNC );
             if( !pDataBase->WriteDocumentation( aOutStm ) )
             {
                 nExit = -1;
                 rtl::OStringBuffer aStr("cannot write documentation file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aDocuFile,
-                    RTL_TEXTENCODING_UTF8));
+                aStr.append(rtl::OUStringToOString(aCommand.aDocuFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
-        if( nExit == 0 && aCommand.aListFile.Len() )
+        if( nExit == 0 && !aCommand.aListFile.isEmpty() )
         {
-            DirEntry aDE( aCommand.aListFile );
-            aDE.ToAbs();
-            aTmpListFile = aDE.GetPath().TempName().GetFull();
+            aTmpListFile = tempFileHelper(aCommand.aListFile);
             SvFileStream aOutStm( aTmpListFile, STREAM_READWRITE | STREAM_TRUNC );
             if( !pDataBase->WriteSvIdl( aOutStm ) )
             {
                 nExit = -1;
                 rtl::OStringBuffer aStr("cannot write list file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aListFile,
-                    RTL_TEXTENCODING_UTF8));
+                aStr.append(rtl::OUStringToOString(aCommand.aListFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
-        if( nExit == 0 && aCommand.aSlotMapFile.Len() )
+        if( nExit == 0 && !aCommand.aSlotMapFile.isEmpty() )
         {
-            DirEntry aDE( aCommand.aSlotMapFile );
-            aDE.ToAbs();
-            aTmpSlotMapFile = aDE.GetPath().TempName().GetFull();
+            aTmpSlotMapFile = tempFileHelper(aCommand.aSlotMapFile);
             SvFileStream aOutStm( aTmpSlotMapFile, STREAM_READWRITE | STREAM_TRUNC );
             if( !pDataBase->WriteSfx( aOutStm ) )
             {
                 nExit = -1;
                 rtl::OStringBuffer aStr("cannot write slotmap file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aSlotMapFile,
-                    RTL_TEXTENCODING_UTF8));
+                aStr.append(rtl::OUStringToOString(aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
-        if( nExit == 0 && aCommand.aHelpIdFile.Len() )
+        if( nExit == 0 && !aCommand.aHelpIdFile.isEmpty() )
         {
-            DirEntry aDE( aCommand.aHelpIdFile );
-            aDE.ToAbs();
-            aTmpHelpIdFile = aDE.GetPath().TempName().GetFull();
+            aTmpHelpIdFile = tempFileHelper(aCommand.aHelpIdFile);
             SvFileStream aStm( aTmpHelpIdFile, STREAM_READWRITE | STREAM_TRUNC );
             if (!pDataBase->WriteHelpIds( aStm ) )
             {
                 nExit = -1;
                 rtl::OStringBuffer aStr("cannot write help ID file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aHelpIdFile,
-                    RTL_TEXTENCODING_UTF8));
+                aStr.append(rtl::OUStringToOString(aCommand.aHelpIdFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
-        if( nExit == 0 && aCommand.aCSVFile.Len() )
+        if( nExit == 0 && !aCommand.aCSVFile.isEmpty() )
         {
-            DirEntry aDE( aCommand.aCSVFile );
-            aDE.ToAbs();
-            aTmpCSVFile = aDE.GetPath().TempName().GetFull();
+            aTmpCSVFile = tempFileHelper(aCommand.aCSVFile);
             SvFileStream aStm( aTmpCSVFile, STREAM_READWRITE | STREAM_TRUNC );
             if (!pDataBase->WriteCSV( aStm ) )
             {
                 nExit = -1;
                 rtl::OStringBuffer aStr("cannot write CSV file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aCSVFile,
-                    RTL_TEXTENCODING_UTF8));
+                aStr.append(rtl::OUStringToOString(aCommand.aCSVFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
-        if( nExit == 0 && aCommand.aSfxItemFile.Len() )
+        if( nExit == 0 && !aCommand.aSfxItemFile.isEmpty() )
         {
-            DirEntry aDE( aCommand.aSfxItemFile );
-            aDE.ToAbs();
-            aTmpSfxItemFile = aDE.GetPath().TempName().GetFull();
+            aTmpSfxItemFile = tempFileHelper(aCommand.aSfxItemFile);
             SvFileStream aOutStm( aTmpSfxItemFile, STREAM_READWRITE | STREAM_TRUNC );
             if( !pDataBase->WriteSfxItem( aOutStm ) )
             {
                 nExit = -1;
                 rtl::OStringBuffer aStr("cannot write item file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aSfxItemFile,
-                    RTL_TEXTENCODING_UTF8));
+                aStr.append(rtl::OUStringToOString(aCommand.aSfxItemFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
-        if( nExit == 0 && aCommand.aDataBaseFile.Len() )
+        if( nExit == 0 && !aCommand.aDataBaseFile.isEmpty() )
         {
-            DirEntry aDE( aCommand.aDataBaseFile );
-            aDE.ToAbs();
-            aTmpDataBaseFile = aDE.GetPath().TempName().GetFull();
+            aTmpDataBaseFile = tempFileHelper(aCommand.aDataBaseFile);
             SvFileStream aOutStm( aTmpDataBaseFile, STREAM_READWRITE | STREAM_TRUNC );
             pDataBase->Save( aOutStm, aCommand.nFlags );
             if( aOutStm.GetError() != SVSTREAM_OK )
             {
                 nExit = -1;
                 rtl::OStringBuffer aStr("cannot write database file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aDataBaseFile,
-                    RTL_TEXTENCODING_UTF8));
+                aStr.append(rtl::OUStringToOString(aCommand.aDataBaseFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
         if (nExit == 0 && !aCommand.m_DepFile.isEmpty())
         {
-            DirEntry aDE(aCommand.m_DepFile);
-            aDE.ToAbs();
-            aTmpDepFile = aDE.GetPath().TempName().GetFull();
+            aTmpDepFile = tempFileHelper(aCommand.m_DepFile);
             SvFileStream aOutStm( aTmpDepFile, STREAM_READWRITE | STREAM_TRUNC );
             pDataBase->WriteDepFile(aOutStm, aCommand.aTargetFile);
             if( aOutStm.GetError() != SVSTREAM_OK )
@@ -246,7 +247,7 @@ int cdecl main ( int argc, char ** argv)
         sal_Bool bErr = sal_False;
         sal_Bool bDoMove = aCommand.aTargetFile.Len() == 0;
         String aErrFile, aErrFile2;
-        if( !bErr && aCommand.aListFile.Len() )
+        if( !bErr && !aCommand.aListFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aListFile, aTmpListFile, bDoMove );
             if( bErr ) {
@@ -254,7 +255,7 @@ int cdecl main ( int argc, char ** argv)
                 aErrFile2 = aTmpListFile;
             }
         }
-        if( !bErr && aCommand.aSlotMapFile.Len() )
+        if( !bErr && !aCommand.aSlotMapFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aSlotMapFile, aTmpSlotMapFile, bDoMove );
             if( bErr ) {
@@ -262,7 +263,7 @@ int cdecl main ( int argc, char ** argv)
                 aErrFile2 = aTmpSlotMapFile;
             }
         }
-        if( !bErr && aCommand.aSfxItemFile.Len() )
+        if( !bErr && !aCommand.aSfxItemFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aSfxItemFile, aTmpSfxItemFile, bDoMove );
             if( bErr ) {
@@ -270,7 +271,7 @@ int cdecl main ( int argc, char ** argv)
                 aErrFile2 = aTmpSfxItemFile;
             }
         }
-        if( !bErr && aCommand.aDataBaseFile.Len() )
+        if( !bErr && !aCommand.aDataBaseFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aDataBaseFile, aTmpDataBaseFile, bDoMove );
             if( bErr ) {
@@ -278,31 +279,7 @@ int cdecl main ( int argc, char ** argv)
                 aErrFile2 = aTmpDataBaseFile;
             }
         }
-        if( !bErr && aCommand.aCallingFile.Len() )
-        {
-            bErr |= !FileMove_Impl( aCommand.aCallingFile, aTmpCallingFile, bDoMove );
-            if( bErr ) {
-                aErrFile = aCommand.aCallingFile;
-                aErrFile2 = aTmpCallingFile;
-            }
-        }
-        if( !bErr && aCommand.aCxxFile.Len() )
-        {
-            bErr |= !FileMove_Impl( aCommand.aCxxFile, aTmpCxxFile, bDoMove );
-            if( bErr ) {
-                aErrFile = aCommand.aCxxFile;
-                aErrFile2 = aTmpCxxFile;
-            }
-        }
-        if( !bErr && aCommand.aHxxFile.Len() )
-        {
-            bErr |= !FileMove_Impl( aCommand.aHxxFile, aTmpHxxFile, bDoMove );
-            if( bErr ) {
-                aErrFile = aCommand.aHxxFile;
-                aErrFile2 = aTmpHxxFile;
-            }
-        }
-        if( !bErr && aCommand.aHelpIdFile.Len() )
+        if( !bErr && !aCommand.aHelpIdFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aHelpIdFile, aTmpHelpIdFile, bDoMove );
             if( bErr ) {
@@ -310,7 +287,7 @@ int cdecl main ( int argc, char ** argv)
                 aErrFile2 = aTmpHelpIdFile;
             }
         }
-        if( !bErr && aCommand.aCSVFile.Len() )
+        if( !bErr && !aCommand.aCSVFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aCSVFile, aTmpCSVFile, bDoMove );
             if( bErr ) {
@@ -318,7 +295,7 @@ int cdecl main ( int argc, char ** argv)
                 aErrFile2 = aTmpCSVFile;
             }
         }
-        if( !bErr && aCommand.aDocuFile.Len() )
+        if( !bErr && !aCommand.aDocuFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aDocuFile, aTmpDocuFile, bDoMove );
             if( bErr ) {
@@ -363,20 +340,26 @@ int cdecl main ( int argc, char ** argv)
 
     if( nExit != 0 )
     {
-        if( aCommand.aListFile.Len() )
-            DirEntry( aTmpListFile ).Kill();
-        if( aCommand.aSlotMapFile.Len() )
-            DirEntry( aTmpSlotMapFile ).Kill();
-        if( aCommand.aSfxItemFile.Len() )
-            DirEntry( aTmpSfxItemFile ).Kill();
-        if( aCommand.aDataBaseFile.Len() )
-            DirEntry( aTmpDataBaseFile ).Kill();
-        if( aCommand.aCallingFile.Len() )
-            DirEntry( aTmpCallingFile ).Kill();
-        if( aCommand.aCxxFile.Len() )
-            DirEntry( aTmpCxxFile ).Kill();
-        if( aCommand.aHxxFile.Len() )
-            DirEntry( aTmpHxxFile ).Kill();
+        if( !aCommand.aListFile.isEmpty() )
+        {
+            osl::FileBase::getSystemPathFromFileURL( aTmpListFile, aTmpListFile );
+            osl::File::remove( aTmpListFile );
+        }
+        if( !aCommand.aSlotMapFile.isEmpty() )
+        {
+            osl::FileBase::getSystemPathFromFileURL( aTmpSlotMapFile, aTmpSlotMapFile );
+            osl::File::remove( aTmpSlotMapFile );
+        }
+        if( !aCommand.aSfxItemFile.isEmpty() )
+        {
+            osl::FileBase::getSystemPathFromFileURL( aTmpSfxItemFile, aTmpSfxItemFile );
+            osl::File::remove( aTmpSfxItemFile );
+        }
+        if( !aCommand.aDataBaseFile.isEmpty() )
+        {
+            osl::FileBase::getSystemPathFromFileURL( aTmpDataBaseFile, aTmpDataBaseFile );
+            osl::File::remove( aTmpDataBaseFile );
+        }
     }
 
     delete pDataBase;
