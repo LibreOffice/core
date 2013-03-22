@@ -214,6 +214,8 @@ void ThumbnailView::CalculateItemPositions ()
     WinBits     nStyle = GetStyle();
     ScrollBar*  pDelScrBar = NULL;
 
+    mFilteredItemList.clear();
+
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
         ImplInitScrollBar();
@@ -295,6 +297,7 @@ void ThumbnailView::CalculateItemPositions ()
 
         if (maFilterFunc(pItem))
         {
+            mFilteredItemList.push_back(pItem);
             if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
             {
                 if( !pItem->isVisible())
@@ -487,6 +490,73 @@ IMPL_LINK (ThumbnailView, OnItemSelected, ThumbnailViewItem*, pItem)
     return 0;
 }
 
+void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
+{
+    // Get the last selected item in the list
+    size_t nLastPos = 0;
+    bool bFoundLast = false;
+    for ( long i = mFilteredItemList.size() - 1; !bFoundLast && i >= 0; --i )
+    {
+        ThumbnailViewItem* pItem = mFilteredItemList[i];
+        if ( pItem->isSelected() )
+        {
+            nLastPos = i;
+            bFoundLast = true;
+        }
+    }
+
+    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    ThumbnailViewItem* pNext = NULL;
+    switch ( aKeyCode.GetCode() )
+    {
+        case KEY_RIGHT:
+            {
+                size_t nNextPos = nLastPos;
+                if ( bFoundLast && nLastPos < mFilteredItemList.size( ) - 1 )
+                    nNextPos = nLastPos + 1;
+                pNext = mFilteredItemList[nNextPos];
+            }
+            break;
+        case KEY_LEFT:
+            {
+                size_t nNextPos = nLastPos;
+                if ( nLastPos > 0 )
+                    nNextPos = nLastPos - 1;
+                pNext = mFilteredItemList[nNextPos];
+            }
+            break;
+        case KEY_DOWN:
+            {
+                size_t nNextPos = nLastPos;
+                if ( bFoundLast && nLastPos < mFilteredItemList.size( ) - mnCols )
+                    nNextPos = nLastPos + mnCols;
+                pNext = mFilteredItemList[nNextPos];
+            }
+            break;
+        case KEY_UP:
+            {
+                size_t nNextPos = nLastPos;
+                if ( nLastPos >= mnCols )
+                    nNextPos = nLastPos - mnCols;
+                pNext = mFilteredItemList[nNextPos];
+            }
+            break;
+        case KEY_RETURN:
+            {
+                if ( bFoundLast )
+                    OnItemDblClicked( mFilteredItemList[nLastPos] );
+            }
+        default:
+            Control::KeyInput( rKEvt );
+    }
+
+    if ( pNext && pNext->isVisible() )
+    {
+        deselectItems();
+        SelectItem(pNext->mnId);
+    }
+}
+
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
@@ -497,12 +567,17 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ( rMEvt.GetClicks() == 1 )
             {
-                if (!pItem->isSelected() && !rMEvt.IsMod1())
-                    deselectItems( );
-                pItem->setSelection(true);
+                if (pItem->isSelected() && rMEvt.IsMod1())
+                    DeselectItem( pItem->mnId );
+                else
+                {
+                    if (!pItem->isSelected() && !rMEvt.IsMod1())
+                        deselectItems( );
+                    SelectItem( pItem->mnId );
 
-                bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
-                pItem->setEditTitle(bClickOnTitle);
+                    bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
+                    pItem->setEditTitle(bClickOnTitle);
+                }
 
                 if (!pItem->isHighlighted())
                     DrawItem(pItem);
@@ -827,6 +902,25 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
             ::com::sun::star::uno::Any aOldAny, aNewAny;
             ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
         }
+    }
+}
+
+void ThumbnailView::DeselectItem( sal_uInt16 nItemId )
+{
+    size_t nItemPos = GetItemPos( nItemId );
+    if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
+        return;
+
+    ThumbnailViewItem* pItem = mItemList[nItemPos];
+    if (pItem->isSelected())
+    {
+        mItemList[nItemPos]->setSelection(false);
+        maItemStateHdl.Call(mItemList[nItemPos]);
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+
+        // TODO Trigger event in accessible object?
     }
 }
 

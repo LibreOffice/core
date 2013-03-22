@@ -202,6 +202,8 @@ public:
 
     void SelectItem( sal_uInt16 nItemId );
 
+    void DeselectItem( sal_uInt16 nItemId );
+
     bool IsItemSelected( sal_uInt16 nItemId ) const;
 
     /**
@@ -234,6 +236,8 @@ public:
     virtual bool renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
 
 protected:
+
+    virtual void KeyInput( const KeyEvent& rKEvt );
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
@@ -268,8 +272,6 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
 
-    void calculateColumnsRows ();
-
     void CalculateItemPositions ();
 
     SFX2_DLLPRIVATE void         ImplInit();
@@ -290,6 +292,7 @@ protected:
 protected:
 
     ValueItemList mItemList;
+    ValueItemList mFilteredItemList; ///< Cache to store the filtered items
     ScrollBar* mpScrBar;
     Rectangle maItemListRect;
     long mnHeaderHeight;
