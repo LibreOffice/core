@@ -5836,8 +5836,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
     // convert from logical units to physical units
     // recode string if needed
-    if( mpFontEntry->mpConversion )
-        mpFontEntry->mpConversion->RecodeString( aStr, 0, aStr.Len() );
+    if( mpFontEntry->mpConversion ) {
+        OUString aTmpStr(aStr); // only needed until aStr is OUString as well
+        mpFontEntry->mpConversion->RecodeString( aTmpStr, 0, aTmpStr.getLength() );
+        aStr = String(aTmpStr);
+    }
 
     long nPixelWidth = nLogicalWidth;
     if( nLogicalWidth && mbMap )
