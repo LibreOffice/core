@@ -2912,15 +2912,22 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 {
     bool bEmbedFonts = false;
-    if( getExportFlags() & EXPORT_CONTENT ) {
+    if (getExportFlags() & EXPORT_CONTENT)
+    {
         Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
         if( xFac.is() )
+        {
+            Reference<beans::XPropertySet> const xProps( xFac->createInstance(
+                         "com.sun.star.document.Settings"), UNO_QUERY );
+            if (xProps.is())
             {
-                Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
-                if( xProps.is() )
+                try // clipboard document doesn't have shell so throws here
+                {
                     xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
-
+                }
+                catch (uno::Exception const&) { }
             }
+        }
     }
 
     XMLFontAutoStylePool *pPool = new XMLFontAutoStylePool( *this, bEmbedFonts );
