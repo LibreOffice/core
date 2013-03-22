@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+2I\u003d",
+        "filename": "connectivity/source/drivers/calc/CTable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2E\u003d",
+        "filename": "connectivity/source/drivers/calc/CTable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2A\u003d",
+        "filename": "connectivity/source/drivers/calc/CTable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+14\u003d",
+        "filename": "sc/source/core/data/dbdocutl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+10\u003d",
+        "filename": "sc/source/core/data/dbdocutl.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+1w\u003d",
+        "filename": "sc/source/core/data/dpobject.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+1s\u003d",
+        "filename": "sc/source/core/data/dpobject.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+1o\u003d",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros? Or in this case keep Get100Sec() ...",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+1k\u003d",
+        "filename": "sc/source/filter/xcl97/XclExpChangeTrack.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "Hmm.. does the Excel OOXML format have nanoseconds instead of 100ths? However, as these are fractions it should be able to deal with..",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+1g\u003d",
+        "filename": "sc/source/ui/view/viewfun6.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2k\u003d",
+        "filename": "tools/inc/tools/time.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "Instead of replacing Get100Sec() with GetNanoSec() I\u0027d rather prefer an additional method GetNanoSec(). Reason: existing code not needing nano seconds evaluating 100th seconds does not need a (double)GetNanoSec()/10000000.0",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+1c\u003d",
+        "filename": "tools/source/rc/rc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "Keep ReadShort(), this is the resource binary format. Or, find the corresponding place that writes the compiled resource file and change both.",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2g\u003d",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "This does not work, passing the nano value instead of 100th value to ImplAdd2UNum() will yield a different result. To emulate the Get100Sec() a GetNanoSec()/10000000 would be needed (see also my comment in tools\u0027 time.hxx ;-)\n\nThe LocaleDataWrapper::getTime() IIRC is used in control fields and/or other places not using the number formatter, probably not prepared to encounter nanoseconds so the 100th seconds value should be preserved.",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2c\u003d",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2M\u003d",
+        "filename": "xmloff/source/core/xmluconv.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2Y\u003d",
+        "filename": "xmloff/source/forms/propertyexport.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2U\u003d",
+        "filename": "xmloff/source/forms/propertyexport.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+2Q\u003d",
+        "filename": "xmloff/source/forms/propertyimport.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-22T19:00:50Z",
+      "side": 1,
+      "message": "um.. could we have some named constant in time.hxx for these values with a dozen zeros?",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
