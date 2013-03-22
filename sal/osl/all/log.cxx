@@ -79,6 +79,8 @@ bool equalStrings(
     return length1 == length2 && std::memcmp(string1, string2, length1) == 0;
 }
 
+#ifndef ANDROID
+
 char const * toString(sal_detail_LogLevel level) {
     switch (level) {
     default:
@@ -92,6 +94,8 @@ char const * toString(sal_detail_LogLevel level) {
         return "debug";
     }
 }
+
+#endif
 
 // getenv is not thread safe, so minimize use of result; except on Android and
 // iOS, see 60628799633ffde502cb105b98d3f254f93115aa "Notice if SAL_LOG is
@@ -123,6 +127,7 @@ char const * getEnvironmentVariable() {
 
 #endif
 
+#ifndef ANDROID
 #if HAVE_SYSLOG_H
 int toSyslogPriority(sal_detail_LogLevel level) {
     switch (level) {
@@ -137,6 +142,7 @@ int toSyslogPriority(sal_detail_LogLevel level) {
         return LOG_DEBUG;
     }
 }
+#endif
 #endif
 
 bool report(sal_detail_LogLevel level, char const * area) {
