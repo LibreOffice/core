@@ -82,17 +82,6 @@ public class ThumbnailFragment extends SherlockFragment {
         mCurrentText = null;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     private void setSelected(int position) {
         formatUnselected(mCurrentImage, mCurrentText);
 
