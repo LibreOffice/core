@@ -31,7 +31,6 @@
 				<!-- UIHints: Tools - Options - Internet - Protocol -->
 				<info>
 					<deprecated/>
-					<author>KSO</author>
 					<desc>Specifies the IP address of the DNS server. If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
 				<value/>
@@ -42,7 +41,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>KSO</author>
 					<desc>Enumerates the names of servers that do not require any proxies.</desc>
 				</info>
 				<value/>
@@ -53,7 +51,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>KSO</author>
 					<desc>Specifies the type of proxy selection.</desc>
 				</info>
 				<constraints>
@@ -79,7 +76,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>KSO</author>
 					<desc>Specifies the name of the FTP proxy server.</desc>
 				</info>
 				<value/>
@@ -90,7 +86,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>KSO</author>
 					<desc>Specifies the port of the FTP proxy server.</desc>
 				</info>
 				<constraints>
@@ -111,7 +106,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>KSO</author>
 					<desc>Specifies the name of the HTTP proxy server.</desc>
 				</info>
 				<value/>
@@ -122,7 +116,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>KSO</author>
 					<desc>Specifies the port of the HTTP proxy server.</desc>
 				</info>
 				<constraints>
@@ -143,7 +136,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>TKR</author>
 					<desc>Specifies the name of the HTTPS proxy server.</desc>
 				</info>
 				<value/>
@@ -154,7 +146,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
-					<author>TKR</author>
 					<desc>Specifies the port of the HTTPS proxy server.</desc>
 				</info>
 				<constraints>
@@ -176,7 +167,6 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<deprecated/>
-					<author>KSO</author>
 					<desc>Specifies the name of the Socks proxy server.</desc>
 				</info>
 				<value/>
@@ -188,7 +178,6 @@
 				<!-- UIHints: Tools  Options  Internet  Proxy -->
 				<info>
 					<deprecated/>
-					<author>KSO</author>
 					<desc>Specifies the port of the Socks proxy server.</desc>
 				</info>
 				<constraints>

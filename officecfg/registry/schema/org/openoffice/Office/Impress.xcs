@@ -19,7 +19,6 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Impress" oor:package="org.openoffice.Office" xml:lang="en-US">
   <info>
-    <author>AF</author>
     <desc >Contains configuration items related to the Impress application.</desc>
   </info>
   <import oor:component="org.openoffice.Office.Common"/>
@@ -83,7 +82,6 @@
     </group>
     <group oor:name="AuthorisedRemote">
       <info>
-        <author>ajrhunt</author>
         <desc>
           A Remote Control Device that has been authorised for connection.
         </desc>
@@ -406,7 +404,6 @@
       </prop>
       <prop oor:name="ShowComments" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>CL</author>
           <desc>Indicates whether to show comments (true) or hide them (false).</desc>
           <label>Show Comments</label>
         </info>
@@ -417,7 +414,6 @@
         <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Optionbar -->
         <info>
-          <author>AF</author>
           <desc>Indicates whether the object creation and modification will be visualized using the full object attribute set or wireframe.</desc>
           <label>Modify with attributes</label>
         </info>
@@ -428,7 +424,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: UNDO stack delete warnng dialog -->
         <info>
-          <author>AW</author>
           <desc>Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
           <label>Show Undo-Stack Delete Warning</label>
         </info>
@@ -439,7 +434,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Slideshow Z order for animations -->
         <info>
-          <author>THB</author>
           <desc>Indicates whether the slideshow should respect shape z-order while animating shapes. Disabling this can improve slideshow performance</desc>
           <label>Enable shape z-order during slideshow animations</label>
         </info>
@@ -450,7 +444,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: List of files containing transition effects -->
         <info>
-          <author>THB</author>
           <desc>
             Contains a list of odf files, that define
             slideshow transitions. Values are put through
@@ -466,7 +459,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: List of files containing object effects -->
         <info>
-          <author>THB</author>
           <desc>
             Contains a list of odf files, that define
             slideshow shape effects. Values are put through
@@ -482,7 +474,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview checkbox in create new effect dialog -->
         <info>
-          <author>CL</author>
           <desc>Indicates whether a selected effect in the custom animation create dialog should be previewed.</desc>
           <label>Automatic preview for new custom animation</label>
         </info>
@@ -493,7 +484,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview in custom animation panel -->
         <info>
-          <author>CL</author>
           <desc>Indicates whether changes in the custom animation panel should be previewed.</desc>
           <label>Automatic preview for custom animation panel</label>
         </info>
@@ -504,7 +494,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: automatic preview in slide transtion panel -->
         <info>
-          <author>CL</author>
           <desc>Indicates whether changes in the slide transition panel should be previewed.</desc>
           <label>Automatic preview for slide transition panel</label>
         </info>
@@ -515,7 +504,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: slide show settings display listbox -->
         <info>
-          <author>CL</author>
           <desc>Number of the display used for full screen slide show mode.</desc>
           <label>Display for full screen slide show mode</label>
         </info>
@@ -526,7 +514,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: slide show context menu -->
         <info>
-          <author>CL</author>
           <desc>Color of the pen during slideshow.</desc>
           <label>Pen Color</label>
         </info>
@@ -537,7 +524,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: slide show context menu -->
         <info>
-          <author>CL</author>
           <desc>Width of the pen during slideshow.</desc>
           <label>Pen Width</label>
         </info>
@@ -626,7 +612,6 @@
           <!-- OldPath: Writer/Other/Compatibility -->
           <!-- UIHints: Tools - Options - Presentation - Other - [Section] Compatibility -->
           <info>
-            <author>SJ</author>
             <desc>Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
             <label>Add spacing between paragraphs</label>
           </info>
@@ -635,7 +620,6 @@
         <prop oor:name="PrinterIndependentLayout" oor:type="xs:short" oor:nillable="false">
           <!-- UIHints: Tools - Options - Presentation - Other - [Section] Compatibility -->
           <info>
-            <author>AF</author>
             <desc>Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
             <label>Use printer independent metrics for document formatting</label>
           </info>
@@ -647,7 +631,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Klick -->
         <info>
-          <author>AW</author>
           <desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
           <label>Default Object Size</label>
         </info>
@@ -668,7 +651,6 @@
       </group>
       <set oor:name="AuthorisedRemotes" oor:node-type="AuthorisedRemote">
        <info>
-        <author>ajrhunt</author>
         <desc>Contains a list of remote control devices that can connect without user confirmation.</desc>
        </info>
       </set>
@@ -1271,7 +1253,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
             <info>
-              <author>OS</author>
               <desc>Converts VBA Basic into Office Basic as commands (True).</desc>
               <label>Load Basic Code to edit</label>
             </info>
@@ -1282,7 +1263,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
             <info>
-              <author>OS</author>
               <desc>Holds original VBA storage for saving in the memory (True).</desc>
               <label>Save Original Basic Code again</label>
             </info>

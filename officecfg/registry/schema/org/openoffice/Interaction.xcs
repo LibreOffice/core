@@ -19,7 +19,6 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Interaction" oor:package="org.openoffice" xml:lang="en-US">
   <info>
-    <author>Frank Schönheit</author>
     <desc>contains configuration related to the interaction system of OpenOffice.org.</desc>
   </info>
   <templates>

@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Writer" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>OS</author>
 		<desc >Contains settings for the Writer application.</desc>
 	</info>
 	<import oor:component="org.openoffice.Office.Common"/>
@@ -346,21 +345,18 @@
             </info>
             <prop oor:name="DataSourceName" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Contains the name of the data source.</desc>
                     <label>Data source name</label>
                 </info>
             </prop>
             <prop oor:name="DataTableName" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Name of the database table or query.</desc>
                     <label>Data table or query name</label>
                 </info>
             </prop>
             <prop oor:name="DataCommandType" oor:type="xs:short" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>CommandType of the data source.</desc>
                     <label>Data CommandType</label>
                 </info>
@@ -373,14 +369,12 @@
             </info>
             <prop oor:name="DBColumnAssignments" oor:type="oor:string-list">
                 <info>
-                    <author>OS</author>
                     <desc>List of all currently available assignments of programmatic to actual column names of data sources used in mail merge. The position in the list has to match the following order of columns: TITLE,FIRSTNAME,LASTNAME,COMPANY,ADDRESS_1,ADDRESS_2,CITY,REGION,ZIP,COUNTRY,PHONE_PRIVATE,PHONE_BUSINESS,E_MAIL,GENDER</desc>
                     <label>Column assignment list</label>
                 </info>
             </prop>
             <node-ref oor:name="DataSource" oor:node-type="_DataSource">
                 <info>
-                    <author>OS</author>
                     <desc>Contains the information of the data source that's been used the last time the wizard has been executed.</desc>
                     <label>Data Set</label>
                 </info>
@@ -388,7 +382,6 @@
         </group>
 		<group oor:name="BusinessLetterElementLocation" >
 			<info>
-				<author>TV</author>
 				<desc>Specifies settings a pre-printed Business Letter Paper within the Letter Wizard.</desc>
 			</info>
 			<prop oor:type="xs:boolean" oor:name="Display">
@@ -419,7 +412,6 @@
 		</group>
 		<group oor:name="LetterControls" >
 			<info>
-				<author>TV</author>
 				<desc>Specifies settings for a Letter Wizard type.</desc>
 			</info>
 			<prop oor:type="xs:int" oor:name="Style">
@@ -580,7 +572,6 @@
 		</group>
 		<group oor:name="FaxControls" >
 			<info>
-				<author>TV</author>
 				<desc>Specifies settings for a Fax Wizard type.</desc>
 			</info>
 			<prop oor:type="xs:int" oor:name="Style">
@@ -711,7 +702,6 @@
 		</group>
 		<group oor:name="AgendaWizardTopic">
 			<info>
-				<author>rpiterman</author>
 				<desc> Contains the topics properties </desc>
 			</info>
 			<prop oor:name="Index" oor:type="xs:int">
@@ -754,7 +744,6 @@
             </info>
             <prop oor:name="OutputToLetter" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether the document output is a letter, not an e-mail.</desc>
                     <label>Output as letter</label>
                 </info>
@@ -762,7 +751,6 @@
             </prop>
             <prop oor:name="IncludeCountry" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether the country/region is included into the address block. If yes the ExcludeCountry property may never be included.</desc>
                     <label>Include country/region</label>
                 </info>
@@ -770,7 +758,6 @@
             </prop>
             <prop oor:name="ExcludeCountry" oor:type="xs:string" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>If the property IncludeCountry is true it all countries/regions are included into the address block except for this country or region.</desc>
                     <label>ExcludeCountry</label>
                 </info>
@@ -779,14 +766,12 @@
 
             <prop oor:name="SavedDocuments" oor:type="oor:string-list">
                 <info>
-                    <author>OS</author>
                     <desc>Contains a list of all documents previously used and saved as mailmerge source documents</desc>
                     <label>Saved documents</label>
                 </info>
             </prop>
             <prop oor:name="AddressBlockSettings" oor:type="oor:string-list" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Contains a list of settings for address blocks. It is a sequence of address column positions separated with breaks (\n) and spaces. The column positions start at 0 and after 9 follows a, b, c and they are equivalent to the following parts of an address: TITLE,FIRSTNAME,LASTNAME,COMPANY,ADDRESS_1,ADDRESS_2,CITY,REGION,ZIP,COUNTRY,PHONE_PRIVATE,PHONE_BUSINESS,E_MAIL</desc>
                     <label>Address block settings</label>
                 </info>
@@ -795,7 +780,6 @@
             </prop>
             <prop oor:name="IsAddressBlock" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether the document should have an address block.</desc>
                     <label>Address Block</label>
                 </info>
@@ -803,7 +787,6 @@
             </prop>
             <prop oor:name="CurrentAddressBlock" oor:type="xs:int" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines the currently used address block.</desc>
                     <label>Current address block</label>
                 </info>
@@ -811,7 +794,6 @@
             </prop>
             <prop oor:name="IsHideEmptyParagraphs" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether address block lines should be hidden if there's no content.</desc>
                     <label>Hide empty paragraphs</label>
                 </info>
@@ -819,7 +801,6 @@
             </prop>
             <prop oor:name="IsGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether the document should have a greeting line.</desc>
                     <label>Greeting line</label>
                 </info>
@@ -827,7 +808,6 @@
             </prop>
             <prop oor:name="IsEMailGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether an e-mail should have a greeting line.</desc>
                     <label>E-mail greeting line</label>
                 </info>
@@ -835,7 +815,6 @@
             </prop>
             <prop oor:name="IsIndividualGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether an individual greeting line is used instead of a neutral one.</desc>
                     <label>Use individual greeting line</label>
                 </info>
@@ -843,7 +822,6 @@
             </prop>
             <prop oor:name="IsEMailIndividualGreetingLine" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether in an e-mail an individual greeting line is used instead of a neutral one.</desc>
                     <label>Use individual greeting line in e-Mail</label>
                 </info>
@@ -851,188 +829,161 @@
             </prop>
             <prop oor:name="FemaleGreetingLines" oor:type="oor:string-list" oor:localized="true">
                 <info>
-                    <author>OS</author>
                     <desc>Contains a list of greeting lines, female.</desc>
                     <label>Greeting lines, female</label>
                 </info>
             </prop>
             <prop oor:name="MaleGreetingLines" oor:type="oor:string-list" oor:localized="true">
                 <info>
-                    <author>OS</author>
                     <desc>Contains a list of greeting lines, male.</desc>
                     <label>Greeting lines, male</label>
                 </info>
             </prop>
             <prop oor:name="NeutralGreetingLines" oor:type="oor:string-list" oor:localized="true">
                 <info>
-                    <author>OS</author>
                     <desc>Contains a list of greeting lines, neutral.</desc>
                     <label>Greeting lines, neutral</label>
                 </info>
             </prop>
             <prop oor:name="CurrentFemaleGreeting" oor:type="xs:int">
                 <info>
-                    <author>OS</author>
                     <desc>Contains the index of the current entry in list of female greeting lines.</desc>
                     <label>Current female Greeting line</label>
                 </info>
             </prop>
             <prop oor:name="CurrentMaleGreeting" oor:type="xs:int">
                 <info>
-                    <author>OS</author>
                     <desc>Contains the index of the current entry in list of male greeting lines.</desc>
                     <label>Current male Greeting line</label>
                 </info>
             </prop>
             <prop oor:name="CurrentNeutralGreeting" oor:type="xs:int">
                 <info>
-                    <author>OS</author>
                     <desc>Contains the index of the current entry in list of neutral greeting lines.</desc>
                     <label>Current neutral Greeting line</label>
                 </info>
             </prop>
             <prop oor:name="FemaleGenderValue" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Determines the value of the Gender column that marks a recipient as female.</desc>
                     <label>Female Gender Value</label>
                 </info>
             </prop>
             <prop oor:name="MailDisplayName" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Contains the display name of the mail address.</desc>
                     <label>e-Mail Name</label>
                 </info>
             </prop>
             <prop oor:name="MailAddress" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>e-Mail address.</desc>
                     <label>e-Mail address</label>
                 </info>
             </prop>
             <prop oor:name="IsMailReplyTo" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>Determines if reply to is switched on.</desc>
                     <label>Is reply to</label>
                 </info>
             </prop>
             <prop oor:name="MailReplyTo" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Reply to address.</desc>
                     <label>Reply to</label>
                 </info>
             </prop>
             <prop oor:name="MailServer" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Name of the SMTP server.</desc>
                     <label>SMTP server</label>
                 </info>
             </prop>
             <prop oor:name="MailPort" oor:type="xs:short">
                 <info>
-                    <author>OS</author>
                     <desc>Port of the SMTP server.</desc>
                     <label>Port</label>
                 </info>
             </prop>
             <prop oor:name="IsSecureConnection" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether the connection to the SMTP server is done using SSL protocol.</desc>
                     <label>Is secure connection</label>
                 </info>
             </prop>
             <prop oor:name="IsAuthentication" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether authentication at the SMTP server is necessary.</desc>
                     <label>Is authentication</label>
                 </info>
             </prop>
             <prop oor:name="MailUserName" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>User name to authenticate at the SMTP server.</desc>
                     <label>User name</label>
                 </info>
             </prop>
             <prop oor:name="MailPassword" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Password to authenticate at the SMTP server.</desc>
                     <label>Password</label>
                 </info>
             </prop>
             <prop oor:name="IsSMPTAfterPOP" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>SMTP server requires authentication at the POP or IMAP server</desc>
                     <label>SMPT after POP</label>
                 </info>
             </prop>
             <prop oor:name="InServerName" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Name of the incoming mail server</desc>
                     <label>Incoming mail server</label>
                 </info>
             </prop>
             <prop oor:name="InServerPort" oor:type="xs:short">
                 <info>
-                    <author>OS</author>
                     <desc>Port of the incoming mail server</desc>
                     <label>Incoming server port</label>
                 </info>
             </prop>
             <prop oor:name="InServerIsPOP" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether the in server uses the POP3 or the IMAP protocol</desc>
                     <label>POP</label>
                 </info>
             </prop>
             <prop oor:name="InServerUserName" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>User name of the incoming mail server</desc>
                     <label>Incoming server user name</label>
                 </info>
             </prop>
             <prop oor:name="InServerPassword" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Password of the incoming mail server</desc>
                     <label>Incoming server password</label>
                 </info>
             </prop>
             <prop oor:name="Filter" oor:type="xs:string">
                 <info>
-                    <author>OS</author>
                     <desc>Contains a filter statement for the current data source.</desc>
                     <label>Filter</label>
                 </info>
             </prop>
             <prop oor:name="EMailSupported" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>Determines whether e-Mail is supported.</desc>
                     <label>E-Mail supported</label>
                 </info>
             </prop>
             <set oor:name="AddressDataAssignments" oor:node-type="AddressDataAssignment">
                 <info>
-                    <author>OS</author>
                     <desc>XXXXXX.</desc>
                 </info>
             </set>
             <node-ref oor:name="DataSource" oor:node-type="_DataSource">
                 <info>
-                    <author>OS</author>
                     <desc>Contains the information of the data source that's been used the last time the wizard has been executed.</desc>
                     <label>Data Set</label>
                 </info>
@@ -1051,7 +1002,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if graphics and objects are displayed.</desc>
 						<label>Graphics and Objects</label>
 					</info>
@@ -1062,7 +1012,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if tables are displayed.</desc>
 						<label>Tables</label>
 					</info>
@@ -1073,7 +1022,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if drawings and controls are displayed.</desc>
 						<label>Drawings and controls</label>
 					</info>
@@ -1084,7 +1032,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if field codes are displayed.</desc>
 						<label>Field codes</label>
 					</info>
@@ -1095,7 +1042,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if comments are displayed.</desc>
 						<label>Comments</label>
 					</info>
@@ -1104,7 +1050,6 @@
 				<prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Not accessible via user interface -->
 					<info>
-						<author>OS</author>
 						<desc>Enables the writer to prevent the display of help tips programmatically.</desc>
 						<label>Prevent help tips</label>
 					</info>
@@ -1118,7 +1063,6 @@
 				<prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: View - Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Determines whether certain settings are applied (display of tab stops, spaces, breaks)</desc>
 						<label>Meta characters</label>
 					</info>
@@ -1129,7 +1073,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if paragraph ends are shown on the screen.</desc>
 						<label>Paragraph end</label>
 					</info>
@@ -1140,7 +1083,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if optional hyphens are shown on the screen.</desc>
 						<label>Optional hyphens</label>
 					</info>
@@ -1151,7 +1093,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if spaces are shown on the screen.</desc>
 						<label>Spaces</label>
 					</info>
@@ -1162,7 +1103,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if protected spaces are shown on the screen.</desc>
 						<label>Protected Spaces</label>
 					</info>
@@ -1173,7 +1113,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if breaks are shown on the screen.</desc>
 						<label>Tabs</label>
 					</info>
@@ -1184,7 +1123,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if paragraph ends are shown on the screen.</desc>
 						<label>Breaks</label>
 					</info>
@@ -1195,7 +1133,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
                         <desc>Specifies if hidden text fields are displayed on the screen.</desc>
                         <label>Fields: Hidden text</label>
 					</info>
@@ -1206,7 +1143,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if hidden paragraphs are displayed on the screen.</desc>
 						<label>Hidden paragraphs</label>
 					</info>
@@ -1215,7 +1151,6 @@
                 <prop oor:name="HiddenCharacter" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options - Text document  Formatting aids - [Section] Display of -->
                     <info>
-                        <author>OS</author>
                         <desc>Specifies if hidden paragraphs are displayed on the screen.</desc>
                         <label>Hidden text</label>
                     </info>
@@ -1231,7 +1166,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Update links -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if links in the document are updated during loading.</desc>
 						<label>Update links: Always/On request/Never</label>
 					</info>
@@ -1259,7 +1193,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if fields in the document are updated during loading.</desc>
 						<label>Update fields automatically</label>
 					</info>
@@ -1270,7 +1203,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if charts in the document are updated during loading.</desc>
 						<label>Update charts automatically</label>
 					</info>
@@ -1291,7 +1223,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
 					<info>
-						<author>OS</author>
 						<desc>Displays helplines around the frames when frames are moved.</desc>
 						<label>Helplines</label>
 					</info>
@@ -1302,7 +1233,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
 					<info>
-						<author>OS</author>
 						<desc>Displays the control points as simple squares without a 3D effect.</desc>
 						<label>Simple control points</label>
 					</info>
@@ -1313,7 +1243,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
 					<info>
-						<author>OS</author>
 						<desc>Displays larger control points.</desc>
 						<label>Large control points</label>
 					</info>
@@ -1329,7 +1258,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the horizontal scroll bar is displayed.</desc>
 						<label>Horizontal scroll</label>
 					</info>
@@ -1340,7 +1268,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the vertical scroll bar is displayed.</desc>
 						<label>Vertical Scroll</label>
 					</info>
@@ -1349,7 +1276,6 @@
 				<prop oor:name="ShowRulers" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies whether rulers are displayed. Filters the values of HorizontalRuler and VerticalRuler.</desc>
 						<label>Show rulers</label>
 					</info>
@@ -1360,7 +1286,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the horizontal ruler is displayed.</desc>
 						<label>Horizontal ruler</label>
 					</info>
@@ -1370,7 +1295,6 @@
 					<!-- OldPath: Writer/Layout -->
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the measurement unit for the horizontal ruler.</desc>
 						<label>Horizontal ruler measure unit</label>
 					</info>
@@ -1427,7 +1351,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the vertical ruler is displayed.</desc>
 						<label>Vertical Ruler</label>
 					</info>
@@ -1436,7 +1359,6 @@
 				<prop oor:name="IsVerticalRulerRight" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the vertical ruler is right aligned.</desc>
 						<label>Vertical Ruler on the right</label>
 					</info>
@@ -1446,7 +1368,6 @@
 					<!-- OldPath: Writer/Layout -->
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the measurement unit for the vertical ruler.</desc>
 						<label>Vertical ruler measure unit</label>
 					</info>
@@ -1503,7 +1424,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Activates the smooth page scrolling function.</desc>
 						<label>Smooth scroll</label>
 					</info>
@@ -1517,7 +1437,6 @@
 				<prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: none yet -->
 					<info>
-						<author>TL</author>
 						<desc>Automatically align the baseline of Math objects with the baseline of the surrounding text.</desc>
 						<label>Align Math objects</label>
 					</info>
@@ -1528,7 +1447,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Meas. Units -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the measurement units.</desc>
 						<label>Measure unit</label>
 					</info>
@@ -1586,7 +1504,6 @@
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Tab stops -->
 					<!-- Notice: The default value is valid for the English Version (depends, if a metric system is used on the platform); NonMetric: 1270 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance between tab stops [UNIT=1/100 mm].</desc>
 						<label>Tab stops</label>
 					</info>
@@ -1605,7 +1522,6 @@
                     <!-- OldLocation: Soffice.cfg -->
                     <!-- UIHints: Tools - Options - Text document - Layout - [Section] Apply char unit -->
                     <info>
-                        <author>OS</author>
                         <desc>apply char unit to calculate the paragraph's indent</desc>
                         <label>apply char unit</label>
                     </info>
@@ -1619,7 +1535,6 @@
 				<prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the zoom type.</desc>
 						<label>Zoom Type</label>
 					</info>
@@ -1645,7 +1560,6 @@
 				<prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the zoom value.</desc>
 						<label>Zoom Value</label>
 					</info>
@@ -1659,7 +1573,6 @@
                                 <prop oor:name="Columns" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>FME</author>
 						<desc>Specifies number of columns of the view layout. 0 means the view layout is set to automatic.</desc>
 						<label>View Layout Columns</label>
 					</info>
@@ -1668,7 +1581,6 @@
                                 <prop oor:name="BookMode" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>FME</author>
 						<desc>Specifies if the book mode should be applied.</desc>
 						<label>View Layout Book Mode</label>
 					</info>
@@ -1689,7 +1601,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
 					<info>
-						<author>OS</author>
 						<desc>Moves frames, drawing elements, and form functions only between the grid points.</desc>
 						<label>Snap to grid</label>
 					</info>
@@ -1700,7 +1611,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
 					<info>
-						<author>OS</author>
 						<desc>Displays the grid.</desc>
 						<label>Visible grid</label>
 					</info>
@@ -1711,7 +1621,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
 					<info>
-						<author>OS</author>
 						<desc>Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
 						<label>Synchronize axes</label>
 					</info>
@@ -1727,7 +1636,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the grid points distance in the X-axis [UNIT=1/100 mm].</desc>
 						<label>X Axis Resolution</label>
 					</info>
@@ -1738,7 +1646,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the grid points distance in the Y-axis [UNIT=1/100 mm].</desc>
 						<label>Y Axis Resolution</label>
 					</info>
@@ -1754,7 +1661,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of intervals between two grid points on the X-axis.</desc>
 						<label>X Axis Subdivision</label>
 					</info>
@@ -1765,7 +1671,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the distance between the grid points on the Y-axis.</desc>
 						<label>Y Axis Subdivision</label>
 					</info>
@@ -1782,7 +1687,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font type to be used for the Standard paragraph style.</desc>
 					<label>Standard</label>
 				</info>
@@ -1790,7 +1694,6 @@
             <prop oor:name="StandardHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the Standard paragraph style.</desc>
                     <label>StandardHeight</label>
                 </info>
@@ -1800,7 +1703,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font type to be used for the paragraph&apos;s headings.</desc>
 					<label>Heading</label>
 				</info>
@@ -1808,7 +1710,6 @@
             <prop oor:name="HeadingHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the Heading paragraph style.</desc>
                     <label>HeadingHeight</label>
                 </info>
@@ -1818,7 +1719,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font to be used in the paragraph styles for lists and numbering.</desc>
 					<label>List</label>
 				</info>
@@ -1826,7 +1726,6 @@
             <prop oor:name="ListHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used in the paragraph styles for lists and numberings.</desc>
                     <label>ListHeight</label>
                 </info>
@@ -1836,7 +1735,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font to be used for the labels of images and tables.</desc>
 					<label>Caption</label>
 				</info>
@@ -1844,7 +1742,6 @@
             <prop oor:name="CaptionHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the labels of images and tables.</desc>
                     <label>CaptionHeight</label>
                 </info>
@@ -1854,7 +1751,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
 					<label>Index</label>
 				</info>
@@ -1862,7 +1758,6 @@
             <prop oor:name="IndexHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
                     <label>IndexHeight</label>
                 </info>
@@ -1872,7 +1767,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts -->
 				<info>
-					<author>OS</author>
 					<desc>Applies the settings to the current document only (true). Otherwise, the settings will apply to all future documents (false).</desc>
 					<label>Current document only</label>
 				</info>
@@ -1886,7 +1780,6 @@
 			<prop oor:name="Standard" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian) -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font type to be used for the Standard paragraph style.</desc>
 					<label>Standard</label>
 				</info>
@@ -1894,7 +1787,6 @@
             <prop oor:name="StandardHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the Standard paragraph style.</desc>
                     <label>StandardHeight</label>
                 </info>
@@ -1902,7 +1794,6 @@
             <prop oor:name="Heading" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font type to be used for the paragraph&apos;s headings.</desc>
 					<label>Heading</label>
 				</info>
@@ -1910,7 +1801,6 @@
             <prop oor:name="HeadingHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the Heading paragraph style.</desc>
                     <label>HeadingHeight</label>
                 </info>
@@ -1918,7 +1808,6 @@
             <prop oor:name="List" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font to be used in the paragraph styles for lists and numbering.</desc>
 					<label>List</label>
 				</info>
@@ -1926,7 +1815,6 @@
             <prop oor:name="ListHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used in the paragraph styles for lists and numberings.</desc>
                     <label>ListHeight</label>
                 </info>
@@ -1934,7 +1822,6 @@
             <prop oor:name="Caption" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font to be used for the labels of images and tables.</desc>
 					<label>Caption</label>
 				</info>
@@ -1942,7 +1829,6 @@
             <prop oor:name="CaptionHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the labels of images and tables.</desc>
                     <label>CaptionHeight</label>
                 </info>
@@ -1950,7 +1836,6 @@
             <prop oor:name="Index" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
 					<label>Index</label>
 				</info>
@@ -1958,7 +1843,6 @@
             <prop oor:name="IndexHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
                     <label>IndexHeight</label>
                 </info>
@@ -1966,7 +1850,6 @@
             <prop oor:name="Document" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
-					<author>OS</author>
 					<desc>Applies the settings to the current document only (true). Otherwise, the settings will apply to all future documents (false).</desc>
 					<label>Current document only</label>
 				</info>
@@ -1980,7 +1863,6 @@
 			<prop oor:name="Standard" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font type to be used for the Standard paragraph style.</desc>
 					<label>Standard</label>
 				</info>
@@ -1988,7 +1870,6 @@
             <prop oor:name="StandardHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the Standard paragraph style.</desc>
                     <label>StandardHeight</label>
                 </info>
@@ -1996,7 +1877,6 @@
             <prop oor:name="Heading" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font type to be used for the paragraph&apos;s headings.</desc>
 					<label>Heading</label>
 				</info>
@@ -2004,7 +1884,6 @@
             <prop oor:name="HeadingHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the Heading paragraph style.</desc>
                     <label>HeadingHeight</label>
                 </info>
@@ -2012,7 +1891,6 @@
             <prop oor:name="List" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font to be used in the paragraph styles for lists and numbering.</desc>
 					<label>List</label>
 				</info>
@@ -2020,7 +1898,6 @@
             <prop oor:name="ListHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used in the paragraph styles for lists and numberings.</desc>
                     <label>ListHeight</label>
                 </info>
@@ -2028,7 +1905,6 @@
             <prop oor:name="Caption" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the font to be used for the labels of images and tables.</desc>
 					<label>Caption</label>
 				</info>
@@ -2036,7 +1912,6 @@
             <prop oor:name="CaptionHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be used for the labels of images and tables.</desc>
                     <label>CaptionHeight</label>
                 </info>
@@ -2044,7 +1919,6 @@
             <prop oor:name="Index" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
 					<label>Index</label>
 				</info>
@@ -2052,7 +1926,6 @@
             <prop oor:name="IndexHeight" oor:type="xs:int">
                 <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
                 <info>
-                    <author>OS</author>
                     <desc>Specifies the font size to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
                     <label>IndexHeight</label>
                 </info>
@@ -2060,7 +1933,6 @@
             <prop oor:name="Document" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
-					<author>OS</author>
 					<desc>Applies the settings to the current document only (true). Otherwise, the settings will apply to all future documents (false).</desc>
 					<label>Current document only</label>
 				</info>
@@ -2080,7 +1952,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies which document contents will be printed.</desc>
 						<label>Graphics</label>
 					</info>
@@ -2091,7 +1962,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if graphics are printed.</desc>
 						<label>Tables</label>
 					</info>
@@ -2102,7 +1972,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if tables are printed.</desc>
 						<label>Drawings</label>
 					</info>
@@ -2113,7 +1982,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if controls are printed.</desc>
 						<label>Controls</label>
 					</info>
@@ -2124,7 +1992,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if background objects are printed.</desc>
 						<label>Background</label>
 					</info>
@@ -2135,7 +2002,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if text is always printed in black.</desc>
 						<label>Print black</label>
 					</info>
@@ -2144,7 +2010,6 @@
                                 <prop oor:name="PrintHiddenText" oor:type="xs:boolean" oor:nillable="false">
                                         <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
                                         <info>
-                                                <author>OS</author>
                                                 <desc>Specifies if hidden text, fields, paragraphs are printed.</desc>
                                                 <label>Print hidden text</label>
                                         </info>
@@ -2153,7 +2018,6 @@
                                 <prop oor:name="PrintPlaceholders" oor:type="xs:boolean" oor:nillable="false">
                                         <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
                                         <info>
-                                                <author>OS</author>
                                                 <desc>Specifies if the text of placeholder fields is printed.</desc>
                                                 <label>Print placeholders</label>
                                         </info>
@@ -2164,7 +2028,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Notes -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if and how comments are printed.</desc>
 					</info>
 					<constraints>
@@ -2201,7 +2064,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
 					<info>
-						<author>OS</author>
 						<desc>Prints only the even pages in the document.</desc>
 						<label>Left pages</label>
 					</info>
@@ -2212,7 +2074,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
 					<info>
-						<author>OS</author>
 						<desc>Prints only the odd pages in the document.</desc>
 						<label>Right pages</label>
 					</info>
@@ -2223,7 +2084,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
 					<info>
-						<author>OS</author>
 						<desc>Reverses the printing order.</desc>
 						<label>Reversed</label>
 					</info>
@@ -2234,7 +2094,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
 					<info>
-						<author>OS</author>
 						<desc>Prints in brochure format.</desc>
 						<label>Brochure</label>
 					</info>
@@ -2245,7 +2104,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
 					<info>
-						<author>OS</author>
 						<desc>Prints in brochure format, with right-to-left direction.</desc>
 						<label>Right-to-left</label>
 					</info>
@@ -2261,7 +2119,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Output -->
 					<info>
-						<author>OS</author>
 						<desc>Controls the print output to avoid problems with duplex printing and odd page numbers.</desc>
 						<label>Create single print jobs</label>
 					</info>
@@ -2272,7 +2129,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document  Print - [Section] Fax -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the fax machine that is used when faxing directly from the document.</desc>
 						<label>Fax</label>
 					</info>
@@ -2289,7 +2145,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Paper tray -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies that the defined paper source in the printer setup is used by printers with multiple trays.</desc>
 						<label>From printer setup</label>
 					</info>
@@ -2299,7 +2154,6 @@
                         <prop oor:name="EmptyPages" oor:type="xs:boolean" oor:nillable="false">
 			  <!-- UIHints: Tools - Options - Text document - Print - Other - Print automatically inserted blank pages -->
                                 <info>
-                                        <author>FME</author>
                                         <desc>Contains settings for printing of empty pages.</desc>
                                         <desc>Specifies that automatically inserted empty pages are printed.</desc>
                                         <label>Print automatically inserted blank pages</label>
@@ -2321,7 +2175,6 @@
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
 					<!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric: 635 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
 						<label>Row</label>
 					</info>
@@ -2333,7 +2186,6 @@
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Shift -->
 					<!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric: 635 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
 						<label>Column</label>
 					</info>
@@ -2350,7 +2202,6 @@
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
 					<!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform); NonMetric:  635 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
 						<label>Row</label>
 					</info>
@@ -2362,7 +2213,6 @@
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Insert -->
 					<!-- Notice: The default value is valid for the english Version (depends, if a metric system is used on the platform);NonMetric:  2540 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
 						<label>Column</label>
 					</info>
@@ -2378,7 +2228,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Table - [Section] Effect -->
 					<info>
-						<author>OS</author>
 						<desc>Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
 					</info>
 					<constraints>
@@ -2410,7 +2259,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
 						<label>Number recognition</label>
 					</info>
@@ -2421,7 +2269,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if only entries with the defined format are accepted. This option is only available if the number format recognition is active (Number_recognition = True).</desc>
 						<label>Number format recognition</label>
 					</info>
@@ -2432,7 +2279,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if all numbers are aligned below right of the cell and not above left (as in the case of text). This option is only available if number format recognition is active (Number_recognition = True).</desc>
 						<label>Alignment</label>
 					</info>
@@ -2453,7 +2299,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the Direct Cursor is active</desc>
 						<label>Use Direct Cursor</label>
 					</info>
@@ -2464,7 +2309,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the insert options for the Direct Cursor.</desc>
 						<label>Insert</label>
 					</info>
@@ -2502,7 +2346,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Cursor - [Section] Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the Direct Cursor can be positioned in a protected area.</desc>
 						<label>Allow Cursor in protected areas</label>
 					</info>
@@ -2527,7 +2370,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
 						<info>
-							<author>OS</author>
 							<desc>Defines the attribute for displaying changes when text is inserted.</desc>
 						</info>
 						<constraints>
@@ -2590,7 +2432,6 @@
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
 						<!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
 						<info>
-							<author>OS</author>
 							<desc>Defines the color for displaying changes when text is inserted.</desc>
 						</info>
 						<value>-1</value>
@@ -2605,7 +2446,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
 						<info>
-							<author>OS</author>
 							<desc>Defines the attribute for displaying changes when text is deleted</desc>
 						</info>
 						<constraints>
@@ -2663,7 +2503,6 @@
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
 						<!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
 						<info>
-							<author>OS</author>
 							<desc>Defines the color for displaying changes when text is deleted.</desc>
 						</info>
 						<value>-1</value>
@@ -2678,7 +2517,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
 						<info>
-							<author>OS</author>
 							<desc>Defines the attribute for displaying changes when text attributes are modified.</desc>
 						</info>
 						<constraints>
@@ -2741,7 +2579,6 @@
 						<!-- UIHints: Tools - Options - Text document - Changes - [Section] Text display -->
 						<!-- Notice: Default value: &quot;depends on author&quot; which corresponds to the color value 0xffffffff -->
 						<info>
-							<author>OS</author>
 							<desc>Defines the color for displaying changes when text attributes are modified.</desc>
 						</info>
 						<value>-1</value>
@@ -2757,7 +2594,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
 					<info>
-						<author>OS</author>
 						<desc>Defines if and where changed lines in the document are marked.</desc>
 					</info>
 					<constraints>
@@ -2794,7 +2630,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Changes - [Section] Lines changed -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the color for highlighting changed lines in the text.</desc>
 					</info>
 					<value>0</value>
@@ -2807,26 +2642,22 @@
             </info>
             <prop oor:name="Mode" oor:type="xs:short">
                 <info>
-                    <author>OS</author>
                     <desc>Defines the Comparison Mode.</desc>
                 </info>
             </prop>
 
             <prop oor:name="UseRSID" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>Specifies if RSIDs are used in comparison.</desc>
                 </info>
             </prop>
             <prop oor:name="IgnorePieces" oor:type="xs:boolean">
                 <info>
-                    <author>OS</author>
                     <desc>Specifies if short pieces of matched text are ignored.</desc>
                 </info>
             </prop>
             <prop oor:name="IgnoreLength" oor:type="xs:short">
                 <info>
-                    <author>OS</author>
                     <desc>Defines the length of ignored pieces.</desc>
                 </info>
             </prop>
@@ -2840,7 +2671,6 @@
 				<!-- OldPath: Writer/Insert/Caption -->
 				<!--UIHints: Tools - Options - Text document  Insert - [Section] Caption  -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the settings for inserting captions for various object types.</desc>
 				</info>
                                 <prop oor:name="CaptionOrderNumberingFirst" oor:type="xs:boolean">
@@ -4241,7 +4071,6 @@
 				<!-- OldPath: Writer/Insert/Tables -->
 				<!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the default settings for tables to be inserted.</desc>
 				</info>
 				<prop oor:name="Header" oor:type="xs:boolean" oor:nillable="false">
@@ -4287,7 +4116,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if spacing between paragraphs and tables are added to ensure the compatibility to MS Word documents.</desc>
 						<label>Add spacing between paragraphs and tables</label>
 					</info>
@@ -4298,7 +4126,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if paragraph and table spacing are added to the start of pages to ensure compatibility with MS Word documents.</desc>
 						<label>Add paragraph and table spacing to start of pages</label>
 					</info>
@@ -4319,7 +4146,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  Save Links relative -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if file links inside AutoText modules are saved relatively or absolutely.</desc>
 						<label>(Save links relative to) File system</label>
 					</info>
@@ -4330,7 +4156,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  Save Links relative -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if Internet links inside AutoText modules are saved relatively or absolutely.</desc>
 						<label>(Save links relative to) Internet</label>
 					</info>
@@ -4341,7 +4166,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  Show preview -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if a preview of the AutoText is displayed.</desc>
 						<label>Show Preview</label>
 					</info>
@@ -4352,7 +4176,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Edit  AutoText  display remainder ... -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the Tip help of the AutoText is displayed.</desc>
 						<label>Display AutoText name while typing</label>
 					</info>
@@ -4361,7 +4184,6 @@
                                 <prop oor:name="SearchInAllCategories" oor:type="xs:boolean" oor:nillable="false">
                                         <!-- #b6633427# -->
                                         <info>
-                                                <author>OS</author>
                                                 <desc>Specifies if the search for an AutoText shortcut will always be done in all AutoText categories.</desc>
                                                 <label>Search for short cut in all categories</label>
                                         </info>
@@ -4381,7 +4203,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement table -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if the replacement table is used to replace letter combinations with defined text.</desc>
 							<label>Use replacement table</label>
 						</info>
@@ -4392,7 +4213,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo INitial Capitals -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if two initial capitals are corrected automatically.</desc>
 							<label>Correct two initial capitals</label>
 						</info>
@@ -4403,7 +4223,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first letter of every sentence -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if the letter at the beginning of a sentence is capitalized automatically.</desc>
 							<label>Capitalize first letter of every sentence</label>
 						</info>
@@ -4414,7 +4233,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold* and _underline_ -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if text is formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
 							<label>Apply underline or bold</label>
 						</info>
@@ -4425,7 +4243,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL regocnition -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if character strings which could represent a URL are converted to a hyperlink.</desc>
 							<label>Detect URL</label>
 						</info>
@@ -4436,7 +4253,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace 1st... -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if ordinal numbers are displayed with raised endings.</desc>
 							<label>Replace ordinal numbers</label>
 						</info>
@@ -4447,7 +4263,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if dashes are replaced automatically.</desc>
 							<label>Replace dashes</label>
 						</info>
@@ -4458,7 +4273,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking space -->
 						<info>
-							<author>cedricbosdo</author>
 							<desc>Adds a non-breaking space before the characters :!;? in french.</desc>
 							<label>Add non-breaking space</label>
 						</info>
@@ -4469,7 +4283,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Remove blank paragraphs -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if blank paragraphs are deleted.</desc>
 							<label>Remove blank paragraphs</label>
 						</info>
@@ -4480,7 +4293,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace custom styles -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if user-defined styles applied in the document are replaced by predefined text document styles.</desc>
 							<label>Replace user-defined styles</label>
 						</info>
@@ -4491,7 +4303,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater -->
 						<info>
-							<author>OS</author>
 							<desc>Determines if single line paragraphs are combined when they are shorter than the specified value.</desc>
 							<label>Combine single line paragraphs</label>
 						</info>
@@ -4502,7 +4313,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Combine single line paragraphs if length greater... / Edit/Combine/Minimum size-->
 						<info>
-							<author>OS</author>
 							<desc>Specifies the minimum length value for combining single line paragraphs. [UNIT=%]</desc>
 							<label>Combine single line paragraphs</label>
 						</info>
@@ -4512,7 +4322,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
 						<info>
-							<author>OS</author>
 							<desc>Deletes Spaces/Tabs at the beginning/end of a paragraph (AutoFormat).</desc>
 							<label>Delete Blanks and Tabs at paragraphbegin and -end</label>
 						</info>
@@ -4522,7 +4331,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs between Lineend and -begin -->
 						<info>
-							<author>OS</author>
 							<desc>Deletes Spaces/Tabs between the rows of a paragraph (AutoFormat).</desc>
 							<label>Delete Blanks and Tabs at paragraphbegin and -end</label>
 						</info>
@@ -4537,7 +4345,6 @@
 							<!-- OldLocation: Soffice.cfg -->
 							<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
 							<info>
-								<author>OS</author>
 								<desc>Specifies if paragraphs starting with a dash, a plus sign or an asterix followed by space or tab are replaced by a bullet character.</desc>
 								<label>Replace bullets with</label>
 							</info>
@@ -4552,7 +4359,6 @@
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the character code if ChangeToBullets=true.</desc>
 								</info>
 								<value>8226</value>
@@ -4562,7 +4368,6 @@
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font name if ChangeToBullets=true.</desc>
 								</info>
 								<value>StarSymbol</value>
@@ -4573,7 +4378,6 @@
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
 								<!--Defautl value 0 = Symbol-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font family if ChangeToBullets=true.</desc>
 								</info>
 								<value>0</value>
@@ -4584,7 +4388,6 @@
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
 								<!--Defautl value 10 = Symbol-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font character set if ChangeToBullets=true.</desc>
 								</info>
 								<value>10</value>
@@ -4595,7 +4398,6 @@
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
 								<!--Defautl value 2 = Variable-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font pitch if ChangeToBullets=true.</desc>
 								</info>
 								<value>2</value>
@@ -4612,7 +4414,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - AutoFormat while typing -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if AutoFormat is active while typing.</desc>
 							<label>AutoFormat while typing</label>
 						</info>
@@ -4623,7 +4424,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if dashes are replaced automatically.</desc>
 							<label>Replace dashes</label>
 						</info>
@@ -4634,7 +4434,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply border -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if borders are applied to paragraphs automatically.</desc>
 							<label>Apply border</label>
 						</info>
@@ -4645,7 +4444,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Create table -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if tables are created by AutoFormat.</desc>
 							<label>Create table</label>
 						</info>
@@ -4656,7 +4454,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply styles -->
 						<info>
-							<author>OS</author>
 							<desc>Specifies if styles are automatically be assigned.</desc>
 							<label>Apply styles</label>
 						</info>
@@ -4666,7 +4463,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect  Options  Delete Blanks and Tabs at paragraphbegin and -end -->
 						<info>
-							<author>OS</author>
 							<desc>Deletes Spaces/Tabs at the beginning/end of a paragraph (AutoFormat during key input).</desc>
 							<label>Delete Blanks and Tabs at paragraphbegin and -end</label>
 						</info>
@@ -4676,7 +4472,6 @@
 						<!-- OldLocation: Soffice.cfg -->
 						<!-- UIHints: Tools  AutoCorrect Options  Delete Blanks and Tabs between Lineend and -begin -->
 						<info>
-							<author>OS</author>
 							<desc>Deletes Spaces/Tabs between the rows of a paragraph (Autoformat during key input).</desc>
 							<label>Delete Blanks and Tabs between lineend and -begin</label>
 						</info>
@@ -4691,7 +4486,6 @@
 							<!-- OldLocation: Soffice.cfg -->
 							<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
 							<info>
-								<author>OS</author>
 								<desc>Specifies if a numbered or bulleted text is created automatically while typing.</desc>
 								<label>Apply numbering</label>
 							</info>
@@ -4706,7 +4500,6 @@
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the character code if ApplyNumbering=true.</desc>
 								</info>
 								<value>8226</value>
@@ -4716,7 +4509,6 @@
 								<!-- OldLocation: Soffice.cfg -->
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font name if ApplyNumbering=true.</desc>
 								</info>
 								<value>StarSymbol</value>
@@ -4727,7 +4519,6 @@
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
 								<!--Defautl value 0 = Symbol-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font family if ApplyNumbering=true.</desc>
 								</info>
 								<value>0</value>
@@ -4738,7 +4529,6 @@
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
 								<!--Defautl value 10 = Symbol-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font character set if ApplyNumbering=true.</desc>
 								</info>
 								<value>10</value>
@@ -4749,7 +4539,6 @@
 								<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options Apply Numbering-->
 								<!--Defautl value 2 = Variable-->
 								<info>
-									<author>OS</author>
 									<desc>Specifies the font pitch if ApplyNumbering=true.</desc>
 								</info>
 								<value>2</value>
@@ -4767,7 +4556,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show suggestions -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the suggestions for the automatic word completion are displayed on the screen.</desc>
 						<label>Show suggestions</label>
 					</info>
@@ -4778,7 +4566,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  min. word length -->
 					<info>
-						<author>OS</author>
 						<desc>Sets the value for the minimum word length.</desc>
 						<label>Min. word length</label>
 					</info>
@@ -4789,7 +4576,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  max. entries -->
 					<info>
-						<author>OS</author>
 						<desc>Sets the maximum number of words to be recalled.</desc>
 						<label>Max. entries</label>
 					</info>
@@ -4800,7 +4586,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Collect suggestions -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the suggestions are compiled in a list.</desc>
 						<label>Collect suggestions</label>
 					</info>
@@ -4811,7 +4596,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: no UI available anymore -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the list containing the suitable suggestions can be navigated with (Ctrl)(Tab)(forward).</desc>
 						<label>Endless suggestions</label>
 					</info>
@@ -4822,7 +4606,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Append blanc -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if a blank is added after the automatic word completion.</desc>
 						<label>Append space</label>
 					</info>
@@ -4833,7 +4616,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show as tip -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the suggestions for the automatic word completion function should be displayed as Tip helps.</desc>
 						<label>Show as tip</label>
 					</info>
@@ -4844,7 +4626,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Accept with -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the key to be used for accepting the current suggestion of the automatic word completion.</desc>
 						<label>Accept with</label>
 					</info>
@@ -4875,7 +4656,6 @@
 				<prop oor:name="KeepList" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  When closing a document, save the list for later use ... -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies whether collected words are removed when the source document is closed.</desc>
 						<label>When closing a document, save the list for later use in other documents</label>
 					</info>
@@ -4896,7 +4676,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the user&apos;s address is copied automatically into the label text field.</desc>
 						<label>Address</label>
 					</info>
@@ -4907,7 +4686,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the label text (address).</desc>
 						<label>Label text</label>
 					</info>
@@ -4919,7 +4697,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the database used.</desc>
 						<label>Database</label>
 					</info>
@@ -4936,7 +4713,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if continuous paper or individual sheets are used.</desc>
 						<label>Continous / Sheet</label>
 					</info>
@@ -4947,7 +4723,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the brand name of the label format.</desc>
 						<label>Brand</label>
 					</info>
@@ -4959,7 +4734,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Labels -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the type of the label format.</desc>
 						<label>Type</label>
 					</info>
@@ -4976,7 +4750,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of labels arranged next to each other on the page.</desc>
 						<label>Columns</label>
 					</info>
@@ -4987,7 +4760,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of labels arranged from top to bottom on the page.</desc>
 						<label>Rows</label>
 					</info>
@@ -4998,7 +4770,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance between the left edge of one label to the left edge of the adjacent label. [UNIT=1/100 mm].</desc>
 						<label>Horizontal pitch</label>
 					</info>
@@ -5009,7 +4780,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance between the upper edge of one label to the upper edge of the label below. [UNIT=1/100 mm].</desc>
 						<label>Vertical pitch</label>
 					</info>
@@ -5020,7 +4790,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the width of each label [UNIT=1/100 mm].</desc>
 						<label>Width</label>
 					</info>
@@ -5031,7 +4800,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the height of each label [UNIT=1/100 mm].</desc>
 						<label>Height</label>
 					</info>
@@ -5042,7 +4810,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance from the left edge of the page to the left edge of the first label [UNIT=1/100 mm].</desc>
 						<label>Left margin</label>
 					</info>
@@ -5053,7 +4820,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance from the top of the page to the top of the first label [UNIT=1/100 mm].</desc>
 						<label>Top margin</label>
 					</info>
@@ -5062,7 +4828,6 @@
 				<prop oor:name="PageWidth" oor:type="xs:int">
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>Winfried</author>
 						<desc>Specifies the page width of the label sheet [UNIT=1/100 mm].</desc>
 						<label>Page Width</label>
 					</info>
@@ -5071,7 +4836,6 @@
 				<prop oor:name="PageHeight" oor:type="xs:int">
 					<!-- UIHints: File  New  Labels  Format -->
 					<info>
-						<author>Winfried</author>
 						<desc>Specifies the page height of the label sheet [UNIT=1/100 mm].</desc>
 						<label>Page Height</label>
 					</info>
@@ -5087,7 +4851,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if contents are synchronized.</desc>
 						<label>Synchronize contents</label>
 					</info>
@@ -5098,7 +4861,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the entire page or a single label are printed/generated.</desc>
 						<label>Entire page / Single label</label>
 					</info>
@@ -5109,7 +4871,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of columns to be printed.</desc>
 						<label>Column</label>
 					</info>
@@ -5120,7 +4881,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  Labels  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of rows to be printed.</desc>
 						<label>Row</label>
 					</info>
@@ -5141,7 +4901,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Medium -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if continuous paper or individual sheets are used.</desc>
 						<label>Continous / Sheet</label>
 					</info>
@@ -5152,7 +4911,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Medium -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the brand name of the business card format.</desc>
 						<label>Brand</label>
 					</info>
@@ -5164,7 +4922,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Medium -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the type of the business card format.</desc>
 						<label>Type</label>
 					</info>
@@ -5181,7 +4938,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of business cards arranged next to each other on the page.</desc>
 						<label>Columns</label>
 					</info>
@@ -5192,7 +4948,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of business cards arranged from top to bottom on the page.</desc>
 						<label>Rows</label>
 					</info>
@@ -5203,7 +4958,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance between the left edge of a business card to the left edge of the adjacent business card. [UNIT=1/100 mm]</desc>
 						<label>Horizontal pitch</label>
 					</info>
@@ -5214,7 +4968,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance between the upper edge of a label to the upper edge of the label below. [UNIT=1/100 mm]</desc>
 						<label>Vertical pitch</label>
 					</info>
@@ -5225,7 +4978,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the width of each business card [UNIT=1/100 mm].</desc>
 						<label>Width</label>
 					</info>
@@ -5236,7 +4988,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the height of each business card [UNIT=1/100 mm].</desc>
 						<label>Height</label>
 					</info>
@@ -5247,7 +4998,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance from the left edge of the page to the left edge of the first business card . [UNIT=1/100 mm]</desc>
 						<label>Left margin</label>
 					</info>
@@ -5258,7 +5008,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the distance from the top of the page to the top of the first business card [UNIT=1/100 mm].</desc>
 						<label>Top margin</label>
 					</info>
@@ -5274,7 +5023,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if contents are synchronized.</desc>
 						<label>Synchronize contents</label>
 					</info>
@@ -5285,7 +5033,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the entire page or a single business card is printed/generated.</desc>
 						<label>Entire page / Single business card</label>
 					</info>
@@ -5296,7 +5043,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of columns to be printed.</desc>
 						<label>Column</label>
 					</info>
@@ -5307,7 +5053,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Options -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of rows to be printed.</desc>
 						<label>Row</label>
 					</info>
@@ -5323,7 +5068,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  BusinessCards -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the AutoText section name.</desc>
 						<label>AutoText section</label>
 					</info>
@@ -5333,7 +5077,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  BusinessCards -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the AutoText module name.</desc>
 					</info>
 				</prop>
@@ -5347,7 +5090,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your first name.</desc>
 						<label>First name</label>
 					</info>
@@ -5357,7 +5099,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your last name.</desc>
 						<label>Last name</label>
 					</info>
@@ -5367,7 +5108,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your initials.</desc>
 						<label>Initials</label>
 					</info>
@@ -5377,7 +5117,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your first name (2nd entry).</desc>
 						<label>First name 2</label>
 					</info>
@@ -5387,7 +5126,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your last name (2nd entry).</desc>
 						<label>Last name 2</label>
 					</info>
@@ -5397,7 +5135,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your initials (2nd entry).</desc>
 						<label>Initials 2</label>
 					</info>
@@ -5407,7 +5144,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the name of the street where you live.</desc>
 						<label>Street</label>
 					</info>
@@ -5417,7 +5153,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your ZIP code.</desc>
 						<label>Zip</label>
 					</info>
@@ -5427,7 +5162,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the city where you live.</desc>
 						<label>City</label>
 					</info>
@@ -5437,7 +5171,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the country where you live.</desc>
 						<label>Country</label>
 					</info>
@@ -5447,7 +5180,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the state where you live.</desc>
 						<label>State</label>
 					</info>
@@ -5457,7 +5189,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your title.</desc>
 						<label>Title</label>
 					</info>
@@ -5467,7 +5198,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your profession.</desc>
 						<label>Profession</label>
 					</info>
@@ -5477,7 +5207,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your phone number.</desc>
 						<label>Phone</label>
 					</info>
@@ -5487,7 +5216,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your mobile phone number.</desc>
 						<label>Mobile</label>
 					</info>
@@ -5497,7 +5225,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your fax number.</desc>
 						<label>Fax</label>
 					</info>
@@ -5507,7 +5234,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the address of your homepage.</desc>
 						<label>Homepage</label>
 					</info>
@@ -5517,7 +5243,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your e-mail address.</desc>
 						<label>E-mail</label>
 					</info>
@@ -5532,7 +5257,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the company name, 1st line.</desc>
 						<label>Company</label>
 					</info>
@@ -5542,7 +5266,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the company name, 2nd line.</desc>
 						<label>CompanyExt</label>
 					</info>
@@ -5552,7 +5275,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the company slogan.</desc>
 						<label>Slogan</label>
 					</info>
@@ -5562,7 +5284,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the name of the street.</desc>
 						<label>Street</label>
 					</info>
@@ -5572,7 +5293,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the postal code or zip code.</desc>
 						<label>Zip</label>
 					</info>
@@ -5582,7 +5302,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the name of the city.</desc>
 						<label>City</label>
 					</info>
@@ -5592,7 +5311,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the country where the company is located.</desc>
 						<label>Country</label>
 					</info>
@@ -5602,7 +5320,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the state where the company is located.</desc>
 						<label>State</label>
 					</info>
@@ -5612,7 +5329,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your position in the company.</desc>
 						<label>Position</label>
 					</info>
@@ -5622,7 +5338,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your phone number.</desc>
 						<label>Phone</label>
 					</info>
@@ -5632,7 +5347,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your mobile phone number.</desc>
 						<label>Mobile</label>
 					</info>
@@ -5642,7 +5356,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your fax number.</desc>
 						<label>Fax</label>
 					</info>
@@ -5652,7 +5365,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the internet address for the company.</desc>
 						<label>WebAddress</label>
 					</info>
@@ -5662,7 +5374,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies your e-mail address.</desc>
 						<label>Email</label>
 					</info>
@@ -5671,7 +5382,6 @@
 		</group>
 		<group oor:name="ObjectBar">
 			<info>
-				<author>OS</author>
 				<desc>Specifies the settings for the object bar.</desc>
 			</info>
 			<group oor:name="Selection">
@@ -5679,7 +5389,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Right mouse click to the toolbar with object selection-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies which type of object bars are visible.</desc>
 				</info>
 				<prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
@@ -5720,7 +5429,6 @@
                 	</info>
                 	<prop oor:name="ShowAnkor" oor:type="xs:boolean" oor:nillable="false">
                		<info>
-                        	<author>mod</author>
                         	<desc>configures if comment anchor should be shown or hidden when display is off</desc>
                         	<label>Comments Ankor on/off</label>
                 	</info>
@@ -5733,7 +5441,6 @@
                 	</info>
                 	<prop oor:name="AdditionalSeperators" oor:type="xs:string" oor:nillable="false">
                		<info>
-                        	<author>cmc</author>
                         	<desc>configures additional word seperators for word counting</desc>
                         	<label>Additional Word Seperators</label>
                 	</info>
@@ -5749,7 +5456,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
 				<info>
-					<author>OS</author>
 					<desc>Displays the list box in the lower half of the Navigator.</desc>
 					<label>List Box on/off</label>
 				</info>
@@ -5760,7 +5466,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
 				<info>
-					<author>OS</author>
 					<desc>Switches from Master View and Normal view when a Master Document is opened.</desc>
 					<label>Toggle</label>
 				</info>
@@ -5771,7 +5476,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
 				<info>
-					<author>OS</author>
 					<desc>Switches from displaying all of the elements in the Navigator to displaying only a selected category as the root in the tree view.</desc>
 					<label>Content View</label>
 				</info>
@@ -5782,7 +5486,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies which entry is selected in the Navigator list box.</desc>
 				</info>
 				<value>0</value>
@@ -5792,7 +5495,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the outline level shown in the Navigator.</desc>
 					<label>Heading levels shown</label>
 				</info>
@@ -5815,7 +5517,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the insert mode when moving elements from the Navigator to another document with drag-and-drop.</desc>
 					<label>Drag Mode</label>
 				</info>
@@ -5843,7 +5544,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Navigator -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies if the contents of a category are displayed in the Navigator list box.</desc>
 				</info>
 				<value>0</value>
@@ -5862,7 +5562,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Envelope -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the recipient&apos;s address.</desc>
 						<label>Addressee</label>
 					</info>
@@ -5874,7 +5573,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Envelope -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the sender&apos;s address.</desc>
 						<label>Sender</label>
 					</info>
@@ -5884,7 +5582,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Envelope -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the sender&apos;s address is used.</desc>
 						<label>Use Sender</label>
 					</info>
@@ -5895,7 +5592,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Envelope -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the database to be used for the addressee.</desc>
 						<label>Database</label>
 					</info>
@@ -5912,7 +5608,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format //  old twips: 6463 / 2-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the position of the addressee field measured from the left margin [UNIT=1/100 mm].</desc>
 						<label>Addressee from left</label>
 					</info>
@@ -5923,7 +5618,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format  // old twips: 6463 / 2-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the position of the addressee field measured from the upper margin [UNIT=1/100 mm].</desc>
 						<label>Addressee from top</label>
 					</info>
@@ -5934,7 +5628,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the position of the sender field measured from the left margin [UNIT=1/100 mm].</desc>
 						<label>Sender from left</label>
 					</info>
@@ -5945,7 +5638,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the position of the sender field measured from the upper margin [UNIT=1/100 mm].</desc>
 						<label>Sender from top</label>
 					</info>
@@ -5956,7 +5648,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the width of the envelope [UNIT=1/100 mm].</desc>
 						<label>Width</label>
 					</info>
@@ -5967,7 +5658,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Format -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the height of the envelope [UNIT=1/100 mm].</desc>
 						<label>Height</label>
 					</info>
@@ -5983,7 +5673,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the alignment when printing.</desc>
 						<label>Alignment</label>
 					</info>
@@ -6026,7 +5715,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the envelope is printed with the side facing up or down in the printer tray.</desc>
 						<label>Print from top / Print from bottom</label>
 					</info>
@@ -6037,7 +5725,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the right distance of the printed area (horizontal position).</desc>
 						<label>Shift right</label>
 					</info>
@@ -6048,7 +5735,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Insert  Envolpe  Printer -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the bottom distance of the printed area (vertical position).</desc>
 						<label>Shift down</label>
 					</info>
@@ -6058,14 +5744,12 @@
 		</group>
 		<group oor:name="InsertData">
 			<info>
-				<author>OS</author>
 				<desc>Contains settings for inserting data from a data base.</desc>
 			</info>
 			<set oor:name="DataSet" oor:node-type="DataSetType">
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Dialog Insert Database Columns -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the data set that you want to insert.</desc>
 				</info>
 			</set>
@@ -6087,7 +5771,6 @@
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
 						<info>
-							<author>OS</author>
 							<desc>Converts VBA Basic into Office Basic as commands (True).</desc>
 							<label>Load Basic Code to edit</label>
 						</info>
@@ -6095,7 +5778,6 @@
 					</prop>
                     <prop oor:name="Executable" oor:type="xs:boolean" oor:nillable="false">
                         <info>
-                            <author>pflin</author>
                             <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
                              <label>Executable code</label>
                          </info>
@@ -6106,7 +5788,6 @@
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Word 97/2000 -->
 						<info>
-							<author>OS</author>
 							<desc>Holds original VBA storage for saving in the memory (True).</desc>
 							<label>Save Original Basic Code again</label>
 						</info>
@@ -6127,7 +5808,6 @@
 					<!--OldLocation: Soffice.cfg -->
 					<!--UIHints: Numbering/Bullets dialog - Customize - Graphics - Keep Ratio-->
 					<info>
-						<author>OS</author>
 						<desc>Maintains the proportions of pictures when the size is modified.</desc>
 					</info>
 					<value>false</value>
@@ -6135,23 +5815,19 @@
 			</group>
                         <group oor:name="DefaultBulletList">
                                 <info>
-                                        <author>OD</author>
                                         <desc>Contains the font and the character used for each level for the default bullet list.</desc>
                                 </info>
                                 <group oor:name="BulletFont">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Contains the font and its relevant attributes used for the default bullet list.</desc>
                                         </info>
                                         <prop oor:name="FontFamilyname" oor:type="xs:string">
                                                 <info>
-                                                        <author>OD</author>
                                                         <desc>Font family name of default bullet character for all list levels.</desc>
                                                 </info>
                                         </prop>
                                         <prop oor:name="FontWeight" oor:type="xs:short">
                                                 <info>
-                                                        <author>OD</author>
                                                         <desc>Font weight of default bullet character for all list levels.</desc>
                                                 </info>
                                                 <constraints>
@@ -6214,7 +5890,6 @@
                                         </prop>
                                         <prop oor:name="FontItalic" oor:type="xs:short">
                                                 <info>
-                                                        <author>OD</author>
                                                         <desc>Italic attribute of font of default bullet character for all list levels.</desc>
                                                 </info>
                                                 <constraints>
@@ -6243,73 +5918,61 @@
                                 </group>
                                 <prop oor:name="BulletCharLvl1" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 1.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl2" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 2.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl3" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 3.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl4" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 4.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl5" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 5.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl6" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 6.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl7" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 7.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl8" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 8.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl9" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 9.</desc>
                                         </info>
                                 </prop>
                                 <prop oor:name="BulletCharLvl10" oor:type="xs:short">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 10.</desc>
                                         </info>
                                 </prop>
                         </group>
                         <group oor:name="UserInterfaceBehavior">
                                 <info>
-                                        <author>OD</author>
                                         <desc>Contains switches for the behavior of the user interface regarding lists and list items.</desc>
                                 </info>
                                 <prop oor:name="ChangeIndentOnTabAtFirstPosOfFirstListItem" oor:type="xs:boolean">
                                         <info>
-                                                <author>OD</author>
                                                 <desc>Behavior of &gt;TAB&lt;-key and &gt;SHIFT-TAB&lt;-key at the first position of the first list item of a list. &gt;TRUE&lt;: complete list indent is increased/decreased. &gt;FALSE&lt;: default behavior of &gt;TAB&lt; resp. &gt;SHIFT-TAB&lt;-key at first position of a list item.</desc>
                                         </info>
                                 </prop>
@@ -6327,7 +5990,6 @@
 					<!--OldLocation: Soffice.cfg -->
 					<!--UIHints: File - Properties - Statistics - Word number - Separator-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the character to be used as a separator.</desc>
 					</info>
 					<value>() \t\n\xff</value>
@@ -6342,7 +6004,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!--UIHints: Insert - Indexes - Show preview -->
 				<info>
-					<author>OS</author>
 					<desc>Specifies if a preview of the index is displayed in the Insert Index dialog .</desc>
 					<label>Show Preview</label>
 				</info>
@@ -6361,14 +6022,12 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Form letter - Printer output - Single print jobs-->
 					<info>
-						<author>OS</author>
 						<desc>Prints each form letter individually with the selected printer (true).</desc>
 					</info>
 					<value>false</value>
 				</prop>
                 <prop oor:name="AskForMerge" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>OS</author>
                         <desc>Determines whether printing a document that contains database fields triggers a 'do you want to call mailmerge' query</desc>
                     </info>
                     <value>true</value>
@@ -6382,7 +6041,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!--UIHints: Form letter - Mailing output - Mail format-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the mail format.</desc>
 					</info>
 					<constraints>
@@ -6417,7 +6075,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!--UIHints: Form letter - File output - Path-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the path for the form letter file.</desc>
 					</info>
 					<value/>
@@ -6428,7 +6085,6 @@
 					<!-- OldPath: Writer/Insert/Tables -->
 					<!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies how the file name is built.</desc>
 					</info>
 					<prop oor:name="Generation" oor:type="xs:boolean">
@@ -6458,7 +6114,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!--UIHints: context menu of readonly loaded documents-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies if a preview of the index is displayed in the dialog Insert Index.</desc>
 					<label>Show Preview</label>
 				</info>
@@ -6959,7 +6614,6 @@
 		</group>
 		<group oor:name="Wizards" >
 			<info>
-				<author>TV</author>
 				<desc>Specifies settings for the Writer Wizards.</desc>
 			</info>
 			<group oor:name="Letter" >
@@ -7009,7 +6663,6 @@
 			</group>
 			<group oor:name="Agenda">
 				<info>
-					<author>RPiterman</author>
 					<desc>Specifies settings for the Agenda Wizard.</desc>
 				</info>
 				<prop oor:type="xs:int" oor:name="AgendaType">

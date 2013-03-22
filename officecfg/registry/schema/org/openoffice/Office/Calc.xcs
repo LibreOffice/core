@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Calc" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>NN</author>
 		<desc >Contains settings for the spreadsheet application.</desc>
 	</info>
 	<templates>
@@ -72,7 +71,6 @@
 			<!-- OldLocation: convert.ini -->
 			<!-- UIHints: function CONVERT -->
 			<info>
-				<author>NN/ER</author>
 				<desc>Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
 			</info>
 		</set>
@@ -89,7 +87,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether formulas instead of results are displayed in the cells.</desc>
 						<label>Formulas</label>
 					</info>
@@ -100,7 +97,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether numbers containing the 0 value are shown.</desc>
 						<label>Zero values</label>
 					</info>
@@ -111,7 +107,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether comments are marked.</desc>
 						<label>Comment tags</label>
 					</info>
@@ -122,7 +117,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
 						<label>Value highlighting</label>
 					</info>
@@ -133,7 +127,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
 						<label>Anchor</label>
 					</info>
@@ -144,7 +137,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether text overflow is marked via a small triangle.</desc>
 						<label>Text overflow</label>
 					</info>
@@ -155,7 +147,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
 						<label>Objects and Graphics</label>
 					</info>
@@ -183,7 +174,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
 						<label>Charts</label>
 					</info>
@@ -211,7 +201,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
 					<info>
-						<author>NN</author>
 						<desc>Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
 						<label>Drawing objects</label>
 					</info>
@@ -244,7 +233,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Other  [Section] Updating -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies if and how links are updated when loading a document.</desc>
 						<label>Update Links</label>
 					</info>
@@ -282,7 +270,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether grid lines are displayed.</desc>
 						<label>Grid lines</label>
 					</info>
@@ -291,7 +278,6 @@
                 <prop oor:name="GridOnColoredCells" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Visual Aids -->
                     <info>
-                        <author>André Schnabel</author>
                         <desc>Specifies whether grid lines should be displayed on top of colored cells.</desc>
                         <label>Grid lines on colored background</label>
                     </info>
@@ -303,7 +289,6 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<!--Default 12632256 = LightGray-->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the color of the grid lines.</desc>
 						<label>Color</label>
 					</info>
@@ -314,7 +299,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether page breaks are displayed.</desc>
 						<label>Page breaks</label>
 					</info>
@@ -325,7 +309,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether helplines are displayed when moving objects.</desc>
 						<label>Helplines</label>
 					</info>
@@ -336,7 +319,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether control points are displayed as simple squares without 3D effect.</desc>
 						<label>Simple control points</label>
 					</info>
@@ -347,7 +329,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether control points are displayed as larger than the default size.</desc>
 						<label>Large control points</label>
 					</info>
@@ -363,7 +344,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether row and column headers are displayed.</desc>
 						<label>Column/Row headers</label>
 					</info>
@@ -374,7 +354,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether a horizontal scroll bar is displayed.</desc>
 						<label>Horizontal scroll</label>
 					</info>
@@ -385,7 +364,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether a vertical scroll bar is displayed.</desc>
 						<label>Vertical Scroll</label>
 					</info>
@@ -396,7 +374,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether sheet tabs are displayed.</desc>
 						<label>Sheet tabs</label>
 					</info>
@@ -407,7 +384,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether outline symbols are displayed.</desc>
 						<label>Outline symbols</label>
 					</info>
@@ -423,7 +399,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>NN</author>
 						<desc>Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 						<label>Statusbar Function</label>
 					</info>
@@ -471,7 +446,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Tab stops -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
 						<label>Tab stops</label>
 					</info>
@@ -495,7 +469,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Measurement unit -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the measurement unit to be used in the user interface.</desc>
 						<label>Measurement unit</label>
 					</info>
@@ -576,7 +549,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the zoom type.</desc>
 						<label>Zoom Type</label>
 					</info>
@@ -604,7 +576,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the percentage value to which the view is scaled.</desc>
 						<label>Zoom Value</label>
 					</info>
@@ -613,7 +584,6 @@
                 <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options - Spreadsheets - View - [Section] Zoom -->
                     <info>
-                        <author>NN</author>
                         <desc>Specifies if zoom is applied to all sheets of a document.</desc>
                         <label>Synchronize sheets</label>
                     </info>
@@ -630,7 +600,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether pressing the Enter key should move the selection.</desc>
 					<label>Press Enter to move selection</label>
 				</info>
@@ -641,7 +610,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
 					<label>Direction to move selection</label>
 				</info>
@@ -674,7 +642,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
 					<label>Press Enter to switch to edit mode</label>
 				</info>
@@ -685,7 +652,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether formatting a cell also affects subsequently entered cells.</desc>
 					<label>Expand formatting</label>
 				</info>
@@ -696,7 +662,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 					<label>Show references in color</label>
 				</info>
@@ -707,7 +672,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 					<label>Expand references if new columns/rows are inserted</label>
 				</info>
@@ -718,7 +682,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
 					<label>Highlight selection in column/row headings</label>
 				</info>
@@ -729,7 +692,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: only API (see UseTabCol) -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
 					<label>Use Tab Column</label>
 				</info>
@@ -738,7 +700,6 @@
 			<prop oor:name="UsePrinterMetrics" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
 					<label>Use printer metrics for text formatting</label>
 				</info>
@@ -747,7 +708,6 @@
 			<prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 					<label>Warn before replacing cells</label>
 				</info>
@@ -757,7 +717,6 @@
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies the functions last used.</desc>
 					<label>Last Used Functions</label>
 				</info>
@@ -795,7 +754,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools  Cell Contents  AutoInput -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether the AutoInput function is active.</desc>
 					<label>Auto Input</label>
 				</info>
@@ -806,7 +764,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools  Detective  AutoRefresh -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
 					<label>Detective Auto Refresh</label>
 				</info>
@@ -826,7 +783,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
 						<label>Snap to grid</label>
 					</info>
@@ -837,7 +793,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether the snap grid is matched with the main grid.</desc>
 						<label>Size to grid</label>
 					</info>
@@ -848,7 +803,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether the grid is displayed.</desc>
 						<label>Visible grid</label>
 					</info>
@@ -859,7 +813,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
 						<label>Synchronize axes</label>
 					</info>
@@ -871,7 +824,6 @@
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
 					<!-- Notice: Default-value in  (nonmetric: 1270 1/100 mm)-->
 					<info>
-						<author>NN</author>
 						<desc>Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
 						<label>X axis</label>
 					</info>
@@ -896,7 +848,6 @@
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
 					<!-- Notice: Default-value in nonmetric: 1270 1/100 mm-->
 					<info>
-						<author>NN</author>
 						<desc>Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
 						<label>Y axis</label>
 					</info>
@@ -926,7 +877,6 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
 					<!-- Notice: Default-value nonmetric 1270 1/100 mm) -->
 					<info>
-						<author>NN</author>
 						<desc>Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
 						<label>X Axis Resolution</label>
 					</info>
@@ -951,7 +901,6 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
 					<!-- Notice: Default-value  nonmetric 1270 1/100 mm) -->
 					<info>
-						<author>NN</author>
 						<desc>Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
 						<label>Y Axis Resolution</label>
 					</info>
@@ -980,7 +929,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the number of intervals between two grid points on the X axis.</desc>
 						<label>X Axis Subdivision</label>
 					</info>
@@ -991,7 +939,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the number of intervals between two grid points on the Y axis.</desc>
 						<label>Y Axis Subdivision</label>
 					</info>
@@ -1009,7 +956,6 @@
 				<!-- UIHints: Tools - Options  Spreadsheet  Sort lists  [List box] Lists -->
 				<!-- Notice: Defaults: Week and month names from system language -->
 				<info>
-					<author>NN</author>
 					<desc>Specifies the available lists.</desc>
 					<label>Lists</label>
 				</info>
@@ -1026,7 +972,6 @@
                 </info>
                 <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Charset/Language</desc>
                         <label>CharSet</label>
                     </info>
@@ -1039,7 +984,6 @@
                 </info>
                 <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Charset/Language</desc>
                         <label>CharSet</label>
                     </info>
@@ -1052,7 +996,6 @@
                 </info>
                 <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Merge Delimiter check box status</desc>
                         <label>MergeDelimiters</label>
                     </info>
@@ -1060,7 +1003,6 @@
                 </prop>
                 <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>kyoshida</author>
                         <desc>If true, quoted field is always imported as text with no exception.</desc>
                         <label>QuotedFieldAsText</label>
                     </info>
@@ -1068,7 +1010,6 @@
                 </prop>
                 <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>kyoshida</author>
                         <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
                         <label>DetectSpecialNumbers</label>
                     </info>
@@ -1076,7 +1017,6 @@
                 </prop>
                 <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>kyoshida</author>
                         <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
                         <label>Language</label>
                     </info>
@@ -1084,7 +1024,6 @@
                 </prop>
                 <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>List of Separators - as a String</desc>
                         <label>Separators</label>
                     </info>
@@ -1092,7 +1031,6 @@
                 </prop>
                 <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Text Separators</desc>
                         <label>TextSeparators</label>
                     </info>
@@ -1100,7 +1038,6 @@
                 </prop>
                 <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Fixed width</desc>
                         <label>FixedWidth</label>
                     </info>
@@ -1108,7 +1045,6 @@
                 </prop>
                 <prop oor:name="FromRow" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>From Row</desc>
                         <label>FromRow</label>
                     </info>
@@ -1116,7 +1052,6 @@
                 </prop>
                 <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Char Set</desc>
                         <label>CharSet</label>
                     </info>
@@ -1124,7 +1059,6 @@
                 </prop>
                 <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Fixed Width List of separators</desc>
                         <label>FixedWidthList</label>
                     </info>
@@ -1137,7 +1071,6 @@
                 </info>
                 <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Merge Delimiter check box status</desc>
                         <label>MergeDelimiters</label>
                     </info>
@@ -1145,7 +1078,6 @@
                 </prop>
                 <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>kyoshida</author>
                         <desc>If true, quoted field is always imported as text with no exception.</desc>
                         <label>QuotedFieldAsText</label>
                     </info>
@@ -1153,7 +1085,6 @@
                 </prop>
                 <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>kyoshida</author>
                         <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
                         <label>DetectSpecialNumbers</label>
                     </info>
@@ -1161,7 +1092,6 @@
                 </prop>
                 <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>kyoshida</author>
                         <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
                         <label>Language</label>
                     </info>
@@ -1169,7 +1099,6 @@
                 </prop>
                 <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>List of Separators - as a String</desc>
                         <label>Separators</label>
                     </info>
@@ -1177,7 +1106,6 @@
                 </prop>
                 <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Text Separators</desc>
                         <label>TextSeparators</label>
                     </info>
@@ -1185,7 +1113,6 @@
                 </prop>
                 <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Fixed width</desc>
                         <label>FixedWidth</label>
                     </info>
@@ -1193,7 +1120,6 @@
                 </prop>
                 <prop oor:name="FromRow" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>From Row</desc>
                         <label>FromRow</label>
                     </info>
@@ -1201,7 +1127,6 @@
                 </prop>
                 <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Char Set</desc>
                         <label>CharSet</label>
                     </info>
@@ -1209,7 +1134,6 @@
                 </prop>
                 <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Fixed Width List of separators</desc>
                         <label>FixedWidthList</label>
                     </info>
@@ -1222,7 +1146,6 @@
                 </info>
                 <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Merge Delimiter check box status</desc>
                         <label>MergeDelimiters</label>
                     </info>
@@ -1230,7 +1153,6 @@
                 </prop>
                 <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>List of Separators - as a String</desc>
                         <label>Separators</label>
                     </info>
@@ -1238,7 +1160,6 @@
                 </prop>
                 <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Text Separators</desc>
                         <label>TextSeparators</label>
                     </info>
@@ -1246,7 +1167,6 @@
                 </prop>
                 <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Fixed width</desc>
                         <label>FixedWidth</label>
                     </info>
@@ -1254,7 +1174,6 @@
                 </prop>
                 <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
                     <info>
-                        <author>muthusuba</author>
                         <desc>Fixed Width List of separators</desc>
                         <label>FixedWidthList</label>
                     </info>
@@ -1275,7 +1194,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether iterative calculation is used for formulas with circular references.</desc>
 						<label>Iterations</label>
 					</info>
@@ -1286,7 +1204,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the maximum number of iteration steps.</desc>
 						<label>Steps</label>
 					</info>
@@ -1297,7 +1214,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the result change value below which iteration is stopped.</desc>
 						<label>Minimum Change</label>
 					</info>
@@ -1313,7 +1229,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Case sensitive -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
 						<label>Case sensitive</label>
 					</info>
@@ -1324,7 +1239,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Precision as shown -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
 						<label>Precision as shown</label>
 					</info>
@@ -1335,7 +1249,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Search criteria = and &lt;&gt; must apply to whole cells -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
 						<label>Search criteria = and &lt;&gt; must apply to whole cells</label>
 					</info>
@@ -1346,7 +1259,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Automatically find column and row labels -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
 						<label>Automatically find column and row labels</label>
 					</info>
@@ -1357,7 +1269,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Combo box] Decimal places -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the number of decimals to be displayed for the Standard number format.</desc>
 						<label>Decimal places</label>
 					</info>
@@ -1366,7 +1277,6 @@
 				<prop oor:name="RegularExpressions" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->
 					<info>
-						<author>NN</author>
 						<desc>Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
 						<label>Enable regular expressions in formulas</label>
 					</info>
@@ -1376,7 +1286,6 @@
                     <!-- UIHints: Tools - Options  Spreadsheet  Calculate -->
                     <!-- This node is deprecated, but we still need to keep it for migration purposes. -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Specifies what formula syntax type to use.</desc>
                     </info>
                     <constraints>
@@ -1415,7 +1324,6 @@
                 <prop oor:name="Grammar" oor:type="xs:int">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Specifies what formula syntax type to use.</desc>
                     </info>
                     <constraints>
@@ -1439,7 +1347,6 @@
                 <prop oor:name="EnglishFunctionName" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Whether to use English function names or localized function names.</desc>
                     </info>
                     <value>false</value>
@@ -1447,7 +1354,6 @@
                 <prop oor:name="SeparatorArg" oor:type="xs:string" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Argument separator in worksheet function</desc>
                     </info>
                     <value></value>
@@ -1455,7 +1361,6 @@
                 <prop oor:name="SeparatorArrayRow" oor:type="xs:string" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Row separator in array constant</desc>
                     </info>
                     <value></value>
@@ -1463,7 +1368,6 @@
                 <prop oor:name="SeparatorArrayCol" oor:type="xs:string" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Column separator in array constant</desc>
                     </info>
                     <value></value>
@@ -1471,7 +1375,6 @@
                 <prop oor:name="StringRefAddressSyntax" oor:type="xs:int">
                     <!-- UIHints: Tools - Options - Spreadsheet - Formula -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Address syntax for reference in string for functions such as INDIRECT.</desc>
                     </info>
                     <constraints>
@@ -1500,7 +1403,6 @@
                 <prop oor:name="EmptyStringAsZero" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
                     <info>
-                        <author>kyoshida</author>
                         <desc>Whether to treat empty string formula result as equivalent of having a numeric zero value.</desc>
                     </info>
                     <value>false</value>
@@ -1513,7 +1415,6 @@
                 <prop oor:name="OOXMLRecalcMode" oor:type="xs:int" oor:nillable="false">
                     <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
                     <info>
-                        <author>Markus Mohrhard</author>
                         <desc>Specifies whether to force a hard recalc after load on OOXML-based Excel documents (2007 and newer).</desc>
                     </info>
                     <constraints>
@@ -1538,7 +1439,6 @@
                 <prop oor:name="ODFRecalcMode" oor:type="xs:int" oor:nillable="false">
                     <!-- UIHint: Tools - Options - Spreadsheet - Formula -->
                     <info>
-                        <author>Kohei Yoshida</author>
                         <desc>Specifies whether to force a hard recalc after load on non-LibreOffice-generated ODF documents.</desc>
                     </info>
                     <constraints>
@@ -1576,7 +1476,6 @@
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the modification color for changes of cell contents.</desc>
 						<label>Changes</label>
 					</info>
@@ -1588,7 +1487,6 @@
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the color to highlight deletions.</desc>
 						<label>Deletions</label>
 					</info>
@@ -1600,7 +1498,6 @@
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the color to highlight insertions.</desc>
 						<label>Insertions</label>
 					</info>
@@ -1612,7 +1509,6 @@
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
 					<info>
-						<author>NN</author>
 						<desc>Specifies the color to highlight moved contents.</desc>
 						<label>Moved entries</label>
 					</info>
@@ -1637,7 +1533,6 @@
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
 						<info>
-							<author>NN</author>
 							<desc>Indicates whether VBA macros are imported as comments.</desc>
 							<label>Load Basic Code to edit</label>
 						</info>
@@ -1645,7 +1540,6 @@
 					</prop>
           <prop oor:name="Executable" oor:type="xs:boolean" oor:nillable="false">
             <info>
-              <author>AB</author>
               <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
               <label>Executable code</label>
             </info>
@@ -1656,7 +1550,6 @@
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
 						<info>
-							<author>NN</author>
 							<desc>Indicates whether the original VBA storage is preserved while editing.</desc>
 							<label>Save Original Basic Code again</label>
 						</info>
@@ -1671,7 +1564,6 @@
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
 						<info>
-							<author>NN</author>
 							<desc>Indicates whether the import of Lotus wk3 files is enabled.</desc>
 							<label>Enable WK3 Filter</label>
 						</info>
@@ -1686,7 +1578,6 @@
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
 						<info>
-							<author>NN</author>
 							<desc>Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
 							<label>Excel Column Width Scale</label>
 						</info>
@@ -1703,7 +1594,6 @@
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
 						<info>
-							<author>NN</author>
 							<desc>Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
 							<label>Excel Row Height Scale</label>
 						</info>
@@ -1721,7 +1611,6 @@
 		</group>
 		<group oor:name="Print">
 			<info>
-				<author>NN</author>
 				<desc>Contains settings that affect printing.</desc>
 			</info>
 			<group oor:name="Page">
@@ -1755,7 +1644,6 @@
 			</info>
 			<group oor:name="DefaultObjectSize">
 				<info>
-					<author>NN</author>
 					<desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
 					<label>Default Object Size</label>
 				</info>
@@ -1776,7 +1664,6 @@
 			</group>
             <group oor:name="SharedDocument">
                 <info>
-                    <author>TBE</author>
                     <desc>Contains settings for shared documents.</desc>
                     <label>Shared document</label>
                 </info>
@@ -1800,7 +1687,6 @@
                 <prop oor:name="BaseGroup" oor:type="xs:int">
                     <!-- UIHints: Tools - Options - Spreadsheet - Compatibility -->
                     <info>
-                        <author>Kohei Yoshida</author>
                         <desc>Specifies baseline key binding group to use.</desc>
                     </info>
                     <constraints>
@@ -1829,7 +1715,6 @@
 		<prop oor:name="SheetCount" oor:type="xs:int" oor:nillable="false">
 			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
 			  <info>
-				<author>Albert Thuswaldner</author>
 				<desc>Option to set initial number of sheet tabs</desc>
 			  </info>
 		  <value>1</value>
@@ -1837,7 +1722,6 @@
 		<prop oor:name="SheetPrefix" oor:type="xs:string">
 			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
 			  <info>
-				<author>Albert Thuswaldner</author>
 				<desc>Option to set the prefix name for new sheet tabs</desc>
 			  </info>
 		</prop>

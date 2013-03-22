@@ -28,7 +28,6 @@
   <templates>
     <group oor:name="Passwordstorage">
       <info>
-        <author>MAV</author>
         <desc>Contains a container for passwords.</desc>
       </info>
       <prop oor:name="Password" oor:type="xs:string" oor:localized="false">
@@ -39,7 +38,6 @@
     </group>
     <group oor:name="HistoryType">
       <info>
-        <author>AS</author>
         <desc>Contains settings for a history entry in the history list.</desc>
       </info>
       <prop oor:name="URL" oor:type="xs:string">
@@ -67,7 +65,6 @@
     </group>
     <group oor:name="MenuType">
       <info>
-        <author>AS</author>
         <desc>Describes a menu entry for configurable office menus (e.g. file
         new).</desc>
       </info>
@@ -95,7 +92,6 @@
     </group>
     <group oor:name="DialogSize">
       <info>
-        <author>PB</author>
         <desc>Contains the width and height of the dialog size.</desc>
       </info>
       <prop oor:name="Height" oor:type="xs:int">
@@ -111,7 +107,6 @@
     </group>
     <group oor:name="Font">
       <info>
-        <author>OJ</author>
         <desc>Describes the characteristics of a font.</desc>
       </info>
       <prop oor:name="Name" oor:type="xs:string">
@@ -508,7 +503,6 @@
     </group>
     <group oor:name="FontReplacement">
       <info>
-        <author>OS</author>
         <desc>Contains settings for the font replacement.</desc>
       </info>
       <prop oor:name="ReplaceFont" oor:type="xs:string">
@@ -539,7 +533,6 @@
     <group oor:name="GraphicSize">
       <info>
         <deprecated>Use LogicalGraphicSize instead of this.</deprecated>
-        <author>SJ</author>
         <desc>Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
       </info>
       <prop oor:name="Width" oor:type="xs:int" oor:nillable="false">
@@ -585,7 +578,6 @@
     </group>
     <group oor:name="LogicalGraphicSize">
       <info>
-        <author>SJ</author>
         <desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
       </info>
       <prop oor:name="LogicalWidth" oor:type="xs:int" oor:nillable="false">
@@ -634,27 +626,23 @@
       <info>
         <deprecated>Replaced by
         org.openoffice.Office.Embedding/ObjectName.</deprecated>
-        <author>MAV</author>
         <desc>Deprecated</desc>
       </info>
       <prop oor:name="Name" oor:type="xs:string" oor:localized="true">
         <info>
           <deprecated/>
-          <author>MAV</author>
           <desc>Deprecated</desc>
         </info>
       </prop>
       <prop oor:name="Key" oor:type="xs:string">
         <info>
           <deprecated/>
-          <author>MAV</author>
           <desc>Deprecated</desc>
         </info>
       </prop>
     </group>
     <group oor:name="RecoveryEntry">
       <info>
-        <author>AS</author>
         <desc>Specifies an entry of the recovery list which is then used by
         CrashGuard to save information about the last opened files.</desc>
       </info>
@@ -679,7 +667,6 @@
     </group>
     <group oor:name="StartEndCharacters">
       <info>
-        <author>OS</author>
         <desc>Contains the characters (so called forbidden characters) that are
         not allowed at the beginning or end of a line.</desc>
       </info>
@@ -698,7 +685,6 @@
     </group>
     <group oor:name="NameCounter">
       <info>
-        <author>MBA</author>
         <desc>Stores an association between a numeric value and a name.</desc>
       </info>
       <prop oor:name="Name" oor:type="xs:string">
@@ -715,7 +701,6 @@
     <group oor:name="MailCommandLineProfile">
       <info>
         <deprecated>Without replacement.</deprecated>
-        <author>OBR</author>
         <desc>Contains the command line profile for external mail
         applications.</desc>
       </info>
@@ -805,7 +790,6 @@
     <group oor:name="JobDescription">
       <info>
         <deprecated>Use cfg package Jobs instead of this.</deprecated>
-        <author>AS</author>
         <desc>Use cfg package Jobs instead of this.</desc>
       </info>
       <prop oor:name="ServiceName" oor:type="xs:string">
@@ -831,7 +815,6 @@
     </group>
     <group oor:name="TrustedAuthor">
       <info>
-        <author>GT</author>
         <desc>All Certificate information needed to handle and identify the
         signature.</desc>
       </info>
@@ -853,7 +836,6 @@
     </group>
     <group oor:name="ApplicationControlLayout">
       <info>
-        <author>FS</author>
         <desc>specifies, on a per-application-type basis, certain defaults for
         layouting form controls</desc>
       </info>
@@ -924,7 +906,6 @@
   <component>
     <group oor:name="InternalMSExport">
       <info>
-        <author>MAV</author>
         <desc>Contains internal MSExport settings that are common for all
         apps.</desc>
       </info>
@@ -939,7 +920,6 @@
     </group>
     <group oor:name="Passwords">
       <info>
-        <author>MAV</author>
         <desc>Contains a description of the persistent password
         container.</desc>
       </info>
@@ -971,7 +951,6 @@
           oor:name="AuthenticateUsingSystemCredentials"
           oor:type="oor:string-list">
         <info>
-          <author>KSO</author>
           <desc>Contains a list of URLs that should be accessed using system
           credentials of the user.</desc>
         </info>
@@ -979,7 +958,6 @@
     </group>
     <group oor:name="_3D_Engine">
       <info>
-        <author>AW</author>
         <desc>Specifies settings for the 3D engine.</desc>
       </info>
       <prop oor:name="Dithering" oor:type="xs:boolean" oor:nillable="false">
@@ -987,7 +965,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
         <info>
-          <author>AW</author>
           <desc>Specifies if dithering is used to display more colors with few
           colors available.</desc>
           <label>Use Dithering</label>
@@ -999,7 +976,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
         <info>
-          <author>AW</author>
           <desc>Specifies if 3D graphics from Draw and Impress will be displayed
           on the user's system using an OpenGL capable hardware. If the system
           does not have an OpenGL capable hardware, this setting will be
@@ -1013,7 +989,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
         <info>
-          <author>AW</author>
           <desc>Specifies whether all geometry data will be simultaneously
           transferred in an array to the graphic driver. Not every graphic
           driver correctly supports this OpenGL capability. For this reason,
@@ -1030,7 +1005,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
         <info>
-          <author>AW</author>
           <desc>Specifies interaction with full display. If a 3-D object is
           rotated or moved, the full display is rotated or moved and not a grid
           frame.</desc>
@@ -1041,12 +1015,10 @@
     </group>
     <group oor:name="Dictionaries">
       <info>
-        <author>CD</author>
         <desc>Contains settings related to dictionaries.</desc>
       </info>
       <prop oor:name="RepositoryURL" oor:type="xs:string" oor:nillable="false">
         <info>
-          <author>CD</author>
           <desc>Specifies a repository URL where users can download additional
           dictionaries.</desc>
         </info>
@@ -1055,12 +1027,10 @@
     </group>
     <group oor:name="Drawinglayer">
       <info>
-        <author>AW</author>
         <desc>Specifies settings for the Drawinglayer.</desc>
       </info>
       <prop oor:name="OverlayBuffer" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies if the Overlay pane is allowed to use an own buffer.
           If on, Overlay is fast but a buffer (graphics memory) is used. If off,
           Overlay is slow, but no Buffer is needed. This is the global switch
@@ -1075,7 +1045,6 @@
           oor:name="OverlayBuffer_Calc" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Similar to OverlayBuffer, but only for Calc Application</desc>
           <label>Calc Overlay is allowed to use a Background Buffer</label>
         </info>
@@ -1085,7 +1054,6 @@
           oor:name="OverlayBuffer_Writer" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Similar to OverlayBuffer, but only for Writer Application</desc>
           <label>Writer Overlay is allowed to use a Background Buffer</label>
         </info>
@@ -1095,7 +1063,6 @@
           oor:name="OverlayBuffer_DrawImpress" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Similar to OverlayBuffer, but only for Draw/Impress
           Applications</desc>
           <label>Draw/Impress Overlay is allowed to use a Background
@@ -1105,7 +1072,6 @@
       </prop>
       <prop oor:name="PaintBuffer" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies if the Application Repaint shall use a buffer for
           Pre-Rendering. If on, screen flicker is greatly reduced and remote
           display is fast, but a buffer (graphics memory) is needed. If off,
@@ -1120,7 +1086,6 @@
           oor:name="PaintBuffer_Calc" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Similar to PaintBuffer, but only for Calc Application.
           PaintBuffer is the global switch.</desc>
           <label>Calc Repaint is allowed to use Pre-Rendering Buffer</label>
@@ -1131,7 +1096,6 @@
           oor:name="PaintBuffer_Writer" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Similar to PaintBuffer, but only for Writer Application.
           PaintBuffer is the global switch.</desc>
           <label>Writer Repaint is allowed to use Pre-Rendering Buffer</label>
@@ -1142,7 +1106,6 @@
           oor:name="PaintBuffer_DrawImpress" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Similar to PaintBuffer, but only for Draw/Impress Applications.
           PaintBuffer is the global switch.</desc>
           <label>Draw/Impress Repaint is allowed to use Pre-Rendering
@@ -1152,7 +1115,6 @@
       </prop>
       <prop oor:name="StripeColorA" oor:type="xs:int" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the first one of two colors used from overlay to
           display striped lines as helplines. Default is black.</desc>
           <label>Use given color as first stripe color</label>
@@ -1161,7 +1123,6 @@
       </prop>
       <prop oor:name="StripeColorB" oor:type="xs:int" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the second one of two colors used from overlay to
           display striped lines as helplines. Default is white.</desc>
           <label>Use given color as second stripe color</label>
@@ -1170,7 +1131,6 @@
       </prop>
       <prop oor:name="StripeLength" oor:type="xs:short" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the length in pixels of a single stripe used from
           overlay to display striped lines as helplines. Default is four.</desc>
           <label>Use given length as stripe length</label>
@@ -1179,7 +1139,6 @@
       </prop>
       <prop oor:name="MaximumPaperWidth" oor:type="xs:int" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the maximum allowed Paper Width for page definitions
           in cm. Default is 3m, i.e. 300 cm. When this is changed to higher
           values, it is done on own risk.</desc>
@@ -1190,7 +1149,6 @@
       <prop
           oor:name="MaximumPaperHeight" oor:type="xs:int" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the maximum allowed Paper Height for page definitions
           in cm. Default is 3m, i.e. 300 cm. When this is changed to higher
           values, it is done on own risk.</desc>
@@ -1202,7 +1160,6 @@
           oor:name="MaximumPaperLeftMargin" oor:type="xs:int"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the maximum allowed Left Margin for the page
           definitions in 1/100th cm.</desc>
           <label>Maximum allowed Left margin for page definitions</label>
@@ -1213,7 +1170,6 @@
           oor:name="MaximumPaperRightMargin" oor:type="xs:int"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the maximum allowed Right Margin for the page
           definitions in 1/100th cm.</desc>
           <label>Maximum allowed Right margin for page definitions</label>
@@ -1224,7 +1180,6 @@
           oor:name="MaximumPaperTopMargin" oor:type="xs:int"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the maximum allowed Top Margin for the page
           definitions in 1/100th cm.</desc>
           <label>Maximum allowed Top margin for page definitions</label>
@@ -1235,7 +1190,6 @@
           oor:name="MaximumPaperBottomMargin" oor:type="xs:int"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the maximum allowed Bottom Margin for the page
           definitions in 1/100th cm.</desc>
           <label>Maximum allowed Bottom margin for page definitions</label>
@@ -1244,7 +1198,6 @@
       </prop>
       <prop oor:name="AntiAliasing" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This switch allows to switch DrawingLayer based views to be
           rendered using AntiAliasing or not. Of course this takes only effect
           when AntiAliasing is supported for the System OOo is running
@@ -1258,7 +1211,6 @@
           oor:name="SnapHorVerLinesToDiscrete" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This switch allows to enhance visualisation of graphics which
           use Horizontal or Vertical Hairlines combined with AntiAliased mode
           (e.g. in 2D charts). When not used, those lines will be AntiAliased as
@@ -1275,7 +1227,6 @@
           oor:name="RenderDecoratedTextDirect" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This switch determines if the decorations of decorated text
           portions (e.g. underline, strike through) are rendered using VCL
           direct rendering or if the primitive is decomposed into simple text
@@ -1291,7 +1242,6 @@
           oor:name="RenderSimpleTextDirect" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This switch determines if simple text is directly rendered using
           VCL or not. If not, the simple text is decomposed into PolyPolygons
           which will be painted then. Default is true, since VCL will use the
@@ -1305,7 +1255,6 @@
       <prop
           oor:name="SolidDragCreate" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This switch decides if Interactions in the DrawingLayer are
           visualized using Wireframe or Full-Object previews. If false, only
           Wireframe will be used. If true, Full-Object preview which gives a
@@ -1323,7 +1272,6 @@
           oor:name="Quadratic3DRenderLimit" oor:type="xs:int"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This defines a Limitation for the default raster conversion from
           3D Scenes to Bitmaps. The number is the maximum number of pixels to
           use, e.g. 1000x1000 Pixels is allowed as default. When Scenes would
@@ -1338,7 +1286,6 @@
           oor:name="QuadraticFormControlRenderLimit" oor:type="xs:int"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This defines a Limitation for the default raster conversion of
           FormControls in edit mode. These have the ability to be displayed
           using this fallback to Bitmaps. The number is the maximum number of
@@ -1354,7 +1301,6 @@
           oor:name="TransparentSelection" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>This switch defines if the selections in the applications (text
           or cells) are visualized using inverse (XOR) when set to false (the
           old selection method, also used when in HighContrast mode) or a
@@ -1369,7 +1315,6 @@
           oor:name="TransparentSelectionPercent" oor:type="xs:short"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the degree of transparence to be used when transparent
           selection is used. The value is a percent value. Since neither no
           transparence nor complete transparence makes sense, the value is
@@ -1384,7 +1329,6 @@
           oor:name="SelectionMaximumLuminancePercent" oor:type="xs:short"
           oor:nillable="false">
         <info>
-          <author>AW</author>
           <desc>Specifies the maximum allowed luminance the system's selection
           color may have. When the colorfetched from the system is brighter
           (luminacne is bigger), it will be scaled to a luminance of exactly
@@ -1397,7 +1341,6 @@
     </group>
     <group oor:name="AutoCorrect">
       <info>
-        <author>OS</author>
         <desc>Contains miscellaneous settings for the auto correction.</desc>
       </info>
       <prop
@@ -1408,7 +1351,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement
              table -->
         <info>
-          <author>OS</author>
           <desc>Specifies if the replacement table should be used to replace
           letter combinations with defined text</desc>
           <label>Use replacement table</label>
@@ -1423,7 +1365,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo
              INitial Capitals -->
         <info>
-          <author>OS</author>
           <desc>Specifies if two initial capitals should be corrected
           automatically.</desc>
           <label>Correct two initial capitals</label>
@@ -1438,7 +1379,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first
              letter of every sentence -->
         <info>
-          <author>OS</author>
           <desc>Specifies if the letter at the beginning of a sentence should be
           capitalized automatically.</desc>
           <label>Capitalize first letter of every sentence</label>
@@ -1453,7 +1393,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold*
              and _underline_ -->
         <info>
-          <author>OS</author>
           <desc>Specifies if text should be formatted in bold or underlined when
           the corresponding characters are entered (*bold*, _underline_).</desc>
           <label>Apply underline or bold</label>
@@ -1468,7 +1407,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL
              regocnition -->
         <info>
-          <author>OS</author>
           <desc>Specifies if character strings which could represent an URL
           should be converted to a hyperlink.</desc>
           <label>Detect URL</label>
@@ -1483,7 +1421,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace
              1st... -->
         <info>
-          <author>OS</author>
           <desc>Specifies if ordinal numbers should be displayed with raised
           endings.</desc>
           <label>Replace ordinal numbers</label>
@@ -1496,7 +1433,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace
              dashes -->
         <info>
-          <author>OS</author>
           <desc>Specifies if minus signs should be replaced by dashes
           automatically.</desc>
           <label>Replace dashes</label>
@@ -1511,7 +1447,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking
              space -->
         <info>
-          <author>cedricbosdo</author>
           <desc>Adds a non-breaking space before the characters :;!? in
           french.</desc>
           <label>Add non-breaking space</label>
@@ -1526,7 +1461,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Ignore Double
              Spaces -->
         <info>
-          <author>OS</author>
           <desc>Specifies if multiple spaces should be combined into one.</desc>
           <label>Ignore double spaces</label>
         </info>
@@ -1538,7 +1472,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Correct accidental
              use of cAPS LOCK key -->
         <info>
-          <author>Kohei Yoshida</author>
           <desc>Specifies whether or not to correct accidental use of CAPS lock
           key.</desc>
           <label>Correct accidental use of cAPS LOCK key</label>
@@ -1553,7 +1486,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single
              quotes -->
         <info>
-          <author>OS</author>
           <desc>Specifies if single quotes should be replaced.</desc>
           <label>Single quotes - Replace</label>
         </info>
@@ -1565,7 +1497,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single
              quotes -->
         <info>
-          <author>OS</author>
           <desc>Specifies the start single quote.</desc>
           <label>Start single quote</label>
         </info>
@@ -1576,7 +1507,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Single
              quotes -->
         <info>
-          <author>OS</author>
           <desc>Specifies the end single quote.</desc>
           <label>End Single quote</label>
         </info>
@@ -1589,7 +1519,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double
              quotes -->
         <info>
-          <author>OS</author>
           <desc>Specifies if double quotes should be replaced.</desc>
           <label>Double quotes - Replace</label>
         </info>
@@ -1601,7 +1530,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double
              quotes -->
         <info>
-          <author>OS</author>
           <desc>Specifies the start quote.</desc>
           <label>Start quote</label>
         </info>
@@ -1612,7 +1540,6 @@
         <!-- UIHints: Tools  AutoCorrect/AutoFormat  Custom Quotes  Double
              quotes -->
         <info>
-          <author>OS</author>
           <desc>Specifies the end quote.</desc>
           <label>End quote</label>
         </info>
@@ -1630,7 +1557,6 @@
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions - Words with
                2 initial capitals -->
           <info>
-            <author>OS</author>
             <desc>Specifies if defined words with two initial capital letters
             should not be included in the AutoCorrect replacement.</desc>
             <label>Words with two initial capital letters - Add
@@ -1646,7 +1572,6 @@
           <!-- UIHints: Tools - AutoCorrect/AutoFormat - Exceptions -
                Abbrevation -->
           <info>
-            <author>OS</author>
             <desc>Specifies if defined abbreviations should be taken into
             account to exclude a preceding capital letter.</desc>
             <label>Abbreviations (no subsequent capital letter) - Add
@@ -1658,12 +1583,10 @@
     </group>
     <group oor:name="Cache">
       <info>
-        <author>AF</author>
         <desc>Specifies cache related options.</desc>
       </info>
       <group oor:name="DrawingEngine">
         <info>
-          <author>AF</author>
           <desc>Specifies the cache related options for the drawing
           engine.</desc>
         </info>
@@ -1672,7 +1595,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- Notice: MaxOLEObjectsInDrawingEngineMemory -->
           <info>
-            <author>AF</author>
             <desc>Determines the maximum number of OLE objects that can be held
             in RAM for drawings, presentations and inserted drawing objects. The
             fewer OLE objects contained in RAM, the more space is available for
@@ -1685,7 +1607,6 @@
       </group>
       <group oor:name="Writer">
         <info>
-          <author>AF</author>
           <desc>Specifies the cache related options for Writer.</desc>
         </info>
         <prop oor:name="OLE_Objects" oor:type="xs:int" oor:nillable="false">
@@ -1693,7 +1614,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- Notice: MaxOLEObjectsInSWMemory -->
           <info>
-            <author>AF</author>
             <desc>Determines the maximum number of OLE objects that can be held
             in RAM for the writer. The fewer OLE objects contained in RAM, the
             more space is available for other functions. The more OLE objects in
@@ -1710,7 +1630,6 @@
         </info>
         <prop oor:name="TotalCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
-            <author>AF</author>
             <desc>Specifies the maximum cache size for all graphical display
             objects.</desc>
             <label>Total Graphic Cache Size</label>
@@ -1719,7 +1638,6 @@
         </prop>
         <prop oor:name="ObjectCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
-            <author>AF</author>
             <desc>Specifies the maximum cache size for a single graphic display
             object.</desc>
             <label>Graphic Object Cache Size</label>
@@ -1729,7 +1647,6 @@
         <prop
             oor:name="ObjectReleaseTime" oor:type="xs:int" oor:nillable="false">
           <info>
-            <author>AF</author>
             <desc>Specifies the time in seconds after which a cached object is
             freed from the cache.</desc>
             <label>Graphic Object Release Timeout</label>
@@ -1743,13 +1660,11 @@
       <!--OldPath: Directories and BackupDirectories -->
       <!-- UIHints: Tools - Options - General - Paths -->
       <info>
-        <author>MBA</author>
         <desc>Contains the current and default path settings used by the
         Office.</desc>
       </info>
       <group oor:name="Info">
         <info>
-          <author>CD</author>
           <desc>Contains various properties information purpose only.</desc>
         </info>
         <prop
@@ -1764,7 +1679,6 @@
       </group>
       <group oor:name="Current">
         <info>
-          <author>MBA</author>
           <desc>Contains the global path settings, mainly those of the Options
           dialog.</desc>
         </info>
@@ -1773,7 +1687,6 @@
           <!-- OldLocation:NEW-->
           <info>
             <deprecated/>
-            <author>MBA</author>
             <desc>Contains the Office installation path.</desc>
           </info>
           <value/>
@@ -1786,7 +1699,6 @@
           <!-- OldLocation:NEW-->
           <info>
             <deprecated/>
-            <author>MBA</author>
             <desc>Contains the Office installation path in URL notation. Must
             match the UCB configuration.</desc>
           </info>
@@ -1796,7 +1708,6 @@
         </prop>
         <prop oor:name="Addin" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>NN</author>
             <desc>Specifies the directory that contains spreadsheet add-ins
             which use the old add-in API.</desc>
           </info>
@@ -1804,7 +1715,6 @@
         </prop>
         <prop oor:name="AutoCorrect" oor:type="oor:string-list">
           <info>
-            <author>OS</author>
             <desc>Specifies the settings of the AutoCorrect dialog.</desc>
           </info>
           <value>
@@ -1814,7 +1724,6 @@
         </prop>
         <prop oor:name="AutoText" oor:type="oor:string-list">
           <info>
-            <author>OS</author>
             <desc>Contains the directory which contains the AutoText
             modules.</desc>
           </info>
@@ -1825,14 +1734,12 @@
         </prop>
         <prop oor:name="Backup" oor:type="xs:string">
           <info>
-            <author>MBA</author>
             <desc>Stores the automatic backup copies of documents.</desc>
           </info>
           <value>$(userurl)/backup</value>
         </prop>
         <prop oor:name="Basic" oor:type="oor:string-list" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Contains the Basic files, which are used by the
             AutoPilots.</desc>
           </info>
@@ -1843,7 +1750,6 @@
         </prop>
         <prop oor:name="Bitmap" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Contains the bitmap files which can be used for menu and
             toolbar icons.</desc>
           </info>
@@ -1851,7 +1757,6 @@
         </prop>
         <prop oor:name="Config" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Contains the configuration files. This value cannot be changed
             through the user interface.</desc>
           </info>
@@ -1859,21 +1764,18 @@
         </prop>
         <prop oor:name="Dictionary" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>TL</author>
             <desc>Contains the provided dictionaries.</desc>
           </info>
           <value>$(insturl)/share/wordbook</value>
         </prop>
         <prop oor:name="Favorite" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>PB</author>
             <desc>Specifies the path to save folder bookmarks.</desc>
           </info>
           <value>$(userurl)/config/folders</value>
         </prop>
         <prop oor:name="Filter" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Specifies the directory where all the filters are
             stored.</desc>
           </info>
@@ -1882,7 +1784,6 @@
         <prop
             oor:name="Gallery" oor:type="oor:string-list">
           <info>
-            <author>AF</author>
             <desc>Specifies the directory which contains the Gallery database
             and multimedia files.</desc>
           </info>
@@ -1893,7 +1794,6 @@
         </prop>
         <prop oor:name="Graphic" oor:type="xs:string">
           <info>
-            <author>DL</author>
             <desc>Specifies the directory that is displayed when the dialog for
             opening a graphic or for saving a new graphic is called.</desc>
           </info>
@@ -1901,14 +1801,12 @@
         </prop>
         <prop oor:name="Help" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>ABI</author>
             <desc>Specifies the path to the Office help files.</desc>
           </info>
           <value>$(instpath)/help</value>
         </prop>
         <prop oor:name="Linguistic" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>TL</author>
             <desc>Contains the files that are necessary for the
             spellcheck.</desc>
           </info>
@@ -1916,14 +1814,12 @@
         </prop>
         <prop oor:name="Module" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Contains the Office modules.</desc>
           </info>
           <value>$(progpath)</value>
         </prop>
         <prop oor:name="Palette" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>DL</author>
             <desc>Specifies the path to the palette files *.SOB to *.SOF
             containing user-defined colors and patterns.</desc>
           </info>
@@ -1931,7 +1827,6 @@
         </prop>
         <prop oor:name="Plugin" oor:type="oor:string-list" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Specifies the directory in which the plugins are saved.</desc>
           </info>
           <value>
@@ -1941,7 +1836,6 @@
         <prop oor:name="Storage" oor:type="xs:string" oor:nillable="false">
           <info>
             <deprecated>Without replacement.</deprecated>
-            <author>ABI</author>
             <desc>Specifies the location where misc data are stored.</desc>
           </info>
           <value>$(userpath)/store</value>
@@ -1950,7 +1844,6 @@
           <info>
             <deprecated>Replaced by
             org.openoffice.Office.Paths/Temp</deprecated>
-            <author>MBA</author>
             <desc>Specifies the base directory used by the Office to store temp
             files.</desc>
           </info>
@@ -1958,7 +1851,6 @@
         </prop>
         <prop oor:name="Template" oor:type="oor:string-list">
           <info>
-            <author>MBA</author>
             <desc>Specifies the templates originate from these folders and
             sub-folders.</desc>
           </info>
@@ -1971,7 +1863,6 @@
         <prop
             oor:name="UIConfig" oor:type="oor:string-list" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Specifies additional folders containing a global user
             interface configuration. The final user interface configuration is
             merged from UserConfig and from these folders.</desc>
@@ -1982,7 +1873,6 @@
         </prop>
         <prop oor:name="UserConfig" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Specifies the folder with the user settings.</desc>
           </info>
           <value>$(userurl)/config</value>
@@ -1990,14 +1880,12 @@
         <prop
             oor:name="UserDictionary" oor:type="xs:string" oor:nillable="false">
           <info>
-            <author>TL</author>
             <desc>Contains the custom dictionaries.</desc>
           </info>
           <value>$(userurl)/wordbook</value>
         </prop>
         <prop oor:name="Work" oor:type="xs:string">
           <info>
-            <author>MBA</author>
             <desc>Specifies the path of the work folder, which can be modified
             according to the user's needs. The path specified here can be seen
             in the Open or Save dialog.</desc>
@@ -2007,7 +1895,6 @@
       </group>
       <group oor:name="Default">
         <info>
-          <author>MBA</author>
           <desc>Contains the default values of all the paths, which can be
           modified according to the user's needs. They are used when pressing
           the Standard-button in the Options dialog.</desc>
@@ -2203,12 +2090,10 @@
     </group>
     <group oor:name="Font">
       <info>
-        <author>OS</author>
         <desc>Contains some common settings for fonts.</desc>
       </info>
       <group oor:name="Substitution">
         <info>
-          <author>OS</author>
           <desc>Contains settings for the font substitution.</desc>
         </info>
         <prop oor:name="Replacement" oor:type="xs:boolean" oor:nillable="false">
@@ -2216,7 +2101,6 @@
           <!-- OldLocation: fntsubst.ini -->
           <!-- UIHints: Tools - Options - General - Font replacement -->
           <info>
-            <author>OS</author>
             <desc>Determines if the list of font replacements is applied or
             not</desc>
             <label>Apply replacement table</label>
@@ -2228,7 +2112,6 @@
           <!-- OldLocation: fntsubst.ini-->
           <!-- UIHints: Tools - Options - General - Font replacement -->
           <info>
-            <author>OS</author>
             <desc>Specifies a substitution of the requested font, even if this
             font is available on the user's system.</desc>
           </info>
@@ -2236,7 +2119,6 @@
       </group>
       <group oor:name="View">
         <info>
-          <author>PB</author>
           <desc>Contains the settings for the font selection box in the object
           bar.</desc>
         </info>
@@ -2245,7 +2127,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
           <info>
-            <author>PB</author>
             <desc>Contains the last five fonts, which are shown on the top of a
             list, beginning with the last one. This list will be displayed on
             the font-name-box of the object bar.</desc>
@@ -2259,7 +2140,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
           <info>
-            <author>PB</author>
             <desc>Specifies that the names of the selectable fonts will be
             displayed with this font.</desc>
           </info>
@@ -2268,7 +2148,6 @@
       </group>
       <group oor:name="SourceViewFont">
         <info>
-          <author>OS</author>
           <desc>Specifies the font name and height used in HTML source
           view</desc>
         </info>
@@ -2298,7 +2177,6 @@
     </group>
     <group oor:name="Gallery">
       <info>
-        <author>AF</author>
         <desc>Specifies Gallery options.</desc>
         <label>Gallery Options</label>
       </info>
@@ -2309,7 +2187,6 @@
              theme -->
         <info>
           <deprecated/>
-          <author>AF</author>
           <desc>Deprecated.</desc>
         </info>
         <value>false</value>
@@ -2317,7 +2194,6 @@
     </group>
     <group oor:name="Menus">
       <info>
-        <author>AS</author>
         <desc>Contains information about configurable menus.</desc>
       </info>
       <set oor:name="New" oor:node-type="MenuType">
@@ -2332,7 +2208,6 @@
       </set>
       <set oor:name="HelpBookmarks" oor:node-type="MenuType">
         <info>
-          <author>PB</author>
           <desc>Contains all help bookmarks.</desc>
         </info>
       </set>
@@ -2340,12 +2215,10 @@
     <group oor:name="History">
       <!-- OldLocation: soffice.ini -->
       <info>
-        <author>AS</author>
         <desc>Contains history information.</desc>
       </info>
       <prop oor:name="HelpBookmarkSize" oor:type="xs:int" oor:nillable="false">
         <info>
-          <author>PB</author>
           <desc>Describes the range and current size of the help bookmark
           history list.</desc>
         </info>
@@ -2423,7 +2296,6 @@
     </group>
     <group oor:name="Internal">
       <info>
-        <author>MBA</author>
         <desc>Contains settings which are used during the Office startup to
         check for unfinished work.</desc>
       </info>
@@ -2432,7 +2304,6 @@
         <!-- OldLocation: soffice.ini -->
         <info>
           <deprecated/>
-          <author>MBA</author>
           <desc>Sends a mail that includes the stack trace after a crash.</desc>
         </info>
         <value>false</value>
@@ -2440,7 +2311,6 @@
       <prop oor:name="UseMailUI" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <deprecated/>
-          <author>MBA</author>
           <desc>Enables UI for sending document as e-mail</desc>
         </info>
         <value>false</value>
@@ -2450,7 +2320,6 @@
         <!-- OldLocation: soffice.ini -->
         <info>
           <deprecated/>
-          <author>MBA</author>
           <desc>Enables mechanism for centralized disabling of
           functionality</desc>
         </info>
@@ -2460,7 +2329,6 @@
           oor:name="DevelopmentChart" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>BM</author>
           <desc>Specifies that If this option is set to true, the new
           development chart library is used instead of the standard one. Do not
           set this option to true unless you know exactly what to do. This new
@@ -2471,7 +2339,6 @@
       </prop>
       <prop oor:name="CurrentTempURL" oor:type="xs:string" oor:nillable="false">
         <info>
-          <author>CD</author>
           <desc>Specifies the current or last temp directory. This directory
           will be removed during shutdown or next office start.</desc>
         </info>
@@ -2481,7 +2348,6 @@
       </prop>
       <set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
         <info>
-          <author>AS</author>
           <desc>Contains the documents that were opened when the office
           crashed.</desc>
         </info>
@@ -2489,7 +2355,6 @@
     </group>
     <group oor:name="Save">
       <info>
-        <author>MBA</author>
         <desc>Contains general settings about the saving process.</desc>
       </info>
       <prop oor:name="WorkingSet" oor:type="xs:boolean" oor:nillable="false">
@@ -2498,7 +2363,6 @@
         <!-- UIHints: Tools  Options - General  Save - [Section] Restore editing
              view - Open documents-->
         <info>
-          <author>MBA</author>
           <desc>Specifies if the all open windows and documents should be saved.
           If set to true, the URLs of all open documents and all view properties
           of all open views are saved when terminating the application.</desc>
@@ -2508,13 +2372,11 @@
       </prop>
       <group oor:name="Document">
         <info>
-          <author>MBA</author>
           <desc>Contains settings which specify how documents are saved.</desc>
         </info>
         <prop oor:name="Unpacked" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: File - Save/Save As -->
           <info>
-            <author>MBA</author>
             <desc>Saves OOo 6.0 XML file documents unpacked into a directory.
             Documents are represented by the directory content and not by a
             single file.</desc>
@@ -2526,7 +2388,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: File - Save/Save As -->
           <info>
-            <author>PB</author>
             <desc>Specifies if the user's name should be written into the
             Properties dialog of the document when saving the document.</desc>
             <label>Use data for document properties</label>
@@ -2538,7 +2399,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
-            <author>MBA</author>
             <desc>Specifies whether all modified documents are automatically
             saved in a time interval.</desc>
             <label>AutoSave every</label>
@@ -2551,7 +2411,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
-            <author>MBA</author>
             <desc>Specifies whether to create a backup copy when a modified
             document is saved.</desc>
             <label>Always create backup copy</label>
@@ -2564,7 +2423,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
-            <author>MBA</author>
             <desc>Specifies if the document properties dialog will be opened for
             editing every time a document is saved under a new filename.</desc>
             <label>Edit document properties before saving</label>
@@ -2578,7 +2436,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
-            <author>MBA</author>
             <desc>Shows a prompt during AutoSave,even when the document has a
             filename.</desc>
             <label>Prompt to save</label>
@@ -2592,7 +2449,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
-            <author>MBA</author>
             <desc>Specifies the AutoSave time interval in minutes.</desc>
             <label>Minutes</label>
           </info>
@@ -2618,7 +2474,6 @@
           <!-- UIHints: Tools  Options - General  Save - [Section] Restore
                editing view - Document view-->
           <info>
-            <author>MBA</author>
             <desc>Saves view properties of last active document view when saving
             a document.</desc>
             <label>Document view</label>
@@ -2632,7 +2487,6 @@
                size-->
           <!--the UI setting is inverse to this setting-->
           <info>
-            <author>MBA</author>
             <desc>Specifies if files saved in the OOo 6.0 XML file formats
             should be in pretty printing format. Saving and loading the document
             takes more time in pretty printing format.</desc>
@@ -2645,7 +2499,6 @@
             oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Save - -->
           <info>
-            <author>MBA</author>
             <desc>Specifies if a warning message is shown if a file is going to
             be saved to an alien format.</desc>
             <label>Open windows</label>
@@ -2655,7 +2508,6 @@
         <prop
             oor:name="AlwaysSaveAs" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <author>MAV</author>
             <desc>If the option is set, every time a user triggers a plain Save
             operation, SaveAs operation with possible additional user
             notifications will be started.</desc>
@@ -2666,7 +2518,6 @@
             oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>PB</author>
             <desc>If the  value is "true", then the ODF that is saved by
             OpenOffice.org will be backward compatible to previous minor
             versions.</desc>
@@ -2677,7 +2528,6 @@
           <!-- UIHints: Tools - Options - Load/Save - General - Load - Load
                printer settings with the document -->
           <info>
-            <author>PB</author>
             <desc>Specifies if the printer settings will be loaded with the
             document.</desc>
           </info>
@@ -2686,7 +2536,6 @@
       </group>
       <group oor:name="Graphic">
         <info>
-          <author>MBA</author>
           <desc>Contains settings on how graphics contained in a document should
           be saved.</desc>
         </info>
@@ -2696,7 +2545,6 @@
           <!-- UIHints: Tools  Options - General  Save - [Section] Save
                graphics -->
           <info>
-            <author>AF</author>
             <desc>Specifies how graphics contained in a document are
             saved.</desc>
             <label>Save graphics Normal/Compressed/Original format</label>
@@ -2723,7 +2571,6 @@
       </group>
       <group oor:name="URL">
         <info>
-          <author>MBA</author>
           <desc>Specifies how URLs in documents should be processed during
           save.</desc>
         </info>
@@ -2733,7 +2580,6 @@
           <!-- UIHints: Tools  Options - General  Save - [Section] Save URLs
                relative to -->
           <info>
-            <author>MBA</author>
             <desc>Specifies whether URLs in documents should be saved relative
             to the file system.</desc>
             <label>File system</label>
@@ -2746,7 +2592,6 @@
           <!-- UIHints: Tools  Options - General  Save - [Section] Save URLs
                relative to -->
           <info>
-            <author>MBA</author>
             <desc>Specifies if URLs in documents should be saved relative to the
             Internet.</desc>
             <label>Internet</label>
@@ -2756,14 +2601,12 @@
       </group>
       <group oor:name="ODF">
         <info>
-          <author>PB</author>
           <desc>Specifies ODF settings.</desc>
         </info>
         <prop
             oor:name="DefaultVersion" oor:type="xs:short" oor:nillable="false">
           <!-- UIHints: Tools - Options - Load/Save - General - ODF version -->
           <info>
-            <author>PB</author>
             <desc>Specifies the default ODF version for saving documents.</desc>
           </info>
           <constraints>
@@ -2799,7 +2642,6 @@
             oor:name="UseSHA1InODF12" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>MAV</author>
             <desc>Specifies whether SHA1 algorithm instead of SHA256 should be
             used in ODF12 for StartKey and Checksum generation during
             encryption.</desc>
@@ -2810,7 +2652,6 @@
             oor:name="UseBlowfishInODF12" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>MAV</author>
             <desc>Specifies whether Blowfish algorithm instead of AES should be
             used in ODF12 for encryption.</desc>
           </info>
@@ -2820,7 +2661,6 @@
     </group>
     <group oor:name="Load">
       <info>
-        <author>MBA</author>
         <desc>Contains settings regarding the loading of documents.</desc>
       </info>
       <prop
@@ -2829,7 +2669,6 @@
         <!-- UIHints: Tools  Options - General  Load/Save - General [Section]
              Load - Load user-defined with the document-->
         <info>
-          <author>MBA</author>
           <desc>Specifies whether the user defined configuration settings are
           loaded together with the document.</desc>
           <label>Load user-defined settings</label>
@@ -2840,7 +2679,6 @@
           oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>MAV</author>
           <desc>Specifies whether the office update dialog should be shown in
           case the loaded document has newer ODF version than the maximal
           supported one.</desc>
@@ -2850,12 +2688,10 @@
     </group>
     <group oor:name="Security">
       <info>
-        <author>MBA</author>
         <desc>Contains security specific Office settings.</desc>
       </info>
       <group oor:name="Scripting">
         <info>
-          <author>MBA</author>
           <desc>Contains security settings regarding Basic scripts.</desc>
         </info>
         <prop
@@ -2865,7 +2701,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - Browser -->
           <info>
-            <author>MBA</author>
             <desc>Lists all trustworthy URLs: file: All scripts from the local
             file system including a LAN; private:explorer: Scripts from the
             Explorer; private:help: Scripts in the help system; private:newmenu:
@@ -2881,7 +2716,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - Browser -->
           <info>
-            <author>MBA</author>
             <desc>Determines how Office Basic scripts should be handled.</desc>
           </info>
           <constraints>
@@ -2907,7 +2741,6 @@
             oor:name="ExecutePlugins" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Specifies whether execution of plugins found inside a document
             is allowed.</desc>
           </info>
@@ -2915,7 +2748,6 @@
         </prop>
         <prop oor:name="Warning" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Specifies whether a warning box should be displayed before
             executing a script.</desc>
           </info>
@@ -2924,7 +2756,6 @@
         <prop
             oor:name="Confirmation" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <author>MBA</author>
             <desc>Specifies whether the user must confirm before a basic script
             can be executed.</desc>
           </info>
@@ -2934,7 +2765,6 @@
             oor:name="WarnSaveOrSendDoc" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>GT</author>
             <desc>Specifies wether to warn when saving or sending documents with
             personal/hidden data.</desc>
           </info>
@@ -2942,7 +2772,6 @@
         </prop>
         <prop oor:name="WarnSignDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <author>GT</author>
             <desc>Specifies wether to warn when signing documents with
             personal/hidden data.</desc>
           </info>
@@ -2956,7 +2785,6 @@
         <prop
             oor:name="WarnPrintDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <author>GT</author>
             <desc>Specifies wether to warn when printing documents with
             personal/hidden data.</desc>
           </info>
@@ -2965,7 +2793,6 @@
         <prop
             oor:name="WarnCreatePDF" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <author>GT</author>
             <desc>Specifies wether to warn when creating PDF documents with
             personal/hidden data.</desc>
           </info>
@@ -2975,7 +2802,6 @@
             oor:name="RemovePersonalInfoOnSaving" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>GT</author>
             <desc>Specifies wether to remove personal information on
             saving.</desc>
           </info>
@@ -2985,7 +2811,6 @@
             oor:name="RecommendPasswordProtection" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>GT</author>
             <desc>Specifies wether to recommend password protection when saving
             documents.</desc>
           </info>
@@ -2995,7 +2820,6 @@
             oor:name="HyperlinksWithCtrlClick" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>PB</author>
             <desc>Specifies whether ctrl-click is required to follow
             hyperlinks.</desc>
           </info>
@@ -3005,7 +2829,6 @@
             oor:name="MacroSecurityLevel" oor:type="xs:int"
             oor:nillable="false">
           <info>
-            <author>GT</author>
             <desc>Level of Macro security.</desc>
           </info>
           <constraints>
@@ -3026,7 +2849,6 @@
             oor:name="DisableMacrosExecution" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>MAV</author>
             <desc>Specifies whether the macro execution is disabled in general.
             If it is set to true, the "MacroSecurityLevel" is ignored. If it is
             set to false, the mentioned entry specified the level of macro
@@ -3036,7 +2858,6 @@
         </prop>
         <set oor:name="TrustedAuthors" oor:node-type="TrustedAuthor">
           <info>
-            <author>GT</author>
             <desc>List with trusted authors.</desc>
           </info>
         </set>
@@ -3044,7 +2865,6 @@
     </group>
     <group oor:name="View">
       <info>
-        <author>MBA</author>
         <desc>Contains window and dialog settings.</desc>
       </info>
       <prop oor:name="FontScaling" oor:type="xs:short" oor:nillable="false">
@@ -3052,7 +2872,6 @@
         <!--OldLocation: soffice.cfg-->
         <!--UIHints: Tools  Options - General  View  [Section] Display-->
         <info>
-          <author>PB</author>
           <desc>Specifies the scaling only of the screen representation
           [UNIT=%].</desc>
           <label>Scaling</label>
@@ -3060,13 +2879,11 @@
         <constraints>
           <minInclusive oor:value="50">
             <info>
-              <author>PB</author>
               <desc>Specifies the minimum range of the scaling.</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="200">
             <info>
-              <author>PB</author>
               <desc>Specifies the maximum range of the scaling.</desc>
             </info>
           </maxInclusive>
@@ -3075,14 +2892,12 @@
       </prop>
       <group oor:name="NewDocumentHandling">
         <info>
-          <author>CD</author>
           <desc>Contains settings to change new document window behavior.</desc>
         </info>
         <prop
             oor:name="ForceFocusAndToFront" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>CD</author>
             <desc>Every new document window will be forced to front and grabs
             the focus.</desc>
           </info>
@@ -3091,7 +2906,6 @@
       </group>
       <group oor:name="AppWindow">
         <info>
-          <author>MBA</author>
           <desc>Contains settings on how the application window should be
           displayed.</desc>
         </info>
@@ -3099,7 +2913,6 @@
           <!-- OldPath: soffice-view/App-Window -->
           <!-- OldLocation: soffice.ini -->
           <info>
-            <author>MBA</author>
             <desc>Specifies whether the application window should be opened in
             Fullscreen mode.</desc>
           </info>
@@ -3109,7 +2922,6 @@
           <!-- OldPath: soffice-view/App-Window -->
           <!-- OldLocation: soffice.ini -->
           <info>
-            <author>MBA</author>
             <desc>Specifies the preferred view of the application window.</desc>
           </info>
           <constraints>
@@ -3134,7 +2946,6 @@
       </group>
       <group oor:name="Dialog">
         <info>
-          <author>MBA</author>
           <desc>Contains settings which specify how dialogs and toolbars should
           be displayed.</desc>
         </info>
@@ -3143,7 +2954,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
           <info>
-            <author>MBA</author>
             <desc>Specifies whether toolbar buttons should be drawn large or
             small. True means large.</desc>
             <label>Large buttons</label>
@@ -3155,7 +2965,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Buttons -->
           <info>
-            <author>MBA</author>
             <desc>Specifies whether toolbox buttons should be drawn with a flat
             or 3D design. True means flat design.</desc>
             <label>Flat buttons</label>
@@ -3170,7 +2979,6 @@
           <!-- UIHints: Tools  Options - General  View  [Section] Mouse
                positioning -->
           <info>
-            <author>PB</author>
             <desc>Determines the automatic mouse positioning on dialogs: 0 -
             Default button 1 - Dialog center 2 - No automatic positioning</desc>
             <label>Mouse positioning</label>
@@ -3201,7 +3009,6 @@
           <!-- UIHints: Tools  Options - General  View  [Section] Middle mouse
                button -->
           <info>
-            <author>OS</author>
             <desc>Determines the action assigned to the middle mouse button: 0 -
             No action 1 -Auto scroll 2 - Paste selection.</desc>
             <label>Middle mouse button</label>
@@ -3228,7 +3035,6 @@
       </group>
       <group oor:name="Localisation">
         <info>
-          <author>SSA</author>
           <desc>Contains localization specific settings.</desc>
         </info>
         <prop
@@ -3236,7 +3042,6 @@
           <!-- OldPath: International/AutoMnemonic -->
           <!-- OldLocation: soffice.ini -->
           <info>
-            <author>SSA</author>
             <desc>Specifies if shortcuts are assigned automatically.</desc>
           </info>
         </prop>
@@ -3244,20 +3049,17 @@
           <!-- OldPath: International/DialogScaleX -->
           <!-- OldLocation: soffice.ini -->
           <info>
-            <author>SSA</author>
             <desc>Specifies the percentage for enlarging controls.</desc>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <author>SSA</author>
                 <desc>Specifies the upper limit for enlarging the controls is
                 100%.</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <author>SSA</author>
                 <desc>Specifies the upper limit for enlarging the controls is
                 100%.</desc>
               </info>
@@ -3267,7 +3069,6 @@
       </group>
       <group oor:name="Menu">
         <info>
-          <author>PB</author>
           <desc>Contains menu view settings.</desc>
         </info>
         <prop
@@ -3277,7 +3078,6 @@
           <!-- OldLocation: soffice.ini -->
           <!-- UIHints: Tools - Options - General - View -->
           <info>
-            <author>PB</author>
             <desc>Shows all deactivated menu entries. Menu commands that are
             normally not necessary are hidden by default.</desc>
           </info>
@@ -3287,7 +3087,6 @@
             oor:name="IsSystemIconsInMenus" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>CMC</author>
             <desc>Indicates whether icons in the office menus should
             shown/hidden by following the System theme.</desc>
           </info>
@@ -3299,7 +3098,6 @@
           <!-- OldPath: General/View -->
           <!-- UIHints: Tools  Options - General  View  [Section] Options -->
           <info>
-            <author>CD</author>
             <desc>Indicates whether icons in the office menus should be
             displayed.</desc>
           </info>
@@ -3310,7 +3108,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Options -->
           <info>
-            <author>PB</author>
             <desc>Specifies automatic selection while moving the mouse over a
             menu (True).</desc>
             <label>Menu follows mouse pointer</label>
@@ -3320,7 +3117,6 @@
       </group>
       <group oor:name="Window">
         <info>
-          <author>MBA</author>
           <desc>Contains settings for general windows used by the Office.</desc>
         </info>
         <prop oor:name="Drag" oor:type="xs:short" oor:nillable="false">
@@ -3328,7 +3124,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  View  [Section] Display -->
           <info>
-            <author>PB</author>
             <desc>Specifies the representation of the window while
             dragging.</desc>
             <label>Window Drag</label>
@@ -3359,7 +3154,6 @@
                5962Window=V1,995/150/280/321,H,0,AL:(16,4,0/0/400/250)#100 -->
           <info>
             <deprecated/>
-            <author>MBA</author>
             <desc>Deprecated.</desc>
           </info>
         </prop>
@@ -3442,7 +3236,6 @@
       <group oor:name="SplitWindow">
         <info>
           <deprecated/>
-          <author>MBA</author>
           <desc>Specifies the properties of window containers for docked
           windows.</desc>
         </info>
@@ -3452,7 +3245,6 @@
           <!-- Notice: LM: Description is missing 0SplitWindow=V1,2,1,0,6308 -->
           <info>
             <deprecated/>
-            <author>MBA</author>
             <desc>Deprecated.</desc>
           </info>
           <value/>
@@ -3465,7 +3257,6 @@
           <!-- Notice: LM: Description is missing -->
           <info>
             <deprecated/>
-            <author>MBA</author>
             <desc>Deprecated.</desc>
           </info>
         </prop>
@@ -3474,7 +3265,6 @@
           <!-- OldLocation: soffice.ini -->
           <info>
             <deprecated/>
-            <author>MBA</author>
             <desc>Deprecated.</desc>
           </info>
           <constraints>
@@ -3544,7 +3334,6 @@
     </group>
     <group oor:name="Undo">
       <info>
-        <author>MBA</author>
         <desc>Contains the settings regarding the undo operation in the
         Office.</desc>
       </info>
@@ -3553,7 +3342,6 @@
         <!-- OldLocation: soffice.cfg -->
         <!-- UIHints: Tools  Options - General  Save - [Section] Undo -->
         <info>
-          <author>MBA</author>
           <desc>Specifies how many operations can be undone in a row.</desc>
           <label>Number of steps</label>
         </info>
@@ -3574,7 +3362,6 @@
     </group>
     <group oor:name="Setup">
       <info>
-        <author>PB</author>
         <desc>Specifies options related to the setup.</desc>
       </info>
       <group oor:name="Language">
@@ -3594,7 +3381,6 @@
     </group>
     <group oor:name="Print">
       <info>
-        <author>AF</author>
         <desc>Specifies options related to printing.</desc>
       </info>
       <prop
@@ -3603,7 +3389,6 @@
         <!-- UIHints: Tools  Options - General  Print  [Section]
              PrinterOptions -->
         <info>
-          <author>MBA</author>
           <desc>Specifies if printing a document can modify a document due to
           reformatting</desc>
           <label>(PrinterOptions) PrintingModifiesDocument</label>
@@ -3612,7 +3397,6 @@
       </prop>
       <group oor:name="Warning">
         <info>
-          <author>OS</author>
           <desc>Contains settings for print specific warnings.</desc>
         </info>
         <prop oor:name="PaperSize" oor:type="xs:boolean" oor:nillable="false">
@@ -3620,7 +3404,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
-            <author>OS</author>
             <desc>Specifies if a warning should be displayed in case the
             printout requires a specific paper size</desc>
             <label>(Warnings) Paper size</label>
@@ -3634,7 +3417,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
-            <author>OS</author>
             <desc>Specifies if a warning should be displayed in case the
             printout requires a specific paper orientation</desc>
             <label>(Warnings) Paper orientation</label>
@@ -3646,7 +3428,6 @@
           <!-- OldLocation: soffice.cfg -->
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
-            <author>OS</author>
             <desc>Specifies if a warning should be displayed in case the printer
             defined in the document was not found</desc>
             <label>(Warnings) Not found</label>
@@ -3657,7 +3438,6 @@
             oor:name="Transparency" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
           <info>
-            <author>AF</author>
             <desc>Specifies if a warning should be displayed in case the
             printout contains transparent objects.</desc>
             <label>(Warnings) Transparency</label>
@@ -3667,7 +3447,6 @@
       </group>
       <group oor:name="Option">
         <info>
-          <author>AF</author>
           <desc>Specifies the options related to printing.</desc>
         </info>
         <group oor:name="Printer">
@@ -3680,7 +3459,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to ignore transparency for the output of
               objects.</desc>
               <label>(PrinterOptions) ReduceTransparency</label>
@@ -3693,7 +3471,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies type of transparency reduction: 0 - Automatically
               determine reduction, 1 - Always disabled.</desc>
               <label>(PrinterOptions) ReducedTransparencyMode</label>
@@ -3706,7 +3483,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to reduce memory usage for output of
               gradients by limiting the number of gradient steps.</desc>
               <label>(PrinterOptions) ReduceGradients</label>
@@ -3719,7 +3495,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies type of gradient reduction: 0 - reduce the number
               of stripes, 1 - reduce to color.</desc>
               <label>(PrinterOptions) ReducedGradientMode</label>
@@ -3732,7 +3507,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies the maximum number stripes used for output of
               gradients.</desc>
               <label>(PrinterOptions) ReducedGradientStepCount</label>
@@ -3745,7 +3519,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to reduce the memory usage of bitmaps for
               print process by limiting the resolution.</desc>
               <label>(PrinterOptions) ReduceBitmaps</label>
@@ -3758,7 +3531,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies type of bitmap reduction: 0 - Automatically
               determine optimal resolution, 1 - Use original resolution, 2 -
               User defined resolution.</desc>
@@ -3772,7 +3544,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies resolution of reduced bitmaps: 0 - 72DPI, 1 -
               96DPI, 2 - 150DPI, 3 - 200DPI, 4 - 300DPI, 5 - 600DPI.</desc>
               <label>(PrinterOptions) ReducedBitmapResolution</label>
@@ -3785,7 +3556,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to reduce the resolution of automatically
               created substitution bitmaps of transparent objects.</desc>
               <label>(PrinterOptions) ReducedBitmapIncludesTransparency</label>
@@ -3798,7 +3568,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrinterOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to create only grayscale output of all
               objects.</desc>
               <label>(PrinterOptions) ConvertToGreyscales</label>
@@ -3811,7 +3580,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>CMC</author>
               <desc>Indicates whether PDF should be the Standard Print Job
               format</desc>
               <label>(PrinterOptions) PDFAsStandardPrintJobFormat</label>
@@ -3830,7 +3598,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to ignore transparency for the output of
               objects.</desc>
               <label>(PrintFileOptions) ReduceTransparency</label>
@@ -3843,7 +3610,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates the type of transparency reduction: 0 -
               Automatically determine reduction, 1 - Always disabled.</desc>
               <label>(PrintFileOptions) ReducedTransparencyMode</label>
@@ -3856,7 +3622,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to reduce memory usage for output of
               gradients by limiting the number of gradient steps.</desc>
               <label>(PrintFileOptions) ReduceGradients</label>
@@ -3869,7 +3634,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates the type of gradient reduction: 0 - Reduce the
               number of stripes, 1 - Reduce to color.</desc>
               <label>(PrintFileOptions) ReducedGradientMode</label>
@@ -3882,7 +3646,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies the maximum number stripes used for output of
               gradients.</desc>
               <label>(PrintFileOptions) ReducedGradientStepCount</label>
@@ -3895,7 +3658,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to reduce the memory usage of bitmaps for
               the print process by limiting the resolution.</desc>
               <label>(PrintFileOptions) ReduceBitmaps</label>
@@ -3908,7 +3670,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies the type of bitmap reduction: 0 - Automatically
               determine optimal resolution, 1 - Use original resolution, 2 -
               User defined resolution.</desc>
@@ -3922,7 +3683,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Specifies the resolution of reduced bitmaps: 0 - 72DPI, 1 -
               96DPI, 2 - 150DPI, 3 - 200DPI, 4 - 300DPI, 5 - 600DPI.</desc>
               <label>(PrintFileOptions) ReducedBitmapResolution</label>
@@ -3935,7 +3695,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to reduce the resolution of automatically
               created substitution bitmaps of transparent objects.</desc>
               <label>(PrintFileOptions)
@@ -3949,7 +3708,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>AF</author>
               <desc>Indicates whether to create only grayscale output of all
               objects.</desc>
               <label>(PrintFileOptions) ConvertToGreyscales</label>
@@ -3962,7 +3720,6 @@
             <!-- UIHints: Tools  Options - General  Print  [Section]
                  PrintFileOptions -->
             <info>
-              <author>CMC</author>
               <desc>Indicates whether PDF should be the Standard Print Job
               format</desc>
               <label>(PrintFileOptions) PDFAsStandardPrintJobFormat</label>
@@ -3975,7 +3732,6 @@
     <group oor:name="WorkingSet">
       <info>
         <deprecated/>
-        <author>MBA</author>
         <desc>Lists open documents or windows.</desc>
       </info>
       <prop oor:name="WindowList" oor:type="oor:string-list">
@@ -3984,14 +3740,12 @@
         <!-- UIHints: Tools  Options - General  Save -->
         <info>
           <deprecated/>
-          <author>MBA</author>
           <desc>Lists open documents or windows.</desc>
         </info>
       </prop>
     </group>
     <group oor:name="AddXMLToStorage">
       <info>
-        <author>OS</author>
         <desc>Contains settings specifying if a XML package is added to the
         applications binary files.</desc>
       </info>
@@ -4000,7 +3754,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
-          <author>OS</author>
           <desc>Defines if a XML package is added to the Writer binary
           files.</desc>
         </info>
@@ -4010,7 +3763,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
-          <author>OS</author>
           <desc>Defines if a XML package is added to the Calc binary
           files.</desc>
         </info>
@@ -4020,7 +3772,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
-          <author>OS</author>
           <desc>Defines if a XML package is added to the Impress binary
           files.</desc>
         </info>
@@ -4030,7 +3781,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: no -->
         <info>
-          <author>OS</author>
           <desc>Defines if a XML package is added to the Draw binary
           files.</desc>
         </info>
@@ -4038,19 +3788,16 @@
     </group>
     <group oor:name="Help">
       <info>
-        <author>FS</author>
         <desc>Contains settings that specify the common help settings.</desc>
       </info>
       <prop oor:name="ShowBasic" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>ABI</author>
           <desc>Determines wether basic help should be shown.</desc>
         </info>
         <value>true</value>
       </prop>
       <prop oor:name="Locale" oor:type="xs:string" oor:nillable="false">
         <info>
-          <author>ABI</author>
           <desc>Determines the locale for the help pages.</desc>
         </info>
         <value/>
@@ -4059,7 +3806,6 @@
       </prop>
       <prop oor:name="System" oor:type="xs:string" oor:nillable="false">
         <info>
-          <author>ABI</author>
           <desc>Determines the operating system on which the help system is
           displayed.</desc>
         </info>
@@ -4071,7 +3817,6 @@
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Help menu-->
         <info>
-          <author>MBA</author>
           <desc>Activates the Tip help.</desc>
           <label>Tips</label>
         </info>
@@ -4081,7 +3826,6 @@
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Help menu-->
         <info>
-          <author>MBA</author>
           <desc>Activates the Extended help.</desc>
           <label>Extended Tips</label>
         </info>
@@ -4089,7 +3833,6 @@
       </prop>
       <prop oor:name="HelpStyleSheet" oor:type="xs:string" oor:nillable="false">
         <info>
-          <author>ABI</author>
           <desc>Specifies the name of the stylesheet used to display help
           content.</desc>
         </info>
@@ -4097,7 +3840,6 @@
       </prop>
       <group oor:name="HelpAgent">
         <info>
-          <author>MBA</author>
           <desc>Specifies the properties of the HelpAgent.</desc>
         </info>
         <prop oor:name="Enabled" oor:type="xs:boolean" oor:nillable="false">
@@ -4135,7 +3877,6 @@
       </group>
       <group oor:name="StartCenter">
         <info>
-          <author>PL</author>
           <desc>Contains settings for the start center.</desc>
         </info>
         <prop
@@ -4175,7 +3916,6 @@
     </group>
     <group oor:name="Java">
       <info>
-        <author>JL</author>
         <desc>Contains Java related settings.</desc>
       </info>
       <group oor:name="Applet">
@@ -4196,7 +3936,6 @@
     </group>
     <group oor:name="Vectorize">
       <info>
-        <author>AF</author>
         <desc>Specifies the options related to the vectorization of
         bitmaps.</desc>
       </info>
@@ -4205,7 +3944,6 @@
         <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap =&gt; context menu  convert  To polygon -->
         <info>
-          <author>AF</author>
           <desc>Specifies the number of colors that are used to create a vector
           graphic in Draw/Impress [UNIT=count].</desc>
           <label>Number of colors</label>
@@ -4231,7 +3969,6 @@
         <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap =&gt; context menu  convert  To polygon -->
         <info>
-          <author>AF</author>
           <desc>Specifies the number of pixels that you want to combine as a
           single pixel when creating a vector graphic.</desc>
           <label>Point reduction</label>
@@ -4257,7 +3994,6 @@
         <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap => context menu  convert  To polygon -->
         <info>
-          <author>AF</author>
           <desc>Indicates whether to create a tiled background before
           vectorizing.</desc>
           <label>Fill holes</label>
@@ -4269,7 +4005,6 @@
         <!-- OldLocation: drawing.cfg -->
         <!-- UIHints: Select bitmap => context menu  convert  To polygon -->
         <info>
-          <author>AF</author>
           <desc>Specifies the extent of background tiles that are used for
           vectorizing [UNIT=pixel].</desc>
           <label>Tile extent</label>
@@ -4291,7 +4026,6 @@
     </group>
     <group oor:name="Image">
       <info>
-        <author>AF</author>
         <desc>Specifies the options for images.</desc>
         <label>Image</label>
       </info>
@@ -4307,7 +4041,6 @@
                Grayscale -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Number</label>
           </info>
@@ -4332,7 +4065,6 @@
                colors -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Number</label>
           </info>
@@ -4357,7 +4089,6 @@
                and Contrast -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Brightness</label>
           </info>
@@ -4382,7 +4113,6 @@
                and Contrast -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Contrast</label>
           </info>
@@ -4406,7 +4136,6 @@
           <!-- UIHints: Tools  Options - Picture  Colors  [Section] Rotation -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Angle</label>
           </info>
@@ -4430,7 +4159,6 @@
           <!-- UIHints: Tools  Options - Picture  Colors  [Section] Rotation -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>To the left / To the right</label>
           </info>
@@ -4445,7 +4173,6 @@
                White -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Threshold value</label>
           </info>
@@ -4475,7 +4202,6 @@
                  values -->
             <info>
               <deprecated/>
-              <author>AF</author>
               <desc>Deprecated.</desc>
               <label>Red</label>
             </info>
@@ -4500,7 +4226,6 @@
                  values -->
             <info>
               <deprecated/>
-              <author>AF</author>
               <desc>Deprecated.</desc>
               <label>Green</label>
             </info>
@@ -4525,7 +4250,6 @@
                  values -->
             <info>
               <deprecated/>
-              <author>AF</author>
               <desc>Deprecated.</desc>
               <label>Blue</label>
             </info>
@@ -4556,7 +4280,6 @@
           <!-- UIHints: Tools  Options - Picture  Effects - [Section] Mosaic -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>X Tile</label>
           </info>
@@ -4580,7 +4303,6 @@
           <!-- UIHints: Tools  Options - Picture  Effects - [Section] Mosaic -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Y Tile</label>
           </info>
@@ -4604,7 +4326,6 @@
           <!-- UIHints: Tools  Options - Picture  Effects - [Section] Mosaic -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Definition</label>
           </info>
@@ -4641,7 +4362,6 @@
                Solarization -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Threshold value</label>
           </info>
@@ -4666,7 +4386,6 @@
                Solarization -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Invert</label>
           </info>
@@ -4678,7 +4397,6 @@
           <!-- UIHints: Tools  Options - Picture  Effects - [Section] Tile -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>X Tile</label>
           </info>
@@ -4702,7 +4420,6 @@
           <!-- UIHints: Tools  Options - Picture  Effects - [Section] Tile -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Y Tile</label>
           </info>
@@ -4728,7 +4445,6 @@
           <!-- Notice: Description in the enumeration is missing -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Degree</label>
           </info>
@@ -4762,7 +4478,6 @@
           <!-- UIHints: Tools  Options - Picture  Effects - [Section] Aging -->
           <info>
             <deprecated/>
-            <author>AF</author>
             <desc>Deprecated.</desc>
             <label>Intensity</label>
           </info>
@@ -4784,7 +4499,6 @@
     </group>
     <group oor:name="DateFormat">
       <info>
-        <author>NN</author>
         <desc>Specifies settings for the date formats used.</desc>
       </info>
       <prop oor:name="TwoDigitYear" oor:type="xs:int" oor:nillable="false">
@@ -4792,7 +4506,6 @@
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Tools - Options - General - Other - Year (two digits) -->
         <info>
-          <author>NN</author>
           <desc>Specifies the first year that can be entered using
           two-digit-year date formats.</desc>
           <label>First two-digit year</label>
@@ -4802,13 +4515,11 @@
     </group>
     <group oor:name="Filter">
       <info>
-        <author>SJ / OS / KA</author>
         <desc>Specifies default settings of Microsoft-, Graphic- and HTML
         filters.</desc>
       </info>
       <group oor:name="Microsoft">
         <info>
-          <author>SJ</author>
           <desc>Specifies default settings of Microsoft filters.</desc>
         </info>
         <group oor:name="Import">
@@ -4902,7 +4613,6 @@
               oor:name="EnablePowerPointPreview" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies if previews are created when saving PowerPoint
               documents.</desc>
             </info>
@@ -4912,7 +4622,6 @@
               oor:name="EnableExcelPreview" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies if previews are created when saving Excel
               documents.</desc>
             </info>
@@ -4922,7 +4631,6 @@
               oor:name="EnableWordPreview" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies if previews are created when saving Word
               documents.</desc>
             </info>
@@ -4932,7 +4640,6 @@
       </group>
       <group oor:name="Graphic">
         <info>
-          <author>SJ</author>
           <desc>Specifies default settings of graphic import and export
           dialogs.</desc>
         </info>
@@ -5577,13 +5284,11 @@
           </group>
           <group oor:name="SVG">
             <info>
-              <author>KA</author>
               <desc>Specifies default settings of SVG export dialog.</desc>
             </info>
             <prop
                 oor:name="TinyMode" oor:type="xs:boolean" oor:nillable="false">
               <info>
-                <author>KA</author>
                 <desc>Specifies if SVG Tiny profile should be used for
                 export.</desc>
               </info>
@@ -5593,7 +5298,6 @@
                 oor:name="EmbedFonts" oor:type="xs:boolean"
                 oor:nillable="false">
               <info>
-                <author>KA</author>
                 <desc>Specifies if fonts should be embedded into SVG
                 file.</desc>
               </info>
@@ -5603,7 +5307,6 @@
                 oor:name="UseNativeTextDecoration" oor:type="xs:boolean"
                 oor:nillable="false">
               <info>
-                <author>KA</author>
                 <desc>Specifies if text decoration like underlining and
                 strike-through be drawm by using SVG attributes (true) or by
                 drawing SVG primitives (false).</desc>
@@ -5615,7 +5318,6 @@
       </group>
       <group oor:name="HTML">
         <info>
-          <author>OS</author>
           <desc>Contains settings for HTML import/export.</desc>
         </info>
         <group oor:name="Import">
@@ -5628,7 +5330,6 @@
             <!-- UIHints: Tools  Options  Load/Save - HTML Compability [Section]
                  Import -->
             <info>
-              <author>ER</author>
               <desc>Specifies if numbers should be parsed according to the en-US
               locale instead of the user's locale.</desc>
               <label>Use 'English (USA)' locale for numbers</label>
@@ -5641,7 +5342,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
             <info>
-              <author>OS</author>
               <desc>Specifies if unknown tags should be imported as
               fields.</desc>
               <label>Import unknown HTML tags as fields</label>
@@ -5654,7 +5354,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Import -->
             <info>
-              <author>OS</author>
               <desc>Specifies if font settings should be ignored when
               importing.</desc>
               <label>Ignore font settings</label>
@@ -5671,7 +5370,6 @@
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
-                <author>OS</author>
                 <desc>Specifies font size for HTML as Token Font 1.</desc>
                 <label>Size 1</label>
               </info>
@@ -5683,7 +5381,6 @@
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
-                <author>OS</author>
                 <desc>Specifies font size for HTML as Token Font 2.</desc>
                 <label>Size 2</label>
               </info>
@@ -5695,7 +5392,6 @@
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
-                <author>OS</author>
                 <desc>Specifies font size for HTML as Token Font 3.</desc>
                 <label>Size 3</label>
               </info>
@@ -5707,7 +5403,6 @@
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
-                <author>OS</author>
                 <desc>Specifies font size for HTML as Token Font 4.</desc>
                 <label>Size 4</label>
               </info>
@@ -5719,7 +5414,6 @@
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
-                <author>OS</author>
                 <desc>Specifies font size for HTML as Token Font 5.</desc>
                 <label>Size 5</label>
               </info>
@@ -5731,7 +5425,6 @@
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
-                <author>OS</author>
                 <desc>Specifies font size for HTML as Token Font 6.</desc>
                 <label>Size 6</label>
               </info>
@@ -5743,7 +5436,6 @@
               <!-- UIHints: Tools  Options - Browser  HTML [Section] Font
                    sizes -->
               <info>
-                <author>OS</author>
                 <desc>Specifies font size for HTML as Token Font 7.</desc>
                 <label>Size 7</label>
               </info>
@@ -5760,7 +5452,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
-              <author>OS</author>
               <desc>Specifies the browser for which the HTML export should be
               optimized</desc>
               <label>Browser</label>
@@ -5799,7 +5490,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
-              <author>OS</author>
               <desc>Specifies if Office Basic instructions are considered when
               exporting in HTML format.</desc>
               <label>(Productname) Basic</label>
@@ -5812,7 +5502,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
-              <author>OS</author>
               <desc>Specifies if the print layout of the current document should
               also be exported.</desc>
               <label>Print layout</label>
@@ -5826,7 +5515,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
-              <author>OS</author>
               <desc>Specifies if graphics are copied to the Internet server when
               uploading via FTP.</desc>
               <label>Copy local graphics to Internet</label>
@@ -5838,7 +5526,6 @@
             <!-- OldLocation: soffice.cfg -->
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
-              <author>OS</author>
               <desc>Specifies if a warning should be displayed to point out that
               the available Basic macros will be lost when exporting in HTML
               format.</desc>
@@ -5849,7 +5536,6 @@
           <prop oor:name="Encoding" oor:type="xs:int">
             <!-- UIHints: Tools  Options - Browser  HTML [Section] Export -->
             <info>
-              <author>OS</author>
               <desc>Specifies the mimetype for the text encoding.</desc>
               <label>Encoding export</label>
             </info>
@@ -5858,7 +5544,6 @@
       </group>
       <group oor:name="PDF">
         <info>
-          <author>KA</author>
           <desc>Specifies default settings of PDF export dialog.</desc>
         </info>
         <group oor:name="Export">
@@ -5871,7 +5556,6 @@
               <deprecated>Use following properties instead:
               UseLosslessCompression, Quality, UseResolutionReduction,
               ResolutionReduction</deprecated>
-              <author>SJ</author>
               <desc>Deprecated.</desc>
             </info>
             <value>1</value>
@@ -5880,7 +5564,6 @@
               oor:name="UseLosslessCompression" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies if graphics are exported to PDF using a lossless
               compression eg. PNG or if they are compressed using the JPEG
               format.</desc>
@@ -5889,7 +5572,6 @@
           </prop>
           <prop oor:name="Quality" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies quality of the JPG export. A higher value results
               in higher quality and file size.</desc>
             </info>
@@ -5915,7 +5597,6 @@
               oor:name="ReduceImageResolution" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies if the resolution of each image is reduced to the
               resolution specified by the property MaxImageResolution.</desc>
             </info>
@@ -5961,7 +5642,6 @@
               oor:name="UseTaggedPDF" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Determines if PDF are created by using special tags also
               known as Tagged PDF.</desc>
             </info>
@@ -5970,7 +5650,6 @@
           <prop
               oor:name="ExportNotes" oor:type="xs:boolean" oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies if notes are exported to PDF.</desc>
             </info>
             <value>false</value>
@@ -5979,7 +5658,6 @@
               oor:name="ExportBookmarks" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>PL</author>
               <desc>Specifies if bookmarks are exported to PDF.</desc>
             </info>
             <value>true</value>
@@ -5988,7 +5666,6 @@
               oor:name="OpenBookmarkLevels" oor:type="xs:int"
               oor:nillable="false">
             <info>
-              <author>PL</author>
               <desc>Specifies how many bookmark levels should be opened in the
               reader application when the PDF gets opened.</desc>
             </info>
@@ -5998,7 +5675,6 @@
               oor:name="ExportNotesPages" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies if notes pages are exported to PDF. (Notes pages
               are available in Impress documents only).</desc>
             </info>
@@ -6008,7 +5684,6 @@
               oor:name="UseTransitionEffects" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>SJ</author>
               <desc>Specifies slide transitions are exported to PDF. This option
               is active only if storing Impress documents.</desc>
             </info>
@@ -6018,7 +5693,6 @@
               oor:name="ExportFormFields" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>pl</author>
               <desc>Specifies whether form fields are exported as widgets or
               only their fixed print representation is exported.</desc>
             </info>
@@ -6028,7 +5702,6 @@
               oor:name="EmbedStandardFonts" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>pl</author>
               <desc>Specifies whether to embed the 14 standard PDF fonts or
               not.</desc>
             </info>
@@ -6066,7 +5739,6 @@
               oor:name="AllowDuplicateFieldNames" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>pl</author>
               <desc>Specifies whether multiple form fields exported are allowed
               to have the same field name.</desc>
             </info>
@@ -6076,7 +5748,6 @@
               oor:name="IsSkipEmptyPages" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>FME</author>
               <desc>Specifies that automatically inserted empty pages are
               suppressed. This option is active only if storing Writer
               documents.</desc>
@@ -6086,7 +5757,6 @@
           <prop
               oor:name="IsAddStream" oor:type="xs:boolean" oor:nillable="false">
             <info>
-              <author>PL</author>
               <desc>Specifies that a stream is inserted to the PDF file which
               contains the original document for archiving purposes.</desc>
             </info>
@@ -6096,7 +5766,6 @@
               oor:name="HideViewerMenubar" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies whether to hide the PDF viewer menubar when the
               document is active.</desc>
             </info>
@@ -6106,7 +5775,6 @@
               oor:name="HideViewerToolbar" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies whether to hide the PDF viewer toolbar when the
               document is active.</desc>
             </info>
@@ -6116,7 +5784,6 @@
               oor:name="HideViewerWindowControls" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies whether to hide the PDF viewer controls when the
               document is active.</desc>
             </info>
@@ -6126,7 +5793,6 @@
               oor:name="ResizeWindowToInitialPage" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the PDF viewer window is opened full screen
               when the document is opened.</desc>
             </info>
@@ -6136,7 +5802,6 @@
               oor:name="CenterWindow" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the PDF viewer window is centered to the
               screen when the PDF document is opened.</desc>
             </info>
@@ -6146,7 +5811,6 @@
               oor:name="OpenInFullScreenMode" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the PDF viewer window is opened full screen,
               on top of all windows..</desc>
             </info>
@@ -6156,7 +5820,6 @@
               oor:name="DisplayPDFDocumentTitle" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the title of the document, if present in the
               document properties, is displayed in the PDF viewer window title
               bar.</desc>
@@ -6165,7 +5828,6 @@
           </prop>
           <prop oor:name="InitialView" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies how the PDF document should be displayed when
               opened.</desc>
             </info>
@@ -6191,7 +5853,6 @@
           </prop>
           <prop oor:name="Magnification" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies the action to be performed when the PDF document
               is opened.</desc>
             </info>
@@ -6230,7 +5891,6 @@
           </prop>
           <prop oor:name="Zoom" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>pl</author>
               <desc>specifies the zoom level a PDF document is opened with. Only
               valid if "Magnification" is set to "4".</desc>
             </info>
@@ -6238,7 +5898,6 @@
           </prop>
           <prop oor:name="InitialPage" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>pl</author>
               <desc>Specifies the page on which a PDF document should be opened
               in the viewer application.</desc>
             </info>
@@ -6246,7 +5905,6 @@
           </prop>
           <prop oor:name="PageLayout" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies the page layout to be used when the document is
               opened.</desc>
             </info>
@@ -6281,7 +5939,6 @@
               oor:name="FirstPageOnLeft" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Used with the value 3 of the PageLayout property above, true
               if the first page (odd) should be on the left side of the
               screen.</desc>
@@ -6291,7 +5948,6 @@
           <!-- PDF Encryption -->
           <prop oor:name="Printing" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies what printing is allowed.</desc>
             </info>
             <constraints>
@@ -6317,7 +5973,6 @@
           </prop>
           <prop oor:name="Changes" oor:type="xs:int" oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies the change allowed to the document.</desc>
             </info>
             <constraints>
@@ -6356,7 +6011,6 @@
               oor:name="EnableCopyingOfContent" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the pages and the document content can be
               extracted to be used in other documents (copy and paste).</desc>
             </info>
@@ -6366,7 +6020,6 @@
               oor:name="EnableTextAccessForAccessibilityTools"
               oor:type="xs:boolean" oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the document content can be extracted to be
               used in accessibility applications.</desc>
             </info>
@@ -6378,7 +6031,6 @@
               oor:name="SelectPdfVersion" oor:type="xs:int"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies the version of PDF to emit.</desc>
             </info>
             <constraints>
@@ -6401,7 +6053,6 @@
               oor:name="ExportLinksRelativeFsys" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the file system related hyperlinks (file://
               protocol) present in the document will be exported as relative to
               the source document location.</desc>
@@ -6412,7 +6063,6 @@
               oor:name="PDFViewSelection" oor:type="xs:int"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies the way the exported PDF will be viewed
               (experienced) by the user.</desc>
             </info>
@@ -6449,7 +6099,6 @@
               oor:name="ConvertOOoTargetToPDFTarget" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the target documents with .od[tpgs]
               extension, will have that extension changed to .pdf when the link
               is exported to PDF. The source document remains untouched.</desc>
@@ -6460,7 +6109,6 @@
               oor:name="ExportBookmarksToPDFDestination" oor:type="xs:boolean"
               oor:nillable="false">
             <info>
-              <author>beppec56</author>
               <desc>Specifies that the bookmarks contained in the source
               OpenOffice.org file should be exported to the PDF file as Named
               Destination (see PDF 1.4 section 8.2.1).</desc>
@@ -6473,12 +6121,10 @@
     </group>
     <group oor:name="Misc">
       <info>
-        <author>MBA</author>
         <desc>Determines the miscellaneous entries for the common group.</desc>
       </info>
       <prop oor:name="MaxOpenDocuments" oor:type="xs:int">
         <info>
-          <author>AS</author>
           <desc>Determines the maximum count of documents, which are allowed to
           be open at the same time. NIL will be interpreted as infinite!</desc>
         </info>
@@ -6489,7 +6135,6 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools  Options  Browser  Other  Plug-Ins  Enable -->
         <info>
-          <author>PB</author>
           <desc>Enables/Disables Plugins.</desc>
           <label>PluginsEnabled</label>
         </info>
@@ -6499,7 +6144,6 @@
           oor:name="UseSystemFileDialog" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>FS</author>
           <desc>Determines if the system's file and folder pickers should be
           used. If false, the proprietary file/folder picker implementations
           will be used. Relevant on platforms where file/folder picker
@@ -6511,7 +6155,6 @@
           oor:name="UseDocumentSystemFileLocking" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>MAV</author>
           <desc>Allows to specify whether the OOo document file locking
           mechanics should use the system file locking.</desc>
         </info>
@@ -6521,7 +6164,6 @@
           oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>MAV</author>
           <desc>Allows to specify whether the OOo document file locking
           mechanics should use the lock file for locking.</desc>
         </info>
@@ -6538,7 +6180,6 @@
           oor:name="ShowLinkWarningDialog" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>THB</author>
           <desc>Determines if a warning dialog should be
           displayed when a user checks the link checkbox in
           the insert graphics dialog.</desc>
@@ -6549,7 +6190,6 @@
           oor:name="UseSystemPrintDialog" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>PL</author>
           <desc>Determines if the system's print dialog should be used. If
           false, the platform independent print dialog implementation will be
           used. Relevant on platforms where print dialog integration is
@@ -6561,7 +6201,6 @@
           oor:name="DisableUICustomization" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>RSiddhartha</author>
           <desc>Disables the customization of the UI elements.</desc>
         </info>
         <value>false</value>
@@ -6569,7 +6208,6 @@
       <prop
           oor:name="AlwaysAllowSave" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>kohei</author>
           <desc>Determines if the user can save the document even when it's not
           modified.</desc>
         </info>
@@ -6579,7 +6217,6 @@
           oor:name="ExperimentalMode" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>mmeeks</author>
           <desc>Determins if various experimental, and potentially unstable
           features should be enabled in the user interface.</desc>
         </info>
@@ -6589,7 +6226,6 @@
           oor:name="MacroRecorderMode" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>cornouws</author>
           <desc>Determins if the limited, and awkward code producing
           macro recorder should be enabled in the user interface.</desc>
         </info>
@@ -6598,7 +6234,6 @@
       <prop oor:name="SymbolSet" oor:type="xs:short" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
         <info>
-          <author>MBA</author>
           <desc>Specifies which size of the symbols is used for the
           toolbars.</desc>
         </info>
@@ -6619,7 +6254,6 @@
       <prop oor:name="SymbolStyle" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
         <info>
-          <author>kendy</author>
           <desc>Specifies which style of the symbols is used for the toolbars,
           menus, etc.</desc>
         </info>
@@ -6675,7 +6309,6 @@
       <prop oor:name="BackgroundImage" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General Personalization -->
         <info>
-          <author>kendy</author>
           <desc>Specifies whether we should use background image in the
             workplace.</desc>
         </info>
@@ -6702,7 +6335,6 @@
       <prop oor:name="BackgroundImageURL" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General Personalization -->
         <info>
-          <author>kendy</author>
           <desc>URL of the image the user wants to use; it is used only when
             BackgroundImage is 'own'.</desc>
         </info>
@@ -6711,7 +6343,6 @@
       <prop oor:name="Persona" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General Personalization -->
         <info>
-          <author>kendy</author>
           <desc>Specifies whether we should use a Firefox Persona, ie. a
             picture under the menu, toolbar, and status bar.</desc>
         </info>
@@ -6737,7 +6368,6 @@
       <prop oor:name="PersonaSettings" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General Personalization -->
         <info>
-          <author>kendy</author>
           <desc>Names of the header and footer images, and colors for text and
             accent.  When set, the value has form
             "header.jpg;footer.jpg;#RGBTXT;#RGBACC".</desc>
@@ -6747,7 +6377,6 @@
       <prop oor:name="ToolboxStyle" oor:type="xs:short" oor:nillable="false">
         <!-- UIHints: Tools  Options General View -->
         <info>
-          <author>MBA</author>
           <desc>Specifies which button style the toolbars should use.</desc>
         </info>
         <constraints>
@@ -6768,7 +6397,6 @@
           oor:name="FormControlPilotsEnabled" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>FS</author>
           <desc>Enables/Disables the usage of AutoPilots for form
           controls.</desc>
         </info>
@@ -6776,7 +6404,6 @@
       </prop>
       <prop oor:name="FirstRun" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>MBA</author>
           <desc>Specifies if the office has never before been started.</desc>
           <label>FirstRun</label>
         </info>
@@ -6815,7 +6442,6 @@
     </group>
     <group oor:name="Forms">
       <info>
-        <author>FS</author>
         <desc>contains settings for the form layer of the applications.</desc>
       </info>
       <group oor:name="ControlLayout">
@@ -6898,7 +6524,6 @@
             oor:name="ExperimentalProperties" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>FS</author>
             <desc>Enables or disables the property browser's access to
             form/control properties which are not officially supported.</desc>
           </info>
@@ -6906,7 +6531,6 @@
         </prop>
         <prop oor:name="DirectHelp" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <author>FS</author>
             <desc>Enables or disables a help section at the bottom of the
             property browser, which shows the help of the currently active
             property.</desc>
@@ -6917,7 +6541,6 @@
     </group>
     <group oor:name="AsianLayout">
       <info>
-        <author>OS</author>
         <desc>Contains layout specific settings for Asian languages.</desc>
       </info>
       <prop
@@ -6928,7 +6551,6 @@
         <!-- UIHints: Tools  Options  Asian typography  Asian layout Kerning
              Western characters only-->
         <info>
-          <author>OS</author>
           <desc>Determines the kerning of western text and/or punctuation inside
           of Asian text.</desc>
           <label>IsKerningWesternTextOnly</label>
@@ -6943,7 +6565,6 @@
         <!-- UIHints: Tools  Options  Asian typography  Asian layout Character
              distance  -->
         <info>
-          <author>OS</author>
           <desc>Determines the type of character distance compression in Asian
           text: 0 - no compression; 1 - compress punctuation only; 2 - compress
           interpunction an japanese kana.</desc>
@@ -6953,7 +6574,6 @@
       </prop>
       <set oor:name="StartEndCharacters" oor:node-type="StartEndCharacters">
         <info>
-          <author>OS</author>
           <desc>Contains the characters at which lines are not allowed to begin
           or to end. For each locale there is a separate entry with the locale
           as its node name.</desc>
@@ -6963,7 +6583,6 @@
     </group>
     <group oor:name="SearchOptions">
       <info>
-        <author>OS / PB</author>
         <desc>Contains all options for search.</desc>
       </info>
       <prop
@@ -6973,7 +6592,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>PB</author>
           <desc>Specifies search for whole words only.</desc>
         </info>
         <value>false</value>
@@ -6983,7 +6601,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>PB</author>
           <desc>Specifies search backwards.</desc>
         </info>
         <value>false</value>
@@ -6995,7 +6612,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>PB</author>
           <desc>Specifies search with the use of regular expressions.</desc>
         </info>
         <value>false</value>
@@ -7007,7 +6623,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>PB</author>
           <desc>Specifies search for styles only.</desc>
         </info>
         <value>false</value>
@@ -7019,7 +6634,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>PB</author>
           <desc>Specifies search with similarity.</desc>
         </info>
         <value>false</value>
@@ -7029,7 +6643,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>PB</author>
           <desc>Specifies search as case sensitive.</desc>
         </info>
         <value>false</value>
@@ -7041,7 +6654,6 @@
         <!-- OldLocation: -->
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>PB</author>
           <desc>Specifies search with the use of Asian options.</desc>
         </info>
         <value>false</value>
@@ -7051,7 +6663,6 @@
           oor:localized="true">
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>OS</author>
           <desc>Specifies the divider label in case of a component-based search
           extension.</desc>
         </info>
@@ -7061,7 +6672,6 @@
           oor:localized="true">
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>OS</author>
           <desc>Specifies the label of the first component-based search
           command.</desc>
         </info>
@@ -7071,7 +6681,6 @@
           oor:localized="true">
         <!-- UIHints: Edit/Find & Replace -->
         <info>
-          <author>OS</author>
           <desc>Specifies the label of the second component-based search
           command.</desc>
         </info>
@@ -7079,14 +6688,12 @@
       <prop oor:name="IsNotes" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Edit Search/Replace  -->
         <info>
-          <author>mod</author>
           <desc>Specifies if search includes comments(SwPostItFields)</desc>
         </info>
         <value>false</value>
       </prop>
       <group oor:name="Japanese">
         <info>
-          <author>OS</author>
           <desc>Contains search options for the Japanese language.</desc>
         </info>
         <prop
@@ -7096,7 +6703,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Does not distinguish between full-width and half-width
             characters.</desc>
           </info>
@@ -7109,7 +6715,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Does not distinguish between hiragana and katakana
             characters.</desc>
           </info>
@@ -7122,7 +6727,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between characters
             with diphthongs and double consonants and plain characters.</desc>
           </info>
@@ -7135,7 +6739,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between minus signs,
             dashes, and long vowel sounds.</desc>
           </info>
@@ -7148,7 +6751,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between repeat
             character marks.</desc>
           </info>
@@ -7161,7 +6763,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between standard and
             nonstandard ideography.</desc>
           </info>
@@ -7174,7 +6775,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between standard and
             nonstandard ideography.</desc>
           </info>
@@ -7187,7 +6787,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between 'Di' and 'Zi'
             or 'Du' and 'Zu'.</desc>
           </info>
@@ -7200,7 +6799,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between 'Ba' and 'Va'
             or 'Ha' and 'Fa'.</desc>
           </info>
@@ -7213,7 +6811,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between 'Tsi', 'Thi'
             and 'Chi' or 'Dhi' and 'Zi'.</desc>
           </info>
@@ -7226,7 +6823,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between 'Hyu' and
             'Fyu' or 'Byu' and 'Vyu'.</desc>
           </info>
@@ -7239,7 +6835,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between 'Se' and 'She'
             or 'Ze' and 'Je'.</desc>
           </info>
@@ -7251,7 +6846,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between 'Ia' and
             'Iya'.</desc>
           </info>
@@ -7263,7 +6857,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between 'Ki' and
             'Ku'.</desc>
           </info>
@@ -7276,7 +6869,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between punctuation
             characters.</desc>
           </info>
@@ -7289,7 +6881,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between characters
             used as blank spaces, such as full-width spaces, half-width spaces,
             and tabs.</desc>
@@ -7303,7 +6894,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between prolonged
             sound marks.</desc>
           </info>
@@ -7316,7 +6906,6 @@
           <!-- OldLocation: -->
           <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
           <info>
-            <author>OS</author>
             <desc>Specifies search without distinguishing between normal dots
             and middle dots.</desc>
           </info>
@@ -7326,14 +6915,12 @@
     </group>
     <group oor:name="Accessibility">
       <info>
-        <author>OS</author>
         <desc>Specifies settings for the accessibility options.</desc>
       </info>
       <prop
           oor:name="AutoDetectSystemHC" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>FS</author>
           <desc>Enables the automatic detection of a high contrast mode set for
           your desktop. Some OS' do not provide this option explicitly, but
           allow the user to choose a color scheme that is HC-compliant
@@ -7346,7 +6933,6 @@
           oor:name="IsForPagePreviews" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Enables the use of high contrast colors, instead of displaying
           the normal/original WYSIWYG colors.</desc>
           <label>For page previews</label>
@@ -7357,7 +6943,6 @@
           oor:name="IsHelpTipsDisappear" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Enables or disables the automatic time out of help tips. You can
           specify a duration (n) of 1 to 99 seconds. If this option is
           disabled, press the Esc key to dismiss the help tip.</desc>
@@ -7367,7 +6952,6 @@
       </prop>
       <prop oor:name="HelpTipSeconds" oor:type="xs:short" oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Enables or disables the automatic time out of help tips. You
           can specify a duration (n) of 1 to 99 seconds. If this option is
           disabled, press the Esc key to dismiss the help tip.</desc>
@@ -7393,7 +6977,6 @@
           oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AF</author>
           <desc>Indicates whether to allow the graphical animation in all SO/OO
           applications (i.e. animated GIFs and objects in Impress during
           presentation, animated graphical previews (Gallery,
@@ -7406,7 +6989,6 @@
           oor:name="IsAllowAnimatedText" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>AF</author>
           <desc>Indicates whether to allow all textual animation like blinking
           and scrolling in all SO/OO applications.</desc>
           <label>Allow animated text</label>
@@ -7417,7 +6999,6 @@
           oor:name="IsAutomaticFontColor" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Overrides all text color attributes set in a SO/OO document for
           display only.</desc>
           <label>Always use automatic font color for screen display</label>
@@ -7426,7 +7007,6 @@
       </prop>
       <prop oor:name="IsSystemFont" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Allows the user to change the UI font to the system
           default.</desc>
           <label>Use system default user interface font</label>
@@ -7437,7 +7017,6 @@
           oor:name="IsSelectionInReadonly" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Indicates whether the cursor is displayed in read-only
           texts.</desc>
           <label>Use text selection mode in readonly texts.</label>
@@ -7449,20 +7028,17 @@
       <info>
         <deprecated>Replaced by
         org.openoffice.Office.Embedding/ObjectNames.</deprecated>
-        <author>MAV</author>
         <desc>Deprecated</desc>
       </info>
     </set>
     <group oor:name="ExternalApps" oor:extensible="true">
       <info>
         <deprecated>Without replacement.</deprecated>
-        <author>OBR</author>
         <desc>Specifies external helper applications / protocol handlers.</desc>
       </info>
     </group>
     <group oor:name="ExternalMailer">
       <info>
-        <author>OBR</author>
         <desc>Specifies an external mail application to be used for Send as
         email.</desc>
       </info>
@@ -7495,12 +7071,10 @@
     </group>
     <group oor:name="I18N">
       <info>
-        <author>OS</author>
         <desc>Contains various language/localization specific settings.</desc>
       </info>
       <group oor:name="InputMethod">
         <info>
-          <author>PL</author>
           <desc>Contains settings for (language/localization specific) input
           methods.</desc>
         </info>
@@ -7663,7 +7237,6 @@
         </prop>
         <prop oor:name="UIMirroring" oor:type="xs:boolean">
           <info>
-            <author>SSA</author>
             <desc>Specifies whether the whole user interface (UI) will be
             mirrored. If true, the UI will be right-to-left. If false, the UI
             will be left-to-right. If nil (the default), the UI will be mirrored
@@ -7675,7 +7248,6 @@
     <group oor:name="Startup">
       <info>
         <deprecated>Use cfg package Jobs instead of this.</deprecated>
-        <author>AS</author>
         <desc>Uses cfg package Jobs instead of this component.</desc>
       </info>
       <set oor:name="Run" oor:node-type="JobDescription">
@@ -7693,26 +7265,22 @@
     </group>
     <group oor:name="SmartTags">
       <info>
-        <author>FME</author>
         <desc>Contains settings for smart tags.</desc>
       </info>
       <group oor:name="Writer">
         <info>
-          <author>FME</author>
           <desc>Contains Writer specific settings for smart tags.</desc>
         </info>
         <prop
             oor:name="RecognizeSmartTags" oor:type="xs:boolean"
             oor:nillable="false">
           <info>
-            <author>FME</author>
             <desc>Specifies whether smart tag recognization is enabled.</desc>
           </info>
           <value>true</value>
         </prop>
         <prop oor:name="ExcludedSmartTagTypes" oor:type="oor:string-list">
           <info>
-            <author>FME</author>
             <desc>A list of excluded smart tag types.</desc>
           </info>
         </prop>

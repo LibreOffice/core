@@ -19,7 +19,6 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="OptionsDialog" oor:package="org.openoffice.Office" xml:lang="en-US"> 
   <info>
-    <author>PB</author>
     <desc >Contains general structures used to hide a single option or an option 
       tabpage or a whole option group.</desc>
   </info>

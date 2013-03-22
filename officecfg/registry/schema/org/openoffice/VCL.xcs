@@ -18,13 +18,11 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="VCL" oor:package="org.openoffice" xml:lang="en-US"> <info>
-		<author>PL</author>
 		<desc >Contains preferences for the VCL (Visual Class Library).</desc>
 	</info>
 	<templates>
 		<group oor:name="LFonts">
 			<info>
-				<author>PL</author>
 				<desc>Contains attributes for fonts. The substitution lists are separated by &apos;;&apos; and are searched first to last for a substitute.</desc>
 			</info>
 			<prop oor:name="SubstFonts" oor:type="xs:string">
@@ -65,19 +63,16 @@
 		</group>
 		<group oor:name="ConfigurableSettings" oor:extensible="true">
 			<info>
-				<author>PL</author>
 				<desc>Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: &quot;EnableATToolSupport&quot; (valid values = &quot;true&quot;, &quot;false&quot;).</desc>
 			</info>
 		</group>
 		<group oor:name="LocalizedDefaultFonts" oor:extensible="true">
 			<info>
-				<author>PL</author>
 				<desc>Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. &quot;en-US&quot;) so that default fonts can be declared for different language contexts. Each value is a font list separated by &apos;;&apos;. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
 			</info>
 		</group>
 		<set oor:name="LocalizedFontSubstitutions" oor:node-type="LFonts">
 			<info>
-				<author>PL</author>
 				<desc>Contains localized font substitution tables organized as a group of sets of LFonts. The outer set denotes the language (for example, &quot;en-US&quot;).</desc>
 			</info>
 		</set>
@@ -85,19 +80,16 @@
 	<component>
 		<set oor:name="Settings" oor:node-type="ConfigurableSettings">
 			<info>
-				<author>PL</author>
 				<desc>Contains the settings for VCL (see template description).</desc>
 			</info>
 		</set>
 		<set oor:name="DefaultFonts" oor:node-type="LocalizedDefaultFonts">
 			<info>
-				<author>PL</author>
 				<desc>Contains the localized default fonts for VCL (see template description).</desc>
 			</info>
 		</set>
 		<set oor:name="FontSubstitutions" oor:node-type="LocalizedFontSubstitutions">
 			<info>
-				<author>PL</author>
 				<desc>Contains the localized font substitution tables for VCL (see template description).</desc>
 			</info>
 		</set>

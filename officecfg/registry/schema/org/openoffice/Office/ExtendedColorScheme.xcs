@@ -19,7 +19,6 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ExtendedColorScheme" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
-		<author>OJ</author>
 	</info>
 	<templates>
 		<group oor:name="ColorEntry">
@@ -43,7 +42,6 @@
 			</info>
 			<set oor:name="Entries" oor:node-type="ColorEntry">
 				<info>
-					<author>OJ</author>
 					<desc>Specifies the color settings for customizing the appearance the extension.</desc>
 				</info>			
 			</set>
@@ -69,14 +67,12 @@
 			</prop>
 			<set oor:name="Entries" oor:node-type="EntryName">
 				<info>
-					<author>OJ</author>
 					<desc>Specifies the entry names.</desc>
 				</info>			
 			</set>
 		</group>
 		<set oor:name="ExtendedColorScheme" oor:node-type="Component">
 			<info>
-				<author>OJ</author>
 				<desc>Specifies the color settings for customizing the appearance of extensions.</desc>
 			</info>			
 		</set>
@@ -84,7 +80,6 @@
 	<component>
 		<group oor:name="ExtendedColorScheme">
 			<info>
-				<author>OJ</author>
 				<desc>Specifies the color settings for customizing the appearance of extensions.</desc>
 			</info>
 			<prop oor:name="CurrentColorScheme" oor:type="xs:string">
@@ -95,14 +90,12 @@
 			<set oor:name="ColorSchemes" oor:node-type="ExtendedColorScheme">
 				<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
 				<info>
-					<author>OJ</author>
 					<desc>Lists entries with color settings.</desc>
 				</info>
 			</set>
 		</group>
 		<set oor:name="EntryNames" oor:node-type="ComponentName">
 			<info>
-				<author>OJ</author>
 				<desc>Lists entries with color entry UI names.</desc>
 			</info>
 		</set>

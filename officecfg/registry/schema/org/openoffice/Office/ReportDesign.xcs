@@ -18,7 +18,6 @@
  -->
 <oor:component-schema oor:name="ReportDesign" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
-		<author>OJ</author>
 		<desc>Contains informatation of report design.</desc>
 	</info>
 	<component>
@@ -28,7 +27,6 @@
             </info>
             <prop oor:name="DirectHelp" oor:type="xs:boolean">
                 <info>
-                    <author>OJ</author>
                     <desc>Enables or disables a help section at the bottom of the property browser, which shows the help of the currently active property.</desc>
                 </info>
                 <value>false</value>
@@ -40,14 +38,12 @@
             </info>
             <prop oor:name="DownloadURL" oor:type="xs:string">
                 <info>
-                    <author>LLA</author>
                     <desc>Direct download URL to the Oracle(tm) Report Builder extension.</desc>
                 </info>
                 <value>http://extensions.go-oo.org</value>
             </prop>
             <prop oor:name="Name" oor:type="xs:string">
                 <info>
-                    <author>LLA</author>
                     <desc>Name of the extension.</desc>
                 </info>
                 <value>Oracle(tm) Report Builder</value>

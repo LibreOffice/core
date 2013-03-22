@@ -20,7 +20,6 @@
 <oor:component-schema oor:name="Paths" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<info>
-        <author>AS</author>
 		<desc>Configuration of layered paths replacing the old path configuration org.openoffice.Office.Common/Path.</desc>
 	</info>
 

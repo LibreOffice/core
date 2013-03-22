@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="WriterWeb" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>OS</author>
 		<desc >Contains settings for the HTML editor.</desc>
 	</info>
 	<import oor:component="org.openoffice.Office.Common"/>
@@ -36,7 +35,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if graphics and objects are displayed.</desc>
 						<label>Graphics and Objects</label>
 					</info>
@@ -47,7 +45,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if tables are displayed.</desc>
 						<label>Tables</label>
 					</info>
@@ -58,7 +55,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if drawings and controls are displayed.</desc>
 						<label>Drawings and controls</label>
 					</info>
@@ -69,7 +65,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if field codes are displayed.</desc>
 						<label>Field codes</label>
 					</info>
@@ -80,7 +75,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if comments are displayed.</desc>
 						<label>Comments</label>
 					</info>
@@ -89,7 +83,6 @@
 				<prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Not accessible via user interface -->
 					<info>
-						<author>OS</author>
 						<desc>Enables the writer to prevent the display of help tips programmatically.</desc>
 						<label>Prevent help tips</label>
 					</info>
@@ -103,7 +96,6 @@
 				<prop oor:name="MetaCharacters" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: View - Nonprinting Characters -->
 					<info>
-						<author>OS</author>
 						<desc>Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
 						<label>Meta characters</label>
 					</info>
@@ -114,7 +106,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if paragraph ends are shown on the screen.</desc>
 						<label>Paragraph end</label>
 					</info>
@@ -125,7 +116,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if optional hyphens are shown on the screen.</desc>
 						<label>Optional hyphens</label>
 					</info>
@@ -136,7 +126,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if spaces are shown on the screen.</desc>
 						<label>Spaces</label>
 					</info>
@@ -147,7 +136,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if protected spaces are shown on the screen.</desc>
 						<label>Protected Spaces</label>
 					</info>
@@ -158,7 +146,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if breaks are shown on the screen.</desc>
 						<label>Breaks</label>
 					</info>
@@ -174,7 +161,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Highlighting -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if fields are highlighted.</desc>
 						<label>Fields</label>
 					</info>
@@ -195,7 +181,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
 					<info>
-						<author>OS</author>
 						<desc>Displays helplines around the frames when frames are moved.</desc>
 						<label>Helplines</label>
 					</info>
@@ -206,7 +191,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
 					<info>
-						<author>OS</author>
 						<desc>Displays the control points as simple squares without a 3D effect.</desc>
 						<label>Simple control points</label>
 					</info>
@@ -217,7 +201,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
 					<info>
-						<author>OS</author>
 						<desc>Displays larger control points.</desc>
 						<label>Large control points</label>
 					</info>
@@ -233,7 +216,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the horizontal scroll bar is displayed.</desc>
 						<label>Horizontal scroll</label>
 					</info>
@@ -244,7 +226,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the vertical scroll bar is displayed.</desc>
 						<label>Vertical Scroll</label>
 					</info>
@@ -253,7 +234,6 @@
 				<prop oor:name="ShowRulers" oor:type="xs:boolean" oor:nillable="false">
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
 						<label>Show rulers</label>
 					</info>
@@ -264,7 +244,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the horizontal ruler is displayed.</desc>
 						<label>Horizontal ruler</label>
 					</info>
@@ -274,7 +253,6 @@
 					<!-- OldPath: Writer/Layout -->
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the measurement unit for the horizontal ruler.</desc>
 						<label>Horizontal ruler measure unit</label>
 					</info>
@@ -331,7 +309,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the vertical ruler is displayed.</desc>
 						<label>Vertical Ruler</label>
 					</info>
@@ -341,7 +318,6 @@
 					<!-- OldPath: Writer/Layout -->
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the measurement unit for the vertical ruler.</desc>
 						<label>Vertical ruler measure unit</label>
 					</info>
@@ -398,7 +374,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
 					<info>
-						<author>OS</author>
 						<desc>Activates the smooth page scrolling function.</desc>
 						<label>Smooth scroll</label>
 					</info>
@@ -412,7 +387,6 @@
                 <prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean" oor:nillable="false">
                     <!-- UIHints: none yet -->
                     <info>
-                        <author>TL</author>
                         <desc>Automatically align the baseline of Math objects with the baseline of the surrounding text.</desc>
                         <label>Align Math objects</label>
                     </info>
@@ -423,7 +397,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Meas. Unit -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the measurement units.</desc>
 						<label>Measure unit</label>
 					</info>
@@ -483,7 +456,6 @@
 				<prop oor:name="Type" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the zoom type.</desc>
 						<label>Zoom Type</label>
 					</info>
@@ -509,7 +481,6 @@
 				<prop oor:name="Value" oor:type="xs:int" oor:nillable="false">
 					<!-- UIHints: (Status Bar) -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the zoom value.</desc>
 						<label>Zoom Value</label>
 					</info>
@@ -530,7 +501,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
 					<info>
-						<author>OS</author>
 						<desc>Moves frames, drawing elements, and form functions only between the grid points.</desc>
 						<label>Snap to grid</label>
 					</info>
@@ -541,7 +511,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
 					<info>
-						<author>OS</author>
 						<desc>Displays the grid.</desc>
 						<label>Visible grid</label>
 					</info>
@@ -552,7 +521,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
 					<info>
-						<author>OS</author>
 						<desc>Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
 						<label>Synchronize axes</label>
 					</info>
@@ -568,7 +536,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the distance between the grid points on the X-axis [UNIT=1/100 mm].</desc>
 						<label>X Axis Resolution</label>
 					</info>
@@ -579,7 +546,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the distance between the grid points on the Y-axis [UNIT=1/100 mm].</desc>
 						<label>Y Axis Resolution</label>
 					</info>
@@ -595,7 +561,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the number of intervals between two grid points on the X-axis.</desc>
 						<label>X Axis Subdivision</label>
 					</info>
@@ -606,7 +571,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
 					<info>
-						<author>OS</author>
 						<desc>Defines the distance between the grid points on the Y-axis.</desc>
 						<label>Y Axis Subdivision</label>
 					</info>
@@ -627,7 +591,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if graphics are printed.</desc>
 						<label>Graphics</label>
 					</info>
@@ -638,7 +601,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if tables are printed.</desc>
 						<label>Tables</label>
 					</info>
@@ -649,7 +611,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if controls are printed.</desc>
 						<label>Controls</label>
 					</info>
@@ -660,7 +621,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if background objects are printed.</desc>
 						<label>Background</label>
 					</info>
@@ -671,7 +631,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if text is always printed in black.</desc>
 						<label>Print black</label>
 					</info>
@@ -682,7 +641,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if comments are printed and how they are printed.</desc>
 					</info>
 					<constraints>
@@ -719,7 +677,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
 					<info>
-						<author>OS</author>
 						<desc>Reverses the printing order.</desc>
 						<label>Reversed</label>
 					</info>
@@ -730,7 +687,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
 					<info>
-						<author>OS</author>
 						<desc>Prints in brochure format.</desc>
 						<label>Brochure</label>
 					</info>
@@ -741,7 +697,6 @@
                                         <!-- OldLocation: Soffice.cfg -->
                                         <!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
                                         <info>
-                                                <author>OS</author>
                                                 <desc>Prints in brochure format, with right-to-left direction.</desc>
                                                 <label>Right-to-left</label>
                                         </info>
@@ -757,7 +712,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Output -->
 					<info>
-						<author>OS</author>
 						<desc>Controls the print output.</desc>
 						<label>Create single print jobs</label>
 					</info>
@@ -768,7 +722,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Fax -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies which fax machine is used when faxing directly from the document</desc>
 						<label>Fax</label>
 					</info>
@@ -785,7 +738,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Paper tray -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
 						<label>From printer setup</label>
 					</info>
@@ -807,7 +759,6 @@
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
 					<!--Notice: NonMetric default: 635 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for moving a table row [UNIT=1/100 mm].</desc>
 						<label>Row</label>
 					</info>
@@ -819,7 +770,6 @@
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Shift -->
 					<!-- Notice: NonMetric default: 635 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
 						<label>Column</label>
 					</info>
@@ -836,7 +786,6 @@
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
 					<!-- Notice: NonMetric default: 635 1/100 mm -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
 						<label>Row</label>
 					</info>
@@ -848,7 +797,6 @@
 					<!-- UIHints: Tools - Option - HTML-Document  Table - [Section] Insert -->
 					<!-- Notice: The NonMetric Default 2540 1/100 mm-->
 					<info>
-						<author>OS</author>
 						<desc>Specifies the default value for inserting columns [UNIT=1/100 mm].</desc>
 						<label>Column</label>
 					</info>
@@ -864,7 +812,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Table  [Section] Effect -->
 					<info>
-						<author>OS</author>
 						<desc>Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
 					</info>
 					<constraints>
@@ -896,7 +843,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
 						<label>Number recognition</label>
 					</info>
@@ -907,7 +853,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
 						<label>Number format recognition</label>
 					</info>
@@ -918,7 +863,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
 						<label>Alignment</label>
 					</info>
@@ -939,7 +883,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the table has a header</desc>
 						<label>Header</label>
 					</info>
@@ -950,7 +893,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
 						<label>Repeat header</label>
 					</info>
@@ -961,7 +903,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
 					<info>
-						<author>OS</author>
 						<desc>Specifies if table cells have a border by default.</desc>
 						<label>Border</label>
 					</info>
@@ -971,14 +912,12 @@
 		</group>
 		<group oor:name="ObjectBar">
 			<info>
-				<author>OS</author>
 				<desc>Specifies the settings for the object bar.</desc>
 			</info>
 			<group oor:name="Selection">
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Right mouse click to the toolbar with object selection-->
 				<info>
-					<author>OS/OS</author>
 					<desc>Specifies the type of object bar that is visible.</desc>
 				</info>
 				<prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
@@ -1022,7 +961,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Option - HTML-Document  Background - [Section] Background color -->
 				<info>
-					<author>OS</author>
 					<desc>Determines the background color.</desc>
 					<label>Background color</label>
 				</info>
@@ -1036,7 +974,6 @@
 				<!--OldLocation: Soffice.cfg -->
 				<!--UIHints: HTML document in readonly mode - context menu of a graphic - Add Graphics - As Link / Copy-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
 				</info>
 				<value>true</value>

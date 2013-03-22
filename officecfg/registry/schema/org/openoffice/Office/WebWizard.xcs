@@ -19,7 +19,6 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="WebWizard" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<info>
-		<author>rpiterman</author>
 		<desc >Contains the configuration schema for the web wizard</desc>
 	</info>
 	<templates>

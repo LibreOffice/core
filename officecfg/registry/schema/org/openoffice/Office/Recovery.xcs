@@ -76,12 +76,10 @@
         </set>
         <group oor:name="SessionShutdown">
             <info>
-				<author>MAV</author>
                 <desc>The session shutdown related information.</desc>
             </info>
             <prop oor:name="DocumentStoreUIEnabled" oor:type="xs:boolean" oor:nillable="false">
                 <info>
-                    <author>MAV</author>
                     <desc>Determines if the office is allowed to show request to store modified documents on session shutdown.</desc>
                 </info>
                 <value>false</value>

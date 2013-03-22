@@ -25,7 +25,6 @@
 	<templates>
         <group oor:name="CanvasService">
 			<info>
-				<author>THB</author>
 				<label>Implementation names for canvas service.</label>
 				<desc>Contains a list of implementation names for each canvas service. Tried in order of appearance</desc>
 			</info>
@@ -49,7 +48,6 @@
 	<component>
 		<group oor:name="DXCanvas">
 			<info>
-				<author>THB</author>
 				<desc>Contains config entries for the DirectX-based implementation of the XCanvas interface.</desc>
 			</info>
 			<prop oor:name="DeviceBlacklist" oor:type="oor:int-list" oor:nillable="false">
@@ -105,7 +103,6 @@
 		</set>
 		<prop oor:name="ForceSafeServiceImpl" oor:type="xs:boolean" oor:nillable="false">
 			<info>
-				<author>THB</author>
 				<desc>When true, force canvas factory to use the last
 				      entry of the respective preferred services
 					  lists. This entry should represent a safe,
@@ -118,7 +115,6 @@
 		</prop>
 		<prop oor:name="UseAcceleratedCanvas" oor:type="xs:boolean" oor:nillable="false">
 			<info>
-				<author>THB</author>
 				<desc>When true, suggest canvas factory to use a
 				      canvas service listed in the
 				      AcceleratedImplementations lists. 
@@ -129,7 +125,6 @@
 		</prop>
 		<prop oor:name="UseAntialiasingCanvas" oor:type="xs:boolean" oor:nillable="false">
 			<info>
-				<author>THB</author>
 				<desc>When true, suggest canvas factory to use a
 				      canvas service listed in the
 				      AntialiasingImplementations lists. 

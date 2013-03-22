@@ -18,7 +18,6 @@
  -->
 <oor:component-schema xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office" oor:name="PresenterScreen">
   <info>
-    <author>AF</author>
     <desc>Configuration of the Presenter Screen extension.</desc>
   </info>
   <import oor:component="org.openoffice.Office.Impress"></import>

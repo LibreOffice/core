@@ -18,13 +18,11 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="DataAccess" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>OJ</author>
 	</info>
 	<import oor:component="org.openoffice.Office.Common"/>
 	<uses oor:component="org.openoffice.Office.Common"/>
 	<templates>
 		<info>
-			<author>OJ</author>
 		</info>
 		<group oor:name="DatabaseDocumentRegistration">
 			<info>
@@ -183,7 +181,6 @@
 	</templates>
 	<component>
 		<info>
-			<author>OJ</author>
 		</info>
         <group oor:name="Policies">
             <info>
@@ -348,7 +345,6 @@
 
 		<group oor:name="Bibliography">
 			<info>
-				<author>OS</author>
 				<desc>Specifies settings of the bibliography component</desc>
 			</info>
 			<prop oor:name="BeamerHeight" oor:type="xs:int">
@@ -385,7 +381,6 @@
 				<!-- OldPath: Bibliography/BibliographyCurrent-->
 				<!-- OldLocation: Soffice.ini-->
 				<info>
-					<author>OS</author>
 					<desc>Determines the current data source for the bibliography.</desc>
 				</info>
 			</node-ref>
@@ -393,7 +388,6 @@
 				<!--OldPath: Bibliography/Bibliography-->
 				<!--OldLocation: Soffice.ini-->
 				<info>
-					<author>OS</author>
 					<desc>Specifies the data source that can be used as a bibliography.</desc>
 				</info>
 			</set>

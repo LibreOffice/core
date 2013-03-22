@@ -22,7 +22,6 @@
     xmlns:oor="http://openoffice.org/2001/registry"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <info>
-    <author>TL</author>
     <desc >Contains linguistic (spell checking, hyphenation, thesaurus) related
     configurations.</desc>
   </info>
@@ -162,7 +161,6 @@
 	<!-- UIHints: Tools - Options - General - Language Settings - Languages
         -->
 	<info>
-	  <author>LO</author>
 	  <desc>Specifies the UI language. An empty string means: use the
           desktop's UI language if possible.</desc>
 	</info>
@@ -173,7 +171,6 @@
           oor:nillable="false">
 	<!-- OldLocation: NEW -->
 	<info>
-	  <author>TL</author>
 	  <desc>Ignores the control characters (ASCII characters &lt; 32) for
           spell checking, hyphenation and the thesaurus.</desc>
 	</info>
@@ -184,7 +181,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies the default document language.</desc>
 	  <label>Default language</label>
 	</info>
@@ -198,7 +194,6 @@
 	<!-- OldPath: DefaultLanguage -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies the default document CJK language.</desc>
 	  <label>Default language for CJK linguistics</label>
 	</info>
@@ -212,7 +207,6 @@
 	<!-- OldPath: DefaultLanguage -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies the default document CTL language.</desc>
 	  <label>Default language for CTL linguistics</label>
 	</info>
@@ -231,7 +225,6 @@
 	  <!-- OldLocation: soffice.ini -->
 	  <!-- UIHints: Tools - Options - General - Language -->
 	  <info>
-	    <author>TL</author>
 	    <desc>Specifies the custom dictionaries to be used. The Ignore list
             (IgnoreAllList (All)) is administered in the RAM only for the
             current spellcheck.</desc>
@@ -250,7 +243,6 @@
             oor:nillable="false">
 	  <!-- OldLocation: NEW -->
 	  <info>
-	    <author>TL</author>
 	    <desc>Determines if personal dictionaries should be used for spell
             checking and hyphenation.</desc>
 	  </info>
@@ -370,7 +362,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies whether to include uppercase words in the spellcheck
           process.</desc>
 	  <label>Spell uppercase words</label>
@@ -384,7 +375,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies whether to check the spelling of words which contain
           numbers as well as letters.</desc>
 	  <label>Spell words with digits</label>
@@ -398,7 +388,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Checks the correct use of capitalization.</desc>
 	  <label>Check capitalization</label>
 	</info>
@@ -409,7 +398,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Checks spelling automatically.</desc>
 	  <label>Automatic spellchecking</label>
 	</info>
@@ -421,7 +409,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Allows spellchecking in headers, footers, and frames.</desc>
 	  <label>Check spelljng in special regions</label>
 	</info>
@@ -434,7 +421,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Advances backwards through the text for spell checking.</desc>
 	  <label>Reverse direction.</label>
 	</info>
@@ -447,7 +433,6 @@
       </info>
       <prop oor:name="IsAutoCheck" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>determines if grammar is automatically checked.</desc>
           <label>Automatic grammar checking</label>
         </info>
@@ -457,7 +442,6 @@
           oor:name="IsInteractiveCheck" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>determines if grammar is check in the spelling and grammar
           dialog.</desc>
           <label>Interactive grammar checking</label>
@@ -474,7 +458,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies the minimum number of characters of the hyphenated
           word required at the end of the line.</desc>
 	  <label>Characters per syllable before hyphen</label>
@@ -498,7 +481,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies the minimum number of characters of the hyphenated
           word required at the next line.</desc>
 	  <label>Characters per syllable after hyphen</label>
@@ -521,7 +503,6 @@
 	<!-- OldPath: HyphMinWordLength -->
 	<!-- OldLocation: soffice.ini -->
 	<info>
-	  <author>TL</author>
 	  <desc>Specifies the minimum word length to allow a hyphenation.</desc>
 	  <label>Minimal word length</label>
 	</info>
@@ -544,7 +525,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Allows hyphenation in headers, footers, and frames.</desc>
 	  <label>Hyphenate in special regions.</label>
 	</info>
@@ -555,7 +535,6 @@
 	<!-- OldLocation: soffice.ini -->
 	<!-- UIHints: Tools - Options - General - Language -->
 	<info>
-	  <author>TL</author>
 	  <desc>Allows for automatic insertion of soft hyphens.</desc>
 	  <label>Automatic hyphention.</label>
 	</info>
@@ -609,7 +588,6 @@
           oor:name="DataFilesChangedCheckValue" oor:type="xs:int"
           oor:nillable="false">
         <info>
-          <author>TL</author>
           <desc>Value used to check if the data files of the linguistic have
           changed and thus the configuration needs to be updated.</desc>
           <label>Data files changed check value</label>

@@ -22,7 +22,6 @@
     xmlns:oor="http://openoffice.org/2001/registry"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <info>
-    <author>AS</author>
     <desc>Contains common content types for Office. See package TypeDetection
     and TypeDetection_Filters for other parts of type/filter configuration
     too.</desc>

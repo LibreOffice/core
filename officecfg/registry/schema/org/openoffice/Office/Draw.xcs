@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Draw" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>AF</author>
 		<desc >Defines the properties of the Draw application.</desc>
 	</info>
 	<import oor:component="org.openoffice.Office.Common"/>
@@ -36,7 +35,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 						<label>Rulers visible</label>
 					</info>
@@ -47,7 +45,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show help lines that can be created by dragging them from the rulers.</desc>
 						<label>Helplines visible</label>
 					</info>
@@ -58,7 +55,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show help lines when moving an object.</desc>
 						<label>Helplines While Moving</label>
 					</info>
@@ -69,7 +65,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show all control points in the Bezier curve editor.</desc>
 						<label>All control points in Bezier editor</label>
 					</info>
@@ -80,7 +75,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show the outline of all moved objects when moving more then one object at a time.</desc>
 						<label>Contour of each individual object</label>
 					</info>
@@ -97,7 +91,6 @@
 					<!-- UIHints: Tools - Options - Drawing - Layout - [Section] Tab stops -->
 					<!-- Notice: Default-Nonmetric Value: 1270 1/100 mm-->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the distance between adjacent tab stops.</desc>
 						<label>Tab stops</label>
 					</info>
@@ -121,7 +114,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing - Layout - [Section] Meas. units -->
 					<info>
-						<author>AF</author>
 						<desc>Contains the specification of distances and sizes.</desc>
 						<label>Measurement unit</label>
 					</info>
@@ -208,7 +200,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show only outlines of graphical objects.</desc>
 						<label>Picture placeholders</label>
 					</info>
@@ -219,7 +210,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show only outlines of draw objects.</desc>
 						<label>Contour mode</label>
 					</info>
@@ -230,7 +220,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to use placeholders for text in draw objects.</desc>
 						<label>Text placeholders</label>
 					</info>
@@ -241,7 +230,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show only hairlines instead of an object&apos;s linestyle.</desc>
 						<label>Line contour only</label>
 					</info>
@@ -258,7 +246,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
 				<info>
-					<author>AF</author>
 					<desc>Indicates whether to store master pages in a cache to speed up drawing.</desc>
 					<label>Use background cache</label>
 				</info>
@@ -269,7 +256,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
 				<info>
-					<author>AF</author>
 					<desc>Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 					<label>Copy while moving</label>
 				</info>
@@ -280,7 +266,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
 				<info>
-					<author>AF</author>
 					<desc>Indicates whether objects can still be moved while in rotating mode.</desc>
 					<label>Objects always moveable</label>
 				</info>
@@ -291,7 +276,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
 				<info>
-					<author>AF</author>
 					<desc>Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 					<label>Don&apos;t distort objects in curve</label>
 				</info>
@@ -302,7 +286,6 @@
 				<!-- OldLocation: soffice.cfg -->
 				<!-- UIHints: Option Bar -->
 				<info>
-					<author>AF</author>
 					<desc>Indicates whether a double-click on a text object changes activates the edit mode.</desc>
 					<label>Double-Click Text to Edit</label>
 				</info>
@@ -313,7 +296,6 @@
 				<!-- OldLocation: soffice.cfg -->
 				<!-- UIHints: Option Bar -->
 				<info>
-					<author>AF</author>
 					<desc>Indicates whether a double-click on an object activates the rotation mode.</desc>
 					<label>Rotation Mode after clicking object</label>
 				</info>
@@ -324,7 +306,6 @@
 				<!-- OldLocation: soffice.cfg -->
 				<!-- UIHints: Menu: view - preview mode -->
 				<info>
-					<author>AF</author>
 					<desc>Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 					<label>Preview-Mode</label>
 				</info>
@@ -349,7 +330,6 @@
 			</prop>
 			<prop oor:name="ShowComments" oor:type="xs:boolean" oor:nillable="false">
 				<info>
-					<author>CL</author>
 					<desc>Indicates whether to show comments (true) or hide them (false).</desc>
 					<label>Show Comments</label>
 				</info>
@@ -360,7 +340,6 @@
 				<!-- OldLocation: soffice.cfg -->
 				<!-- UIHints: Optionbar -->
 				<info>
-					<author>AF</author>
 					<desc>Indicates whether the object creation and modification will be visualized using the full object attribute set or wireframe.</desc>
 					<label>Modify with attributes</label>
 				</info>
@@ -375,7 +354,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Other  [Section] Text objects -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether a simple click on a text object changes it to edit mode.</desc>
 						<label>Allow quick editing</label>
 					</info>
@@ -386,7 +364,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Other  [Section] Text objects -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 						<label>Only text area selectable</label>
 					</info>
@@ -402,7 +379,6 @@
 					<!-- OldLocation: drawing.cfg -->
 					<!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the number of intermediate morphing steps between two objects.</desc>
 						<label>Steps</label>
 					</info>
@@ -425,7 +401,6 @@
 					<!-- OldLocation: drawing.cfg -->
 					<!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether two objects to be morphed shall have the same orientation.</desc>
 						<label>Orientation</label>
 					</info>
@@ -436,7 +411,6 @@
 					<!-- OldLocation: drawing.cfg -->
 					<!-- UIHints: Select two objects =&gt; Edit  Cross-fade -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to consider objects&apos; attributes (e.g. colors) when morphing one object into another.</desc>
 						<label>Attributes</label>
 					</info>
@@ -448,7 +422,6 @@
 				<!-- OldLocation: -->
 				<!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Klick -->
 				<info>
-					<author>AW</author>
 					<desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 					<label>Default Object Size</label>
 				</info>
@@ -475,7 +448,6 @@
 				<prop oor:name="PrinterIndependentLayout" oor:type="xs:short" oor:nillable="false">
 					<!-- UIHints: Tools - Options - Draw - Other - [Section] Compatibility -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
 						<label>Use printer independent metrics for document formatting</label>
 					</info>
@@ -496,7 +468,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to snap an object when moved to the next grid point.</desc>
 						<label>Grid lines</label>
 					</info>
@@ -507,7 +478,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to snap at snap lines.</desc>
 						<label>Snap lines</label>
 					</info>
@@ -518,7 +488,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 						<label>Page margins</label>
 					</info>
@@ -529,7 +498,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 						<label>Object frame</label>
 					</info>
@@ -540,7 +508,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to snap corner points of adjacent objects.</desc>
 						<label>Object points</label>
 					</info>
@@ -551,7 +518,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
 						<label>Snap range</label>
 					</info>
@@ -579,7 +545,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 						<label>When creating or moving objects</label>
 					</info>
@@ -590,7 +555,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 						<label>Extend edges</label>
 					</info>
@@ -601,7 +565,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to use snapping while rotating an object.</desc>
 						<label>When rotating</label>
 					</info>
@@ -612,7 +575,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 						<label>When rotating</label>
 					</info>
@@ -635,7 +597,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 						<label>Point reduction</label>
 					</info>
@@ -664,7 +625,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
 				<info>
-					<author>AF</author>
 					<desc>Specifies zoom factor along the horizontal axis.</desc>
 					<label>Scale</label>
 				</info>
@@ -675,7 +635,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
 				<info>
-					<author>AF</author>
 					<desc>Specifies zoom factor along the vertical axis.</desc>
 					<label>Scale</label>
 				</info>
@@ -695,7 +654,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to force frames and drawing elements on grid points.</desc>
 						<label>Snap to grid</label>
 					</info>
@@ -706,7 +664,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to show the grid.</desc>
 						<label>Visible grid</label>
 					</info>
@@ -717,7 +674,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 						<label>Synchronize axes</label>
 					</info>
@@ -734,7 +690,6 @@
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
 					<!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
 					<info>
-						<author>AF</author>
 						<desc>Defines the horizontal distance between adjacent grid points.</desc>
 						<label>X Axis Resolution</label>
 					</info>
@@ -759,7 +714,6 @@
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
 					<!-- Notice: Default- nonmerical value: 1270 1/100 mm. -->
 					<info>
-						<author>AF</author>
 						<desc>Defines the vertical distance between adjacent grid points.</desc>
 						<label>Y Axis Resolution</label>
 					</info>
@@ -789,7 +743,6 @@
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
 					<!-- Notice: Default value for English Version only: 254 Points) -->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the number of points between two grid points on the X axis.</desc>
 						<label>X Axis Subdivision</label>
 					</info>
@@ -801,7 +754,6 @@
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
 					<!-- Notice: Default value for English Version only: 254 Points) -->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the number of points between two grid points on the Y axis.</desc>
 						<label>Y Axis Subdivision</label>
 					</info>
@@ -817,7 +769,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to synchronize grid and snap-grid.</desc>
 						<label>Size to grid</label>
 					</info>
@@ -829,7 +780,6 @@
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
 					<!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
 					<info>
-						<author>AF</author>
 						<desc>Defines the horizontal distance between adjacent points of the snap grid.</desc>
 						<label>X axis</label>
 					</info>
@@ -854,7 +804,6 @@
 					<!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
 					<!-- Notice: Default-Default-nonmetrical value: 1270 1/100 mm. -->
 					<info>
-						<author>AF</author>
 						<desc>Defines the vertical distance between adjacent points of the snap grid.</desc>
 						<label>Y axis</label>
 					</info>
@@ -888,7 +837,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Print - [Section] Contents -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
 						<label>Drawing</label>
 					</info>
@@ -904,7 +852,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 						<label>Fit to page</label>
 					</info>
@@ -915,7 +862,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 						<label>Tile pages</label>
 					</info>
@@ -926,7 +872,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print a document in the form of a brochure.</desc>
 						<label>Brochure</label>
 					</info>
@@ -937,7 +882,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print the front side pages of a brochure.</desc>
 						<label>Front side</label>
 					</info>
@@ -948,7 +892,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print the back side pages of a brochure.</desc>
 						<label>Back side</label>
 					</info>
@@ -964,7 +907,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print page names.</desc>
 						<label>Page name</label>
 					</info>
@@ -975,7 +917,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print the current date at the top of every page.</desc>
 						<label>Date</label>
 					</info>
@@ -986,7 +927,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print the current time at the top of every page.</desc>
 						<label>Time</label>
 					</info>
@@ -997,7 +937,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to print hidden pages.</desc>
 						<label>Hidden pages</label>
 					</info>
@@ -1008,7 +947,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Print - [Section] Quality -->
 					<info>
-						<author>AF</author>
 						<desc>Specifies the quality of the printed colors.</desc>
 					</info>
 					<constraints>
@@ -1035,7 +973,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Options - Drawing  Print  [Check box] From printer setup -->
 					<info>
-						<author>AF</author>
 						<desc>Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 						<label>From printer setup</label>
 					</info>

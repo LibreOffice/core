@@ -19,7 +19,6 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Logging" oor:package="org.openoffice.Office" xml:lang="en-US">
   <info>
-    <author>FS</author>
     <desc >Contains preferences the Logger components.</desc>
   </info>
   <templates>
@@ -72,7 +71,6 @@
   <component>
     <group oor:name="OOoImprovement">
       <info>
-		<author>b_michaelsen</author>
         <desc>specifies settings for the logging of userinterface events.</desc>
       </info>
       <prop oor:name="EnablingAllowed" oor:type="xs:boolean" oor:nillable="false">

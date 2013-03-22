@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Math" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>TL</author>
 		<desc >Contains settings for Math.</desc>
 	</info>
 	<templates>
@@ -227,7 +226,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies if the title (filename) is printed.</desc>
 					<label>Title row</label>
 				</info>
@@ -238,7 +236,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies if the formula text is printed.</desc>
 					<label>Formula text</label>
 				</info>
@@ -249,7 +246,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies if a border is drawn around the formula when printed.</desc>
 					<label>Border</label>
 				</info>
@@ -260,7 +256,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
 				<info>
-					<author>TL</author>
 					<desc>Defines the size used when printing the formula.</desc>
 					<label>Print Size</label>
 				</info>
@@ -288,7 +283,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
 					<label>Zoom factor</label>
 				</info>
@@ -314,7 +308,6 @@
             <prop oor:name="IsSaveOnlyUsedSymbols" oor:type="xs:boolean" oor:nillable="false">
                 <!-- UIHints: - Tools/Options - OpenOffice Maths - Settings -->
                 <info>
-                    <author>TL</author>
                     <desc>When set only symbols used in the current formula will be saved. Otherwise all user defined symbols will be saved in each formula.</desc>
                     <label>Save only used symbols.</label>
                 </info>
@@ -331,7 +324,6 @@
 				<!-- UIHints: - -->
 				<info>
 					<deprecated/>
-					<author>TL</author>
 					<desc>Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
 					<label>Missing symbols warning.</label>
 				</info>
@@ -342,7 +334,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
 				<info>
-					<author>TL</author>
 					<desc>Ignores spacing symbols at the end of a line.</desc>
 					<label>Ignore ~ and &apos; at the end of the line</label>
 				</info>
@@ -358,7 +349,6 @@
 				<!-- OldLocation: Soffice.cfg -->
                 <!-- UIHints: View - Elements -->
 				<info>
-					<author>TL</author>
 					<desc>Toggles the visibility of the ToolBox (Selection Box).</desc>
 					<label>Show Tool Box</label>
 				</info>
@@ -369,7 +359,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: View - AutoRefresh Display -->
 				<info>
-					<author>TL</author>
 					<desc>Automatically updates the display of the formula after the text has changed.</desc>
 					<label>Update display automatically</label>
 				</info>
@@ -380,7 +369,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: The icon &quot;Formula Cursor&quot; in the Tool bar -->
 				<info>
-					<author>TL</author>
 					<desc>Toggles the visibility of the FormulaCursor.</desc>
 					<label>Show Formula Cursor</label>
 				</info>
@@ -401,7 +389,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Text Mode -->
 				<info>
-					<author>TL</author>
 					<desc>Displays some expressions in a compact form.</desc>
 					<label>Textmode</label>
 				</info>
@@ -410,7 +397,6 @@
             <prop oor:name="GreekCharStyle" oor:type="xs:short" oor:nillable="false">
                 <!-- UIHints: n/a yet -->
                 <info>
-                    <author>TL</author>
                     <desc>Specifies the default layout for symbols from the 'Greek' symbol set.</desc>
                     <label>Greek character style</label>
                 </info>
@@ -433,7 +419,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->
 				<info>
-					<author>TL</author>
 					<desc>Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
 					<label>Scale normal brackets</label>
 				</info>
@@ -444,7 +429,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Alignment - Horizontal -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the default horizontal alignment for the formula.</desc>
 					<label>Horizontal alignment</label>
 				</info>
@@ -472,7 +456,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Base size -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the reference base size. [UNIT=Pts]</desc>
 					<label>Base size</label>
 				</info>
@@ -495,7 +478,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Text -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the text size relative to the base size. [UNIT=%]</desc>
 					<label>Text size</label>
 				</info>
@@ -518,7 +500,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Indices -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the size of the indices relative to the base size. [UNIT=%]</desc>
 					<label>Index size</label>
 				</info>
@@ -541,7 +522,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Functions -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the size of the functions relative to the base size. [UNIT=%]</desc>
 					<label>Function size</label>
 				</info>
@@ -564,7 +544,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Operators -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the size of the operators relative to the base size. [UNIT=%]</desc>
 					<label>Operator size</label>
 				</info>
@@ -587,7 +566,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format- Font Size - Limits -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the size of the limits relative to the base size. [UNIT=%]</desc>
 					<label>Limits size</label>
 				</info>
@@ -610,7 +588,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Variables -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
 					<label>Variable Font name</label>
 				</info>
@@ -621,7 +598,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Functions -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
 					<label>Function Font name</label>
 				</info>
@@ -632,7 +608,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Numbers -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
 					<label>Number Font name</label>
 				</info>
@@ -643,7 +618,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Text -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
 					<label>Text Font name</label>
 				</info>
@@ -654,7 +628,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Sans -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the FontFormat (font) to be used for &apos;sans&apos;. The value must be contained in the FontFormatList.</desc>
 					<label>Sans Font name</label>
 				</info>
@@ -665,7 +638,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Serif -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the FontFormat (font) to be used for &apos;serif&apos;. The value must be contained in the FontFormatList.</desc>
 					<label>Serif Font name</label>
 				</info>
@@ -676,7 +648,6 @@
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Fonts - Fixed -->
 				<info>
-					<author>TL</author>
 					<desc>Specifies the FontFormat (font) to be used for &apos;fixed&apos;. The value must be contained in the FontFormatList.</desc>
 					<label>Fixed Font name</label>
 				</info>
@@ -691,7 +662,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Spacing - Spacing -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the horizontal distance of different expressions and of binary operators. [UNIT=%]</desc>
 						<label>Horizontal distance</label>
 					</info>
@@ -714,7 +684,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Spacing - Line Spacing -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance of different lines. [UNIT=%]</desc>
 						<label>Vertical distance</label>
 					</info>
@@ -737,7 +706,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Spacing - Root Spacing -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance of the root symbol&apos;s horizontal bar to the argument. [UNIT=%]</desc>
 						<label>Distance to root symbol</label>
 					</info>
@@ -760,7 +728,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Indexes - Subscript -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance of the subscript to the base. [UNIT=%]</desc>
 						<label>Subscript distance</label>
 					</info>
@@ -783,7 +750,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Indexes - Superscript -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance of the superscript to the base. [UNIT=%]</desc>
 						<label>Superscript distance</label>
 					</info>
@@ -806,7 +772,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Limits - Lower Limit -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance of the lower limit to the operator. [UNIT=%]</desc>
 						<label>Lower limit distance</label>
 					</info>
@@ -829,7 +794,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Limits - Upper Limit -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance of the upper limit to the operator. [UNIT=%]</desc>
 						<label>Upper limit distance</label>
 					</info>
@@ -852,7 +816,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Operators - Excess size -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the scaling of a large operator relative to the base size. [UNIT=%]</desc>
 						<label>Oversize of large operator</label>
 					</info>
@@ -875,7 +838,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the distance between the large operator and it&apos;s argument. [UNIT=%]</desc>
 						<label>Distance to large operator</label>
 					</info>
@@ -898,7 +860,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fractions - Numerator -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance from the numerator to the fraction separator. [UNIT=%]</desc>
 						<label>Numerator distance</label>
 					</info>
@@ -921,7 +882,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fractions - Denominator -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
 						<label>Denominator distance</label>
 					</info>
@@ -944,7 +904,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Excess length -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the excess length of the fraction separator relative to its arguments. [UNIT=%]</desc>
 						<label>Fraction overlength</label>
 					</info>
@@ -967,7 +926,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Weight -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the stroke width of the fraction separator [UNIT=%]</desc>
 						<label>Fraction strokewidth</label>
 					</info>
@@ -990,7 +948,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size (left/right) -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the excess length of the scalable brackets relative to the argument. [UNIT=%]</desc>
 						<label>Bracket oversize</label>
 					</info>
@@ -1013,7 +970,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Brackets - Spacing -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the horizontal distance between the brackets and the enclosed argument. [UNIT=%]</desc>
 						<label>Bracket distance</label>
 					</info>
@@ -1036,7 +992,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Brackets - Excess size -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE. [UNIT=%]</desc>
 						<label>Normal bracket oversize</label>
 					</info>
@@ -1059,7 +1014,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Matrixes - Line Spacing -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the distance between the rows of a matrix. [UNIT=%]</desc>
 						<label>Matrix row distance</label>
 					</info>
@@ -1082,7 +1036,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Matrixes - Column Spacing -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the distance between the columns of a matrix. [UNIT=%]</desc>
 						<label>Matrix column distance</label>
 					</info>
@@ -1105,7 +1058,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Symbols - Primary height -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the distance between the attribute and its base. [UNIT=%]</desc>
 						<label>Distance to attribute</label>
 					</info>
@@ -1128,7 +1080,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Symbols - Minimum distance -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the distance between different attributes of the same base. [UNIT=%]</desc>
 						<label>Distance between attributes</label>
 					</info>
@@ -1151,7 +1102,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Left -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the width of the extra space to the left of the formula. [UNIT=1/100 mm]</desc>
 						<label>Left margin</label>
 					</info>
@@ -1174,7 +1124,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Right -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the width of the extra space to the right of the formula. [UNIT=1/100 mm]</desc>
 						<label>Right margin</label>
 					</info>
@@ -1197,7 +1146,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Top -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the amount of extra space above the formula. [UNIT=1/100 mm]</desc>
 						<label>Top margin</label>
 					</info>
@@ -1220,7 +1168,6 @@
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Format - Spacing - Category - Borders - Bottom -->
 					<info>
-						<author>TL</author>
 						<desc>Specifies the amount of extra space below the formula. [UNIT=1/100 mm]</desc>
 						<label>Bottom margin</label>
 					</info>

@@ -19,12 +19,10 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UI" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
-		<author>OS</author>
 	</info>
 	<templates>
 		<group oor:name="FilterClass">
 			<info>
-				<author>FS</author>
 				<desc>Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
 			</info>
 			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true" oor:nillable="false">
@@ -41,7 +39,6 @@
 		<group oor:name="ColorScheme">
 			<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
 			<info>
-				<author>OS</author>
 				<desc>Defines the templates for color settings used to customize the appearance of the applications.</desc>
 			</info>
 			<group oor:name="DocColor">
@@ -575,7 +572,6 @@
 	<component>
 		<group oor:name="FilterClassification">
 			<info>
-				<author>FS</author>
 				<desc>Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
 			</info>
 			<group oor:name="GlobalFilters">
@@ -607,7 +603,6 @@
 		</group>
 		<group oor:name="ColorScheme">
 			<info>
-				<author>OS</author>
 				<desc>Specifies the color settings for customizing the appearance of the applications.</desc>
 			</info>
 			<prop oor:name="CurrentColorScheme" oor:type="xs:string">
@@ -618,14 +613,12 @@
 			<set oor:name="ColorSchemes" oor:node-type="ColorScheme">
 				<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
 				<info>
-					<author>OS</author>
 					<desc>Lists entries with color settings.</desc>
 				</info>
 			</set>
 		</group>
 		<group oor:name="FilePicker">
 			<info>
-				<author>FS</author>
 				<desc>Specifies various settings for the internal file/folder picker dialog.</desc>
 			</info>
 			<prop oor:name="FillAsynchronously" oor:type="xs:boolean" oor:nillable="false">

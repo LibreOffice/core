@@ -18,7 +18,6 @@
 -->
 <oor:component-schema oor:name="ExtensionDependencies" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
-	<author>JSC</author>
         <desc>Contains a list of extensions with additonal dependencies to overrule missing dependencies in extensions
               or to control specific extensions in general.</desc>
     </info>

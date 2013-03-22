@@ -19,7 +19,6 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="InteractionHandler" oor:package="org.openoffice.ucb" xml:lang="en-US">
   <info>
-    <author>TKR</author>
     <desc>Deprecated. Use org.openoffice.Interaction instead.</desc>
   </info>
   <templates>

@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="TypeDetection" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>AS</author>
 		<desc >Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
 	</info>
 	<templates>
@@ -133,7 +132,6 @@
 			</prop>
 			<prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean" oor:nillable="false">
 				<info>
-					<author>OS</author>
 					<desc>Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
 				</info>
 				<value>true</value>

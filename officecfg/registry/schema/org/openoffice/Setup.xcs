@@ -22,20 +22,17 @@
     xmlns:oor="http://openoffice.org/2001/registry"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <info>
-    <author>JB/IS</author>
     <desc>Contains Setup preferences, such as the installed UI locales or the
     available modules.</desc>
   </info>
   <templates>
     <group oor:name="InstalledLocale">
       <info>
-        <author>JB</author>
 	<desc>Describes a language pack that is installed to provide a localized
         office UI.</desc>
       </info>
       <prop oor:name="Origin" oor:type="xs:string">
         <info>
-          <author>JB</author>
           <desc>Identifies the organization, group or person that provided this
           language pack.</desc>
         </info>
@@ -118,7 +115,6 @@
     </group>
     <group oor:name="Factory">
       <info>
-        <author>AS</author>
 	<desc>Describes an application module (a document factory, such as
         Writer).</desc>
       </info>
@@ -213,21 +209,18 @@
       </prop>
       <prop oor:name="ooSetupFactoryCommandConfigRef" oor:type="xs:string">
 	<info>
-    	  <author>CD</author>
 	  <desc>Refer to a configuration file, which contains the list of UI
           commands, suitable for this module.</desc>
 	</info>
       </prop>
       <prop oor:name="ooSetupFactoryWindowStateConfigRef" oor:type="xs:string">
 	<info>
-    	  <author>CD</author>
 	  <desc>Refer to a configuration file, which contains the persistent
           window data, suitable for this module.</desc>
 	</info>
       </prop>
       <prop oor:name="ooSetupFactoryCmdCategoryConfigRef" oor:type="xs:string">
 	<info>
-    	  <author>CD</author>
 	  <desc>Refers to a configuration file which contains category
           definitions for user interface commands suitable for this
           module.</desc>
@@ -235,14 +228,12 @@
       </prop>
       <prop oor:name="ooSetupFactoryHelpBaseURL" oor:type="xs:string">
 	<info>
-    	  <author>AS</author>
 	  <desc>Describe the base part of a help URL, which can be used to show
           the start help page according to the used office factory.</desc>
 	</info>
       </prop>
       <prop oor:name="ooSetupFactoryHelpOnOpen" oor:type="xs:boolean">
 	<info>
-    	  <author>AS</author>
 	  <desc>Enable/disable automatic showing of the start help page for this
           office factory, if any document suitable for this factory is
           opened.</desc>
@@ -259,7 +250,6 @@
   <component>
     <group oor:name="Product">
       <info>
-	<author>MBA</author>
 	<desc>Contains common product and version information</desc>
       </info>
       <!--The default must be written by the setup.-->
@@ -306,7 +296,6 @@
           oor:name="ooSetupVersionAboutBox" oor:type="xs:string"
           oor:nillable="false">
 	<info>
-	  <author>PB</author>
 	  <desc>Specifies the complete (major.minor.micro) version number of the
           product that appears only on the about box.</desc>
 	</info>
@@ -316,7 +305,6 @@
           oor:name="ooSetupVersionAboutBoxSuffix" oor:type="xs:string"
           oor:nillable="false">
 	<info>
-	  <author>PMLADEK</author>
 	  <desc>Specifies the version suffix (beta1, rc2) of the product that
           appears only on the about box.</desc>
 	</info>
@@ -324,7 +312,6 @@
       </prop>
       <prop oor:name="ooVendor" oor:type="xs:string" oor:nillable="false">
 	<info>
-	  <author>IHI</author>
 	  <desc>Specifies the vendor who build the product.</desc>
 	</info>
 	<value/>
@@ -360,14 +347,12 @@
 	<!-- OldPath: Service User/[username] -->
 	<!-- OldLocation: userdb.ini -->
 	<info>
-	  <author>IS/BEI</author>
 	  <desc>Indicates if the user data is copied successfully.</desc>
 	</info>
         <value>false</value>
       </prop>
       <set oor:name="InstalledLocales" oor:node-type="InstalledLocale">
 	<info>
-	  <author>JB / IS</author>
 	  <desc>Enumerates the application languages that are installed, if a
           multilingual version is used.</desc>
 	</info>
@@ -378,7 +363,6 @@
 	<!-- OldPath: Common-->
 	<!-- OldLocation: soffice.ini -->
 	<info>
-	  <author>CD</author>
 	  <desc>Specifies the URL for an UNO connection that can be used to
           script the office from outside.</desc>
 	</info>
@@ -390,7 +374,6 @@
           oor:name="MigrationCompleted" oor:type="xs:boolean"
           oor:nillable="false">
 	<info>
-	  <author>LO</author>
 	  <desc>This should be set to true, as soon as settings from nother
           version have been imported into this installation in order to prevent
           multiple migrations</desc>
@@ -401,7 +384,6 @@
           oor:name="LastCompatibilityCheckID" oor:type="xs:string"
           oor:nillable="false">
 	<info>
-	  <author>DV</author>
 	  <desc>The build ID of the office. On startup the office will compare
           this ID with the current build id to decide if the extensions
           dependencies need to be checked.</desc>
@@ -410,7 +392,6 @@
       </prop>
       <set oor:name="Factories" oor:node-type="Factory">
 	<info>
-	  <author>AS</author>
 	  <desc>Contains all of the document factories that were installed
           during setup.</desc>
 	</info>
@@ -419,7 +400,6 @@
           oor:name="OfficeRestartInProgress" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>MAV</author>
           <desc>The entry specifies that we are in restart process</desc>
         </info>
         <value>false</value>
@@ -427,7 +407,6 @@
     </group>
     <group oor:name="L10N">
       <info>
-	<author>PB</author>
 	<desc>Specifies the installation locales.</desc>
       </info>
       <!--The default must be written by the setup.-->
@@ -437,7 +416,6 @@
 	<!-- UIHints: Tools - Options - General - Other -->
 	<!--The initial default should be written by the setup.-->
 	<info>
-	  <author>PB</author>
 	  <desc>Indicates the Office language selected by the user.</desc>
 	  <label>Locale</label>
 	</info>
@@ -449,7 +427,6 @@
 	<!-- UIHints: Tools - Options - Language Settings - Languages - Language
              of - Locale setting -->
 	<info>
-	  <author>ER</author>
 	  <desc>Indicates the locale setting defined by the user. By default,
           this label is empty and the system locale is used.</desc>
 	</info>
@@ -462,7 +439,6 @@
 	<!-- UIHints: Tools - Options - Language Settings - Languages - Language
              of - Default currency -->
 	<info>
-	  <author>ER</author>
 	  <desc>Indicates the currency settings defined by the user. By default,
           this label is empty and the currency defined in the
           ooSetupSystemLocale is used.</desc>
@@ -475,7 +451,6 @@
           oor:name="DecimalSeparatorAsLocale" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Indicates that the decimal separator (dot or commma) is used as
           appropriate for the selected locale instead of the one related to the
           default keyboard layout.</desc>
@@ -487,7 +462,6 @@
           oor:name="IgnoreLanguageChange" oor:type="xs:boolean"
           oor:nillable="false">
         <info>
-          <author>OS</author>
           <desc>Indicates whether changes to the system input language/keyboard
           will be ignored. If ignored, when new text is typed that text will
           follow the language of the document or current paragraph, not the
@@ -502,7 +476,6 @@
 	<!-- UIHints: Tools - Options - Language Settings - Languages - Language
              of - Date acceptance patterns -->
 	<info>
-	  <author>erAck</author>
 	  <desc>Indicates the date acceptance patterns defined by the user. By
           default, this label is empty and the patterns defined in the
           ooSetupSystemLocale are used.</desc>

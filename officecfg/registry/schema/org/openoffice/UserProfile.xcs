@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UserProfile" oor:package="org.openoffice" xml:lang="en-US"> <info>
-		<author>PB / JB</author>
 		<desc >Contains user-related information, such as name and address.</desc>
 	</info>
 	<component>
@@ -31,7 +30,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the name of the user&apos;s company.</desc>
 				</info>
 				<value/>
@@ -42,7 +40,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the first name of the user.</desc>
 				</info>
 				<value/>
@@ -53,7 +50,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the last name of the user.</desc>
 				</info>
 				<value/>
@@ -64,7 +60,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the user&apos;s initials.</desc>
 				</info>
 				<value/>
@@ -75,7 +70,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the street where the use lives.</desc>
 				</info>
 				<value/>
@@ -86,7 +80,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the city where the user lives.</desc>
 				</info>
 				<value/>
@@ -97,7 +90,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the state where the user lives.</desc>
 				</info>
 				<value/>
@@ -108,7 +100,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the user&apos;s ZIP-code.</desc>
 				</info>
 				<value/>
@@ -119,7 +110,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the country where the user lives.</desc>
 				</info>
 				<value/>
@@ -130,7 +120,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the user&apos;s title.</desc>
 				</info>
 				<value/>
@@ -141,7 +130,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 				</info>
 				<value/>
@@ -152,7 +140,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the user&apos;s private telephone number.</desc>
 				</info>
 				<value/>
@@ -163,7 +150,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the user&apos;s telephone number at work.</desc>
 				</info>
 				<value/>
@@ -174,7 +160,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the user&apos;s fax number.</desc>
 				</info>
 				<value/>
@@ -185,7 +170,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>Specifies the user&apos;s e-mail address.</desc>
 				</info>
 				<value/>
@@ -196,7 +180,6 @@
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>PB</author>
 					<desc>This field is kept for backwards compatibility.</desc>
 				</info>
 				<value>UserGroup</value>
@@ -204,7 +187,6 @@
 			<prop oor:name="fathersname" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>rail</author>
 					<desc>Specifies the father's name of the user (only for Russian UI).</desc>
 				</info>
 				<value/>
@@ -212,7 +194,6 @@
 			<prop oor:name="apartment" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<author>pb</author>
 					<desc>Specifies the apartment of the user (only for Russian UI).</desc>
 				</info>
 				<value/>

@@ -19,32 +19,27 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="System" oor:package="org.openoffice" xml:lang="en-US">
 	<info>
-		<author>OBR</author>
 		<desc >Contains preferences which are dynamically read from the system like UI locales.</desc>
 	</info>
 	<component>
 		<group oor:name="L10N">
 			<info>
-				<author>OBR</author>
 				<desc>Contains localization settings</desc>
 			</info>
 			<prop oor:name="Locale" oor:type="xs:string" oor:nillable="false">
 				<info>
-					<author>OBR</author>
 					<desc>Contains the user's desktop locale setting if available.</desc>
 				</info>
 				<value/>
 			</prop>
 			<prop oor:name="UILocale" oor:type="xs:string" oor:nillable="false">
 				<info>
-					<author>OBR</author>
 					<desc>Contains the user's desktop UI language setting if available.</desc>
 				</info>
 				<value/>
 			</prop>
 			<prop oor:name="SystemLocale" oor:type="xs:string" oor:nillable="false">
 				<info>
-					<author>OBR</author>
 					<desc>Contains the system's default locale setting if available.</desc>
 				</info>
 				<value/>

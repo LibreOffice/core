@@ -24,7 +24,6 @@
                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                       xml:lang="en-US">
     <info>
-		<author>AS</author>
 		<desc>Contain all needed properties for the tabbed document interface of OOo.</desc>
 	</info>
 

@@ -19,13 +19,11 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Embedding" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
-		<author>MAV</author>
 		<desc>Contains embedding related information, such as the list of available for embedding objects.</desc>
 	</info>
 	<templates>
 		<group oor:name="Object">
 			<info>
-                <author>MAV</author>
 				<desc>Describes an embedded object.</desc>
 			</info>
 			<!--The default must be written by the setup.-->
@@ -62,7 +60,6 @@
 		</group>
 		<group oor:name="Verb">
 			<info>
-                <author>MAV</author>
 				<desc>Describes possible verbs that can be supported by an embedded object.</desc>
 			</info>
 			<prop oor:name="VerbUIName" oor:localized="true" oor:type="xs:string">
@@ -92,7 +89,6 @@
 		</group>
 		<group oor:name="ObjectName">
 			<info>
-                <author>MAV</author>
 				<desc>Provides object name that appeares in UI.</desc>
 			</info>
 			<prop oor:name="ObjectUIName" oor:localized="true" oor:type="xs:string">
@@ -112,31 +108,26 @@
 	<component>
 		<set oor:name="Objects" oor:node-type="Object">
 			<info>
-				<author>MAV</author>
 				<desc>Contains the explicitly registered embedded objects. ClassID is used as a name for entry.</desc>
 			</info>
 		</set>
 		<set oor:name="Verbs" oor:node-type="Verb">
 			<info>
-				<author>MAV</author>
 				<desc>Contains possible verbs for embedded objects.</desc>
 			</info>
 		</set>
 		<group oor:name="MimeTypeClassIDRelations" oor:extensible="true">
 			<info>
-				<author>MAV</author>
 				<desc>Contains convertion table from MimeType to ClassID. MimeType is used as a name for entry.</desc>
 			</info>
 		</group>
 		<group oor:name="UserFactories" oor:extensible="true">
 			<info>
-				<author>MAV</author>
 				<desc>List of additional factories that can be used to create embedded object.</desc>
 			</info>
 		</group>
 		<set oor:name="ObjectNames" oor:node-type="ObjectName">
 			<info>
-				<author>MAV</author>
 				<desc>List of object names to be used in GUI and ClassIDs.</desc>
 			</info>
 		</set>

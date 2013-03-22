@@ -18,7 +18,6 @@
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Views" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<author>AS</author>
 		<desc >Contains persistent information about opened dialogs, windows, tab pages, and so on.</desc>
 	</info>
 	<templates>
