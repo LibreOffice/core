@@ -39,7 +39,6 @@
 #include "dpobject.hxx"
 #include "dpsave.hxx"
 #include "dociter.hxx"      // for lcl_EmptyExcept
-#include "cell.hxx"         // for lcl_EmptyExcept
 #include "editable.hxx"
 #include "attrib.hxx"
 #include "drwlayer.hxx"
@@ -1179,15 +1178,13 @@ namespace {
 bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
 {
     ScCellIterator aIter( pDoc, rRange );
-    ScBaseCell* pCell = aIter.GetFirst();
-    while (pCell)
+    for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
-        if ( !pCell->IsBlank() )      // real content?
+        if (!aIter.get().isEmpty())      // real content?
         {
             if (!rExcept.In(aIter.GetPos()))
                 return false;       // cell found
         }
-        pCell = aIter.GetNext();
     }
 
     return true;        // nothing found - empty
