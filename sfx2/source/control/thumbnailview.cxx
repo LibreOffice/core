@@ -777,7 +777,7 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
     }
 
     // reset variables
-    if ( (mnHighItemId == nItemId) )
+    if ( mnHighItemId == nItemId )
     {
         mnHighItemId    = 0;
     }
