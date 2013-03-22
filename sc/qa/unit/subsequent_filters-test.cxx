@@ -121,8 +121,6 @@ public:
     void testRepeatedColumnsODS();
     void testDataValidityODS();
 
-    void testColorScaleODS();
-    void testColorScaleXLSX();
     void testDataBarODS();
     void testNewCondFormat();
 
@@ -182,8 +180,6 @@ public:
     CPPUNIT_TEST(testControlImport);
     CPPUNIT_TEST(testChartImportODS);
 
-    //CPPUNIT_TEST(testColorScaleODS);
-    //CPPUNIT_TEST(testColorScaleXLSX);
     CPPUNIT_TEST(testDataBarODS);
     CPPUNIT_TEST(testNewCondFormat);
 
@@ -1724,105 +1720,6 @@ void ScFiltersTest::testRichTextContentODS()
         }
     }
     CPPUNIT_ASSERT_MESSAGE("Second line should be underlined.", bHasUnderline);
-
-    xDocSh->DoClose();
-}
-
-namespace {
-
-void testColorScaleFormat_Impl(const OUString& rFilePath, const ScConditionalFormat* pFormat)
-{
-    OUStringBuffer aBuf;
-    CPPUNIT_ASSERT(pFormat);
-    pFormat->dumpInfo(aBuf);
-    OUString aString = aBuf.makeStringAndClear();
-    std::string aStdString;
-    loadFile(rFilePath, aStdString);
-    OUString aRefString = OUString::createFromAscii(aStdString.c_str());
-    CPPUNIT_ASSERT_EQUAL(aRefString, aString);
-}
-
-void testColorScale_Impl(ScDocument* pDoc, const OUString& aBaseString)
-{
-    // first color scale
-    {
-        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(1,1,0);
-        OUString aFilePath = aBaseString + OUString("colorScale_1.txt");
-        testColorScaleFormat_Impl(aFilePath, pFormat);
-    }
-
-    // second cond format
-    {
-        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(4,1,0);
-        OUString aFilePath = aBaseString + OUString("colorScale_2.txt");
-        testColorScaleFormat_Impl(aFilePath, pFormat);
-    }
-
-    // third cond format
-    {
-        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(7,1,0);
-        OUString aFilePath = aBaseString + OUString("colorScale_3.txt");
-        testColorScaleFormat_Impl(aFilePath, pFormat);
-    }
-
-    // forth cond format
-    {
-        const ScConditionalFormat* pFormat = pDoc->GetCondFormat(10,1,0);
-        OUString aFilePath = aBaseString + OUString("colorScale_4.txt");
-        testColorScaleFormat_Impl(aFilePath, pFormat);
-    }
-}
-
-}
-
-void ScFiltersTest::testColorScaleODS()
-{
-    const OUString aFileNameBase("colorScale.");
-    OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
-
-    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.ods", xDocSh.Is());
-
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(OUString("/reference/"));
-    testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
-
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testColorScaleXLSX()
-{
-    const OUString aFileNameBase("colorScale.");
-    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-
-    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.xlsx", xDocSh.Is());
-
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(OUString("/reference/"));
-    testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
 
     xDocSh->DoClose();
 }
