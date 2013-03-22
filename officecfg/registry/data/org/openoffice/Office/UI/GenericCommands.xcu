@@ -22,7 +22,6 @@
         <node oor:name="Commands">
             <node oor:name=".uno:WebHtml" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Vorschau in Web-Browser</value>
                     <value xml:lang="en-US">Preview in Web Browser</value>
                 </prop>
             </node>
