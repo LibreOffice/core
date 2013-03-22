@@ -31,6 +31,7 @@
 #include "editutil.hxx"
 #include "detfunc.hxx"
 #include "postit.hxx"
+#include "stringutil.hxx"
 
 //--------------------------------------------------------------------------
 
@@ -966,10 +967,14 @@ bool ScTable::SearchRangeForAllEmptyCells(
                         {
                             aCol[nCol].Insert(i, new ScStringCell(rNewStr));
                             if (pUndoDoc)
+                            {
                                 // TODO: I'm using a string cell with empty content to
                                 // trigger deletion of cell instance on undo.  Maybe I
                                 // should create a new cell type for this?
-                                pUndoDoc->PutCell(nCol, i, nTab, new ScStringCell(String()));
+                                ScSetStringParam aParam;
+                                aParam.setTextInput();
+                                pUndoDoc->SetString(ScAddress(nCol, i, nTab), EMPTY_OUSTRING);
+                            }
                         }
                         rUndoStr = String();
                     }
@@ -999,10 +1004,14 @@ bool ScTable::SearchRangeForAllEmptyCells(
                 {
                     aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
                     if (pUndoDoc)
+                    {
                         // TODO: I'm using a string cell with empty content to
                         // trigger deletion of cell instance on undo.  Maybe I
                         // should create a new cell type for this?
-                        pUndoDoc->PutCell(nCol, nRow, nTab, new ScStringCell(String()));
+                        ScSetStringParam aParam;
+                        aParam.setTextInput();
+                        pUndoDoc->SetString(ScAddress(nCol, nRow, nTab), EMPTY_OUSTRING);
+                    }
                 }
             }
             else if (pCell->GetCellType() == CELLTYPE_NOTE)
@@ -1015,7 +1024,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                     if (pUndoDoc)
                     {
                         ScAddress aCellPos(nCol, nRow, nTab);
-                        pUndoDoc->PutCell(nCol, nRow, nTab, pCell->Clone(*pUndoDoc, aCellPos));
+                        pUndoDoc->PutCell(aCellPos, pCell->Clone(*pUndoDoc, aCellPos));
                         ScNotes* pNotes = pUndoDoc->GetNotes(nTab);
                         ScPostIt* pPostIt = maNotes.findByAddress(nCol, nRow);
                         if (pPostIt)

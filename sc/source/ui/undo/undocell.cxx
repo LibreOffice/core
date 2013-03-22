@@ -250,7 +250,9 @@ void ScUndoEnterData::Undo()
     {
         Value& rVal = maOldValues[i];
         ScBaseCell* pNewCell = rVal.mpCell ? rVal.mpCell->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
-        pDoc->PutCell(maPos.Col(), maPos.Row(), rVal.mnTab, pNewCell);
+        ScAddress aPos = maPos;
+        aPos.SetTab(rVal.mnTab);
+        pDoc->PutCell(aPos, pNewCell);
 
         if (rVal.mbHasFormat)
             pDoc->ApplyAttr(maPos.Col(), maPos.Row(), rVal.mnTab,

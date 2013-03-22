@@ -2925,28 +2925,6 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
     }
 }
 
-
-void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, bool bForceTab )
-{
-    if (ValidTab(nTab))
-    {
-        if ( bForceTab && ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab]) )
-        {
-            bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
-
-            if (nTab >= static_cast<SCTAB>(maTabs.size()))
-                maTabs.resize(nTab + 1,NULL);
-            maTabs[nTab] = new ScTable(this, nTab,
-                            OUString("temp"),
-                            bExtras, bExtras);
-        }
-
-        if (maTabs[nTab])
-            maTabs[nTab]->PutCell( nCol, nRow, pCell );
-    }
-}
-
-
 void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, bool bForceTab )
 {
     SCTAB nTab = rPos.Tab();

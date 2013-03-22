@@ -1442,7 +1442,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aPos, pOld,
                     eTempGrammar, cMatrixFlag);
             pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
-            pUndoDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pFCell );
+            pUndoDoc->SetFormulaCell(aPos, pFCell);
         }
 
         bCompile = true;

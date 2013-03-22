@@ -744,8 +744,6 @@ public:
     SC_DLLPUBLIC void EnsureTable( SCTAB nTab );
 
     SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell, bool bForceTab = false );
-    SC_DLLPUBLIC void           PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
-                            bool bForceTab = false );
     SC_DLLPUBLIC void           PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
                             sal_uLong nFormatIndex, bool bForceTab = false);
                     //  return TRUE = number format is set
