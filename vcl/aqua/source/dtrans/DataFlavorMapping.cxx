@@ -526,7 +526,7 @@ NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor
 
   for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
     {
-      if (oOOFlavor.MimeType.startsWith(flavorMap[i].OOoFlavor))
+      if (oOOFlavor.MimeType.startsWith(OUString::createFromAscii(flavorMap[i].OOoFlavor)))
         {
           sysFlavor = flavorMap[i].SystemFlavor;
         }
