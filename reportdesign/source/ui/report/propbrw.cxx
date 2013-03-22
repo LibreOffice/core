@@ -25,8 +25,13 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/report/inspection/DefaultComponentInspectorModel.hpp>
 #include <svx/svxids.hrc>
 #include <vcl/stdtext.hxx>
 #include <svx/svdview.hxx>
@@ -40,10 +45,6 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/report/inspection/DefaultComponentInspectorModel.hpp>
 #include <comphelper/processfactory.hxx>
 #include "SectionView.hxx"
 #include "ReportSection.hxx"
@@ -92,7 +93,7 @@ DBG_NAME( rpt_PropBrw )
 
 //----------------------------------------------------------------------------
 
-PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParent,ODesignView*  _pDesignView)
+PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, Window* pParent, ODesignView*  _pDesignView)
           :DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
           ,m_xORB(_xORB)
           ,m_pDesignView(_pDesignView)
@@ -107,12 +108,9 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(OUString("com.sun.star.frame.Frame")), UNO_QUERY);
-        if (m_xMeAsFrame.is())
-        {
-            m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName(OUString("report property browser"));  // change name!
-        }
+        m_xMeAsFrame = Frame::create( m_xORB );
+        m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
+        m_xMeAsFrame->setName( OUString("report property browser") );  // change name!
     }
     catch (Exception&)
     {
@@ -123,8 +121,6 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
 
     if (m_xMeAsFrame.is())
     {
-        Reference< XComponentContext > xOwnContext(
-            comphelper::getComponentContext( m_xORB ) );
         try
         {
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
@@ -135,9 +131,9 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
             };
             m_xInspectorContext.set(
                 ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
-                xOwnContext ) );
+                m_xORB ) );
             // create a property browser controller
-            bool bEnableHelpSection = lcl_shouldEnableHelpSection( xOwnContext );
+            bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
             Reference< inspection::XObjectInspectorModel> xInspectorModel( bEnableHelpSection
                 ?   report::inspection::DefaultComponentInspectorModel::createWithHelpSection( m_xInspectorContext, 3, 8 )
                 :   report::inspection::DefaultComponentInspectorModel::createDefault( m_xInspectorContext ) );
@@ -150,7 +146,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
             }
             else
             {
-                m_xBrowserController->attachFrame(m_xMeAsFrame);
+                m_xBrowserController->attachFrame( Reference<XFrame>(m_xMeAsFrame, UNO_QUERY_THROW));
                 m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
                 OSL_ENSURE(m_xBrowserComponentWindow.is(), "PropBrw::PropBrw: attached the controller, but have no component window!");
                 if ( bEnableHelpSection )

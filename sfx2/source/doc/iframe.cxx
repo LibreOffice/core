@@ -23,7 +23,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
@@ -42,7 +42,7 @@ namespace sfx2
 
 class IFrameWindow_Impl : public Window
 {
-    uno::Reference < frame::XFrame > mxFrame;
+    uno::Reference < frame::XFrame2 > mxFrame;
     sal_Bool                bBorder;
 
 public:
@@ -92,11 +92,11 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
     return aIFramePropertyMap_Impl;
 }
 
-SFX_IMPL_XSERVICEINFO( IFrameObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.IFrameObject" )
+SFX_IMPL_XSERVICEINFO_CTX( IFrameObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.IFrameObject" )
 SFX_IMPL_SINGLEFACTORY( IFrameObject );
 
-IFrameObject::IFrameObject( const uno::Reference < lang::XMultiServiceFactory >& rFact )
-    : mxFact( rFact )
+IFrameObject::IFrameObject( const uno::Reference < uno::XComponentContext >& rxContext )
+    : mxContext( rxContext )
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
 }
@@ -132,7 +132,7 @@ throw( uno::RuntimeException )
         // we must destroy the IFrame before the parent is destroyed
         xWindow->addEventListener( this );
 
-        mxFrame = uno::Reference< frame::XFrame >( mxFact->createInstance( "com.sun.star.frame.Frame" ),uno::UNO_QUERY );
+        mxFrame = frame::Frame::create( mxContext );
         uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
         mxFrame->initialize( xWin );
         mxFrame->setName( maFrmDescr.GetName() );
@@ -141,11 +141,9 @@ throw( uno::RuntimeException )
         if ( xFramesSupplier.is() )
             mxFrame->setCreator( xFramesSupplier );
 
-        uno::Reference< frame::XDispatchProvider > xProv( mxFrame, uno::UNO_QUERY );
-
         util::URL aTargetURL;
         aTargetURL.Complete = OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getComponentContext(mxFact) ) );
+        uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( mxContext ) );
         xTrans->parseStrict( aTargetURL );
 
         uno::Sequence < beans::PropertyValue > aProps(2);
@@ -153,7 +151,7 @@ throw( uno::RuntimeException )
         aProps[0].Value <<= (sal_Int16) 2;
         aProps[1].Name = "ReadOnly";
         aProps[1].Value <<= (sal_Bool) sal_True;
-        uno::Reference < frame::XDispatch > xDisp = xProv->queryDispatch( aTargetURL, "_self", 0 );
+        uno::Reference < frame::XDispatch > xDisp = mxFrame->queryDispatch( aTargetURL, "_self", 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
 

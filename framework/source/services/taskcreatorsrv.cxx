@@ -27,7 +27,7 @@
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -160,7 +160,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     //------------------->
 
     // create the new frame
-    css::uno::Reference< css::frame::XFrame > xFrame = implts_createFrame(xParentFrame, xContainerWindow, sRightName);
+    css::uno::Reference< css::frame::XFrame2 > xFrame = implts_createFrame(xParentFrame, xContainerWindow, sRightName);
 
     // special freature:
     // A special listener will restore pos/size states in case
@@ -264,7 +264,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame    ,
+css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame    ,
                                                                                   const css::uno::Reference< css::awt::XWindow >&  xContainerWindow,
                                                                                   const OUString&                           sName           )
 {
@@ -275,7 +275,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame
     // <- SAFE
 
     // create new frame.
-    css::uno::Reference< css::frame::XFrame > xNewFrame( xSMGR->createInstance( SERVICENAME_FRAME ), css::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::frame::XFrame2 > xNewFrame = css::frame::Frame::create( comphelper::getComponentContext(xSMGR) );
 
     // Set window on frame.
     // Do it before calling any other interface methods ...
@@ -288,7 +288,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame
     {
         css::uno::Reference< css::frame::XFramesSupplier > xSupplier  (xParentFrame, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XFrames >         xContainer = xSupplier->getFrames();
-        xContainer->append( xNewFrame );
+        xContainer->append( css::uno::Reference<css::frame::XFrame>(xNewFrame, css::uno::UNO_QUERY_THROW) );
     }
 
     // Set it's API name (if there is one from outside)
@@ -299,7 +299,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame
 }
 
 //-----------------------------------------------
-void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );
@@ -320,7 +320,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
 }
 
 //-----------------------------------------------
-void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );
@@ -340,7 +340,7 @@ void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Refe
 }
 
 //-----------------------------------------------
-void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );

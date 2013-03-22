@@ -161,6 +161,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	DispatchRecorder \
 	DispatchRecorderSupplier \
 	DocumentTemplates \
+	Frame \
 	GlobalEventBroadcaster \
 	MediaTypeDetectionHelper \
 	ModuleManager \
@@ -896,7 +897,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	DesktopTask \
 	DesktopTasks \
 	DispatchProvider \
-	Frame \
 	FrameControl \
 	FrameLoader \
 	FrameLoaderFactory \
@@ -2546,6 +2546,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XExtendedFilterDetection \
 	XFilterDetect \
 	XFrame \
+	XFrame2 \
 	XFrameActionListener \
 	XFrameLoader \
 	XFrameLoaderQuery \

@@ -31,7 +31,7 @@
 namespace com { namespace sun { namespace star {
 namespace frame {
     class XSynchronousFrameLoader;
-    class XFrame;
+    class XFrame2;
 }
 namespace uno {
     class XComponentContext;
@@ -148,7 +148,7 @@ namespace slideshow
 
             /// the frame containing the applet
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XFrame>                  mxFrame;
+                ::com::sun::star::frame::XFrame2>                 mxFrame;
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>         mxComponentContext;
         };

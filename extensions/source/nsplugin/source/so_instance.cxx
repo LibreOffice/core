@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -172,14 +173,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag);
 
         // create frame
-        m_xFrame = Reference< frame::XFrame >(
-            mxRemoteMSF->createInstance( OUString("com.sun.star.frame.Frame")),
-            uno::UNO_QUERY );
-        if (!m_xFrame.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "can not create frame\n");
-            return sal_False;
-        }
+        m_xFrame = frame::Frame::create( xContext );
 
         // initialize frame
         m_xFrame->initialize( m_xUnoWin );
@@ -208,7 +202,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         }
 
         // append m_xFrame to m_xFrames
-        m_xFrames->append( m_xFrame );
+        m_xFrames->append( Reference<frame::XFrame>(m_xFrame, uno::UNO_QUERY_THROW) );
 
         // create XComponentLoader
         Reference< frame::XComponentLoader > xLoader( m_xFrame, uno::UNO_QUERY );
@@ -425,7 +419,7 @@ sal_Bool SoPluginInstance::Destroy(void)
 
     m_xUnoWin = Reference< awt::XWindow >();
     m_xComponent = Reference< XComponent >();
-    m_xFrame = Reference< frame::XFrame >();
+    m_xFrame = Reference< frame::XFrame2 >();
     m_xFrames = Reference< frame::XFrames >();
     m_xDispatcher = Reference< frame::XDispatchHelper >();
     m_xDispatchProvider = Reference< frame::XDispatchProvider >();

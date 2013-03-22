@@ -28,7 +28,7 @@
 #include <stdtypes.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -132,14 +132,14 @@ class TaskCreatorService : public  css::lang::XTypeProvider
 
         void implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const;
 
-        css::uno::Reference< css::frame::XFrame > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
+        css::uno::Reference< css::frame::XFrame2 > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
                                                                       const css::uno::Reference< css::awt::XWindow >&  xContainerWindow ,
                                                                       const OUString&                           sName            );
 
-        void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
-        void implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame >& xFrame );
+        void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
+        void implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
 
-        void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
+        void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame );
 
         OUString impl_filterNames( const OUString& sName );
 };

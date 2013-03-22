@@ -35,16 +35,17 @@
 #include "svx/svdpagv.hxx"
 #include "svx/svxids.hrc"
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/ObjectInspectorModel.hpp>
-#include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
 
@@ -85,7 +86,7 @@ FmPropBrwMgr::FmPropBrwMgr( Window* _pParent, sal_uInt16 _nId,
                             SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
-    pWindow = new FmPropBrw( ::comphelper::getProcessServiceFactory(), _pBindings, this, _pParent, _pInfo );
+    pWindow = new FmPropBrw( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
 }
@@ -190,7 +191,7 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 //========================================================================
 DBG_NAME(FmPropBrw);
 //------------------------------------------------------------------------
-FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings,
+FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
             SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )
     :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE) )
     ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *_pBindings)
@@ -208,30 +209,19 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(OUString("com.sun.star.frame.Frame") ), UNO_QUERY);
-        if (m_xMeAsFrame.is())
-        {
-            // create an intermediate window, which is to be the container window of the frame
-            // Do *not* use |this| as container window for the frame, this would result in undefined
-            // responsibility for this window (as soon as we initialize a frame with a window, the frame
-            // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
-            // #i34249#
-            Window* pContainerWindow = new Window( this );
-            pContainerWindow->Show();
-            m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
+        m_xMeAsFrame = Frame::create(m_xORB);
 
-            m_xMeAsFrame->initialize( m_xFrameContainerWindow );
-            m_xMeAsFrame->setName(OUString("form property browser") );
-            if ( _pBindings->GetDispatcher() )
-            {
-                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                        xSupp ( _pBindings->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
-//                if ( xSupp.is() )
-//                    xSupp->getFrames()->append( m_xMeAsFrame );
-                // Don't append frame to frame hierachy to prevent UI_DEACTIVATE messages
-                // #i31834#
-            }
-        }
+        // create an intermediate window, which is to be the container window of the frame
+        // Do *not* use |this| as container window for the frame, this would result in undefined
+        // responsibility for this window (as soon as we initialize a frame with a window, the frame
+        // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
+        // #i34249#
+        Window* pContainerWindow = new Window( this );
+        pContainerWindow->Show();
+        m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
+
+        m_xMeAsFrame->initialize( m_xFrameContainerWindow );
+        m_xMeAsFrame->setName( OUString("form property browser") );
     }
     catch (Exception&)
     {
@@ -240,7 +230,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     }
 
     if (m_xMeAsFrame.is())
-        _pMgr->SetFrame( m_xMeAsFrame );
+        _pMgr->SetFrame( Reference<XFrame>(m_xMeAsFrame,UNO_QUERY_THROW) );
 
 
     if ( m_xBrowserComponentWindow.is() )
@@ -558,8 +548,6 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         xControlMap = pFormPage->GetImpl().getControlToShapeMap();
 
     // our own component context
-    Reference< XComponentContext > xOwnContext(
-        comphelper::getComponentContext( m_xORB ) );
 
     // a ComponentContext for the
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
@@ -571,9 +559,9 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     };
     m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
-        xOwnContext ) );
+        m_xORB ) );
 
-    bool bEnableHelpSection = lcl_shouldEnableHelpSection( xOwnContext );
+    bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
 
     // an object inspector model
     m_xInspectorModel =
@@ -594,7 +582,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     }
     else
     {
-        m_xBrowserController->attachFrame( m_xMeAsFrame );
+        m_xBrowserController->attachFrame( Reference<XFrame>(m_xMeAsFrame,UNO_QUERY_THROW) );
         m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
         DBG_ASSERT( m_xBrowserComponentWindow.is(), "FmPropBrw::impl_createPropertyBrowser_throw: attached the controller, but have no component window!" );
     }

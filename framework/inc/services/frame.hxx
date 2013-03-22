@@ -35,23 +35,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <general.h>
 
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XTitle.hpp>
-#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -60,8 +43,18 @@
 #include <com/sun/star/awt/FocusEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
+#include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <unotools/cmdoptions.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -111,11 +104,7 @@ class WindowCommandDispatch;
 class Frame :   // interfaces
                 public  css::lang::XTypeProvider                    ,
                 public  css::lang::XServiceInfo                     ,
-                public  css::frame::XFramesSupplier                 ,   // => XFrame => XComponent
-                public  css::frame::XDispatchProvider               ,
-                public  css::frame::XDispatchProviderInterception   ,
-                public  css::frame::XDispatchInformationProvider    ,
-                public  css::task::XStatusIndicatorFactory          ,
+                public  css::frame::XFrame2                         ,
                 public  css::awt::XWindowListener                   ,   // => XEventListener
                 public  css::awt::XTopWindowListener                ,
                 public  css::awt::XFocusListener                    ,
@@ -290,6 +279,19 @@ class Frame :   // interfaces
         virtual void SAL_CALL addTitleChangeListener   ( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) throw (css::uno::RuntimeException);
         virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListenr ) throw (css::uno::RuntimeException);
 
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XFrame2 attributes
+        //---------------------------------------------------------------------------------------------------------
+        virtual css::uno::Reference<css::container::XNameContainer> SAL_CALL getUserDefinedAttributes() throw (css::uno::RuntimeException);
+
+        virtual css::uno::Reference<css::frame::XDispatchRecorderSupplier> SAL_CALL getDispatchRecorderSupplier() throw (css::uno::RuntimeException);
+        virtual void SAL_CALL setDispatchRecorderSupplier(const css::uno::Reference<css::frame::XDispatchRecorderSupplier>&) throw (css::uno::RuntimeException);
+
+        virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getLayoutManager() throw (css::uno::RuntimeException);
+        virtual void SAL_CALL setLayoutManager(const css::uno::Reference<css::uno::XInterface>&) throw (css::uno::RuntimeException);
+
+
         //---------------------------------------------------------------------------------------------------------
         //  PropertySetHelper => XPropertySet, XPropertySetInfo
         //---------------------------------------------------------------------------------------------------------
@@ -331,7 +333,7 @@ class Frame :   // interfaces
 
         // non threadsafe
         void                                                    impl_checkMenuCloser            (                                                                        );
-        void                                                    impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame >&      xFrame           ,
+        void                                                    impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame2 >&     xFrame           ,
                                                                                                         sal_Bool                                        bState           );
         void                                                    impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                        );
@@ -403,8 +405,8 @@ class Frame :   // interfaces
         SvtCommandOptions                                                       m_aCommandOptions                   ;   /// ref counted class to support disabling commands defined by configuration file
         sal_Bool                                                                m_bSelfClose                        ;   /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
         sal_Bool                                                                m_bIsHidden                         ;   /// indicates, if this frame is used in hidden mode or not
-        static css::uno::WeakReference< css::frame::XFrame >                    m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
-        css::uno::Reference< ::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
+        static css::uno::WeakReference< css::frame::XFrame2 >                   m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
+        css::uno::Reference< ::css::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
         css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper                      ;
 

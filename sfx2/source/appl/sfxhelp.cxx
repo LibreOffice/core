@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/processfactory.hxx>
@@ -526,15 +526,15 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
     return aHelpURL.makeStringAndClear();
 }
 
-SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
+SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
                                     Reference< XFrame >& rHelpContent)
 {
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
 
     // otherwise - create new help task
-    Reference< XFrame > xHelpTask = xDesktop->findFrame(
-        OUString("OFFICE_HELP_TASK"),
-        FrameSearchFlag::TASKS | FrameSearchFlag::CREATE);
+    Reference< XFrame2 > xHelpTask(
+        xDesktop->findFrame(  "OFFICE_HELP_TASK", FrameSearchFlag::TASKS | FrameSearchFlag::CREATE),
+        UNO_QUERY_THROW);
     if (!xHelpTask.is())
         return 0;
 
@@ -753,9 +753,9 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
     // check if help window is still open
     // If not, create a new one and return access directly to the internal sub frame showing the help content
     // search must be done here; search one desktop level could return an arbitraty frame
-    Reference< XFrame > xHelp = xDesktop->findFrame(
-        OUString("OFFICE_HELP_TASK"),
-        FrameSearchFlag::CHILDREN);
+    Reference< XFrame2 > xHelp(
+        xDesktop->findFrame( "OFFICE_HELP_TASK", FrameSearchFlag::CHILDREN),
+        UNO_QUERY_THROW);
     Reference< XFrame > xHelpContent = xDesktop->findFrame(
         OUString("OFFICE_HELP"),
         FrameSearchFlag::CHILDREN);

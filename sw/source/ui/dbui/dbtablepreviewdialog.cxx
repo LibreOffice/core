@@ -20,9 +20,7 @@
 #include <swtypes.hxx>
 #include <dbtablepreviewdialog.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <toolkit/unohlp.hxx>
 
 #include <dbui.hrc>
@@ -67,13 +65,8 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
     try
     {
         // create a frame wrapper for myself
-        uno::Reference< lang::XMultiServiceFactory >
-                                    xMgr = comphelper::getProcessServiceFactory();
-        m_xFrame = uno::Reference< frame::XFrame >(xMgr->createInstance("com.sun.star.frame.Frame"), uno::UNO_QUERY);
-        if(m_xFrame.is())
-        {
-            m_xFrame->initialize( VCLUnoHelper::GetInterface ( m_pBeamerWIN ) );
-        }
+        m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
+        m_xFrame->initialize( VCLUnoHelper::GetInterface( m_pBeamerWIN ) );
     }
     catch (uno::Exception const &)
     {
@@ -81,10 +74,9 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
     }
     if(m_xFrame.is())
     {
-        uno::Reference<frame::XDispatchProvider> xDP(m_xFrame, uno::UNO_QUERY);
         util::URL aURL;
         aURL.Complete = ".component:DB/DataSourceBrowser";
-        uno::Reference<frame::XDispatch> xD = xDP->queryDispatch(aURL, "", 0x0C);
+        uno::Reference<frame::XDispatch> xD = m_xFrame->queryDispatch(aURL, "", 0x0C);
         if(xD.is())
         {
             xD->dispatch(aURL, rValues);

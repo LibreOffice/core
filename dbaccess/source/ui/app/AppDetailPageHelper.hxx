@@ -37,7 +37,7 @@
 #include <memory>
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
-namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com{ namespace sun { namespace star { namespace frame { class XFrame2; } } } }
 namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } }
 
 #define ELEMENT_COUNT   size_t(E_ELEMENT_TYPE_COUNT)
@@ -90,7 +90,7 @@ namespace dbaui
         Window*             m_pTablePreview;
         ::std::auto_ptr<PopupMenu> m_aMenu;
         PreviewMode         m_ePreviewMode;
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             m_xFrame;
         ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist >
                             m_xDocInfo;

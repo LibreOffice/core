@@ -39,7 +39,7 @@
 #include "unotools/configmgr.hxx"
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -595,21 +595,18 @@ OUString SvtDocInfoTable_Impl::GetString( long nId ) const
 
 // class SvtFrameWindow_Impl ---------------------------------------------
 
-SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
-
-    Window( pParent )
-
+SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent )
+  : Window( pParent )
 {
     // detect application language
-    aLocale= SvtPathOptions().GetLocale();
+    aLocale = SvtPathOptions().GetLocale();
 
     // create windows and frame
     pEditWin = new ODocumentInfoPreview( this ,WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK);
     pTextWin = new Window( this );
-    xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->
-        createInstance( "com.sun.star.frame.Frame" ), UNO_QUERY );
+    m_xFrame = Frame::create( ::comphelper::getProcessComponentContext() );
     xWindow = VCLUnoHelper::GetInterface( pTextWin );
-    xFrame->initialize( xWindow );
+    m_xFrame->initialize( xWindow );
 
     // create docinfo instance
     m_xDocProps.set( document::DocumentProperties::create(::comphelper::getProcessComponentContext()) );
@@ -621,7 +618,7 @@ SvtFrameWindow_Impl::~SvtFrameWindow_Impl()
 {
     delete pEditWin;
     delete pEmptyWin;
-    xFrame->dispose();
+    m_xFrame->dispose();
 }
 
 void SvtFrameWindow_Impl::ViewEditWin()
@@ -693,7 +690,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
 
     if ( rURL.Len() == 0 )
     {
-        xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+        m_xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
         ViewEmptyWin();
     }
     else if ( !::utl::UCBContentHelper::IsFolder( rURL ) )
@@ -705,7 +702,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         xTrans->parseStrict( aURL );
 
         String aTarget;
-        Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+        Reference < XDispatchProvider > xProv( m_xFrame, UNO_QUERY_THROW );
         if ( bPreview )
             aTarget = "_self";
         else
@@ -752,8 +749,8 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                         aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
                         xDisp->dispatch( aURL, aArgs );
 
-                        OUString                                         aDispURL;
-                        Reference< ::com::sun::star::frame::XController >       xCtrl = xFrame->getController();
+                        OUString                                                aDispURL;
+                        Reference< ::com::sun::star::frame::XController >       xCtrl = m_xFrame->getController();
                         if( xCtrl.is() )
                         {
                             Reference< ::com::sun::star::frame::XModel >        xMdl = xCtrl->getModel();
@@ -763,7 +760,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
 
                         if( aDispURL != aURL.Complete )
                         {
-                            xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
+                            m_xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
                             ViewEmptyWin();
                             m_aOpenURL = OUString();
                         }

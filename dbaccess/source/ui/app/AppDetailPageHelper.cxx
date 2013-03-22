@@ -25,30 +25,30 @@
 #include "tabletree.hxx"
 #include "UITools.hxx"
 #include "dbtreelistbox.hxx"
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XTabController.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include <com/sun/star/ucb/Command.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/ucb/Command.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 #include "AppView.hxx"
 #include "dbaccess_helpid.hrc"
 #include "dbu_app.hrc"
@@ -1141,20 +1141,19 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         {
             try
             {
-                m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.frame.Frame"), getBorderWin().getView()->getORB() ), UNO_QUERY );
+                m_xFrame = Frame::create( getBorderWin().getView()->getORB() );
                 m_xFrame->initialize( m_xWindow );
 
                 // no layout manager (and thus no toolbars) in the preview
                 // Must be called after initialize ... but before any other call to this frame.
                 // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
-                Reference< XPropertySet > xFrameProps( m_xFrame, UNO_QUERY_THROW );
-                xFrameProps->setPropertyValue( OUString( "LayoutManager" ), makeAny(Reference< XLayoutManager >()) );
+                m_xFrame->setLayoutManager( Reference< XLayoutManager >() );
 
                 Reference<XFramesSupplier> xSup(getBorderWin().getView()->getAppController().getXController()->getFrame(),UNO_QUERY);
                 if ( xSup.is() )
                 {
                     Reference<XFrames> xFrames = xSup->getFrames();
-                    xFrames->append(m_xFrame);
+                    xFrames->append( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW));
                 }
             }
             catch(const Exception&)
@@ -1169,7 +1168,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
             xApplication, NULL, _bTable
         ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        pDispatcher->setTargetFrame( m_xFrame );
+        pDispatcher->setTargetFrame( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW) );
 
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "Preview", sal_True );

@@ -21,6 +21,7 @@
 #define BASCTL_PROPBRW_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <comphelper/stl_types.hxx>
 #include <svl/lstner.hxx>
 #include <svl/brdcst.hxx>
@@ -30,9 +31,6 @@
 class SfxBindings;
 class SdrView;
 class SfxViewShell;
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-}}}}
 
 namespace basctl
 {
@@ -44,9 +42,7 @@ class PropBrw : public DockingWindow, public SfxListener, public SfxBroadcaster
 private:
     bool        m_bInitialStateChange;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    m_xORB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
                     m_xMeAsFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     m_xBrowserController;

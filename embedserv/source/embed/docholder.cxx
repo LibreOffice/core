@@ -30,36 +30,37 @@
 
 #include "common.h"
 #include <Windows.h>
-#include <com/sun/star/lang/SystemDependent.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
-#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XCloseBroadcaster.hpp>
-#include <com/sun/star/util/XCloseAble.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/bridge/XBridgeSupplier2.hpp>
+#include <com/sun/star/bridge/ModelDependent.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/embed/EmbedMapUnits.hpp>
+#include <com/sun/star/embed/XVisualObject.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XView.hpp>
-#include <com/sun/star/bridge/XBridgeSupplier2.hpp>
-#include <com/sun/star/bridge/ModelDependent.hpp>
-#include <com/sun/star/embed/EmbedMapUnits.hpp>
-#include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
+#include <com/sun/star/util/XCloseAble.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
@@ -348,28 +349,12 @@ HRESULT DocumentHolder::InPlaceActivate(
             m_xFrame->activate();
         else {
             // create frame and initialize it with with the created window
-            static const OUString aFrameServiceName( "com.sun.star.frame.Frame" );
-            m_xFrame = uno::Reference<frame::XFrame>(
-                m_xFactory->createInstance(aFrameServiceName),
-                uno::UNO_QUERY);
-
-            if(!m_xFrame.is())
-                return ERROR;
-
+            m_xFrame = frame::Frame::create( m_xFactory );
             m_xFrame->initialize(m_xEditWindow);
 
-            uno::Reference<frame::XDispatchProviderInterception>
-                xDPI(m_xFrame,uno::UNO_QUERY);
-            if(xDPI.is())
-                xDPI->registerDispatchProviderInterceptor( CreateNewInterceptor() );
+            m_xFrame->registerDispatchProviderInterceptor( CreateNewInterceptor() );
 
-            uno::Reference<beans::XPropertySet> xPS(m_xFrame,uno::UNO_QUERY);
-            if( xPS.is() )
-            {
-                aAny = xPS->getPropertyValue(
-                    OUString("LayoutManager"));
-                aAny >>= m_xLayoutManager;
-            }
+            m_xLayoutManager.set( m_xFrame->getLayoutManager(), UNO_QUERY_THROW );
 
             if(m_xLayoutManager.is())
                 m_xLayoutManager->setDockingAreaAcceptor(this);
@@ -378,7 +363,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             LoadDocInFrame( sal_True );
 
             uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
-            xDesktop->getFrames()->append(m_xFrame);
+            xDesktop->getFrames()->append( uno::Reference<frame::XFrame>(m_xFrame, uno::UNO_QUERY_THROW) );
 
             // determine the menuhandle to get menutitems.
             if(m_xLayoutManager.is()) {
@@ -661,7 +646,7 @@ void DocumentHolder::DisconnectFrameDocument( sal_Bool bComplete )
 
     if ( bComplete )
     {
-        m_xFrame = uno::Reference< frame::XFrame>();
+        m_xFrame = uno::Reference<frame::XFrame2>();
         m_pIDispatch = NULL;
         m_xDocument = uno::Reference< frame::XModel >();
     }
@@ -709,12 +694,10 @@ void DocumentHolder::CloseFrame()
         catch( const uno::Exception& ) {
         }
     else {
-        uno::Reference<lang::XComponent> xComp(m_xFrame,uno::UNO_QUERY);
-        if(xComp.is())
-            xComp->dispose();
+        m_xFrame->dispose();
     }
 
-    m_xFrame = uno::Reference< frame::XFrame >();
+    m_xFrame = uno::Reference< frame::XFrame2 >();
 }
 
 void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, sal_Bool bLink )
@@ -761,9 +744,7 @@ sal_Bool DocumentHolder::ExecuteSuspendCloseFrame()
                         xCloseable->close(sal_True);
                     else
                     {
-                        uno::Reference<lang::XComponent> xComp( m_xFrame, uno::UNO_QUERY_THROW );
-                        if( xComp.is() )
-                            xComp->dispose();
+                        m_xFrame->dispose();
                     }
                 }
                 catch( const util::CloseVetoException& )
@@ -777,13 +758,13 @@ sal_Bool DocumentHolder::ExecuteSuspendCloseFrame()
         {
         }
 
-        m_xFrame = uno::Reference< frame::XFrame >();
+        m_xFrame = uno::Reference< frame::XFrame2 >();
     }
 
     return sal_True;
 }
 
-uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
+uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
 {
     if(! m_xFrame.is() )
     {
@@ -795,8 +776,7 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
         // is loaded into the frame in ::show() method the terminate listener will be removed
         // this is so only for outplace activation
         if( xFrame.is() )
-            m_xFrame = xFrame->findFrame(
-                OUString("_blank"),0);
+            m_xFrame = xFrame->findFrame( OUString("_blank"), 0 );
 
         uno::Reference< util::XCloseBroadcaster > xBroadcaster(
             m_xFrame, uno::UNO_QUERY );
@@ -811,10 +791,7 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
     if( m_xFrame.is() )
     {
         // intercept
-        uno::Reference<frame::XDispatchProviderInterception>
-            xDPI(m_xFrame,uno::UNO_QUERY);
-        if(xDPI.is())
-            xDPI->registerDispatchProviderInterceptor( CreateNewInterceptor() );
+        m_xFrame->registerDispatchProviderInterceptor( CreateNewInterceptor() );
     }
 
     return m_xFrame;
@@ -868,17 +845,11 @@ void DocumentHolder::show()
             LoadDocInFrame( sal_False );
 
             // get rid of second closer if it is there
-            uno::Reference< beans::XPropertySet > xProps( m_xFrame, uno::UNO_QUERY );
-            if ( xProps.is() )
+            uno::Reference< beans::XPropertySet > xLMProps( m_xFrame->getLayoutManager(), uno::UNO_QUERY );
+            if ( xLMProps.is() )
             {
-                uno::Reference< frame::XLayoutManager > xLayoutManager;
-                xProps->getPropertyValue( OUString( "LayoutManager" ) ) >>= xLayoutManager;
-                uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
-                if ( xLMProps.is() )
-                {
-                    xLMProps->setPropertyValue( OUString( "MenuBarCloser" ),
-                                                uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
-                }
+                xLMProps->setPropertyValue( OUString( "MenuBarCloser" ),
+                                            uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
             }
 
             if ( !m_bLink )
@@ -1007,24 +978,16 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
             }
         }
         // set the title
-        uno::Reference<beans::XPropertySet> xPropSet(
-            m_xFrame,uno::UNO_QUERY);
-        if(xPropSet.is()) {
-            uno::Any aAny;
-            static const sal_Unicode u[] = { ' ','(',0 };
-            static const sal_Unicode c[] = { ')',0 };
-            OUString aTotalName(m_aFilterName);
-            aTotalName += OUString(u);
-            aTotalName += aDocumentName;
-            aTotalName += OUString(c);
-            aAny <<= aTotalName;
-            try {
-                xPropSet->setPropertyValue(
-                    OUString("Title"),
-                    aAny);
-            }
-            catch( const uno::Exception& ) {
-            }
+        static const sal_Unicode u[] = { ' ','(',0 };
+        static const sal_Unicode c[] = { ')',0 };
+        rtl::OUString aTotalName(m_aFilterName);
+        aTotalName += rtl::OUString(u);
+        aTotalName += aDocumentName;
+        aTotalName += rtl::OUString(c);
+        try {
+            m_xFrame->setTitle( aTotalName );
+        }
+        catch( const uno::Exception& ) {
         }
     }
 
@@ -1383,7 +1346,7 @@ DocumentHolder::disposing(
     }
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
-        m_xFrame = uno::Reference< frame::XFrame >();
+        m_xFrame = uno::Reference< frame::XFrame2 >();
 }
 
 
@@ -1421,14 +1384,14 @@ DocumentHolder::notifyClosing(
         // can happen only in case of links
         m_pIDispatch = NULL;
         m_xDocument = uno::Reference< frame::XModel >();
-        m_xFrame = uno::Reference< frame::XFrame >();
+        m_xFrame = uno::Reference< frame::XFrame2 >();
 
         LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
         if ( aDocLock.GetEmbedDocument() )
             aDocLock.GetEmbedDocument()->OLENotifyClosing();
     }
     else if( m_xFrame.is() && m_xFrame == aSource.Source )
-        m_xFrame = uno::Reference< frame::XFrame >();
+        m_xFrame = uno::Reference< frame::XFrame2 >();
 }
 
 void SAL_CALL

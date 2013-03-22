@@ -26,7 +26,7 @@
 
 namespace com{ namespace sun{ namespace star{
     namespace beans{  struct PropertyValue; }
-    namespace frame{ class XFrame;     }
+    namespace frame{ class XFrame2;     }
     }}}
 
 class SwDBTablePreviewDialog : public SfxModalDialog
@@ -35,7 +35,7 @@ class SwDBTablePreviewDialog : public SfxModalDialog
     Window*         m_pBeamerWIN;
     OKButton        m_aOK;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >         m_xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >         m_xFrame;
 public:
     SwDBTablePreviewDialog(Window* pParent,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rValues  );

@@ -19,12 +19,13 @@
 
 #include "framecontrol.hxx"
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/Frame.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
@@ -459,8 +460,8 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
                                         const   OUString&                   rURL        ,
                                         const   Sequence< PropertyValue >&  rArguments  )
 {
-    Reference< XFrame >     xOldFrame   ;
-    Reference< XFrame >     xNewFrame   ;
+    Reference< XFrame2 >     xOldFrame   ;
+    Reference< XFrame2 >     xNewFrame   ;
 
     {
         MutexGuard  aGuard ( m_aMutex ) ;
@@ -469,29 +470,24 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
 
 
 
-    xNewFrame = Reference< XFrame >  ( impl_getComponentContext()->getServiceManager()->createInstanceWithContext("com.sun.star.frame.Frame", impl_getComponentContext()), UNO_QUERY ) ;
-    Reference< XDispatchProvider >  xDSP ( xNewFrame, UNO_QUERY ) ;
+    xNewFrame = Frame::create( impl_getComponentContext() );
 
-    if (xDSP.is())
+    Reference< XWindow >  xWP ( xPeer, UNO_QUERY ) ;
+    xNewFrame->initialize ( xWP ) ;
+
+    //  option
+    //xFrame->setName( "WhatYouWant" );
+
+    Reference< XURLTransformer > xTrans = URLTransformer::create( impl_getComponentContext() );
+    // load file
+    URL aURL ;
+    aURL.Complete = rURL ;
+    xTrans->parseStrict( aURL ) ;
+
+    Reference< XDispatch >  xDisp = xNewFrame->queryDispatch ( aURL, OUString (), FrameSearchFlag::SELF ) ;
+    if (xDisp.is())
     {
-        Reference< XWindow >  xWP ( xPeer, UNO_QUERY ) ;
-        xNewFrame->initialize ( xWP ) ;
-
-        //  option
-        //xFrame->setName( "WhatYouWant" );
-
-        Reference< XURLTransformer > xTrans = URLTransformer::create( impl_getComponentContext() );
-        // load file
-        URL aURL ;
-
-        aURL.Complete = rURL ;
-        xTrans->parseStrict( aURL ) ;
-
-        Reference< XDispatch >  xDisp = xDSP->queryDispatch ( aURL, OUString (), FrameSearchFlag::SELF ) ;
-        if (xDisp.is())
-        {
-            xDisp->dispatch ( aURL, rArguments ) ;
-        }
+        xDisp->dispatch ( aURL, rArguments ) ;
     }
 
     // set the frame
@@ -519,20 +515,20 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
 
 void FrameControl::impl_deleteFrame()
 {
-    Reference< XFrame >  xOldFrame;
-    Reference< XFrame >  xNullFrame;
+    Reference< XFrame2 >  xOldFrame;
+    Reference< XFrame2 >  xNullFrame;
 
     {
         // do not dispose the frame in this guarded section (deadlock?)
         MutexGuard aGuard( m_aMutex );
         xOldFrame = m_xFrame;
-        m_xFrame = Reference< XFrame > ();
+        m_xFrame = Reference< XFrame2 > ();
     }
 
     // notify the listeners
     sal_Int32 nFrameId = PROPERTYHANDLE_FRAME;
-    Any aNewFrame( &xNullFrame, ::getCppuType((const Reference< XFrame >*)0) );
-    Any aOldFrame( &xOldFrame, ::getCppuType((const Reference< XFrame >*)0) );
+    Any aNewFrame( &xNullFrame, ::getCppuType((const Reference< XFrame2 >*)0) );
+    Any aOldFrame( &xOldFrame, ::getCppuType((const Reference< XFrame2 >*)0) );
     fire( &nFrameId, &aNewFrame, &aOldFrame, 1, sal_False );
 
     // dispose the frame

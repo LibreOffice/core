@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -246,11 +246,11 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
         // create and initialize new top level frame for this window
         Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference < XDesktop2 > xDesktop = Desktop::create( xContext );
-        Reference < XFrame > xFrame( xContext->getServiceManager()->createInstanceWithContext("com.sun.star.frame.Frame", xContext), UNO_QUERY_THROW );
+        Reference < XFrame2 > xFrame = Frame::create( xContext );
 
         Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY_THROW );
         xFrame->initialize( xWin.get() );
-        xDesktop->getFrames()->append( xFrame );
+        xDesktop->getFrames()->append( Reference<XFrame>(xFrame, uno::UNO_QUERY_THROW) );
 
         if ( xWin->isActive() )
             xFrame->activate();

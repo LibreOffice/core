@@ -460,7 +460,7 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
 {
     if ( !m_pPropWin && _bToogleOn )
     {
-        m_pPropWin = new PropBrw(Reference<XMultiServiceFactory>(getController().getORB()->getServiceManager(), UNO_QUERY_THROW), m_pTaskPane,this);
+        m_pPropWin = new PropBrw(getController().getORB(), m_pTaskPane,this);
         m_pPropWin->Invalidate();
         static_cast<OTaskWindow*>(m_pTaskPane)->setPropertyBrowser(m_pPropWin);
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::AddWindow));

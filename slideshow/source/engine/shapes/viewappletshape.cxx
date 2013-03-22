@@ -47,7 +47,7 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 
 #include "viewappletshape.hxx"
@@ -170,18 +170,13 @@ namespace slideshow
                     // create a frame, and load the applet into it
                     // ===========================================
 
-                    mxFrame.set(
-                        xFactory->createInstanceWithContext(
-                            OUString("com.sun.star.frame.Frame" ),
-                            mxComponentContext ),
-                        uno::UNO_QUERY_THROW );
-
+                    mxFrame = frame::Frame::create( mxComponentContext );
                     mxFrame->initialize( xOwnWindow );
 
                     uno::Reference < frame::XSynchronousFrameLoader > xLoader( mxViewer,
                                                                                uno::UNO_QUERY_THROW );
                     xLoader->load( uno::Sequence < beans::PropertyValue >(),
-                                   mxFrame );
+                                   uno::Reference<frame::XFrame>(mxFrame, uno::UNO_QUERY_THROW) );
 
 
                     // resize surrounding window and applet to current shape size

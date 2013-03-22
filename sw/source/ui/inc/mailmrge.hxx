@@ -39,7 +39,7 @@ class SwXSelChgLstnr_Impl;
 struct SwMailMergeDlg_Impl;
 namespace com{namespace sun{namespace star{
     namespace frame{
-        class XFrame;
+        class XFrame2;
     }
     namespace sdbc{
         class XResultSet;
@@ -110,7 +110,7 @@ class SwMailMergeDlg : public SvxStandardDialog
 
     sal_uInt16          nMergeType;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > m_xFrame;
 
     Size            m_aDialogSize;
     OUString m_sSaveFilter;

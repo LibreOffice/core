@@ -23,10 +23,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
 namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
 
@@ -445,7 +444,7 @@ private:
     SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
     sfx2::SearchDialog*     pSrchDlg;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             xFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
                             xBreakIterator;
@@ -483,7 +482,7 @@ public:
     virtual void            GetFocus();
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
-    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             getFrame() const { return xFrame; }
 
     inline void             SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
@@ -508,7 +507,7 @@ friend class SfxHelpIndexWindow_Impl;
                                 xWindow;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
                                 xOpenListener;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                                 xFrame;
 
     SfxHelpIndexWindow_Impl*    pIndexWin;
@@ -543,7 +542,7 @@ friend class SfxHelpIndexWindow_Impl;
     DECL_LINK(          ChangeHdl, HelpListener_Impl* );
 
 public:
-    SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
+    SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
                         Window* pParent, WinBits nBits );
     ~SfxHelpWindow_Impl();
 
@@ -551,7 +550,7 @@ public:
 
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
-    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                         getTextFrame() const { return pTextWin->getFrame(); }
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
                         getOpenListener() const { return xOpenListener; }

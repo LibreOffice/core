@@ -42,18 +42,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -61,9 +56,11 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -78,9 +75,12 @@
 #include <com/sun/star/util/XSearchDescriptor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
+#include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <svtools/helpopt.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svtools/menuoptions.hxx>
@@ -1480,7 +1480,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, sal_Bool bAdd
         return;
 
     // If a print job runs do not open a new page
-    Reference< XFrame >      xTextFrame      = pTextWin->getFrame();
+    Reference< XFrame2 >     xTextFrame      = pTextWin->getFrame();
     Reference< XController > xTextController ;
     if (xTextFrame.is())
         xTextController = xTextFrame->getController ();
@@ -2004,12 +2004,11 @@ long TextWin_Impl::Notify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 // remove docking area acceptor from layoutmanager, so it will not layout anything further .-)
-static void lcl_disableLayoutOfFrame(const Reference< XFrame >& xFrame)
+static void lcl_disableLayoutOfFrame(const Reference< XFrame2 >& xFrame)
 {
     static const OUString PROP_LAYOUT_MANAGER("LayoutManager");
 
-    Reference< XPropertySet > xPropSet(xFrame, UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(PROP_LAYOUT_MANAGER, makeAny(Reference< XLayoutManager >()));
+    xFrame->setLayoutManager( Reference< XLayoutManager >() );
 }
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -2037,8 +2036,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 {
     sfx2::AddToTaskPaneList( &aToolBox );
 
-    xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
-        "com.sun.star.frame.Frame" ), UNO_QUERY );
+    xFrame = Frame::create( ::comphelper::getProcessComponentContext() );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( "OFFICE_HELP" );
     lcl_disableLayoutOfFrame(xFrame);
@@ -2570,12 +2568,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_SELECTIONMODE, SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ).toString() );
             aMenu.SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
-            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             URL aURL;
             aURL.Complete = ".uno:SelectTextMode";
             PARSE_URL( aURL );
-            Reference < XDispatch > xDisp = xProv.is() ?
-                    xProv->queryDispatch( aURL, OUString(), 0 ) : Reference < XDispatch >();
+            Reference < XDispatch > xDisp = xFrame->queryDispatch( aURL, OUString(), 0 );
             if(xDisp.is())
             {
                 HelpStatusListener_Impl* pStateListener;
@@ -3148,7 +3144,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
 // -----------------------------------------------------------------------
 
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
-    const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
+    const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
     Window* pParent, WinBits ) :
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
@@ -3177,12 +3173,11 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
     pIndexWin->Show();
     pTextWin = new SfxHelpTextWindow_Impl( this );
-    Reference < XFramesSupplier > xSup( rFrame, UNO_QUERY );
-    Reference < XFrames > xFrames = xSup->getFrames();
-    xFrames->append( pTextWin->getFrame() );
+    Reference < XFrames > xFrames = rFrame->getFrames();
+    xFrames->append( Reference<XFrame>(pTextWin->getFrame(), UNO_QUERY_THROW) );
     pTextWin->SetSelectHdl( LINK( this, SfxHelpWindow_Impl, SelectHdl ) );
     pTextWin->Show();
-    pHelpInterceptor->setInterception( pTextWin->getFrame() );
+    pHelpInterceptor->setInterception( Reference<XFrame>(pTextWin->getFrame(), UNO_QUERY_THROW) );
     pHelpListener->SetChangeHdl( LINK( this, SfxHelpWindow_Impl, ChangeHdl ) );
     LoadConfig();
 }

@@ -28,7 +28,6 @@ namespace framework{
 //  used servicenames by framework
 //_________________________________________________________________________________________________________________
 
-#define SERVICENAME_FRAME                                       DECLARE_ASCII("com.sun.star.frame.Frame"                            )
 #define SERVICENAME_FRAMELOADERFACTORY                          DECLARE_ASCII("com.sun.star.frame.FrameLoaderFactory"               )
 #define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )
 #define SERVICENAME_TYPEDETECTION                               DECLARE_ASCII("com.sun.star.document.TypeDetection"                 )
@@ -62,7 +61,6 @@ namespace framework{
 //  used implementationnames by framework
 //_________________________________________________________________________________________________________________
 
-#define IMPLEMENTATIONNAME_FRAME                                DECLARE_ASCII("com.sun.star.comp.framework.Frame"                   )
 #define IMPLEMENTATIONNAME_DESKTOP                              DECLARE_ASCII("com.sun.star.comp.framework.Desktop"                 )
 #define IMPLEMENTATIONNAME_URLTRANSFORMER                       DECLARE_ASCII("com.sun.star.comp.framework.URLTransformer"          )
 #define IMPLEMENTATIONNAME_GENERICFRAMELOADER                   DECLARE_ASCII("com.sun.star.comp.office.FrameLoader"                )

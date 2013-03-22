@@ -42,19 +42,20 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <toolkit/unohlp.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 
 #include <unomid.h>
 
@@ -267,24 +268,17 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         try
         {
             // create a frame wrapper for myself
-            uno::Reference< XMultiServiceFactory >
-                                        xMgr = comphelper::getProcessServiceFactory();
-            xFrame = uno::Reference< XFrame >(xMgr->createInstance("com.sun.star.frame.Frame"), UNO_QUERY);
-            if(xFrame.is())
-            {
-                xFrame->initialize( VCLUnoHelper::GetInterface ( pBeamerWin ) );
-            }
+            m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
         }
         catch (const Exception&)
         {
-            xFrame.clear();
+            m_xFrame.clear();
         }
-        if(xFrame.is())
+        if(m_xFrame.is())
         {
-            uno::Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
             URL aURL;
             aURL.Complete = ".component:DB/DataSourceBrowser";
-            uno::Reference<XDispatch> xD = xDP->queryDispatch(aURL,
+            uno::Reference<XDispatch> xD = m_xFrame->queryDispatch(aURL,
                         "",
                         0x0C);
             if(xD.is())
@@ -300,7 +294,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 xD->dispatch(aURL, aProperties);
                 pBeamerWin->Show();
             }
-            uno::Reference<XController> xController = xFrame->getController();
+            uno::Reference<XController> xController = m_xFrame->getController();
             pImpl->xFController = uno::Reference<runtime::XFormController>(xController, UNO_QUERY);
             if(pImpl->xFController.is())
             {
@@ -452,10 +446,10 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
 SwMailMergeDlg::~SwMailMergeDlg()
 {
-    if(xFrame.is())
+    if(m_xFrame.is())
     {
-        xFrame->setComponent(NULL, NULL);
-        xFrame->dispose();
+        m_xFrame->setComponent(NULL, NULL);
+        m_xFrame->dispose();
     }
     else
         delete pBeamerWin;

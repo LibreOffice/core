@@ -18,7 +18,7 @@ namespace svtools {
 }
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
-namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com{ namespace sun { namespace star { namespace frame { class XFrame2; } } } }
 
 class SfxTemplateInfoDlg : public ModalDialog
 {
@@ -41,7 +41,7 @@ private:
     Window *mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
     svtools::ODocumentInfoPreview *mpInfoView;
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame;
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 > m_xFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
 };
 

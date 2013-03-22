@@ -1,0 +1,145 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_frame_XFrame2_idl__
+#define __com_sun_star_frame_XFrame2_idl__
+
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/frame/XDispatchInformationProvider.idl>
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#include <com/sun/star/frame/XDispatchProviderInterception.idl>
+#include <com/sun/star/frame/XDispatchRecorderSupplier.idl>
+#include <com/sun/star/frame/XFramesSupplier.idl>
+#include <com/sun/star/task/XStatusIndicatorFactory.idl>
+
+
+module com {  module sun {  module star {  module frame {
+
+/**
+    @since LibreOffice 4.1
+ */
+published interface XFrame2
+{
+    /** contains user defined attributes.
+     */
+    [attribute, readonly] com::sun::star::container::XNameContainer UserDefinedAttributes;
+
+    /** provides access to dispatchers for the frame.
+
+        <p>
+        What kind of URLs a frame accepts in the calls to <member>XDispatchProvider::queryDispatch()</member>,
+        and how the returned dispatcher handles dispatches is completely implementation dependent
+        (though of course the restrictions of <type>XDispatchProvider</type> must be met).
+        Frame implementations may (optionally) support special targets in the call to
+        <member>XDispatchProvider::queryDispatch()</member>.
+        Such special targets are passed as target frame name. They may, in addition,
+        require special frame search flags (see <type>FrameSearchFlag</type>), or,
+        in opposite, limit the set of allowed flags.<br>
+        Common special targets include:
+        <ul>
+                        <li><b>_blank</b><br> is used to create a new frame when dispatching the URL.</li>
+            <li><b>_default</b><br> is used to recycle empty or create a new frame when dispatching the URL.</li>
+            <li><b>_self</b><br> forces the frame to dispatch the URL into itself. ("" means the same)</li>
+                        <li><b>_parent</b><br> dispatches the URL into the parent frame.</li>
+                        <li><b>_top</b><br> dispatches the URL into the top level frame, the frame where this is invoked belongs to.</li>
+        </ul>
+        </p>
+
+        @see XDispatch
+        @see XFrame::findFrame()
+    */
+    interface XDispatchProvider;
+
+    /** provides information about supported commands
+
+        @since OOo 2.0
+    */
+    interface XDispatchInformationProvider;
+
+    /** supports interception mechanism for dispatched URLs
+
+        <p>
+        Registered objects can intercept, suppress or reroute dispatched URLs.
+        If they support another interface too (<type>XInterceptorInfo</type>)
+        it's possible to perform it by directly calling of right interceptor without
+        using list of all registered ones.
+        </p>
+     */
+    interface XDispatchProviderInterception;
+
+    /** Provides access to sub frames within this frame,
+        and via it's XFrame sub-interface: Allows the component to be loaded and accessed
+        within the frame; it is the main connection to the
+        environment of the component.
+     */
+    interface XFramesSupplier; // -> XFrame
+
+    /** supplies access to <type scope="com::sun::star::task">XStatusIndicator</type> objects
+        for the component within the frame to show progresses
+     */
+    interface com::sun::star::task::XStatusIndicatorFactory;
+
+    /** if possible it sets/gets the UI title on/from the frame container window
+
+        <p>
+        It depends from the type of the frame container window. If it is a system
+        task window all will be OK. Otherwise the title can't be set.
+        Setting/getting of the pure value of this property must be possible in every
+        case. Only showing on the UI can be fail.
+        </p>
+     */
+    [attribute] string Title;
+
+    /** provides access to the dispatch recorder of the frame
+
+        <p>
+        Such recorder can be used to record dispatch requests.
+        The supplier contains a dispatch recorder and provide the functionality
+        to use it for any dispatch object from outside which supports the interface
+        <type>XDispatch</type>. A supplier is available only, if recording was enabled.
+        That means: if someone wishes to enable recoding on a frame he must set
+        a supplier with a recorder object inside of it. Every user of dispatches
+        has to check then if such supplier is available at this frame property.
+        If value of this property is <NULL/> he must call <member>XDispatch::dispatch()</member>
+        on the original dispatch object. If it's a valid value he must use the supplier
+        by calling his method <member>XDispatchRecorderSupplier::dispatchAndRecord()</member>
+        with the original dispatch object as argument.
+        </p>
+
+        <p>
+        Note:<br>
+        It's not recommended to cache an already gotten supplier. Because there exist
+        no possibility to check for enabled/disabled recording then.
+        </p>
+
+    @since OOo 1.1.2
+     */
+    [attribute] XDispatchRecorderSupplier DispatchRecorderSupplier;
+
+    /** Provides access to the <type>LayoutManager</type> of the frame.
+        This is actually of type XLayoutManager, but this API is still experimental (unpublished).
+    */
+    [attribute] com::sun::star::uno::XInterface LayoutManager;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

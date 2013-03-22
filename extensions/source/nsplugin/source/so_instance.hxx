@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -47,7 +48,7 @@
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 
 #include "ns_debug.hxx"
@@ -77,7 +78,7 @@ private:
     // StarOffice component window
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xComponent;
     // StarOffice frame for this Plugin
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > m_xFrame;
     // Frames of StarOffice
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrames > m_xFrames;
     // Dispatcher of frame

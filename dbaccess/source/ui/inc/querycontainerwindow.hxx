@@ -23,7 +23,7 @@
 #include <vcl/window.hxx>
 #include <vcl/split.hxx>
 #include "dataview.hxx"
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include "QueryViewSwitch.hxx"
 #include <vcl/dockwin.hxx>
 
@@ -50,7 +50,7 @@ namespace dbaui
         OQueryViewSwitch*   m_pViewSwitch;
         OBeamer*            m_pBeamer;
         Splitter*           m_pSplitter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xBeamer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > m_xBeamer;
 
         DECL_LINK( SplitHdl, void* );
     public:
@@ -66,7 +66,7 @@ namespace dbaui
             // called when the beamer has been disposed
         void    disposingPreview();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
                 getPreviewFrame() const { return m_xBeamer; }
 
         OQueryDesignView*   getDesignView() { return m_pViewSwitch->getDesignView(); }

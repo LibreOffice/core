@@ -20,10 +20,9 @@
 #ifndef _REPORT_PROPBRW_HXX
 #define _REPORT_PROPBRW_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <svl/brdcst.hxx>
@@ -48,9 +47,9 @@ private:
     OModuleClient       m_aModuleClient;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xInspectorContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xORB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
                         m_xMeAsFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspector >
                         m_xBrowserController;
@@ -87,7 +86,7 @@ protected:
     DECL_LINK( OnAsyncGetFocus, void* );
 
 public:
-    PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+    PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB
             ,Window* pParent
             ,ODesignView*  _pDesignView);
     virtual ~PropBrw();

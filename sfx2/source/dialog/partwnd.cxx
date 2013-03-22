@@ -18,19 +18,19 @@
  */
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Frame.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -105,40 +105,32 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 )
     : SfxDockingWindow( pBind, pChildWin, pParent, nBits )
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-            "com.sun.star.frame.Frame" ), ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference < css::frame::XFrame2 > xFrame = css::frame::Frame::create(
+            ::comphelper::getProcessComponentContext() );
     xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet(
-        xFrame, ::com::sun::star::uno::UNO_QUERY );
     try
     {
-        const OUString aLayoutManager( "LayoutManager" );
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet;
+        css::uno::Reference< css::beans::XPropertySet > xLMPropSet( xFrame->getLayoutManager(), css::uno::UNO_QUERY_THROW );
 
-        ::com::sun::star::uno::Any a = xPropSet->getPropertyValue( aLayoutManager );
-        if ( a >>= xLMPropSet )
-        {
-            const OUString aAutomaticToolbars( "AutomaticToolbars" );
-            xLMPropSet->setPropertyValue( aAutomaticToolbars, ::com::sun::star::uno::Any( sal_False ));
-        }
+        const OUString aAutomaticToolbars( "AutomaticToolbars" );
+        xLMPropSet->setPropertyValue( aAutomaticToolbars, css::uno::Any( sal_False ));
     }
-    catch( ::com::sun::star::uno::RuntimeException& )
+    catch( css::uno::RuntimeException& )
     {
         throw;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( css::uno::Exception& )
     {
     }
 
-    pChildWin->SetFrame( xFrame );
+    pChildWin->SetFrame( css::uno::Reference<css::frame::XFrame>(xFrame,css::uno::UNO_QUERY_THROW) );
     if ( pBind->GetDispatcher() )
     {
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
-                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+        css::uno::Reference < css::frame::XFramesSupplier >
+                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY );
         if ( xSupp.is() )
-            xSupp->getFrames()->append( xFrame );
+            xSupp->getFrames()->append( css::uno::Reference<css::frame::XFrame>(xFrame, css::uno::UNO_QUERY_THROW) );
     }
     else {
         OSL_FAIL("Bindings without Dispatcher!");

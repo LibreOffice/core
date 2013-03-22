@@ -28,6 +28,7 @@
 #include <svx/svxids.hrc>
 
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/types.hxx>
@@ -85,7 +86,6 @@ DBG_NAME(PropBrw)
 PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     DockingWindow(&rLayout_),
     m_bInitialStateChange(true),
-    m_xORB(comphelper::getProcessServiceFactory()),
     m_xContextDocument(SfxViewShell::Current() ? SfxViewShell::Current()->GetCurrentDocument() : Reference<XModel>()),
     rLayout(rLayout_),
     pView(0)
@@ -99,12 +99,9 @@ PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance( "com.sun.star.frame.Frame" ), UNO_QUERY);
-        if (m_xMeAsFrame.is())
-        {
-            m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName( "form property browser" );  // change name!
-        }
+        m_xMeAsFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
+        m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
+        m_xMeAsFrame->setName( "form property browser" );  // change name!
     }
     catch (const Exception&)
     {
@@ -127,8 +124,7 @@ void PropBrw::ImplReCreateController()
 
     try
     {
-        Reference< XComponentContext > xOwnContext(
-            comphelper::getComponentContext( m_xORB ) );
+        Reference< XComponentContext > xOwnContext = comphelper::getProcessComponentContext();
 
         // a ComponentContext for the
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =
@@ -160,7 +156,7 @@ void PropBrw::ImplReCreateController()
             }
             else
             {
-                xAsXController->attachFrame(m_xMeAsFrame);
+                xAsXController->attachFrame( Reference<XFrame>(m_xMeAsFrame,UNO_QUERY_THROW) );
                 m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
                 DBG_ASSERT(m_xBrowserComponentWindow.is(), "PropBrw::PropBrw: attached the controller, but have no component window!");
             }

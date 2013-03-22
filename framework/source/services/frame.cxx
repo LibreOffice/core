@@ -91,22 +91,23 @@
 
 namespace framework{
 
-css::uno::WeakReference< css::frame::XFrame > Frame::m_xCloserFrame = css::uno::WeakReference< css::frame::XFrame >();
+css::uno::WeakReference< css::frame::XFrame2 > Frame::m_xCloserFrame = css::uno::WeakReference< css::frame::XFrame2 >();
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_21                (   Frame                                                                   ,
+DEFINE_XINTERFACE_22                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
+                                        DIRECT_INTERFACE(css::frame::XFrame2                                    ),
                                         DIRECT_INTERFACE(css::frame::XFramesSupplier                            ),
                                         DIRECT_INTERFACE(css::frame::XFrame                                     ),
-                                        DIRECT_INTERFACE(css::lang::XComponent                                  ),
                                         DIRECT_INTERFACE(css::task::XStatusIndicatorFactory                     ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProvider                          ),
                                         DIRECT_INTERFACE(css::frame::XDispatchInformationProvider               ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProviderInterception              ),
+                                        DIRECT_INTERFACE(css::lang::XComponent                                  ),
                                         DIRECT_INTERFACE(css::beans::XPropertySet                               ),
                                         DIRECT_INTERFACE(css::beans::XPropertySetInfo                           ),
                                         DIRECT_INTERFACE(css::awt::XWindowListener                              ),
@@ -121,18 +122,19 @@ DEFINE_XINTERFACE_21                (   Frame                                   
                                         DIRECT_INTERFACE(css::frame::XTitleChangeBroadcaster                    )
                                     )
 
-DEFINE_XTYPEPROVIDER_20             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_21             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
+                                        css::frame::XFrame2                                                     ,
                                         css::frame::XFramesSupplier                                             ,
                                         css::frame::XFrame                                                      ,
-                                        css::lang::XComponent                                                   ,
                                         css::task::XStatusIndicatorFactory                                      ,
-                                        css::beans::XPropertySet                                                ,
-                                        css::beans::XPropertySetInfo                                            ,
                                         css::frame::XDispatchProvider                                           ,
                                         css::frame::XDispatchInformationProvider                                ,
                                         css::frame::XDispatchProviderInterception                               ,
+                                        css::lang::XComponent                                                   ,
+                                        css::beans::XPropertySet                                                ,
+                                        css::beans::XPropertySetInfo                                            ,
                                         css::awt::XWindowListener                                               ,
                                         css::awt::XTopWindowListener                                            ,
                                         css::awt::XFocusListener                                                ,
@@ -146,8 +148,8 @@ DEFINE_XTYPEPROVIDER_20             (   Frame                                   
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,
                                         ::cppu::OWeakObject                                                     ,
-                                        SERVICENAME_FRAME                                                       ,
-                                        IMPLEMENTATIONNAME_FRAME
+                                        "com.sun.star.frame.Frame"                                              ,
+                                        OUString("com.sun.star.comp.framework.Frame")
                                     )
 
 DEFINE_INIT_SERVICE                 (   Frame,
@@ -1735,6 +1737,47 @@ void SAL_CALL Frame::removeTitleChangeListener( const css::uno::Reference< css::
     xTitle->removeTitleChangeListener(xListener);
 }
 
+css::uno::Reference<css::container::XNameContainer> SAL_CALL Frame::getUserDefinedAttributes() throw (css::uno::RuntimeException)
+{
+    // optional attribute
+    return 0;
+}
+
+css::uno::Reference<css::frame::XDispatchRecorderSupplier> SAL_CALL Frame::getDispatchRecorderSupplier() throw (css::uno::RuntimeException)
+{
+    ReadGuard aReadLock( m_aLock );
+    return m_xDispatchRecorderSupplier;
+}
+
+void SAL_CALL Frame::setDispatchRecorderSupplier(const css::uno::Reference<css::frame::XDispatchRecorderSupplier>& p) throw (css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE { */
+        WriteGuard aWriteLock( m_aLock );
+            m_xDispatchRecorderSupplier.set(p);
+        aWriteLock.unlock();
+    /* } SAFE */
+}
+
+css::uno::Reference<css::uno::XInterface> SAL_CALL Frame::getLayoutManager() throw (css::uno::RuntimeException)
+{
+    ReadGuard aReadLock( m_aLock );
+    return m_xLayoutManager;
+}
+
+void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInterface>& p1) throw (css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE { */
+        WriteGuard aWriteLock( m_aLock );
+            m_xLayoutManager.set(p1, css::uno::UNO_QUERY_THROW);
+        aWriteLock.unlock();
+    /* } SAFE */
+}
+
+
 /*-****************************************************************************************************/
 void Frame::implts_forgetSubFrames()
 {
@@ -3011,7 +3054,7 @@ void Frame::implts_checkSuicide()
                 <TRUE/> enable; <FALSE/> disable this state
  */
 
-void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame ,
+void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame2 >& xFrame ,
                             /*IN*/       sal_Bool                                   bState  )
 {
     // Note: If start module isnt installed - no closer has to be shown!
@@ -3068,7 +3111,7 @@ void Frame::impl_checkMenuCloser()
         FrameListAnalyzer::E_HIDDEN | FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
     // specify the new frame, which must have this special state ...
-    css::uno::Reference< css::frame::XFrame > xNewCloserFrame;
+    css::uno::Reference< css::frame::XFrame2 > xNewCloserFrame;
 
     // -----------------------------
     // a)
@@ -3088,7 +3131,7 @@ void Frame::impl_checkMenuCloser()
     {
         // others[0] can't be the backing component!
         // Because it's set at the special member aAnalyzer.m_xBackingComponent ... :-)
-        xNewCloserFrame = aAnalyzer.m_lOtherVisibleFrames[0];
+        xNewCloserFrame.set( aAnalyzer.m_lOtherVisibleFrames[0], css::uno::UNO_QUERY_THROW );
     }
     // -----------------------------
     // b)
@@ -3109,7 +3152,7 @@ void Frame::impl_checkMenuCloser()
     // or must be enabled/disabled at all.
     /* STATIC SAFE { */
     WriteGuard aStaticWriteLock(LockHelper::getGlobalLock());
-    css::uno::Reference< css::frame::XFrame > xCloserFrame (m_xCloserFrame.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFrame2 > xCloserFrame (m_xCloserFrame.get(), css::uno::UNO_QUERY);
     if (xCloserFrame!=xNewCloserFrame)
     {
         if (xCloserFrame.is())

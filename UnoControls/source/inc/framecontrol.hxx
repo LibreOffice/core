@@ -22,7 +22,7 @@
 
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -593,7 +593,7 @@ private:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >         m_xFrame                    ;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >        m_xFrame                    ;
     OUString                                        m_sComponentURL             ;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_seqLoaderArguments        ;
     ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer       ;

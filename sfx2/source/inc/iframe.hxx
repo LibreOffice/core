@@ -26,9 +26,8 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <cppuhelper/implbase6.hxx>
@@ -51,13 +50,13 @@ class IFrameObject : public ::cppu::WeakImplHelper6 <
         com::sun::star::lang::XInitialization,
         com::sun::star::beans::XPropertySet >
 {
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > mxFact;
-    com::sun::star::uno::Reference < com::sun::star::frame::XFrame > mxFrame;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > mxContext;
+    com::sun::star::uno::Reference < com::sun::star::frame::XFrame2 > mxFrame;
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxObj;
     SfxItemPropertyMap  maPropMap;
     SfxFrameDescriptor  maFrmDescr;
 
-                        IFrameObject( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rFact );
+                        IFrameObject( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext>& rxContext );
                         ~IFrameObject();
 
     virtual sal_Bool SAL_CALL load( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& lDescriptor,

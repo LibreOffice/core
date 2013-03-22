@@ -19,9 +19,8 @@
 #ifndef SVX_FMPROPBRW_HXX
 #define SVX_FMPROPBRW_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -48,9 +47,9 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
     OUString m_sLastActivePage;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xInspectorContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                     m_xORB;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
                     m_xMeAsFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                     m_xLastKnownDocument;
@@ -77,7 +76,7 @@ protected:
 
 public:
     FmPropBrw(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB,
         SfxBindings* pBindings,
         SfxChildWindow* pMgr,
         Window* pParent,

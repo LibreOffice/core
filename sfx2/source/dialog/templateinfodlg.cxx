@@ -17,7 +17,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -53,8 +53,8 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (Window *pParent)
 
     xWindow = VCLUnoHelper::GetInterface(mpPreviewView);
 
-    xFrame.set(comphelper::getProcessServiceFactory()->createInstance("com.sun.star.frame.Frame"), uno::UNO_QUERY );
-    xFrame->initialize( xWindow );
+    m_xFrame = Frame::create( comphelper::getProcessComponentContext() );
+    m_xFrame->initialize( xWindow );
 
     mpPreviewView->Show();
     mpInfoView->Show();
@@ -62,7 +62,7 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (Window *pParent)
 
 SfxTemplateInfoDlg::~SfxTemplateInfoDlg()
 {
-    xFrame->dispose();
+    m_xFrame->dispose();
 
     delete mpInfoView;
 }
@@ -97,10 +97,7 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
         aURL.Complete = rURL;
         xTrans->parseStrict(aURL);
 
-        uno::Reference<frame::XDispatchProvider> xProv( xFrame, uno::UNO_QUERY );
-
-        uno::Reference<frame::XDispatch> xDisp = xProv.is() ?
-            xProv->queryDispatch( aURL, "_self", 0 ) : uno::Reference<XDispatch>();
+        uno::Reference<frame::XDispatch> xDisp = m_xFrame->queryDispatch( aURL, "_self", 0 );
 
         if ( xDisp.is() )
         {

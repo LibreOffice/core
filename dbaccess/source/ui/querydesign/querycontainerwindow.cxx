@@ -28,8 +28,9 @@
 #include <sfx2/sfxsids.hrc>
 #include <vcl/fixed.hxx>
 #include "UITools.hxx"
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Frame.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 //.........................................................................
 namespace dbaui
@@ -195,18 +196,13 @@ namespace dbaui
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.frame.Frame"), m_pViewSwitch->getORB()),UNO_QUERY );
-            m_xBeamer.set( xBeamerFrame );
-            OSL_ENSURE(m_xBeamer.is(),"No frame created!");
+            m_xBeamer = Frame::create( m_pViewSwitch->getORB() );
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
 
             // notify layout manager to not create internal toolbars
-            Reference < XPropertySet > xPropSet( xBeamerFrame, UNO_QUERY );
             try
             {
-                const OUString aLayoutManager( "LayoutManager" );
-                Reference < XPropertySet > xLMPropSet(xPropSet->getPropertyValue( aLayoutManager ),UNO_QUERY);
-
+                Reference < XPropertySet > xLMPropSet(m_xBeamer->getLayoutManager(), UNO_QUERY);
                 if ( xLMPropSet.is() )
                 {
                     const OUString aAutomaticToolbars( "AutomaticToolbars" );
@@ -222,7 +218,7 @@ namespace dbaui
             // append our frame
             Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
             Reference < XFrames > xFrames = xSup->getFrames();
-            xFrames->append( m_xBeamer );
+            xFrames->append( Reference<XFrame>(m_xBeamer,UNO_QUERY_THROW) );
 
             Size aSize = GetOutputSizePixel();
             Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));

@@ -25,7 +25,7 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <cppuhelper/implbase4.hxx>
 
@@ -90,7 +90,7 @@ private:
 
 
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XFrame > m_xFrame;
+    ::com::sun::star::frame::XFrame2 > m_xFrame;
 
     OUString m_aContainerName,m_aDocumentNamePart,m_aFilterName;
 
@@ -100,7 +100,7 @@ private:
 
 
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::frame::XFrame > DocumentFrame();
+    ::com::sun::star::frame::XFrame2 > DocumentFrame();
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
