@@ -47,12 +47,6 @@ AstUnion::AstUnion(const ::rtl::OString& name, AstType* pDiscType, AstScope* pSc
     if ( pDiscType->getNodeType() == NT_predefined )
     {
         pBaseType = (AstBaseType*)pDiscType;
-        if ( !pBaseType )
-        {
-            m_pDiscriminantType = NULL;
-            m_discExprType = ET_none;
-            return;
-        }
         m_pDiscriminantType = pDiscType;
         switch (pBaseType->getExprType())
         {
