@@ -932,7 +932,6 @@ class ScChangeTrack : public utl::ConfigurationListener
     sal_uLong               nEndLastCut;
     sal_uLong               nLastMerge;
     ScChangeTrackMergeState eMergeState;
-    sal_uInt16              nLoadedFileFormatVersion;
     bool bLoadSave:1;
     bool bInDelete:1;
     bool bInDeleteUndo:1;
@@ -1237,9 +1236,6 @@ public:
 
     void                NotifyModified( ScChangeTrackMsgType eMsgType,
                             sal_uLong nStartAction, sal_uLong nEndAction );
-
-    sal_uInt16              GetLoadedFileFormatVersion() const
-                            { return nLoadedFileFormatVersion; }
 
     sal_uLong AddLoadedGenerated(
         ScBaseCell* pOldCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue ); // only to use in the XML import

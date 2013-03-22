@@ -42,14 +42,7 @@
 #include <sfx2/sfxsids.hrc>
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
-
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry )
-
-// loaded MSB > eigenes => inkompatibel
-#define SC_CHGTRACK_FILEFORMAT_FIRST    0x0001
-#define SC_CHGTRACK_FILEFORMAT  0x0001
-
-// --- ScChangeAction ------------------------------------------------------
 
 ScChangeAction::ScChangeAction( ScChangeActionType eTypeP, const ScRange& rRange )
         :
@@ -2218,7 +2211,6 @@ void ScChangeTrack::Init()
     nEndLastCut = 0;
     nLastMerge = 0;
     eMergeState = SC_CTMS_NONE;
-    nLoadedFileFormatVersion = SC_CHGTRACK_FILEFORMAT;
     bLoadSave = false;
     bInDelete = false;
     bInDeleteTop = false;
