@@ -128,7 +128,9 @@ if test -z "$SED"; then
 fi
 
 dnl ===================================================================
-dnl When building for Android the --with-android-ndk is mandatory
+dnl When building for Android, --with-android-ndk,
+dnl --with-android-ndk-toolchain-version and --with-android-sdk are
+dnl mandatory
 dnl ===================================================================
 
 AC_ARG_WITH(android-ndk,
@@ -153,6 +155,11 @@ if test -n "$with_android_ndk"; then
 
     # Set up a lot of pre-canned defaults
 
+    if test ! -f $ANDROID_NDK_HOME/RELEASE.TXT; then
+        AC_MSG_ERROR([Unrecognized Android NDK. Only r8* versions supported.])
+    fi
+    ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
+
     if test $host_cpu = arm; then
         android_cpu=arm
     elif test $host_cpu = mips; then
@@ -161,6 +168,24 @@ if test -n "$with_android_ndk"; then
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
         android_cpu=x86
+    fi
+
+    case "$with_android_ndk_toolchain_version" in
+    4.6|4.7)
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_cpu-linux-androideabi-$with_android_ndk_toolchain_version
+        ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
+        ;;
+    clang3.1|clang3.2)
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_cpu-linux-androideabi-4.6
+        ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
+        ANDROID_USING_CLANG=true
+        ;;
+    esac
+
+    if test ! -d $ANDROID_BINUTILS_DIR; then
+        AC_MSG_ERROR([No directory $ANDROID_BINUTILS_DIR])
+    elif test $ANDROID_COMPILER_DIR != $ANDROID_BINUTILS_DIR -a ! -d $ANDROID_COMPILER_DIR; then
+        AC_MSG_ERROR([No directory $ANDROID_COMPILER_DIR])
     fi
 
     # Check if there is a 64-bit tool-chain. Google provides a NDK with 64-bit tool-chain binaries in
@@ -172,58 +197,62 @@ if test -n "$with_android_ndk"; then
     # with debug information.)
     toolchain_system='*'
     if test $build_os = linux-gnu; then
-        case $build_cpu in
-        x86_64)
-            case "`ls -d $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/linux-x86_64/bin 2>/dev/null`" in
-            */bin|*/bin\ */bin*)
-                toolchain_system=linux-x86_64
-                ;;
-            esac
-            ;;
-        i?86|x86)
-            toolchain_system=linux-x86
-            ;;
-        esac
+        ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/linux-x86/bin
+        ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/linux-x86
+        if test $build_cpu = x86_64; then
+            if test -d $ANDROID_COMPILER_DIR/prebuilt/linux-x86_64; then
+                ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/linux-x86_64/bin
+            fi
+            if test -d $ANDROID_BINUTILS_DIR/prebuilt/linux-x86_64; then
+                ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/linux-x86_64
+            fi
+        fi
+        ANDROID_BINUTILS_BIN=$ANDROID_BINUTILS_PREBUILT_ROOT/bin
     fi
-
-    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*$with_android_ndk_toolchain_version/prebuilt/$toolchain_system/bin`
-    # Check if there are several toolchain versions
-    case "$ANDROID_ABI_PREBUILT_BIN" in
-    */bin\ */bin*)
-        AC_MSG_ERROR([Several toolchain versions in NDK, you must specify --with-android-ndk-toolchain-version])
-    esac
 
     # This stays empty if there is just one version of the toolchain in the NDK
     ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=
     case "`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*/prebuilt/*/bin`" in
     */bin\ */bin*)
         # Trailing slash intentional and necessary, compare to how this is used
-        ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
+        if test -n "$ANDROID_USING_CLANG"; then
+            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.6/
+        else
+            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
+        fi
         ;;
     esac
 
     if test $host_cpu = arm; then
-       android_gcc_prefix=arm-linux-androideabi
+       android_gnu_prefix=arm-linux-androideabi
     elif test $host_cpu = mips; then
-       android_gcc_prefix=mipsel-linux-android
+       android_gnu_prefix=mipsel-linux-android
     elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-android-linux-gcc; then
-        android_gcc_prefix=i686-android-linux
+        android_gnu_prefix=i686-android-linux
     elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-linux-android-gcc; then
-        android_gcc_prefix=i686-linux-android
+        android_gnu_prefix=i686-linux-android
     else
         AC_MSG_ERROR([Can't figure out the toolchain prefix])
     fi
 
     test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu
-    test -z "$AR" && AR=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-ar
-    test -z "$NM" && NM=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-nm
-    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-objdump
-    test -z "$RANLIB" && RANLIB=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-ranlib
-    test -z "$STRIP" && STRIP=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-strip
+    test -z "$AR" && AR=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ar
+    test -z "$NM" && NM=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-nm
+    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-objdump
+    test -z "$RANLIB" && RANLIB=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ranlib
+    test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-strip
 
     if test $host_cpu = arm; then
         ANDROID_APP_ABI=armeabi-v7a
-        ANDROIDCFLAGS="-march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8"
+        if test -n "$ANDROID_USING_CLANG"; then
+            ANDROIDCFLAGS="-gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT" 
+            ANDROIDCFLAGS="$ANDROIDCFLAGS -target armv7-none-linux-androideabi"
+            ANDROIDCFLAGS="$ANDROIDCFLAGS -no-canonical-prefixes"
+        else
+            :
+        fi
+        ANDROIDCFLAGS="$ANDROIDCFLAGS -mthumb"
+        ANDROIDCFLAGS="$ANDROIDCFLAGS -march=armv7-a -mfloat-abi=softfp -mfpu=neon"
     elif test $host_cpu = mips; then
         ANDROID_APP_ABI=mips
         ANDROIDCFLAGS=""
@@ -232,11 +261,19 @@ if test -n "$with_android_ndk"; then
         ANDROIDCFLAGS="-march=atom"
     fi
     ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -Wno-psabi --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS -Wl,--fix-cortex-a8"
+
+    if test -n "$ANDROID_USING_CLANG"; then
+        ANDROIDCFLAGS="$ANDROIDCFLAGS -Qunused-arguments"
+    else
+        ANDROIDCFLAGS="$ANDROIDCFLAGS -Wno-psabi"
+    fi
 
     # When using the 4.6 or newer toolchain, use the gold linker
     case "$with_android_ndk_toolchain_version" in
-    4.[[6789]]*|[[56789]].*)
+    4.[[6789]]*|[[56789]].*|clang*)
         # The NDK doesn't have ld.gold for MIPS for some reason
         if test "$host_cpu" != mips; then
             ANDROIDCFLAGS="$ANDROIDCFLAGS -fuse-ld=gold"
@@ -261,8 +298,25 @@ if test -n "$with_android_ndk"; then
         ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/x86/include"
     fi
 
-    test -z "$CC" && CC="$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-gcc $ANDROIDCFLAGS"
-    test -z "$CXX" && CXX="$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-g++ $ANDROIDCXXFLAGS"
+    if test -z "$CC"; then
+        case "$with_android_ndk_toolchain_version" in
+        4.*)
+            CC="$ANDROID_COMPILER_BIN/$android_gnu_prefix-gcc $ANDROIDCFLAGS"
+            ;;
+        clang*)
+            CC="$ANDROID_COMPILER_BIN/clang $ANDROIDCFLAGS"
+        esac
+    fi
+    if test -z "$CXX"; then
+        case "$with_android_ndk_toolchain_version" in
+        4.*)
+            CXX="$ANDROID_COMPILER_BIN/$android_gnu_prefix-g++ $ANDROIDCXXFLAGS"
+            ;;
+        clang*)
+            CXX="$ANDROID_COMPILER_BIN/clang++ $ANDROIDCXXFLAGS"
+            ;;
+        esac
+    fi
 fi
 AC_SUBST(ANDROID_NDK_HOME)
 AC_SUBST(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)
