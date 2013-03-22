@@ -43,8 +43,6 @@ class ScTokenArray;
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
 
-#define DUMP_FORMAT_INFO 1
-
 enum ScConditionMode
 {
     SC_COND_EQUAL,
@@ -120,10 +118,6 @@ public:
     virtual void SetParent( ScConditionalFormat* pNew ) = 0;
 
     bool operator==( const ScFormatEntry& ) const;
-
-#if DUMP_FORMAT_INFO
-    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const = 0;
-#endif
 
     virtual void startRendering();
     virtual void endRendering();
@@ -234,10 +228,6 @@ public:
     virtual ScFormatEntry* Clone(ScDocument* pDoc = NULL) const;
 
     static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
-
-#if DUMP_FORMAT_INFO
-    virtual void dumpInfo(rtl::OUStringBuffer& ) const {}
-#endif
 
     virtual void endRendering();
     virtual void startRendering();
@@ -361,10 +351,6 @@ public:
 
     bool operator==( const ScFormatEntry& ) const;
 
-#if DUMP_FORMAT_INFO
-    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
-#endif
-
     virtual void startRendering();
     virtual void endRendering();
 
@@ -430,10 +416,6 @@ public:
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
     bool            MarkUsedExternalReferences() const;
-
-#if DUMP_FORMAT_INFO
-    void dumpInfo(rtl::OUStringBuffer& rBuf) const;
-#endif
 
     //  sorted (via PTRARR) by Index
     //  operator== only for sorting

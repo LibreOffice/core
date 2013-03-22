@@ -32,9 +32,6 @@
 #include "fillinfo.hxx"
 #include "iconsets.hrc"
 #include "scresid.hxx"
-#if DUMP_FORMAT_INFO
-#include <iostream>
-#endif
 
 #include <algorithm>
 
@@ -157,44 +154,6 @@ void ScColorScaleEntry::SetColor(const Color& rColor)
 {
     maColor = rColor;
 }
-
-#if DUMP_FORMAT_INFO
-
-void ScColorScaleEntry::dumpInfo(rtl::OUStringBuffer& rBuf) const
-{
-    rBuf.append("Color Scale Entry\n");
-    rBuf.append("Type: ");
-    switch(meType)
-    {
-        case COLORSCALE_VALUE:
-            rBuf.append( "Value\n" );
-            break;
-        case COLORSCALE_MIN:
-            rBuf.append( "Min\n" );
-            break;
-        case COLORSCALE_MAX:
-            rBuf.append( "Max\n" );
-            break;
-        case COLORSCALE_PERCENT:
-            rBuf.append( "Percent\n" );
-            break;
-        case COLORSCALE_PERCENTILE:
-            rBuf.append( "Percentile\n" );
-            break;
-        case COLORSCALE_FORMULA:
-            rBuf.append( "Formual\n" );
-            break;
-        default:
-            rBuf.append( "Unsupported Type\n" );
-    }
-    rBuf.append( "Color: " ).append( (sal_Int32)maColor.GetRed() ).append( "," ).append( (sal_Int32)maColor.GetGreen() ).append( "," ).append( (sal_Int32)maColor.GetBlue() ).append( "\n" );
-    if(meType == COLORSCALE_FORMULA)
-        rBuf.append( "Formula: " ).append( GetFormula( formula::FormulaGrammar::GRAM_DEFAULT ) ).append("\n");
-    else if( meType != COLORSCALE_MIN && meType != COLORSCALE_MAX )
-        rBuf.append( "Value: " ).append( mnVal ).append( "\n" );
-}
-
-#endif
 
 ScColorFormat::ScColorFormat(ScDocument* pDoc):
     ScFormatEntry(pDoc)
@@ -486,34 +445,6 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 
     return new Color(aColor);
 }
-
-#if DUMP_FORMAT_INFO
-void ScColorScaleFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
-{
-    rBuf.append("Color Scale with ").append(static_cast<sal_Int32>(size())).append(" entries\n");
-    for(const_iterator itr = begin(); itr != end(); ++itr)
-    {
-        itr->dumpInfo(rBuf);
-    }
-
-    const ScRangeList& rRange = GetRange();
-    size_t n = rRange.size();
-    for(size_t i = 0; i < n; ++i)
-    {
-        const ScRange* pRange = rRange[i];
-        SCTAB nTab = pRange->aStart.Tab();
-        for( SCCOL nCol = pRange->aStart.Col(), nEndCol = pRange->aEnd.Col(); nCol <= nEndCol; ++nCol)
-        {
-            for( SCROW nRow = pRange->aStart.Row(), nEndRow = pRange->aEnd.Row(); nRow <= nEndRow; ++nRow)
-            {
-                boost::scoped_ptr<Color> pColor( GetColor(ScAddress(nCol, nRow, nTab)) );
-                rBuf.append((sal_Int32)nCol).append(",").append(nRow).append(",").append((sal_Int32)nTab).append(",");
-                rBuf.append(((sal_Int32)pColor->GetRed())).append(",").append(((sal_Int32)pColor->GetGreen())).append(",").append(((sal_Int32)pColor->GetBlue())).append("\n");
-            }
-        }
-    }
-}
-#endif
 
 void ScColorScaleFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 {
@@ -835,28 +766,6 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     return pInfo;
 }
 
-#if DUMP_FORMAT_INFO
-void ScDataBarFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
-{
-    const ScRangeList& rRange = GetRange();
-    size_t n = rRange.size();
-    for(size_t i = 0; i < n; ++i)
-    {
-        const ScRange* pRange = rRange[i];
-        SCTAB nTab = pRange->aStart.Tab();
-        for( SCCOL nCol = pRange->aStart.Col(), nEndCol = pRange->aEnd.Col(); nCol <= nEndCol; ++nCol)
-        {
-            for( SCROW nRow = pRange->aStart.Row(), nEndRow = pRange->aEnd.Row(); nRow <= nEndRow; ++nRow)
-            {
-                boost::scoped_ptr<ScDataBarInfo> pInfo( GetDataBarInfo(ScAddress(nCol, nRow, nTab)) );
-                rBuf.append((sal_Int32) nCol).append(",").append(nRow).append(",").append((sal_Int32) nTab).append(",").append(pInfo->mnZero).append(",");
-                rBuf.append(pInfo->mnLength).append(",").append((sal_Bool)pInfo->mbGradient).append(",").append((sal_Bool)pInfo->mbShowValue).append("\n");
-            }
-        }
-    }
-}
-#endif
-
 ScIconSetFormat::ScIconSetFormat(ScDocument* pDoc):
     ScColorFormat(pDoc),
     mpFormatData(new ScIconSetFormatData)
@@ -961,15 +870,6 @@ void ScIconSetFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     for(iterator itr = begin(); itr != end(); ++itr)
     {
         itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
-    }
-}
-
-void ScIconSetFormat::dumpInfo( rtl::OUStringBuffer& rBuffer ) const
-{
-    rBuffer.append("IconSet: \n");
-    for(const_iterator itr = begin(); itr != end(); ++itr)
-    {
-        itr->dumpInfo(rBuffer);
     }
 }
 

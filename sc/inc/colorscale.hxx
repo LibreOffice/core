@@ -90,9 +90,6 @@ public:
     ScColorScaleEntryType GetType() const;
     void SetType( ScColorScaleEntryType eType );
 
-#if DUMP_FORMAT_INFO
-    void dumpInfo(rtl::OUStringBuffer& rBuf) const;
-#endif
 };
 
 namespace databar
@@ -274,10 +271,6 @@ public:
     const_iterator end() const;
 
     size_t size() const;
-
-#if DUMP_FORMAT_INFO
-    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
-#endif
 };
 
 class SC_DLLPUBLIC ScDataBarFormat : public ScColorFormat
@@ -299,9 +292,6 @@ public:
 
     virtual condformat::ScFormatEntryType GetType() const;
 
-#if DUMP_FORMAT_INFO
-    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
-#endif
 private:
     double getMin(double nMin, double nMax) const;
     double getMax(double nMin, double nMax) const;
@@ -355,9 +345,6 @@ public:
     iterator end();
     const_iterator end() const;
 
-#if DUMP_FORMAT_INFO
-    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
-#endif
 private:
 
     double GetMinValue() const;

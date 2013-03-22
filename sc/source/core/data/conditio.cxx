@@ -1801,11 +1801,6 @@ bool ScCondDateFormatEntry::operator==( const ScFormatEntry& r ) const
     return rEntry.maStyleName == maStyleName;
 }
 
-void ScCondDateFormatEntry::dumpInfo( rtl::OUStringBuffer& rBuffer ) const
-{
-    rBuffer.append("Date Format");
-}
-
 void ScCondDateFormatEntry::startRendering()
 {
     mpCache.reset();
@@ -1953,17 +1948,6 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
     }
     return aData;
 }
-
-
-#if DUMP_FORMAT_INFO
-void ScConditionalFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
-{
-    for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-    {
-        itr->dumpInfo(rBuf);
-    }
-}
-#endif
 
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
