@@ -11,11 +11,15 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mariadb))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mariadb,$(MARIADB_TARBALL)))
 
-# This was generated on a 64-bit linux, will have to conditionalize it if it is broken
-# for another configuration.
-$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,libmariadb/my_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/mysql_version.h,libmariadb/configs/mysql_version.h))
 
-$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/mysql_version.h,libmariadb/mysql_version.h))
+ifneq ($(OS),WNT)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,libmariadb/configs/mac_my_config.h))
+else
+$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,libmariadb/configs/linux_my_config.h))
+endif
+endif # $(OS),WNT
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb,1))
 

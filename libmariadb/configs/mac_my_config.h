@@ -6,7 +6,7 @@
  */
 #define HAVE_ALLOCA_H 1
 #define HAVE_ARPA_INET_H 1
-#define HAVE_CRYPT_H 1
+/* #undef HAVE_CRYPT_H */
 #define HAVE_DIRENT_H 1
 #define HAVE_DLFCN_H 1
 #define HAVE_EXECINFO_H 1
@@ -17,7 +17,7 @@
 #define HAVE_GRP_H 1
 /* #undef HAVE_IEEEFP_H */
 #define HAVE_LIMITS_H 1
-#define HAVE_MALLOC_H 1
+/* #undef HAVE_MALLOC_H */
 #define HAVE_MEMORY_H 1
 #define HAVE_NETINET_IN_H 1
 #define HAVE_PATHS_H 1
@@ -34,7 +34,7 @@
 #define HAVE_SYS_IOCTL_H 1
 #define HAVE_SYS_IPC_H 1
 #define HAVE_SYS_MMAN_H 1
-#define HAVE_SYS_PRCTL_H 1
+/* #undef HAVE_SYS_PRCTL_H */
 #define HAVE_SYS_SELECT_H 1
 #define HAVE_SYS_SHM_H 1
 #define HAVE_SYS_SOCKET_H 1
@@ -44,7 +44,7 @@
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_SYS_UN_H 1
 /* #undef HAVE_SYSENT_H */
-#define HAVE_TERMIO_H 1
+/* #undef HAVE_TERMIO_H */
 #define HAVE_TERMIOS_H 1
 #define HAVE_UNISTD_H 1
 #define HAVE_UTIME_H 1
@@ -62,21 +62,21 @@
 #define HAVE_BZERO 1
 /* #undef HAVE_CLOCK_GETTIME */
 /* #undef HAVE_COMPRESS */
-/* #undef HAVE_CRYPT */
+#define HAVE_CRYPT 1
 #define HAVE_DLERROR 1
 #define HAVE_DLOPEN 1
 #define HAVE_FCHMOD 1
 #define HAVE_FCNTL 1
 /* #undef HAVE_FCONVERT */
-#define HAVE_FDATASYNC 1
-/* #undef HAVE_FESETROUND */
+/* #undef HAVE_FDATASYNC */
+#define HAVE_FESETROUND 1
 #define HAVE_FINITE 1
 #define HAVE_FSEEKO 1
 #define HAVE_FSYNC 1
 #define HAVE_GETADDRINFO 1
 #define HAVE_GETCWD 1
-#define HAVE_GETHOSTBYADDR_R 1
-#define HAVE_GETHOSTBYNAME_R 1
+/* #undef HAVE_GETHOSTBYADDR_R */
+/* #undef HAVE_GETHOSTBYNAME_R */
 /* #undef HAVE_GETHRTIME */
 #define HAVE_GETNAMEINFO 1
 #define HAVE_GETPAGESIZE 1
@@ -91,22 +91,38 @@
 #define HAVE_INITGROUPS 1
 #define HAVE_LDIV 1
 #define HAVE_LOCALTIME_R 1
-/* #undef HAVE_LOG2 */
+#define HAVE_LOG2 1
 #define HAVE_LONGJMP 1
 #define HAVE_LSTAT 1
 #define HAVE_MADVISE 1
-#define HAVE_MALLINFO 1
-#define HAVE_MEMALIGN 1
+/* #undef HAVE_MALLINFO */
+/* #undef HAVE_MEMALIGN */
 #define HAVE_MEMCPY 1
 #define HAVE_MEMMOVE 1
 #define HAVE_MKSTEMP 1
 #define HAVE_MLOCK 1
 #define HAVE_MLOCKALL 1
 #define HAVE_MMAP 1
-#define HAVE_MMAP64 1
+/* #undef HAVE_MMAP64 */
 #define HAVE_PERROR 1
 #define HAVE_POLL 1
 #define HAVE_PREAD 1
+/* #undef HAVE_PTHREAD_ATTR_CREATE */
+#define HAVE_PTHREAD_ATTR_GETSTACKSIZE 1
+/* #undef HAVE_PTHREAD_ATTR_SETPRIO */
+#define HAVE_PTHREAD_ATTR_SETSCHEDPARAM 1
+#define HAVE_PTHREAD_ATTR_SETSCOPE 1
+#define HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
+/* #undef HAVE_PTHREAD_CONDATTR_CREATE */
+/* #undef HAVE_PTHREAD_INIT */
+#define HAVE_PTHREAD_KEY_DELETE 1
+#define HAVE_PTHREAD_KILL 1
+#define HAVE_PTHREAD_RWLOCK_RDLOCK 1
+/* #undef HAVE_PTHREAD_SETPRIO_NP */
+#define HAVE_PTHREAD_SETSCHEDPARAM 1
+#define HAVE_PTHREAD_SIGMASK 1
+/* #undef HAVE_PTHREAD_THREADMASK */
+#define HAVE_PTHREAD_YIELD_NP 1
 #define HAVE_READDIR_R 1
 #define HAVE_READLINK 1
 #define HAVE_REALPATH 1
@@ -123,8 +139,8 @@
 #define HAVE_SNPRINTF 1
 #define HAVE_STPCPY 1
 #define HAVE_STRERROR 1
-/* #undef HAVE_STRLCPY */
-#define HAVE_STRNLEN 1
+#define HAVE_STRLCPY 1
+/* #undef HAVE_STRNLEN */
 #define HAVE_STRPBRK 1
 #define HAVE_STRSEP 1
 #define HAVE_STRSTR 1
@@ -143,22 +159,119 @@
  * types and sizes
  */
 /* Types we may use */
-#define HAVE_CHAR 1
-#define HAVE_CHARP 1
-#define HAVE_SHORT 1
+#define SIZEOF_CHAR 1
+#if SIZEOF_CHAR
+# define HAVE_CHAR 1
+#endif
+
+#define SIZEOF_CHARP 4
+#if SIZEOF_CHARP
+# define HAVE_CHARP 1
+#endif
+
+#define SIZEOF_SHORT 2
+#if SIZEOF_SHORT
+# define HAVE_SHORT 1
+#endif
 
 #define SIZEOF_INT 4
+#if SIZEOF_INT
+# define HAVE_INT 1
+#endif
 
-#define HAVE_INT 1
-#define HAVE_LONG 1
-#define HAVE_LONG_LONG 1
-#define HAVE_OFF_T 1
-#define HAVE_SIGSET_T 1
-#define HAVE_SIZE_T 1
-#define HAVE_UINT 1
+#define SIZEOF_LONG 4
+#if SIZEOF_LONG
+# define HAVE_LONG 1
+#endif
+
+#define SIZEOF_LONG_LONG 8
+#if SIZEOF_LONG_LONG
+# define HAVE_LONG_LONG 1
+#endif
+
+#define SIZEOF_OFF_T 8
+#if SIZEOF_OFF_T
+# define HAVE_OFF_T 1
+#endif
+
+#define SIZEOF_SIGSET_T 4
+#if SIZEOF_SIGSET_T
+# define HAVE_SIGSET_T 1
+#endif
+
+#define SIZEOF_SIZE_T 4
+#if SIZEOF_SIZE_T
+# define HAVE_SIZE_T 1
+#endif
+
+/* #undef SIZEOF_UCHAR */
+#if SIZEOF_UCHAR
+# define HAVE_UCHAR 1
+#endif
+
+#define SIZEOF_UINT 4
+#if SIZEOF_UINT
+# define HAVE_UINT 1
+#endif
+
+/* #undef SIZEOF_ULONG */
+#if SIZEOF_ULONG
+# define HAVE_ULONG 1
+#endif
+
+/* #undef SIZEOF_INT8 */
+#if SIZEOF_INT8
+# define HAVE_INT8 1
+#endif
+/* #undef SIZEOF_UINT8 */
+#if SIZEOF_UINT8
+# define HAVE_UINT8 1
+#endif
+
+/* #undef SIZEOF_INT16 */
+#if SIZEOF_INT16
+# define HAVE_INT16 1
+#endif
+/* #undef SIZEOF_UINT16 */
+#if SIZEOF_UINT16
+# define HAVE_UINT16 1
+#endif
+
+/* #undef SIZEOF_INT32 */
+#if SIZEOF_INT32
+# define HAVE_INT32 1
+#endif
+/* #undef SIZEOF_UINT32 */
+#if SIZEOF_UINT32
+# define HAVE_UINT32 1
+#endif
+/* #undef SIZEOF_U_INT32_T */
+#if SIZEOF_U_INT32_T
+# define HAVE_U_INT32_T 1
+#endif
+
+/* #undef SIZEOF_INT64 */
+#if SIZEOF_INT64
+# define HAVE_INT64 1
+#endif
+/* #undef SIZEOF_UINT64 */
+#if SIZEOF_UINT64
+# define HAVE_UINT64 1
+#endif
+
+/* #undef SIZEOF_SOCKLEN_T */
+#if SIZEOF_SOCKLEN_T
+# define HAVE_SOCKLEN_T 1
+#endif
+
 #define SOCKET_SIZE_TYPE socklen_t
 
 #define RETSIGTYPE void
 #define RETQSORTTYPE void
 
-#define THREAD 1
+/*
+ * various other defines
+ */
+/* #undef HAVE_THREADS */
+#define SHAREDIR "share"
+#define DEFAULT_CHARSET_HOME "/usr/local"
