@@ -24,12 +24,8 @@
 #include <vcl/status.hxx>
 #include <vcl/prgsbar.hxx>
 
-// =======================================================================
-
 #define PROGRESSBAR_OFFSET          3
 #define PROGRESSBAR_WIN_OFFSET      2
-
-// =======================================================================
 
 void ProgressBar::ImplInit()
 {
@@ -50,8 +46,6 @@ static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
     return nOutStyle;
 }
 
-// -----------------------------------------------------------------------
-
 ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, clearProgressBarBorder( pParent, nWinStyle ) )
 {
@@ -59,28 +53,22 @@ ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
     ImplInit();
 }
 
-// -----------------------------------------------------------------------
-
 ProgressBar::ProgressBar( Window* pParent, const ResId& rResId ) :
     Window( pParent, rResId )
 {
     ImplInit();
 }
 
-// -----------------------------------------------------------------------
-
 ProgressBar::~ProgressBar()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void ProgressBar::ImplInitSettings( sal_Bool bFont,
                                     sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-/* !!! Derzeit unterstuetzen wir keine Textausgaben
+/* FIXME: !!! We do not support text output at the moment
     if ( bFont )
     {
         Font aFont;
@@ -128,14 +116,13 @@ void ProgressBar::ImplInitSettings( sal_Bool bFont,
         }
         SetLineColor();
         SetFillColor( aColor );
-/* !!! Derzeit unterstuetzen wir keine Textausgaben
+/* FIXME: !!! We do not support text output at the moment
         SetTextColor( aColor );
         SetTextFillColor();
 */
     }
 }
 
-// -----------------------------------------------------------------------
 
 void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
 {
@@ -166,14 +153,11 @@ void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
                     Rectangle( Point(), GetSizePixel() ) );
 }
 
-// -----------------------------------------------------------------------
-
 void ProgressBar::Paint( const Rectangle& )
 {
     ImplDrawProgress( 0, mnPercent );
 }
 
-// -----------------------------------------------------------------------
 
 void ProgressBar::Resize()
 {
@@ -181,8 +165,6 @@ void ProgressBar::Resize()
     if ( IsReallyVisible() )
         Invalidate();
 }
-
-// -----------------------------------------------------------------------
 
 void ProgressBar::SetValue( sal_uInt16 nNewPercent )
 {
@@ -205,11 +187,9 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ProgressBar::StateChanged( StateChangedType nType )
 {
-/* !!! Derzeit unterstuetzen wir keine Textausgaben
+/* FIXME: !!! We do not support text output at the moment
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {
@@ -231,8 +211,6 @@ void ProgressBar::StateChanged( StateChangedType nType )
 
     Window::StateChanged( nType );
 }
-
-// -----------------------------------------------------------------------
 
 void ProgressBar::DataChanged( const DataChangedEvent& rDCEvt )
 {

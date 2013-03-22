@@ -22,8 +22,6 @@
 #include <tools/rc.h>
 #include <vector>
 
-// =======================================================================
-
 typedef ::std::vector< Window* > ImplMoreWindowList;
 
 struct ImplMoreButtonData
@@ -32,8 +30,6 @@ struct ImplMoreButtonData
     OUString            maMoreText;
     OUString            maLessText;
 };
-
-// =======================================================================
 
 void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -63,7 +59,6 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
     }
 }
 
-// -----------------------------------------------------------------------
 void MoreButton::ShowState()
 {
     if ( mbState )
@@ -78,15 +73,11 @@ void MoreButton::ShowState()
     }
 }
 
-// -----------------------------------------------------------------------
-
 MoreButton::MoreButton( Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_MOREBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
-
-// -----------------------------------------------------------------------
 
 MoreButton::MoreButton( Window* pParent, const ResId& rResId ) :
     PushButton( WINDOW_MOREBUTTON )
@@ -100,8 +91,6 @@ MoreButton::MoreButton( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
-
 void MoreButton::ImplLoadRes( const ResId& rResId )
 {
     PushButton::ImplLoadRes( rResId );
@@ -110,7 +99,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {
-        // Nicht Methode rufen, da Dialog nicht umgeschaltet werden soll
+        // Don't call method as Dialog should not be switched over
         mbState = (sal_Bool)ReadShortRes();
         // SetText( GetText() );
         ShowState();
@@ -118,11 +107,9 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & RSC_MOREBUTTON_MAPUNIT )
         meUnit = (MapUnit)ReadLongRes();
     if ( nObjMask & RSC_MOREBUTTON_DELTA )
-        // Groesse fuer Erweitern des Dialogs
+        // Size for resizing the Dialog
         mnDelta = ReadShortRes();
 }
-
-// -----------------------------------------------------------------------
 
 MoreButton::~MoreButton()
 {
@@ -131,33 +118,30 @@ MoreButton::~MoreButton()
     delete mpMBData;
 }
 
-// -----------------------------------------------------------------------
-
 void MoreButton::Click()
 {
     Window*     pParent = GetParent();
     Size        aSize( pParent->GetSizePixel() );
     long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 
-    // Status aendern
+    // Change status
     mbState = !mbState;
     ShowState();
 
-    // Hier den Click-Handler rufen, damit vorher die Controls initialisiert
-    // werden koennen
+    // Call Click handler here, so that we can initialize the Controls
     PushButton::Click();
 
-    // Je nach Status die Fenster updaten
+    // Update the windows according to the status
     if ( mbState )
     {
-        // Fenster anzeigen
+        // Show window
         if ( mpMBData->mpItemList ) {
             for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
                 (*mpMBData->mpItemList)[ i ]->Show();
             }
         }
 
-        // Dialogbox anpassen
+        // Adapt dialogbox
         Point aPos( pParent->GetPosPixel() );
         Rectangle aDeskRect( pParent->ImplGetFrameWindow()->GetDesktopRectPixel() );
 
@@ -176,11 +160,11 @@ void MoreButton::Click()
     }
     else
     {
-        // Dialogbox anpassen
+        // Adapt Dialogbox
         aSize.Height() -= nDeltaPixel;
         pParent->SetSizePixel( aSize );
 
-        // Fenster nicht mehr anzeigen
+        // Hide window(s) again
         if ( mpMBData->mpItemList ) {
             for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
                 (*mpMBData->mpItemList)[ i ]->Hide();
@@ -188,8 +172,6 @@ void MoreButton::Click()
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 void MoreButton::AddWindow( Window* pWindow )
 {
@@ -204,21 +186,16 @@ void MoreButton::AddWindow( Window* pWindow )
         pWindow->Hide();
 }
 
-// -----------------------------------------------------------------------
-
 void MoreButton::SetText( const OUString& rText )
 {
     PushButton::SetText( rText );
 }
-
-// -----------------------------------------------------------------------
 
 OUString MoreButton::GetText() const
 {
     return PushButton::GetText();
 }
 
-// -----------------------------------------------------------------------
 void MoreButton::SetMoreText( const OUString& rText )
 {
     if ( mpMBData )
@@ -228,7 +205,6 @@ void MoreButton::SetMoreText( const OUString& rText )
         SetText( rText );
 }
 
-// -----------------------------------------------------------------------
 OUString MoreButton::GetMoreText() const
 {
     if ( mpMBData )
@@ -237,7 +213,6 @@ OUString MoreButton::GetMoreText() const
         return PushButton::GetText();
 }
 
-// -----------------------------------------------------------------------
 void MoreButton::SetLessText( const OUString& rText )
 {
     if ( mpMBData )
@@ -247,7 +222,6 @@ void MoreButton::SetLessText( const OUString& rText )
         SetText( rText );
 }
 
-// -----------------------------------------------------------------------
 OUString MoreButton::GetLessText() const
 {
     if ( mpMBData )
