@@ -3562,9 +3562,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
             {
                 //  Notizen zaehlen als nicht-leer
                 if ( !pCell->IsBlank() )
-                    aMarkData.SetMultiMarkArea(
-                            ScRange( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ),
-                            false );
+                    aMarkData.SetMultiMarkArea(aIter.GetPos(), false);
 
                 pCell = aIter.GetNext();
             }
@@ -3625,8 +3623,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                             //  Date/Time Erkennung
 
                             sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)pDoc->GetAttr(
-                                        aIter.GetCol(), aIter.GetRow(), aIter.GetTab(),
-                                        ATTR_VALUE_FORMAT ))->GetValue();
+                                        aIter.GetPos(), ATTR_VALUE_FORMAT))->GetValue();
                             short nTyp = pDoc->GetFormatTable()->GetType(nIndex);
                             if ((nTyp == NUMBERFORMAT_DATE) || (nTyp == NUMBERFORMAT_TIME) ||
                                     (nTyp == NUMBERFORMAT_DATETIME))
@@ -3648,9 +3645,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                 }
 
                 if (bAdd)
-                    aMarkData.SetMultiMarkArea(
-                            ScRange( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ),
-                            sal_True );
+                    aMarkData.SetMultiMarkArea(aIter.GetPos(), true);
 
                 pCell = aIter.GetNext();
             }
@@ -3708,9 +3703,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
                     }
 
                     if (bAdd)
-                        aMarkData.SetMultiMarkArea(
-                                ScRange( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ),
-                                sal_True );
+                        aMarkData.SetMultiMarkArea(aIter.GetPos(), true);
                 }
 
                 pCell = aIter.GetNext();
@@ -3754,7 +3747,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         {
             if (pCmpCell->GetCellType() != CELLTYPE_NOTE)
             {
-                SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetCol()) : static_cast<SCCOLROW>(aCmpIter.GetRow());
+                SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetPos().Col()) : static_cast<SCCOLROW>(aCmpIter.GetPos().Row());
                 if (bColumnDiff)
                     aCellRange = ScRange( static_cast<SCCOL>(nCellPos),0,nTab,
                             static_cast<SCCOL>(nCellPos),MAXROW,nTab );
@@ -3796,12 +3789,12 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
             while (pCell)
             {
                 if (bColumnDiff)
-                    aCmpAddr = ScAddress( aIter.GetCol(), nCmpPos, aIter.GetTab() );
+                    aCmpAddr = ScAddress( aIter.GetPos().Col(), nCmpPos, aIter.GetPos().Tab() );
                 else
-                    aCmpAddr = ScAddress( static_cast<SCCOL>(nCmpPos), aIter.GetRow(), aIter.GetTab() );
+                    aCmpAddr = ScAddress( static_cast<SCCOL>(nCmpPos), aIter.GetPos().Row(), aIter.GetPos().Tab() );
                 const ScBaseCell* pOtherCell = pDoc->GetCell( aCmpAddr );
 
-                ScRange aOneRange( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() );
+                ScRange aOneRange(aIter.GetPos());
                 if ( !ScBaseCell::CellEqual( pCell, pOtherCell ) )
                     aMarkData.SetMultiMarkArea( aOneRange );
                 else
@@ -3954,9 +3947,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
                     }
                     if (bMark)
                     {
-                        ScRange aCellRange( aCellIter.GetCol(),
-                                            aCellIter.GetRow(),
-                                            aCellIter.GetTab() );
+                        ScRange aCellRange(aCellIter.GetPos());
                         if ( bRecursive && !bFound && !aMarkData.IsAllMarked( aCellRange ) )
                             bFound = sal_True;
                         aMarkData.SetMultiMarkArea( aCellRange, sal_True );

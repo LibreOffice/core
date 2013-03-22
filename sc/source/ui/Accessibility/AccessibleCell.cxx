@@ -376,7 +376,7 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
                         bFound = sal_True;
                 }
                 if (bFound)
-                    AddRelation(ScAddress(aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab()), AccessibleRelationType::CONTROLLER_FOR, pRelationSet);
+                    AddRelation(aCellIter.GetPos(), AccessibleRelationType::CONTROLLER_FOR, pRelationSet);
             }
             pCell = aCellIter.GetNext();
         }

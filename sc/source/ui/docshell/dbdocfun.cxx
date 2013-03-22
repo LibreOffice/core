@@ -1184,7 +1184,7 @@ bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rE
     {
         if ( !pCell->IsBlank() )      // real content?
         {
-            if ( !rExcept.In( ScAddress( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ) ) )
+            if (!rExcept.In(aIter.GetPos()))
                 return false;       // cell found
         }
         pCell = aIter.GetNext();

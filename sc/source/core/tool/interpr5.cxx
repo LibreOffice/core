@@ -426,7 +426,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         // an array to the matrix object, for performance reasons.
         for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext(), nPrevRow = nThisRow)
         {
-            nThisRow = aCellIter.GetRow();
+            nThisRow = aCellIter.GetPos().Row();
 
             if (HasCellEmptyData(pCell))
             {

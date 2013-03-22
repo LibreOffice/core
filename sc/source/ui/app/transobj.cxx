@@ -795,8 +795,8 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             }
             if (bOut)
             {
-                SCCOL nCol = aIter.GetCol() - nSubX;
-                SCROW nRow = aIter.GetRow() - nSubY;
+                SCCOL nCol = aIter.GetPos().Col() - nSubX;
+                SCROW nRow = aIter.GetPos().Row() - nSubY;
 
                 sal_uInt16 nErrCode = pFCell->GetErrCode();
                 ScAddress aPos(nCol, nRow, nDestTab);

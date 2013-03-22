@@ -4286,6 +4286,10 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
     return &xPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
 }
 
+const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const
+{
+    return GetAttr(rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
+}
 
 const ScPatternAttr* ScDocument::GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {

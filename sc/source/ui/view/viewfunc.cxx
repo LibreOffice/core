@@ -831,7 +831,8 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
             ScBaseCell* pCell = aIter.GetFirst();
             while ( pCell )
             {
-                nScript |= pDoc->GetScriptType( aIter.GetCol(), aIter.GetRow(), aIter.GetTab(), pCell );
+                nScript |= pDoc->GetScriptType(
+                    aIter.GetPos().Col(), aIter.GetPos().Row(), aIter.GetPos().Tab(), pCell);
                 pCell = aIter.GetNext();
             }
         }

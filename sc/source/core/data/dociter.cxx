@@ -940,152 +940,114 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument,
                                 SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
                                 SCCOL nECol, SCROW nERow, SCTAB nETab, bool bSTotal ) :
     pDoc( pDocument ),
-    nStartCol( nSCol),
-    nStartRow( nSRow),
-    nStartTab( nSTab ),
-    nEndCol( nECol ),
-    nEndRow( nERow),
-    nEndTab( nETab ),
+    maStartPos(nSCol, nSRow, nSTab),
+    maEndPos(nECol, nERow, nETab),
+    nColRow(0),
     bSubTotal(bSTotal)
-
 {
-    SCTAB nDocMaxTab = pDocument->GetTableCount() - 1;
-
-    PutInOrder( nStartCol, nEndCol);
-    PutInOrder( nStartRow, nEndRow);
-    PutInOrder( nStartTab, nEndTab );
-
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab) || nStartTab > nDocMaxTab) nStartTab = nDocMaxTab;
-    if (!ValidTab(nEndTab) || nEndTab > nDocMaxTab) nEndTab = nDocMaxTab;
-
-    while (nEndTab>0 && !pDoc->maTabs[nEndTab])
-        --nEndTab; // Only the tables in use
-    if (nStartTab>nEndTab)
-        nStartTab = nEndTab;
-
-    nCol = nStartCol;
-    nRow = nStartRow;
-    nTab = nStartTab;
-    nColRow = 0; // Initialized in GetFirst
-
-    if (!pDoc->maTabs[nTab])
-    {
-        OSL_FAIL("Table not found");
-        nStartCol = nCol = MAXCOL+1;
-        nStartRow = nRow = MAXROW+1;
-        nStartTab = nTab = MAXTAB+1; // -> Abort on GetFirst
-    }
+    init();
 }
 
-ScCellIterator::ScCellIterator
-    ( ScDocument* pDocument, const ScRange& rRange, bool bSTotal ) :
+ScCellIterator::ScCellIterator( ScDocument* pDocument, const ScRange& rRange, bool bSTotal ) :
     pDoc( pDocument ),
-    nStartCol( rRange.aStart.Col() ),
-    nStartRow( rRange.aStart.Row() ),
-    nStartTab( rRange.aStart.Tab() ),
-    nEndCol( rRange.aEnd.Col() ),
-    nEndRow( rRange.aEnd.Row() ),
-    nEndTab( rRange.aEnd.Tab() ),
+    maStartPos(rRange.aStart),
+    maEndPos(rRange.aEnd),
+    nColRow(0),
     bSubTotal(bSTotal)
-
 {
-    PutInOrder( nStartCol, nEndCol);
-    PutInOrder( nStartRow, nEndRow);
-    PutInOrder( nStartTab, nEndTab );
+    init();
+}
 
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-    if (!ValidTab(nStartTab)) nStartTab = pDoc->GetTableCount()-1;
-    if (!ValidTab(nEndTab)) nEndTab = pDoc->GetTableCount()-1;
+void ScCellIterator::init()
+{
+    SCTAB nDocMaxTab = pDoc->GetTableCount() - 1;
 
-    while (nEndTab>0 && !pDoc->maTabs[nEndTab])
-        --nEndTab; // Only tables that are in use
-    if (nStartTab>nEndTab)
-        nStartTab = nEndTab;
+    PutInOrder(maStartPos, maEndPos);
 
-    nCol = nStartCol;
-    nRow = nStartRow;
-    nTab = nStartTab;
-    nColRow = 0; // Initialized in GetFirst
+    if (!ValidCol(maStartPos.Col())) maStartPos.SetCol(MAXCOL);
+    if (!ValidCol(maEndPos.Col())) maEndPos.SetCol(MAXCOL);
+    if (!ValidRow(maStartPos.Row())) maStartPos.SetRow(MAXROW);
+    if (!ValidRow(maEndPos.Row())) maEndPos.SetRow(MAXROW);
+    if (!ValidTab(maStartPos.Tab(), nDocMaxTab)) maStartPos.SetTab(nDocMaxTab);
+    if (!ValidTab(maEndPos.Tab(), nDocMaxTab)) maEndPos.SetTab(nDocMaxTab);
 
-    if (!pDoc->maTabs[nTab])
+    while (maEndPos.Tab() > 0 && !pDoc->maTabs[maEndPos.Tab()])
+        maEndPos.IncTab(-1); // Only the tables in use
+
+    if (maStartPos.Tab() > maEndPos.Tab())
+        maStartPos.SetTab(maEndPos.Tab());
+
+    maCurPos = maStartPos;
+
+    if (!pDoc->maTabs[maCurPos.Tab()])
     {
         OSL_FAIL("Table not found");
-        nStartCol = nCol = MAXCOL+1;
-        nStartRow = nRow = MAXROW+1;
-        nStartTab = nTab = MAXTAB+1; // -> Abort on GetFirst
+        maStartPos = ScAddress(MAXCOL+1, MAXROW+1, MAXTAB+1); // -> Abort on GetFirst.
+        maCurPos = maStartPos;
     }
 }
 
 ScBaseCell* ScCellIterator::GetThis()
 {
-
-    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
+    ScColumn* pCol = &(pDoc->maTabs[maCurPos.Tab()])->aCol[maCurPos.Col()];
     for ( ;; )
     {
-        if ( nRow > nEndRow )
+        if (maCurPos.Row() > maEndPos.Row())
         {
-            nRow = nStartRow;
+            maCurPos.SetRow(maStartPos.Row());
             do
             {
-                nCol++;
-                if ( nCol > nEndCol )
+                maCurPos.IncCol();
+                if (maCurPos.Col() > maEndPos.Col())
                 {
-                    nCol = nStartCol;
-                    nTab++;
-                    if ( nTab > nEndTab )
+                    maCurPos.SetCol(maStartPos.Col());
+                    maCurPos.IncTab();
+                    if (maCurPos.Tab() > maEndPos.Tab())
                         return NULL; // Over and out
                 }
-                pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
+                pCol = &(pDoc->maTabs[maCurPos.Tab()])->aCol[maCurPos.Col()];
             } while ( pCol->maItems.empty() );
-            pCol->Search( nRow, nColRow );
+            pCol->Search(maCurPos.Row(), nColRow);
         }
 
-        while ( (nColRow < pCol->maItems.size()) && (pCol->maItems[nColRow].nRow < nRow) )
-            nColRow++;
+        while ( (nColRow < pCol->maItems.size()) && (pCol->maItems[nColRow].nRow < maCurPos.Row()) )
+            ++nColRow;
 
-        if ( nColRow < pCol->maItems.size() && pCol->maItems[nColRow].nRow <= nEndRow )
+        if (nColRow < pCol->maItems.size() && pCol->maItems[nColRow].nRow <= maEndPos.Row())
         {
-            nRow = pCol->maItems[nColRow].nRow;
-            if ( !bSubTotal || !pDoc->maTabs[nTab]->RowFiltered( nRow ) )
+            maCurPos.SetRow(pCol->maItems[nColRow].nRow);
+            if (!bSubTotal || !pDoc->maTabs[maCurPos.Tab()]->RowFiltered(maCurPos.Row()))
             {
                 ScBaseCell* pCell = pCol->maItems[nColRow].pCell;
 
                 if ( bSubTotal && pCell->GetCellType() == CELLTYPE_FORMULA
                                 && ((ScFormulaCell*)pCell)->IsSubTotal() )
-                    nRow++; // Don't subtotal rows
+                    maCurPos.IncRow(); // Don't subtotal rows
                 else
                     return pCell; // Found it!
             }
             else
-                nRow++;
+                maCurPos.IncRow();
         }
         else
-            nRow = nEndRow + 1; // Next column
+            maCurPos.SetRow(maEndPos.Row() + 1); // Next column
     }
 }
 
 ScBaseCell* ScCellIterator::GetFirst()
 {
-    if ( !ValidTab(nTab) )
+    if ( !ValidTab(maCurPos.Tab()) )
         return NULL;
-    nCol = nStartCol;
-    nRow = nStartRow;
-    nTab = nStartTab;
-    ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
-    pCol->Search( nRow, nColRow );
+
+    maCurPos = maStartPos;
+    ScColumn* pCol = &(pDoc->maTabs[maCurPos.Tab()])->aCol[maCurPos.Col()];
+    pCol->Search(maCurPos.Row(), nColRow);
     return GetThis();
 }
 
 ScBaseCell* ScCellIterator::GetNext()
 {
-    ++nRow;
+    maCurPos.IncRow();
     return GetThis();
 }
 

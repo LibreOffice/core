@@ -306,7 +306,7 @@ sal_Bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
         {
             nError = ((ScFormulaCell*)pCell)->GetErrCode();
             if (nError)
-                rErrPos.Set( aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab() );
+                rErrPos = aCellIter.GetPos();
         }
         pCell = aCellIter.GetNext();
     }
@@ -796,7 +796,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
     while (pCell)
     {
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
-            switch( InsertPredLevel( aCellIter.GetCol(), aCellIter.GetRow(), rData, nLevel ) )
+            switch( InsertPredLevel( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(), rData, nLevel ) )
             {
                 case DET_INS_INSERTED:
                     nResult = DET_INS_INSERTED;
@@ -897,7 +897,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
     {
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
-            sal_uInt16 nTemp = FindPredLevel( aCellIter.GetCol(), aCellIter.GetRow(), nLevel, nDeleteLevel );
+            sal_uInt16 nTemp = FindPredLevel( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(), nLevel, nDeleteLevel );
             if (nTemp > nResult)
                 nResult = nTemp;
         }
@@ -1056,12 +1056,12 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
                             aRef.aStart.Col(),aRef.aStart.Row(),
                             aRef.aEnd.Col(),aRef.aEnd.Row() ))
                     {
-                        sal_Bool bAlien = ( aCellIter.GetTab() != nTab );
+                        sal_Bool bAlien = ( aCellIter.GetPos().Tab() != nTab );
                         sal_Bool bDrawRet;
                         if (bAlien)
                             bDrawRet = DrawAlienEntry( aRef, rData );
                         else
-                            bDrawRet = DrawEntry( aCellIter.GetCol(), aCellIter.GetRow(),
+                            bDrawRet = DrawEntry( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
                                                     aRef, rData );
                         if (bDrawRet)
                         {
@@ -1081,8 +1081,8 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
                                 if ( nLevel < rData.GetMaxLevel() )
                                 {
                                     sal_uInt16 nSubResult = InsertSuccLevel(
-                                                            aCellIter.GetCol(), aCellIter.GetRow(),
-                                                            aCellIter.GetCol(), aCellIter.GetRow(),
+                                                            aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
+                                                            aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
                                                             rData, nLevel+1 );
                                     switch (nSubResult)
                                     {
@@ -1158,10 +1158,10 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
                         }
                         else if ( !bRunning &&
                                 HasArrow( aRef.aStart,
-                                            aCellIter.GetCol(),aCellIter.GetRow(),aCellIter.GetTab() ) )
+                                            aCellIter.GetPos().Col(),aCellIter.GetPos().Row(),aCellIter.GetPos().Tab() ) )
                         {
-                            sal_uInt16 nTemp = FindSuccLevel( aCellIter.GetCol(), aCellIter.GetRow(),
-                                                            aCellIter.GetCol(), aCellIter.GetRow(),
+                            sal_uInt16 nTemp = FindSuccLevel( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
+                                                            aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
                                                             nLevel+1, nDeleteLevel );
                             if (nTemp > nResult)
                                 nResult = nTemp;
@@ -1365,7 +1365,7 @@ sal_Bool ScDetectiveFunc::MarkInvalid(sal_Bool& rOverflow)
                 ScBaseCell* pCell = aCellIter.GetFirst();
                 while ( pCell && nInsCount < SC_DET_MAXCIRCLE )
                 {
-                    SCROW nCellRow = aCellIter.GetRow();
+                    SCROW nCellRow = aCellIter.GetPos().Row();
                     if ( bMarkEmpty )
                         for ( nRow = nNextRow; nRow < nCellRow && nInsCount < SC_DET_MAXCIRCLE; nRow++ )
                         {

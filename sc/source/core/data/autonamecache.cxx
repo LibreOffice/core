@@ -84,7 +84,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rN
             }
             if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rName ) )
             {
-                rAddresses.push_back( ScAddress( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ) );
+                rAddresses.push_back(aIter.GetPos());
             }
         }
     }

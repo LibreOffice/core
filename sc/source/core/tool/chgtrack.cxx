@@ -2660,13 +2660,13 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
         {
             if ( ScChangeActionContent::GetContentCellType( pCell ) )
             {
-                aBigPos.Set( aIter.GetCol() + nDx, aIter.GetRow() + nDy,
-                    aIter.GetTab() + nDz );
+                aBigPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
+                    aIter.GetPos().Tab() + nDz );
                 ScChangeActionContent* pContent = SearchContentAt( aBigPos, NULL );
                 if ( !pContent )
                 {   // nicht getrackte Contents
-                    aPos.Set( aIter.GetCol() + nDx, aIter.GetRow() + nDy,
-                        aIter.GetTab() + nDz );
+                    aPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
+                        aIter.GetPos().Tab() + nDz );
                     GenerateDelContent( aPos, pCell, pRefDoc );
                     //! der Content wird hier _nicht_ per AddContent hinzugefuegt,
                     //! sondern in UpdateReference, um z.B. auch kreuzende Deletes

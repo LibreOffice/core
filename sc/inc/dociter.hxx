@@ -214,19 +214,14 @@ class ScCellIterator            // walk through all cells in an area
 {                               // for SubTotal no hidden and no sub-total lines
 private:
     ScDocument*     pDoc;
-    SCCOL           nStartCol;
-    SCROW           nStartRow;
-    SCTAB           nStartTab;
-    SCCOL           nEndCol;
-    SCROW           nEndRow;
-    SCTAB           nEndTab;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
+    ScAddress maStartPos;
+    ScAddress maEndPos;
+    ScAddress maCurPos;
     SCSIZE          nColRow;
     bool            bSubTotal;
 
     ScBaseCell*     GetThis();
+    void init();
 public:
                     ScCellIterator(ScDocument* pDocument,
                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
@@ -236,10 +231,7 @@ public:
                                    const ScRange& rRange, bool bSTotal = false);
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
-    SCCOL           GetCol() const { return nCol; }
-    SCROW           GetRow() const { return nRow; }
-    SCTAB           GetTab() const { return nTab; }
-    ScAddress       GetPos() const { return ScAddress( nCol, nRow, nTab ); }
+    const ScAddress& GetPos() const { return maCurPos; }
 };
 
 class ScQueryCellIterator           // walk through all non-empty cells in an area

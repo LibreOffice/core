@@ -3065,9 +3065,9 @@ bool ScCompiler::IsColRowName( const String& rName )
                         if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
-                            aRef.nCol = aIter.GetCol();
-                            aRef.nRow = aIter.GetRow();
-                            aRef.nTab = aIter.GetTab();
+                            aRef.nCol = aIter.GetPos().Col();
+                            aRef.nRow = aIter.GetPos().Row();
+                            aRef.nTab = aIter.GetPos().Tab();
                             if ( !jRow )
                                 aRef.SetColRel( true );     // ColName
                             else
@@ -3159,7 +3159,7 @@ bool ScCompiler::IsColRowName( const String& rName )
             {
                 if ( bFound )
                 {   // stop if everything else is further away
-                    if ( nMax < (long)aIter.GetCol() )
+                    if ( nMax < (long)aIter.GetPos().Col() )
                         break;      // aIter
                 }
                 CellType eType = pCell->GetCellType();
@@ -3193,8 +3193,8 @@ bool ScCompiler::IsColRowName( const String& rName )
                     }
                     if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                     {
-                        SCCOL nCol = aIter.GetCol();
-                        SCROW nRow = aIter.GetRow();
+                        SCCOL nCol = aIter.GetPos().Col();
+                        SCROW nRow = aIter.GetPos().Row();
                         long nC = nMyCol - nCol;
                         long nR = nMyRow - nRow;
                         if ( bFound )
@@ -3205,7 +3205,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                                 if ( nC < 0 || nR < 0 )
                                 {   // right or below
                                     bTwo = true;
-                                    aTwo.Set( nCol, nRow, aIter.GetTab() );
+                                    aTwo.Set( nCol, nRow, aIter.GetPos().Tab() );
                                     nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                                     nDistance = nD;
                                 }
@@ -3215,7 +3215,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                                     // current entry and nMyRow is below (CellIter
                                     // runs column-wise)
                                     bTwo = false;
-                                    aOne.Set( nCol, nRow, aIter.GetTab() );
+                                    aOne.Set( nCol, nRow, aIter.GetPos().Tab() );
                                     nMax = Max( nMyCol + nC, nMyRow + nR );
                                     nDistance = nD;
                                 }
@@ -3223,7 +3223,7 @@ bool ScCompiler::IsColRowName( const String& rName )
                         }
                         else
                         {
-                            aOne.Set( nCol, nRow, aIter.GetTab() );
+                            aOne.Set( nCol, nRow, aIter.GetPos().Tab() );
                             nDistance = nC * nC + nR * nR;
                             nMax = Max( nMyCol + Abs( nC ), nMyRow + Abs( nR ) );
                         }
