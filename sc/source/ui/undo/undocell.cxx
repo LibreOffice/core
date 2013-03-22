@@ -186,7 +186,8 @@ struct DeleteCell : std::unary_function<ScUndoEnterData::Value, void>
 {
     void operator() (ScUndoEnterData::Value& rVal)
     {
-        rVal.mpCell->Delete();
+        if (rVal.mpCell)
+            rVal.mpCell->Delete();
     }
 };
 
