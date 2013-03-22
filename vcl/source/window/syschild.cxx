@@ -42,9 +42,12 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+
+#ifdef SOLAR_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 using namespace ::com::sun::star;
 
