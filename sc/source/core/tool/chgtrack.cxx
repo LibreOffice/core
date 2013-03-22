@@ -17,16 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>        // SHL_CALC
-#include <tools/rtti.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/itemset.hxx>
-#include <svl/isethint.hxx>
-#include <svl/itempool.hxx>
-#include <sfx2/app.hxx>
-#include <unotools/useroptions.hxx>
-#include <sfx2/sfxsids.hrc>
-
+#include "chgtrack.hxx"
 #include "cell.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
@@ -38,11 +29,17 @@
 #include "patattr.hxx"
 #include "hints.hxx"
 #include "markdata.hxx"
-
 #include "globstr.hrc"
 
-#define SC_CHGTRACK_CXX
-#include "chgtrack.hxx"
+#include <tools/shl.hxx>        // SHL_CALC
+#include <tools/rtti.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/itemset.hxx>
+#include <svl/isethint.hxx>
+#include <svl/itempool.hxx>
+#include <sfx2/app.hxx>
+#include <unotools/useroptions.hxx>
+#include <sfx2/sfxsids.hrc>
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 

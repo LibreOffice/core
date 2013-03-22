@@ -32,11 +32,7 @@
 #include "global.hxx"
 #include "bigrange.hxx"
 #include "scdllapi.h"
-
-#ifdef SC_CHGTRACK_CXX
-// core/inc
 #include "refupdat.hxx"
-#endif
 
 class ScBaseCell;
 class ScDocument;
@@ -949,7 +945,6 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeTrack( const ScChangeTrack& );
     ScChangeTrack& operator=( const ScChangeTrack& );
 
-#ifdef SC_CHGTRACK_CXX
     static  SCROW               InitContentRowsPerSlot();
 
     // true if one is MM_FORMULA and the other is
@@ -1021,8 +1016,6 @@ class ScChangeTrack : public utl::ConfigurationListener
                                 // is NULL otherwise.
                                 // bRecursion == called from reject with table
     bool Reject( ScChangeAction*, ScChangeActionMap*, bool bRecursion );
-
-#endif  // SC_CHGTRACK_CXX
 
             void                ClearMsgQueue();
     virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
