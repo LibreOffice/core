@@ -12,6 +12,7 @@
 #include "cell.hxx"
 #include "editeng/editobj.hxx"
 #include "stringutil.hxx"
+#include "formula/token.hxx"
 
 ScCellValue::ScCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
 ScCellValue::ScCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
@@ -111,6 +112,121 @@ void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos )
         default:
             rDoc.SetEmptyCell(rPos);
     }
+}
+
+bool ScCellValue::hasString() const
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return true;
+        case CELLTYPE_FORMULA:
+            return !mpFormula->IsValue();
+        default:
+            return false;
+    }
+}
+
+bool ScCellValue::hasNumeric() const
+{
+    switch (meType)
+    {
+        case CELLTYPE_VALUE:
+            return true;
+        case CELLTYPE_FORMULA:
+            return mpFormula->IsValue();
+        default:
+            return false;
+    }
+}
+
+bool ScCellValue::isEmpty() const
+{
+    return meType == CELLTYPE_NOTE || meType == CELLTYPE_NONE;
+}
+
+namespace {
+
+CellType adjustCellType( CellType eOrig )
+{
+    switch (eOrig)
+    {
+        case CELLTYPE_NOTE:
+            return CELLTYPE_NONE;
+        case CELLTYPE_EDIT:
+            return CELLTYPE_STRING;
+        default:
+            ;
+    }
+    return eOrig;
+}
+
+OUString getString( const ScCellValue& rVal )
+{
+    if (rVal.meType == CELLTYPE_STRING)
+        return *rVal.mpString;
+
+    if (rVal.meType == CELLTYPE_EDIT)
+    {
+        OUStringBuffer aRet;
+        size_t n = rVal.mpEditText->GetParagraphCount();
+        for (size_t i = 0; i < n; ++i)
+        {
+            if (i > 0)
+                aRet.append('\n');
+            aRet.append(rVal.mpEditText->GetText(i));
+        }
+        return aRet.makeStringAndClear();
+    }
+
+    return EMPTY_OUSTRING;
+}
+
+}
+
+bool ScCellValue::equalsWithoutFormat( const ScCellValue& r ) const
+{
+    CellType eType1 = adjustCellType(meType);
+    CellType eType2 = adjustCellType(r.meType);
+    if (eType1 != eType2)
+        return false;
+
+    switch (meType)
+    {
+        case CELLTYPE_NONE:
+            return true;
+        case CELLTYPE_VALUE:
+            return mfValue == r.mfValue;
+        case CELLTYPE_STRING:
+        {
+            OUString aStr1 = getString(*this);
+            OUString aStr2 = getString(r);
+            return aStr1 == aStr2;
+        }
+        case CELLTYPE_FORMULA:
+        {
+            ScTokenArray* pCode1 = mpFormula->GetCode();
+            ScTokenArray* pCode2 = r.mpFormula->GetCode();
+
+            if (pCode1->GetLen() != pCode2->GetLen())
+                return false;
+
+            sal_uInt16 n = pCode1->GetLen();
+            formula::FormulaToken** ppToken1 = pCode1->GetArray();
+            formula::FormulaToken** ppToken2 = pCode2->GetArray();
+            for (sal_uInt16 i = 0; i < n; ++i)
+            {
+                if (!ppToken1[i]->TextEqual(*(ppToken2[i])))
+                    return false;
+            }
+
+            return true;
+        }
+        default:
+            ;
+    }
+    return false;
 }
 
 ScBaseCell* getHackedBaseCell( ScDocument* pDoc, const ScCellValue& rVal )

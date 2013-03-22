@@ -49,6 +49,14 @@ struct ScCellValue
      * Set cell value at specified position in specified document.
      */
     void commit( ScDocument& rDoc, const ScAddress& rPos );
+
+    bool hasString() const;
+
+    bool hasNumeric() const;
+
+    bool isEmpty() const;
+
+    bool equalsWithoutFormat( const ScCellValue& r ) const;
 };
 
 // TODO: temporary workaround.  To be removed later.

@@ -21,10 +21,11 @@
 
 #include "autonamecache.hxx"
 #include "dociter.hxx"
-#include "cell.hxx"
 #include "queryparam.hxx"
-
-// -----------------------------------------------------------------------
+#include "cell.hxx"
+#include "cellvalue.hxx"
+#include "editutil.hxx"
+#include "document.hxx"
 
 ScAutoNameCache::ScAutoNameCache( ScDocument* pD ) :
     pDoc( pD ),
@@ -52,25 +53,28 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rN
     ScAutoNameAddresses& rAddresses = aNames[rName];
 
     ScCellIterator aIter( pDoc, ScRange( 0, 0, nCurrentTab, MAXCOL, MAXROW, nCurrentTab ) );
-    for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
+    for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
         // don't check code length here, always use the stored result
         // (AutoCalc is disabled during CompileXML)
-
-        if ( pCell->HasStringData() )
+        const ScCellValue& rVal = aIter.get();
+        if (rVal.hasString())
         {
-            String aStr;
-            CellType eType = pCell->GetCellType();
-            switch ( eType )
+            OUString aStr;
+            switch (rVal.meType)
             {
                 case CELLTYPE_STRING:
-                    aStr = ((ScStringCell*)pCell)->GetString();
+                    aStr = *rVal.mpString;
                 break;
                 case CELLTYPE_FORMULA:
-                    aStr = ((ScFormulaCell*)pCell)->GetString();
+                    aStr = rVal.mpFormula->GetString();
                 break;
                 case CELLTYPE_EDIT:
-                    aStr = ((ScEditCell*)pCell)->GetString();
+                {
+                    ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+                    rEngine.SetText(*rVal.mpEditText);
+                    aStr = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
+                }
                 break;
                 case CELLTYPE_NONE:
                 case CELLTYPE_VALUE:
