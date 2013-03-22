@@ -25,8 +25,6 @@
 #define ACCESSDELIM_C(e)(char)\
                         ( ( e == FSYS_STYLE_NTFS ) ? '\\' : '/' )
 #define SEARCHDELIM(e)  ( (e == FSYS_STYLE_BSD) ? ":" : ";" )
-#define SEARCHDELIM_C(e)(char)\
-                        ( (e == FSYS_STYLE_BSD) ? ':' : ';' )
 #define ACTPARENT(e)    ".."
 #define ACTCURRENT(e)   "."
 
