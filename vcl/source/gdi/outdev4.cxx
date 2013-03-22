@@ -432,9 +432,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
             nInc = (nMinRect < 800) ? 10 : 20;
         }
 
-        if( !nInc )
-            nInc = 1;
-
         nStepCount = nMinRect / nInc;
     }
 
