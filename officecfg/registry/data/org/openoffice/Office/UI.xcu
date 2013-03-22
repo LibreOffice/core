@@ -23,7 +23,6 @@
             <node oor:name="Classes">
                 <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Text documents</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -32,7 +31,6 @@
                 </node>
                 <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Spreadsheets</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -41,7 +39,6 @@
                 </node>
                 <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Presentations</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -50,7 +47,6 @@
                 </node>
                 <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Drawings</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -59,7 +55,6 @@
                 </node>
                 <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Web pages</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -68,7 +63,6 @@
                 </node>
                 <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Master documents</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -77,7 +71,6 @@
                 </node>
                 <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Formulas</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -86,7 +79,6 @@
                 </node>
                 <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Database documents</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -99,7 +91,6 @@
             <node oor:name="Classes">
                 <node oor:name="msword956" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Microsoft Word 6.0 / 95</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -108,7 +99,6 @@
                 </node>
                 <node oor:name="excel456" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -117,7 +107,6 @@
                 </node>
                 <node oor:name="excel456templ" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -126,7 +115,6 @@
                 </node>
                 <node oor:name="swwtext" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">Text (StarWriter/Web)</value>
                     </prop>
                     <prop oor:name="Filters">
@@ -135,7 +123,6 @@
                 </node>
                 <node oor:name="wpw67" oor:op="replace">
                     <prop oor:name="DisplayName">
-
                         <value xml:lang="en-US">WordPerfect (Win) 6.0 - 7.0</value>
                     </prop>
                     <prop oor:name="Filters">

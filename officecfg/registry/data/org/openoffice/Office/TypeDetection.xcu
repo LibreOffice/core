@@ -23,7 +23,6 @@
                    Use the new configuration schema org.openoffice.TypeDetection/ and its related sub
                    structures. Contact as96863 to get further information about this fact.
     --->
-
     <node oor:name="Types"/>
     <node oor:name="Filters"/>
     <node oor:name="ContentHandlers"/>

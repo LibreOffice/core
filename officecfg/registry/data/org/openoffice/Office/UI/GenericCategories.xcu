@@ -22,157 +22,131 @@
         <node oor:name="Categories">
             <node oor:name="0" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Internal</value>
                 </prop>
             </node>
             <node oor:name="1" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Application</value>
                 </prop>
             </node>
             <node oor:name="2" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">View</value>
                 </prop>
             </node>
             <node oor:name="3" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Documents</value>
                 </prop>
             </node>
             <node oor:name="4" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Edit</value>
                 </prop>
             </node>
             <node oor:name="5" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">BASIC</value>
                 </prop>
             </node>
             <node oor:name="6" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Options</value>
                 </prop>
             </node>
             <node oor:name="7" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Math</value>
                 </prop>
             </node>
             <node oor:name="8" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Navigate</value>
                 </prop>
             </node>
             <node oor:name="9" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Insert</value>
                 </prop>
             </node>
             <node oor:name="10" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Format</value>
                 </prop>
             </node>
             <node oor:name="11" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Templates</value>
                 </prop>
             </node>
             <node oor:name="12" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Text</value>
                 </prop>
             </node>
             <node oor:name="13" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Frame</value>
                 </prop>
             </node>
             <node oor:name="14" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Graphic</value>
                 </prop>
             </node>
             <node oor:name="15" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Table</value>
                 </prop>
             </node>
             <node oor:name="16" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Numbering</value>
                 </prop>
             </node>
             <node oor:name="17" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Data</value>
                 </prop>
             </node>
             <node oor:name="18" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Special Functions</value>
                 </prop>
             </node>
             <node oor:name="19" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Image</value>
                 </prop>
             </node>
             <node oor:name="20" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Chart</value>
                 </prop>
             </node>
             <node oor:name="21" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Explorer</value>
                 </prop>
             </node>
             <node oor:name="22" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Connector</value>
                 </prop>
             </node>
             <node oor:name="23" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Modify</value>
                 </prop>
             </node>
             <node oor:name="24" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Drawing</value>
                 </prop>
             </node>
             <node oor:name="25" oor:op="replace">
                 <prop oor:name="Name" oor:type="xs:string">
-
                     <value xml:lang="en-US">Controls</value>
                 </prop>
             </node>

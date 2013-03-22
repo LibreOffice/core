@@ -36,7 +36,6 @@
     </node>
     <node oor:name="SHOW" oor:op="replace">
       <prop oor:name="VerbUIName">
-
         <value xml:lang="en-US">~Edit</value>
       </prop>
       <prop oor:name="VerbID">
@@ -51,7 +50,6 @@
     </node>
     <node oor:name="OPEN" oor:op="replace">
       <prop oor:name="VerbUIName">
-
         <value xml:lang="en-US">~Open</value>
       </prop>
       <prop oor:name="VerbID">
@@ -111,7 +109,6 @@
     </node>
     <node oor:name="PROPERTIES" oor:op="replace">
       <prop oor:name="VerbUIName">
-
         <value xml:lang="en-US">Propert~ies...</value>
       </prop>
       <prop oor:name="VerbID">
@@ -126,7 +123,6 @@
     </node>
     <node oor:name="SAVECOPYAS" oor:op="replace">
       <prop oor:name="VerbUIName">
-
         <value xml:lang="en-US">Save Copy ~as...</value>
       </prop>
       <prop oor:name="VerbID">
@@ -294,7 +290,6 @@
   <node oor:name="ObjectNames">
     <node oor:name="Calc" oor:op="replace" install:module="calc">
       <prop oor:name="ObjectUIName">
-
         <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Spreadsheet</value>
       </prop>
       <prop oor:name="ClassID">
@@ -303,7 +298,6 @@
     </node>
     <node oor:name="Chart" oor:op="replace" install:module="chart">
       <prop oor:name="ObjectUIName">
-
         <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Chart</value>
       </prop>
       <prop oor:name="ClassID">
@@ -312,7 +306,6 @@
     </node>
     <node oor:name="Draw" oor:op="replace" install:module="draw">
       <prop oor:name="ObjectUIName">
-
         <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Drawing</value>
       </prop>
       <prop oor:name="ClassID">
@@ -321,7 +314,6 @@
     </node>
     <node oor:name="Impress" oor:op="replace" install:module="impress">
       <prop oor:name="ObjectUIName">
-
         <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Presentation</value>
       </prop>
       <prop oor:name="ClassID">
@@ -330,7 +322,6 @@
     </node>
     <node oor:name="Math" oor:op="replace" install:module="math">
       <prop oor:name="ObjectUIName">
-
         <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Formula</value>
       </prop>
       <prop oor:name="ClassID">
@@ -339,7 +330,6 @@
     </node>
     <node oor:name="Writer" oor:op="replace" install:module="writer">
       <prop oor:name="ObjectUIName">
-
         <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Text</value>
       </prop>
       <prop oor:name="ClassID">
@@ -347,7 +337,6 @@
       </prop>
     </node>
   </node>
-
   <node oor:name="MimeTypeClassIDRelations" install:module="reportbuilder">
     <prop oor:name="application/vnd.sun.xml.report.chart" oor:op="replace" oor:type="xs:string">
       <value>80243D39-6741-46C5-926E-069164FF87BB</value>
@@ -357,4 +346,3 @@
     </prop>
   </node>
 </oor:component-data>
-

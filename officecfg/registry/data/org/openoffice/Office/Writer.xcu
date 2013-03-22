@@ -78,12 +78,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Table</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -91,12 +88,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Text</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -104,12 +98,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -119,12 +110,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -132,12 +120,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -145,12 +130,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -158,12 +140,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -171,12 +150,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -184,12 +160,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>
@@ -197,12 +170,9 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-
-
             </prop>
           </node>
         </node>

@@ -5,55 +5,46 @@
         <node oor:name="Commands">
             <node oor:name=".uno:Bib/Mapping" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Column Arrangement...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/standardFilter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Filter...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/DeleteRecord" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">Delete ~Record</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/InsertRecord" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Record</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/sdbsource" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">~Choose Data Source...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/source" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">Table</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/query" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">Search Key</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/autoFilter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">AutoFilter</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/removeFilter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-
                     <value xml:lang="en-US">Remove Filter</value>
                 </prop>
             </node>

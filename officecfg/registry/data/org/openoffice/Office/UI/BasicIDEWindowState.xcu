@@ -32,7 +32,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Standard</value>
-
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -53,7 +52,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Macro</value>
-
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -91,17 +89,14 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Language</value>
-
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
-
             <node oor:name="private:resource/toolbar/formcontrolsbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">FormControls</value>
-
                 </prop>
                 <prop oor:name="DockPos" oor:type="xs:string">
                     <value>0,0</value>
@@ -119,11 +114,9 @@
                     <value>true</value>
                 </prop>
             </node>
-
             <node oor:name="private:resource/toolbar/insertcontrolsbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Toolbox</value>
-
                 </prop>
                 <prop oor:name="DockPos" oor:type="xs:string">
                     <value>0,0</value>
@@ -150,7 +143,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Full Screen</value>
-
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -182,4 +174,3 @@
         </node>
     </node>
 </oor:component-data>
-

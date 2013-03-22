@@ -35,10 +35,8 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Standard</value>
-
                 </prop>
             </node>
         </node>
     </node>
 </oor:component-data>
-

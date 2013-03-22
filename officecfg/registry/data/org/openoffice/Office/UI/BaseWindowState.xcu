@@ -15,7 +15,6 @@
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Table</value>
-
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
@@ -36,7 +35,6 @@
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Query</value>
-
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
@@ -57,7 +55,6 @@
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Report</value>
-
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
@@ -78,7 +75,6 @@
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Form</value>
-
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
@@ -99,7 +95,6 @@
     </prop>
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Standard</value>
-
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>

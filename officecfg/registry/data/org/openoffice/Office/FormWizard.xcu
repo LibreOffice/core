@@ -26,7 +26,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Beige</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>beige.css</value>
@@ -38,8 +37,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Bright Blue</value>
-
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>bgr.css</value>
@@ -51,7 +48,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Light Gray</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>grey.css</value>
@@ -63,7 +59,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Dark</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>dark.css</value>
@@ -75,7 +70,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Orange</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>orange.css</value>
@@ -87,7 +81,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Ice Blue</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>ibg.css</value>
@@ -99,7 +92,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Grey</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>ice.css</value>
@@ -111,7 +103,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Water</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>water.css</value>
@@ -123,7 +114,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Red</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>red.css</value>
@@ -135,7 +125,6 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Violet</value>
-
                 </prop>
                 <prop oor:name="CssHref">
                     <value>violet.css</value>

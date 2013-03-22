@@ -445,161 +445,122 @@
     <node oor:name="com.sun.star.comp.sdbc.MozabDriver">
       <node oor:name="MozillaPreferences">
         <prop oor:name="PabDescription" >
-
           <value xml:lang="en-US">Personal Address book</value>
     </prop>
         <prop oor:name="HisDescription">
-
           <value xml:lang="en-US">Collected Addresses</value>
            </prop>
       </node>
       <node oor:name="ColumnAliases">
         <prop oor:name="FirstName">
-
           <value xml:lang="en-US">First Name</value>
         </prop>
         <prop oor:name="LastName">
-
           <value xml:lang="en-US">Last Name</value>
         </prop>
         <prop oor:name="DisplayName">
-
           <value xml:lang="en-US">Display Name</value>
         </prop>
         <prop oor:name="NickName">
-
           <value xml:lang="en-US">Nickname</value>
         </prop>
         <prop oor:name="PrimaryEmail">
-
           <value xml:lang="en-US">E-mail</value>
         </prop>
         <prop oor:name="SecondEmail">
-
           <value xml:lang="en-US">E-mail (2)</value>
         </prop>
         <prop oor:name="PreferMailFormat">
-
           <value xml:lang="en-US">Mail Format</value>
         </prop>
         <prop oor:name="WorkPhone">
-
           <value xml:lang="en-US">Phone (Work)</value>
         </prop>
         <prop oor:name="HomePhone">
-
           <value xml:lang="en-US">Phone (Home)</value>
         </prop>
         <prop oor:name="FaxNumber">
-
           <value xml:lang="en-US">Fax</value>
         </prop>
         <prop oor:name="PagerNumber">
-
           <value xml:lang="en-US">Pager</value>
         </prop>
         <prop oor:name="CellularNumber">
-
           <value xml:lang="en-US">Mobile</value>
         </prop>
         <prop oor:name="HomeAddress">
-
           <value xml:lang="en-US">Address 1</value>
         </prop>
         <prop oor:name="HomeAddress2">
-
           <value xml:lang="en-US">Address 2</value>
         </prop>
         <prop oor:name="HomeCity">
-
           <value xml:lang="en-US">City</value>
         </prop>
         <prop oor:name="HomeState">
-
           <value xml:lang="en-US">State</value>
         </prop>
         <prop oor:name="HomeZipCode">
-
           <value xml:lang="en-US">ZIP/Postal (Home)</value>
         </prop>
         <prop oor:name="HomeCountry">
-
           <value xml:lang="en-US">Country</value>
         </prop>
         <prop oor:name="WorkAddress">
-
           <value xml:lang="en-US">Work Address</value>
         </prop>
         <prop oor:name="WorkAddress2">
-
           <value xml:lang="en-US">Work Address 2</value>
         </prop>
         <prop oor:name="WorkCity">
-
           <value xml:lang="en-US">City (Work)</value>
         </prop>
         <prop oor:name="WorkState">
-
           <value xml:lang="en-US">State (Work)</value>
         </prop>
         <prop oor:name="WorkZipCode">
-
           <value xml:lang="en-US">Zip/Postal (Work)</value>
         </prop>
         <prop oor:name="WorkCountry">
-
           <value xml:lang="en-US">Country (Work)</value>
         </prop>
         <prop oor:name="JobTitle">
-
           <value xml:lang="en-US">Job Title</value>
         </prop>
         <prop oor:name="Department">
-
           <value xml:lang="en-US">Department</value>
         </prop>
         <prop oor:name="Company">
-
           <value xml:lang="en-US">Company</value>
         </prop>
         <prop oor:name="WebPage1">
-
           <value xml:lang="en-US">Web Page (Work)</value>
         </prop>
         <prop oor:name="WebPage2">
-
           <value xml:lang="en-US">Web Page (Home)</value>
         </prop>
         <prop oor:name="BirthYear">
-
           <value xml:lang="en-US">Birth Year</value>
         </prop>
         <prop oor:name="BirthMonth">
-
           <value xml:lang="en-US">Birth Month</value>
         </prop>
         <prop oor:name="BirthDay">
-
           <value xml:lang="en-US">Birth Day</value>
         </prop>
         <prop oor:name="Custom1">
-
           <value xml:lang="en-US">Custom 1</value>
         </prop>
         <prop oor:name="Custom2">
-
           <value xml:lang="en-US">Custom 2</value>
         </prop>
         <prop oor:name="Custom3">
-
           <value xml:lang="en-US">Custom 3</value>
         </prop>
         <prop oor:name="Custom4">
-
           <value xml:lang="en-US">Custom 4</value>
         </prop>
         <prop oor:name="Notes">
-
           <value xml:lang="en-US">Comments</value>
         </prop>
       </node>
@@ -714,20 +675,3 @@
     </node>
   </node>
 </oor:component-data>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
