@@ -502,7 +502,6 @@
             </node>
             <node oor:name=".uno:DBNewReport" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Bericht...</value>
                     <value xml:lang="en-US">Report...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">

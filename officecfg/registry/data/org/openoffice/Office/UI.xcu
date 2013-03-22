@@ -87,7 +87,6 @@
                 <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
 
-                        <value xml:lang="en">Database Documents</value>
                         <value xml:lang="en-US">Database documents</value>
                     </prop>
                     <prop oor:name="Filters">
