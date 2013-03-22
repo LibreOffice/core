@@ -24,8 +24,8 @@
 #include <module.hxx>
 #include <globals.hxx>
 #include <database.hxx>
-#include <tools/fsys.hxx>
 #include <tools/debug.hxx>
+#include <osl/file.hxx>
 
 SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
 
@@ -222,12 +222,16 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
         {
-            DirEntry aFullName( rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US) );
-            rBase.StartNewFile( aFullName.GetFull() );
-            if( aFullName.Find( rBase.GetPath() ) )
+            OUString aFullName(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
+            rBase.StartNewFile( aFullName );
+            osl::FileBase::RC searchError = osl::File::searchFileURL(aFullName, rBase.GetPath(), aFullName);
+            osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
+
+            if( osl::FileBase::E_None == searchError )
             {
-                rBase.AddDepFile(aFullName.GetFull());
-                SvTokenStream aTokStm( aFullName.GetFull() );
+                rBase.AddDepFile( aFullName );
+                SvTokenStream aTokStm( aFullName );
+
                 if( SVSTREAM_OK == aTokStm.GetStream().GetError() )
                 {
                     // rescue error from old file
@@ -252,19 +256,15 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                 }
                 else
                 {
-                    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                        "cannot open file: "));
-                    aStr.append(rtl::OUStringToOString(aFullName.GetFull(),
-                        RTL_TEXTENCODING_UTF8));
+                    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot open file: "));
+                    aStr.append(rtl::OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
                     rBase.SetError(aStr.makeStringAndClear(), pTok);
                 }
             }
             else
             {
-                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                    "cannot find file:"));
-                aStr.append(rtl::OUStringToOString(aFullName.GetFull(),
-                    RTL_TEXTENCODING_UTF8));
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot find file:"));
+                aStr.append(rtl::OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
                 rBase.SetError(aStr.makeStringAndClear(), pTok);
             }
         }

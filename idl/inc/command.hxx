@@ -30,25 +30,18 @@ typedef ::std::vector< rtl::OString* > ByteStringList;
 class SvCommand
 {
 public:
-    String      aDataBaseFile;
+    OUString    aDataBaseFile;
     StringList  aInFileList;
-    String      aListFile;
-    String      aSlotMapFile;
-    String      aSfxItemFile;
-    String      aODLFile;
-    String      aCallingFile;
-    String      aCxxFile;
-    String      aHxxFile;
-    String      aSrcFile;
+    OUString    aListFile;
+    OUString    aSlotMapFile;
+    OUString    aSfxItemFile;
     String      aPath;
-    String      aCHeaderFile;
-    String      aCSourceFile;
     String      aTargetFile;
-    String      aHelpIdFile;
-    String      aCSVFile;
-    String      aExportFile;
-    String      aDocuFile;
-    ::rtl::OUString m_DepFile;
+    OUString    aHelpIdFile;
+    OUString    aCSVFile;
+    OUString    aExportFile;
+    OUString    aDocuFile;
+    OUString    m_DepFile;
     sal_uInt32      nVerbosity;
     sal_uInt32      nFlags;
 

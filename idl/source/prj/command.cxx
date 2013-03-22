@@ -26,7 +26,7 @@
 #include <command.hxx>
 #include <globals.hxx>
 #include <database.hxx>
-#include <tools/fsys.hxx>
+#include "sal/config.h"
 
 char const * SyntaxStrings[] = {
 "basic-type:",
@@ -320,7 +320,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                 { // define include paths
                     String aName( aParam.Copy( 1 ) );
                     if( aPath.Len() )
-                        aPath += DirEntry::GetSearchDelimiter();
+                        aPath += OUString( SAL_PATHSEPARATOR );
                     aPath += aName;
                 }
                 else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
@@ -361,7 +361,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     if( aInc.getLength() )
     {
         if( aPath.Len() )
-            aPath += DirEntry::GetSearchDelimiter();
+            aPath += OUString( SAL_PATHSEPARATOR );
         aPath += rtl::OStringToOUString(aInc, RTL_TEXTENCODING_ASCII_US);
     }
 }
