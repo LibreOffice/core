@@ -1357,10 +1357,9 @@ ScChangeActionContent::ScChangeActionContent( const sal_uLong nActionNumber,
         pPrevContent(NULL),
         pNextInSlot(NULL),
         ppPrevInSlot(NULL)
-
 {
     if (pOldCell)
-        ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
+        SetCell( aOldValue, pOldCell, 0, pDoc );
     if (!sOldValue.isEmpty())     // #i40704# don't overwrite SetCell result with empty string
         aOldValue = sOldValue; // set again, because SetCell removes it
 }
@@ -1446,8 +1445,7 @@ void ScChangeActionContent::SetOldValue( const ScBaseCell* pCell,
 void ScChangeActionContent::SetNewValue( const ScBaseCell* pCell,
         ScDocument* pDoc )
 {
-    ScChangeActionContent::SetValue( aNewValue, pNewCell,
-        aBigRange.aStart.MakeAddress(), pCell, pDoc, pDoc );
+    SetValue( aNewValue, pNewCell, aBigRange.aStart.MakeAddress(), pCell, pDoc, pDoc );
 }
 
 
