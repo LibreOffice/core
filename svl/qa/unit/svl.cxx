@@ -325,25 +325,25 @@ void Test::testFdo60915()
 {
     LanguageType eLang = LANGUAGE_THAI;
     OUString sCode, sExpected;
-    double fPreviewNumber = 1234; // equals 18/05/1903 (2446 B.E.)
+    double fPreviewNumber = 36486; // equals 1999-11-22 (2542 B.E.)
     SvNumberFormatter aFormatter(m_xContext, eLang);
     {
         sCode = "[~buddhist]D/MM/YYYY";
-        sExpected = "18/05/2446";
+        sExpected = "22/11/2542";
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
     {
         sCode = "[~buddhist]D/MM/YY";
-        sExpected = "18/05/46";
+        sExpected = "22/11/42";
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
     {
         sCode = "[NatNum1][$-41E][~buddhist]D/MM/YYYY";
         sal_Unicode sTemp[] =
         {
-            0x0E51, 0x0E58, 0x002F,
-            0x0E50, 0x0E55, 0x002F,
-            0x0E52, 0x0E54, 0x0E54, 0x0E56
+            0x0E52, 0x0E52, 0x002F,
+            0x0E51, 0x0E51, 0x002F,
+            0x0E52, 0x0E55, 0x0E54, 0x0E52
         };
         sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
@@ -352,9 +352,9 @@ void Test::testFdo60915()
         sCode = "[NatNum1][$-41E][~buddhist]D/MM/YY";
         sal_Unicode sTemp[] =
         {
-            0x0E51, 0x0E58, 0x002F,
-            0x0E50, 0x0E55, 0x002F,
-            0x0E54, 0x0E56
+            0x0E52, 0x0E52, 0x002F,
+            0x0E51, 0x0E51, 0x002F,
+            0x0E54, 0x0E52
         };
         sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
         checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
