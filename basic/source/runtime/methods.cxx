@@ -1782,9 +1782,20 @@ RTLFUNC(Val)
         }
         else
         {
-            // #57844 use localized function
-            nResult = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
-            checkArithmeticOverflow( nResult );
+            rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+            sal_Int32 nParseEnd = 0;
+            nResult = ::rtl::math::stringToDouble( aStr, '.', ',', &eStatus, &nParseEnd );
+            if ( eStatus != rtl_math_ConversionStatus_Ok )
+                StarBASIC::Error( SbERR_MATH_OVERFLOW );
+            /* TODO: we should check whether all characters were parsed here,
+             * but earlier code silently ignored trailing nonsense such as "1x"
+             * resulting in 1 with the side effect that any alpha-only-string
+             * like "x" resulted in 0. Not changing that now (2013-03-22) as
+             * user macros may rely on it. */
+#if 0
+            else if ( nParseEnd != aStr.getLength() )
+                StarBASIC::Error( SbERR_CONVERSION );
+#endif
         }
 
         rPar.Get(0)->PutDouble( nResult );
