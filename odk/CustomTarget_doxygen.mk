@@ -52,6 +52,7 @@ $(odk_WORKDIR)/docs/cpp/ref/index.html: $(DOXY_DEPS)
 	sed -e 's!^INPUT = %$$!INPUT = $(DOXY_INPUT)!' \
 	-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DOXY_WORKDIR)!' \
 	-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = $(CPPDOCREFNAME)!' \
+	-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
         -e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
         -e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
 	$< > $(odk_WORKDIR)/Doxyfile
