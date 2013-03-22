@@ -158,12 +158,14 @@ public:
     virtual OUString GetComment() const;
 
 private:
+    void SetChangeTrack();
     void SetValue( const ScCellValue& rVal );
 
 private:
     ScAddress maPos;
     ScCellValue maOldValue;
     ScCellValue maNewValue;
+    sal_uLong mnEndChangeAction;
 };
 
 class ScUndoPageBreak: public ScSimpleUndo

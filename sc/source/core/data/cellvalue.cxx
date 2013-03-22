@@ -113,4 +113,22 @@ void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos )
     }
 }
 
+ScBaseCell* getHackedBaseCell( ScDocument* pDoc, const ScCellValue& rVal )
+{
+    switch (rVal.meType)
+    {
+        case CELLTYPE_STRING:
+            return new ScStringCell(*rVal.mpString);
+        case CELLTYPE_EDIT:
+            return new ScEditCell(rVal.mpEditText->Clone(), pDoc);
+        case CELLTYPE_VALUE:
+            return new ScValueCell(rVal.mfValue);
+        case CELLTYPE_FORMULA:
+            return rVal.mpFormula->Clone();
+        default:
+            ;
+    }
+    return NULL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

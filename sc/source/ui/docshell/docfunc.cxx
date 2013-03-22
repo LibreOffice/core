@@ -808,51 +808,6 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
     return sal_True;
 }
 
-namespace {
-
-void pushUndoSetCell( ScDocShell& rDocShell, ScDocument* pDoc, const ScAddress& rPos, const ScCellValue& rNewVal )
-{
-    svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
-    switch (pDoc->GetCellType(rPos))
-    {
-        case CELLTYPE_NONE:
-        case CELLTYPE_NOTE:
-            // Empty cell.
-            pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, rNewVal));
-        break;
-        case CELLTYPE_VALUE:
-        {
-            double fOldVal = pDoc->GetValue(rPos);
-            pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, fOldVal, rNewVal));
-        }
-        break;
-        case CELLTYPE_STRING:
-        {
-            OUString aOldStr = pDoc->GetString(rPos);
-            pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldStr, rNewVal));
-        }
-        break;
-        case CELLTYPE_EDIT:
-        {
-            const EditTextObject* pOldText = pDoc->GetEditText(rPos);
-            if (pOldText)
-                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pOldText, rNewVal));
-        }
-        break;
-        case CELLTYPE_FORMULA:
-        {
-            const ScFormulaCell* pCell = pDoc->GetFormulaCell(rPos);
-            if (pCell)
-                pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, *pCell, rNewVal));
-        }
-        break;
-        default:
-            ;
-    }
-}
-
-}
-
 bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
 {
     ScDocShellModificator aModificator( rDocShell );
@@ -861,10 +816,19 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
 
     bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
 
+    ScCellValue aOldVal;
     if (bUndo)
-        pushUndoSetCell(rDocShell, pDoc, rPos, fVal);
+        aOldVal.assign(*pDoc, rPos);
 
     pDoc->SetValue(rPos, fVal);
+
+    if (bUndo)
+    {
+        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        ScCellValue aNewVal;
+        aNewVal.assign(*pDoc, rPos);
+        pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
+    }
 
     if (bHeight)
         AdjustRowHeight(rPos);
@@ -886,12 +850,21 @@ bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool
 
     bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
 
+    ScCellValue aOldVal;
     if (bUndo)
-        pushUndoSetCell(rDocShell, pDoc, rPos, rStr);
+        aOldVal.assign(*pDoc, rPos);
 
     ScSetStringParam aParam;
     aParam.setTextInput();
     pDoc->SetString(rPos, rStr, &aParam);
+
+    if (bUndo)
+    {
+        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        ScCellValue aNewVal;
+        aNewVal.assign(*pDoc, rPos);
+        pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
+    }
 
     if (bHeight)
         AdjustRowHeight(rPos);
@@ -913,10 +886,19 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
 
     bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
 
+    ScCellValue aOldVal;
     if (bUndo)
-        pushUndoSetCell(rDocShell, pDoc, rPos, rStr);
+        aOldVal.assign(*pDoc, rPos);
 
     pDoc->SetEditText(rPos, rStr.Clone());
+
+    if (bUndo)
+    {
+        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        ScCellValue aNewVal;
+        aNewVal.assign(*pDoc, rPos);
+        pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
+    }
 
     if (bHeight)
         AdjustRowHeight(rPos);
@@ -957,10 +939,19 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
 
     bool bHeight = pDoc->HasAttrib(rPos, HASATTR_NEEDHEIGHT);
 
+    ScCellValue aOldVal;
     if (bUndo)
-        pushUndoSetCell(rDocShell, pDoc, rPos, *xCell);
+        aOldVal.assign(*pDoc, rPos);
 
     pDoc->SetFormulaCell(rPos, xCell.release());
+
+    if (bUndo)
+    {
+        svl::IUndoManager* pUndoMgr = rDocShell.GetUndoManager();
+        ScCellValue aNewVal;
+        aNewVal.assign(*pDoc, rPos);
+        pUndoMgr->AddUndoAction(new ScUndoSetCell(&rDocShell, rPos, aOldVal, aNewVal));
+    }
 
     if (bHeight)
         AdjustRowHeight(rPos);

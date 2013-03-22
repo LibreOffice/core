@@ -419,10 +419,16 @@ sal_Bool ScUndoEnterValue::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rNewVal ) :
-    ScSimpleUndo(pDocSh), maPos(rPos), maNewValue(rNewVal) {}
+    ScSimpleUndo(pDocSh), maPos(rPos), maNewValue(rNewVal), mnEndChangeAction(0)
+{
+    SetChangeTrack();
+}
 
 ScUndoSetCell::ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal ) :
-    ScSimpleUndo(pDocSh), maPos(rPos), maOldValue(rOldVal), maNewValue(rNewVal) {}
+    ScSimpleUndo(pDocSh), maPos(rPos), maOldValue(rOldVal), maNewValue(rNewVal), mnEndChangeAction(0)
+{
+    SetChangeTrack();
+}
 
 ScUndoSetCell::~ScUndoSetCell() {}
 
@@ -431,6 +437,12 @@ void ScUndoSetCell::Undo()
     BeginUndo();
     SetValue(maOldValue);
     pDocShell->PostPaintCell(maPos);
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    if (pChangeTrack)
+        pChangeTrack->Undo(mnEndChangeAction, mnEndChangeAction);
+
     EndUndo();
 }
 
@@ -439,6 +451,7 @@ void ScUndoSetCell::Redo()
     BeginRedo();
     SetValue(maNewValue);
     pDocShell->PostPaintCell(maPos);
+    SetChangeTrack();
     EndRedo();
 }
 
@@ -455,6 +468,29 @@ sal_Bool ScUndoSetCell::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 OUString ScUndoSetCell::GetComment() const
 {
     return ScGlobal::GetRscString(STR_UNDO_ENTERDATA); // "Input"
+}
+
+void ScUndoSetCell::SetChangeTrack()
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    if (pChangeTrack)
+    {
+        mnEndChangeAction = pChangeTrack->GetActionMax() + 1;
+
+        {
+            // TODO: Come back to this later.
+            ScBaseCell* pOldCell = getHackedBaseCell(pDoc, maOldValue);
+            pChangeTrack->AppendContent(maPos, pOldCell);
+            if (pOldCell)
+                pOldCell->Delete();
+        }
+
+        if (mnEndChangeAction > pChangeTrack->GetActionMax())
+            mnEndChangeAction = 0;       // Nothing is appended
+    }
+    else
+        mnEndChangeAction = 0;
 }
 
 void ScUndoSetCell::SetValue( const ScCellValue& rVal )

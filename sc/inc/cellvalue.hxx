@@ -51,6 +51,10 @@ struct ScCellValue
     void commit( ScDocument& rDoc, const ScAddress& rPos );
 };
 
+// TODO: temporary workaround.  To be removed later.
+class ScBaseCell;
+ScBaseCell* getHackedBaseCell( ScDocument* pDoc, const ScCellValue& rVal );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
