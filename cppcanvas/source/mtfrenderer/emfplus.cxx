@@ -69,6 +69,8 @@
 #define EmfPlusRecordTypeSetCompositingQuality 16420
 #define EmfPlusRecordTypeSave 16421
 #define EmfPlusRecordTypeRestore 16422
+#define EmfPlusRecordTypeBeginContainerNoParams 16424
+#define EmfPlusRecordTypeEndContainer 16425
 #define EmfPlusRecordTypeSetWorldTransform 16426
 #define EmfPlusRecordTypeResetWorldTransform 16427
 #define EmfPlusRecordTypeMultiplyWorldTransform 16428
@@ -1221,6 +1223,43 @@ namespace cppcanvas
             return cellSize;
         }
 
+        void ImplRenderer::GraphicStatePush(GraphicStateMap& map, sal_Int32 index, OutDevState& rState)
+        {
+            GraphicStateMap::iterator iter = map.find( index );
+
+            if ( iter != map.end() )
+            {
+                EmfPlusGraphicState state = iter->second;
+                map.erase( iter );
+
+                EMFP_DEBUG (printf ("stack index: %d found and erased\n", index));
+            }
+
+            EmfPlusGraphicState state;
+
+            state.aWorldTransform = aWorldTransform;
+            state.aDevState = rState;
+
+            map[ index ] = state;
+        }
+
+        void ImplRenderer::GraphicStatePop(GraphicStateMap& map, sal_Int32 index, OutDevState& rState)
+        {
+            GraphicStateMap::iterator iter = map.find( index );
+
+            if ( iter != map.end() )
+            {
+                EMFP_DEBUG (printf ("stack index: %d found\n", index));
+
+                EmfPlusGraphicState state = iter->second;
+
+                aWorldTransform = state.aWorldTransform;
+                rState.clip = state.aDevState.clip;
+                rState.clipRect = state.aDevState.clipRect;
+                rState.xClipPoly = state.aDevState.xClipPoly;
+            }
+        }
+
         void ImplRenderer::processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms,
                                            OutDevState& rState, const CanvasSharedPtr& rCanvas )
         {
@@ -1677,22 +1716,7 @@ namespace cppcanvas
 
                         EMFP_DEBUG (printf ("EMF+ Save stack index: %d\n", stackIndex));
 
-                        EPGSSIter aIter = mGSStack.find( stackIndex );
-
-                        if ( aIter != mGSStack.end() )
-                        {
-                            EmfPlusGraphicState aState = aIter->second;
-                            mGSStack.erase( aIter );
-
-                            EMFP_DEBUG (printf ("stack index: %d found and erased\n", stackIndex));
-                        }
-
-                        EmfPlusGraphicState aState;
-
-                        aState.aWorldTransform = aWorldTransform;
-                        aState.aDevState = rState;
-
-                        mGSStack[ stackIndex ] = aState;
+                        GraphicStatePush( mGSStack, stackIndex, rState );
 
                         break;
                     }
@@ -1704,19 +1728,32 @@ namespace cppcanvas
 
                         EMFP_DEBUG (printf ("EMF+ Restore stack index: %d\n", stackIndex));
 
-                        EPGSSIter aIter = mGSStack.find( stackIndex );
-
-                        if ( aIter != mGSStack.end() ) {
-                            EMFP_DEBUG (printf ("stack index: %d found\n", stackIndex));
-                            EmfPlusGraphicState aState = aIter->second;
-                            aWorldTransform = aState.aWorldTransform;
-                            rState.clip = aState.aDevState.clip;
-                            rState.clipRect = aState.aDevState.clipRect;
-                            rState.xClipPoly = aState.aDevState.xClipPoly;
-                        }
+                        GraphicStatePop( mGSStack, stackIndex, rState );
 
                         break;
                     }
+                    case EmfPlusRecordTypeBeginContainerNoParams:
+                    {
+                        sal_uInt32 stackIndex;
+
+                        rMF >> stackIndex;
+
+                        EMFP_DEBUG (printf ("EMF+ Begin Container No Params stack index: %d\n", stackIndex));
+
+                        GraphicStatePush( mGSContainerStack, stackIndex, rState );
+                    }
+                    break;
+                    case EmfPlusRecordTypeEndContainer:
+                    {
+                        sal_uInt32 stackIndex;
+
+                        rMF >> stackIndex;
+
+                        EMFP_DEBUG (printf ("EMF+ End Container stack index: %d\n", stackIndex));
+
+                        GraphicStatePop( mGSContainerStack, stackIndex, rState );
+                    }
+                    break;
                     case EmfPlusRecordTypeSetWorldTransform: {
                         EMFP_DEBUG (printf ("EMF+ SetWorldTransform\n"));
                         XForm transform;

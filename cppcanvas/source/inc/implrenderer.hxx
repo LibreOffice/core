@@ -174,6 +174,8 @@ static float GetSwapFloat( SvStream& rSt )
             OutDevState aDevState;
         } EmfPlusGraphicState;
 
+        typedef ::std::map<int,EmfPlusGraphicState> GraphicStateMap;
+
         class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
         {
         public:
@@ -215,6 +217,8 @@ static float GetSwapFloat( SvStream& rSt )
             void MapToDevice (double &x, double &y);
             ::basegfx::B2DPoint Map (double ix, double iy);
             ::basegfx::B2DSize MapSize (double iwidth, double iheight);
+            void GraphicStatePush (GraphicStateMap& map, sal_Int32 index, OutDevState& rState);
+            void GraphicStatePop (GraphicStateMap& map, sal_Int32 index, OutDevState& rState);
 
         private:
             // default: disabled copy/assignment
@@ -300,8 +304,8 @@ static float GetSwapFloat( SvStream& rSt )
             sal_uInt16      mMFlags;
             SvMemoryStream  mMStream;
             /* emf+ graphic state stack */
-            ::std::map<int,EmfPlusGraphicState> mGSStack;
-            typedef ::std::map<int,EmfPlusGraphicState>::iterator EPGSSIter;
+            GraphicStateMap mGSStack;
+            GraphicStateMap mGSContainerStack;
         };
 
 
