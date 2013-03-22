@@ -99,13 +99,13 @@ public class Receiver {
                 }
             } else if (aInstruction.equals("slide_notes")) {
                 int aSlideNumber = Integer.parseInt(aCommand.get(1));
-                String aNotes = new String();
+                StringBuilder aNotes = new StringBuilder();
                 for (int i = 2; i < aCommand.size(); i++) {
-                    aNotes += aCommand.get(i);
+                    aNotes.append(aCommand.get(i));
                 }
 
                 // Store image internally
-                mSlideShow.putNotes(aSlideNumber, aNotes);
+                mSlideShow.putNotes(aSlideNumber, aNotes.toString());
 
                 Intent aIntent = new Intent(
                                 CommunicationService.MSG_SLIDE_NOTES);
