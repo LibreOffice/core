@@ -45,6 +45,7 @@ public:
     void testFdo61952();
     void testFdo60842();
     void testFdo56272();
+    void testFdo55814();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -67,6 +68,7 @@ void Test::run()
         {"hello.odt", &Test::testFdo61952},
         {"fdo60842.odt", &Test::testFdo60842},
         {"fdo56272.odt", &Test::testFdo56272},
+        {"fdo55814.odt", &Test::testFdo55814},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -323,6 +325,20 @@ void Test::testFdo56272()
     uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
     // Vertical position was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
+}
+
+void Test::testFdo55814()
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+    xField->setPropertyValue("Content", uno::makeAny(OUString("Yes")));
+    uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // This was "0".
+    CPPUNIT_ASSERT_EQUAL(OUString("Hide==\"Yes\""), getProperty<OUString>(xSections->getByIndex(0), "Condition"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
