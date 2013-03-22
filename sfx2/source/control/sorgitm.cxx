@@ -70,14 +70,11 @@ int SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     String aValue;
-    sal_Bool bIsString = sal_False;
-    sal_Bool bValue = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case 0:
         case MID_SCRIPT_ORGANIZER_LANGUAGE:
-            bIsString = sal_True;
             aValue = aLanguage;
             break;
         default:
@@ -85,10 +82,8 @@ bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
                return false;
      }
 
-    if ( bIsString )
-        rVal <<= ::rtl::OUString( aValue );
-    else
-        rVal <<= bValue;
+    rVal <<= ::rtl::OUString( aValue );
+
     return true;
 }
 
