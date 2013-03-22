@@ -2173,10 +2173,19 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             // \pard is allowed between \cell and \row, but in that case it should not reset the fact that we're inside a table.
             if (m_aStates.top().nCells == 0)
             {
+                // Reset everything.
                 m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
                 m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
                 if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
                     m_pCurrentBuffer = 0;
+            }
+            else
+            {
+                // Reset only margins.
+                lcl_eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before);
+                lcl_eraseNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after);
+                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaLeft);
+                m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PDxaRight);
             }
             m_aStates.top().resetFrame();
             break;

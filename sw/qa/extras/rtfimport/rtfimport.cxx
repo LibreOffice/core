@@ -146,6 +146,7 @@ public:
     void testFdo59638();
     void testFdo60722();
     void testFdo61909();
+    void testFdo62288();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -264,6 +265,7 @@ void Test::run()
         {"fdo59638.rtf", &Test::testFdo59638},
         {"fdo60722.rtf", &Test::testFdo60722},
         {"fdo61909.rtf", &Test::testFdo61909},
+        {"fdo62288.rtf", &Test::testFdo62288},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1175,6 +1177,19 @@ void Test::testFdo61909()
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xTextRange, "CharFontName"));
     // Was 0x008000.
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
+}
+
+void Test::testFdo62288()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    // Margins were inherited from the previous cell, even there was a \pard there.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
