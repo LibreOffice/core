@@ -1432,16 +1432,14 @@ ScChangeActionLinkEntry** ScChangeActionContent::GetDeletedInAddress()
 void ScChangeActionContent::SetOldValue( const ScBaseCell* pCell,
         const ScDocument* pFromDoc, ScDocument* pToDoc, sal_uLong nFormat )
 {
-    ScChangeActionContent::SetValue( aOldValue, pOldCell,
-        nFormat, pCell, pFromDoc, pToDoc );
+    SetValue( aOldValue, pOldCell, nFormat, pCell, pFromDoc, pToDoc );
 }
 
 
 void ScChangeActionContent::SetOldValue( const ScBaseCell* pCell,
         const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
-    ScChangeActionContent::SetValue( aOldValue, pOldCell,
-        aBigRange.aStart.MakeAddress(), pCell, pFromDoc, pToDoc );
+    SetValue( aOldValue, pOldCell, aBigRange.aStart.MakeAddress(), pCell, pFromDoc, pToDoc );
 }
 
 
@@ -1459,8 +1457,8 @@ void ScChangeActionContent::SetOldNewCells( ScBaseCell* pOldCellP,
 {
     pOldCell = pOldCellP;
     pNewCell = pNewCellP;
-    ScChangeActionContent::SetCell( aOldValue, pOldCell, nOldFormat, pDoc );
-    ScChangeActionContent::SetCell( aNewValue, pNewCell, nNewFormat, pDoc );
+    SetCell( aOldValue, pOldCell, nOldFormat, pDoc );
+    SetCell( aNewValue, pNewCell, nNewFormat, pDoc );
 }
 
 void ScChangeActionContent::SetNewCell(
@@ -1468,7 +1466,7 @@ void ScChangeActionContent::SetNewCell(
 {
     OSL_ENSURE( !pNewCell, "ScChangeActionContent::SetNewCell: overwriting existing cell" );
     pNewCell = pCell;
-    ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
+    SetCell( aNewValue, pNewCell, 0, pDoc );
 
     // #i40704# allow to set formatted text here - don't call SetNewValue with string from XML filter
     if (!rFormatted.isEmpty())
@@ -1567,7 +1565,7 @@ void ScChangeActionContent::GetRefString(
     if ( nFlags )
     {
         const ScBaseCell* pCell = GetNewCell();
-        if ( ScChangeActionContent::GetContentCellType( pCell ) == SC_CACCT_MATORG )
+        if ( GetContentCellType( pCell ) == SC_CACCT_MATORG )
         {
             ScBigRange aLocalBigRange( GetBigRange() );
             SCCOL nC;
@@ -1681,7 +1679,7 @@ void ScChangeActionContent::GetStringOfCell( rtl::OUString& rStr,
 {
     if ( pCell )
     {
-        if ( ScChangeActionContent::NeedsNumberFormat( pCell ) )
+        if ( NeedsNumberFormat( pCell ) )
             GetStringOfCell( rStr, pCell, pDoc, pDoc->GetNumberFormat( rPos ) );
         else
             GetStringOfCell( rStr, pCell, pDoc, 0 );
@@ -1694,7 +1692,7 @@ void ScChangeActionContent::GetStringOfCell( rtl::OUString& rStr,
 void ScChangeActionContent::GetStringOfCell( rtl::OUString& rStr,
     const ScBaseCell* pCell, const ScDocument* pDoc, sal_uLong nFormat )
 {
-    if ( ScChangeActionContent::GetContentCellType( pCell ) )
+    if ( GetContentCellType( pCell ) )
     {
         switch ( pCell->GetCellType() )
         {
@@ -1779,7 +1777,7 @@ void ScChangeActionContent::SetValue(
     rStr = rtl::OUString();
     if ( pCell )
         pCell->Delete();
-    if ( ScChangeActionContent::GetContentCellType( pOrgCell ) )
+    if ( GetContentCellType( pOrgCell ) )
     {
         pCell = pOrgCell->Clone( *pToDoc );
         switch ( pOrgCell->GetCellType() )
@@ -1916,7 +1914,7 @@ void ScChangeActionContent::PutValueToDoc(
                     pDoc->SetString( aPos.Col(), aPos.Row(), aPos.Tab(), rValue );
                 break;
                 default:
-                    switch ( ScChangeActionContent::GetContentCellType( pCell ) )
+                    switch ( GetContentCellType( pCell ) )
                     {
                         case SC_CACCT_MATORG :
                         {
