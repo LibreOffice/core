@@ -196,17 +196,29 @@ public:
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues );
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+        throw (
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException, css::uno::RuntimeException);
+
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
-        getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames );
+        getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+        throw (css::uno::RuntimeException);
+
     virtual void SAL_CALL addPropertiesChangeListener(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
-        const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener );
+        const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
+        throw (css::uno::RuntimeException);
+
     virtual void SAL_CALL removePropertiesChangeListener(
-        const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener );
+        const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
+        throw (css::uno::RuntimeException);
+
     virtual void SAL_CALL firePropertiesChangeEvent(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
-        const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener );
+        const ::com::sun::star::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
+        throw (css::uno::RuntimeException);
 
     // XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault()

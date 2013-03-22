@@ -2335,6 +2335,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 void SAL_CALL SwXTextCursor::setPropertyValues(
     const uno::Sequence< ::rtl::OUString >& aPropertyNames,
     const uno::Sequence< uno::Any >& aValues )
+    throw (
+        css::beans::PropertyVetoException, css::lang::IllegalArgumentException,
+        css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     if( aValues.getLength() != aPropertyNames.getLength() )
     {
@@ -2367,6 +2370,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
 
 uno::Sequence< uno::Any > SAL_CALL
 SwXTextCursor::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+    throw (css::uno::RuntimeException)
 {
     // a banal implementation for now
     uno::Sequence< uno::Any > aValues( aPropertyNames.getLength() );
@@ -2378,11 +2382,13 @@ SwXTextCursor::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPrope
 void SAL_CALL SwXTextCursor::addPropertiesChangeListener(
         const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
         const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
+    throw (css::uno::RuntimeException)
 {
     OSL_FAIL("SwXTextCursor::addPropertiesChangeListener(): not implemented");
 }
 void SAL_CALL SwXTextCursor::removePropertiesChangeListener(
         const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
+    throw (css::uno::RuntimeException)
 {
     OSL_FAIL("SwXTextCursor::removePropertiesChangeListener(): not implemented");
 }
@@ -2390,6 +2396,7 @@ void SAL_CALL SwXTextCursor::removePropertiesChangeListener(
 void SAL_CALL SwXTextCursor::firePropertiesChangeEvent(
         const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
         const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
+    throw (css::uno::RuntimeException)
 {
     OSL_FAIL("SwXTextCursor::firePropertiesChangeEvent(): not implemented");
 }
