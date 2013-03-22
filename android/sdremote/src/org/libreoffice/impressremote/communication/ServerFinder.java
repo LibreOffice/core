@@ -63,7 +63,7 @@ public class ServerFinder {
                     break;
                 }
             }
-            if (i == aBuffer.length || !aCommand.equals("LOREMOTE_ADVERTISE")) {
+            if (i == aBuffer.length || !"LOREMOTE_ADVERTISE".equals(aCommand)) {
                 return;
             }
             for (int j = i + 1; j < aBuffer.length; j++) {

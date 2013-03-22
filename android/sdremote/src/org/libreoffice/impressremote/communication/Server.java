@@ -12,7 +12,7 @@ public class Server {
 
     public enum Protocol {
         NETWORK, BLUETOOTH
-    };
+    }
 
     private Protocol mProtocol;
     private String mAddress;
