@@ -259,8 +259,8 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
                         ScTokenArray* pArr = aComp.CompileString( aNew );
                         ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
                                                     pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
-                        pDoc->PutCell( aPos, pNewCell );
-                        bOk = sal_True;
+                        pDoc->SetFormulaCell(aPos, pNewCell);
+                        bOk = true;
                     }
                 }
                 pCell = aIter.GetNext();

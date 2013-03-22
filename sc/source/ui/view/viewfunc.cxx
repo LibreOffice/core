@@ -705,7 +705,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd; ++itr)
-                pDoc->PutCell(nCol, nRow, *itr, new ScEditCell(rData, pDoc, NULL));
+            {
+                ScAddress aPos(nCol, nRow, *itr);
+                pDoc->SetEditText(aPos, rData, pDoc->GetEditPool());
+            }
 
             if ( bRecord )
             {   //  because of ChangeTrack current first

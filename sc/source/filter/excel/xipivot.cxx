@@ -123,7 +123,7 @@ void XclImpPCItem::WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScP
             XclTools::ErrorToEnum( fValue, EXC_BOOLERR_ERROR, nErrCode ) );
         ScFormulaCell* pCell = new ScFormulaCell( &rDoc, rScPos, pScTokArr );
         pCell->SetHybridDouble( fValue );
-        rDoc.PutCell( rScPos, pCell );
+        rDoc.SetFormulaCell(rScPos, pCell);
     }
 }
 

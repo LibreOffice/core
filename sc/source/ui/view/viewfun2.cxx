@@ -808,12 +808,13 @@ void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData 
     if (aNewStr.GetChar(0) == '=')                      // Formula ?
     {
         //  SetString not possible, because in Clipboard-Documents nothing will be compiled!
-        ScFormulaCell* pFCell = new ScFormulaCell( pDoc, aPos, aNewStr );
-        pInsDoc->PutCell( nCol, nRow, nTab, pFCell );
+        pInsDoc->SetFormulaCell(aPos, new ScFormulaCell(pDoc, aPos, aNewStr));
     }
     else if ( pData )
+    {
         // A copy of pData will be stored.
-        pInsDoc->PutCell(nCol, nRow, nTab, new ScEditCell(*pData, pDoc, NULL));
+        pInsDoc->SetEditText(aPos, *pData, pDoc->GetEditPool());
+    }
     else
         pInsDoc->SetString( nCol, nRow, nTab, aNewStr );
 

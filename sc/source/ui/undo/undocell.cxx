@@ -706,8 +706,7 @@ void ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
             if (pCell->GetCellType() == CELLTYPE_EDIT )
             {
                 // A copy of pTObj will be stored in the cell.
-                ScEditCell* pNewCell = new ScEditCell(*pTObj, pDoc, NULL);
-                pDoc->PutCell( nCol, nRow, nTab, pNewCell );
+                pDoc->SetEditText(ScAddress(nCol,nRow,nTab), *pTObj, pDoc->GetEditPool());
                 if ( !bUndo )
                     SetChangeTrack( pCell );
             }

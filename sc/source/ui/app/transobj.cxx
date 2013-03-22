@@ -61,6 +61,7 @@
 #include "viewdata.hxx"
 #include "dociter.hxx"
 #include "cellsuno.hxx"
+#include "stringutil.hxx"
 
 using namespace com::sun::star;
 
@@ -799,19 +800,22 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
                 ScBaseCell* pNew = 0;
                 sal_uInt16 nErrCode = pFCell->GetErrCode();
+                ScAddress aPos(nCol, nRow, nDestTab);
                 if (nErrCode)
                 {
-                    pNew = new ScStringCell( ScGlobal::GetErrorString(nErrCode) );
                     if ( ((const SvxHorJustifyItem*) pDestDoc->GetAttr(
                             nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY))->GetValue() ==
                             SVX_HOR_JUSTIFY_STANDARD )
                         pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
                                 SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY) );
+
+                    ScSetStringParam aParam;
+                    aParam.setTextInput();
+                    pDestDoc->SetString(aPos, ScGlobal::GetErrorString(nErrCode));
                 }
                 else if (pFCell->IsValue())
                 {
-                    double fVal = pFCell->GetValue();
-                    pNew = new ScValueCell( fVal );
+                    pDestDoc->SetValue(aPos, pFCell->GetValue());
                 }
                 else
                 {
@@ -823,11 +827,12 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                         pDestDoc->SetEditText(ScAddress(nCol,nRow,nDestTab), rEngine.CreateTextObject());
                     }
                     else
-                        pNew = new ScStringCell( aStr );
+                    {
+                        ScSetStringParam aParam;
+                        aParam.setTextInput();
+                        pDestDoc->SetString(aPos, aStr);
+                    }
                 }
-
-                if (pNew)
-                    pDestDoc->PutCell(nCol, nRow, nDestTab, pNew);
 
                 //  number formats
 
