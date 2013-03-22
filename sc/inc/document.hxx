@@ -836,6 +836,7 @@ public:
     SC_DLLPUBLIC bool           HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC bool           HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC bool           HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC bool HasValueData( const ScAddress& rPos ) const;
     bool            HasStringCells( const ScRange& rRange ) const;
 
     /** Returns true, if there is any data to create a selection list for rPos. */

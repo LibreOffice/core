@@ -37,7 +37,6 @@
 #include "document.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
-#include "cell.hxx"
 #include "cellform.hxx"
 #include "editutil.hxx"
 #include "stlpool.hxx"
@@ -173,40 +172,35 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         return ;
     }
 
-    ScBaseCell* pCell;
-    pDoc->GetCell( nCol, nRow, nTab, pCell );
-    sal_Bool bValueData;
-    rtl::OUString aContent;
-    if ( pCell )
+    bool bValueData = false;
+    OUString aContent;
+    ScAddress aPos(nCol, nRow, nTab);
+    switch (pDoc->GetCellType(aPos))
     {
-        switch ( pCell->GetCellType() )
+        case CELLTYPE_NOTE:
+        case CELLTYPE_NONE:
+            bValueData = false;
+        break;
+        case CELLTYPE_EDIT:
         {
-            case CELLTYPE_NOTE :
-                bValueData = false;
-            break;      // nix
-            case CELLTYPE_EDIT :
+            bValueData = false;
+            const EditTextObject* pObj = pDoc->GetEditText(aPos);
+            if (pObj)
             {
-                bValueData = false;
                 EditEngine& rEngine = GetEditEngine();
-                const EditTextObject* pObj = static_cast<const ScEditCell*>(pCell)->GetData();
-                if ( pObj )
-                {
-                    rEngine.SetText( *pObj );
-                    aContent = rEngine.GetText( LINEEND_LF );   // LineFeed zwischen Absaetzen!
-                }
-            }
-            break;
-            default:
-            {
-                bValueData = pCell->HasValueData();
-                sal_uLong nFormat = pAttr->GetNumberFormat( pFormatter );
-                Color* pColor;
-                ScCellFormat::GetString( pCell, nFormat, aContent, &pColor, *pFormatter );
+                rEngine.SetText(*pObj);
+                aContent = rEngine.GetText(LINEEND_LF);   // LineFeed zwischen Absaetzen!
             }
         }
+        break;
+        default:
+        {
+            bValueData = pDoc->HasValueData(aPos);
+            sal_uLong nFormat = pAttr->GetNumberFormat(pFormatter);
+            Color* pColor;
+            aContent = ScCellFormat::GetString(*pDoc, aPos, nFormat, &pColor, *pFormatter);
+        }
     }
-    else
-        bValueData = false;
 
     sal_Bool bResetPar, bResetAttr;
     bResetPar = bResetAttr = false;

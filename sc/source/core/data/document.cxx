@@ -3344,6 +3344,10 @@ bool ScDocument::HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
         return false;
 }
 
+bool ScDocument::HasValueData( const ScAddress& rPos ) const
+{
+    return HasValueData(rPos.Col(), rPos.Row(), rPos.Tab());
+}
 
 bool ScDocument::HasStringCells( const ScRange& rRange ) const
 {
