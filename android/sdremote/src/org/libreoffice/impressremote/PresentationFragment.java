@@ -21,10 +21,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -38,7 +35,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.SherlockFragment;
 
 public class PresentationFragment extends SherlockFragment {
@@ -306,24 +302,7 @@ public class PresentationFragment extends SherlockFragment {
 
         @Override
         protected Bitmap createBitmap(int position) {
-            Bitmap aBitmap = mSlideShow.getImage(position);
-            final int borderWidth = 8;
-
-            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-            p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
-
-            RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
-                            + aBitmap.getWidth(), borderWidth
-                            + aBitmap.getHeight());
-            Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2
-                            * borderWidth, aBitmap.getHeight() + 2
-                            * borderWidth, aBitmap.getConfig());
-            Canvas canvas = new Canvas(aOut);
-            canvas.drawColor(getResources().getColor(R.color.light_grey));
-            canvas.drawRect(aRect, p);
-            canvas.drawBitmap(aBitmap, null, aRect, null);
-
-            return aOut;
+            return mSlideShow.getImage(position);
         }
     }
 }
