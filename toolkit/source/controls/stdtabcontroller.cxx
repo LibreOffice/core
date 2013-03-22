@@ -28,6 +28,7 @@
 #include <rtl/uuid.h>
 
 #include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -348,14 +349,16 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 
 void StdTabController::activateFirst(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    SolarMutexGuard aSolarGuard;
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
 
     ImplActivateControl( sal_True );
 }
 
 void StdTabController::activateLast(  ) throw(RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    SolarMutexGuard aSolarGuard;
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
 
     ImplActivateControl( sal_False );
 }
