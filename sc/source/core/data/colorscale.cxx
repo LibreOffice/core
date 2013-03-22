@@ -59,6 +59,11 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mpCell(),
     meType(rEntry.meType)
 {
+    if(rEntry.mpCell)
+    {
+        mpCell.reset(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*rEntry.mpCell->GetDocument(), SC_CLONECELL_NOMAKEABS_EXTERNAL)));
+        mpCell->StartListeningTo( mpCell->GetDocument() );
+    }
 }
 
 ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry):
@@ -76,6 +81,8 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
 
 ScColorScaleEntry::~ScColorScaleEntry()
 {
+    if(mpCell)
+        mpCell->EndListeningTo(mpCell->GetDocument());
 }
 
 void ScColorScaleEntry::SetFormula( const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
