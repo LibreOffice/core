@@ -21,6 +21,7 @@
 #define _SVDOTEXT_HXX
 
 #include <vcl/field.hxx>
+#include <svx/itextprovider.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdtrans.hxx> // GeoStat
 #include <tools/datetime.hxx>
@@ -123,7 +124,7 @@ namespace sdr
 //   SdrTextObj
 //************************************************************
 
-class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj
+class SVX_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {
 private:
     // Cell needs access to ImpGetDrawOutliner();

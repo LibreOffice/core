@@ -99,6 +99,46 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
     return &aSvxCellPropertySet;
 }
 
+namespace
+{
+
+class CellTextProvider : public svx::ITextProvider
+{
+public:
+    explicit CellTextProvider(const sdr::table::CellRef xCell);
+    virtual ~CellTextProvider();
+
+private:
+    virtual sal_Int32 getTextCount() const;
+    virtual SdrText* getText(sal_Int32 nIndex) const;
+
+private:
+    const sdr::table::CellRef m_xCell;
+};
+
+CellTextProvider::CellTextProvider(const sdr::table::CellRef xCell)
+    : m_xCell(xCell)
+{
+}
+
+CellTextProvider::~CellTextProvider()
+{
+}
+
+sal_Int32 CellTextProvider::getTextCount() const
+{
+    return 1;
+}
+
+SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
+{
+    (void) nIndex;
+    assert(nIndex == 0);
+    return m_xCell.get();
+}
+
+}
+
 namespace sdr
 {
     namespace properties
@@ -108,6 +148,8 @@ namespace sdr
         protected:
             // create a new itemset
             SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
+
+            const svx::ITextProvider& getTextProvider() const;
 
         public:
             // basic constructor
@@ -131,6 +173,9 @@ namespace sdr
             void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
 
             sdr::table::CellRef mxCell;
+
+        private:
+            const CellTextProvider maTextProvider;
         };
 
         // create a new itemset
@@ -153,15 +198,22 @@ namespace sdr
                 0, 0));
         }
 
+        const svx::ITextProvider& CellProperties::getTextProvider() const
+        {
+            return maTextProvider;
+        }
+
         CellProperties::CellProperties(SdrObject& rObj, sdr::table::Cell* pCell)
         :   TextProperties(rObj)
         ,   mxCell(pCell)
+        ,   maTextProvider(mxCell)
         {
         }
 
         CellProperties::CellProperties(const CellProperties& rProps, SdrObject& rObj, sdr::table::Cell* pCell)
         :   TextProperties(rProps, rObj)
         ,   mxCell( pCell )
+        ,   maTextProvider(mxCell)
         {
         }
 
