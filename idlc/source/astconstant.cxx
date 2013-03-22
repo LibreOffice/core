@@ -54,7 +54,6 @@ sal_Bool AstConstant::dumpBlob(
     typereg::Writer & rBlob, sal_uInt16 index, bool published)
 {
     RTConstValue    aConst;
-    sal_Unicode*    str = NULL;
 
     AstExprValue *exprVal = getConstValue()->getExprValue();
     switch (getConstValueType())
@@ -119,8 +118,6 @@ sal_Bool AstConstant::dumpBlob(
         index, getDocumentation(), OUString(),
         RT_ACCESS_CONST | (published ? RT_ACCESS_PUBLISHED : 0),
         OStringToOUString(name, RTL_TEXTENCODING_UTF8), type, aConst);
-    if (str)
-        delete[] str;
 
     return sal_True;
 }
