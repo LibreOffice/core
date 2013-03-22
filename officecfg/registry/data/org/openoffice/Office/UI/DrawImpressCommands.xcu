@@ -1859,7 +1859,6 @@
 
       <node oor:name=".uno:MergeCells" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Zellen verbinden</value>
           <value xml:lang="en-US">Merge Cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1868,7 +1867,6 @@
       </node>
       <node oor:name=".uno:SplitCell" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Zelle teilen</value>
           <value xml:lang="en-US">Split Cells</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1877,7 +1875,6 @@
       </node>
       <node oor:name=".uno:OptimizeTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Optimieren</value>
           <value xml:lang="en-US">Optimize</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1902,7 +1899,6 @@
       </node>
       <node oor:name=".uno:CellVertBottom" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Unten</value>
           <value xml:lang="en-US">Bottom</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1911,7 +1907,6 @@
       </node>
       <node oor:name=".uno:CellVertCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Mittig (vertikal)</value>
           <value xml:lang="en-US">Center ( vertical )</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1920,7 +1915,6 @@
       </node>
       <node oor:name=".uno:CellVertTop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Oben</value>
           <value xml:lang="en-US">Top</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1929,7 +1923,6 @@
       </node>
       <node oor:name=".uno:InsertRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Zeile einfügen</value>
           <value xml:lang="en-US">Insert Row</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1943,7 +1936,6 @@
       </node>
       <node oor:name=".uno:InsertColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Spalte einfügen</value>
           <value xml:lang="en-US">Insert Column</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1957,11 +1949,9 @@
       </node>
       <node oor:name=".uno:DeleteRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Zeile löschen</value>
           <value xml:lang="en-US">Delete Row</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="de">Zeilen</value>
           <value xml:lang="en-US">~Rows</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1970,11 +1960,9 @@
       </node>
       <node oor:name=".uno:DeleteColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Spalte löschen</value>
           <value xml:lang="en-US">Delete Column</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="de">Spalten</value>
           <value xml:lang="en-US">~Columns</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1983,11 +1971,9 @@
       </node>
       <node oor:name=".uno:SelectTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Tabelle selektieren</value>
           <value xml:lang="en-US">Select Table</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="de">Tabelle</value>
           <value xml:lang="en-US">~Table</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1996,11 +1982,9 @@
       </node>
       <node oor:name=".uno:EntireColumn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Spalte selektieren</value>
           <value xml:lang="en-US">Select Column</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="de">Spalten</value>
           <value xml:lang="en-US">~Columns</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -2009,11 +1993,9 @@
       </node>
       <node oor:name=".uno:EntireRow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Zeile selektieren</value>
           <value xml:lang="en-US">Select Rows</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="de">Zeilen</value>
           <value xml:lang="en-US">~Rows</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -2022,7 +2004,6 @@
       </node>
       <node oor:name=".uno:TableDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Tabelleneigenschaften...</value>
           <value xml:lang="en-US">Ta~ble Properties...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -2031,7 +2012,6 @@
       </node>
       <node oor:name=".uno:AutoSum" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Summe</value>
           <value xml:lang="en-US">Sum</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -2040,7 +2020,6 @@
       </node>
       <node oor:name=".uno:TableSort" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">Sorti~eren...</value>
           <value xml:lang="en-US">So~rt...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -2049,7 +2028,6 @@
       </node>
       <node oor:name=".uno:InsertTable" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="de">~Tabelle...</value>
           <value xml:lang="en-US">~Table...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">

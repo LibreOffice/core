@@ -22,7 +22,6 @@
         <node oor:name="Commands">
             <node oor:name=".uno:WebHtml" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Vorschau in Web-Browser</value>
                     <value xml:lang="en-US">Preview in Web Browser</value>
                 </prop>
             </node>
@@ -4580,31 +4579,6 @@
             <node oor:name=".uno:SwitchXFormsDesignMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Design Mode On/Off</value>
-                    <value xml:lang="ar">إظهار/إخفاء وضع التصميم</value>
-                    <value xml:lang="no">Design Mode On/Off</value>
-                    <value xml:lang="ca">Mode de disseny activat/desactivat</value>
-                    <value xml:lang="zh-TW">啟動或關閉設計模式</value>
-                    <value xml:lang="cs">Režim návrhu zap/vyp</value>
-                    <value xml:lang="da">Udkasttilstand til/fra</value>
-                    <value xml:lang="el">Κατάσταση σχεδιασμού Ναι/Όχι</value>
-                    <value xml:lang="es">Modo Diseño</value>
-                    <value xml:lang="fi">Suunnittelutila käytössä / poissa käytöstä</value>
-                    <value xml:lang="fr">(Dés)activer le mode Conception</value>
-                    <value xml:lang="he">‮מצב עיצוב מופעל/מופסק‬</value>
-                    <value xml:lang="it">Mostra/nascondi Modo bozza</value>
-                    <value xml:lang="ja">デザインモード オン/オフ</value>
-                    <value xml:lang="ko">디자인 모드 적용/적용 안함</value>
-                    <value xml:lang="nl">Ontwerpmodus aan/uit</value>
-                    <value xml:lang="pl">Włącz/Wyłącz tryb projektu</value>
-                    <value xml:lang="pt-BR">Ativar/Desativar Modo Esboço</value>
-                    <value xml:lang="ru">Визуальное проектирование формы</value>
-                    <value xml:lang="sk">Režim návrhu zap/vyp</value>
-                    <value xml:lang="sv">Utkastläge på/av</value>
-                    <value xml:lang="th">โหมดออกแบบ มี/ไม่มี</value>
-                    <value xml:lang="tr">Tasarım kipini aç/kapat</value>
-                    <value xml:lang="hi">डिसैन प्रकार शुरू/बंद</value>
-                    <value xml:lang="zh-CN">启动或关闭设计模式</value>
-                    <value xml:lang="pt">Modo Esboço</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>9</value>
