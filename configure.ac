@@ -6967,7 +6967,7 @@ else
     SYSTEM_ZLIB=NO
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${OUTDIR}/inc/external/zlib"
-    ZLIB_LIBS="-L${OUTDIR}/lib -lz"
+    ZLIB_LIBS="-L${OUTDIR}/lib -lzlib"
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
