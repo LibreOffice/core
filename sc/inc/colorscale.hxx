@@ -95,7 +95,7 @@ public:
 namespace databar
 {
 
-enum ScAxisPostion
+enum ScAxisPosition
 {
     NONE,
     AUTOMATIC,
@@ -166,7 +166,7 @@ struct SC_DLLPUBLIC ScDataBarFormatData
      *
      * Default is false
      */
-    databar::ScAxisPostion meAxisPosition;
+    databar::ScAxisPosition meAxisPosition;
 
     /**
      * If TRUE we only show the bar and not the value

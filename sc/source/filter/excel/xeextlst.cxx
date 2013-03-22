@@ -126,7 +126,7 @@ XclExpExtDataBar::XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarForm
 
 namespace {
 
-const char* getAxisPosition(databar::ScAxisPostion eAxisPosition)
+const char* getAxisPosition(databar::ScAxisPosition eAxisPosition)
 {
     switch(eAxisPosition)
     {

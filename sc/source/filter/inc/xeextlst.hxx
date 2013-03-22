@@ -76,7 +76,7 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    databar::ScAxisPostion meAxisPosition;
+    databar::ScAxisPosition meAxisPosition;
 
     boost::scoped_ptr<XclExpExtCfvo> mpLowerLimit;
     boost::scoped_ptr<XclExpExtCfvo> mpUpperLimit;

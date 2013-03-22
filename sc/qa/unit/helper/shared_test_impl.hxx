@@ -35,7 +35,7 @@ struct DataBarData
     ScRange aRange;
     ScColorScaleEntryType eLowerLimitType;
     ScColorScaleEntryType eUpperLimitType;
-    databar::ScAxisPostion eAxisPosition;
+    databar::ScAxisPosition eAxisPosition;
 };
 
 DataBarData aData[] = {
