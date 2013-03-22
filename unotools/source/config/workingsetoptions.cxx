@@ -201,7 +201,7 @@ void SvtWorkingSetOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
             seqValues[nProperty] >>= m_seqWindowList;
         }
         #if OSL_DEBUG_LEVEL > 1
-        else DBG_ASSERT( sal_False, "SvtWorkingSetOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
+        else DBG_ASSERT( sal_False, "SvtWorkingSetOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
         #endif
     }
 }

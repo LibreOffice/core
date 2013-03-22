@@ -2505,7 +2505,7 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
         case PE_RIGHT_EXPECTED:      nRID = RID_ERR_RIGHTEXPECTED;          break;
 
         default:
-            nRID = RID_ERR_UNKOWN;
+            nRID = RID_ERR_UNKNOWN;
     }
     pErrDesc->Text += SM_RESSTR(nRID);
 

@@ -53,11 +53,11 @@ Guess::Guess(const char * guess_str)
     string enc;
 
     //if the guess is not like "UNKNOWN" or "SHORT", go into the brackets
-//     if(strncmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKOWN, strlen(_TEXTCAT_RESULT_UNKOWN)) != 0
+//     if(strncmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKNOWN, strlen(_TEXTCAT_RESULT_UNKNOWN)) != 0
 //        &&
 //        strncmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT, strlen(_TEXTCAT_RESULT_SHORT)) != 0)
 //     {
-        if(strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKOWN) != 0
+        if(strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKNOWN) != 0
            &&
            strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT) != 0)
         {
