@@ -57,23 +57,26 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rN
     {
         // don't check code length here, always use the stored result
         // (AutoCalc is disabled during CompileXML)
-        const ScCellValue& rVal = aIter.get();
-        if (rVal.hasString())
+        if (aIter.hasString())
         {
             OUString aStr;
-            switch (rVal.meType)
+            switch (aIter.getType())
             {
                 case CELLTYPE_STRING:
-                    aStr = *rVal.mpString;
+                    aStr = aIter.getString();
                 break;
                 case CELLTYPE_FORMULA:
-                    aStr = rVal.mpFormula->GetString();
+                    aStr = aIter.getFormulaCell()->GetString();
                 break;
                 case CELLTYPE_EDIT:
                 {
-                    ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
-                    rEngine.SetText(*rVal.mpEditText);
-                    aStr = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
+                    const EditTextObject* p = aIter.getEditText();
+                    if (p)
+                    {
+                        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+                        rEngine.SetText(*p);
+                        aStr = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
+                    }
                 }
                 break;
                 case CELLTYPE_NONE:

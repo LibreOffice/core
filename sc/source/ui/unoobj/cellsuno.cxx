@@ -3561,7 +3561,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
                 //  Notizen zaehlen als nicht-leer
-                if (!aIter.get().isEmpty())
+                if (!aIter.isEmpty())
                     aMarkData.SetMultiMarkArea(aIter.GetPos(), false);
             }
         }
@@ -3597,8 +3597,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
                 bool bAdd = false;
-                const ScCellValue& rVal = aIter.get();
-                switch (rVal.meType)
+                switch (aIter.getType())
                 {
                     case CELLTYPE_STRING:
                         if ( nContentFlags & sheet::CellFlags::STRING )
@@ -3677,9 +3676,9 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
             ScCellIterator aIter( pDoc, aRange );
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
-                if (aIter.get().meType == CELLTYPE_FORMULA)
+                if (aIter.getType() == CELLTYPE_FORMULA)
                 {
-                    ScFormulaCell* pFCell = aIter.get().mpFormula;
+                    ScFormulaCell* pFCell = aIter.getFormulaCell();
                     bool bAdd = false;
                     if (pFCell->GetErrCode())
                     {
@@ -3737,7 +3736,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         ScCellIterator aCmpIter( pDoc, aCmpRange );
         for (bool bHasCell = aCmpIter.first(); bHasCell; bHasCell = aCmpIter.next())
         {
-            if (aCmpIter.get().meType != CELLTYPE_NOTE)
+            if (aCmpIter.getType() != CELLTYPE_NOTE)
             {
                 SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetPos().Col()) : static_cast<SCCOLROW>(aCmpIter.GetPos().Row());
                 if (bColumnDiff)
@@ -3778,17 +3777,13 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
             ScCellIterator aIter( pDoc, aRange );
             for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
             {
-                const ScCellValue& rCell = aIter.get();
-
                 if (bColumnDiff)
                     aCmpAddr = ScAddress( aIter.GetPos().Col(), nCmpPos, aIter.GetPos().Tab() );
                 else
                     aCmpAddr = ScAddress( static_cast<SCCOL>(nCmpPos), aIter.GetPos().Row(), aIter.GetPos().Tab() );
 
-                ScCellValue aOtherCell;
-                aOtherCell.assign(*pDoc, aCmpAddr);
                 ScRange aOneRange(aIter.GetPos());
-                if (!rCell.equalsWithoutFormat(aOtherCell))
+                if (!aIter.equalsWithoutFormat(aCmpAddr))
                     aMarkData.SetMultiMarkArea( aOneRange );
                 else
                     aMarkData.SetMultiMarkArea( aOneRange, false );     // deselect
@@ -3868,11 +3863,10 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
                 ScCellIterator aIter( pDoc, aRange );
                 for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
                 {
-                    const ScCellValue& rVal = aIter.get();
-                    if (rVal.meType != CELLTYPE_FORMULA)
+                    if (aIter.getType() != CELLTYPE_FORMULA)
                         continue;
 
-                    ScDetectiveRefIter aRefIter(rVal.mpFormula);
+                    ScDetectiveRefIter aRefIter(aIter.getFormulaCell());
                     ScRange aRefRange;
                     while ( aRefIter.GetNextRef( aRefRange) )
                     {
@@ -3917,12 +3911,11 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
             ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
             for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
             {
-                const ScCellValue& rVal = aCellIter.get();
-                if (rVal.meType != CELLTYPE_FORMULA)
+                if (aCellIter.getType() != CELLTYPE_FORMULA)
                     continue;
 
                 bool bMark = false;
-                ScDetectiveRefIter aIter(rVal.mpFormula);
+                ScDetectiveRefIter aIter(aCellIter.getFormulaCell());
                 ScRange aRefRange;
                 while ( aIter.GetNextRef( aRefRange) )
                 {

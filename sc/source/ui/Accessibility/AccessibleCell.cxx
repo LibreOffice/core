@@ -367,11 +367,10 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
 
         for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
         {
-            const ScCellValue& rVal = aCellIter.get();
-            if (rVal.meType == CELLTYPE_FORMULA)
+            if (aCellIter.getType() == CELLTYPE_FORMULA)
             {
                 bool bFound = false;
-                ScDetectiveRefIter aIter(rVal.mpFormula);
+                ScDetectiveRefIter aIter(aCellIter.getFormulaCell());
                 ScRange aRef;
                 while ( !bFound && aIter.GetNextRef( aRef ) )
                 {

@@ -59,6 +59,8 @@ public:
     /// Retrieves string with paragraphs delimited by new lines ('\n').
     static String GetMultilineString( const EditEngine& rEngine );
 
+    static OUString GetString( const EditTextObject& rEditText );
+
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,

@@ -302,11 +302,10 @@ sal_Bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
     ScCellIterator aIter( pDoc, rRange);
     for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
-        const ScCellValue& rVal = aIter.get();
-        if (rVal.meType != CELLTYPE_FORMULA)
+        if (aIter.getType() != CELLTYPE_FORMULA)
             continue;
 
-        nError = rVal.mpFormula->GetErrCode();
+        nError = aIter.getFormulaCell()->GetErrCode();
         if (nError)
             rErrPos = aIter.GetPos();
     }
@@ -794,7 +793,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
     ScCellIterator aIter( pDoc, rRef);
     for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
-        if (aIter.get().meType != CELLTYPE_FORMULA)
+        if (aIter.getType() != CELLTYPE_FORMULA)
             continue;
 
         const ScAddress& rPos = aIter.GetPos();
@@ -896,7 +895,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
     ScCellIterator aCellIter( pDoc, rRef);
     for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
     {
-        if (aCellIter.get().meType != CELLTYPE_FORMULA)
+        if (aCellIter.getType() != CELLTYPE_FORMULA)
             continue;
 
         sal_uInt16 nTemp = FindPredLevel(aCellIter.GetPos().Col(), aCellIter.GetPos().Row(), nLevel, nDeleteLevel);

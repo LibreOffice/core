@@ -1180,7 +1180,7 @@ bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rE
     ScCellIterator aIter( pDoc, rRange );
     for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
     {
-        if (!aIter.get().isEmpty())      // real content?
+        if (!aIter.isEmpty())      // real content?
         {
             if (!rExcept.In(aIter.GetPos()))
                 return false;       // cell found

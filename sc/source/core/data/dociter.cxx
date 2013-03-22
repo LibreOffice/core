@@ -35,6 +35,8 @@
 #include "queryparam.hxx"
 #include "queryentry.hxx"
 #include "globstr.hrc"
+#include "editutil.hxx"
+
 #include "tools/fract.hxx"
 #include "editeng/editobj.hxx"
 
@@ -943,7 +945,9 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument,
     maStartPos(nSCol, nSRow, nSTab),
     maEndPos(nECol, nERow, nETab),
     nColRow(0),
-    bSubTotal(bSTotal)
+    bSubTotal(bSTotal),
+    meCurType(CELLTYPE_NONE),
+    mfCurValue(0.0)
 {
     init();
 }
@@ -953,7 +957,9 @@ ScCellIterator::ScCellIterator( ScDocument* pDocument, const ScRange& rRange, bo
     maStartPos(rRange.aStart),
     maEndPos(rRange.aEnd),
     nColRow(0),
-    bSubTotal(bSTotal)
+    bSubTotal(bSTotal),
+    meCurType(CELLTYPE_NONE),
+    mfCurValue(0.0)
 {
     init();
 }
@@ -1068,7 +1074,7 @@ bool ScCellIterator::getCurrent()
                     maCurPos.IncTab();
                     if (maCurPos.Tab() > maEndPos.Tab())
                     {
-                        maCurCell.clear();
+                        meCurType = CELLTYPE_NONE;
                         return false; // Over and out
                     }
                 }
@@ -1093,33 +1099,26 @@ bool ScCellIterator::getCurrent()
                 else
                 {
                     // Found it!
-                    maCurCell.clear();
-                    maCurCell.meType = pCell->GetCellType();
-                    switch (maCurCell.meType)
+                    meCurType = pCell->GetCellType();
+                    switch (meCurType)
                     {
                         case CELLTYPE_VALUE:
-                            maCurCell.mfValue = static_cast<const ScValueCell*>(pCell)->GetValue();
+                            mfCurValue = static_cast<const ScValueCell*>(pCell)->GetValue();
                         break;
                         case CELLTYPE_STRING:
-                        {
-                            const OUString& rStr = static_cast<const ScStringCell*>(pCell)->GetString();
-                            maCurCell.mpString = new OUString(rStr);
-                        }
+                            maCurString = static_cast<const ScStringCell*>(pCell)->GetString();
                         break;
                         case CELLTYPE_EDIT:
-                        {
-                            const EditTextObject* pData = static_cast<const ScEditCell*>(pCell)->GetData();
-                            maCurCell.mpEditText = pData->Clone();
-                        }
+                            mpCurEditText = static_cast<const ScEditCell*>(pCell)->GetData();
                         break;
                         case CELLTYPE_FORMULA:
-                            maCurCell.mpFormula = static_cast<const ScFormulaCell*>(pCell)->Clone();
+                            mpCurFormula = static_cast<ScFormulaCell*>(pCell);
                         break;
                         default:
-                            maCurCell.meType = CELLTYPE_NONE;
+                            meCurType = CELLTYPE_NONE;
                     }
 
-                    if (maCurCell.meType != CELLTYPE_NONE)
+                    if (meCurType != CELLTYPE_NONE)
                         return true;
 
                     maCurPos.IncRow();
@@ -1130,6 +1129,145 @@ bool ScCellIterator::getCurrent()
         }
         else
             maCurPos.SetRow(maEndPos.Row() + 1); // Next column
+    }
+    return false;
+}
+
+CellType ScCellIterator::getType() const
+{
+    return meCurType;
+}
+
+const OUString& ScCellIterator::getString() const
+{
+    return maCurString;
+}
+
+const EditTextObject* ScCellIterator::getEditText() const
+{
+    return mpCurEditText;
+}
+
+ScFormulaCell* ScCellIterator::getFormulaCell()
+{
+    return mpCurFormula;
+}
+
+bool ScCellIterator::hasString() const
+{
+    switch (meCurType)
+    {
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return true;
+        case CELLTYPE_FORMULA:
+            return !mpCurFormula->IsValue();
+        default:
+            ;
+    }
+
+    return false;
+}
+
+bool ScCellIterator::hasNumeric() const
+{
+    switch (meCurType)
+    {
+        case CELLTYPE_VALUE:
+            return true;
+        case CELLTYPE_FORMULA:
+            return mpCurFormula->IsValue();
+        default:
+            ;
+    }
+
+    return false;
+}
+
+bool ScCellIterator::isEmpty() const
+{
+    return meCurType == CELLTYPE_NOTE || meCurType == CELLTYPE_NONE;
+}
+
+namespace {
+
+CellType adjustCellType( CellType eOrig )
+{
+    switch (eOrig)
+    {
+        case CELLTYPE_NOTE:
+            return CELLTYPE_NONE;
+        case CELLTYPE_EDIT:
+            return CELLTYPE_STRING;
+        default:
+            ;
+    }
+    return eOrig;
+}
+
+}
+
+bool ScCellIterator::equalsWithoutFormat( const ScAddress& rPos ) const
+{
+    // Fetch the other cell first.
+    if (!pDoc->TableExists(rPos.Tab()))
+        return false;
+
+    ScTable& rTab = *pDoc->maTabs[rPos.Tab()];
+    if (!ValidColRow(rPos.Col(), rPos.Row()))
+        return false;
+
+    ScColumn& rCol = rTab.aCol[rPos.Col()];
+    SCSIZE nIndex;
+    if (!rCol.Search(rPos.Row(), nIndex))
+        return false;
+
+    ScBaseCell* pCell2 = rCol.maItems[nIndex].pCell;
+
+    CellType eType1 = adjustCellType(meCurType);
+    CellType eType2 = adjustCellType(pCell2->GetCellType());
+    if (eType1 != eType2)
+        return false;
+
+    switch (eType1)
+    {
+        case CELLTYPE_NONE:
+            // Both are empty.
+            return true;
+        case CELLTYPE_VALUE:
+            return mfCurValue == static_cast<ScValueCell*>(pCell2)->GetValue();
+        case CELLTYPE_STRING:
+        {
+            OUString aStr1;
+            if (meCurType == CELLTYPE_STRING)
+                aStr1 = maCurString;
+            else if (meCurType == CELLTYPE_EDIT)
+                aStr1 = ScEditUtil::GetString(*mpCurEditText);
+
+            OUString aStr2 = pCell2->GetStringData();
+            return aStr1 == aStr2;
+        }
+        case CELLTYPE_FORMULA:
+        {
+            ScTokenArray* pCode1 = mpCurFormula->GetCode();
+            ScTokenArray* pCode2 = static_cast<ScFormulaCell*>(pCell2)->GetCode();
+
+            if (pCode1->GetLen() != pCode2->GetLen())
+                return false;
+
+            sal_uInt16 n = pCode1->GetLen();
+            formula::FormulaToken** ppToken1 = pCode1->GetArray();
+            formula::FormulaToken** ppToken2 = pCode2->GetArray();
+            for (sal_uInt16 i = 0; i < n; ++i)
+            {
+                if (!ppToken1[i]->TextEqual(*(ppToken2[i])))
+                    return false;
+            }
+
+            return true;
+        }
+        default:
+            ;
     }
     return false;
 }
@@ -1149,11 +1287,6 @@ bool ScCellIterator::next()
 {
     maCurPos.IncRow();
     return getCurrent();
-}
-
-const ScCellValue& ScCellIterator::get() const
-{
-    return maCurCell;
 }
 
 //-------------------------------------------------------------------------------

@@ -2062,12 +2062,14 @@ void ScXMLExport::_ExportAutoStyles()
                 if (pDoc->IsStreamValid(nTab))
                 {
                     ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
-                    ScBaseCell* pCell = aIter.GetFirst();
-                    while (pCell)
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        if (pCell->GetCellType() == CELLTYPE_FORMULA)
-                            static_cast<ScFormulaCell*>(pCell)->IsValue();      // interpret if dirty
-                        pCell = aIter.GetNext();
+                        if (aIter.getType() != CELLTYPE_FORMULA)
+                            continue;
+
+                        ScFormulaCell* pFC = aIter.getFormulaCell();
+                        if (pFC)
+                            pFC->IsValue(); // interpret if dirty
                     }
                 }
 

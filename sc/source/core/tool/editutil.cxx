@@ -29,6 +29,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include "editeng/editobj.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/inethist.hxx>
@@ -88,6 +89,19 @@ String ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
 String ScEditUtil::GetMultilineString( const EditEngine& rEngine )
 {
     return lcl_GetDelimitedString(rEngine, '\n');
+}
+
+OUString ScEditUtil::GetString( const EditTextObject& rEditText )
+{
+    OUStringBuffer aRet;
+    size_t n = rEditText.GetParagraphCount();
+    for (size_t i = 0; i < n; ++i)
+    {
+        if (i > 0)
+            aRet.append('\n');
+        aRet.append(rEditText.GetText(i));
+    }
+    return aRet.makeStringAndClear();
 }
 
 //------------------------------------------------------------------------
