@@ -2318,8 +2318,8 @@ namespace
         aURL.SetURL(aName);
 
         aURL.setExtension( _sExtension );
-        String sNewName(newName);
-        sNewName.AppendAscii(".");
+        OUString sNewName(newName);
+        sNewName += ".";
         sNewName += _sExtension;
 
         try
