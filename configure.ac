@@ -7608,12 +7608,6 @@ int main(int argc, char **argv) {
         LIBS=$save_LIBS
     else
         AC_MSG_RESULT([internal])
-        AC_MSG_CHECKING([for mysqlcppconn module])
-        if test -d mysqlcppconn; then
-            AC_MSG_RESULT([OK])
-        else
-            AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-        fi
         BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
         SYSTEM_MYSQL_CPPCONN=NO
     fi
