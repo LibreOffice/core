@@ -111,8 +111,8 @@ namespace sd
                                        const uno::Sequence<beans::PropertyValue>& aConfigProps );
 
     protected:
-        virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
-        virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
+        virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException );
+        virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException );
 
     private:
         bool LoadList( XPropertyListType t, const rtl::OUString &rPath,
@@ -388,14 +388,21 @@ uno::Sequence<beans::PropertyValue>
     return aRet;
 }
 
-void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+void
+DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
+        const Any* pValues)
+throw (UnknownPropertyException, PropertyVetoException,
+    IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     ::SolarMutexGuard aGuard;
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
-        throw UnknownPropertyException();
+    {
+        throw RuntimeException("Document or Shell missing",
+                static_cast<OWeakObject *>(this));
+    }
 
     sal_Bool bValue = sal_False;
     bool bOk, bChanged = false, bOptionsChanged = false;
@@ -949,14 +956,20 @@ void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )
     *pValue <<= aPath;
 }
 
-void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException )
+void
+DocumentSettings::_getPropertyValues(
+        const PropertyMapEntry** ppEntries, Any* pValue)
+throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     ::SolarMutexGuard aGuard;
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
     ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
-        throw UnknownPropertyException();
+    {
+        throw RuntimeException("Document or Shell missing",
+                static_cast<OWeakObject *>(this));
+    }
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 

@@ -282,17 +282,22 @@ Any SAL_CALL PropertySetHelper::getPropertyDefault( const ::rtl::OUString& aProp
     return _getPropertyDefault( pEntry );
 }
 
-void PropertySetHelper::_getPropertyStates( const comphelper::PropertyMapEntry**, PropertyState* ) throw(UnknownPropertyException )
+void PropertySetHelper::_getPropertyStates(
+        const comphelper::PropertyMapEntry**, PropertyState*)
+throw (UnknownPropertyException, RuntimeException)
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
-void PropertySetHelper::_setPropertyToDefault( const comphelper::PropertyMapEntry* )  throw(UnknownPropertyException )
+void
+PropertySetHelper::_setPropertyToDefault(const comphelper::PropertyMapEntry*)
+throw (UnknownPropertyException, RuntimeException)
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
-Any PropertySetHelper::_getPropertyDefault( const comphelper::PropertyMapEntry* ) throw(UnknownPropertyException, WrappedTargetException )
+Any PropertySetHelper::_getPropertyDefault(const comphelper::PropertyMapEntry*)
+throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OSL_FAIL( "you have to implement this yourself!");
 
