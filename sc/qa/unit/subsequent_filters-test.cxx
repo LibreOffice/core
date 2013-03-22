@@ -1732,50 +1732,6 @@ void ScFiltersTest::testRichTextContentODS()
     xDocSh->DoClose();
 }
 
-namespace {
-
-struct DataBarData
-{
-    ScRange aRange;
-    ScColorScaleEntryType eLowerLimitType;
-    ScColorScaleEntryType eUpperLimitType;
-    databar::ScAxisPostion eAxisPosition;
-};
-
-DataBarData aData[] = {
-    { ScRange(1,2,0,1,5,0), COLORSCALE_AUTO, COLORSCALE_AUTO, databar::AUTOMATIC },
-    { ScRange(3,2,0,3,5,0), COLORSCALE_MIN, COLORSCALE_MAX, databar::AUTOMATIC },
-    { ScRange(5,2,0,5,5,0), COLORSCALE_PERCENTILE, COLORSCALE_PERCENT, databar::AUTOMATIC },
-    { ScRange(7,2,0,7,5,0), COLORSCALE_VALUE, COLORSCALE_FORMULA, databar::AUTOMATIC },
-    { ScRange(1,9,0,1,12,0), COLORSCALE_AUTO, COLORSCALE_AUTO, databar::MIDDLE }
-};
-
-void testDataBar_Impl(ScDocument* pDoc)
-{
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
-    CPPUNIT_ASSERT(pList);
-
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
-    {
-        ScConditionalFormatList::const_iterator itr = std::find_if(pList->begin(),
-                pList->end(), FindCondFormatByEnclosingRange(aData[i].aRange));
-        CPPUNIT_ASSERT(itr != pList->end());
-        CPPUNIT_ASSERT_EQUAL(size_t(1), itr->size());
-
-        const ScFormatEntry* pFormatEntry = itr->GetEntry(0);
-        CPPUNIT_ASSERT_EQUAL(pFormatEntry->GetType(), condformat::DATABAR);
-        const ScDataBarFormat* pDataBar = static_cast<const ScDataBarFormat*>(pFormatEntry);
-        CPPUNIT_ASSERT(pDataBar);
-        const ScDataBarFormatData* pDataBarData = pDataBar->GetDataBarData();
-        CPPUNIT_ASSERT_EQUAL(aData[i].eLowerLimitType, pDataBarData->mpLowerLimit->GetType());
-        CPPUNIT_ASSERT_EQUAL(aData[i].eUpperLimitType, pDataBarData->mpUpperLimit->GetType());
-
-        CPPUNIT_ASSERT_EQUAL(aData[i].eAxisPosition, pDataBarData->meAxisPosition);
-    }
-}
-
-}
-
 void ScFiltersTest::testDataBarODS()
 {
     ScDocShellRef xDocSh = loadDoc("databar.", ODS);

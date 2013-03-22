@@ -48,6 +48,8 @@ public:
     void testConditionalFormatExportXLSX();
     void testColorScaleExportODS();
     void testColorScaleExportXLSX();
+    void testDataBarExportODS();
+    void testDataBarExportXLSX();
     void testMiscRowHeightExport();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -190,6 +192,34 @@ void ScExportTest::testColorScaleExportXLSX()
 
     testColorScale2Entry_Impl(pDoc);
     testColorScale3Entry_Impl(pDoc);
+}
+
+void ScExportTest::testDataBarExportODS()
+{
+    ScDocShellRef xShell = loadDoc("databar.", ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    testDataBar_Impl(pDoc);
+}
+
+void ScExportTest::testDataBarExportXLSX()
+{
+    ScDocShellRef xShell = loadDoc("databar.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    testDataBar_Impl(pDoc);
 }
 
 void ScExportTest::testMiscRowHeightExport()
