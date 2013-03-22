@@ -98,12 +98,14 @@
 #define WIDEEXPORT_REQUESTED        8
 #define SAVE_REQUESTED              16
 #define SAVEAS_REQUESTED            32
+#define SAVEACOPY_REQUESTED         64
 
 // possible statuses of save operation
 #define STATUS_NO_ACTION            0
 #define STATUS_SAVE                 1
 #define STATUS_SAVEAS               2
 #define STATUS_SAVEAS_STANDARDNAME  3
+#define STATUS_SAVEACOPY            4
 
 const char aFilterNameString[] = "FilterName";
 const char aFilterOptionsString[] = "FilterOptions";
@@ -128,6 +130,8 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
         nResult = SID_DIRECTEXPORTDOCASPDF;
     else if ( nStoreMode == SAVEAS_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
         nResult = SID_SAVEASDOC;
+    else if ( nStoreMode == SAVEACOPY_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
+        nResult = SID_SAVEACOPY;
     else {
         DBG_ASSERT( sal_False, "Unacceptable slot name is provided!\n" );
     }
@@ -149,6 +153,8 @@ static sal_uInt8 getStoreModeFromSlotName( const ::rtl::OUString& aSlotName )
         nResult = SAVE_REQUESTED;
     else if ( aSlotName == "SaveAs" )
         nResult = SAVEAS_REQUESTED;
+    else if ( aSlotName == "SaveACopy" )
+        nResult = SAVEACOPY_REQUESTED;
     else
         throw task::ErrorCodeIOException( ::rtl::OUString(),
                                             uno::Reference< uno::XInterface >(),
@@ -922,6 +928,11 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         aDialogFlags = SFXWB_EXPORT;
     }
 
+    if ( nStoreMode & SAVEACOPY_REQUESTED)
+    {
+        aDialogFlags = SFXWB_SAVEACOPY;
+    }
+
     boost::scoped_ptr<sfx2::FileDialogHelper> pFileDlg;
 
     ::rtl::OUString aDocServiceName = GetDocServiceName();
@@ -1662,7 +1673,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
         try {
             // Document properties can contain streams that should be freed before storing
             aModelData.FreeDocumentProps();
-            if ( ( nStoreMode & EXPORT_REQUESTED ) )
+            if ( ( (nStoreMode & EXPORT_REQUESTED) || (nStoreMode & SAVEACOPY_REQUESTED) ) )
                 aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
             else
                 aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
@@ -1688,7 +1699,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
 
         // this is actually a save operation with different parameters
         // so storeTo or storeAs without DocInfo operations are used
-        if ( ( nStoreMode & EXPORT_REQUESTED ) )
+        if ( ( nStoreMode & EXPORT_REQUESTED ) || ( nStoreMode & SAVEACOPY_REQUESTED ) )
             aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
         else
             aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );

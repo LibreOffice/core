@@ -924,6 +924,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
     mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
     mbIsSaveDlg             = sal_False;
+    mbIsSaveACopyDlg        = SFXWB_SAVEACOPY == ( nFlags & SFXWB_SAVEACOPY );
     mbPwdCheckBoxState      = sal_False;
     mbSelection             = sal_False;
     mbSelectionEnabled      = sal_True;
@@ -1117,6 +1118,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, sal_True );
         }
         catch( const Exception & ) { }
+    }
+
+    // Save a copy dialog
+    if ( mbIsSaveACopyDlg )
+    {
+        mxFileDlg->setTitle( SfxResId( STR_PB_SAVEACOPY ).toString() );
     }
 
     // the "insert file" dialog needs another title

@@ -64,6 +64,7 @@ class Window;
 // the SFXWB constants are for the nFlags parameter of the constructor
 #define SFXWB_INSERT            0x04000000L     // turn Open into Insert dialog
 #define SFXWB_EXPORT            0x40000000L     // turn Save into Export dialog
+#define SFXWB_SAVEACOPY         0x00400000L     // turn Save into Save a Copy dialog
 #define SFXWB_MULTISELECTION    0x20000000L
 #define SFXWB_GRAPHIC           0x00800000L     // register graphic formats
 

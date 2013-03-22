@@ -87,6 +87,7 @@ namespace sfx2
         sal_Bool                    mbHasPreview            : 1;
         sal_Bool                    mbShowPreview           : 1;
         sal_Bool                    mbIsSaveDlg             : 1;
+        sal_Bool                    mbIsSaveACopyDlg        : 1;
         sal_Bool                    mbExport                : 1;
 
         sal_Bool                    mbDeleteMatcher         : 1;

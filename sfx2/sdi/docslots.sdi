@@ -139,6 +139,11 @@ interface OfficeDocument : Document
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
+    SID_SAVEACOPY // ole(req) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
     SID_DOCTEMPLATE // ole(no) api(final/play/rec)
     [
         ExecMethod = ExecFile_Impl ;

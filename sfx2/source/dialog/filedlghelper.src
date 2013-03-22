@@ -101,6 +101,12 @@ String STR_PB_SAVE
     Text [ en-US ] = "~Save" ;
 };
 
+String STR_PB_SAVEACOPY
+{
+    Text [ en-US ] = "Save a Copy" ;
+};
+
+
 String STR_LB_IMAGE_TEMPLATE
 {
     Text [ en-US ] = "Style:" ;

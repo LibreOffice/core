@@ -36,6 +36,8 @@
 #define STR_LB_IMAGE_TEMPLATE       (RID_SFX_EXPLORER_START + 62)
 #define STR_LB_TEMPLATES            (RID_SFX_EXPLORER_START + 63)
 #define STR_LB_VERSION              (RID_SFX_EXPLORER_START + 64)
+#define STR_PB_SAVEACOPY            (RID_SFX_EXPLORER_START + 65)
+
 
 #endif
 

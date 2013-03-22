@@ -542,6 +542,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_EXPORTDOC:
         case SID_SAVEASDOC:
         case SID_SAVEDOC:
+        case SID_SAVEACOPY:
         {
             // derived class may decide to abort this
             if( !QuerySlotExecutable( nId ) )
@@ -574,6 +575,12 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, sal_False );
                     if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
                         rReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
+                }
+
+                if ( nId == SID_SAVEACOPY )
+                {
+                    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+                    rReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
                 }
 
                 // TODO/LATER: do the following GUI related actions in standalown method
@@ -749,7 +756,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 nErrorCode = ( lErr != ERRCODE_IO_ABORT ) && ( nErrorCode == ERRCODE_NONE ) ? nErrorCode : lErr;
             }
 
-            if (nId == SID_SAVEASDOC && nErrorCode == ERRCODE_NONE)
+            if ( (nId == SID_SAVEASDOC || nId == SID_SAVEACOPY) && nErrorCode == ERRCODE_NONE )
             {
                 SetReadOnlyUI(false);
             }
@@ -1051,6 +1058,20 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxStringItem( nWhich, SfxResId(STR_SAVEASDOC).toString() ) );
+                break;
+            }
+
+            case SID_SAVEACOPY:
+            {
+                if( ( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) != SFX_LOADED_MAINDOCUMENT )
+                {
+                    rSet.DisableItem( nWhich );
+                    break;
+                }
+                if ( /*!pCombinedFilters ||*/ !GetMedium() )
+                    rSet.DisableItem( nWhich );
+                else
+                    rSet.Put( SfxStringItem( nWhich, SfxResId(STR_SAVEACOPY).toString() ) );
                 break;
             }
 
