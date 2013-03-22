@@ -24,7 +24,7 @@
 enum CSS1Token
 {
     CSS1_NULL,
-    CSS1_UNKOWN,
+    CSS1_UNKNOWN,
 
     CSS1_IDENT,
     CSS1_STRING,

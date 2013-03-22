@@ -335,7 +335,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
         }
 
         #if OSL_DEBUG_LEVEL > 1
-        else DBG_ASSERT( sal_False, "SvtMenuOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
+        else DBG_ASSERT( sal_False, "SvtMenuOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
         #endif
     }
 

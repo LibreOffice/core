@@ -1611,7 +1611,7 @@ String RID_ERR_IDENT
     Text [ en-US ] = "ERROR : " ;
 };
 
-String RID_ERR_UNKOWN
+String RID_ERR_UNKNOWN
 {
     Text [ en-US ] = "Unknown error occurred" ;
 };

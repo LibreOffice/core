@@ -107,10 +107,6 @@ struct doc
                         TagVersion(
                             const CodeEntity &  i_ce );
 
-    void                Get_UnkownTags(
-                            Dyn_CeIterator &    o_result,
-                            const CodeEntity &  i_ce );
-
     bool                IsDeprecated(
                             const CodeEntity &  i_ce );
     bool                IsIncomplete(

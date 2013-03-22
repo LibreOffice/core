@@ -206,7 +206,7 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
             seqValues[nProperty] >>= m_nDialogScale;
         }
         #if OSL_DEBUG_LEVEL > 1
-        else DBG_ASSERT( sal_False, "SvtLocalisationOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
+        else DBG_ASSERT( sal_False, "SvtLocalisationOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
         #endif
     }
 
