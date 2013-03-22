@@ -88,6 +88,7 @@
 #define RID_STR_FILTCONFIG                  (RID_SFX_DOC_START+ 52)
 #define RID_STR_FILTBASIC                   (RID_SFX_DOC_START+ 53)
 #define RID_STR_WARNSTYLEOVERWRITE          (RID_SFX_DOC_START+ 54)
+#define STR_SAVEACOPY                       (RID_SFX_DOC_START+ 55)
 
 #define MSG_OPEN_READONLY                   (RID_SFX_DOC_START+ 58)
 
