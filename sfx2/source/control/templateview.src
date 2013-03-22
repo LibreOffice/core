@@ -9,12 +9,6 @@
 
 #include "templateview.hrc"
 
-Control CONTROL_BUTTONS
-{
-    Size = MAP_APPFONT( 290, 17 );
-    TabStop = False;
-};
-
 PushButton BTN_ALL_TEMPLATES
 {
     Pos = MAP_APPFONT( 1, 1 );

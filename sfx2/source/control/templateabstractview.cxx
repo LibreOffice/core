@@ -115,7 +115,7 @@ bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
 
 TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
-      mpItemView(new TemplateView(this)),
+      mpItemView(new TemplateView(pParent)),
       mbFilteredResults(false),
       meFilterOption(FILTER_APP_WRITER)
 {
@@ -124,7 +124,7 @@ TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, 
 
 TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
-      mpItemView(new TemplateView(this)),
+      mpItemView(new TemplateView(pParent)),
       mbFilteredResults(false),
       meFilterOption(FILTER_APP_WRITER)
 {
@@ -186,7 +186,13 @@ void TemplateAbstractView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
 
 void TemplateAbstractView::showOverlay (bool bVisible)
 {
+    Show(!bVisible);
     mpItemView->Show(bVisible);
+
+    mpItemView->SetPosSizePixel(GetPosPixel(), GetSizePixel());
+    mpItemView->SetStyle(GetStyle());
+
+    mpItemView->GrabFocus();
 
     // Clear items is the overlay is closed.
     if (!bVisible)

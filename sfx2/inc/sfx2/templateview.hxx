@@ -54,7 +54,6 @@ private:
     Link maOpenHdl;
     TemplateAbstractView* mpMasterView;
 
-    Control    maButtons;
     PushButton maAllButton;
     FixedText  maFTName;
     sal_uInt16 mnId;

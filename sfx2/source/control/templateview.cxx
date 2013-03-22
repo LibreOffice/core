@@ -34,14 +34,13 @@ using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
 TemplateView::TemplateView (Window *pParent)
-    : ThumbnailView(pParent,WB_VSCROLL),
+    : ThumbnailView(pParent,WB_VSCROLL | WB_TABSTOP),
       mpMasterView(NULL),
-      maButtons(this, SfxResId(CONTROL_BUTTONS)),
-      maAllButton(&maButtons, SfxResId(BTN_ALL_TEMPLATES)),
-      maFTName(&maButtons, SfxResId(FT_NAME)),
+      maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),
+      maFTName(this, SfxResId(FT_NAME)),
       mnId(0)
 {
-    mnHeaderHeight = maButtons.GetSizePixel().getHeight();
+    mnHeaderHeight = maAllButton.GetSizePixel().getHeight() + maAllButton.GetPosPixel().Y() * 2;
     maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
 }
 
@@ -88,13 +87,8 @@ void TemplateView::Resize()
     Size aWinSize = GetOutputSize();
 
     // Set the buttons panel and buttons size
-    Size aPanelSize = maButtons.GetSizePixel();
-    int nDeltaW = aWinSize.getWidth() - aPanelSize.getWidth();
-    aPanelSize.setWidth(aWinSize.getWidth());
-    maButtons.SetSizePixel(aPanelSize);
-
     Size aNameSize = maFTName.GetSizePixel();
-    aNameSize.setWidth(aNameSize.getWidth() + nDeltaW);
+    aNameSize.setWidth( aWinSize.getWidth() - maFTName.GetPosPixel().X());
     maFTName.SetSizePixel(aNameSize);
 
     ThumbnailView::Resize();
