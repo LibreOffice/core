@@ -122,7 +122,7 @@ public:
     void testDataValidityODS();
 
     void testDataBarODS();
-    void testNewCondFormat();
+    void testNewCondFormatXLSX();
 
     //change this test file only in excel and not in calc
     void testSharedFormulaXLSX();
@@ -181,7 +181,7 @@ public:
     CPPUNIT_TEST(testChartImportODS);
 
     CPPUNIT_TEST(testDataBarODS);
-    CPPUNIT_TEST(testNewCondFormat);
+    CPPUNIT_TEST(testNewCondFormatXLSX);
 
     CPPUNIT_TEST(testNumberFormatHTML);
     CPPUNIT_TEST(testNumberFormatCSV);
@@ -1728,7 +1728,7 @@ void ScFiltersTest::testDataBarODS()
 {
 }
 
-void ScFiltersTest::testNewCondFormat()
+void ScFiltersTest::testNewCondFormatXLSX()
 {
     const OUString aFileNameBase("new_cond_format_test.");
     OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
