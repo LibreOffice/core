@@ -23,10 +23,6 @@
 #include <sal/config.h>
 #include <sal/macros.h>
 
-#if defined LIBO_INTERNAL_ONLY
-#include <config_global.h>
-#endif
-
 #include <sal/typesizes.h>
 
 #ifdef __cplusplus

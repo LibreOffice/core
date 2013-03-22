@@ -19,13 +19,11 @@
 #ifndef INCLUDED_RTL_ALLOCATOR_HXX
 #define INCLUDED_RTL_ALLOCATOR_HXX
 
+#include "sal/config.h"
+
 #include "sal/types.h"
 #include "rtl/alloc.h"
 #include <cstddef>
-
-#if defined LIBO_INTERNAL_ONLY
-#include "config_global.h"
-#endif
 
 /// @cond INTERNAL
 

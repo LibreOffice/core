@@ -31,10 +31,6 @@
 
 #include "sal/config.h"
 
-#if defined LIBO_INTERNAL_ONLY
-#include <config_global.h>
-#endif
-
 // Manually defining RTL_DISABLE_FAST_STRING allows to force turning fast string concatenation off
 // (e.g. for debugging).
 #ifndef RTL_DISABLE_FAST_STRING
