@@ -22,6 +22,8 @@
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace utl {
   class FontSubstConfiguration;
@@ -54,7 +56,7 @@ public:
     const char*         mpSubsFontName;
     sal_Unicode         (*mpCvtFunc)( sal_Unicode );
     sal_Unicode         RecodeChar( sal_Unicode c ) const;
-    void                RecodeString( String& rStra, xub_StrLen nIndex, xub_StrLen nLen ) const;
+    void                RecodeString( OUString& rStra, sal_Int32 nIndex, sal_Int32 nLen ) const;
     static const ConvertChar* GetRecodeData( const String& rOrgFontName, const String& rMapFontName );
 };
 

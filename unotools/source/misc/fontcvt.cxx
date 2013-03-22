@@ -1372,15 +1372,17 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 
 // recode the string assuming the character codes are symbol codes
 // from an traditional symbol font (i.e. U+F020..U+F0FF)
-void ConvertChar::RecodeString( String& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+void ConvertChar::RecodeString( OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
-    sal_uLong nLastIndex = (sal_uLong)nIndex + nLen;
-    if( nLastIndex > rStr.Len() )
-        nLastIndex = rStr.Len();
+    sal_Int32 nLastIndex = nIndex + nLen;
+    OUStringBuffer    aTmpStr(rStr);
+
+    if( nLastIndex > aTmpStr.getLength() )
+        nLastIndex = aTmpStr.getLength();
 
     for(; nIndex < nLastIndex; ++nIndex )
     {
-        sal_Unicode cOrig = rStr.GetChar( nIndex );
+        sal_Unicode cOrig = rStr[ nIndex ];
         // only recode symbols and their U+00xx aliases
         if( ((cOrig < 0x0020) || (cOrig > 0x00FF))
         &&  ((cOrig < 0xF020) || (cOrig > 0xF0FF)) )
@@ -1389,8 +1391,9 @@ void ConvertChar::RecodeString( String& rStr, xub_StrLen nIndex, xub_StrLen nLen
         // recode a symbol
         sal_Unicode cNew = RecodeChar( cOrig );
         if( cOrig != cNew )
-            rStr.SetChar( nIndex, cNew );
+            aTmpStr[ nIndex ] = cNew;
     }
+    rStr = aTmpStr.makeStringAndClear();
 }
 
 //=======================================================================
