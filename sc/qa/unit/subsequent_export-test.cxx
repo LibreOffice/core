@@ -21,6 +21,7 @@
 #define CALC_DEBUG_OUTPUT 0
 
 #include "helper/qahelper.hxx"
+#include "helper/shared_test_impl.hxx"
 
 #include "docsh.hxx"
 #include "postit.hxx"
@@ -45,6 +46,8 @@ public:
     void test();
     void testPasswordExport();
     void testConditionalFormatExportXLSX();
+    void testColorScaleExportODS();
+    void testColorScaleExportXLSX();
     void testMiscRowHeightExport();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -53,6 +56,8 @@ public:
     CPPUNIT_TEST(testPasswordExport);
 #endif
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
+    CPPUNIT_TEST(testColorScaleExportODS);
+    CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST_SUITE_END();
 
@@ -155,6 +160,36 @@ void ScExportTest::testConditionalFormatExportXLSX()
     OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
+}
+
+void ScExportTest::testColorScaleExportODS()
+{
+    ScDocShellRef xShell = loadDoc("colorscale.", ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    testColorScale2Entry_Impl(pDoc);
+    testColorScale3Entry_Impl(pDoc);
+}
+
+void ScExportTest::testColorScaleExportXLSX()
+{
+    ScDocShellRef xShell = loadDoc("colorscale.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    testColorScale2Entry_Impl(pDoc);
+    testColorScale3Entry_Impl(pDoc);
 }
 
 void ScExportTest::testMiscRowHeightExport()
