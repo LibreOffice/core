@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include "global.hxx"
 #include "scdllapi.h"
+#include "cellvalue.hxx"
 
 #include <memory>
 
@@ -217,11 +218,13 @@ private:
     ScAddress maStartPos;
     ScAddress maEndPos;
     ScAddress maCurPos;
+    ScCellValue maCurCell;
     SCSIZE          nColRow;
     bool            bSubTotal;
 
     ScBaseCell*     GetThis();
     void init();
+    bool getCurrent();
 public:
                     ScCellIterator(ScDocument* pDocument,
                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
@@ -232,6 +235,11 @@ public:
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
     const ScAddress& GetPos() const { return maCurPos; }
+
+    bool first();
+    bool next();
+
+    const ScCellValue& get() const;
 };
 
 class ScQueryCellIterator           // walk through all non-empty cells in an area

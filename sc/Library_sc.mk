@@ -143,7 +143,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/drawpage \
 	sc/source/core/data/drwlayer \
 	sc/source/core/data/fillinfo \
-    sc/source/core/data/funcdesc \
+	sc/source/core/data/formulaiter \
+	sc/source/core/data/funcdesc \
 	sc/source/core/data/global \
 	sc/source/core/data/global2 \
 	sc/source/core/data/globalx \

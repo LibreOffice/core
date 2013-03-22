@@ -30,8 +30,9 @@
 #include "miscuno.hxx"
 #include "editsrc.hxx"
 #include "dociter.hxx"
-#include "cell.hxx"
 #include "markdata.hxx"
+#include "cellvalue.hxx"
+#include "formulaiter.hxx"
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -361,43 +362,38 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
 {
     if (mpDoc)
     {
-        ScCellIterator aCellIter( mpDoc, 0,0, maCellAddress.Tab(), MAXCOL,MAXROW, maCellAddress.Tab() );
-        ScBaseCell* pCell = aCellIter.GetFirst();
-        while (pCell)
+        ScRange aRange(0, 0, maCellAddress.Tab(), MAXCOL, MAXROW, maCellAddress.Tab());
+        ScCellIterator aCellIter(mpDoc, aRange);
+
+        for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
         {
-            if (pCell->GetCellType() == CELLTYPE_FORMULA)
+            const ScCellValue& rVal = aCellIter.get();
+            if (rVal.meType == CELLTYPE_FORMULA)
             {
-                sal_Bool bFound(false);
-                ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
+                bool bFound = false;
+                ScDetectiveRefIter aIter(rVal.mpFormula);
                 ScRange aRef;
                 while ( !bFound && aIter.GetNextRef( aRef ) )
                 {
                     if (aRef.In(maCellAddress))
-                        bFound = sal_True;
+                        bFound = true;
                 }
                 if (bFound)
                     AddRelation(aCellIter.GetPos(), AccessibleRelationType::CONTROLLER_FOR, pRelationSet);
             }
-            pCell = aCellIter.GetNext();
         }
     }
 }
 
 void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet)
 {
-    if (mpDoc)
+    if (mpDoc && mpDoc->GetCellType(maCellAddress) == CELLTYPE_FORMULA)
     {
-        ScBaseCell* pBaseCell = mpDoc->GetCell(maCellAddress);
-        if (pBaseCell && (pBaseCell->GetCellType() == CELLTYPE_FORMULA))
+        ScDetectiveRefIter aIter(mpDoc->GetFormulaCell(maCellAddress));
+        ScRange aRef;
+        while ( aIter.GetNextRef( aRef ) )
         {
-            ScFormulaCell* pFCell = (ScFormulaCell*) pBaseCell;
-
-            ScDetectiveRefIter aIter( pFCell );
-            ScRange aRef;
-            while ( aIter.GetNextRef( aRef ) )
-            {
-                AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
-            }
+            AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
         }
     }
 }

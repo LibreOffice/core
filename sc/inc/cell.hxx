@@ -602,18 +602,6 @@ public:
     bool                   InterpretFormulaGroup();
 };
 
-//          Iterator for references in a formula cell
-class ScDetectiveRefIter
-{
-private:
-    ScTokenArray* pCode;
-    ScAddress aPos;
-public:
-                ScDetectiveRefIter( ScFormulaCell* pCell );
-    bool        GetNextRef( ScRange& rRange );
-    ScToken*    GetNextRefToken();
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

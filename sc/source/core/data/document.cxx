@@ -88,6 +88,7 @@
 #include "defaultsoptions.hxx"
 #include "editutil.hxx"
 #include "stringutil.hxx"
+#include "formulaiter.hxx"
 
 #include <map>
 #include <limits>

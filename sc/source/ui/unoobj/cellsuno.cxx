@@ -120,6 +120,7 @@
 #include "formula/grammar.hxx"
 #include "editeng/escapementitem.hxx"
 #include "stringutil.hxx"
+#include "formulaiter.hxx"
 
 #include <list>
 #include <boost/scoped_ptr.hpp>

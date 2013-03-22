@@ -42,6 +42,7 @@
 #include "dociter.hxx"
 #include "formula/opcode.hxx"
 #include "cell.hxx"
+#include "formulaiter.hxx"
 
 using ::rtl::OUString;
 

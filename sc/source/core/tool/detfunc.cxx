@@ -66,6 +66,7 @@
 #include "postit.hxx"
 #include "rangelst.hxx"
 #include "reftokenhelper.hxx"
+#include "formulaiter.hxx"
 
 #include <vector>
 

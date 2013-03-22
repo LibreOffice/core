@@ -62,6 +62,7 @@
 #include "dociter.hxx"
 #include "cellsuno.hxx"
 #include "stringutil.hxx"
+#include "formulaiter.hxx"
 
 using namespace com::sun::star;
 

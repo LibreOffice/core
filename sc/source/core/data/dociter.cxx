@@ -36,12 +36,12 @@
 #include "queryentry.hxx"
 #include "globstr.hrc"
 #include "tools/fract.hxx"
+#include "editeng/editobj.hxx"
 
 #include <vector>
 
 using ::rtl::math::approxEqual;
 using ::std::vector;
-using ::rtl::OUString;
 using ::std::set;
 
 // STATIC DATA -----------------------------------------------------------
@@ -1049,6 +1049,111 @@ ScBaseCell* ScCellIterator::GetNext()
 {
     maCurPos.IncRow();
     return GetThis();
+}
+
+bool ScCellIterator::getCurrent()
+{
+    ScColumn* pCol = &(pDoc->maTabs[maCurPos.Tab()])->aCol[maCurPos.Col()];
+    while (true)
+    {
+        if (maCurPos.Row() > maEndPos.Row())
+        {
+            maCurPos.SetRow(maStartPos.Row());
+            do
+            {
+                maCurPos.IncCol();
+                if (maCurPos.Col() > maEndPos.Col())
+                {
+                    maCurPos.SetCol(maStartPos.Col());
+                    maCurPos.IncTab();
+                    if (maCurPos.Tab() > maEndPos.Tab())
+                    {
+                        maCurCell.clear();
+                        return false; // Over and out
+                    }
+                }
+                pCol = &(pDoc->maTabs[maCurPos.Tab()])->aCol[maCurPos.Col()];
+            } while ( pCol->maItems.empty() );
+            pCol->Search(maCurPos.Row(), nColRow);
+        }
+
+        while ( (nColRow < pCol->maItems.size()) && (pCol->maItems[nColRow].nRow < maCurPos.Row()) )
+            ++nColRow;
+
+        if (nColRow < pCol->maItems.size() && pCol->maItems[nColRow].nRow <= maEndPos.Row())
+        {
+            maCurPos.SetRow(pCol->maItems[nColRow].nRow);
+            if (!bSubTotal || !pDoc->maTabs[maCurPos.Tab()]->RowFiltered(maCurPos.Row()))
+            {
+                ScBaseCell* pCell = pCol->maItems[nColRow].pCell;
+
+                if ( bSubTotal && pCell->GetCellType() == CELLTYPE_FORMULA
+                                && ((ScFormulaCell*)pCell)->IsSubTotal() )
+                    maCurPos.IncRow(); // Don't subtotal rows
+                else
+                {
+                    // Found it!
+                    maCurCell.clear();
+                    maCurCell.meType = pCell->GetCellType();
+                    switch (maCurCell.meType)
+                    {
+                        case CELLTYPE_VALUE:
+                            maCurCell.mfValue = static_cast<const ScValueCell*>(pCell)->GetValue();
+                        break;
+                        case CELLTYPE_STRING:
+                        {
+                            const OUString& rStr = static_cast<const ScStringCell*>(pCell)->GetString();
+                            maCurCell.mpString = new OUString(rStr);
+                        }
+                        break;
+                        case CELLTYPE_EDIT:
+                        {
+                            const EditTextObject* pData = static_cast<const ScEditCell*>(pCell)->GetData();
+                            maCurCell.mpEditText = pData->Clone();
+                        }
+                        break;
+                        case CELLTYPE_FORMULA:
+                            maCurCell.mpFormula = static_cast<const ScFormulaCell*>(pCell)->Clone();
+                        break;
+                        default:
+                            maCurCell.meType = CELLTYPE_NONE;
+                    }
+
+                    if (maCurCell.meType != CELLTYPE_NONE)
+                        return true;
+
+                    maCurPos.IncRow();
+                }
+            }
+            else
+                maCurPos.IncRow();
+        }
+        else
+            maCurPos.SetRow(maEndPos.Row() + 1); // Next column
+    }
+    return false;
+}
+
+bool ScCellIterator::first()
+{
+    if (!ValidTab(maCurPos.Tab()))
+        return false;
+
+    maCurPos = maStartPos;
+    ScColumn* pCol = &(pDoc->maTabs[maCurPos.Tab()])->aCol[maCurPos.Col()];
+    pCol->Search(maCurPos.Row(), nColRow);
+    return getCurrent();
+}
+
+bool ScCellIterator::next()
+{
+    maCurPos.IncRow();
+    return getCurrent();
+}
+
+const ScCellValue& ScCellIterator::get() const
+{
+    return maCurCell;
 }
 
 //-------------------------------------------------------------------------------
