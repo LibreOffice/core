@@ -460,7 +460,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
 
         //start Java
         JavaVM *pVm = NULL;
-        SAL_INFO("jvmfwk", "starting java");
+        SAL_INFO("jfw", "Starting Java");
         javaPluginError plerr = (*pFunc)(pInfo, arOpt, index, & pVm, ppEnv);
         if (plerr == JFW_PLUGIN_E_VM_CREATION_FAILED)
         {
