@@ -21,11 +21,11 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <tools/fsys.hxx>
 #include <tools/debug.hxx>
 #include <database.hxx>
 #include <globals.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/file.hxx>
 
 SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( sal_False )
@@ -205,17 +205,17 @@ sal_Bool SvIdlDataBase::InsertId( const rtl::OString& rIdName, sal_uLong nVal )
 
 sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
 {
-    DirEntry aFullName( rFileName );
-    aFullName.Find( GetPath() );
+    OUString aFullName;
+    osl::File::searchFileURL( rFileName, GetPath(), aFullName);
+    osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
 
     for ( size_t i = 0, n = aIdFileList.size(); i < n; ++i )
         if ( *aIdFileList[ i ] == rFileName )
             return sal_True;
 
     aIdFileList.push_back( new String( rFileName ) );
-
-    this->AddDepFile(aFullName.GetFull());
-    SvTokenStream aTokStm( aFullName.GetFull() );
+    this->AddDepFile( aFullName );
+    SvTokenStream aTokStm( aFullName );
     if( aTokStm.GetStream().GetError() == SVSTREAM_OK )
     {
         SvToken * pTok = aTokStm.GetToken_Next();
@@ -634,20 +634,22 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
             pTok = rInStm.GetToken_Next();
             if( pTok->IsString() )
             {
-                DirEntry aFullName(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
-                if( aFullName.Find( rPath ) )
+                OUString aFullName;
+                if( osl::FileBase::E_None == osl::File::searchFileURL(
+                    rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US),
+                    rPath,
+                    aFullName) )
                 {
-                    this->AddDepFile(aFullName.GetFull());
-                    SvFileStream aStm( aFullName.GetFull(),
-                                        STREAM_STD_READ | STREAM_NOCREATE );
+                    osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
+                    this->AddDepFile(aFullName);
+                    SvFileStream aStm( aFullName, STREAM_STD_READ | STREAM_NOCREATE );
                     Load( aStm );
                     if( aStm.GetError() != SVSTREAM_OK )
                     {
                         if( aStm.GetError() == SVSTREAM_WRONGVERSION )
                         {
                             rtl::OStringBuffer aStr("wrong version, file ");
-                            aStr.append(rtl::OUStringToOString(
-                                aFullName.GetFull(), RTL_TEXTENCODING_UTF8));
+                            aStr.append(rtl::OUStringToOString( aFullName, RTL_TEXTENCODING_UTF8));
                             SetError(aStr.makeStringAndClear(), pTok);
                             WriteError( rInStm );
                             bOk = sal_False;
@@ -656,7 +658,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
                         {
                             aStm.Seek( 0 );
                             aStm.ResetError();
-                            SvTokenStream aTokStm( aStm, aFullName.GetFull() );
+                            SvTokenStream aTokStm( aStm, aFullName );
                             bOk = ReadSvIdl( aTokStm, sal_True, rPath );
                         }
                     }
