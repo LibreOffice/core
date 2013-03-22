@@ -9,17 +9,20 @@
 package org.libreoffice.impressremote.communication;
 
 import org.libreoffice.impressremote.R;
-import org.libreoffice.impressremote.Globals;
 
-import android.util.Log;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.SparseArray;
+
 
 public class SlideShow {
 
-    private SparseArray<byte[]> mPreviewImages = new SparseArray<byte[]>();
+    private SparseArray<Bitmap> mPreviews = new SparseArray<Bitmap>();
     private SparseArray<String> mNotes = new SparseArray<String>();
 
     private int mSize = 0;
@@ -47,28 +50,28 @@ public class SlideShow {
     }
 
     protected void putImage(int aSlide, byte[] aImage) {
-        mPreviewImages.put(aSlide, aImage);
+        Bitmap aBitmap = BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+        final int borderWidth = 8;
+
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
+
+        RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
+                        + aBitmap.getWidth(), borderWidth
+                        + aBitmap.getHeight());
+        Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2
+                        * borderWidth, aBitmap.getHeight() + 2
+                        * borderWidth, aBitmap.getConfig());
+        Canvas canvas = new Canvas(aOut);
+        canvas.drawColor(mContext.getResources().getColor(R.color.light_grey));
+        canvas.drawRect(aRect, p);
+        canvas.drawBitmap(aBitmap, null, aRect, null);
+
+        mPreviews.put(aSlide, aOut);
     }
 
     public Bitmap getImage(int aSlide) {
-        byte[] aImage = mPreviewImages.get(aSlide);
-        if (aImage == null) {
-            return BitmapFactory.decodeResource(mContext.getResources(),
-                            R.drawable.image_loading);
-        }
-        Bitmap aBitmap = null;
-        try {
-            aBitmap = BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
-        } catch (OutOfMemoryError e) {
-            Log.e(Globals.TAG, "Bitmap decoding error byte length: " + aImage.length +
-                  "first 4 bytes: " + aImage[0] + " " + aImage[1] + " " + aImage[2] + " " + aImage[3] +
-                  "Exception " + e);
-        }
-        if (aBitmap == null) {
-            return BitmapFactory.decodeResource(mContext.getResources(),
-                            R.drawable.image_loading);
-        }
-        return aBitmap;
+        return mPreviews.get(aSlide);
     }
 
     protected void putNotes(int aSlide, String aNotes) {
