@@ -13,7 +13,10 @@ $(eval $(call gb_ExternalProject_use_unpacked,liborcus,orcus))
 
 $(eval $(call gb_ExternalProject_use_autoconf,liborcus,build))
 
-$(eval $(call gb_ExternalProject_use_external,liborcus,boost_headers))
+$(eval $(call gb_ExternalProject_use_externals,liborcus, \
+    boost_headers \
+    zlib \
+))
 
 $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 	build \
