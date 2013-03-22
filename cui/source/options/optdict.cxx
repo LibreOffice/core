@@ -118,9 +118,9 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
 
 IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 {
-    String sDict = comphelper::string::stripEnd(aNameEdit.GetText(), ' ');
+    OUString sDict = comphelper::string::stripEnd(aNameEdit.GetText(), ' ');
     // add extension for personal dictionaries
-    sDict.AppendAscii(".dic");
+    sDict += ".dic";
 
     Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
 
@@ -133,7 +133,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     sal_Bool bFound = sal_False;
     sal_uInt16 i;
     for (i = 0; !bFound && i < nCount; ++i )
-        if ( sDict.EqualsIgnoreCaseAscii( String(pDic[i]->getName()) ))
+        if ( sDict.equalsIgnoreAsciiCase( pDic[i]->getName()) )
             bFound = sal_True;
 
     if ( bFound )

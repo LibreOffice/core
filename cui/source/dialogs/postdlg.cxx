@@ -134,8 +134,8 @@ SvxPostItDialog::~SvxPostItDialog()
 
 void SvxPostItDialog::ShowLastAuthor(const String& rAuthor, const String& rDate)
 {
-    String sTxt( rAuthor );
-    sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+    OUString sTxt( rAuthor );
+    sTxt += ", ";
     sTxt += rDate;
     m_pLastEditFT->SetText( sTxt );
 }
@@ -187,23 +187,23 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     Time aTime( Time::SYSTEM );
     String aTmp( SvtUserOptions().GetID() );
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    String aStr( m_pEditED->GetText() );
-    aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n---- " ) );
+    OUString aStr( m_pEditED->GetText() );
+    aStr += "\n---- ";
 
     if ( aTmp.Len() > 0 )
     {
         aStr += aTmp;
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+        aStr += ", ";
     }
     aStr += rLocaleWrapper.getDate(aDate);
-    aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+    aStr += ", ";
     aStr += rLocaleWrapper.getTime(aTime, sal_False, sal_False);
-    aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ----\n" ) );
+    aStr += " ----\n";
 
     aStr = convertLineEnd(aStr, GetSystemLineEnd());
 
     m_pEditED->SetText(aStr);
-    xub_StrLen nLen = aStr.Len();
+    xub_StrLen nLen = aStr.getLength();
     m_pEditED->GrabFocus();
     m_pEditED->SetSelection( Selection( nLen, nLen ) );
     return 0;

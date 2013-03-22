@@ -521,10 +521,10 @@ SvxHyphenWordDialog::~SvxHyphenWordDialog()
 void SvxHyphenWordDialog::SetWindowTitle( LanguageType nLang )
 {
     String aLangStr( SvtLanguageTable::GetLanguageString( nLang ) );
-    String aTmp( aLabel );
-    aTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) );
-    aTmp.Append( aLangStr );
-    aTmp.Append( sal_Unicode( ')' ) );
+    OUString aTmp( aLabel );
+    aTmp += " (";
+    aTmp += aLangStr;
+    aTmp += ")";
     SetText( aTmp );
 }
 

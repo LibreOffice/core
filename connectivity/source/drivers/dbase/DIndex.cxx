@@ -509,16 +509,15 @@ sal_Bool ODbaseIndex::CreateImpl()
         aName = getString(xCol->getFastPropertyValue(PROPERTY_ID_NAME));
 
         const String aQuote(m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString());
-        String aStatement;
-        aStatement.AssignAscii("SELECT ");
+        OUString aStatement( "SELECT " );
         aStatement += aQuote;
         aStatement += aName;
         aStatement += aQuote;
-        aStatement.AppendAscii(" FROM ");
+        aStatement += " FROM ";
         aStatement += aQuote;
         aStatement += m_pTable->getName().getStr();
         aStatement += aQuote;
-        aStatement.AppendAscii(" ORDER BY ");
+        aStatement += " ORDER BY ";
         aStatement += aQuote;
         aStatement += aName;
         aStatement += aQuote;

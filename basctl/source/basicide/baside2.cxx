@@ -1339,7 +1339,7 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
     ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    String aModName( GetName() );
+    OUString aModName( GetName() );
     String aLibSubName;
     if( xBasic.Is() && aDocument.isInVBAMode() && XModule().Is() )
     {
@@ -1355,7 +1355,7 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
                     ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
                     if( !sObjName.isEmpty() )
                     {
-                        aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
+                        aModName += " (" + sObjName + ")";
                     }
                 }
                 break;
