@@ -11,8 +11,11 @@
 
 Module gid_Module_Reportbuilder
     PackageInfo = "packinfo_office.txt";
-    ParentID = gid_Module_Root_Brand;
-    Styles = (HIDDEN_ROOT);
+    MOD_NAME_DESC(MODULE_OPTIONAL_REPORTDESIGN); 
+    ParentID = gid_Module_Optional;
+    Styles = ( );
+    Minimal = NO;
+    Default = YES; 
     Dirs = (gid_Dir_Share_Reportbuilder);
     Files = (
 #if !defined SYSTEM_APACHE_COMMONS

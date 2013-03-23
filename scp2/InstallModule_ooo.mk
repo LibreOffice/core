@@ -249,7 +249,7 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
 endif
 
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
-$(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
+$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
     scp2/source/ooo/module_reportbuilder \
 ))
 endif
