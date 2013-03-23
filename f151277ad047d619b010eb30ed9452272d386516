@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+1A\u003d",
+        "filename": "vcl/source/control/longcurr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-23T04:08:44Z",
+      "side": 1,
+      "message": "Spelling is \"decimal\"",
+      "revId": "f151277ad047d619b010eb30ed9452272d386516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+08\u003d",
+        "filename": "vcl/source/control/longcurr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-23T04:08:44Z",
+      "side": 1,
+      "message": "This is self evident - can we just get rid of this comment?",
+      "revId": "f151277ad047d619b010eb30ed9452272d386516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+04\u003d",
+        "filename": "vcl/source/control/lstbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-23T04:08:44Z",
+      "side": 1,
+      "message": "Can you clarify what is meant by \"ListBox \u003d\u003e PreNotify() ...\"? That doesn\u0027t make things any clearer...",
+      "revId": "f151277ad047d619b010eb30ed9452272d386516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+00\u003d",
+        "filename": "vcl/source/control/lstbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-23T04:08:44Z",
+      "side": 1,
+      "message": "Can you add a FIXME to this?",
+      "revId": "f151277ad047d619b010eb30ed9452272d386516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+0w\u003d",
+        "filename": "vcl/source/control/lstbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-23T04:08:44Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is a very helpful comment...",
+      "revId": "f151277ad047d619b010eb30ed9452272d386516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+0o\u003d",
+        "filename": "vcl/source/control/lstbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-23T04:08:44Z",
+      "side": 1,
+      "message": "Get rid of this - it\u0027s not needed",
+      "revId": "f151277ad047d619b010eb30ed9452272d386516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+0k\u003d",
+        "filename": "vcl/source/control/prgsbar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-23T04:08:44Z",
+      "side": 1,
+      "message": "Can you add a FIXME?",
+      "revId": "f151277ad047d619b010eb30ed9452272d386516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
