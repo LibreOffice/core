@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -58,8 +59,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpFillGradientAttribute > ImplType;
+
         private:
-            ImpFillGradientAttribute*           mpFillGradientAttribute;
+            ImplType mpFillGradientAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor

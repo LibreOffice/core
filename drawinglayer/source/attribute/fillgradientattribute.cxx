@@ -19,6 +19,7 @@
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -29,9 +30,6 @@ namespace drawinglayer
         class ImpFillGradientAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // data definitions
             GradientStyle                           meStyle;
             double                                  mfBorder;
@@ -51,8 +49,7 @@ namespace drawinglayer
                 const basegfx::BColor& rStartColor,
                 const basegfx::BColor& rEndColor,
                 sal_uInt16 nSteps)
-            :   mnRefCount(0),
-                meStyle(eStyle),
+            :   meStyle(eStyle),
                 mfBorder(fBorder),
                 mfOffsetX(fOffsetX),
                 mfOffsetY(fOffsetY),
@@ -60,6 +57,18 @@ namespace drawinglayer
                 maStartColor(rStartColor),
                 maEndColor(rEndColor),
                 mnSteps(nSteps)
+            {
+            }
+
+            ImpFillGradientAttribute()
+            :   meStyle(GRADIENTSTYLE_LINEAR),
+                mfBorder(0.0),
+                mfOffsetX(0.0),
+                mfOffsetY(0.0),
+                mfAngle(0.0),
+                maStartColor(basegfx::BColor()),
+                maEndColor(basegfx::BColor()),
+                mnSteps(0)
             {
             }
 
@@ -84,27 +93,13 @@ namespace drawinglayer
                     && getEndColor() == rCandidate.getEndColor()
                     && getSteps() == rCandidate.getSteps());
             }
-
-            static ImpFillGradientAttribute* get_global_default()
-            {
-                static ImpFillGradientAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpFillGradientAttribute(
-                        GRADIENTSTYLE_LINEAR,
-                        0.0, 0.0, 0.0, 0.0,
-                        basegfx::BColor(),
-                        basegfx::BColor(),
-                        0);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< FillGradientAttribute::ImplType, theGlobalDefault > {};
+        }
 
         FillGradientAttribute::FillGradientAttribute(
             GradientStyle eStyle,
@@ -115,73 +110,39 @@ namespace drawinglayer
             const basegfx::BColor& rStartColor,
             const basegfx::BColor& rEndColor,
             sal_uInt16 nSteps)
-        :   mpFillGradientAttribute(new ImpFillGradientAttribute(
+        :   mpFillGradientAttribute(ImpFillGradientAttribute(
                 eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, nSteps))
         {
         }
 
         FillGradientAttribute::FillGradientAttribute()
-        :   mpFillGradientAttribute(ImpFillGradientAttribute::get_global_default())
+        :   mpFillGradientAttribute(theGlobalDefault::get())
         {
-            mpFillGradientAttribute->mnRefCount++;
         }
 
         FillGradientAttribute::FillGradientAttribute(const FillGradientAttribute& rCandidate)
         :   mpFillGradientAttribute(rCandidate.mpFillGradientAttribute)
         {
-            mpFillGradientAttribute->mnRefCount++;
         }
 
         FillGradientAttribute::~FillGradientAttribute()
         {
-            if(mpFillGradientAttribute->mnRefCount)
-            {
-                mpFillGradientAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpFillGradientAttribute;
-            }
         }
 
         bool FillGradientAttribute::isDefault() const
         {
-            return mpFillGradientAttribute == ImpFillGradientAttribute::get_global_default();
+            return mpFillGradientAttribute.same_object(theGlobalDefault::get());
         }
 
         FillGradientAttribute& FillGradientAttribute::operator=(const FillGradientAttribute& rCandidate)
         {
-            if(rCandidate.mpFillGradientAttribute != mpFillGradientAttribute)
-            {
-                if(mpFillGradientAttribute->mnRefCount)
-                {
-                    mpFillGradientAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpFillGradientAttribute;
-                }
-
-                mpFillGradientAttribute = rCandidate.mpFillGradientAttribute;
-                mpFillGradientAttribute->mnRefCount++;
-            }
-
+            mpFillGradientAttribute = rCandidate.mpFillGradientAttribute;
             return *this;
         }
 
         bool FillGradientAttribute::operator==(const FillGradientAttribute& rCandidate) const
         {
-            if(rCandidate.mpFillGradientAttribute == mpFillGradientAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpFillGradientAttribute == *mpFillGradientAttribute);
+            return rCandidate.mpFillGradientAttribute == mpFillGradientAttribute;
         }
 
         const basegfx::BColor& FillGradientAttribute::getStartColor() const
