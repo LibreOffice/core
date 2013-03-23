@@ -71,7 +71,6 @@
 #define REPLACELENGTH_INSTURL           10
 #define REPLACELENGTH_PROGURL           10
 #define REPLACELENGTH_USERURL           10
-#define REPLACELENGTH_PATH               7
 #define REPLACELENGTH_LANG               7
 #define REPLACELENGTH_LANGID             9
 #define REPLACELENGTH_VLANG              8
