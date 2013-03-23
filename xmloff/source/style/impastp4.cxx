@@ -89,7 +89,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
                      "Adding duplicate family " << rStrName <<
                      " with mismatching mapper ! " <<
                      typeid(*aFind->mxMapper.get()).name() << " " <<
-                     typeid(rMapper.get()).name() );
+                     typeid(*rMapper.get()).name() );
     }
 #endif
 
