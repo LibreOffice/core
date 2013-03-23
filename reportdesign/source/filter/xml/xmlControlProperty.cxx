@@ -265,7 +265,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                     nType = TYPE_TIME;
                 else if ( _rExpectedType.equals(s_aDateTimeType) )
                     nType = TYPE_DATETIME;
-                if ( !nType )
+                if ( nType )
                 {
                     // first extract the double
                     double nValue = 0;
