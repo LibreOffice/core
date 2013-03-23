@@ -285,7 +285,7 @@ bool SvpSalGraphics::CheckContext()
     basebmp::RawMemorySharedArray pixelBuffer = m_aDevice->getBuffer();
 
     mrContext = CGBitmapContextCreate(pixelBuffer.get(), size.getX(), size.getY(), 8, m_aDevice->getScanlineStride(),
-                                      CGColorSpaceCreateDeviceRGB(), kCGImageAlphaLast|kCGBitmapByteOrder32Little);
+                                      CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast);
 
     SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
 
