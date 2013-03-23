@@ -278,6 +278,7 @@ void SwSidebarWin::InitControls()
     // window controls for author and date
     mpMetadataAuthor = new Edit( this, 0 );
     mpMetadataAuthor->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
+    mpMetadataAuthor->EnableRTL(Application::GetSettings().GetLayoutRTL());
     mpMetadataAuthor->SetReadOnly();
     mpMetadataAuthor->AlwaysDisableInput(true);
     mpMetadataAuthor->SetCallHandlersOnInputDisabled(true);
@@ -296,6 +297,7 @@ void SwSidebarWin::InitControls()
 
     mpMetadataDate = new Edit( this, 0 );
     mpMetadataDate->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_DATE_NAME ) );
+    mpMetadataDate->EnableRTL(Application::GetSettings().GetLayoutRTL());
     mpMetadataDate->SetReadOnly();
     mpMetadataDate->AlwaysDisableInput(true);
     mpMetadataDate->SetCallHandlersOnInputDisabled(true);
