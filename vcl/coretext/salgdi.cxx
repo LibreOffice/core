@@ -281,13 +281,13 @@ void QuartzSalGraphics::SetTextColor( SalColor nSalColor )
 
 bool SvpSalGraphics::CheckContext()
 {
-    SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
-
     basegfx::B2IVector size = m_aDevice->getSize();
     basebmp::RawMemorySharedArray pixelBuffer = m_aDevice->getBuffer();
 
     mrContext = CGBitmapContextCreate(pixelBuffer.get(), size.getX(), size.getY(), 8, m_aDevice->getScanlineStride(),
                                       CGColorSpaceCreateDeviceRGB(), kCGImageAlphaLast|kCGBitmapByteOrder32Little);
+
+    SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
 
     return (mrContext != NULL);
 }
