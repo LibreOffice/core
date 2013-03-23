@@ -965,6 +965,7 @@ $(call gb_GenCObject_get_target,$(2)) : $(call gb_GenCObject_get_source,$(2))
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
 $(call gb_GenCObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
@@ -986,6 +987,7 @@ $(call gb_GenCxxObject_get_target,$(2)) : $(call gb_GenCxxObject_get_source,$(2)
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenCxxObject_get_source,$(2),$(1)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCxxObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
@@ -1023,7 +1025,6 @@ endef
 define gb_LinkTarget_add_scanner
 $(call gb_LexTarget_LexTarget,$(2))
 $(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3))
-$(call gb_GenCxxObject_get_target,LexTarget/$(2)) : WARNINGS_NOT_ERRORS := $(true)
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_LexTarget_get_clean_target,$(2))
 
 endef
