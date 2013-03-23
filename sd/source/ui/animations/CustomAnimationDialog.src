@@ -614,7 +614,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
     ListBox LB_GROUP_TEXT
     {
         HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_TEXT:LB_GROUP_TEXT";
-        Pos = MAP_APPFONT ( X2 , 3 ) ;
+        Pos = MAP_APPFONT ( (WIDTH-W2-65), 3 ) ;
         Size = MAP_APPFONT ( W2, 48 );
         TabStop = TRUE ;
         Border = TRUE ;
@@ -636,7 +636,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
     {
         HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_GROUP_AUTO";
         Pos = MAP_APPFONT ( X0 , 20  ) ;
-        Size = MAP_APPFONT ( W1 , 8 ) ;
+        Size = MAP_APPFONT ( W1  , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Automatically after" ;
     };
@@ -645,7 +645,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
     MetricField MF_GROUP_AUTO
     {
         HelpID = "sd:MetricField:RID_TP_CUSTOMANIMATION_TEXT:MF_GROUP_AUTO";
-        Pos = MAP_APPFONT ( X2 , 18 ) ;
+        Pos = MAP_APPFONT ( (WIDTH-W2-65) , 20 ) ;
         Size = MAP_APPFONT ( W2, 12 );
         Border = TRUE ;
         TabStop = TRUE ;
