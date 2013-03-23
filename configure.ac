@@ -5562,6 +5562,33 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
+    AC_MSG_CHECKING(
+        [whether $CC supports pragma GCC diagnostic error/ignored/warning])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -Wunused"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #pragma GCC diagnostic ignored "-Wunused"
+            static void dummy() {}
+        ])], [
+            AC_DEFINE([HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
+    AC_MSG_CHECKING([whether $CC supports pragma GCC diagnostic push/pop])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -Wunused"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #pragma GCC diagnostic push
+            #pragma GCC diagnostic ignored "-Wunused"
+            static void dummy() {}
+            #pragma GCC diagnostic pop
+        ])], [
+            AC_DEFINE([HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CFLAGS=$save_CFLAGS
+
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #if __GNUC__ == 4 && __GNUC_MINOR__ == 7 && (__GNUC_PATCHLEVEL__ == 0 || __GNUC_PATCHLEVEL__ == 1)
 #else

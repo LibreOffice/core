@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/interfacecontainer.h>
@@ -176,7 +178,7 @@ int SalAquaPicker::run()
         startDirectory = NSHomeDirectory();
     }
 
-#if defined(LIBO_WERROR) && defined(__clang__) && MACOSX_SDK_VERSION >= 1070
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic push
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
 #endif
@@ -199,7 +201,7 @@ int SalAquaPicker::run()
             implsetDisplayDirectory([[NSURL fileURLWithPath:pDir] OUStringForInfo:FULLPATH]);
         }
     }
-#if defined(LIBO_WERROR) && defined(__clang__) && MACOSX_SDK_VERSION >= 1070
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
 #pragma GCC diagnostic pop
 #endif
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);

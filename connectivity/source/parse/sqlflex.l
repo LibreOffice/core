@@ -18,6 +18,8 @@
 //   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 //
 
+#include "sal/config.h"
+
 #define YY_EXIT 1               // YY_FATAL will not halt the application
 
 #ifndef _CSTDARG_
@@ -44,11 +46,9 @@
 #include <rtl/strbuf.hxx>
 #include <connectivity/sqlparse.hxx>
 
-#if defined __GNUC__
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 # pragma GCC diagnostic ignored "-Wwrite-strings"
 # pragma GCC diagnostic ignored "-Wunused-function"
-#endif
 #elif defined __SUNPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER

@@ -22,6 +22,8 @@
  * lexer for parsing resource source files (*.src)
  */
 
+#include "sal/config.h"
+
 /* enlarge token buffer to tokenize whole strings */
 #undef YYLMAX
 #define YYLMAX 64000
@@ -41,11 +43,9 @@
 
 #include "sal/main.h"
 
-#if defined __GNUC__
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
-#endif
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif

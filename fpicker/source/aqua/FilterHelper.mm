@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <functional>
 #include <algorithm>
 #include <osl/mutex.hxx>
@@ -374,14 +376,8 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 }
 
 // 'fileAttributesAtPath:traverseLink:' is deprecated 
-#if defined LIBO_WERROR && defined __GNUC__
-#define GCC_VERSION (__GNUC__ * 10000 \
-                     + __GNUC_MINOR__ * 100 \
-                     + __GNUC_PATCHLEVEL__)
-#if GCC_VERSION >= 40201
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#define DID_TURN_OFF_DEPRECATED_DECLARATIONS_WARNING
-#endif
 #endif
 
 sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
@@ -440,7 +436,7 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
     return sal_False;
 }
 
-#ifdef DID_TURN_OFF_DEPRECATED_DECLARATIONS_WARNING
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic error "-Wdeprecated-declarations"
 #endif
 

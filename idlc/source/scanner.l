@@ -23,6 +23,8 @@
  * scanner.ll - Lexical scanner for IDLC 1.0
  */
 
+#include "sal/config.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -247,11 +249,9 @@ static void parseLineAndFile(sal_Char* pBuf)
 }	
 
 // Suppress any warnings from generated code:
-#if defined __GNUC__
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
-#endif
 #elif defined __SUNPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER

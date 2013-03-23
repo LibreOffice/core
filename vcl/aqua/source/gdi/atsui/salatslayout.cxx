@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#incldue "sal/config.h"
+
 #include "tools/debug.hxx"
 
 #include "aqua/saldata.hxx"
@@ -29,13 +31,8 @@
 #include <math.h>
 
 // ATSUI is deprecated in 10.6 (or already 10.5?)
-#if defined LIBO_WERROR && defined __GNUC__
-#define GCC_VERSION (__GNUC__ * 10000 \
-                     + __GNUC_MINOR__ * 100 \
-                     + __GNUC_PATCHLEVEL__)
-#if GCC_VERSION >= 40201
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
 #endif
 
 // =======================================================================

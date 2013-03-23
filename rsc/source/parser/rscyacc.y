@@ -18,6 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -256,14 +258,8 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #pragma warning(push, 1)
 #pragma warning(disable:4129 4273 4701 4702)
 #endif
-#if defined __GNUC__
-#define GCC_VERSION (__GNUC__ * 10000 \
-                     + __GNUC_MINOR__ * 100 \
-                     + __GNUC_PATCHLEVEL__)
-/* Diagnostics pragma was introduced with gcc-4.2.1 */
-#if GCC_VERSION >= 40201
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wwrite-strings"
-#endif
 #elif defined __SUNPRO_CC
 #pragma disable_warn
 #endif

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #ifndef MINIMAL_PROFILEDISCOVER
     // Turn off DEBUG Assertions
     #ifdef _DEBUG
@@ -46,7 +48,8 @@
     #endif
 #endif
 
-#if defined __GNUC__ && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4)
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
+    && !defined __clang__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #elif defined __SUNPRO_CC

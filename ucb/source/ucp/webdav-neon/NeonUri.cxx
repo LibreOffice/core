@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include <string.h>
 #include <rtl/uri.hxx>
@@ -45,14 +46,8 @@ using namespace webdav_ucp;
 # pragma disable_warn
 # endif
 
-#if defined __GNUC__
-#define GCC_VERSION (__GNUC__ * 10000 \
-                     + __GNUC_MINOR__ * 100 \
-                     + __GNUC_PATCHLEVEL__)
-/* Diagnostics pragma was introduced with gcc-4.2.1 */
-#if GCC_VERSION >= 40201
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic ignored "-Wwrite-strings"
-#endif
 #endif
 
 namespace {

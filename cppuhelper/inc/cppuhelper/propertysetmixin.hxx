@@ -77,7 +77,8 @@ template< typename T > class PropertySetMixin;
 
    @since UDK 3.2.1
 */
-#if defined __GNUC__ && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4)
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
+    && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
 #endif
@@ -397,7 +398,8 @@ private:
 
     void checkUnknown(rtl::OUString const & propertyName);
 };
-#if defined __GNUC__ && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4)
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE \
+    && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
 

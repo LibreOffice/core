@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <DataFlavorMapping.hxx>
 #include "HtmlFmtFlt.hxx"
 #include "PictToBmpFlt.hxx"
@@ -97,13 +99,8 @@ namespace // private
 // Make deprecation warnings just warnings even in a -Werror
 // compilation.
 
-#if defined LIBO_WERROR && defined __GNUC__
-#define GCC_VERSION (__GNUC__ * 10000 \
-                     + __GNUC_MINOR__ * 100 \
-                     + __GNUC_PATCHLEVEL__)
-#if GCC_VERSION >= 40201
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
 #endif
 
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
