@@ -42,11 +42,11 @@ void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
     if ( !bMutex )
         pSalData->mnTimerOrgMS = nMS;
 
-    // Periode darf nicht zu gross sein, da Windows mit sal_uInt16 arbeitet
+    // duration has to fit into Window's sal_uInt16
     if ( nMS > MAX_SYSPERIOD )
         nMS = MAX_SYSPERIOD;
 
-    // Gibt es einen Timer, dann zerstoren
+    // kill timer if it exists
     if ( pSalData->mnTimerId )
         KillTimer( 0, pSalData->mnTimerId );
 
