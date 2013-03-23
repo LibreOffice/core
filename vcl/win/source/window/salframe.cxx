@@ -131,7 +131,7 @@ static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pPa
 
 static void ImplSaveFrameState( WinSalFrame* pFrame )
 {
-    // Position, Groesse und Status fuer GetWindowState() merken
+    // save position, size and state for GetWindowState()
     if ( !pFrame->mbFullScreen )
     {
         sal_Bool bVisible = (GetWindowStyle( pFrame->mhWnd ) & WS_VISIBLE) != 0;
@@ -524,7 +524,7 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild )
 
 // =======================================================================
 
-// Uebersetzungstabelle von System-Keycodes in StarView-Keycodes
+// translation table from System keycodes into StartView keycodes
 #define KEY_TAB_SIZE     146
 
 static sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
@@ -892,7 +892,7 @@ WinSalFrame::WinSalFrame()
 
     memset( &maGeometry, 0, sizeof( maGeometry ) );
 
-    // Daten ermitteln, wenn erster Frame angelegt wird
+    // get data, when making 1st frame
     if ( !pSalData->mpFirstFrame )
     {
         if ( !aSalShlData.mnWheelMsgId )
@@ -1213,7 +1213,7 @@ static void ImplSalShow( HWND hWnd, sal_Bool bVisible, sal_Bool bNoActivate )
             pFrame->mnShowState = SW_SHOWNOACTIVATE;
         else
             pFrame->mnShowState = SW_SHOW;
-        // Damit Taskleiste unter W98 auch gleich ausgeblendet wird
+        // hide toolbar for W98
         if ( pFrame->mbPresentation )
         {
             HWND hWndParent = ::GetParent( hWnd );
@@ -1690,9 +1690,8 @@ void WinSalFrame::GetClientSize( long& rWidth, long& rHeight )
 
 void WinSalFrame::SetWindowState( const SalFrameState* pState )
 {
-    // Wir testen, ob das Fenster ueberhaupt auf den Bildschirm passt, damit
-    // nicht wenn die Bildschirm-Aufloesung geaendert wurde, das Fenster aus
-    // diesem herausragt
+    // Check if the window fits into the screen, in case the screen
+    // resolution changed
     int     nX;
     int     nY;
     int     nWidth;
@@ -1724,7 +1723,7 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     long nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
     long nRightDeco = abs( aWinRect.right - aRect2.right );
 
-    // Fenster-Position/Groesse in den Bildschirm einpassen
+    // adjust window position/size to fit the screen
     if ( !(pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y)) )
         nPosSize |= SWP_NOMOVE;
     if ( !(pState->mnMask & (SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT)) )
@@ -1762,12 +1761,12 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
     if ( nY < nScreenY )
         nY = nScreenY;
 
-    // Restore-Position setzen
+    // set Restore-Position
     WINDOWPLACEMENT aPlacement;
     aPlacement.length = sizeof( aPlacement );
     GetWindowPlacement( mhWnd, &aPlacement );
 
-    // Status setzen
+    // set State
     sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     sal_Bool bUpdateHiddenFramePos = FALSE;
     if ( !bVisible )
@@ -1914,7 +1913,7 @@ void WinSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
 
     if ( bFullScreen )
     {
-        // Damit Taskleiste von Windows ausgeblendet wird
+        // to hide the Windows taskbar
         DWORD nExStyle = GetWindowExStyle( mhWnd );
         if ( nExStyle & WS_EX_TOOLWINDOW )
         {
@@ -1935,8 +1934,8 @@ void WinSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
     }
     else
     {
-        // wenn ShowState wieder hergestellt werden muss, hiden wir zuerst
-        // das Fenster, damit es nicht so sehr flackert
+        // when the ShowState has to be reset, hide the window first to
+        // reduce flicker
         sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
         if ( bVisible && (mnShowState != mnFullScreenShowState) )
             ShowWindow( mhWnd, SW_HIDE );
@@ -2004,7 +2003,7 @@ void WinSalFrame::StartPresentation( sal_Bool bStart )
                 pSalData->mpSageEnableProc( DISABLE_AGENT );
         }
 
-        // Bildschirmschoner ausschalten, wenn Praesentation laueft
+        // turn off screen-saver when in Presentation mode
         SystemParametersInfo( SPI_GETSCREENSAVEACTIVE, 0,
                               &(pSalData->mbScrSvrEnabled), 0 );
         if ( pSalData->mbScrSvrEnabled )
@@ -2012,11 +2011,11 @@ void WinSalFrame::StartPresentation( sal_Bool bStart )
     }
     else
     {
-        // Bildschirmschoner wieder einschalten
+        // turn on screen-saver
         if ( pSalData->mbScrSvrEnabled )
             SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, pSalData->mbScrSvrEnabled, 0, 0 );
 
-        // Systemagenten wieder aktivieren
+        // re-activate system agents
         if ( pSalData->mnSageStatus == ENABLE_AGENT )
             pSalData->mpSageEnableProc( pSalData->mnSageStatus );
     }
@@ -2082,9 +2081,8 @@ static void ImplSalToTop( HWND hWnd, sal_uInt16 nFlags )
     {
         SetFocus( hWnd );
 
-        // Windows behauptet oefters mal, das man den Focus hat, obwohl
-        // man diesen nicht hat. Wenn dies der Fall ist, dann versuchen
-        // wir diesen auch ganz richtig zu bekommen.
+        // Windows sometimes incorrectly reports to have the focus;
+        // thus make sure to really get the focus
         if ( ::GetFocus() == hWnd )
             SetForegroundWindow( hWnd );
     }
@@ -2231,7 +2229,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
             aImplPtrTab[ePointerStyle].mhCursor = LoadCursor( 0, aImplPtrTab[ePointerStyle].mnSysId );
     }
 
-    // Unterscheidet sich der Mauspointer, dann den neuen setzen
+    // change the mouse pointer if different
     if ( mhCursor != aImplPtrTab[ePointerStyle].mhCursor )
     {
         mhCursor = aImplPtrTab[ePointerStyle].mhCursor;
@@ -3134,9 +3132,8 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     aMouseEvt.mnCode    = 0;
     aMouseEvt.mnTime    = GetMessageTime();
 
-    // Wegen (Logitech-)MouseTreiber ueber GetKeyState() gehen, die auf
-    // mittlerer Maustaste Doppelklick simulieren und den KeyStatus nicht
-    // beruecksichtigen
+    // Use GetKeyState(), as some Logitech mouse drivers do not check
+    // KeyState when simulating double-click with center mouse button
 
     if ( GetKeyState( VK_LBUTTON ) & 0x8000 )
         aMouseEvt.mnCode |= MOUSE_LEFT;
@@ -3155,9 +3152,9 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     {
         case WM_MOUSEMOVE:
             {
-            // Da bei Druecken von Modifier-Tasten die MouseEvents
-            // nicht zusammengefast werden (da diese durch KeyEvents
-            // unterbrochen werden), machen wir dieses hier selber
+            // As the mouse events are not collected correctly when
+            // pressing modifier keys (as interrupted by KeyEvents)
+            // we do this here ourselves
             if ( aMouseEvt.mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2) )
             {
                 MSG aTempMsg;
@@ -3477,8 +3474,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     sal_uInt16          nRepeat         = LOWORD( lParam )-1;
     sal_uInt16          nModCode        = 0;
 
-    // Key wurde evtl. durch SysChild an uns weitergeleitet und
-    // darf somit dann nicht doppelt verarbeitet werden
+    // this key might have been relayed by SysChild and thus
+    // may not be processed twice
     GetSalData()->mnSalObjWantKeyEvt = 0;
 
     if ( nMsg == WM_DEADCHAR )
@@ -3491,8 +3488,8 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     if ( !pFrame )
         return 0;
 
-    // Wir restaurieren den Background-Modus bei jeder Texteingabe,
-    // da einige Tools wie RichWin uns diesen hin- und wieder umsetzen
+    // reset the background mode for each text input,
+    // as some tools such as RichWin may have changed it
     if ( pFrame->mpGraphics &&
          pFrame->mpGraphics->mhDC )
         SetBkMode( pFrame->mpGraphics->mhDC, TRANSPARENT );
@@ -3524,14 +3521,13 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 return 1;
         }
 
-        // Backspace ignorieren wir als eigenstaendige Taste,
-        // damit wir keine Probleme in Kombination mit einem
-        // DeadKey bekommen
+        // ignore backspace as a single key, so that
+        // we do not get problems for combinations w/ a DeadKey
         if ( wParam == 0x08 )    // BACKSPACE
             return 0;
 
-        // Hier kommen nur "freifliegende" WM_CHAR Message an, die durch
-        // eintippen einer ALT-NUMPAD Kombination erzeugt wurden
+        // only "free flying" WM_CHAR messages arrive here, that are
+        // created by typing a ALT-NUMPAD combination
         SalKeyEvent aKeyEvt;
 
         if ( (wParam >= '0') && (wParam <= '9') )
@@ -3599,7 +3595,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
      // MCD, 2003-01-13, Support for WM_UNICHAR & Keyman 6.0; addition ends
     else
     {
-        // Bei Shift, Control und Menu schicken wir einen KeyModChange-Event
+        // for shift, control and menu we issue a KeyModChange event
         if ( (wParam == VK_SHIFT) || (wParam == VK_CONTROL) || (wParam == VK_MENU) )
         {
             SalKeyModEvent aModEvt;
@@ -3655,11 +3651,10 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             if ( !bKeyUp )
             {
                 // check for charcode
-                // Mit Hilfe von PeekMessage holen wir uns jetzt die
-                // zugehoerige WM_CHAR Message, wenn vorhanden.
-                // Diese WM_CHAR Message steht immer am Anfang der
-                // Messagequeue. Ausserdem ist sichergestellt, dass immer
-                // nur eine WM_CHAR Message in der Queue steht.
+                // Get the related WM_CHAR message using PeekMessage, if available.
+                // The WM_CHAR message is always at the beginning of the
+                // message queue. Also it is made certain that there is always only
+                // one WM_CHAR message in the queue.
                 bCharPeek = ImplPeekMessage( &aCharMsg, hWnd,
                                              WM_CHAR, WM_CHAR, PM_NOREMOVE | PM_NOYIELD );
                 if ( bCharPeek && (nDeadChar == aCharMsg.wParam) )
@@ -3821,7 +3816,7 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
         nModCode |= KEY_MOD1;
     nModCode |= KEY_MOD2;
 
-    // KeyEvent zusammenbauen
+    // assemble KeyEvent
     SalKeyEvent aKeyEvt;
     aKeyEvt.mnTime      = GetMessageTime();
     if ( (cKeyCode >= 48) && (cKeyCode <= 57) )
@@ -3855,13 +3850,13 @@ static bool ImplHandlePaintMsg( HWND hWnd )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
-        // Clip-Region muss zurueckgesetzt werden, da wir sonst kein
-        // ordentliches Bounding-Rectangle bekommen
+        // clip-region must be reset, as we do not get a proper
+        // bounding-rectangle otherwise
         if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
             SelectClipRgn( pFrame->mpGraphics->mhDC, 0 );
 
-        // Laut Window-Doku soll man erst abfragen, ob ueberhaupt eine
-        // Paint-Region anliegt
+        // according to Window-Documentation one shall check first if
+        // there really is a paint-region
         if ( GetUpdateRect( hWnd, NULL, FALSE ) )
         {
             // Call BeginPaint/EndPaint to query the rect and send
@@ -3872,7 +3867,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
             CopyRect( &aUpdateRect, &aPs.rcPaint );
 
             // Paint
-            // ClipRegion wieder herstellen
+            // reset ClipRegion
             if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
             {
                 SelectClipRgn( pFrame->mpGraphics->mhDC,
@@ -3894,7 +3889,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
         }
         else
         {
-            // ClipRegion wieder herstellen
+            // reset ClipRegion
             if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
             {
                 SelectClipRgn( pFrame->mpGraphics->mhDC,
@@ -4023,7 +4018,7 @@ static void ImplCallMoveHdl( HWND hWnd )
     if ( pFrame )
     {
         pFrame->CallCallback( SALEVENT_MOVE, 0 );
-        // Um doppelte Paints von VCL und SAL zu vermeiden
+        // to avoid doing Paint twice by VCL and SAL
         //if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
         //    UpdateWindow( hWnd );
     }
@@ -4054,17 +4049,17 @@ static void ImplHandleMoveMsg( HWND hWnd )
             if ( GetWindowStyle( hWnd ) & WS_VISIBLE )
                 pFrame->mbDefPos = FALSE;
 
-            // Gegen moegliche Rekursionen sichern
+            // protect against recursion
             if ( !pFrame->mbInMoveMsg )
             {
-                // Fenster im FullScreenModus wieder einpassen
+                // adjust window again for FullScreenMode
                 pFrame->mbInMoveMsg = TRUE;
                 if ( pFrame->mbFullScreen )
                     ImplSalFrameFullScreenPos( pFrame );
                 pFrame->mbInMoveMsg = FALSE;
             }
 
-            // Status merken
+            // save state
             ImplSaveFrameState( pFrame );
 
             // Call Hdl
@@ -4083,15 +4078,15 @@ static void ImplHandleMoveMsg( HWND hWnd )
 
 static void ImplCallSizeHdl( HWND hWnd )
 {
-    // Da Windows diese Messages auch senden kann, muss hier auch die
-    // Solar-Semaphore beruecksichtigt werden
+    // as Windows can send these messages also, we have to use
+    // the Solar semaphore
     if ( ImplSalYieldMutexTryToAcquire() )
     {
         WinSalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
             pFrame->CallCallback( SALEVENT_RESIZE, 0 );
-            // Um doppelte Paints von VCL und SAL zu vermeiden
+            // to avoid double Paints by VCL and SAL
             if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
                 UpdateWindow( hWnd );
         }
@@ -4115,7 +4110,7 @@ static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
             pFrame->mnWidth  = (int)LOWORD(lParam);
             pFrame->mnHeight = (int)HIWORD(lParam);
-            // Status merken
+            // save state
             ImplSaveFrameState( pFrame );
             // Call Hdl
             ImplCallSizeHdl( hWnd );
@@ -4132,13 +4127,12 @@ static void ImplHandleFocusMsg( HWND hWnd )
         WinSalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame && !WinSalFrame::mbInReparent )
         {
-            // Query the actual status
             if ( ::GetFocus() == hWnd )
             {
                 if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
                     UpdateWindow( hWnd );
 
-                // Feststellen, ob wir IME unterstuetzen
+                // do we support IME?
                 if ( pFrame->mbIME && pFrame->mhDefIMEContext )
                 {
                     UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_PROPERTY );
@@ -4317,8 +4311,8 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
     sal_Bool bReleaseMutex = FALSE;
     if ( (nMsg == WM_QUERYNEWPALETTE) || (nMsg == WM_PALETTECHANGED) )
     {
-        // Da Windows diese Messages auch sendet, muss hier auch die
-        // Solar-Semaphore beruecksichtigt werden
+        // as Windows can send these messages also, we have to use
+        // the Solar semaphore
         if ( ImplSalYieldMutexTryToAcquire() )
             bReleaseMutex = TRUE;
         else if ( nMsg == WM_QUERYNEWPALETTE )
@@ -4338,7 +4332,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
 
     pSalData->mbInPalChange = TRUE;
 
-    // Alle Paletten in VirDevs und Frames zuruecksetzen
+    // reset all palettes in VirDevs and Frames
     pTempVD = pSalData->mpFirstVD;
     while ( pTempVD )
     {
@@ -4364,7 +4358,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         pTempFrame = pTempFrame->mpNextFrame;
     }
 
-    // Palette neu realizen
+    // re-initialize palette
     WinSalFrame* pFrame = NULL;
     if ( bFrame )
         pFrame = GetWindowPtr( hWnd );
@@ -4388,7 +4382,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         ReleaseDC( hWnd, hDC );
     }
 
-    // Alle Paletten in VirDevs und Frames neu setzen
+    // reset all palettes in VirDevs and Frames
     pTempVD = pSalData->mpFirstVD;
     while ( pTempVD )
     {
@@ -4416,7 +4410,7 @@ static LRESULT ImplHandlePalette( sal_Bool bFrame, HWND hWnd, UINT nMsg,
         pTempFrame = pTempFrame->mpNextFrame;
     }
 
-    // Wenn sich Farben geaendert haben, dann die Fenster updaten
+    // if colors changed, update the window
     if ( bUpdate )
     {
         pTempFrame = pSalData->mpFirstFrame;
@@ -4973,22 +4967,20 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
         if( GetMenu( hWnd ) )
             return FALSE;
 
-        // Hier verarbeiten wir nur KeyMenu-Events fuer Alt um
-        // den MenuBar zu aktivieren, oder wenn ein SysChild-Fenster
-        // den Focus hat, da diese Alt+Tasten-Kombinationen nur
-        // ueber diesen Event verarbeitet werden
+        // Process here KeyMenu events only for Alt to activate the MenuBar,
+        // or if a SysChild window is in focus, as Alt-key-combinations are
+        // only processed via this event
         if ( !LOWORD( lParam ) )
         {
-            // Nur ausloesen, wenn keine weitere Taste gedrueckt ist. Im
-            // Gegensatz zur Doku wird in der X-Koordinaate der CharCode
-            // geliefert, der zusaetzlich gedrueckt ist
-            // Also 32 fuer Space, 99 fuer c, 100 fuer d, ...
-            // Da dies nicht dokumentiert ist, fragen wir vorsichtshalber
-            // auch den Status der Space-Taste ab
+            // Only trigger if no other key is pressed.
+            // Contrary to Docu the CharCode is delivered with the x-coordinate
+            // that is pressed in addition.
+            // Also 32 for space, 99 for c, 100 for d, ...
+            // As this is not documented, we check the state of the space-bar
             if ( GetKeyState( VK_SPACE ) & 0x8000 )
                 return 0;
 
-            // Damit nicht bei Alt+Maustaste auch der MenuBar aktiviert wird
+            // to avoid activating the MenuBar for Alt+MouseKey
             if ( (GetKeyState( VK_LBUTTON ) & 0x8000) ||
                  (GetKeyState( VK_RBUTTON ) & 0x8000) ||
                  (GetKeyState( VK_MBUTTON ) & 0x8000) ||
@@ -5006,7 +4998,7 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
         }
         else
         {
-            // Testen, ob ein SysChild den Focus hat
+            // check if a SysChild is in focus
             HWND hFocusWnd = ::GetFocus();
             if ( hFocusWnd && ImplFindSalObject( hFocusWnd ) )
             {
@@ -5014,8 +5006,8 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
                 // LowerCase
                 if ( (cKeyCode >= 65) && (cKeyCode <= 90) )
                     cKeyCode += 32;
-                // Wir nehmen nur 0-9 und A-Z, alle anderen Tasten muessen durch
-                // den Hook vom SalObj verarbeitet werden
+                // We only accept 0-9 and A-Z; all other keys have to be
+                // processed by the SalObj hook
                 if ( ((cKeyCode >= 48) && (cKeyCode <= 57)) ||
                      ((cKeyCode >= 97) && (cKeyCode <= 122)) )
                 {
@@ -5052,7 +5044,7 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM, LPARAM lParam )
 {
     ImplSalYieldMutexAcquireWithWait();
 
-    // Feststellen, ob wir IME unterstuetzen
+    // check if we support IME
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
 
     if ( !pFrame )
@@ -5086,8 +5078,8 @@ static void ImplUpdateIMECursorPos( WinSalFrame* pFrame, HIMC hIMC )
     COMPOSITIONFORM aForm;
     memset( &aForm, 0, sizeof( aForm ) );
 
-    // Cursor-Position ermitteln und aus der die Default-Position fuer
-    // das Composition-Fenster berechnen
+    // get cursor position and from it calculate default position
+    // for the composition window
     SalExtTextInputPosEvent aPosEvt;
     pFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvt );
     if ( (aPosEvt.mnX == -1) && (aPosEvt.mnY == -1) )
@@ -5282,8 +5274,8 @@ static sal_Bool ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if ( pFrame && (!lParam || (lParam & GCS_RESULTSTR)) )
     {
-        // Wir restaurieren den Background-Modus bei jeder Texteingabe,
-        // da einige Tools wie RichWin uns diesen hin- und wieder umsetzen
+        // reset the background mode for each text input,
+        // as some tools such as RichWin may have changed it
         if ( pFrame->mpGraphics &&
              pFrame->mpGraphics->mhDC )
             SetBkMode( pFrame->mpGraphics->mhDC, TRANSPARENT );
@@ -5398,7 +5390,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
         if ( pFrame && pFrame->mbHandleIME &&
              pFrame->mbAtCursorIME )
         {
-            // Wir wollen den Cursor hiden
+            // we want to hide der cursor
             pFrame->mbCandidateMode = TRUE;
             ImplHandleIMEComposition( hWnd, GCS_CURSORPOS );
 
@@ -5550,8 +5542,7 @@ static int ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     POINT aScreenPt;
     aScreenPt.x = (short)LOWORD( lParam );
     aScreenPt.y = (short)HIWORD( lParam );
-    // Child-Fenster suchen, welches an der entsprechenden
-    // Position liegt
+    // find child window that is at this position
     HWND hChildWnd;
     HWND hWheelWnd = hWnd;
     do
@@ -5583,7 +5574,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
     {
-        // Window-Instanz am Windowhandle speichern
+        // Save Window-Instance in Windowhandle
         // Can also be used for the W-Version, because the struct
         // to access lpCreateParams is the same structure
         CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
@@ -5591,9 +5582,8 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         if ( pFrame != 0 )
         {
             SetWindowPtr( hWnd, pFrame );
-            // HWND schon hier setzen, da schon auf den Instanzdaten
-            // gearbeitet werden kann, wenn Messages waehrend
-            // CreateWindow() gesendet werden
+            // Set HWND already here, as data might be used already
+            // when messages are being sent by CreateWindow()
             pFrame->mhWnd = hWnd;
             pFrame->maSysData.hWnd = hWnd;
         }
@@ -5668,15 +5658,14 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_MOUSEWHEEL:
             // FALLTHROUGH intended
         case WM_MOUSEHWHEEL:
-            // Gegen Rekursion absichern, falls wir vom IE oder dem externen
-            // Fenster die Message wieder zurueckbekommen
+            // protect against recursion, in case the message is returned
+            // by IE or the external window
             if ( !bInWheelMsg )
             {
                 bInWheelMsg++;
                 rDef = !ImplHandleWheelMsg( hWnd, nMsg, wParam, lParam );
-                // Wenn wir die Message nicht ausgewertet haben, schauen wir
-                // noch einmal nach, ob dort ein geplugtes Fenster steht,
-                // welches wir dann benachrichtigen
+                // If we did not process the message, re-check if here is a
+                // connected (?) window that we have to notify.
                 if ( rDef )
                     rDef = ImplSalWheelMousePos( hWnd, nMsg, wParam, lParam, nRet );
                 bInWheelMsg--;
@@ -5771,12 +5760,11 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_ACTIVATE:
-            // Wenn wir aktiviert werden, dann wollen wir auch unsere
-            // Palette setzen. Wir machen dieses in Activate,
-            // damit andere externe Child-Fenster auch unsere Palette
-            // ueberschreiben koennen. So wird unsere jedenfalls nur einmal
-            // gesetzt und nicht immer rekursiv, da an allen anderen Stellen
-            // diese nur als Background-Palette gesetzt wird
+            // Getting activated, we also want to set our palette.
+            // We do this in Activate, so that other external child windows
+            // can overwrite our palette. Thus our palette is set only once
+            // and not recursively, as at all other places it is set only as
+            // the background palette.
             if ( LOWORD( wParam ) != WA_INACTIVE )
                 ImplSendMessage( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
             break;
@@ -5959,16 +5947,15 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 #endif // WINVER >= 0x0500
     }
 
-    // WheelMouse-Message abfangen
+    // catch WheelMouse-Message
     if ( rDef && (nMsg == aSalShlData.mnWheelMsgId) && aSalShlData.mnWheelMsgId )
     {
-        // Gegen Rekursion absichern, falls wir vom IE oder dem externen
-        // Fenster die Message wieder zurueckbekommen
+        // protect against recursion, in case the message is returned
+        // by IE or the external window
         if ( !bInWheelMsg )
         {
             bInWheelMsg++;
-            // Zuerst wollen wir die Message dispatchen und dann darf auch
-            // das SystemWindow drankommen
+            // First dispatch the message; and then give the SystemWindow a turn
             WORD nKeyState = 0;
             if ( GetKeyState( VK_SHIFT ) & 0x8000 )
                 nKeyState |= MK_SHIFT;
