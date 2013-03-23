@@ -188,7 +188,6 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                 delete pIter;
                 return sal_True;
             }
-            delete pIter;
         }
     }
     return sal_False;
