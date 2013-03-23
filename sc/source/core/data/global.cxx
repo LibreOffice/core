@@ -38,6 +38,7 @@
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <unotools/charclass.hxx>
+#include <unotools/securityoptions.hxx>
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
@@ -924,13 +925,25 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 {
     //  OpenURL wird immer ueber irgendwelche Umwege durch Mausklicks im GridWindow
     //  aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
+    //SvtSecurityOptions to access Libreoffice global security parameters
+    SvtSecurityOptions aSecOpt;
+    bool bProceedHyperlink = false;
+    if ( (nScClickMouseModifier & KEY_MOD1) && aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ))     // control-click -> into new window
+    {
+        //Ctrl key is pressed and ctrl+click hyperlink security control is set
+        bProceedHyperlink = true;
+    }
+    else if( !aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ) )
+    {
+        //ctrl+click hyperlink security control is disabled just click will do
+        bProceedHyperlink = true;
+    }
+    if ( !bProceedHyperlink )
+        return;
 
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
-
-    if ( nScClickMouseModifier & KEY_MOD1 )     // control-click -> into new window
-        aTarget.SetValue(rtl::OUString("_blank"));
-
+    aTarget.SetValue(rtl::OUString("_blank"));
     SfxViewFrame* pFrame = NULL;
     String aReferName;
     if ( pScActiveViewShell )
