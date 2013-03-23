@@ -212,8 +212,7 @@ void ImplSalYieldMutexAcquireWithWait()
     SalData* pSalData = GetSalData();
     if ( pSalData->mnAppThreadId == nThreadId )
     {
-        // Wenn wir den Mutex nicht bekommen, muessen wir solange
-        // warten, bis wir Ihn bekommen
+        // wait till we get the Mutex
         sal_Bool bAcquire = FALSE;
         do
         {
@@ -399,13 +398,13 @@ SalData::SalData()
     }
     mnStockPenCount = 0;        // count of static pens
     mnStockBrushCount = 0;      // count of static brushes
-    mnSalObjWantKeyEvt = 0;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
+    mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
     mnCacheDCInUse = 0;         // count of CacheDC in use
     mbObjClassInit = FALSE;     // is SALOBJECTCLASS initialised
     mbInPalChange = FALSE;      // is in WM_QUERYNEWPALETTE
     mnAppThreadId = 0;          // Id from Applikation-Thread
     mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
-    mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == nicht vorhanden)
+    mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == not available)
     mpSageEnableProc = 0;       // funktion to deactivate the system agent
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
@@ -940,7 +939,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
 void SalTimer::Start( sal_uLong nMS )
 {
-    // Um auf Main-Thread umzuschalten
+    // to switch to Main-Thread
     SalData* pSalData = GetSalData();
     if ( pSalData->mpFirstInstance )
     {
@@ -957,7 +956,7 @@ void SalTimer::Start( sal_uLong nMS )
 
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
 {
-    // Um auf Main-Thread umzuschalten
+    // to switch to Main-Thread
     return (SalFrame*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
 }
 
@@ -965,7 +964,7 @@ SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData,
 
 SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
 {
-    // Um auf Main-Thread umzuschalten
+    // to switch to Main-Thread
     HWND hWndParent;
     if ( pParent )
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
@@ -987,7 +986,7 @@ SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
                                          sal_Bool /*bShow*/ )
 {
-    // Um auf Main-Thread umzuschalten
+    // to switch to Main-Thread
     return (SalObject*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
 }
 

@@ -61,7 +61,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
     char       c2;
     do
     {
-        // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
+        // change to LowerCase if the char is between 'A' and 'Z'
         c1 = *pStr1;
         c2 = *pStr2;
         if ( (c1 >= 65) && (c1 <= 90) )
