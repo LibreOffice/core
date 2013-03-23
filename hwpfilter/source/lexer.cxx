@@ -34,10 +34,6 @@
 #define YY_MAIN 0
 #endif
 
-#define FLEX_SCANNER
-#define YY_FLEX_MAJOR_VERSION 2
-#define YY_FLEX_MINOR_VERSION 5
-
 #include <stdio.h>
 
 
@@ -98,18 +94,10 @@
  */
 #define YY_SC_TO_UI(c) ((unsigned int) (unsigned char) c)
 
-/* Enter a start condition.  This macro really ought to take a parameter,
- * but we do it the disgusting crufty way forced on us by the ()-less
- * definition of BEGIN.
- */
-#define BEGIN yy_start = 1 + 2 *
-
 /* Translate the current start state into a value that can be later handed
- * to BEGIN to return to the state.  The YYSTATE alias is for lex
- * compatibility.
+ * to BEGIN to return to the state.
  */
 #define YY_START ((yy_start - 1) / 2)
-#define YYSTATE YY_START
 
 /* Action number for EOF rule of a given start state. */
 #define YY_STATE_EOF(state) (YY_END_OF_BUFFER + state + 1)
@@ -130,33 +118,6 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
-
-/* The funky do-while in the following #define is used to turn the definition
- * int a single C statement (which needs a semi-colon terminator).  This
- * avoids problems with code like:
- *
- *  if ( condition_holds )
- *      yyless( 5 );
- *  else
- *      do_something_else();
- *
- * Prior to using the do-while the compiler would get upset at the
- * "else" because it interpreted the "if" statement as being all
- * done when it reached the ';' after the yyless() call.
- */
-
-/* Return all but the first 'n' matched characters back to the input stream. */
-
-#define yyless(n) \
-    do \
-        { \
-        /* Undo effects of setting up yytext. */ \
-        *yy_cp = yy_hold_char; \
-        YY_RESTORE_YY_MORE_OFFSET \
-        yy_c_buf_p = yy_cp = yy_bp + n - YY_MORE_ADJ; \
-        YY_DO_BEFORE_ACTION; /* set up yytext again */ \
-        } \
-    while ( 0 )
 
 //#define unput(c) yyunput( c, yytext_ptr )
 
@@ -259,7 +220,6 @@ YY_BUFFER_STATE yy_create_buffer YY_PROTO(( FILE *file, int size ));
 void yy_delete_buffer YY_PROTO(( YY_BUFFER_STATE b ));
 void yy_init_buffer YY_PROTO(( YY_BUFFER_STATE b, FILE *file ));
 void yy_flush_buffer YY_PROTO(( YY_BUFFER_STATE b ));
-#define YY_FLUSH_BUFFER yy_flush_buffer( yy_current_buffer )
 
 YY_BUFFER_STATE yy_scan_buffer YY_PROTO(( char *base, yy_size_t size ));
 YY_BUFFER_STATE yy_scan_string YY_PROTO(( yyconst char *yy_str ));
@@ -268,24 +228,6 @@ YY_BUFFER_STATE yy_scan_bytes YY_PROTO(( yyconst char *bytes, int len ));
 static void *yy_flex_alloc YY_PROTO(( yy_size_t ));
 static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t ));
 static void yy_flex_free YY_PROTO(( void * ));
-
-#define yy_new_buffer yy_create_buffer
-
-#define yy_set_interactive(is_interactive) \
-    { \
-    if ( ! yy_current_buffer ) \
-        yy_current_buffer = yy_create_buffer( yyin, YY_BUF_SIZE ); \
-    yy_current_buffer->yy_is_interactive = is_interactive; \
-    }
-
-#define yy_set_bol(at_bol) \
-    { \
-    if ( ! yy_current_buffer ) \
-        yy_current_buffer = yy_create_buffer( yyin, YY_BUF_SIZE ); \
-    yy_current_buffer->yy_at_bol = at_bol; \
-    }
-
-#define YY_AT_BOL() (yy_current_buffer->yy_at_bol)
 
 typedef unsigned char YY_CHAR;
 FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
@@ -308,7 +250,6 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
     *yy_cp = '\0'; \
     yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 45
 #define YY_END_OF_BUFFER 46
 static yyconst short int yy_accept[994] =
     {   0,
@@ -1011,11 +952,6 @@ static yyconst short int yy_chk[1389] =
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
 
-/* The intent behind this definition is that it'll catch
- * any uses of REJECT which flex missed.
- */
-#define REJECT reject_used_but_not_detected
-#define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
@@ -1029,10 +965,6 @@ char *yytext;
 #define fileno _fileno
 #define isatty _isatty
 #endif
-
-/* enlarge token buffer to tokenize whole strings */
-#undef YYLMAX
-#define YYLMAX 64000
 
 #ifdef __cplusplus
 extern "C" {
@@ -1153,11 +1085,6 @@ YY_MALLOC_DECL
  */
 #ifndef yyterminate
 #define yyterminate() return YY_NULL
-#endif
-
-/* Number of entries by which start-condition stack grows. */
-#ifndef YY_START_STACK_INCR
-#define YY_START_STACK_INCR 25
 #endif
 
 /* Report a fatal error. */
@@ -2123,22 +2050,6 @@ char msg[];
     exit( YY_EXIT_FAILURE );
     }
 
-
-
-/* Redefine yyless() so it works in section 3 code. */
-
-#undef yyless
-#define yyless(n) \
-    do \
-        { \
-        /* Undo effects of setting up yytext. */ \
-        yytext[yyleng] = yy_hold_char; \
-        yy_c_buf_p = yytext + n; \
-        yy_hold_char = *yy_c_buf_p; \
-        *yy_c_buf_p = '\0'; \
-        yyleng = n; \
-        } \
-    while ( 0 )
 
 
 /* Internal utility routines. */

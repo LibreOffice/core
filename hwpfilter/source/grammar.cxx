@@ -21,44 +21,12 @@
 /*  A Bison parser, made from grammar.y
     by GNU Bison version 1.28  */
 
-#define YYBISON 1  /* Identify Bison output.  */
-
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
 #ifndef YYMAXDEPTH
 #define YYMAXDEPTH 0
 #endif
-
-#define ACCENT  257
-#define SMALL_GREEK 258
-#define CAPITAL_GREEK   259
-#define BINARY_OPERATOR 260
-#define RELATION_OPERATOR   261
-#define ARROW   262
-#define GENERAL_IDEN    263
-#define GENERAL_OPER    264
-#define BIG_SYMBOL  265
-#define FUNCTION    266
-#define ROOT    267
-#define FRACTION    268
-#define SUBSUP  269
-#define EQOVER  270
-#define DELIMETER   271
-#define LARGE_DELIM 272
-#define DECORATION  273
-#define SPACE_SYMBOL    274
-#define CHARACTER   275
-#define STRING  276
-#define OPERATOR    277
-#define EQBEGIN 278
-#define EQEND   279
-#define EQLEFT  280
-#define EQRIGHT 281
-#define NEWLINE 282
-#define LEFT_DELIM  283
-#define RIGHT_DELIM 284
-#define DIGIT   285
 
 #include <list>
 #include <stdlib.h>
@@ -434,33 +402,12 @@ static const short yycheck[] = {    11,
    It is replaced by the list of actions, each action
    as one case of the switch.  */
 
-#define yyerrok     (yyerrstatus = 0)
-#define yyclearin   (yychar = YYEMPTY)
 #define YYEMPTY     -2
 #define YYEOF       0
 #define YYACCEPT    goto yyacceptlab
 #define YYABORT     goto yyabortlab
-#define YYERROR     goto yyerrlab1
-/* Like YYERROR except do call yyerror.
-   This remains here temporarily to ease the
-   transition to the new meaning of YYERROR, for GCC.
-   Once GCC version 2 has supplanted version 1, this can go.  */
-#define YYFAIL      goto yyerrlab
-#define YYRECOVERING()  (!!yyerrstatus)
-#define YYBACKUP(token, value) \
-do                              \
-  if (yychar == YYEMPTY && yylen == 1)              \
-    { yychar = (token), yylval = (value);           \
-      yychar1 = YYTRANSLATE (yychar);               \
-      YYPOPSTACK;                       \
-      goto yybackup;                        \
-    }                               \
-  else                              \
-    { yyerror ("syntax error: cannot back up"); YYERROR; }  \
-while (0)
 
 #define YYTERROR    1
-#define YYERRCODE   256
 
 #ifndef YYPURE
 #define YYLEX       yylex()
@@ -616,8 +563,6 @@ yyparse(YYPARSE_PARAM_ARG)
   YYLTYPE *yylsp;
 
 #define YYPOPSTACK   (yyvsp--, yyssp--, yylsp--)
-#else
-#define YYPOPSTACK   (yyvsp--, yyssp--)
 #endif
 
   int yystacksize = YYINITDEPTH;
