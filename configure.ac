@@ -2103,20 +2103,8 @@ if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
 fi
 
-# Currently we build only viewer apps for Android (and for iOS not even that yet), so to avoid getting
-# some pathological export-related code and data linked in, we will add some judicious #ifndef
-# DISABLE_EXPORT in the code in places where the linker map shows it has a big impact. Places that
-# generate large amounts of code or data related to export only but still gets linked in. At least
-# that is the theory, let's see...
-
-if test -z "$enable_export"; then
-    if test $_os != Android -a $_os != iOS; then
-        enable_export=yes
-    fi
-fi
-
 DISABLE_EXPORT=''
-if test "$enable_export" = yes; then
+if test "$enable_export" != no; then
     BUILD_TYPE="$BUILD_TYPE EXPORT"
 else
     DISABLE_EXPORT='TRUE'
