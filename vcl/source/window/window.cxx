@@ -8325,7 +8325,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
 
     if( mpWindowImpl->mpFrameData )
     {

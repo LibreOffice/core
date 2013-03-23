@@ -257,7 +257,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
                 sal_Bool bDocShared = false;
                 if ( aValue >>= bDocShared )
                 {
@@ -418,7 +418,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 aRet <<= pDocShell->IsLoadReadonly();
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
 #endif
             }

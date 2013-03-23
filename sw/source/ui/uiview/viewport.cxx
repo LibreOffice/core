@@ -1056,7 +1056,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         return;
     m_bInOuterResizePixel = sal_True;
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
 // feststellen, ob Scrollbars angezeigt werden duerfen
     sal_Bool bShowH = sal_True,
          bShowV = sal_True,
@@ -1203,7 +1203,7 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 
 sal_Bool SwView::UpdateScrollbars()
 {
-#if defined(ANDROID) || defined(IOS)
+#ifndef LIBO_FEATURE_DESKTOP
     return sal_True;
 #else
     sal_Bool bRet = sal_False;

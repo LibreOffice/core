@@ -135,7 +135,7 @@ static const sal_Int8 LOCK_UI_NOLOCK = 0;
 static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
 static const sal_Int8 LOCK_UI_TRY = 2;
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
 
 bool IsSystemFileLockingUsed()
 {
@@ -984,7 +984,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUStri
 
 namespace
 {
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
     bool isSuitableProtocolForLocking(const String & rLogicName)
     {
         INetURLObject aUrl( rLogicName );
@@ -999,7 +999,7 @@ namespace
 // if user cancel the loading the ERROR_ABORT is set
 bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 {
-#if defined(ANDROID) || defined(IOS)
+#ifndef LIBO_FEATURE_DESKTOP
     (void) bLoading;
     (void) bNoUI;
     return true;
@@ -2682,7 +2682,7 @@ void SfxMedium::CloseAndRelease()
 
 void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
 {
-#if defined(ANDROID) || defined(IOS)
+#ifndef LIBO_FEATURE_DESKTOP
     (void) bReleaseLockStream;
 #else
     if ( pImp->m_xLockingStream.is() )

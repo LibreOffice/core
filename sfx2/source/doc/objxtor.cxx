@@ -390,7 +390,7 @@ SfxObjectShell::~SfxObjectShell()
     {
         pMedium->CloseAndReleaseStreams_Impl();
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
         if ( IsDocShared() )
             FreeSharedFile();
 #endif

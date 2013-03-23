@@ -23,7 +23,7 @@
 
 #include "dp_configuration.hrc"
 #include "dp_backend.h"
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
 #include "dp_persmap.h"
 #endif
 #include "dp_ucb.h"
@@ -110,10 +110,12 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
         OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
-#if !defined(ANDROID) && !defined(IOS)
+
+#ifndef DISABLE_EXTENSIONS
     // for backwards compatibility - nil if no (compatible) back-compat db present
     ::std::auto_ptr<PersistentMap> m_registeredPackages;
 #endif
+
     virtual void SAL_CALL disposing();
 
     const Reference<deployment::XPackageTypeInfo> m_xConfDataTypeInfo;
@@ -215,7 +217,7 @@ BackendImpl::BackendImpl(
 
         configmgrini_verify_init( xCmdEnv );
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<PersistentMap> pMap;
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -551,7 +553,8 @@ BackendImpl::PackageImpl::isRegistered_(
     bool bReg = false;
     if (that->hasActiveEntry(getURL()))
         bReg = true;
-#if !defined(ANDROID) && !defined(IOS)
+
+#ifndef DISABLE_EXTENSIONS
     if (!bReg && that->m_registeredPackages.get())
     {
         // fallback for user extension registered in berkeley DB
@@ -740,7 +743,7 @@ void BackendImpl::PackageImpl::processPackage_(
     }
     else // revoke
     {
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
         if (!that->removeFromConfigmgrIni(m_isSchema, url, xCmdEnv) &&
             that->m_registeredPackages.get()) {
             // Obsolete package database handling - should be removed for LibreOffice 4.0

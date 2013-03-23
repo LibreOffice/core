@@ -116,7 +116,7 @@ namespace desktop {
         }
     }
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
     static osl::FileBase::RC copy_recursive( const rtl::OUString& srcUnqPath, const rtl::OUString& dstUnqPath)
     {
         FileBase::RC err;

@@ -766,7 +766,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 aDocument.SetChangeViewSettings(aChangeViewSet);
                             }
                         }
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
                         else if ( nSlot == SID_DOCUMENT_MERGE && IsDocShared() && pChangeTrack )
                         {
                             sal_uLong nEnd = pChangeTrack->GetActionMax();
@@ -897,7 +897,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         }
         break;
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
         case SID_SHARE_DOC:
             {
                 ScViewData* pViewData = GetViewData();
@@ -2300,7 +2300,7 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     return 0;
 }
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
 
 void ScDocShell::EnableSharedSettings( bool bEnable )
 {

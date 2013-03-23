@@ -442,7 +442,7 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
     {
         m_nologo = true;
     }
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
     else if ( oArg == "nolockcheck" )
     {
         m_nolockcheck = true;

@@ -218,6 +218,10 @@ define gb_Helper_define_if_set
 $(foreach def,$(1),$(if $(filter TRUE YES,$($(def))),-D$(def)))
 endef
 
+define gb_Helper_define_if_in
+$(foreach def,$(1),$(if $(filter $(def),$(2)),-DLIBO_FEATURE_$(def)))
+endef
+
 define gb_Helper_execute
 $(call gb_Executable_get_command,$(firstword $(1))) $(wordlist 2,$(words $(1)),$(1))
 endef

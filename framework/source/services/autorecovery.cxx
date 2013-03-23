@@ -2020,7 +2020,7 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 */
 void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
 {
-#if defined(ANDROID) || defined(IOS)
+#ifndef LIBO_FEATURE_DESKTOP
     (void) rInfo;
 #else
     if ( rInfo.Document.is() )

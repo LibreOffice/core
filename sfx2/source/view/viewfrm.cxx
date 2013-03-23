@@ -673,7 +673,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
                 // TODO/LATER: Temporary solution, the SfxMedium must know the original URL as aLogicName
                 //             SfxMedium::Transfer_Impl() will be forbidden then.
                 if ( xOldObj->IsDocShared() )
@@ -790,7 +790,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xNewObj->SetReadOnlyUI( !bForEdit );
                     }
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
                     if ( xNewObj->IsDocShared() )
                     {
                         // the file is shared but the closing can change the sharing control file

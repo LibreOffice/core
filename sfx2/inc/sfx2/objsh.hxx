@@ -271,7 +271,7 @@ public:
     virtual sal_Bool            AcceptStateUpdate() const;
     sal_Bool                    IsHelpDocument() const;
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
     sal_Bool                    IsDocShared() const;
     ::rtl::OUString             GetSharedFileURL() const;
     sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );

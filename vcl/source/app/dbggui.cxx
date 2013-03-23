@@ -1661,7 +1661,7 @@ void DbgPrintMsgBox( const char* pLine )
     }
 
     strcpy( aDbgOutBuf, pLine );
-#if defined UNX && !(defined ANDROID || defined IOS)
+#if defined UNX && defined LIBO_FEATURE_DESKTOP
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=core dump)" );
 #elif defined _WIN32
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=try to invoke debugger)" );

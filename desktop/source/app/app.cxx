@@ -1386,7 +1386,8 @@ int Desktop::Main()
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
-#if !defined(ANDROID) && !defined(IOS)
+
+#ifdef LIBO_FEATURE_DESKTOP
     OUString aUnknown( rCmdLineArgs.GetUnknown() );
     if ( !aUnknown.isEmpty() )
     {
@@ -1450,7 +1451,8 @@ int Desktop::Main()
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_xLockfile.reset(new Lockfile);
-#if !defined(ANDROID) && !defined(IOS)
+
+#ifdef LIBO_FEATURE_DESKTOP
         if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
         {
@@ -1537,7 +1539,7 @@ int Desktop::Main()
         */
         Application::GetDefaultDevice();
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!

@@ -59,7 +59,7 @@ namespace {
 
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
 
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
 static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
@@ -105,7 +105,7 @@ namespace desktop
 
 namespace {
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
 
 class Parser: public CommandLineArgs::Supplier {
 public:
@@ -451,7 +451,7 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -613,7 +613,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
 void OfficeIPCThread::DisableOfficeIPCThread(bool join)
 {
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -673,7 +673,7 @@ void OfficeIPCThread::SetReady(
 
 void OfficeIPCThread::execute()
 {
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
     do
     {
         osl::StreamPipe aStreamPipe;

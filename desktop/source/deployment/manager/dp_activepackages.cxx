@@ -43,7 +43,7 @@
 //   key: 0xFF UTF8(identifier)
 //   value: UTF8(tempname) 0xFF UTF8(filename) 0xFF UTF8(mediatype)
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
 
 namespace {
 
@@ -117,13 +117,12 @@ namespace dp_manager {
 ActivePackages::ActivePackages() {}
 
 ActivePackages::ActivePackages(::rtl::OUString const & url, bool readOnly)
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
     : m_map(url, readOnly)
 #endif
 {
-#if defined(ANDROID) || defined(IOS)
-    (void)url; (void)readOnly;
-#endif
+    (void) url;
+    (void) readOnly;
 }
 
 ActivePackages::~ActivePackages() {}
@@ -138,7 +137,7 @@ bool ActivePackages::get(
     Data * data, ::rtl::OUString const & id, ::rtl::OUString const & fileName)
     const
 {
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
     ::rtl::OString v;
     if (m_map.get(&v, newKey(id))) {
         if (data != NULL) {
@@ -163,7 +162,7 @@ bool ActivePackages::get(
 
 ActivePackages::Entries ActivePackages::getEntries() const {
     Entries es;
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
     ::dp_misc::t_string2string_map m(m_map.getEntries());
     for (::dp_misc::t_string2string_map::const_iterator i(m.begin());
          i != m.end(); ++i)
@@ -189,7 +188,7 @@ ActivePackages::Entries ActivePackages::getEntries() const {
 }
 
 void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
     ::rtl::OStringBuffer b;
     b.append(
         ::rtl::OUStringToOString(data.temporaryName, RTL_TEXTENCODING_UTF8));
@@ -211,7 +210,7 @@ void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
 void ActivePackages::erase(
     ::rtl::OUString const & id, ::rtl::OUString const & fileName)
 {
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
     m_map.erase(newKey(id), true) || m_map.erase(oldKey(fileName), true);
 #else
     (void) id;

@@ -495,7 +495,7 @@ void SfxObjectShell::SetModalMode_Impl( sal_Bool bModal )
     }
 }
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
 
 sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
 {

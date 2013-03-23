@@ -25,7 +25,7 @@
 #include <utility>
 #include <vector>
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
 #include "dp_persmap.h"
 #endif
 
@@ -84,7 +84,7 @@ public:
 private:
     ActivePackages(ActivePackages &); // not defined
     void operator =(ActivePackages &); // not defined
-#if !defined(ANDROID) && !defined(IOS)
+#ifndef DISABLE_EXTENSIONS
     ::dp_misc::PersistentMap m_map;
 #endif
 };

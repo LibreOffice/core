@@ -31,7 +31,7 @@
 #include "uno/current_context.hxx"
 #include "unotools/pathoptions.hxx"
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_HELP
 #include <helpcompiler/compilehelp.hxx>
 #include <helpcompiler/HelpIndexer.hxx>
 #endif
@@ -386,7 +386,7 @@ void BackendImpl::implProcessHelp(
             data.dataUrl = xPackage->getURL();
             if (!package->extensionContainsCompiledHelp())
             {
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_HELP
                 const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
                 data.dataUrl = sHelpFolder;
 

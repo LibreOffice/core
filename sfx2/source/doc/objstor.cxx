@@ -2687,7 +2687,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             if ( pFilterOptItem )
                 pSet->Put( *pFilterOptItem );
 
-#if !defined(ANDROID) && !defined(IOS)
+#ifdef LIBO_FEATURE_DESKTOP
             if ( IsDocShared() && !aTempFileURL.isEmpty() )
             {
                 // this is a shared document that has to be disconnected from the old location

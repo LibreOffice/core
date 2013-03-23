@@ -277,6 +277,9 @@ gb_GLOBALDEFS += \
 		ENABLE_READONLY_INSTALLSET \
 	)
 
+gb_GLOBALDEFS += \
+    $(call gb_Helper_define_if_in,DESKTOP HELP,$(BUILD_TYPE))
+
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
 include $(GBUILDDIR)/Deliver.mk
