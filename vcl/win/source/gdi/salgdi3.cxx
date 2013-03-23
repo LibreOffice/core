@@ -799,7 +799,7 @@ inline FontPitch ImplLogPitchToSal( BYTE nPitch )
 
 inline FontPitch ImplMetricPitchToSal( BYTE nPitch )
 {
-    // Sausaecke bei MS !! siehe NT Hilfe
+    // Grrrr! See NT help
     if ( !(nPitch & TMPF_FIXED_PITCH) )
         return PITCH_FIXED;
     else
@@ -2269,8 +2269,8 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     EnumFontFamiliesExW( mhDC, &aLogFont,
         (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
 
-    // Feststellen, was es fuer Courier-Schriften auf dem Bildschirm gibt,
-    // um in SetFont() evt. Courier auf Courier New zu mappen
+    // check what Courier fonts are used on the screen, so to perhaps
+    // map Courier to CourierNew in SetFont()
     if ( !mbPrinter )
     {
         bImplSalCourierScalable = aInfo.mbImplSalCourierScalable;

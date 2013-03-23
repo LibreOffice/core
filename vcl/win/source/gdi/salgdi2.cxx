@@ -104,7 +104,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 {
     HRGN hTempRgn;
 
-    // Bereiche ausserhalb des sichtbaren Bereiches berechnen
+    // calculate area outside the visible region
     if ( rSrcRect.left < nLeft )
     {
         if ( !rhInvalidateRgn )
@@ -151,7 +151,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
     int     nOldClipRgnType = ERROR;
     HRGN    hInvalidateRgn = 0;
 
-    // Muessen die ueberlappenden Bereiche auch invalidiert werden?
+    // do we have to invalidate also the overlaping regions?
     if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mbWindow )
     {
         // compute and invalidate those parts that were either off-screen or covered by other windows
@@ -188,7 +188,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
             ImplSalGetWorkArea( NULL, &theScreen, NULL );  // find the screen area taking multiple monitors into account
             ImplCalcOutSideRgn( aSrcRect, theScreen.left, theScreen.top, theScreen.right, theScreen.bottom, hInvalidateRgn );
 
-            // Bereiche die von anderen Fenstern ueberlagert werden berechnen
+            // calculate regions that are covered by other windows
             HRGN hTempRgn2 = 0;
             HWND hWndTopWindow = mhWnd;
             // Find the TopLevel Window, because only Windows which are in
@@ -321,10 +321,9 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         if ( bInvalidate )
         {
             InvalidateRgn( mhWnd, hInvalidateRgn, TRUE );
-            // Hier loesen wir nur ein Update aus, wenn es der
-            // MainThread ist, damit es beim Bearbeiten der
-            // Paint-Message keinen Deadlock gibt, da der
-            // SolarMutex durch diesen Thread schon gelockt ist
+            // here we only initiate an update if this is the MainThread,
+            // so that there is no deadlock when handling the Paint event,
+            // as the SolarMutex is already held by this Thread
             SalData*    pSalData = GetSalData();
             DWORD       nCurThreadId = GetCurrentThreadId();
             if ( pSalData->mnAppThreadId == nCurThreadId )
@@ -542,9 +541,8 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     aPosAry.mnDestX = aPosAry.mnDestY = 0;
     BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
 
-    // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
-    // die Farben der Maske richtig auf die Palette abzubilden,
-    // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
+    // WIN/WNT seems to have a minor problem mapping the correct color of the
+    // mask to the palette if we draw the DIB directly ==> draw DDB
     if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
     {
         WinSalBitmap aTmp;
@@ -648,9 +646,8 @@ void WinSalGraphics::drawMask( const SalTwoRect* pPosAry,
     HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
     HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
 
-    // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
-    // die Farben der Maske richtig auf die Palette abzubilden,
-    // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
+    // WIN/WNT seems to have a minor problem mapping the correct color of the
+    // mask to the palette if we draw the DIB directly ==> draw DDB
     if( ( GetBitCount() <= 8 ) && rSalBitmap.ImplGethDIB() && rSalBitmap.GetBitCount() == 1 )
     {
         WinSalBitmap aTmp;
@@ -800,13 +797,12 @@ void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInver
     hOldPen = SelectPen( mhDC, hPen );
 
     POINT* pWinPtAry;
-    // Unter NT koennen wir das Array direkt weiterreichen
+    // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
 
     pWinPtAry = (POINT*)pPtAry;
-    // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
-    // von Punkten
+    // for Windows 95 and its maximum number of points
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
     {
         if ( !Polyline( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
