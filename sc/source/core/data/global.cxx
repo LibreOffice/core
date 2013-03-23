@@ -38,6 +38,7 @@
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <unotools/charclass.hxx>
+#include <unotools/securityoptions.hxx>
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
@@ -925,39 +926,51 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 {
     //  OpenURL wird immer ueber irgendwelche Umwege durch Mausklicks im GridWindow
     //  aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
-
-    SfxStringItem aUrl( SID_FILE_NAME, rURL );
-    SfxStringItem aTarget( SID_TARGETNAME, rTarget );
-
-    if ( nScClickMouseModifier & KEY_MOD1 )     // control-click -> into new window
-        aTarget.SetValue(rtl::OUString("_blank"));
-
-    SfxViewFrame* pFrame = NULL;
-    String aReferName;
-    if ( pScActiveViewShell )
+    //SvtSecurityOptions to access Libreoffice global security parameters
+    SvtSecurityOptions aSecOpt;
+    bool aProceedHyperlink = false;
+    if ( (nScClickMouseModifier & KEY_MOD1) && aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ))     // control-click -> into new window
     {
-        pFrame = pScActiveViewShell->GetViewFrame();
-        SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
-        if (pMed)
-            aReferName = pMed->GetName();
+        //Ctrl key is pressed and ctrl+click hyperlink security control is set
+        aProceedHyperlink = true;
     }
+    else if( !( aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ) ) )
+    {
+        //ctrl+click hyperlink security control is disabled just click will do
+        aProceedHyperlink = true;
+    }
+    if ( aProceedHyperlink )
+    {
+        SfxStringItem aUrl( SID_FILE_NAME, rURL );
+        SfxStringItem aTarget( SID_TARGETNAME, rTarget );
+        aTarget.SetValue(rtl::OUString("_blank"));
+        SfxViewFrame* pFrame = NULL;
+        String aReferName;
+        if ( pScActiveViewShell )
+        {
+            pFrame = pScActiveViewShell->GetViewFrame();
+            SfxMedium *pMed = pFrame->GetObjectShell()->GetMedium();
+            if (pMed)
+                aReferName = pMed->GetName();
+        }
 
-    SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
-    SfxStringItem aReferer( SID_REFERER, aReferName );
+        SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
+        SfxStringItem aReferer( SID_REFERER, aReferName );
 
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
-    SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
+        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
+        SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
 
-    //  kein SID_SILENT mehr
+        //  kein SID_SILENT mehr
 
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if (pViewFrm)
-        pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if (pViewFrm)
+            pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
+                                   SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                     &aUrl, &aTarget,
                                     &aFrm, &aReferer,
                                     &aNewView, &aBrowsing,
                                     0L );
+    }
 }
 
 //------------------------------------------------------------------------
