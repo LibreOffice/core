@@ -2952,6 +2952,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     }
                     catch( const lang::IllegalArgumentException& )
                     {
+#if !defined(ANDROID) && !defined(IOS)
                         // some additional arguments do not allow to use saving, SaveAs should be done
                         // but only for normal documents, the shared documents would be overwritten in this case
                         // that would mean an information loss
@@ -2979,6 +2980,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                                 throw task::ErrorCodeIOException( ::rtl::OUString( "Cant change password for shared document."  ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                             }
                         }
+#endif
                     }
                 }
             }

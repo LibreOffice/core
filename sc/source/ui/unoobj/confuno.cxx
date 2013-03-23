@@ -257,11 +257,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
+#if !defined(ANDROID) && !defined(IOS)
                 sal_Bool bDocShared = false;
                 if ( aValue >>= bDocShared )
                 {
                     pDocShell->SetSharedXMLFlag( bDocShared );
                 }
+#endif
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDINFO ) == 0 )
             {
@@ -416,7 +418,9 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 aRet <<= pDocShell->IsLoadReadonly();
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
+#if !defined(ANDROID) && !defined(IOS)
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
+#endif
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDINFO ) == 0 )
                 aRet <<= pDocShell->GetModifyPasswordInfo();

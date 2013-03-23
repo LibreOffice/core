@@ -673,11 +673,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 
+#if !defined(ANDROID) && !defined(IOS)
                 // TODO/LATER: Temporary solution, the SfxMedium must know the original URL as aLogicName
                 //             SfxMedium::Transfer_Impl() will be forbidden then.
                 if ( xOldObj->IsDocShared() )
                     pNewSet->Put( SfxStringItem( SID_FILE_NAME, xOldObj->GetSharedFileURL() ) );
-
+#endif
                 if ( pURLItem )
                     pNewSet->Put( SfxStringItem( SID_REFERER, pMedium->GetName() ) );
                 else
@@ -789,12 +790,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xNewObj->SetReadOnlyUI( !bForEdit );
                     }
 
+#if !defined(ANDROID) && !defined(IOS)
                     if ( xNewObj->IsDocShared() )
                     {
                         // the file is shared but the closing can change the sharing control file
                         xOldObj->DoNotCleanShareControlFile();
                     }
-
+#endif
                     // the Reload and Silent items were only temporary, remove them
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_SILENT );

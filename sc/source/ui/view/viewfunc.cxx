@@ -1533,6 +1533,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, sal_Bool bRecord )
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         const ScMarkData& rMark = GetViewData()->GetMarkData();
 
+#if !defined(ANDROID) && !defined(IOS)
         // #i94841# [Collaboration] if deleting rows is rejected, the content is sometimes wrong
         if ( pDocSh->IsDocShared() && ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS ) )
         {
@@ -1553,6 +1554,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, sal_Bool bRecord )
             }
         }
         else
+#endif
         {
             pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, bRecord, false );
         }

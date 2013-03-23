@@ -766,6 +766,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 aDocument.SetChangeViewSettings(aChangeViewSet);
                             }
                         }
+#if !defined(ANDROID) && !defined(IOS)
                         else if ( nSlot == SID_DOCUMENT_MERGE && IsDocShared() && pChangeTrack )
                         {
                             sal_uLong nEnd = pChangeTrack->GetActionMax();
@@ -784,6 +785,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 PostPaintGridAll();
                             }
                         }
+#endif
                     }
                     pOtherDocSh->DoClose();     // delete passiert mit der Ref
                 }
@@ -895,6 +897,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         }
         break;
 
+#if !defined(ANDROID) && !defined(IOS)
         case SID_SHARE_DOC:
             {
                 ScViewData* pViewData = GetViewData();
@@ -1071,7 +1074,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
-
+#endif
         case SID_OPEN_CALC:
         {
             SfxStringItem aApp(SID_DOC_SERVICE, rtl::OUString("com.sun.star.sheet.SpreadsheetDocument"));
@@ -2297,7 +2300,7 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     return 0;
 }
 
-//------------------------------------------------------------------
+#if !defined(ANDROID) && !defined(IOS)
 
 void ScDocShell::EnableSharedSettings( bool bEnable )
 {
@@ -2375,5 +2378,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     }
     return xModel;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

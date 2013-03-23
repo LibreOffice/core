@@ -390,9 +390,10 @@ SfxObjectShell::~SfxObjectShell()
     {
         pMedium->CloseAndReleaseStreams_Impl();
 
+#if !defined(ANDROID) && !defined(IOS)
         if ( IsDocShared() )
             FreeSharedFile();
-
+#endif
         DELETEX( pMedium );
     }
 

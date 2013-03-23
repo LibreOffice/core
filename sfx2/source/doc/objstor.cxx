@@ -2687,6 +2687,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             if ( pFilterOptItem )
                 pSet->Put( *pFilterOptItem );
 
+#if !defined(ANDROID) && !defined(IOS)
             if ( IsDocShared() && !aTempFileURL.isEmpty() )
             {
                 // this is a shared document that has to be disconnected from the old location
@@ -2701,6 +2702,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
                     SwitchToShared( sal_True, sal_False );
                 }
             }
+#endif
         }
 
         if ( bWasReadonly && !bSaveTo )

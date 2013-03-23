@@ -635,6 +635,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SFX_EVENT_LOADFINISHED:
                 {
+#if !defined(ANDROID) && !defined(IOS)
                     // the readonly documents should not be opened in shared mode
                     if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() && !IsReadOnly() )
                     {
@@ -654,10 +655,12 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             SetReadOnlyUI( sal_True );
                         }
                     }
+#endif
                 }
                 break;
             case SFX_EVENT_VIEWCREATED:
                 {
+#if !defined(ANDROID) && !defined(IOS)
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading() )
                     {
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
@@ -675,7 +678,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             }
                         }
                     }
-
+#endif
                     try
                     {
                         uno::Reference< uno::XComponentContext > xContext(
@@ -717,6 +720,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
             case SFX_EVENT_SAVEDOC:
                 {
+#if !defined(ANDROID) && !defined(IOS)
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
                     {
                         bool bSuccess = false;
@@ -900,7 +904,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         if ( !bSuccess )
                             SetError( ERRCODE_IO_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) ); // this error code will produce no error message, but will break the further saving process
                     }
-
+#endif
 
                     if (pSheetSaveData)
                         pSheetSaveData->SetInSupportedSave(true);

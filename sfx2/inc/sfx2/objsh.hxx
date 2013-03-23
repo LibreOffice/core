@@ -271,15 +271,21 @@ public:
     virtual sal_Bool            AcceptStateUpdate() const;
     sal_Bool                    IsHelpDocument() const;
 
+#if !defined(ANDROID) && !defined(IOS)
     sal_Bool                    IsDocShared() const;
     ::rtl::OUString             GetSharedFileURL() const;
     sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );
     SAL_DLLPRIVATE void         FreeSharedFile();
     SAL_DLLPRIVATE void         FreeSharedFile( const ::rtl::OUString& aTempFileURL );
     SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
-
     void                        SetSharedXMLFlag( sal_Bool bFlag ) const;
     sal_Bool                    HasSharedXMLFlagSet() const;
+#else
+    sal_Bool                    IsDocShared() const
+        { return sal_False; };
+    ::rtl::OUString             GetSharedFileURL() const
+        { return ::rtl::OUString(); };
+#endif
 
     SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
     SAL_DLLPRIVATE void SetMacroMode_Impl(sal_Bool bModal=sal_True);

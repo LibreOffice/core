@@ -495,7 +495,8 @@ void SfxObjectShell::SetModalMode_Impl( sal_Bool bModal )
     }
 }
 
-//--------------------------------------------------------------------
+#if !defined(ANDROID) && !defined(IOS)
+
 sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
 {
     sal_Bool bResult = sal_True;
@@ -678,6 +679,8 @@ sal_Bool SfxObjectShell::IsDocShared() const
 {
     return pImp->m_aSharedFileURL;
 }
+
+#endif
 
 //--------------------------------------------------------------------
 
