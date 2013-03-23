@@ -303,10 +303,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
         h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
         pStr++;
 
-        if ( nLen < 32 )
-            nSkip = nLen / 4;
-        else
-            nSkip = nLen / 8;
+        nSkip = nLen / 8;
         nLen -= 8;
         while ( nLen > 0 )
         {
