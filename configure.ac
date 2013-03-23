@@ -160,6 +160,14 @@ if test -n "$with_android_ndk"; then
     fi
     ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
 
+    case $ANDROID_NDK_VERSION in
+    r8*)
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r8* versions are supported])
+        ;;
+    esac
+
     if test $host_cpu = arm; then
         android_cpu=arm
         android_platform_prefix=$android_cpu-linux-androideabi
@@ -179,6 +187,7 @@ if test -n "$with_android_ndk"; then
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
     clang3.1|clang3.2)
+        AC_MSG_WARN([Building with the Clang tool-chain is known to break in the bridges module, fix that please])
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.6
         ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
         ANDROID_USING_CLANG=true
@@ -230,12 +239,11 @@ if test -n "$with_android_ndk"; then
        android_gnu_prefix=arm-linux-androideabi
     elif test $host_cpu = mips; then
        android_gnu_prefix=mipsel-linux-android
-    elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-android-linux-gcc; then
+    elif test $ANDROID_NDK_VERSION = r8; then
+        # The prefix used for the x86 tool-chain changed between NDK r8 and r8b
         android_gnu_prefix=i686-android-linux
-    elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-linux-android-gcc; then
-        android_gnu_prefix=i686-linux-android
     else
-        AC_MSG_ERROR([Can't figure out the toolchain prefix])
+        android_gnu_prefix=i686-linux-android
     fi
 
     test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu
