@@ -403,7 +403,7 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
         return FALSE;
     }
 
-    // Outputbuffer anlegen
+    // make Outputbuffer
     nDriverDataLen              = sizeof(SalDriverData) + nSysJobSize-1;
     pOutBuffer                  = (SalDriverData*)rtl_allocateZeroMemory( nDriverDataLen );
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
@@ -412,14 +412,14 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
                                     (char*)pOutBuffer->maDriverData -
                                     (char*)pOutBuffer );
 
-    // Testen, ob wir einen geeigneten Inputbuffer haben
+    // check if we have a suitable input buffer
     if ( bIn && ImplTestSalJobSetup( pPrinter, pSetupData, FALSE ) )
     {
         pInBuffer = (BYTE*)pSetupData->mpDriverData + ((SalDriverData*)pSetupData->mpDriverData)->mnDriverOffset;
         nMode |= DM_IN_BUFFER;
     }
 
-    // Testen, ob Dialog angezeigt werden soll
+    // check if the dialog should be shown
     if ( pVisibleDlgParent )
     {
         hWnd = pVisibleDlgParent->mhWnd;
@@ -1571,14 +1571,13 @@ sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
     mnError = 0;
     mbAbort = FALSE;
 
-    // Wegen Telocom Balloon Fax-Treiber, der uns unsere Messages
-    // ansonsten oefters schickt, versuchen wir vorher alle
-    // zu verarbeiten und dann eine Dummy-Message reinstellen
+    // As the Telocom Balloon Fax driver tends to send messages repeatedly
+    // we try to process first all, and then insert a dummy message
     sal_Bool bWhile = TRUE;
     int  i = 0;
     do
     {
-        // Messages verarbeiten
+        // process messages
         MSG aMsg;
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
@@ -1689,7 +1688,7 @@ sal_Bool WinSalPrinter::AbortJob()
 {
     mbAbort = TRUE;
 
-    // Abort asyncron ausloesen
+    // trigger Abort asynchronously
     HDC hDC = mhDC;
     if ( hDC )
     {
@@ -1708,7 +1707,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
     SalData*    pSalData = GetSalData();
     WinSalPrinter* pPrinter = pSalData->mpFirstPrinter;
 
-    // Feststellen, ob Printer noch existiert
+    // check if printer still exists
     while ( pPrinter )
     {
         if ( pPrinter->mhDC == hPrnDC )
@@ -1717,7 +1716,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
         pPrinter = pPrinter->mpNextPrinter;
     }
 
-    // Wenn Printer noch existiert, dann den Job abbrechen
+    // if printer still exists, cancel the job
     if ( pPrinter )
     {
         HDC hDC = pPrinter->mhDC;

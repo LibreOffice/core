@@ -125,9 +125,9 @@ static BYTE aOrdDither16Bit[8][8] =
 
 // =======================================================================
 
-// Pens muessen wir mit 1 Pixel-Breite erzeugen, da ansonsten die S3-Karte
-// viele Paintprobleme hat, wenn Polygone/PolyLines gezeichnet werden und
-// eine komplexe ClipRegion gesetzt ist
+// we must create pens with 1-pixel width; otherwise the S3-graphics card
+// map has many paint problems when drawing polygons/polyLines and a
+// complex is set
 #define GSL_PEN_WIDTH                   1
 
 // =======================================================================
@@ -327,14 +327,14 @@ void ImplFreeSalGDI()
     for ( i = 0; i < pSalData->mnStockBrushCount; i++ )
         DeleteBrush( pSalData->mhStockBrushAry[i] );
 
-    // 50% Brush loeschen
+    // delete 50% Brush
     if ( pSalData->mh50Brush )
     {
         DeleteBrush( pSalData->mh50Brush );
         pSalData->mh50Brush = 0;
     }
 
-    // 50% Bitmap loeschen
+    // delete 50% Bitmap
     if ( pSalData->mh50Bmp )
     {
         DeleteBitmap( pSalData->mh50Bmp );
@@ -344,7 +344,7 @@ void ImplFreeSalGDI()
     ImplClearHDCCache( pSalData );
     delete[] pSalData->mpHDCCache;
 
-    // Ditherpalette loeschen, wenn vorhanden
+    // delete Ditherpalette, if existing
     if ( pSalData->mhDitherPal )
     {
         DeleteObject( pSalData->mhDitherPal );
@@ -513,7 +513,7 @@ static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 
 void ImplSalInitGraphics( WinSalGraphics* pData )
 {
-    // Beim Printer berechnen wir die minimale Linienstaerke
+    // calculate the minimal line width for the printer
     if ( pData->mbPrinter )
     {
         int nDPIX = GetDeviceCaps( pData->mhDC, LOGPIXELSX );
@@ -554,7 +554,7 @@ HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
     {
         HDC hDC = GetDC( 0 );
 
-        // neuen DC mit DefaultBitmap anlegen
+        // create new DC sith DefaultBitmap
         pC->mhDC = CreateCompatibleDC( hDC );
 
         if( pSalData->mhDitherPal )
@@ -750,7 +750,7 @@ WinSalGraphics::WinSalGraphics()
 
 WinSalGraphics::~WinSalGraphics()
 {
-    // free obsolete GDI objekts
+    // free obsolete GDI objects
         ReleaseFonts();
 
     if ( mhPen )
@@ -770,7 +770,7 @@ WinSalGraphics::~WinSalGraphics()
         mhRegion = 0;
     }
 
-    // Cache-Daten zerstoeren
+    // delete cache data
     if ( mpStdClipRgnData )
         delete [] mpStdClipRgnData;
 
@@ -996,7 +996,7 @@ void WinSalGraphics::SetLineColor()
     HPEN hNewPen = GetStockPen( NULL_PEN );
     HPEN hOldPen = SelectPen( mhDC, hNewPen );
 
-    // destory or save old pen
+    // destroy or save old pen
     if ( mhPen )
     {
         if ( !mbStockPen )
@@ -1054,7 +1054,7 @@ void WinSalGraphics::SetLineColor( SalColor nSalColor )
     // select new pen
     HPEN hOldPen = SelectPen( mhDC, hNewPen );
 
-    // destory or save old pen
+    // destroy or save old pen
     if ( mhPen )
     {
         if ( !mbStockPen )
@@ -1078,7 +1078,7 @@ void WinSalGraphics::SetFillColor()
     HBRUSH hNewBrush = GetStockBrush( NULL_BRUSH );
     HBRUSH hOldBrush = SelectBrush( mhDC, hNewBrush );
 
-    // destory or save old brush
+    // destroy or save old brush
     if ( mhBrush )
     {
         if ( !mbStockBrush )
@@ -1182,7 +1182,7 @@ void WinSalGraphics::SetFillColor( SalColor nSalColor )
     // select new brush
     HBRUSH hOldBrush = SelectBrush( mhDC, hNewBrush );
 
-    // destory or save old brush
+    // destroy or save old brush
     if ( mhBrush )
     {
         if ( !mbStockBrush )
@@ -1332,7 +1332,7 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
 void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
 {
-    // Unter NT koennen wir das Array direkt weiterreichen
+    // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
 
@@ -1358,8 +1358,7 @@ void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
             pWinPtAry[nPoints-1].x--;
     }
 
-    // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
-    // von Punkten
+    // for Windows 95 and its maximum number of points
     if ( !Polyline( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
         Polyline( mhDC, pWinPtAry, MAX_64KSALPOINTS );
 
@@ -1382,13 +1381,12 @@ void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
 
 void WinSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
 {
-    // Unter NT koennen wir das Array direkt weiterreichen
+    // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolygon(): POINT != SalPoint" );
 
     POINT* pWinPtAry = (POINT*)pPtAry;
-    // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
-    // von Punkten
+    // for Windows 95 and its maximum number of points
     if ( !WIN_Polygon( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
         WIN_Polygon( mhDC, pWinPtAry, MAX_64KSALPOINTS );
 }
@@ -1422,8 +1420,8 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
         pWinPointAryAry = aWinPointAryAry;
     else
         pWinPointAryAry = new POINT[nPolyPolyPoints];
-    // Unter NT koennen wir das Array direkt weiterreichen
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
+    // for NT, we can handover the array directly
+   DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyPolygon(): POINT != SalPoint" );
     const SalPoint* pPolyAry;
     UINT            n = 0;
@@ -1471,7 +1469,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
 sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
-    // Unter NT koennen wir das Array direkt weiterreichen
+    // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyLineBezier(): POINT != SalPoint" );
 
@@ -1488,7 +1486,7 @@ sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* 
 sal_Bool WinSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
-    // Unter NT koennen wir das Array direkt weiterreichen
+    // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolygonBezier(): POINT != SalPoint" );
 
@@ -1541,7 +1539,7 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
-    // Unter NT koennen wir das Array direkt weiterreichen
+    // for NT, we can handover the array directly
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
 
