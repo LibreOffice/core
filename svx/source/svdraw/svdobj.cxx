@@ -2932,7 +2932,6 @@ void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUn
     {
         if ( !xOldUnoShape.is() )
         {
-            SAL_WARN_IF( mpSvxShape, "svx.sdr", "SdrObject::impl_setUnoShape: still having impl. pointer to dead object!" );
             // make sure there is no stale impl. pointer if the UNO
             // shape was destroyed meanwhile (remember we only hold weak
             // reference to it!)
