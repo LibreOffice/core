@@ -92,13 +92,15 @@ public:
 namespace sd
 {
 
-const int nDateTimeFormatsCount = 10;
+const int nDateTimeFormatsCount = 12;
 int nDateTimeFormats[nDateTimeFormatsCount] =
 {
     SVXDATEFORMAT_A,
-    SVXDATEFORMAT_F,
-    SVXDATEFORMAT_D,
+    SVXDATEFORMAT_B,
     SVXDATEFORMAT_C,
+    SVXDATEFORMAT_D,
+    SVXDATEFORMAT_E,
+    SVXDATEFORMAT_F,
 
     SVXDATEFORMAT_A | (SVXTIMEFORMAT_24_HM << 4),
     SVXDATEFORMAT_A | (SVXTIMEFORMAT_12_HM << 4),
