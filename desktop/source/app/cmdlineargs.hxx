@@ -105,6 +105,7 @@ class CommandLineArgs: private boost::noncopyable
         std::vector< rtl::OUString > GetConversionList() const;
         rtl::OUString       GetConversionParams() const;
         rtl::OUString       GetConversionOut() const;
+        OUString       GetPidfileName() const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
         bool IsEmpty() const;
@@ -166,6 +167,7 @@ class CommandLineArgs: private boost::noncopyable
         rtl::OUString m_conversionout; // contains external URIs
         std::vector< rtl::OUString > m_infilter;
         rtl::OUString m_language;
+        OUString m_pidfile;
 };
 
 }

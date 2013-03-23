@@ -126,6 +126,14 @@
 #endif
 #endif //WNT
 
+#if defined WNT
+#include <process.h>
+#define GETPID _getpid
+#else
+#include <unistd.h>
+#define GETPID getpid
+#endif
+
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -1572,6 +1580,38 @@ int Desktop::Main()
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
 
+        OUString pidfileName = rCmdLineArgs.GetPidfileName();
+        if ( !pidfileName.isEmpty() )
+        {
+            OUString pidfileURL;
+
+            if ( osl_getFileURLFromSystemPath(pidfileName.pData, &pidfileURL.pData) == osl_File_E_None )
+            {
+                osl::File pidfile( pidfileURL );
+                osl::FileBase::RC rc;
+
+                osl::File::remove( pidfileURL );
+                if ( (rc = pidfile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) ) == osl::File::E_None )
+                {
+                    OString pid( OString::valueOf( static_cast<sal_Int32>( GETPID() ) ) );
+                    sal_uInt64 written = 0;
+                    if ( pidfile.write(pid.getStr(), pid.getLength(), written) != osl::File::E_None )
+                    {
+                        SAL_WARN("desktop", "cannot write pidfile " << pidfile.getURL());
+                    }
+                    pidfile.close();
+                }
+                else
+                {
+                    SAL_WARN("desktop", "cannot open pidfile " << pidfile.getURL() << osl::FileBase::RC(rc));
+                }
+            }
+            else
+            {
+                SAL_WARN("desktop", "cannot get pidfile URL from path" << pidfileName);
+            }
+        }
+
         if ( rCmdLineArgs.IsHeadless() )
         {
             // Ensure that we use not the system file dialogs as
@@ -1740,6 +1780,24 @@ int Desktop::doShutdown()
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
     if ( rCmdLineArgs.IsHeadless() )
         SvtMiscOptions().SetUseSystemFileDialog( pExecGlobals->bUseSystemFileDialog );
+
+    OUString pidfileName = rCmdLineArgs.GetPidfileName();
+    if ( !pidfileName.isEmpty() )
+    {
+        OUString pidfileURL;
+
+        if ( osl_getFileURLFromSystemPath(pidfileName.pData, &pidfileURL.pData) == osl_File_E_None )
+        {
+            if ( osl::File::remove( pidfileURL ) != osl::FileBase::E_None )
+            {
+                SAL_WARN("desktop", "shutdown: cannot remove pidfile " << pidfileURL);
+            }
+        }
+        else
+        {
+            SAL_WARN("desktop", "shutdown: cannot get pidfile URL from path" << pidfileName);
+        }
+    }
 
     // remove temp directory
     RemoveTemporaryDirectory();

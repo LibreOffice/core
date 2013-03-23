@@ -529,6 +529,10 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
     {
         m_language = oArg.copy(RTL_CONSTASCII_LENGTH("language="));
     }
+    else if ( oArg.matchIgnoreAsciiCase("pidfile="))
+    {
+        m_pidfile = oArg.copy(RTL_CONSTASCII_LENGTH("pidfile="));
+    }
     else if ( oArg == "writer" )
     {
         m_writer = true;
@@ -851,6 +855,11 @@ bool CommandLineArgs::IsEmpty() const
 bool CommandLineArgs::WantsToLoadDocument() const
 {
     return m_bDocumentArgs;
+}
+
+OUString CommandLineArgs::GetPidfileName() const
+{
+    return m_pidfile;
 }
 
 } // namespace desktop
