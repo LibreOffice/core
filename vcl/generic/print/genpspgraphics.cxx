@@ -1171,10 +1171,9 @@ ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPri
 #if OSL_DEBUG_LEVEL > 2
     if( bHasMapNames )
     {
-        rtl::OString aOrigName(rtl::OUStringToOString(aDFA.maName, osl_getThreadTextEncoding()));
-        rtl::OString aAliasNames(rtl::OUStringToOString(aDFA.maMapNames, osl_getThreadTextEncoding()));
-        fprintf( stderr, "using alias names \"%s\" for font family \"%s\"\n",
-            aAliasNames.getStr(), aOrigName.getStr() );
+        rtl::OString aOrigName(rtl::OUStringToOString(aDFA.GetFamilyName(), osl_getThreadTextEncoding()));
+        rtl::OString aAliasNames(rtl::OUStringToOString(aDFA.GetAliasNames(), osl_getThreadTextEncoding()));
+        SAL_INFO( "vcl.fonts", "using alias names " << aAliasNames.getStr() << " for font family " << aOrigName.getStr() );
     }
 #endif
 
