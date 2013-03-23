@@ -33,12 +33,10 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-// -----------------------------------------------------------------------
 
 // Forward declaration
 void Main();
 
-// -----------------------------------------------------------------------
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -56,7 +54,6 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
-// -----------------------------------------------------------------------
 
 class MyWin : public WorkWindow
 {
@@ -72,7 +69,6 @@ public:
     void        Resize();
 };
 
-// -----------------------------------------------------------------------
 
 void Main()
 {
@@ -83,56 +79,48 @@ void Main()
     Application::Execute();
 }
 
-// -----------------------------------------------------------------------
 
 MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::Paint( const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::Resize()
 {

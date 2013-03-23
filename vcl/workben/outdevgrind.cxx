@@ -78,8 +78,6 @@ class TestWindow : public Dialog
         virtual void Paint( const Rectangle& rRect );
 };
 
-//----------------------------------------------------------------------------------
-
 typedef boost::function1<void, OutputDevice*>   functor_type;
 typedef std::vector< std::pair<const char*,
                                functor_type> >  functor_vector_type;
@@ -140,17 +138,6 @@ void setupMethodStubs( functor_vector_type& res )
     GDIMetaFile       aMtf;
     aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),sal_True) );
     aMtf.AddAction( new MetaRectAction(aRect) );
-
-    /* void DrawText( const Point& rStartPt, const XubString& rStr,
-                   xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
-                   MetricVector* pVector = NULL, String* pDisplayText = NULL );
-    */
-//    add(res,
-//        "DrawText",
-//        boost::bind(
-//            &OutputDevice::DrawText,
-//            _1,
-//            aPt1, aString, (sal_uInt16)0, aString.Len(), (MetricVector*)0, (String*)0, (vcl::ITextLayout*)0 ));
 
     /* void DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
@@ -792,7 +779,6 @@ void setupMethodStubs( functor_vector_type& res )
 
 }
 
-//----------------------------------------------------------------------------------
 
 void grindFunc( OutputDevice&                       rTarget,
                 functor_vector_type::const_iterator iter,
@@ -815,7 +801,6 @@ void grindFunc( OutputDevice&                       rTarget,
              pMsg );
 }
 
-//----------------------------------------------------------------------------------
 
 /** Call OutputDevice render methods repeatedly, and output elapsed
     time to stdout
@@ -879,7 +864,6 @@ void outDevGrind( OutputDevice& rTarget, sal_Int32 nTurns=100 )
     }
 }
 
-//----------------------------------------------------------------------------------
 
 void TestWindow::Paint( const Rectangle& )
 {
@@ -916,9 +900,7 @@ int GrindApp::Main()
         return EXIT_SUCCESS;
     }
 
-    //-------------------------------------------------
     // create the global service-manager
-    //-------------------------------------------------
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     try
     {

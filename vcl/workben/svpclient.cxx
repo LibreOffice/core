@@ -59,20 +59,15 @@ using ::rtl::OUStringToOString;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OStringBuffer;
-// -----------------------------------------------------------------------
 
 // Forward declaration
 void Main();
-
-// -----------------------------------------------------------------------
 
 SAL_IMPLEMENT_MAIN()
 {
     tools::extendApplicationEnvironment();
 
-    //-------------------------------------------------
     // create the global service-manager
-    //-------------------------------------------------
     Reference< XMultiServiceFactory > xFactory;
     try
     {
@@ -97,8 +92,6 @@ SAL_IMPLEMENT_MAIN()
 
     return 0;
 }
-
-// -----------------------------------------------------------------------
 
 class MyWin : public WorkWindow
 {
@@ -127,8 +120,6 @@ public:
     DECL_LINK( QuitHdl, Button* );
 };
 
-// -----------------------------------------------------------------------
-
 void Main()
 {
     MyWin aMainWin( NULL, WB_STDWORK );
@@ -137,8 +128,6 @@ void Main()
 
     Application::Execute();
 }
-
-// -----------------------------------------------------------------------
 
 MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
@@ -273,49 +262,42 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
     return 0;
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::Paint( const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::Resize()
 {
