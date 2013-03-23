@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+xY\u003d",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-03-23T17:13:30Z",
+      "side": 1,
+      "message": "Wonder why this is commented - if it does not work, kill it completely. If it is unclear, have some work-in-progress patch?",
+      "revId": "0b935b3865ac8614b8e85d8b2487dd0dd78ee4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
