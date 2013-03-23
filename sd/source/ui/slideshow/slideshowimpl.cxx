@@ -968,11 +968,9 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         if( bStartWithActualSlide )
         {
-            sal_Int32 nSlideNum = ( pStartPage->GetPageNum() - 1 ) >> 1;
-
             if( !maPresSettings.mbAll && !maPresSettings.mbCustomShow )
             {
-                // its start from dia, find out if it is located before our current Slide
+                // determine number of first presentation slide
                 const sal_Int32 nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
                 sal_Int32 nSlide;
                 for( nSlide = 0; (nSlide < nSlideCount); nSlide++ )
@@ -981,12 +979,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                         break;
                 }
 
-                if( nSlide > nSlideNum )
-                    nSlideNum = -1;
+                mpSlideController->setStartSlideNumber( nSlide );
             }
-
-            if( nSlideNum != -1 )
-                mpSlideController->setStartSlideNumber( nSlideNum );
         }
 
         // remember Slide number from where the show was started
