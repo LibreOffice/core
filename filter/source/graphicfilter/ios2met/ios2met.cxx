@@ -1682,14 +1682,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             else {
                 *pOS2MET >> nMix;
                 if (nMix==0) {
-                    if (nA==1) switch (nP) {
-                        case 1: aAttr.eLinMix=aDefAttr.eLinMix; break;
-                        case 2: aAttr.eChrMix=aDefAttr.eChrMix; break;
-                        case 3: aAttr.eMrkMix=aDefAttr.eMrkMix; break;
-                        case 4: aAttr.ePatMix=aDefAttr.ePatMix; break;
-                        case 5: aAttr.eImgMix=aDefAttr.eImgMix; break;
-                    }
-                    else switch (nP) {
+                    switch (nP) {
                         case 1: aAttr.eLinBgMix=aDefAttr.eLinBgMix; break;
                         case 2: aAttr.eChrBgMix=aDefAttr.eChrBgMix; break;
                         case 3: aAttr.eMrkBgMix=aDefAttr.eMrkBgMix; break;
@@ -1699,14 +1692,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 }
                 else {
                     eROP=OS2MixToRasterOp(nMix);
-                    if (nA==1) switch (nP) {
-                        case 1: aAttr.eLinMix=eROP; break;
-                        case 2: aAttr.eChrMix=eROP; break;
-                        case 3: aAttr.eMrkMix=eROP; break;
-                        case 4: aAttr.ePatMix=eROP; break;
-                        case 5: aAttr.eImgMix=eROP; break;
-                    }
-                    else switch (nP) {
+                    switch (nP) {
                         case 1: aAttr.eLinBgMix=eROP; break;
                         case 2: aAttr.eChrBgMix=eROP; break;
                         case 3: aAttr.eMrkBgMix=eROP; break;
