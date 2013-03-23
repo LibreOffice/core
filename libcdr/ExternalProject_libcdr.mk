@@ -29,7 +29,9 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& export ICU_LIBS=" " \
-		&& export ICU_CFLAGS="$(if $(filter NO,$(SYSTEM_ICU)),-I$(OUTDIR)/inc/external, )" \
+		&& export ICU_CFLAGS="$(if $(filter NO,$(SYSTEM_ICU)),\
+		$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+		$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,icu)/source/common, )" \
 		&& ./configure \
 			--with-pic \
 			--enable-static \

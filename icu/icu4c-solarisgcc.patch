@@ -1,26 +1,3 @@
-diff -uriwb build/icu.old/source/aclocal.m4 misc/build/icu/source/aclocal.m4
---- build/icu.old/source/aclocal.m4	2012-04-05 21:49:28.000000000 +0100
-+++ build/icu/source/aclocal.m4	2012-06-21 15:44:57.299256932 +0100
-@@ -455,7 +455,7 @@
-             case "${host}" in
-             *-*-solaris*)
-                 CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long"
--                CFLAGS="$CFLAGS -D__STDC__=0";;
-+                CFLAGS="$CFLAGS -std=c99";;
-             *-*-hpux*)
-                 echo "# Note: We are not using '-ansi' with HP/UX GCC because int64_t broke, see <http://bugs.icu-project.org/trac/ticket/8493>"
-                 CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
-@@ -474,10 +474,6 @@
-         if test "$GXX" = yes
-         then
-             CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
--            case "${host}" in
--            *-*-solaris*)
--                CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
--            esac
-         else
-             case "${host}" in
-             *-*-cygwin)
 diff -uriwb build/icu.old/source/common/uposixdefs.h misc/build/icu/source/common/uposixdefs.h
 --- build/icu.old/source/common/uposixdefs.h	2012-04-05 21:46:18.000000000 +0100
 +++ build/icu/source/common/uposixdefs.h	2012-06-21 15:45:17.613369477 +0100
@@ -33,26 +10,3 @@ diff -uriwb build/icu.old/source/common/uposixdefs.h misc/build/icu/source/commo
  #   define _XOPEN_SOURCE_EXTENDED 1
  #endif
  
-diff -uriwb build/icu.old/source/configure misc/build/icu/source/configure
---- build/icu.old/source/configure	2012-04-05 21:49:28.000000000 +0100
-+++ build/icu/source/configure	2012-06-21 15:44:42.817030445 +0100
-@@ -4264,7 +4264,7 @@
-             case "${host}" in
-             *-*-solaris*)
-                 CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long"
--                CFLAGS="$CFLAGS -D__STDC__=0";;
-+                CFLAGS="$CFLAGS -std=c99";;
-             *-*-hpux*)
-                 echo "# Note: We are not using '-ansi' with HP/UX GCC because int64_t broke, see <http://bugs.icu-project.org/trac/ticket/8493>"
-                 CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
-@@ -4283,10 +4283,6 @@
-         if test "$GXX" = yes
-         then
-             CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
--            case "${host}" in
--            *-*-solaris*)
--                CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
--            esac
-         else
-             case "${host}" in
-             *-*-cygwin)
