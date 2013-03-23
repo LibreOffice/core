@@ -15,7 +15,6 @@ $(eval $(call gb_UI_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/descriptioninfopage \
 	sfx2/uiconfig/ui/documentinfopage \
 	sfx2/uiconfig/ui/documentpropertiesdialog \
-	sfx2/uiconfig/ui/internetinfopage \
 	sfx2/uiconfig/ui/managestylepage \
 	sfx2/uiconfig/ui/optprintpage \
 	sfx2/uiconfig/ui/password \

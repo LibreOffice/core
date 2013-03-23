@@ -130,27 +130,13 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="internet">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Internet </property>
-              </object>
-              <packing>
-                <property name="position">3</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
               <object class="GtkLabel" id="security">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Security</property>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
