@@ -403,7 +403,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                                 m_pChartController->m_aSelection.setSelection( xShape );
                                 m_pChartController->m_aSelection.applySelection( pDrawViewWrapper );
                             }
-                            if ( nFeatureId == SID_DRAW_TEXT )
+                            if ( nFeatureId == COMMAND_ID_DRAW_TEXT )
                             {
                                 m_pChartController->StartTextEdit();
                             }
@@ -517,7 +517,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 if ( pTextObj )
                                 {
                                     pTextObj->SetLogicRect( aRect );
-                                    sal_Bool bVertical = ( nID == SID_DRAW_TEXT_VERTICAL );
+                                    sal_Bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );
                                     pTextObj->SetVerticalWriting( bVertical );
                                     if ( bVertical )
                                     {
@@ -537,7 +537,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         {
                             if ( pObj->ISA( SdrCaptionObj ) )
                             {
-                                sal_Bool bIsVertical( SID_DRAW_CAPTION_VERTICAL == nID );
+                                sal_Bool bIsVertical( COMMAND_ID_DRAW_CAPTION_VERTICAL == nID );
                                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                                 if ( pTextObj )
                                 {
