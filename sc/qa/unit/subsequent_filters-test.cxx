@@ -127,6 +127,7 @@ public:
     void testDataBarXLSX();
     void testColorScaleODS();
     void testColorScaleXLSX();
+    void testNewCondFormatODS();
     void testNewCondFormatXLSX();
 
     //change this test file only in excel and not in calc
@@ -189,6 +190,7 @@ public:
     CPPUNIT_TEST(testDataBarXLSX);
     CPPUNIT_TEST(testColorScaleODS);
     CPPUNIT_TEST(testColorScaleXLSX);
+    CPPUNIT_TEST(testNewCondFormatODS);
     CPPUNIT_TEST(testNewCondFormatXLSX);
 
     CPPUNIT_TEST(testNumberFormatHTML);
@@ -1772,6 +1774,22 @@ void ScFiltersTest::testColorScaleXLSX()
 
     testColorScale2Entry_Impl(pDoc);
     testColorScale3Entry_Impl(pDoc);
+}
+
+void ScFiltersTest::testNewCondFormatODS()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "new_cond_format_test.", ODS );
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.xlsx", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    OUString aCSVFile("new_cond_format_test.");
+    OUString aCSVPath;
+    createCSVPath( aCSVFile, aCSVPath );
+    testCondFile(aCSVPath, pDoc, 0);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testNewCondFormatXLSX()

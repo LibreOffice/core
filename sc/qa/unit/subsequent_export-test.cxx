@@ -45,6 +45,7 @@ public:
 
     void test();
     void testPasswordExport();
+    void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
     void testColorScaleExportODS();
     void testColorScaleExportXLSX();
@@ -57,6 +58,7 @@ public:
 #if !defined(MACOSX) && !defined(DRAGONFLY)
     CPPUNIT_TEST(testPasswordExport);
 #endif
+    CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testColorScaleExportODS);
     CPPUNIT_TEST(testColorScaleExportXLSX);
@@ -148,6 +150,20 @@ void ScExportTest::testPasswordExport()
     ScDocument* pLoadedDoc = xDocSh->GetDocument();
     double aVal = pLoadedDoc->GetValue(0,0,0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(aVal, 1.0, 1e-8);
+}
+
+void ScExportTest::testConditionalFormatExportODS()
+{
+    ScDocShellRef xShell = loadDoc("new_cond_format_test.", ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    OUString aCSVFile("new_cond_format_test.");
+    OUString aCSVPath;
+    createCSVPath( aCSVFile, aCSVPath );
+    testCondFile(aCSVPath, pDoc, 0);
 }
 
 void ScExportTest::testConditionalFormatExportXLSX()
