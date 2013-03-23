@@ -2115,7 +2115,6 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
         if ( SeekToRec( rStCtrl, PPT_PST_FontCollection, pEnvHd->GetRecEndFilePos(), &aListHd ) )
         {
             sal_uInt16 nCount2 = 0;
-            VirtualDevice* pVDev = NULL;
             while ( SeekToRec( rStCtrl, PPT_PST_FontEntityAtom, aListHd.GetRecEndFilePos() ) )
             {
                 bRet = sal_True;
@@ -2147,7 +2146,6 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 };
                 pFonts->insert( pFonts->begin() + nCount2++, pFont );
             }
-            delete pVDev;
         }
         rStCtrl.Seek( nFPosMerk ); // restore FilePos
     }
