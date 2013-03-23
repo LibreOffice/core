@@ -83,11 +83,6 @@ void Main()
     aMainWin.SetText( rtl::OUString( "VCLDemo - VCL Workbench" ) );
     aMainWin.Show();
 
-    /*
-    InfoBox ib(NULL, String((sal_Char*)"Test", sizeof("Test")));
-    ib.Execute();
-    */
-
     Application::Execute();
 }
 
