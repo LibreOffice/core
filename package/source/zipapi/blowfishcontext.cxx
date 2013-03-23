@@ -72,7 +72,7 @@ uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherC
 
     if ( m_bEncrypt )
     {
-        rtl_cipher_encode( m_pCipher,
+        nError = rtl_cipher_encode( m_pCipher,
                           aData.getConstArray(),
                           aData.getLength(),
                           reinterpret_cast< sal_uInt8* >( aResult.getArray() ),
@@ -80,7 +80,7 @@ uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherC
     }
     else
     {
-        rtl_cipher_decode( m_pCipher,
+        nError = rtl_cipher_decode( m_pCipher,
                           aData.getConstArray(),
                           aData.getLength(),
                           reinterpret_cast< sal_uInt8* >( aResult.getArray() ),
