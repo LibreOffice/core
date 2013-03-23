@@ -75,14 +75,12 @@ ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_externals,merged,\
 	hunspell \
 	expat_utf8 \
+	mythes \
+	hyphen \
 ))
 $(eval $(call gb_Library_use_static_libraries,merged,\
 	sax_shared \
 	ulingu \
-))
-$(eval $(call gb_Library_add_libs,merged,\
-	$(if $(filter MSC,$(COM)),libmythes.lib,-lmythes-1.2) \
-	$(if $(filter MSC,$(COM)),hyphen.lib,-lhyphen) \
 ))
 endif
 
@@ -180,12 +178,6 @@ ifeq ($(OS),IOS)
 $(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
 	CoreFoundation \
 	UIKit \
-))
-endif
-
-ifneq ($(ENABLE_LIBRSVG),NO)
-$(eval $(call gb_Library_use_externals,merged,\
-	cairo \
 ))
 endif
 
