@@ -236,21 +236,16 @@ void InitSalData()   {}
 void DeInitSalData() {}
 void InitSalMain()   {}
 
-void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
+void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
-    rtl::OUString aError( rErrorText );
-    if( aError.isEmpty() )
-        aError = rtl::OUString::createFromAscii("Unknown application error");
+    (void) bDumpCore;
 
-    if( bDumpCore )
-        abort();
-    else
-        _exit(1);
+    NSLog(@"SalAbort: %s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 }
 
 const OUString& SalGetDesktopEnvironment()
 {
-    static rtl::OUString aEnv( "android" );
+    static OUString aEnv( "iOS" );
     return aEnv;
 }
 
