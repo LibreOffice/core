@@ -1202,7 +1202,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 //-----------------------------------------------
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 {
-    DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
+    assert(m_pFileDlg);
 
     OUString sCfgName;
     if ( ERRCODE_NONE == m_pFileDlg->GetError() )
@@ -1286,7 +1286,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 //-----------------------------------------------
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 {
-    DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
+    assert(m_pFileDlg);
 
     OUString sCfgName;
     if ( ERRCODE_NONE == m_pFileDlg->GetError() )
