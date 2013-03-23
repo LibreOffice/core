@@ -442,12 +442,14 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
     {
         m_nologo = true;
     }
+#if !defined(ANDROID) && !defined(IOS)
     else if ( oArg == "nolockcheck" )
     {
         m_nolockcheck = true;
         // Workaround for automated testing
         ::svt::DocumentLockFile::AllowInteraction( false );
     }
+#endif
     else if ( oArg == "help" || aArg == "-h" || aArg == "-?" )
     {
         m_help = true;

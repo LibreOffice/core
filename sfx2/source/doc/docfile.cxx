@@ -135,7 +135,8 @@ static const sal_Int8 LOCK_UI_NOLOCK = 0;
 static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
 static const sal_Int8 LOCK_UI_TRY = 2;
 
-//----------------------------------------------------------------
+#if !defined(ANDROID) && !defined(IOS)
+
 bool IsSystemFileLockingUsed()
 {
     // check whether system file locking has been used, the default value is false
@@ -193,6 +194,8 @@ bool IsLockingUsed()
 {
     return officecfg::Office::Common::Misc::UseLocking::get();
 }
+
+#endif
 
 } // anonymous namespace
 //==========================================================
@@ -981,12 +984,14 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUStri
 
 namespace
 {
+#if !defined(ANDROID) && !defined(IOS)
     bool isSuitableProtocolForLocking(const String & rLogicName)
     {
         INetURLObject aUrl( rLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
         return eProt == INET_PROT_FILE || eProt == INET_PROT_SFTP;
     }
+#endif
 }
 
 // returns true if the document can be opened for editing ( even if it should be a copy )
@@ -994,6 +999,11 @@ namespace
 // if user cancel the loading the ERROR_ABORT is set
 bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 {
+#if defined(ANDROID) || defined(IOS)
+    (void) bLoading;
+    (void) bNoUI;
+    return true;
+#else
     if (!IsLockingUsed())
         return true;
 
@@ -1230,6 +1240,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
         OSL_FAIL( "Locking exception: high probability, that the content has not been created" );
     }
     return bResult;
+#endif
 }
 
 //------------------------------------------------------------------
@@ -2671,6 +2682,9 @@ void SfxMedium::CloseAndRelease()
 
 void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
 {
+#if defined(ANDROID) || defined(IOS)
+    (void) bReleaseLockStream;
+#else
     if ( pImp->m_xLockingStream.is() )
     {
         if ( bReleaseLockStream )
@@ -2703,6 +2717,7 @@ void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
         catch( const uno::Exception& )
         {}
     }
+#endif
 }
 
 void SfxMedium::CloseAndReleaseStreams_Impl()

@@ -110,7 +110,8 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/whiter \
     svl/source/misc/PasswordHelper \
     svl/source/misc/adrparse \
-    svl/source/misc/documentlockfile \
+    $(if $(filter DESKTOP,$(BUILD_TYPE)),\
+        svl/source/misc/documentlockfile) \
     svl/source/misc/filenotation \
     svl/source/misc/folderrestriction \
     svl/source/misc/fstathelper \
