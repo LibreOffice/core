@@ -1019,9 +1019,7 @@ static char *yy_last_accepting_cpos;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "lexer.l"
 #define INITIAL 0
-#line 2 "lexer.l"
 #include <stdlib.h>
 #include <string.h>
 #include "nodes.h"
@@ -1053,7 +1051,6 @@ extern YYSTYPE yylval;
 #else
 int token_debug(const char *format, ...);
 #endif
-#line 1026 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -1196,10 +1193,6 @@ YY_DECL
     register char *yy_cp, *yy_bp;
     register int yy_act;
 
-#line 90 "lexer.l"
-
-#line 1179 "lex.yy.c"
-
     if ( yy_init )
         {
         yy_init = 0;
@@ -1283,231 +1276,185 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 91 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Begin[%s]\n",yytext+1); return EQBEGIN; }
     //YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 92 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>End[%s]\n",yytext+1); return EQEND; }
     //YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 93 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Left[%s]\n",yytext+1); return EQLEFT; }
     //YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 94 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>LeftDelim[%s]\n",yytext+1); return LEFT_DELIM; }
     //YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 95 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>RightDelim[%s]\n",yytext+1); return RIGHT_DELIM; }
     //YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 96 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Right[%s]\n",yytext+1); return EQRIGHT; }
     //YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 97 "lexer.l"
 { yylval.str = yytext;   token_debug("  ==>NewLine[%s]\n",yytext); return NEWLINE; }
     //YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 99 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Accent[%s]\n",yytext+1); return ACCENT; }
     //YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 100 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Small_Greek[%s]\n",yytext+1); return SMALL_GREEK; }
     //YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 101 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Capital_Greek[%s]\n",yytext+1); return CAPITAL_GREEK; }
     //YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 102 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Binary_Operator[%s]\n",yytext+1); return BINARY_OPERATOR; }
     //YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 103 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Relation_Symbol[%s]\n",yytext+1); return RELATION_OPERATOR; }
     //YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 105 "lexer.l"
 { yylval.str = strdup("neq"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 106 "lexer.l"
 { yylval.str = strdup("vmlt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 107 "lexer.l"
 { yylval.str = strdup("vmgt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 108 "lexer.l"
 { yylval.str = strdup("mlt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 109 "lexer.l"
 { yylval.str = strdup("mgt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 110 "lexer.l"
 { yylval.str = yytext; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 112 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Arrow[%s]\n",yytext+1); return ARROW; }
     //YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 113 "lexer.l"
 { yylval.str = strdup("leftrightarrow"); token_debug("  ==>Arrow[leftrightarrow]\n"); return ARROW; }
     //YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 114 "lexer.l"
 { yylval.str = strdup("rightarrow"); token_debug("  ==>Arrow[rightarrow]\n"); return ARROW; }
     //YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 115 "lexer.l"
 { yylval.str = strdup("leftarrow"); token_debug("   ==>Arrow[leftarrow]\n"); return ARROW; }
     //YY_BREAK
 
 case 23:
 YY_RULE_SETUP
-#line 116 "lexer.l"
 { token_debug(" ==>Ignore[\\rm]\n"); }
     //YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 117 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>General_Iden[%s]\n",yytext+1); return GENERAL_IDEN; }
     //YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 118 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>General_Oper[%s]\n",yytext+1); return GENERAL_OPER; }
     //YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 119 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Big_Symbol[%s]\n",yytext+1); return BIG_SYMBOL; }
     //YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 120 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Function[%s]\n",yytext+1); return FUNCTION; }
     //YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 121 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Root[%s]\n",yytext+1); return ROOT; }
     //YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 122 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Fraction[%s]\n",yytext+1); return FRACTION; }
     //YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 123 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Over[%s]\n",yytext+1); return EQOVER; }
     //YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 124 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Delimeter[%s]\n",yytext+1); return DELIMETER; }
     //YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 125 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Large_Delim[%s]\n",yytext+1); return LARGE_DELIM; }
     //YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 126 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Decoration[%s]\n",yytext+1); return DECORATION; }
     //YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 127 "lexer.l"
 { yylval.str = yytext+1; token_debug("  ==>Space_Symbol[%s]\n",yytext+1); /*return SPACE_SYMBOL;*/ }
     //YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 128 "lexer.l"
 { yylval.str = strdup("quad"); token_debug("    ==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
     //YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 129 "lexer.l"
 { yylval.dval = yytext;  token_debug("  ==>Digit[%s]\n",yytext); return DIGIT; }
     //YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 130 "lexer.l"
 { yylval.str = yytext;   token_debug("  ==>Operator[%s]\n",yytext); return OPERATOR; }
     //YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 131 "lexer.l"
 { token_debug(" ==>SubSup[%s]\n",yytext); return yytext[0]; }
     //YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 132 "lexer.l"
 { token_debug(" ==>Paren[%s]\n",yytext); return yytext[0];}
     //YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 133 "lexer.l"
 { token_debug(" ==>Abs[%s]\n",yytext); return yytext[0];}
     //YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 134 "lexer.l"
 { token_debug("   ==>Space[0x%2x]\n",yytext[0]); }
     YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 135 "lexer.l"
 { token_debug("   ==>Ignore[0x%2x]\n",yytext[0]); }
     YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 136 "lexer.l"
 { yylval.str = yytext;  token_debug("   ==>String[%s]\n",yytext); return STRING; }
     //YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 137 "lexer.l"
 { yylval.str = yytext;  token_debug("   ==>Else[%s]\n",yytext); return CHARACTER; }
     //YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 138 "lexer.l"
 ECHO;
     YY_BREAK
-#line 1487 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
     yyterminate();
 
@@ -2274,7 +2221,6 @@ int main()
     return 0;
     }
 #endif
-#line 138 "lexer.l"
 
 
 void initFlex(const char *_code )

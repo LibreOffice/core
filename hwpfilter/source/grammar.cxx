@@ -60,8 +60,6 @@
 #define RIGHT_DELIM 284
 #define DIGIT   285
 
-#line 1 "grammar.y"
-
 #include <list>
 #include <stdlib.h>
 #include <string.h>
@@ -94,7 +92,6 @@ int debug(const char *format, ...);
 #endif
 
 
-#line 35 "grammar.y"
 typedef union {
     char *dval;
     char *str;
@@ -376,8 +373,6 @@ static const short yycheck[] = {    11,
     -1,    17,    18,    -1,    20,    21,    22,    23,    -1,    -1,
     -1,    -1,    -1,    -1,    -1,    31,    32
 };
-/* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/lib/bison.simple"
 /* This file comes from bison-1.28.  */
 
 /* Skeleton output parser for bison,
@@ -569,8 +564,6 @@ __yy_memcpy (char *to, char *from, unsigned int count)
 
 #endif
 #endif
-
-#line 217 "/usr/lib/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -900,296 +893,223 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 60 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 2:
-#line 61 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 3:
-#line 62 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 4:
-#line 63 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 5:
-#line 64 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 6:
-#line 65 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 7:
-#line 66 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 8:
-#line 67 "grammar.y"
 { yyval.ptr = new Node(ID_CHARACTER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 9:
-#line 68 "grammar.y"
 { yyval.ptr = new Node(ID_OPERATOR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 10:
-#line 69 "grammar.y"
 { yyval.ptr = new Node(ID_OPERATOR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 11:
-#line 70 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 12:
-#line 71 "grammar.y"
 { yyval.ptr = new Node(ID_DELIMETER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 13:
-#line 72 "grammar.y"
 { yyval.ptr = new Node(ID_DELIMETER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 14:
-#line 73 "grammar.y"
 { yyval.ptr = new Node(ID_IDENTIFIER); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 15:
-#line 74 "grammar.y"
 { yyval.ptr = new Node(ID_CHARACTER); allocChar(yyval.ptr->value , '|'); debug("Identifier : '|'\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 16:
-#line 75 "grammar.y"
 { yyval.ptr = new Node(ID_NUMBER); allocValue(yyval.ptr->value , yyvsp[0].dval); debug("Number : %s\n",yyvsp[0].dval); nodelist.push_back(yyval.ptr); ;
     break;}
 case 17:
-#line 76 "grammar.y"
 { yyval.ptr = new Node(ID_STRING); allocValue(yyval.ptr->value , yyvsp[0].str); debug("String : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 18:
-#line 80 "grammar.y"
 { yyval.ptr = new Node(ID_PRIMARYEXPR); yyval.ptr->child = yyvsp[0].ptr; debug("PrimaryExpr\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 19:
-#line 81 "grammar.y"
 { yyval.ptr = new Node(ID_PRIMARYEXPR); yyval.ptr->child = yyvsp[-1].ptr; yyval.ptr->next = yyvsp[0].ptr; debug("PrimaryExpr : PrimaryExpr Identifier\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 20:
-#line 85 "grammar.y"
 { yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '('); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 21:
-#line 86 "grammar.y"
 { yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '['); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 22:
-#line 87 "grammar.y"
 {   yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '{'); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 23:
-#line 88 "grammar.y"
 {   yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '<'); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 24:
-#line 89 "grammar.y"
 { yyval.ptr = new Node(ID_LEFT); allocChar(yyval.ptr->value , '|'); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 25:
-#line 90 "grammar.y"
 { yyval.ptr = new Node(ID_LEFT); allocValue(yyval.ptr->value , "||"); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 26:
-#line 91 "grammar.y"
 { yyval.ptr = new Node(ID_LEFT); allocValue(yyval.ptr->value , yyvsp[0].str); debug("EQLeft \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 27:
-#line 95 "grammar.y"
 { yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , ')'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 28:
-#line 96 "grammar.y"
 { yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , ']'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 29:
-#line 97 "grammar.y"
 { yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , '}'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 30:
-#line 98 "grammar.y"
 { yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , '>'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 31:
-#line 99 "grammar.y"
 { yyval.ptr = new Node(ID_RIGHT); allocChar(yyval.ptr->value , '|'); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 32:
-#line 100 "grammar.y"
 { yyval.ptr = new Node(ID_RIGHT); allocValue(yyval.ptr->value , "||"); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 33:
-#line 101 "grammar.y"
 { yyval.ptr = new Node(ID_RIGHT); allocValue(yyval.ptr->value , yyvsp[0].str); debug("EQRight \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 34:
-#line 105 "grammar.y"
 { yyval.ptr = new Node(ID_FENCE); yyval.ptr->child=yyvsp[-2].ptr; yyvsp[-2].ptr->next=yyvsp[-1].ptr; yyvsp[-1].ptr->next=yyvsp[0].ptr; debug("Fence \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 35:
-#line 109 "grammar.y"
 { yyval.ptr = new Node(ID_PARENTH); yyval.ptr->child = yyvsp[-1].ptr; debug("Parenth: '(' ExprList ')' \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 36:
-#line 110 "grammar.y"
 { yyval.ptr = new Node(ID_PARENTH); debug("Parenth: '(' ')' \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 37:
-#line 114 "grammar.y"
 { yyval.ptr = new Node(ID_BLOCK); yyval.ptr->child = yyvsp[-1].ptr; debug("Block: '{' ExprList '}' \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 38:
-#line 115 "grammar.y"
 { yyval.ptr = new Node(ID_BLOCK); debug("Block: '{' '}' \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 39:
-#line 119 "grammar.y"
 { yyval.ptr = new Node(ID_BRACKET); yyval.ptr->child = yyvsp[-1].ptr; debug("Bracket \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 40:
-#line 120 "grammar.y"
 { yyval.ptr = new Node(ID_BRACKET); debug("Bracket \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 41:
-#line 124 "grammar.y"
 { yyval.ptr = new Node(ID_SUBEXPR); yyval.ptr->child = yyvsp[-2].ptr; yyvsp[-2].ptr->next = yyvsp[0].ptr; debug("SubSupExpr : ID_SUBEXPR\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 42:
-#line 125 "grammar.y"
 { yyval.ptr = new Node(ID_SUPEXPR); yyval.ptr->child = yyvsp[-2].ptr; yyvsp[-2].ptr->next = yyvsp[0].ptr; debug("SubSupExpr : ID_SUPEXPR\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 43:
-#line 126 "grammar.y"
 { yyval.ptr = new Node(ID_SUBSUPEXPR); yyval.ptr->child=yyvsp[-4].ptr; yyvsp[-4].ptr->next=yyvsp[-2].ptr; yyvsp[-2].ptr->next=yyvsp[0].ptr; debug("SubSupExpr : ID_SUBSUPEXPR\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 44:
-#line 130 "grammar.y"
 { yyval.ptr = new Node(ID_FRACTIONEXPR); yyval.ptr->child = yyvsp[-1].ptr; yyvsp[-1].ptr->next = yyvsp[0].ptr; debug("FractionExpr : %s\n",yyvsp[-2].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 45:
-#line 134 "grammar.y"
 { yyval.ptr = new Node(ID_OVER); yyval.ptr->child = yyvsp[-3].ptr; yyvsp[-3].ptr->next = yyvsp[-1].ptr; debug("OverExpr\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 46:
-#line 139 "grammar.y"
 { yyval.ptr = new Node(ID_ACCENTEXPR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Accent : %s\n", yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 47:
-#line 143 "grammar.y"
 { yyval.ptr = new Node(ID_ACCENTEXPR); yyval.ptr->child=yyvsp[-1].ptr; yyvsp[-1].ptr->next = yyvsp[0].ptr; debug("AccentExpr \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 48:
-#line 146 "grammar.y"
 { yyval.ptr = new Node(ID_DECORATIONEXPR); allocValue(yyval.ptr->value , yyvsp[0].str); debug("Decoration : %s\n", yyvsp[0].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 49:
-#line 150 "grammar.y"
 { yyval.ptr = new Node(ID_DECORATIONEXPR); yyval.ptr->child = yyvsp[-1].ptr; yyvsp[-1].ptr->next = yyvsp[0].ptr; debug("DecorationExpr \n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 50:
-#line 154 "grammar.y"
 { yyval.ptr = new Node(ID_SQRTEXPR); yyval.ptr->child = yyvsp[0].ptr; debug("RootExpr : %s\n", yyvsp[-1].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 51:
-#line 155 "grammar.y"
 { yyval.ptr = new Node(ID_ROOTEXPR); yyval.ptr->child = yyvsp[-1].ptr; yyvsp[-1].ptr->next= yyvsp[0].ptr; debug("RootExpr : %s\n", yyvsp[-2].str); nodelist.push_back(yyval.ptr); ;
     break;}
 case 52:
-#line 159 "grammar.y"
 { yyval.ptr = new Node(ID_BEGIN); yyval.ptr->child = yyvsp[0].ptr; nodelist.push_back(yyval.ptr);  debug("BeginExpr\n"); ;
     break;}
 case 53:
-#line 160 "grammar.y"
 { yyval.ptr = new Node(ID_BEGIN); yyval.ptr->child = yyvsp[-1].ptr; yyvsp[-1].ptr->next= yyvsp[0].ptr; nodelist.push_back(yyval.ptr); debug("BeginExpr\n"); ;
     break;}
 case 54:
-#line 164 "grammar.y"
 { yyval.ptr = new Node(ID_END); yyval.ptr->child = yyvsp[0].ptr; nodelist.push_back(yyval.ptr); debug("EndExpr\n"); ;
     break;}
 case 55:
-#line 169 "grammar.y"
 { yyval.ptr = new Node(ID_MATHML); yyval.ptr->child = yyvsp[0].ptr; nodelist.push_back(yyval.ptr); top = yyval.ptr; debug("MathML\n"); ;
     break;}
 case 56:
-#line 173 "grammar.y"
 { yyval.ptr = new Node(ID_LINES); yyval.ptr->child = yyvsp[0].ptr; nodelist.push_back(yyval.ptr); debug("Lines\n"); ;
     break;}
 case 57:
-#line 174 "grammar.y"
 { yyval.ptr = new Node(ID_LINES); yyval.ptr->child = yyvsp[-2].ptr; yyvsp[-2].ptr->next = yyvsp[0].ptr; nodelist.push_back(yyval.ptr); debug("Lines\n"); ;
     break;}
 case 58:
-#line 178 "grammar.y"
 { yyval.ptr = new Node(ID_LINE); yyval.ptr->child = yyvsp[0].ptr; nodelist.push_back(yyval.ptr); debug("Line\n"); ;
     break;}
 case 59:
-#line 182 "grammar.y"
 { yyval.ptr = new Node(ID_EXPRLIST); yyval.ptr->child = yyvsp[0].ptr; debug("ExprList : Expr\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 60:
-#line 183 "grammar.y"
 { yyval.ptr = new Node(ID_EXPRLIST); yyval.ptr->child = yyvsp[-1].ptr; yyvsp[-1].ptr->next = yyvsp[0].ptr;  debug("ExprList : ExprList Expr\n"); nodelist.push_back(yyval.ptr); ;
     break;}
 case 61:
-#line 187 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Block\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 62:
-#line 188 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Parenth\n");  nodelist.push_back(yyval.ptr);;
     break;}
 case 63:
-#line 189 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : Fence\n");  nodelist.push_back(yyval.ptr);;
     break;}
 case 64:
-#line 190 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : SubSupExpr\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 65:
-#line 191 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : FractionExpr\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 66:
-#line 192 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : OverExpr\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 67:
-#line 193 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : DecorationExpr\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 68:
-#line 194 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : RootExpr\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 69:
-#line 195 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : AccentExpr\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 70:
-#line 196 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : PrimaryExpr\n"); nodelist.push_back(yyval.ptr);;
     break;}
 case 71:
-#line 197 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : BeginExpr\n");  nodelist.push_back(yyval.ptr);;
     break;}
 case 72:
-#line 198 "grammar.y"
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : EndExpr\n");  nodelist.push_back(yyval.ptr);;
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 543 "/usr/lib/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1409,7 +1329,6 @@ yyerrhandle:
     }
   return 1;
 }
-#line 202 "grammar.y"
 
 
 Node *mainParse(const char *_code)
