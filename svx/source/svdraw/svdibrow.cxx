@@ -562,27 +562,31 @@ void _SdrItemBrowserControl::BrkChangeEntry()
 
 void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntPtr nEntryNum)
 {
-    ImpItemListRow* pAktEntry=ImpGetEntry(nEntryNum);
-    if (pAktEntry==NULL) {
+    SAL_WARN_IF(nEntryNum > aList.size(), "svx", "trying to set item " << nEntryNum << "in a vector of size " << aList.size());
+    if (nEntryNum >= aList.size()) {
+        nEntryNum = aList.size();
         aList.push_back(new ImpItemListRow(rEntry));
         RowInserted(nEntryNum);
-    } else if (*pAktEntry!=rEntry) {
-        bool bStateDiff=rEntry.eState!=pAktEntry->eState;
-        bool bValueDiff=!rEntry.aValue.equals(pAktEntry->aValue);
-        bool bAllDiff = true;
-        if (bStateDiff || bValueDiff) {
-            // check whether only state and/or value have changed
-            ImpItemListRow aTest(rEntry);
-            aTest.eState=pAktEntry->eState;
-            aTest.aValue=pAktEntry->aValue;
-            if (aTest==*pAktEntry) bAllDiff = false;
-        }
-        *pAktEntry=rEntry;
-        if (bAllDiff) {
-            RowModified(nEntryNum);
-        } else {
-            if (bStateDiff) RowModified(nEntryNum,ITEMBROWSER_STATECOL_ID);
-            if (bValueDiff) RowModified(nEntryNum,ITEMBROWSER_VALUECOL_ID);
+    } else {
+        ImpItemListRow* pAktEntry=ImpGetEntry(nEntryNum);
+        if (*pAktEntry!=rEntry) {
+            bool bStateDiff=rEntry.eState!=pAktEntry->eState;
+            bool bValueDiff=!rEntry.aValue.equals(pAktEntry->aValue);
+            bool bAllDiff = true;
+            if (bStateDiff || bValueDiff) {
+                // check whether only state and/or value have changed
+                ImpItemListRow aTest(rEntry);
+                aTest.eState=pAktEntry->eState;
+                aTest.aValue=pAktEntry->aValue;
+                if (aTest==*pAktEntry) bAllDiff = false;
+            }
+            *pAktEntry=rEntry;
+            if (bAllDiff) {
+                RowModified(nEntryNum);
+            } else {
+                if (bStateDiff) RowModified(nEntryNum,ITEMBROWSER_STATECOL_ID);
+                if (bValueDiff) RowModified(nEntryNum,ITEMBROWSER_VALUECOL_ID);
+            }
         }
     }
 }
