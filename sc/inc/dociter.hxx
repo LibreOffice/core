@@ -214,12 +214,12 @@ public:
 class ScCellIterator            // walk through all cells in an area
 {                               // for SubTotal no hidden and no sub-total lines
 private:
-    ScDocument*     pDoc;
+    ScDocument* mpDoc;
     ScAddress maStartPos;
     ScAddress maEndPos;
     ScAddress maCurPos;
-    SCSIZE          nColRow;
-    bool            bSubTotal;
+    SCSIZE mnIndex;
+    bool mbSubTotal;
 
     CellType meCurType;
     OUString maCurString;
@@ -233,11 +233,11 @@ private:
     void init();
     bool getCurrent();
 public:
-                    ScCellIterator(ScDocument* pDocument,
+                    ScCellIterator(ScDocument* pDoc,
                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
                                    bool bSTotal = false);
-                    ScCellIterator(ScDocument* pDocument,
+                    ScCellIterator(ScDocument* pDoc,
                                    const ScRange& rRange, bool bSTotal = false);
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
