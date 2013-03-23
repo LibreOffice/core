@@ -13,20 +13,16 @@ $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	icu/icu4c.9948.mlym-crash.patch \
-	icu/icu4c-bsd.patch \
 	icu/icu4c-build.patch \
 	icu/icu4c.8198.revert.icu5431.patch \
 	icu/icu4c.7601.Indic-ccmp.patch \
 	icu/icu4c-aix.patch \
 	icu/icu4c-wchar_t.patch \
 	icu/icu4c-warnings.patch \
-	icu/icu4c.9313.cygwin.patch \
 	icu/icu4c-macosx.patch \
 	icu/icu4c-solarisgcc.patch \
 	icu/icu4c-mkdir.patch \
 	icu/icu4c-buffer-overflow.patch \
-	icu/icu4c.9737.CVE-2013-0900_changesets_32865_32908.patch \
-	icu/icu4c-CVE-2013-0900_umutex.patch \
 	icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
 ))
 
