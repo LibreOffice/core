@@ -4494,7 +4494,7 @@ for a in "$MAKE" "$GNUMAKE" make gmake gnumake; do
     if test -n "$a"; then
         $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
         if test $? -eq 0;  then
-            GNUMAKE=$a
+            GNUMAKE=`which $a`
             break
         fi
     fi
