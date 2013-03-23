@@ -283,11 +283,11 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const ::com::sun::star
             TransferableDataHelper aDataHelper( rEventObject.Contents );
             SwWrtShell& rSh = pView->GetWrtShell();
 
-            pView->nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
-            pView->bPasteState = aDataHelper.GetXTransferable().is() &&
+            pView->m_nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
+            pView->m_bPasteState = aDataHelper.GetXTransferable().is() &&
                             SwTransferable::IsPaste( rSh, aDataHelper );
 
-            pView->bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
+            pView->m_bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
                         SwTransferable::IsPasteSpecial( rSh, aDataHelper );
         }
 

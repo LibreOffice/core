@@ -78,19 +78,19 @@ struct SwSearchOptions
 };
 
 
-inline Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
+inline Window* GetParentWindow( SvxSearchDialog* m_pSrchDlg )
 {
     Window* pWin;
-    if( pSrchDlg && pSrchDlg->IsVisible() )
-        pWin = pSrchDlg;
+    if( m_pSrchDlg && m_pSrchDlg->IsVisible() )
+        pWin = m_pSrchDlg;
     else
         pWin = 0;
     return pWin;
 }
 
-inline void ShowNotFoundInfoBox( SvxSearchDialog* pSrchDlg )
+inline void ShowNotFoundInfoBox( SvxSearchDialog* m_pSrchDlg )
 {
-    Window* pParentWindow = GetParentWindow( pSrchDlg );
+    Window* pParentWindow = GetParentWindow( m_pSrchDlg );
     InfoBox aBox( pParentWindow, SW_RES(MSG_NOT_FOUND));
     if (pParentWindow)
     {
@@ -116,7 +116,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
     sal_Bool bApi = bQuiet | bNoMessage;
 
     sal_uInt16 nSlot = rReq.GetSlot();
-    if (nSlot == FN_REPEAT_SEARCH && !pSrchItem)
+    if (nSlot == FN_REPEAT_SEARCH && !m_pSrchItem)
     {
         if(bApi)
         {
@@ -124,20 +124,20 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             nSlot = 0;
         }
     }
-    if( pWrtShell->IsBlockMode() )
-        pWrtShell->LeaveBlockMode();
+    if( m_pWrtShell->IsBlockMode() )
+        m_pWrtShell->LeaveBlockMode();
     switch (nSlot)
     {
     // erstmal Nichts tun
     case SID_SEARCH_ITEM:
     {
-        delete pSrchItem;
-        pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
+        delete m_pSrchItem;
+        m_pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
     }
     break;
 
     case FID_SEARCH_ON:
-        bJustOpened = true;
+        m_bJustOpened = true;
         GetViewFrame()->GetBindings().Invalidate(SID_SEARCH_ITEM);
         break;
 
@@ -145,23 +145,23 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
         if(pArgs)
         {
             // Dialog abmelden
-            delete pSrchItem;
-            pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
+            delete m_pSrchItem;
+            m_pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
 
-            DELETEZ( pSrchList );
-            DELETEZ( pReplList );
+            DELETEZ( m_pSrchList );
+            DELETEZ( m_pReplList );
 
             if ( pWrp )
             {
-                pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
+                m_pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
                 // die Search / Replace -Items merken wir uns
-                const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
+                const SearchAttrItemList* pList = m_pSrchDlg->GetSearchItemList();
                 if( pList && pList->Count() )
-                    pSrchList = new SearchAttrItemList( *pList );
+                    m_pSrchList = new SearchAttrItemList( *pList );
 
-                if( 0 != (pList = pSrchDlg->GetReplaceItemList() ) &&
+                if( 0 != (pList = m_pSrchDlg->GetReplaceItemList() ) &&
                     pList->Count() )
-                    pReplList = new SearchAttrItemList( *pList );
+                    m_pReplList = new SearchAttrItemList( *pList );
             }
         }
         break;
@@ -174,31 +174,31 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     SwView::SetMoveType(NID_SRCH_REP);
                 if ( pWrp )
                 {
-                    pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
+                    m_pSrchDlg = static_cast <SvxSearchDialog*> (pWrp->getDialog ());
                 }
                 else
-                    pSrchDlg = 0;
+                    m_pSrchDlg = 0;
             }
 
-            if (pSrchDlg)
+            if (m_pSrchDlg)
             {
-                DELETEZ( pSrchList );
-                DELETEZ( pReplList );
+                DELETEZ( m_pSrchList );
+                DELETEZ( m_pReplList );
 
-                const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
+                const SearchAttrItemList* pList = m_pSrchDlg->GetSearchItemList();
                 if( pList && pList->Count() )
-                    pSrchList = new SearchAttrItemList( *pList );
+                    m_pSrchList = new SearchAttrItemList( *pList );
 
-                if( 0 != (pList = pSrchDlg->GetReplaceItemList() ) &&
+                if( 0 != (pList = m_pSrchDlg->GetReplaceItemList() ) &&
                     pList->Count() )
-                    pReplList = new SearchAttrItemList( *pList );
+                    m_pReplList = new SearchAttrItemList( *pList );
             }
 
             if (nSlot == FN_REPEAT_SEARCH)
             {
-                OSL_ENSURE(pSrchItem, "SearchItem missing");
-                if( !pSrchItem )
-                    pSrchItem = new SvxSearchItem(SID_SEARCH_ITEM);
+                OSL_ENSURE(m_pSrchItem, "SearchItem missing");
+                if( !m_pSrchItem )
+                    m_pSrchItem = new SvxSearchItem(SID_SEARCH_ITEM);
             }
             else
             {
@@ -206,17 +206,17 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 OSL_ENSURE(pArgs, "Args missing");
                 if ( pArgs )
                 {
-                    delete pSrchItem;
-                    pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
+                    delete m_pSrchItem;
+                    m_pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
                 }
             }
-            switch (pSrchItem->GetCommand())
+            switch (m_pSrchItem->GetCommand())
             {
             case SVX_SEARCHCMD_FIND:
             {
                 sal_Bool bRet = SearchAndWrap(bApi);
                 if( bRet )
-                    Scroll(pWrtShell->GetCharRect().SVRect());
+                    Scroll(m_pWrtShell->GetCharRect().SVRect());
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
             }
             break;
@@ -227,9 +227,9 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                 {
                     if( !bApi )
                     {
-                        ShowNotFoundInfoBox( pSrchDlg );
+                        ShowNotFoundInfoBox( m_pSrchDlg );
                     }
-                    bFound = sal_False;
+                    m_bFound = sal_False;
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
             }
@@ -243,82 +243,82 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 //      was ist, wenn man das gefundene nur attributieren will??
 
                     sal_uInt16 nCmd = SVX_SEARCHCMD_FIND;
-                    if( pSrchItem->GetReplaceString().Len() ||
-                        !pReplList )
+                    if( m_pSrchItem->GetReplaceString().Len() ||
+                        !m_pReplList )
                     {
                         // Verhindern, dass - falls der Suchstring im
                         // Ersetzungsstring enthalten ist - der ersetzte String
                         // noch einmal gefunden wird.
 
-                        sal_Bool bBack = pSrchItem->GetBackward();
+                        sal_Bool bBack = m_pSrchItem->GetBackward();
                         if (bBack)
-                            pWrtShell->Push();
-                        String aReplace( pSrchItem->GetReplaceString() );
-                        SearchOptions aTmp( pSrchItem->GetSearchOptions() );
-                        String *pBackRef = ReplaceBackReferences( aTmp, pWrtShell->GetCrsr() );
+                            m_pWrtShell->Push();
+                        String aReplace( m_pSrchItem->GetReplaceString() );
+                        SearchOptions aTmp( m_pSrchItem->GetSearchOptions() );
+                        String *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCrsr() );
                         if( pBackRef )
-                            pSrchItem->SetReplaceString( *pBackRef );
+                            m_pSrchItem->SetReplaceString( *pBackRef );
                         Replace();
                         if( pBackRef )
                         {
-                            pSrchItem->SetReplaceString( aReplace );
+                            m_pSrchItem->SetReplaceString( aReplace );
                             delete pBackRef;
                         }
                         if (bBack)
                         {
-                            pWrtShell->Pop();
-                            pWrtShell->SwapPam();
+                            m_pWrtShell->Pop();
+                            m_pWrtShell->SwapPam();
                         }
                     }
-                    else if( pReplList )
+                    else if( m_pReplList )
                         nCmd = SVX_SEARCHCMD_REPLACE;
 
                     // 2) Weiter suchen (ohne zu ersetzen!)
 
-                    sal_uInt16 nOldCmd = pSrchItem->GetCommand();
-                    pSrchItem->SetCommand( nCmd );
+                    sal_uInt16 nOldCmd = m_pSrchItem->GetCommand();
+                    m_pSrchItem->SetCommand( nCmd );
                     sal_Bool bRet = SearchAndWrap(bApi);
                     if( bRet )
-                        Scroll( pWrtShell->GetCharRect().SVRect());
-                    pSrchItem->SetCommand( nOldCmd );
+                        Scroll( m_pWrtShell->GetCharRect().SVRect());
+                    m_pSrchItem->SetCommand( nOldCmd );
                     rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
                 }
                 break;
 
             case SVX_SEARCHCMD_REPLACE_ALL:
                 {
-                    SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
-                    bExtra = sal_False;
+                    SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
+                    m_bExtra = sal_False;
                     sal_uLong nFound;
 
                     {   //Scope for SwWait-Object
                         SwWait aWait( *GetDocShell(), sal_True );
-                        pWrtShell->StartAllAction();
-                        if (!pSrchItem->GetSelection())
+                        m_pWrtShell->StartAllAction();
+                        if (!m_pSrchItem->GetSelection())
                         {
                             // if we don't want to search in the selection...
-                            pWrtShell->KillSelection(0, false);
+                            m_pWrtShell->KillSelection(0, false);
                             // i#8288 "replace all" should not change cursor
                             // position, so save current cursor
-                            pWrtShell->Push();
+                            m_pWrtShell->Push();
                             if (DOCPOS_START == aOpts.eEnd)
                             {
-                                pWrtShell->EndDoc();
+                                m_pWrtShell->EndDoc();
                             }
                             else
                             {
-                                pWrtShell->SttDoc();
+                                m_pWrtShell->SttDoc();
                             }
                         }
                         nFound = FUNC_Search( aOpts );
-                        if (!pSrchItem->GetSelection())
+                        if (!m_pSrchItem->GetSelection())
                         {
                             // create it just to overwrite it with stack cursor
-                            pWrtShell->CreateCrsr();
+                            m_pWrtShell->CreateCrsr();
                             // i#8288 restore the original cursor position
-                            pWrtShell->Pop(false);
+                            m_pWrtShell->Pop(false);
                         }
-                        pWrtShell->EndAllAction();
+                        m_pWrtShell->EndAllAction();
                     }
 
                     rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0 && ULONG_MAX != nFound));
@@ -326,9 +326,9 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     {
                         if( !bApi )
                         {
-                            ShowNotFoundInfoBox( pSrchDlg );
+                            ShowNotFoundInfoBox( m_pSrchDlg );
                         }
-                        bFound = sal_False;
+                        m_bFound = sal_False;
                         return;
                     }
 
@@ -338,7 +338,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         const xub_StrLen nPos = aText.Search( rtl::OUString("XX") );
                         aText.Erase( nPos, 2 );
                         aText.Insert( OUString::number( nFound ), nPos );
-                        Window* pParentWindow = GetParentWindow( pSrchDlg );
+                        Window* pParentWindow = GetParentWindow( m_pSrchDlg );
                         InfoBox( pParentWindow, aText ).Execute();
                     }
                 }
@@ -401,23 +401,23 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         aCJKAttr + SAL_N_ELEMENTS( aCJKAttr ));
             }
 
-            SfxItemSet aSet( pWrtShell->GetAttrPool(), &aArr[0] );
+            SfxItemSet aSet( m_pWrtShell->GetAttrPool(), &aArr[0] );
             sal_uInt16 nWhich = SID_SEARCH_SEARCHSET;
 
             if ( FID_SEARCH_REPLACESET == nSlot )
             {
                 nWhich = SID_SEARCH_REPLACESET;
 
-                if ( pReplList )
+                if ( m_pReplList )
                 {
-                    pReplList->Get( aSet );
-                    DELETEZ( pReplList );
+                    m_pReplList->Get( aSet );
+                    DELETEZ( m_pReplList );
                 }
             }
-            else if ( pSrchList )
+            else if ( m_pSrchList )
             {
-                pSrchList->Get( aSet );
-                DELETEZ( pSrchList );
+                m_pSrchList->Get( aSet );
+                DELETEZ( m_pSrchList );
             }
             rReq.SetReturnValue( SvxSetItem( nWhich, aSet ) );
         }
@@ -437,29 +437,29 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 
 sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
 {
-    SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
+    SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
 
         // Startposition der Suche fuer WrapAround merken
         // Start- / EndAction wegen vielleicht bestehender Selektionen
         // aus 'Suche alle'
-    pWrtShell->StartAllAction();
-    pWrtShell->Push();
+    m_pWrtShell->StartAllAction();
+    m_pWrtShell->Push();
         // falls in selektierten Bereichen gesucht werden soll, duerfen sie
         // nicht aufgehoben werden
-    if (!pSrchItem->GetSelection())
-        pWrtShell->KillSelection(0, false);
+    if (!m_pSrchItem->GetSelection())
+        m_pWrtShell->KillSelection(0, false);
 
     SwWait *pWait = new SwWait( *GetDocShell(), sal_True );
     if( FUNC_Search( aOpts ) )
     {
-        bFound = sal_True;
-        if(pWrtShell->IsSelFrmMode())
+        m_bFound = sal_True;
+        if(m_pWrtShell->IsSelFrmMode())
         {
-            pWrtShell->UnSelectFrm();
-            pWrtShell->LeaveSelFrmMode();
+            m_pWrtShell->UnSelectFrm();
+            m_pWrtShell->LeaveSelFrmMode();
         }
-        pWrtShell->Pop();
-        pWrtShell->EndAllAction();
+        m_pWrtShell->Pop();
+        m_pWrtShell->EndAllAction();
         delete pWait;
         return sal_True;
     }
@@ -468,53 +468,53 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         // Suchen in den Sonderbereichen, wenn keine
         // Suche in Selektionen vorliegt. Bei Suche in Selektionen
         // wird ohnehin in diesen Sonderbereichen gesucht
-    bool bHasSrchInOther = bExtra;
-    if (!pSrchItem->GetSelection() && !bExtra )
+    bool bHasSrchInOther = m_bExtra;
+    if (!m_pSrchItem->GetSelection() && !m_bExtra )
     {
-        bExtra = true;
+        m_bExtra = true;
         if( FUNC_Search( aOpts ) )
         {
-            bFound = sal_True;
-            pWrtShell->Pop();
-            pWrtShell->EndAllAction();
+            m_bFound = sal_True;
+            m_pWrtShell->Pop();
+            m_pWrtShell->EndAllAction();
             return sal_True;
         }
-        bExtra = false;
+        m_bExtra = false;
     }
     else
-        bExtra = !bExtra;
+        m_bExtra = !m_bExtra;
 
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
-    pSrchDlg = pWrp ? static_cast <SvxSearchDialog*> (pWrp->getDialog ()) : 0;
+    m_pSrchDlg = pWrp ? static_cast <SvxSearchDialog*> (pWrp->getDialog ()) : 0;
 
         // falls Startposition am Dokumentende / -anfang
     if (aOpts.bDontWrap)
     {
-        pWrtShell->EndAllAction();
+        m_pWrtShell->EndAllAction();
         if( !bApi )
         {
-            ShowNotFoundInfoBox( pSrchDlg );
+            ShowNotFoundInfoBox( m_pSrchDlg );
         }
-        bFound = sal_False;
-        pWrtShell->Pop();
+        m_bFound = sal_False;
+        m_pWrtShell->Pop();
         return sal_False;
     }
-    pWrtShell->EndAllAction();
+    m_pWrtShell->EndAllAction();
         // noch mal mit WrapAround versuchen?
 
-    if( bApi || RET_NO == QueryBox( GetParentWindow( pSrchDlg ),
+    if( bApi || RET_NO == QueryBox( GetParentWindow( m_pSrchDlg ),
                                         SW_RES( DOCPOS_START == aOpts.eEnd
                                             ? MSG_SEARCH_START
                                             : MSG_SEARCH_END )
                                     ).Execute() )
     {
-        bFound = sal_False;
-        pWrtShell->Pop();
+        m_bFound = sal_False;
+        m_pWrtShell->Pop();
         return sal_False;
     }
-    pWrtShell->StartAllAction();
-    pWrtShell->Pop(sal_False);
+    m_pWrtShell->StartAllAction();
+    m_pWrtShell->Pop(sal_False);
     pWait = new SwWait( *GetDocShell(), sal_True );
 
     bool bSrchBkwrd = DOCPOS_START == aOpts.eEnd;
@@ -524,52 +524,52 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
 
     if (bHasSrchInOther)
     {
-        pWrtShell->ClearMark();
+        m_pWrtShell->ClearMark();
         if (bSrchBkwrd)
-            pWrtShell->EndDoc();
+            m_pWrtShell->EndDoc();
         else
-            pWrtShell->SttDoc();
+            m_pWrtShell->SttDoc();
     }
 
-    bFound = 0 != FUNC_Search( aOpts );
-    pWrtShell->EndAllAction();
+    m_bFound = 0 != FUNC_Search( aOpts );
+    m_pWrtShell->EndAllAction();
     delete pWait;
-    if ( bFound )
-        return bFound;
+    if ( m_bFound )
+        return m_bFound;
     if(!bApi)
     {
-        ShowNotFoundInfoBox( pSrchDlg );
+        ShowNotFoundInfoBox( m_pSrchDlg );
     }
-    return bFound = sal_False;
+    return m_bFound = sal_False;
 }
 
 
 sal_Bool SwView::SearchAll(sal_uInt16* pFound)
 {
     SwWait aWait( *GetDocShell(), sal_True );
-    pWrtShell->StartAllAction();
+    m_pWrtShell->StartAllAction();
 
-    SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
+    SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
 
-    if (!pSrchItem->GetSelection())
+    if (!m_pSrchItem->GetSelection())
     {
         // bestehende Selektionen aufheben,
         // wenn nicht in selektierten Bereichen gesucht werden soll
-        pWrtShell->KillSelection(0, false);
+        m_pWrtShell->KillSelection(0, false);
 
         if( DOCPOS_START == aOpts.eEnd )
-            pWrtShell->EndDoc();
+            m_pWrtShell->EndDoc();
         else
-            pWrtShell->SttDoc();
+            m_pWrtShell->SttDoc();
     }
-    bExtra = false;
+    m_bExtra = false;
     sal_uInt16 nFound = (sal_uInt16)FUNC_Search( aOpts );
     if(pFound)
         *pFound = nFound;
-    bFound = 0 != nFound;
+    m_bFound = 0 != nFound;
 
-    pWrtShell->EndAllAction();
-    return bFound;
+    m_pWrtShell->EndAllAction();
+    return m_bFound;
 }
 
 
@@ -577,67 +577,67 @@ void SwView::Replace()
 {
     SwWait aWait( *GetDocShell(), sal_True );
 
-    pWrtShell->StartAllAction();
+    m_pWrtShell->StartAllAction();
 
-    if( pSrchItem->GetPattern() ) // Vorlagen?
+    if( m_pSrchItem->GetPattern() ) // Vorlagen?
     {
         SwRewriter aRewriter;
-        aRewriter.AddRule(UndoArg1, pSrchItem->GetSearchString());
+        aRewriter.AddRule(UndoArg1, m_pSrchItem->GetSearchString());
         aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
-        aRewriter.AddRule(UndoArg3, pSrchItem->GetReplaceString());
+        aRewriter.AddRule(UndoArg3, m_pSrchItem->GetReplaceString());
 
-        pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter);
+        m_pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter);
 
-        pWrtShell->SetTxtFmtColl( pWrtShell->GetParaStyle(
-                            pSrchItem->GetReplaceString(),
+        m_pWrtShell->SetTxtFmtColl( m_pWrtShell->GetParaStyle(
+                            m_pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
-        pWrtShell->EndUndo();
+        m_pWrtShell->EndUndo();
     }
     else
     {
         if (GetPostItMgr()->HasActiveSidebarWin())
-            GetPostItMgr()->Replace(pSrchItem);
+            GetPostItMgr()->Replace(m_pSrchItem);
 
         sal_Bool bReqReplace = true;
 
-        if(pWrtShell->HasSelection())
+        if(m_pWrtShell->HasSelection())
         {
             /* check that the selection match the search string*/
             //save state
-            SwPosition aStartPos = (* pWrtShell->GetSwCrsr()->Start());
-            SwPosition aEndPos = (* pWrtShell->GetSwCrsr()->End());
-            sal_Bool   bHasSelection = pSrchItem->GetSelection();
-            sal_uInt16 nOldCmd = pSrchItem->GetCommand();
+            SwPosition aStartPos = (* m_pWrtShell->GetSwCrsr()->Start());
+            SwPosition aEndPos = (* m_pWrtShell->GetSwCrsr()->End());
+            sal_Bool   bHasSelection = m_pSrchItem->GetSelection();
+            sal_uInt16 nOldCmd = m_pSrchItem->GetCommand();
 
             //set state for checking if current selection has a match
-            pSrchItem->SetCommand( SVX_SEARCHCMD_FIND );
-            pSrchItem->SetSelection(true);
+            m_pSrchItem->SetCommand( SVX_SEARCHCMD_FIND );
+            m_pSrchItem->SetSelection(true);
 
             //check if it matchs
-            SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
+            SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
             if( ! FUNC_Search(aOpts) )
             {
 
                 //no matching therefore should not replace selection
                 // => remove selection
 
-                if(! pSrchItem->GetBackward() )
+                if(! m_pSrchItem->GetBackward() )
                 {
-                    (* pWrtShell->GetSwCrsr()->Start()) = aStartPos;
-                    (* pWrtShell->GetSwCrsr()->End()) = aEndPos;
+                    (* m_pWrtShell->GetSwCrsr()->Start()) = aStartPos;
+                    (* m_pWrtShell->GetSwCrsr()->End()) = aEndPos;
                 }
                 else
                 {
-                    (* pWrtShell->GetSwCrsr()->Start()) = aEndPos;
-                    (* pWrtShell->GetSwCrsr()->End()) = aStartPos;
+                    (* m_pWrtShell->GetSwCrsr()->Start()) = aEndPos;
+                    (* m_pWrtShell->GetSwCrsr()->End()) = aStartPos;
                 }
                 bReqReplace = false;
             }
 
             //set back old search state
-            pSrchItem->SetCommand( nOldCmd );
-            pSrchItem->SetSelection(bHasSelection);
+            m_pSrchItem->SetCommand( nOldCmd );
+            m_pSrchItem->SetSelection(bHasSelection);
         }
         /*
          * remove current selection
@@ -649,22 +649,22 @@ void SwView::Replace()
         if( bReqReplace )
         {
 
-            sal_Bool bReplaced = pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
-                                                                  pSrchItem->GetRegExp());
-            if( bReplaced && pReplList && pReplList->Count() && pWrtShell->HasSelection() )
+            sal_Bool bReplaced = m_pWrtShell->SwEditShell::Replace( m_pSrchItem->GetReplaceString(),
+                                                                  m_pSrchItem->GetRegExp());
+            if( bReplaced && m_pReplList && m_pReplList->Count() && m_pWrtShell->HasSelection() )
             {
-                SfxItemSet aReplSet( pWrtShell->GetAttrPool(),
+                SfxItemSet aReplSet( m_pWrtShell->GetAttrPool(),
                                      aTxtFmtCollSetRange );
-                if( pReplList->Get( aReplSet ).Count() )
+                if( m_pReplList->Get( aReplSet ).Count() )
                 {
-                    ::SfxToSwPageDescAttr( *pWrtShell, aReplSet );
-                    pWrtShell->SwEditShell::SetAttr( aReplSet );
+                    ::SfxToSwPageDescAttr( *m_pWrtShell, aReplSet );
+                    m_pWrtShell->SwEditShell::SetAttr( aReplSet );
                 }
             }
         }
     }
 
-    pWrtShell->EndAllAction();
+    m_pWrtShell->EndAllAction();
 }
 
 
@@ -686,16 +686,16 @@ SwSearchOptions::SwSearchOptions( SwWrtShell* pSh, sal_Bool bBackward )
 
 sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 {
-    sal_Bool bDoReplace = pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE ||
-                      pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
+    sal_Bool bDoReplace = m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE ||
+                      m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
 
-    int eRanges = pSrchItem->GetSelection() ?
-        FND_IN_SEL : bExtra ? FND_IN_OTHER : FND_IN_BODY;
-    if (pSrchItem->GetCommand() == SVX_SEARCHCMD_FIND_ALL    ||
-        pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
+    int eRanges = m_pSrchItem->GetSelection() ?
+        FND_IN_SEL : m_bExtra ? FND_IN_OTHER : FND_IN_BODY;
+    if (m_pSrchItem->GetCommand() == SVX_SEARCHCMD_FIND_ALL    ||
+        m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
         eRanges |= FND_IN_SELALL;
 
-    pWrtShell->SttSelect();
+    m_pWrtShell->SttSelect();
 
     static sal_uInt16 aSearchAttrRange[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -704,24 +704,24 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP,
         0 };
 
-    SfxItemSet aSrchSet( pWrtShell->GetAttrPool(), aSearchAttrRange);
-    if( pSrchList && pSrchList->Count() )
+    SfxItemSet aSrchSet( m_pWrtShell->GetAttrPool(), aSearchAttrRange);
+    if( m_pSrchList && m_pSrchList->Count() )
     {
-        pSrchList->Get( aSrchSet );
+        m_pSrchList->Get( aSrchSet );
 
         /*  -- Seitenumbruch mit Seitenvorlage */
-        ::SfxToSwPageDescAttr( *pWrtShell, aSrchSet );
+        ::SfxToSwPageDescAttr( *m_pWrtShell, aSrchSet );
     }
 
     SfxItemSet* pReplSet = 0;
-    if( bDoReplace && pReplList && pReplList->Count() )
+    if( bDoReplace && m_pReplList && m_pReplList->Count() )
     {
-        pReplSet = new SfxItemSet( pWrtShell->GetAttrPool(),
+        pReplSet = new SfxItemSet( m_pWrtShell->GetAttrPool(),
                                         aSearchAttrRange );
-        pReplList->Get( *pReplSet );
+        m_pReplList->Get( *pReplSet );
 
         /*  -- Seitenumbruch mit Seitenvorlage */
-        ::SfxToSwPageDescAttr( *pWrtShell, *pReplSet );
+        ::SfxToSwPageDescAttr( *m_pWrtShell, *pReplSet );
 
         if( !pReplSet->Count() )        // schade, die Attribute
             DELETEZ( pReplSet );        // kennen wir nicht
@@ -730,7 +730,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     //
     // build SearchOptions to be used
     //
-    SearchOptions aSearchOpt( pSrchItem->GetSearchOptions() );
+    SearchOptions aSearchOpt( m_pSrchItem->GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
     if( !bDoReplace )
         aSearchOpt.replaceString = aEmptyStr;
@@ -738,20 +738,20 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     sal_uLong nFound;
     if( aSrchSet.Count() || ( pReplSet && pReplSet->Count() ))
     {
-        nFound = pWrtShell->SearchAttr(
+        nFound = m_pWrtShell->SearchAttr(
             aSrchSet,
-            !pSrchItem->GetPattern(),
+            !m_pSrchItem->GetPattern(),
             rOptions.eStart,
             rOptions.eEnd,
             FindRanges(eRanges),
-            pSrchItem->GetSearchString().Len() ? &aSearchOpt : 0,
+            m_pSrchItem->GetSearchString().Len() ? &aSearchOpt : 0,
             pReplSet );
     }
-    else if( pSrchItem->GetPattern() )
+    else if( m_pSrchItem->GetPattern() )
     {
         // Suchen (und ersetzen) von Vorlagen
-        const String sRplStr( pSrchItem->GetReplaceString() );
-        nFound = pWrtShell->SearchTempl( pSrchItem->GetSearchString(),
+        const String sRplStr( m_pSrchItem->GetReplaceString() );
+        nFound = m_pWrtShell->SearchTempl( m_pSrchItem->GetSearchString(),
             rOptions.eStart,
             rOptions.eEnd,
             FindRanges(eRanges),
@@ -760,13 +760,13 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     else
     {
         // Normale Suche
-        nFound = pWrtShell->SearchPattern(aSearchOpt, pSrchItem->GetNotes(),
+        nFound = m_pWrtShell->SearchPattern(aSearchOpt, m_pSrchItem->GetNotes(),
                                           rOptions.eStart,
                                           rOptions.eEnd,
                                           FindRanges(eRanges),
                                           bDoReplace );
     }
-    pWrtShell->EndSelect();
+    m_pWrtShell->EndSelect();
     return nFound;
 }
 
@@ -775,10 +775,10 @@ Dialog* SwView::GetSearchDialog()
     const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)SfxViewFrame::Current()->GetChildWindow(nId);
     if ( pWrp )
-        pSrchDlg = pWrp->getDialog ();
+        m_pSrchDlg = pWrp->getDialog ();
     else
-        pSrchDlg = 0;
-    return pSrchDlg;
+        m_pSrchDlg = 0;
+    return m_pSrchDlg;
 }
 
 void SwView::StateSearch(SfxItemSet &rSet)
@@ -801,28 +801,28 @@ void SwView::StateSearch(SfxItemSet &rSet)
             break;
             case SID_SEARCH_ITEM:
             {
-                if ( !pSrchItem )
+                if ( !m_pSrchItem )
                 {
-                    pSrchItem = new SvxSearchItem( SID_SEARCH_ITEM );
-                    pSrchItem->SetFamily(SFX_STYLE_FAMILY_PARA);
-                    pSrchItem->SetSearchString( pWrtShell->GetSelTxt() );
+                    m_pSrchItem = new SvxSearchItem( SID_SEARCH_ITEM );
+                    m_pSrchItem->SetFamily(SFX_STYLE_FAMILY_PARA);
+                    m_pSrchItem->SetSearchString( m_pWrtShell->GetSelTxt() );
                 }
 
-                if( bJustOpened && pWrtShell->IsSelection() )
+                if( m_bJustOpened && m_pWrtShell->IsSelection() )
                 {
                     String aTxt;
-                    if( 1 == pWrtShell->GetCrsrCnt() &&
-                        ( aTxt = pWrtShell->SwCrsrShell::GetSelTxt() ).Len() )
+                    if( 1 == m_pWrtShell->GetCrsrCnt() &&
+                        ( aTxt = m_pWrtShell->SwCrsrShell::GetSelTxt() ).Len() )
                     {
-                        pSrchItem->SetSearchString( aTxt );
-                        pSrchItem->SetSelection( sal_False );
+                        m_pSrchItem->SetSearchString( aTxt );
+                        m_pSrchItem->SetSelection( sal_False );
                     }
                     else
-                        pSrchItem->SetSelection( sal_True );
+                        m_pSrchItem->SetSelection( sal_True );
                 }
 
-                bJustOpened = false;
-                rSet.Put( *pSrchItem );
+                m_bJustOpened = false;
+                rSet.Put( *m_pSrchItem );
             }
             break;
         }

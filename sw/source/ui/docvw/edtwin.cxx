@@ -339,8 +339,8 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
             const SwFrmFmt* pFmt = 0;
 
             bool bFrameIsValidTarget = false;
-            if( m_pApplyTempl->pFormatClipboard )
-                bFrameIsValidTarget = m_pApplyTempl->pFormatClipboard->HasContentForThisType( nsSelectionType::SEL_FRM );
+            if( m_pApplyTempl->m_pFormatClipboard )
+                bFrameIsValidTarget = m_pApplyTempl->m_pFormatClipboard->HasContentForThisType( nsSelectionType::SEL_FRM );
             else if( !m_pApplyTempl->nColor )
                 bFrameIsValidTarget = ( m_pApplyTempl->eType == SFX_STYLE_FAMILY_FRAME );
 
@@ -1285,9 +1285,9 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     SwWrtShell &rSh = m_rView.GetWrtShell();
 
     if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
-        m_pApplyTempl && m_pApplyTempl->pFormatClipboard )
+        m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard )
     {
-        m_pApplyTempl->pFormatClipboard->Erase();
+        m_pApplyTempl->m_pFormatClipboard->Erase();
         SetApplyTemplate(SwApplyTemplate());
         m_rView.GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
     }
@@ -2747,8 +2747,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     //ignore key modifiers for format paintbrush
     {
-        bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->pFormatClipboard
-                                &&  m_pApplyTempl->pFormatClipboard->HasContent();
+        bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard
+                                &&  m_pApplyTempl->m_pFormatClipboard->HasContent();
         if( bExecFormatPaintbrush )
             rMEvt = MouseEvent( _rMEvt.GetPosPixel(), _rMEvt.GetClicks(),
                                     _rMEvt.GetMode(), _rMEvt.GetButtons() );
@@ -3646,8 +3646,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     //ignore key modifiers for format paintbrush
     {
-        bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->pFormatClipboard
-                                &&  m_pApplyTempl->pFormatClipboard->HasContent();
+        bool bExecFormatPaintbrush = m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard
+                                &&  m_pApplyTempl->m_pFormatClipboard->HasContent();
         if( bExecFormatPaintbrush )
             rMEvt = MouseEvent( _rMEvt.GetPosPixel(), _rMEvt.GetClicks(),
                                     _rMEvt.GetMode(), _rMEvt.GetButtons() );
@@ -4550,7 +4550,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if( m_pApplyTempl )
     {
         int eSelection = rSh.GetSelectionType();
-        SwFormatClipboard* pFormatClipboard = m_pApplyTempl->pFormatClipboard;
+        SwFormatClipboard* pFormatClipboard = m_pApplyTempl->m_pFormatClipboard;
         if( pFormatClipboard )//apply format paintbrush
         {
             //get some parameters
@@ -4722,7 +4722,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     DELETEZ(m_pApplyTempl);
     SwWrtShell &rSh = m_rView.GetWrtShell();
 
-    if(rTempl.pFormatClipboard)
+    if(rTempl.m_pFormatClipboard)
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
               SetPointer( POINTER_FILL );//@todo #i20119# maybe better a new brush pointer here in future

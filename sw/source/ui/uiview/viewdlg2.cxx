@@ -73,7 +73,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg(
-                pMDI, *pWrtShell, sal_True);
+                pMDI, *m_pWrtShell, sal_True);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());

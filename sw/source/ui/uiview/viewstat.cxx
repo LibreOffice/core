@@ -73,10 +73,10 @@ void SwView::GetState(SfxItemSet &rSet)
         switch(nWhich)
         {
             case FN_EDIT_LINK_DLG:
-                if( pWrtShell->GetLinkManager().GetLinks().empty() )
+                if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
                     rSet.DisableItem(nWhich);
-                else if( pWrtShell->IsSelFrmMode() &&
-                            pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
+                else if( m_pWrtShell->IsSelFrmMode() &&
+                            m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
                         rSet.DisableItem(nWhich);
                 break;
 
@@ -84,35 +84,35 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 // Captions gibt's fuer Grafiken, OLE-Objekte, Rahmen und Tabellen
                 if( !bGetFrmType )
-                    eFrmType = pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
-                if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && nSelectionType != nsSelectionType::SEL_DRW_TXT)||
-                        nSelectionType & nsSelectionType::SEL_TBL ||
-                        nSelectionType & nsSelectionType::SEL_DRW) )
+                    eFrmType = m_pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
+                if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
+                        m_nSelectionType & nsSelectionType::SEL_TBL ||
+                        m_nSelectionType & nsSelectionType::SEL_DRW) )
                     rSet.DisableItem(nWhich);
-                else if((pWrtShell->IsObjSelected()||pWrtShell->IsFrmSelected()) &&
-                        (pWrtShell->IsSelObjProtected( FLYPROTECT_PARENT)||
-                            pWrtShell->IsSelObjProtected( FLYPROTECT_CONTENT )))
+                else if((m_pWrtShell->IsObjSelected()||m_pWrtShell->IsFrmSelected()) &&
+                        (m_pWrtShell->IsSelObjProtected( FLYPROTECT_PARENT)||
+                            m_pWrtShell->IsSelObjProtected( FLYPROTECT_CONTENT )))
                     rSet.DisableItem(nWhich);
-                else if( pWrtShell->IsTableMode() )
+                else if( m_pWrtShell->IsTableMode() )
                     rSet.DisableItem(nWhich);
             }
             break;
 
             case FN_EDIT_FOOTNOTE:
             {
-                if( !pWrtShell->GetCurFtn() )
+                if( !m_pWrtShell->GetCurFtn() )
                     rSet.DisableItem(nWhich);
             }
             break;
 
             case FN_CHANGE_PAGENUM:
             {
-                sal_uInt16 nType = pWrtShell->GetFrmType(0,sal_True);
+                sal_uInt16 nType = m_pWrtShell->GetFrmType(0,sal_True);
                 if( ( FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER |
                       FRMTYPE_FOOTNOTE | FRMTYPE_DRAWOBJ ) & nType )
                     rSet.DisableItem(nWhich);
                 else
-                    rSet.Put(SfxUInt16Item(nWhich, pWrtShell->GetPageOffset()));
+                    rSet.Put(SfxUInt16Item(nWhich, m_pWrtShell->GetPageOffset()));
             }
             break;
             case SID_PRINTDOC:
@@ -125,16 +125,16 @@ void SwView::GetState(SfxItemSet &rSet)
             case RES_PAPER_BIN:
             case FN_PARAM_FTN_INFO:
             {
-                const sal_uInt16 nCurIdx = pWrtShell->GetCurPageDesc();
-                const SwPageDesc& rDesc = pWrtShell->GetPageDesc( nCurIdx );
+                const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
+                const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
                 ::PageDescToItemSet( rDesc, rSet);
             }
             break;
             case RES_BACKGROUND:
             case SID_ATTR_BRUSH:
             {
-                const sal_uInt16 nCurIdx = pWrtShell->GetCurPageDesc();
-                const SwPageDesc& rDesc = pWrtShell->GetPageDesc( nCurIdx );
+                const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
+                const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
                 const SwFrmFmt& rMaster = rDesc.GetMaster();
                 const SvxBrushItem& rBrush = (const SvxBrushItem&)
                                     rMaster.GetFmtAttr(RES_BACKGROUND, sal_True);
@@ -143,17 +143,17 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_CLEARHISTORY:
             {
-                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetLastUndoInfo(0, 0)));
+                rSet.Put(SfxBoolItem(nWhich, m_pWrtShell->GetLastUndoInfo(0, 0)));
             }
             break;
             case SID_UNDO:
             {
                 // die muss noch nicht vorhanden sein
                 // also lasse sie mal anlegen:
-                if( !pShell )
+                if( !m_pShell )
                     SelectShell();
 
-                const SfxPoolItem* pState = pShell->GetSlotState(SID_UNDO);
+                const SfxPoolItem* pState = m_pShell->GetSlotState(SID_UNDO);
                 if(pState)
                     rSet.Put(*pState);
                 else
@@ -162,14 +162,14 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_INSERT_CTRL:
             {
-                SfxImageItem aImgItem(nWhich, bWeb ? SwView::nWebInsertCtrlState : SwView::nInsertCtrlState);
+                SfxImageItem aImgItem(nWhich, bWeb ? SwView::m_nWebInsertCtrlState : SwView::m_nInsertCtrlState);
                 SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
                 const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
                 if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
                 {
-                    if(pWrtShell->IsInVerticalText())
+                    if(m_pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
-                    if(pWrtShell->IsInRightToLeftText())
+                    if(m_pWrtShell->IsInRightToLeftText())
                         aImgItem.SetMirrored(sal_True);
                 }
                 rSet.Put(aImgItem);
@@ -180,28 +180,28 @@ void SwView::GetState(SfxItemSet &rSet)
                 rSet.DisableItem(nWhich);
             else
             {
-                SfxImageItem aImgItem(nWhich, SwView::nInsertObjectCtrlState);
+                SfxImageItem aImgItem(nWhich, SwView::m_nInsertObjectCtrlState);
                 SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
                 const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
                 if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
                 {
-                    if(pWrtShell->IsInVerticalText())
+                    if(m_pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
-                    if(pWrtShell->IsInRightToLeftText())
+                    if(m_pWrtShell->IsInRightToLeftText())
                         aImgItem.SetMirrored(sal_True);
                 }
                 rSet.Put(aImgItem);
             }
             break;
             case FN_UPDATE_TOX:
-                if(!pWrtShell->GetTOXCount())
+                if(!m_pWrtShell->GetTOXCount())
                     rSet.DisableItem(nWhich);
             break;
             case FN_EDIT_CURRENT_TOX:
             case FN_UPDATE_CUR_TOX:
             {
                 const SwTOXBase* pBase = 0;
-                if(0 == (pBase = pWrtShell->GetCurTOX()) ||
+                if(0 == (pBase = m_pWrtShell->GetCurTOX()) ||
                     (FN_EDIT_CURRENT_TOX == nWhich && pBase->IsTOXBaseInReadonly()))
                     rSet.DisableItem(nWhich);
             }
@@ -219,7 +219,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_ATTR_DEFTABSTOP:
             {
                 const SvxTabStopItem& rDefTabs =
-                    (const SvxTabStopItem&)pWrtShell->
+                    (const SvxTabStopItem&)m_pWrtShell->
                                         GetDefault(RES_PARATR_TABSTOP);
                 rSet.Put( SfxUInt16Item( nWhich,
                                                 (sal_uInt16)::GetTabDist(rDefTabs)));
@@ -228,16 +228,16 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_ATTR_LANGUAGE:
             {
                 rSet.Put((const SvxLanguageItem&)
-                    pWrtShell->GetDefault(RES_CHRATR_LANGUAGE), SID_ATTR_LANGUAGE);
+                    m_pWrtShell->GetDefault(RES_CHRATR_LANGUAGE), SID_ATTR_LANGUAGE);
             }
             break;
             case RES_CHRATR_CJK_LANGUAGE:
                 rSet.Put((const SvxLanguageItem&)
-                    pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE), RES_CHRATR_CJK_LANGUAGE);
+                    m_pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE), RES_CHRATR_CJK_LANGUAGE);
             break;
             case RES_CHRATR_CTL_LANGUAGE:
                 rSet.Put((const SvxLanguageItem&)
-                    pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE), RES_CHRATR_CTL_LANGUAGE);
+                    m_pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE), RES_CHRATR_CTL_LANGUAGE);
             break;
             case FN_REDLINE_ON:
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
@@ -249,7 +249,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 sal_uInt16 nMask = nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE;
                 rSet.Put( SfxBoolItem( nWhich,
-                    (pWrtShell->GetRedlineMode() & nMask) == nMask ));
+                    (m_pWrtShell->GetRedlineMode() & nMask) == nMask ));
             }
             break;
             case SID_GALLERY :
@@ -268,8 +268,8 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 // If the selection/cursor start position isn't on a redline, disable
                 // accepting/rejecting changes.
-                SwDoc *pDoc = pWrtShell->GetDoc();
-                SwPaM *pCursor = pWrtShell->GetCrsr();
+                SwDoc *pDoc = m_pWrtShell->GetDoc();
+                SwPaM *pCursor = m_pWrtShell->GetCrsr();
                 if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
                     rSet.DisableItem(nWhich);
             }
@@ -281,7 +281,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 // Enable change navigation if we have any redlines. Ideally we should disable
                 // "Next Change" if we're at or past the last change, and similarly for
                 // "Previous Change"
-                if (0 == pWrtShell->GetRedlineCount())
+                if (0 == m_pWrtShell->GetRedlineCount())
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -318,7 +318,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_MAIL_SCROLLBODY_PAGEDOWN:
                 {
-                    const long nBottom = pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
+                    const long nBottom = m_pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
                     const long nAct = GetVisArea().Bottom();
                     rSet.Put(SfxBoolItem(SID_MAIL_SCROLLBODY_PAGEDOWN, nAct < nBottom ));
                 }
@@ -327,7 +327,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
                 if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
-                    (SID_DOCUMENT_MERGE == nWhich && pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength()))
+                    (SID_DOCUMENT_MERGE == nWhich && m_pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength()))
                     rSet.DisableItem(nWhich);
             break;
             case  SID_VIEW_DATA_SOURCE_BROWSER:
@@ -338,20 +338,20 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_READONLY_MODE:
                 rSet.Put(SfxBoolItem(nWhich,
-                    pWrtShell->HasReadonlySel()||GetDocShell()->IsReadOnly()));
+                    m_pWrtShell->HasReadonlySel()||GetDocShell()->IsReadOnly()));
             break;
             case SID_IMAGE_ORIENTATION:
             {
                 SfxImageItem aImageItem(nWhich);
-                if(pWrtShell->IsInVerticalText())
+                if(m_pWrtShell->IsInVerticalText())
                     aImageItem.SetRotation( 2700 );
-                if(pWrtShell->IsInRightToLeftText())
+                if(m_pWrtShell->IsInRightToLeftText())
                     aImageItem.SetMirrored( sal_True );
                 rSet.Put(aImageItem);
             }
             break;
             case FN_INSERT_FIELD_DATA_ONLY :
-                if(!bInMailMerge && !GetViewFrame()->HasChildWindow(nWhich))
+                if(!m_bInMailMerge && !GetViewFrame()->HasChildWindow(nWhich))
                     rSet.DisableItem(nWhich);
             break;
             case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
@@ -372,11 +372,11 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_ALIGN_ANY_HDEFAULT :
             case SID_ALIGN_ANY_VDEFAULT :
             {
-                if( !pShell )
+                if( !m_pShell )
                     SelectShell();
                 sal_uInt16 nAlias = 0;
                 bool bDraw = false;
-                if( nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
+                if( m_nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
                 {
                     switch( nWhich )
                     {
@@ -389,7 +389,7 @@ void SwView::GetState(SfxItemSet &rSet)
                         case SID_ALIGN_ANY_BOTTOM   :   nAlias = FN_TABLE_VERT_BOTTOM; break;
                     }
                 }
-                else if(nSelectionType & (nsSelectionType::SEL_DRW))
+                else if(m_nSelectionType & (nsSelectionType::SEL_DRW))
                 {
                     //the draw shell cannot provide a status per item - only one for SID_OBJECT_ALIGN
                     if(nWhich != SID_ALIGN_ANY_JUSTIFIED)
@@ -441,7 +441,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
                 rSet.DisableItem( nWhich );
             else
             {
-                SfxAllEnumItem aEnum(SID_INSERT_DRAW, nDrawSfxId);
+                SfxAllEnumItem aEnum(SID_INSERT_DRAW, m_nDrawSfxId);
                 if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
                 {
                     aEnum.DisableValue( SID_DRAW_CAPTION_VERTICAL );
@@ -458,13 +458,13 @@ void SwView::GetDrawState(SfxItemSet &rSet)
 
         case SID_DRAW_TEXT_MARQUEE:
             if (::GetHtmlMode(GetDocShell()) & HTMLMODE_SOME_STYLES)
-                rSet.Put( SfxBoolItem(nWhich, nDrawSfxId == nWhich));
+                rSet.Put( SfxBoolItem(nWhich, m_nDrawSfxId == nWhich));
             else
                 rSet.DisableItem(nWhich);
             break;
         case SID_OBJECT_SELECT:
-            rSet.Put( SfxBoolItem(nWhich, nDrawSfxId == nWhich ||
-                                          nFormSfxId == nWhich));
+            rSet.Put( SfxBoolItem(nWhich, m_nDrawSfxId == nWhich ||
+                                          m_nFormSfxId == nWhich));
             break;
 
         case SID_FONTWORK_GALLERY_FLOATER :
@@ -484,7 +484,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
             if ( bWeb )
                 rSet.DisableItem( nWhich );
             else
-                rSet.Put(SfxStringItem(nWhich, aCurrShapeEnumCommand[ nWhich - SID_DRAWTBX_CS_BASIC ] ));
+                rSet.Put(SfxStringItem(nWhich, m_aCurrShapeEnumCommand[ nWhich - SID_DRAWTBX_CS_BASIC ] ));
         }
         break;
 
@@ -496,7 +496,7 @@ sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
     sal_Bool bRet = sal_False;
     switch(nFeature)
     {
-        case CHILDWIN_LABEL     : bRet = pWrtShell->IsLabelDoc(); break;
+        case CHILDWIN_LABEL     : bRet = m_pWrtShell->IsLabelDoc(); break;
         case CHILDWIN_MAILMERGE : bRet = 0 != GetMailMergeConfigItem(); break;
     }
     return bRet;

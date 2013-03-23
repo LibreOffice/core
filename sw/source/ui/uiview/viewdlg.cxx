@@ -53,17 +53,17 @@ void SwView::ExecDlg(SfxRequest &rReq)
             if ( pItem )
             {
                 sal_uInt16 nValue = ((SfxUInt16Item *)pItem)->GetValue();
-                sal_uInt16 nOldValue = pWrtShell->GetPageOffset();
+                sal_uInt16 nOldValue = m_pWrtShell->GetPageOffset();
                 sal_uInt16 nPage, nLogPage;
-                pWrtShell->GetPageNum( nPage, nLogPage,
-                   pWrtShell->IsCrsrVisible(), sal_False);
+                m_pWrtShell->GetPageNum( nPage, nLogPage,
+                   m_pWrtShell->IsCrsrVisible(), sal_False);
 
                 if(nValue != nOldValue || nValue != nLogPage)
                 {
                     if(!nOldValue)
-                        pWrtShell->SetNewPageOffset( nValue );
+                        m_pWrtShell->SetNewPageOffset( nValue );
                     else
-                        pWrtShell->SetPageOffset( nValue );
+                        m_pWrtShell->SetPageOffset( nValue );
                 }
             }
         }

@@ -53,8 +53,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
 
-sal_uInt16  SwView::nMoveType = NID_PGE;
-sal_Int32 SwView::nActMark = 0;
+sal_uInt16  SwView::m_nMoveType = NID_PGE;
+sal_Int32 SwView::m_nActMark = 0;
 
 
 #define VIEW_IMAGECOLOR COL_LIGHTBLUE
@@ -64,39 +64,39 @@ using namespace ::com::sun::star::frame;
 
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
 {
-    bool const bCrsrIsVisible(pWrtShell->IsCrsrVisible());
+    bool const bCrsrIsVisible(m_pWrtShell->IsCrsrVisible());
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
     // fdo#40465 force the cursor to stay in view whilst zooming
     if (bCrsrIsVisible)
-        pWrtShell->ShowCrsr();
+        m_pWrtShell->ShowCrsr();
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                         short nFactor, sal_Bool bViewOnly )
 {
-    sal_Bool bUnLockView = !pWrtShell->IsViewLocked();
-    pWrtShell->LockView( sal_True );
-    pWrtShell->LockPaint();
+    sal_Bool bUnLockView = !m_pWrtShell->IsViewLocked();
+    m_pWrtShell->LockView( sal_True );
+    m_pWrtShell->LockPaint();
 
     {
-    SwActContext aActContext(pWrtShell);
+    SwActContext aActContext(m_pWrtShell);
 
     long nFac = nFactor;
 
     sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
     SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
-    const SwPageDesc &rDesc = pWrtShell->GetPageDesc( pWrtShell->GetCurPageDesc() );
+    const SwPageDesc &rDesc = m_pWrtShell->GetPageDesc( m_pWrtShell->GetCurPageDesc() );
     const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
-    const SwViewOption *pOpt = pWrtShell->GetViewOptions();
+    const SwViewOption *pOpt = m_pWrtShell->GetViewOptions();
     long lLeftMargin = 0;
 
     if( eZoomType != SVX_ZOOM_PERCENT )
     {
         const bool bAutomaticViewLayout = 0 == pOpt->GetViewLayoutColumns();
 
-        const SwRect aPageRect( pWrtShell->GetAnyCurRect( RECT_PAGE_CALC ) );
-        const SwRect aRootRect( pWrtShell->GetAnyCurRect( RECT_PAGES_AREA ) );
+        const SwRect aPageRect( m_pWrtShell->GetAnyCurRect( RECT_PAGE_CALC ) );
+        const SwRect aRootRect( m_pWrtShell->GetAnyCurRect( RECT_PAGES_AREA ) );
         Size aPageSize( aPageRect.SSize() );
         Size aRootSize( aRootRect.SSize() );
 
@@ -164,20 +164,20 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         {
             aOpt.SetZoom    ( sal_uInt16(nFac) );
             aOpt.SetReadonly(pOpt->IsReadonly());
-            pWrtShell->ApplyViewOptions( aOpt );
+            m_pWrtShell->ApplyViewOptions( aOpt );
         }
         if ( eZoomType != SVX_ZOOM_PERCENT )
         {
             Point aPos;
 
             if ( eZoomType == SVX_ZOOM_WHOLEPAGE )
-                aPos.Y() = pWrtShell->GetAnyCurRect(RECT_PAGE).Top() - DOCUMENTBORDER;
+                aPos.Y() = m_pWrtShell->GetAnyCurRect(RECT_PAGE).Top() - DOCUMENTBORDER;
             else
             {
                 //sicherstellen, dass sich der Cursor im sichtbaren
                 //Bereich befindet, damit nur 1x gescrollt wird
                 aPos.X() = lLeftMargin;
-                const SwRect &rCharRect = pWrtShell->GetCharRect();
+                const SwRect &rCharRect = m_pWrtShell->GetCharRect();
                 if ( rCharRect.Top() > GetVisArea().Bottom() ||
                     rCharRect.Bottom() < aPos.Y() )
                     aPos.Y() = rCharRect.Top() - rCharRect.Height();
@@ -188,36 +188,36 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         }
         // OS: Notloesung - in CalcVisArea wird u.U. wieder SetZoom gerufen und
         // dann werden falsche Werte eingestellt
-        ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
+        ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
         CalcVisArea( rEditSize );   //fuer das Neuberechnen des sichtbaren Bereiches
     }
     else if ( sal_uInt16(nFac) != pOpt->GetZoom() )
     {
         aOpt.SetZoom    ( sal_uInt16(nFac) );
-        pWrtShell->ApplyViewOptions( aOpt );
+        m_pWrtShell->ApplyViewOptions( aOpt );
     }
 
     const Fraction aFrac( nFac, 100 );
-    pVRuler->SetZoom( aFrac );
-    pVRuler->ForceUpdate();
-    pHRuler->SetZoom( aFrac );
-    pHRuler->ForceUpdate();
-    ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
+    m_pVRuler->SetZoom( aFrac );
+    m_pVRuler->ForceUpdate();
+    m_pHRuler->SetZoom( aFrac );
+    m_pHRuler->ForceUpdate();
+    ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
     }
-    pWrtShell->UnlockPaint();
+    m_pWrtShell->UnlockPaint();
     if( bUnLockView )
-        pWrtShell->LockView( sal_False );
+        m_pWrtShell->LockView( sal_False );
 }
 
 void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewOnly )
 {
-    const sal_Bool bUnLockView = !pWrtShell->IsViewLocked();
-    pWrtShell->LockView( sal_True );
-    pWrtShell->LockPaint();
+    const sal_Bool bUnLockView = !m_pWrtShell->IsViewLocked();
+    m_pWrtShell->LockView( sal_True );
+    m_pWrtShell->LockPaint();
 
     {
 
-    SwActContext aActContext(pWrtShell);
+    SwActContext aActContext(m_pWrtShell);
 
     if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
@@ -238,7 +238,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
         }
     }
 
-    const SwViewOption *pOpt = pWrtShell->GetViewOptions();
+    const SwViewOption *pOpt = m_pWrtShell->GetViewOptions();
 
     if ( nColumns  != pOpt->GetViewLayoutColumns() ||
          bBookMode != pOpt->IsViewLayoutBookMode() )
@@ -246,17 +246,17 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
         SwViewOption aOpt( *pOpt );
         aOpt.SetViewLayoutColumns( nColumns );
         aOpt.SetViewLayoutBookMode( bBookMode );
-        pWrtShell->ApplyViewOptions( aOpt );
+        m_pWrtShell->ApplyViewOptions( aOpt );
     }
 
-    pVRuler->ForceUpdate();
-    pHRuler->ForceUpdate();
+    m_pVRuler->ForceUpdate();
+    m_pHRuler->ForceUpdate();
 
     }
 
-    pWrtShell->UnlockPaint();
+    m_pWrtShell->UnlockPaint();
     if( bUnLockView )
-        pWrtShell->LockView( sal_False );
+        m_pWrtShell->LockView( sal_False );
 
     SfxBindings& rBnd = GetViewFrame()->GetBindings();
     rBnd.Invalidate( SID_ATTR_VIEWLAYOUT );
@@ -278,15 +278,15 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
         switch ( pVclEvent->GetId() )
         {
             case VCLEVENT_WINDOW_HIDE:
-                if( pChildWin == pHScrollbar )
+                if( pChildWin == m_pHScrollbar )
                     ShowHScrollbar( sal_False );
-                else if( pChildWin == pVScrollbar )
+                else if( pChildWin == m_pVScrollbar )
                     ShowVScrollbar( sal_False );
                 break;
             case VCLEVENT_WINDOW_SHOW:
-                if( pChildWin == pHScrollbar )
+                if( pChildWin == m_pHScrollbar )
                     ShowHScrollbar( sal_True );
-                else if( pChildWin == pVScrollbar )
+                else if( pChildWin == m_pVScrollbar )
                     ShowVScrollbar( sal_True );
                 break;
         }
@@ -298,12 +298,12 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
 int SwView::_CreateScrollbar( sal_Bool bHori )
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
-    SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
+    SwScrollbar** ppScrollbar = bHori ? &m_pHScrollbar : &m_pVScrollbar;
 
     OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" );
 
     if( !bHori )
-        CreatePageButtons( !bShowAtResize );
+        CreatePageButtons( !m_bShowAtResize );
 
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
     UpdateScrollbars();
@@ -320,7 +320,7 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
 
     // Scrollbar muss nochmals getestet werden, da im InvalidateBorder u.U. der
     // Scrollbar wieder geloescht wurde
-    if ( !bShowAtResize && (*ppScrollbar))
+    if ( !m_bShowAtResize && (*ppScrollbar))
         (*ppScrollbar)->ExtendedShow();
 
     return 1;
@@ -329,17 +329,17 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
 void SwView::CreatePageButtons(sal_Bool bShow)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
-    pPageUpBtn      = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), sal_True );
-    pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
-    pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), sal_False );
-    pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
+    m_pPageUpBtn      = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), sal_True );
+    m_pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
+    m_pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), sal_False );
+    m_pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
     Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
-    pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
-    pNaviBtn->SetHelpId(HID_SCRL_NAVI);
+    m_pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
+    m_pNaviBtn->SetHelpId(HID_SCRL_NAVI);
     Link aLk( LINK( this, SwView, BtnPage ) );
-    pPageUpBtn->SetClickHdl( aLk );
-    pPageDownBtn->SetClickHdl( aLk );
-    if(nMoveType != NID_PGE)
+    m_pPageUpBtn->SetClickHdl( aLk );
+    m_pPageDownBtn->SetClickHdl( aLk );
+    if(m_nMoveType != NID_PGE)
     {
         Color aColor(VIEW_IMAGECOLOR);
         SetImageButtonColor(aColor);
@@ -347,9 +347,9 @@ void SwView::CreatePageButtons(sal_Bool bShow)
 
     if(bShow)
     {
-        pPageUpBtn->Show();
-        pPageDownBtn->Show();
-        pNaviBtn->Show();
+        m_pPageUpBtn->Show();
+        m_pPageDownBtn->Show();
+        m_pNaviBtn->Show();
     }
 };
 
@@ -359,7 +359,7 @@ void SwView::CreatePageButtons(sal_Bool bShow)
 IMPL_LINK( SwView, BtnPage, Button *, pButton )
 {
     // #i75416# move the execution of the search to an asynchronously called static link
-    bool* pbNext = new bool( (pButton == pPageDownBtn) );
+    bool* pbNext = new bool( (pButton == m_pPageDownBtn) );
     Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
     return 0;
 }
@@ -370,7 +370,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         return 0;
     bool bNext = *pbNext;
     SwWrtShell& rSh = pThis->GetWrtShell();
-    switch( nMoveType )
+    switch( m_nMoveType )
     {
         case NID_PGE:
             bNext ? pThis->PhyPageDown() : pThis->PhyPageUp();
@@ -387,9 +387,9 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_OLE:
         {
             sal_uInt16 eType = GOTOOBJ_FLY_FRM;
-            if(nMoveType == NID_GRF)
+            if(m_nMoveType == NID_GRF)
                 eType = GOTOOBJ_FLY_GRF;
-            else if(nMoveType == NID_OLE)
+            else if(m_nMoveType == NID_OLE)
                 eType = GOTOOBJ_FLY_OLE;
             sal_Bool bSuccess = bNext ?
                     rSh.GotoNextFly(eType) :
@@ -404,7 +404,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_DRW :
         case NID_CTRL:
             rSh.GotoObj(bNext,
-                    nMoveType == NID_DRW ?
+                    m_nMoveType == NID_DRW ?
                         GOTOOBJ_DRAW_SIMPLE :
                         GOTOOBJ_DRAW_CONTROL);
         break;
@@ -457,17 +457,17 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             {
                 if(bNext)
                 {
-                    nActMark++;
-                    if (nActMark >= MAX_MARKS || nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
-                        nActMark = 0;
+                    m_nActMark++;
+                    if (m_nActMark >= MAX_MARKS || m_nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                        m_nActMark = 0;
                 }
                 else
                 {
-                    nActMark--;
-                    if (nActMark < 0 || nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
-                        nActMark = vNavMarks.size()-1;
+                    m_nActMark--;
+                    if (m_nActMark < 0 || m_nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                        m_nActMark = vNavMarks.size()-1;
                 }
-                rSh.GotoMark(vNavMarks[nActMark]);
+                rSh.GotoMark(vNavMarks[m_nActMark]);
             }
         }
         break;
@@ -485,15 +485,15 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         }
         break;
         case NID_SRCH_REP:
-        if(pSrchItem)
+        if(m_pSrchItem)
         {
-            sal_Bool bBackward = pSrchItem->GetBackward();
+            sal_Bool bBackward = m_pSrchItem->GetBackward();
             if(rSh.HasSelection() && !bNext == rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
-            pSrchItem->SetBackward(!bNext);
+            m_pSrchItem->SetBackward(!bNext);
             SfxRequest aReq(FN_REPEAT_SEARCH, SFX_CALLMODE_SLOT, pThis->GetPool());
             pThis->ExecSearch(aReq);
-            pSrchItem->SetBackward(bBackward);
+            m_pSrchItem->SetBackward(bBackward);
         }
         break;
         case NID_INDEX_ENTRY:
@@ -508,69 +508,69 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             rSh.GotoNxtPrvTblFormula( bNext, sal_True );
             break;
     }
-    pThis->pEditWin->GrabFocus();
+    pThis->m_pEditWin->GrabFocus();
     delete pbNext;
     return 0;
 }
 
 int SwView::CreateTab()
 {
-    pHRuler->SetActive(GetFrame() && IsActive());
+    m_pHRuler->SetActive(GetFrame() && IsActive());
 
-    pHRuler->Show();
+    m_pHRuler->Show();
     InvalidateBorder();
     return 1;
 }
 
 int SwView::KillTab()
 {
-    pHRuler->Hide();
+    m_pHRuler->Hide();
     InvalidateBorder();
     return 1;
 }
 
 void SwView::ChangeTabMetric( FieldUnit eUnit )
 {
-    if(pHRuler->GetUnit() != eUnit )
+    if(m_pHRuler->GetUnit() != eUnit )
     {
-        pHRuler->SetUnit( eUnit );
-        pHRuler->Invalidate();
+        m_pHRuler->SetUnit( eUnit );
+        m_pHRuler->Invalidate();
     }
 }
 
 void SwView::ChangeVLinealMetric( FieldUnit eUnit )
 {
-    if(pVRuler->GetUnit() != eUnit)
+    if(m_pVRuler->GetUnit() != eUnit)
     {
-        pVRuler->SetUnit( eUnit );
-        pVRuler->Invalidate();
+        m_pVRuler->SetUnit( eUnit );
+        m_pVRuler->Invalidate();
     }
 }
 
 void SwView::GetVLinealMetric(FieldUnit& eToFill) const
 {
-    eToFill = pVRuler->GetUnit();
+    eToFill = m_pVRuler->GetUnit();
 }
 
 void SwView::GetHLinealMetric(FieldUnit& eToFill) const
 {
-    eToFill = pHRuler->GetUnit();
+    eToFill = m_pHRuler->GetUnit();
 }
 
 int SwView::CreateVLineal()
 {
-    pHRuler->SetBorderPos( pVRuler->GetSizePixel().Width()-1 );
+    m_pHRuler->SetBorderPos( m_pVRuler->GetSizePixel().Width()-1 );
 
-    pVRuler->SetActive(GetFrame() && IsActive());
-    pVRuler->Show();
+    m_pVRuler->SetActive(GetFrame() && IsActive());
+    m_pVRuler->Show();
     InvalidateBorder();
     return 1;
 }
 
 int SwView::KillVLineal()
 {
-    pVRuler->Hide();
-    pHRuler->SetBorderPos( 0 );
+    m_pVRuler->Hide();
+    m_pHRuler->SetBorderPos( 0 );
     InvalidateBorder();
     return 1;
 }
@@ -601,14 +601,14 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
 
 sal_uInt16 SwView::GetMoveType()
 {
-    return nMoveType;
+    return m_nMoveType;
 }
 
 void SwView::SetMoveType(sal_uInt16 nSet)
 {
-    sal_Bool bLastPage = nMoveType == NID_PGE;
-    nMoveType = nSet;
-    sal_Bool bNewPage = nMoveType == NID_PGE;
+    sal_Bool bLastPage = m_nMoveType == NID_PGE;
+    m_nMoveType = nSet;
+    sal_Bool bNewPage = m_nMoveType == NID_PGE;
     if(bNewPage != bLastPage)
     {
         Color aColor(bNewPage ? COL_BLACK : VIEW_IMAGECOLOR);
@@ -624,59 +624,59 @@ void SwView::SetMoveType(sal_uInt16 nSet)
 
 void SwView::SetActMark(sal_Int32 nSet)
 {
-    nActMark = nSet;
+    m_nActMark = nSet;
 }
 
 void SwView::SetImageButtonColor(Color& rColor)
 {
-    if(pPageUpBtn)
+    if(m_pPageUpBtn)
     {
-        pPageUpBtn->SetControlForeground(rColor);
-        pPageDownBtn->SetControlForeground(rColor);
+        m_pPageUpBtn->SetControlForeground(rColor);
+        m_pPageDownBtn->SetControlForeground(rColor);
     }
 }
 
 void SwView::ShowHScrollbar(sal_Bool bShow)
 {
-    OSL_ENSURE(pHScrollbar, "Scrollbar invalid");
-    pHScrollbar->ExtendedShow(bShow);
+    OSL_ENSURE(m_pHScrollbar, "Scrollbar invalid");
+    m_pHScrollbar->ExtendedShow(bShow);
 }
 
 sal_Bool SwView::IsHScrollbarVisible()const
 {
-    OSL_ENSURE(pHScrollbar, "Scrollbar invalid");
-    return pHScrollbar->IsVisible( sal_False ) || pHScrollbar->IsAuto();
+    OSL_ENSURE(m_pHScrollbar, "Scrollbar invalid");
+    return m_pHScrollbar->IsVisible( sal_False ) || m_pHScrollbar->IsAuto();
 }
 
 void SwView::ShowVScrollbar(sal_Bool bShow)
 {
-    OSL_ENSURE(pVScrollbar, "Scrollbar invalid");
-    pVScrollbar->ExtendedShow(bShow);
-    pPageUpBtn->Show(bShow);
-    pPageDownBtn->Show(bShow);
-    pNaviBtn->Show(bShow);
+    OSL_ENSURE(m_pVScrollbar, "Scrollbar invalid");
+    m_pVScrollbar->ExtendedShow(bShow);
+    m_pPageUpBtn->Show(bShow);
+    m_pPageDownBtn->Show(bShow);
+    m_pNaviBtn->Show(bShow);
 }
 
 sal_Bool SwView::IsVScrollbarVisible()const
 {
-    OSL_ENSURE(pVScrollbar, "Scrollbar invalid");
-    return pVScrollbar->IsVisible( sal_False );
+    OSL_ENSURE(m_pVScrollbar, "Scrollbar invalid");
+    return m_pVScrollbar->IsVisible( sal_False );
 }
 
 void SwView::EnableHScrollbar(bool bEnable)
 {
-    if (mbHScrollbarEnabled != bEnable)
+    if (m_bHScrollbarEnabled != bEnable)
     {
-        mbHScrollbarEnabled = bEnable;
+        m_bHScrollbarEnabled = bEnable;
         InvalidateBorder();
     }
 }
 
 void SwView::EnableVScrollbar(bool bEnable)
 {
-    if (mbVScrollbarEnabled != bEnable)
+    if (m_bVScrollbarEnabled != bEnable)
     {
-        mbVScrollbarEnabled = bEnable;
+        m_bVScrollbarEnabled = bEnable;
         InvalidateBorder();
     }
 }

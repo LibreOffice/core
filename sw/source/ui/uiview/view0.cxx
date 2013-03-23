@@ -121,43 +121,43 @@ TYPEINIT1(SwView,SfxViewShell)
 
 ShellModes  SwView::GetShellMode()
 {
-    return pViewImpl->GetShellMode();
+    return m_pViewImpl->GetShellMode();
 }
 
 view::XSelectionSupplier* SwView::GetUNOObject()
 {
-    return pViewImpl->GetUNOObject();
+    return m_pViewImpl->GetUNOObject();
 }
 
 void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
-    pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
+    m_pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
     //to enable the right state of the selection cursor in readonly documents
     if(GetDocShell()->IsReadOnly())
-        pWrtShell->ShowCrsr();
+        m_pWrtShell->ShowCrsr();
 
 }
 
 void   SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
                 sal_uInt16 nRestart, sal_Bool bIsSource)
 {
-    pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
+    m_pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
     UIFeatureChanged();
 }
 
 SwMailMergeConfigItem*  SwView::GetMailMergeConfigItem()
 {
-    return pViewImpl->GetMailMergeConfigItem();
+    return m_pViewImpl->GetMailMergeConfigItem();
 }
 
 sal_uInt16 SwView::GetMailMergeRestartPage() const
 {
-    return pViewImpl->GetMailMergeRestartPage();
+    return m_pViewImpl->GetMailMergeRestartPage();
 }
 
 sal_Bool SwView::IsMailMergeSourceView() const
 {
-    return pViewImpl->IsMailMergeSourceView();
+    return m_pViewImpl->IsMailMergeSourceView();
 }
 
 static sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )

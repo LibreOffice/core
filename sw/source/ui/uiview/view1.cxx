@@ -45,8 +45,8 @@ extern int bDocSzUpdated;
 void SwView::Activate(sal_Bool bMDIActivate)
 {
     // fdo#40438 Update the layout to make sure everything is correct before showing the content
-    pWrtShell->StartAction();
-    pWrtShell->EndAction( sal_True );
+    m_pWrtShell->StartAction();
+    m_pWrtShell->EndAction( sal_True );
 
     // aktuelle View anmelden an der DocShell
     // die View bleibt solange an der DocShell
@@ -60,28 +60,28 @@ void SwView::Activate(sal_Bool bMDIActivate)
 
     // Dokumentgroesse hat sich geaendert
     if(!bDocSzUpdated)
-        DocSzChgd(aDocSz);
+        DocSzChgd(m_aDocSz);
 
     // make selection visible
-    if(bMakeSelectionVisible)
+    if(m_bMakeSelectionVisible)
     {
-        pWrtShell->MakeSelVisible();
-        bMakeSelectionVisible = sal_False;
+        m_pWrtShell->MakeSelVisible();
+        m_bMakeSelectionVisible = sal_False;
     }
-    pHRuler->SetActive( sal_True );
-    pVRuler->SetActive( sal_True );
+    m_pHRuler->SetActive( sal_True );
+    m_pVRuler->SetActive( sal_True );
 
     if ( bMDIActivate )
     {
-        pWrtShell->ShGetFcs(sal_False);     // Selektionen sichtbar
+        m_pWrtShell->ShGetFcs(sal_False);     // Selektionen sichtbar
 
-        if( sSwViewData.Len() )
+        if( m_sSwViewData.Len() )
         {
-            ReadUserData( sSwViewData, sal_False );
-            sSwViewData.Erase();
+            ReadUserData( m_sSwViewData, sal_False );
+            m_sSwViewData.Erase();
         }
 
-        AttrChangedNotify(pWrtShell);
+        AttrChangedNotify(m_pWrtShell);
 
         // Flddlg ggf neu initialisieren (z.B. fuer TYP_SETVAR)
         sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
@@ -100,18 +100,18 @@ void SwView::Activate(sal_Bool bMDIActivate)
         nId = SwInsertIdxMarkWrapper::GetChildWindowId();
         SwInsertIdxMarkWrapper *pIdxMrk = (SwInsertIdxMarkWrapper*)pVFrame->GetChildWindow(nId);
         if (pIdxMrk)
-            pIdxMrk->ReInitDlg(*pWrtShell);
+            pIdxMrk->ReInitDlg(*m_pWrtShell);
 
         // reinit AuthMarkDlg
         nId = SwInsertAuthMarkWrapper::GetChildWindowId();
         SwInsertAuthMarkWrapper *pAuthMrk = (SwInsertAuthMarkWrapper*)pVFrame->
                                                                 GetChildWindow(nId);
         if (pAuthMrk)
-            pAuthMrk->ReInitDlg(*pWrtShell);
+            pAuthMrk->ReInitDlg(*m_pWrtShell);
     }
     else
         //Wenigstens das Notify rufen (vorsichtshalber wegen der SlotFilter
-        AttrChangedNotify(pWrtShell);
+        AttrChangedNotify(m_pWrtShell);
 
     SfxViewShell::Activate(bMDIActivate);
 }
@@ -125,10 +125,10 @@ void SwView::Deactivate(sal_Bool bMDIActivate)
 
     if( bMDIActivate )
     {
-        pWrtShell->ShLooseFcs();    // Selektionen unsichtbar
+        m_pWrtShell->ShLooseFcs();    // Selektionen unsichtbar
 
-        pHRuler->SetActive( sal_False );
-        pVRuler->SetActive( sal_False );
+        m_pHRuler->SetActive( sal_False );
+        m_pVRuler->SetActive( sal_False );
     }
     SfxViewShell::Deactivate(bMDIActivate);
 }
@@ -140,12 +140,12 @@ void SwView::MarginChanged()
 
 void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
 {
-    if(!pFormatClipboard)
+    if(!m_pFormatClipboard)
         return;
 
-    if( pFormatClipboard->HasContent() )
+    if( m_pFormatClipboard->HasContent() )
     {
-        pFormatClipboard->Erase();
+        m_pFormatClipboard->Erase();
 
         SwApplyTemplate aTemplate;
         GetEditWin().SetApplyTemplate(aTemplate);
@@ -160,10 +160,10 @@ void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
                                     SID_FORMATPAINTBRUSH)).GetValue());
         }
 
-        pFormatClipboard->Copy( GetWrtShell(), GetPool(), bPersistentCopy );
+        m_pFormatClipboard->Copy( GetWrtShell(), GetPool(), bPersistentCopy );
 
         SwApplyTemplate aTemplate;
-        aTemplate.pFormatClipboard = pFormatClipboard;
+        aTemplate.m_pFormatClipboard = m_pFormatClipboard;
         GetEditWin().SetApplyTemplate(aTemplate);
     }
     GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
@@ -171,14 +171,14 @@ void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
 
 void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
 {
-    if(!pFormatClipboard)
+    if(!m_pFormatClipboard)
         return;
 
-    bool bHasContent = pFormatClipboard && pFormatClipboard->HasContent();
+    bool bHasContent = m_pFormatClipboard && m_pFormatClipboard->HasContent();
     rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH, bHasContent));
     if(!bHasContent)
     {
-        if( !pFormatClipboard->CanCopyThisType( GetWrtShell().GetSelectionType() ) )
+        if( !m_pFormatClipboard->CanCopyThisType( GetWrtShell().GetSelectionType() ) )
             rSet.DisableItem( SID_FORMATPAINTBRUSH );
     }
 }
