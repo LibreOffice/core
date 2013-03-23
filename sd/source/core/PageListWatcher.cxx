@@ -32,6 +32,7 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
     maPageVectorStandard.clear();
     maPageVectorNotes.clear();
     mpHandoutPage = 0L;
+    mnVisiblePageCount = -1;
 
     // build up vectors again
     const sal_uInt32 nPageCount(ImpGetPageCount());
@@ -46,6 +47,7 @@ void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
             case PK_STANDARD:
             {
                 maPageVectorStandard.push_back(pCandidate);
+                if (!pCandidate->IsExcluded()) mnVisiblePageCount++;
                 break;
             }
             case PK_NOTES:
@@ -165,6 +167,22 @@ sal_uInt32 ImpPageListWatcher::GetSdPageCount(PageKind ePgKind)
     }
 
     return nRetval;
+}
+
+
+sal_uInt32 ImpPageListWatcher::GetVisibleSdPageCount()
+{
+    sal_uInt32 nVisiblePageCount = 0;
+
+    // build up vectors again
+    const sal_uInt32 nPageCount(ImpGetPageCount());
+
+    for(sal_uInt32 a(0L); a < nPageCount; a++)
+    {
+        SdPage* pCandidate = ImpGetPage(a);
+        if ((pCandidate->GetPageKind() == PK_STANDARD)&&(!pCandidate->IsExcluded())) nVisiblePageCount++;
+    }
+    return nVisiblePageCount;
 }
 
 //////////////////////////////////////////////////////////////////////////////

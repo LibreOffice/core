@@ -815,6 +815,8 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     SdPage* pPage      = NULL;
     SdPage* pFirstPage = NULL;
     sal_uInt16 nFirstPage;
+    sal_Int32 nPageCount;
+    sal_Int32 nActivePageCount;
     sal_uInt16 nSelectedPages = mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
     OUStringBuffer aPageStr;
     String aLayoutStr;
@@ -831,7 +833,14 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
         {
             pPage = pDescriptor->GetPage();
             nFirstPage = (pPage->GetPageNum()/2) + 1;
-            aPageStr.append(" ").append(static_cast<sal_Int32>(nFirstPage), 10).append(" / ").append(mrSlideSorter.GetModel().GetPageCount(), 10);
+            nPageCount = mrSlideSorter.GetModel().GetPageCount();
+            nActivePageCount = static_cast<sal_Int32>(mrSlideSorter.GetModel().GetDocument()->GetActiveSdPageCount());
+
+            aPageStr.append(" ").append(static_cast<sal_Int32>(nFirstPage), 10).append(" / ").append(nPageCount, 10);
+            if (nPageCount != nActivePageCount)
+            {
+                aPageStr.append(" (").append(nActivePageCount, 10).append(")");
+            }
         }
       rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr.makeStringAndClear() ) );
     }

@@ -822,7 +822,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
                                    SID_ATTR_SIZE, SID_ATTR_SIZE,
                                    0L);
 
-//        GetStatusBarState(aSet); not fast by pressed modify key!!
+        GetStatusBarState(aSet);
 
         aSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
 

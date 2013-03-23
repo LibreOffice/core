@@ -699,12 +699,20 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Display of current page and layer.
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) )
     {
+        sal_Int32 nPageCount = sal_Int32(GetDoc()->GetSdPageCount(mePageKind));
+        sal_Int32 nActivePageCount = sal_Int32(GetDoc()->GetActiveSdPageCount());
         // Always show the slide/page number.
         OUString aOUString = SD_RESSTR(STR_SD_PAGE);
         aOUString += " ";
         aOUString += OUString::valueOf( sal_Int32(maTabControl.GetCurPageId()) );
         aOUString += " / " ;
-        aOUString += OUString::valueOf( sal_Int32(GetDoc()->GetSdPageCount(mePageKind)) );
+        aOUString += OUString::valueOf( nPageCount );
+        if (nPageCount != nActivePageCount)
+        {
+            aOUString += " (";
+            aOUString += OUString::valueOf( nActivePageCount );
+            aOUString += ")";
+        }
 
         // If in layer mode additionally show the layer that contains all
         // selected shapes of the page.  If the shapes are distributed on
