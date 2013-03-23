@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+xo\u003d",
+        "filename": "vcl/win/source/gdi/salgdi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-23T17:10:23Z",
+      "side": 1,
+      "message": "S3 graphics card is meant here",
+      "revId": "fbaf3b66699da0b48739f3af575e5dc33fe49208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
