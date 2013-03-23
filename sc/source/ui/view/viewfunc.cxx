@@ -817,7 +817,7 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
         // no selection -> cursor
 
         nScript = pDoc->GetScriptType( GetViewData()->GetCurX(),
-                            GetViewData()->GetCurY(), GetViewData()->GetTabNo(), NULL );
+                            GetViewData()->GetCurY(), GetViewData()->GetTabNo());
     }
     else
     {
@@ -828,12 +828,10 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
         {
             ScRange aRange = *aRanges[i];
             ScCellIterator aIter( pDoc, aRange );
-            ScBaseCell* pCell = aIter.GetFirst();
-            while ( pCell )
+            for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 nScript |= pDoc->GetScriptType(
-                    aIter.GetPos().Col(), aIter.GetPos().Row(), aIter.GetPos().Tab(), pCell);
-                pCell = aIter.GetNext();
+                    aIter.GetPos().Col(), aIter.GetPos().Row(), aIter.GetPos().Tab());
             }
         }
     }

@@ -114,18 +114,14 @@ sal_uInt8 ScDocument::GetStringScriptType( const rtl::OUString& rString )
     return nRet;
 }
 
-sal_uInt8 ScDocument::GetCellScriptType( const ScAddress& rPos, ScBaseCell* pCell, sal_uLong nNumberFormat )
+sal_uInt8 ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat )
 {
-    if ( !pCell )
-        return 0;       // empty
-
     sal_uInt8 nStored = GetScriptType(rPos);
     if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
         return nStored;                             // use stored value
 
-    rtl::OUString aStr;
     Color* pColor;
-    ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *xPoolHelper->GetFormTable() );
+    OUString aStr = ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *xPoolHelper->GetFormTable());
 
     sal_uInt8 nRet = GetStringScriptType( aStr );
 
@@ -134,7 +130,7 @@ sal_uInt8 ScDocument::GetCellScriptType( const ScAddress& rPos, ScBaseCell* pCel
     return nRet;
 }
 
-sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell )
+sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     // if script type is set, don't have to get number formats
 
@@ -153,7 +149,7 @@ sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseC
 
     sal_uLong nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );
 
-    return GetCellScriptType(aPos, pCell, nFormat);
+    return GetCellScriptType(aPos, nFormat);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

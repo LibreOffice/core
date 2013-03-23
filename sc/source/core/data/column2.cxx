@@ -214,7 +214,7 @@ long ScColumn::GetNeededSize(
                 nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
         }
 
-        sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
+        sal_uInt8 nScript = pDocument->GetScriptType(nCol, nRow, nTab);
         if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
         //  also call SetFont for edit cells, because bGetFont may be set only once
@@ -603,7 +603,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         {
             SCROW nRow = maItems[nIndex].nRow;
 
-            sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, maItems[nIndex].pCell );
+            sal_uInt8 nScript = pDocument->GetScriptType(nCol, nRow, nTab);
             if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
             const ScPatternAttr* pPattern = GetPattern( nRow );
@@ -772,7 +772,7 @@ void ScColumn::GetOptimalHeight(
                     Search(nStart,nIndex);
                     while ( nIndex < maItems.size() && (nRow=maItems[nIndex].nRow) <= nEnd )
                     {
-                        sal_uInt8 nScript = pDocument->GetScriptType( nCol, nRow, nTab, maItems[nIndex].pCell );
+                        sal_uInt8 nScript = pDocument->GetScriptType(nCol, nRow, nTab);
                         if ( nScript != nDefScript )
                         {
                             if ( nScript == SCRIPTTYPE_ASIAN )

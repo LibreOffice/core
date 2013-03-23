@@ -2371,7 +2371,7 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
         ScBaseCell* pCell = maItems[nIndex].pCell;
         CellType eCellType = pCell->GetCellType();
         if ( eCellType == CELLTYPE_EDIT ||
-             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab, pCell) ) ||
+             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab) ) ||
              ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) )
         {
             rFirst = nRow;

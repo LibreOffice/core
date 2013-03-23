@@ -883,7 +883,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( pCell )
     {
         bValueData = pCell->HasValueData();
-        nScriptType = pDoc->GetScriptType( nCol, nRow, nTab, pCell );
+        nScriptType = pDoc->GetScriptType(nCol, nRow, nTab);
     }
     else
     {

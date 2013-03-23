@@ -72,7 +72,7 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
     //  used for thesaurus
 
-    sal_uInt8 nScript = pDoc->GetScriptType( rPos.Col(), rPos.Row(), rPos.Tab(), NULL );
+    sal_uInt8 nScript = pDoc->GetScriptType(rPos.Col(), rPos.Row(), rPos.Tab());
     sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                     ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
     const SfxPoolItem* pItem = pDoc->GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
