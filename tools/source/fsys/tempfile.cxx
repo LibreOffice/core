@@ -29,10 +29,6 @@
 
 #include <stdio.h>
 
-#ifdef UNX
-#define _MAX_PATH 260
-#endif
-
 using namespace osl;
 
 namespace { struct TempNameBase_Impl : public rtl::Static< ::rtl::OUString, TempNameBase_Impl > {}; }
@@ -41,18 +37,6 @@ struct TempFile_Impl
 {
     String      aName;
 };
-
-extern rtl::OUString GetSystemTempDirPath_Impl();
-
-rtl::OUString GetSystemTempDirPath_Impl()
-{
-    rtl::OUString aTmpURL, aPath;
-    osl::FileBase::getTempDirURL( aTmpURL );
-    osl::FileBase::getSystemPathFromFileURL( aTmpURL, aPath );
-    return aPath;
-}
-
-#define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
 
 OUString ConstructTempDir_Impl()
 {

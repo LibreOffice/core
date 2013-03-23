@@ -57,7 +57,13 @@
 using namespace osl;
 using ::rtl::OUString;
 
-extern rtl::OUString GetSystemTempDirPath_Impl();
+static rtl::OUString GetSystemTempDirPath_Impl()
+{
+    rtl::OUString aTmpURL, aPath;
+    osl::FileBase::getTempDirURL( aTmpURL );
+    osl::FileBase::getSystemPathFromFileURL( aTmpURL, aPath );
+    return aPath;
+}
 
 int Sys2SolarError_Impl( int nSysErr )
 {
