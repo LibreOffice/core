@@ -994,7 +994,7 @@ RTLFUNC(InStrRev)
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
         {
-            SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+            SbiRuntime* pRT = pInst->pRun;
             bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : sal_False;
         }
         else
@@ -1368,7 +1368,7 @@ RTLFUNC(Replace)
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
         {
-            SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+            SbiRuntime* pRT = pInst->pRun;
             bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : sal_False;
         }
         else
@@ -1629,7 +1629,7 @@ RTLFUNC(StrComp)
     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
     if( bCompatibility )
     {
-        SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+        SbiRuntime* pRT = pInst->pRun;
         nTextCompare = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : sal_False;
     }
     else
