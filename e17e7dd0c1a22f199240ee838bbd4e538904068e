@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+xQ\u003d",
+        "filename": "vcl/win/source/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5577,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-23T17:15:32Z",
+      "side": 1,
+      "message": "Instance",
+      "revId": "e17e7dd0c1a22f199240ee838bbd4e538904068e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
