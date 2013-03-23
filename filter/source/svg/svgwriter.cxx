@@ -32,6 +32,7 @@
 using ::rtl::OUString;
 
 static const char   aXMLElemG[] = "g";
+static const char   aXMLElemA[] = "a";
 static const char   aXMLElemDefs[] = "defs";
 static const char   aXMLElemLine[] = "line";
 static const char   aXMLElemRect[] = "rect";
@@ -1795,20 +1796,31 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
         mbIsPlacehlolderShape = sal_False;
     }
-    else if( mbIsURLField && !msUrl.isEmpty() )
-    {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "UrlField" );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
-        mbIsURLField = sal_False;
-    }
-
 
     addFontAttributes( /* isTexTContainer: */ false );
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
-    SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
     OUString sTextContent = rText;
-    mrExport.GetDocHandler()->characters( sTextContent );
+
+    // <a> tag for link should be the innermost tag, inside <tspan>
+    if( !mbIsPlacehlolderShape && mbIsURLField && !msUrl.isEmpty() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "UrlField" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
+
+        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
+        {
+            SvXMLElementExport aSVGAElem( mrExport, XML_NAMESPACE_NONE, aXMLElemA, mbIWS, mbIWS );
+            mrExport.GetDocHandler()->characters( sTextContent );
+        }
+    }
+    else
+    {
+        SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+        mrExport.GetDocHandler()->characters( sTextContent );
+    }
+
     mnTextWidth += mpVDev->GetTextWidth( sTextContent );
 }
 
