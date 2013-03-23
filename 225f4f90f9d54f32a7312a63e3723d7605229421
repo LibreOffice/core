@@ -155,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAW3//+z0\u003d",
+        "filename": "sc/source/filter/xcl97/XclExpChangeTrack.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-03-23T09:43:38Z",
+      "side": 1,
+      "message": "Dunno. mstahl said \"the XML formats don\u0027t have maximal precision, only minimal precision\", so I put the full precision. I vaguely remember hearing the minimum precision is milliseconds anyway, so we should at least put milliseconds",
+      "parentUuid": "AAAAW3//+1k\u003d",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAW3//+1g\u003d",
         "filename": "sc/source/ui/view/viewfun6.cxx",
         "patchSetId": 8
@@ -217,6 +235,24 @@
       "writtenOn": "2013-03-22T19:00:50Z",
       "side": 1,
       "message": "This does not work, passing the nano value instead of 100th value to ImplAdd2UNum() will yield a different result. To emulate the Get100Sec() a GetNanoSec()/10000000 would be needed (see also my comment in tools\u0027 time.hxx ;-)\n\nThe LocaleDataWrapper::getTime() IIRC is used in control fields and/or other places not using the number formatter, probably not prepared to encounter nanoseconds so the 100th seconds value should be preserved.",
+      "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+z8\u003d",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-03-23T09:43:38Z",
+      "side": 1,
+      "message": "Yes, this was supposed to be ImplAdd9UNum.",
+      "parentUuid": "AAAAW3//+2g\u003d",
       "revId": "225f4f90f9d54f32a7312a63e3723d7605229421",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
