@@ -76,9 +76,6 @@ using namespace ::com::sun::star::frame;
 
 namespace sd {
 
-// width: DIN A4, two margins à 1 cm each
-#define OUTLINE_PAPERWIDTH 19000
-
 // a progress bar gets displayed when more than
 // PROCESS_WITH_PROGRESS_THRESHOLD pages are concerned
 #define PROCESS_WITH_PROGRESS_THRESHOLD  5
@@ -97,7 +94,7 @@ TYPEINIT1( OutlineView, ::sd::View );
 |*
 \************************************************************************/
 
-OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewSh)
+OutlineView::OutlineView( DrawDocShell& rDocSh, Window* pWindow, OutlineViewShell& rOutlineViewSh)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewSh)
 , mrOutlineViewShell(rOutlineViewSh)
 , mrOutliner(*mrDoc.GetOutliner(sal_True))
@@ -116,7 +113,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
         bInitOutliner = sal_True;
         mrOutliner.Init( OUTLINERMODE_OUTLINEVIEW );
         mrOutliner.SetRefDevice( SD_MOD()->GetRefDevice( rDocSh ) );
-        sal_uLong nWidth = OUTLINE_PAPERWIDTH;
+        sal_uLong nWidth = pWindow->GetViewSize().Width();
         mrOutliner.SetPaperSize(Size(nWidth, 400000000));
     }
 
@@ -860,7 +857,7 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl)
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
     Rectangle     aVis          = pOutlinerView->GetVisArea();
-    sal_uLong nWidth = OUTLINE_PAPERWIDTH;
+    sal_uLong nWidth = pWin->GetViewSize().Width();
     Rectangle aText = Rectangle(Point(0,0),
                                    Size(nWidth,
                                         mrOutliner.GetTextHeight()));
