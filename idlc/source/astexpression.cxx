@@ -1136,8 +1136,6 @@ AstExprValue* AstExpression::eval_symbol(EvalKind ek)
      * OK, now evaluate the constant we just got, to produce its value
      */
     pConst = static_cast< AstConstant* >(pDecl);
-    if (pConst == NULL)
-        return NULL;
     return pConst->getConstValue()->eval_internal(ek);
 }
 
