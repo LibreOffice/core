@@ -506,14 +506,15 @@ void ScTabView::InterpretVisible()
             if (nX2 > MAXCOL) nX2 = MAXCOL;
             if (nY2 > MAXROW) nY2 = MAXROW;
 
-            ScCellIterator aIter( pDoc, nX1, nY1, nTab, nX2, nY2, nTab );
-            ScBaseCell* pCell = aIter.GetFirst();
-            while ( pCell )
+            ScCellIterator aIter(pDoc, ScRange(nX1, nY1, nTab, nX2, nY2, nTab));
+            for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
-                if ( pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetDirty() )
-                    ((ScFormulaCell*)pCell)->Interpret();
+                if (aIter.getType() != CELLTYPE_FORMULA)
+                    continue;
 
-                pCell = aIter.GetNext();
+                ScFormulaCell* p = aIter.getFormulaCell();
+                if (p->GetDirty())
+                    p->Interpret();
             }
         }
     }

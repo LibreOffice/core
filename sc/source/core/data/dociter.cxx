@@ -1138,9 +1138,22 @@ CellType ScCellIterator::getType() const
     return meCurType;
 }
 
-const OUString& ScCellIterator::getString() const
+OUString ScCellIterator::getString()
 {
-    return maCurString;
+    switch (meCurType)
+    {
+        case CELLTYPE_STRING:
+            return maCurString;
+        case CELLTYPE_EDIT:
+            if (mpCurEditText)
+                return ScEditUtil::GetString(*mpCurEditText);
+        break;
+        case CELLTYPE_FORMULA:
+            return mpCurFormula->GetString();
+        default:
+            ;
+    }
+    return EMPTY_OUSTRING;
 }
 
 const EditTextObject* ScCellIterator::getEditText() const

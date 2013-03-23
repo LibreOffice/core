@@ -4155,16 +4155,12 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 {
                     ScBaseCell* pCell;
                     ScCellIterator aIter( pDok, aRange, glSubTotal );
-                    if ( (pCell = aIter.GetFirst()) != NULL )
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        do
-                        {
-                            CellType eType = pCell->GetCellType();
-                            if( eType != CELLTYPE_NONE && eType != CELLTYPE_NOTE )
-                                nCount++;
-                        }
-                        while ( (pCell = aIter.GetNext()) != NULL );
+                        if (!aIter.isEmpty())
+                            ++nCount;
                     }
+
                     if ( nGlobalError )
                         nGlobalError = 0;
                 }
@@ -5373,16 +5369,12 @@ void ScInterpreter::ScCountEmptyCells()
                         static_cast<sal_uLong>(aRange.aEnd.Row() - aRange.aStart.Row() + 1) *
                         static_cast<sal_uLong>(aRange.aEnd.Col() - aRange.aStart.Col() + 1) *
                         static_cast<sal_uLong>(aRange.aEnd.Tab() - aRange.aStart.Tab() + 1);
-                    ScBaseCell* pCell;
-                    ScCellIterator aDocIter( pDok, aRange, glSubTotal);
-                    if ( (pCell = aDocIter.GetFirst()) != NULL )
+
+                    ScCellIterator aIter( pDok, aRange, glSubTotal);
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        do
-                        {
-                            if ((eCellType = pCell->GetCellType()) != CELLTYPE_NONE
-                                    && eCellType != CELLTYPE_NOTE)
-                                nCount++;
-                        } while ( (pCell = aDocIter.GetNext()) != NULL );
+                        if (!aIter.isEmpty())
+                            ++nCount;
                     }
                 }
             }

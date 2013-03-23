@@ -302,27 +302,24 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
                     ScRangeList aErrorCells;        // cells on the linked sheets that need error values
 
-                    ScCellIterator aCellIter( pDoc, 0,0,0, MAXCOL,MAXROW,MAXTAB );          // all sheets
-                    ScBaseCell* pCell = aCellIter.GetFirst();
-                    while (pCell)
+                    ScCellIterator aIter(pDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));          // all sheets
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+                        if (aIter.getType() != CELLTYPE_FORMULA)
+                            continue;
+
+                        ScFormulaCell* pCell = aIter.getFormulaCell();
+                        ScDetectiveRefIter aRefIter(pCell);
+                        ScRange aRefRange;
+                        while ( aRefIter.GetNextRef( aRefRange ) )
                         {
-                            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-
-                            ScDetectiveRefIter aRefIter( pFCell );
-                            ScRange aRefRange;
-                            while ( aRefIter.GetNextRef( aRefRange ) )
+                            if ( aRefRange.aStart.Tab() <= nTab && aRefRange.aEnd.Tab() >= nTab )
                             {
-                                if ( aRefRange.aStart.Tab() <= nTab && aRefRange.aEnd.Tab() >= nTab )
-                                {
-                                    // use first cell of range references (don't fill potentially large ranges)
+                                // use first cell of range references (don't fill potentially large ranges)
 
-                                    aErrorCells.Join( ScRange( aRefRange.aStart ) );
-                                }
+                                aErrorCells.Join( ScRange( aRefRange.aStart ) );
                             }
                         }
-                        pCell = aCellIter.GetNext();
                     }
 
                     size_t nRanges = aErrorCells.size();

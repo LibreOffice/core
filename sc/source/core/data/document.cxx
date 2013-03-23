@@ -3418,15 +3418,14 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
     for (size_t nPos=0, nRangeCount = rRanges.size(); nPos < nRangeCount; nPos++)
     {
         ScCellIterator aIter( this, *rRanges[ nPos ] );
-        ScBaseCell* pCell = aIter.GetFirst();
-        while (pCell)
+        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
         {
-            if (pCell->GetCellType() == CELLTYPE_FORMULA)
-            {
-                if ( static_cast<ScFormulaCell*>(pCell)->GetDirty() && GetAutoCalc() )
-                    static_cast<ScFormulaCell*>(pCell)->Interpret();
-            }
-            pCell = aIter.GetNext();
+            if (aIter.getType() != CELLTYPE_FORMULA)
+                continue;
+
+            ScFormulaCell* p = aIter.getFormulaCell();
+            if (p->GetDirty() && GetAutoCalc())
+                p->Interpret();
         }
     }
 }

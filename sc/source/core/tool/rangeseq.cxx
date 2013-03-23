@@ -37,12 +37,14 @@ static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
 {
     // no need to look at empty cells - just use ScCellIterator
     ScCellIterator aIter( pDoc, rRange );
-    ScBaseCell* pCell = aIter.GetFirst();
-    while (pCell)
+    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA && static_cast<ScFormulaCell*>(pCell)->GetErrCode() != 0 )
+        if (aIter.getType() != CELLTYPE_FORMULA)
+            continue;
+
+        ScFormulaCell* pCell = aIter.getFormulaCell();
+        if (pCell->GetErrCode() != 0)
             return true;
-        pCell = aIter.GetNext();
     }
     return false;   // no error found
 }

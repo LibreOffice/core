@@ -244,7 +244,7 @@ public:
     const ScAddress& GetPos() const { return maCurPos; }
 
     CellType getType() const;
-    const OUString& getString() const;
+    OUString getString();
     const EditTextObject* getEditText() const;
     ScFormulaCell* getFormulaCell();
     bool hasString() const;

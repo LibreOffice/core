@@ -742,13 +742,13 @@ bool ScDocument::DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam )
 bool ScDocument::HasSubTotalCells( const ScRange& rRange )
 {
     ScCellIterator aIter( this, rRange );
-    ScBaseCell* pCell = aIter.GetFirst();
-    while (pCell)
+    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->IsSubTotal() )
-            return true;
+        if (aIter.getType() != CELLTYPE_FORMULA)
+            continue;
 
-        pCell = aIter.GetNext();
+        if (aIter.getFormulaCell()->IsSubTotal())
+            return true;
     }
     return false;   // none found
 }
@@ -1576,19 +1576,23 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
     for (sal_uInt16 nListNo=0; nListNo<2; nListNo++)
     {
         ScRangePairList* pList = pLists[ nListNo ];
-        if (pList)
-            for ( size_t i = 0, nPairs = pList->size(); i < nPairs; ++i )
+        if (!pList)
+            continue;
+
+        for ( size_t i = 0, nPairs = pList->size(); i < nPairs; ++i )
+        {
+            ScRangePair* pPair = (*pList)[i];
+            ScRange aRange = pPair->GetRange(0);
+            ScCellIterator aIter( this, aRange );
+            for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
-                ScRangePair* pPair = (*pList)[i];
-                ScRange aRange = pPair->GetRange(0);
-                ScCellIterator aIter( this, aRange );
-                for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
-                    if ( pCell->HasStringData() )
-                    {
-                        OUString aStr = pCell->GetStringData();
-                        rStrings.insert(ScTypedStrData(aStr, 0.0, ScTypedStrData::Header));
-                    }
+                if (!aIter.hasString())
+                    continue;
+
+                OUString aStr = aIter.getString();
+                rStrings.insert(ScTypedStrData(aStr, 0.0, ScTypedStrData::Header));
             }
+        }
     }
 
     return true;
