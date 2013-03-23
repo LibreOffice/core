@@ -84,6 +84,11 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 	mkdir -p $(appdir)/program/resource
 	cp $(OUTDIR)/bin/*en-US.res $(appdir)/program/resource
 #
+# Artwork
+#
+	mkdir -p $(appdir)/share/config
+	cp -R $(OUTDIR)/bin/images_tango.zip $(appdir)/share/config/images.zip
+#
 # Set up rc, the "inifile". See getIniFileName_Impl(). 
 #
 	( \
