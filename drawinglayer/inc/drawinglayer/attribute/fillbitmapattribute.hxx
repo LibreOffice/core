@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -44,8 +45,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC FillBitmapAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpFillBitmapAttribute > ImplType;
+
         private:
-            ImpFillBitmapAttribute*             mpFillBitmapAttribute;
+            ImplType mpFillBitmapAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
