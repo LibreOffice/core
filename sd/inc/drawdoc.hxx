@@ -343,6 +343,8 @@ public:
     SD_DLLPUBLIC SdPage*GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
     SD_DLLPUBLIC sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
 
+    SD_DLLPUBLIC sal_uInt16 GetActiveSdPageCount() const;
+
     sal_uInt16              GetMasterPageUserCount(SdrPage* pMaster) const;
 
     const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }

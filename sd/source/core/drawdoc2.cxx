@@ -66,6 +66,7 @@
 
 #include "PageListWatcher.hxx"
 #include <vcl/virdev.hxx>
+#include "customshowlist.hxx"
 
 using namespace ::sd;
 
@@ -200,6 +201,11 @@ SdPage* SdDrawDocument::GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind)
 sal_uInt16 SdDrawDocument::GetMasterSdPageCount(PageKind ePgKind) const
 {
     return (sal_uInt16)mpMasterPageListWatcher->GetSdPageCount(ePgKind);
+}
+
+sal_uInt16 SdDrawDocument::GetActiveSdPageCount() const
+{
+    return (sal_uInt16)mpDrawPageListWatcher->GetVisibleSdPageCount();
 }
 
 // Adapt the page numbers that are registered in the page objects of the notes

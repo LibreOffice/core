@@ -43,6 +43,7 @@ protected:
     SdPage*                         mpHandoutPage;
 
     sal_Bool                        mbPageListValid;
+    sal_uInt32                      mnVisiblePageCount;
 
     void ImpRecreateSortedPageListOnDemand();
     virtual sal_uInt32 ImpGetPageCount() const = 0;
@@ -60,6 +61,7 @@ public:
     void Invalidate() { mbPageListValid = sal_False; }
     SdPage* GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum = 0L);
     sal_uInt32 GetSdPageCount(PageKind ePgKind);
+    sal_uInt32 GetVisibleSdPageCount();
 };
 
 //////////////////////////////////////////////////////////////////////////////

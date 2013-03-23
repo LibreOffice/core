@@ -866,7 +866,7 @@ void DrawViewShell::ShowMousePosInfo(const Rectangle& rRect,
                                    SID_ATTR_SIZE, SID_ATTR_SIZE,
                                    0L);
 
-//        GetStatusBarState(aSet);  nicht performant bei gedrueckter Modifiertaste!!
+        GetStatusBarState(aSet);
 
         aSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
 
