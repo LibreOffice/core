@@ -33,6 +33,9 @@ gb_MERGEDLIBS := \
 	canvastools \
 	configmgr \
 	cppcanvas \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	deploymentmisc \
 	desktopbe1 \
 	drawinglayer \
@@ -73,13 +76,11 @@ gb_MERGEDLIBS := \
 	uui \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
-	$(if $(filter-out IOS,$(OS)), \
-	wpftdraw \
-	wpftwriter) \
+	$(if $(filter-out IOS,$(OS)),wpftdraw) \
+	$(if $(filter-out IOS,$(OS)),wpftwriter) \
 	xmlscript \
 	xmlsecurity \
-	xo \
-
+	xo
 
 ifeq ($(OS),ANDROID)
 gb_MERGEDLIBS += \

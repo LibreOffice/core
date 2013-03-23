@@ -82,6 +82,8 @@ COMMA :=,
 
 CLOSE_PAREN :=)
 
+include $(GBUILDDIR)/Helper.mk
+
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/pre_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/pre_*.mk)
@@ -180,7 +182,6 @@ gb__ENV_CXXFLAGS := $(ENVCFLAGSCXX)
 endif
 
 include $(GBUILDDIR)/ExternalExecutable.mk
-include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
 include $(GBUILDDIR)/Tempfile.mk
 
