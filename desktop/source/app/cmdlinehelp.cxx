@@ -123,6 +123,8 @@ namespace desktop
         "      If --outdir is not specified then current working dir is used as output_dir.\n"\
         "      Eg. --print-to-file *.doc\n"\
         "          --print-to-file --printer-name nasty_lowres_printer --outdir /home/user *.doc\n"\
+        "--pidfile file\n"\
+        "      Store soffice.bin pid to file.\n"\
         "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n\n";
 
     rtl::OUString ReplaceStringHookProc(const rtl::OUString& rStr);
