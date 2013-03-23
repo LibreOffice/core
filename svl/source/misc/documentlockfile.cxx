@@ -199,7 +199,7 @@ void DocumentLockFile::RemoveFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // TODO/LATER: the removing is not atomar, is it possible in general to make it atomar?
+    // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
     uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
     uno::Sequence< ::rtl::OUString > aFileData = GetLockData();
 

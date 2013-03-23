@@ -68,7 +68,7 @@ public:
         position of the wrapped stream at construction time). */
     void                align( size_t nSize );
 
-    /** Aligns the stream according to the passed type and reads an atomar value. */
+    /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
     inline Type         readAligned() { align( sizeof( Type ) ); return readValue< Type >(); }
     /** Aligns the stream according to the passed type and skips the size of the type. */

@@ -2887,7 +2887,7 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
     // if we're loaded as sub form we got a "rowSetChanged" from the parent rowset _before_ we got the "loaded"
     // so we don't need to execute the statement again, this was already done
     // (and there were no relevant changes between these two listener calls, the "load" of a form is quite an
-    // atomar operation.)
+    // atomic operation.)
 
     sal_Bool bSuccess = sal_False;
     if (bExecute)

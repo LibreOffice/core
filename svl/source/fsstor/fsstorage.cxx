@@ -602,12 +602,12 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
             {
                 ::utl::UCBContentHelper::Kill( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
                 bFolderExists =
-                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomar :(
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomic :(
             }
             else if ( !bFolderExists )
             {
                 bFolderExists =
-                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomar :(
+                    MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ); // TODO: not atomic :(
             }
         }
         else if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )

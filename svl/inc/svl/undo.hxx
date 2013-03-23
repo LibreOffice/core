@@ -258,7 +258,7 @@ namespace svl
 
             Effectively, calling this method is equivalent to <code>while ( IsInListAction() ) LeaveListAction();</code>,
             followed by <code>Clear()</code>. The only difference to this calling sequence is that Reset is an
-            atomar operation, also resulting in only one notification.
+            atomic operation, also resulting in only one notification.
         */
         virtual void            Reset() = 0;
 

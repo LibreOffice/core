@@ -73,7 +73,7 @@ public:
     void                align( size_t nSize );
 
     void         pad( sal_Int32 nBytes, size_t nAtomSize = 1);
-    /** Aligns the stream according to the passed type and reads an atomar value. */
+    /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
     inline void         writeAligned( Type nVal ) { align( sizeof( Type ) ); writeValue( nVal ); }
     /** Aligns the stream according to the passed type and skips the size of the type. */
