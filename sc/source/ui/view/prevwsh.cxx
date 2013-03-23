@@ -919,7 +919,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     else
         rData.nTotalPages = 99;
 
-    //  eNumType kennt der Dialog selber
+    //  the dialog knows eNumType
 }
 
 void ScPreviewShell::WriteUserData(String& rData, sal_Bool /* bBrowse */)
@@ -1134,7 +1134,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
             break;
     }
 
-        // nHRange-nHPage kann negativ sein, deshalb Abfrage auf < 0 hinterher
+        // nHRange-nHPage might be negative, that's why we check for < 0 afterwards
 
     if( aCurPos.Y() > (nVRange-nVPage) )
         aCurPos.Y() = (nVRange-nVPage);
