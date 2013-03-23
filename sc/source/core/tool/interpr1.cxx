@@ -4153,7 +4153,6 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 if( eFunc == ifCOUNT2 )
                 {
-                    ScBaseCell* pCell;
                     ScCellIterator aIter( pDok, aRange, glSubTotal );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
