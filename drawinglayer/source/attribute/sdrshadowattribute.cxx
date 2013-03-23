@@ -20,6 +20,7 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -30,9 +31,6 @@ namespace drawinglayer
         class ImpSdrShadowAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // shadow definitions
             basegfx::B2DVector                  maOffset;                   // shadow offset 1/100th mm
             double                              mfTransparence;             // [0.0 .. 1.0], 0.0==no transp.
@@ -42,10 +40,16 @@ namespace drawinglayer
                 const basegfx::B2DVector& rOffset,
                 double fTransparence,
                 const basegfx::BColor& rColor)
-            :   mnRefCount(0),
-                maOffset(rOffset),
+            :   maOffset(rOffset),
                 mfTransparence(fTransparence),
                 maColor(rColor)
+            {
+            }
+
+            ImpSdrShadowAttribute()
+            :   maOffset(basegfx::B2DVector()),
+                mfTransparence(0.0),
+                maColor(basegfx::BColor())
             {
             }
 
@@ -60,97 +64,52 @@ namespace drawinglayer
                     && getTransparence() == rCandidate.getTransparence()
                     && getColor() == rCandidate.getColor());
             }
-
-            static ImpSdrShadowAttribute* get_global_default()
-            {
-                static ImpSdrShadowAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrShadowAttribute(
-                        basegfx::B2DVector(),
-                        0.0,
-                        basegfx::BColor());
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrShadowAttribute::ImplType, theGlobalDefault > {};
+        }
+
 
         SdrShadowAttribute::SdrShadowAttribute(
             const basegfx::B2DVector& rOffset,
             double fTransparence,
             const basegfx::BColor& rColor)
-        :   mpSdrShadowAttribute(new ImpSdrShadowAttribute(
+        :   mpSdrShadowAttribute(ImpSdrShadowAttribute(
                 rOffset, fTransparence, rColor))
         {
         }
 
         SdrShadowAttribute::SdrShadowAttribute()
-        :   mpSdrShadowAttribute(ImpSdrShadowAttribute::get_global_default())
+        :   mpSdrShadowAttribute(theGlobalDefault::get())
         {
-            mpSdrShadowAttribute->mnRefCount++;
         }
 
         SdrShadowAttribute::SdrShadowAttribute(const SdrShadowAttribute& rCandidate)
         :   mpSdrShadowAttribute(rCandidate.mpSdrShadowAttribute)
         {
-            mpSdrShadowAttribute->mnRefCount++;
         }
 
         SdrShadowAttribute::~SdrShadowAttribute()
         {
-            if(mpSdrShadowAttribute->mnRefCount)
-            {
-                mpSdrShadowAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrShadowAttribute;
-            }
         }
 
         bool SdrShadowAttribute::isDefault() const
         {
-            return mpSdrShadowAttribute == ImpSdrShadowAttribute::get_global_default();
+            return mpSdrShadowAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrShadowAttribute& SdrShadowAttribute::operator=(const SdrShadowAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrShadowAttribute != mpSdrShadowAttribute)
-            {
-                if(mpSdrShadowAttribute->mnRefCount)
-                {
-                    mpSdrShadowAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrShadowAttribute;
-                }
-
-                mpSdrShadowAttribute = rCandidate.mpSdrShadowAttribute;
-                mpSdrShadowAttribute->mnRefCount++;
-            }
-
+            mpSdrShadowAttribute = rCandidate.mpSdrShadowAttribute;
             return *this;
         }
 
         bool SdrShadowAttribute::operator==(const SdrShadowAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrShadowAttribute == mpSdrShadowAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpSdrShadowAttribute == *mpSdrShadowAttribute);
+            return mpSdrShadowAttribute == rCandidate.mpSdrShadowAttribute;
         }
 
         const basegfx::B2DVector& SdrShadowAttribute::getOffset() const

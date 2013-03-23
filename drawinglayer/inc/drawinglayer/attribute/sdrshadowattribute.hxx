@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -42,8 +43,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC SdrShadowAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrShadowAttribute > ImplType;
+
         private:
-            ImpSdrShadowAttribute*              mpSdrShadowAttribute;
+            ImplType mpSdrShadowAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
