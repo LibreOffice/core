@@ -942,9 +942,13 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         if( bStartWithActualSlide )
         {
-            aPresSlide = pStartPage->GetName();
-            // if the starting slide is hidden, we can't set slide controller to ALL mode
-            maPresSettings.mbAll = !pStartPage->IsExcluded();
+            if ( !aPresSlide.Len())
+            {
+                // no preset slide yet, so pick current on one
+                aPresSlide = pStartPage->GetName();
+                // if the starting slide is hidden, we can't set slide controller to ALL mode
+                maPresSettings.mbAll = !pStartPage->IsExcluded();
+            }
 
             if( meAnimationMode != ANIMATIONMODE_SHOW )
             {
@@ -966,9 +970,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             }
         }
 
-        sal_Int32 nSlideNum = ( pStartPage->GetPageNum() - 1 ) >> 1;
         // build page list
-        createSlideList( maPresSettings.mbAll, false, aPresSlide, nSlideNum );
+        createSlideList( maPresSettings.mbAll, false, aPresSlide );
 
         // remember Slide number from where the show was started
         if( pStartPage )
@@ -2429,7 +2432,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide, sal_Int32 nStartSlide )
+void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide )
 {
     const long nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
 
@@ -2462,7 +2465,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
                 sal_Int32 nSlide;
                 sal_Bool bTakeNextAvailable = sal_False;
 
-                for( nSlide = nStartSlide, nFirstVisibleSlide = -1;
+                for( nSlide = 0, nFirstVisibleSlide = -1;
                     ( nSlide < nSlideCount ) && ( -1 == nFirstVisibleSlide ); nSlide++ )
                 {
                     SdPage* pTestSlide = mpDoc->GetSdPage( (sal_uInt16)nSlide, PK_STANDARD );

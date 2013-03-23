@@ -265,7 +265,7 @@ private:
 
     double update();
 
-    void createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide, sal_Int32 nStartSlide = 0 );
+    void createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide );
 
     void displayCurrentSlide (const bool bSkipAllMainSequenceEffects = false);
 
