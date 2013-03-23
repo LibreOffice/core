@@ -71,7 +71,6 @@ void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
     {
         if( mbModify && !maBitmap.ImplGetImpBitmap() )
         {
-            rBitmap.ImplMakeUnique();
             pImpBmp = rBitmap.ImplGetImpBitmap();
         }
         else

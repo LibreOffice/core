@@ -52,9 +52,6 @@ Bitmap::Bitmap( const Bitmap& rBitmap ) :
     maPrefSize      ( rBitmap.maPrefSize )
 {
     mpImpBmp = rBitmap.mpImpBmp;
-
-    if ( mpImpBmp )
-        mpImpBmp->ImplIncRefCount();
 }
 
 Bitmap::Bitmap( SalBitmap* pSalBitmap )
@@ -121,7 +118,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                 pRealPal = (BitmapPalette*) pPal;
         }
 
-        mpImpBmp = new ImpBitmap;
+        mpImpBmp = ImpBitmap;
         mpImpBmp->ImplCreate( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
     }
     else
@@ -231,10 +228,6 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
     maPrefSize = rBitmap.maPrefSize;
     maPrefMapMode = rBitmap.maPrefMapMode;
 
-    if ( rBitmap.mpImpBmp )
-        rBitmap.mpImpBmp->ImplIncRefCount();
-
-    ImplReleaseRef();
     mpImpBmp = rBitmap.mpImpBmp;
 
     return *this;
@@ -253,7 +246,6 @@ void Bitmap::SetEmpty()
     maPrefMapMode = MapMode();
     maPrefSize = Size();
 
-    ImplReleaseRef();
     mpImpBmp = NULL;
 }
 
@@ -342,33 +334,6 @@ sal_uLong Bitmap::GetChecksum() const
     }
 
     return nRet;
-}
-
-void Bitmap::ImplReleaseRef()
-{
-    if( mpImpBmp )
-    {
-        if( mpImpBmp->ImplGetRefCount() > 1UL )
-            mpImpBmp->ImplDecRefCount();
-        else
-        {
-            delete mpImpBmp;
-            mpImpBmp = NULL;
-        }
-    }
-}
-
-void Bitmap::ImplMakeUnique()
-{
-    if( mpImpBmp && mpImpBmp->ImplGetRefCount() > 1UL )
-    {
-        ImpBitmap* pOldImpBmp = mpImpBmp;
-
-        pOldImpBmp->ImplDecRefCount();
-
-        mpImpBmp = new ImpBitmap;
-        mpImpBmp->ImplCreate( *pOldImpBmp );
-    }
 }
 
 void Bitmap::ImplAssignWithSize( const Bitmap& rBitmap )

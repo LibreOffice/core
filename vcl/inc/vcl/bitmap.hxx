@@ -20,6 +20,7 @@
 #ifndef _SV_BITMAP_HXX
 #define _SV_BITMAP_HXX
 
+#include <o3tl/cow_wrapper.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -302,7 +303,7 @@ class VCL_DLLPUBLIC Bitmap
 {
 private:
 
-    ImpBitmap*          mpImpBmp;
+    o3tl::cow_wrapper< ImpBitmap > mpImpBmp;
     MapMode             maPrefMapMode;
     Size                maPrefSize;
 
