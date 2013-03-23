@@ -127,7 +127,7 @@ TempFile::TempFile()
     pImp->aName = ConstructTempDir_Impl();
 
     // get TempFile with default naming scheme
-    CreateTempName_Impl( pImp->aName, sal_True );
+    CreateTempName_Impl( pImp->aName, sal_True, false );
 }
 
 TempFile::TempFile( const String& rLeadingChars, const String* pExtension )
