@@ -657,7 +657,7 @@ void PictWriter::WriteOpcode_Text(const Point & rPoint, const String& rString, s
     dh = aPoint.X()-aDstTextPosition.X();
     dv = aPoint.Y()-aDstTextPosition.Y();
 
-    if (bDstTextPositionValid==sal_False || dh<0 || dh>255 || dv<0 || dv>0 || bDelta==sal_False)
+    if (bDstTextPositionValid==sal_False || dh<0 || dh>255 || dv<0 || dv>255 || bDelta==sal_False)
     {
         *pPict << (sal_uInt16)0x0028;
         WritePoint(rPoint);
