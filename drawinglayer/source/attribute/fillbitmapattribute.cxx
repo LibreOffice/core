@@ -29,9 +29,6 @@ namespace drawinglayer
         class ImpFillBitmapAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // data definitions
             BitmapEx                                maBitmapEx;
             basegfx::B2DPoint                       maTopLeft;
@@ -45,11 +42,18 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rTopLeft,
                 const basegfx::B2DVector& rSize,
                 bool bTiling)
-            :   mnRefCount(0),
-                maBitmapEx(rBitmapEx),
+            :   maBitmapEx(rBitmapEx),
                 maTopLeft(rTopLeft),
                 maSize(rSize),
                 mbTiling(bTiling)
+            {
+            }
+
+            ImpFillBitmapAttribute()
+            :   maBitmapEx(BitmapEx()),
+                maTopLeft(basegfx::B2DPoint()),
+                maSize(basegfx::B2DVector()),
+                mbTiling(false)
             {
             }
 
@@ -66,33 +70,20 @@ namespace drawinglayer
             const basegfx::B2DPoint& getTopLeft() const { return maTopLeft; }
             const basegfx::B2DVector& getSize() const { return maSize; }
             bool getTiling() const { return mbTiling; }
-
-            static ImpFillBitmapAttribute* get_global_default()
-            {
-                static ImpFillBitmapAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpFillBitmapAttribute(
-                        BitmapEx(),
-                        basegfx::B2DPoint(),
-                        basegfx::B2DVector(),
-                        false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< FillBitmapAttribute::ImplType, theGlobalDefault > {};
+        }
 
         FillBitmapAttribute::FillBitmapAttribute(
             const BitmapEx& rBitmapEx,
             const basegfx::B2DPoint& rTopLeft,
             const basegfx::B2DVector& rSize,
             bool bTiling)
-        :   mpFillBitmapAttribute(new ImpFillBitmapAttribute(
+        :   mpFillBitmapAttribute(ImpFillBitmapAttribute(
                 rBitmapEx, rTopLeft, rSize, bTiling))
         {
         }
@@ -100,59 +91,26 @@ namespace drawinglayer
         FillBitmapAttribute::FillBitmapAttribute(const FillBitmapAttribute& rCandidate)
         :   mpFillBitmapAttribute(rCandidate.mpFillBitmapAttribute)
         {
-            mpFillBitmapAttribute->mnRefCount++;
         }
 
         FillBitmapAttribute::~FillBitmapAttribute()
         {
-            if(mpFillBitmapAttribute->mnRefCount)
-            {
-                mpFillBitmapAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpFillBitmapAttribute;
-            }
         }
 
         bool FillBitmapAttribute::isDefault() const
         {
-            return mpFillBitmapAttribute == ImpFillBitmapAttribute::get_global_default();
+            return mpFillBitmapAttribute.same_object(theGlobalDefault::get());
         }
 
         FillBitmapAttribute& FillBitmapAttribute::operator=(const FillBitmapAttribute& rCandidate)
         {
-            if(rCandidate.mpFillBitmapAttribute != mpFillBitmapAttribute)
-            {
-                if(mpFillBitmapAttribute->mnRefCount)
-                {
-                    mpFillBitmapAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpFillBitmapAttribute;
-                }
-
-                mpFillBitmapAttribute = rCandidate.mpFillBitmapAttribute;
-                mpFillBitmapAttribute->mnRefCount++;
-            }
-
+            mpFillBitmapAttribute = rCandidate.mpFillBitmapAttribute;
             return *this;
         }
 
         bool FillBitmapAttribute::operator==(const FillBitmapAttribute& rCandidate) const
         {
-            if(rCandidate.mpFillBitmapAttribute == mpFillBitmapAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpFillBitmapAttribute == *mpFillBitmapAttribute);
+            return rCandidate.mpFillBitmapAttribute == mpFillBitmapAttribute;
         }
 
         const BitmapEx& FillBitmapAttribute::getBitmapEx() const
