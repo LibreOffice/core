@@ -36,12 +36,10 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-// -----------------------------------------------------------------------
 
 // Forward declaration
 void Main();
 
-// -----------------------------------------------------------------------
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -59,7 +57,6 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
-// -----------------------------------------------------------------------
 
 class MyWin : public WorkWindow
 {
@@ -75,7 +72,6 @@ public:
     void        Resize();
 };
 
-// -----------------------------------------------------------------------
 
 void Main()
 {
@@ -83,29 +79,21 @@ void Main()
     aMainWin.SetText( rtl::OUString( "VCLDemo - VCL Workbench" ) );
     aMainWin.Show();
 
-    /*
-    InfoBox ib(NULL, String((sal_Char*)"Test", sizeof("Test")));
-    ib.Execute();
-    */
-
     Application::Execute();
 }
 
-// -----------------------------------------------------------------------
 
 MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -115,28 +103,24 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
     DrawRect( aRect );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::Paint( const Rectangle& rRect )
 {
@@ -162,7 +146,6 @@ void MyWin::Paint( const Rectangle& rRect )
     DrawText( Point( 20, 30 ), String( RTL_CONSTASCII_USTRINGPARAM( "Just a simple test text" ) ) );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::Resize()
 {
