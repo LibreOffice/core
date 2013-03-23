@@ -272,7 +272,7 @@ enum CellType
         CELLTYPE_NOTE,
         CELLTYPE_EDIT,
 #if OSL_DEBUG_LEVEL > 0
-           ,CELLTYPE_DESTROYED
+        CELLTYPE_DESTROYED
 #endif
     };
 
