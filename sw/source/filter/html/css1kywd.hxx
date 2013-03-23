@@ -229,6 +229,7 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_height, "height" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_float, "float" );
 
+extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_column_count, "column-count" );
 
 // Strings fuer Positioning
 

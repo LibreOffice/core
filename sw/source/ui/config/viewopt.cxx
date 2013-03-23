@@ -320,10 +320,10 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
                 nRet |= HTMLMODE_FULL_STYLES;
             break;
             case HTML_CFG_NS40:
-                nRet |= HTMLMODE_FRM_COLUMNS;
+                // no special features for this browser
             break;
             case HTML_CFG_WRITER:
-                nRet |= HTMLMODE_FRM_COLUMNS|HTMLMODE_FULL_STYLES;
+                nRet |= HTMLMODE_FULL_STYLES;
             break;
         }
     }

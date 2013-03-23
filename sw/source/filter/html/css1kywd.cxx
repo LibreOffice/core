@@ -219,6 +219,7 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_height, "height" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_float, "float" );
 
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_column_count, "column-count" );
 
 // Strings fuer Positioning
 

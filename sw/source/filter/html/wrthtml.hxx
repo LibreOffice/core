@@ -473,7 +473,7 @@ public:
         sal_uInt32 nFrmOpts, const rtl::OString& rEndTags = rtl::OString() );
     void OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt );
     void OutCSS1_TableCellBorderHack(const SwFrmFmt& rFrmFmt);
-    void OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt );
+    void OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwFmtCol *pCol );
     void OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt, sal_uInt32 nFrmOpts,
                                 const SdrObject *pSdrObj=0,
                                 const SfxItemSet *pItemSet=0 );
