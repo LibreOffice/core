@@ -125,7 +125,7 @@ void ScExportTest::test()
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pLoadedDoc = xDocSh->GetDocument();
     double aVal = pLoadedDoc->GetValue(0,0,0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(aVal, 1.0, 1e-8);
+    ASSERT_DOUBLES_EQUAL(aVal, 1.0);
 }
 
 void ScExportTest::testPasswordExport()
@@ -149,7 +149,7 @@ void ScExportTest::testPasswordExport()
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pLoadedDoc = xDocSh->GetDocument();
     double aVal = pLoadedDoc->GetValue(0,0,0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(aVal, 1.0, 1e-8);
+    ASSERT_DOUBLES_EQUAL(aVal, 1.0);
 }
 
 void ScExportTest::testConditionalFormatExportODS()
