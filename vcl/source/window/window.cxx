@@ -4223,11 +4223,11 @@ namespace
             pWindow = &i_rWindow;
 
         rtl::OStringBuffer aErrorString;
-        aErrorString.append(char(13));
+        aErrorString.append(' ');
         aErrorString.append(typeid( *pWindow ).name());
-        aErrorString.append(" (window text: '");
+        aErrorString.append(" (");
         aErrorString.append(rtl::OUStringToOString(pWindow->GetText(), RTL_TEXTENCODING_UTF8));
-        aErrorString.append("')");
+        aErrorString.append(")");
         return aErrorString.makeStringAndClear();
     }
 }
@@ -4377,7 +4377,7 @@ Window::~Window()
                 aTempStr.append("Window (");
                 aTempStr.append(rtl::OUStringToOString(GetText(),
                                                        RTL_TEXTENCODING_UTF8));
-                aTempStr.append(") with living SystemWindow(s) destroyed: ");
+                aTempStr.append(") with live SystemWindows destroyed: ");
                 aTempStr.append(aErrorStr.toString());
                 OSL_FAIL(aTempStr.getStr());
                 // abort in non-pro version, this must be fixed!
@@ -4401,7 +4401,7 @@ Window::~Window()
         {
             rtl::OStringBuffer aTempStr( "Window (" );
             aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") with living SystemWindow(s) destroyed: ");
+            aTempStr.append(") with live SystemWindows destroyed: ");
             aTempStr.append(aErrorStr.toString());
             OSL_FAIL( aTempStr.getStr() );
             GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
@@ -4411,7 +4411,7 @@ Window::~Window()
         {
             rtl::OStringBuffer aTempStr("Window (");
             aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") with living Child(s) destroyed: ");
+            aTempStr.append(") with live children destroyed: ");
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
@@ -4426,7 +4426,7 @@ Window::~Window()
         {
             rtl::OStringBuffer aTempStr("Window (");
             aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
-            aTempStr.append(") with living SystemWindow(s) destroyed: ");
+            aTempStr.append(") with live SystemWindows destroyed: ");
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
