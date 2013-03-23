@@ -139,12 +139,35 @@ public:
         test( aTestObj7, aTestObj8, aTestObj9 );
     }
 
+    void testStaticDefault()
+    {
+        cow_wrapper_client4 aTestObj1;
+        cow_wrapper_client4 aTestObj2;
+        cow_wrapper_client4 aTestObj3(4);
+
+        CPPUNIT_ASSERT_MESSAGE("aTestObj1.is_default()",
+                               aTestObj1.is_default() );
+        CPPUNIT_ASSERT_MESSAGE("aTestObj2.is_default()",
+                               aTestObj2.is_default() );
+        CPPUNIT_ASSERT_MESSAGE("!aTestObj3.is_default()",
+                               !aTestObj3.is_default() );
+        aTestObj1 = aTestObj2;
+        CPPUNIT_ASSERT_MESSAGE("aTestObj1.is_default() #2",
+                               aTestObj1.is_default() );
+        CPPUNIT_ASSERT_MESSAGE("aTestObj2.is_default() #2",
+                               aTestObj2.is_default() );
+        aTestObj1 = aTestObj3;
+        CPPUNIT_ASSERT_MESSAGE("!aTestObj1.is_default()",
+                               !aTestObj1.is_default() );
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(cow_wrapper_test);
     CPPUNIT_TEST(testCowWrapper);
+    CPPUNIT_TEST(testStaticDefault);
     CPPUNIT_TEST_SUITE_END();
 };
 

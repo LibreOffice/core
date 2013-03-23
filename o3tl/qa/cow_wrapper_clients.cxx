@@ -18,6 +18,7 @@
  */
 
 #include "cow_wrapper_clients.hxx"
+#include <rtl/instance.hxx>
 
 namespace o3tltests {
 
@@ -165,6 +166,55 @@ bool cow_wrapper_client3::operator!=( const cow_wrapper_client3& rRHS ) const
     return maImpl != rRHS.maImpl;
 }
 bool cow_wrapper_client3::operator<( const cow_wrapper_client3& rRHS ) const
+{
+    return maImpl < rRHS.maImpl;
+}
+
+// ---------------------------------------------------------------------------
+
+namespace { struct theDefaultClient4 : public rtl::Static< o3tl::cow_wrapper< int >,
+                                                            theDefaultClient4 > {}; }
+
+cow_wrapper_client4::cow_wrapper_client4() :
+    maImpl(theDefaultClient4::get())
+{
+}
+
+cow_wrapper_client4::cow_wrapper_client4( int nVal ) :
+    maImpl( nVal )
+{
+}
+
+cow_wrapper_client4::~cow_wrapper_client4()
+{
+}
+
+cow_wrapper_client4::cow_wrapper_client4( const cow_wrapper_client4& rSrc ) :
+    maImpl(rSrc.maImpl)
+{
+}
+
+cow_wrapper_client4& cow_wrapper_client4::operator=( const cow_wrapper_client4& rSrc )
+{
+    maImpl = rSrc.maImpl;
+
+    return *this;
+}
+
+bool cow_wrapper_client4::is_default() const
+{
+    return maImpl.same_object(theDefaultClient4::get());
+}
+
+bool cow_wrapper_client4::operator==( const cow_wrapper_client4& rRHS ) const
+{
+    return maImpl == rRHS.maImpl;
+}
+bool cow_wrapper_client4::operator!=( const cow_wrapper_client4& rRHS ) const
+{
+    return maImpl != rRHS.maImpl;
+}
+bool cow_wrapper_client4::operator<( const cow_wrapper_client4& rRHS ) const
 {
     return maImpl < rRHS.maImpl;
 }

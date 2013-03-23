@@ -115,6 +115,30 @@ private:
     o3tl::cow_wrapper< cow_wrapper_client2_impl, o3tl::ThreadSafeRefCountingPolicy > maImpl;
 };
 
+/** test default-object comparison - have default-ctored-client4 share
+    the same static impl instance, check if isDefault does the right
+    thing
+ */
+class cow_wrapper_client4
+{
+public:
+    cow_wrapper_client4();
+    explicit cow_wrapper_client4(int);
+    ~cow_wrapper_client4();
+
+    cow_wrapper_client4( const cow_wrapper_client4& );
+    cow_wrapper_client4& operator=( const cow_wrapper_client4& );
+
+    bool is_default() const;
+
+    bool operator==( const cow_wrapper_client4& rRHS ) const;
+    bool operator!=( const cow_wrapper_client4& rRHS ) const;
+    bool operator<( const cow_wrapper_client4& rRHS ) const;
+
+private:
+    o3tl::cow_wrapper< int > maImpl;
+};
+
 } // namespace o3tltests
 
 #endif /* INCLUDED_COW_WRAPPER_CLIENTS_HXX */
