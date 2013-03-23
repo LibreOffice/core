@@ -3266,9 +3266,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
         const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
         if( eMode == SHOWWINDOWMODE_END )
         {
-            const sal_Int32 nLastSlideIndex = mpSlideController->getSlideIndexCount() - 1;
-            if( nLastSlideIndex >= 0 )
-                mpShowWindow->RestartShow( nLastSlideIndex );
+            mpShowWindow->RestartShow( mpSlideController->getCurrentSlideIndex() );
         }
         else if( (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
         {
