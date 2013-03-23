@@ -18,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE08805B16FDB784000CED5C /* LOViewerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOViewerWindow.h; sourceTree = "<group>"; };
+		BE08805C16FDB784000CED5C /* LOViewerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOViewerWindow.m; sourceTree = "<group>"; };
 		BE5A22551664F87600CF01C9 /* Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Viewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5A22591664F87600CF01C9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BE5A225B1664F87600CF01C9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -83,6 +85,8 @@
 				BE69AD3716958CA0001BE1CD /* Resources */,
 				BE5A22681664F87600CF01C9 /* LOViewerAppDelegate.h */,
 				BE5A22691664F87600CF01C9 /* LOViewerAppDelegate.mm */,
+				BE08805B16FDB784000CED5C /* LOViewerWindow.h */,
+				BE08805C16FDB784000CED5C /* LOViewerWindow.m */,
 				BE5A22601664F87600CF01C9 /* Supporting Files */,
 			);
 			path = Viewer;
