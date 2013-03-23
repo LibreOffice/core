@@ -636,7 +636,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
     {
         HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_TEXT:CBX_GROUP_AUTO";
         Pos = MAP_APPFONT ( X0 , 20  ) ;
-        Size = MAP_APPFONT ( W0 , 10 ) ;
+        Size = MAP_APPFONT ( W1 , 8 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Automatically after" ;
     };
