@@ -1917,7 +1917,6 @@ void Outliner::ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_
     DBG_CHKTHIS(Outliner,0);
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    sal_uInt16 nRelPos = 0xFFFF;
 
     while ( pPara )
     {
@@ -1944,9 +1943,6 @@ void Outliner::ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_
 
         if ( bRecalcLevel )
         {
-            if ( nRelPos != 0xFFFF )
-                nRelPos++;
-
             sal_Int16 nDepth = pPara->GetDepth();
             pPara = pParaList->GetParagraph( ++nPara );
             if ( !bRecalcChildren )
