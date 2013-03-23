@@ -38,10 +38,6 @@
 #include "xmlsec/xmlenc.h"
 #include "xmlsec/crypto.h"
 
-#ifdef UNX
-#define stricmp strcasecmp
-#endif
-
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
