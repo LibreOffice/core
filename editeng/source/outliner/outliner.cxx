@@ -1438,10 +1438,10 @@ const SvxNumberFormat* Outliner::GetNumberFormat( sal_uInt16 nPara ) const
     const SvxNumberFormat* pFmt = NULL;
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    if (pPara == NULL)
+    if (!pPara)
         return NULL;
 
-    sal_Int16 nDepth = pPara? pPara->GetDepth() : -1;
+    sal_Int16 nDepth = pPara->GetDepth();
 
     if( nDepth >= 0 )
     {
