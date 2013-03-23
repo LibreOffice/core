@@ -1785,12 +1785,32 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     }
 
                     {
+                        OUString aBookmark;
+                        Reference<XPropertySetInfo> xShapePropSetInfo = xShapePropSet->getPropertySetInfo();
+                        if(xShapePropSetInfo->hasPropertyByName("Bookmark"))
+                        {
+                            xShapePropSet->getPropertyValue( "Bookmark" ) >>= aBookmark;
+                        }
+
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-                        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
-                                                    0xffffffff,
-                                                    pElementId,
-                                                    &rxShape,
-                                                    pEmbeddedBitmapsMtf );
+                        if( !aBookmark.isEmpty() )
+                        {
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xlink:href", aBookmark);
+                            SvXMLElementExport alinkA( *mpSVGExport, XML_NAMESPACE_NONE, "a", sal_True, sal_True );
+                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
+                                                        0xffffffff,
+                                                        pElementId,
+                                                        &rxShape,
+                                                        pEmbeddedBitmapsMtf );
+                        }
+                        else
+                        {
+                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
+                                                        0xffffffff,
+                                                        pElementId,
+                                                        &rxShape,
+                                                        pEmbeddedBitmapsMtf );
+                        }
                     }
                 }
 
