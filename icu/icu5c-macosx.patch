@@ -2,7 +2,7 @@
 +++ misc/build/icu/source/common/putil.cpp
 @@ -1080,8 +1080,16 @@
          static const time_t decemberSolstice=1198332540; /*2007-12-22 06:09 UT*/
- 
+
          /* This probing will tell us when daylight savings occurs.  */
 +#if U_PLATFORM_IS_DARWIN_BASED
 +        struct tm *tmp;

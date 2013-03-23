@@ -1,25 +1,25 @@
 --- misc/icu/source/config/mh-linux
 +++ misc/build/icu/source/config/mh-linux
 @@ -30,7 +30,7 @@
- 
+
  ## Compiler switch to embed a library name
  # The initial tab in the next line is to prevent icu-config from reading it.
 -	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
 +#	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
  #SH# # We can't depend on MIDDLE_SO_TARGET being set.
  #SH# LD_SONAME=
- 
+
 --- misc/icu/source/configure
 +++ misc/build/icu/source/configure
 @@ -5053,7 +5053,7 @@
- 	else
- 		icu_cv_host_frag=mh-linux-va
- 	fi ;;
+	else
+		icu_cv_host_frag=mh-linux-va
+	fi ;;
 -*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
 +*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu|*-*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
  *-*-cygwin|*-*-mingw32)
- 	if test "$GCC" = yes; then
- 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+	if test "$GCC" = yes; then
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 @@ -6127,6 +6127,9 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
@@ -53,7 +53,7 @@
  #   define U_HAVE_NL_LANGINFO_CODESET 1
  #endif
 @@ -114,6 +114,8 @@
- 
+
  #ifdef U_TIMEZONE
      /* Use the predefined value. */
 +#elif defined(__ANDROID__)
@@ -70,5 +70,5 @@
 -#   define U_EXPORT __attribute__((visibility("default")))
 +#   define U_EXPORT
  #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
-    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
+    || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550)
  #   define U_EXPORT __global

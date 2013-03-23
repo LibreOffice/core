@@ -2,17 +2,17 @@
 +++ misc/build/icu/source/tools/toolutil/pkg_genc.h
 @@ -58,7 +58,7 @@
  #endif
- 
+
  #define LARGE_BUFFER_MAX_SIZE 2048
 -#define SMALL_BUFFER_MAX_SIZE 512
 +#define SMALL_BUFFER_MAX_SIZE 2048
  #define SMALL_BUFFER_FLAG_NAMES 32
  #define BUFFER_PADDING_SIZE 20
- 
+
 --- misc/icu/source/tools/toolutil/pkg_genc.c
 +++ misc/build/icu/source/tools/toolutil/pkg_genc.c
 @@ -145,6 +145,28 @@
- 
+
          ".long ","",HEX_0X
      },
 +    {"gcc-android-arm",
@@ -41,22 +41,11 @@
          "\t.section \".rodata\"\n"
          "\t.align   8\n"
 
---- misc/icu/source/common/stringpiece.cpp	2010-09-29 20:37:20.000000000 +0200
-+++ misc/build/icu/source/common/stringpiece.cpp	2011-03-15 10:57:24.722045561 +0100
-@@ -75,7 +75,7 @@
-  * Visual Studios 9.0.
-  * Cygwin with MSVC 9.0 also complains here about redefinition.
-  */
--#if (!defined(_MSC_VER) || (_MSC_VER > 1500)) && !defined(CYGWINMSVC)
-+#if (!defined(_MSC_VER) && !defined(CYGWINMSVC))
- const int32_t StringPiece::npos;
- #endif
- 
 --- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
 +++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
 @@ -25,11 +25,7 @@
  SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
- 
+
  ## Compiler switches to embed a library name and version information
 -ifeq ($(ENABLE_RPATH),YES)
 -LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(libdir)/$(notdir $(MIDDLE_SO_TARGET))
@@ -64,27 +53,27 @@
 -LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
 -endif
 +LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @executable_path/$(notdir $(MIDDLE_SO_TARGET))
- 
+
  ## Compiler switch to embed a runtime search path
  LD_RPATH=
 @@ -45,10 +41,6 @@
  ## Non-shared intermediate object suffix
  STATIC_O = ao
- 
+
 -## Override Versioned target for a shared library.
 -FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
 -MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 -
- ## Compilation rules
+ ## Compilation and dependency rules
  %.$(STATIC_O): $(srcdir)/%.c
- 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d $*.o $*.$(STATIC_O)" -o $@ $<)
 @@ -80,16 +72,10 @@
- 
+
  ## Versioned libraries rules
- 
+
 -%.$(SO_TARGET_VERSION_MAJOR).$(SO): %.$(SO_TARGET_VERSION).$(SO)
 +%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
- 	$(RM) $@ && ln -s ${<F} $@
+	$(RM) $@ && ln -s ${<F} $@
 -%.$(SO): %.$(SO_TARGET_VERSION_MAJOR).$(SO)
 -	$(RM) $@ && ln -s ${*F}.$(SO_TARGET_VERSION).$(SO) $@
 -
@@ -95,28 +84,28 @@
 -GENREN_PL_OPTS=-x Mach-O -n '-g' -p '| c++filt'
 +%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
 +	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
- 
+
  ## Remove shared library 's'
- STATIC_PREFIX_WHEN_USED = 
+ STATIC_PREFIX_WHEN_USED =
 --- misc/icu/source/layout/ArabicShaping.cpp	2010-09-29 20:38:38.000000000 +0200
 +++ misc/build/icu/source/layout/ArabicShaping.cpp	2011-03-15 10:56:26.655056238 +0100
 @@ -79,7 +79,6 @@
  #define markFeatureMask 0x00040000UL
  #define mkmkFeatureMask 0x00020000UL
- 
+
 -#define NO_FEATURES   0
  #define ISOL_FEATURES (isolFeatureMask | ligaFeatureMask | msetFeatureMask | markFeatureMask | ccmpFeatureMask | rligFeatureMask | caltFeatureMask | dligFeatureMask | cswhFeatureMask | cursFeatureMask | kernFeatureMask | mkmkFeatureMask)
- 
+
  #define SHAPE_MASK 0xF0000000UL
 @@ -174,11 +173,7 @@
          LEUnicode c = chars[in];
          ShapeType t = getShapeType(c);
- 
+
 -        if (t == ST_NOSHAPE_NONE) {
 -            glyphStorage.setAuxData(out, NO_FEATURES, success);
 -        } else {
              glyphStorage.setAuxData(out, ISOL_FEATURES, success);
 -        }
- 
+
          if ((t & MASK_TRANSPARENT) != 0) {
              continue;

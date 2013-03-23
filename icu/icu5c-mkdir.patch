@@ -5,6 +5,6 @@
  SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
  $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
 +	mkdir -p $(OUTTMPDIR)
- 	rc.exe /i$(srcdir)/../common /i$(top_builddir)/common /fo$@ $(CPPFLAGS) $(SOURCE_FILE)
+	rc.exe /i$(srcdir)/../common /i$(top_builddir)/common /fo$@ $(CPPFLAGS) $(SOURCE_FILE)
  endif
  endif
