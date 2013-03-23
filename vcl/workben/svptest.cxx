@@ -43,12 +43,10 @@ using namespace ::com::sun::star::lang;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-// -----------------------------------------------------------------------
 
 // Forward declaration
 void Main();
 
-// -----------------------------------------------------------------------
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -66,7 +64,6 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
-// -----------------------------------------------------------------------
 
 class MyWin : public WorkWindow
 {
@@ -83,7 +80,6 @@ public:
     void        Resize();
 };
 
-// -----------------------------------------------------------------------
 
 void Main()
 {
@@ -94,7 +90,6 @@ void Main()
     Application::Execute();
 }
 
-// -----------------------------------------------------------------------
 
 MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
@@ -121,42 +116,36 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aBitmap.ReleaseAccess( pAcc );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-// -----------------------------------------------------------------------
 
 static Point project( const Point& rPoint )
 {
@@ -166,7 +155,6 @@ static Point project( const Point& rPoint )
     // transform planar coordinates to 3d
     double x = rPoint.X();
     double y = rPoint.Y();
-    //double z = 0;
 
     // rotate around X axis
     double x1 = x;
@@ -255,8 +243,6 @@ void MyWin::Paint( const Rectangle& rRect )
     DrawRect( Rectangle( Point( 300,300 ),
                          Size( aPaperSize.Width()-600,
                                aPaperSize.Height()-600 ) ) );
-
-    // AllSettings aSettings( Application::GetSettings() );
 
     const int nFontCount = GetDevFontCount();
     const int nFontSamples = (nFontCount<15) ? nFontCount : 15;
@@ -361,7 +347,6 @@ void MyWin::Paint( const Rectangle& rRect )
     Pop();
 }
 
-// -----------------------------------------------------------------------
 
 void MyWin::Resize()
 {
