@@ -108,6 +108,7 @@ public:
                             : mrServerFont( rFont )
                             {}
 
+    using LEFontInstance::getFontTable;
     virtual const void*     getFontTable(LETag tableTag) const;
     virtual le_int32        getUnitsPerEM() const;
     virtual float           getXPixelsPerEm() const;

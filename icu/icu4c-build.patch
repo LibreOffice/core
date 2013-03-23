@@ -41,17 +41,6 @@
          "\t.section \".rodata\"\n"
          "\t.align   8\n"
 
---- misc/icu/source/common/stringpiece.cpp	2010-09-29 20:37:20.000000000 +0200
-+++ misc/build/icu/source/common/stringpiece.cpp	2011-03-15 10:57:24.722045561 +0100
-@@ -75,7 +75,7 @@
-  * Visual Studios 9.0.
-  * Cygwin with MSVC 9.0 also complains here about redefinition.
-  */
--#if (!defined(_MSC_VER) || (_MSC_VER > 1500)) && !defined(CYGWINMSVC)
-+#if (!defined(_MSC_VER) && !defined(CYGWINMSVC))
- const int32_t StringPiece::npos;
- #endif
- 
 --- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
 +++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
 @@ -25,11 +25,7 @@
@@ -75,9 +64,9 @@
 -FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
 -MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 -
- ## Compilation rules
+ ## Compilation and dependency rules
  %.$(STATIC_O): $(srcdir)/%.c
- 	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+	$(call SILENT_COMPILE,$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d $*.o $*.$(STATIC_O)" -o $@ $<)
 @@ -80,16 +72,10 @@
  
  ## Versioned libraries rules
