@@ -814,16 +814,15 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     // page view and layout
     SdPage* pPage      = NULL;
     SdPage* pFirstPage = NULL;
-    sal_uInt16  nFirstPage;
-    sal_uInt16  nSelectedPages = (sal_uInt16)mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
-    rtl::OUString aPageStr;
+    sal_uInt16 nFirstPage;
+    sal_uInt16 nSelectedPages = mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
+    OUStringBuffer aPageStr;
     String aLayoutStr;
 
+    //Set number of slides
     if (nSelectedPages > 0)
-        aPageStr = SD_RESSTR(STR_SD_PAGE);
-
-    if (nSelectedPages == 1)
     {
+        aPageStr = SD_RESSTR(STR_SLIDE_SINGULAR);
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
@@ -831,22 +830,20 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
         if (pDescriptor)
         {
             pPage = pDescriptor->GetPage();
-            nFirstPage = pPage->GetPageNum()/2;
-            pFirstPage = pPage;
-
-            aPageStr += " ";
-            aPageStr += rtl::OUString::valueOf( static_cast<sal_Int32>(nFirstPage + 1) );
-            aPageStr += " / " ;
-            aPageStr += rtl::OUString::valueOf(mrSlideSorter.GetModel().GetPageCount());
-
-            aLayoutStr = pFirstPage->GetLayoutName();
-            aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
+            nFirstPage = (pPage->GetPageNum()/2) + 1;
+            aPageStr.append(" ").append(static_cast<sal_Int32>(nFirstPage), 10).append(" / ").append(mrSlideSorter.GetModel().GetPageCount(), 10);
         }
+      rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr.makeStringAndClear() ) );
     }
 
-    rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
-    rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
-
+    //Set layout
+    if (nSelectedPages == 1 && pPage != NULL)
+    {
+        pFirstPage = pPage;
+        aLayoutStr = pFirstPage->GetLayoutName();
+        aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
+        rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
+    }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
     {
         rSet.Put( SfxVoidItem( SID_ATTR_ZOOMSLIDER ) );
