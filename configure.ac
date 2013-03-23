@@ -162,21 +162,24 @@ if test -n "$with_android_ndk"; then
 
     if test $host_cpu = arm; then
         android_cpu=arm
+        android_platform_prefix=$android_cpu-linux-androideabi
     elif test $host_cpu = mips; then
         android_cpu=mips
+        android_platform_prefix=$android_cpu-linux-androideabi
     else
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
         android_cpu=x86
+        android_platform_prefix=$android_cpu
     fi
 
     case "$with_android_ndk_toolchain_version" in
     4.6|4.7)
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_cpu-linux-androideabi-$with_android_ndk_toolchain_version
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
     clang3.1|clang3.2)
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_cpu-linux-androideabi-4.6
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.6
         ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
         ANDROID_USING_CLANG=true
         ;;
