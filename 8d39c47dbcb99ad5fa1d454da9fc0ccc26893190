@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+wg\u003d",
+        "filename": "drawinglayer/source/attribute/sdrshadowattribute.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-23T19:44:22Z",
+      "side": 1,
+      "message": "use \u003d\u003d for deep check",
+      "revId": "8d39c47dbcb99ad5fa1d454da9fc0ccc26893190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
