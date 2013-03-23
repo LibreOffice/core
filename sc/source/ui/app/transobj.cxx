@@ -779,75 +779,73 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
     ScRange aRef;
 
     ScCellIterator aIter( pDoc, nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab );
-    ScBaseCell* pCell = aIter.GetFirst();
-    while (pCell)
+    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
-        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+        if (aIter.getType() != CELLTYPE_FORMULA)
+            continue;
+
+        ScFormulaCell* pFCell = aIter.getFormulaCell();
+        bool bOut = false;
+        ScDetectiveRefIter aRefIter( pFCell );
+        while ( !bOut && aRefIter.GetNextRef( aRef ) )
         {
-            ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-            bool bOut = false;
-            ScDetectiveRefIter aRefIter( pFCell );
-            while ( !bOut && aRefIter.GetNextRef( aRef ) )
+            if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||
+                    aRef.aStart.Col() < nStartX || aRef.aEnd.Col() > nEndX ||
+                    aRef.aStart.Row() < nStartY || aRef.aEnd.Row() > nEndY )
+                bOut = true;
+        }
+        if (bOut)
+        {
+            SCCOL nCol = aIter.GetPos().Col() - nSubX;
+            SCROW nRow = aIter.GetPos().Row() - nSubY;
+
+            sal_uInt16 nErrCode = pFCell->GetErrCode();
+            ScAddress aPos(nCol, nRow, nDestTab);
+            if (nErrCode)
             {
-                if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||
-                        aRef.aStart.Col() < nStartX || aRef.aEnd.Col() > nEndX ||
-                        aRef.aStart.Row() < nStartY || aRef.aEnd.Row() > nEndY )
-                    bOut = true;
+                if ( ((const SvxHorJustifyItem*) pDestDoc->GetAttr(
+                        nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY))->GetValue() ==
+                        SVX_HOR_JUSTIFY_STANDARD )
+                    pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
+                            SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY) );
+
+                ScSetStringParam aParam;
+                aParam.setTextInput();
+                pDestDoc->SetString(aPos, ScGlobal::GetErrorString(nErrCode));
             }
-            if (bOut)
+            else if (pFCell->IsValue())
             {
-                SCCOL nCol = aIter.GetPos().Col() - nSubX;
-                SCROW nRow = aIter.GetPos().Row() - nSubY;
-
-                sal_uInt16 nErrCode = pFCell->GetErrCode();
-                ScAddress aPos(nCol, nRow, nDestTab);
-                if (nErrCode)
+                pDestDoc->SetValue(aPos, pFCell->GetValue());
+            }
+            else
+            {
+                String aStr = pFCell->GetString();
+                if ( pFCell->IsMultilineResult() )
                 {
-                    if ( ((const SvxHorJustifyItem*) pDestDoc->GetAttr(
-                            nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY))->GetValue() ==
-                            SVX_HOR_JUSTIFY_STANDARD )
-                        pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
-                                SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY) );
-
-                    ScSetStringParam aParam;
-                    aParam.setTextInput();
-                    pDestDoc->SetString(aPos, ScGlobal::GetErrorString(nErrCode));
-                }
-                else if (pFCell->IsValue())
-                {
-                    pDestDoc->SetValue(aPos, pFCell->GetValue());
+                    ScFieldEditEngine& rEngine = pDestDoc->GetEditEngine();
+                    rEngine.SetText(aStr);
+                    pDestDoc->SetEditText(ScAddress(nCol,nRow,nDestTab), rEngine.CreateTextObject());
                 }
                 else
                 {
-                    String aStr = pFCell->GetString();
-                    if ( pFCell->IsMultilineResult() )
-                    {
-                        ScFieldEditEngine& rEngine = pDestDoc->GetEditEngine();
-                        rEngine.SetText(aStr);
-                        pDestDoc->SetEditText(ScAddress(nCol,nRow,nDestTab), rEngine.CreateTextObject());
-                    }
-                    else
-                    {
-                        ScSetStringParam aParam;
-                        aParam.setTextInput();
-                        pDestDoc->SetString(aPos, aStr);
-                    }
-                }
-
-                //  number formats
-
-                sal_uLong nOldFormat = ((const SfxUInt32Item*)
-                                pDestDoc->GetAttr(nCol,nRow,nDestTab, ATTR_VALUE_FORMAT))->GetValue();
-                if ( (nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-                {
-                    sal_uLong nNewFormat = pFCell->GetStandardFormat( *pFormatter,
-                        nOldFormat );
-                    pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
-                                SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );
+                    ScSetStringParam aParam;
+                    aParam.setTextInput();
+                    pDestDoc->SetString(aPos, aStr);
                 }
             }
+
+            //  number formats
+
+            sal_uLong nOldFormat = ((const SfxUInt32Item*)
+                            pDestDoc->GetAttr(nCol,nRow,nDestTab, ATTR_VALUE_FORMAT))->GetValue();
+            if ( (nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+            {
+                sal_uLong nNewFormat = pFCell->GetStandardFormat( *pFormatter,
+                    nOldFormat );
+                pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
+                            SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );
+            }
         }
-        pCell = aIter.GetNext();
     }
 }
 

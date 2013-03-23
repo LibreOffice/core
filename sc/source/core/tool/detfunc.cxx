@@ -1029,87 +1029,85 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
 sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         ScDetectiveData& rData, sal_uInt16 nLevel )
 {
-    //  ueber ganzes Dokument
+    // over the entire document.
 
     sal_uInt16 nResult = DET_INS_EMPTY;
-    ScCellIterator aCellIter( pDoc, 0,0,0, MAXCOL,MAXROW,MAXTAB );          // alle Tabellen
-    ScBaseCell* pCell = aCellIter.GetFirst();
-    while (pCell)
+    ScCellIterator aCellIter(pDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));  // all sheets
+    for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
     {
-        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+        if (aCellIter.getType() != CELLTYPE_FORMULA)
+            continue;
+
+        ScFormulaCell* pFCell = aCellIter.getFormulaCell();
+        bool bRunning = pFCell->IsRunning();
+
+        if (pFCell->GetDirty())
+            pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
+        pFCell->SetRunning(true);
+
+        ScDetectiveRefIter aIter(pFCell);
+        ScRange aRef;
+        while ( aIter.GetNextRef( aRef) )
         {
-            ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-            sal_Bool bRunning = pFCell->IsRunning();
-
-            if (pFCell->GetDirty())
-                pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-            pFCell->SetRunning(sal_True);
-
-            ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
-            ScRange aRef;
-            while ( aIter.GetNextRef( aRef) )
+            if (aRef.aStart.Tab() <= nTab && aRef.aEnd.Tab() >= nTab)
             {
-                if (aRef.aStart.Tab() <= nTab && aRef.aEnd.Tab() >= nTab)
+                if (Intersect( nCol1,nRow1,nCol2,nRow2,
+                        aRef.aStart.Col(),aRef.aStart.Row(),
+                        aRef.aEnd.Col(),aRef.aEnd.Row() ))
                 {
-                    if (Intersect( nCol1,nRow1,nCol2,nRow2,
-                            aRef.aStart.Col(),aRef.aStart.Row(),
-                            aRef.aEnd.Col(),aRef.aEnd.Row() ))
+                    sal_Bool bAlien = ( aCellIter.GetPos().Tab() != nTab );
+                    sal_Bool bDrawRet;
+                    if (bAlien)
+                        bDrawRet = DrawAlienEntry( aRef, rData );
+                    else
+                        bDrawRet = DrawEntry( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
+                                                aRef, rData );
+                    if (bDrawRet)
                     {
-                        sal_Bool bAlien = ( aCellIter.GetPos().Tab() != nTab );
-                        sal_Bool bDrawRet;
-                        if (bAlien)
-                            bDrawRet = DrawAlienEntry( aRef, rData );
-                        else
-                            bDrawRet = DrawEntry( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
-                                                    aRef, rData );
-                        if (bDrawRet)
+                        nResult = DET_INS_INSERTED;         //  neuer Pfeil eingetragen
+                    }
+                    else
+                    {
+                        if (bRunning)
                         {
-                            nResult = DET_INS_INSERTED;         //  neuer Pfeil eingetragen
+                            if (nResult == DET_INS_EMPTY)
+                                nResult = DET_INS_CIRCULAR;
                         }
                         else
                         {
-                            if (bRunning)
-                            {
-                                if (nResult == DET_INS_EMPTY)
-                                    nResult = DET_INS_CIRCULAR;
-                            }
-                            else
-                            {
-                                        //  weiterverfolgen
+                                    //  weiterverfolgen
 
-                                if ( nLevel < rData.GetMaxLevel() )
+                            if ( nLevel < rData.GetMaxLevel() )
+                            {
+                                sal_uInt16 nSubResult = InsertSuccLevel(
+                                                        aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
+                                                        aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
+                                                        rData, nLevel+1 );
+                                switch (nSubResult)
                                 {
-                                    sal_uInt16 nSubResult = InsertSuccLevel(
-                                                            aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
-                                                            aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
-                                                            rData, nLevel+1 );
-                                    switch (nSubResult)
-                                    {
-                                        case DET_INS_INSERTED:
-                                            nResult = DET_INS_INSERTED;
-                                            break;
-                                        case DET_INS_CONTINUE:
-                                            if (nResult != DET_INS_INSERTED)
-                                                nResult = DET_INS_CONTINUE;
-                                            break;
-                                        case DET_INS_CIRCULAR:
-                                            if (nResult == DET_INS_EMPTY)
-                                                nResult = DET_INS_CIRCULAR;
-                                            break;
-                                        // DET_INS_EMPTY: unveraendert lassen
-                                    }
+                                    case DET_INS_INSERTED:
+                                        nResult = DET_INS_INSERTED;
+                                        break;
+                                    case DET_INS_CONTINUE:
+                                        if (nResult != DET_INS_INSERTED)
+                                            nResult = DET_INS_CONTINUE;
+                                        break;
+                                    case DET_INS_CIRCULAR:
+                                        if (nResult == DET_INS_EMPTY)
+                                            nResult = DET_INS_CIRCULAR;
+                                        break;
+                                    // DET_INS_EMPTY: unveraendert lassen
                                 }
-                                else                                    //  nMaxLevel erreicht
-                                    if (nResult != DET_INS_INSERTED)
-                                        nResult = DET_INS_CONTINUE;
                             }
+                            else                                    //  nMaxLevel erreicht
+                                if (nResult != DET_INS_INSERTED)
+                                    nResult = DET_INS_CONTINUE;
                         }
                     }
                 }
             }
-            pFCell->SetRunning(bRunning);
         }
-        pCell = aCellIter.GetNext();
+        pFCell->SetRunning(bRunning);
     }
 
     return nResult;
@@ -1124,54 +1122,52 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
     sal_Bool bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
 
     ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
-    ScBaseCell* pCell = aCellIter.GetFirst();
-    while (pCell)
+    for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
     {
-        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+        if (aCellIter.getType() != CELLTYPE_FORMULA)
+            continue;
+
+        ScFormulaCell* pFCell = aCellIter.getFormulaCell();
+        bool bRunning = pFCell->IsRunning();
+
+        if (pFCell->GetDirty())
+            pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
+        pFCell->SetRunning(true);
+
+        ScDetectiveRefIter aIter(pFCell);
+        ScRange aRef;
+        while ( aIter.GetNextRef( aRef) )
         {
-            ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-            sal_Bool bRunning = pFCell->IsRunning();
-
-            if (pFCell->GetDirty())
-                pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-            pFCell->SetRunning(sal_True);
-
-            ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
-            ScRange aRef;
-            while ( aIter.GetNextRef( aRef) )
+            if (aRef.aStart.Tab() <= nTab && aRef.aEnd.Tab() >= nTab)
             {
-                if (aRef.aStart.Tab() <= nTab && aRef.aEnd.Tab() >= nTab)
+                if (Intersect( nCol1,nRow1,nCol2,nRow2,
+                        aRef.aStart.Col(),aRef.aStart.Row(),
+                        aRef.aEnd.Col(),aRef.aEnd.Row() ))
                 {
-                    if (Intersect( nCol1,nRow1,nCol2,nRow2,
-                            aRef.aStart.Col(),aRef.aStart.Row(),
-                            aRef.aEnd.Col(),aRef.aEnd.Row() ))
+                    if ( bDelete )                          // Pfeile, die hier anfangen
                     {
-                        if ( bDelete )                          // Pfeile, die hier anfangen
+                        if (aRef.aStart != aRef.aEnd)
                         {
-                            if (aRef.aStart != aRef.aEnd)
-                            {
-                                DeleteBox( aRef.aStart.Col(), aRef.aStart.Row(),
-                                                aRef.aEnd.Col(), aRef.aEnd.Row() );
-                            }
-                            DeleteArrowsAt( aRef.aStart.Col(), aRef.aStart.Row(), false );
+                            DeleteBox( aRef.aStart.Col(), aRef.aStart.Row(),
+                                            aRef.aEnd.Col(), aRef.aEnd.Row() );
                         }
-                        else if ( !bRunning &&
-                                HasArrow( aRef.aStart,
-                                            aCellIter.GetPos().Col(),aCellIter.GetPos().Row(),aCellIter.GetPos().Tab() ) )
-                        {
-                            sal_uInt16 nTemp = FindSuccLevel( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
-                                                            aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
-                                                            nLevel+1, nDeleteLevel );
-                            if (nTemp > nResult)
-                                nResult = nTemp;
-                        }
+                        DeleteArrowsAt( aRef.aStart.Col(), aRef.aStart.Row(), false );
+                    }
+                    else if ( !bRunning &&
+                            HasArrow( aRef.aStart,
+                                        aCellIter.GetPos().Col(),aCellIter.GetPos().Row(),aCellIter.GetPos().Tab() ) )
+                    {
+                        sal_uInt16 nTemp = FindSuccLevel( aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
+                                                        aCellIter.GetPos().Col(), aCellIter.GetPos().Row(),
+                                                        nLevel+1, nDeleteLevel );
+                        if (nTemp > nResult)
+                            nResult = nTemp;
                     }
                 }
             }
-
-            pFCell->SetRunning(bRunning);
         }
-        pCell = aCellIter.GetNext();
+
+        pFCell->SetRunning(bRunning);
     }
 
     return nResult;
