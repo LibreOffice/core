@@ -942,11 +942,14 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         if( bStartWithActualSlide )
         {
+            aPresSlide = pStartPage->GetName();
+            // if the starting slide is hidden, we can't set slide controller to ALL mode
+            maPresSettings.mbAll = !pStartPage->IsExcluded();
+
             if( meAnimationMode != ANIMATIONMODE_SHOW )
             {
                 if( pStartPage->GetPageKind() == PK_STANDARD )
                 {
-                    aPresSlide = pStartPage->GetName();
                     maPresSettings.mbAll = false;
                 }
                 else
@@ -963,31 +966,9 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             }
         }
 
+        sal_Int32 nSlideNum = ( pStartPage->GetPageNum() - 1 ) >> 1;
         // build page list
-        createSlideList( maPresSettings.mbAll, false, aPresSlide );
-
-        if( bStartWithActualSlide )
-        {
-            sal_Int32 nSlideNum = ( pStartPage->GetPageNum() - 1 ) >> 1;
-
-            if( !maPresSettings.mbAll && !maPresSettings.mbCustomShow )
-            {
-                // its start from dia, find out if it is located before our current Slide
-                const sal_Int32 nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
-                sal_Int32 nSlide;
-                for( nSlide = 0; (nSlide < nSlideCount); nSlide++ )
-                {
-                    if( mpDoc->GetSdPage( (sal_uInt16) nSlide, PK_STANDARD )->GetName() == aPresSlide )
-                        break;
-                }
-
-                if( nSlide > nSlideNum )
-                    nSlideNum = -1;
-            }
-
-            if( nSlideNum != -1 )
-                mpSlideController->setStartSlideNumber( nSlideNum );
-        }
+        createSlideList( maPresSettings.mbAll, false, aPresSlide, nSlideNum );
 
         // remember Slide number from where the show was started
         if( pStartPage )
@@ -2448,7 +2429,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide )
+void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide, sal_Int32 nStartSlide )
 {
     const long nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
 
@@ -2472,34 +2453,33 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
 
         if( eMode != AnimationSlideController::CUSTOM )
         {
-            sal_Int32 nFirstSlide = 0;
+            sal_Int32 nFirstVisibleSlide = 0;
+
 
             // normal presentation
-            if( eMode == AnimationSlideController::FROM )
+            if( rPresSlide.Len() )
             {
-                if( rPresSlide.Len() )
+                sal_Int32 nSlide;
+                sal_Bool bTakeNextAvailable = sal_False;
+
+                for( nSlide = nStartSlide, nFirstVisibleSlide = -1;
+                    ( nSlide < nSlideCount ) && ( -1 == nFirstVisibleSlide ); nSlide++ )
                 {
-                    sal_Int32 nSlide;
-                    sal_Bool bTakeNextAvailable = sal_False;
+                    SdPage* pTestSlide = mpDoc->GetSdPage( (sal_uInt16)nSlide, PK_STANDARD );
 
-                    for( nSlide = 0, nFirstSlide = -1; ( nSlide < nSlideCount ) && ( -1 == nFirstSlide ); nSlide++ )
+                    if( pTestSlide->GetName() == rPresSlide )
                     {
-                        SdPage* pTestSlide = mpDoc->GetSdPage( (sal_uInt16)nSlide, PK_STANDARD );
-
-                        if( pTestSlide->GetName() == rPresSlide )
-                        {
-                            if( pTestSlide->IsExcluded() )
-                                bTakeNextAvailable = sal_True;
-                            else
-                                nFirstSlide = nSlide;
-                        }
-                        else if( bTakeNextAvailable && !pTestSlide->IsExcluded() )
-                            nFirstSlide = nSlide;
+                        if( pTestSlide->IsExcluded() )
+                            bTakeNextAvailable = sal_True;
+                        else
+                            nFirstVisibleSlide = nSlide;
                     }
-
-                    if( -1 == nFirstSlide )
-                        nFirstSlide = 0;
+                    else if( bTakeNextAvailable && !pTestSlide->IsExcluded() )
+                        nFirstVisibleSlide = nSlide;
                 }
+
+                if( -1 == nFirstVisibleSlide )
+                    nFirstVisibleSlide = 0;
             }
 
             for( sal_Int32 i = 0; i < nSlideCount; i++ )
@@ -2509,7 +2489,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
                     mpSlideController->insertSlideNumber( i, bVisible );
             }
 
-            mpSlideController->setStartSlideNumber( nFirstSlide );
+            mpSlideController->setStartSlideNumber( nFirstVisibleSlide );
         }
         else
         {
