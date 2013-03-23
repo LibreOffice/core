@@ -57,6 +57,7 @@
 #include <unotools/charclass.hxx>
 #include <i18npool/languagetag.hxx>
 #include <charfmt.hxx>
+#include <fmtclds.hxx>
 #include <fmtcol.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -2271,7 +2272,7 @@ void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrmFmt const& rFrmFmt)
     }
 }
 
-void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt )
+void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwFmtCol *pCol )
 {
     SwCSS1OutMode aMode( *this, CSS1_OUTMODE_STYLE_OPT_ON |
                                 CSS1_OUTMODE_ENCODE|
@@ -2281,6 +2282,12 @@ void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt )
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
         OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION, 0 );
+
+    if (pCol)
+    {
+        OString sColumnCount(OString::number(static_cast<sal_Int32>(pCol->GetNumCols())));
+        OutCSS1_PropertyAscii(sCSS1_P_column_count, sColumnCount);
+    }
 
     if( !bFirstCSS1Property )
         Strm() << '\"';

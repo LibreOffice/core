@@ -21,7 +21,6 @@
 
 #define HTMLMODE_ON                 0x0001
 #define HTMLMODE_PARA_DISTANCE      0x0004
-#define HTMLMODE_FRM_COLUMNS        0x0010
 #define HTMLMODE_SOME_STYLES        0x0020 /* mind. MS IE */
 #define HTMLMODE_FULL_STYLES        0x0040 /* == SW */
 #define HTMLMODE_PARA_BLOCK         0x0100

@@ -469,15 +469,13 @@ sal_uLong SwHTMLWriter::WriteStream()
     return nWarn;
 }
 
-static const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
-                                       const SwSection& rSection,
+static const SwFmtCol *lcl_html_GetFmtCol( const SwSection& rSection,
                                        const SwSectionFmt& rFmt )
 {
     const SwFmtCol *pCol = 0;
 
     const SfxPoolItem* pItem;
-    if( rHTMLWrt.IsHTMLMode( HTMLMODE_FRM_COLUMNS ) &&
-        FILE_LINK_SECTION != rSection.GetType() &&
+    if( FILE_LINK_SECTION != rSection.GetType() &&
         SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState(RES_COL,sal_False,&pItem) &&
         ((const SwFmtCol *)pItem)->GetNumCols() > 1 )
     {
@@ -496,7 +494,7 @@ static bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nI
     {
         const SwSection& rSection = pSectNd->GetSection();
         const SwSectionFmt *pFmt = rSection.GetFmt();
-        if( pFmt && lcl_html_GetFmtCol( rHTMLWrt, rSection, *pFmt ) )
+        if( pFmt && lcl_html_GetFmtCol( rSection, *pFmt ) )
             bRet = true;
     }
 
@@ -615,7 +613,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
     if( rHTMLWrt.IsHTMLMode( rHTMLWrt.bCfgOutStyles ) )
-        rHTMLWrt.OutCSS1_SectionFmtOptions( rFmt );
+        rHTMLWrt.OutCSS1_SectionFmtOptions( rFmt, pCol );
 
     rHTMLWrt.Strm() << '>';
 
@@ -660,7 +658,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
     sal_uInt32 nSectSttIdx = rSectNd.GetIndex();
     sal_uInt32 nSectEndIdx = rSectNd.EndOfSectionIndex();
-    const SwFmtCol *pCol = lcl_html_GetFmtCol( rHTMLWrt, rSection, *pFmt );
+    const SwFmtCol *pCol = lcl_html_GetFmtCol( rSection, *pFmt );
     if( pCol )
     {
         // If the next node is a columned section node, too, don't export
@@ -686,7 +684,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
                     pSurrSection = &pSurrSectNd->GetSection();
                     pSurrFmt = pSurrSection->GetFmt();
                     if( pSurrFmt )
-                        pSurrCol = lcl_html_GetFmtCol( rHTMLWrt, *pSurrSection,
+                        pSurrCol = lcl_html_GetFmtCol( *pSurrSection,
                                                        *pSurrFmt );
                 }
             }
