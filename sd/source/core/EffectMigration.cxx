@@ -1322,7 +1322,7 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
         if( pObj )
         {
             const Reference< XShape > xShape( pShape );
-            SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->GetPage() : 0 );
+            SdPage* pPage = dynamic_cast< SdPage* >(pPathObj->GetPage());
             if( pPage )
             {
                 boost::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
