@@ -1927,6 +1927,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Below Average";
     };
+    String STR_COND_ABOVE_EQUAL_AVERAGE
+    {
+        Text [ en-US ] = "Above or equal Average";
+    };
+    String STR_COND_BELOW_EQUAL_AVERAGE
+    {
+        Text [ en-US ] = "Below or equal Average";
+    };
     String STR_COND_ERROR
     {
         Text [ en-US ] = "an Error code";

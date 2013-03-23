@@ -665,7 +665,10 @@
 #define STR_DPFIELD_GROUP_BY_QUARTERS    533
 #define STR_DPFIELD_GROUP_BY_YEARS       534
 
-#define STR_COUNT                   535
+#define STR_COND_ABOVE_EQUAL_AVERAGE 535
+#define STR_COND_BELOW_EQUAL_AVERAGE 536
+
+#define STR_COUNT                   537
 
 #endif
 

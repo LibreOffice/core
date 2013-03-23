@@ -62,6 +62,8 @@ enum ScConditionMode
     SC_COND_BOTTOM_PERCENT,
     SC_COND_ABOVE_AVERAGE,
     SC_COND_BELOW_AVERAGE,
+    SC_COND_ABOVE_EQUAL_AVERAGE,
+    SC_COND_BELOW_EQUAL_AVERAGE,
     SC_COND_ERROR,
     SC_COND_NOERROR,
     SC_COND_BEGINS_WITH,
@@ -244,8 +246,8 @@ private:
     bool IsTopNPercent( double nArg ) const;
     bool IsBottomNElement( double nArg ) const;
     bool IsBottomNPercent( double nArg ) const;
-    bool IsAboveAverage( double nArg ) const;
-    bool IsBelowAverage( double nArg ) const;
+    bool IsAboveAverage( double nArg, bool bEqual ) const;
+    bool IsBelowAverage( double nArg, bool bEqual ) const;
 
     bool IsError( const ScAddress& rPos ) const;
 

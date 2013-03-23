@@ -243,25 +243,33 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(15);
                 break;
-            case SC_COND_ERROR:
+            case SC_COND_ABOVE_EQUAL_AVERAGE:
                 maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(16);
                 break;
-            case SC_COND_NOERROR:
+            case SC_COND_BELOW_EQUAL_AVERAGE:
                 maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(17);
                 break;
-            case SC_COND_BEGINS_WITH:
+            case SC_COND_ERROR:
+                maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(18);
                 break;
-            case SC_COND_ENDS_WITH:
+            case SC_COND_NOERROR:
+                maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(19);
                 break;
-            case SC_COND_CONTAINS_TEXT:
+            case SC_COND_BEGINS_WITH:
                 maLbCondType.SelectEntryPos(20);
                 break;
-            case SC_COND_NOT_CONTAINS_TEXT:
+            case SC_COND_ENDS_WITH:
                 maLbCondType.SelectEntryPos(21);
+                break;
+            case SC_COND_CONTAINS_TEXT:
+                maLbCondType.SelectEntryPos(22);
+                break;
+            case SC_COND_NOT_CONTAINS_TEXT:
+                maLbCondType.SelectEntryPos(23);
                 break;
             case SC_COND_NONE:
                 break;
@@ -356,21 +364,27 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
             eMode = SC_COND_BELOW_AVERAGE;
             break;
         case 16:
-            eMode = SC_COND_ERROR;
+            eMode = SC_COND_ABOVE_EQUAL_AVERAGE;
             break;
         case 17:
-            eMode = SC_COND_NOERROR;
+            eMode = SC_COND_BELOW_EQUAL_AVERAGE;
             break;
         case 18:
-            eMode = SC_COND_BEGINS_WITH;
+            eMode = SC_COND_ERROR;
             break;
         case 19:
-            eMode = SC_COND_ENDS_WITH;
+            eMode = SC_COND_NOERROR;
             break;
         case 20:
-            eMode = SC_COND_CONTAINS_TEXT;
+            eMode = SC_COND_BEGINS_WITH;
             break;
         case 21:
+            eMode = SC_COND_ENDS_WITH;
+            break;
+        case 22:
+            eMode = SC_COND_CONTAINS_TEXT;
+            break;
+        case 23:
             eMode = SC_COND_NOT_CONTAINS_TEXT;
             break;
         default:

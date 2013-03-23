@@ -933,7 +933,7 @@ bool ScConditionEntry::IsBottomNPercent( double nArg ) const
     return true;
 }
 
-bool ScConditionEntry::IsBelowAverage( double nArg ) const
+bool ScConditionEntry::IsBelowAverage( double nArg, bool bEqual ) const
 {
     FillCache();
 
@@ -944,13 +944,13 @@ bool ScConditionEntry::IsBelowAverage( double nArg ) const
         nSum += itr->first * itr->second;
     }
 
-    if(nVal1)
+    if(bEqual)
         return (nArg <= nSum/mpCache->nValueItems);
     else
         return (nArg < nSum/mpCache->nValueItems);
 }
 
-bool ScConditionEntry::IsAboveAverage( double nArg ) const
+bool ScConditionEntry::IsAboveAverage( double nArg, bool bEqual ) const
 {
     FillCache();
 
@@ -961,7 +961,7 @@ bool ScConditionEntry::IsAboveAverage( double nArg ) const
         nSum += itr->first * itr->second;
     }
 
-    if(nVal1)
+    if(bEqual)
         return (nArg >= nSum/mpCache->nValueItems);
     else
         return (nArg > nSum/mpCache->nValueItems);
@@ -1084,10 +1084,12 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             bValid = IsBottomNPercent( nArg );
             break;
         case SC_COND_ABOVE_AVERAGE:
-            bValid = IsAboveAverage( nArg );
+        case SC_COND_ABOVE_EQUAL_AVERAGE:
+            bValid = IsAboveAverage( nArg, eOp == SC_COND_ABOVE_EQUAL_AVERAGE );
             break;
         case SC_COND_BELOW_AVERAGE:
-            bValid = IsBelowAverage( nArg );
+        case SC_COND_BELOW_EQUAL_AVERAGE:
+            bValid = IsBelowAverage( nArg, eOp == SC_COND_BELOW_EQUAL_AVERAGE );
             break;
         case SC_COND_ERROR:
         case SC_COND_NOERROR:

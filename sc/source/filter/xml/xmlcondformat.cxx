@@ -485,7 +485,7 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
     else if(rValue.indexOf("top-percent") == 0)
     {
         const sal_Unicode* pStr = rValue.getStr();
-        const sal_Unicode* pStart = pStr + 11;
+        const sal_Unicode* pStart = pStr + 12;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
         eMode = SC_COND_TOP_PERCENT;
@@ -497,6 +497,22 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
         eMode = SC_COND_BOTTOM_PERCENT;
+    }
+    else if(rValue.indexOf("above-average") == 0)
+    {
+        eMode = SC_COND_ABOVE_AVERAGE;
+    }
+    else if(rValue.indexOf("below-average") == 0)
+    {
+        eMode = SC_COND_BELOW_AVERAGE;
+    }
+    else if(rValue.indexOf("above-equal-average") == 0)
+    {
+        eMode = SC_COND_ABOVE_EQUAL_AVERAGE;
+    }
+    else if(rValue.indexOf("below-equal-average") == 0)
+    {
+        eMode = SC_COND_BELOW_EQUAL_AVERAGE;
     }
     else if(rValue.indexOf("is-error") == 0)
     {

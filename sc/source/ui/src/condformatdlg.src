@@ -150,6 +150,8 @@ Control RID_COND_ENTRY
             "bottom 10 percent";
             "above average";
             "below average";
+            "above or equal average";
+            "below or equal average";
             "Error";
             "No Error";
             "Begins with";

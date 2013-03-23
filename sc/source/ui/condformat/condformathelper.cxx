@@ -75,16 +75,20 @@ rtl::OUString getExpression(sal_Int32 nIndex)
         case 16:
             return ScGlobal::GetRscString(STR_COND_BELOW_AVERAGE);
         case 17:
-            return ScGlobal::GetRscString(STR_COND_ERROR);
+            return ScGlobal::GetRscString(STR_COND_ABOVE_EQUAL_AVERAGE);
         case 18:
-            return ScGlobal::GetRscString(STR_COND_NOERROR);
+            return ScGlobal::GetRscString(STR_COND_BELOW_EQUAL_AVERAGE);
         case 19:
-            return ScGlobal::GetRscString(STR_COND_BEGINS_WITH);
+            return ScGlobal::GetRscString(STR_COND_ERROR);
         case 20:
-            return ScGlobal::GetRscString(STR_COND_ENDS_WITH);
+            return ScGlobal::GetRscString(STR_COND_NOERROR);
         case 21:
-            return ScGlobal::GetRscString(STR_COND_CONTAINS);
+            return ScGlobal::GetRscString(STR_COND_BEGINS_WITH);
         case 22:
+            return ScGlobal::GetRscString(STR_COND_ENDS_WITH);
+        case 23:
+            return ScGlobal::GetRscString(STR_COND_CONTAINS);
+        case 24:
             return ScGlobal::GetRscString(STR_COND_NOT_CONTAINS);
     }
     return rtl::OUString();

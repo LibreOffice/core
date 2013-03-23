@@ -833,6 +833,8 @@ const char* GetTypeString(ScConditionMode eMode)
             return "top10";
         case SC_COND_ABOVE_AVERAGE:
         case SC_COND_BELOW_AVERAGE:
+        case SC_COND_ABOVE_EQUAL_AVERAGE:
+        case SC_COND_BELOW_EQUAL_AVERAGE:
             return "aboveAverage";
         case SC_COND_NOTDUPLICATE:
             return "uniqueValues";
@@ -893,7 +895,10 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
 {
     bool bFmla2 = false;
     ScConditionMode eOperation = mrFormatEntry.GetOperation();
-    sal_Int32 nAboveAverage = eOperation == SC_COND_ABOVE_AVERAGE;
+    sal_Int32 nAboveAverage = eOperation == SC_COND_ABOVE_AVERAGE ||
+                                eOperation == SC_COND_ABOVE_EQUAL_AVERAGE;
+    sal_Int32 nEqualAverage = eOperation == SC_COND_ABOVE_EQUAL_AVERAGE ||
+                                eOperation == SC_COND_BELOW_EQUAL_AVERAGE;
     sal_Int32 nBottom = eOperation == SC_COND_BOTTOM10
         || eOperation == SC_COND_BOTTOM_PERCENT;
     sal_Int32 nPercent = eOperation == SC_COND_TOP_PERCENT ||
@@ -922,6 +927,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
             XML_operator, GetOperatorString( mrFormatEntry.GetOperation(), bFmla2 ),
             XML_aboveAverage, OString::valueOf( nAboveAverage ).getStr(),
+            XML_equalAverage, OString::valueOf( nEqualAverage ).getStr(),
             XML_bottom, OString::valueOf( nBottom ).getStr(),
             XML_percent, OString::valueOf( nPercent ).getStr(),
             XML_rank, aRank.getStr(),

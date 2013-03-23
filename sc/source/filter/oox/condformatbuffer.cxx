@@ -716,9 +716,19 @@ void CondFormatRule::finalizeImport()
         break;
         case XML_aboveAverage:
             if(maModel.mbAboveAverage)
-                eOperator = SC_COND_ABOVE_AVERAGE;
+            {
+                if(maModel.mbEqualAverage)
+                    eOperator = SC_COND_ABOVE_EQUAL_AVERAGE;
+                else
+                    eOperator = SC_COND_ABOVE_AVERAGE;
+            }
             else
-                eOperator = SC_COND_BELOW_AVERAGE;
+            {
+                if(maModel.mbEqualAverage)
+                    eOperator = SC_COND_BELOW_EQUAL_AVERAGE;
+                else
+                    eOperator = SC_COND_BELOW_AVERAGE;
+            }
         break;
         case XML_colorScale:
         break;
@@ -796,15 +806,15 @@ void CondFormatRule::finalizeImport()
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
-    else if( eOperator == SC_COND_ABOVE_AVERAGE || eOperator == SC_COND_BELOW_AVERAGE )
+    else if( eOperator == SC_COND_ABOVE_AVERAGE || eOperator == SC_COND_BELOW_AVERAGE ||
+            eOperator == SC_COND_ABOVE_EQUAL_AVERAGE || eOperator == SC_COND_BELOW_EQUAL_AVERAGE )
     {
         ScDocument& rDoc = getScDocument();
-        ScTokenArray aTokenArrayEqual;
-        aTokenArrayEqual.AddDouble( maModel.mbEqualAverage );
+        // actually that is still unsupported
         ScTokenArray aTokenArrayDev;
         aTokenArrayDev.AddDouble( maModel.mnStdDev );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayEqual, &aTokenArrayDev, &rDoc, aPos, aStyleName );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayDev, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( eOperator == SC_COND_DUPLICATE || eOperator == SC_COND_NOTDUPLICATE )

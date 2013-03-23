@@ -3969,6 +3969,18 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                                 aCond.append(")");
                                 break;
+                            case SC_COND_ABOVE_AVERAGE:
+                                aCond.append("above-average");
+                                break;
+                            case SC_COND_BELOW_AVERAGE:
+                                aCond.append("below-average");
+                                break;
+                            case SC_COND_ABOVE_EQUAL_AVERAGE:
+                                aCond.append("above-equal-average");
+                                break;
+                            case SC_COND_BELOW_EQUAL_AVERAGE:
+                                aCond.append("below-equal-average");
+                                break;
                             case SC_COND_ERROR:
                                 aCond.append("is-error");
                                 break;
