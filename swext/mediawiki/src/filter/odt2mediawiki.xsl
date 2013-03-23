@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    odt2mediawiki: OpenDocument to WikiMedia transformation
+    Copyright (C) 2007-2013  Bernhard Haumacher (haui at haumacher dot de)
 
-<!-- 
-	odt2wiki: OpenDocument to WikiMedia transformation
-    Copyright (C) 2007  Bernhard Haumacher (haui at haumacher dot de)
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.	
+    $Id: odt2mediawiki.xsl 3180 2013-03-17 16:00:43Z hauma $
 -->
 <stylesheet version="1.0" 
 	xmlns="http://www.w3.org/1999/XSL/Transform"
@@ -478,12 +477,31 @@
 		== WikiMath == 
 	 -->
 
+    <!--
+       Make sure to join sibling node that are all formated with WikiMath style without repeating
+       the <math>..</math> markup.
+
+       Do not apply any transformation to the contents marked as WikiMath.
+   -->
 	<template match="text:span[@text:style-name='WikiMath']">
 		<value-of select="'&lt;math&gt;'"/>
-		<apply-templates/>
+		<value-of select="string(.)"/>
 		<value-of select="'&lt;/math&gt;'"/>
 	</template>
 
+   <template match="text:span[@text:style-name='WikiMath' and boolean(preceding-sibling::node()[position()=1 and local-name(.)='span' and @text:style-name='WikiMath'])]">
+       <value-of select="string(.)"/>
+       <value-of select="'&lt;/math&gt;'"/>
+   </template>
+
+   <template match="text:span[@text:style-name='WikiMath' and boolean(following-sibling::node()[position()=1 and local-name(.)='span' and @text:style-name='WikiMath'])]">
+       <value-of select="'&lt;math&gt;'"/>
+       <value-of select="string(.)"/>
+   </template>
+
+   <template match="text:span[@text:style-name='WikiMath' and boolean(following-sibling::node()[position()=1 and local-name(.)='span' and @text:style-name='WikiMath']) and boolean(preceding-sibling::node()[position()=1 and local-name(.)='span' and @text:style-name='WikiMath'])]">
+       <value-of select="string(.)"/>
+    </template>
 
 	<!-- 
 		== Native links == 
