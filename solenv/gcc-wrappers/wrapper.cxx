@@ -9,6 +9,8 @@
 
 #include "wrapper.hxx"
 
+#define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 
 #define BUFLEN 2048
@@ -139,6 +141,14 @@ int startprocess(string command, string args) {
     si.hStdOutput=childout_write;
     si.hStdError=childout_write;
 
+    size_t pos=command.find("ccache ");
+    if(pos != string::npos) {
+        args.insert(0,"cl.exe");
+        command=command.substr(0,pos+strlen("ccache"))+".exe";
+    }
+
+    //cerr << "CMD= " << command << " " << args << endl;
+
     // Commandline may be modified by CreateProcess
     char* cmdline=_strdup(args.c_str());
 
@@ -177,6 +187,7 @@ int startprocess(string command, string args) {
             WriteFile(stdout_handle,buffer,readlen,&writelen,NULL);
         }
     }
+    WaitForSingleObject(pi.hProcess, INFINITE);
     GetExitCodeProcess(pi.hProcess, &ret);
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);

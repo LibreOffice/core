@@ -18,8 +18,6 @@ int main(int argc, char *argv[]) {
 
     setupccenv();
 
-    cerr << "CXX= " << command << " " << args << endl;
-
     return startprocess(command,args);
 
 }
