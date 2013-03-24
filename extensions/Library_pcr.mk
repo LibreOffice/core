@@ -85,7 +85,6 @@ $(eval $(call gb_Library_add_exception_objects,pcr,\
 	extensions/source/propctrlr/formgeometryhandler \
 	extensions/source/propctrlr/formlinkdialog \
 	extensions/source/propctrlr/formmetadata \
-	extensions/source/propctrlr/formstrings \
 	extensions/source/propctrlr/genericpropertyhandler \
 	extensions/source/propctrlr/handlerhelper \
 	extensions/source/propctrlr/inspectorhelpwindow \
@@ -97,7 +96,6 @@ $(eval $(call gb_Library_add_exception_objects,pcr,\
 	extensions/source/propctrlr/pcrcommon \
 	extensions/source/propctrlr/pcrcomponentcontext \
 	extensions/source/propctrlr/pcrservices \
-	extensions/source/propctrlr/pcrstrings \
 	extensions/source/propctrlr/pcrunodialogs \
 	extensions/source/propctrlr/propcontroller \
 	extensions/source/propctrlr/propertycomposer \
