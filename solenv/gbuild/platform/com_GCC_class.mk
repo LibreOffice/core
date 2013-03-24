@@ -44,6 +44,7 @@ $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(gb_CC) \
+		-x assembler-with-cpp \
 		$(gb_LTOFLAGS) \
 		$(gb_AFLAGS) \
 		-c $(3) \

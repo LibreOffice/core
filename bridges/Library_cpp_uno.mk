@@ -130,7 +130,8 @@ else ifeq ($(CPU),X)
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_x86-64
 bridge_asm_objects := call
-bridge_exception_objects := abi callvirtualmethod cpp2uno except uno2cpp
+bridge_noopt_objects := callvirtualmethod
+bridge_exception_objects := abi cpp2uno except uno2cpp
 else ifeq ($(OS),MACOSX)
 bridges_SELECTED_BRIDGE := gcc3_macosx_x86-64
 bridge_exception_objects := abi call callvirtualmethod cpp2uno except uno2cpp
