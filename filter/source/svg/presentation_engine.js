@@ -1995,10 +1995,10 @@ PlaceholderShape.prototype.init = function()
                     aPlaceholderElement.setAttribute( 'text-anchor', sTextAnchor );
                 if( sX )
                     aPlaceholderElement.setAttribute( 'x', sX );
-
-                this.element = aTextFieldElement;
-                this.textElement = aPlaceholderElement;
             }
+
+            this.element = aTextFieldElement;
+            this.textElement = aPlaceholderElement;
 
             // We remove all text lines but the first one used as placeholder.
             var aTextLineGroupElem = this.textElement.parentNode.parentNode;
