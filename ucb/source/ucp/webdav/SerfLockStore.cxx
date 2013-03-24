@@ -19,9 +19,9 @@
 
 #include <ne_locks.h>
 #include <ne_uri.h>
-#include "rtl/ustring.hxx"
-#include "osl/time.h"
-#include "osl/thread.hxx"
+#include <rtl/ustring.hxx>
+#include <osl/time.h>
+#include <osl/thread.hxx>
 #include "SerfSession.hxx"
 #include "SerfLockStore.hxx"
 

@@ -18,7 +18,7 @@
  */
 
 #include <osl/diagnose.h>
-#include "osl/doublecheckedlocking.h"
+#include <osl/doublecheckedlocking.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
@@ -41,9 +41,9 @@
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include "com/sun/star/ucb/InteractiveLockingLockedException.hpp"
-#include "com/sun/star/ucb/InteractiveLockingLockExpiredException.hpp"
-#include "com/sun/star/ucb/InteractiveLockingNotLockedException.hpp"
+#include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
+#include <com/sun/star/ucb/InteractiveLockingLockExpiredException.hpp>
+#include <com/sun/star/ucb/InteractiveLockingNotLockedException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkGeneralException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>

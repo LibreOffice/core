@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SERFHEADREQPROCIMPL_HXX
 #define INCLUDED_SERFHEADREQPROCIMPL_HXX
 
-#include <SerfRequestProcessorImpl.hxx>
+#include "SerfRequestProcessorImpl.hxx"
 
 #include <vector>
 #include <rtl/ustring.hxx>
-#include <DAVResource.hxx>
+#include "DAVResource.hxx"
 
-#include <SerfInputStream.hxx>
+#include "SerfInputStream.hxx"
 #include <com/sun/star/io/XOutputStream.hpp>
 
 namespace http_dav_ucp

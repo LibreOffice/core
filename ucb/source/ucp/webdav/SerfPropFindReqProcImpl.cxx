@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SerfPropFindReqProcImpl.hxx>
-#include <SerfTypes.hxx>
-#include <DAVProperties.hxx>
+#include "SerfPropFindReqProcImpl.hxx"
+#include "SerfTypes.hxx"
+#include "DAVProperties.hxx"
 
-#include <webdavresponseparser.hxx>
+#include "webdavresponseparser.hxx"
 #include <comphelper/seqstream.hxx>
 
 using namespace com::sun::star;

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SerfMkColReqProcImpl.hxx>
+#include "SerfMkColReqProcImpl.hxx"
 
 #include <serf.h>
 

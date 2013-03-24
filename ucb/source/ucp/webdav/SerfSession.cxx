@@ -25,17 +25,17 @@
 #include "comphelper/sequence.hxx"
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
-#include <AprEnv.hxx>
+#include "AprEnv.hxx"
 #include <apr_strings.h>
 
 #include "DAVAuthListener.hxx"
-#include <SerfTypes.hxx>
-#include <SerfSession.hxx>
-#include <SerfUri.hxx>
-#include <SerfRequestProcessor.hxx>
-#include <SerfCallbacks.hxx>
-#include <SerfInputStream.hxx>
-#include <UCBDeadPropertyValue.hxx>
+#include "SerfTypes.hxx"
+#include "SerfSession.hxx"
+#include "SerfUri.hxx"
+#include "SerfRequestProcessor.hxx"
+#include "SerfCallbacks.hxx"
+#include "SerfInputStream.hxx"
+#include "UCBDeadPropertyValue.hxx"
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/XCertificate.hpp>

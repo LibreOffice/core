@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SerfRequestProcessorImplFac.hxx>
-#include <SerfPropFindReqProcImpl.hxx>
-#include <SerfPropPatchReqProcImpl.hxx>
-#include <SerfGetReqProcImpl.hxx>
-#include <SerfHeadReqProcImpl.hxx>
-#include <SerfPutReqProcImpl.hxx>
-#include <SerfPostReqProcImpl.hxx>
-#include <SerfDeleteReqProcImpl.hxx>
-#include <SerfMkColReqProcImpl.hxx>
-#include <SerfCopyReqProcImpl.hxx>
-#include <SerfMoveReqProcImpl.hxx>
+#include "SerfRequestProcessorImplFac.hxx"
+#include "SerfPropFindReqProcImpl.hxx"
+#include "SerfPropPatchReqProcImpl.hxx"
+#include "SerfGetReqProcImpl.hxx"
+#include "SerfHeadReqProcImpl.hxx"
+#include "SerfPutReqProcImpl.hxx"
+#include "SerfPostReqProcImpl.hxx"
+#include "SerfDeleteReqProcImpl.hxx"
+#include "SerfMkColReqProcImpl.hxx"
+#include "SerfCopyReqProcImpl.hxx"
+#include "SerfMoveReqProcImpl.hxx"
 
 namespace http_dav_ucp
 {

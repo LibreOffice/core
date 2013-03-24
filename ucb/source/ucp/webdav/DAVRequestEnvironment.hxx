@@ -23,7 +23,7 @@
 
 #include <vector>
 #include <rtl/ref.hxx>
-#include <DAVAuthListener.hxx>
+#include "DAVAuthListener.hxx"
 
 namespace http_dav_ucp
 {

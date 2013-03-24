@@ -25,10 +25,10 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <osl/mutex.hxx>
-#include <DAVSession.hxx>
-#include <SerfTypes.hxx>
+#include "DAVSession.hxx"
+#include "SerfTypes.hxx"
 //#include "SerfLockStore.hxx"
-#include <SerfUri.hxx>
+#include "SerfUri.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace ucbhelper { class ProxyDecider; }

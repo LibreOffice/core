@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SerfCallbacks.hxx>
+#include "SerfCallbacks.hxx"
 
-#include <SerfSession.hxx>
-#include <SerfRequestProcessor.hxx>
+#include "SerfSession.hxx"
+#include "SerfRequestProcessor.hxx"
 
 using namespace http_dav_ucp;
 

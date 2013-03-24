@@ -22,8 +22,8 @@
 #define INCLUDED_SERFLOCKSTORE_HXX
 
 #include <map>
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include "SerfTypes.hxx"
 
 namespace http_dav_ucp

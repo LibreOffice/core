@@ -23,7 +23,7 @@
 #include <serf.h>
 
 #include <sal/types.h>
-#include <DAVRequestEnvironment.hxx>
+#include "DAVRequestEnvironment.hxx"
 
 namespace http_dav_ucp
 {

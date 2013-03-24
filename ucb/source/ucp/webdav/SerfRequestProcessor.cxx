@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SerfRequestProcessor.hxx>
-#include <SerfRequestProcessorImpl.hxx>
-#include <SerfRequestProcessorImplFac.hxx>
-#include <SerfCallbacks.hxx>
-#include <SerfSession.hxx>
+#include "SerfRequestProcessor.hxx"
+#include "SerfRequestProcessorImpl.hxx"
+#include "SerfRequestProcessorImplFac.hxx"
+#include "SerfCallbacks.hxx"
+#include "SerfSession.hxx"
 
 #include <apr_strings.h>
 

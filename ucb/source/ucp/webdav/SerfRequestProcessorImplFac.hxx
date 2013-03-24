@@ -25,8 +25,8 @@
 #include "DAVTypes.hxx"
 #include "DAVResource.hxx"
 
-#include <SerfRequestProcessorImpl.hxx>
-#include <SerfInputStream.hxx>
+#include "SerfRequestProcessorImpl.hxx"
+#include "SerfInputStream.hxx"
 #include <com/sun/star/io/XOutputStream.hpp>
 
 namespace http_dav_ucp

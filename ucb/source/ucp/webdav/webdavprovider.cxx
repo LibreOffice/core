@@ -21,7 +21,7 @@
 #include "webdavprovider.hxx"
 #include "webdavcontent.hxx"
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;

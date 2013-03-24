@@ -20,14 +20,14 @@
 #ifndef INCLUDED_SERFPROPFINDREQPROCIMPL_HXX
 #define INCLUDED_SERFPROPFINDREQPROCIMPL_HXX
 
-#include <SerfRequestProcessorImpl.hxx>
+#include "SerfRequestProcessorImpl.hxx"
 
 #include <vector>
 #include <rtl/ustring.hxx>
 #include "DAVTypes.hxx"
 #include "DAVResource.hxx"
 
-#include <SerfInputStream.hxx>
+#include "SerfInputStream.hxx"
 
 namespace http_dav_ucp
 {

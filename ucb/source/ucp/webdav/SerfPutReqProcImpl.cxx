@@ -19,7 +19,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <SerfPutReqProcImpl.hxx>
+#include "SerfPutReqProcImpl.hxx"
 
 #include <serf.h>
 

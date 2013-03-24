@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <webdavresponseparser.hxx>
+#include "webdavresponseparser.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/xml/sax/Parser.hpp>

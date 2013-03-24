@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SERFPUTREQPROCIMPL_HXX
 #define INCLUDED_SERFPUTREQPROCIMPL_HXX
 
-#include <SerfRequestProcessorImpl.hxx>
+#include "SerfRequestProcessorImpl.hxx"
 
 namespace http_dav_ucp
 {
