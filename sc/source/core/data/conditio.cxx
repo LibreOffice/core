@@ -526,6 +526,15 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
 {
     bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz >= 1 );
     bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz <= -1 );
+    if(pCondFormat)
+        aSrcPos = pCondFormat->GetRange().Combine().aStart;
+    ScAddress aOldSrcPos = aSrcPos;
+    bool bChangedPos = false;
+    if(eUpdateRefMode == URM_INSDEL && rRange.In(aSrcPos))
+    {
+        aSrcPos.Move(nDx, nDy, nDz);
+        bChangedPos = aSrcPos != aOldSrcPos;
+    }
 
     bool bChanged1 = false;
     bool bChanged2 = false;
@@ -533,7 +542,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     if (pFormula1)
     {
         if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged1, nDz );
+            lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aOldSrcPos.Tab(), bChanged1, nDz );
         else
         {
             ScCompiler aComp( mpDoc, aSrcPos, *pFormula1 );
@@ -543,18 +552,18 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             else
             {
                 bool bSizeChanged;
-                aComp.UpdateReference( eUpdateRefMode, aSrcPos, rRange, nDx,
+                aComp.UpdateReference( eUpdateRefMode, aOldSrcPos, rRange, nDx,
                         nDy, nDz, bChanged1, bSizeChanged );
             }
         }
 
-        if (bChanged1)
+        if (bChanged1 || bChangedPos)
             DELETEZ(pFCell1);       // is created again in IsValid
     }
     if (pFormula2)
     {
         if ( bInsertTab )
-            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged2, nDz );
+            lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aOldSrcPos.Tab(), bChanged2, nDz );
         else
         {
             ScCompiler aComp( mpDoc, aSrcPos, *pFormula2);
@@ -564,12 +573,12 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             else
             {
                 bool bSizeChanged;
-                aComp.UpdateReference( eUpdateRefMode, aSrcPos, rRange, nDx,
+                aComp.UpdateReference( eUpdateRefMode, aOldSrcPos, rRange, nDx,
                         nDy, nDz, bChanged2, bSizeChanged );
             }
         }
 
-        if (bChanged2)
+        if (bChanged2 || bChangedPos)
             DELETEZ(pFCell2);       // is created again in IsValid
     }
 }
