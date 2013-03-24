@@ -59,15 +59,9 @@ class Window;
 
 class VCL_DLLPUBLIC Help
 {
-private:
-    OUString            maHelpFile;
-
 public:
                         Help();
     virtual             ~Help();
-
-    void                SetHelpFile( const OUString& rFileName ) { maHelpFile = rFileName; }
-    const OUString&     GetHelpFile() const { return maHelpFile; }
 
     virtual sal_Bool    Start( const OUString& rHelpId, const Window* pWindow );
     virtual sal_Bool    SearchKeyword( const OUString& rKeyWord );
