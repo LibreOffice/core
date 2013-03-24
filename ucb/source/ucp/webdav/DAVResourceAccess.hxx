@@ -126,6 +126,14 @@ public:
              com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    GET( DAVRequestHeaders & rRequestHeaders,
+         const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+         DAVResource & rResource,
+         const com::sun::star::uno::Reference<
+             com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw ( DAVException );
+
     void
     GET( com::sun::star::uno::Reference<
              com::sun::star::io::XOutputStream > & rStream,

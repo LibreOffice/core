@@ -75,6 +75,118 @@
 using namespace com::sun::star;
 using namespace http_dav_ucp;
 
+namespace
+{
+static void lcl_sendPartialGETRequest( bool &bError,
+                                       DAVException &aLastException,
+                                       const std::vector< rtl::OUString > aProps,
+                                       std::vector< rtl::OUString > &aHeaderNames,
+                                       const std::auto_ptr< DAVResourceAccess > &xResAccess,
+                                       std::auto_ptr< ContentProperties > &xProps,
+                                       const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+{
+    bool bIsRequestSize = false;
+    DAVResource aResource;
+    DAVRequestHeaders aPartialGet;
+    aPartialGet.push_back(
+        DAVRequestHeader(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bytes=0-0" ))));
+
+    for ( std::vector< rtl::OUString >::const_iterator it = aHeaderNames.begin();
+            it != aHeaderNames.end(); it++ )
+    {
+        if ( it->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+        {
+            bIsRequestSize = true;
+            break;
+        }
+    }
+
+    if ( bIsRequestSize )
+    {
+        // we need to know if the server accepts range requests for a resource
+        // and the range unit it uses
+        aHeaderNames.push_back( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accept-Ranges" ) ) );
+        aHeaderNames.push_back( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Content-Range" ) ) );
+    }
+    try
+    {
+        uno::Reference< io::XInputStream > xIn = xResAccess->GET( aPartialGet,
+                                                                  aHeaderNames,
+                                                                  aResource,
+                                                                  xEnv );
+        bError = false;
+
+        if ( bIsRequestSize )
+        {
+            // the ContentProperties maps "Content-Length" to the UCB "Size" property
+            // This would have an unrealistic value of 1 byte because we did only a partial GET
+            // Solution: if "Content-Range" is present, map it with UCB "Size" property
+            rtl::OUString aAcceptRanges, aContentRange, aContentLength;
+            std::vector< DAVPropertyValue > &aResponseProps = aResource.properties;
+            for ( std::vector< DAVPropertyValue >::const_iterator it = aResponseProps.begin();
+                    it != aResponseProps.end(); it++ )
+            {
+                if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Accept-Ranges" ) ) )
+                    it->Value >>= aAcceptRanges;
+                else if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Range" ) ) )
+                    it->Value >>= aContentRange;
+                else if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+                    it->Value >>= aContentLength;
+            }
+
+            sal_Int64 nSize = 1;
+            if ( aContentLength.getLength() )
+            {
+                nSize = aContentLength.toInt64();
+            }
+
+            // according to http://tools.ietf.org/html/rfc2616#section-3.12
+            // the only range unit defined is "bytes" and implementations
+            // MAY ignore ranges specified using other units.
+            if ( nSize == 1 &&
+                    aContentRange.getLength() &&
+                    aAcceptRanges.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bytes" ) ) )
+            {
+                // Parse the Content-Range to get the size
+                // vid. http://tools.ietf.org/html/rfc2616#section-14.16
+                // Content-Range: <range unit> <bytes range>/<size>
+                sal_Int32 nSlash = aContentRange.lastIndexOf( sal_Unicode('/'));
+                if ( nSlash != -1 )
+                {
+                    rtl::OUString aSize = aContentRange.copy( nSlash + 1 );
+                    // "*" means that the instance-length is unknown at the time when the response was generated
+                    if ( !aSize.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "*" )))
+                    {
+                        for ( std::vector< DAVPropertyValue >::iterator it = aResponseProps.begin();
+                                it != aResponseProps.end(); it++ )
+                        {
+                            if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
+                            {
+                                it->Value <<= aSize;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( xProps.get() )
+            xProps->addProperties(
+                aProps,
+                ContentProperties( aResource ) );
+        else
+            xProps.reset ( new ContentProperties( aResource ) );
+    }
+    catch ( DAVException const & ex )
+    {
+        aLastException = ex;
+    }
+}
+}
+
 //=========================================================================
 //=========================================================================
 //
@@ -1335,13 +1447,43 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     }
                     catch ( DAVException const & e )
                     {
-                        bNetworkAccessAllowed
-                            = shouldAccessNetworkAfterException( e );
+                        // non "general-purpose servers" may not support HEAD requests
+                        // see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.1
+                        // In this case, perform a partial GET only to get the header info
+                        // vid. http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
+                        // WARNING if the server does not support partial GETs,
+                        // the GET will transfer the whole content
+                        bool bError = true;
+                        DAVException aLastException = e;
 
-                        if ( !bNetworkAccessAllowed )
+                        // According to the spec. the origin server SHOULD return
+                        // * 405 (Method Not Allowed):
+                        //      the method is known but not allowed for the requested resource
+                        // * 501 (Not Implemented):
+                        //      the method is unrecognized or not implemented
+                        // TODO SC_NOT_FOUND is only for google-code server
+                        if ( aLastException.getStatus() == SC_NOT_IMPLEMENTED ||
+                                aLastException.getStatus() == SC_METHOD_NOT_ALLOWED ||
+                                aLastException.getStatus() == SC_NOT_FOUND )
                         {
-                            cancelCommandExecution( e, xEnv );
-                            // unreachable
+                            lcl_sendPartialGETRequest( bError,
+                                                       aLastException,
+                                                       aMissingProps,
+                                                       aHeaderNames,
+                                                       xResAccess,
+                                                       xProps,
+                                                       xEnv );
+                            m_bDidGetOrHead = !bError;
+                        }
+
+                        if ( bError )
+                        {
+                            if ( !(bNetworkAccessAllowed
+                                    = shouldAccessNetworkAfterException( aLastException )) )
+                            {
+                                cancelCommandExecution( aLastException, xEnv );
+                                // unreachable
+                            }
                         }
                     }
                 }
