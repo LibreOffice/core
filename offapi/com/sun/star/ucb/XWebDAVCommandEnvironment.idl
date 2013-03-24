@@ -19,7 +19,7 @@
 #ifndef __com_sun_star_ucb_XWebDAVCommandEnvironment_idl__
 #define __com_sun_star_ucb_XWebDAVCommandEnvironment_idl__
 
-#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/ucb/XCommandEnvironment.idl>
 #include <com/sun/star/beans/NamedValue.idl>
 
 
@@ -27,12 +27,8 @@ module com { module sun { module star { module ucb {
 
 /** A command environment that can be used to deal with WebDAV/HTTP specific
     commands.
-
-    <p>Supply an implementation of this interface together with an
-    XCommandEnvironment implementation, when executing a command
-    using XCommandProcessor.
 */
-interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
+interface XWebDAVCommandEnvironment : XCommandEnvironment
 {
     /** This method gets called while assembling an WebDAV/HTTP request.
         The returned headername-headervalue pairs will be appended to
@@ -53,7 +49,6 @@ interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
         [in] string aURI,
         [in] string aMethod);
 };
-
 
 }; }; }; };
 
