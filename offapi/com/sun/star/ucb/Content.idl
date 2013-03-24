@@ -31,7 +31,6 @@
 #include <com/sun/star/ucb/XContentCreator.idl>
 #include <com/sun/star/container/XChild.idl>
 
-
 module com { module sun { module star { module ucb {
 
 /** A <type>Content</type> is a service that provides access to data of a
@@ -40,6 +39,7 @@ module com { module sun { module star { module ucb {
 */
 published service Content
 {
+
     /** provides access to the identity and the type of the content and
         allows the registration of listeners for <type>ContentEvent</type>s.
 
@@ -76,505 +76,753 @@ published service Content
         commands and properties. A content may define additional commands and
         properties. </p>
 
-        <p>This interface is required. </p>
-
-        <pre>
-        =======================================================================
-        Commands:
-        =======================================================================
-
-        [return type]
-            [command name]
-                [parameter type and name]
-
-        -----------------------------------------------------------------------
-        Mandatory commands:
-        -----------------------------------------------------------------------
-
-        // This command obtains an interface which allows to query
-        // information on commands supported by a content.
-        <type>XCommandInfo</type>
-            getCommandInfo
-                void
-
-        // This command obtains an interface which allows to query
-        // information on properties supported by a content.
-        <type scope="com::sun::star::beans">XPropertySetInfo</type>
-            getPropertySetInfo
-                void
-
-        // This command obtains property values from the content.
-        // Note: The execution will not be aborted, if there are properties
-        //       requested, that are unknown to the content! The returned
-        //       row object must contain a NULL value in the corresponding
-        //       column instead.
-        <type scope="com::sun::star::sdbc">XRow</type>
-            getPropertyValues
-                sequence&lt; <type scope="com::sun::star::beans">Property</type> &gt; aProps
-
-        // This command sets property values of the content.
-        // Note that setPropertyValues does not throw an exception in the case
-        // that one or more of the requested property values cannot be set! The
-        // implementation should set as much property values as possible. This
-        // command returns a sequence< any > which has exactly the same number
-        // of elements like the number of properties to set. Every sequence
-        // element contains the status for a property. The first sequence
-        // elements corresponds to the first element in the sequence of
-        // <type scope="com::sun::star::beans">PropertyValue</type> passed as
-        // command argument and so on. The exceptions will never be passed to
-        // an Interaction Handler.
-        // An any containing:
-        // - No value indicates, that the property value was set successfully.
-        // - <type scope="com::sun::star::beans">UnknownPropertyException</type>
-        //   indicates, that the property is not known to the content
-        //   implementation.
-        // - <type scope="com::sun::star::beans">IllegalTypeException</type>
-        //   indicates, that the data type of the property value is not
-        //   acceptable.
-        // - <type scope="com::sun::star::lang">IllegalAccessException</type>
-        //   indicates, that the property is constant
-        //   (<member scope="com::sun::star::beans">PropertyAttribute::READONLY</member>
-        //   is set).
-        // - <type scope="com::sun::star::lang">IllegalArgumentException</type>
-        //   indicates, that the property value is not acceptable. For instance,
-        //   setting an empty title may be illegal.
-        // - Any other exception derived from <type scope="com::sun::star::uno">Exception</type>
-        //   indicates, that the value was not set successfully. For example,
-        //   this can be a <type>InteractiveAugmentedIOException</type>
-        //   transporting the error code <member>IOErrorCode::ACCESS_DENIED</member>.
-        // If the value to set is equal to the current value, no exception must
-        // be added to the returned sequence
-        sequence&lt; any &gt;
-            setPropertyValues
-                sequence&lt; <type scope="com::sun::star::beans">PropertyValue</type> &gt; aValues
-
-        -----------------------------------------------------------------------
-        Optional commands:
-        -----------------------------------------------------------------------
-
-        // For folder objects, this command will return an implementation
-        // of service <type>DynamicResultSet</type>.
-        // The <type>OpenCommandArgument2</type> members must be filled as follows:
-        // Mode         : ALL or FOLDERS or DOCUMENTS. The implementation
-        //                of the open command MUST support all these modes!
-        // Priority     : can be set, but implementation may ignore the value
-        // Sink         : empty( ignored )
-        // Properties   : The properties for that the result set shall
-        //                contain the property values. The order of the
-        //                sequence is the same as the order of result set
-        //                columns. First element of sequence will be row
-        //                number one, second will be row number two, ...
-        // SortingInfo      : contains sort criteria, if result set shall
-        //                be sorted, otherwise it can be left empty.
-        // The execution must be aborted by the implementation of this command
-        // (by throwing a <type>CommandAbortedException</type>), if an
-        // unsupported mode is requested.
-        <type>XDynamicResultSet</type>
-            <B>open</B>
-                <type>OpenCommandArgument2</type> aOpenCommandArg
-
-        // For non-folder objects, the <type>OpenCommandArgument2</type> struct
-        // will be prefilled with a data sink object, which will be filled
-        // with the content data.
-        // The <type>OpenCommandArgument2</type> members must be filled as follows:
-        // Mode         : DOCUMENT or DOCUMENT_SHARE_DENY_NONE or
-        //                DOCUMENT_SHARE_DENY_WRITE. Support for DOCUMENT
-        //                is mandatory, all others are optional.
-        // Priority     : can be set, but implementation may ignore the value
-        // Sink         : a sink, where the implementation can put the
-        //                document data into.
-        // Properties   : empty ( ignored )
-        // SortingInfo      : empty ( ignored )
-        // The execution must be aborted by the implementation of this command
-        // (by throwing a <type>CommandAbortedException</type>), if an
-        // unsupported mode is requested.
-        void
-            <B>open</B>
-                <type>OpenCommandArgument2</type> aOpenCommandArg
-
-        // This command triggers an update operation on a content. For example,
-        // when "updating" a POP3-Inbox, the content for that box will get
-        // and store all new objects on the appropriate server. The inserted
-        // contents will be notified by calling
-        // <member>XContentEventListener::contentEvent</member>.
-        void
-            <B>update</B>
-                <type>OpenCommandArgument2</type> aOpenCommandArg
-
-        // This command triggers a synchronization operation between locally
-        // cached data and remote server's data. For example, when
-        // "synchronizing" a POP3-Inbox the content for that box will get and
-        // store all new objects and destroy all cached data for objects no
-        // longer existing on the server. The inserted/deleted contents will
-        // be notified by calling
-        // <member>XContent::contentEvent</member>.
-        void
-            <B>synchronize</B>
-                <type>OpenCommandArgument2</type> aOpenCommandArg
-
-        // This command closes an object.
-        void
-            <B>close</B>
-                void
-
-        // This command deletes an object. If <TRUE/> is passed as parameter,
-        // the object will be destroyed physically. Otherwise it will be put
-        // into trash can, if such a service is available and the object to
-        // be deleted supports the command "undelete".
-        // On successful completion of this command, the deleted content
-        // must propagate its deletion by notifying a <type>ContentEvent</type>
-        // - <member>ContentAction::DELETED</member>. Additionally, the contents
-        // parent must notify a <type>ContentEvent</type>
-        // - <member>ContentAction::REMOVED</member>
-        void
-            <B>delete</B>
-                boolean bDeletePhysically
-
-        // This command restores an object previously deleted into trash. It
-        // must be supported by objects which claim to be undeletable, but
-        // should never be called directly.
-        void
-            <B>undelete</B>
-                void
-
-        // (1) This command inserts a new content. It commits the process of
-        // creating a new content via executing the command "createNewContent"
-        // and initializing it via setting properties, afterwards.
-        // The command is not called on the content which created the new
-        // content, because the new object already knows where it is to be
-        // inserted (i.e. Calling createNewContent with the content type for a
-        // message on a News Group creates a content which internally belongs
-        // to the Outbox. Calling "insert" on that message will result in
-        // posting the article to the appropriate News Group). Not calling
-        // "insert" for the new content, i.e. because the user cancels writing
-        // a new message, simply discards the new object. No extra call to
-        // "delete" is necessary.
-        // On successful completion of this command, the parent of the inserted
-        // content must propagate the change by notifying a
-        // <type>ContentEvent</type> - <member>ContentAction::INSERTED</member>.
-        // (2) Additionally this command can be called at any time to overwrite
-        // the data of an existing content.
-        void
-            <B>insert</B>
-                <type>InsertCommandArgument</type> aInsertCommandArg
-
-        // This command searches for subcontents of a content matching the
-        // given search criteria. The command will return an implementation
-        // of service <type>DynamicResultSet</type>.
-        <type>XDynamicResultSet</type>
-            <B>search</B>
-                <type>SearchCommandArgument</type> aSearchCommandArg
-
-        // <b>Important note:</b> A client that wants to transfer data should
-        // not execute this command, but it should execute the command
-        // "globalTransfer" at the <type>UniversalContentBroker</type>.
-        // This command is able to transfer all kind of content
-        // supported by that UCB.
-        // This command transfers (copies/moves) an object from one location
-        // to another. It must be executed at the folder content representing
-        // the destination of the transfer operation. Note that the
-        // implementation need not(!) be able to handle any type of contents.
-        // Generally, there are good chances that a transfer of a content will
-        // succeed, if source and target folder have the same URL scheme.
-        // But there is no guaranty for that. For instance, moving a message
-        // from a folder on IMAP server A to a folder on IMAP server B may
-        // fail, because the transfer command can't be implemented efficiently
-        // for this scenario, because it is not directly supported by the IMAP
-        // protocol. On the other hand, moving a message from one folder to
-        // another folder on the same IMAP server should work, because it can
-        // be implemented efficiently. If an implementation is not able to
-        // handle a given source URL, it should indicate this by issuing a
-        // <type>InteractiveBadTransferURLException</type> interaction request.
-        // Source and target folder may be the same when doing a move operation.
-        // Transfers without the transfer command can be done as follows:
-        // 1) Create a new content at the target folder
-        //    --> targetContent = target.execute( "createNewContent", type )
-        // 2) Transfer data from source to target content
-        //    --> props = sourceContent.execute( "getPropertyValues", ... )
-        //    --> dataStream = sourceContent.execute( "open", ... )
-        //    --> targetContent.execute( "setPropertyValues", props )
-        // 3) Insert ( commit ) the new content
-        //    --> targetContent.execute( "insert", dataStream )
-        // 4) For move operations only: destroy the source content
-        //    sourceContent.execute( "delete", ... )
-        // This mechanism should work for all transfer operations, but generally
-        // it's less efficient than the transfer command.
-        void
-            <B>transfer</B>
-                <type>TransferInfo</type> aTransferInfo
-
-        // This command obtains an exclusive write lock for the resource. The
-        // lock is active until command "unlock" is executed or the OOo
-        // session that obtained the lock ends or until the lock is released by
-        // a third party (e.g. a system administrator).
-        void
-            <B>lock</B>
-                void
-        Exceptions: <type>InteractiveLockingLockedException</type>
-                    <type>InteractiveLockingLockExpiredException</type>
-
-        // This command removes a lock obtained by executing the command "lock"
-        // from the resource.
-        void
-            <B>unlock</B>
-                void
-        Exceptions: <type>InteractiveLockingNotLockedException</type>
-                    <type>InteractiveLockingLockExpiredException</type>
-
-        // Note that <type>InteractiveLockingLockExpiredException</type> might
-        // be raised by any command that requires a previously obtained lock.
-
-        // This command creates a new non-persistent content of a given type.
-        // <p>Creation of a new (persistent) content:
-        // <ol>
-        //    <li>creatabletypes = obtain "CreatableContentsInfo" property<br>
-        //        from creator
-        //    <li>choose a suitable type from creatabletypes
-        //    <li>newObject = execute command "createNewContent(type)" at<br>
-        //        creator
-        //    <li>initialize the new object (i.e. newObject.Property1 = ...)
-        //    <li>execute command "insert" at new content. This command
-        //        commits the data and makes the new content persistent.
-        // </ol>
-        // This command must be supported by every Content that supports the
-        // property "CreatableContentsInfo" if the returned property value
-        // contains a non-empty sequence of creatable types.
-        // Note: This command is part of the replacement for the deprecated
-        // interface <type>XContentCreator</type>.
-        <type>XContent</type> >
-            <B>createNewContent</B>
-                <type>ContentInfo<type> content info
-
-        =======================================================================
-        Properties:
-        =======================================================================
-
-        -----------------------------------------------------------------------
-        Mandatory properties:
-        -----------------------------------------------------------------------
-
-        // contains a unique(!) type string for the content ( i.e.
-        // "application/vnd.sun.star.hierarchy-link" ). This property is always
-        // read-only. It does not contain the media type ( MIME types ) of the
-        // content. Media types may be provided through the optional property
-        // "MediaType".
-        // The value of this property should match the information on creatable
-        // contents given by UCB contents that implement the property
-        // "CreatableContentsInfo".
-        string ContentType
-
-        // indicates, whether a content can contain other contents.
-        boolean IsFolder
-
-        // indicates, whether a content is a document. This means, the
-        // content can dump itself into a data sink.
-        boolean IsDocument
-
-        // contains the title of an object (e.g. the subject of a message).
-        string Title;
-
-        -----------------------------------------------------------------------
-        Optional properties:
-        -----------------------------------------------------------------------
-
-        // contains the interval for automatic updates of an object.
-        // It is specified in seconds.
-        long AutoUpdateInterval
-
-        // contains the maximum number of network connections
-        // allowed for one (Internet) protocol at a time. (e.g. The HTTP
-        // cache can be configured to use a maximum for the number of
-        // connections used for browsing.)
-        short ConnectionLimit
-
-        // contains the current connection mode for the object.
-        // (see <type>ConnectionMode</type>)
-        short ConnectionMode
-
-        // contains the date and time the object was created.
-        <type scope"com::sun::star::util">DateTime</type> DateCreated
-
-        // contains the date and time the object was last modified.
-        <type scope"com::sun::star::util">DateTime</type> DateModified
-
-        // contains the count of documents of a folder.
-        long DocumentCount;
-
-        // contains the count of marked documents within a folder.
-        long DocumentCountMarked
-
-        // contains a sequence of document header fields (i.e. header
-        // fields of a MIME-message, or the document info of an
-        // office document ). For some standard header fields there
-        // are predefined separate properties, like &quot;MessageTo&quot;.
-        sequence&lt; <type>DocumentHeaderField</type> &gt; DocumentHeader
-
-        // contains information about the way a folder stores the
-        // contents of (remote) documents.
-        <type>DocumentStoreMode</type> DocumentStoreMode
-
-        // contains the count of subfolders of a folder.
-        long FolderCount
-
-        // contains the free space left on a storage device. It is specified in bytes.
-        hyper FreeSpace
-
-        // indicates whether a content has subcontents, which are documents.
-        boolean HasDocuments
-
-        // indicates whether a content has subcontents, which are folders.
-        boolean HasFolders
-
-        // indicates whether a content is &quot;marked&quot;.
-        boolean IsMarked
-
-        // indicates whether a content has been "read".
-        boolean IsRead;
-
-        // indicates whether a content is read-only.
-        boolean IsReadOnly
-
-        // indicates whether a content is subscribed.
-        boolean IsSubscribed
-
-        // indicates whether the feature to store contents depending on
-        // their age is active.
-        boolean IsTimeLimitedStore;
-
-        // indicates whether (sub)contents shall be automatically updated
-        // everytime a (folder) content is opened. This property may be
-        // used to control whether a folder content should read data only
-        // from local cache when it is opened, or whether it should connect
-        // to a server to obtain latest data.
-        boolean UpdateOnOpen
-
-        // contains the keywords of a document (e.g. the value
-        // of the &quot;keywords&quot; header field of a news article).
-        string Keywords
-
-        // contains the media type ( MIME type ) of a content. It is highly
-        // recommended to support this property if the content's implementation
-        // can obtain the media type natively from its data source ( i.e.
-        // HTTP servers provide media types for all their documents ).
-        string MediaType
-
-        // contains the BCC (blind carbon copy) receiver(s) of a message.
-        string MessageBCC
-
-        // contains the CC (carbon copy) receiver(s) of a message.
-        string MessageCC
-
-        // contains (the address of) the sender of a message.
-        string MessageFrom
-
-        // contains the ID of a message.
-        string MessageId
-
-        // contains the &quot;In-Reply-To&quot; field of a message.
-        string MessageInReplyTo
-
-        // contains the &quot;Reply-To&quot; field of a message.
-        string MessageReplyTo
-
-        // contains the recipient(s) of a message.
-        string MessageTo
-
-        // contains the name(s) of the newsgroup(s) into which a message
-        // was posted.
-        string NewsGroups
-
-        // contains a password (e.g. needed to access a POP3-Server).
-        string Password
-
-        // contains a priority (i.e. of a message).
-        <type>Priority</type> Priority
-
-        // contains the &quot;References&quot; field of a news article.
-        string References
-
-        // contains the rules set for a content.
-        <type>RuleSet</type> Rules
-
-        // contains the count of seen/read subcontents of a folder content.
-        long SeenCount
-
-        // contains the base directory to use on a server. (e.g. Setting
-        // the server base of an FTP-Account to &quot;/pub/incoming&quot;
-        // will result in showing contents from that directory and not from
-        // server's root directory)
-        string ServerBase
-
-        // contains a server name (e.g. The name of the server to use for
-        // a POP3-Account).
-        string ServerName
-
-        // contains a numeric server port.
-        short ServerPort
-
-        // contains the size (usually in bytes) of an object.
-        hyper Size
-
-        // contains a size limit for an object. (e.g. One may specify the
-        // maximum size of the HTTP-Cache)
-        hyper SizeLimit
-
-        // contains the count of subscribed contents of a folder.
-        long SubscribedCount
-
-        // contains the policy to use when synchronizing two objects.
-        <type>SynchronizePolicy</type> SynchronizePolicy
-
-        // contains information about the target frame to use when displaying
-        // an object.
-
-        <p>The value is a string containing three tokens, separated by &quot;;&quot;
-        (A semicolon):<br/>
-        <dl>
-        <dt>1st token
-        </dt><dd>Behavior on &quot;select&quot; ( single click )
-        </dd><dt>2nd token
-        </dt><dd>Behavior on &quot;open&quot;   ( double click )
-        </dd><dt>3rd token
-        </dt><dd>Behavior on &quot;open in new task&quot; ( double click + CTRL key )
-        </dd></dl>
-        </p>
-        <p>  Each token may contain the following values:<br/>
-        <dl>
-        <dt>&quot;_beamer&quot;
-        </dt><dd>Show in &quot;Beamer&quot;
-        </dd><dt>&quot;_top&quot;
-        </dt><dd>Show in current frame (replaces old)
-        </dd><dt>&quot;_blank&quot;
-        </dt><dd>Show in new task
-        </dd></dl>
-        </p>
-        string TargetFrames
-
-        // for contents that are links to other contents, contains the URL of
-        // the target content
-        string TargetURL
-
-        // contains the value to use if the property "IsTimeLimitedStore" is set.
-        short TimeLimitStore;
-
-        // contains a user name. (e.g. the user name needed to access a
-        // POP3-Account)
-        string UserName
-
-        // describes a verification policy.
-        <type>VerificationMode</type> VerificationMode
-
-        // contains the types of Contents a Content object can create via
-        // command "createNewContent".
-        // If the property value can be a non-empty sequence, the Content must
-        // also support command "createNewContent".
-        // Note: This property is part of the replacement for the deprecated
-        // interface <type>XContentCreator</type>.
-        sequence <type>ContentInfo</type> CreatableContentsInfo
-
-        </pre>
+        <p>This interface is required.</p>
+
+        <h3>Commands</h3>
+        <h4>Mandatory commands</h4>
+
+        <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
+            <thead>
+                <tr>
+                    <th>Command Name</th>
+                    <th>Return Type</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>getCommandInfo</td>
+                    <td><type>XCommandInfo</type></td>
+                    <td>void</td>
+                    <td>This command obtains an interface which allows to query
+                        information on commands supported by a content.
+                    </td>
+                </tr>
+                <tr>
+                    <td>getPropertySetInfo</td>
+                    <td><type scope="com::sun::star::beans">XPropertySetInfo</type></td>
+                    <td>void</td>
+                    <td>This command obtains an interface which allows to query
+                        information on properties supported by a content.
+                    </td>
+                </tr>
+                <tr>
+                    <td>getPropertyValues</td>
+                    <td><type scope="com::sun::star::sdbc">XRow</type></td>
+                    <td>sequence&lt; <type scope="com::sun::star::beans">Property</type> &gt; aProps</td>
+                    <td>This command obtains property values from the content.
+                        <blockquote>
+                            <b>Note</b>: The execution will not be aborted, if there
+                            are properties requested, that are unknown to the
+                            content. The returned row object must contain a NULL
+                            value in the corresponding column instead.
+                        </blockquote>
+                    </td>
+                </tr>
+                <tr>
+                    <td>setPropertyValues</td>
+                    <td>sequence&lt; any &gt;</td>
+                    <td>sequence&lt; <type scope="com::sun::star::beans">PropertyValue</type> &gt; aValues</td>
+                    <td>This command sets property values of the content.
+                        <p>Note that setPropertyValues does not throw an exception in the case
+                        that one or more of the requested property values cannot be set.
+                        The implementation should set as much property values as possible.</p>
+
+                        <p>This command returns a sequence< any > which has exactly the same number
+                        of elements like the number of properties to set. Every sequence
+                        element contains the status for a property. The first sequence
+                        elements corresponds to the first element in the sequence of
+                        <type scope="com::sun::star::beans">PropertyValue</type>s passed as
+                        command argument, and so on. The exceptions will never be passed to
+                        an <type scope="com::sun::star::task">InteractionHandler</type>.</p>
+
+                        <p>Every element in the returned sequence is an any containing:</p>
+                        <ul>
+                            <li>No value indicates, that the property value was set successfully.</li>
+                            <li><type scope="com::sun::star::beans">UnknownPropertyException</type>
+                            indicates, that the property is not known to the content
+                            implementation.</li>
+                            <li><type scope="com::sun::star::beans">IllegalTypeException</type>
+                            indicates, that the data type of the property value is not
+                            acceptable.</li>
+                            <li><type scope="com::sun::star::lang">IllegalAccessException</type>
+                            indicates, that the property is constant
+                            (<member scope="com::sun::star::beans">PropertyAttribute::READONLY</member>
+                            is set).</li>
+                            <li><type scope="com::sun::star::lang">IllegalArgumentException</type>
+                            indicates, that the property value is not acceptable. For instance,
+                            setting an empty title may be illegal.</li>
+                            <li>Any other execption derived from <type scope="com::sun::star::uno">Exception</type>
+                            indicates, that the value was not set successfully. For example,
+                            this can be a <type>InteractiveAugmentedIOException</type>
+                            transporting the error code <member>IOErrorCode::ACCESS_DENIED</member>.</li>
+                        </ul>
+
+                        <p>If the value to set is equal to the current value, no exception must
+                        be added to the returned sequence</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Optional commands</h4>
+        <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
+            <thead>
+                <tr>
+                    <th>Command Name</th>
+                    <th>Return Type</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>open</td>
+                    <td><type>XDynamicResultSet</type></td>
+                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
+                    <td>
+                        For <b>folder</b> objects, this command will return an
+                        implementation of service <type>DynamicResultSet</type>.
+                        <p>The <type>OpenCommandArgument2</type> members must be
+                        filled as follows:</p>
+                        <ul>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Mode</member>:
+                                <const scope="com::sun::star::ucb">OpenMode::ALL</const> or
+                                <const scope="com::sun::star::ucb">OpenMode::FOLDERS</const> or
+                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENTS</const>.
+                                The implementation of the open command MUST support all these modes!
+                            </li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Priority</member>:
+                                can be set, but implementation may ignore the value
+                            </li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Sink</member>:
+                                empty( ignored )
+                            </li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Properties</member>:
+                                The properties for which the result set shall
+                                contain the property values. The order of the
+                                sequence is the same as the order of result set
+                                columns. First element of sequence will be row
+                                number one, second will be row number two, ...
+                            </li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument2::SortingInfo</member>:
+                                contains sort criteria, if result set shall
+                                be sorted, otherwise it can be left empty.
+                            </li>
+                        </ul>
+                        The exceution must be aborted by the implementation of this command
+                        (by throwing a <type>CommandAbortedException</type>), if an
+                        unsupported mode is requested.
+                    </td>
+                </tr>
+                <tr>
+                    <td>open</td>
+                    <td>void</td>
+                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
+                    <td>For non-folder objects, the <type>OpenCommandArgument2</type>
+                        struct will be prefilled with a data sink object, which
+                        will be filled with the content data.
+                        <p>The <type>OpenCommandArgument2</type> members must be
+                        filled as follows:</p>
+                        <ul>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Mode</member>:
+                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENT</const> or
+                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENT_SHARE_DENY_NONE</const> or
+                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENT_SHARE_DENY_WRITE</const>.
+                                Support for DOCUMENT is mandatory, all others are optional.
+                            </li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Priority</member>:
+                                can be set, but implementation may ignore the value
+                            </li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Sink</member>:
+                                a sink, where the implementation can put the document data into.
+                            </li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Properties</member>: empty ( ignored )</li>
+                            <li><member scope="com::sun::star::ucb">OpenCommandArgument2::SortingInfo</member>: empty ( ignored )</li>
+                        </ul>
+                        <p>The exceution must be aborted by the implementation of this command
+                        (by throwing a <type>CommandAbortedException</type>), if an
+                        unsupported mode is requested.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>createNewContent</td>
+                    <td><type>XContent</type></td>
+                    <td><type>ContentInfo</type> contentinfo</td>
+                    <td>
+                        This command creates a new <b>non-persistent</b> content of a given type.
+                        <p>This command must be supported by every <type>Content</type>
+                        that supports the property "CreatableContentsInfo", if the returned
+                        property value contains a non-empty sequence of creatable types.
+                        <blockquote>
+                            Note: This command is part of the replacement for the deprecated
+                            interface <type>XContentCreator</type>.
+                        </blockquote>
+                        <p>Creation of a new <b>persistent</b> content:
+                        <ol>
+                            <li>creatabletypes = obtain "CreatableContentsInfo" property from creator</li>
+                            <li>choose a suitable type from creatabletypes</li>
+                            <li>newObject = execute command "createNewContent(type)" at creator</li>
+                            <li>initialize the new object (i.e. newObject.Property1 = ...)</li>
+                            <li>execute command "insert" at new content. This command
+                                commits the data and makes the new content persistent.</li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td>insert</td>
+                    <td>void</td>
+                    <td><type>InsertCommandArgument</type> aInsertCommandArg</td>
+                    <td>
+                        <ol>
+                            <li>
+                                This command inserts a <b>new content</b>. It commits the process of
+                                creating a new content via executing the command "createNewContent"
+                                and initializing it via setting properties, afterwards.</br>
+                                The command is not called on the content which created the new
+                                content, because the new object already knows where it is to be
+                                inserted (i.e. Calling createNewContent with the content type for a
+                                message on a News Group creates a content which internally belongs
+                                to the Outbox. Calling "insert" on that message will result in
+                                posting the article to the appropriate News Group). Not calling
+                                "insert" for the new content, i.e. because the user cancels writing
+                                a new message, simply discards the new object. No extra call to
+                                "delete" is necessary.</br>
+                                On successful completion of this command, the parent of the inserted
+                                content must propagate the change by notifying a
+                                <type>ContentEvent</type> - <member>ContentAction::INSERTED</member>.
+                            </li>
+                            <li>
+                                Additionally this command can be called at any time to overwrite
+                                the data of an <b>existing content</b>.
+                            </li>
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td>update</td>
+                    <td>void</td>
+                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
+                    <td>This command triggers an update operation on a content.
+                        For example, when "updating" a POP3-Inbox, the content
+                        for that box will get and store all new objects on the
+                        appropriate server. The inserted contents will be
+                        notified by calling
+                        <member>XContentEventListener::contentEvent</member>.
+                    </td>
+                </tr>
+                <tr>
+                    <td>synchronize</td>
+                    <td>void</td>
+                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
+                    <td>
+                        This command triggers a synchronization operation between locally
+                        cached data and remote server's data. For example, when
+                        "synchronizing" a POP3-Inbox the content for that box will get and
+                        store all new objects and destroy all cached data for objects no
+                        longer existing on the server. The inserted/deleted contents will
+                        be notified by calling
+                        <member>XContent::contentEvent</member>.
+                    </td>
+                </tr>
+                <tr>
+                    <td>close</td>
+                    <td>void</td>
+                    <td>void</td>
+                    <td>This command closes an object.</td>
+                </tr>
+                <tr>
+                    <td>delete</td>
+                    <td>void</td>
+                    <td>boolean bDeletePhysically</td>
+                    <td>
+                        This command deletes an object. If <TRUE/> is passed as parameter,
+                        the object will be destroyed physically. Otherwise it will be put
+                        into trash can, if such a service is available and the object to
+                        be deleted supports the command "undelete".
+                        On successful completion of this command, the deleted content
+                        must propagate its deletion by notifying a <type>ContentEvent</type>
+                        - <member>ContentAction::DELETED</member>. Additionally, the contents
+                        parent must notify a <type>ContentEvent</type>
+                        - <member>ContentAction::REMOVED</member>
+                    </td>
+                </tr>
+                <tr>
+                    <td>undelete</td>
+                    <td>void</td>
+                    <td>void</td>
+                    <td>
+                        This command restores an object previously deleted into trash. It
+                        must be supported by objects which claim to be undeletable, but
+                        should never be called directly.
+                    </td>
+                </tr>
+                <tr>
+                    <td>search</td>
+                    <td><type>XDynamicResultSet</type></td>
+                    <td><type>SearchCommandArgument</type> aSearchCommandArg</td>
+                    <td>
+                        This command searches for subcontents of a content matching the
+                        given search criteria. The command will return an implemenation
+                        of service <type>DynamicResultSet</type>.
+                    </td>
+                </tr>
+                <tr>
+                    <td>transfer</td>
+                    <td>void</td>
+                    <td><type>TransferInfo</type> aTransferInfo</td>
+                    <td>
+                        <blockquote>
+                            <b>Important note:</b> A client that wants to transfer data should
+                            not execute this command, but it should execute the command
+                            "globalTransfer" at the <type>UniversalContentBroker</type>.
+                            This command is able to transfer all kind of content
+                            supported by that UCB.
+                        </blockquote>
+                        This command transfers (copies/moves) an object from one location
+                        to another. It must be executed at the folder content representing
+                        the <b>destination</b> of the transfer operation.</br>
+                        Note that the implementation need not be able to handle
+                        any type of contents.</br>
+                        Generally, there are good chances that a transfer of a content will
+                        succeed, if source and target folder have the same URL scheme.
+                        But there is no guaranty for that.</br>
+                        For instance, moving a message from a folder on IMAP server A
+                        to a folder on IMAP server B may fail, because the transfer
+                        command can't be implemented efficiently for this scenario,
+                        because it is not directly supported by the IMAP protocol.
+                        On the other hand, moving a message from one folder to
+                        another folder on the same IMAP server should work, because it can
+                        be implemeted efficiently.</br>
+                        If an implementation is not able to handle a given source URL,
+                        it should indicate this by issuing a
+                        <type>InteractiveBadTransferURLException</type> interaction request.</br>
+                        Source and target folder may be the same when doing a move operation.
+                        </br>
+                        Transfers without the transfer command can be done as follows:
+                        <ol>
+                            <li>Create a new content at the target folder</br>
+                            <code>targetContent = target.execute( "createNewContent", type )</code>
+                            </li>
+                            <li>Transfer data from source to target content</br>
+                            <code>props = sourceContent.execute( "getPropertyValues", ... )</code>
+                            <code>dataStream = sourceContent.execute( "open", ... )</code>
+                            <code>targetContent.execute( "setPropertyValues", props )</code>
+                            </li>
+                            <li>Insert ( commit ) the new content</br>
+                            <code>targetContent.execute( "insert", dataStream )</code>
+                            </li>
+                            <li>For move operations only: destroy the source content</br>
+                            <code>sourceContent.execute( "delete", ... )</code>
+                            </li>
+                        </ol>
+                        <p>This mechanism should work for all transfer operations, but generally
+                        it's less efficient than the transfer command.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>lock</td>
+                    <td>void</td>
+                    <td>void</td>
+                    <td>
+                        This command obtains an exlusive write lock for the resource. The
+                        lock is active until command "unlock" is executed, or the OOo
+                        session that obtained the lock ends, or until the lock is released by
+                        a third party (e.g. a system administrator).</br>
+                        Exceptions:
+                        <ul>
+                            <li><type>InteractiveLockingLockedException</type></li>
+                            <li><type>InteractiveLockingLockExpiredException</type></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>unlock</td>
+                    <td>void</td>
+                    <td>void</td>
+                    <td>
+                        This command removes a lock obtained by executing the command "lock"
+                        from the resource.</br>
+                        <p>Exceptions:
+                        <ul>
+                            <li><type>InteractiveLockingLockedException</type></li>
+                            <li><type>InteractiveLockingLockExpiredException</type></li>
+                        </ul>
+                        </p>
+                        <p>Note that <type>InteractiveLockingLockExpiredException</type> might
+                        be raised by any command that requires a previously obtained lock.
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Properties</h3>
+        <h4>Mandatory properties</h4>
+
+        <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ContentType</td>
+                    <td>string</td>
+                    <td>
+                        contains a unique type string for the content
+                        ( i.e. "application/vnd.sun.star.hierarchy-link" ).
+                        <p>This property is always read-only.</p>
+                        <p>The ContentType should not be confused with the MIME
+                        media type ( MIME types ) of the content. Media types
+                        may be provided through the optional property "MediaType".</p>
+                        <p>The value of this property should match the information on creatable
+                        contents given by UCB contents that implement the property
+                        "CreatableContentsInfo".</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>IsFolder</td>
+                    <td>boolean</td>
+                    <td>indicates, whether a content can contain other contents.</td>
+                </tr>
+                <tr>
+                    <td>IsDocument</td>
+                    <td>boolean</td>
+                    <td>indicates, whether a content is a document. This means,
+                        the content can dump itself into a data sink.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td>string</td>
+                    <td>contains the title of an object (e.g. the subject of a message).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Optional properties</h4>
+
+        <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>AutoUpdateInterval</td>
+                    <td>long</td>
+                    <td>contains the interval for automatic updates of an object.
+                        It is specified in seconds.
+                    </td>
+                </tr>
+                <tr>
+                    <td>ConnectionLimit</td>
+                    <td>short</td>
+                    <td>contains the maximum number of network connections
+                        allowed for one (internet) protocol at a time. (e.g. The HTTP
+                        cache can be configured to use a maximum for the number of
+                        connections used for browsing.)
+                    </td>
+                </tr>
+                <tr>
+                    <td>ConnectionMode</td>
+                    <td>short</td>
+                    <td>contains the current connection mode for the object.
+                        (see <type>ConnectionMode</type>)
+                    </td>
+                </tr>
+                <tr>
+                    <td>CreatableContentsInfo</td>
+                    <td>sequence <type>ContentInfo</type></td>
+                    <td>
+                        contains the types of Contents a Content object can create via
+                        command "createNewContent".
+                        <p>If the property value can be a non-empty sequence, the
+                        Content must also support command "createNewContent".</p>
+                        <blockquote>
+                            Note: This property is part of the replacement for the deprecated
+                            interface <type>XContentCreator</type>.
+                        </blockquote>
+                    </td>
+                </tr>
+                <tr>
+                    <td>DateCreated</td>
+                    <td><type scope"com::sun::star::util">DateTime</type></td>
+                    <td>contains the date and time the object was created.</td>
+                </tr>
+                <tr>
+                    <td>DateModified</td>
+                    <td><type scope"com::sun::star::util">DateTime</type></td>
+                    <td>contains the date and time the object was last modified.</td>
+                </tr>
+                <tr>
+                    <td>DocumentCount</td>
+                    <td>long</td>
+                    <td>contains the count of documents of a folder.</td>
+                </tr>
+                <tr>
+                    <td>DocumentCountMarked</td>
+                    <td>long</td>
+                    <td>contains the count of marked documents within a folder.</td>
+                </tr>
+                <tr>
+                    <td>DocumentHeader</td>
+                    <td>sequence&lt; <type>DocumentHeaderField</type> &gt; </td>
+                    <td>contains a sequence of documemt header fields (i.e. header
+                        fields of a MIME-message, or the document info of an
+                        office document ). For some standard header fields there
+                        are predefined separate properties, like &quot;MessageTo&quot;.
+                    </td>
+                </tr>
+                <tr>
+                    <td>DocumentStoreMode</td>
+                    <td><type>DocumentStoreMode</type></td>
+                    <td>contains information about the way a folder stores the
+                        contents of (remote) documents.
+                    </td>
+                </tr>
+                <tr>
+                    <td>FolderCount</td>
+                    <td>long</td>
+                    <td>contains the count of subfolders of a folder.</td>
+                </tr>
+                <tr>
+                    <td>FreeSpace</td>
+                    <td>hyper</td>
+                    <td>contains the free space left on a storage device. It is
+                        specified in bytes.</td>
+                </tr>
+                <tr>
+                    <td>HasDocuments</td>
+                    <td>boolean</td>
+                    <td>indicates whether a content has subcontents, which are documents.</td>
+                </tr>
+                <tr>
+                    <td>HasFolders</td>
+                    <td>boolean</td>
+                    <td>indicates whether a content has subcontents, which are folders.</td>
+                </tr>
+                <tr>
+                    <td>IsMarked</td>
+                    <td>boolean</td>
+                    <td>indicates whether a content is &quot;marked&quot;.</td>
+                </tr>
+                <tr>
+                    <td>IsRead</td>
+                    <td>boolean</td>
+                    <td>indicates whether a content has been "read".</td>
+                </tr>
+                <tr>
+                    <td>IsReadOnly</td>
+                    <td>boolean</td>
+                    <td>indicates whether a content is read-only.</td>
+                </tr>
+                <tr>
+                    <td>IsSubscribed</td>
+                    <td>boolean</td>
+                    <td>indicates whether a content is subscribed.</td>
+                </tr>
+                <tr>
+                    <td>IsTimeLimitedStore</td>
+                    <td>boolean</td>
+                    <td>indicates whether the feature to store contents
+                        depending on their age is active.</td>
+                </tr>
+                <tr>
+                    <td>UpdateOnOpen</td>
+                    <td>boolean</td>
+                    <td>indicates whether (sub)contents shall be automatically updated
+                        everytime a (folder) content is opened.</br>This property may be
+                        used to control whether a folder content should read data only
+                        from local cache when it is opened, or whether it should connect
+                        to a server to obtain latest data.</td>
+                </tr>
+                <tr>
+                    <td>Keywords</td>
+                    <td>string</td>
+                    <td>contains the keywords of a document (e.g. the value
+                        of the &quot;keywords&quot; header field of a news article).</td>
+                </tr>
+                <tr>
+                    <td>MediaType</td>
+                    <td>string</td>
+                    <td>contains the media type ( MIME type ) of a content. It is highly
+                        recommended to support this property if the content's implementation
+                        can obtain the media type natively from its data source ( i.e.
+                        HTTP servers provide media types for all their documents ).
+                    </td>
+                </tr>
+                <tr>
+                    <td>MessageBCC</td>
+                    <td>string</td>
+                    <td>contains the BCC (blind carbon copy) receiver(s) of a message.</td>
+                </tr>
+                <tr>
+                    <td>MessageCC</td>
+                    <td>string</td>
+                    <td>contains the CC (carbon copy) receiver(s) of a message.</td>
+                </tr>
+                <tr>
+                    <td>MessageFrom</td>
+                    <td>string</td>
+                    <td>contains (the address of) the sender of a message.</td>
+                </tr>
+                <tr>
+                    <td>MessageId</td>
+                    <td>string</td>
+                    <td>contains the ID of a message.</td>
+                </tr>
+                <tr>
+                    <td>MessageInReplyTo</td>
+                    <td>string</td>
+                    <td>contains the &quot;In-Reply-To&quot; field of a message.</td>
+                </tr>
+                <tr>
+                    <td>MessageReplyTo</td>
+                    <td>string</td>
+                    <td>contains the &quot;Reply-To&quot; field of a message.</td>
+                </tr>
+                <tr>
+                    <td>MessageTo</td>
+                    <td>string</td>
+                    <td>contains the recipient(s) of a message.</td>
+                </tr>
+                <tr>
+                    <td>NewsGroups</td>
+                    <td>string</td>
+                    <td>contains the name(s) of the newsgroup(s) into which a message was posted.</td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>string</td>
+                    <td>contains a password (e.g. needed to access a POP3-Server).</td>
+                </tr>
+                <tr>
+                    <td>Priority</td>
+                    <td><type>Priority</type></td>
+                    <td>contains a priority (i.e. of a message).</td>
+                </tr>
+                <tr>
+                    <td>References</td>
+                    <td>string</td>
+                    <td>contains the &quot;References&quot; field of a news article.</td>
+                </tr>
+                <tr>
+                    <td>Rules</td>
+                    <td><type>RuleSet</type></td>
+                    <td>contains the rules set for a content.</td>
+                </tr>
+                <tr>
+                    <td>SeenCount</td>
+                    <td>long</td>
+                    <td>contains the count of seen/read subcontents of a folder content.</td>
+                </tr>
+                <tr>
+                    <td>ServerBase</td>
+                    <td>string</td>
+                    <td>contains the base directory to use on a server. (e.g. Setting
+                        the server base of an FTP-Account to &quot;/pub/incoming&quot;
+                        will result in showing contents from that directory and not from
+                        server's root directory)
+                    </td>
+                </tr>
+                <tr>
+                    <td>ServerName</td>
+                    <td>string</td>
+                    <td>contains a server name (e.g. The name of the server to use for
+                        a POP3-Account).
+                    </td>
+                </tr>
+                <tr>
+                    <td>ServerPort</td>
+                    <td>short</td>
+                    <td>contains a numeric server port.</td>
+                </tr>
+                <tr>
+                    <td>Size</td>
+                    <td>hyper</td>
+                    <td>contains the size (usually in bytes) of an object.</td>
+                </tr>
+                <tr>
+                    <td>SizeLimit</td>
+                    <td>hyper</td>
+                    <td>contains a size limit for an object. (e.g. One may specify the
+                        maximum size of the HTTP-Cache)
+                    </td>
+                </tr>
+                <tr>
+                    <td>SubscribedCount</td>
+                    <td>long</td>
+                    <td>contains the count of subscribed contents of a folder.</td>
+                </tr>
+                <tr>
+                    <td>SynchronizePolicy</td>
+                    <td><type>SynchronizePolicy</type></td>
+                    <td>contains the policy to use when synchronizing two objects.</td>
+                </tr>
+                <tr>
+                    <td>TargetFrames</td>
+                    <td>string</td>
+                    <td>contains information about the target frame to use when displaying
+                        an object.
+                        <p>The value is a string containing three tokens, separated by &quot;;&quot;
+                        (A semicolon):<br/>
+                            <dl>
+                                <dt>1st token</dt>
+                                    <dd>Behavior on &quot;select&quot; ( single click )</dd>
+                                <dt>2nd token</dt>
+                                    <dd>Behavior on &quot;open&quot;   ( double click )</dd>
+                                <dt>3rd token</dt>
+                                    <dd>Behavior on &quot;open in new task&quot; ( double click + CTRL key )</dd>
+                            </dl>
+                         </p>
+                        <p> Each token may contain the following values:<br/>
+                            <dl>
+                            <dt>&quot;_beamer&quot;</dt>
+                                <dd>Show in &quot;Beamer&quot;</dd>
+                            <dt>&quot;_top&quot;</dt>
+                                <dd>Show in current frame (replaces old)</dd>
+                            <dt>&quot;_blank&quot;</dt>
+                                <dd>Show in new task</dd>
+                            </dl>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>TargetURL</td>
+                    <td>string</td>
+                    <td>for contents that are links to other contents, contains the URL of
+        the target content</td>
+                </tr>
+                <tr>
+                    <td>TimeLimitStore</td>
+                    <td>short</td>
+                    <td>contains the value to use if the property "IsTimeLimitedStore" is set.</td>
+                </tr>
+                <tr>
+                    <td>UserName</td>
+                    <td>string</td>
+                    <td>contains a user name. (e.g. the user name needed to access a
+        POP3-Account)</td>
+                </tr>
+                <tr>
+                    <td>VerificationMode</td>
+                    <td><type>VerificationMode</type> </td>
+                    <td>describes a verification policy.</td>
+                </tr>
+            </tbody>
+        </table>
      */
     interface com::sun::star::ucb::XCommandProcessor;
+
 
     /** is an enhanced version of <type>XCommandProcessor</type> that has an
         additional method for releasing command identifiers obtained via
@@ -607,21 +855,29 @@ published service Content
         types:
 
         <p>
-        <ul>
-        <li>boolean
-        <li>char
-        <li>byte
-        <li>string
-        <li>short
-        <li>long
-        <li>hyper
-        <li>float
-        <li>double
-        </ul>
+            <ul>
+                <li>boolean
+                <li>char
+                <li>byte
+                <li>string
+                <li>short
+                <li>long
+                <li>hyper
+                <li>float
+                <li>double
+            </ul>
+        </p>
 
         <p>If a property with an unsupported type shall be added a
         <type scope="com::sun::star::beans">IllegalTypeException</type> must
         be raised.
+
+        @deprecated
+            <p>This interface is <b>deprecated</b>, because a
+            <type>ContentProvider</type> might need a
+            <type>XCommandEnvironment</type> to perform the tasks of adding and
+            removing properties. New implementations should implement the
+            respective commands "addProperty" and "removeProperty" instead.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
