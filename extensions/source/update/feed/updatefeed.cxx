@@ -25,7 +25,7 @@
 #include "precompiled_extensions.hxx"
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -37,7 +37,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
@@ -137,8 +136,7 @@ public:
 //------------------------------------------------------------------------------
 
 class UpdateInformationProvider :
-    public ::cppu::WeakImplHelper4< deployment::XUpdateInformationProvider,
-                                    ucb::XCommandEnvironment,
+    public ::cppu::WeakImplHelper3< deployment::XUpdateInformationProvider,
                                     ucb::XWebDAVCommandEnvironment,
                                     lang::XServiceInfo >
 {

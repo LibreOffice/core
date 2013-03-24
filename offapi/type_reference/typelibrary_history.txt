@@ -198,3 +198,7 @@
 
 19/12/2012 (arielch): TaskID=121514
   Remove deprecated AWT UnoControlSimpleAnimation API
+
+23/03/2013 (arielch): TaskID=121944
+  css::ucb::XWebDAVCommandEnvironment should be derived from css::ucb::XCommandEnvironment
+
