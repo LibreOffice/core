@@ -1530,6 +1530,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 OUString( "IsDocument" ),
                 uno::makeAny( true ),
                 true );
+            xProps->addProperty(
+                OUString( "ContentType" ),
+                uno::makeAny( OUString(WEBDAV_CONTENT_TYPE) ),
+                true );
         }
     }
     else
