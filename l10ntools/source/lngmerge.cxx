@@ -249,7 +249,7 @@ sal_Bool LngParser::Merge(
                             rtl::OString sNewText;
                             pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
                             if( sLang == "qtz" )
-                                sNewText = sNewText.copy(6);
+                                sNewText = sNewText.copy(sNewText.indexOf("|") + 2);
 
                             if ( !sNewText.isEmpty()) {
                                 rtl::OString *pLine = (*pLines)[ nPos ];
@@ -287,7 +287,7 @@ sal_Bool LngParser::Merge(
                     rtl::OString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
                     if( sCur == "qtz" )
-                                sNewText = sNewText.copy(6);
+                        sNewText = sNewText.copy(sNewText.indexOf("|") + 2);
                     if (( !sNewText.isEmpty()) &&
                         !(( sCur.equalsL(RTL_CONSTASCII_STRINGPARAM("x-comment"))) && ( sNewText == "-" )))
                     {
