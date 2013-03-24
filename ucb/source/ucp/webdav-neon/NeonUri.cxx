@@ -144,11 +144,9 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
 {
     // Complete URI.
     const ne_uri * pUriDefs
-        = matchIgnoreAsciiCase( rUri,
-                                RTL_CONSTASCII_STRINGPARAM( "ftp:" ) ) ?
+        = rUri.matchIgnoreAsciiCase( "ftp:" ) ?
               &g_sUriDefaultsFTP :
-          matchIgnoreAsciiCase( rUri,
-                                RTL_CONSTASCII_STRINGPARAM( "https:" ) ) ?
+          rUri.matchIgnoreAsciiCase( "https:" ) ?
               &g_sUriDefaultsHTTPS :
               &g_sUriDefaultsHTTP;
 
