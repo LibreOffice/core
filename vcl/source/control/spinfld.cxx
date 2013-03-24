@@ -178,7 +178,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
         }
     }
 
-    // Oberen/linken Button malen
+    // draw upper/left Button
     sal_uInt16 nTempStyle = nStyle;
     if ( bUpperIn )
         nTempStyle |= BUTTON_DRAW_PRESSED;
@@ -225,14 +225,14 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
     if( !bNativeOK )
         aUpRect = aDecoView.DrawButton( rUpperRect, nTempStyle );
 
-    // Unteren/rechten Button malen
+    // draw lower/right Button
     if ( bLowerIn )
         nStyle |= BUTTON_DRAW_PRESSED;
     Rectangle aLowRect;
     if( !bNativeOK )
         aLowRect = aDecoView.DrawButton( rLowerRect, nStyle );
 
-    // Zusaetzliche Default-Kante wollen wir auch ausnutzen
+     // make use of additional default edge
     aUpRect.Left()--;
     aUpRect.Top()--;
     aUpRect.Right()++;
@@ -242,8 +242,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
     aLowRect.Right()++;
     aLowRect.Bottom()++;
 
-    // Wir malen auch in die Kante rein, damit man etwas erkennen kann,
-    // wenn das Rechteck zu klein ist
+    // draw into the edge, so that something is visible if the rectangle is too small
     if ( aUpRect.GetHeight() < 4 )
     {
         aUpRect.Right()++;
@@ -252,7 +251,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
         aLowRect.Bottom()++;
     }
 
-    // Symbolgroesse berechnen
+    // calculate Symbol size
     long nTempSize1 = aUpRect.GetWidth();
     long nTempSize2 = aLowRect.GetWidth();
     if ( Abs( nTempSize1-nTempSize2 ) == 1 )
@@ -426,7 +425,7 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( maDropDownRect.IsInside( rMEvt.GetPosPixel() ) )
         {
-            // Rechts daneben liegt der DropDownButton:
+            // put DropDownButton to the right
             mbInDropDown = ShowDropDown( mbInDropDown ? sal_False : sal_True );
             Paint( Rectangle( Point(), GetOutputSizePixel() ) );
         }
@@ -679,7 +678,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
     else
         rDDArea.SetEmpty();
 
-    // Je nach Hoehe, die groessen Berechnen
+    // calcuate sizes according to the height
     if ( GetStyle() & WB_SPIN )
     {
         long nBottom1 = aSize.Height()/2;

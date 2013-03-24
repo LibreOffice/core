@@ -188,7 +188,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
             bNegative = sal_True;
     }
 
-    // Throw out all unwanted chars
+    // delete unwanted characters
     for (xub_StrLen i=0; i < aStr1.Len(); )
     {
         if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
@@ -226,7 +226,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     aStr  = aStr1;
     aStr += aStr2.makeStringAndClear();
 
-    // Boundscheck
+    // check range
     BigInt nValue( aStr );
     if ( bRound )
     {
@@ -420,7 +420,6 @@ void LongCurrencyFormatter::SetUseThousandSep( sal_Bool b )
 
 void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 {
-
     if ( nDigits > 9 )
         nDigits = 9;
 

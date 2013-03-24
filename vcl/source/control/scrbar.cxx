@@ -1033,7 +1033,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         // Should we start Tracking?
         if ( meScrollType != SCROLL_DONTKNOW )
         {
-            // remember original position in case of abort or EndScroll-Delta
+            // store original position for cancel and EndScroll delta
             mnStartPos = mnThumbPos;
             // #92906# Call StartTracking() before ImplDoMouseAction(), otherwise
             // MouseButtonUp() / EndTracking() may be called if somebody is spending

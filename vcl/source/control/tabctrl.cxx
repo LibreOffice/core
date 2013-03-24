@@ -85,7 +85,7 @@ struct ImplTabCtrlData
 #define TAB_BORDER_RIGHT    2
 #define TAB_BORDER_BOTTOM   2
 
-// Fuer die Ermittlung von den Tab-Positionen
+// for the Tab positions
 #define TAB_PAGERECT        0xFFFF
 
 // =======================================================================
@@ -234,7 +234,7 @@ void TabControl::ImplLoadRes( const ResId& rResId )
     {
         sal_uLong nEle = ReadLongRes();
 
-        // Item hinzufuegen
+        // add item
         for( sal_uLong i = 0; i < nEle; i++ )
         {
             InsertPage( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
@@ -252,7 +252,7 @@ TabControl::~TabControl()
 
     ImplFreeLayoutData();
 
-    // TabCtrl-Daten loeschen
+    // delete TabCtrl data
     if ( mpTabCtrlData )
     {
         if( mpTabCtrlData->mpListBox )
@@ -310,7 +310,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     if ( pItem->maFormatText.Len() < TAB_EXTRASPACE_X )
         aSize.Width() += TAB_EXTRASPACE_X-pItem->maFormatText.Len();
 
-    // Evt. den Text kuerzen
+    // shorten Text if needed
     if ( aSize.Width()+4 >= nMaxWidth )
     {
         rtl::OUString aAppendStr("...");
@@ -638,7 +638,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
 sal_Bool TabControl::ImplPosCurTabPage()
 {
-    // Aktuelle TabPage resizen/positionieren
+    // resize/position current TabPage
     ImplTabItem* pItem = ImplGetItem( GetCurPageId() );
     if ( pItem && pItem->mpTabPage )
     {
@@ -762,7 +762,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     else
         nOff = 0;
 
-    // Wenn wir die aktuelle Page sind, muessen wir etwas mehr zeichnen
+    // if this is the active Page, we have to draw a little more
     if ( pItem->mnId == mnCurPageId )
     {
         nOff2 = 2;
@@ -1041,7 +1041,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     if( ! bLayout )
         HideFocus();
 
-    // Hier wird gegebenenfalls auch neu formatiert
+    // reformat if needed
     Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
 
     // find current item
@@ -1239,9 +1239,10 @@ void TabControl::setAllocation(const Size &rAllocation)
 
     mbFormat = sal_True;
 
-    // Aktuelle TabPage resizen/positionieren
+    // resize/position active TabPage
     sal_Bool bTabPage = ImplPosCurTabPage();
-    // Feststellen, was invalidiert werden muss
+
+    // check what needs to be invalidated
     Size aNewSize = rAllocation;
     long nNewWidth = aNewSize.Width();
     for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
@@ -1362,7 +1363,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
             rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
             {
-                // Wenn eine Hilfe existiert, dann ausloesen
+                // call Help if existing
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
                     pHelp->Start( aHelpId, this );
@@ -1370,8 +1371,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
             }
         }
 
-        // Bei Quick- oder Balloon-Help zeigen wir den Text an,
-        // wenn dieser abgeschnitten ist
+        // for Quick or Ballon Help, we show the text, if it is cut
         if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
         {
             ImplTabItem* pItem = ImplGetItem( nItemId );
@@ -1929,7 +1929,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
         {
             mnActPageId = nPageId;
             ActivatePage();
-            // Page koennte im Activate-Handler umgeschaltet wurden sein
+            // Page could have been switched by the Activate handler
             nPageId = mnActPageId;
             mnActPageId = 0;
             SetCurPageId( nPageId );
@@ -1956,7 +1956,7 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
             if ( IsDefaultSize() )
                 SetTabPageSizePixel( pTabPage->GetSizePixel() );
 
-            // Erst hier setzen, damit Resize nicht TabPage umpositioniert
+            // only set here, so that Resize does not reposition TabPage
             pItem->mpTabPage = pTabPage;
             queue_resize();
             if ( pItem->mnId == mnCurPageId )
