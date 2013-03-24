@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "DAVProperties.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
@@ -48,20 +49,33 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
 
     // body bucket
     serf_bucket_t* body_bkt = 0;
-    OUString aBodyText;
+    OString aBodyText;
     {
         // create and fill body bucket with properties to be set or removed
-        static const char* OpCodes[2] = { "set", "remove" };
+        static const struct
+        {
+            const char *str;
+            sal_Int32   len;
+        }
+        OpCode [] = {
+            { RTL_CONSTASCII_STRINGPARAM( "set" ) },
+            { RTL_CONSTASCII_STRINGPARAM( "remove" ) }
+        };
         const int nPropCount = ( mpProperties != 0 )
                                ? mpProperties->size()
                                : 0;
         if ( nPropCount > 0 )
         {
+            rtl::OUStringBuffer aBuffer;
+            // add PropPatch xml header in front
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPPATCH_HEADER ));
+
             // <*operation code*><prop>
+
             ProppatchOperation lastOp = (*mpProperties)[ 0 ].operation;
-            aBodyText += OUString::createFromAscii( "<" );
-            aBodyText += OUString::createFromAscii( OpCodes[lastOp] );
-            aBodyText += OUString::createFromAscii( "><prop>" );
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<" ));
+            aBuffer.appendAscii( OpCode[lastOp].str, OpCode[lastOp].len );
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "><prop>" ));
 
             SerfPropName thePropName;
             for ( int n = 0; n < nPropCount; ++n )
@@ -74,24 +88,24 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                 if ( rProperty.operation != lastOp )
                 {
                     // </prop></*last operation code*><*operation code><prop>
-                    aBodyText += OUString::createFromAscii( "</prop></" );
-                    aBodyText += OUString::createFromAscii( OpCodes[lastOp] );
-                    aBodyText += OUString::createFromAscii( "><" );
-                    aBodyText += OUString::createFromAscii( OpCodes[rProperty.operation] );
-                    aBodyText += OUString::createFromAscii( "><prop>" );
+                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</prop></" ));
+                    aBuffer.appendAscii( OpCode[lastOp].str, OpCode[lastOp].len );
+                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "><" ));
+                    aBuffer.appendAscii( OpCode[rProperty.operation].str, OpCode[rProperty.operation].len );
+                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "><prop>" ));
                 }
 
                 // <*propname* xmlns="*propns*"
-                aBodyText += OUString::createFromAscii( "<" );
-                aBodyText += OUString::createFromAscii( thePropName.name );
-                aBodyText += OUString::createFromAscii( " xmlns=\"" );
-                aBodyText += OUString::createFromAscii( thePropName.nspace );
-                aBodyText += OUString::createFromAscii( "\"" );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<" ));
+                aBuffer.appendAscii( thePropName.name );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " xmlns=\"" ));
+                aBuffer.appendAscii( thePropName.nspace );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\"" ));
 
                 if ( rProperty.operation == PROPSET )
                 {
                     // >*property value*</*propname*>
-                    aBodyText += OUString::createFromAscii( ">" );
+                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( ">" ));
 
                     OUString aStringValue;
                     if ( DAVProperties::isUCBDeadProperty( thePropName ) )
@@ -103,37 +117,32 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                     {
                         rProperty.value >>= aStringValue;
                     }
-                    aBodyText += aStringValue;
-                    aBodyText += OUString::createFromAscii( "</" );
-                    aBodyText += OUString::createFromAscii( thePropName.name );
-                    aBodyText += OUString::createFromAscii( ">" );
+                    aBuffer.append( aStringValue );
+                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</" ));
+                    aBuffer.appendAscii( thePropName.name );
+                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( ">" ));
                 }
                 else
                 {
                     // />
-                    aBodyText += OUString::createFromAscii( "/>" );
+                    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/>" ));
                 }
 
                 lastOp = rProperty.operation;
             }
 
             // </prop></*last operation code*>
-            aBodyText += OUString::createFromAscii( "</prop></" );
-            aBodyText += OUString::createFromAscii( OpCodes[lastOp] );
-            aBodyText += OUString::createFromAscii( ">" );
-
-            // add PropPatch xml header in front
-            aBodyText = OUString::createFromAscii( PROPPATCH_HEADER ) + aBodyText;
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "</prop></" ));
+            aBuffer.appendAscii( OpCode[lastOp].str, OpCode[lastOp].len );
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( ">" ));
 
             // add PropPatch xml trailer at end
-            aBodyText += OUString::createFromAscii( PROPPATCH_TRAILER );
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPPATCH_TRAILER ));
 
-            body_bkt = SERF_BUCKET_SIMPLE_STRING( OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
-                                                  pSerfBucketAlloc );
-            if ( useChunkedEncoding() )
-            {
-                body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
-            }
+            aBodyText = rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+            body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
+                                                       aBodyText.getLength(),
+                                                       pSerfBucketAlloc );
         }
     }
 

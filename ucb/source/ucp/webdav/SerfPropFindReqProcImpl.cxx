@@ -23,6 +23,8 @@
 
 #include "webdavresponseparser.hxx"
 #include <comphelper/seqstream.hxx>
+#include <rtl/ustrbuf.hxx>
+
 
 using namespace com::sun::star;
 
@@ -89,14 +91,20 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
 
     // body bucket - certain properties OR all properties OR only property names
     serf_bucket_t* body_bkt = 0;
-    OUString aBodyText;
+    OString aBodyText;
     {
+        // TODO is it really needed a Unicode string buffer?
+        // All properties and property names aren't supposed to be ASCII?
+        rtl::OUStringBuffer aBuffer;
+        aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPFIND_HEADER ));
+
         // create and fill body bucket with requested properties
         const int nPropCount = ( !mbOnlyPropertyNames && mpPropNames )
                                ? mpPropNames->size()
                                : 0;
         if ( nPropCount > 0 )
         {
+            aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<prop>" ) );
             SerfPropName thePropName;
             for ( int theIndex = 0; theIndex < nPropCount; theIndex ++ )
             {
@@ -120,23 +128,19 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
         {
             if ( mbOnlyPropertyNames )
             {
-                aBodyText = OUString::createFromAscii( "<propname/>" );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<propname/>" ));
             }
             else
             {
-                aBodyText = OUString::createFromAscii( "<allprop/>" );
+                aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "<allprop/>" ));
             }
         }
 
-        aBodyText = OUString::createFromAscii( PROPFIND_HEADER ) +
-                    aBodyText +
-                    OUString::createFromAscii( PROPFIND_TRAILER );
-        body_bkt = SERF_BUCKET_SIMPLE_STRING( OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
-                                              pSerfBucketAlloc );
-        if ( useChunkedEncoding() )
-        {
-            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
-        }
+        aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( PROPFIND_TRAILER ));
+        aBodyText = rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+        body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
+                                                   aBodyText.getLength(),
+                                                   pSerfBucketAlloc );
     }
 
     // create serf request
