@@ -58,7 +58,7 @@ TaskManager::startTask(
     if( it != m_aTaskMap.end() )
     {
         throw DuplicateCommandIdentifierException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ),
+            OUString( OSL_LOG_PREFIX ),
             uno::Reference< uno::XInterface >() );
     }
     m_aTaskMap[ CommandId ] = TaskHandling( xCommandEnv );

@@ -649,8 +649,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else
                 xRow->appendVoid( rProp );
 
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsVolume" ) ) ||
-             rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsCompactDisk" ) ) )
+        else if ( rProp.Name == "IsVolume" || rProp.Name == "IsCompactDisk" )
             xRow->appendBoolean( rProp, sal_False );
 
         else if ( rProp.Name == "DateCreated" ) {
@@ -784,12 +783,12 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 #if OSL_DEBUG_LEVEL > 1
         g_warning( "Set prop '%s'", OUStringToGnome( rValue.Name ) );
 #endif
-        if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        if ( rValue.Name == "ContentType" ||
+             rValue.Name == "MediaType" ||
+             rValue.Name == "IsDocument" ||
+             rValue.Name == "IsFolder" ||
+             rValue.Name == "Size" ||
+             rValue.Name == "CreatableContentsInfo" )
             aRet[ n ] <<= getReadOnlyException( this );
 
         else if ( rValue.Name == "Title" ) {

@@ -599,7 +599,7 @@ bool OfficeDocumentsManager::isHelpDocument(
         return false;
 
     ::rtl::OUString sURL( xModel->getURL() );
-    if ( sURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.help://" ) ) )
+    if ( sURL.match( "vnd.sun.star.help://" ) )
         return true;
 
     return false;

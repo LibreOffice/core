@@ -338,11 +338,11 @@ BaseContent::execute( const Command& aCommand,
 
     Any aAny;
 
-    if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertySetInfo")))  // No exceptions
+    if (aCommand.Name == "getPropertySetInfo")  // No exceptions
     {
         aAny <<= getPropertySetInfo( CommandId );
     }
-    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getCommandInfo")))  // no exceptions
+    else if (aCommand.Name == "getCommandInfo")  // no exceptions
     {
         aAny <<= getCommandInfo();
     }

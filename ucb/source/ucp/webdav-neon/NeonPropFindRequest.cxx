@@ -140,8 +140,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
             if ( !aValue.isEmpty() )
             {
                 aValue = stripDavNamespace( aValue ).toAsciiLowerCase();
-                if ( aValue.compareTo(
-                         RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
+                if ( aValue.compareTo( "<collection" ) == 0 )
                 {
                     thePropertyValue.Value
                         <<= OUString("collection");

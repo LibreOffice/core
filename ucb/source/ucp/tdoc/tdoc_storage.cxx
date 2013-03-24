@@ -413,15 +413,14 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         {
             if ( eMode == READ_WRITE_CREATE )
                 throw lang::IllegalArgumentException(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    rtl::OUString(
                         "Invalid open mode: document storages cannot be "
-                        "created!" ) ),
+                        "created!" ),
                     uno::Reference< uno::XInterface >(),
                     sal_Int16( 2 ) );
             else
                 throw embed::InvalidStorageException(
-                    rtl::OUString(
-                        "Invalid document id!" ),
+                    rtl::OUString( "Invalid document id!" ),
                     uno::Reference< uno::XInterface >() );
         }
 

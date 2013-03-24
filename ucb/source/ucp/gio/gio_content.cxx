@@ -645,12 +645,12 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 #if OSL_DEBUG_LEVEL > 1
         g_warning("Set prop '%s'", rtl::OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
 #endif
-        if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) ||
-             rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+        if ( rValue.Name == "ContentType" ) ||
+             rValue.Name == "MediaType" ) ||
+             rValue.Name == "IsDocument" ) ||
+             rValue.Name == "IsFolder" ) ||
+             rValue.Name == "Size" ) ||
+             rValue.Name == "CreatableContentsInfo" ) )
         {
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
         }
@@ -931,7 +931,7 @@ uno::Any SAL_CALL Content::execute(
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= setPropertyValues( aProperties, xEnv );
     }
-    else if (aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) )
+    else if (aCommand.Name.equals == "createNewContent" )
              && isFolder( xEnv ) )
     {
         ucb::ContentInfo arg;
