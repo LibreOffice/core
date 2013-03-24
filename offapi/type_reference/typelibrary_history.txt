@@ -206,3 +206,5 @@
   css::ucb::XWebDAVCommandEnvironment::getUserRequestHeaders() should return a
   sequence of css::beans::StringPair
 
+23/03/2013 (arielch): TaskID=121946
+  css::ucb::XWebDAVCommandEnvironment: use enums to identify WebDAV/HTTP methods

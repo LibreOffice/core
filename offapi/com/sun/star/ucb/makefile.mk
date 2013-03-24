@@ -205,6 +205,7 @@ IDLFILES=\
     WebDAVContentProvider.idl\
     WebDAVDocumentContent.idl\
     WebDAVFolderContent.idl\
+    WebDAVHTTPMethod.idl \
     WelcomeDynamicResultSetStruct.idl\
     XAnyCompare.idl\
     XAnyCompareFactory.idl\

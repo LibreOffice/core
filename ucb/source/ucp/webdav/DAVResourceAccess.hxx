@@ -32,6 +32,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/WebDAVHTTPMethod.hpp>
 #include "DAVAuthListener.hxx"
 #include "DAVException.hxx"
 #include "DAVSession.hxx"
@@ -229,7 +230,7 @@ public:
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv,
         const rtl::OUString & rURI,
-        const rtl::OUString & rMethod,
+        com::sun::star::ucb::WebDAVHTTPMethod eMethod,
         DAVRequestHeaders & rRequestHeaders );
 
 private:
