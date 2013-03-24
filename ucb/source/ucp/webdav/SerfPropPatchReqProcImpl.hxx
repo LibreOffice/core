@@ -22,10 +22,10 @@
 #ifndef INCLUDED_SERFPROPPATCHREQPROCIMPL_HXX
 #define INCLUDED_SERFPROPPATCHREQPROCIMPL_HXX
 
-#include <SerfRequestProcessorImpl.hxx>
+#include "SerfRequestProcessorImpl.hxx"
 
 #include <vector>
-#include <DAVTypes.hxx>
+#include "DAVTypes.hxx"
 
 namespace http_dav_ucp
 {

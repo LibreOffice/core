@@ -22,11 +22,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <SerfPropFindReqProcImpl.hxx>
-#include <SerfTypes.hxx>
-#include <DAVProperties.hxx>
+#include "SerfPropFindReqProcImpl.hxx"
+#include "SerfTypes.hxx"
+#include "DAVProperties.hxx"
 
-#include <webdavresponseparser.hxx>
+#include "webdavresponseparser.hxx"
 #include <comphelper/seqstream.hxx>
 
 using namespace com::sun::star;

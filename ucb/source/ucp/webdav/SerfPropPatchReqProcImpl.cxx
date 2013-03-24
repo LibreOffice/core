@@ -23,11 +23,11 @@
 #include "precompiled_ucb.hxx"
 
 #include <rtl/ustring.hxx>
-#include <DAVProperties.hxx>
-#include <UCBDeadPropertyValue.hxx>
+#include "DAVProperties.hxx"
+#include "UCBDeadPropertyValue.hxx"
 
-#include <SerfPropPatchReqProcImpl.hxx>
-#include <SerfTypes.hxx>
+#include "SerfPropPatchReqProcImpl.hxx"
+#include "SerfTypes.hxx"
 
 namespace http_dav_ucp
 {

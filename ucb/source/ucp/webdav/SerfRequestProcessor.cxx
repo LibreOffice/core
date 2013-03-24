@@ -22,11 +22,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <SerfRequestProcessor.hxx>
-#include <SerfRequestProcessorImpl.hxx>
-#include <SerfRequestProcessorImplFac.hxx>
-#include <SerfCallbacks.hxx>
-#include <SerfSession.hxx>
+#include "SerfRequestProcessor.hxx"
+#include "SerfRequestProcessorImpl.hxx"
+#include "SerfRequestProcessorImplFac.hxx"
+#include "SerfCallbacks.hxx"
+#include "SerfSession.hxx"
 
 #include <apr_strings.h>
 

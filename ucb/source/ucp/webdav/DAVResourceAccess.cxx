@@ -24,13 +24,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/ucb/XWebDAVCommandEnvironment.hpp"
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
 
-#include "ucbhelper/simpleauthenticationrequest.hxx"
-#include "comphelper/seekableinput.hxx"
+#include <ucbhelper/simpleauthenticationrequest.hxx>
+#include <comphelper/seekableinput.hxx>
 
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"
