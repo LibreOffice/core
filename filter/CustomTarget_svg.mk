@@ -43,7 +43,7 @@ filter_GEN_svg_Script_hxx := $(filter_SVGWORK)/svgscript.hxx
 $(filter_GEN_svg_Tokens_gperf) : \
 			$(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens) \
 			| $(filter_SVGWORK)/.dir
-	$(call gb_Output_announce,$@,build,GPF,3)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,3)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens) \
 			$(filter_GEN_svg_Tokens_hxx) $(filter_GEN_svg_Tokens_gperf))
@@ -52,7 +52,7 @@ $(filter_GEN_svg_Tokens_gperf) : \
 $(filter_GEN_svg_Tokens_hxx) : $(filter_GEN_svg_Tokens_gperf)
 
 $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
-	$(call gb_Output_announce,$@,build,GPF,1)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		 $(GPERF) --compare-strncmp -C -m 20  $(filter_GEN_svg_Tokens_gperf) \
 			 | sed -e "s/(char\*)0/(char\*)0$(COMMA) 0/g" \
@@ -62,7 +62,7 @@ $(filter_GEN_svg_Script_hxx) : \
 			$(call gb_ExternalExecutable_get_dependencies,python) \
 			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx) \
 			| $(filter_SVGWORK)/.dir
-	$(call gb_Output_announce,$@,build,PY ,1)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_ExternalExecutable_get_command,python) $(filter_SRC_svg_Js2Hxx) \
 			$(filter_SRC_svg_PresentationEngine) \

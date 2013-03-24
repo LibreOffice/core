@@ -201,7 +201,7 @@ filter_XcuResTarget_get_target = \
  $(call gb_XcuResTarget_get_target,fcfg_langpack/$(1)/$(filter_XCU_filter))
 
 $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
-	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(true),XCU,1)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
