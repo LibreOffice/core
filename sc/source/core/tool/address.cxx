@@ -1944,7 +1944,7 @@ void ScRange::Format( OUString& r, sal_uInt16 nFlags, const ScDocument* pDoc,
 
 bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
-    SCsTAB nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB+1;
+    SCsTAB nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB;
     dx = Col() + dx;
     dy = Row() + dy;
     dz = Tab() + dz;
@@ -1959,8 +1959,8 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
         dy = MAXROW, bValid =false;
     if( dz < 0 )
         dz = 0, bValid = false;
-    else if( dz >= nMaxTab )
-        dz = nMaxTab-1, bValid =false;
+    else if( dz > nMaxTab )
+        dz = nMaxTab, bValid =false;
     Set( dx, dy, dz );
     return bValid;
 }
