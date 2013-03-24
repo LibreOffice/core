@@ -26,8 +26,6 @@
 #include <dirent.h>
 #include <unistd.h>
 
-#define DRIVE_EXISTS(c) ( TRUE )
-
 #define _mkdir(p)       mkdir(p, 0777)
 #define _rmdir          rmdir
 #define _chdir          chdir
