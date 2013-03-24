@@ -21,19 +21,6 @@
 
 // defines ------------------------------------------------------------------
 
-#define GB_WORD         1
-#define GB_EXCEL        2
-#define GB_PPOINT       3
-
-#define CB_WBAS_CODE    1
-#define CB_WBAS_STG     2
-#define CB_EBAS_CODE    3
-#define CB_EBAS_EXECTBL 4
-#define CB_EBAS_STG     5
-#define CB_PBAS_CODE    6
-#define CB_PBAS_STG     7
-#define CB_WBAS_WBCTBL  8
-
 #define CLB_SETTINGS    1
 #define ST_CHG_MATH     1
 #define ST_CHG_WRITER   2
