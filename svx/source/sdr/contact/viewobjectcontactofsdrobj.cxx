@@ -48,12 +48,17 @@ namespace sdr
         {
         }
 
+        bool ViewObjectContactOfSdrObj::isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const
+        {
+            return aLayers.IsSet(getSdrObject().GetLayer());
+        }
+
         bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
         {
             const SdrObject& rObject = getSdrObject();
 
             // Test layer visibility
-            if(!rDisplayInfo.GetProcessLayers().IsSet(rObject.GetLayer()))
+            if(!isPrimitiveVisibleOnAnyLayer(rDisplayInfo.GetProcessLayers()))
             {
                 return false;
             }

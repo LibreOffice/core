@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdobj.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -97,6 +98,14 @@ namespace sdr
                 }
             }
             return xRetval;
+        }
+
+        bool ViewObjectContactOfGroup::isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const
+        {
+            SetOfByte aObjectLayers;
+            getSdrObject().getMergedHierarchyLayerSet(aObjectLayers);
+            aObjectLayers &= aLayers;
+            return !aObjectLayers.IsEmpty();
         }
     } // end of namespace contact
 } // end of namespace sdr
