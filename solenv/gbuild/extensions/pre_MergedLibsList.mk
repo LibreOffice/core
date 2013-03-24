@@ -31,6 +31,7 @@ ifeq ($(MERGELIBS),TRUE)
 gb_MERGEDLIBS := \
 	avmedia \
 	canvastools \
+	chartcore \
 	configmgr \
 	cppcanvas \
 	cui \
