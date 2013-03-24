@@ -554,9 +554,14 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
 
             for( sal_Int32 nOffset = 0; nOffset < nNewColumns; nOffset++ )
             {
-                Reference< XPropertySet >( xCols->getByIndex( aEnd.mnCol + nOffset + 1 ), UNO_QUERY_THROW )->
+                // Resolves fdo#61540
+                // On Insert before, the reference column whose size is going to be
+                // used for newly created column(s) is wrong. As the new columns are
+                // inserted before the reference column, the reference column moved
+                // to the new position by no., of new columns i.e (earlier+newcolumns).
+                Reference< XPropertySet >(xCols->getByIndex(nNewStartColumn+nOffset), UNO_QUERY_THROW )->
                     setPropertyValue( sSize,
-                        Reference< XPropertySet >( xCols->getByIndex( aStart.mnCol + nOffset ), UNO_QUERY_THROW )->
+                        Reference< XPropertySet >(xCols->getByIndex( bInsertAfter?nNewStartColumn-1:nNewStartColumn+nNewColumns ), UNO_QUERY_THROW )->
                             getPropertyValue( sSize ) );
             }
 
