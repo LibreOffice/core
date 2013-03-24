@@ -1742,6 +1742,8 @@ void ScFiltersTest::testDataBarODS()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     testDataBar_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDataBarXLSX()
@@ -1752,6 +1754,8 @@ void ScFiltersTest::testDataBarXLSX()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     testDataBar_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testColorScaleODS()
@@ -1763,6 +1767,8 @@ void ScFiltersTest::testColorScaleODS()
 
     testColorScale2Entry_Impl(pDoc);
     testColorScale3Entry_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testColorScaleXLSX()
@@ -1774,6 +1780,8 @@ void ScFiltersTest::testColorScaleXLSX()
 
     testColorScale2Entry_Impl(pDoc);
     testColorScale3Entry_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testNewCondFormatODS()
