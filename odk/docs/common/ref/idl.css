@@ -126,6 +126,19 @@ body { background-color:#ffffff; }
 #adc-idlref .expl-table td,
 #adc-idlref .param-table td  { border: none; }
 
+#adc-idlref .devdoc td {
+    border-width: 1px;
+    padding: 5px;
+    border-style: inset;
+    border-color: gray;
+    background-color: white; }
+
+#adc-idlref .devdoc th {
+    border-width: 1px;
+    padding: 5px;
+    border-style: inset;
+    border-color: gray;
+    background-color: white; }
 
 /* Explanation of CSS classes:
 
