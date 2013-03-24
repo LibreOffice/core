@@ -178,7 +178,7 @@ public:
         throw ( uno::RuntimeException ) { return  uno::Reference< ucb::XProgressHandler >(); };
 
     // XWebDAVCommandEnvironment
-    virtual uno::Sequence< beans::NamedValue > SAL_CALL getUserRequestHeaders(
+    virtual uno::Sequence< beans::StringPair > SAL_CALL getUserRequestHeaders(
         const rtl::OUString&, const rtl::OUString& )
         throw ( uno::RuntimeException ) { return m_aRequestHeaderList; };
 
@@ -193,7 +193,7 @@ public:
 protected:
 
     virtual ~UpdateInformationProvider();
-    static uno::Any getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item);
+    static rtl::OUString getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item);
 
 private:
     uno::Reference< io::XInputStream > load(const rtl::OUString& rURL);
@@ -214,7 +214,7 @@ private:
     const uno::Reference< xml::dom::XDocumentBuilder > m_xDocumentBuilder;
     const uno::Reference< xml::xpath::XXPathAPI > m_xXPathAPI;
 
-    uno::Sequence< beans::NamedValue > m_aRequestHeaderList;
+    uno::Sequence< beans::StringPair > m_aRequestHeaderList;
 
     uno::Reference< ucb::XCommandProcessor > m_xCommandProcessor;
     uno::Reference< task::XInteractionHandler > m_xInteractionHandler;
@@ -344,19 +344,17 @@ UpdateInformationProvider::UpdateInformationProvider(
         uno::UNO_QUERY_THROW);
 
     rtl::OUStringBuffer buf;
-    rtl::OUString name;
-    getConfigurationItem(
-        xConfigurationProvider,
-        UNISTRING("org.openoffice.Setup/Product"),
-        UNISTRING("ooName")) >>= name;
-    buf.append(name);
+    buf.append(
+        getConfigurationItem(
+            xConfigurationProvider,
+            UNISTRING("org.openoffice.Setup/Product"),
+            UNISTRING("ooName")));
     buf.append(sal_Unicode(' '));
-    rtl::OUString version;
-    getConfigurationItem(
-        xConfigurationProvider,
-        UNISTRING("org.openoffice.Setup/Product"),
-        UNISTRING("ooSetupVersion")) >>= version;
-    buf.append(version);
+    buf.append(
+        getConfigurationItem(
+            xConfigurationProvider,
+            UNISTRING("org.openoffice.Setup/Product"),
+            UNISTRING("ooSetupVersion")));
     rtl::OUString edition(
         UNISTRING(
             "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
@@ -366,11 +364,11 @@ UpdateInformationProvider::UpdateInformationProvider(
         buf.append(sal_Unicode(' '));
         buf.append(edition);
     }
-    rtl::OUString extension;
-    getConfigurationItem(
-        xConfigurationProvider,
-        UNISTRING("org.openoffice.Setup/Product"),
-        UNISTRING("ooSetupExtension")) >>= extension;
+    rtl::OUString extension(
+        getConfigurationItem(
+            xConfigurationProvider,
+            UNISTRING("org.openoffice.Setup/Product"),
+            UNISTRING("ooSetupExtension")));
     if (extension.getLength() != 0) {
         buf.append(sal_Unicode(' '));
         buf.append(extension);
@@ -404,13 +402,13 @@ UpdateInformationProvider::UpdateInformationProvider(
         i += product.getLength();
     }
 
-    m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
-    m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
+    m_aRequestHeaderList[0].First = UNISTRING("Accept-Language");
+    m_aRequestHeaderList[0].Second = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
     if( aUserAgent.getLength() > 0 )
     {
         m_aRequestHeaderList.realloc(2);
-        m_aRequestHeaderList[1].Name = UNISTRING("User-Agent");
-        m_aRequestHeaderList[1].Value = uno::makeAny(aUserAgent);
+        m_aRequestHeaderList[1].First = UNISTRING("User-Agent");
+        m_aRequestHeaderList[1].Second = aUserAgent;
     }
 }
 
@@ -451,9 +449,10 @@ UpdateInformationProvider::~UpdateInformationProvider()
 
 //------------------------------------------------------------------------------
 
-uno::Any
+rtl::OUString
 UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item)
 {
+    rtl::OUString sRet;
     beans::PropertyValue aProperty;
     aProperty.Name  = UNISTRING("nodepath");
     aProperty.Value = uno::makeAny(node);
@@ -467,7 +466,8 @@ UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServi
             aArgumentList ),
         uno::UNO_QUERY_THROW);
 
-    return xNameAccess->getByName(item);
+    xNameAccess->getByName(item) >>= sRet;
+    return sRet;
 }
 
 //------------------------------------------------------------------------------

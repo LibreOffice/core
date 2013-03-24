@@ -202,3 +202,7 @@
 23/03/2013 (arielch): TaskID=121944
   css::ucb::XWebDAVCommandEnvironment should be derived from css::ucb::XCommandEnvironment
 
+23/03/2013 (arielch): TaskID=121945
+  css::ucb::XWebDAVCommandEnvironment::getUserRequestHeaders() should return a
+  sequence of css::beans::StringPair
+
