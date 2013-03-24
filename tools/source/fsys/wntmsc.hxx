@@ -50,7 +50,7 @@ typedef struct
     const char      *p;
 } DIR;
 
-#define PATHDELIMITER   ";"
+#define PATHSEPARATOR   SAL_PATHSEPARATOR
 #define DEFSTYLE        FSYS_STYLE_NTFS
 #define MKDIR( p )      mkdir( p )
 #define CMP_LOWER(s)    ( s.toAsciiLowerCase() )
