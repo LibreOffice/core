@@ -52,6 +52,10 @@ gb_MERGEDLIBS := \
 	i18nutil \
 	lng \
 	localebe1 \
+	localedata_en \
+	localedata_es \
+	localedata_euro \
+	localedata_others \
 	msfilter \
 	oox \
 	package2 \
