@@ -786,7 +786,7 @@ void EditorWindow::InitScrollBars()
     {
         rModulWindow.GetHScrollBar()->SetVisibleSize( aOutSz.Width() );
         rModulWindow.GetHScrollBar()->SetPageSize( aOutSz.Width() * 8 / 10 );
-        rModulWindow.GetHScrollBar()->SetLineSize( GetTextWidth( OUString('x') ) );
+        rModulWindow.GetHScrollBar()->SetLineSize( GetTextWidth( "x" ) );
         rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
         rModulWindow.GetHScrollBar()->Show();
     }

@@ -573,8 +573,7 @@ public:
     void                DrawText( const Point& rStartPt, const XubString& rStr,
                                   xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                                   MetricVector* pVector = NULL, OUString* pDisplayText = NULL );
-    long                GetTextWidth( const XubString& rStr, xub_StrLen nIndex = 0,
-                                      xub_StrLen nLen = STRING_LEN ) const;
+    long                GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
     /// Height where any character of the current font fits; in logic coordinates.
     long                GetTextHeight() const;
     float               approximate_char_width() const;

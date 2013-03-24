@@ -5470,15 +5470,11 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
         mpAlphaVDev->DrawText( rStartPt, rStr, nIndex, nLen, pVector, pDisplayText );
 }
 
-long OutputDevice::GetTextWidth( const String& rStr,
-                                 xub_StrLen nIndex, xub_StrLen nLen ) const
+long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    sal_Int32 nLen2 = (nLen == STRING_LEN) ? -1 : nLen; // only needed until nLen is sal_Int32
-    sal_Int32 nIndex2 = nIndex;                            // ditto
-    OUString aTmpStr(rStr);
-    long nWidth = GetTextArray( aTmpStr, NULL, nIndex2, nLen2 );
+    long nWidth = GetTextArray( rStr, NULL, nIndex, nLen );
 
     return nWidth;
 }
@@ -5504,7 +5500,7 @@ long OutputDevice::GetTextHeight() const
 
 float OutputDevice::approximate_char_width() const
 {
-    return GetTextWidth(rtl::OUString("aemnnxEM")) / 8.0;
+    return GetTextWidth("aemnnxEM") / 8.0;
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
@@ -6357,7 +6353,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     }
     else
     {
-        long nTextWidth = _rLayout.GetTextWidth( aStr, 0, STRING_LEN );
+        long nTextWidth = _rLayout.GetTextWidth( aStr, 0, -1 );
 
         // Evt. Text kuerzen
         if ( nTextWidth > nWidth )
