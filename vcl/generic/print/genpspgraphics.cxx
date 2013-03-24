@@ -1235,12 +1235,13 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
     pFontList->Add( pFD );
 }
 
-bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
+bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNewText, sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop )
 {
     if( ! m_pPhoneNr )
         return false;
 
-    rCutStop = rCutStart = STRING_NOTFOUND;
+    rNewText = rOrig;
+    rCutStop = rCutStart = -1;
 
 #define FAX_PHONE_TOKEN          "@@#"
 #define FAX_PHONE_TOKEN_LENGTH   3
@@ -1260,7 +1261,7 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
         {
             nStart = nPos;
             m_bPhoneCollectionActive = true;
-            m_aPhoneCollection = rtl::OUString();
+            m_aPhoneCollection = "";
             bRet = true;
             bStarted = true;
         }
@@ -1286,13 +1287,13 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
             aPhoneNr.append( m_aPhoneCollection );
             aPhoneNr.append( "</Fax#>" );
             *m_pPhoneNr = aPhoneNr.makeStringAndClear();
-            m_aPhoneCollection = rtl::OUString();
+            m_aPhoneCollection = "";
         }
     }
     if( m_aPhoneCollection.getLength() > 1024 )
     {
         m_bPhoneCollectionActive = false;
-        m_aPhoneCollection = rtl::OUString();
+        m_aPhoneCollection = "";
         bRet = false;
     }
 
@@ -1301,7 +1302,8 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
         rLen -= nStop - nStart;
         rCutStart = nStart+nIndex;
         rCutStop = nStop+nIndex;
-        rNewText = ( rCutStart ? rOrig.copy( 0, rCutStart ) : rtl::OUString() ) + rOrig.copy( rCutStop );
+        if (rCutStart != rCutStop)
+            rNewText = ( rCutStart ? rOrig.copy( 0, rCutStart ) : rtl::OUString() ) + rOrig.copy( rCutStop );
     }
 
     return bRet && m_bSwallowFaxNo;

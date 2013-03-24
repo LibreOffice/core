@@ -752,7 +752,7 @@ bool SalGraphics::DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,
     return drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
 
-bool SalGraphics::filterText( const rtl::OUString&, rtl::OUString&, xub_StrLen, xub_StrLen&, xub_StrLen&, xub_StrLen& )
+bool SalGraphics::filterText( const rtl::OUString&, rtl::OUString&, sal_Int32, sal_Int32&, sal_Int32&, sal_Int32& )
 {
     return false;
 }

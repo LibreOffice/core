@@ -346,12 +346,8 @@ public:
         true: a substitution has taken place and rNewText rLen, rCutStart and rCutStop have been filled accordingly
         false: no substitution has taken place, rNewText, rLen, rCutStart, rCutStop remain unchanged
      */
-    virtual bool            filterText( const rtl::OUString& rOrigText,
-                                        rtl::OUString& rNewText,
-                                        xub_StrLen nIndex,
-                                        xub_StrLen& rLen,
-                                        xub_StrLen& rCutStart,
-                                        xub_StrLen& rCutStop );
+    virtual bool            filterText( const rtl::OUString& rOrigText, rtl::OUString& rNewText,
+                                        sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop );
 
     virtual bool            supportsOperation( OutDevSupportType ) const = 0;
 
