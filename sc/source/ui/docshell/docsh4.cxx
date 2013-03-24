@@ -727,12 +727,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pOtherDocSh->GetError() )                 // nur Errors
                     {
                         sal_Bool bHadTrack = ( aDocument.GetChangeTrack() != NULL );
+#ifdef LIBO_FEATURE_DESKTOP
                         sal_uLong nStart = 0;
                         if ( nSlot == SID_DOCUMENT_MERGE && pChangeTrack )
                         {
                             nStart = pChangeTrack->GetActionMax() + 1;
                         }
-
+#endif
                         if ( nSlot == SID_DOCUMENT_COMPARE )
                             CompareDocument( *pOtherDocSh->GetDocument() );
                         else
