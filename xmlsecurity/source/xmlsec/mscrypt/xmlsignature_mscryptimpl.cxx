@@ -27,9 +27,7 @@
 #include "securityenvironment_mscryptimpl.hxx"
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
-#include "xmlsec/xmlsec.h"
-#include "xmlsec/xmldsig.h"
-#include "xmlsec/crypto.h"
+#include "xmlsecurity/xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;

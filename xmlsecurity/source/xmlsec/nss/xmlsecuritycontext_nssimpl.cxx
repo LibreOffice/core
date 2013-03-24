@@ -24,14 +24,7 @@
 #include "xmlsecuritycontext_nssimpl.hxx"
 #include "xmlstreamio.hxx"
 
-#include <sal/types.h>
-//For reasons that escape me, this is what xmlsec does when size_t is not 4
-#if SAL_TYPES_SIZEOFPOINTER != 4
-#    define XMLSEC_NO_SIZE_T
-#endif
-#include "xmlsec/xmlsec.h"
-#include "xmlsec/keysmngr.h"
-#include "xmlsec/crypto.h"
+#include "xmlsecurity/xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;

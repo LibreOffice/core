@@ -35,15 +35,10 @@
 #include "x509certificate_mscryptimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 
-#include <xmlsec/xmlsec.h>
-#include <xmlsec/keysmngr.h>
-#include <xmlsec/crypto.h>
-#include <xmlsec/base64.h>
+#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec/mscrypto/akmngr.h"
 
 #include <xmlsecurity/biginteger.hxx>
-
-#include "xmlsec/keysmngr.h"
-#include "xmlsec/mscrypto/akmngr.h"
 
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>

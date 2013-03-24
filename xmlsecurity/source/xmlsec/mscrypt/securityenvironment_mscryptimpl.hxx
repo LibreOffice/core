@@ -46,7 +46,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <list>
-#include "xmlsec/xmlsec.h"
+#include "xmlsecurity/xmlsec-wrapper.h"
 
 #include "sal/types.h"
 

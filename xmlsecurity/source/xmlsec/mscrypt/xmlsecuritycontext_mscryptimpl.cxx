@@ -23,9 +23,7 @@
 #include "xmlsecuritycontext_mscryptimpl.hxx"
 #include "xmlstreamio.hxx"
 
-#include "xmlsec/xmlsec.h"
-#include "xmlsec/keysmngr.h"
-#include "xmlsec/crypto.h"
+#include "xmlsecurity/xmlsec-wrapper.h"
 #include "xmlsec/mscrypto/akmngr.h"
 
 using namespace ::com::sun::star::uno ;

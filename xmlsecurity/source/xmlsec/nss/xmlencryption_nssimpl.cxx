@@ -28,15 +28,7 @@
 #include "securityenvironment_nssimpl.hxx"
 #include "errorcallback.hxx"
 
-#include <sal/types.h>
-//For reasons that escape me, this is what xmlsec does when size_t is not 4
-#if SAL_TYPES_SIZEOFPOINTER != 4
-#    define XMLSEC_NO_SIZE_T
-#endif
-#include "xmlsec/xmlsec.h"
-#include "xmlsec/xmltree.h"
-#include "xmlsec/xmlenc.h"
-#include "xmlsec/crypto.h"
+#include "xmlsecurity/xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;

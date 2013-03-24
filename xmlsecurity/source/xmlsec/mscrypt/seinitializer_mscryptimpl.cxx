@@ -22,7 +22,7 @@
 
 #include "securityenvironment_mscryptimpl.hxx"
 
-#include "xmlsec/strings.h"
+#include "xmlsecurity/xmlsec-wrapper.h"
 #include "xmlsec/mscrypto/app.h"
 
 namespace cssu = com::sun::star::uno;
