@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+rQ\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5815,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-24T06:22:04Z",
+      "side": 1,
+      "message": "\"ditto\" :-)",
+      "revId": "e2735b3c8036af80735a957a4b37fa5f312b1471",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+rM\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5816,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-24T06:22:04Z",
+      "side": 1,
+      "message": "\"ditto\" :-)",
+      "revId": "e2735b3c8036af80735a957a4b37fa5f312b1471",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
