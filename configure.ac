@@ -11387,36 +11387,44 @@ dnl branding
 dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
 # initialize mapped arrays
-brand_vars=(INTRO_BITMAP ABOUT_BACKGROUND_SVG FLAT_LOGO_SVG \
+brand_vars="INTRO_BITMAP ABOUT_BACKGROUND_SVG FLAT_LOGO_SVG \
     STARTCENTER_LEFT_BITMAP STARTCENTER_RIGHT_BITMAP \
     STARTCENTER_RTL_LEFT_BITMAP STARTCENTER_RTL_RIGHT_BITMAP \
-    STARTCENTER_SPACE_BITMAP)
-brand_files=(intro.png about.svg flat_logo.svg \
+    STARTCENTER_SPACE_BITMAP"
+brand_files="intro.png about.svg flat_logo.svg \
     backing_left.png backing_right.png \
     backing_rtl_left.png backing_rtl_right.png \
-    backing_space.png)
+    backing_space.png"
+brandmaxidx=0
 
-for i in $(echo ${brand_vars[[@]]})
+for i in $brand_vars
 do
-     declare $i=
+    declare $i=
+    let "brandmaxidx=$brandmaxidx + 1"
 done
 
 if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
 else
-    idx=0
-    while test $idx -lt ${#brand_vars[@]}
-    do
-        if ! test -f $with_branding/${brand_files[[$idx]]}
-        then
-            AC_MSG_WARN([Branded file $i does not exist, using the default one])
-        else
-            declare ${brand_vars[[$idx]]}="$with_branding/${brand_files[[$idx]]}"
-        fi
-        let "idx=$idx + 1"
-    done
-    check_for_progress="yes"
-    AC_MSG_RESULT([$with_branding])
+    if ! test -d $with_branding ; then
+        AC_MSG_ERROR([No directory $with_branding, falling back to default branding])
+    else
+        AC_MSG_RESULT([$with_branding])
+        idx=1
+        while test $idx -le $brandmaxidx
+        do
+            lvar=$(echo $brand_vars | cut -f$idx -d" ")
+            lfile=$(echo $brand_files | cut -f$idx -d" ")
+
+            if ! test -f $with_branding/$lfile ; then
+                AC_MSG_WARN([Branded file $lfile does not exist, using the default one])
+            else
+                declare lvar="$with_branding/$lfile"
+            fi
+            let "idx=$idx + 1"
+        done
+        check_for_progress="yes"
+    fi
 fi
 AC_SUBST(INTRO_BITMAP)
 AC_SUBST(ABOUT_BACKGROUND_SVG)
