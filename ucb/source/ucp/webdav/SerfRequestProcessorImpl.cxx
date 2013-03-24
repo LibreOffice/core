@@ -18,6 +18,7 @@
  */
 
 #include "SerfRequestProcessorImpl.hxx"
+#include "webdavuseragent.hxx"
 
 namespace http_dav_ucp
 {
@@ -51,6 +52,7 @@ bool SerfRequestProcessorImpl::useChunkedEncoding() const
 
 void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeaderBucket )
 {
+    bool bHasUserAgent( false );
     DAVRequestHeaders::const_iterator aHeaderIter( mrRequestHeaders.begin() );
     const DAVRequestHeaders::const_iterator aEnd( mrRequestHeaders.end() );
 
@@ -61,11 +63,24 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
         const OString aValue = OUStringToOString( (*aHeaderIter).second,
                                                             RTL_TEXTENCODING_UTF8 );
 
+        OSL_TRACE( "Request Header - \"%s: %s\"", aHeader.getStr(), aValue.getStr() );
+        if ( !bHasUserAgent )
+            bHasUserAgent = aHeaderIter->first.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "User-Agent" ) );
+
         serf_bucket_headers_set( inoutSerfHeaderBucket,
                                  aHeader.getStr(),
                                  aValue.getStr() );
 
         ++aHeaderIter;
+    }
+
+    if ( !bHasUserAgent )
+    {
+        const OUString &rUserAgent = WebDAVUserAgent::get();
+        serf_bucket_headers_set( inoutSerfHeaderBucket,
+                                 "User-Agent",
+                                 OUStringToOString( rUserAgent, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     serf_bucket_headers_set( inoutSerfHeaderBucket, "Accept-Encoding", "gzip");

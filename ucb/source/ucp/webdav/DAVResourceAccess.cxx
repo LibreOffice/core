@@ -1110,32 +1110,33 @@ void DAVResourceAccess::getUserRequestHeaders(
     const OUString & rMethod,
     DAVRequestHeaders & rRequestHeaders )
 {
-    if ( xEnv.is() )
+    if ( !xEnv.is() )
+        return;
+
+    uno::Reference< ucb::XWebDAVCommandEnvironment > xDAVEnv(
+        xEnv, uno::UNO_QUERY );
+
+    if ( !xDAVEnv.is() )
+        return;
+
+    uno::Sequence< beans::NamedValue > aRequestHeaders
+        = xDAVEnv->getUserRequestHeaders( rURI, rMethod );
+
+    for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
     {
-        uno::Reference< ucb::XWebDAVCommandEnvironment > xDAVEnv(
-            xEnv, uno::UNO_QUERY );
+        OUString aValue;
+        sal_Bool isString = aRequestHeaders[ n ].Value >>= aValue;
 
-        if ( xDAVEnv.is() )
+        if ( !isString )
         {
-            uno::Sequence< beans::NamedValue > aRequestHeaders
-                = xDAVEnv->getUserRequestHeaders( rURI, rMethod );
-
-            for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
-            {
-                OUString aValue;
-                sal_Bool isString = aRequestHeaders[ n ].Value >>= aValue;
-
-                if ( !isString )
-                {
-                    OSL_ENSURE( isString,
-                        "DAVResourceAccess::getUserRequestHeaders :"
-                        "Value is not a string! Ignoring..." );
-                }
-
-                rRequestHeaders.push_back(
-                    DAVRequestHeader( aRequestHeaders[ n ].Name, aValue ) );
-            }
+            OSL_ENSURE( isString,
+                "DAVResourceAccess::getUserRequestHeaders :"
+                "Value is not a string! Ignoring..." );
+            continue;
         }
+
+        rRequestHeaders.push_back(
+            DAVRequestHeader( aRequestHeaders[ n ].Name, aValue ) );
     }
 }
 
