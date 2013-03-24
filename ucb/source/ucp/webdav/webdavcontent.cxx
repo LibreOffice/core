@@ -1657,6 +1657,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 uno::makeAny( true ),
                 true );
+            xProps->addProperty(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( WEBDAV_CONTENT_TYPE ) ) ),
+                true );
         }
     }
     else
