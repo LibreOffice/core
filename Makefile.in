@@ -88,7 +88,9 @@ define gbuild_modules_rules
 $(foreach m,$(1),$(call gbuild_module_rules,$(m)))
 endef
 
-$(eval $(call gbuild_modules_rules,$(filter-out Module%,$(subst /, ,$(subst $(SRCDIR)/,,$(wildcard $(SRCDIR)/*/Module_*.mk))))))
+gbuild_modules := $(filter-out Module%,$(subst /, ,$(subst $(SRCDIR)/,,$(wildcard $(SRCDIR)/*/Module_*.mk))))
+
+$(eval $(call gbuild_modules_rules,$(gbuild_modules)))
 
 gbuild_TARGETS := AllLangHelp \
 	AllLangResTarget \
@@ -124,7 +126,7 @@ gbuild_TARGETS := AllLangHelp \
 	WinResTarget \
 	Zip
 # build a generic gbuild target
-$(foreach target,$(gbuild_TARGETS),$(target)_%):
+$(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)):
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 #
