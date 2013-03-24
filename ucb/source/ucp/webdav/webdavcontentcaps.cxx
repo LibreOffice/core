@@ -26,6 +26,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
+#include <com/sun/star/ucb/PropertyCommandArgument.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -492,7 +493,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Sequence< ucb::CommandInfo > aCmdInfo( 8 );
+    uno::Sequence< ucb::CommandInfo > aCmdInfo( 10 );
 
     ///////////////////////////////////////////////////////////////
     // Mandatory commands
@@ -553,6 +554,18 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 -1,
                 getCppuType( static_cast<
                     ucb::PostCommandArgument2 * >( 0 ) ) );
+    aCmdInfo[ 8 ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "addProperty" ) ),
+                -1,
+                getCppuType( static_cast<
+                    ucb::PropertyCommandArgument * >( 0 ) ) );
+    aCmdInfo[ 9 ] =
+            ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "removeProperty" ) ),
+                -1,
+                getCppuType( static_cast<
+                    rtl::OUString * >( 0 ) ) );
 
     sal_Bool bFolder = sal_False;
 

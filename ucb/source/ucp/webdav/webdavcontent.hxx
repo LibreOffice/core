@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 
 namespace com { namespace sun { namespace star { namespace ucb {
     struct OpenCommandArgument2;
+    struct PropertyCommandArgument;
     struct PostCommandArgument2;
     struct TransferInfo;
 } } } }
@@ -190,6 +191,21 @@ private:
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& Environment );
 
+    // XPropertyContainer replacement
+    void addProperty( const com::sun::star::ucb::PropertyCommandArgument &aCmdArg,
+                      const com::sun::star::uno::Reference<
+                      com::sun::star::ucb::XCommandEnvironment >& Environment )
+    throw( com::sun::star::beans::PropertyExistException,
+           com::sun::star::beans::IllegalTypeException,
+           com::sun::star::lang::IllegalArgumentException,
+           com::sun::star::uno::RuntimeException );
+
+    void removeProperty( const rtl::OUString& Name,
+                         const com::sun::star::uno::Reference<
+                         com::sun::star::ucb::XCommandEnvironment >& Environment )
+    throw( com::sun::star::beans::UnknownPropertyException,
+           com::sun::star::beans::NotRemoveableException,
+           com::sun::star::uno::RuntimeException );
 public:
     Content( const ::com::sun::star::uno::Reference<
                  ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,

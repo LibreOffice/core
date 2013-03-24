@@ -448,6 +448,65 @@ published service Content
                         </p>
                     </td>
                 </tr>
+                <tr>
+                    <td>addProperty</td>
+                    <td>void</td>
+                    <td><type>PropertyCommandArgument</type> aCmdArg</td>
+                    <td>
+                        Adds a new properties to the content.
+                        <p>
+                            <member>PropertyCommandArgument::Property</member>
+                            contains information about the property to be added.
+                            <member>PropertyCommandArgument::DefaultValue</member>
+                            may contain the default value for the property. Its type must
+                            match the one specified in <member scope="com::sun::star::beans">Property::Type</member>.
+                        </p>
+                        <p>Note that the dynamic properties must be kept persistent. The
+                        service <type>Store</type> (UCB persistence service) may be used to
+                        implement this.</p>
+                        <p><b>Important:</b> The implementation must at least support
+                        adding properties of the following basic data types:</p>
+                        <p>
+                            <ul>
+                                <li>boolean
+                                <li>char
+                                <li>byte
+                                <li>string
+                                <li>short
+                                <li>long
+                                <li>hyper
+                                <li>float
+                                <li>double
+                            </ul>
+                        </p>
+                        <p>
+                            Raises a <type scope="com::sun::star::beans">PropertyExistException</type>
+                            if a property with the same name already exists;
+                           <type scope="com::sun::star::beans">IllegalTypeException</type>
+                           if the property has an unsupported type;
+                           <type scope="com::sun::star::lang">IllegalArgumentException</type>
+                           if the Name of the property is empty.</p>
+                        <blockquote>
+                            Note: This command replaces the deprecated interface method
+                            <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>.
+                        </blockquote>
+                    </td>
+                </tr>
+                <tr>
+                    <td>removeProperty</td>
+                    <td>void</td>
+                    <td>string PropertyName</td>
+                    <td>Removes the properties from the content.
+                        <p>Raises a <type scope="com::sun::star::beans">UnknownPropertyException</type>
+                        if the property does not exist;
+                        <type scope="com::sun::star::beans">NotRemoveableException</type>
+                        if the property is not removable.</p>
+                        <blockquote>
+                            Note: This command replaces the deprecated interface method
+                            <member scope="com::sun::star::beans">XPropertyContainer::removeProperty</member>.
+                        </blockquote>
+                    </td>
+                </tr>
         </table>
 
         <h3>Properties</h3>
@@ -785,7 +844,7 @@ published service Content
                     <td>TargetURL</td>
                     <td>string</td>
                     <td>for contents that are links to other contents, contains the URL of
-        the target content</td>
+                        the target content</td>
                 </tr>
                 <tr>
                     <td>TimeLimitStore</td>
@@ -796,7 +855,7 @@ published service Content
                     <td>UserName</td>
                     <td>string</td>
                     <td>contains a user name. (e.g. the user name needed to access a
-        POP3-Account)</td>
+                        POP3-Account)</td>
                 </tr>
                 <tr>
                     <td>VerificationMode</td>

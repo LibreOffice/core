@@ -48,6 +48,8 @@ struct DAVProperties
                                     OUString & rFullName );
 
     static bool isUCBDeadProperty( const SerfPropName & rName );
+    static bool isUCBSpecialProperty( const rtl::OUString & rFullName,
+                                      rtl::OUString & rParsedName );
 };
 
 } // namespace http_dav_ucp

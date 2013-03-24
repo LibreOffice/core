@@ -3858,6 +3858,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	PostCommandArgument \
 	PostCommandArgument2 \
 	Priority \
+	PropertyCommandArgument \
 	PropertyValueInfo \
 	PropertyValueState \
 	RecipientInfo \

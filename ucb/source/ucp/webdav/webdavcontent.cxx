@@ -56,6 +56,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
+#include <com/sun/star/ucb/PropertyCommandArgument.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
@@ -743,6 +744,68 @@ uno::Any SAL_CALL Content::execute(
 
         aRet = uno::makeAny( createNewContent( aArg ) );
     }
+    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "addProperty" )))
+    {
+        ucb::PropertyCommandArgument aPropArg;
+        if ( !( aCommand.Argument >>= aPropArg ))
+        {
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+        }
+
+        // TODO when/if XPropertyContainer is removed,
+        // the command execution can be canceled in addProperty
+        try
+        {
+            addProperty( aPropArg, Environment );
+        }
+        catch ( const beans::PropertyExistException &e )
+        {
+            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+        }
+        catch ( const beans::IllegalTypeException&e )
+        {
+            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+        }
+        catch ( const lang::IllegalArgumentException&e )
+        {
+            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+        }
+    }
+    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "removeProperty" )))
+    {
+        rtl::OUString sPropName;
+        if ( !( aCommand.Argument >>= sPropName ) )
+        {
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+        }
+
+        // TODO when/if XPropertyContainer is removed,
+        // the command execution can be canceled in removeProperty
+        try
+        {
+            removeProperty( sPropName, Environment );
+        }
+        catch( const beans::UnknownPropertyException &e )
+        {
+            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+        }
+        catch( const beans::NotRemoveableException &e )
+        {
+            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+        }
+    }
     else
     {
         //////////////////////////////////////////////////////////////////
@@ -794,42 +857,53 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 //
 //=========================================================================
 
-// virtual
-void SAL_CALL Content::addProperty( const OUString& Name,
-                                    sal_Int16 Attributes,
-                                    const uno::Any& DefaultValue )
-    throw( beans::PropertyExistException,
-           beans::IllegalTypeException,
-           lang::IllegalArgumentException,
-           uno::RuntimeException )
+void Content::addProperty( const com::sun::star::ucb::PropertyCommandArgument &aCmdArg,
+                           const uno::Reference< ucb::XCommandEnvironment >& xEnv  )
+throw( beans::PropertyExistException,
+       beans::IllegalTypeException,
+       lang::IllegalArgumentException,
+       uno::RuntimeException )
 {
 //    if ( m_bTransient )
 //   @@@ ???
+    const beans::Property aProperty = aCmdArg.Property;
+    const uno::Any aDefaultValue = aCmdArg.DefaultValue;
 
-    if ( Name.isEmpty() )
-        throw lang::IllegalArgumentException();
+    // check property Name
+    if ( !aProperty.Name.getLength() )
+        throw lang::IllegalArgumentException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "\"addProperty\" with empty Property.Name")),
+            static_cast< ::cppu::OWeakObject * >( this ),
+            -1 );
 
     // Check property type.
-    if ( !UCBDeadPropertyValue::supportsType( DefaultValue.getValueType() ) )
-    {
-        OSL_ENSURE( sal_False,
-                    "Content::addProperty - Unsupported property type!" );
-        throw beans::IllegalTypeException();
-    }
+    if ( !UCBDeadPropertyValue::supportsType( aProperty.Type ) )
+        throw beans::IllegalTypeException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "\"addProperty\" unsupported Property.Type")),
+            static_cast< ::cppu::OWeakObject * >( this ) );
+
+    // check default value
+    if ( aDefaultValue.hasValue() && aDefaultValue.getValueType() != aProperty.Type )
+        throw beans::IllegalTypeException(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "\"addProperty\" DefaultValue does not match Property.Type")),
+            static_cast< ::cppu::OWeakObject * >( this ) );
 
     //////////////////////////////////////////////////////////////////////
     // Make sure a property with the requested name does not already
     // exist in dynamic and static(!) properties.
     //////////////////////////////////////////////////////////////////////
 
-    // @@@ Need real command environment here, but where to get it from?
-    //     XPropertyContainer interface should be replaced by
-    //     XCommandProcessor commands!
-    uno::Reference< ucb::XCommandEnvironment > xEnv;
+    // Take into account special properties with custom namespace
+    // using <prop:the_propname xmlns:prop="the_namespace">
+    rtl::OUString aSpecialName;
+    bool bIsSpecial = DAVProperties::isUCBSpecialProperty( aProperty.Name, aSpecialName );
 
     // Note: This requires network access!
     if ( getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
-             ->hasPropertyByName( Name ) )
+            ->hasPropertyByName( bIsSpecial ? aSpecialName : aProperty.Name ) )
     {
         // Property does already exist.
         throw beans::PropertyExistException();
@@ -839,7 +913,7 @@ void SAL_CALL Content::addProperty( const OUString& Name,
     // Add a new dynamic property.
     //////////////////////////////////////////////////////////////////////
 
-    ProppatchValue aValue( PROPSET, Name, DefaultValue );
+    ProppatchValue aValue( PROPSET, aProperty.Name, aDefaultValue );
 
     std::vector< ProppatchValue > aProppatchValues;
     aProppatchValues.push_back( aValue );
@@ -861,7 +935,7 @@ void SAL_CALL Content::addProperty( const OUString& Name,
         // Notify propertyset info change listeners.
         beans::PropertySetInfoChangeEvent evt(
             static_cast< cppu::OWeakObject * >( this ),
-            Name,
+            bIsSpecial ? aSpecialName : aProperty.Name,
             -1, // No handle available
             beans::PropertySetInfoChange::PROPERTY_INSERTED );
         notifyPropertySetInfoChange( evt );
@@ -873,8 +947,9 @@ void SAL_CALL Content::addProperty( const OUString& Name,
             // Support for setting arbitrary dead properties is optional!
 
             // Store property locally.
-            ContentImplHelper::addProperty(
-                Name, Attributes, DefaultValue );
+            ContentImplHelper::addProperty( bIsSpecial ? aSpecialName : aProperty.Name,
+                                            aProperty.Attributes,
+                                            aDefaultValue );
         }
         else
         {
@@ -891,9 +966,9 @@ void SAL_CALL Content::addProperty( const OUString& Name,
 
                     case NON_DAV:
                         // Store property locally.
-                        ContentImplHelper::addProperty( Name,
-                                                        Attributes,
-                                                        DefaultValue );
+                        ContentImplHelper::addProperty( bIsSpecial ? aSpecialName : aProperty.Name,
+                                                        aProperty.Attributes,
+                                                        aDefaultValue );
                         break;
 
                     default:
@@ -920,25 +995,19 @@ void SAL_CALL Content::addProperty( const OUString& Name,
     }
 }
 
-//=========================================================================
-// virtual
-void SAL_CALL Content::removeProperty( const OUString& Name )
-    throw( beans::UnknownPropertyException,
-           beans::NotRemoveableException,
-           uno::RuntimeException )
+void Content::removeProperty( const rtl::OUString& Name,
+                              const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+throw( beans::UnknownPropertyException,
+       beans::NotRemoveableException,
+       uno::RuntimeException )
 {
-    // @@@ Need real command environment here, but where to get it from?
-    //     XPropertyContainer interface should be replaced by
-    //     XCommandProcessor commands!
-    uno::Reference< ucb::XCommandEnvironment > xEnv;
-
 #if 0
     // @@@ REMOVABLE z.Z. nicht richtig an der PropSetInfo gesetzt!!!
     try
     {
         beans::Property aProp
-            = getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
-                ->getPropertyByName( Name );
+        = getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
+          ->getPropertyByName( Name );
 
         if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVABLE ) )
         {
@@ -1001,20 +1070,20 @@ void SAL_CALL Content::removeProperty( const OUString& Name )
                     const ResourceType & rType = getResourceType( xEnv );
                     switch ( rType )
                     {
-                        case UNKNOWN:
-                        case DAV:
-                            throw beans::UnknownPropertyException();
+                    case UNKNOWN:
+                    case DAV:
+                        throw beans::UnknownPropertyException();
 
-                        case NON_DAV:
-                            // Try to remove property from local store.
-                            ContentImplHelper::removeProperty( Name );
-                            break;
+                    case NON_DAV:
+                        // Try to remove property from local store.
+                        ContentImplHelper::removeProperty( Name );
+                        break;
 
-                        default:
-                            OSL_ENSURE( sal_False,
-                                        "Content::removeProperty - "
-                                        "Unsupported resource type!" );
-                            break;
+                    default:
+                        OSL_ENSURE( sal_False,
+                                    "Content::removeProperty - "
+                                    "Unsupported resource type!" );
+                        break;
                     }
                 }
                 catch ( uno::Exception const & )
@@ -1033,6 +1102,35 @@ void SAL_CALL Content::removeProperty( const OUString& Name )
             }
         }
     }
+}
+
+// virtual
+void SAL_CALL Content::addProperty( const rtl::OUString& Name,
+                                    sal_Int16 Attributes,
+                                    const uno::Any& DefaultValue )
+    throw( beans::PropertyExistException,
+           beans::IllegalTypeException,
+           lang::IllegalArgumentException,
+           uno::RuntimeException )
+{
+    beans::Property aProperty;
+    aProperty.Name = Name;
+    aProperty.Type = DefaultValue.getValueType();
+    aProperty.Attributes = Attributes;
+    aProperty.Handle = -1;
+
+    addProperty( ucb::PropertyCommandArgument( aProperty, DefaultValue ),
+                 uno::Reference< ucb::XCommandEnvironment >());
+}
+
+// virtual
+void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
+    throw( beans::UnknownPropertyException,
+           beans::NotRemoveableException,
+           uno::RuntimeException )
+{
+    removeProperty( Name,
+                    uno::Reference< ucb::XCommandEnvironment >() );
 }
 
 //=========================================================================
@@ -1749,11 +1847,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Optional props.
             //////////////////////////////////////////////////////////////
 
+            rtl::OUString aSpecialName;
+            bool bIsSpecial = DAVProperties::isUCBSpecialProperty( rName, aSpecialName );
+
             if ( !xInfo.is() )
                 xInfo = getPropertySetInfo( xEnv,
                                             sal_False /* don't cache data */ );
 
-            if ( !xInfo->hasPropertyByName( rName ) )
+            if ( !xInfo->hasPropertyByName( bIsSpecial ? aSpecialName : rName ) )
             {
                 // Check, whether property exists. Skip otherwise.
                 // PROPPATCH::set would add the property automatically, which
@@ -1798,7 +1899,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            if ( rName == "CreatableContentsInfo" )
+            if ( rName.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(

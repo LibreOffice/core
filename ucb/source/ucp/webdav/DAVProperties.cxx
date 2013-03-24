@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include "DAVProperties.hxx"
+#include <rtl/ustrbuf.hxx>
 
 using namespace http_dav_ucp;
 
@@ -178,6 +179,45 @@ bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
              ( rtl_str_compareIgnoreAsciiCase(
                  rName.nspace, "http://ucb.openoffice.org/dav/props/" )
                == 0 ) );
+}
+
+bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OUString& rParsedName)
+{
+    sal_Int32 nLen = rFullName.getLength();
+    if ( nLen <= 0 ||
+            !rFullName.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "<prop:" ) ) ||
+            !rFullName.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( "\">" ) ) )
+        return false;
+
+    sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
+    sal_Int32 nEnd = rFullName.indexOf( sal_Unicode( ' ' ), nStart );
+    if ( nEnd == -1 )
+        return false;
+
+    rtl::OUString sPropName = rFullName.copy( nStart, nEnd - nStart );
+    if ( !sPropName.getLength() )
+        return false;
+
+    // TODO skip whitespaces?
+    if ( !rFullName.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "xmlns:prop=\"" ), ++nEnd ) )
+        return false;
+
+    nStart = nEnd + RTL_CONSTASCII_LENGTH( "xmlns:prop=\"" );
+    nEnd = rFullName.indexOf( sal_Unicode( '"' ), nStart );
+    if ( nEnd != nLen - RTL_CONSTASCII_LENGTH( "\">" ) )
+        return false;
+
+    rtl::OUString sNamesp = rFullName.copy( nStart, nEnd - nStart );
+    if ( !( nLen = sNamesp.getLength() ) )
+        return false;
+
+    rtl::OUStringBuffer aBuff( sNamesp );
+    if ( sNamesp[nLen - 1] != '/' )
+        aBuff.append( sal_Unicode( '/' ) );
+    aBuff.append( sPropName );
+    rParsedName = aBuff.makeStringAndClear();
+
+    return rParsedName.getLength();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
