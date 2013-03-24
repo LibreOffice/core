@@ -874,7 +874,6 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nCol = 0;
                 else if ( nCol > MAXCOL )
                     nCol = MAXCOL;
-                bCellStateChanged = aPos.Col() != nCol;
                 aPos.SetCol( nCol );
             }
         }
@@ -888,7 +887,6 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nRow = 0;
                 else if ( nRow > MAXROW )
                     nRow = MAXROW;
-                bCellStateChanged = aPos.Row() != nRow;
                 aPos.SetRow( nRow );
             }
         }
@@ -903,10 +901,10 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                     nTab = 0;
                 else if ( nTab > nMaxTab )
                     nTab = nMaxTab;
-                bCellStateChanged = aPos.Tab() != nTab;
                 aPos.SetTab( nTab );
             }
         }
+        bCellStateChanged = aPos != aOldPos;
     }
     else if ( r.In( aPos ) )
     {
