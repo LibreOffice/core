@@ -55,10 +55,10 @@ public:
 private:
     SlideSorter& mrSlideSorter;
     model::SharedPageDescriptor mpDescriptor;
-    ::rtl::OUString msDefaultHelpText;
     ::rtl::OUString msCurrentHelpText;
     sal_uLong mnHelpWindowHandle;
-    Timer maTimer;
+    Timer maShowTimer;
+    Timer maHiddenTimer;
 
     /** Request to show the tool tip.
         @param bForce
