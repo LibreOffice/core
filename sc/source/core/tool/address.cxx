@@ -270,7 +270,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
     }
     else
     {
-        bool only_digits = sal_True;
+        bool only_digits = true;
 
         /*
          * Valid: Normal!a1
@@ -1844,7 +1844,7 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
     switch( rDetails.eConv ) {
     default :
     case formula::FormulaGrammar::CONV_OOO: {
-        sal_Bool bOneTab = (aStart.Tab() == aEnd.Tab());
+        bool bOneTab = (aStart.Tab() == aEnd.Tab());
         if ( !bOneTab )
             nFlags |= SCA_TAB_3D;
         aStart.Format( r, nFlags, pDoc, rDetails );
@@ -1948,7 +1948,7 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
     dx = Col() + dx;
     dy = Row() + dy;
     dz = Tab() + dz;
-    sal_Bool bValid = sal_True;
+    bool bValid = true;
     if( dx < 0 )
         dx = 0, bValid = false;
     else if( dx > MAXCOL )
