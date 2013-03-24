@@ -112,8 +112,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 
 SvxNumberInfoItem::~SvxNumberInfoItem()
 {
-    if ( pDelFormatArr )
-        delete []pDelFormatArr;
+    delete [] pDelFormatArr;
 }
 
 //------------------------------------------------------------------------

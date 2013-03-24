@@ -187,8 +187,7 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
 
 PrintFontManager::PrintFont::~PrintFont()
 {
-    if( m_pMetrics )
-        delete m_pMetrics;
+    delete m_pMetrics;
 }
 
 // -------------------------------------------------------------------------
@@ -749,8 +748,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
 
     m_nLeading = m_nAscend + m_nDescend - 1000;
 
-    if( m_pMetrics )
-        delete m_pMetrics;
+    delete m_pMetrics;
     m_pMetrics = new PrintFontMetrics;
     // mark all pages as queried (or clear if only global font info queiried)
     memset( m_pMetrics->m_aPages, bOnlyGlobalAttributes ? 0 : 0xff, sizeof( m_pMetrics->m_aPages ) );
@@ -1014,8 +1012,7 @@ PrintFontManager::~PrintFontManager()
     for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         delete (*it).second;
     delete m_pAtoms;
-    if( m_pFontCache )
-        delete m_pFontCache;
+    delete m_pFontCache;
 }
 
 // -------------------------------------------------------------------------

@@ -362,8 +362,7 @@ AstUnionBranch::AstUnionBranch(AstUnionLabel* pLabel, AstType const * pType, con
 
 AstUnionBranch::~AstUnionBranch()
 {
-    if ( m_pLabel )
-        delete m_pLabel;
+    delete m_pLabel;
 }
 
 AstUnionLabel::AstUnionLabel(UnionLabel labelKind, AstExpression* pExpr)
@@ -376,8 +375,7 @@ AstUnionLabel::AstUnionLabel(UnionLabel labelKind, AstExpression* pExpr)
 
 AstUnionLabel::~AstUnionLabel()
 {
-    if ( m_pLabelValue )
-        delete m_pLabelValue;
+    delete m_pLabelValue;
 }
 
 
