@@ -77,7 +77,6 @@ SdTpOptionsSnap::~SdTpOptionsSnap()
 sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
-    SdOptionsSnapItem* pOptsItem = NULL;
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
 
     aOptsItem.GetOptionsSnap().SetSnapHelplines( aCbxSnapHelplines.IsChecked() );
@@ -91,8 +90,7 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
     aOptsItem.GetOptionsSnap().SetAngle( (sal_Int16) aMtrFldAngle.GetValue() );
     aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( (sal_Int16) aMtrFldBezAngle.GetValue() );
 
-    if( pOptsItem == NULL || !(aOptsItem == *pOptsItem) )
-        rAttrs.Put( aOptsItem );
+    rAttrs.Put( aOptsItem );
 
     // we get a possible existing GridItem, this ensures that we do net set
     // some default values by accident
