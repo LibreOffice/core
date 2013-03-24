@@ -27,7 +27,9 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -38,12 +40,14 @@ class Chart2ImportTest : public test::BootstrapFixture, public unotest::MacrosTe
 {
 public:
     void Fdo60083();
+    void testSteppedLines();
 
     virtual void setUp();
     virtual void tearDown();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
+    CPPUNIT_TEST(testSteppedLines);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -52,6 +56,8 @@ private:
     Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent );
     Reference< chart2::XDataSeries > getDataSeriesFromDoc( Reference< chart2::XChartDocument > xChartDoc,
             sal_Int32 nDataSeries, sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0 );
+    Reference< chart2::XChartType > getChartTypeFromDoc( Reference< chart2::XChartDocument > xChartDoc,
+            sal_Int32 nChartType, sal_Int32 nCooSys = 0 );
 
     Reference< lang::XComponent > mxComponent;
 };
@@ -100,6 +106,46 @@ void Chart2ImportTest::Fdo60083()
     CPPUNIT_ASSERT(!xErrorBarXProps.is());
 }
 
+
+// stepped line interpolation
+void Chart2ImportTest::testSteppedLines()
+{
+    const sal_Int32 MAXSHEET = 14;
+    chart2::CurveStyle curveStyle[] = {
+        chart2::CurveStyle_LINES,
+        chart2::CurveStyle_CUBIC_SPLINES,
+        chart2::CurveStyle_B_SPLINES,
+        chart2::CurveStyle_STEP_START,
+        chart2::CurveStyle_STEP_END,
+        chart2::CurveStyle_STEP_CENTER_X,
+        chart2::CurveStyle_STEP_CENTER_Y,
+        chart2::CurveStyle_LINES,
+        chart2::CurveStyle_CUBIC_SPLINES,
+        chart2::CurveStyle_B_SPLINES,
+        chart2::CurveStyle_STEP_START,
+        chart2::CurveStyle_STEP_END,
+        chart2::CurveStyle_STEP_CENTER_X,
+        chart2::CurveStyle_STEP_CENTER_Y
+    };
+
+    load("/chart2/qa/extras/data/ods/", "stepped_lines.ods");
+    for(sal_Int32 nSheet = 0; nSheet < MAXSHEET; ++nSheet)
+    {
+        uno::Reference< chart2::XChartDocument > xChart2Doc = getChartDocFromSheet( nSheet, mxComponent );
+        CPPUNIT_ASSERT(xChart2Doc.is());
+
+        Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChart2Doc, 0 );
+        CPPUNIT_ASSERT(xChartType.is());
+
+        Reference< beans::XPropertySet > xPropSet( xChartType, UNO_QUERY );
+        CPPUNIT_ASSERT(xPropSet.is());
+
+        chart2::CurveStyle eCurveStyle;
+        xPropSet->getPropertyValue("CurveStyle") >>= eCurveStyle;
+        CPPUNIT_ASSERT_EQUAL(eCurveStyle, curveStyle[nSheet]);
+    }
+}
+
 Reference< chart2::XChartDocument > Chart2ImportTest::getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
 {
     // let us assume that we only have one chart per sheet
@@ -132,8 +178,8 @@ Reference< chart2::XChartDocument > Chart2ImportTest::getChartDocFromSheet( sal_
     return xChartDoc;
 }
 
-Reference< chart2::XDataSeries > Chart2ImportTest::getDataSeriesFromDoc( uno::Reference< chart2::XChartDocument > xChartDoc,
-                                                                sal_Int32 nDataSeries, sal_Int32 nChartType, sal_Int32 nCooSys )
+Reference< chart2::XChartType > Chart2ImportTest::getChartTypeFromDoc( Reference< chart2::XChartDocument > xChartDoc,
+                                                                sal_Int32 nChartType, sal_Int32 nCooSys )
 {
     CPPUNIT_ASSERT( xChartDoc.is() );
 
@@ -152,7 +198,14 @@ Reference< chart2::XDataSeries > Chart2ImportTest::getDataSeriesFromDoc( uno::Re
     Sequence< Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
     CPPUNIT_ASSERT( xChartTypeSequence.getLength() > nChartType );
 
-    Reference< chart2::XDataSeriesContainer > xDataSequenceContainer( xChartTypeSequence[nChartType], UNO_QUERY_THROW );
+    return xChartTypeSequence[nChartType];
+}
+
+Reference< chart2::XDataSeries > Chart2ImportTest::getDataSeriesFromDoc( uno::Reference< chart2::XChartDocument > xChartDoc,
+                                                                sal_Int32 nDataSeries, sal_Int32 nChartType, sal_Int32 nCooSys )
+{
+    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, nChartType, nCooSys );
+    Reference< chart2::XDataSeriesContainer > xDataSequenceContainer( xChartType, UNO_QUERY_THROW );
     CPPUNIT_ASSERT ( xDataSequenceContainer.is() );
 
     Sequence< Reference< chart2::XDataSeries > > xSeriesSequence( xDataSequenceContainer->getDataSeries() );
