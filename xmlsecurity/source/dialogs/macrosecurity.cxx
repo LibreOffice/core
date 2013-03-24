@@ -433,17 +433,17 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
 
-ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
+XmlReadOnlyImage::XmlReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
     SetImage( Image(XMLSEC_RES( RID_XMLSECTP_LOCK )));
 }
 
-ReadOnlyImage::~ReadOnlyImage()
+XmlReadOnlyImage::~XmlReadOnlyImage()
 {
 }
 
-void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
+void XmlReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 {
     if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
     {
@@ -451,7 +451,7 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
                                      OutputToScreenPixel( aLogicPix.BottomRight() ) );
 
-        OUString aStr(ReadOnlyImage::GetHelpTip());
+        OUString aStr(XmlReadOnlyImage::GetHelpTip());
         if ( Help::IsBalloonHelpEnabled() )
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aScreenRect,
             aStr );
@@ -462,7 +462,7 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-const OUString& ReadOnlyImage::GetHelpTip()
+const OUString& XmlReadOnlyImage::GetHelpTip()
 {
      static OUString aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));
      return aStr;

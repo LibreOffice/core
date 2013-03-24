@@ -42,11 +42,11 @@ namespace dcss = ::com::sun::star;
 
 class MacroSecurityTP;
 
-class ReadOnlyImage : public FixedImage
+class XmlReadOnlyImage : public FixedImage
 {
 public:
-    ReadOnlyImage(Window* pParent, const ResId rResId);
-    ~ReadOnlyImage();
+    XmlReadOnlyImage(Window* pParent, const ResId rResId);
+    ~XmlReadOnlyImage();
 
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     static const OUString& GetHelpTip();

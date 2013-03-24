@@ -33,6 +33,7 @@ gb_MERGEDLIBS := \
 	canvastools \
 	configmgr \
 	cppcanvas \
+	cui \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
