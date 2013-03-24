@@ -22,10 +22,7 @@
  * Turn off DEBUG Assertions
  */
 #ifdef _DEBUG
-    #define _DEBUG_WAS_DEFINED _DEBUG
-    #undef _DEBUG
-#else
-    #undef _DEBUG_WAS_DEFINED
+#undef _DEBUG
 #endif
 
 /*
@@ -33,10 +30,7 @@
  * with debug
  */
 #ifdef DEBUG
-    #define DEBUG_WAS_DEFINED DEBUG
-    #undef DEBUG
-#else
-    #undef DEBUG_WAS_DEFINED
+#undef DEBUG
 #endif
 
 
