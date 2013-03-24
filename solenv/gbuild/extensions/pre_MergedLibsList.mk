@@ -79,6 +79,7 @@ gb_MERGEDLIBS := \
 	vcl \
 	$(if $(filter-out IOS,$(OS)),wpftdraw) \
 	$(if $(filter-out IOS,$(OS)),wpftwriter) \
+	writerfilter \
 	xmlscript \
 	xmlsecurity \
 	xo
