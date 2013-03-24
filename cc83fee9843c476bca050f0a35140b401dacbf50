@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+rE\u003d",
+        "filename": "dbaccess/source/ui/dlg/generalpage.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-03-24T06:26:23Z",
+      "side": 1,
+      "message": "Since this code does not expect GetDatabaseCreationMode() to return anything else than eConnectExternal, eOpenExisting or eCreateNew, I\u0027d make that more explicit by either adding a\n default:\n   assert(false);\n\nor even better, doing \"return true\" instead of \"break\" and *remove* the \"return true\" after the switch statement. In this way, if the enum is ever extended, we\u0027ll get a nice compiler warning \"reached end of non-void function without return\"",
+      "revId": "cc83fee9843c476bca050f0a35140b401dacbf50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
