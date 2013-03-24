@@ -43,14 +43,21 @@ typedef sal_Unicode const * const * (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, 
 
 #ifndef DISABLE_DYNLOADING
 
+#ifdef LIBO_MERGELIBS
+
+static const char *lcl_DATA_EN = "mergedlo";
+static const char *lcl_DATA_ES = "mergedlo";
+static const char *lcl_DATA_EURO = "mergedlo";
+static const char *lcl_DATA_OTHERS = "mergedlo";
+
+#else
+
 static const char *lcl_DATA_EN = "localedata_en";
 static const char *lcl_DATA_ES = "localedata_es";
 static const char *lcl_DATA_EURO = "localedata_euro";
 static const char *lcl_DATA_OTHERS = "localedata_others";
 
 #endif
-
-#ifndef DISABLE_DYNLOADING
 
 static const struct {
     const char* pLocale;
