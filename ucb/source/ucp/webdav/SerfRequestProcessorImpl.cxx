@@ -20,6 +20,7 @@
  *************************************************************/
 
 #include "SerfRequestProcessorImpl.hxx"
+#include "webdavuseragent.hxx"
 
 namespace
 {
@@ -82,6 +83,7 @@ void SerfRequestProcessorImpl::handleChunkedEncoding (
 
 void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeaderBucket )
 {
+    bool bHasUserAgent( false );
     DAVRequestHeaders::const_iterator aHeaderIter( mrRequestHeaders.begin() );
     const DAVRequestHeaders::const_iterator aEnd( mrRequestHeaders.end() );
 
@@ -92,11 +94,24 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
         const rtl::OString aValue = rtl::OUStringToOString( (*aHeaderIter).second,
                                                             RTL_TEXTENCODING_UTF8 );
 
+        OSL_TRACE( "Request Header - \"%s: %s\"", aHeader.getStr(), aValue.getStr() );
+        if ( !bHasUserAgent )
+            bHasUserAgent = aHeaderIter->first.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "User-Agent" ) );
+
         serf_bucket_headers_set( inoutSerfHeaderBucket,
                                  aHeader.getStr(),
                                  aValue.getStr() );
 
         ++aHeaderIter;
+    }
+
+    if ( !bHasUserAgent )
+    {
+        const rtl::OUString &rUserAgent = WebDAVUserAgent::get();
+        serf_bucket_headers_set( inoutSerfHeaderBucket,
+                                 "User-Agent",
+                                 rtl::OUStringToOString( rUserAgent, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     serf_bucket_headers_set( inoutSerfHeaderBucket, "Accept-Encoding", "gzip");
