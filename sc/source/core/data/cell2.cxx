@@ -848,10 +848,6 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 
     SCCOL nCol1 = r.aStart.Col();
     SCROW nRow1 = r.aStart.Row();
-    SCTAB nTab1 = r.aStart.Tab();
-    SCCOL nCol2 = r.aEnd.Col();
-    SCROW nRow2 = r.aEnd.Row();
-    SCTAB nTab2 = r.aEnd.Tab();
     SCCOL nCol = aPos.Col();
     SCROW nRow = aPos.Row();
     SCTAB nTab = aPos.Tab();
