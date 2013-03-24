@@ -37,6 +37,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/optaccessibilitypage \
 	cui/uiconfig/ui/optadvancedpage \
 	cui/uiconfig/ui/optappearancepage \
+	cui/uiconfig/ui/optfltrpage \
 	cui/uiconfig/ui/optfontspage \
 	cui/uiconfig/ui/optgeneralpage \
 	cui/uiconfig/ui/optmemorypage \

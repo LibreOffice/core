@@ -39,23 +39,19 @@ enum MSFltrPg2_CheckBoxEntries {
 // -----------------------------------------------------------------------
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT ), rSet ),
-    aMSWordGB       ( this, CUI_RES( GB_WORD        ) ),
-    aWBasicCodeCB   ( this, CUI_RES( CB_WBAS_CODE ) ),
-    aWBasicWbctblCB ( this, CUI_RES( CB_WBAS_WBCTBL ) ),
-    aWBasicStgCB    ( this, CUI_RES( CB_WBAS_STG  ) ),
-    aMSExcelGB      ( this, CUI_RES( GB_EXCEL     ) ),
-    aEBasicCodeCB   ( this, CUI_RES( CB_EBAS_CODE ) ),
-    aEBasicExectblCB( this, CUI_RES( CB_EBAS_EXECTBL ) ),
-    aEBasicStgCB    ( this, CUI_RES( CB_EBAS_STG  ) ),
-    aMSPPointGB     ( this, CUI_RES( GB_PPOINT    ) ),
-    aPBasicCodeCB   ( this, CUI_RES( CB_PBAS_CODE ) ),
-    aPBasicStgCB    ( this, CUI_RES( CB_PBAS_STG  ) )
+    : SfxTabPage( pParent, "OptFltrPage", "cui/ui/optfltrpage.ui", rSet )
 {
-    FreeResource();
+    get( aWBasicCodeCB      , "wo_basic"    );
+    get( aWBasicWbctblCB    , "wo_exec"     );
+    get( aWBasicStgCB       , "wo_saveorig" );
+    get( aEBasicCodeCB      , "ex_basic"    );
+    get( aEBasicExectblCB   , "ex_exec"     );
+    get( aEBasicStgCB       , "ex_saveorig" );
+    get( aPBasicCodeCB      , "pp_basic"    );
+    get( aPBasicStgCB       , "pp_saveorig" );
 
-    aWBasicCodeCB.SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
-    aEBasicCodeCB.SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
+    aWBasicCodeCB->SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
+    aEBasicCodeCB->SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
 }
 
 OfaMSFilterTabPage::~OfaMSFilterTabPage()
@@ -64,13 +60,13 @@ OfaMSFilterTabPage::~OfaMSFilterTabPage()
 
 IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl)
 {
-    aWBasicWbctblCB.Enable( aWBasicCodeCB.IsChecked() );
+    aWBasicWbctblCB->Enable( aWBasicCodeCB->IsChecked() );
     return 0;
 }
 
 IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl)
 {
-    aEBasicExectblCB.Enable( aEBasicCodeCB.IsChecked() );
+    aEBasicExectblCB->Enable( aEBasicCodeCB->IsChecked() );
     return 0;
 }
 
@@ -85,23 +81,23 @@ sal_Bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
     sal_Bool bFlag;
-    if( aWBasicCodeCB.GetSavedValue() != (bFlag = aWBasicCodeCB.IsChecked()))
+    if( aWBasicCodeCB->GetSavedValue() != (bFlag = aWBasicCodeCB->IsChecked()))
         rOpt.SetLoadWordBasicCode( bFlag );
-    if( aWBasicWbctblCB.GetSavedValue() != (bFlag = aWBasicWbctblCB.IsChecked()))
+    if( aWBasicWbctblCB->GetSavedValue() != (bFlag = aWBasicWbctblCB->IsChecked()))
         rOpt.SetLoadWordBasicExecutable( bFlag );
-    if( aWBasicStgCB.GetSavedValue() != (bFlag = aWBasicStgCB.IsChecked()))
+    if( aWBasicStgCB->GetSavedValue() != (bFlag = aWBasicStgCB->IsChecked()))
         rOpt.SetLoadWordBasicStorage( bFlag );
 
-    if( aEBasicCodeCB.GetSavedValue() != (bFlag = aEBasicCodeCB.IsChecked()))
+    if( aEBasicCodeCB->GetSavedValue() != (bFlag = aEBasicCodeCB->IsChecked()))
         rOpt.SetLoadExcelBasicCode( bFlag );
-    if( aEBasicExectblCB.GetSavedValue() != (bFlag = aEBasicExectblCB.IsChecked()))
+    if( aEBasicExectblCB->GetSavedValue() != (bFlag = aEBasicExectblCB->IsChecked()))
         rOpt.SetLoadExcelBasicExecutable( bFlag );
-    if( aEBasicStgCB.GetSavedValue() != (bFlag = aEBasicStgCB.IsChecked()))
+    if( aEBasicStgCB->GetSavedValue() != (bFlag = aEBasicStgCB->IsChecked()))
         rOpt.SetLoadExcelBasicStorage( bFlag );
 
-    if( aPBasicCodeCB.GetSavedValue() != (bFlag = aPBasicCodeCB.IsChecked()))
+    if( aPBasicCodeCB->GetSavedValue() != (bFlag = aPBasicCodeCB->IsChecked()))
         rOpt.SetLoadPPointBasicCode( bFlag );
-    if( aPBasicStgCB.GetSavedValue() != (bFlag = aPBasicStgCB.IsChecked()))
+    if( aPBasicStgCB->GetSavedValue() != (bFlag = aPBasicStgCB->IsChecked()))
         rOpt.SetLoadPPointBasicStorage( bFlag );
 
     return sal_False;
@@ -111,26 +107,26 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 {
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
-    aWBasicCodeCB.Check( rOpt.IsLoadWordBasicCode() );
-    aWBasicCodeCB.SaveValue();
-    aWBasicWbctblCB.Check( rOpt.IsLoadWordBasicExecutable() );
-    aWBasicWbctblCB.SaveValue();
-    aWBasicStgCB.Check( rOpt.IsLoadWordBasicStorage() );
-    aWBasicStgCB.SaveValue();
-    LoadWordBasicCheckHdl_Impl( &aWBasicCodeCB );
+    aWBasicCodeCB->Check( rOpt.IsLoadWordBasicCode() );
+    aWBasicCodeCB->SaveValue();
+    aWBasicWbctblCB->Check( rOpt.IsLoadWordBasicExecutable() );
+    aWBasicWbctblCB->SaveValue();
+    aWBasicStgCB->Check( rOpt.IsLoadWordBasicStorage() );
+    aWBasicStgCB->SaveValue();
+    LoadWordBasicCheckHdl_Impl( aWBasicCodeCB );
 
-    aEBasicCodeCB.Check( rOpt.IsLoadExcelBasicCode() );
-    aEBasicCodeCB.SaveValue();
-    aEBasicExectblCB.Check( rOpt.IsLoadExcelBasicExecutable() );
-    aEBasicExectblCB.SaveValue();
-    aEBasicStgCB.Check( rOpt.IsLoadExcelBasicStorage() );
-    aEBasicStgCB.SaveValue();
-    LoadExcelBasicCheckHdl_Impl( &aEBasicCodeCB );
+    aEBasicCodeCB->Check( rOpt.IsLoadExcelBasicCode() );
+    aEBasicCodeCB->SaveValue();
+    aEBasicExectblCB->Check( rOpt.IsLoadExcelBasicExecutable() );
+    aEBasicExectblCB->SaveValue();
+    aEBasicStgCB->Check( rOpt.IsLoadExcelBasicStorage() );
+    aEBasicStgCB->SaveValue();
+    LoadExcelBasicCheckHdl_Impl( aEBasicCodeCB );
 
-    aPBasicCodeCB.Check( rOpt.IsLoadPPointBasicCode() );
-    aPBasicCodeCB.SaveValue();
-    aPBasicStgCB.Check( rOpt.IsLoadPPointBasicStorage() );
-    aPBasicStgCB.SaveValue();
+    aPBasicCodeCB->Check( rOpt.IsLoadPPointBasicCode() );
+    aPBasicCodeCB->SaveValue();
+    aPBasicStgCB->Check( rOpt.IsLoadPPointBasicStorage() );
+    aPBasicStgCB->SaveValue();
 }
 
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,

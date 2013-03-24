@@ -29,17 +29,14 @@
 
 class OfaMSFilterTabPage : public SfxTabPage
 {
-    FixedLine       aMSWordGB;
-    CheckBox        aWBasicCodeCB;
-    CheckBox        aWBasicWbctblCB;
-    CheckBox        aWBasicStgCB;
-    FixedLine       aMSExcelGB;
-    CheckBox        aEBasicCodeCB;
-    CheckBox        aEBasicExectblCB;
-    CheckBox        aEBasicStgCB;
-    FixedLine       aMSPPointGB;
-    CheckBox        aPBasicCodeCB;
-    CheckBox        aPBasicStgCB;
+    CheckBox*       aWBasicCodeCB;
+    CheckBox*       aWBasicWbctblCB;
+    CheckBox*       aWBasicStgCB;
+    CheckBox*       aEBasicCodeCB;
+    CheckBox*       aEBasicExectblCB;
+    CheckBox*       aEBasicStgCB;
+    CheckBox*       aPBasicCodeCB;
+    CheckBox*       aPBasicStgCB;
 
     OfaMSFilterTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
