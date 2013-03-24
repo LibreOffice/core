@@ -1330,7 +1330,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             if ( !( xProps.get()
                     && xProps->containsAllNames(
                         rProperties, aMissingProps ) )
-                 && !m_bDidGetOrHead )
+                 || !m_bDidGetOrHead )
             {
                 // Possibly the missing props can be obtained using a HEAD
                 // request.
