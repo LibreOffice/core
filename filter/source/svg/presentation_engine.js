@@ -679,202 +679,6 @@ function configureDetectionTools()
 /*****
  * @licstart
  *
- * The following is the license notice for the part of JavaScript code of this
- * page included between the '@stdlibstart' and the '@stdlibend' notes.
- */
-
-/*****  ******************************************************************
- *
- *  Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
- *  Free Software Foundation, Inc.
- *
- *  The code included between the start note '@stdlibstart' and the end
- *  note '@stdlibend' is a derivative work of the GNU ISO C++ Library.
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3, or (at your option)
- *  any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  Under Section 7 of GPL version 3, you are granted additional
- *  permissions described in the GCC Runtime Library Exception, version
- *  3.1, as published by the Free Software Foundation.
- *
- *  You should have received a copy of the GNU General Public License and
- *  a copy of the GCC Runtime Library Exception along with this program;
- *  see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
- *  <http://www.gnu.org/licenses/>.
- *
- *************************************************************************/
-
-/*****
- *
- * Copyright (c) 1994
- * Hewlett-Packard Company
- *
- * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for any purpose is hereby granted without fee,
- * provided that the above copyright notice appear in all copies and
- * that both that copyright notice and this permission notice appear
- * in supporting documentation.  Hewlett-Packard Company makes no
- * representations about the suitability of this software for any
- * purpose.  It is provided 'as is' without express or implied warranty.
- *
- *
- * Copyright (c) 1996,1997
- * Silicon Graphics Computer Systems, Inc.
- *
- * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for any purpose is hereby granted without fee,
- * provided that the above copyright notice appear in all copies and
- * that both that copyright notice and this permission notice appear
- * in supporting documentation.  Silicon Graphics makes no
- * representations about the suitability of this software for any
- * purpose.  It is provided 'as is' without express or implied warranty.
- *
- ************************************************************************/
-
-/*****
- * @licend
- *
- * The above is the license notice for the part of JavaScript code of this
- * page included between the '@stdlibstart' and the '@stdlibend' notes.
- */
-
-
-
-/*****
- * @stdlibstart
- *
- * The following code is a porting, performed on August 2011, of a part of
- * the C++ code included into the source file stl_queue.h that is part of
- * the GNU ISO C++ Library.
- */
-
-
-function PriorityQueue( aCompareFunc )
-{
-    this.aSequence = new Array();
-    this.aCompareFunc = aCompareFunc;
-}
-
-PriorityQueue.prototype.clone = function()
-{
-    var aCopy = new PriorityQueue( this.aCompareFunc );
-    var src = this.aSequence;
-    var dest = [];
-    var i, l;
-    for( i = 0, l = src.length; i < l; ++i )
-    {
-        if( i in src )
-        {
-            dest.push( src[i] );
-        }
-    }
-    aCopy.aSequence = dest;
-
-    return aCopy;
-};
-
-PriorityQueue.prototype.top = function()
-{
-    return this.aSequence[0];
-};
-
-PriorityQueue.prototype.isEmpty = function()
-{
-    return ( this.size() === 0 );
-};
-
-PriorityQueue.prototype.size = function()
-{
-    return this.aSequence.length;
-};
-
-PriorityQueue.prototype.push = function( aValue )
-{
-    this.implPushHeap( 0, this.aSequence.length, 0, aValue );
-};
-
-PriorityQueue.prototype.clear = function()
-{
-    return this.aSequence = new Array();
-};
-
-
-PriorityQueue.prototype.pop = function()
-{
-    if( this.isEmpty() )
-        return;
-
-    var nLast = this.aSequence.length - 1;
-    var aValue = this.aSequence[ nLast ];
-    this.aSequence[ nLast ] = this.aSequence[ 0 ];
-    this.implAdjustHeap( 0, 0, nLast, aValue );
-    this.aSequence.pop();
-};
-
-PriorityQueue.prototype.implAdjustHeap = function( nFirst, nHoleIndex, nLength, aValue )
-{
-    var nTopIndex = nHoleIndex;
-    var nSecondChild = nHoleIndex;
-
-    while( nSecondChild < Math.floor( ( nLength - 1 ) / 2 ) )
-    {
-         nSecondChild = 2 * ( nSecondChild + 1 );
-         if( this.aCompareFunc( this.aSequence[ nFirst + nSecondChild ],
-                                this.aSequence[ nFirst + nSecondChild - 1] ) )
-         {
-             --nSecondChild;
-         }
-         this.aSequence[ nFirst + nHoleIndex ] = this.aSequence[ nFirst + nSecondChild ];
-         nHoleIndex = nSecondChild;
-    }
-
-    if( ( ( nLength & 1 ) === 0 ) && ( nSecondChild === Math.floor( ( nLength - 2 ) / 2 ) ) )
-    {
-        nSecondChild = 2 * ( nSecondChild + 1 );
-        this.aSequence[ nFirst + nHoleIndex ] = this.aSequence[ nFirst + nSecondChild - 1];
-        nHoleIndex = nSecondChild - 1;
-    }
-
-    this.implPushHeap( nFirst, nHoleIndex, nTopIndex, aValue );
-};
-
-PriorityQueue.prototype.implPushHeap = function( nFirst, nHoleIndex, nTopIndex, aValue )
-{
-    var nParent = Math.floor( ( nHoleIndex - 1 ) / 2 );
-
-    while( ( nHoleIndex > nTopIndex ) &&
-           this.aCompareFunc( this.aSequence[ nFirst + nParent ], aValue ) )
-    {
-        this.aSequence[ nFirst + nHoleIndex ] = this.aSequence[ nFirst + nParent ];
-        nHoleIndex = nParent;
-        nParent = Math.floor( ( nHoleIndex - 1 ) / 2 );
-    }
-    this.aSequence[ nFirst + nHoleIndex ] = aValue;
-};
-
-
-/*****
- * @stdlibend
- *
- * The above code is a porting, performed on August 2011, of a part of
- * the C++ code included into the source file stl_queue.h that is part of
- * the GNU ISO C++ Library.
- */
-
-
-
-
-
-/*****
- * @licstart
- *
  * The following is the license notice for the part of JavaScript code  of
  * this page included between the '@libreofficestart' and the '@libreofficeend'
  * notes.
@@ -3955,6 +3759,55 @@ function SVGPathMatrixTransform( aPath, aSVGMatrix )
     aPath.y = aSVGMatrix.b * nX + aSVGMatrix.d * aPath.y + aSVGMatrix.f;
 }
 
+
+/**********************************************************************************************
+ *      simple PriorityQueue
+ **********************************************************************************************/
+
+function PriorityQueue( aCompareFunc )
+{
+    this.aSequence = new Array();
+    this.aCompareFunc = aCompareFunc;
+    this.bSorted = true;
+}
+
+PriorityQueue.prototype.top = function()
+{
+    if( !this.bSorted )
+    {
+        this.aSequence.sort(this.aCompareFunc)
+        this.bSorted = true;
+    }
+    return this.aSequence[this.aSequence.length - 1];
+};
+
+PriorityQueue.prototype.isEmpty = function()
+{
+    return ( this.aSequence.length === 0 );
+};
+
+PriorityQueue.prototype.push = function( aValue )
+{
+    this.bSorted = false;
+    this.aSequence.push( aValue );
+};
+
+PriorityQueue.prototype.clear = function()
+{
+    this.bSorted = true;
+    this.aSequence = new Array();
+};
+
+PriorityQueue.prototype.pop = function()
+{
+    if( !this.bSorted )
+    {
+        this.aSequence.sort(this.aCompareFunc)
+        this.bSorted = true;
+    }
+
+    return this.aSequence.pop();
+};
 
 
 /**********************************************************************************************
@@ -10516,8 +10369,7 @@ EventMultiplexer.prototype.getId = function()
 
 EventMultiplexer.prototype.hasRegisteredMouseClickHandlers = function()
 {
-    var nSize = this.aMouseClickHandlerSet.size();
-    return ( nSize > 0 );
+    return !this.aMouseClickHandlerSet.isEmpty();
 }
 
 EventMultiplexer.prototype.registerMouseClickHandler = function( aHandler, nPriority )
