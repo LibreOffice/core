@@ -1885,16 +1885,17 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 if ( !pDoc->AdjustMacroMode( String() ) )
                     // check forbids execution
                     return ERRCODE_IO_ACCESSDENIED;
-            }
-            else if ( pDoc && pDoc->GetMedium() )
-            {
-                pDoc->AdjustMacroMode( String() );
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
-                if ( pUpdateDocItem && pMacroExecModeItem
-                  && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
-                  && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )
-                    return ERRCODE_IO_ACCESSDENIED;
+
+                if ( pDoc->GetMedium() )
+                {
+                    pDoc->AdjustMacroMode( String() );
+                    SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                    SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+                    if ( pUpdateDocItem && pMacroExecModeItem
+                      && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
+                      && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )
+                        return ERRCODE_IO_ACCESSDENIED;
+                }
             }
 
             // find BASIC method
