@@ -860,10 +860,10 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 //  bool bPosChanged = false;           // if this cell was moved
-    bool bIsInsert = false;
+    bool bIsInsert = (eUpdateRefMode == URM_INSDEL &&
+                nDx >= 0 && nDy >= 0 && nDz >= 0);
     if (eUpdateRefMode == URM_INSDEL && r.In( aPos ))
     {
-        bIsInsert = (nDx >= 0 && nDy >= 0 && nDz >= 0);
         aPos.Move(nDx, nDy, nDz);
         bCellStateChanged = aPos != aOldPos;
     }
