@@ -1158,6 +1158,11 @@ AC_ARG_ENABLE(winegcc,
          needed for MinGW cross-compilation.]),
 )
 
+AC_ARG_ENABLE(clang,
+    AS_HELP_STRING([--enable-clang],
+        [Build using the clang compiler.]),
+)
+
 AC_ARG_ENABLE(liblangtag,
     AS_HELP_STRING([--disable-liblangtag],
         [Disable use of liblangtag, and insted use an own simple
@@ -2274,43 +2279,36 @@ if test "$CCACHE" != ""; then
 fi
 
 dnl ===================================================================
-dnl  Checks for C compiler,
-dnl  The check for the C++ compiler is later on.
+dnl  Checks for Icecream
 dnl ===================================================================
-if test "$_os" != "WINNT" -a "$WITH_MINGW" != "yes"; then
-	GCC_HOME_SET="true"
-	AC_MSG_CHECKING([gcc home])
-	if test -z "$with_gcc_home"; then
-		if test "$enable_icecream" = "yes"; then
-			if test -d "/usr/lib/icecc/bin"; then
-				GCC_HOME="/usr/lib/icecc/"
-			else
-				GCC_HOME="/opt/icecream/"
-			fi
-		else
-			GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
-			GCC_HOME_SET="false"
-		fi
-	else
-		GCC_HOME="$with_gcc_home"
-	fi
-	AC_MSG_RESULT($GCC_HOME)
-	AC_SUBST(GCC_HOME)
-
-	if test "$GCC_HOME_SET" = "true"; then
-		if test -z "$CC"; then
-			CC="$GCC_HOME/bin/gcc"
-		fi
-		if test -z "$CXX"; then
-			CXX="$GCC_HOME/bin/g++"
-		fi
-	fi
+if test "$enable_icecream" = "yes"; then
+    if test -d "/usr/lib/icecc/bin"; then
+	ICECREAM_HOME="/usr/lib/icecc/"
+    else
+	ICECREAM_HOME="/opt/icecream/"
+    fi
+    if test -z "$CC"; then
+	CC="$GCC_HOME/bin/gcc"
+    fi
+    if test -z "$CXX"; then
+	CXX="$GCC_HOME/bin/g++"
+    fi
 fi
 
-dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
+dnl ===================================================================
+dnl  Checks for C compiler,
+dnl  AC_PROG_CC checks for gcc, cc and then cl (if it weren't guarded for win32)
+dnl  The check for the C++ compiler is later on.
+dnl ===================================================================
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that
     save_CFLAGS=$CFLAGS
+    if test "$enable_clang" = "yes"; then
+        AC_PATH_PROG(CC,clang)
+        if test -z "$CC"; then
+            AC_MSG_ERROR([Clang not found in path. Is it installed?])
+        fi
+    fi
     AC_PROG_CC
     CFLAGS=$save_CFLAGS
 fi
@@ -5002,6 +5000,12 @@ dnl ===================================================================
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     # AC_PROG_CXX sets CXXFLAGS to -g -O2 if not set, avoid that
     save_CXXFLAGS=$CXXFLAGS
+    if test "$enable_clang" = "yes"; then
+        AC_PATH_PROG(CXX,clang++)
+        if test -z "$CXX"; then
+            AC_MSG_ERROR([clang++ not found in path. Is it installed?])
+        fi
+    fi
     AC_PROG_CXX
     CXXFLAGS=$save_CXXFLAGS
 else
