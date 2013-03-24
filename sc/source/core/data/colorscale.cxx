@@ -1084,6 +1084,7 @@ BitmapEx& ScIconSetFormat::getBitmap( ScIconSetType eType, sal_Int32 nIndex )
         if(aBitmapMap[i].eType == eType)
         {
             nBitmap = *(aBitmapMap[i].nBitmaps + nIndex);
+            break;
         }
     }
     assert( nBitmap != -1 );
