@@ -37,7 +37,6 @@ class Properties;
 
 namespace sd { namespace slidesorter { namespace view {
 
-const int Theme_ToolTipDelay = 1000;
 const int Theme_FocusIndicatorWidth = 3;
 
 /** Collection of colors and styles that are used to paint the slide sorter

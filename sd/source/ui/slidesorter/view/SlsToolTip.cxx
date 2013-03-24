@@ -33,13 +33,16 @@ namespace sd { namespace slidesorter { namespace view {
 
 ToolTip::ToolTip (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      msDefaultHelpText(),
       msCurrentHelpText(),
       mnHelpWindowHandle(0),
-      maTimer()
+      maShowTimer(),
+      maHiddenTimer()
 {
-    maTimer.SetTimeout(Theme_ToolTipDelay);
-    maTimer.SetTimeoutHdl(LINK(this, ToolTip, DelayTrigger));
+    SharedSdWindow window = rSlideSorter.GetContentWindow();
+    const HelpSettings& rHelpSettings = window->GetSettings().GetHelpSettings();
+    maShowTimer.SetTimeout(rHelpSettings.GetTipDelay());
+    maShowTimer.SetTimeoutHdl(LINK(this, ToolTip, DelayTrigger));
+    maHiddenTimer.SetTimeout(rHelpSettings.GetTipDelay());
 }
 
 
@@ -47,19 +50,23 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
 
 ToolTip::~ToolTip (void)
 {
-    maTimer.Stop();
+    maShowTimer.Stop();
+    maHiddenTimer.Stop();
     Hide();
 }
-
-
 
 
 void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
 {
     if (mpDescriptor != rpDescriptor)
     {
-        maTimer.Stop();
-        Hide();
+        maShowTimer.Stop();
+        bool bWasVisible = Hide();
+
+        if (bWasVisible)
+        {
+            maHiddenTimer.Start();
+        }
 
         mpDescriptor = rpDescriptor;
 
@@ -79,13 +86,12 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
                 sHelpText += OUString::number(mpDescriptor->GetPageIndex()+1);
             }
 
-            msDefaultHelpText = sHelpText;
             msCurrentHelpText = sHelpText;
-            Show(false);
+            // show new tooltip immediately, if last one was recently hidden
+            Show(maHiddenTimer.IsActive());
         }
         else
         {
-            msDefaultHelpText = OUString();
             msCurrentHelpText = OUString();
         }
     }
@@ -98,7 +104,7 @@ void ToolTip::Show (const bool bNoDelay)
     if (bNoDelay)
         DoShow();
     else
-        maTimer.Start();
+        maShowTimer.Start();
 }
 
 
@@ -106,7 +112,7 @@ void ToolTip::Show (const bool bNoDelay)
 
 void ToolTip::DoShow (void)
 {
-    if (maTimer.IsActive())
+    if (maShowTimer.IsActive())
     {
         // The delay timer is active.  Wait for it to trigger the showing of
         // the tool tip.
