@@ -529,7 +529,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
             if ( aCtrlList[ nCtrl ] == "SelectionBox" )
             {
-                bSelectionBoxFound = sal_False;
+                bSelectionBoxFound = sal_True;
                 break;
             }
     }
