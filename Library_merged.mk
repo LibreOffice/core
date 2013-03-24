@@ -59,6 +59,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	libxml2 \
 	nss3 \
 	openssl \
+	orcus \
 	$(if $(filter-out IOS,$(OS)),\
 	cdr \
 	wpd \

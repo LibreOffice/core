@@ -57,6 +57,7 @@ gb_MERGEDLIBS := \
 	sax \
 	sb \
 	sc \
+	scfilt \
 	sd \
 	sfx \
 	sofficeapp \
