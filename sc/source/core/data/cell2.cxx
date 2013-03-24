@@ -861,49 +861,10 @@ bool ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     ScAddress aOldPos( aPos );
 //  bool bPosChanged = false;           // if this cell was moved
     bool bIsInsert = false;
-    if (eUpdateRefMode == URM_INSDEL)
+    if (eUpdateRefMode == URM_INSDEL && r.In( aPos ))
     {
         bIsInsert = (nDx >= 0 && nDy >= 0 && nDz >= 0);
-        if ( nDx && nRow >= nRow1 && nRow <= nRow2 &&
-            nTab >= nTab1 && nTab <= nTab2 )
-        {
-            if (nCol >= nCol1)
-            {
-                nCol = sal::static_int_cast<SCCOL>( nCol + nDx );
-                if ((SCsCOL) nCol < 0)
-                    nCol = 0;
-                else if ( nCol > MAXCOL )
-                    nCol = MAXCOL;
-                aPos.SetCol( nCol );
-            }
-        }
-        if ( nDy && nCol >= nCol1 && nCol <= nCol2 &&
-            nTab >= nTab1 && nTab <= nTab2 )
-        {
-            if (nRow >= nRow1)
-            {
-                nRow = sal::static_int_cast<SCROW>( nRow + nDy );
-                if ((SCsROW) nRow < 0)
-                    nRow = 0;
-                else if ( nRow > MAXROW )
-                    nRow = MAXROW;
-                aPos.SetRow( nRow );
-            }
-        }
-        if ( nDz && nCol >= nCol1 && nCol <= nCol2 &&
-            nRow >= nRow1 && nRow <= nRow2 )
-        {
-            if (nTab >= nTab1)
-            {
-                SCTAB nMaxTab = pDocument->GetTableCount() - 1;
-                nTab = sal::static_int_cast<SCTAB>( nTab + nDz );
-                if ((SCsTAB) nTab < 0)
-                    nTab = 0;
-                else if ( nTab > nMaxTab )
-                    nTab = nMaxTab;
-                aPos.SetTab( nTab );
-            }
-        }
+        aPos.Move(nDx, nDy, nDz);
         bCellStateChanged = aPos != aOldPos;
     }
     else if ( r.In( aPos ) )
