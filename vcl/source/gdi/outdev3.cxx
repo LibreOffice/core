@@ -5809,9 +5809,14 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     // filter out special markers
     if( bFilter )
     {
-        xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
-        rtl::OUString aTmpStr(aStr);
-        bool bFiltered = mpGraphics->filterText( rOrigStr, aTmpStr, nMinIndex, nLen, nCutStart, nCutStop );
+        sal_Int32 nCutStart, nCutStop, nOrgLen = nLen;
+        OUString aTmpStr(aStr);
+        OUString aTmpOrigStr(rOrigStr); // only needed until rOrigStr is OUString
+        sal_Int32 nMinIndex2=nMinIndex; // ditto
+        sal_Int32 nLen2=nLen;           // ditto
+        bool bFiltered = mpGraphics->filterText( aTmpOrigStr, aTmpStr, nMinIndex2, nLen2, nCutStart, nCutStop );
+        nLen = nLen2;           // ditto
+        nMinIndex = nMinIndex2; // ditto
         aStr = aTmpStr;
         if( !nLen )
             return NULL;
