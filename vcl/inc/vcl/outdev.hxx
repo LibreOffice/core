@@ -378,10 +378,9 @@ public:
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
 
-    SAL_DLLPRIVATE SalLayout*   ImplLayout( const String&, xub_StrLen nIndex,
-                                            xub_StrLen nLen, const Point& rLogicPos = Point(0,0),
-                                            long nLogicWidth=0, const sal_Int32* pLogicDXArray=NULL,
-                                            bool bFilter = false ) const;
+    SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
+                                            const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
+                                            const sal_Int32* pLogicDXArray=NULL, bool bFilter = false ) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                             long nPixelWidth, const sal_Int32* pPixelDXArray ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
@@ -583,9 +582,8 @@ public:
                                        const sal_Int32* pDXAry = NULL,
                                        xub_StrLen nIndex = 0,
                                        xub_StrLen nLen = STRING_LEN );
-    long                GetTextArray( const XubString& rStr, sal_Int32* pDXAry = NULL,
-                                      xub_StrLen nIndex = 0,
-                                      xub_StrLen nLen = STRING_LEN ) const;
+    long                GetTextArray( const OUString& rStr, sal_Int32* pDXAry = NULL,
+                                      sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
     bool                GetCaretPositions( const XubString&, sal_Int32* pCaretXArray,
                                       xub_StrLen nIndex, xub_StrLen nLen,
                                       sal_Int32* pDXAry = NULL, long nWidth = 0,

@@ -5475,7 +5475,11 @@ long OutputDevice::GetTextWidth( const String& rStr,
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    long nWidth = GetTextArray( rStr, NULL, nIndex, nLen );
+    sal_Int32 nLen2 = (nLen == STRING_LEN) ? -1 : nLen; // only needed until nLen is sal_Int32
+    sal_Int32 nIndex2 = nIndex;                            // ditto
+    OUString aTmpStr(rStr);
+    long nWidth = GetTextArray( aTmpStr, NULL, nIndex2, nLen2 );
+
     return nWidth;
 }
 
@@ -5532,15 +5536,17 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
         mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen );
 }
 
-long OutputDevice::GetTextArray( const String& rStr, sal_Int32* pDXAry,
-                                 xub_StrLen nIndex, xub_StrLen nLen ) const
+long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
+                                 sal_Int32 nIndex, sal_Int32 nLen ) const
 {
+    // MEM: default nLen = STRING_LENGTH
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( nIndex >= rStr.Len() )
+    if( nIndex >= rStr.getLength() )
         return 0;
-    if( (sal_uLong)nIndex+nLen >= rStr.Len() )
-        nLen = rStr.Len() - nIndex;
+
+    if( nLen < 0 || nIndex+nLen >= rStr.getLength() )
+        nLen = rStr.getLength() - nIndex;
 
     // do layout
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
@@ -5776,12 +5782,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     return aLayoutArgs;
 }
 
-SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
-                                     xub_StrLen nMinIndex,
-                                     xub_StrLen nLen,
-                                     const Point& rLogicalPos,
-                                     long nLogicalWidth,
-                                     const sal_Int32* pDXArray,
+SalLayout* OutputDevice::ImplLayout( const OUString& rOrigStr, sal_Int32 nMinIndex, sal_Int32 nLen,
+                                     const Point& rLogicalPos, long nLogicalWidth, const sal_Int32* pDXArray,
                                      bool bFilter ) const
 {
     // we need a graphics
@@ -5797,28 +5799,21 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         ImplInitFont();
 
     // check string index and length
-    if( (unsigned)nMinIndex + nLen > rOrigStr.Len() )
+    if( nMinIndex + nLen > rOrigStr.getLength() )
     {
-        const int nNewLen = (int)rOrigStr.Len() - nMinIndex;
+        const sal_Int32 nNewLen = rOrigStr.getLength() - nMinIndex;
         if( nNewLen <= 0 )
             return NULL;
-        nLen = static_cast<xub_StrLen>(nNewLen);
+        nLen = nNewLen;
     }
 
-    String aStr = rOrigStr;
+    OUString aStr = rOrigStr;
 
     // filter out special markers
     if( bFilter )
     {
         sal_Int32 nCutStart, nCutStop, nOrgLen = nLen;
-        OUString aTmpStr(aStr);
-        OUString aTmpOrigStr(rOrigStr); // only needed until rOrigStr is OUString
-        sal_Int32 nMinIndex2=nMinIndex; // ditto
-        sal_Int32 nLen2=nLen;           // ditto
-        bool bFiltered = mpGraphics->filterText( aTmpOrigStr, aTmpStr, nMinIndex2, nLen2, nCutStart, nCutStop );
-        nLen = nLen2;           // ditto
-        nMinIndex = nMinIndex2; // ditto
-        aStr = aTmpStr;
+        bool bFiltered = mpGraphics->filterText( rOrigStr, aStr, nMinIndex, nLen, nCutStart, nCutStop );
         if( !nLen )
             return NULL;
 
@@ -5843,9 +5838,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     // convert from logical units to physical units
     // recode string if needed
     if( mpFontEntry->mpConversion ) {
-        OUString aTmpStr(aStr); // only needed until aStr is OUString as well
-        mpFontEntry->mpConversion->RecodeString( aTmpStr, 0, aTmpStr.getLength() );
-        aStr = String(aTmpStr);
+        mpFontEntry->mpConversion->RecodeString( aStr, 0, aStr.getLength() );
     }
 
     long nPixelWidth = nLogicalWidth;
@@ -5863,13 +5856,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         pDXArray = pTempDXAry;
     }
 
-    OUString aTmpStr(aStr); // only needed until aStr is OUString as well
-    sal_Int32 nMinIndex2=nMinIndex; // ditto
-    sal_Int32 nLen2=nLen;           // ditto
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aTmpStr, nMinIndex, nLen, nPixelWidth, pDXArray );
-    aStr = String(aTmpStr);     // ditto
-    nLen = nLen2;           // ditto
-    nMinIndex = nMinIndex2; // ditto
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXArray );
 
     // get matching layout object for base font
     SalLayout* pSalLayout = NULL;
