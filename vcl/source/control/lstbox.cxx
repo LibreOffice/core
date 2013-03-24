@@ -75,8 +75,8 @@ ListBox::~ListBox()
     //#109201#
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
-    // Beim zerstoeren des FloatWins macht TH ein GrabFocus auf den Parent,
-    // also diese ListBox => PreNotify()...
+    // When destroying the FloatWin, TH does a GrabFocus of the parent,
+    // thus this ListBox => PreNotify()...
     ImplListBox *pImplLB = mpImplLB;
     mpImplLB = NULL;
     delete pImplLB;
@@ -208,7 +208,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
 
         long nId = ReadLongRes();
         if( nId )
-            SetEntryData( nPos, (void *)nId );  // ID als UserData
+            SetEntryData( nPos, (void *)nId );  // ID as UserData
     }
 
     if( nSelPos < nNumber )
@@ -272,7 +272,7 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
         const ImplEntryList* pEntryList = mpImplLB->GetEntryList();
         if ( pEntryList->IsEntryPosSelected( nChanged ) )
         {
-            // Sollte mal ein ImplPaintEntry werden...
+            // was supposed to become a ImplPaintEntry...
             if ( nChanged < pEntryList->GetMRUCount() )
                 nChanged = pEntryList->FindEntry( pEntryList->GetEntryText( nChanged ) );
             mpImplWin->SetItemPos( nChanged );
@@ -414,7 +414,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
         }
     }
 
-    // Inhalt
+    // contents
     if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
     {
         pDev->SetTextColor( Color( COL_BLACK ) );
@@ -461,7 +461,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
         {
             Rectangle aClip( aPos, aSize );
             if ( nTextHeight > aSize.Height() )
-                aClip.Bottom() += nTextHeight-aSize.Height()+1;  // Damit HP-Drucker nicht 'weg-optimieren'
+                // so as to not 'optimize-away' the HP printer
+                aClip.Bottom() += nTextHeight-aSize.Height()+1;
             pDev->IntersectClipRegion( aClip );
         }
 
@@ -560,11 +561,11 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
         SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset
                             // otherwise it will overpaint NWF drawn listboxes
         Resize();
-        mpImplLB->Resize(); // Wird nicht durch ListBox::Resize() gerufen, wenn sich die ImplLB nicht aendert.
+        mpImplLB->Resize(); // not called by ListBox::Resize() if ImplLB is unchanged
 
         if ( mpImplWin )
         {
-            mpImplWin->SetSettings( GetSettings() );    // Falls noch nicht eingestellt...
+            mpImplWin->SetSettings( GetSettings() );    // in case not setup yet
             ImplInitFieldSettings( mpImplWin, sal_True, sal_True, sal_True );
 
             mpBtn->SetSettings( GetSettings() );
@@ -705,8 +706,8 @@ void ListBox::Resize()
         mpImplLB->SetSizePixel( aOutSz );
     }
 
-    // FloatingWindow-Groesse auch im unsichtbare Zustand auf Stand halten,
-    // weil KEY_PGUP/DOWN ausgewertet wird...
+    // keep size of FloatingWindow current even when invisible,
+    // for calc of KEY_PGUP/DOWN
     if ( mpFloatWin )
         mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize() );
 
@@ -1262,13 +1263,13 @@ void ListBox::EnableMultiSelection( sal_Bool bMulti, sal_Bool bStackSelection )
     mpImplLB->EnableMultiSelection( bMulti, bStackSelection );
 
     // WB_SIMPLEMODE:
-    // Die MultiListBox verh�lt sich wie eine normale ListBox.
-    // Die Mehrfachselektion kann nur �ber entsprechende Zusatztasten erfolgen.
+    // MultiListBox acts as a normal ListBox
+    // Multi-Selection needs modifier keys
 
     sal_Bool bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? sal_True : sal_False;
     mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
 
-    // ohne Focus ist das Traveln in einer MultiSelection nicht zu sehen:
+    // moving in a MultiSelection is not visible when not in focus
     if ( mpFloatWin )
         mpImplLB->GetMainWindow()->AllowGrabFocus( bMulti );
 }
@@ -1405,13 +1406,13 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
 
 Size ListBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
-    // ggf. werden ScrollBars eingeblendet
+    // show ScrollBars if needed
     Size aMinSz = CalcMinimumSize();
 //  aMinSz = ImplCalcOutSz( aMinSz );
 
     Size aSz;
 
-    // Hoehe
+    // height
     if ( nLines )
     {
         if ( !IsDropDownBox() )
@@ -1422,7 +1423,7 @@ Size ListBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
     else
         aSz.Height() = aMinSz.Height();
 
-    // Breite
+    // width
     if ( nColumns )
         aSz.Width() = nColumns * GetTextWidth( rtl::OUString('X') );
     else

@@ -80,7 +80,7 @@ void ProgressBar::ImplInitSettings( sal_Bool bFont,
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-/* !!! Derzeit unterstuetzen wir keine Textausgaben
+/* TODO: So far we do not support text
     if ( bFont )
     {
         Font aFont;
@@ -128,7 +128,8 @@ void ProgressBar::ImplInitSettings( sal_Bool bFont,
         }
         SetLineColor();
         SetFillColor( aColor );
-/* !!! Derzeit unterstuetzen wir keine Textausgaben
+
+/* TODO: So far we do not support text
         SetTextColor( aColor );
         SetTextFillColor();
 */
@@ -209,7 +210,7 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
 
 void ProgressBar::StateChanged( StateChangedType nType )
 {
-/* !!! Derzeit unterstuetzen wir keine Textausgaben
+/* TODO: So far we do not support text
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {

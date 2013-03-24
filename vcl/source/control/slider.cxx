@@ -222,7 +222,7 @@ void Slider::ImplUpdateRects( sal_Bool bUpdate )
 
 long Slider::ImplCalcThumbPos( long nPixPos )
 {
-    // Position berechnen
+    // calculate position
     long nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPixPos-mnThumbPixOffset, mnMaxRange-mnMinRange, mnThumbPixRange-1 );
     nCalcThumbPos += mnMinRange;
@@ -233,11 +233,10 @@ long Slider::ImplCalcThumbPos( long nPixPos )
 
 long Slider::ImplCalcThumbPosPix( long nPos )
 {
-    // Position berechnen
+    // calculate position
     long nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPos-mnMinRange, mnThumbPixRange-1, mnMaxRange-mnMinRange );
-    // Am Anfang und Ende des Sliders versuchen wir die Anzeige korrekt
-    // anzuzeigen
+    // at the beginning and end we try to display Slider correctly
     if ( !nCalcThumbPos && (mnThumbPos > mnMinRange) )
         nCalcThumbPos = 1;
     if ( nCalcThumbPos &&
@@ -327,7 +326,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     sal_Bool                    bEnabled = IsEnabled();
 
-    // Evt. noch offene Berechnungen nachholen
+    // do missing calculations
     if ( mbCalcSize )
         ImplCalc( sal_False );
 
@@ -653,7 +652,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
             meScrollType    = SCROLL_DRAG;
             mnDragDraw      = SLIDER_DRAW_THUMB;
 
-            // Zusaetzliche Daten berechnen
+            // calculate additional values
             Point aCenterPos = maThumbRect.Center();
             if ( GetStyle() & WB_HORZ )
                 mnMouseOff = rMousePos.X()-aCenterPos.X();
@@ -685,10 +684,10 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
             mnDragDraw = SLIDER_DRAW_CHANNEL;
         }
 
-        // Soll Tracking gestartet werden
+        // Shall we start Tracking?
         if( meScrollType != SCROLL_DONTKNOW )
         {
-            // Startposition merken fuer Abbruch und EndScroll-Delta
+            // store Start position for cancel and EndScroll delta
             mnStartPos = mnThumbPos;
             ImplDoMouseAction( rMousePos, meScrollType != SCROLL_SET );
             Update();
@@ -705,7 +704,7 @@ void Slider::MouseButtonUp( const MouseEvent& )
 {
     if( SCROLL_SET == meScrollType )
     {
-        // Button und PageRect-Status wieder herstellen
+        // reset Button and PageRect state
         const sal_uInt16 nOldStateFlags = mnStateFlags;
 
         mnStateFlags &= ~( SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN | SLIDER_STATE_THUMB_DOWN );
@@ -725,7 +724,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
 {
     if ( rTEvt.IsTrackingEnded() )
     {
-        // Button und PageRect-Status wieder herstellen
+        // reset Button and PageRect state
         sal_uInt16 nOldStateFlags = mnStateFlags;
         mnStateFlags &= ~(SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN |
                           SLIDER_STATE_THUMB_DOWN);
@@ -733,7 +732,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
             ImplDraw( mnDragDraw );
         mnDragDraw = 0;
 
-        // Bei Abbruch, die alte ThumbPosition wieder herstellen
+        // on cancel, reset the previous Thumb position
         if ( rTEvt.IsTrackingCanceled() )
         {
             long nOldPos = mnThumbPos;
@@ -744,8 +743,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
 
         if ( meScrollType == SCROLL_DRAG )
         {
-            // Wenn gedragt wurde, berechnen wir den Thumb neu, damit
-            // er wieder auf einer gerundeten ThumbPosition steht
+            // after dragging, recalculate to a rounded Thumb position
             ImplCalc();
             Update();
 
@@ -766,7 +764,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
     {
         const Point rMousePos = rTEvt.GetMouseEvent().GetPosPixel();
 
-        // Dragging wird speziell behandelt
+        // special handling for dragging
         if ( meScrollType == SCROLL_DRAG )
         {
             long nMovePix;
@@ -775,8 +773,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                 nMovePix = rMousePos.X()-(aCenterPos.X()+mnMouseOff);
             else
                 nMovePix = rMousePos.Y()-(aCenterPos.Y()+mnMouseOff);
-            // Nur wenn sich Maus in die Scrollrichtung bewegt, muessen
-            // wir etwas tun
+            // only if the mouse moves in Scroll direction we have to act
             if ( nMovePix )
             {
                 mnThumbPixPos += nMovePix;
@@ -802,8 +799,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
         else
             ImplDoMouseAction( rMousePos, rTEvt.IsTrackingRepeat() );
 
-        // Wenn Slider-Werte so umgesetzt wurden, das es nichts
-        // mehr zum Tracking gibt, dann berechen wir hier ab
+        // end tracking if ScrollBar values indicate we are done
         if ( !IsVisible() )
             EndTracking();
     }
@@ -954,20 +950,20 @@ void Slider::EndSlide()
 
 void Slider::SetRange( const Range& rRange )
 {
-    // Range einpassen
+    // adjust Range
     Range aRange = rRange;
     aRange.Justify();
     long nNewMinRange = aRange.Min();
     long nNewMaxRange = aRange.Max();
 
-    // Wenn Range sich unterscheidet, dann neuen setzen
+    // reset Range if different
     if ( (mnMinRange != nNewMinRange) ||
          (mnMaxRange != nNewMaxRange) )
     {
         mnMinRange = nNewMinRange;
         mnMaxRange = nNewMaxRange;
 
-        // Thumb einpassen
+        // adjust Thumb
         if ( mnThumbPos > mnMaxRange )
             mnThumbPos = mnMaxRange;
         if ( mnThumbPos < mnMinRange )

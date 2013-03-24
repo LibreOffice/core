@@ -131,8 +131,7 @@ MenuButton::~MenuButton()
 
 IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
 {
-    // Abfragen, ob Button-Benutzung noch aktiv ist, da diese ja auch
-    // vorher abgebrochen wurden sein koennte
+    // check if button is still active, as it could have been cancelled
     if ( IsTracking() )
     {
         if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
@@ -212,8 +211,7 @@ void MenuButton::Select()
 
 void MenuButton::SetMenuMode( sal_uInt16 nMode )
 {
-    // Fuer die 5.1-Auslieferung besser noch nicht inline, ansonsten kann
-    // diese Funktion zur 6.0 inline werden
+    // TODO: make this function inline for V6.0?
     mnMenuMode = nMode;
 }
 
@@ -221,8 +219,7 @@ void MenuButton::SetPopupMenu( PopupMenu* pNewMenu )
 {
     if (pNewMenu == mpMenu)
         return;
-    // Fuer die 5.1-Auslieferung besser noch nicht inline, ansonsten kann
-    // diese Funktion zur 6.0 inline werden
+    // TODO: make this function inline for V6.0?
     mpMenu = pNewMenu;
 }
 

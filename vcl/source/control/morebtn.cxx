@@ -110,7 +110,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {
-        // Nicht Methode rufen, da Dialog nicht umgeschaltet werden soll
+        // do not call method, as Dlg shall not be switched
         mbState = (sal_Bool)ReadShortRes();
         // SetText( GetText() );
         ShowState();
@@ -118,7 +118,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & RSC_MOREBUTTON_MAPUNIT )
         meUnit = (MapUnit)ReadLongRes();
     if ( nObjMask & RSC_MOREBUTTON_DELTA )
-        // Groesse fuer Erweitern des Dialogs
+        // size for extended dialog
         mnDelta = ReadShortRes();
 }
 
@@ -139,25 +139,24 @@ void MoreButton::Click()
     Size        aSize( pParent->GetSizePixel() );
     long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 
-    // Status aendern
+    // change state
     mbState = !mbState;
     ShowState();
 
-    // Hier den Click-Handler rufen, damit vorher die Controls initialisiert
-    // werden koennen
+    // call click handler, so that the controls can be initialized here
     PushButton::Click();
 
-    // Je nach Status die Fenster updaten
+    // update windows
     if ( mbState )
     {
-        // Fenster anzeigen
+        // show window
         if ( mpMBData->mpItemList ) {
             for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
                 (*mpMBData->mpItemList)[ i ]->Show();
             }
         }
 
-        // Dialogbox anpassen
+        // adjust Dialogbox
         Point aPos( pParent->GetPosPixel() );
         Rectangle aDeskRect( pParent->ImplGetFrameWindow()->GetDesktopRectPixel() );
 
@@ -176,11 +175,11 @@ void MoreButton::Click()
     }
     else
     {
-        // Dialogbox anpassen
+        // adjust Dialogbox
         aSize.Height() -= nDeltaPixel;
         pParent->SetSizePixel( aSize );
 
-        // Fenster nicht mehr anzeigen
+        // hide window
         if ( mpMBData->mpItemList ) {
             for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
                 (*mpMBData->mpItemList)[ i ]->Hide();
