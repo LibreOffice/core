@@ -25,6 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 class SdrObject;
+class SetOfByte;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -34,6 +35,14 @@ namespace sdr
     {
         class SVX_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
         {
+            /** Test whether the primitive is visible on any layer from @c aLayers
+
+                This should be overriden by ViewObjectContacts of SDR classes
+                that have subparts which can be on different layers (that is,
+                SdrObjGroup .-)
+              */
+            virtual bool isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const;
+
         protected:
             const SdrObject& getSdrObject() const;
 
