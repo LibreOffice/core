@@ -382,10 +382,8 @@ public:
                                             xub_StrLen nLen, const Point& rLogicPos = Point(0,0),
                                             long nLogicWidth=0, const sal_Int32* pLogicDXArray=NULL,
                                             bool bFilter = false ) const;
-    SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( String&,
-                                            xub_StrLen nIndex, xub_StrLen nLen,
-                                            long nPixelWidth,
-                                            const sal_Int32* pPixelDXArray ) const;
+    SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
+                                            long nPixelWidth, const sal_Int32* pPixelDXArray ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
 
     static
@@ -1060,8 +1058,7 @@ public:
 
     sal_uInt16              GetBitCount() const;
 
-    sal_Bool                GetTextIsRTL( const String&, xub_StrLen nIndex,
-                            xub_StrLen nLen ) const;
+    sal_Bool                GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 
     /** Query the existence and depth of the alpha channel
 

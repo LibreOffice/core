@@ -5665,13 +5665,13 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
         mpAlphaVDev->DrawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
 }
 
-ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
-                                       xub_StrLen nMinIndex, xub_StrLen nLen,
+ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
+                                       const sal_Int32 nMinIndex, const sal_Int32 nLen,
                                        long nPixelWidth, const sal_Int32* pDXArray ) const
 {
     // get string length for calculating extents
-    xub_StrLen nEndIndex = rStr.Len();
-    if( (sal_uLong)nMinIndex + nLen < nEndIndex )
+    sal_Int32 nEndIndex = rStr.getLength();
+    if( nMinIndex + nLen < nEndIndex )
         nEndIndex = nMinIndex + nLen;
 
     // don't bother if there is nothing to do
@@ -5686,8 +5686,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
     else if( 0 == (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
-        const sal_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
-        const sal_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
+        const sal_Unicode* pStr = rStr.getStr() + nMinIndex;
+        const sal_Unicode* pEnd = rStr.getStr() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
             ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
@@ -5711,8 +5711,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
     else
     {
         // disable CTL for non-CTL text
-        const sal_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
-        const sal_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
+        const sal_Unicode* pStr = rStr.getStr() + nMinIndex;
+        const sal_Unicode* pEnd = rStr.getStr() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0300) && (*pStr < 0x0370))   // diacritical marks
             ||  ((*pStr >= 0x0590) && (*pStr < 0x10A0))   // many CTL scripts
@@ -5731,9 +5731,10 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
     if( meTextLanguage ) //TODO: (mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS)
     {
         // disable character localization when no digits used
-        const sal_Unicode* pBase = rStr.GetBuffer();
+        const sal_Unicode* pBase = rStr.getStr();
         const sal_Unicode* pStr = pBase + nMinIndex;
         const sal_Unicode* pEnd = pBase + nEndIndex;
+        OUStringBuffer sTmpStr(rStr);
         for( ; pStr < pEnd; ++pStr )
         {
             // TODO: are there non-digit localizations?
@@ -5743,10 +5744,10 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
                 sal_UCS4 cChar = GetLocalizedChar( *pStr, meTextLanguage );
                 if( cChar != *pStr )
                     // TODO: are the localized digit surrogates?
-                    rStr.SetChar( static_cast<sal_uInt16>(pStr - pBase),
-                                 static_cast<sal_Unicode>(cChar) );
+                    sTmpStr[pStr - pBase] = cChar;
             }
         }
+        rStr = sTmpStr.makeStringAndClear();
     }
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style
@@ -5764,7 +5765,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
         nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
 
     // set layout options
-    ImplLayoutArgs aLayoutArgs( rStr.GetBuffer(), rStr.Len(), nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguage() );
+    ImplLayoutArgs aLayoutArgs( rStr.getStr(), rStr.getLength(), nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguage() );
 
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
@@ -5862,7 +5863,13 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         pDXArray = pTempDXAry;
     }
 
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen, nPixelWidth, pDXArray );
+    OUString aTmpStr(aStr); // only needed until aStr is OUString as well
+    sal_Int32 nMinIndex2=nMinIndex; // ditto
+    sal_Int32 nLen2=nLen;           // ditto
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aTmpStr, nMinIndex, nLen, nPixelWidth, pDXArray );
+    aStr = String(aTmpStr);     // ditto
+    nLen = nLen2;           // ditto
+    nMinIndex = nMinIndex2; // ditto
 
     // get matching layout object for base font
     SalLayout* pSalLayout = NULL;
@@ -6077,11 +6084,9 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     return pSalLayout;
 }
 
-sal_Bool OutputDevice::GetTextIsRTL(
-            const String& rString,
-            xub_StrLen nIndex, xub_StrLen nLen ) const
+sal_Bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
-    String aStr( rString );
+    OUString aStr( rString );
     ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, NULL );
     bool bRTL = false;
     int nCharPos = -1;
@@ -7620,8 +7625,10 @@ sal_Bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector
 
     bRet = true;
     bool bRTL = false;
-    String aStr( rStr ); // prepare for e.g. localized digits
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, NULL );
+    OUString aStr( rStr ); // prepare for e.g. localized digits
+    sal_Int32 nIndex2 = nIndex;  // only needed until nIndex is sal_Int32
+    sal_Int32 nLen2 = nLen;  // only needed until nLen is sal_Int32
+    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nIndex2, nLen2, 0, NULL );
     for( int nCharPos = -1; aLayoutArgs.GetNextPos( &nCharPos, &bRTL);)
     {
         bool bSuccess = false;
