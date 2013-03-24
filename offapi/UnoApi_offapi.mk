@@ -1530,6 +1530,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ucb,\
 	WebDAVContentProvider \
 	WebDAVDocumentContent \
 	WebDAVFolderContent \
+	WebDAVHTTPMethod \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	ActionTrigger \

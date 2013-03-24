@@ -20,6 +20,7 @@
 #define __com_sun_star_ucb_XWebDAVCommandEnvironment_idl__
 
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
+#include <com/sun/star/ucb/WebDAVHTTPMethod.idl>
 #include <com/sun/star/beans/StringPair.idl>
 
 
@@ -38,15 +39,16 @@ interface XWebDAVCommandEnvironment : XCommandEnvironment
     The request URI.
 
     @param aMethod
-    The WebDAV/HTTP method ("GET","PUT","MKCOL",...).
+    The WebDAV/HTTP method ("GET","PUT","MKCOL",...) as defined in
+    <type>WebDAVHTTPMethod</type>.
 
     @return
         A sequence of header name, header value pairs. The header
         names must be the plain names and contain no trailing ":".
     */
     sequence<com::sun::star::beans::StringPair> getUserRequestHeaders(
-        [in] string aURI,
-        [in] string aMethod);
+        [in] string             aURI,
+        [in] WebDAVHTTPMethod   eMethod);
 };
 
 }; }; }; };

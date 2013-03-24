@@ -1,0 +1,114 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_ucb_WebDAVHTTPMethod_idl__
+#define __com_sun_star_ucb_WebDAVHTTPMethod_idl__
+
+module com { module sun { module star { module ucb {
+
+
+/** Standard WebDAV/HTTP methods.
+
+    @since Apache OpenOffice 4.0
+*/
+enum WebDAVHTTPMethod
+{
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.3">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    GET,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.4">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    HEAD,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.5">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    POST,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.6">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    PUT,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.7">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    DELETE,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.8">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    TRACE,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.2">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    OPTIONS,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc2616#section-9.9">RFC 2616: Hypertext Transfer Protocol -- HTTP/1.1</a>
+     */
+    CONNECT,
+
+    /** HTTP request method as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc5789">RFC 5789: PATCH Method for HTTP</a>
+     */
+    PATCH,
+
+    /** WebDAV methods as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc4918#section-9.1">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>
+     */
+    PROPFIND,
+
+    /** WebDAV methods as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc4918#section-9.2">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>
+     */
+    PROPPATCH,
+
+    /** WebDAV methods as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc4918#section-9.3">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>
+     */
+    MKCOL,
+
+    /** WebDAV methods as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc4918#section-9.8">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>
+     */
+    COPY,
+
+    /** WebDAV methods as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc4918#section-9.9">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>
+     */
+    MOVE,
+
+    /** WebDAV methods as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc4918#section-9.10">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>
+     */
+    LOCK,
+
+    /** WebDAV methods as defined in
+        <a target="_blank" href="http://tools.ietf.org/html/rfc4918#section-9.11">HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)</a>
+     */
+    UNLOCK
+
+};
+
+}; }; }; };
+
+#endif

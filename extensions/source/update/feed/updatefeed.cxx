@@ -174,7 +174,7 @@ public:
 
     // XWebDAVCommandEnvironment
     virtual uno::Sequence< beans::StringPair > SAL_CALL getUserRequestHeaders(
-        const OUString&, const OUString& )
+        const OUString&,  ucb::WebDAVHTTPMethod )
         throw ( uno::RuntimeException ) { return m_aRequestHeaderList; };
 
     // XServiceInfo
