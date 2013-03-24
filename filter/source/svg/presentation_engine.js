@@ -1,3 +1,4 @@
+/* -*- Mode: JS; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                      - Presentation Engine -                            *
@@ -8,6 +9,9 @@
  *  generating the C++ header file must start with a '/' and exactly 5 '*'
  *  not striped examples: '/*****', '/***** *'
  *  striped examples: '/** ***' (not contiguous), '/******' (more than 5)
+ *
+ *  NOTE: This file combines several works, under different
+ *  licenses. See the @licstart / @licend sections below.
  */
 
 
@@ -890,7 +894,7 @@ PriorityQueue.prototype.implPushHeap = function( nFirst, nHoleIndex, nTopIndex, 
  *   contributor license agreements. See the NOTICE file distributed
  *   with this work for additional information regarding copyright
  *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
+ *   License, Version 2.0 (the 'License'); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  *
@@ -2006,7 +2010,7 @@ PlaceholderShape.prototype.init = function()
                 {
                     var aChildSet = getElementChildren( aTextLineGroupElem );
                     if( aChildSet.length > 1  )
-                    var i = 1;
+                        var i = 1;
                     for( ; i < aChildSet.length; ++i )
                     {
                         aTextLineGroupElem.removeChild( aChildSet[i] );
@@ -2156,8 +2160,8 @@ MasterPageView.prototype.createElement = function()
                     aTextFieldContentProviderSet[aSlideNumberClassName] )
                 {
                     this.aSlideNumberFieldHandler =
-                    new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
-                                                 aTextFieldContentProviderSet[aSlideNumberClassName] );
+                        new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
+                                                     aTextFieldContentProviderSet[aSlideNumberClassName] );
                     this.aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
                     this.aSlideNumberFieldHandler.appendTo( this.aBackgroundObjectsElement );
                 }
@@ -2168,9 +2172,9 @@ MasterPageView.prototype.createElement = function()
                 if( this.aMetaSlide.nIsDateTimeVisible )
                 {
                     this.aDateTimeFieldHandler =
-                    this.initTextFieldHandler( aDateTimeClassName, aPlaceholderShapeSet,
-                                               aTextFieldContentProviderSet, aDefsElement,
-                                               aTextFieldHandlerSet, sMasterSlideId );
+                        this.initTextFieldHandler( aDateTimeClassName, aPlaceholderShapeSet,
+                                                   aTextFieldContentProviderSet, aDefsElement,
+                                                   aTextFieldHandlerSet, sMasterSlideId );
                 }
             }
             else if( sId === aFooterClassName )
@@ -2179,9 +2183,9 @@ MasterPageView.prototype.createElement = function()
                 if( this.aMetaSlide.nIsFooterVisible )
                 {
                     this.aFooterFieldHandler =
-                    this.initTextFieldHandler( aFooterClassName, aPlaceholderShapeSet,
-                                               aTextFieldContentProviderSet, aDefsElement,
-                                               aTextFieldHandlerSet, sMasterSlideId );
+                        this.initTextFieldHandler( aFooterClassName, aPlaceholderShapeSet,
+                                                   aTextFieldContentProviderSet, aDefsElement,
+                                                   aTextFieldHandlerSet, sMasterSlideId );
                 }
             }
             else if( sId === aHeaderClassName )
@@ -2190,9 +2194,9 @@ MasterPageView.prototype.createElement = function()
                 if( this.aMetaSlide.nIsHeaderVisible )
                 {
                     this.aHeaderFieldHandler =
-                    this.initTextFieldHandler( aHeaderClassName, aPlaceholderShapeSet,
-                                               aTextFieldContentProviderSet, aDefsElement,
-                                               aTextFieldHandlerSet, sMasterSlideId );
+                        this.initTextFieldHandler( aHeaderClassName, aPlaceholderShapeSet,
+                                                   aTextFieldContentProviderSet, aDefsElement,
+                                                   aTextFieldHandlerSet, sMasterSlideId );
                 }
             }
             else
@@ -2216,8 +2220,8 @@ MasterPageView.prototype.createElement = function()
 };
 
 MasterPageView.prototype.initTextFieldHandler =
-function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
-          aDefsElement, aTextFieldHandlerSet, sMasterSlideId )
+    function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
+              aDefsElement, aTextFieldHandlerSet, sMasterSlideId )
 {
     var aTextFieldHandler = null;
     if( aPlaceholderShapeSet[sClassName] &&
@@ -2230,8 +2234,8 @@ function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
         if ( !aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] )
         {
             aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ] =
-            new TextFieldHandler( aPlaceholderShapeSet[sClassName],
-                                  aTextFieldContentProviderSet[sClassName] );
+                new TextFieldHandler( aPlaceholderShapeSet[sClassName],
+                                      aTextFieldContentProviderSet[sClassName] );
             aTextFieldHandler = aTextFieldHandlerSet[ sMasterSlideId ][ sTextFieldContentProviderId ];
             aTextFieldHandler.update();
             aTextFieldHandler.appendTo( aDefsElement );
@@ -2339,7 +2343,7 @@ TextFieldHandler.prototype.setTextContent = function( sText )
     if( !this.aTextPlaceholderElement )
     {
         log( 'PlaceholderShape.setTextContent: text element is not valid in placeholder of type '
-                + this.className + ' that belongs to master slide ' + this.masterPage.id );
+             + this.className + ' that belongs to master slide ' + this.masterPage.id );
         return;
     }
     this.aTextPlaceholderElement.textContent = sText;
@@ -3164,9 +3168,9 @@ function mem_fn( sMethodName )
 function bind( aObject, aMethod )
 {
     return  function()
-            {
-                return aMethod.call( aObject, arguments[0] );
-            };
+    {
+        return aMethod.call( aObject, arguments[0] );
+    };
 }
 
 function bind2( aFunction )
@@ -13300,4 +13304,4 @@ ElapsedTime.prototype.getElapsedTimeImpl = function()
  *
  */
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
