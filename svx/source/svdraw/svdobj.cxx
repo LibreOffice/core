@@ -650,10 +650,7 @@ void SdrObject::getMergedHierarchyLayerSet(SetOfByte& rSet) const
 
 void SdrObject::NbcSetLayer(SdrLayerID nLayer)
 {
-    if(GetLayer() != nLayer)
-    {
-        mnLayerID = nLayer;
-    }
+    mnLayerID = nLayer;
 }
 
 void SdrObject::SetLayer(SdrLayerID nLayer)
