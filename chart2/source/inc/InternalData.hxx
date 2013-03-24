@@ -69,7 +69,6 @@ public:
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
 
-    typedef ::std::valarray< double > tDataType;
     typedef ::std::vector< ::std::vector< ::com::sun::star::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
     void setComplexRowLabels( const tVecVecAny& rNewRowLabels );
@@ -93,6 +92,7 @@ private:
     sal_Int32   m_nColumnCount;
     sal_Int32   m_nRowCount;
 
+    typedef ::std::valarray< double > tDataType;
     tDataType    m_aData;
     tVecVecAny   m_aRowLabels;//outer index is row index, inner index is category level
     tVecVecAny   m_aColumnLabels;//outer index is column index
