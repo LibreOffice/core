@@ -576,22 +576,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
 
-    Reference< XMultiServiceFactory > xFactory = paParent->getServiceFactory();
-    Reference< XInterface > xIfc;
-    if( xFactory.is() )
-    {
-        xIfc = xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.documents.PDFDetector" ) ) );
-    }
-    if( xIfc.is() )
-    {
-        maCbAddStream.Show( sal_True );
-        maCbAddStream.Check( paParent->mbAddStream );
-    }
-    else
-    {
-        maCbAddStream.Show( sal_False );
-        maCbAddStream.Check( sal_False );
-    }
+    maCbAddStream.Check( paParent->mbAddStream );
     maCbAddStream.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
     // init addstream dependencies
     ToggleAddStreamHdl( NULL );
@@ -611,7 +596,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
 
     paParent->mbIsSkipEmptyPages =  !maCbExportEmptyPages.IsChecked();
-    paParent->mbAddStream = maCbAddStream.IsVisible() && maCbAddStream.IsChecked();
+    paParent->mbAddStream = maCbAddStream.IsChecked();
 
     paParent->mbIsRangeChecked = sal_False;
     if( maRbRange.IsChecked() )
@@ -688,25 +673,21 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, void*, EMPTYARG
 // -----------------------------------------------------------------------------
 IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
 {
-    if( maCbAddStream.IsVisible() )
+    if( maCbAddStream.IsChecked() )
     {
-        if( maCbAddStream.IsChecked() )
-        {
-            maRbAll.Check();
-            maRbRange.Enable( sal_False );
-            maRbSelection.Enable( sal_False );
-            maEdPages.Enable( sal_False );
-            //Sym2_5805, When the control is disabled, it is also readonly. So here, it is not necessary to set it as readonly.
-            //maEdPages.SetReadOnly( sal_True );
-            maRbAll.Enable( sal_False );
-        }
-        else
-        {
-            maRbAll.Enable( sal_True );
-            maRbRange.Enable( sal_True );
-            maRbSelection.Enable( sal_True );
-        }
+        maRbAll.Check();
+        maRbRange.Enable( sal_False );
+        maRbSelection.Enable( sal_False );
+        maEdPages.Enable( sal_False );
+        maRbAll.Enable( sal_False );
     }
+    else
+    {
+        maRbAll.Enable( sal_True );
+        maRbRange.Enable( sal_True );
+        maRbSelection.Enable( sal_True );
+    }
+
     return 0;
 }
 
