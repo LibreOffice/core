@@ -103,7 +103,7 @@ string processccargs(vector<string> rawargs) {
             args.append("-link -LIBPATH:"+(*i).substr(2));
         }
         else if(!(*i).compare(0,2,"-l")) {
-            args.append((*i).substr(2)+"lib.lib");
+            args.append((*i).substr(2)+".lib");
         }
         else if(!(*i).compare(0,12,"-fvisibility")) {
             //TODO: drop other gcc-specific options
@@ -132,7 +132,7 @@ int startprocess(string command, string args) {
     sa.bInheritHandle=TRUE;
 
     if(!CreatePipe(&childout_read,&childout_write,&sa,0)) {
-        cerr << "Error: could not create sdtout pipe" << endl;
+        cerr << "Error: could not create stdout pipe" << endl;
         exit(1);
     }
 
@@ -141,6 +141,7 @@ int startprocess(string command, string args) {
     si.hStdOutput=childout_write;
     si.hStdError=childout_write;
 
+    // support ccache
     size_t pos=command.find("ccache ");
     if(pos != string::npos) {
         args.insert(0,"cl.exe");
