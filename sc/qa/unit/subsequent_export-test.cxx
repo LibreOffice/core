@@ -150,6 +150,8 @@ void ScExportTest::testPasswordExport()
     ScDocument* pLoadedDoc = xDocSh->GetDocument();
     double aVal = pLoadedDoc->GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testConditionalFormatExportODS()
@@ -164,6 +166,8 @@ void ScExportTest::testConditionalFormatExportODS()
     OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testConditionalFormatExportXLSX()
@@ -178,6 +182,8 @@ void ScExportTest::testConditionalFormatExportXLSX()
     OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
     testCondFile(aCSVPath, pDoc, 0);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testColorScaleExportODS()
@@ -193,6 +199,8 @@ void ScExportTest::testColorScaleExportODS()
 
     testColorScale2Entry_Impl(pDoc);
     testColorScale3Entry_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testColorScaleExportXLSX()
@@ -208,6 +216,8 @@ void ScExportTest::testColorScaleExportXLSX()
 
     testColorScale2Entry_Impl(pDoc);
     testColorScale3Entry_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testDataBarExportODS()
@@ -222,6 +232,8 @@ void ScExportTest::testDataBarExportODS()
     CPPUNIT_ASSERT(pDoc);
 
     testDataBar_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testDataBarExportXLSX()
@@ -236,6 +248,8 @@ void ScExportTest::testDataBarExportXLSX()
     CPPUNIT_ASSERT(pDoc);
 
     testDataBar_Impl(pDoc);
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testMiscRowHeightExport()

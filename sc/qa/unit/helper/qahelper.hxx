@@ -281,6 +281,7 @@ public:
                     CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
                 }
             }
+            xShell->DoClose();
         }
     }
 };
