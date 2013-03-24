@@ -40,6 +40,9 @@ namespace sdr
 
             // This method recursively paints the draw hierarchy.
             virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
+
+        private:
+            virtual bool isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const;
         };
     } // end of namespace contact
 } // end of namespace sdr
