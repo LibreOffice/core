@@ -70,8 +70,8 @@ class WWD_General(WebWizardDialog):
 
     def getDocAddDialog(self):
         self.docAddDialog = SystemDialog.createOpenDialog(self.xMSF)
-        for i in range(WWD_General.settings.cp_Filters.getSize()):
-            f = WWD_General.settings.cp_Filters.getElementAt(i)
+        for i in range(self.settings.cp_Filters.getSize()):
+            f = self.settings.cp_Filters.getElementAt(i)
             if f is not None:
                 self.docAddDialog.addFilter(
                     f.cp_Name.replace("%PRODNAME", self.resources.prodName),
@@ -118,10 +118,10 @@ class WWD_General(WebWizardDialog):
         print ("DEBUG !!! getDoc -- ", s)
         if (len(s) == 0):
             return None
-        elif (WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]):
+        elif (self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]):
             return None
         else:
-            return WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
+            return self.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
 
     '''
     how many documents are in the list?
@@ -129,7 +129,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def getDocsCount(self):
-        return WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()
+        return self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()
 
     '''
     fills the export listbox.
@@ -146,7 +146,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def getPublisher(self, name):
-        return WWD_General.settings.cp_DefaultSession.cp_Publishing.getElement(name)
+        return self.settings.cp_DefaultSession.cp_Publishing.getElement(name)
 
     '''
     @return true if the checkbox "save session" is checked.
@@ -205,7 +205,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkDocList(self):
-        if WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() \
+        if self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() \
                 == 0:
             self.enableSteps(False)
             return False

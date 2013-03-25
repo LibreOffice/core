@@ -80,9 +80,6 @@ are the controller inbetween.
 
 class WWD_Startup(WWD_General):
 
-    selectedDoc = []
-    ftp = False
-
     '''
     He - my constructor !
     I call/do here in this order: <br/>
@@ -106,6 +103,8 @@ class WWD_Startup(WWD_General):
 
     def __init__(self, xmsf):
         super(WWD_Startup, self).__init__(xmsf)
+        self.selectedDoc = []
+        self.ftp = False
         self.sda = None
         self.docAware = []
         self.designAware = []
@@ -131,11 +130,11 @@ class WWD_Startup(WWD_General):
         doc = OfficeDocument.createNewDocument(
             self.myFrame, "swriter", False, True)
         self.loadSettings(doc)
-        self.setSaveSessionName(WWD_General.settings.cp_DefaultSession)
-        self.ilLayouts.listModel = WWD_General.settings.cp_Layouts
+        self.setSaveSessionName(self.settings.cp_DefaultSession)
+        self.ilLayouts.listModel = self.settings.cp_Layouts
         self.ilLayouts.create(self)
         #COMMENTED
-        self.checkContent(WWD_General.settings.cp_DefaultSession.cp_Content, Task("", "", 99999), self.xUnoDialog)
+        self.checkContent(self.settings.cp_DefaultSession.cp_Content, Task("", "", 99999), self.xUnoDialog)
         #saved sessions, styles, combobox save session.
         # also set the chosen saved session...
         self.fillLists()
@@ -182,9 +181,9 @@ class WWD_Startup(WWD_General):
         length = self.resources.resSessionName
         # traverse between the sessions and find the one that
         # has the biggest number.
-        for i in range(WWD_General.settings.cp_SavedSessions.getSize()):
+        for i in range(self.settings.cp_SavedSessions.getSize()):
             sessionName = \
-                WWD_General.settings.cp_SavedSessions.getElementAt(i).cp_Name
+                self.settings.cp_SavedSessions.getElementAt(i).cp_Name
             if sessionName.startswith(self.resources.resSessionName):
                 maxValue = max(maxValue, int(sessionName[length:]))
 
@@ -250,9 +249,9 @@ class WWD_Startup(WWD_General):
         try:
             self.dpStylePreview = DocumentPreview(self.xMSF, self.imgPreview)
             self.stylePreview = StylePreview(
-                self.xMSF, WWD_General.settings.workPath)
-            style = WWD_General.settings.cp_DefaultSession.getStyle()
-            bg = WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage
+                self.xMSF, self.settings.workPath)
+            style = self.settings.cp_DefaultSession.getStyle()
+            bg = self.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage
             self.stylePreview.refresh(style, bg)
             self.dpStylePreview.setDocument(
                 self.stylePreview.htmlFilename, DocumentPreview.PREVIEW_MODE)
@@ -264,23 +263,24 @@ class WWD_Startup(WWD_General):
     '''
 
     def loadSettings(self, document):
+        print ("DEBUG !!! loadSettings -- ")
         try:
             # instanciate
-            WWD_General.settingsResources = \
+            self.settingsResources = \
                 [self.resources.resPages, self.resources.resSlides,
                     self.resources.resCreatedTemplate,
                     self.resources.resUpdatedTemplate,
                     self.resources.resSizeTemplate]
 
-            WWD_General.settings = CGSettings(
-                self.xMSF, WWD_General.settingsResources, document)
+            self.settings = CGSettings(
+                self.xMSF, self.settingsResources, document)
             # get configuration view
             confRoot = Configuration.getConfigurationRoot(
                 self.xMSF, CONFIG_PATH, True)
             # read
-            WWD_General.settings.readConfiguration(
+            self.settings.readConfiguration(
                 confRoot, CONFIG_READ_PARAM)
-            configSet = WWD_General.settings.cp_DefaultSession.cp_Publishing
+            configSet = self.settings.cp_DefaultSession.cp_Publishing
             # now if path variables are used in publisher paths, they
             # are getting replaced here...
             for i in range(configSet.getSize()):
@@ -289,12 +289,17 @@ class WWD_Startup(WWD_General):
                     p.cp_URL = self.substitute(p.cp_URL)
                 except Exception:
                     traceback.print_exc()
+
+            print ("DEBUG !!! loadSettings -- cp_IconSet: ", self.settings.cp_DefaultSession.cp_Design.cp_IconSet)
+            print ("DEBUG !!! loadSettings -- cp_Layout: ", self.settings.cp_DefaultSession.cp_Design.cp_Layout)
+            print ("DEBUG !!! loadSettings -- cp_Style: ", self.settings.cp_DefaultSession.cp_Design.cp_Style)
+
             # initialize the WWD_General.settings.
-            WWD_General.settings.configure(self.xMSF)
+            self.settings.configure(self.xMSF)
             # set resource needed for web page.
             # sort the styles alphabetically
             #COMMENTED - FIXME: to be impemented
-            #WWD_General.settings.cp_Styles.sort(None)
+            #self.settings.cp_Styles.sort(None)
             self.prepareSessionLists()
             if self.proxies:
                 self.__ftp = self.getPublisher(FTP_PUBLISHER).cp_Publish
@@ -305,16 +310,16 @@ class WWD_Startup(WWD_General):
 
     def prepareSessionLists(self):
         # now copy the sessions list...
-        sessions = WWD_General.settings.cp_SavedSessions.childrenList
+        sessions = self.settings.cp_SavedSessions.childrenList
 
-        WWD_General.settings.savedSessions.clear()
+        self.settings.savedSessions.clear()
         for index,item in enumerate(sessions):
-            WWD_General.settings.savedSessions.add(index, item)
+            self.settings.savedSessions.add(index, item)
             # add an empty session to the saved session
             # list which apears in step 1
         sn = CGSessionName()
         sn.cp_Name = self.resources.resSessionNameNone
-        WWD_General.settings.cp_SavedSessions.add(0, sn)
+        self.settings.cp_SavedSessions.add(0, sn)
 
     '''
     fills the saved session list, the styles list,
@@ -328,30 +333,30 @@ class WWD_Startup(WWD_General):
 
         print ("Filling lstLoadSettings with cp_SavedSessions ...")
         ListModelBinder.fillList(self.lstLoadSettings,
-            WWD_General.settings.cp_SavedSessions.childrenList, None)
+            self.settings.cp_SavedSessions.childrenList, None)
         print ("lstLoadSettings filled !!!")
         # set the selected session to load. (step 1)
         self.selectSession()
         # fill the styles list.
         print ("Filling lstStyles with cp_Styles ...")
         ListModelBinder.fillList(self.lstStyles,
-            WWD_General.settings.cp_Styles.childrenList, None)
+            self.settings.cp_Styles.childrenList, None)
         print ("lstStyles filled !!!")
         # fill the save session combobox (step 7)
         print ("Filling cbSaveSettings with savedSessions ...")
         ListModelBinder.fillComboBox(self.cbSaveSettings,
-            WWD_General.settings.savedSessions.childrenList, None)
+            self.settings.savedSessions.childrenList, None)
         print ("cbSaveSettings filled !!!")
 
     def selectSession(self):
         selectedSession = 0
-        if WWD_General.settings.cp_LastSavedSession is not None \
-                and not WWD_General.settings.cp_LastSavedSession == "":
-            ses = WWD_General.settings.cp_SavedSessions.getElement(
-                WWD_General.settings.cp_LastSavedSession)
+        if self.settings.cp_LastSavedSession is not None \
+                and not self.settings.cp_LastSavedSession == "":
+            ses = self.settings.cp_SavedSessions.getElement(
+                self.settings.cp_LastSavedSession)
             if ses is not None:
                 selectedSession = \
-                    WWD_General.settings.cp_SavedSessions.getIndexOf(ses)
+                    self.settings.cp_SavedSessions.getIndexOf(ses)
 
         self.lstLoadSettings.Model.SelectedItems = (selectedSession,)
 
@@ -364,7 +369,7 @@ class WWD_Startup(WWD_General):
     def makeDataAware(self):
         #page 1
         ListModelBinder(
-            self.lstLoadSettings, WWD_General.settings.cp_SavedSessions)
+            self.lstLoadSettings, self.settings.cp_SavedSessions)
         #page 2 : document properties
         self.docListDA = UnoDataAware.attachListBox(
             self, "selectedDoc", self.lstDocuments, False)
@@ -376,7 +381,7 @@ class WWD_Startup(WWD_General):
         self.docListDA.updateUI()
         doc = CGDocument #dummy
         self.docsBinder = ListModelBinder(self.lstDocuments,
-            WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents)
+            self.settings.cp_DefaultSession.cp_Content.cp_Documents)
         self.docAware.append(UnoDataAware.attachEditControl(
             doc, "cp_Title", self.txtDocTitle, True))
         self.docAware.append(UnoDataAware.attachEditControl(
@@ -386,7 +391,7 @@ class WWD_Startup(WWD_General):
         self.docAware.append(UnoDataAware.attachListBox(
             doc, "Exporter", self.lstDocTargetType, False))
         #page 3 : Layout
-        design = WWD_General.settings.cp_DefaultSession.cp_Design
+        design = self.settings.cp_DefaultSession.cp_Design
 
         #COMMENTED
         #self.sda = SimpleDataAware.SimpleDataAware_unknown(design, DataAware.PropertyValue ("Layout", design), ilLayouts, DataAware.PropertyValue ("Selected", ilLayouts))
@@ -412,7 +417,7 @@ class WWD_Startup(WWD_General):
         self.designAware.append(UnoDataAware.attachCheckBox(
             design, "cp_DisplaySize", self.chkDocSize, True))
         self.designAware.append(RadioDataAware.attachRadioButtons(
-            WWD_General.settings.cp_DefaultSession.cp_Design,
+            self.settings.cp_DefaultSession.cp_Design,
             "cp_OptimizeDisplaySize",
             (self.optOptimize640x480, self.optOptimize800x600,
                 self.optOptimize1024x768), True))
@@ -422,26 +427,26 @@ class WWD_Startup(WWD_General):
         a special method which will perform some display, background and Iconsets changes.
         '''
         self.designAware.append(UnoDataAware.attachListBox(
-            WWD_General.settings.cp_DefaultSession.cp_Design,
+            self.settings.cp_DefaultSession.cp_Design,
             "Style", self.lstStyles, False))
         #page 6 : site general props
         self.genAware.append(UnoDataAware.attachEditControl(
-            WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
+            self.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_Title", self.txtSiteTitle, True))
         self.genAware.append(UnoDataAware.attachEditControl(
-            WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
+            self.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_Description", self.txtSiteDesc, True))
         self.genAware.append(UnoDataAware.attachDateControl(
-            WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
+            self.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_CreationDate", self.dateSiteCreated, False))
         self.genAware.append(UnoDataAware.attachDateControl(
-            WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
+            self.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_UpdateDate", self.dateSiteUpdate, False))
         self.genAware.append(UnoDataAware.attachEditControl(
-            WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
+            self.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_Email", self.txtEmail, True))
         self.genAware.append(UnoDataAware.attachEditControl(
-            WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
+            self.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_Copyright", self.txtCopyright, True))
         #page 7 : publishing
         self.pubAware_(
@@ -451,7 +456,7 @@ class WWD_Startup(WWD_General):
         self.pubAware_(
             ZIP_PUBLISHER, self.chkZip, self.txtZip, False)
         self.sessionNameDA = UnoDataAware.attachEditControl(
-            WWD_General.settings.cp_DefaultSession, "cp_Name",
+            self.settings.cp_DefaultSession, "cp_Name",
             self.cbSaveSettings, True)
 
     '''
@@ -463,7 +468,7 @@ class WWD_Startup(WWD_General):
     '''
 
     def pubAware_(self, publish, checkbox, textbox, isLabel):
-        p = WWD_General.settings.cp_DefaultSession.cp_Publishing.getElement(publish)
+        p = self.settings.cp_DefaultSession.cp_Publishing.getElement(publish)
         uda = UnoDataAware.attachCheckBox(p, "cp_Publish", checkbox, True)
         uda.Inverse = True
         uda.disableObjects = [textbox]
@@ -495,7 +500,7 @@ class WWD_Startup(WWD_General):
         chooses to cancel, the session is not loaded.
         '''
         self.checkContent(session.cp_Content, task, xC)
-        WWD_General.settings.cp_DefaultSession = session
+        self.settings.cp_DefaultSession = session
         self.fillDocumentList(session.cp_Content)
         task.advance(True)
         self.mountList(session.cp_Design, self.designAware)
@@ -564,11 +569,6 @@ class WWD_Startup(WWD_General):
     @return true if the document is ok (a file exists in the given url).
     '''
 
-    @classmethod
-    def checkDocument1(self, xmsf, doc, task, xC):
-        doc.validate(xmsf, task)
-        return True
-
     def checkDocument(self, doc, task, xC):
         doc.validate(self.xMSF, task)
         return True
@@ -636,28 +636,12 @@ class WWD_Startup(WWD_General):
         try:
             self.btnDocUp.Model.Enabled = False if (len(self.selectedDoc) == 0) else (False if (self.selectedDoc[0] == 0) else True)
             self.btnDocDown.Model.Enabled = False if (len(self.selectedDoc) == 0) else (True if (self.selectedDoc[0] + 1 < self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()) else False)
-
-            #if len(WWD_Startup.selectedDoc) == 0:
-            #    aux = False
-            #    aux2 = False
-            #else:
-            #    if WWD_Startup.selectedDoc[0] == 0:
-            #        aux = False
-            #    else:
-            #        aux = True
-            #    if WWD_Startup.selectedDoc[0] + 1 < \
-            #        WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize():
-            #        aux2 = True
-            #    else:
-            #        aux2 = False
-            #self.btnDocUp.Model.Enabled = aux
-            #self.btnDocDown.Model.Enabled = aux2
         except Exception:
             traceback.print_exc()
 
     def updateBackgroundText(self):
         bg = \
-            WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage
+            self.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage
         if bg is None or bg == "":
             bg = self.resources.resBackgroundNone
         else:
@@ -666,11 +650,11 @@ class WWD_Startup(WWD_General):
         self.txtBackground.Model.Label = bg
 
     def updateIconsetText(self):
-        iconset = WWD_General.settings.cp_DefaultSession.cp_Design.cp_IconSet
+        iconset = self.settings.cp_DefaultSession.cp_Design.cp_IconSet
         if iconset is None or iconset == "":
             iconsetName = self.resources.resIconsetNone
         else:
-            IconSet = WWD_General.settings.cp_IconSets.getElement(iconset)
+            IconSet = self.settings.cp_IconSets.getElement(iconset)
             if IconSet is None:
                 iconsetName = self.resources.resIconsetNone
             else:
@@ -689,8 +673,8 @@ class WWD_Startup(WWD_General):
         try:
             print ("WARNING !!! refreshStylePreview")
             self.updateBackgroundText()
-            self.stylePreview.refresh(WWD_General.settings.cp_DefaultSession.getStyle(),
-                                      WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
+            self.stylePreview.refresh(self.settings.cp_DefaultSession.getStyle(),
+                                      self.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
             self.dpStylePreview.reload(self.xMSF)
         except Exception:
             traceback.print_exc()
