@@ -2154,7 +2154,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_CHpsInc:
         break;  // sprmCHpsInc
     case NS_sprm::LN_CHpsPos:
-        m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
+        // The spec says 0 is the same as the lack of the value, so don't parse that.
+        if (nIntValue)
+            m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
         break;  // sprmCHpsPos
     case NS_sprm::LN_CHpsPosAdj:
         break;  // sprmCHpsPosAdj

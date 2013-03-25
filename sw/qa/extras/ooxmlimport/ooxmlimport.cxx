@@ -121,6 +121,7 @@ public:
     void testFdo59638();
     void testFdo61343();
     void testToolsLineNumbering();
+    void testFdo60922();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -193,6 +194,7 @@ void Test::run()
         {"fdo59638.docx", &Test::testFdo59638},
         {"fdo61343.docx", &Test::testFdo61343},
         {"tools-line-numbering.docx", &Test::testToolsLineNumbering},
+        {"fdo60922.docx", &Test::testFdo60922},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1278,6 +1280,12 @@ void Test::testToolsLineNumbering()
 
     xPropertySet->getPropertyValue("SeparatorInterval") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nValue);
+}
+
+void Test::testFdo60922()
+{
+    // This was 0, not 100, due to wrong import of w:position w:val="0"
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapementHeight"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
