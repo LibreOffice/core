@@ -26,11 +26,9 @@
 */
 #if OSL_DEBUG_LEVEL > 0
 #define ASSERT_EXCEPTION(ex)                   \
-  OSL_FAIL( OUStringToOString( \
-    "Exception caught. Type: " +\
-    OUString::createFromAscii( typeid( ex ).name()) +\
-    ", Message: " +\
-    ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr())
+  SAL_WARN("chart2", "Exception caught. Type: " <<\
+    typeid( ex ).name() << ", Message: " << \
+    ex.Message )
 #else
 //avoid compilation warnings
 #define ASSERT_EXCEPTION(ex) (void)(ex)
