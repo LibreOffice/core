@@ -322,7 +322,6 @@ void ScFormulaReferenceHelper::Init()
         SCTAB nTab = pViewData->GetTabNo();
         ScAddress aCursorPos( nCol, nRow, nTab );
 
-        String rStrExp;
         pRefComp.reset( new ScCompiler( pDoc, aCursorPos) );
         pRefComp->SetGrammar( pDoc->GetGrammar() );
         pRefComp->SetCompileForFAP(true);
