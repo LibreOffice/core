@@ -240,30 +240,29 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
             aRange.aStart.SetTab(i);
             aRange.aEnd.SetTab(i);
             ScCellIterator aIter( pDoc, aRange );
-            ScBaseCell* pCell = aIter.GetFirst();
-            while ( pCell )
+            for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
-                if (pCell->GetCellType() == CELLTYPE_FORMULA)
+                if (aIter.getType() != CELLTYPE_FORMULA)
+                    continue;
+
+                ScFormulaCell* pCell = aIter.getFormulaCell();
+                OUString aOld;
+                pCell->GetFormula(aOld);
+                sal_Int32 nLen = aOld.getLength();
+                ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
+                aFinder.ToggleRel( 0, nLen );
+                if (aFinder.GetFound())
                 {
-                    rtl::OUString aOld;
-                    ((ScFormulaCell*)pCell)->GetFormula(aOld);
-                    xub_StrLen nLen = aOld.getLength();
-                    ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
-                    aFinder.ToggleRel( 0, nLen );
-                    if (aFinder.GetFound())
-                    {
-                        ScAddress aPos = ((ScFormulaCell*)pCell)->aPos;
-                        String aNew = aFinder.GetText();
-                        ScCompiler aComp( pDoc, aPos);
-                        aComp.SetGrammar(pDoc->GetGrammar());
-                        ScTokenArray* pArr = aComp.CompileString( aNew );
-                        ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
-                                                    pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
-                        pDoc->SetFormulaCell(aPos, pNewCell);
-                        bOk = true;
-                    }
+                    ScAddress aPos = pCell->aPos;
+                    String aNew = aFinder.GetText();
+                    ScCompiler aComp( pDoc, aPos);
+                    aComp.SetGrammar(pDoc->GetGrammar());
+                    ScTokenArray* pArr = aComp.CompileString( aNew );
+                    ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
+                                                pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
+                    pDoc->SetFormulaCell(aPos, pNewCell);
+                    bOk = true;
                 }
-                pCell = aIter.GetNext();
             }
         }
     }

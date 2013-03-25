@@ -247,6 +247,8 @@ public:
     OUString getString();
     const EditTextObject* getEditText() const;
     ScFormulaCell* getFormulaCell();
+    double getValue() const;
+
     bool hasString() const;
     bool hasNumeric() const;
     bool isEmpty() const;

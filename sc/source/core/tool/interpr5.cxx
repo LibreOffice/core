@@ -424,20 +424,24 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
         // Neighboring cell values of identical type are stored and passed as
         // an array to the matrix object, for performance reasons.
-        for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext(), nPrevRow = nThisRow)
+        for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next(), nPrevRow = nThisRow)
         {
             nThisRow = aCellIter.GetPos().Row();
 
-            if (HasCellEmptyData(pCell))
+            if (aCellIter.isEmpty())
             {
                 aBucket.flush(*pMat, static_cast<SCSIZE>(nCol-nCol1));
                 continue;
             }
 
-            if (HasCellValueData(pCell))
+            if (aCellIter.hasNumeric())
             {
                 ScAddress aAdr(nCol, nThisRow, nTab1);
-                double fVal = GetCellValue( aAdr, pCell);
+
+                // TODO: Come back to this and fix it.
+                ScBaseCell* pBC = pDok->GetCell(aAdr);
+                double fVal = GetCellValue(aAdr, pBC);
+
                 if ( nGlobalError )
                 {
                     fVal = CreateDoubleError( nGlobalError);
@@ -459,8 +463,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
                 continue;
             }
 
-            String aStr;
-            GetCellString( aStr, pCell);
+            String aStr = aCellIter.getString();
             if ( nGlobalError )
             {
                 double fVal = CreateDoubleError( nGlobalError);

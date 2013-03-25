@@ -1166,6 +1166,20 @@ ScFormulaCell* ScCellIterator::getFormulaCell()
     return mpCurFormula;
 }
 
+double ScCellIterator::getValue() const
+{
+    switch (meCurType)
+    {
+        case CELLTYPE_VALUE:
+            return mfCurValue;
+        case CELLTYPE_FORMULA:
+            return mpCurFormula->GetValue();
+        default:
+            ;
+    }
+    return 0.0;
+}
+
 bool ScCellIterator::hasString() const
 {
     switch (meCurType)
@@ -1199,7 +1213,17 @@ bool ScCellIterator::hasNumeric() const
 
 bool ScCellIterator::isEmpty() const
 {
-    return meCurType == CELLTYPE_NOTE || meCurType == CELLTYPE_NONE;
+    switch (meCurType)
+    {
+        case CELLTYPE_NOTE:
+        case CELLTYPE_NONE:
+            return true;
+        case CELLTYPE_FORMULA:
+            return mpCurFormula->IsEmpty();
+        default:
+            ;
+    }
+    return false;
 }
 
 namespace {
