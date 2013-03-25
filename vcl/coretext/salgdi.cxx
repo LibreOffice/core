@@ -30,6 +30,8 @@
 #include <UIKit/UIKit.h>
 #include <postmac.h>
 
+#include <basebmp/scanlineformats.hxx>
+
 #include "saldatabasic.hxx"
 #include "headless/svpframe.hxx"
 #include "headless/svpgdi.hxx"
@@ -284,17 +286,41 @@ bool SvpSalGraphics::CheckContext()
     basegfx::B2IVector size = m_aDevice->getSize();
     basebmp::RawMemorySharedArray pixelBuffer = m_aDevice->getBuffer();
 
-    mrContext = CGBitmapContextCreate(pixelBuffer.get(), size.getX(), size.getY(), 8, m_aDevice->getScanlineStride(),
-                                      CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast);
+    SAL_INFO( "vcl.ios", "CheckContext: device=" << m_aDevice.get() << " size=" << size.getX() << "x" << size.getY() << (m_aDevice->isTopDown() ? " top-down" : " bottom-up") << " stride=" << m_aDevice->getScanlineStride() );
+
+    switch( m_aDevice->getScanlineFormat() ) {
+    case basebmp::Format::EIGHT_BIT_PAL:
+        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
+                                          size.getX(), size.getY(),
+                                          8, m_aDevice->getScanlineStride(),
+                                          CGColorSpaceCreateDeviceGray(),
+                                          kCGImageAlphaNone);
+        break;
+    case basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
+                                          size.getX(), size.getY(),
+                                          8, m_aDevice->getScanlineStride(),
+                                          CGColorSpaceCreateDeviceRGB(),
+                                          kCGImageAlphaNoneSkipLast);
+        break;
+    default:
+        SAL_INFO( "vcl.ios", "CheckContext: unsupported color format " << basebmp::Format::formatName( m_aDevice->getScanlineFormat() ) );
+    }
 
     SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
 
-    return (mrContext != NULL);
+    if( mrContext != NULL && m_aDevice->isTopDown() )
+    {
+        CGContextTranslateCTM( mrContext, 0, size.getY() );
+        CGContextScaleCTM( mrContext, 1, -1 );
+    }
+
+    return ( mrContext != NULL );
 }
 
 CGContextRef SvpSalGraphics::GetContext()
 {
-    if (!mrContext)
+    if ( !mrContext )
         CheckContext();
 
     return mrContext;
