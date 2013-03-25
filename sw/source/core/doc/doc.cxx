@@ -2473,6 +2473,7 @@ bool SwDoc::ConvertFieldsToText()
                     aPam2.SetMark();
                     aPam2.Move();
                     DeleteAndJoin(aPam2);//remove the field
+                    bRet=true;
                 }
             }
             ++aBegin;
