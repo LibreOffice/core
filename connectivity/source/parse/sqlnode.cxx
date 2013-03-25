@@ -1115,11 +1115,6 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
                                           const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                          const Reference< XPropertySet > & xField)
 {
-
-
-    // mutex for parsing
-    static ::osl::Mutex aMutex;
-
     // Guard the parsing
     ::osl::MutexGuard aGuard(getMutex());
     // must be reset
