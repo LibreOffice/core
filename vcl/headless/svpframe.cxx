@@ -81,7 +81,7 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     // fast and easy cross-platform wiping of the data
     memset( (void *)&m_aSystemChildData, 0, sizeof( SystemChildData ) );
     m_aSystemChildData.nSize        = sizeof( SystemChildData );
-#if defined( UNX ) // FIXME: prolly redundant
+#ifdef UNX
     m_aSystemChildData.pSalFrame    = this;
 #if defined(ANDROID) || defined(IOS)
     // We want 32-bit RGBA bitmaps
