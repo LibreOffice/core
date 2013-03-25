@@ -30,7 +30,7 @@ SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh )
     get(mpCntntCopyRB, "copyheading");
     get(mpBoxAttrCopyWithParaRB, "customheadingapplystyle");
     get(mpBoxAttrCopyNoParaRB, "customheading");
-    get(mpBorderCopyRB, "customheading");
+    get(mpBorderCopyRB, "noheading");
 }
 
 void SwSplitTblDlg::Apply()
@@ -38,14 +38,12 @@ void SwSplitTblDlg::Apply()
     m_nSplit = HEADLINE_CNTNTCOPY;
     if(mpBoxAttrCopyWithParaRB->IsChecked())
         m_nSplit = HEADLINE_BOXATRCOLLCOPY;
-    if(mpBoxAttrCopyNoParaRB->IsChecked())
+    else if(mpBoxAttrCopyNoParaRB->IsChecked())
         m_nSplit = HEADLINE_BOXATTRCOPY;
     else if(mpBorderCopyRB->IsChecked())
         m_nSplit = HEADLINE_BORDERCOPY;
 
     rShell.SplitTable(m_nSplit);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
