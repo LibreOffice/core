@@ -1,0 +1,30 @@
+diff -ur exttextcat.old/src/textcat.c exttextcat/src/textcat.c
+--- exttextcat.old/src/textcat.c	2012-11-01 15:40:35.000000000 +0100
++++ exttextcat/src/textcat.c	2013-03-25 16:22:57.226896529 +0100
+@@ -274,10 +274,10 @@
+     switch (cnt)
+     {
+     case TEXTCAT_RESULT_UNKOWN:
+-        result = _TEXTCAT_RESULT_UNKOWN;
++        result = TEXTCAT_RESULT_UNKNOWN_STR;
+         break;
+     case TEXTCAT_RESULT_SHORT:
+-        result = _TEXTCAT_RESULT_SHORT;
++        result = TEXTCAT_RESULT_SHORT_STR;
+         break;
+     default:
+         {
+diff -ur exttextcat.old/src/textcat.h exttextcat/src/textcat.h
+--- exttextcat.old/src/textcat.h	2012-01-13 22:04:24.000000000 +0100
++++ exttextcat/src/textcat.h	2013-03-25 16:22:11.131896925 +0100
+@@ -40,8 +40,8 @@
+ #include "common.h"
+ #include "textcat_properties.h"
+ 
+-#define _TEXTCAT_RESULT_UNKOWN        "UNKNOWN"
+-#define _TEXTCAT_RESULT_SHORT         "SHORT"
++#define TEXTCAT_RESULT_UNKNOWN_STR   "UNKNOWN"
++#define TEXTCAT_RESULT_SHORT_STR     "SHORT"
+ #define TEXTCAT_RESULT_UNKOWN        0
+ #define TEXTCAT_RESULT_SHORT         -2
+ 

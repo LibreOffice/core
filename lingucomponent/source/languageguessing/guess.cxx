@@ -57,9 +57,9 @@ Guess::Guess(const char * guess_str)
 //        &&
 //        strncmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT, strlen(_TEXTCAT_RESULT_SHORT)) != 0)
 //     {
-        if(strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKNOWN) != 0
+        if(strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_UNKNOWN_STR) != 0
            &&
-           strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT) != 0)
+           strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
         {
 
         int current_pointer = 0;

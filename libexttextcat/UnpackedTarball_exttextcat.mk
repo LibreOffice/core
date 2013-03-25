@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,exttextcat,$(LIBEXTTEXTCAT_TARBALL)
 
 $(eval $(call gb_UnpackedTarball_add_patches,exttextcat,\
 	libexttextcat/android.patch \
+	libexttextcat/unkown.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
