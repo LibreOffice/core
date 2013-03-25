@@ -26,7 +26,6 @@
 #include <windows.h>
 #endif
 
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 
 // class FileBase
