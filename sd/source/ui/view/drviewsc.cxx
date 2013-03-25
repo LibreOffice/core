@@ -406,7 +406,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     }
 
                     WaitObject aWait( (Window*)GetActiveWindow() );
-                    mpDrawView->ConvertMarkedObjTo3D(sal_True);
+                    mpDrawView->ConvertMarkedObjTo3D(true);
                 }
             }
 

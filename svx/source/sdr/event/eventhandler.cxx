@@ -110,7 +110,7 @@ namespace sdr
         }
 
         // for control
-        sal_Bool EventHandler::IsEmpty() const
+        bool EventHandler::IsEmpty() const
         {
             return (0L == maVector.size());
         }

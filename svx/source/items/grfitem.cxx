@@ -89,7 +89,7 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, sal_uInt16 nVersion ) const
 
 bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     text::GraphicCrop aRet;
     aRet.Left   = nLeft;
@@ -112,7 +112,7 @@ bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     text::GraphicCrop aVal;
 

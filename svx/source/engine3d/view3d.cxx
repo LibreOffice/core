@@ -603,8 +603,8 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
 
 bool E3dView::IsConvertTo3DObjPossible() const
 {
-    sal_Bool bAny3D(sal_False);
-    sal_Bool bGroupSelected(sal_False);
+    bool bAny3D(false);
+    bool bGroupSelected(false);
     bool bRetval(true);
 
     for(sal_uInt32 a=0;!bAny3D && a<GetMarkedObjectCount();a++)
@@ -624,14 +624,14 @@ bool E3dView::IsConvertTo3DObjPossible() const
     return bRetval;
 }
 
-void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, sal_Bool& rAny3D,
-    sal_Bool& rGroupSelected) const
+void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, bool& rAny3D,
+    bool& rGroupSelected) const
 {
     if(pObj)
     {
         if(pObj->ISA(E3dObject))
         {
-            rAny3D = sal_True;
+            rAny3D = true;
         }
         else
         {
@@ -643,7 +643,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, sal_Bool& rAny3D,
                     SdrObject* pNewObj = aIter.Next();
                     ImpIsConvertTo3DPossible(pNewObj, rAny3D, rGroupSelected);
                 }
-                rGroupSelected = sal_True;
+                rGroupSelected = true;
             }
         }
     }
@@ -698,7 +698,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     }
 }
 
-void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
+void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
 {
     // Single PathObject, transform this
     SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
@@ -766,7 +766,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal
     }
 }
 
-void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
+void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat)
 {
     if(pObj)
     {
@@ -831,7 +831,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExt
     }
 }
 
-void E3dView::ConvertMarkedObjTo3D(sal_Bool bExtrude, basegfx::B2DPoint aPnt1, basegfx::B2DPoint aPnt2)
+void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, basegfx::B2DPoint aPnt2)
 {
     if(AreObjectsMarked())
     {
@@ -1097,12 +1097,12 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
 
                                     if(aCompareColor == aLocalColor)
                                     {
-                                        bOverlap = sal_False;
+                                        bOverlap = false;
                                     }
                                 }
                                 else if(eLocalFillStyle == XFILL_NONE)
                                 {
-                                    bOverlap = sal_False;
+                                    bOverlap = false;
                                 }
                             }
                         }
@@ -1468,7 +1468,7 @@ void E3dView::MovAction(const Point& rPnt)
 // axis. It is sufficient with this call, if an object is selected.
 // (No initialization necessary)
 
-void E3dView::End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes)
+void E3dView::End3DCreation(bool bUseDefaultValuesForMirrorAxes)
 {
     ResetCreationActive();
 
@@ -1485,7 +1485,7 @@ void E3dView::End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes)
             basegfx::B2DPoint aPnt1(aRect.Left(), -aRect.Top());
             basegfx::B2DPoint aPnt2(aRect.Left(), -aRect.Bottom());
 
-            ConvertMarkedObjTo3D(sal_False, aPnt1, aPnt2);
+            ConvertMarkedObjTo3D(false, aPnt1, aPnt2);
         }
         else
         {
@@ -1499,7 +1499,7 @@ void E3dView::End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes)
             basegfx::B2DPoint aPnt1(aMirrorRef1.X(), -aMirrorRef1.Y());
             basegfx::B2DPoint aPnt2(aMirrorRef2.X(), -aMirrorRef2.Y());
 
-            ConvertMarkedObjTo3D(sal_False, aPnt1, aPnt2);
+            ConvertMarkedObjTo3D(false, aPnt1, aPnt2);
         }
     }
 }

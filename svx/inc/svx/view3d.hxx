@@ -69,13 +69,13 @@ protected:
 
     void InitView();
 
-    void ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
-    void ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
+    void ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
+    void ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
     void ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj);
     void ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj);
 
     void InitScene(E3dScene* pScene, double fW, double fH, double fCamZ);
-    void ImpIsConvertTo3DPossible(SdrObject* pObj, sal_Bool& rAny3D, sal_Bool& rGroupSelected) const;
+    void ImpIsConvertTo3DPossible(SdrObject* pObj, bool& rAny3D, bool& rGroupSelected) const;
     void BreakSingle3DObj(E3dObject* pObj);
 
 public:
@@ -108,7 +108,7 @@ public:
     bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
 
     bool IsConvertTo3DObjPossible() const;
-    void ConvertMarkedObjTo3D(sal_Bool bExtrude=sal_True, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
+    void ConvertMarkedObjTo3D(bool bExtrude=true, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
     // Nachtraeglichhe Korrekturmoeglichkeit um alle Extrudes in einer
     // bestimmten Tiefensortierung anzulegen
@@ -118,10 +118,10 @@ public:
     void Start3DCreation();
 
     // migration of overlay
-    sal_Bool Is3DRotationCreationActive() const { return (0L != mpMirrorOverlay); }
+    bool Is3DRotationCreationActive() const { return (0L != mpMirrorOverlay); }
 
     virtual void MovAction(const Point& rPnt);
-    void End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes=sal_False);
+    void End3DCreation(bool bUseDefaultValuesForMirrorAxes=false);
     void ResetCreationActive();
 
     double GetDefaultCamPosZ();

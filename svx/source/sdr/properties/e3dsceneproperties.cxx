@@ -197,13 +197,13 @@ namespace sdr
                     // one common function for the camera attributes
                     // since SetCamera() sets all three back to the ItemSet
                     Camera3D aSceneCam(rObj.GetCamera());
-                    sal_Bool bChange(sal_False);
+                    bool bChange(false);
 
                     // for SDRATTR_3DSCENE_PERSPECTIVE:
                     if(aSceneCam.GetProjection() != rObj.GetPerspective())
                     {
                         aSceneCam.SetProjection(rObj.GetPerspective());
-                        bChange = sal_True;
+                        bChange = true;
                     }
 
                     // for SDRATTR_3DSCENE_DISTANCE:
@@ -213,7 +213,7 @@ namespace sdr
                     if(fNew != aActualPosition.getZ())
                     {
                         aSceneCam.SetPosition(basegfx::B3DPoint(aActualPosition.getX(), aActualPosition.getY(), fNew));
-                        bChange = sal_True;
+                        bChange = true;
                     }
 
                     // for SDRATTR_3DSCENE_FOCAL_LENGTH:
@@ -222,7 +222,7 @@ namespace sdr
                     if(aSceneCam.GetFocalLength() != fNew)
                     {
                         aSceneCam.SetFocalLength(fNew);
-                        bChange = sal_True;
+                        bChange = true;
                     }
 
                     // for all

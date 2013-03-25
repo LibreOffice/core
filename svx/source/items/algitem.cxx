@@ -336,7 +336,7 @@ SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) 
 
 bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -364,7 +364,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
+    bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
     long nMaxVal = bConvert ? TWIP_TO_MM100(SHRT_MAX) : SHRT_MAX;   // Members sind sal_Int16
     sal_Int32 nVal = 0;
     if(!(rVal >>= nVal) || (nVal > nMaxVal))

@@ -207,7 +207,7 @@ namespace sdr
 
                 if(nDifference)
                 {
-                    const sal_Bool bLineVisible(XLINE_NONE != ((const XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue());
+                    const bool bLineVisible(XLINE_NONE != ((const XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue());
 
                     if(bLineVisible)
                     {
@@ -421,7 +421,7 @@ namespace sdr
 
                     if(nParaCount)
                     {
-                        sal_Bool bBurnIn(sal_False);
+                        bool bBurnIn(false);
 
                         for(sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
                         {
@@ -451,7 +451,7 @@ namespace sdr
                                     from the paragraphs item set
                                 */
 
-                                sal_Bool bHasURL(sal_False);
+                                bool bHasURL(false);
 
                                 if(aSet.GetItemState(EE_CHAR_COLOR) == SFX_ITEM_SET)
                                 {
@@ -473,7 +473,7 @@ namespace sdr
 
                                                     if(pData && pData->ISA(SvxURLField))
                                                     {
-                                                        bHasURL = sal_True;
+                                                        bHasURL = true;
                                                         break;
                                                     }
                                                 }
@@ -519,7 +519,7 @@ namespace sdr
                                 }
 
                                 pOutliner->SetParaAttribs(nPara, aSet);
-                                bBurnIn = sal_True; // #i51163# Flag was set wrong
+                                bBurnIn = true; // #i51163# Flag was set wrong
                             }
                         }
 

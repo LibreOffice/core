@@ -256,7 +256,7 @@ void SAL_CALL BasMgrContainerListenerImpl::disposing( const lang::EventObject& S
 void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::ContainerEvent& Event )
     throw( uno::RuntimeException )
 {
-    sal_Bool bLibContainer = maLibName.isEmpty();
+    bool bLibContainer = maLibName.isEmpty();
     OUString aName;
     Event.Accessor >>= aName;
 
@@ -308,7 +308,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
 
     // Replace not possible for library container
 #ifdef DBG_UTIL
-    sal_Bool bLibContainer = maLibName.isEmpty();
+    bool bLibContainer = maLibName.isEmpty();
 #endif
     DBG_ASSERT( !bLibContainer, "library container fired elementReplaced()");
 
@@ -336,7 +336,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
     OUString aName;
     Event.Accessor >>= aName;
 
-    sal_Bool bLibContainer = maLibName.isEmpty();
+    bool bLibContainer = maLibName.isEmpty();
     if( bLibContainer )
     {
         StarBASIC* pLib = mpMgr->GetLib( aName );

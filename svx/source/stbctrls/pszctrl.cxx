@@ -142,10 +142,10 @@ struct SvxPosSizeStatusBarControl_Impl
     Point   aPos;       // valid when a position is shown
     Size    aSize;      // valid when a size is shown
     String  aStr;       // valid when a text is shown
-    sal_Bool    bPos;       // show position ?
-    sal_Bool    bSize;      // set size ?
-    sal_Bool    bTable;     // set table index ?
-    sal_Bool    bHasMenu;   // set StarCalc popup menu ?
+    bool    bPos;       // show position ?
+    bool    bSize;      // set size ?
+    bool    bTable;     // set table index ?
+    bool    bHasMenu;   // set StarCalc popup menu ?
     sal_uInt16  nFunction;  // the selected StarCalc function
     Image   aPosImage;  // Image to show the position
     Image   aSizeImage; // Image to show the size
@@ -170,10 +170,10 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     pImp( new SvxPosSizeStatusBarControl_Impl )
 {
-    pImp->bPos = sal_False;
-    pImp->bSize = sal_False;
-    pImp->bTable = sal_False;
-    pImp->bHasMenu = sal_False;
+    pImp->bPos = false;
+    pImp->bSize = false;
+    pImp->bTable = false;
+    pImp->bHasMenu = false;
     pImp->nFunction = 0;
     pImp->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
     pImp->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
@@ -233,12 +233,12 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     {
         if ( eState == SFX_ITEM_AVAILABLE )
         {
-            pImp->bHasMenu = sal_True;
+            pImp->bHasMenu = true;
             if ( pState && pState->ISA(SfxUInt16Item) )
                 pImp->nFunction = ((const SfxUInt16Item*)pState)->GetValue();
         }
         else
-            pImp->bHasMenu = sal_False;
+            pImp->bHasMenu = false;
     }
     else if ( SFX_ITEM_AVAILABLE != eState )
     {
@@ -246,11 +246,11 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         // notified for all display types
 
         if ( nSID == SID_TABLE_CELL )
-            pImp->bTable = sal_False;
+            pImp->bTable = false;
         else if ( nSID == SID_ATTR_POSITION )
-            pImp->bPos = sal_False;
+            pImp->bPos = false;
         else if ( nSID == GetSlotId() )     // controller is registered for SID_ATTR_SIZE
-            pImp->bSize = sal_False;
+            pImp->bSize = false;
         else
         {
             SAL_WARN( "svx.stbcrtls","unknown slot id");
@@ -260,30 +260,30 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     {
         // show position
         pImp->aPos = ( (SfxPointItem*)pState )->GetValue();
-        pImp->bPos = sal_True;
-        pImp->bTable = sal_False;
+        pImp->bPos = true;
+        pImp->bTable = false;
     }
     else if ( pState->ISA( SvxSizeItem ) )
     {
         // show size
         pImp->aSize = ( (SvxSizeItem*)pState )->GetSize();
-        pImp->bSize = sal_True;
-        pImp->bTable = sal_False;
+        pImp->bSize = true;
+        pImp->bTable = false;
     }
     else if ( pState->ISA( SfxStringItem ) )
     {
         // show string (table cel or different)
         pImp->aStr = ( (SfxStringItem*)pState )->GetValue();
-        pImp->bTable = sal_True;
-        pImp->bPos = sal_False;
-        pImp->bSize = sal_False;
+        pImp->bTable = true;
+        pImp->bPos = false;
+        pImp->bSize = false;
     }
     else
     {
         SAL_WARN( "svx.stbcrtls", "invalid item type" );
-        pImp->bPos = sal_False;
-        pImp->bSize = sal_False;
-        pImp->bTable = sal_False;
+        pImp->bPos = false;
+        pImp->bSize = false;
+        pImp->bTable = false;
     }
 
     if ( GetStatusBar().AreItemsVisible() )

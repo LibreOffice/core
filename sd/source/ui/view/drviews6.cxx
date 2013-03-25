@@ -583,7 +583,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             mpDrawView->SdrEndTextEdit();
             if(GetActiveWindow())
                 GetActiveWindow()->EnterWait();
-            mpDrawView->End3DCreation(sal_True);
+            mpDrawView->End3DCreation(true);
             Cancel();
             rReq.Ignore();
             if(GetActiveWindow())

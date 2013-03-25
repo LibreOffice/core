@@ -96,7 +96,7 @@ namespace sdr
             virtual void ExecuteEvents();
 
             // for control
-            sal_Bool IsEmpty() const;
+            bool IsEmpty() const;
         };
     } // end of namespace event
 } // end of namespace sdr

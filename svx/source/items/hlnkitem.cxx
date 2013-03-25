@@ -235,7 +235,7 @@ int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxHyperlinkItem& rItem = (const SvxHyperlinkItem&) rAttr;
 
-    sal_Bool bRet = ( sName   == rItem.sName   &&
+    bool bRet = ( sName   == rItem.sName   &&
                   sURL    == rItem.sURL    &&
                   sTarget == rItem.sTarget &&
                   eType   == rItem.eType   &&
