@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <rtl/math.hxx>
 
 #include <stdio.h>
 #include <string.h>
@@ -283,8 +284,19 @@ Calendar_gregorian::getUniqueID() throw(RuntimeException)
 void SAL_CALL
 Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException)
 {
+        // ICU handles dates in milliseconds as double values and uses floor()
+        // to obtain integer values, which may yield a date decremented by one
+        // for odd (historical) timezone values where the computed value due to
+        // rounding errors has a fractional part in milliseconds. Ensure we
+        // pass a value without fraction here. If not, that may lead to
+        // fdo#44286 or fdo#52619 and the like, e.g. when passing
+        // -2136315212000.000244 instead of -2136315212000.000000
+        double fM = timeInDays * U_MILLIS_PER_DAY;
+        double fR = rtl::math::round( fM );
+        SAL_INFO_IF( fM != fR, "i18npool",
+                "Calendar_gregorian::setDateTime: " << std::fixed << fM << " rounded to " << fR);
         UErrorCode status;
-        body->setTime(timeInDays * U_MILLIS_PER_DAY, status = U_ZERO_ERROR);
+        body->setTime( fR, status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) ) throw ERROR;
         getValue();
 }
@@ -679,6 +691,11 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
                     DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
                     DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
                 }
+                SAL_INFO( "i18npool", "Calendar_gregorian::setValue:" <<
+                        "  nZone0 " << nZone0 << ", nDST0 " << nDST0 <<
+                        ", nZone1 " << nZone1 << ", nDST1 " << nDST1 <<
+                        ", nZone2 " << nZone2 << ", nDST2 " << nDST2 <<
+                        ", nZone3 " << nZone3 << ", nDST3 " << nDST3);
             }
         }
 #if erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
