@@ -3025,42 +3025,26 @@ bool ScCompiler::IsColRowName( const String& rName )
                         nThisTab <= rNameRange.aEnd.Tab()) )
                     continue;   // for
                 ScCellIterator aIter( pDoc, rNameRange );
-                for ( ScBaseCell* pCell = aIter.GetFirst(); pCell && !bInList;
-                        pCell = aIter.GetNext() )
+                for (bool bHas = aIter.first(); bHas && !bInList; bHas = aIter.next())
                 {
                     // Don't crash if cell (via CompileNameFormula) encounters
                     // a formula cell without code and
                     // HasStringData/Interpret/Compile is executed and all that
                     // recursive..
                     // Furthermore, *this* cell won't be touched, since no RPN exists yet.
-                    CellType eType = pCell->GetCellType();
-                    bool bOk = ( (eType == CELLTYPE_FORMULA ?
-                        ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
-                        && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
-                        : true ) );
-                    if ( bOk && pCell->HasStringData() )
+                    CellType eType = aIter.getType();
+                    bool bOk = false;
+                    if (eType == CELLTYPE_FORMULA)
                     {
-                        String aStr;
-                        switch ( eType )
-                        {
-                            case CELLTYPE_STRING:
-                                aStr = ((ScStringCell*)pCell)->GetString();
-                            break;
-                            case CELLTYPE_FORMULA:
-                                aStr = ((ScFormulaCell*)pCell)->GetString();
-                            break;
-                            case CELLTYPE_EDIT:
-                                aStr = ((ScEditCell*)pCell)->GetString();
-                            break;
-                            case CELLTYPE_NONE:
-                            case CELLTYPE_VALUE:
-                            case CELLTYPE_NOTE:
-#if OSL_DEBUG_LEVEL > 0
-                            case CELLTYPE_DESTROYED:
-#endif
-                                ;   // nothing, prevent compiler warning
-                            break;
-                        }
+                        ScFormulaCell* pFC = aIter.getFormulaCell();
+                        bOk = (pFC->GetCode()->GetCodeLen() > 0) && (pFC->aPos != aPos);
+                    }
+                    else
+                        bOk = true;
+
+                    if (bOk && aIter.hasString())
+                    {
+                        OUString aStr = aIter.getString();
                         if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
