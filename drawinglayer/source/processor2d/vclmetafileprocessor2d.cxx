@@ -444,6 +444,15 @@ namespace drawinglayer
                     // pre-fill fLineWidth
                     fLineWidth = pLineAttribute->getWidth();
 
+                    // #i113922# the LineWidth is duplicated in the MetaPolylineAction,
+                    // and also inside the SvtGraphicStroke and needs transforming into
+                    // the same space as its co-ordinates here cf. fdo#61789
+                    // This is a partial fix. When a object transformation is used which
+                    // e.g. contains a scaleX != scaleY, an unproportional scaling will happen.
+                    const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation *
+                                                           basegfx::B2DVector(pLineAttribute->getWidth(), 0.0 ));
+                    fLineWidth = aDiscreteUnit.getLength();
+
                     // pre-fill fMiterLength
                     fMiterLength = fLineWidth;
 
@@ -1233,11 +1242,8 @@ namespace drawinglayer
                             mpOutputDevice->SetFillColor();
                             aHairLinePolyPolygon.transform(maCurrentTransformation);
 
-                            // #i113922# LineWidth needs to be transformed, too
-                            const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(rLine.getWidth(), 0.0));
-                            const double fDiscreteLineWidth(aDiscreteUnit.getLength());
-
-                            LineInfo aLineInfo(LINE_SOLID, basegfx::fround(fDiscreteLineWidth));
+                            // use the transformed line width from the stroke info.
+                            LineInfo aLineInfo(LINE_SOLID, basegfx::fround(pSvtGraphicStroke->getStrokeWidth()));
                             aLineInfo.SetLineJoin(rLine.getLineJoin());
                             aLineInfo.SetLineCap(rLine.getLineCap());
 
