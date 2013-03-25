@@ -227,9 +227,6 @@ namespace xforms
     //--------------------------------------------------------------------
     sal_uInt16 OXSDDataType::_validate( const ::rtl::OUString& _rValue )
     {
-        // care for the whitespaces
-        ::rtl::OUString sConverted = Convert::convertWhitespace( _rValue, m_nWST );
-
         // care for the regular expression
         if ( !m_sPattern.isEmpty() )
         {
