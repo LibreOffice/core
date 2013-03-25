@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+l0\u003d",
+        "filename": "wizards/com/sun/star/wizards/common/IRenderer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-03-25T11:17:24Z",
+      "side": 1,
+      "message": "Please see http://opengrok.libreoffice.org/xref/core/TEMPLATE.SOURCECODE.HEADER#26 on what header to use for new files.",
+      "revId": "28f1bdbabc3541c94cf41dbcee3a131c81576f2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
