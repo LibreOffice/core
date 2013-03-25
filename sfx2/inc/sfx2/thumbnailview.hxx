@@ -277,6 +277,7 @@ protected:
     using Window::ImplInit;
 
     void CalculateItemPositions ();
+    void MakeItemVisible( sal_uInt16 nId );
 
     SFX2_DLLPRIVATE void         ImplInit();
     SFX2_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
