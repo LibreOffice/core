@@ -20,6 +20,8 @@
 /* Begin PBXFileReference section */
 		BE08805B16FDB784000CED5C /* LOViewerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOViewerWindow.h; sourceTree = "<group>"; };
 		BE08805C16FDB784000CED5C /* LOViewerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOViewerWindow.m; sourceTree = "<group>"; };
+		BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapdevice.cxx; path = ../../../../basebmp/source/bitmapdevice.cxx; sourceTree = "<group>"; };
+		BE4EEE9A16FF80B100D475B2 /* virdev.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = virdev.cxx; path = ../../../../vcl/source/gdi/virdev.cxx; sourceTree = "<group>"; };
 		BE5A22551664F87600CF01C9 /* Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Viewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5A22591664F87600CF01C9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BE5A225B1664F87600CF01C9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -38,6 +40,22 @@
 		BE69AD8A1695954D001BE1CD /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		BE69AD8B1695954D001BE1CD /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		BE69AD8C1695954D001BE1CD /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		BE9086F616FF02B2004400A1 /* headlessinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = headlessinst.cxx; path = ../../../../vcl/headless/headlessinst.cxx; sourceTree = "<group>"; };
+		BE9086F716FF02B2004400A1 /* svpbmp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpbmp.cxx; path = ../../../../vcl/headless/svpbmp.cxx; sourceTree = "<group>"; };
+		BE9086F816FF02B2004400A1 /* svpdata.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
+		BE9086F916FF02B2004400A1 /* svpdummies.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpdummies.cxx; path = ../../../../vcl/headless/svpdummies.cxx; sourceTree = "<group>"; };
+		BE9086FA16FF02B3004400A1 /* svpelement.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpelement.cxx; path = ../../../../vcl/headless/svpelement.cxx; sourceTree = "<group>"; };
+		BE9086FB16FF02B3004400A1 /* svpframe.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpframe.cxx; path = ../../../../vcl/headless/svpframe.cxx; sourceTree = "<group>"; };
+		BE9086FC16FF02B3004400A1 /* svpgdi.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpgdi.cxx; path = ../../../../vcl/headless/svpgdi.cxx; sourceTree = "<group>"; };
+		BE9086FD16FF02B3004400A1 /* svpinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpinst.cxx; path = ../../../../vcl/headless/svpinst.cxx; sourceTree = "<group>"; };
+		BE9086FE16FF02B3004400A1 /* svpprn.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpprn.cxx; path = ../../../../vcl/headless/svpprn.cxx; sourceTree = "<group>"; };
+		BE9086FF16FF02B3004400A1 /* svptext.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svptext.cxx; path = ../../../../vcl/headless/svptext.cxx; sourceTree = "<group>"; };
+		BE90870016FF02B3004400A1 /* svpvd.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
+		BEBF3E3A17002D0200C454AC /* svapp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
+		BEBF3E3B17002D0200C454AC /* svmain.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
+		BEBF3E3C17002D4C00C454AC /* frame.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = frame.cxx; path = ../../../../framework/source/services/frame.cxx; sourceTree = "<group>"; };
+		BEBF3E3D17002D6900C454AC /* window.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = window.cxx; path = ../../../../vcl/source/window/window.cxx; sourceTree = "<group>"; };
+		BEBF3E3E17005E6B00C454AC /* frmload.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = frmload.cxx; path = ../../../../sfx2/source/view/frmload.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,11 +100,29 @@
 		BE5A225F1664F87600CF01C9 /* Viewer */ = {
 			isa = PBXGroup;
 			children = (
-				BE69AD3716958CA0001BE1CD /* Resources */,
+				BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */,
+				BEBF3E3C17002D4C00C454AC /* frame.cxx */,
+				BEBF3E3E17005E6B00C454AC /* frmload.cxx */,
+				BE9086F616FF02B2004400A1 /* headlessinst.cxx */,
 				BE5A22681664F87600CF01C9 /* LOViewerAppDelegate.h */,
 				BE5A22691664F87600CF01C9 /* LOViewerAppDelegate.mm */,
 				BE08805B16FDB784000CED5C /* LOViewerWindow.h */,
 				BE08805C16FDB784000CED5C /* LOViewerWindow.m */,
+				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
+				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
+				BE9086F716FF02B2004400A1 /* svpbmp.cxx */,
+				BE9086F816FF02B2004400A1 /* svpdata.cxx */,
+				BE9086F916FF02B2004400A1 /* svpdummies.cxx */,
+				BE9086FA16FF02B3004400A1 /* svpelement.cxx */,
+				BE9086FB16FF02B3004400A1 /* svpframe.cxx */,
+				BE9086FC16FF02B3004400A1 /* svpgdi.cxx */,
+				BE9086FD16FF02B3004400A1 /* svpinst.cxx */,
+				BE9086FE16FF02B3004400A1 /* svpprn.cxx */,
+				BE9086FF16FF02B3004400A1 /* svptext.cxx */,
+				BE90870016FF02B3004400A1 /* svpvd.cxx */,
+				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
+				BEBF3E3D17002D6900C454AC /* window.cxx */,
+				BE69AD3716958CA0001BE1CD /* Resources */,
 				BE5A22601664F87600CF01C9 /* Supporting Files */,
 			);
 			path = Viewer;
