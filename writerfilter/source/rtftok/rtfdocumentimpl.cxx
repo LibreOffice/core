@@ -839,6 +839,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     }
     writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
     checkFirstRun();
+
     if (!m_aStates.top().pCurrentBuffer)
     {
         Mapper().props(pProperties);
@@ -850,6 +851,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
     }
+
     return 0;
 }
 
@@ -948,7 +950,9 @@ bool RTFFrame::inFrame()
 void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
 {
     sal_uInt8 sValue[] = { nValue };
-    if (!m_aStates.top().pCurrentBuffer)
+    RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
+
+    if (!pCurrentBuffer)
     {
         Mapper().startCharacterGroup();
         // Should we send run properties?
@@ -959,10 +963,10 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     }
     else
     {
-        m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
+        pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
         RTFValue::Pointer_t pValue(new RTFValue(*sValue));
-        m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
-        m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
+        pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
+        pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
     }
 }
 
@@ -1109,31 +1113,37 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    if (!m_aStates.top().pCurrentBuffer && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
+    RTFBuffer_t* pCurrentBuffer = m_aStates.top().pCurrentBuffer;
+
+    if (!pCurrentBuffer && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().startCharacterGroup();
-    else if (m_aStates.top().pCurrentBuffer)
+    else if (pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, pValue));
+        pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, pValue));
     }
+
     if (m_aStates.top().nDestinationState == DESTINATION_NORMAL
             || m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT
             || m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
         runProps();
-    if (!m_aStates.top().pCurrentBuffer)
+
+    if (!pCurrentBuffer)
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(rString.getStr()), rString.getLength());
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(rString));
-        m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_UTEXT, pValue));
+        pCurrentBuffer->push_back(make_pair(BUFFER_UTEXT, pValue));
     }
+
     m_bNeedCr = true;
-    if (!m_aStates.top().pCurrentBuffer && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
+
+    if (!pCurrentBuffer && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().endCharacterGroup();
-    else if(m_aStates.top().pCurrentBuffer)
+    else if(pCurrentBuffer)
     {
         RTFValue::Pointer_t pValue;
-        m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, pValue));
+        pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, pValue));
     }
 }
 
@@ -2380,6 +2390,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             {
                 if (!m_aStates.top().pCurrentBuffer)
                     m_aStates.top().pCurrentBuffer = &m_aSuperBuffer;
+
                 RTFValue::Pointer_t pValue(new RTFValue("superscript"));
                 m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue);
             }
@@ -2716,12 +2727,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_POSY: nId = NS_ooxml::LN_CT_FramePr_y; m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, 0); break;
         default: break;
     }
+
     if (nId > 0)
     {
         m_bNeedPap = true;
         // Don't try to support text frames inside tables for now.
         if (m_aStates.top().pCurrentBuffer != &m_aTableBuffer)
             m_aStates.top().aFrame.setSprm(nId, nParam);
+
         return 0;
     }
 
@@ -4285,6 +4298,7 @@ int RTFDocumentImpl::popState()
         else if (m_xDocumentProperties.is())
             m_xDocumentProperties->setTitle(aState.aDestinationText.makeStringAndClear());
     }
+
     if (aState.pCurrentBuffer == &m_aSuperBuffer)
     {
         OSL_ASSERT(m_aStates.top().pCurrentBuffer == 0);
@@ -4294,6 +4308,7 @@ int RTFDocumentImpl::popState()
 
         m_bHasFootnote = false;
     }
+
     if (m_aStates.size())
     {
         m_aStates.top().nCells = aState.nCells;
