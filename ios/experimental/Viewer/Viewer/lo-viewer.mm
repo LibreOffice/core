@@ -65,6 +65,8 @@ extern "C" {
     extern void * smd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * spell_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * svgfilter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * svt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * svx_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -110,6 +112,8 @@ lo_get_libmap(void)
         { "libsmlo.a", sm_component_getFactory },
         { "libspelllo.a", spell_component_getFactory },
         { "libsvgfilterlo.a", svgfilter_component_getFactory },
+        { "libsvtlo.a", svt_component_getFactory },
+        { "libsvxlo.a", svx_component_getFactory },
         { "libswdlo.a", swd_component_getFactory },
         { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
