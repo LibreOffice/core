@@ -67,14 +67,12 @@ namespace connectivity
             ::std::map<sal_Int32,SWORD>                                         m_aODBCColumnTypes;
 
             SQLHANDLE                                                                   m_aStatementHandle;   // ... until freed
-            SQLHANDLE                                                                   m_aConnectionHandle;
             ::com::sun::star::uno::WeakReferenceHelper                                  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
             OConnection*                                m_pConnection;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
-            sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             sal_Int32                                   m_nDriverColumnCount;   // column count of the driver wich can sometimes be less than the metadata count
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;

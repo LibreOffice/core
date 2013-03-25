@@ -61,7 +61,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     ,m_pConnection(_pConnection)
     ,m_nTextEncoding(_pConnection->getTextEncoding())
     ,m_nRowPos(-1)
-    ,m_nLastColumnPos(0)
     ,m_nDriverColumnCount(0)
     ,m_nCurrentFetchState(0)
     ,m_bWasNull(sal_True)
