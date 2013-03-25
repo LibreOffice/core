@@ -142,6 +142,8 @@ public:
     // mutators
     /// Set path to stroke
     void    setPath             ( const Polygon& );
+    /// Affine scaling in both X and Y dimensions
+    void    scale               ( double fScaleX, double fScaleY );
 
 private:
     // friends

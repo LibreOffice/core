@@ -115,6 +115,21 @@ void SvtGraphicStroke::setPath( const Polygon& rPoly )
     maPath = rPoly;
 }
 
+void SvtGraphicStroke::scale( double fXScale, double fYScale )
+{
+    // Clearly scaling stroke-width for fat lines is rather a problem
+    maPath.Scale( fXScale, fYScale );
+
+    double fScale = sqrt (fabs (fXScale * fYScale) ); // clearly not ideal.
+    fprintf( stderr, " HIT A SCALING ! by %g %g %g\n",
+             (double) fXScale, (double) fYScale, (double) fScale );
+    mfStrokeWidth *= fScale;
+    mfMiterLimit *= fScale;
+
+    maStartArrow.Scale( fXScale, fYScale );
+    maEndArrow.Scale( fXScale, fYScale );
+}
+
 SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );

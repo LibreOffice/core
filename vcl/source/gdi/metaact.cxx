@@ -4066,10 +4066,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 {
                     SvtGraphicStroke aStroke;
                     aMemStm >> aStroke;
-                    Polygon aPath;
-                    aStroke.getPath( aPath );
-                    aPath.Scale( fXScale, fYScale );
-                    aStroke.setPath( aPath );
+                    aStroke.scale( fXScale, fYScale );
                     aDest << aStroke;
                 }
                 else
