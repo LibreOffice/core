@@ -128,7 +128,7 @@ vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
 
     const char *guess_list = textcat_Classify(h, text, len);
 
-    if (strcmp(guess_list, _TEXTCAT_RESULT_SHORT) == 0)
+    if (strcmp(guess_list, TEXTCAT_RESULT_SHORT_STR) == 0)
         return guesses;
 
     int current_pointer = 0;
