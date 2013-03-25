@@ -39,6 +39,7 @@ bool SvpSalBitmap::Create( const Size& rSize,
                            const BitmapPalette& rPalette )
 {
     sal_uInt32 nFormat = SVP_DEFAULT_BITMAP_FORMAT;
+    SAL_INFO( "vcl.headless", "SvpSalBitmap::Create(" << rSize.Width() << "," << rSize.Height() << "," << nBitCount << ")" );
     switch( nBitCount )
     {
         case 1: nFormat = Format::ONE_BIT_MSB_PAL; break;
