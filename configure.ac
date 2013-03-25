@@ -5565,7 +5565,7 @@ if test "$GCC" = "yes"; then
     AC_MSG_CHECKING(
         [whether $CC supports pragma GCC diagnostic error/ignored/warning])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Wunused"
+    CFLAGS="$CFLAGS -Werror -Wunknown-pragmas -Wunused-parameter"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #pragma GCC diagnostic ignored "-Wunused-parameter"
             void dummy(int n) {}
@@ -5577,7 +5577,7 @@ if test "$GCC" = "yes"; then
 
     AC_MSG_CHECKING([whether $CC supports pragma GCC diagnostic push/pop])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Wunused"
+    CFLAGS="$CFLAGS -Werror -Wunknown-pragmas -Wunused-parameter"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #pragma GCC diagnostic push
             #pragma GCC diagnostic ignored "-Wunused-parameter"
