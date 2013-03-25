@@ -278,7 +278,7 @@ class ImageList(object):
     def moveSelection(self, image):
         print ("DEBUG !!! moveSelection - image: ", image)
         self.grbxSelectedImage.Visible = False
-        row = image / self.cols
+        row = int(image / self.cols)
         if self.rowSelect:
             col = 0
         else:
@@ -455,7 +455,7 @@ class ImageList(object):
     def getImageFromEvent(self, event):
         image = (event).Source
         controlName = image.Model.Name
-        return int(controlName[6 + len(self.name)])
+        return int(controlName[6 + len(self.name):])
 
     def mousePressed(self, event):
         print ("DEBUG !!! mousePressed -- Mouse pressed.")
