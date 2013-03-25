@@ -17,12 +17,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     HandledArgs aArgs;
     if( !Export::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("propex","properties");
+        Export::writeUsage("propex","*.properties");
         return 1;
     }
 
     PropParser aParser(
-        aArgs.m_sInputFile, Export::sLanguages, aArgs.m_bMergeMode );
+        aArgs.m_sInputFile, aArgs.m_sLanguage, aArgs.m_bMergeMode );
     if( !aParser.isInitialized() )
     {
         return 1;

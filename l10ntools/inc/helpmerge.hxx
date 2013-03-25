@@ -44,8 +44,8 @@ public:
 
 /// Method append a PO file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid
-    static bool CreatePO( const rtl::OString &rPOFile_in, const rtl::OString &sHelpFile,
-                          XMLFile *pXmlFile, const rtl::OString &rGsi1 );
+    static bool CreatePO( const OString &rPOFile_in, const OString &sHelpFile, const OString &rLanguage,
+                          XMLFile *pXmlFile, const OString &rGsi1 );
 
 /// Method merges the String from the POfile into XMLfile. Both Strings must
 /// point to existing files.

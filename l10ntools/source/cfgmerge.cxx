@@ -50,10 +50,9 @@ FILE * init(int argc, char ** argv) {
     HandledArgs aArgs;
     if ( !Export::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("cfgex","xcu");
+        Export::writeUsage("cfgex","*.xcu");
         std::exit(EXIT_FAILURE);
     }
-    Export::InitLanguages();
     global::inputPathname = aArgs.m_sInputFile;
 
     FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
@@ -67,13 +66,12 @@ FILE * init(int argc, char ** argv) {
     if (aArgs.m_bMergeMode) {
         global::parser.reset(
             new CfgMerge(
-                aArgs.m_sMergeSrc.getStr(), aArgs.m_sOutputFile.getStr(),
-                global::inputPathname));
+                aArgs.m_sMergeSrc, aArgs.m_sOutputFile,
+                global::inputPathname, aArgs.m_sLanguage ));
     } else {
         global::parser.reset(
             new CfgExport(
-                aArgs.m_sOutputFile.getStr(), aArgs.m_sPrj.getStr(),
-                global::inputPathname ));
+                aArgs.m_sOutputFile, global::inputPathname, aArgs.m_sLanguage ));
     }
 
     return pFile;
@@ -359,13 +357,12 @@ void CfgParser::Error(const rtl::OString& rError)
 
 /*****************************************************************************/
 CfgExport::CfgExport(
-        const rtl::OString &rOutputFile,
-        const rtl::OString &rProject,
-        const rtl::OString &rFilePath
+        const OString &rOutputFile,
+        const OString &rFilePath,
+        const OString &rLanguage
 )
 /*****************************************************************************/
-                : sPrj( rProject ),
-                sPath( rFilePath )
+                : sPath( rFilePath )
 {
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
@@ -373,8 +370,7 @@ CfgExport::CfgExport(
         std::cerr << "ERROR: Unable to open output file: " << rOutputFile << "\n";
         std::exit(EXIT_FAILURE);
     }
-    Export::InitLanguages( false );
-    aLanguages = Export::GetLanguages();
+    aLanguages.push_back( rLanguage );
 }
 
 /*****************************************************************************/
@@ -435,8 +431,8 @@ void CfgExport::WorkOnText(
 //
 
 CfgMerge::CfgMerge(
-    const rtl::OString &rMergeSource, const rtl::OString &rOutputFile,
-    const rtl::OString &rFilename)
+    const OString &rMergeSource, const OString &rOutputFile,
+    const OString &rFilename, const OString &rLanguage )
                 : pMergeDataFile( NULL ),
                 pResData( NULL ),
                 sFilename( rFilename ),
@@ -454,15 +450,14 @@ CfgMerge::CfgMerge(
     {
         pMergeDataFile = new MergeDataFile(
             rMergeSource, global::inputPathname, true );
-        if (Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
+        if (rLanguage.equalsIgnoreAsciiCase("ALL") )
         {
-            Export::SetLanguages( pMergeDataFile->GetLanguages() );
             aLanguages = pMergeDataFile->GetLanguages();
         }
-        else aLanguages = Export::GetLanguages();
+        else aLanguages.push_back(rLanguage);
     }
     else
-        aLanguages = Export::GetLanguages();
+        aLanguages.push_back(rLanguage);
 }
 
 /*****************************************************************************/

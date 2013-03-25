@@ -38,7 +38,7 @@ $(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep.ulf : \
 		$(call gb_Executable_get_runtime_dependencies,ulfex)
 	MERGEINPUT=`$(gb_MKTEMP)` && \
 	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(subst $(SRCDIR)/,,$(dir $<))).po) > $${MERGEINPUT} && \
-	$(call gb_Executable_get_command,ulfex) -p crashrep -i $< -o $@ -m $${MERGEINPUT} -l all && \
+	$(call gb_Executable_get_command,ulfex) -i $< -o $@ -m $${MERGEINPUT} -l all && \
 	rm -f $${MERGEINPUT}
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

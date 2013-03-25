@@ -13,45 +13,29 @@
 #include "export.hxx"
 #include "stringmerge.hxx"
 
-void WriteUsage()
-{
-    std::cout
-        << "Syntax: stringex [-p Prj] [-r Root] -i FileIn -o FileOut"
-        << " [-m DataBase] [-l l1,l2,...]\n"
-        << " Prj:      Project\n"
-        << " Root:  Path to project root (../.. etc.)\n"
-        << " FileIn:   Source files (strings.xml)\n"
-        << " FileOut:  Destination file (*.*)\n"
-        << " DataBase: Mergedata (*.po)\n"
-        << " -l: Restrict the handled languages; l1, l2, ... are elements of"
-        << " (de, en-US, ...)\n";
-}
-
-
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     HandledArgs aArgs;
     if( !Export::handleArguments(argc, argv, aArgs) )
     {
-        WriteUsage();
+        Export::writeUsage("stringex","string.xml");
         return 1;
     }
 
-        StringParser aParser(aArgs.m_sInputFile, Export::sLanguages);
-        if( !aParser.isInitialized() )
-        {
-            return 1;
-        }
+    StringParser aParser(aArgs.m_sInputFile, aArgs.m_sLanguage);
+    if( !aParser.isInitialized() )
+    {
+        return 1;
+    }
 
-        if( aArgs.m_bMergeMode || aArgs.m_sPrj.isEmpty() )
-        {
-            aParser.Merge(
-                aArgs.m_sMergeSrc, aArgs.m_sOutputFile );
-        }
-        else
-        {
-            aParser.Extract( aArgs.m_sOutputFile );
-        }
+    if( aArgs.m_bMergeMode )
+    {
+        aParser.Merge( aArgs.m_sMergeSrc, aArgs.m_sOutputFile );
+    }
+    else
+    {
+        aParser.Extract( aArgs.m_sOutputFile );
+    }
     return 0;
 }
 

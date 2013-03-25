@@ -144,7 +144,6 @@ public:
 class CfgExport : public CfgParser
 {
 private:
-    rtl::OString sPrj;
     rtl::OString sPath;
     std::vector<rtl::OString> aLanguages;
 
@@ -160,9 +159,9 @@ protected:
     void Output(const rtl::OString& rOutput);
 public:
     CfgExport(
-        const rtl::OString &rOutputFile,
-        const rtl::OString &rProject,
-        const rtl::OString &rFilePath
+        const OString &rOutputFile,
+        const OString &rFilePath,
+        const OString &rLanguage
     );
     ~CfgExport();
 };
@@ -190,8 +189,9 @@ protected:
 
     void Output(const rtl::OString& rOutput);
 public:
-    CfgMerge(const rtl::OString &rMergeSource,
-        const rtl::OString &rOutputFile, const rtl::OString &rFilename);
+    CfgMerge(
+        const OString &rMergeSource, const OString &rOutputFile,
+        const OString &rFilename, const OString &rLanguage );
     ~CfgMerge();
 };
 

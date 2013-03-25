@@ -94,7 +94,6 @@ bool Export::handleArguments(
     int argc, char * argv[], HandledArgs& o_aHandledArgs)
 {
     o_aHandledArgs = HandledArgs();
-    sLanguages = "";
     sal_uInt16 nState = STATE_NON;
 
     for( int i = 1; i < argc; i++ )
@@ -106,14 +105,6 @@ bool Export::handleArguments(
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-O" )
         {
             nState = STATE_OUTPUT; // next token specifies the dest file
-        }
-        else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-P" )
-        {
-            nState = STATE_PRJ; // next token specifies the cur. project
-        }
-        else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-R" )
-        {
-            nState = STATE_ROOT; // next token specifies path to project root
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-M" )
         {
@@ -141,16 +132,6 @@ bool Export::handleArguments(
                     o_aHandledArgs.m_sOutputFile = OString( argv[i] );
                 }
                 break;
-                case STATE_PRJ:
-                {
-                    o_aHandledArgs.m_sPrj = OString( argv[i] );
-                }
-                break;
-                case STATE_ROOT:
-                {
-                    o_aHandledArgs.m_sPrjRoot = OString( argv[i] );
-                }
-                break;
                 case STATE_MERGESRC:
                 {
                     o_aHandledArgs.m_sMergeSrc = OString( argv[i] );
@@ -159,7 +140,7 @@ bool Export::handleArguments(
                 break;
                 case STATE_LANGUAGES:
                 {
-                    sLanguages = OString( argv[i] );
+                    o_aHandledArgs.m_sLanguage = OString( argv[i] );
                 }
                 break;
             }
@@ -180,16 +161,13 @@ bool Export::handleArguments(
 void Export::writeUsage(const OString& rName, const OString& rFileType)
 {
     std::cout
-        << "Syntax: " << rName.getStr()
-        << " [-p Prj] [-r PrjRoot] -i FileIn -o FileOut"
-        << " [-m DataBase] [-l l1,l2,...]\n"
-        << " Prj:      Project\n"
-        << " PrjRoot:  Path to project root (../.. etc.)\n"
-        << " FileIn:   Source files (*." << rFileType.getStr() << ")\n"
+        << " Syntax: " << rName.getStr()
+        << " -i FileIn -o FileOut [-m DataBase] [-l Lang]\n"
+        << " FileIn:   Source files (" << rFileType.getStr() << ")\n"
         << " FileOut:  Destination file (*.*)\n"
         << " DataBase: Mergedata (*.po)\n"
-        << " -l: Restrict the handled languages; l1, l2, ... are elements of"
-        << " (de, en-US, ...)\n";
+        << " Lang: Restrict the handled languag; one element of\n"
+        << " (de, en-US, ...) or all\n";
 }
 
 void Export::writePoEntry(

@@ -121,7 +121,7 @@ $(call gb_Output_announce,$(2),$(true),SUM,1)
 MERGEINPUT=`$(gb_MKTEMP)` && \
 echo $(SCP_POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpMergeTarget_COMMAND) -p scp2 -i $(SCP_SOURCE) -o $(1) -m $${MERGEINPUT} -l all ) && \
+	$(gb_ScpMergeTarget_COMMAND) -i $(SCP_SOURCE) -o $(1) -m $${MERGEINPUT} -l all ) && \
 rm -rf $${MERGEINPUT}
 
 endef

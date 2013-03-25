@@ -53,9 +53,9 @@ public:
         sal_Bool bULFFormat);
     ~LngParser();
 
-    sal_Bool CreatePO( const rtl::OString &rPOFile );
-    sal_Bool Merge(const rtl::OString &rPOFile,
-        const rtl::OString &rDestinationFile);
+    sal_Bool CreatePO( const OString &rPOFile, const OString &rLanguage );
+    sal_Bool Merge(const OString &rPOFile, const OString &rDestinationFile,
+         const OString &rLanguage );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

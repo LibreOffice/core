@@ -30,15 +30,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     HandledArgs aArgs;
     if ( !Export::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("ulfex","ulf");
+        Export::writeUsage("ulfex","*.ulf");
         return 1;
     }
 
     LngParser aParser( aArgs.m_sInputFile, true );
     if ( aArgs.m_bMergeMode )
-        aParser.Merge(aArgs.m_sMergeSrc, aArgs.m_sOutputFile);
+        aParser.Merge(
+            aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage );
     else
-        aParser.CreatePO( aArgs.m_sOutputFile );
+        aParser.CreatePO( aArgs.m_sOutputFile, aArgs.m_sLanguage );
 
     return 0;
 }

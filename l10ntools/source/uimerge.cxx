@@ -28,8 +28,6 @@
 #include <fstream>
 #include <vector>
 
-rtl::OString sPrj;
-rtl::OString sPrjRoot;
 rtl::OString sInputFileName;
 rtl::OString sOutputFile;
 
@@ -186,9 +184,10 @@ namespace
 }
 
 bool Merge(
-    const rtl::OString &rSDFFile,
-    const rtl::OString &rSourceFile,
-    const rtl::OString &rDestinationDir)
+    const OString &rPOFile,
+    const OString &rSourceFile,
+    const OString &rDestinationDir,
+    const OString &rLanguage )
 {
     {
         bool bDestinationIsDir(false);
@@ -213,14 +212,12 @@ bool Merge(
         }
     }
 
-    Export::InitLanguages( true );
-
-    MergeDataFile aMergeDataFile( rSDFFile, rSourceFile, sal_False );
-    rtl::OString sTmp( Export::sLanguages );
-    if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
-        Export::SetLanguages( aMergeDataFile.GetLanguages() );
-
-    std::vector<rtl::OString> aLanguages = Export::GetLanguages();
+    MergeDataFile aMergeDataFile( rPOFile, rSourceFile, sal_False );
+    std::vector<rtl::OString> aLanguages;
+    if( rLanguage.equalsIgnoreAsciiCase("ALL") )
+        aLanguages = aMergeDataFile.GetLanguages();
+    else
+        aLanguages.push_back(rLanguage);
 
     const MergeDataHashMap& rMap = aMergeDataFile.getMap();
     const rtl::OString aDestinationDir(rDestinationDir + "/");
@@ -246,18 +243,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     HandledArgs aArgs;
     if ( !Export::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("uiex","ui");
+        Export::writeUsage("uiex","*.ui");
         return 1;
     }
 
-    sPrj = aArgs.m_sPrj;
-    sPrjRoot = aArgs.m_sPrjRoot;
     sInputFileName = aArgs.m_sInputFile;
     sOutputFile = aArgs.m_sOutputFile;
 
     if (!aArgs.m_bMergeMode)
     {
-        if (Export::sLanguages != "en-US")
+        if (aArgs.m_sLanguage != "en-US")
         {
             fprintf(stderr, "only en-US can exist in source .ui files\n");
             nRetValue = 1;
@@ -267,7 +262,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     else
     {
-        Merge(aArgs.m_sMergeSrc, sInputFileName, sOutputFile);
+        Merge(aArgs.m_sMergeSrc, sInputFileName, sOutputFile, aArgs.m_sLanguage);
     }
 
     return nRetValue;

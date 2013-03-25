@@ -57,7 +57,6 @@ echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
-		-p $(firstword $(subst /, ,$(2))) \
 		-i $(3) \
 		-o $(1) \
 		-m $${MERGEINPUT} \

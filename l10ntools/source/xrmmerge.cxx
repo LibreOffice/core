@@ -41,13 +41,12 @@ void YYWarning( const char * );
 bool bMergeMode;
 sal_Bool bDisplayName;
 sal_Bool bExtensionDescription;
-rtl::OString sPrj;
-rtl::OString sPrjRoot;
-rtl::OString sInputFileName;
-rtl::OString sOutputFile;
-rtl::OString sMergeSrc;
-rtl::OString sLangAttribute;
-rtl::OString sResourceType;
+OString sLanguage;
+OString sInputFileName;
+OString sOutputFile;
+OString sMergeSrc;
+OString sLangAttribute;
+OString sResourceType;
 XRMResParser *pParser = NULL;
 
 extern "C" {
@@ -65,8 +64,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     {
         // command line is valid
         bMergeMode = aArgs.m_bMergeMode;
-        sPrj = aArgs.m_sPrj;
-        sPrjRoot = aArgs.m_sPrjRoot;
+        sLanguage = aArgs.m_sLanguage;
         sInputFileName = aArgs.m_sInputFile;
         sOutputFile = aArgs.m_sOutputFile;
         sMergeSrc = aArgs.m_sMergeSrc;
@@ -77,7 +75,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     else
     {
         // command line is not valid
-        Export::writeUsage("xrmex","xrm/xml");
+        Export::writeUsage("xrmex","*.xrm/*.xml");
         return NULL;
     }
 }
@@ -88,12 +86,11 @@ int InitXrmExport( char*, char* pFilename)
 {
     // instanciate Export
     rtl::OString sFilename( pFilename );
-    Export::InitLanguages( false );
 
     if ( bMergeMode )
         pParser = new XRMResMerge( sMergeSrc, sOutputFile, sFilename );
       else if (!sOutputFile.isEmpty()) {
-        pParser = new XRMResExport( sOutputFile, sPrj, sInputFileName );
+        pParser = new XRMResExport( sOutputFile, sInputFileName );
     }
 
     return 1;
@@ -335,15 +332,13 @@ void XRMResParser::ConvertStringToXMLFormat( rtl::OString &rString )
 
 /*****************************************************************************/
 XRMResExport::XRMResExport(
-    const rtl::OString &rOutputFile, const rtl::OString &rProject,
-    const rtl::OString &rFilePath )
+    const OString &rOutputFile, const OString &rFilePath )
 /*****************************************************************************/
                 : XRMResParser(),
                 pResData( NULL ),
-                sPrj( rProject ),
                 sPath( rFilePath )
 {
-    aLanguages = Export::GetLanguages();
+    aLanguages.push_back( sLanguage );
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
     {
@@ -441,8 +436,8 @@ void XRMResExport::EndOfText(
 
 /*****************************************************************************/
 XRMResMerge::XRMResMerge(
-    const rtl::OString &rMergeSource, const rtl::OString &rOutputFile,
-    const rtl::OString &rFilename)
+    const OString &rMergeSource, const OString &rOutputFile,
+    const OString &rFilename )
 /*****************************************************************************/
                 : XRMResParser(),
                 pMergeDataFile( NULL ),
@@ -452,13 +447,12 @@ XRMResMerge::XRMResMerge(
     if (!rMergeSource.isEmpty())
         pMergeDataFile = new MergeDataFile(
             rMergeSource, sInputFileName, false);
-    if( Export::sLanguages.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")))
+    if( sLanguage.equalsIgnoreAsciiCase("ALL") )
     {
-        Export::SetLanguages( pMergeDataFile->GetLanguages() );
         aLanguages = pMergeDataFile->GetLanguages();
     }
     else
-        aLanguages = Export::GetLanguages();
+        aLanguages.push_back( sLanguage );
     pOutputStream.open(
         rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
     if (!pOutputStream.is_open()) {

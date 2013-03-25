@@ -41,8 +41,6 @@ MergeDataFile * pMergeDataFile = 0; //TODO
 
 namespace global {
 
-OString prj;
-OString prjRoot;
 OString inputPathname;
 boost::scoped_ptr< Export > exporter;
 
@@ -56,12 +54,11 @@ FILE * init(int argc, char ** argv) {
     HandledArgs aArgs;
     if ( !Export::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("transex3","src/hrc");
+        Export::writeUsage("transex3","*.src/*.hrc");
         std::exit(EXIT_FAILURE);
     }
+    Export::sLanguages = aArgs.m_sLanguage;
     Export::InitLanguages();
-    global::prj =  aArgs.m_sPrj;
-    global::prjRoot =  aArgs.m_sPrjRoot;
     global::inputPathname =  aArgs.m_sInputFile;
 
     FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
@@ -172,8 +169,6 @@ Export::Export(const rtl::OString &rOutput)
                 nListIndex( 0 ),
                 nListLevel( 0 ),
                 bSkipFile( false ),
-                sProject( global::prj ),
-                sRoot( global::prjRoot ),
                 bMergeMode( false ),
                 bError( sal_False ),
                 bReadOver( sal_False ),
@@ -203,8 +198,6 @@ Export::Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput)
                 nListIndex( 0 ),
                 nListLevel( 0 ),
                 bSkipFile( false ),
-                sProject( global::prj ),
-                sRoot( global::prjRoot ),
                 bMergeMode( sal_True ),
                 sMergeSrc( rMergeSource ),
                 bError( sal_False ),

@@ -75,8 +75,8 @@ HelpParser::HelpParser( const rtl::OString &rHelpFile )
 /*****************************************************************************/
 bool HelpParser::CreatePO(
 /*****************************************************************************/
-    const rtl::OString &rPOFile_in, const rtl::OString &sHelpFile,
-    XMLFile *pXmlFile, const rtl::OString &rGsi1){
+    const OString &rPOFile_in, const OString &sHelpFile, const OString &rLanguage,
+    XMLFile *pXmlFile, const OString &rGsi1){
     SimpleXMLParser aParser;
     rtl::OUString sXmlFile(
         rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
@@ -110,8 +110,8 @@ bool HelpParser::CreatePO(
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
 
-    Export::InitLanguages( false );
-    std::vector<rtl::OString> aLanguages = Export::GetLanguages();
+    std::vector<rtl::OString> aLanguages;
+    aLanguages.push_back( rLanguage );
 
     std::vector<rtl::OString> order = file->getOrder();
     std::vector<rtl::OString>::iterator pos;
@@ -152,7 +152,7 @@ bool HelpParser::CreatePO(
     return sal_True;
 }
 
-bool HelpParser::Merge( const rtl::OString &rPOFile, const rtl::OString &rDestinationFile  ,
+bool HelpParser::Merge( const rtl::OString &rPOFile, const rtl::OString &rDestinationFile,
     const rtl::OString& rLanguage , MergeDataFile& aMergeDataFile )
 {
 

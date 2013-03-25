@@ -247,20 +247,16 @@ class ParserQueue;
 //result type of handleArguments()
 struct HandledArgs
 {
-    OString m_sPrj;
-    OString m_sPrjRoot;
     OString m_sInputFile;
     OString m_sOutputFile;
     OString m_sMergeSrc;
-    OString m_sLanguages;
+    OString m_sLanguage;
     bool m_bMergeMode;
     HandledArgs()
-        : m_sPrj( OString() )
-        , m_sPrjRoot( OString() )
-        , m_sInputFile( OString() )
+        : m_sInputFile( OString() )
         , m_sOutputFile( OString() )
         , m_sMergeSrc( OString() )
-        , m_sLanguages( OString() )
+        , m_sLanguage( OString() )
         , m_bMergeMode( false )
     {}
 };
@@ -289,8 +285,6 @@ private:
     std::size_t nListIndex;
     std::size_t nListLevel;
     bool bSkipFile;
-    rtl::OString sProject;
-    rtl::OString sRoot;
     sal_Bool bMergeMode;
     rtl::OString sMergeSrc;
     rtl::OString sLastListLine;

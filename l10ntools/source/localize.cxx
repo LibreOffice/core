@@ -127,7 +127,6 @@ bool passesPositiveList(const OUString& rUrl) {
 }
 
 void handleCommand(
-    const OString& rProject, const OString& rProjectRoot,
     const OString& rInPath, const OString& rOutPath,
     const OString& rExecutable)
 {
@@ -136,10 +135,6 @@ void handleCommand(
     buf.append(OString(getenv("INPATH_FOR_BUILD")));
     buf.append("/bin/");
     buf.append(rExecutable);
-    buf.append(" -p ");
-    buf.append(rProject);
-    buf.append(" -r ");
-    buf.append(rProjectRoot);
     buf.append(" -i ");
     buf.append(rInPath);
     buf.append(" -o ");
@@ -195,9 +190,8 @@ void InitPoFile(
 }
 
 bool handleFile(
-    const OString& rProject, const OString& rProjectRoot,
-    const OUString& rUrl, const OString& rPotDir,
-    bool bInitPoFile )
+    const OString& rProject, const OUString& rUrl,
+    const OString& rPotDir, bool bInitPoFile )
 {
     struct Command {
         char const * extension;
@@ -243,9 +237,7 @@ bool handleFile(
                 {
                     InitPoFile(rProject, sInPath, rPotDir, sOutPath);
                 }
-                handleCommand(
-                    rProject, rProjectRoot, sInPath,
-                    sOutPath, commands[i].executable);
+                handleCommand(sInPath, sOutPath, commands[i].executable);
                 return true;
             }
             break;
@@ -256,7 +248,7 @@ bool handleFile(
 
 void handleFilesOfDir(
     std::vector<OUString>& aFiles, const OString& rProject,
-    const OString& rProjectRoot, const OString& rPotDir )
+    const OString& rPotDir )
 {
     ///Handle files in lexical order
     std::sort(aFiles.begin(), aFiles.end());
@@ -267,7 +259,7 @@ void handleFilesOfDir(
 
     for( citer_t aIt = aFiles.begin(); aIt != aFiles.end(); ++aIt )
     {
-        if (handleFile( rProject, rProjectRoot, *aIt, rPotDir, bFirstLocFile))
+        if (handleFile( rProject, *aIt, rPotDir, bFirstLocFile))
         {
             bFirstLocFile = false;
         }
@@ -380,13 +372,10 @@ bool includeProject(const OString& rProject) {
 /// is a project directory; 2 if this is a directory inside a project
 ///
 /// @param rProject the name of the project (empty and ignored if nLevel <= 0)
-///
-/// @param rProjectRoo the relative path back to the project root (empty and ignored if
-/// nLevel <= 0)
 /// @param rPotDir the path of pot directory
 void handleDirectory(
-    const OUString& rUrl, int nLevel, const OString& rProject,
-    const OString& rProjectRoot, const OString& rPotDir)
+    const OUString& rUrl, int nLevel,
+    const OString& rProject, const OString& rPotDir)
 {
     osl::Directory dir(rUrl);
     if (dir.open() != osl::FileBase::E_None) {
@@ -418,34 +407,26 @@ void handleDirectory(
         case -1: // the clone or src directory
             if (stat.getFileType() == osl::FileStatus::Directory) {
                 handleDirectory(
-                    stat.getFileURL(), 0, OString(),
-                    OString(), rPotDir);
+                    stat.getFileURL(), 0, OString(), rPotDir);
             }
             break;
         case 0: // a root directory
             if (stat.getFileType() == osl::FileStatus::Directory) {
                 if (includeProject(sDirName)) {
                     handleDirectory(
-                        stat.getFileURL(), 1, sDirName,
-                        OString(), rPotDir.concat("/").concat(sDirName));
+                        stat.getFileURL(), 1, sDirName, rPotDir.concat("/").concat(sDirName));
                 } else if ( sDirName == "clone" ||
                             sDirName == "src" )
                 {
-                    handleDirectory(
-                        stat.getFileURL(), -1, OString(), OString(), rPotDir);
+                    handleDirectory( stat.getFileURL(), -1, OString(), rPotDir);
                 }
             }
             break;
         default:
             if (stat.getFileType() == osl::FileStatus::Directory)
             {
-                OString pr(rProjectRoot);
-                if (!pr.isEmpty()) {
-                    pr += OString('/');
-                }
-                pr += OString("..");
                 handleDirectory(
-                    stat.getFileURL(), 2, rProject, pr, rPotDir.concat("/").concat(sDirName));
+                    stat.getFileURL(), 2, rProject, rPotDir.concat("/").concat(sDirName));
             }
             else
             {
@@ -457,7 +438,7 @@ void handleDirectory(
 
     if( !aFileNames.empty() )
     {
-        handleFilesOfDir( aFileNames, rProject, rProjectRoot, rPotDir );
+        handleFilesOfDir( aFileNames, rProject, rPotDir );
     }
 
     if (dir.close() != osl::FileBase::E_None) {
@@ -487,7 +468,7 @@ void handleProjects(char * sSourceRoot, char const * sDestRoot)
              << "       root16: " << OUStringToOString(root16, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
         throw false; //TODO
     }
-    handleDirectory(rootUrl, 0, OString(), OString(), OString(sDestRoot));
+    handleDirectory(rootUrl, 0, OString(), OString(sDestRoot));
 }
 }
 

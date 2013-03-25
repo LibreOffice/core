@@ -217,7 +217,7 @@ $(share_WORKDIR)/%.ulf: $(share_SRCDIR)/share/%.ulf | $(call gb_Executable_get_r
 	MERGEINPUT=`$(gb_MKTEMP)` && \
 	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $@)).po) > $${MERGEINPUT} && \
 	$(call gb_Helper_abbreviate_dirs,\
-	$(call gb_Executable_get_command,ulfex) -p sysui -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
+	$(call gb_Executable_get_command,ulfex) -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
 	rm -rf $${MERGEINPUT}
 else
 $(share_WORKDIR)/%.ulf: $(share_SRCDIR)/share/%.ulf

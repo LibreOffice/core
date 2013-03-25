@@ -94,7 +94,6 @@ $(call gb_ExtensionTarget_get_workdir,%)/description.xml : $(gb_ExtensionTarget_
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_ExtensionTarget_get_workdir,$*) && \
 		$(gb_ExtensionTarget_XRMEXCOMMAND) \
-			-p $(PRJNAME) \
 			-i $(filter %.xml,$^) \
 			-o $@ \
 			-m $${MERGEINPUT} \
@@ -132,7 +131,6 @@ $(call gb_ExtensionTarget_get_target,$(1)) : FILES := META-INF description.xml
 $(call gb_ExtensionTarget_get_target,$(1)) : LICENSE :=
 $(call gb_ExtensionTarget_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM := $(PLATFORMID)
-$(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
 	$(SRCDIR)/$(2)/description.xml
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml :| \

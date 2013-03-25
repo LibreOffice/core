@@ -80,11 +80,11 @@ LngParser::~LngParser()
     delete pLines;
 }
 
-sal_Bool LngParser::CreatePO( const rtl::OString &rPOFile )
+sal_Bool LngParser::CreatePO(
+    const OString &rPOFile,
+    const OString &rLanguage )
 {
-
-    Export::InitLanguages( false );
-    aLanguages = Export::GetLanguages();
+    aLanguages.push_back(rLanguage);
     PoOfstream aPOStream( rPOFile, PoOfstream::APP );
     if (!aPOStream.isOpen()) {
         std::cerr << "Ulfex error: Can't open po file:" << rPOFile.getStr() << "\n";
@@ -161,10 +161,10 @@ void LngParser::ReadLine(const rtl::OString &rLine_in,
 }
 
 sal_Bool LngParser::Merge(
-    const rtl::OString &rPOFile,
-    const rtl::OString &rDestinationFile)
+    const OString &rPOFile,
+    const OString &rDestinationFile,
+    const OString &rLanguage )
 {
-    Export::InitLanguages( true );
     std::ofstream aDestination(
         rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
     if (!aDestination.is_open()) {
@@ -173,10 +173,8 @@ sal_Bool LngParser::Merge(
     nError = LNG_OK;
 
     MergeDataFile aMergeDataFile( rPOFile, sSource, false, true );
-    rtl::OString sTmp( Export::sLanguages );
-    if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
-        Export::SetLanguages( aMergeDataFile.GetLanguages() );
-    aLanguages = Export::GetLanguages();
+    if( rLanguage.equalsIgnoreAsciiCase("ALL") )
+        aLanguages = aMergeDataFile.GetLanguages();
 
     size_t nPos = 0;
     sal_Bool bGroup = sal_False;

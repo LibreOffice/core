@@ -81,7 +81,6 @@ class XRMResExport : public XRMResParser
 {
 private:
     ResData *pResData;
-    rtl::OString sPrj;
     rtl::OString sPath;
     PoOfstream pOutputStream;
 protected:
@@ -101,9 +100,8 @@ protected:
 
 public:
     XRMResExport(
-        const rtl::OString &rOutputFile,
-        const rtl::OString &rProject,
-        const rtl::OString &rFilePath
+        const OString &rOutputFile,
+        const OString &rFilePath
     );
     virtual ~XRMResExport();
 };

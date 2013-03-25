@@ -40,7 +40,6 @@ $(readlicense_oo_DIR)/readme.xrm : \
         MERGEINPUT=`$(gb_MKTEMP)` && \
         echo $(foreach lang,$(filter-out qtz,$(filter-out en-US,$(gb_WITH_LANG))),$(gb_POLOCATION)/$(lang)/readlicense_oo/docs.po) > $${MERGEINPUT} && \
 		$(call gb_Executable_get_command,xrmex) \
-			-p readlicense_oo \
 			-i $< \
 			-o $@ \
 			-m $${MERGEINPUT} \

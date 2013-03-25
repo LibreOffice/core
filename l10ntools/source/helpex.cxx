@@ -36,17 +36,14 @@
 void WriteUsage()
 {
     std::cout
-        << "Syntax: Helpex [-p Prj] [-r Root] -[m]i FileIn -o FileOut"
-        << " [-m DataBase] [-l l1,l2,...]\n"
-        << " Prj: Project\n"
-        << " Root: Path to project root (../.. etc.)\n"
+        << " Syntax: Helpex -[m]i FileIn -o FileOut [-m DataBase] [-l Lang]\n"
         << " FileIn + i:   Source file (*.xhp)\n"
         << " FileIn + -mi: File including paths of source files"
         << " (only for merge)"
         << " FileOut:  Destination file (*.*) or files (in case of -mi)\n"
         << " DataBase: Mergedata (*.po)\n"
-        << " -l: Restrict the handled languages; l1, l2, ... are elements of"
-        << " (de, en-US, ...)\n";
+        << " Lang: Restrict the handled languages; one element of\n"
+        << " (de, en-US, ...) or all\n";
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
@@ -93,7 +90,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                     aArgs.m_sOutputFile +
                     sXhpFile.copy( sXhpFile.lastIndexOf("/") ));
                 if( !aParser.Merge( aArgs.m_sMergeSrc, sOutput,
-                    Export::sLanguages, aMergeDataFile ))
+                    aArgs.m_sLanguage, aMergeDataFile ))
                 {
                     hasNoError = false;
                 }
@@ -109,7 +106,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
             hasNoError =
                 aParser.Merge(
                     aArgs.m_sMergeSrc, aArgs.m_sOutputFile,
-                    Export::sLanguages , aMergeDataFile );
+                    aArgs.m_sLanguage, aMergeDataFile );
         }
     }
     else
@@ -117,7 +114,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         HelpParser aParser( aArgs.m_sInputFile );
         hasNoError =
             aParser.CreatePO(
-                aArgs.m_sOutputFile, aArgs.m_sInputFile,
+                aArgs.m_sOutputFile, aArgs.m_sInputFile, aArgs.m_sLanguage,
                 new XMLFile( OUString('0') ), "help" );
     }
 

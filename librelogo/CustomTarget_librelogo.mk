@@ -40,7 +40,6 @@ $(librelogo_DIR)/LibreLogo_%.properties : \
 		MERGEINPUT=`$(gb_MKTEMP)` && \
 		echo $(POFILE) > $${MERGEINPUT} && \
 		$(call gb_Executable_get_command,propex) \
-			-p librelogo \
 			-i $(SOURCE) \
 			-o $@ \
 			-m $${MERGEINPUT} \
