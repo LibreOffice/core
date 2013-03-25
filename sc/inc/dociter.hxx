@@ -245,6 +245,7 @@ public:
     OUString getString();
     const EditTextObject* getEditText() const;
     ScFormulaCell* getFormulaCell();
+    const ScFormulaCell* getFormulaCell() const;
     double getValue() const;
 
     bool hasString() const;

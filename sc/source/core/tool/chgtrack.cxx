@@ -1753,6 +1753,37 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
     return SC_CACCT_NONE;
 }
 
+ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScCellIterator& rIter )
+{
+    switch (rIter.getType())
+    {
+        case CELLTYPE_VALUE:
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return SC_CACCT_NORMAL;
+        case CELLTYPE_FORMULA:
+        {
+            const ScFormulaCell* pCell = rIter.getFormulaCell();
+            switch (pCell->GetMatrixFlag())
+            {
+                case MM_NONE :
+                    return SC_CACCT_NORMAL;
+                case MM_FORMULA :
+                case MM_FAKE :
+                    return SC_CACCT_MATORG;
+                case MM_REFERENCE :
+                    return SC_CACCT_MATREF;
+                default:
+                    ;
+            }
+            return SC_CACCT_NORMAL;
+        }
+        default:
+            ;
+    }
+
+    return SC_CACCT_NONE;
+}
 
 bool ScChangeActionContent::NeedsNumberFormat( const ScBaseCell* pCell )
 {
@@ -2657,8 +2688,7 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
         ScCellIterator aIter( pRefDoc, rOrgRange );
         for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
         {
-            ScBaseCell* pCell = aIter.getHackedBaseCell();
-            if ( ScChangeActionContent::GetContentCellType( pCell ) )
+            if (ScChangeActionContent::GetContentCellType(aIter))
             {
                 aBigPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
                     aIter.GetPos().Tab() + nDz );
@@ -2667,6 +2697,8 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
                 {   // nicht getrackte Contents
                     aPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
                         aIter.GetPos().Tab() + nDz );
+
+                    ScBaseCell* pCell = aIter.getHackedBaseCell();
                     GenerateDelContent( aPos, pCell, pRefDoc );
                     //! der Content wird hier _nicht_ per AddContent hinzugefuegt,
                     //! sondern in UpdateReference, um z.B. auch kreuzende Deletes

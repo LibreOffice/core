@@ -1102,6 +1102,11 @@ ScFormulaCell* ScCellIterator::getFormulaCell()
     return mpCurFormula;
 }
 
+const ScFormulaCell* ScCellIterator::getFormulaCell() const
+{
+    return mpCurFormula;
+}
+
 double ScCellIterator::getValue() const
 {
     switch (meCurType)
