@@ -89,7 +89,7 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplNumericGetValue( const OUString& rStr, double& rValue,
+static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
                                  sal_Bool bCurrency = sal_False )
 {
@@ -196,7 +196,19 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, double& rValue,
     aStr  = aStr1.makeStringAndClear() + aStr2.makeStringAndClear();
 
     // check range
-    double nValue = rtl::OUString(aStr).toDouble();
+    sal_Int64 nValue = aStr.toInt64();
+    if( nValue == 0 )
+    {
+        // check if string is equivalent to zero
+        sal_Int16 nIndex = bNegative ? 1 : 0;
+        while( aStr[nIndex] == '0' && nIndex < aStr.getLength() )
+            ++nIndex;
+        if( nIndex < aStr.getLength() )
+        {
+            rValue = bNegative ? SAL_MIN_INT64 : SAL_MAX_INT64;
+            return sal_True;
+        }
+    }
     if (bRound)
     {
         if ( !bNegative )
@@ -428,23 +440,22 @@ sal_Bool FormatterBase::IsEmptyFieldValue() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool NumericFormatter::ImplNumericReformat( const OUString& rStr, double& rValue,
+sal_Bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rValue,
                                                 OUString& rOutStr )
 {
     if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
         return sal_True;
     else
     {
-        double nTempVal = rValue;
-        // caution: precision loss in double cast
+        sal_Int64 nTempVal = rValue;
         if ( nTempVal > mnMax )
-            nTempVal = (double)mnMax;
+            nTempVal = mnMax;
         else if ( nTempVal < mnMin )
-            nTempVal = (double)mnMin;
+            nTempVal = mnMin;
 
         if ( GetErrorHdl().IsSet() && (rValue != nTempVal) )
         {
-            mnCorrectedValue = (sal_Int64)nTempVal;
+            mnCorrectedValue = nTempVal;
             if ( !GetErrorHdl().Call( this ) )
             {
                 mnCorrectedValue = 0;
@@ -454,7 +465,7 @@ sal_Bool NumericFormatter::ImplNumericReformat( const OUString& rStr, double& rV
                 mnCorrectedValue = 0;
         }
 
-        rOutStr = CreateFieldText( (sal_Int64)nTempVal );
+        rOutStr = CreateFieldText( nTempVal );
         return sal_True;
     }
 }
@@ -627,17 +638,16 @@ sal_Int64 NumericFormatter::GetValue() const
     if ( !GetField() )
         return 0;
 
-    double nTempValue;
+    sal_Int64 nTempValue;
 
     if ( ImplNumericGetValue( GetField()->GetText(), nTempValue,
                               GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
     {
-        // caution: precision loss in double cast
         if ( nTempValue > mnMax )
-            nTempValue = (double)mnMax;
+            nTempValue = mnMax;
         else if ( nTempValue < mnMin )
-            nTempValue = (double)mnMin;
-        return (sal_Int64)nTempValue;
+            nTempValue = mnMin;
+        return nTempValue;
     }
     else
         return mnLastValue;
@@ -690,10 +700,9 @@ void NumericFormatter::Reformat()
         return;
 
     OUString aStr;
-    // caution: precision loss in double cast
-    double nTemp = (double)mnLastValue;
+    sal_Int64 nTemp = mnLastValue;
     sal_Bool bOK = ImplNumericReformat( GetField()->GetText(), nTemp, aStr );
-    mnLastValue = (sal_Int64)nTemp;
+    mnLastValue = nTemp;
     if ( !bOK )
         return;
 
@@ -1052,7 +1061,7 @@ void NumericBox::Modify()
 
 void NumericBox::ReformatAll()
 {
-    double nValue;
+    sal_Int64 nValue;
     OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
@@ -1407,14 +1416,16 @@ static sal_Bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_In
                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
 {
     // Zahlenwert holen
-    if ( !ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper ) )
+    sal_Int64 nValue;
+    if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
         return sal_False;
 
     // Einheit rausfinden
     FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
 
     // Einheiten umrechnen
-    rValue = MetricField::ConvertDoubleValue( rValue, nBaseValue, nDecDigits, eEntryUnit, eUnit );
+    // caution: conversion to double loses precision
+    rValue = MetricField::ConvertDoubleValue( (double)nValue, nBaseValue, nDecDigits, eEntryUnit, eUnit );
 
     return sal_True;
 }
@@ -2064,7 +2075,7 @@ static sal_Bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-inline sal_Bool ImplCurrencyGetValue( const OUString& rStr, double& rValue,
+inline sal_Bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
                                   sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // fetch number
@@ -2075,21 +2086,20 @@ inline sal_Bool ImplCurrencyGetValue( const OUString& rStr, double& rValue,
 
 sal_Bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr )
 {
-    double nValue;
+    sal_Int64 nValue;
     if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), sal_True ) )
         return sal_True;
     else
     {
-        double nTempVal = nValue;
-        // caution: precision loss in double cast
+        sal_Int64 nTempVal = nValue;
         if ( nTempVal > GetMax() )
-            nTempVal = (double)GetMax();
+            nTempVal = GetMax();
         else if ( nTempVal < GetMin())
-            nTempVal = (double)GetMin();
+            nTempVal = GetMin();
 
         if ( GetErrorHdl().IsSet() && (nValue != nTempVal) )
         {
-            mnCorrectedValue = (sal_Int64)nTempVal;
+            mnCorrectedValue = nTempVal;
             if ( !GetErrorHdl().Call( this ) )
             {
                 mnCorrectedValue = 0;
@@ -2099,7 +2109,7 @@ sal_Bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString
                 mnCorrectedValue = 0;
         }
 
-        rOutStr = CreateFieldText( (long)nTempVal );
+        rOutStr = CreateFieldText( nTempVal );
         return sal_True;
     }
 }
@@ -2154,15 +2164,14 @@ sal_Int64 CurrencyFormatter::GetValue() const
     if ( !GetField() )
         return 0;
 
-    double nTempValue;
+    sal_Int64 nTempValue;
     if ( ImplCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
     {
-        // caution: precision loss in double cast
         if ( nTempValue > mnMax )
-            nTempValue = (double)mnMax;
+            nTempValue = mnMax;
         else if ( nTempValue < mnMin )
-            nTempValue = (double)mnMin;
-        return (sal_Int64)nTempValue;
+            nTempValue = mnMin;
+        return nTempValue;
     }
     else
         return mnLastValue;
@@ -2183,10 +2192,9 @@ void CurrencyFormatter::Reformat()
     if ( !aStr.isEmpty() )
     {
         ImplSetText( aStr  );
-        // caution: precision loss in double cast
-        double nTemp = (double)mnLastValue;
+        sal_Int64 nTemp = mnLastValue;
         ImplCurrencyGetValue( aStr, nTemp, GetDecimalDigits(), ImplGetLocaleDataWrapper() );
-        mnLastValue = (sal_Int64)nTemp;
+        mnLastValue = nTemp;
     }
     else
         SetValue( mnLastValue );
