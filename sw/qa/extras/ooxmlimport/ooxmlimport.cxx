@@ -114,6 +114,7 @@ public:
     void testFdo53985();
     void testFdo59638();
     void testFdo61343();
+    void testFdo60922();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -180,6 +181,7 @@ void Test::run()
         {"fdo53985.docx", &Test::testFdo53985},
         {"fdo59638.docx", &Test::testFdo59638},
         {"fdo61343.docx", &Test::testFdo61343},
+        {"fdo60922.docx", &Test::testFdo60922},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1130,6 +1132,12 @@ void Test::testFdo61343()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testFdo60922()
+{
+    // This was 0, not 100, due to wrong import of w:position w:val="0"
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapementHeight"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
