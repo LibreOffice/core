@@ -385,9 +385,6 @@ Menu RID_OUTLINE_POPUP
     };
 };
 
-/*
-RID_MASTERPAGE_POPUP
-*/
 
 Menu RID_BEZIER_POPUP
 {

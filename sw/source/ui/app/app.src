@@ -281,21 +281,6 @@ InfoBox MSG_ERROR_PASSWD
     Message [ en-US ] = "Invalid password" ;
 };
 
-/*
- * commented out, because the Toolbox can't be loaded from the resource
- * at this time.
-Window WIN_TOOLBOX {
-       "Bearbeitung von Text, Rahmen, Grafik, Tabellen oder "
-       "Numerierungen.";
-HelpText [ en-US ] = "The objectbar contains, depending on your current "
-            "working context, buttons for the editing of text, "
-            "frames, graphics, tables or numberings.";
-    OUTPUTSIZE = TRUE;
-    BORDER = TRUE;
-    Size = (28,27);
-};
- */
-
 String STR_FMT_STD
 {
     Text [ en-US ] = "(none)" ;
