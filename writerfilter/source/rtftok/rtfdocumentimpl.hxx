@@ -407,6 +407,9 @@ namespace writerfilter {
 
                 /// Same as the int value of NS_rtf::LN_ISTD in aParagraphAttributes, for performance reasons.
                 int nCurrentStyleIndex;
+
+                /// Points to the active buffer, if there is one.
+                RTFBuffer_t* pCurrentBuffer;
         };
 
         class RTFTokenizer;
@@ -540,8 +543,6 @@ namespace writerfilter {
                 RTFBuffer_t m_aSuperBuffer;
                 /// Buffered shape text.
                 RTFBuffer_t m_aShapetextBuffer;
-                /// Points to the active buffer, if there is one.
-                RTFBuffer_t* m_pCurrentBuffer;
 
                 bool m_bHasFootnote;
                 /// Superstream of this substream.
