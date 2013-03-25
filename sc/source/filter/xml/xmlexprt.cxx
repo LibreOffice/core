@@ -2061,7 +2061,7 @@ void ScXMLExport::_ExportAutoStyles()
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
                 if (pDoc->IsStreamValid(nTab))
                 {
-                    ScCellIterator aIter( pDoc, 0,0,nTab, MAXCOL,MAXROW,nTab );
+                    ScCellIterator aIter( pDoc, ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab) );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if (aIter.getType() != CELLTYPE_FORMULA)

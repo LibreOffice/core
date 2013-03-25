@@ -936,22 +936,6 @@ bool ScDBQueryDataIterator::GetNext(Value& rValue)
     return mpData->getNext(rValue);
 }
 
-// ============================================================================
-
-ScCellIterator::ScCellIterator( ScDocument* pDoc,
-                                SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
-                                SCCOL nECol, SCROW nERow, SCTAB nETab, bool bSTotal ) :
-    mpDoc(pDoc),
-    maStartPos(nSCol, nSRow, nSTab),
-    maEndPos(nECol, nERow, nETab),
-    mnIndex(0),
-    mbSubTotal(bSTotal),
-    meCurType(CELLTYPE_NONE),
-    mfCurValue(0.0)
-{
-    init();
-}
-
 ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, bool bSTotal ) :
     mpDoc(pDoc),
     maStartPos(rRange.aStart),

@@ -778,7 +778,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     ScRange aRef;
 
-    ScCellIterator aIter( pDoc, nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab );
+    ScCellIterator aIter( pDoc, ScRange(nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab) );
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (aIter.getType() != CELLTYPE_FORMULA)

@@ -231,13 +231,9 @@ private:
 
     void init();
     bool getCurrent();
+
 public:
-                    ScCellIterator(ScDocument* pDoc,
-                                   SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
-                                   SCCOL nECol, SCROW nERow, SCTAB nETab,
-                                   bool bSTotal = false);
-                    ScCellIterator(ScDocument* pDoc,
-                                   const ScRange& rRange, bool bSTotal = false);
+    ScCellIterator( ScDocument* pDoc, const ScRange& rRange, bool bSTotal = false );
 
     const ScAddress& GetPos() const { return maCurPos; }
 

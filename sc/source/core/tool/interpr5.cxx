@@ -418,7 +418,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     {
         // Scan one column at a time, to pass a sequence of values to matrix in one call.
         ScCellIterator aCellIter(
-            pDok, nCol, nRow1, nTab1, nCol, nRow2, nTab2);
+            pDok, ScRange(nCol, nRow1, nTab1, nCol, nRow2, nTab2));
 
         SCROW nPrevRow = -2, nThisRow = -2;
 

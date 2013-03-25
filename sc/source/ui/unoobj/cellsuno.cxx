@@ -3908,7 +3908,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
 
             SCTAB nTab = lcl_FirstTab(aNewRanges);              //! alle Tabellen
 
-            ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
+            ScCellIterator aCellIter( pDoc, ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab) );
             for (bool bHasCell = aCellIter.first(); bHasCell; bHasCell = aCellIter.next())
             {
                 if (aCellIter.getType() != CELLTYPE_FORMULA)

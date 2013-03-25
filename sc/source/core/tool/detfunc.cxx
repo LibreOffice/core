@@ -1121,7 +1121,7 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
     sal_uInt16 nResult = nLevel;
     sal_Bool bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
 
-    ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
+    ScCellIterator aCellIter( pDoc, ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab) );
     for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next())
     {
         if (aCellIter.getType() != CELLTYPE_FORMULA)
@@ -1356,7 +1356,7 @@ sal_Bool ScDetectiveFunc::MarkInvalid(sal_Bool& rOverflow)
                 sal_Bool bMarkEmpty = !pData->IsIgnoreBlank();
                 SCROW nNextRow = nRow1;
                 SCROW nRow;
-                ScCellIterator aCellIter( pDoc, nCol,nRow1,nTab, nCol,nRow2,nTab );
+                ScCellIterator aCellIter( pDoc, ScRange(nCol, nRow1, nTab, nCol, nRow2, nTab) );
                 for (bool bHas = aCellIter.first(); bHas && nInsCount < SC_DET_MAXCIRCLE; bHas = aCellIter.next())
                 {
                     SCROW nCellRow = aCellIter.GetPos().Row();
@@ -1394,7 +1394,7 @@ sal_Bool ScDetectiveFunc::MarkInvalid(sal_Bool& rOverflow)
 void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                   vector<ScTokenRef>& rRefTokens)
 {
-    ScCellIterator aIter(pDoc, nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    ScCellIterator aIter(pDoc, ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab));
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (aIter.getType() != CELLTYPE_FORMULA)
