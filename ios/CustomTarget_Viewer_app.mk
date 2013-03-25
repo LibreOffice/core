@@ -89,6 +89,18 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 	mkdir -p $(appdir)/share/config
 	cp -R $(OUTDIR)/bin/images_tango.zip $(appdir)/share/config/images.zip
 #
+# soffice.cfg
+#
+	mkdir -p $(appdir)/share/config/soffice.cfg
+	cp -R $(OUTDIR)/xml/uiconfig/* $(appdir)/share/config/soffice.cfg
+#
+# "registry"
+#
+	mkdir -p $(appdir)/share/registry/res
+	cp $(OUTDIR)/xml/*.xcd $(appdir)/share/registry
+	mv $(appdir)/share/registry/fcfg_langpack_en-US.xcd $(appdir)/share/registry/res
+	cp -R $(OUTDIR)/xml/registry/* $(appdir)/share/registry
+#
 # Set up rc, the "inifile". See getIniFileName_Impl(). 
 #
 	( \
