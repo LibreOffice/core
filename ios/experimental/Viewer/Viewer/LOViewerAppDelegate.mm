@@ -26,7 +26,7 @@ static UIWindow *theWindow;
     (void) application;
     (void) launchOptions;
 
-    CGRect bounds = [[UIScreen mainScreen] bounds];
+    CGRect bounds = [[UIScreen mainScreen] applicationFrame];
     self.window = [[LOViewerWindow alloc] initWithFrame:bounds];
 
     theWindow = self.window;
