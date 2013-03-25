@@ -2437,14 +2437,23 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             bTextReplaced = true;
         }
 
-           if( rInf.GetHyphPos() )
-            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
-                                                    '-', *rInf.GetHyphPos(),
-                                                     nTmpIdx, nTmpLen, nKern );
+        OUString sTmpText(*pTmpText); // only needed until *pTmpText is OUString
+        sal_Int32 nTmpIdx2 = nTmpIdx;  // ditto
+        sal_Int32 nTmpLen2 = nTmpLen;  // ditto
+        if( rInf.GetHyphPos() ) {
+            sal_Int32 nHyphPos = *rInf.GetHyphPos();
+            nTxtBreak = rInf.GetOut().GetTextBreak( sTmpText, nTextWidth,
+                             static_cast<sal_Unicode>('-'), nHyphPos,
+                             nTmpIdx2, nTmpLen2, nKern );
+            xub_StrLen nTmpHyphPos = static_cast<xub_StrLen>(nHyphPos);
+            rInf.SetHyphPos(&nTmpHyphPos);
+        }
         else
-            nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
-                                                    nTmpIdx, nTmpLen, nKern );
+            nTxtBreak = rInf.GetOut().GetTextBreak( sTmpText, nTextWidth,
+                                                    nTmpIdx2, nTmpLen2, nKern );
 
+        nTmpIdx = nTmpIdx2;     // ditto
+        nTmpLen = nTmpLen2;     // ditto
         if ( bTextReplaced && STRING_LEN != nTxtBreak )
         {
             if ( nTmpLen != nLn )

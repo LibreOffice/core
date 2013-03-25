@@ -5795,7 +5795,7 @@ SalLayout* OutputDevice::ImplLayout( const OUString& rOrigStr, sal_Int32 nMinInd
         ImplInitFont();
 
     // check string index and length
-    if( nMinIndex + nLen > rOrigStr.getLength() )
+    if( -1 == nLen || nMinIndex + nLen > rOrigStr.getLength() )
     {
         const sal_Int32 nNewLen = rOrigStr.getLength() - nMinIndex;
         if( nNewLen <= 0 )
@@ -6077,8 +6077,8 @@ sal_Bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, 
     return (nCharPos != nIndex) ? sal_True : sal_False;
 }
 
-xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
-                                       xub_StrLen nIndex, xub_StrLen nLen,
+xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
+                                       sal_Int32 nIndex, sal_Int32 nLen,
                                        long nCharExtra, sal_Bool /*TODO: bCellBreaking*/ ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -6109,9 +6109,9 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
     return nRetVal;
 }
 
-xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
-                                       sal_Unicode nHyphenatorChar, xub_StrLen& rHyphenatorPos,
-                                       xub_StrLen nIndex, xub_StrLen nLen,
+xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
+                                       sal_Unicode nHyphenatorChar, sal_Int32& rHyphenatorPos,
+                                       sal_Int32 nIndex, sal_Int32 nLen,
                                        long nCharExtra ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -6143,7 +6143,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
 
     // calculate hyphenated break position
     rtl::OUString aHyphenatorStr(nHyphenatorChar);
-    xub_StrLen nTempLen = 1;
+    sal_Int32 nTempLen = 1;
     SalLayout* pHyphenatorLayout = ImplLayout( aHyphenatorStr, 0, nTempLen );
     if( pHyphenatorLayout )
     {
