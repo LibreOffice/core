@@ -1326,6 +1326,11 @@ bool ScCellIterator::next()
     return getCurrent();
 }
 
+ScBaseCell* ScCellIterator::getHackedBaseCell()
+{
+    return mpDoc->GetCell(maCurPos);
+}
+
 //-------------------------------------------------------------------------------
 
 ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,

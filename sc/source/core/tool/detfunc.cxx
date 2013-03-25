@@ -1357,8 +1357,7 @@ sal_Bool ScDetectiveFunc::MarkInvalid(sal_Bool& rOverflow)
                 SCROW nNextRow = nRow1;
                 SCROW nRow;
                 ScCellIterator aCellIter( pDoc, nCol,nRow1,nTab, nCol,nRow2,nTab );
-                ScBaseCell* pCell = aCellIter.GetFirst();
-                while ( pCell && nInsCount < SC_DET_MAXCIRCLE )
+                for (bool bHas = aCellIter.first(); bHas && nInsCount < SC_DET_MAXCIRCLE; bHas = aCellIter.next())
                 {
                     SCROW nCellRow = aCellIter.GetPos().Row();
                     if ( bMarkEmpty )
@@ -1367,13 +1366,12 @@ sal_Bool ScDetectiveFunc::MarkInvalid(sal_Bool& rOverflow)
                             DrawCircle( nCol, nRow, aData );
                             ++nInsCount;
                         }
-                    if ( !pData->IsDataValid( pCell, ScAddress( nCol, nCellRow, nTab ) ) )
+                    if (!pData->IsDataValid(aCellIter))
                     {
                         DrawCircle( nCol, nCellRow, aData );
                         ++nInsCount;
                     }
                     nNextRow = nCellRow + 1;
-                    pCell = aCellIter.GetNext();
                 }
                 if ( bMarkEmpty )
                     for ( nRow = nNextRow; nRow <= nRow2 && nInsCount < SC_DET_MAXCIRCLE; nRow++ )

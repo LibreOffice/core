@@ -256,6 +256,9 @@ public:
 
     bool first();
     bool next();
+
+    // TODO: Remove this later.
+    ScBaseCell* getHackedBaseCell();
 };
 
 class ScQueryCellIterator           // walk through all non-empty cells in an area

@@ -29,6 +29,7 @@ namespace ValidListType = ::com::sun::star::sheet::TableValidationVisibility;
 class ScPatternAttr;
 class ScTokenArray;
 class ScTypedStrData;
+class ScCellIterator;
 
 enum ScValidationMode
 {
@@ -128,6 +129,8 @@ public:
     sal_Bool            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
                                     const ScAddress& rPos ) const;
     sal_Bool            IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+
+    bool IsDataValid( ScCellIterator& rIter ) const;
 
                     // TRUE -> break
     sal_Bool            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;

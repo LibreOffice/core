@@ -40,6 +40,7 @@
 #include "rangenam.hxx"
 #include "dbdata.hxx"
 #include "typedstrdata.hxx"
+#include "dociter.hxx"
 
 #include <math.h>
 #include <memory>
@@ -531,6 +532,90 @@ sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos
             if ( bOk )
             {
                 double nLenVal = (double) aString.Len();
+                ScValueCell* pTmpCell = new ScValueCell( nLenVal );
+                bOk = IsCellValid( pTmpCell, rPos );
+                pTmpCell->Delete();
+            }
+            break;
+
+        default:
+            OSL_FAIL("not yet done");
+            break;
+    }
+
+    return bOk;
+}
+
+bool ScValidationData::IsDataValid( ScCellIterator& rIter ) const
+{
+    const ScAddress& rPos = rIter.GetPos();
+
+    if( eDataMode == SC_VALID_LIST )
+    {
+        ScBaseCell* pBC = rIter.getHackedBaseCell();
+        return IsListValid(pBC, rPos);
+    }
+
+    double fVal = 0.0;
+    OUString aString;
+    bool bIsVal = true;
+
+    switch (rIter.getType())
+    {
+        case CELLTYPE_VALUE:
+            fVal = rIter.getValue();
+            break;
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            aString = rIter.getString();
+            bIsVal = false;
+            break;
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFCell = rIter.getFormulaCell();
+            bIsVal = pFCell->IsValue();
+            if ( bIsVal )
+                fVal  = pFCell->GetValue();
+            else
+                aString = pFCell->GetString();
+        }
+        break;
+        default:                        // Notizen, Broadcaster
+            return IsIgnoreBlank();     // wie eingestellt
+    }
+
+    bool bOk = true;
+    switch (eDataMode)
+    {
+        // SC_VALID_ANY schon oben
+
+        case SC_VALID_WHOLE:
+        case SC_VALID_DECIMAL:
+        case SC_VALID_DATE:         // Date/Time ist nur Formatierung
+        case SC_VALID_TIME:
+            bOk = bIsVal;
+            if ( bOk && eDataMode == SC_VALID_WHOLE )
+                bOk = ::rtl::math::approxEqual( fVal, floor(fVal+0.5) );        // ganze Zahlen
+            if ( bOk )
+            {
+                ScBaseCell* pBC = rIter.getHackedBaseCell();
+                bOk = IsCellValid(pBC, rPos);
+            }
+            break;
+
+        case SC_VALID_CUSTOM:
+        {
+            //  fuer Custom muss eOp == SC_COND_DIRECT sein
+            //! der Wert muss im Dokument stehen !!!!!!!!!!!!!!!!!!!!
+            ScBaseCell* pBC = rIter.getHackedBaseCell();
+            bOk = IsCellValid(pBC, rPos);
+        }
+        break;
+        case SC_VALID_TEXTLEN:
+            bOk = !bIsVal;          // nur Text
+            if ( bOk )
+            {
+                double nLenVal = (double) aString.getLength();
                 ScValueCell* pTmpCell = new ScValueCell( nLenVal );
                 bOk = IsCellValid( pTmpCell, rPos );
                 pTmpCell->Delete();
