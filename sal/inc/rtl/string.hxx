@@ -1371,6 +1371,22 @@ public:
     }
 
     /**
+      Returns the uint64 value from this string.
+
+      This function can't be used for language specific conversion.
+
+      @param    radix       the radix (between 2 and 36)
+      @return   the uint64 represented from this string.
+                0 if this string represents no number.
+
+      @since LibreOffice 4.1
+    */
+    sal_uInt64 toUInt64( sal_Int16 radix = 10 ) const SAL_THROW(())
+    {
+        return rtl_str_toUInt64( pData->buffer, radix );
+    }
+
+    /**
       Returns the float value from this string.
 
       This function can't be used for language specific conversion.

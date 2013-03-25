@@ -762,6 +762,27 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32(
 SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64(
         const sal_Char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
+/** Interpret a string as an unsigned long integer.
+
+    This function cannot be used for language-specific conversion.  The string
+    must be null-terminated.
+
+    @param str
+    a null-terminated string.
+
+    @param radix
+    the radix.  Must be between RTL_USTR_MIN_RADIX (2) and RTL_USTR_MAX_RADIX
+    (36), inclusive.
+
+    @return
+    the unsigned long integer value represented by the string, or 0 if the
+    string does not represent an unsigned long integer.
+
+    @since LibreOffice 4.1
+ */
+SAL_DLLPUBLIC sal_uInt64 SAL_CALL rtl_str_toUInt64(
+        const sal_Char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
+
 /** Interpret a string as a float.
 
     This function cannot be used for language-specific conversion.  The string

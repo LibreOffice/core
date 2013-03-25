@@ -658,6 +658,7 @@ LIBO_UDK_4.1 { # symbols available in >= LibO 4.1
         rtl_uString_ensureCapacity;
         rtl_string_alloc;
         rtl_uString_alloc;
+        rtl_str_toUInt64;
         rtl_str_valueOfUInt64;
         rtl_ustr_valueOfUInt64;
         rtl_ustr_toUInt64;
