@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAW3//+c0\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2013-03-25T23:07:38Z",
+      "side": 1,
+      "message": "Ohh, yes. Recognize it, just forgot to amend.",
+      "parentUuid": "AAAAW3//+dU\u003d",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAW3//+dQ\u003d",
         "filename": "vcl/source/control/field.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-03-25T22:22:37Z",
       "side": 1,
       "message": "This rValue here is passed as reference because ImplNumericGetValue() obtains the value per reference as well, so this should be sal_Int64\u0026 as well instead of double\u0026 otherwise no value is returned. Of course callers need also to be adapted.",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+co\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2013-03-25T23:07:38Z",
+      "side": 1,
+      "message": "rValue is changed just before the function return with sal_True.",
+      "parentUuid": "AAAAW3//+dQ\u003d",
       "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAW3//+cw\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1420,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2013-03-25T23:07:38Z",
+      "side": 1,
+      "message": "Yes, but when return sal_False, than this is the expected behaviour not to change the output patameter. ImplNumericGetValue() works the same.",
+      "parentUuid": "AAAAW3//+dI\u003d",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAW3//+dE\u003d",
         "filename": "vcl/source/control/field.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-03-25T22:22:37Z",
       "side": 1,
       "message": "Maybe better implement a conversion method that takes a sal_Int64 instead of introducing the precision loss at a different place now..",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+ck\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2013-03-25T23:07:38Z",
+      "side": 1,
+      "message": "Yes, it would be. But by now I just kill double conversion from NumericBox and MetricBox works the same as before.",
+      "parentUuid": "AAAAW3//+dE\u003d",
       "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
