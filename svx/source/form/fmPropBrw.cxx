@@ -182,9 +182,6 @@ using namespace ::svxform;
             nClassNameResourceId = RID_STR_CONTROL; break;
     }
 
-    if ( !nClassNameResourceId )
-        return ::rtl::OUString();
-
     return ::rtl::OUString( String( SVX_RES( nClassNameResourceId ) ) );
 }
 
