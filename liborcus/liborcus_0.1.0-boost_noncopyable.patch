@@ -1,0 +1,11 @@
+--- src/liborcus/dom_tree.cpp	2012-11-28 13:21:10.000000000 +0100
++++ src/liborcus/dom_tree.cpp	2013-03-25 09:01:58.405649302 +0100
+@@ -31,6 +31,8 @@
+ 
+ #include "string_pool.hpp"
+ 
++#include <boost/noncopyable.hpp> // for boost::noncopyable
++
+ #include <iostream>
+ #include <sstream>
+ 
