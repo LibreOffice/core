@@ -48,6 +48,8 @@ namespace basebmp { namespace Format
     static const sal_Int32 THIRTYTWO_BIT_TC_MASK_ABGR   = (sal_Int32)0x10;
     static const sal_Int32 THIRTYTWO_BIT_TC_MASK_RGBA   = (sal_Int32)0x11;
     static const sal_Int32 MAX                          = (sal_Int32)0x11;
+
+    const char *formatName(sal_Int32 nScanlineFormat);
 } }
 
 #endif /* INCLUDED_BASEBMP_SCANLINEFORMATS_HXX */

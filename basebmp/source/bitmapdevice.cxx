@@ -1824,13 +1824,13 @@ inline sal_uInt32 nextPow2( sal_uInt32 x )
 
 namespace
 {
-BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&                  rSize,
-                                              bool                                       bTopDown,
-                                              sal_Int32                                  nScanlineFormat,
-                                              boost::shared_array< sal_uInt8 >           pMem,
-                                              PaletteMemorySharedVector                  pPal,
-                                              const basegfx::B2IBox*                     pSubset,
-                                              const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
+BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&                  rSize,
+                                                   bool                                       bTopDown,
+                                                   sal_Int32                                  nScanlineFormat,
+                                                   boost::shared_array< sal_uInt8 >           pMem,
+                                                   PaletteMemorySharedVector                  pPal,
+                                                   const basegfx::B2IBox*                     pSubset,
+                                                   const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
 {
     OSL_ASSERT(rSize.getX() > 0 && rSize.getY() > 0);
 
@@ -2021,6 +2021,26 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
 
     // TODO(F3): other formats not yet implemented
     return BitmapDeviceSharedPtr();
+}
+
+BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&                  rSize,
+                                              bool                                       bTopDown,
+                                              sal_Int32                                  nScanlineFormat,
+                                              boost::shared_array< sal_uInt8 >           pMem,
+                                              PaletteMemorySharedVector                  pPal,
+                                              const basegfx::B2IBox*                     pSubset,
+                                              const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
+{
+    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, bTopDown, nScanlineFormat, pMem, pPal, pSubset, rDamage ) );
+
+    SAL_INFO( "basebmp.bitmapdevice",
+              "createBitmapDevice: "
+              << rSize.getX() << "x" << rSize.getY()
+              << (bTopDown ? " top-down " : " bottom-up ")
+              << Format::formatName(nScanlineFormat)
+              << " = " << result );
+
+    return result;
 }
 } // namespace
 

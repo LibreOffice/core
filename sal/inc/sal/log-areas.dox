@@ -29,6 +29,10 @@ certain functionality.
 
 @li @c basctl.basicide
 
+@section basebmp
+
+@li @c basebmp.bitmapdevice
+
 @section basic
 
 @li @c basic

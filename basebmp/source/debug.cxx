@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if OSL_DEBUG_LEVEL > 2
-
 #include <osl/diagnose.h>
 
 #include <basegfx/point/b2ipoint.hxx>
@@ -33,12 +31,14 @@
 
 namespace basebmp
 {
-    namespace
+    namespace Format
     {
-        static const char* getFormatString( sal_Int32 nScanlineFormat )
+        const char* formatName( sal_Int32 nScanlineFormat )
         {
             switch( nScanlineFormat )
             {
+                case Format::NONE:
+                    return "NONE";
                 case Format::ONE_BIT_MSB_GREY:
                     return "ONE_BIT_MSB_GREY";
                 case Format::ONE_BIT_LSB_GREY:
@@ -65,13 +65,21 @@ namespace basebmp
                     return "SIXTEEN_BIT_MSB_TC_MASK";
                 case Format::TWENTYFOUR_BIT_TC_MASK:
                     return "TWENTYFOUR_BIT_TC_MASK";
-                case Format::THIRTYTWO_BIT_TC_MASK:
-                    return "THIRTYTWO_BIT_TC_MASK";
+                case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
+                    return "THIRTYTWO_BIT_TC_MASK_BGRA";
+                case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
+                    return "THIRTYTWO_BIT_TC_MASK_ARGB";
+                case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
+                    return "THIRTYTWO_BIT_TC_MASK_ABGR";
+                case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+                    return "THIRTYTWO_BIT_TC_MASK_RGBA";
                 default:
                     return "<unknown>";
             }
         }
     }
+
+#if OSL_DEBUG_LEVEL > 2
 
     SAL_DLLPUBLIC_EXPORT void debugDump( const BitmapDeviceSharedPtr& rDevice,
                     std::ostream&                rOutputStream )
@@ -85,7 +93,7 @@ namespace basebmp
             << "/* Width   = " << aSize.getX() << " */" << std::endl
             << "/* Height  = " << aSize.getY() << " */" << std::endl
             << "/* TopDown = " << bTopDown << " */" << std::endl
-            << "/* Format  = " << getFormatString(nScanlineFormat) << " */" << std::endl
+            << "/* Format  = " << formatName(nScanlineFormat) << " */" << std::endl
             << "/* (dumped entries are already mapped RGBA color values) */" << std::endl
             << std::endl;
 
@@ -97,8 +105,9 @@ namespace basebmp
             rOutputStream << std::endl;
         }
     }
-}
 
 #endif // OSL_DEBUG_LEVEL > 2
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
