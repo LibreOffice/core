@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+dU\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-25T22:22:37Z",
+      "side": 1,
+      "message": "This can\u0027t possibly compile ... bNegatvie should be bNegative instead.",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+dQ\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-25T22:22:37Z",
+      "side": 1,
+      "message": "This rValue here is passed as reference because ImplNumericGetValue() obtains the value per reference as well, so this should be sal_Int64\u0026 as well instead of double\u0026 otherwise no value is returned. Of course callers need also to be adapted.",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+dI\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1420,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-25T22:22:37Z",
+      "side": 1,
+      "message": "Using the temporary here instead of rValue leaves rValue unchanged.",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+dE\u003d",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-25T22:22:37Z",
+      "side": 1,
+      "message": "Maybe better implement a conversion method that takes a sal_Int64 instead of introducing the precision loss at a different place now..",
+      "revId": "ef2297330b11130aaeffa58894e9613ef1968f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
