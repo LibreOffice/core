@@ -941,11 +941,15 @@ namespace {
             bNeg = sal_False;
         }
 
+        const T nDiv = bNeg ? -(std::numeric_limits<T>::min()/nRadix) : (std::numeric_limits<T>::max()/nRadix);
+        const sal_Int16 nMod = bNeg ? -(std::numeric_limits<T>::min()%nRadix) : (std::numeric_limits<T>::max()%nRadix);
         while ( *pStr )
         {
             nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
             if ( nDigit < 0 )
                 break;
+            if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+                return 0;
 
             n *= nRadix;
             n += nDigit;
@@ -978,11 +982,15 @@ namespace {
         if ( *pStr == '+' )
             ++pStr;
 
+        const T nDiv = std::numeric_limits<T>::max()/nRadix;
+        const sal_Int16 nMod = std::numeric_limits<T>::max()%nRadix;
         while ( *pStr )
         {
             nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
             if ( nDigit < 0 )
                 break;
+            if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+                return 0;
 
             n *= nRadix;
             n += nDigit;
