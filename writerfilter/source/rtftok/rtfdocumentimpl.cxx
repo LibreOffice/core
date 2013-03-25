@@ -209,10 +209,10 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
     return NULL;
 }
 
-static util::DateTime lcl_getDateTime(std::stack<RTFParserState>& aStates)
+static util::DateTime lcl_getDateTime(RTFParserState& aState)
 {
-    return util::DateTime(0 /*100sec*/, 0 /*sec*/, aStates.top().nMinute, aStates.top().nHour,
-            aStates.top().nDay, aStates.top().nMonth, aStates.top().nYear);
+    return util::DateTime(0 /*100sec*/, 0 /*sec*/, aState.nMinute, aState.nHour,
+            aState.nDay, aState.nMonth, aState.nYear);
 }
 
 static void lcl_DestinationToMath(OUStringBuffer& rDestinationText, oox::formulaimport::XmlStreamBuilder& rMathBuffer)
@@ -3828,12 +3828,12 @@ int RTFDocumentImpl::popState()
                 sal_Int32 nReplaces = 1;
                 for (int i = 0; i < aOrig.getLength(); i++)
                 {
-                    if (std::find(m_aStates.top().aLevelNumbers.begin(), m_aStates.top().aLevelNumbers.end(), i+1)
-                            != m_aStates.top().aLevelNumbers.end())
+                    if (std::find(aState.aLevelNumbers.begin(), aState.aLevelNumbers.end(), i+1)
+                            != aState.aLevelNumbers.end())
                     {
                         aBuf.append(sal_Unicode('%'));
                         // '1.1.1' -> '%1.%2.%3', but '1.' (with '2.' prefix omitted) is %2.
-                        aBuf.append(sal_Int32(nReplaces++ + m_aStates.top().nListLevelNum + 1 - m_aStates.top().aLevelNumbers.size()));
+                        aBuf.append(sal_Int32(nReplaces++ + aState.nListLevelNum + 1 - aState.aLevelNumbers.size()));
                     }
                     else
                         aBuf.append(aOrig.copy(i, 1));
@@ -3843,14 +3843,11 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_SHAPEPROPERTYNAME:
+            aState.aShape.aProperties.push_back(make_pair(m_aStates.top().aDestinationText.makeStringAndClear(), OUString()));
+            break;
         case DESTINATION_SHAPEPROPERTYVALUE:
-        case DESTINATION_SHAPEPROPERTY:
-            {
-                if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
-                    aState.aShape.aProperties.push_back(make_pair(m_aStates.top().aDestinationText.makeStringAndClear(), OUString()));
-                else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE && aState.aShape.aProperties.size())
-                    aState.aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
-            }
+            if (aState.aShape.aProperties.size())
+                aState.aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
             break;
         case DESTINATION_PICPROP:
         case DESTINATION_SHAPEINSTRUCTION:
@@ -3885,7 +3882,7 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_DATAFIELD:
             {
-                OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
+                OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), aState.nCurrentEncoding);
                 // decode hex dump
                 OStringBuffer aBuf;
                 const char *str = aStr.getStr();
@@ -3922,9 +3919,9 @@ int RTFDocumentImpl::popState()
                 nLength = aStr.toChar();
                 aStr = aStr.copy(1);
                 OString aDefaultText = aStr.copy(0, nLength);
-                RTFValue::Pointer_t pNValue(new RTFValue(OStringToOUString(aName, m_aStates.top().nCurrentEncoding)));
+                RTFValue::Pointer_t pNValue(new RTFValue(OStringToOUString(aName, aState.nCurrentEncoding)));
                 m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
-                RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
+                RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, aState.nCurrentEncoding)));
                 m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
 
                 m_bFormField = false;
@@ -3932,15 +3929,15 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_CREATIONTIME:
             if (m_xDocumentProperties.is())
-                m_xDocumentProperties->setCreationDate(lcl_getDateTime(m_aStates));
+                m_xDocumentProperties->setCreationDate(lcl_getDateTime(aState));
             break;
         case DESTINATION_REVISIONTIME:
             if (m_xDocumentProperties.is())
-                m_xDocumentProperties->setModificationDate(lcl_getDateTime(m_aStates));
+                m_xDocumentProperties->setModificationDate(lcl_getDateTime(aState));
             break;
         case DESTINATION_PRINTTIME:
             if (m_xDocumentProperties.is())
-                m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
+                m_xDocumentProperties->setPrintDate(lcl_getDateTime(aState));
             break;
         case DESTINATION_AUTHOR:
             if (m_xDocumentProperties.is())
@@ -3965,7 +3962,7 @@ int RTFDocumentImpl::popState()
         case DESTINATION_OPERATOR:
         case DESTINATION_COMPANY:
             {
-                OUString aName = m_aStates.top().nDestinationState == DESTINATION_OPERATOR ? OUString("Operator") : OUString("Company");
+                OUString aName = aState.nDestinationState == DESTINATION_OPERATOR ? OUString("Operator") : OUString("Company");
                 if (m_xDocumentProperties.is())
                 {
                     uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
@@ -4059,7 +4056,7 @@ int RTFDocumentImpl::popState()
         case DESTINATION_ANNOTATIONDATE:
             {
                 OUString aStr(OStringToOUString(lcl_DTTM22OString(m_aStates.top().aDestinationText.makeStringAndClear().toInt32()),
-                            m_aStates.top().nCurrentEncoding));
+                            aState.nCurrentEncoding));
                 RTFValue::Pointer_t pValue(new RTFValue(aStr));
                 RTFSprms aAnnAttributes;
                 aAnnAttributes.set(NS_ooxml::LN_CT_TrackChange_date, pValue);
@@ -4117,8 +4114,9 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_SHAPE:
-            if (m_aStates.top().aFrame.inFrame())
+            if (aState.aFrame.inFrame())
             {
+                // parBreak modify m_aStates.top() so we can't apply resetFrame directly on aState
                 m_aStates.top().resetFrame();
                 parBreak();
                 // Save this state for later use, so we only reset frame status only for the first shape inside a frame.
@@ -4351,7 +4349,7 @@ int RTFDocumentImpl::popState()
     }
 
     // See if we need to end a track change
-    RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
+    RTFValue::Pointer_t pTrackchange = aState.aCharacterSprms.find(NS_ooxml::LN_trackchange);
     if (pTrackchange.get())
     {
         RTFSprms aTCAttributes;
