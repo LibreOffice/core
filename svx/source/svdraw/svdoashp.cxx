@@ -247,22 +247,22 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                 if(!bSolidFillUsed && XFILL_SOLID == eFillStyle)
                 {
                     bSolidFillUsed = sal_True;
-                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                    bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
                 if(!bGradientFillUsed && XFILL_GRADIENT == eFillStyle)
                 {
                     bGradientFillUsed = sal_True;
-                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                    bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
                 if(!bHatchFillUsed && XFILL_HATCH == eFillStyle)
                 {
                     bHatchFillUsed = sal_True;
-                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                    bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
                 if(!bBitmapFillUsed && XFILL_BITMAP == eFillStyle)
                 {
                     bBitmapFillUsed = sal_True;
-                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                    bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
             }
         }
