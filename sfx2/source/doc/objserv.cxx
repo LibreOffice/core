@@ -579,7 +579,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 if ( nId == SID_SAVEACOPY )
                 {
-                    SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, sal_False );
                     rReq.AppendItem( SfxBoolItem( SID_SAVETO, sal_True ) );
                 }
 
