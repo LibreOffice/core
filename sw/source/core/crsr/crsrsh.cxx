@@ -938,7 +938,7 @@ int SwCrsrShell::CompareCursor( CrsrCompareType eType ) const
     int nRet = 0;
     const SwPosition *pFirst = 0, *pSecond = 0;
     const SwPaM *pCur = GetCrsr(), *pStk = pCrsrStk;
-    if( CurrPtCurrMk != eType && pStk )
+    if( pStk )
     {
         switch ( eType)
         {
