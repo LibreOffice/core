@@ -59,10 +59,6 @@
 #include <vector>
 #include <algorithm>
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
 using comphelper::string::getToken;
 using comphelper::string::getTokenCount;
 
