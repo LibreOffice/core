@@ -545,6 +545,7 @@ namespace svgio
                             {
                                 // angle in grad
                                 nPos += aStrGrad.getLength();
+                                aType = grad;
                             }
                             break;
                         }
@@ -555,6 +556,7 @@ namespace svgio
                             {
                                 // angle in radians
                                 nPos += aStrRad.getLength();
+                                aType = rad;
                             }
                             break;
                         }
