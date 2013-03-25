@@ -32,7 +32,6 @@
 #undef OPTIONAL
 
 #include "vcl/svapp.hxx"
-#include "tools/fsys.hxx"
 #include "tools/urlobj.hxx"
 #include "osl/mutex.hxx"
 
