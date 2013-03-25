@@ -64,7 +64,7 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
     @param  xResource
             the object, which should be closed here.
 
-    @param  bDelegateOwnerShip
+    @param  bDelegateOwnership
             used at the XCloseable->close() method to define
             the right owner in case closing failed.
 
@@ -72,7 +72,7 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
             sal_True if closing failed.
  */
 inline sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource         ,
-                       sal_Bool                                     bDelegateOwnerShip)
+                       sal_Bool                                     bDelegateOwnership)
 {
     css::uno::Reference< css::util::XCloseable > xClose  (xResource, css::uno::UNO_QUERY);
     css::uno::Reference< css::lang::XComponent > xDispose(xResource, css::uno::UNO_QUERY);
@@ -80,7 +80,7 @@ inline sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xReso
     try
     {
         if (xClose.is())
-            xClose->close(bDelegateOwnerShip);
+            xClose->close(bDelegateOwnership);
         else
         if (xDispose.is())
             xDispose->dispose();

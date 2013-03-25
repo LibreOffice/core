@@ -179,7 +179,7 @@ protected:
     String                      _aPath;
     String                      _aDefExt;
 
-    void                        ReleaseOwnerShip( Window* pUserControl );
+    void                        ReleaseOwnership( Window* pUserControl );
 
     /** enables or disables the complete UI of the file picker, with only offering a
         cancel button

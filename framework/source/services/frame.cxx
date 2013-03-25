@@ -1546,11 +1546,11 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
     @descr      This method ask internal component (controller) if he accept this close request.
                 In case of <TRUE/> nothing will be happen (from point of caller of this close method).
                 In case of <FALSE/> a CloseVetoException is thrown. After such exception given parameter
-                <var>bDeliverOwnerShip</var> regulate which will be the new owner of this instance.
+                <var>bDeliverOwnership</var> regulate which will be the new owner of this instance.
 
     @attention  It's the replacement for XTask::close() which is marked as obsolete method.
 
-    @param      bDeliverOwnerShip
+    @param      bDeliverOwnership
                     If parameter is set to <FALSE/> the original caller will be the owner after thrown
                     veto exception and must try to close this frame at later time again. Otherwhise the
                     source of throwed exception is the right one. May it will be the frame himself.
@@ -1560,7 +1560,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
 
     @threadsafe yes
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::CloseVetoException,
+void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::CloseVetoException,
                                                                 css::uno::RuntimeException   )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1583,7 +1583,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
         {
             try
             {
-                ((css::util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnerShip );
+                ((css::util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
             }
             catch( const css::uno::RuntimeException& )
             {
@@ -1596,7 +1596,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     // check if this frame is used for any load process currently
     if (isActionLocked())
     {
-        if (bDeliverOwnerShip)
+        if (bDeliverOwnership)
         {
             /* SAFE */
             WriteGuard aWriteLock( m_aLock );

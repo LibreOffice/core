@@ -269,7 +269,7 @@ class Frame :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XCloseable
         //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL close( sal_Bool bDeliverOwnerShip ) throw( css::util::CloseVetoException,
+        virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw( css::util::CloseVetoException,
                                                                          css::uno::RuntimeException   );
 
         //---------------------------------------------------------------------------------------------------------

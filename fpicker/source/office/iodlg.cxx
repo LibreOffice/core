@@ -343,7 +343,7 @@ struct ControlChain_Impl
 {
     Window*            _pControl;
     ControlChain_Impl* _pNext;
-    sal_Bool               _bHasOwnerShip;
+    sal_Bool               _bHasOwnership;
 
     ControlChain_Impl( Window* pControl, ControlChain_Impl* pNext );
     ~ControlChain_Impl();
@@ -358,7 +358,7 @@ ControlChain_Impl::ControlChain_Impl
 )
     : _pControl( pControl ),
       _pNext( pNext ),
-      _bHasOwnerShip( sal_True )
+      _bHasOwnership( sal_True )
 {
 }
 
@@ -366,7 +366,7 @@ ControlChain_Impl::ControlChain_Impl
 
 ControlChain_Impl::~ControlChain_Impl()
 {
-    if ( _bHasOwnerShip )
+    if ( _bHasOwnership )
     {
         delete _pControl;
     }
@@ -630,7 +630,7 @@ void SvtFileDialog::Init_Impl
         _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
         _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
         AddControl( _pCbReadOnly );
-        ReleaseOwnerShip( _pCbReadOnly );
+        ReleaseOwnership( _pCbReadOnly );
         _pCbReadOnly->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
     }
 
@@ -639,7 +639,7 @@ void SvtFileDialog::Init_Impl
         _pImp->_pCbPassword = new CheckBox( this, SvtResId( CB_EXPLORERFILE_PASSWORD ) );
         _pImp->_pCbPassword->SetText( SvtResId( STR_SVT_FILEPICKER_PASSWORD ) );
         AddControl( _pImp->_pCbPassword );
-        ReleaseOwnerShip( _pImp->_pCbPassword );
+        ReleaseOwnership( _pImp->_pCbPassword );
         _pImp->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
     }
 
@@ -2901,7 +2901,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pCbLinkBox ->SetText( SvtResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
         _pCbLinkBox ->SetHelpId( HID_FILEDLG_LINK_CB );
         AddControl( _pCbLinkBox  );
-        ReleaseOwnerShip( _pCbLinkBox );
+        ReleaseOwnership( _pCbLinkBox );
         _pCbLinkBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
     }
 
@@ -2918,13 +2918,13 @@ void SvtFileDialog::AddControls_Impl( )
         _pCbPreviewBox->SetText( SvtResId( STR_SVT_FILEPICKER_SHOW_PREVIEW ) );
         _pCbPreviewBox->SetHelpId( HID_FILEDLG_PREVIEW_CB );
         AddControl( _pCbPreviewBox );
-        ReleaseOwnerShip( _pCbPreviewBox );
+        ReleaseOwnership( _pCbPreviewBox );
         _pCbPreviewBox->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
 
         // generate preview window just here
         _pPrevWin = new Window( this, WinBits( WB_BORDER ) );
         AddControl( _pPrevWin );
-        ReleaseOwnerShip( _pPrevWin );
+        ReleaseOwnership( _pPrevWin );
         _pPrevWin->Hide();
 
         _pPrevBmp = new FixedBitmap( this, WinBits( WB_BORDER ) );
@@ -2939,7 +2939,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->Check( sal_True );
         AddControl( _pImp->_pCbAutoExtension );
-        ReleaseOwnerShip( _pImp->_pCbAutoExtension );
+        ReleaseOwnership( _pImp->_pCbAutoExtension );
         _pImp->_pCbAutoExtension->SetClickHdl( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );
     }
 
@@ -2948,7 +2948,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pCbOptions = new CheckBox( this, SvtResId( CB_OPTIONS ) );
         _pImp->_pCbOptions->SetText( SvtResId( STR_SVT_FILEPICKER_FILTER_OPTIONS ) );
         AddControl( _pImp->_pCbOptions );
-        ReleaseOwnerShip( _pImp->_pCbOptions );
+        ReleaseOwnership( _pImp->_pCbOptions );
         _pImp->_pCbOptions->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
     }
 
@@ -2957,7 +2957,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pCbSelection = new CheckBox( this, SvtResId( CB_OPTIONS ) );
         _pCbSelection->SetText( SvtResId( STR_SVT_FILEPICKER_SELECTION ) );
         AddControl( _pCbSelection );
-        ReleaseOwnerShip( _pCbSelection );
+        ReleaseOwnership( _pCbSelection );
         _pCbSelection->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
     }
 
@@ -2967,7 +2967,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPbPlay->SetText( SvtResId( STR_SVT_FILEPICKER_PLAY ) );
         _pPbPlay->SetHelpId( HID_FILESAVE_DOPLAY );
         AddControl( _pPbPlay );
-        ReleaseOwnerShip( _pPbPlay );
+        ReleaseOwnership( _pPbPlay );
         _pPbPlay->SetClickHdl( LINK( this, SvtFileDialog, PlayButtonHdl_Impl ) );
     }
 
@@ -3112,7 +3112,7 @@ sal_Bool SvtFileDialog::getShowState()
 }
 
 // -----------------------------------------------------------------------
-void SvtFileDialog::ReleaseOwnerShip( Window* pUserControl )
+void SvtFileDialog::ReleaseOwnership( Window* pUserControl )
 
 /*
   [Description]
@@ -3126,7 +3126,7 @@ void SvtFileDialog::ReleaseOwnerShip( Window* pUserControl )
     {
         if ( pElement->_pControl == pUserControl )
         {
-            pElement->_bHasOwnerShip = sal_False;
+            pElement->_bHasOwnership = sal_False;
             break;
         }
         pElement = pElement->_pNext;

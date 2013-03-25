@@ -291,8 +291,8 @@ public:
     SAL_DLLPRIVATE void CheckIPClient_Impl( SfxInPlaceClient*, const Rectangle& );
     SAL_DLLPRIVATE void PushSubShells_Impl( sal_Bool bPush=sal_True );
     SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( sal_False ); }
-    SAL_DLLPRIVATE void TakeOwnerShip_Impl();
-    SAL_DLLPRIVATE void TakeFrameOwnerShip_Impl();
+    SAL_DLLPRIVATE void TakeOwnership_Impl();
+    SAL_DLLPRIVATE void TakeFrameOwnership_Impl();
     SAL_DLLPRIVATE sal_Bool ExecKey_Impl(const KeyEvent& aKey);
 };
 

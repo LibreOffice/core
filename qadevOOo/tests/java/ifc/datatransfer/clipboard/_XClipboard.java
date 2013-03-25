@@ -107,7 +107,7 @@ public class _XClipboard extends MultiMethodTest {
 
     /**
     * Sets new contents for the clipboard. Then checks if it was set,
-    * and if <code>lostOwnerShip()</code> notification of the prevoius
+    * and if <code>lostOwnership()</code> notification of the prevoius
     * contents was called with appropriate parameters.<p>
     * Has <b> OK </b> status if <code>getContents</code> returns the same
     * object which is set, and notification was received.

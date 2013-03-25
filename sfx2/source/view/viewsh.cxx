@@ -2039,16 +2039,16 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUStr
     return sal_True;
 }
 
-void SfxViewShell::TakeOwnerShip_Impl()
+void SfxViewShell::TakeOwnership_Impl()
 {
-    // currently there is only one reason to take OwnerShip: a hidden frame is printed
+    // currently there is only one reason to take Ownership: a hidden frame is printed
     // so the ViewShell will check this on EndPrint (->prnmon.cxx)
     pImp->m_bGotOwnership = true;
 }
 
-void SfxViewShell::TakeFrameOwnerShip_Impl()
+void SfxViewShell::TakeFrameOwnership_Impl()
 {
-    // currently there is only one reason to take OwnerShip: a hidden frame is printed
+    // currently there is only one reason to take Ownership: a hidden frame is printed
     // so the ViewShell will check this on EndPrint (->prnmon.cxx)
     pImp->m_bGotFrameOwnership = true;
 }

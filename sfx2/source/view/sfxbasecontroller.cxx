@@ -379,12 +379,12 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EV
         {
             if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
             {
-                // ignore OwnerShip in case of visible frame (will be closed by user)
+                // ignore Ownership in case of visible frame (will be closed by user)
                 uno::Reference < frame::XModel > xModel( aEvent.Source, uno::UNO_QUERY );
                 if ( xModel.is() )
-                    pShell->TakeOwnerShip_Impl();
+                    pShell->TakeOwnership_Impl();
                 else
-                    pShell->TakeFrameOwnerShip_Impl();
+                    pShell->TakeFrameOwnership_Impl();
             }
 
             throw com::sun::star::util::CloseVetoException(::rtl::OUString("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));

@@ -506,7 +506,7 @@ private:
 
             virtual ~TheModel();
 
-            void        SetOwnerShip( sal_Bool bGetsOwnership );
+            void        SetOwnership( sal_Bool bGetsOwnership );
             void        addListener( ChartController* pController );
             void        removeListener(  ChartController* pController );
             void        tryTermination();

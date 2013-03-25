@@ -165,7 +165,7 @@ ChartController::TheModel::~TheModel()
 {
 }
 
-void ChartController::TheModel::SetOwnerShip( sal_Bool bGetsOwnership )
+void ChartController::TheModel::SetOwnership( sal_Bool bGetsOwnership )
 {
     m_bOwnership                = bGetsOwnership;
     m_bOwnershipIsWellKnown = sal_True;
@@ -873,7 +873,7 @@ void ChartController::impl_deleteDrawViewController()
     {
         if( bGetsOwnership )
         {
-            aModelRef->SetOwnerShip( bGetsOwnership );
+            aModelRef->SetOwnership( bGetsOwnership );
         }
 
         throw util::CloseVetoException();
