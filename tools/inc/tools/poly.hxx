@@ -80,7 +80,7 @@ class PolyOptimizeData
 private:
 
     enum DataType   { DATA_NONE = 0, DATA_ABSOLUT = 1, DATA_PERCENT = 2 };
-    DataType        eType;
+    DataType        eType; // NOTE: only used for debugging
     union           { sal_uIntPtr mnAbsolut; sal_uInt16 mnPercent; };
 
 public:
@@ -89,7 +89,7 @@ public:
                     PolyOptimizeData( sal_uIntPtr nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
                     PolyOptimizeData( sal_uInt16 nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
 
-    sal_uIntPtr         GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
+    sal_uIntPtr         GetAbsValue() const { (void)eType; DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
     sal_uInt16          GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
 };
 
