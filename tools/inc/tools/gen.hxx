@@ -679,8 +679,11 @@ template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Rectangle& rectangle )
 {
-    return stream << rectangle.getX() << ',' << rectangle.getY() << ' '
-        << rectangle.getWidth() << 'x' << rectangle.getHeight();
+    if (rectangle.IsEmpty())
+        return stream << "EMPTY";
+    else
+        return stream << rectangle.getWidth() << 'x' << rectangle.getHeight()
+                      << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
 }
 
 #endif
