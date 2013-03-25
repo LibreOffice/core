@@ -2283,15 +2283,15 @@ dnl  Checks for Icecream
 dnl ===================================================================
 if test "$enable_icecream" = "yes"; then
     if test -d "/usr/lib/icecc/bin"; then
-	ICECREAM_HOME="/usr/lib/icecc/"
+        ICECREAM_HOME="/usr/lib/icecc"
     else
-	ICECREAM_HOME="/opt/icecream/"
+        ICECREAM_HOME="/opt/icecream"
     fi
     if test -z "$CC"; then
-	CC="$GCC_HOME/bin/gcc"
+    	CC="$ICECREAM_HOME/bin/gcc"
     fi
     if test -z "$CXX"; then
-	CXX="$GCC_HOME/bin/g++"
+    	CXX="$ICECREAM_HOME/bin/g++"
     fi
 fi
 
