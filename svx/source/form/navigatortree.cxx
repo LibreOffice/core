@@ -1725,7 +1725,7 @@ namespace svxform
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if (!pFormShell)
             return;
-        FmFormModel* pFormModel = pFormShell ? pFormShell->GetFormModel() : NULL;
+        FmFormModel* pFormModel = pFormShell->GetFormModel();
         if (!pFormModel)
             return;
 
