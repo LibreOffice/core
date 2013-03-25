@@ -68,6 +68,8 @@
 #include "interpre.hxx"
 #include "columniterator.hxx"
 #include "types.hxx"
+#include "conditio.hxx"
+#include "globstr.hrc"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -272,6 +274,7 @@ public:
      * Test formula & formula grouping
      */
     void testFormulaGrouping();
+    void testCondFormatINSDEL();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -336,6 +339,7 @@ public:
     CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST(testCellTextWidth);
     CPPUNIT_TEST(testFormulaGrouping);
+    CPPUNIT_TEST(testCondFormatINSDEL);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6272,6 +6276,31 @@ void Test::testFormulaGrouping()
             }
         }
     }
+}
+
+void Test::testCondFormatINSDEL()
+{
+    // fdo#62206
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,0,3,0));
+    pFormat->AddRange(aRangeList);
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    m_pDoc->InsertCol(0,0,MAXROW,0,0,2);
+    const ScRangeList& rRange = pFormat->GetRange();
+    CPPUNIT_ASSERT(rRange == ScRange(2,0,0,2,3,0));
+
+    OUString aExpr = pEntry->GetExpression(ScAddress(2,0,0), 0);
+    CPPUNIT_ASSERT_EQUAL(aExpr, OUString("D2"));
+
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
