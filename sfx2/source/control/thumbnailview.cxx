@@ -126,6 +126,7 @@ void ThumbnailView::ImplDeleteItems()
     }
 
     mItemList.clear();
+    mFilteredItemList.clear();
 }
 
 void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
@@ -677,17 +678,20 @@ void ThumbnailView::Paint( const Rectangle &aRect)
 
 void ThumbnailView::GetFocus()
 {
-    // Select the first item if nothing selected
-    int nSelected = -1;
-    for (size_t i = 0, n = mItemList.size(); i < n && nSelected == -1; ++i)
+    if(GETFOCUS_TAB & GetGetFocusFlags())
     {
-        if (mItemList[i]->isSelected())
-            nSelected = i;
-    }
+        // Select the first item if nothing selected
+        int nSelected = -1;
+        for (size_t i = 0, n = mItemList.size(); i < n && nSelected == -1; ++i)
+        {
+            if (mItemList[i]->isSelected())
+                nSelected = i;
+        }
 
-    if ( nSelected == -1 && mItemList.size( ) > 0 )
-    {
-        SelectItem( 1 );
+        if ( nSelected == -1 && mItemList.size( ) > 0 )
+        {
+            SelectItem( 1 );
+        }
     }
 
     // Tell the accessible object that we got the focus.
