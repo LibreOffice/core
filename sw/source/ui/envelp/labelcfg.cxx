@@ -250,7 +250,6 @@ static Sequence<PropertyValue> lcl_CreateProperties(
 // function fills SwLabDlg with label definitions for manufacturer rManufacturer
 void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
 {
-    OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
     if (m_aLabels.find(rManufacturer) == m_aLabels.end())
         return;
     for (std::map<OUString, SwLabelMeasure>::iterator it = m_aLabels[rManufacturer].begin();
