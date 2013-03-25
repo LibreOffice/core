@@ -1,0 +1,10 @@
+Code-Review+1: Fridrich Strba <fridrich@documentfoundation.org>
+Code-Review+2: Thorsten Behrens <tbehrens@suse.com>
+Verified+1: Thorsten Behrens <tbehrens@suse.com>
+Code-Review+1: Petr Mladek <pmladek@suse.cz>
+Verified+1: Petr Mladek <pmladek@suse.cz>
+Submitted-by: Thorsten Behrens <tbehrens@suse.com>
+Submitted-at: Mon, 25 Mar 2013 20:39:19 +0000
+Reviewed-on: https://gerrit.libreoffice.org/2963
+Project: core
+Branch: refs/heads/libreoffice-4-0-2
