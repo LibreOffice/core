@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+os\u003d",
+        "filename": "sd/source/ui/view/outlview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-03-25T00:06:57Z",
+      "side": 1,
+      "message": "Unless you are absolutely sure this cannot ever be sd::Window - go for that change. Otherwise, let\u0027s not take chances, even more since the two classes are related.",
+      "revId": "09eeb61ce9f14a9d8b01283dbdc1cb018e141786",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
