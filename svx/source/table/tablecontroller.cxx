@@ -2521,7 +2521,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
         {
             if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
             {
-                bTextOnly = true;
+                bTextOnly = false;
                 break;
             }
             pRanges += 2;
