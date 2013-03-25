@@ -51,6 +51,7 @@ struct ScComplexRefData;
 
 class ScToken;
 class ScJumpMatrix;
+class ScCellIterator;
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
 
@@ -186,7 +187,9 @@ bool IsTableOpInRange( const ScRange& );
 sal_uLong GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
 double ConvertStringToValue( const String& );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
+double GetCellValue( ScCellIterator& rIter );
 double GetCellValueOrZero( const ScAddress&, const ScBaseCell* );
+double GetCellValueOrZero( ScCellIterator& rIter );
 double GetValueCellValue( const ScAddress&, const ScValueCell* );
 ScBaseCell* GetCell( const ScAddress& rPos );
 void GetCellString( String& rStr, const ScBaseCell* pCell );

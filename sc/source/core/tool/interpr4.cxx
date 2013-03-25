@@ -470,77 +470,152 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCe
     return nVal;
 }
 
+double ScInterpreter::GetCellValue( ScCellIterator& rIter )
+{
+    sal_uInt16 nErr = nGlobalError;
+    nGlobalError = 0;
+    double nVal = GetCellValueOrZero(rIter);
+    if ( !nGlobalError || nGlobalError == errCellNoValue )
+        nGlobalError = nErr;
+    return nVal;
+}
 
 double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCell* pCell )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellValueOrZero" );
     double fValue = 0.0;
-    if (pCell)
+    if (!pCell)
+        return fValue;
+
+    CellType eType = pCell->GetCellType();
+    switch (eType)
     {
-        CellType eType = pCell->GetCellType();
-        switch ( eType )
+        case CELLTYPE_FORMULA:
         {
-            case CELLTYPE_FORMULA:
+            ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
+            sal_uInt16 nErr = pFCell->GetErrCode();
+            if( !nErr )
             {
-                ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-                sal_uInt16 nErr = pFCell->GetErrCode();
-                if( !nErr )
+                if (pFCell->IsValue())
                 {
-                    if (pFCell->IsValue())
-                    {
-                        fValue = pFCell->GetValue();
-                        pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
-                            rPos, pFCell );
-                    }
-                    else
-                    {
-                        String aStr = pFCell->GetString();
-                        fValue = ConvertStringToValue( aStr );
-                    }
+                    fValue = pFCell->GetValue();
+                    pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
+                        rPos, pFCell );
                 }
                 else
                 {
-                    fValue = 0.0;
-                    SetError(nErr);
+                    String aStr = pFCell->GetString();
+                    fValue = ConvertStringToValue( aStr );
                 }
             }
-            break;
-            case CELLTYPE_VALUE:
+            else
             {
-                fValue = ((ScValueCell*)pCell)->GetValue();
-                nCurFmtIndex = pDok->GetNumberFormat( rPos );
-                nCurFmtType = pFormatter->GetType( nCurFmtIndex );
-                if ( bCalcAsShown && fValue != 0.0 )
-                    fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex );
-            }
-            break;
-            case  CELLTYPE_STRING:
-            case  CELLTYPE_EDIT:
-            {
-                // SUM(A1:A2) differs from A1+A2. No good. But people insist on
-                // it ... #i5658#
-                String aStr;
-                if ( eType == CELLTYPE_STRING )
-                    aStr = ((ScStringCell*)pCell)->GetString();
-                else
-                    aStr = ((ScEditCell*)pCell)->GetString();
-                fValue = ConvertStringToValue( aStr );
-            }
-            break;
-            case CELLTYPE_NONE:
-            case CELLTYPE_NOTE:
-                fValue = 0.0;       // empty or broadcaster cell
-            break;
-#if OSL_DEBUG_LEVEL > 0
-            case CELLTYPE_DESTROYED:
-#endif
-                SetError(errCellNoValue);
                 fValue = 0.0;
-            break;
+                SetError(nErr);
+            }
         }
+        break;
+        case CELLTYPE_VALUE:
+        {
+            fValue = ((ScValueCell*)pCell)->GetValue();
+            nCurFmtIndex = pDok->GetNumberFormat( rPos );
+            nCurFmtType = pFormatter->GetType( nCurFmtIndex );
+            if ( bCalcAsShown && fValue != 0.0 )
+                fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex );
+        }
+        break;
+        case  CELLTYPE_STRING:
+        case  CELLTYPE_EDIT:
+        {
+            // SUM(A1:A2) differs from A1+A2. No good. But people insist on
+            // it ... #i5658#
+            String aStr;
+            if ( eType == CELLTYPE_STRING )
+                aStr = ((ScStringCell*)pCell)->GetString();
+            else
+                aStr = ((ScEditCell*)pCell)->GetString();
+            fValue = ConvertStringToValue( aStr );
+        }
+        break;
+        case CELLTYPE_NONE:
+        case CELLTYPE_NOTE:
+            fValue = 0.0;       // empty or broadcaster cell
+        break;
+#if OSL_DEBUG_LEVEL > 0
+        case CELLTYPE_DESTROYED:
+#endif
+            SetError(errCellNoValue);
+            fValue = 0.0;
+        break;
     }
-    else
-        fValue = 0.0;
+
+    return fValue;
+}
+
+double ScInterpreter::GetCellValueOrZero( ScCellIterator& rIter )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellValueOrZero" );
+    double fValue = 0.0;
+
+    CellType eType = rIter.getType();
+    const ScAddress& rPos = rIter.GetPos();
+    switch (eType)
+    {
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFCell = rIter.getFormulaCell();
+            sal_uInt16 nErr = pFCell->GetErrCode();
+            if( !nErr )
+            {
+                if (pFCell->IsValue())
+                {
+                    fValue = pFCell->GetValue();
+                    pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
+                        rPos, pFCell );
+                }
+                else
+                {
+                    String aStr = pFCell->GetString();
+                    fValue = ConvertStringToValue( aStr );
+                }
+            }
+            else
+            {
+                fValue = 0.0;
+                SetError(nErr);
+            }
+        }
+        break;
+        case CELLTYPE_VALUE:
+        {
+            fValue = rIter.getValue();
+            nCurFmtIndex = pDok->GetNumberFormat( rPos );
+            nCurFmtType = pFormatter->GetType( nCurFmtIndex );
+            if ( bCalcAsShown && fValue != 0.0 )
+                fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex );
+        }
+        break;
+        case  CELLTYPE_STRING:
+        case  CELLTYPE_EDIT:
+        {
+            // SUM(A1:A2) differs from A1+A2. No good. But people insist on
+            // it ... #i5658#
+            OUString aStr = rIter.getString();
+            fValue = ConvertStringToValue( aStr );
+        }
+        break;
+        case CELLTYPE_NONE:
+        case CELLTYPE_NOTE:
+            fValue = 0.0;       // empty or broadcaster cell
+        break;
+#if OSL_DEBUG_LEVEL > 0
+        case CELLTYPE_DESTROYED:
+#endif
+            SetError(errCellNoValue);
+            fValue = 0.0;
+        break;
+    }
+
     return fValue;
 }
 

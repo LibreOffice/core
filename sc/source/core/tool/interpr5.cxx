@@ -437,10 +437,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
             if (aCellIter.hasNumeric())
             {
                 ScAddress aAdr(nCol, nThisRow, nTab1);
-
-                // TODO: Come back to this and fix it.
-                ScBaseCell* pBC = pDok->GetCell(aAdr);
-                double fVal = GetCellValue(aAdr, pBC);
+                double fVal = GetCellValue(aCellIter);
 
                 if ( nGlobalError )
                 {
