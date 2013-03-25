@@ -3154,41 +3154,26 @@ bool ScCompiler::IsColRowName( const String& rName )
         else
         {
             ScCellIterator aIter( pDoc, ScRange( aOne, aTwo ) );
-            for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
+            for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
             {
                 if ( bFound )
                 {   // stop if everything else is further away
                     if ( nMax < (long)aIter.GetPos().Col() )
                         break;      // aIter
                 }
-                CellType eType = pCell->GetCellType();
-                bool bOk = ( (eType == CELLTYPE_FORMULA ?
-                    ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
-                    && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
-                    : true ) );
-                if ( bOk && pCell->HasStringData() )
+                CellType eType = aIter.getType();
+                bool bOk = false;
+                if (eType == CELLTYPE_FORMULA)
                 {
-                    String aStr;
-                    switch ( eType )
-                    {
-                        case CELLTYPE_STRING:
-                            aStr = ((ScStringCell*)pCell)->GetString();
-                        break;
-                        case CELLTYPE_FORMULA:
-                            aStr = ((ScFormulaCell*)pCell)->GetString();
-                        break;
-                        case CELLTYPE_EDIT:
-                            aStr = ((ScEditCell*)pCell)->GetString();
-                        break;
-                        case CELLTYPE_NONE:
-                        case CELLTYPE_VALUE:
-                        case CELLTYPE_NOTE:
-#if OSL_DEBUG_LEVEL > 0
-                        case CELLTYPE_DESTROYED:
-#endif
-                            ;   // nothing, prevent compiler warning
-                        break;
-                    }
+                    ScFormulaCell* pFC = aIter.getFormulaCell();
+                    bOk = (pFC->GetCode()->GetCodeLen() > 0) && (pFC->aPos != aPos);
+                }
+                else
+                    bOk = true;
+
+                if (bOk && aIter.hasString())
+                {
+                    OUString aStr = aIter.getString();
                     if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                     {
                         SCCOL nCol = aIter.GetPos().Col();
