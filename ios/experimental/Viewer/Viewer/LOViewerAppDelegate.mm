@@ -45,6 +45,8 @@ static UIWindow *theWindow;
     self.window.pixelBuffer = pixelBuffer;
     self.window.image = image;
 
+    lo_set_view_size(bounds.size.width, bounds.size.height);
+
     [self.window makeKeyAndVisible];
 
     NSThread* thread = [[NSThread alloc] initWithTarget:self

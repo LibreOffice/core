@@ -297,6 +297,14 @@ int IosSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
 }
 
 extern "C"
+void lo_set_view_size(int width, int height)
+{
+    // Horrible
+    viewWidth = width;
+    viewHeight = height;
+}
+
+extern "C"
 void lo_render_windows(char *pixelBuffer, int width, int height)
 {
     // Hack: assume so far that we are asked to redraw the whole pixel buffer
