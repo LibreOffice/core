@@ -44,6 +44,10 @@ certain functionality.
 @li @c canvas.cairo
 @li @c canvas.null
 
+@section chart2
+
+@li @c chart2
+
 @section connectivity
 
 @li @c connectivity.mork
