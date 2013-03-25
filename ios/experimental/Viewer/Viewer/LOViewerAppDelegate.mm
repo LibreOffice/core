@@ -39,7 +39,7 @@ static UIWindow *theWindow;
     memset(pixelBuffer, 0xFF, nbytes);
 
     CGDataProviderRef provider = CGDataProviderCreateWithData( NULL, pixelBuffer, nbytes, NULL);
-    image = CGImageCreate(bounds.size.width, bounds.size.height, 8, 32, bounds.size.width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaFirst, provider, NULL, false, kCGRenderingIntentDefault);
+    image = CGImageCreate(bounds.size.width, bounds.size.height, 8, 32, bounds.size.width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast, provider, NULL, false, kCGRenderingIntentDefault);
 
     self.window.bounds = bounds;
     self.window.pixelBuffer = pixelBuffer;
