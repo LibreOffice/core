@@ -84,7 +84,7 @@ private: //methods
     /** resizes the data if at least one of the given dimensions is larger than
         before.  The data is never becoming smaller only larger.
 
-        @return </sal_True>, if the data was enlarged
+        @return </true>, if the data was enlarged
     */
     bool enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount );
 
