@@ -652,7 +652,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         SwDocShell* pDocSh = PTR_CAST( SwDocShell, rEvHint.GetObjShell() );
         if( pDocSh )
         {
-            SwWrtShell* pWrtSh = pDocSh ? pDocSh->GetWrtShell() : 0;
+            SwWrtShell* pWrtSh = pDocSh->GetWrtShell();
             switch( rEvHint.GetEventId() )
             {
             case SFX_EVENT_LOADFINISHED:
