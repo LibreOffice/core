@@ -2259,7 +2259,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         return *plugin;
 
 #ifndef DISABLE_DYNLOADING
-    #if LIBO_MERGELIBS
+    #ifdef LIBO_MERGELIBS
         OUString sFilterLib(SVLIBRARY("merged"));
     #else
         OUString sFilterLib(SVLIBRARY("scfilt"));
