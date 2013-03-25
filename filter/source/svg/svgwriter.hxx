@@ -362,6 +362,8 @@ private:
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY,
                                               sal_Bool bApplyMapping = sal_True );
     void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
+    void                    ImplAddLineAttr( const LineInfo &rAttrs,
+                                             sal_Bool bApplyMapping = sal_True );
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
                                                   sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool bApplyMapping = sal_True );

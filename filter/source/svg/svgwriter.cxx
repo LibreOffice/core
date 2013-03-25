@@ -2051,6 +2051,17 @@ void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, long nRadX, long n
     }
 }
 
+void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs,
+                                       sal_Bool bApplyMapping )
+{
+    if ( !rAttrs.IsDefault() )
+    {
+        sal_Int32 nStrokeWidth = bApplyMapping ? ImplMap( rAttrs.GetWidth() ) : rAttrs.GetWidth();
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth,
+                               OUString::valueOf( nStrokeWidth ) );
+    }
+}
+
 void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
                                             sal_Bool bApplyMapping )
 {
@@ -2986,6 +2997,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     if( rPoly.GetSize() )
                     {
                         mpContext->AddPaintAttr( mpVDev->GetLineColor(), Color( COL_TRANSPARENT ) );
+                        ImplAddLineAttr( pA->GetLineInfo() );
                         ImplWritePolyPolygon( rPoly, sal_True );
                     }
                 }
