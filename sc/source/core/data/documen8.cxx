@@ -207,7 +207,11 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 {
     if (!pVirtualDevice_100th_mm)
     {
+#ifdef IOS
+        pVirtualDevice_100th_mm = new VirtualDevice( 8 );
+#else
         pVirtualDevice_100th_mm = new VirtualDevice( 1 );
+#endif
         pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
         MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
         aMapMode.SetMapUnit( MAP_100TH_MM );

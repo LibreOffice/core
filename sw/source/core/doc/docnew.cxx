@@ -698,7 +698,11 @@ SwDoc::~SwDoc()
 
 VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
+#ifdef IOS
+    VirtualDevice* pNewVir = new VirtualDevice( 8 );
+#else
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
+#endif
 
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 
