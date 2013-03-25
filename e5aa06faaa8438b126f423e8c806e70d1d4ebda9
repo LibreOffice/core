@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+cg\u003d",
+        "filename": "vcl/generic/print/genpspgraphics.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-25T22:59:46Z",
+      "side": 1,
+      "message": "I\u0027d actually keep and use the default OUString() ctor in such cases instead, because from the \"\" string literal an empty OUString needs to be constructed anyway. It doesn\u0027t matter much here, using the literal is just one check and one condition more in the template consuming the literal.",
+      "revId": "e5aa06faaa8438b126f423e8c806e70d1d4ebda9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+cc\u003d",
+        "filename": "vcl/generic/print/genpspgraphics.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-25T22:59:46Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "e5aa06faaa8438b126f423e8c806e70d1d4ebda9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+cY\u003d",
+        "filename": "vcl/generic/print/genpspgraphics.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-25T22:59:46Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "e5aa06faaa8438b126f423e8c806e70d1d4ebda9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
