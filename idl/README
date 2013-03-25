@@ -1,3 +1,2 @@
-SvIDL Compiler.
-
-(CH: Where is the difference to [[idlc]]???)
+SvIDL Compiler that generates C++ slot headers from SDI files in modules' sdi/
+subdirectory.
