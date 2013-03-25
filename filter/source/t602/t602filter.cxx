@@ -136,42 +136,31 @@ T602ImportFilter::~T602ImportFilter()
 }
 
 // XExtendedTypeDetection
-::rtl::OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
+OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
     throw(RuntimeException)
 {
-    // checks for filter or type name would be necessary in case we want to use the filter also for "602" files
-    // without the magic bytes at the beginning; I leave the code as comment in case of
-    // ::rtl::OUString aFilterName, aTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     const PropertyValue * pValue = Descriptor.getConstArray();
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= mxInputStream;
-/*        else if ( pValue[i].Name == "FilterName" )
-            pValue[i].Value >>= aFilterName;
-        else if ( pValue[i].Name == "TypeName" )
-            pValue[i].Value >>= aTypeName; */
     }
 
     if (!mxInputStream.is())
-        return ::rtl::OUString();
-
-/*    if ( aFilterName == "T602Document" || aTypeName == "writer_T602_Document" )
-        // preselection by type (extension) or filter name: no reason to check type
-        return rtl::OUString(  "writer_T602_Document"  ); */
+        return OUString();
 
     ::com::sun::star::uno::Sequence< sal_Int8 > aData;
-    size_t numBytes = 4;
+    const size_t numBytes = 4;
     size_t numBytesRead = 0;
 
     numBytesRead = mxInputStream->readSomeBytes (aData, numBytes);
 
     if ((numBytesRead != numBytes) || (aData[0] != '@') ||
         (aData[1] != 'C') || (aData[2] != 'T') || (aData[3] != ' '))
-        return ::rtl::OUString();
+        return OUString();
 
-    return rtl::OUString(  "writer_T602_Document"  );
+    return OUString(  "writer_T602_Document"  );
 }
 
 // XFilter
@@ -1144,7 +1133,7 @@ ResMgr* T602ImportFilterDialog::getResMgr()
     return mpResMgr;
 }
 
-void SAL_CALL T602ImportFilterDialog::setTitle( const ::rtl::OUString& )
+void SAL_CALL T602ImportFilterDialog::setTitle( const OUString& )
             throw (::com::sun::star::uno::RuntimeException)
 {
 }
@@ -1158,9 +1147,9 @@ sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
         return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-rtl::OUString T602ImportFilterDialog::getResStr( sal_Int16 resid )
+OUString T602ImportFilterDialog::getResStr( sal_Int16 resid )
 {
-    rtl::OUString sStr = String( ResId( resid, *getResMgr() ) );
+    OUString sStr( ResId( resid, *getResMgr() ) );
     return sStr;
 }
 
