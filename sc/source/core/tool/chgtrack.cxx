@@ -2681,31 +2681,32 @@ void ScChangeTrack::AppendOneDeleteRange( const ScRange& rOrgRange,
 void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
         ScDocument* pRefDoc, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    if ( pRefDoc )
-    {
-        ScAddress aPos;
-        ScBigAddress aBigPos;
-        ScCellIterator aIter( pRefDoc, rOrgRange );
-        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
-        {
-            if (ScChangeActionContent::GetContentCellType(aIter))
-            {
-                aBigPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
-                    aIter.GetPos().Tab() + nDz );
-                ScChangeActionContent* pContent = SearchContentAt( aBigPos, NULL );
-                if ( !pContent )
-                {   // nicht getrackte Contents
-                    aPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
-                        aIter.GetPos().Tab() + nDz );
+    if (!pRefDoc)
+        return;
 
-                    ScBaseCell* pCell = aIter.getHackedBaseCell();
-                    GenerateDelContent( aPos, pCell, pRefDoc );
-                    //! der Content wird hier _nicht_ per AddContent hinzugefuegt,
-                    //! sondern in UpdateReference, um z.B. auch kreuzende Deletes
-                    //! korrekt zu erfassen
-                }
-            }
-        }
+    ScAddress aPos;
+    ScBigAddress aBigPos;
+    ScCellIterator aIter( pRefDoc, rOrgRange );
+    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+    {
+        if (!ScChangeActionContent::GetContentCellType(aIter))
+            continue;
+
+        aBigPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
+            aIter.GetPos().Tab() + nDz );
+        ScChangeActionContent* pContent = SearchContentAt( aBigPos, NULL );
+        if (pContent)
+            continue;
+
+        // nicht getrackte Contents
+        aPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
+            aIter.GetPos().Tab() + nDz );
+
+        ScBaseCell* pCell = aIter.getHackedBaseCell();
+        GenerateDelContent( aPos, pCell, pRefDoc );
+        //! der Content wird hier _nicht_ per AddContent hinzugefuegt,
+        //! sondern in UpdateReference, um z.B. auch kreuzende Deletes
+        //! korrekt zu erfassen
     }
 }
 
