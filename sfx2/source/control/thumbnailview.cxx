@@ -550,11 +550,38 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             Control::KeyInput( rKEvt );
     }
 
-    if ( pNext && pNext->isVisible() )
+    if ( pNext )
     {
         deselectItems();
         SelectItem(pNext->mnId);
+        MakeItemVisible(pNext->mnId);
     }
+}
+
+void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
+{
+    // Get the item row
+    size_t nPos = 0;
+    bool bFound = false;
+    for ( size_t i = 0; !bFound && i < mFilteredItemList.size(); ++i )
+    {
+        ThumbnailViewItem* pItem = mFilteredItemList[i];
+        if ( pItem->mnId == nItemId )
+        {
+            nPos = i;
+            bFound = true;
+        }
+    }
+    sal_uInt16 nRow = nPos / mnCols;
+
+    // Move the visible rows as little as possible to include that one
+    if ( nRow < mnFirstLine )
+        mnFirstLine = nRow;
+    else if ( nRow > mnFirstLine + mnVisLines )
+        mnFirstLine = nRow - mnVisLines;
+
+    CalculateItemPositions();
+    Invalidate();
 }
 
 void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
@@ -700,11 +727,11 @@ void ThumbnailView::LoseFocus()
 
 void ThumbnailView::Resize()
 {
+    Control::Resize();
     CalculateItemPositions();
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
-    Control::Resize();
 }
 
 void ThumbnailView::StateChanged( StateChangedType nType )

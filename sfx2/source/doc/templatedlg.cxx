@@ -332,7 +332,7 @@ void SfxTemplateManagerDlg::Resize()
     Point aViewPos = maView->GetPosPixel();
     aViewPos.setY(nToolbarsHeight);
     aViewPos.setX(0);
-    Size aThumbSize(aWinSize.getWidth(), maTabControl.GetTabPageSizePixel().getWidth() - aViewPos.getY());
+    Size aThumbSize(aWinSize.getWidth(), maTabControl.GetTabPageSizePixel().getHeight() - aViewPos.getY());
     maView->SetPosSizePixel(aViewPos, aThumbSize);
 
     if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)
