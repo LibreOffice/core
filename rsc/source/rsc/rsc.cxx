@@ -162,13 +162,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                     ;
                 if( *pEqual )
                 {
-                    OUString aSPath = OStringToOUString( OString( pEqual + 1 ),  RTL_TEXTENCODING_ASCII_US );
-                    // replace forward slash to backslash on Windows
-                    osl::FileBase::getFileURLFromSystemPath( aSPath, aSPath );
-                    osl::FileBase::getSystemPathFromFileURL( aSPath, aSPath );
+                    const rtl::OString aSPath( pEqual + 1 );
+                    DirEntry            aSDir(rtl::OStringToOUString(aSPath, RTL_TEXTENCODING_ASCII_US));
 
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
-                        rtl::OUStringToOString(aSPath, RTL_TEXTENCODING_ASCII_US) ) );
+                        rtl::OUStringToOString(aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US) ) );
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
@@ -196,7 +194,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 nCommands |= INCLUDE_FLAG;
                 rtl::OStringBuffer aBuffer(aPath);
                 if (aBuffer.getLength())
-                    aBuffer.append(SAL_PATHSEPARATOR);
+                    aBuffer.append(rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US));
                 aBuffer.append((*ppStr) + 2);
                 aPath = aBuffer.makeStringAndClear();
             }
@@ -213,16 +211,14 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 // ignore empty -lip= arguments that we get lots of these days
                 if (!aSysSearchDir.isEmpty())
                 {
-                    OUString aSysDir = OStringToOUString(aSysSearchDir, RTL_TEXTENCODING_ASCII_US);
-                    // replace forward slash to backslash on Windows
-                    osl::FileBase::getFileURLFromSystemPath( aSysDir, aSysDir );
-                    osl::FileBase::getSystemPathFromFileURL( aSysDir, aSysDir );
+                    DirEntry aSysDir(rtl::OStringToOUString(aSysSearchDir, RTL_TEXTENCODING_ASCII_US));
                     m_aOutputFiles.back().aSysSearchDirs.push_back(
-                        rtl::OUStringToOString(aSysDir, RTL_TEXTENCODING_ASCII_US) );
+                        rtl::OUStringToOString(aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US) );
                     rtl::OString aLangSearchPath = m_aOutputFiles.back().aLangSearchPath;
                     if( !aLangSearchPath.isEmpty() )
                     {
-                        aLangSearchPath = aLangSearchPath + OString( SAL_PATHSEPARATOR );
+                        aLangSearchPath = aLangSearchPath +
+                        rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US);
                     }
                     aLangSearchPath = aLangSearchPath + aSysSearchDir;
 
@@ -846,8 +842,8 @@ ERRTYPE RscCompiler::Link()
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
 
             // Schreibe Datei
-            sal_Char cSearchDelim = SAL_PATHSEPARATOR;
-            sal_Char cAccessDelim = SAL_PATHDELIMITER;
+            sal_Char cSearchDelim = rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US)[0];
+            sal_Char cAccessDelim = rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US)[0];
             pTC->ChangeLanguage( it->aLangName );
             pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
             pTC->ClearSysNames();
