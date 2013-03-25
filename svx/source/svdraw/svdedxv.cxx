@@ -1396,7 +1396,6 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
     sal_Bool bRet=sal_False;
     sal_Bool bTextEdit=pTextEditOutlinerView!=NULL && mxTextEditObj.is();
     sal_Bool bAllTextSelected=ImpIsTextEditAllSelected();
-    SfxItemSet* pModifiedSet=NULL;
     const SfxItemSet* pSet=&rSet;
 
     if (!bTextEdit)
@@ -1537,8 +1536,6 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
         }
         bRet=sal_True;
     }
-    if (pModifiedSet!=NULL)
-        delete pModifiedSet;
     return bRet;
 }
 
