@@ -14,6 +14,7 @@ $(eval $(call gb_UI_add_uifiles,svt,\
 	svtools/uiconfig/ui/placeedit \
 	svtools/uiconfig/ui/printersetupdialog \
 	svtools/uiconfig/ui/restartdialog \
+	svtools/uiconfig/ui/GraphicExportOptionsDialog \
 ))
 
 # vim: set noet sw=4 ts=4:

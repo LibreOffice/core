@@ -56,6 +56,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_pdffilter \
 	Library_placeware \
 	Library_svgfilter \
+	Library_graphicfilter \
 	Library_t602filter \
 	Library_textfd \
 	Library_xmlfa \

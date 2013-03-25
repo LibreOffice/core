@@ -829,6 +829,17 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	impress_html_Export_ui \
 )
 
+# fcfg_writergraphics
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_writergraphics_types.xcu,filter/source/config/fragments/types,\
+	jpg_JPEG \
+	png_Portable_Network_Graphic \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writergraphics_filters.xcu,filter/source/config/fragments/filters,\
+	writer_jpg_Export \
+	writer_png_Export \
+)
+
 # fcfg_internalgraphics
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.xcu,filter/source/config/fragments/types,\
 	bmp_MS_Windows \

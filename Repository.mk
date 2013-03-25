@@ -307,6 +307,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	flat \
     for \
     fwk \
+    graphicfilter \
     guesslang \
     helplinker \
     hwp \

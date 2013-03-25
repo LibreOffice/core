@@ -144,6 +144,8 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/edit/svmedit2 \
     svtools/source/edit/textwindowpeer \
     svtools/source/filter/SvFilterOptionsDialog \
+    svtools/source/filter/GraphicExportOptionsDialog \
+    svtools/source/filter/DocumentToGraphicRenderer \
     svtools/source/filter/exportdialog \
     svtools/source/graphic/descriptor \
     svtools/source/graphic/graphic \

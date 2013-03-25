@@ -97,7 +97,9 @@ postprocess_FILES_graphicfilter := \
 	$(postprocess_MOD)/fcfg_drawgraphics_filters.xcu \
 	$(postprocess_MOD)/fcfg_drawgraphics_types.xcu \
 	$(postprocess_MOD)/fcfg_impressgraphics_filters.xcu \
-	$(postprocess_MOD)/fcfg_impressgraphics_types.xcu
+	$(postprocess_MOD)/fcfg_impressgraphics_types.xcu \
+	$(postprocess_MOD)/fcfg_writergraphics_filters.xcu \
+	$(postprocess_MOD)/fcfg_writergraphics_types.xcu
 
 postprocess_DEPS_impress := main
 postprocess_FILES_impress := \
