@@ -686,22 +686,6 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         if ( xCurrentRow.is() )
         {
             // after creation the set is positioned before the first record, per definition
-#ifdef DBG_UTIL
-            Reference< XResultSetMetaDataSupplier > xSup(xPrivileges,UNO_QUERY);
-            if ( xSup.is() )
-            {
-                Reference< XResultSetMetaData > xRsMetaData = xSup->getMetaData();
-                if ( xRsMetaData.is() )
-                {
-                    sal_Int32 nCount = xRsMetaData->getColumnCount();
-                    for (sal_Int32 i=1; i<=nCount; ++i)
-                    {
-                        ::rtl::OUString sColumnName = xRsMetaData->getColumnName(i);
-                    }
-                }
-            }
-#endif
-
             ::rtl::OUString sPrivilege, sGrantee;
             while ( xPrivileges->next() )
             {
