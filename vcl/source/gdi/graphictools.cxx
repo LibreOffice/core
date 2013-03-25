@@ -123,8 +123,6 @@ void SvtGraphicStroke::scale( double fXScale, double fYScale )
     maPath.Scale( fXScale, fYScale );
 
     double fScale = sqrt (fabs (fXScale * fYScale) ); // clearly not ideal.
-    fprintf( stderr, " HIT A SCALING ! by %g %g %g\n",
-             (double) fXScale, (double) fYScale, (double) fScale );
     mfStrokeWidth *= fScale;
     mfMiterLimit *= fScale;
 
