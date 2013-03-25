@@ -21,7 +21,6 @@
 #include "InternalData.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
-#include "macros.hxx"
 
 #include <rtl/math.hxx>
 #include <algorithm>

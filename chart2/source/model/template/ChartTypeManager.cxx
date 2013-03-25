@@ -257,7 +257,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             // createInstance is called with an unknown service-name, this
             // function will just return an empty XInterface.
             ASSERT_EXCEPTION( ex );
-            OSL_TRACE( "Couldn't instantiate service \"%s\"", U2C( aServiceSpecifier ));
+            SAL_WARN("chart2", "Couldn't instantiate service: "<< aServiceSpecifier );
             xResult.set( 0 );
         }
     }

@@ -36,8 +36,6 @@
 #define ASSERT_EXCEPTION(ex) (void)(ex)
 #endif
 
-#define U2C(ouString) (OUStringToOString(ouString,RTL_TEXTENCODING_ASCII_US).getStr())
-
 // CHART_MACROS_HXX
 #endif
 

@@ -173,7 +173,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                     xFilter.set(
                         m_xContext->getServiceManager()->createInstanceWithContext(
                             aFilterServiceName, m_xContext ), uno::UNO_QUERY_THROW );
-                    OSL_TRACE( "Filter found for service %s", U2C( aFilterServiceName ));
+                    SAL_WARN("chart2", "Filter found for service " << aFilterServiceName );
                 }
             }
         }

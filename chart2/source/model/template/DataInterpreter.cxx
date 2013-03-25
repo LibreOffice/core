@@ -410,7 +410,7 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
     if( ! xSource.is())
         return;
 
-    OSL_TRACE( "DataSource in DataInterpreter:" );
+    SAL_INFO("chart2", "DataSource in DataInterpreter:" );
     Sequence< Reference< data::XLabeledDataSequence > > aSequences( xSource->getDataSequences());
     Reference< beans::XPropertySet > xProp;
     OUString aId;
@@ -426,11 +426,11 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
             if( xProp.is() &&
                 ( xProp->getPropertyValue( "Role") >>= aId ))
             {
-                OSL_TRACE( "  <data sequence %d> Role: %s, Source: %s", k, U2C( aId ), U2C( aSourceRepr ));
+                SAL_INFO("chart2", "  <data sequence " << k << "> Role: " << aId << ", Source: "<< aSourceRepr);
             }
             else
             {
-                OSL_TRACE( "  <data sequence %d> unknown Role, Source: %s", k, U2C( aSourceRepr ) );
+                SAL_INFO("chart2", "  <data sequence " << k << "> unknown Role, Source: " << aSourceRepr );
             }
 
             aSourceRepr = "<none>";
@@ -440,11 +440,12 @@ void lcl_ShowDataSource( const Reference< data::XDataSource > & xSource )
             if( xProp.is() &&
                 ( xProp->getPropertyValue( "Role") >>= aId ))
             {
-                OSL_TRACE( "  <data sequence label %d> Role: %s, Source: %s", k, U2C( aId ), U2C( aSourceRepr ));
+                SAL_INFO("chart2", "  <data sequence label " << k << "> Role: " << aId
+                        << ", Source: " << aSourceRepr );
             }
             else
             {
-                OSL_TRACE( "  <data sequence label %d> unknown Role, Source: %s", k, U2C( aSourceRepr ) );
+                SAL_INFO("chart2", "  <data sequence label " << k << "> unknown Role, Source: " << aSourceRepr );
             }
         }
     }
