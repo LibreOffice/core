@@ -63,7 +63,7 @@ Guess::Guess(const char * guess_str)
            &&
            strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
 #else
-        if(strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKNOWN) != 0
+        if(strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKOWN) != 0
            &&
            strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT) != 0)
 #endif
