@@ -96,6 +96,18 @@ SvpSalGraphics::SvpSalGraphics() :
 
 SvpSalGraphics::~SvpSalGraphics()
 {
+#ifdef IOS
+    if(m_style)
+    {
+        delete m_style;
+        m_style = NULL;
+    }
+    if(mrContext)
+    {
+        CGContextRelease( mrContext );
+        mrContext = NULL;
+    }
+#endif
 }
 
 void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
