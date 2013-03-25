@@ -56,20 +56,20 @@ void IosSalInstance::BlitFrameToBuffer(char *pPixelBuffer,
     const sal_Int32 nStride = aDev->getScanlineStride();
     const unsigned char *pSrc = aSrcData.get();
 
+    if (aDev->getScanlineFormat() != basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA)
+    {
+        SAL_INFO( "vcl.ios", "BlitFrameToBuffer: format is not 32bpp RGBA but " << aDev->getScanlineFormat() );
+        return;
+    }
+
     for (unsigned int y = 0; y < (unsigned int)aDevSize.getY(); y++)
     {
-        const unsigned char *sp( pSrc + nStride * y );
+        const unsigned char *sp( pSrc + nStride * (aDevSize.getY() - 1 - y) );
 
         unsigned char *dp( (unsigned char *)pPixelBuffer +
                            nPBWidth * 4 * (y + nDestY) +
                            nDestX * 4 );
-        for (unsigned int x = 0; x < (unsigned int)aDevSize.getX(); x++)
-        {
-            dp[x*4 + 0] = sp[x*4 + 0]; // R
-            dp[x*4 + 1] = sp[x*4 + 1]; // G
-            dp[x*4 + 2] = sp[x*4 + 2]; // B
-            dp[x*4 + 3] = 255; // A
-        }
+        memcpy(dp, sp, aDevSize.getX()*4);
     }
 }
 
