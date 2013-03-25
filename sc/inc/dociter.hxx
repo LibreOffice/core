@@ -229,7 +229,6 @@ private:
         ScFormulaCell* mpCurFormula; // points to the original.
     };
 
-    ScBaseCell*     GetThis();
     void init();
     bool getCurrent();
 public:
@@ -239,8 +238,7 @@ public:
                                    bool bSTotal = false);
                     ScCellIterator(ScDocument* pDoc,
                                    const ScRange& rRange, bool bSTotal = false);
-    ScBaseCell*     GetFirst();
-    ScBaseCell*     GetNext();
+
     const ScAddress& GetPos() const { return maCurPos; }
 
     CellType getType() const;

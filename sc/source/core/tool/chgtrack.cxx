@@ -2655,9 +2655,9 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
         ScAddress aPos;
         ScBigAddress aBigPos;
         ScCellIterator aIter( pRefDoc, rOrgRange );
-        ScBaseCell* pCell = aIter.GetFirst();
-        while ( pCell )
+        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
         {
+            ScBaseCell* pCell = aIter.getHackedBaseCell();
             if ( ScChangeActionContent::GetContentCellType( pCell ) )
             {
                 aBigPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,
@@ -2673,7 +2673,6 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
                     //! korrekt zu erfassen
                 }
             }
-            pCell = aIter.GetNext();
         }
     }
 }
