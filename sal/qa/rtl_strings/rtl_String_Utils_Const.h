@@ -20,9 +20,7 @@
 #ifndef _RTL_STRING_UTILS_CONST_H_
 #define _RTL_STRING_UTILS_CONST_H_
 
-#ifndef _SAL_TYPES_H_
-    #include <sal/types.h>
-#endif
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C"

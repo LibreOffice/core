@@ -25,17 +25,9 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _SAL_TYPES_H_
-    #include <sal/types.h>
-#endif
-
-#ifndef _RTL_USTRING_H_
-    #include <rtl/ustring.h>
-#endif
-
-#ifndef _RTL_STRING_HXX_
-    #include <rtl/string.hxx>
-#endif
+#include <sal/types.h>
+#include <rtl/ustring.h>
+#include <rtl/string.hxx>
 
 sal_Char* cpystr( sal_Char* dst, const sal_Char* src );
 sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );

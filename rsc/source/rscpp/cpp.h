@@ -302,17 +302,9 @@ void InitCpp6();
 
 #define HELLO()   fprintf( stderr, "[Hello at %s, %d] ", __FILE__, __LINE__ )
 
-#ifndef _STDIO_H
 #include <stdio.h>
-#endif
-
-#ifndef _STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifndef _STRING_H
 #include <string.h>
-#endif
 
 /* cpp1.c */
 void output( int c );

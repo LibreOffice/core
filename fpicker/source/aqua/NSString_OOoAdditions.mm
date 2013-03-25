@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CFSTRINGUTILITIES_HXX_
 #include "CFStringUtilities.hxx"
-#endif
-
 #include "NSString_OOoAdditions.hxx"
 
 #define CLASS_NAME "NSString"

@@ -26,9 +26,7 @@
 
 #else /* !_SOLAR_RSC_INVOKED */
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 
 /** The various supported text encodings.
 

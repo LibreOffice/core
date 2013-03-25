@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*****************************************************************/
-/* Includes                                                      */
-/*****************************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -33,9 +29,7 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
-#ifndef _FILE_URL_H_
 #include "file_url.h"
-#endif
 
 oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
 {

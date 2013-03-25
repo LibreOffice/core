@@ -20,15 +20,8 @@
  #ifndef _OSL_FILE_PATH_HELPER_H_
  #define _OSL_FILE_PATH_HELPER_H_
 
-
- #ifndef _SAL_TYPES_H_
  #include <sal/types.h>
- #endif
-
- #ifndef _RTL_USTRING_H_
  #include <rtl/ustring.h>
- #endif
-
 
  #ifdef __cplusplus
  extern "C"

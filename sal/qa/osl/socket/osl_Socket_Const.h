@@ -24,23 +24,11 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustring.h>
-
-#ifndef _OSL_SOCLET_HXX_
 #include <osl/socket.hxx>
-#endif
 #include <osl/socket.h>
-
-#ifndef _OSL_THREAD_HXX
 #include <osl/thread.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX
 #include <osl/file.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX
 #include <osl/mutex.hxx>
-#endif
 #include <osl/time.h>
 
 const char * pTestString1 = "test socket";

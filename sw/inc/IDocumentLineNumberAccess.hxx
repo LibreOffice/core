@@ -20,9 +20,7 @@
  #ifndef IDOCUMENTLINENUMBERACCESS_HXX_INCLUDED
  #define IDOCUMENTLINENUMBERACCESS_HXX_INCLUDED
 
- #ifndef _SAL_TYPES_H_
  #include <sal/types.h>
- #endif
 
 class SwLineNumberInfo;
 

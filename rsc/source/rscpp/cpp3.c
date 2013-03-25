@@ -26,9 +26,7 @@
 
 #include "time.h" /* BP */
 
-#ifndef _STRING_H
 #include <string.h>
-#endif
 
 #ifndef _NO_PROTO
 int AddInclude( char *pIncStr );  /* BP, 11.09.91, Forward-Deklaration */

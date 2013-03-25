@@ -20,9 +20,7 @@
  #ifndef IDOCUMENTSTYLEPOOLACCESS_HXX_INCLUDED
  #define IDOCUMENTSTYLEPOOLACCESS_HXX_INCLUDED
 
- #ifndef _SAL_TYPES_H_
  #include <sal/types.h>
- #endif
 
  class SwTxtFmtColl;
  class SwCharFmt;

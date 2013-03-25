@@ -20,26 +20,11 @@
  #ifndef _OSL_UUNXAPI_H_
  #define _OSL_UUNXAPI_H_
 
- #ifndef _UNISTD_H
  #include <unistd.h>
- #endif
-
- #ifndef _STDLIB_H
  #include <stdlib.h>
- #endif
-
- #ifndef _TYPES_H
  #include <sys/types.h>
- #endif
-
- #ifndef _STAT_H
  #include <sys/stat.h>
- #endif
-
- #ifndef _RTL_USTRING_H_
  #include <rtl/ustring.h>
- #endif
-
 
  #ifdef __cplusplus
  extern "C"

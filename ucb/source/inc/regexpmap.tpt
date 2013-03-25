@@ -19,19 +19,11 @@
 #ifndef _UCB_REGEXPMAP_TPT_
 #define _UCB_REGEXPMAP_TPT_
 
-#ifndef _UCB_REGEXPMAP_HXX_
 #include <regexpmap.hxx>
-#endif
-
 #include <list>
-
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
-#ifndef _UCB_REGEXP_HXX_
 #include "regexp.hxx"
-#endif
 
 using namespace ucb_impl;
 

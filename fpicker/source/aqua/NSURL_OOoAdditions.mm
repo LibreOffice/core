@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _NSSTRING_OOOADDITIONS_HXX_
 #include "NSString_OOoAdditions.hxx"
-#endif
-
 #include "NSURL_OOoAdditions.hxx"
 #include "sal/log.hxx"
 

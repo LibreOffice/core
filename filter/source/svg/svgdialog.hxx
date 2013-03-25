@@ -20,12 +20,8 @@
 #ifndef SVGDIALOG_HXX
 #define SVGDIALOG_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
-#endif
 
 #include <svtools/genericunodialog.hxx>
 #include <memory>

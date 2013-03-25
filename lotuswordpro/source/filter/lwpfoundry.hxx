@@ -66,19 +66,13 @@
 #define _LWPFOUNDRY_HXX
 
 #include "lwpheader.hxx"
-
-#ifndef _LWPOBJECTID_HXX
 #include "lwpobjid.hxx"
-#endif
-
-#ifndef _LWPOBJECTSTREAM_HXX
 #include "lwpobjstrm.hxx"
-#endif
-
 #include "lwpcolor.hxx"
 #include "lwpbasetype.hxx"
 #include "lwpfont.hxx"
 #include "lwpdropcapmgr.hxx"
+
 class LwpDocument;
 class LwpBookMark;
 

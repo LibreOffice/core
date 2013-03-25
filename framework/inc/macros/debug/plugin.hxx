@@ -26,13 +26,8 @@
 
 #ifdef  ENABLE_PLUGINDEBUG
 
-    #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
-    #endif
-
-    #ifndef _RTL_STRING_HXX_
     #include <rtl/string.hxx>
-    #endif
 
     /*_____________________________________________________________________________________________________________
         LOGFILE_PLUGIN

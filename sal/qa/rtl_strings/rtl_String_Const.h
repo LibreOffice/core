@@ -20,23 +20,13 @@
 #ifndef _RTL_STRING_CONST_H_
 #define _RTL_STRING_CONST_H_
 
-#ifndef _RTL_STRING_UTILS_HXX_
-    #include <rtl_String_Utils.hxx>
-#endif
+#include <rtl_String_Utils.hxx>
 
 #include <limits.h>
 
-#ifndef _SAL_TYPES_H_
-    #include <sal/types.h>
-#endif
-
-#ifndef _RTL_TEXTENC_H
-    #include <rtl/textenc.h>
-#endif
-
-#ifndef _RTL_USTRING_H_
-    #include <rtl/ustring.h>
-#endif
+#include <sal/types.h>
+#include <rtl/textenc.h>
+#include <rtl/ustring.h>
 
 #ifdef __cplusplus
 extern "C"

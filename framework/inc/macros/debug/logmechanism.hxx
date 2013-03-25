@@ -26,10 +26,7 @@
 
 #ifdef  ENABLE_LOGMECHANISM
 
-    #ifndef _RTL_STRING_HXX_
     #include <rtl/string.hxx>
-    #endif
-
     #include <stdio.h>
 
     /*_____________________________________________________________________________________________________________

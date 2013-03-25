@@ -23,69 +23,28 @@
 %{
 #include <string.h>
 
-#ifndef _IDLC_IDLC_HXX_
 #include <idlc/idlc.hxx>
-#endif
-#ifndef _IDLC_ERRORHANDLER_HXX_
 #include <idlc/errorhandler.hxx>
-#endif
-#ifndef _IDLC_FEHELPER_HXX_
 #include <idlc/fehelper.hxx>
-#endif
-#ifndef _IDLC_EXPRESSION_HXX_
 #include <idlc/astexpression.hxx>
-#endif
-#ifndef _IDLC_ASTCONSTANTS_HXX_
 #include <idlc/astconstants.hxx>
-#endif
-#ifndef _IDLC_ASTCONSTANT_HXX_
 #include <idlc/astconstant.hxx>
-#endif
-#ifndef _IDLC_ASTARRAY_HXX_
 #include <idlc/astarray.hxx>
-#endif
-#ifndef _IDLC_ASTBASETYPE_HXX_
 #include <idlc/astbasetype.hxx>
-#endif
-#ifndef _IDLC_ASTTYPEDEF_HXX_
 #include <idlc/asttypedef.hxx>
-#endif
-#ifndef _IDLC_ASTEXCEPTION_HXX_
 #include <idlc/astexception.hxx>
-#endif
-#ifndef _IDLC_ASTMEMBER_HXX_
 #include <idlc/astmember.hxx>
-#endif
-#ifndef _IDLC_ASTENUM_HXX_
 #include <idlc/astenum.hxx>
-#endif
-#ifndef _IDLC_ASTSEQUENCE_HXX_
 #include <idlc/astsequence.hxx>
-#endif
-#ifndef _IDLC_ASTATTRIBUTE_HXX_
 #include <idlc/astattribute.hxx>
-#endif
-#ifndef _IDLC_ASTOPERATION_HXX_
 #include <idlc/astoperation.hxx>
-#endif
-#ifndef _IDLC_ASTPARAMETER_HXX_
 #include <idlc/astparameter.hxx>
-#endif
-#ifndef _IDLC_ASTINTERFACEMEMBER_HXX_
 #include <idlc/astinterfacemember.hxx>
-#endif
-#ifndef _IDLC_ASTSERVICEMEMBER_HXX_
 #include <idlc/astservicemember.hxx>
-#endif
-#ifndef _IDLC_ASTOBSERVES_HXX_
 #include <idlc/astobserves.hxx>
-#endif
-#ifndef _IDLC_ASTNEEDS_HXX_
 #include <idlc/astneeds.hxx>
-#endif
-#ifndef _IDLC_ASTUNION_HXX_
 #include <idlc/astunion.hxx>
-#endif
+
 #include "idlc/aststructinstance.hxx"
 
 #include "attributeexceptions.hxx"

@@ -22,9 +22,7 @@
 #include <framework/fwedllapi.h>
 #include <vcl/bitmap.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _COM_SUN_STAR_IO_XOUPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

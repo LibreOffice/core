@@ -69,10 +69,7 @@ int SAL_CALL main(int argc, char ** argv) \
 
 #ifdef SAL_W32
 
-#ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
-#define INCLUDED_STDLIB_H
-#endif
 
 /* Sorry but this is neccessary cause HINSTANCE is a typedef that differs (C++ causes an error) */
 

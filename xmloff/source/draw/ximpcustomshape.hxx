@@ -26,9 +26,7 @@
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 

@@ -26,9 +26,7 @@
 
 #include <general.h>
 
-#ifndef __COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
 
 #include <comphelper/sequenceasvector.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

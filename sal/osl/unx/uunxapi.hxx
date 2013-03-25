@@ -20,13 +20,9 @@
 #ifndef _OSL_UUNXAPI_HXX_
 #define _OSL_UUNXAPI_HXX_
 
-#ifndef _OSL_UUNXAPI_H_
 #include "uunxapi.h"
-#endif
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 namespace osl
 {

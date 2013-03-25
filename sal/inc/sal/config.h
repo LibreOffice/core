@@ -24,10 +24,7 @@
 #include "config_global.h"
 #endif
 
-#ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
-#define INCLUDED_STDLIB_H
-#endif
 
 #ifdef WIN32
 #define SAL_W32

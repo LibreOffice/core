@@ -109,9 +109,8 @@
 #include <rtl/random.h>
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
-#ifndef _NUMRULE_HXX
 #include "numrule.hxx"//For i120928
-#endif
+
 using namespace sw::util;
 using namespace sw::types;
 

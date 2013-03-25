@@ -22,9 +22,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <sal/types.h>
-#ifndef _SOLAR_h
 #include <tools/solar.h>
-#endif
 
 class String;
 

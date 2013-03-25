@@ -22,9 +22,7 @@
 
 #include <guiddef.h>
 
-#ifndef _COMPHELPER_CLASSIDS_HXX
 #include <comphelper/classids.hxx>
-#endif
 
 #if defined __MINGW32__
 #pragma GCC diagnostic warning "-Wmissing-braces"

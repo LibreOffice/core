@@ -48,29 +48,13 @@
 #include &lt;vector&gt;
 #include &lt;boost/shared_ptr.hpp&gt;
 
-#ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
 #include &lt;resourcemodel/OutputWithDepth.hxx&gt;
-#endif
 
-#ifndef INCLUDED_RESOURCESIDS_HXX
 #include &lt;doctok/resourceids.hxx&gt;
-#endif
-
-#ifndef INCLUDED_WW8_STRUCT_BASE_HXX
 #include &lt;doctok/WW8StructBase.hxx&gt;
-#endif
-
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_IMPL_HXX
 #include &lt;doctok/WW8ResourceModelImpl.hxx&gt;
-#endif
-
-#ifndef INCLUDED_WW8_PROPERTY_SET_IMPL_HXX
 #include &lt;doctok/WW8PropertySetImpl.hxx&gt;
-#endif
-
-#ifndef INCLUDED_DFF_HXX
 #include &lt;doctok/Dff.hxx&gt;
-#endif
 
 namespace writerfilter {
 namespace doctok {

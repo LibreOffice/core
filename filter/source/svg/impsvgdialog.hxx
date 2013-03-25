@@ -20,13 +20,8 @@
 #ifndef IMPSVGDIALOG_HXX
 #define IMPSVGDIALOG_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

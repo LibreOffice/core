@@ -26,9 +26,7 @@
 
 #ifdef  ENABLE_EVENTDEBUG
 
-    #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
-    #endif
 
     /*_____________________________________________________________________________________________________________
         LOGFILE_EVENTDEBUG

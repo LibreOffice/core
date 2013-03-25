@@ -21,9 +21,7 @@
 #define _SV_ACCEL_H
 
 #include <tools/solar.h>
-#ifndef _SV_KEYCOD_HXX
 #include <vcl/keycod.hxx>
-#endif
 
 class Accelerator;
 

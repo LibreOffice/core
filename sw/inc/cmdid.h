@@ -26,10 +26,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define INCLUDED_SW_CMDID_H
 
 #include <sfx2/sfx.hrc>
-
-#ifndef SW_UNOMID_H
 #include <unomid.h>
-#endif
 
 /* Flags that are being used in the slot definitions for the disable-features */
 #define SW_DISABLE_ON_PROTECTED_CURSOR  0x00000001

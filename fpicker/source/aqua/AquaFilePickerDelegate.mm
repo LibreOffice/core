@@ -19,14 +19,8 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-#ifndef _SALAQUAFILEPICKER_HXX_
 #include "SalAquaFilePicker.hxx"
-#endif
-
-#ifndef _FILTERHELPER_HXX_
 #include "FilterHelper.hxx"
-#endif
-
 #include "AquaFilePickerDelegate.hxx"
 
 @implementation AquaFilePickerDelegate

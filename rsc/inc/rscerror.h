@@ -19,9 +19,7 @@
 #ifndef _RSCERROR_H
 #define _RSCERROR_H
 
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 
 /****************** D E F I N I T I O N S ********************************/
 /******************* R e t u r n   E r r o r s         *******************/

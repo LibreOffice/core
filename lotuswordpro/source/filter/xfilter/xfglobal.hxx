@@ -63,33 +63,16 @@
 
 #include <cassert>
 
-#ifndef _SAL_TYPES_H
 #include "sal/types.h"
-#endif
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
-#ifndef _IXFOBJECT_HXX
 #include "ixfobject.hxx"
-#endif
-
-#ifndef _IXFSTREAM_HXX
 #include "ixfstream.hxx"
-#endif
-
-#ifndef _IXFATTRLIST_HXX
 #include "ixfattrlist.hxx"
-#endif
 
-#ifndef _XFUTIL_HXX
 #include "xfutil.hxx"
-#endif
-
-#ifndef _XFDEFS_HXX
 #include "xfdefs.hxx"
-#endif
 
 #define PI 3.1415926
 #define FLOAT_MIN   0.001

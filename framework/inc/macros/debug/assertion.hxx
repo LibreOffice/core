@@ -22,13 +22,8 @@
 
 #if defined( ENABLE_ASSERTIONS ) || defined( ENABLE_WARNINGS )
 
-    #ifndef _OSL_DIAGNOSE_H_
     #include <osl/diagnose.h>
-    #endif
-
-    #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
-    #endif
 
 #endif
 

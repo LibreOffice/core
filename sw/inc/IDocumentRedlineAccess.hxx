@@ -20,18 +20,12 @@
  #ifndef IDOCUMENTREDLINE_HXX_INCLUDED
  #define IDOCUMENTREDLINE_HXX_INCLUDED
 
- #ifndef _SAL_TYPES_H_
  #include <sal/types.h>
- #endif
- #ifndef _SOLAR_H
  #include <tools/solar.h>
- #endif
 
  #include <limits.h> // USHRT_MAX
 
- #ifndef _COM_SUN_STAR_SEQUENCE_HXX_
  #include <com/sun/star/uno/Sequence.hxx>
- #endif
 
  class SwRedline;
  class SwRedlineTbl;

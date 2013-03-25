@@ -24,13 +24,9 @@
 #include <rtl/alloc.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HXX_
 #include <com/sun/star/lang/EventObject.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HXX_
 #include "com/sun/star/lang/DisposedException.hpp"
-#endif
 #include "cppuhelperdllapi.h"
 
 /** */ //for docpp

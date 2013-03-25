@@ -22,16 +22,10 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <osl/mutex.hxx>
 #include <osl/pipe.hxx>
-
-#ifndef _OSL_CONDITION_HXX_
 #include <osl/conditn.hxx>
-#endif
 #include <osl/time.h>
 
 #ifdef UNX

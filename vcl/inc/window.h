@@ -24,12 +24,8 @@
 #include <tools/solar.h>
 #include <vcl/outdev.hxx>
 #include <vcl/timer.hxx>
-#ifndef _SV_INPUTCTX_HXX
 #include <vcl/inputctx.hxx>
-#endif
-#ifndef _SV_POINTR_HXX
 #include <vcl/pointr.hxx>
-#endif
 #include <tools/wintypes.hxx>
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
