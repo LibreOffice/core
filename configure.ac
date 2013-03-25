@@ -5567,8 +5567,8 @@ if test "$GCC" = "yes"; then
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -Wunused"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-            #pragma GCC diagnostic ignored "-Wunused"
-            static void dummy() {}
+            #pragma GCC diagnostic ignored "-Wunused-parameter"
+            void dummy(int n) {}
         ])], [
             AC_DEFINE([HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY],[1])
             AC_MSG_RESULT([yes])
@@ -5580,8 +5580,8 @@ if test "$GCC" = "yes"; then
     CFLAGS="$CFLAGS -Werror -Wunused"
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
             #pragma GCC diagnostic push
-            #pragma GCC diagnostic ignored "-Wunused"
-            static void dummy() {}
+            #pragma GCC diagnostic ignored "-Wunused-parameter"
+            void dummy(int n) {}
             #pragma GCC diagnostic pop
         ])], [
             AC_DEFINE([HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE],[1])
