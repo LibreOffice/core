@@ -698,7 +698,7 @@ SwDoc::~SwDoc()
 
 VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
-    VirtualDevice* pNewVir = new VirtualDevice( 1 );
+    VirtualDevice* pNewVir = new VirtualDevice( 8 );
 
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 

@@ -65,23 +65,41 @@ private:
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
 public:
-                        VirtualDevice( sal_uInt16 nBitCount = 0 );
-                        VirtualDevice( const OutputDevice& rCompDev,
-                                       sal_uInt16 nBitCount = 0 );
-    /** Create a virtual device with alpha channel
-
-        @param rCompDev
-        The generated vdev will be compatible to this device. By
-        default, Application::GetDefaultDevice() is used here.
+    /** Create a virtual device of size 1x1
 
         @param nBitCount
         Bit depth of the generated virtual device. Use 0 here, to
-        indicate: take default screen depth. Currently, only 0 and 1
+        indicate: take default screen depth. Only 0, 1 and 8
+        are allowed here, with 1 denoting binary mask and 8 a graylevel mask.
+     */
+                        VirtualDevice( sal_uInt16 nBitCount = 0 );
+
+    /** Create a virtual device of size 1x1
+
+        @param rCompDev
+        The generated vdev will be compatible to this device.
+
+        @param nBitCount
+        Bit depth of the generated virtual device. Use 0 here, to
+        indicate: take default screen depth. Only 0 and 1
+        are allowed here, with 1 denoting binary mask.
+     */
+                        VirtualDevice( const OutputDevice& rCompDev,
+                                       sal_uInt16 nBitCount = 0 );
+
+    /** Create a virtual device  of size 1x1 with alpha channel
+
+        @param rCompDev
+        The generated vdev will be compatible to this device.
+
+        @param nBitCount
+        Bit depth of the generated virtual device. Use 0 here, to
+        indicate: take default screen depth. Only 0 and 1
         are allowed here, with 1 denoting binary mask.
 
         @param nAlphaBitCount
         Bit depth of the generated virtual device. Use 0 here, to
-        indicate: take default screen depth. Currently, only 0 and 1
+        indicate: take default screen depth. Only 0 and 1
         are allowed here, with 1 denoting binary mask.
      */
                         VirtualDevice( const OutputDevice& rCompDev,
