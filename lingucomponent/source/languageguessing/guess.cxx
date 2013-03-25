@@ -57,9 +57,16 @@ Guess::Guess(const char * guess_str)
 //        &&
 //        strncmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT, strlen(_TEXTCAT_RESULT_SHORT)) != 0)
 //     {
+// FIXME just a temporary check until new version with renamed macros deployed
+#if EXTTEXTCAT_VERSION_MAJOR > 3 || (EXTTEXTCAT_VERSION_MAJOR == 3 && (EXTTEXTCAT_VERSION_MINOR > 4 || (EXTTEXTCAT_VERSION_MINOR == 4 && (EXTTEXTCAT_VERSION_MICRO >= 1))))
         if(strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_UNKNOWN_STR) != 0
            &&
            strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
+#else
+        if(strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKNOWN) != 0
+           &&
+           strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT) != 0)
+#endif
         {
 
         int current_pointer = 0;

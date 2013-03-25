@@ -128,7 +128,12 @@ vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
 
     const char *guess_list = textcat_Classify(h, text, len);
 
+// FIXME just a temporary check until new version with renamed macros deployed
+#if EXTTEXTCAT_VERSION_MAJOR > 3 || (EXTTEXTCAT_VERSION_MAJOR == 3 && (EXTTEXTCAT_VERSION_MINOR > 4 || (EXTTEXTCAT_VERSION_MINOR == 4 && (EXTTEXTCAT_VERSION_MICRO >= 1))))
     if (strcmp(guess_list, TEXTCAT_RESULT_SHORT_STR) == 0)
+#else
+    if (strcmp(guess_list, _TEXTCAT_RESULT_SHORT) == 0)
+#endif
         return guesses;
 
     int current_pointer = 0;
