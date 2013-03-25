@@ -1090,6 +1090,7 @@ BitmapDevice::BitmapDevice( const basegfx::B2IBox&           rBounds,
 BitmapDevice::~BitmapDevice()
 {
     // outline, because of internal ImplBitmapDevice
+    SAL_INFO( "basebmp.bitmapdevice", "~BitmapDevice(" << this << ")" );
 }
 
 basegfx::B2IVector BitmapDevice::getSize() const
@@ -2038,7 +2039,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
               << rSize.getX() << "x" << rSize.getY()
               << (bTopDown ? " top-down " : " bottom-up ")
               << Format::formatName(nScanlineFormat)
-              << " = " << result );
+              << " = " << result.get() );
 
     return result;
 }
