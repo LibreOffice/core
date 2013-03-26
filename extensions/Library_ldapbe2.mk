@@ -55,7 +55,7 @@ $(eval $(call gb_Library_use_libraries,ldapbe2,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,ldapbe2,\
-	plc4, wldap32 \
+	wldap32 \
 ))
 else # 0S!=WNT
 $(eval $(call gb_Library_use_externals,ldapbe2,\
