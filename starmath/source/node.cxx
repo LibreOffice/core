@@ -41,12 +41,6 @@
 #include <float.h>
 
 
-#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
-
-
-using ::rtl::OUString;
-
-
 ////////////////////////////////////////
 // SmTmpDevice
 // Allows for font and color changes. The original settings will be restored
@@ -440,7 +434,7 @@ void SmNode::CreateTextFromNode(String &rText)
     if (nSize > 1)
     {
         rText = comphelper::string::stripEnd(rText, ' ');
-        APPEND(rText,"} ");
+        rText += "} ";
     }
 }
 
@@ -815,7 +809,7 @@ void SmExpressionNode::CreateTextFromNode(String &rText)
     if (nSize > 1)
     {
         rText = comphelper::string::stripEnd(rText, ' ');
-        APPEND(rText,"} ");
+        rText += "} ";
     }
 }
 
@@ -1105,11 +1099,11 @@ void SmRootNode::CreateTextFromNode(String &rText)
     SmNode *pExtra = GetSubNode(0);
     if (pExtra)
     {
-        APPEND(rText,"nroot ");
+        rText += "nroot ";
         pExtra->CreateTextFromNode(rText);
     }
     else
-        APPEND(rText,"sqrt ");
+        rText += "sqrt ";
     GetSubNode(2)->CreateTextFromNode(rText);
 }
 
@@ -1218,7 +1212,7 @@ void SmBinVerNode::CreateTextFromNode(String &rText)
     SmNode *pNum   = GetSubNode(0),
            *pDenom = GetSubNode(2);
     pNum->CreateTextFromNode(rText);
-    APPEND(rText,"over ");
+    rText += "over ";
     pDenom->CreateTextFromNode(rText);
 }
 
@@ -1606,22 +1600,22 @@ void SmSubSupNode::CreateTextFromNode(String &rText)
 
     if (NULL != (pNode = GetSubNode(LSUB+1)))
     {
-        APPEND(rText,"lsub ");
+        rText += "lsub ";
         pNode->CreateTextFromNode(rText);
     }
     if (NULL != (pNode = GetSubNode(LSUP+1)))
     {
-        APPEND(rText,"lsup ");
+        rText += "lsup ";
         pNode->CreateTextFromNode(rText);
     }
     if (NULL != (pNode = GetSubNode(CSUB+1)))
     {
-        APPEND(rText,"csub ");
+        rText += "csub ";
         pNode->CreateTextFromNode(rText);
     }
     if (NULL != (pNode = GetSubNode(CSUP+1)))
     {
-        APPEND(rText,"csup ");
+        rText += "csup ";
         pNode->CreateTextFromNode(rText);
     }
     if (NULL != (pNode = GetSubNode(RSUB+1)))
@@ -1644,7 +1638,7 @@ void SmSubSupNode::CreateTextFromNode(String &rText)
 void SmBraceNode::CreateTextFromNode(String &rText)
 {
     if (GetScaleMode() == SCALE_HEIGHT)
-        APPEND(rText,"left ");
+        rText += "left ";
     {
         String aStr;
         GetSubNode(0)->CreateTextFromNode(aStr);
@@ -1653,21 +1647,21 @@ void SmBraceNode::CreateTextFromNode(String &rText)
         if (aStr.Len())
         {
             if (aStr.EqualsAscii("divides"))
-                APPEND(rText,"lline");
+                rText += "lline";
             else if (aStr.EqualsAscii("parallel"))
-                APPEND(rText,"ldline");
+                rText += "ldline";
             else if (aStr.EqualsAscii("<"))
-                APPEND(rText,"langle");
+                rText += "langle";
             else
                 rText.Append(aStr);
             rText.Append(' ');
         }
         else
-            APPEND(rText,"none ");
+            rText += "none ";
     }
     GetSubNode(1)->CreateTextFromNode(rText);
     if (GetScaleMode() == SCALE_HEIGHT)
-        APPEND(rText,"right ");
+        rText += "right ";
     {
         String aStr;
         GetSubNode(2)->CreateTextFromNode(aStr);
@@ -1676,17 +1670,17 @@ void SmBraceNode::CreateTextFromNode(String &rText)
         if (aStr.Len())
         {
             if (aStr.EqualsAscii("divides"))
-                APPEND(rText,"rline");
+                rText += "rline";
             else if (aStr.EqualsAscii("parallel"))
-                APPEND(rText,"rdline");
+                rText += "rdline";
             else if (aStr.EqualsAscii(">"))
-                APPEND(rText,"rangle");
+                rText += "rangle";
             else
                 rText.Append(aStr);
             rText.Append(' ');
         }
         else
-            APPEND(rText,"none ");
+            rText += "none ";
     }
     rText.Append(' ');
 
@@ -2056,23 +2050,23 @@ void SmFontNode::CreateTextFromNode(String &rText)
     switch (GetToken().eType)
     {
         case TBOLD:
-            APPEND(rText,"bold ");
+            rText += "bold ";
             break;
         case TNBOLD:
-            APPEND(rText,"nbold ");
+            rText += "nbold ";
             break;
         case TITALIC:
-            APPEND(rText,"italic ");
+            rText += "italic ";
             break;
         case TNITALIC:
-            APPEND(rText,"nitalic ");
+            rText += "nitalic ";
             break;
         case TPHANTOM:
-            APPEND(rText,"phantom ");
+            rText += "phantom ";
             break;
         case TSIZE:
             {
-                APPEND(rText,"size ");
+                rText += "size ";
                 switch (nSizeType)
                 {
                     case FNTSIZ_PLUS:
@@ -2099,37 +2093,37 @@ void SmFontNode::CreateTextFromNode(String &rText)
             }
             break;
         case TBLACK:
-            APPEND(rText,"color black ");
+            rText += "color black ";
             break;
         case TWHITE:
-            APPEND(rText,"color white ");
+            rText += "color white ";
             break;
         case TRED:
-            APPEND(rText,"color red ");
+            rText += "color red ";
             break;
         case TGREEN:
-            APPEND(rText,"color green ");
+            rText += "color green ";
             break;
         case TBLUE:
-            APPEND(rText,"color blue ");
+            rText += "color blue ";
             break;
         case TCYAN:
-            APPEND(rText,"color cyan ");
+            rText += "color cyan ";
             break;
         case TMAGENTA:
-            APPEND(rText,"color magenta ");
+            rText += "color magenta ";
             break;
         case TYELLOW:
-            APPEND(rText,"color yellow ");
+            rText += "color yellow ";
             break;
         case TSANS:
-            APPEND(rText,"font sans ");
+            rText += "font sans ";
             break;
         case TSERIF:
-            APPEND(rText,"font serif ");
+            rText += "font serif ";
             break;
         case TFIXED:
-            APPEND(rText,"font fixed ");
+            rText += "font fixed ";
             break;
         default:
             break;
@@ -2420,10 +2414,10 @@ void SmTextNode::CreateTextFromNode(String &rText)
         if ((GetToken().eType == TIDENT) && (GetFontDesc() == FNT_FUNCTION))
         {
             //Search for existing functions and remove extraenous keyword
-            APPEND(rText,"func ");
+            rText += "func ";
         }
         else if (bQuoted)
-            APPEND(rText,"italic ");
+            rText += "italic ";
 
         if (bQuoted)
             rText.Append('\"');
@@ -2511,7 +2505,7 @@ sal_Unicode SmTextNode::ConvertSymbolToUnicode(sal_Unicode nIn)
 
 void SmMatrixNode::CreateTextFromNode(String &rText)
 {
-    APPEND(rText,"matrix {");
+    rText += "matrix {";
     for (sal_uInt16 i = 0;  i < nNumRows; i++)
     {
         for (sal_uInt16 j = 0;  j < nNumCols; j++)
@@ -2519,13 +2513,13 @@ void SmMatrixNode::CreateTextFromNode(String &rText)
             SmNode *pNode = GetSubNode(i * nNumCols + j);
             pNode->CreateTextFromNode(rText);
             if (j != nNumCols-1)
-                APPEND(rText,"# ");
+                rText += "# ";
         }
         if (i != nNumRows-1)
-            APPEND(rText,"## ");
+            rText += "## ";
     }
     rText = comphelper::string::stripEnd(rText, ' ');
-    APPEND(rText,"} ");
+    rText += "} ";
 }
 
 
@@ -2759,13 +2753,13 @@ void SmRectangleNode::CreateTextFromNode(String &rText)
     switch (GetToken().eType)
     {
     case TUNDERLINE:
-        APPEND(rText,"underline ");
+        rText += "underline ";
         break;
     case TOVERLINE:
-        APPEND(rText,"overline ");
+        rText += "overline ";
         break;
     case TOVERSTRIKE:
-        APPEND(rText,"overstrike ");
+        rText += "overstrike ";
         break;
     default:
         break;
@@ -2791,49 +2785,49 @@ void SmAttributNode::CreateTextFromNode(String &rText)
             switch (nLast)
             {
             case 0xAF: // MACRON
-                APPEND(rText,"overline ");
+                rText += "overline ";
                 break;
             case MS_DOT: // DOT ABOVE
-                APPEND(rText,"dot ");
+                rText += "dot ";
                 break;
             case 0x2dc: // SMALL TILDE
-                APPEND(rText,"widetilde ");
+                rText += "widetilde ";
                 break;
             case MS_DDOT: // DIAERESIS
-                APPEND(rText,"ddot ");
+                rText += "ddot ";
                 break;
             case 0xE082:
                 break;
             case 0xE09B:
             case MS_DDDOT: // COMBINING THREE DOTS ABOVE
-                APPEND(rText,"dddot ");
+                rText += "dddot ";
                 break;
             case MS_ACUTE: // COMBINING ACUTE ACCENT
-                APPEND(rText,"acute ");
+                rText += "acute ";
                 break;
             case MS_GRAVE: // COMBINING GRAVE ACCENT
-                APPEND(rText,"grave ");
+                rText += "grave ";
                 break;
             case MS_CHECK: // COMBINING CARON
-                APPEND(rText,"check ");
+                rText += "check ";
                 break;
             case MS_BREVE: // COMBINING BREVE
-                APPEND(rText,"breve ");
+                rText += "breve ";
                 break;
             case MS_CIRCLE: // COMBINING RING ABOVE
-                APPEND(rText,"circle ");
+                rText += "circle ";
                 break;
             case MS_VEC: // COMBINING RIGHT ARROW ABOVE
-                APPEND(rText,"vec ");
+                rText += "vec ";
                 break;
             case MS_TILDE: // COMBINING TILDE
-                APPEND(rText,"tilde ");
+                rText += "tilde ";
                 break;
             case MS_HAT: // COMBINING CIRCUMFLEX ACCENT
-                APPEND(rText,"hat ");
+                rText += "hat ";
                 break;
             case MS_BAR: // COMBINING MACRON
-                APPEND(rText,"bar ");
+                rText += "bar ";
                 break;
             default:
                 rText.Append(nLast);
@@ -2849,9 +2843,9 @@ void SmAttributNode::CreateTextFromNode(String &rText)
     rText = comphelper::string::stripEnd(rText, ' ');
 
     if (nLast == 0xE082)
-        APPEND(rText," overbrace {}");
+        rText += " overbrace {}";
 
-    APPEND(rText,"} ");
+    rText += "} ";
 }
 
 /**************************************************************************/

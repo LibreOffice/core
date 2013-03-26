@@ -22,8 +22,6 @@
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
 
-#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
-
 void MathType::Init()
 {
     //These are the default MathType sizes
@@ -590,7 +588,7 @@ int MathType::Parse(SotStorage *pStor)
     //a sophisticated system to determine what expressions are
     //opened is required, but this is as much work as rewriting
     //starmaths internals.
-    APPEND(rRet,"{}");
+    rRet += "{}";
 
 #if OSL_DEBUG_LEVEL > 1
 #   ifdef CAOLAN
@@ -632,7 +630,7 @@ static void lcl_AppendDummyTerm(String &rRet)
         break;
     }
     if (!bOk)   //No term, use dummy
-        APPEND(rRet," {}");
+        rRet += " {}";
 }
 
 void MathType::HandleNudge()
@@ -706,7 +704,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 while (nI && ((cChar = rRet.GetChar(nI)) == ' '))
                     --nI;
                 if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
-                    APPEND(rRet,"{}");
+                    rRet += "{}";
             }
         }
 
@@ -718,92 +716,92 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         HandleNudge();
 
                     if (newline>0)
-                        APPEND(rRet,"\nnewline\n");
+                        rRet += "\nnewline\n";
                     if (!(xfNULL(nTag)))
                     {
                         switch (nSelector)
                         {
                         case 0x0:
                             if (nVariation==0)
-                                APPEND(rRet," langle ");
+                                rRet += " langle ";
                             else if (nVariation==1)
-                                APPEND(rRet," \\langle ");
+                                rRet += " \\langle ";
                             break;
                         case 0x1:
                             if (nVariation==0)
-                                APPEND(rRet," left (");
+                                rRet += " left (";
                             else if (nVariation==1)
-                                APPEND(rRet,"\\(");
+                                rRet += "\\(";
                             break;
                         case 0x2:
                             if ((nVariation==0) || (nVariation==1))
-                                APPEND(rRet," left lbrace ");
+                                rRet += " left lbrace ";
                             else
-                                APPEND(rRet," left none ");
+                                rRet += " left none ";
                             break;
                         case 0x3:
                             if (nVariation==0)
-                                APPEND(rRet," left [");
+                                rRet += " left [";
                             else if (nVariation==1)
-                                APPEND(rRet,"\\[");
+                                rRet += "\\[";
                             break;
                         case 0x8:
                         case 0xb:
-                            APPEND(rRet," \\[");
+                            rRet += " \\[";
                             break;
                         case 0x4:
                             if (nVariation==0)
-                                APPEND(rRet," lline ");
+                                rRet += " lline ";
                             else if (nVariation==1)
-                                APPEND(rRet," \\lline ");
+                                rRet += " \\lline ";
                             break;
                         case 0x5:
                             if (nVariation==0)
-                                APPEND(rRet," ldline ");
+                                rRet += " ldline ";
                             else if (nVariation==1)
-                                APPEND(rRet," \\ldline ");
+                                rRet += " \\ldline ";
                             break;
                         case 0x6:
                             if (nVariation == 0 || nVariation == 1)
-                                APPEND(rRet," left lfloor ");
+                                rRet += " left lfloor ";
                             else if (nVariation==1)
-                                APPEND(rRet," left none ");
+                                rRet += " left none ";
                             break;
                         case 0x7:
                             if (nVariation==0)
-                                APPEND(rRet," lceil ");
+                                rRet += " lceil ";
                             else if (nVariation==1)
-                                APPEND(rRet," \\lceil ");
+                                rRet += " \\lceil ";
                             break;
                         case 0x9:
                         case 0xa:
-                            APPEND(rRet," \\]");
+                            rRet += " \\]";
                             break;
                         case 0xc:
-                            APPEND(rRet," \\(");
+                            rRet += " \\(";
                             break;
                         case 0xd:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    APPEND(rRet," sqrt");
+                                    rRet += " sqrt";
                                 else
                                 {
-                                    APPEND(rRet," nroot");
+                                    rRet += " nroot";
                                     sPush = rRet;
                                     rRet.Erase();
                                 }
                             }
-                            APPEND(rRet," {");
+                            rRet += " {";
                             break;
                         case 0xe:
                             if (nPart == 0)
-                                APPEND(rRet," { ");
+                                rRet += " { ";
 
 
                             if (nPart == 1)
-                                APPEND(rRet," over ");
-                            APPEND(rRet," {");
+                                rRet += " over ";
+                            rRet += " {";
                             break;
                         case 0xf:
                             nSubSupStartPos = rRet.Len();
@@ -811,67 +809,67 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                     ((nVariation == 2) && (nPart==1)))
                             {
                                 lcl_AppendDummyTerm(rRet);
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             }
                             else if ((nVariation == 1) ||
                                     ((nVariation == 2) && (nPart==0)))
                             {
                                 lcl_AppendDummyTerm(rRet);
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             }
-                            APPEND(rRet," {");
+                            rRet += " {";
                             break;
                         case 0x10:
                             if (nVariation == 0)
-                                APPEND(rRet," {underline ");
+                                rRet += " {underline ";
                             else if (nVariation == 1)
-                                APPEND(rRet," {underline underline ");
-                            APPEND(rRet," {");
+                                rRet += " {underline underline ";
+                            rRet += " {";
                             break;
                         case 0x11:
                             if (nVariation == 0)
-                                APPEND(rRet," {overline ");
+                                rRet += " {overline ";
                             else if (nVariation == 1)
-                                APPEND(rRet," {overline overline ");
-                            APPEND(rRet," {");
+                                rRet += " {overline overline ";
+                            rRet += " {";
                             break;
                         case 0x12:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    APPEND(rRet," widevec ");//left arrow above
+                                    rRet += " widevec ";//left arrow above
                                 else if (nVariation == 1)
-                                    APPEND(rRet," widevec ");//left arrow below
-                                APPEND(rRet," {");
+                                    rRet += " widevec ";//left arrow below
+                                rRet += " {";
                             }
                             break;
                         case 0x13:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    APPEND(rRet," widevec ");//right arrow above
+                                    rRet += " widevec ";//right arrow above
                                 else if (nVariation == 1)
-                                    APPEND(rRet," widevec ");//right arrow below
-                                APPEND(rRet," {");
+                                    rRet += " widevec ";//right arrow below
+                                rRet += " {";
                             }
                             break;
                         case 0x14:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    APPEND(rRet," widevec ");//double arrow above
+                                    rRet += " widevec ";//double arrow above
                                 else if (nVariation == 1)
-                                    APPEND(rRet," widevec ");//double arrow below
-                                APPEND(rRet," {");
+                                    rRet += " widevec ";//double arrow below
+                                rRet += " {";
                             }
                             break;
                         case 0x15:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 3) || (nVariation == 4))
-                                    APPEND(rRet," lInt");
+                                    rRet += " lInt";
                                 else
-                                    APPEND(rRet," Int");
+                                    rRet += " Int";
                                 if ( (nVariation != 0) && (nVariation != 3))
                                 {
                                     sPush = rRet;
@@ -880,20 +878,20 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 4)) && (nPart==1))
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             else if ((nVariation == 2) && (nPart==2))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 2) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x16:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 2) || (nVariation == 3))
-                                    APPEND(rRet," llInt");
+                                    rRet += " llInt";
                                 else
-                                    APPEND(rRet," iInt");
+                                    rRet += " iInt";
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet;
@@ -902,16 +900,16 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 3)) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x17:
                             if (nPart == 0)
                             {
                                 if ((nVariation == 2) || (nVariation == 3))
-                                    APPEND(rRet," lllInt");
+                                    rRet += " lllInt";
                                 else
-                                    APPEND(rRet," iiInt");
+                                    rRet += " iiInt";
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet;
@@ -920,64 +918,64 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 3)) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x18:
                             if (nPart == 0)
                             {
                                 if (nVariation == 2)
-                                    APPEND(rRet," lInt");
+                                    rRet += " lInt";
                                 else
-                                    APPEND(rRet," Int");
+                                    rRet += " Int";
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 2)) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 0) && (nPart==2))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x19:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    APPEND(rRet," llInt");
+                                    rRet += " llInt";
                                 else
-                                    APPEND(rRet," iInt");
+                                    rRet += " iInt";
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if (nPart==1)
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x1a:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    APPEND(rRet," lllInt");
+                                    rRet += " lllInt";
                                 else
-                                    APPEND(rRet," iiInt");
+                                    rRet += " iiInt";
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if (nPart==1)
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x1b:
                         case 0x1c:
-                            APPEND(rRet," {");
+                            rRet += " {";
                             break;
                         case 0x1d:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," Sum");
+                                rRet += " Sum";
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
@@ -985,32 +983,32 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x1e:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," Sum");
+                                rRet += " Sum";
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x1f:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," Prod");
+                                rRet += " Prod";
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
@@ -1018,32 +1016,32 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x20:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," Prod");
+                                rRet += " Prod";
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x21:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," coProd");
+                                rRet += " coProd";
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
@@ -1051,32 +1049,32 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x22:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," coProd");
+                                rRet += " coProd";
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x23:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," union"); //union
+                                rRet += " union"; //union
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
@@ -1084,32 +1082,32 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x24:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," union"); //union
+                                rRet += " union"; //union
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x25:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," intersect"); //intersect
+                                rRet += " intersect"; //intersect
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
@@ -1117,38 +1115,38 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x26:
                             if (nPart == 0)
                             {
-                                APPEND(rRet," intersect"); //intersect
+                                rRet += " intersect"; //intersect
                                 sPush = rRet;
                                 rRet.Erase();
                             }
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             else if ((nVariation == 1) && (nPart==2))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x27:
                             if ((nVariation == 0) && (nPart==1))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 2) && (nPart==1))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 2) && (nPart==2))
-                                APPEND(rRet," cSup");
-                            APPEND(rRet," {");
+                                rRet += " cSup";
+                            rRet += " {";
                             break;
                         case 0x28:
                             if (nVariation == 0)
@@ -1159,19 +1157,19 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                     rRet.Erase();
                                 }
                             }
-                            APPEND(rRet," {");
+                            rRet += " {";
                             if (nVariation == 0)
                             {
                                 if (nPart == 1)
-                                    APPEND(rRet,"alignr ");
+                                    rRet += "alignr ";
                             }
                             if (nPart == 0)
-                                APPEND(rRet,"\\lline ");
+                                rRet += "\\lline ";
                             if (nVariation == 1)
-                                APPEND(rRet,"overline ");
+                                rRet += "overline ";
                             break;
                         case 0x29:
-                            APPEND(rRet," {");
+                            rRet += " {";
                             break;
                         case 0x2a:
                             if (nPart == 0)
@@ -1180,14 +1178,14 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 rRet.Erase();
                             }
                             if ((nVariation == 0) && (nPart==0))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 2) && (nPart==1))
-                                APPEND(rRet," rSup");
+                                rRet += " rSup";
                             else if ((nVariation == 1) && (nPart==0))
-                                APPEND(rRet," rSub");
+                                rRet += " rSub";
                             else if ((nVariation == 2) && (nPart==0))
-                                APPEND(rRet," rSub");
-                            APPEND(rRet," {");
+                                rRet += " rSub";
+                            rRet += " {";
                             break;
                         case 0x2b:
                             if (nPart == 0)
@@ -1196,60 +1194,60 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 rRet.Erase();
                             }
                             if ((nVariation == 0) && (nPart==0))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 2) && (nPart==1))
-                                APPEND(rRet," cSup");
+                                rRet += " cSup";
                             else if ((nVariation == 1) && (nPart==0))
-                                APPEND(rRet," cSub");
+                                rRet += " cSub";
                             else if ((nVariation == 2) && (nPart==0))
-                                APPEND(rRet," cSub");
-                            APPEND(rRet," {");
+                                rRet += " cSub";
+                            rRet += " {";
                             break;
                         case 0x2c:
                             if (nPart == 0)
-                                APPEND(rRet,"\"\"");
+                                rRet += "\"\"";
                             if ((nVariation == 0)
                                     || ((nVariation == 2) && (nPart==1)))
-                                APPEND(rRet," lSup");
+                                rRet += " lSup";
                             else if ((nVariation == 1)
                                     || ((nVariation == 2) && (nPart==0)))
-                                APPEND(rRet," lSub");
-                            APPEND(rRet," {");
+                                rRet += " lSub";
+                            rRet += " {";
                             break;
                         case 0x2d:
                             if (nVariation==0)
                             {
                                 if (nPart == 0)
-                                    APPEND(rRet," langle ");
+                                    rRet += " langle ";
                             }
                             else if (nVariation==1)
                             {
-                                APPEND(rRet," \\langle ");
+                                rRet += " \\langle ";
                                 newline--;
                             }
                             else if (nVariation==2)
                             {
-                                APPEND(rRet," \\lline ");
+                                rRet += " \\lline ";
                                 newline--;
                             }
                             break;
                         case 0x2e:
                             if (nVariation == 0)
-                                APPEND(rRet," widevec ");//left below
+                                rRet += " widevec ";//left below
                             else if (nVariation == 1)
-                                APPEND(rRet," widevec ");//right below
+                                rRet += " widevec ";//right below
                             else if (nVariation == 2)
-                                APPEND(rRet," widevec ");//double headed below
-                            APPEND(rRet," {");
+                                rRet += " widevec ";//double headed below
+                            rRet += " {";
                             break;
                         case 0x2f:
                             if (nVariation == 0)
-                                APPEND(rRet," widevec ");//left above
+                                rRet += " widevec ";//left above
                             else if (nVariation == 1)
-                                APPEND(rRet," widevec ");//right above
+                                rRet += " widevec ";//right above
                             else if (nVariation == 2)
-                                APPEND(rRet," widevec ");//double headed above
-                            APPEND(rRet," {");
+                                rRet += " widevec ";//double headed above
+                            rRet += " {";
                             break;
                         default:
                             break;
@@ -1275,7 +1273,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 bOk=true;
 
                             if (bOk)
-                                APPEND(rRet,"} ");
+                                rRet += "} ";
                             else
                                 rRet.Erase(nSizeStartPos);
                             nSetSize--;
@@ -1290,62 +1288,62 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         {
                         case 0x0:
                             if (nVariation==0)
-                                APPEND(rRet," rangle ");
+                                rRet += " rangle ";
                             else if (nVariation==2)
-                                APPEND(rRet," \\rangle ");
+                                rRet += " \\rangle ";
                             break;
                         case 0x1:
                             if (nVariation==0)
-                                APPEND(rRet," right )");
+                                rRet += " right )";
                             else if (nVariation==2)
-                                APPEND(rRet,"\\)");
+                                rRet += "\\)";
                             break;
                         case 0x2:
                             if ((nVariation==0) || (nVariation==2))
-                                APPEND(rRet," right rbrace ");
+                                rRet += " right rbrace ";
                             else
-                                APPEND(rRet," right none ");
+                                rRet += " right none ";
                             break;
                         case 0x3:
                             if (nVariation==0)
-                                APPEND(rRet," right ]");
+                                rRet += " right ]";
                             else if (nVariation==2)
-                                APPEND(rRet,"\\]");
+                                rRet += "\\]";
                             break;
                         case 0x4:
                             if (nVariation==0)
-                                APPEND(rRet," rline ");
+                                rRet += " rline ";
                             else if (nVariation==2)
-                                APPEND(rRet," \\rline ");
+                                rRet += " \\rline ";
                             break;
                         case 0x5:
                             if (nVariation==0)
-                                APPEND(rRet," rdline ");
+                                rRet += " rdline ";
                             else if (nVariation==2)
-                                APPEND(rRet," \\rdline ");
+                                rRet += " \\rdline ";
                             break;
                         case 0x6:
                             if (nVariation == 0 || nVariation == 2)
-                                APPEND(rRet," right rfloor ");
+                                rRet += " right rfloor ";
                             else if (nVariation==2)
-                                APPEND(rRet," right none ");
+                                rRet += " right none ";
                             break;
                         case 0x7:
                             if (nVariation==0)
-                                APPEND(rRet," rceil ");
+                                rRet += " rceil ";
                             else if (nVariation==2)
-                                APPEND(rRet," \\rceil ");
+                                rRet += " \\rceil ";
                             break;
                         case 0x8:
                         case 0xa:
-                            APPEND(rRet,"\\[");
+                            rRet += "\\[";
                             break;
                         case 0x9:
                         case 0xc:
-                            APPEND(rRet,"\\]");
+                            rRet += "\\]";
                             break;
                         case 0xd:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nVariation == 1)
                             {
                                 if (nPart == 0)
@@ -1369,14 +1367,14 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case 0xb:
-                            APPEND(rRet,"\\)");
+                            rRet += "\\)";
                             break;
                         case 0xe:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                                 newline--;
                             else
-                                APPEND(rRet,"} ");
+                                rRet += "} ";
                             nPart++;
                             break;
                         case 0xf:
@@ -1400,7 +1398,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 bOk=true;
 
                             if (bOk)
-                                APPEND(rRet,"} ");
+                                rRet += "} ";
                             else
                                 rRet.Erase(nSubSupStartPos);
                             nPart++;
@@ -1410,16 +1408,16 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if ((nPart == 0) &&
                                     ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             nPart++;
                             break;
                         case 0x2e:
                         case 0x2f:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             break;
                         case 0x10:
                         case 0x11:
-                            APPEND(rRet,"}} ");
+                            rRet += "}} ";
                             break;
                         case 0x12:
                         case 0x13:
@@ -1427,25 +1425,25 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 newline--;
-                                APPEND(rRet,"} ");
+                                rRet += "} ";
                             }
                             nPart++;
                             break;
                         case 0x1b:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 newline--;
-                                APPEND(rRet,"overbrace");
+                                rRet += "overbrace";
                             }
                             nPart++;
                             break;
                         case 0x1c:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 newline--;
-                                APPEND(rRet,"underbrace");
+                                rRet += "underbrace";
                             }
                             nPart++;
                             break;
@@ -1455,11 +1453,11 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             else if ((nPart==1) &&
                                     ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             nPart++;
                             break;
                         case 0x28:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nVariation == 0)
                             {
                                 if (nPart == 0)
@@ -1471,7 +1469,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 {
                                     sPush += rRet;
                                     rRet = sPush;
-                                    APPEND(rRet," over ");
+                                    rRet += " over ";
                                     rRet += sMainTerm;
                                 }
                             }
@@ -1480,17 +1478,17 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case 0x29:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 newline--;
                                 switch (nVariation)
                                 {
                                 case 1:
-                                    APPEND(rRet,"slash");
+                                    rRet += "slash";
                                     break;
                                 default:
-                                    APPEND(rRet,"wideslash");
+                                    rRet += "wideslash";
                                     break;
                                 }
                             }
@@ -1506,7 +1504,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         case 0x24:
                         case 0x25:
                         case 0x26:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 if (nVariation != 2)
@@ -1535,7 +1533,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case 0x15:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 if ((nVariation != 0) && (nVariation != 3))
@@ -1566,7 +1564,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         case 0x16:
                         case 0x17:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 if ((nVariation != 0) && (nVariation != 2))
@@ -1587,7 +1585,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             nPart++;
                             break;
                         case 0x18:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 sMainTerm = rRet;
@@ -1615,7 +1613,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         case 0x19:
                         case 0x1a:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
                             if (nPart == 0)
                             {
                                 sMainTerm = rRet;
@@ -1633,7 +1631,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         case 0x2a:
                         case 0x2b:
-                            APPEND(rRet,"} ");
+                            rRet += "} ";
 
                             if ((nPart == 0) &&
                                     ((nVariation == 0) || (nVariation == 1)))
@@ -1665,15 +1663,15 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nPart == 0)
                                 {
                                     newline--; //there is another term to arrive
-                                    APPEND(rRet," mline ");
+                                    rRet += " mline ";
                                 }
                                 else
-                                    APPEND(rRet," rangle ");
+                                    rRet += " rangle ";
                             }
                             else if (nVariation==1)
-                                APPEND(rRet," \\lline ");
+                                rRet += " \\lline ";
                             else if (nVariation==2)
-                                APPEND(rRet," \\rangle ");
+                                rRet += " \\rangle ";
                             nPart++;
                             break;
                         default:
@@ -1791,7 +1789,7 @@ void MathType::HandleMatrixSeperator(int nMatrixRows,int nMatrixCols,
         if (rCurCol == nMatrixCols-1)
         {
             if (rCurRow != nMatrixRows-1)
-                APPEND(rRet," {} ##\n");
+                rRet += " {} ##\n";
             if (nMatrixRows!=-1)
             {
                 rCurCol=0;
@@ -1800,7 +1798,7 @@ void MathType::HandleMatrixSeperator(int nMatrixRows,int nMatrixCols,
         }
         else
         {
-            APPEND(rRet," {} # ");
+            rRet += " {} # ";
             if (nMatrixRows!=-1)
                 rCurCol++;
             else
@@ -1817,13 +1815,13 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSet
     {
     case 1:
     default:
-        APPEND(rRet,"alignl {");
+        rRet += "alignl {";
         break;
     case 2:
-        APPEND(rRet,"alignc {");
+        rRet += "alignc {";
         break;
     case 3:
-        APPEND(rRet,"alignr {");
+        rRet += "alignr {";
         break;
     }
     rSetAlign++;
@@ -1847,7 +1845,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
             if (-nLstSize/32 != nLastSize)
             {
                 nLastSize = nCurSize;
-                APPEND(rRet," size ");
+                rRet += " size ";
                 rRet += OUString::number(-nLstSize/32);
                 rRet += '{';
                 bRet=true;
@@ -1876,7 +1874,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
             if (nLstSize != nLastSize)
             {
                 nLastSize = nCurSize;
-                APPEND(rRet," size ");
+                rRet += " size ";
                 rRet += OUString::number(nLstSize);
                 rRet += '{';
                 bRet=true;
@@ -2660,14 +2658,14 @@ int MathType::HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
 
     HandleAlign(nHAlign,nVAlign,rSetAlign);
 
-    APPEND(rRet," stack {\n");
+    rRet += " stack {\n";
     int nRet = HandleRecords(nLevel+1,nSelector,nVariation,-1,-1);
     rRet.Erase(rRet.Len()-3,2);
-    APPEND(rRet,"} ");
+    rRet += "} ";
 
     while (rSetAlign)
     {
-        APPEND(rRet,"} ");
+        rRet += "} ";
         rSetAlign--;
     }
     return nRet;
@@ -2690,15 +2688,15 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
     if (((nCols+1)*2)%8)
         nBytes++;
     pS->SeekRel(nBytes);
-    APPEND(rRet," matrix {\n");
+    rRet += " matrix {\n";
     int nRet = HandleRecords(nLevel+1,nSelector,nVariation,nRows,nCols);
 
     xub_StrLen nI = rRet.SearchBackward('#');
     if ((nI != STRING_NOTFOUND) && (nI > 0))
         if (rRet.GetChar(nI-1) != '#')  //missing column
-            APPEND(rRet,"{}");
+            rRet += "{}";
 
-    APPEND(rRet,"\n} ");
+    rRet += "\n} ";
     return nRet;
 }
 
@@ -2740,7 +2738,7 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     if (bRemove)
     {
         rRet.Erase(rLastTemplateBracket,1);
-        APPEND(rRet,"} ");
+        rRet += "} ";
         rLastTemplateBracket = STRING_NOTFOUND;
     }
     if (rSelector == 0xf)
@@ -2761,18 +2759,18 @@ void MathType::HandleEmblishments()
         switch (nEmbel)
         {
         case 0x02:
-            APPEND(rRet," dot ");
+            rRet += " dot ";
             break;
         case 0x03:
-            APPEND(rRet," ddot ");
+            rRet += " ddot ";
             break;
         case 0x04:
-            APPEND(rRet," dddot ");
+            rRet += " dddot ";
             break;
         case 0x05:
             if (nPostSup == 0)
             {
-                APPEND(sPost," sup {}");
+                sPost += " sup {}";
                 nPostSup = sPost.Len();
             }
             sPost.InsertAscii(" ' ",nPostSup-1);
@@ -2781,7 +2779,7 @@ void MathType::HandleEmblishments()
         case 0x06:
             if (nPostSup == 0)
             {
-                APPEND(sPost," sup {}");
+                sPost += " sup {}";
                 nPostSup = sPost.Len();
             }
             sPost.InsertAscii(" '' ",nPostSup-1);
@@ -2790,38 +2788,38 @@ void MathType::HandleEmblishments()
         case 0x07:
             if (nPostlSup == 0)
             {
-                APPEND(sPost," lsup {}");
+                sPost += " lsup {}";
                 nPostlSup = sPost.Len();
             }
             sPost.InsertAscii(" ' ",nPostlSup-1);
             nPostlSup += 3;
             break;
         case 0x08:
-            APPEND(rRet," tilde ");
+            rRet += " tilde ";
             break;
         case 0x09:
-            APPEND(rRet," hat ");
+            rRet += " hat ";
             break;
         case 0x0b:
-            APPEND(rRet," vec ");
+            rRet += " vec ";
             break;
         case 0x10:
-            APPEND(rRet," overstrike ");
+            rRet += " overstrike ";
             break;
         case 0x11:
-            APPEND(rRet," bar ");
+            rRet += " bar ";
             break;
         case 0x12:
             if (nPostSup == 0)
             {
-                APPEND(sPost," sup {}");
+                sPost += " sup {}";
                 nPostSup = sPost.Len();
             }
             sPost.InsertAscii(" ''' ",nPostSup-1);
             nPostSup += 5;
             break;
         case 0x14:
-            APPEND(rRet," breve ");
+            rRet += " breve ";
             break;
         default:
             OSL_ENSURE(nEmbel < 21,"Embel out of range");
@@ -2898,7 +2896,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
         sPost.Erase();
         nPostSup = nPostlSup = 0;
         int nOriglen=rRet.Len()-rTextStart;
-        APPEND(rRet," {");  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
+        rRet += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         if ((!bSilent) && ((nOriglen) > 1))
             rRet += '\"';
         nRet = HandleRecords(nLevel+1,nSelector,nVariation);
@@ -2917,7 +2915,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
                 rRet += '{';
             }
             else
-                APPEND(rRet," {");
+                rRet += " {";
             rTextStart = rRet.Len();
         }
     }
