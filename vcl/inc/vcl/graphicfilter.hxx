@@ -34,8 +34,6 @@ class FilterConfigCache;
 struct WMF_EXTERNALHEADER;
 struct ConvertData;
 
-#define OPT_FILTERSECTION           "Graphic"
-
 #define GRFILTER_OK                 0
 #define GRFILTER_OPENERROR          1
 #define GRFILTER_IOERROR            2
