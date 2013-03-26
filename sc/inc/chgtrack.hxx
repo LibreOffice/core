@@ -37,7 +37,6 @@
 
 class ScDocument;
 class ScFormulaCell;
-class ScCellIterator;
 
 enum ScChangeActionType
 {
@@ -800,7 +799,7 @@ public:
         rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 
     static ScChangeActionContentCellType GetContentCellType( const ScCellValue& rCell );
-    static ScChangeActionContentCellType GetContentCellType( const ScCellIterator& rIter );
+    static ScChangeActionContentCellType GetContentCellType( const ScRefCellValue& rIter );
 
     // NewCell
     bool IsMatrixOrigin() const;

@@ -4156,7 +4156,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     ScCellIterator aIter( pDok, aRange, glSubTotal );
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        if (!aIter.isEmpty())
+                        if (!aIter.hasEmptyData())
                             ++nCount;
                     }
 
@@ -5372,7 +5372,7 @@ void ScInterpreter::ScCountEmptyCells()
                     ScCellIterator aIter( pDok, aRange, glSubTotal);
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        if (!aIter.isEmpty())
+                        if (!aIter.hasEmptyData())
                             ++nCount;
                     }
                 }

@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include "global.hxx"
 #include "scdllapi.h"
+#include "cellvalue.hxx"
 
 #include <memory>
 
@@ -45,7 +46,6 @@ struct ScQueryParam;
 struct ScDBQueryParamInternal;
 struct ScDBQueryParamMatrix;
 class ScFormulaCell;
-struct ScCellValue;
 
 class ScDocumentIterator                // walk through all non-empty cells
 {
@@ -222,13 +222,7 @@ private:
     SCSIZE mnIndex;
     bool mbSubTotal;
 
-    CellType meCurType;
-    OUString maCurString;
-    union {
-        double mfCurValue;
-        const EditTextObject* mpCurEditText; // points to the original.
-        ScFormulaCell* mpCurFormula; // points to the original.
-    };
+    ScRefCellValue maCurCell;
 
     void init();
     bool getCurrent();
@@ -245,9 +239,11 @@ public:
     const ScFormulaCell* getFormulaCell() const;
     double getValue() const;
     ScCellValue getCellValue() const;
+    ScRefCellValue getRefCellValue() const;
 
     bool hasString() const;
     bool hasNumeric() const;
+    bool hasEmptyData() const;
     bool isEmpty() const;
     bool equalsWithoutFormat( const ScAddress& rPos ) const;
 

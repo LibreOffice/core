@@ -1750,9 +1750,9 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
     }
 }
 
-ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScCellIterator& rIter )
+ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScRefCellValue& rCell )
 {
-    switch (rIter.getType())
+    switch (rCell.meType)
     {
         case CELLTYPE_VALUE:
         case CELLTYPE_STRING:
@@ -1760,7 +1760,7 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
             return SC_CACCT_NORMAL;
         case CELLTYPE_FORMULA:
         {
-            const ScFormulaCell* pCell = rIter.getFormulaCell();
+            const ScFormulaCell* pCell = rCell.mpFormula;
             switch (pCell->GetMatrixFlag())
             {
                 case MM_NONE :
@@ -2676,7 +2676,7 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
     ScCellIterator aIter( pRefDoc, rOrgRange );
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
-        if (!ScChangeActionContent::GetContentCellType(aIter))
+        if (!ScChangeActionContent::GetContentCellType(aIter.getRefCellValue()))
             continue;
 
         aBigPos.Set( aIter.GetPos().Col() + nDx, aIter.GetPos().Row() + nDy,

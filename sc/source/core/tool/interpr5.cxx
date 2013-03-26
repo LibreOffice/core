@@ -428,7 +428,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         {
             nThisRow = aCellIter.GetPos().Row();
 
-            if (aCellIter.isEmpty())
+            if (aCellIter.hasEmptyData())
             {
                 aBucket.flush(*pMat, static_cast<SCSIZE>(nCol-nCol1));
                 continue;
