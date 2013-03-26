@@ -130,7 +130,7 @@ if ($ENV{BUILD_TYPE} =~ m/ODK/) {
 print "Installer finished\n";
 
 if ($do_link && !$is_windows) {
-    system("$ENV{SOLARENV}/bin/linkoo $path $ENV{SRC_ROOT}") &&
+    system("$ENV{SOLARENV}/bin/linkoo $path $ENV{BUILDDIR}") &&
       die "linkoo failed: $!";
 }
 
