@@ -7793,9 +7793,11 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
                 save_LIBS=$LIBS
                 AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                     [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5, try installing libcom_err devel package])])
+                KRB5_LIBS=$LIBS
                 LIBS=$save_LIBS
                 AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                     [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5, try installing krb5 devel package])])
+                KRB5_LIBS="$KRB5_LIBS $LIBS"
                 LIBS=$save_LIBS
             fi
             if test "$with_gssapi" != "no"; then
@@ -7803,6 +7805,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
               save_LIBS=$LIBS
               AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                     [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+              GSSAPI_LIBS=$LIBS
               LIBS=$save_LIBS
             fi
             ;;
@@ -7817,9 +7820,11 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
                 save_LIBS=$LIBS
                 AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                     [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+                KRB5_LIBS=$LIBS
                 LIBS=$save_LIBS
                 AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                     [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+                KRB5_LIBS="$KRB5_LIBS $LIBS"
                 LIBS=$save_LIBS
             fi
             if test "$with_gssapi" != "no"; then
@@ -7827,6 +7832,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
                 save_LIBS=$LIBS
                 AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                     [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+                GSSAPI_LIBS=$LIBS
                 LIBS=$save_LIBS
             fi
             ;;
@@ -7836,9 +7842,11 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
                 save_LIBS=$LIBS
                 AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                     [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+                KRB5_LIBS=$LIBS
                 LIBS=$save_LIBS
                 AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
                     [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+                KRB5_LIBS="$KRB5_LIBS $LIBS"
                 LIBS=$save_LIBS
             fi
             if test "$with_gssapi" = "yes"; then
@@ -7847,6 +7855,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
                 AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
                     [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
                 LIBS=$save_LIBS
+                GSSAPI_LIBS=$LIBS
             fi
         esac
 
@@ -7881,6 +7890,8 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
 fi
 AC_SUBST(WITH_KRB5)
 AC_SUBST(WITH_GSSAPI)
+AC_SUBST(GSSAPI_LIBS)
+AC_SUBST(KRB5_LIBS)
 AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
 AC_SUBST(POSTGRESQL_INC)

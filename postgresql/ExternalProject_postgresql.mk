@@ -44,8 +44,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4" \
 			) \
 		&& cd src/interfaces/libpq \
-		&& MAKEFLAGS= && $(MAKE) all-static-lib libpq-flags.mk \
-	)
+		&& MAKEFLAGS= && $(MAKE) all-static-lib)
 
 endif
 

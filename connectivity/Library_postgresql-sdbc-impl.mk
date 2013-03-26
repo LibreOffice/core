@@ -60,18 +60,21 @@ endif
 $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 	boost_headers \
 	postgresql \
+	openssl \
+	openldap \
+	nss3 \
+	plc4 \
+	ssl3 \
 ))
 
 ifneq ($(SYSTEM_POSTGRESQL),YES)
 ifneq ($(OS)$(COM),WNTMSC)
 
--include $(OUTDIR)/inc/postgresql/libpq-flags.mk
-
 $(eval $(call gb_Library_add_libs,postgresql-sdbc-impl,\
-	$(if $(filter-out MACOSX,$(OS)),-Wl$(COMMA)--as-needed) \
-	$(LIBPQ_DEP_LIBS) \
+	$(if $(filter YES,$(WITH_GSSAPI)),$(GSSAPI_LIBS)) \
+	$(if $(filter YES,$(WITH_KRB5)),$(KRB5_LIBS)) \
 	$(if $(filter-out MACOSX,$(OS)),-ldl) \
-	$(if $(filter-out MACOSX,$(OS)),-Wl$(COMMA)--no-as-needed) \
+	$(if $(filter-out MACOSX,$(OS)),-lpthread) \
 ))
 
 endif
