@@ -197,13 +197,6 @@ bool ScDocumentIterator::GetNext()
     return GetThis();
 }
 
-//------------------------------------------------------------------------
-
-ScBaseCell* ScDocumentIterator::GetCell()
-{
-    return pCell;
-}
-
 ScCellValue ScDocumentIterator::GetCellValue() const
 {
     ScCellValue aRet;

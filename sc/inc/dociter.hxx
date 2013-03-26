@@ -76,7 +76,6 @@ public:
     bool                    GetFirst();
     bool                    GetNext();
 
-    ScBaseCell*             GetCell();
     ScCellValue GetCellValue() const;
     const ScPatternAttr*    GetPattern();
     void                    GetPos( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );
