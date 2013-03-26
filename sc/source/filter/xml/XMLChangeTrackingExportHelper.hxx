@@ -30,7 +30,7 @@
 class ScChangeAction;
 class ScChangeTrack;
 class ScXMLExport;
-class ScCellValue;
+struct ScCellValue;
 class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
