@@ -459,7 +459,7 @@ Ww1Sprm::Ww1Sprm(SvStream& rStream, sal_uLong ulFilePos)
 Ww1Sprm::~Ww1Sprm()
 {
     delete[] pArr;
-    delete p;
+    delete[] p;
 }
 
 sal_uInt16 Ww1SingleSprm::Size(sal_uInt8* /*pSprm*/)
