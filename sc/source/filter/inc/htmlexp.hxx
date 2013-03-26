@@ -37,7 +37,7 @@ class Graphic;
 class SdrObject;
 class OutputDevice;
 class ScDrawLayer;
-class ScEditCell;
+class EditTextObject;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -128,7 +128,7 @@ class ScHTMLExport : public ScExportBase
                             // nXOutFlags fuer XOutBitmap::WriteGraphic
 
                         // write to stream if and only if URL fields in edit cell
-    sal_Bool                WriteFieldText( const ScEditCell* pCell );
+    bool WriteFieldText( const EditTextObject* pData );
 
                         // kopiere ggfs. eine lokale Datei ins Internet
     sal_Bool                CopyLocalFileToINet( String& rFileNm,

@@ -24,6 +24,7 @@
 #include "cellform.hxx"
 #include "cell.hxx"
 #include "document.hxx"
+#include "cellvalue.hxx"
 #include "formula/errorcodes.hxx"
 #include "sc.hrc"
 
@@ -137,6 +138,108 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, OUString& rS
                 }
             }
             break;
+        default:
+            rString = OUString();
+            break;
+    }
+}
+
+void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,
+                              Color** ppColor, SvNumberFormatter& rFormatter,
+                              bool bNullVals, bool bFormula, ScForceTextFmt eForceTextFmt,
+                              bool bUseStarFormat )
+{
+    *ppColor = NULL;
+    if (&rFormatter==NULL)
+    {
+        rString = OUString();
+        return;
+    }
+
+    switch (rCell.meType)
+    {
+        case CELLTYPE_STRING:
+            rFormatter.GetOutputString(*rCell.mpString, nFormat, rString, ppColor, bUseStarFormat);
+        break;
+        case CELLTYPE_EDIT:
+            rFormatter.GetOutputString(rCell.getString(), nFormat, rString, ppColor );
+        break;
+        case CELLTYPE_VALUE:
+        {
+            double nValue = rCell.mfValue;
+            if (!bNullVals && nValue == 0.0)
+                rString = OUString();
+            else
+            {
+                if( eForceTextFmt == ftCheck )
+                {
+                    if( nFormat && rFormatter.IsTextFormat( nFormat ) )
+                        eForceTextFmt = ftForce;
+                }
+                if( eForceTextFmt == ftForce )
+                {
+                    OUString aTemp;
+                    rFormatter.GetOutputString( nValue, 0, aTemp, ppColor );
+                    rFormatter.GetOutputString( aTemp, nFormat, rString, ppColor );
+                }
+                else
+                    rFormatter.GetOutputString( nValue, nFormat, rString, ppColor, bUseStarFormat );
+            }
+        }
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell*  pFCell = rCell.mpFormula;
+            if ( bFormula )
+            {
+                pFCell->GetFormula( rString );
+            }
+            else
+            {
+                // A macro started from the interpreter, which has
+                // access to Formular Cells, becomes a CellText, even if
+                // that triggers further interpretation, except if those
+                // cells are already being interpreted.
+                // IdleCalc generally doesn't trigger futher interpretation,
+                // as not to get Err522 (circular).
+                if ( pFCell->GetDocument()->IsInInterpreter() &&
+                        (!pFCell->GetDocument()->GetMacroInterpretLevel()
+                        || pFCell->IsRunning()) )
+                {
+                    rString = OUString("...");
+                }
+                else
+                {
+                    sal_uInt16 nErrCode = pFCell->GetErrCode();
+
+                    // get the number format only after interpretation (GetErrCode):
+                    if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+                        nFormat = pFCell->GetStandardFormat( rFormatter,
+                            nFormat );
+
+                    if (nErrCode != 0)
+                        rString = ScGlobal::GetErrorString(nErrCode);
+                    else if ( pFCell->IsEmptyDisplayedAsString() )
+                        rString = OUString();
+                    else if ( pFCell->IsValue() )
+                    {
+                        double fValue = pFCell->GetValue();
+                        if ( !bNullVals && fValue == 0.0 )
+                            rString = OUString();
+                        else if ( pFCell->IsHybridValueCell() )
+                            rString = pFCell->GetString();
+                        else
+                            rFormatter.GetOutputString( fValue, nFormat, rString, ppColor, bUseStarFormat );
+                    }
+                    else
+                    {
+                        OUString aCellString = pFCell->GetString();
+                        rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor, bUseStarFormat );
+                    }
+                }
+            }
+        }
+        break;
         default:
             rString = OUString();
             break;

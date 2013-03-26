@@ -28,6 +28,7 @@ class SvNumberFormatter;
 class Color;
 class ScDocument;
 class ScAddress;
+class ScRefCellValue;
 
 enum ScForceTextFmt {
     ftDontForce,            // numbers as numbers
@@ -46,6 +47,12 @@ public:
                                sal_Bool bFormula  = false,
                                ScForceTextFmt eForceTextFmt = ftDontForce,
                                bool bUseStarFormat = false );
+
+    static void GetString(
+        ScRefCellValue& rCell, sal_uLong nFormat, rtl::OUString& rString,
+        Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
+        bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce,
+        bool bUseStarFormat = false );
 
     static OUString GetString(
         const ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat,

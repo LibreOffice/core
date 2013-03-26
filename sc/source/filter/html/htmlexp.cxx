@@ -62,7 +62,7 @@
 #include "docoptio.hxx"
 #include "editutil.hxx"
 #include "ftools.hxx"
-
+#include "cellvalue.hxx"
 
 #include <editeng/flditem.hxx>
 #include <editeng/borderline.hxx>
@@ -876,24 +876,19 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         }
     }
 
-    ScBaseCell* pCell = pDoc->GetCell( aPos );
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, aPos);
+
     sal_uLong nFormat = pAttr->GetNumberFormat( pFormatter );
-    sal_Bool bValueData;
-    sal_uInt8 nScriptType;
-    if ( pCell )
-    {
-        bValueData = pCell->HasValueData();
+    bool bValueData = aCell.hasNumeric();
+    sal_uInt8 nScriptType = 0;
+    if (!aCell.isEmpty())
         nScriptType = pDoc->GetScriptType(nCol, nRow, nTab);
-    }
-    else
-    {
-        bValueData = false;
-        nScriptType = 0;
-    }
+
     if ( nScriptType == 0 )
         nScriptType = aHTMLStyle.nDefaultScriptType;
 
-    rtl::OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);
+    OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);
 
     // border of the cells
     SvxBoxItem* pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
@@ -1061,24 +1056,21 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     double fVal = 0.0;
     if ( bValueData )
     {
-        if ( pCell )
+        switch (aCell.meType)
         {
-            switch ( pCell->GetCellType() )
-            {
-                case CELLTYPE_VALUE:
-                    fVal = ((ScValueCell*)pCell)->GetValue();
-                    if ( bCalcAsShown && fVal != 0.0 )
-                        fVal = pDoc->RoundValueAsShown( fVal, nFormat );
-                    break;
-                case CELLTYPE_FORMULA:
-                    fVal = ((ScFormulaCell*)pCell)->GetValue();
-                    if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-                        nFormat = ScGlobal::GetStandardFormat( fVal, *pFormatter,
-                            nFormat, ((ScFormulaCell*)pCell)->GetFormatType() );
-                    break;
-                default:
-                    OSL_FAIL( "value data with unsupported cell type" );
-            }
+            case CELLTYPE_VALUE:
+                fVal = aCell.mfValue;
+                if ( bCalcAsShown && fVal != 0.0 )
+                    fVal = pDoc->RoundValueAsShown( fVal, nFormat );
+                break;
+            case CELLTYPE_FORMULA:
+                fVal = aCell.mpFormula->GetValue();
+                if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+                    nFormat = ScGlobal::GetStandardFormat( fVal, *pFormatter,
+                        nFormat, aCell.mpFormula->GetFormatType() );
+                break;
+            default:
+                OSL_FAIL( "value data with unsupported cell type" );
         }
     }
 
@@ -1140,25 +1132,24 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         TAG_ON(aStr.makeStringAndClear().getStr());
     }
 
-    rtl::OUString aStrOut;
-    sal_Bool bFieldText = false;
-    if ( pCell )
-    {   // cell content
-        Color* pColor;
-        switch ( pCell->GetCellType() )
-        {
-            case CELLTYPE_NOTE :
-                // nothing
-            break;
-            case CELLTYPE_EDIT :
-                bFieldText = WriteFieldText( (const ScEditCell*) pCell );
-                if ( bFieldText )
-                    break;
-                //! else: fallthru
-            default:
-                ScCellFormat::GetString( pCell, nFormat, aStrOut, &pColor, *pFormatter );
-        }
+    OUString aStrOut;
+    bool bFieldText = false;
+
+    Color* pColor;
+    switch (aCell.meType)
+    {
+        case CELLTYPE_NOTE :
+            // nothing
+        break;
+        case CELLTYPE_EDIT :
+            bFieldText = WriteFieldText(aCell.mpEditText);
+            if ( bFieldText )
+                break;
+            //! else: fallthru
+        default:
+            ScCellFormat::GetString(aCell, nFormat, aStrOut, &pColor, *pFormatter);
     }
+
     if ( !bFieldText )
     {
         if ( aStrOut.isEmpty() )
@@ -1201,10 +1192,9 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 }
 
 
-sal_Bool ScHTMLExport::WriteFieldText( const ScEditCell* pCell )
+bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
 {
     bool bFields = false;
-    const EditTextObject* pData = pCell->GetData();
     // text and anchor of URL fields, Doc-Engine is a ScFieldEditEngine
     EditEngine& rEngine = pDoc->GetEditEngine();
     rEngine.SetText( *pData );

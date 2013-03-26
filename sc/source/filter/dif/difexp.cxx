@@ -30,6 +30,7 @@
 #include "progress.hxx"
 #include <rtl/tencinfo.h>
 #include "ftools.hxx"
+#include "cellvalue.hxx"
 #include "rtl/strbuf.hxx"
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
@@ -143,7 +144,8 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     SCCOL               nColCnt;
     SCROW               nRowCnt;
-    ScBaseCell*         pAkt;
+
+    ScRefCellValue aCell;
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
@@ -156,20 +158,43 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
         {
             OSL_ASSERT(aOS.getLength() == 0);
             bool bWriteStringData = false;
-            pDoc->GetCell( nColCnt, nRowCnt, nTab, pAkt );
-            if( pAkt )
+            aCell.assign(*pDoc, ScAddress(nColCnt, nRowCnt, nTab));
+
+            switch (aCell.meType)
             {
-                switch( pAkt->GetCellType() )
-                {
-                    case CELLTYPE_NONE:
-                    case CELLTYPE_NOTE:
-                        aOS.appendAscii(pEmptyData);
-                        break;
-                    case CELLTYPE_VALUE:
+                case CELLTYPE_NONE:
+                case CELLTYPE_NOTE:
+                    aOS.appendAscii(pEmptyData);
+                break;
+                case CELLTYPE_VALUE:
+                    aOS.appendAscii(pNumData);
+                    if( bPlain )
+                    {
+                        aOS.append(
+                            rtl::math::doubleToUString(
+                                aCell.mfValue, rtl_math_StringFormat_G, 14, '.', true));
+                    }
+                    else
+                    {
+                        pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
+                        aOS.append(aString);
+                    }
+                    aOS.appendAscii("\nV\n");
+                break;
+                case CELLTYPE_EDIT:
+                case CELLTYPE_STRING:
+                    aString = aCell.getString();
+                    bWriteStringData = true;
+                break;
+                case CELLTYPE_FORMULA:
+                    if (aCell.mpFormula->GetErrCode())
+                        aOS.appendAscii(pNumDataERROR);
+                    else if (aCell.mpFormula->IsValue())
+                    {
                         aOS.appendAscii(pNumData);
                         if( bPlain )
                         {
-                            fVal = static_cast<ScValueCell*>(pAkt)->GetValue();
+                            fVal = aCell.mpFormula->GetValue();
                             aOS.append(
                                 rtl::math::doubleToUString(
                                     fVal, rtl_math_StringFormat_G, 14, '.', true));
@@ -180,49 +205,16 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                             aOS.append(aString);
                         }
                         aOS.appendAscii("\nV\n");
-                        break;
-                    case CELLTYPE_EDIT:
-                        aString = static_cast<ScEditCell*>(pAkt)->GetString();
+                    }
+                    else
+                    {
+                        aString = aCell.mpFormula->GetString();
                         bWriteStringData = true;
-                        break;
-                    case CELLTYPE_STRING:
-                        aString = static_cast<ScStringCell*>(pAkt)->GetString();
-                        bWriteStringData = true;
-                        break;
-                    case CELLTYPE_FORMULA:
-                        if (static_cast<ScFormulaCell*>(pAkt)->GetErrCode())
-                            aOS.appendAscii(pNumDataERROR);
-                        else if( pAkt->HasValueData() )
-                        {
-                            aOS.appendAscii(pNumData);
-                            if( bPlain )
-                            {
-                                fVal = static_cast<ScFormulaCell*>(pAkt)->GetValue();
-                                aOS.append(
-                                    rtl::math::doubleToUString(
-                                        fVal, rtl_math_StringFormat_G, 14, '.', true));
-                            }
-                            else
-                            {
-                                pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                                aOS.append(aString);
-                            }
-                            aOS.appendAscii("\nV\n");
-                        }
-                        else if( pAkt->HasStringData() )
-                        {
-                            aString = static_cast<ScFormulaCell*>(pAkt)->GetString();
-                            bWriteStringData = true;
-                        }
-                        else
-                            aOS.appendAscii(pNumDataERROR);
+                    }
 
-                        break;
-                    default:;
-                }
+                break;
+                default:;
             }
-            else
-                aOS.appendAscii(pEmptyData);
 
             if ( !bWriteStringData )
                 rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
