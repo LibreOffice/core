@@ -64,6 +64,8 @@ struct SystemEnvData
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
+#elif defined( IOS )
+    // Nothing
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
     long                aWindow;        // the window of the object
@@ -92,6 +94,8 @@ struct SystemParentData
     HWND            hWnd;             // the window hwnd
 #elif defined( MACOSX )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
+#elif defined( IOS )
+    // Nothing
 #elif defined( UNX )
     long            aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
@@ -109,7 +113,9 @@ struct SystemMenuData
 #if defined( WNT )
     HMENU           hMenu;          // the menu handle of the menu bar
 #elif defined( MACOSX )
-    //not defined
+    // Nothing
+#elif defined( IOS )
+    // Nothing
 #elif defined( UNX )
     long            aMenu;          // ???
 #endif
@@ -127,6 +133,7 @@ struct SystemGraphicsData
 #elif defined( MACOSX )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( IOS )
+    // Nothing
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
@@ -141,7 +148,9 @@ struct SystemGraphicsData
 #if defined( WNT )
         , hDC( 0 )
 #elif defined( MACOSX )
+    // Nothing
 #elif defined( IOS )
+    // Nothing
 #elif defined( UNX )
         , pDisplay( NULL )
         , hDrawable( 0 )
@@ -164,7 +173,9 @@ struct SystemWindowData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )                  // meaningless on Windows
 #elif defined( MACOSX )             // meaningless on Mac OS X
+    // Nothing
 #elif defined( IOS )                // and maybe on iOS, too, then
+    // Nothing
 #elif defined( UNX )
     void*           pVisual;        // the visual to be used
 #endif

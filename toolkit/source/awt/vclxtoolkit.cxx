@@ -936,6 +936,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     aParentData.nSize   = sizeof( aParentData );
                                     #if defined MACOSX
                                     aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
+                                    #elif defined IOS
+                                    // Nothing
                                     #elif defined UNX
                                     aParentData.aWindow = nWindowHandle;
                                     aParentData.bXEmbedSupport = bXEmbed;
@@ -1181,6 +1183,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             aParentData.nSize   = sizeof( aParentData );
             #if defined MACOSX
             aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
+            #elif defined IOS
+            // Nothing
             #elif defined UNX
             aParentData.aWindow = nWindowHandle;
             aParentData.bXEmbedSupport = bXEmbed;

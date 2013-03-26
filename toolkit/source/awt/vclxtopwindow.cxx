@@ -96,6 +96,9 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
             {
                  aRet <<= (sal_IntPtr)pSysData->pView;
             }
+#elif (defined IOS)
+            // Nothing
+            (void) SystemType;
 #elif (defined UNX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
             {
