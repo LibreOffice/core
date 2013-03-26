@@ -78,9 +78,6 @@
 static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CID);
 #endif
 
-#ifndef MAXPATHLEN
-#define MAXPATHLEN 1024
-#endif
 #include <MNSFolders.hxx>
 #include <MNSINIParser.hxx>
 

@@ -35,10 +35,6 @@
 
 #include "sal/types.h"
 
-#define SYSTEM_WIN32   1
-#define SYSTEM_WIN16   2
-#define SYSTEM_JAVA    3
-#define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
 
 

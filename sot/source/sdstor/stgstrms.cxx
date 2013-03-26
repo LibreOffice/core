@@ -31,8 +31,6 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 
-#define __HUGE
-
 ///////////////////////////// class StgFAT ///////////////////////////////
 
 // The FAT class performs FAT operations on an underlying storage stream.

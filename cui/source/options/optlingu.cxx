@@ -82,7 +82,6 @@ using namespace ::com::sun::star::beans;
 
 #define CBCOL_FIRST     0
 #define CBCOL_SECOND    1
-#define CBCOL_BOTH      2
 
 static const sal_Char cSpell[]   = SN_SPELLCHECKER;
 static const sal_Char cGrammar[] = SN_GRAMMARCHECKER;

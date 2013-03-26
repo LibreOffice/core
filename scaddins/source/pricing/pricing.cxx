@@ -100,10 +100,8 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 //------------------------------------------------------------------
 
 #define UNIQUE              sal_False   // function name does not exist in Calc
-#define DOUBLE              sal_True    // function name exists in Calc
 
 #define STDPAR              sal_False   // all parameters are described
-#define INTPAR              sal_True    // first parameter is internal
 
 #define FUNCDATA( FuncName, ParamCount, Category, Double, IntPar )  \
     { "get" #FuncName, PRICING_FUNCNAME_##FuncName, PRICING_FUNCDESC_##FuncName, PRICING_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }

@@ -1355,10 +1355,7 @@ void PPTWriter::ImplWriteOLE( )
 sal_Bool PPTWriter::ImplWriteAtomEnding()
 {
 
-#define EPP_LastViewTypeNone        0
 #define EPP_LastViewTypeSlideView   1
-#define EPP_LastViewTypeOutlineView 2
-#define EPP_LastViewTypeNotes       3
 
     sal_uInt32  i, nPos, nOfs, nPersistOfs = mpStrm->Tell();
     sal_uInt32  nPersistEntrys = 0;

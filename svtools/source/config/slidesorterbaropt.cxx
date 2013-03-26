@@ -48,8 +48,6 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_VISIBLE_DRAWVIEW          OUString("DrawView")
 #define PROPERTYHANDLE_VISIBLE_DRAWVIEW        5
 
-#define PROPERTYCOUNT                          6
-
 class SvtSlideSorterBarOptions_Impl : public ConfigItem
 {
     Sequence< OUString > m_seqPropertyNames;

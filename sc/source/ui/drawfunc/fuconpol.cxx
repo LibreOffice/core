@@ -28,13 +28,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
-//  Pixelabstand zum Schliessen von Freihand-Zeichnungen
-#ifndef CLOSE_PIXDIST
-#define CLOSE_PIXDIST 5
-#endif
-
-//------------------------------------------------------------------------
-
 /*************************************************************************
 |*
 |* Konstruktor

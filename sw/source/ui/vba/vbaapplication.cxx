@@ -44,16 +44,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OUString;
 
-// #TODO is this defined somewhere else?
-#if ( defined UNX )
-#define FILE_PATH_SEPERATOR "/"
-#else // windows
-#define FILE_PATH_SEPERATOR "\\"
-#endif
-
-#define EXCELVERSION "11.0"
-
-
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ): SwVbaApplication_BASE( xContext )
 {
 }

@@ -40,10 +40,6 @@ namespace connectivity
         using namespace ::com::sun::star::embed;
         using namespace ::com::sun::star::io;
 
-#define ThrowException(env, type, msg) { \
-    env->ThrowNew(env->FindClass(type), msg); }
-
-
         StreamHelper::StreamHelper(const Reference< XStream>& _xStream)
             : m_xStream(_xStream)
         {

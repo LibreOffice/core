@@ -47,7 +47,6 @@ static const sal_Char* gpsPC = "pc";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
-#define XML_NULLDATE "NullDate"
 
 /** convert string to measure using optional min and max values*/
 bool Converter::convertMeasure( sal_Int32& rValue,

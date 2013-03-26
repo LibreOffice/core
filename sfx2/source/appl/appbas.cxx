@@ -71,13 +71,10 @@
 #include "appbaslib.hxx"
 #include <basic/basicmanagerrepository.hxx>
 
-#define ITEMID_SEARCH SID_SEARCH_ITEM
-
 #include <svl/srchitem.hxx>
 #include <osl/socket.hxx>
 
 #define SFX_TYPEMAP
-#define Selection
 #include "sfxslots.hxx"
 
 using namespace ::com::sun::star;

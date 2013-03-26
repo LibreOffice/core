@@ -27,10 +27,6 @@
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
 
-#define USER_PACKAGE_MANAGER    "user"
-#define SHARED_PACKAGE_MANAGER  "shared"
-#define BUNDLED_PACKAGE_MANAGER "bundled"
-
 using namespace ::com::sun::star;
 
 namespace sd {

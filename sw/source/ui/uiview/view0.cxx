@@ -54,18 +54,9 @@
 #include "wview.hxx"
 #include "shells.hrc"
 
-#define OLEObjects
 #define SwView
-#define Frames
-#define Graphics
-#define Tables
-#define Controls
 #define GlobalContents
 #define Text
-#define Frame
-#define Graphic
-#define Object
-#define Draw
 #define TextDrawText
 #define TextInTable
 #define ListInText
@@ -73,7 +64,6 @@
 #define WebTextInTable
 #define WebListInText
 #define WebListInTable
-#define TextPage
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include <PostItMgr.hxx>

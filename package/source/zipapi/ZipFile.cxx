@@ -47,8 +47,6 @@
 
 #include <CRC32.hxx>
 
-#define AES_CBC_BLOCK_SIZE 16
-
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;

@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// CLOOKS:
-#define _SPIN_HXX
-
 #include "basidesh.hxx"
 
 #include <tools/diagnose_ex.h>

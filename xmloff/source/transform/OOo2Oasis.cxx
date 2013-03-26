@@ -74,9 +74,6 @@ enum XMLUserDefinedTransformerAction
 
 #define ENTRY2( n, l, a, p1, p2 ) \
     ENTRY3( n, l, a, p1, p2, 0 )
-#define ENTRY2QQ( n, l, a, n1, l1, n2, l2 ) \
-    ENTRY2( n, l, a, XMLTransformerActionInit::QNameParam( n1, l1 ), \
-            XMLTransformerActionInit::QNameParam( n2, l2 ) )
 #define ENTRY2QN( n, l, a, n1, l1, p2 ) \
     ENTRY2( n, l, a, XMLTransformerActionInit::QNameParam( n1, l1 ), p2 )
 

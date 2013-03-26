@@ -61,8 +61,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#define LOGFILE_AUTHOR "mb93740"
-
 SwXMLWriter::SwXMLWriter( const String& rBaseURL )
 {
     SetBaseURL( rBaseURL );
@@ -506,7 +504,7 @@ bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
     OSL_ENSURE( NULL != pServiceName, "Need service name!" );
 
-    RTL_LOGFILE_TRACE_AUTHOR1( "sw", LOGFILE_AUTHOR,
+    RTL_LOGFILE_TRACE_AUTHOR1( "sw", "mb93740",
                                "SwXMLWriter::WriteThroughComponent : stream %s",
                                pStreamName );
 
@@ -574,7 +572,7 @@ bool SwXMLWriter::WriteThroughComponent(
     OSL_ENSURE( xComponent.is(), "Need component!" );
     OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aFilterLog, "sw", LOGFILE_AUTHOR,
+    RTL_LOGFILE_CONTEXT_AUTHOR( aFilterLog, "sw", "mb93740",
                                 "SwXMLWriter::WriteThroughComponent" );
 
     // get component

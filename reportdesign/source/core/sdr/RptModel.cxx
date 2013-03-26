@@ -27,10 +27,6 @@
 #include "UndoEnv.hxx"
 #include "ReportUndoFactory.hxx"
 #include "ReportDefinition.hxx"
-#define ITEMID_COLOR        1
-#define ITEMID_BRUSH        2
-#define ITEMID_FONT         3
-#define ITEMID_FONTHEIGHT   4
 
 #include <svx/tbcontrl.hxx>
 #include "rptui_slotid.hrc"

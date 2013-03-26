@@ -23,8 +23,6 @@
 #define G_TYPE_LO_ACTION                                (g_lo_action_get_type ())
 #define G_LO_ACTION(inst)                               (G_TYPE_CHECK_INSTANCE_CAST ((inst),                     \
                                                          G_TYPE_LO_ACTION, GLOAction))
-#define G_IS_LO_ACTION(inst)                            (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
-                                                         G_TYPE_LO_ACTION))
 
 struct _GLOAction
 {

@@ -67,11 +67,6 @@
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <tools/diagnose_ex.h>
-
-#ifndef OOVBA_DLLIMPLEMENTATION
-#define OOVBA_DLLIMPLEMENTATION
-#endif
-
 #include <vbahelper/vbahelper.hxx>
 
 using namespace ::com::sun::star;

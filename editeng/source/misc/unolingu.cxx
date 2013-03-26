@@ -65,8 +65,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
 
-#define CSS com::sun::star
-
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
     uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();

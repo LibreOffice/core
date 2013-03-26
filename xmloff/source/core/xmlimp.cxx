@@ -60,8 +60,6 @@
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
 #include "RDFaImportHelper.hxx"
 
-#define LOGFILE_AUTHOR "unknown"
-
 using ::com::sun::star::beans::XPropertySetInfo;
 
 using ::rtl::OUString;
@@ -479,7 +477,7 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
 void SAL_CALL SvXMLImport::startDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    RTL_LOGFILE_TRACE_AUTHOR( "xmloff", LOGFILE_AUTHOR, "{ SvXMLImport::startDocument" );
+    RTL_LOGFILE_TRACE_AUTHOR( "xmloff", "unknown", "{ SvXMLImport::startDocument" );
 
     if( !mxGraphicResolver.is() || !mxEmbeddedResolver.is() )
     {
@@ -516,7 +514,7 @@ void SAL_CALL SvXMLImport::startDocument( void )
 void SAL_CALL SvXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException)
 {
-    RTL_LOGFILE_TRACE_AUTHOR( "xmloff", LOGFILE_AUTHOR, "} SvXMLImport::startDocument" );
+    RTL_LOGFILE_TRACE_AUTHOR( "xmloff", "unknown", "} SvXMLImport::startDocument" );
 
     //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
     //  because the SvXMLImport dtor might not be called until after the document has been closed.
@@ -692,7 +690,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         // If we do profiling, we want a trace message for the first element
         // in order to identify the stream.
         rtl::OString aString(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
-        RTL_LOGFILE_TRACE_AUTHOR1( "xmloff", LOGFILE_AUTHOR,
+        RTL_LOGFILE_TRACE_AUTHOR1( "xmloff", "unknown",
                                    "SvXMLImport::StartElement( \"%s\", ... )",
                                    aString.getStr() );
 #endif

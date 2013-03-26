@@ -30,11 +30,6 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// this is a copy of defines in svx/inc/escpitem.hxx
-#define DFLT_ESC_PROP    58
-#define DFLT_ESC_AUTO_SUPER 101
-#define DFLT_ESC_AUTO_SUB  -101
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // class XMLEscapementPropHdl

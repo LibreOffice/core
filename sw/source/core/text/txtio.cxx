@@ -44,8 +44,6 @@
 #include "pormulti.hxx"
 #include "ndhints.hxx"
 
-#define CONSTCHAR( name, string ) static const sal_Char name[] = string
-
 SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 {
     rOs << " {HINTS:";
@@ -125,6 +123,8 @@ const char *GetPrepName( const PrepareHint )
 #include <stdlib.h>
 #include "swtypes.hxx"      // ZTCCONST
 #include "swfont.hxx"     // SwDropPortion
+
+#define CONSTCHAR( name, string ) static const sal_Char name[] = string
 
 CONSTCHAR( pClose, "} " );
 

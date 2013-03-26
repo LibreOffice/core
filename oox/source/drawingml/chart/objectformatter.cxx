@@ -134,14 +134,6 @@ struct AutoFormatEntry
 #define AUTOFORMAT_COLOR( first, last, themed_style, color_token ) \
     { first, last, themed_style, color_token, XML_TOKEN_INVALID, 0, 100, 0, false }
 
-#define AUTOFORMAT_ACCENTS( first, themed_style ) \
-    AUTOFORMAT_COLOR( first,     first,     themed_style, XML_accent1 ), \
-    AUTOFORMAT_COLOR( first + 1, first + 1, themed_style, XML_accent2 ), \
-    AUTOFORMAT_COLOR( first + 2, first + 2, themed_style, XML_accent3 ), \
-    AUTOFORMAT_COLOR( first + 3, first + 3, themed_style, XML_accent4 ), \
-    AUTOFORMAT_COLOR( first + 4, first + 4, themed_style, XML_accent5 ), \
-    AUTOFORMAT_COLOR( first + 5, first + 5, themed_style, XML_accent6 )
-
 #define AUTOFORMAT_COLORMOD( first, last, themed_style, color_token, mod_token, mod_value ) \
     { first, last, themed_style, color_token, mod_token, mod_value, 100, 0, false }
 
@@ -401,7 +393,6 @@ static const AutoFormatEntry spUpDownBarEffects[] =
 };
 
 #undef AUTOFORMAT_COLOR
-#undef AUTOFORMAT_ACCENTS
 #undef AUTOFORMAT_COLORMOD
 #undef AUTOFORMAT_ACCENTSMOD
 #undef AUTOFORMAT_PATTERN

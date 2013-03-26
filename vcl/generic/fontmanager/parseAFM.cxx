@@ -89,8 +89,6 @@
 #define lineterm EOL    /* line terminating character */
 #define normalEOF 1 /* return code from parsing routines used only */
 /* in this module */
-#define Space "space"   /* used in string comparison to look for the width */
-/* of the space character to init the widths array */
 #define False "false"   /* used in string comparison to check the value of */
 /* boolean keys (e.g. IsFixedPitch)  */
 

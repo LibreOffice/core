@@ -55,10 +55,6 @@ typedef struct {
 #define NUMBER_OMIT_ONE_67 (NUMBER_OMIT_ONE_6|NUMBER_OMIT_ONE_7)
 #define NUMBER_OMIT_ZERO_ONE_67 ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE_67 )
 
-
-#define MAX_SAL_UINT32  0xFFFFFFFF
-#define MAX_VALUE       (MAX_SAL_UINT32 - 9) / 10
-
 namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal_Bool useGeresh);

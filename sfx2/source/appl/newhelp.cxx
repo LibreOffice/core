@@ -141,7 +141,6 @@ using namespace ::comphelper;
 #define TBI_SEARCHDIALOG    1008
 #define TBI_SOURCEVIEW      1009
 #define TBI_SELECTIONMODE   1010
-#define TBI_ONSTARTUP       1011
 
 #define CONFIGNAME_HELPWIN      "OfficeHelp"
 #define CONFIGNAME_INDEXWIN     "OfficeHelpIndex"

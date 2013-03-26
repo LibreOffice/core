@@ -59,7 +59,6 @@
 #include <editeng/unoprnms.hxx>
 #include <editeng/editids.hrc>
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 #include <editeng/adjustitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
@@ -122,12 +121,8 @@
 #define PPT_COLSCHEME                       (0x08000000)
 #define PPT_COLSCHEME_HINTERGRUND           (0x08000000)
 #define PPT_COLSCHEME_TEXT_UND_ZEILEN       (0x08000001)
-#define PPT_COLSCHEME_SCHATTEN              (0x08000002)
 #define PPT_COLSCHEME_TITELTEXT             (0x08000003)
-#define PPT_COLSCHEME_FUELLBEREICHE         (0x08000004)
-#define PPT_COLSCHEME_AKZENT                (0x08000005)
 #define PPT_COLSCHEME_A_UND_HYPERLINK       (0x08000006)
-#define PPT_COLSCHEME_A_H_GESICHERT         (0x08000007)
 
 #define ANSI_CHARSET            0
 #define SYMBOL_CHARSET          2

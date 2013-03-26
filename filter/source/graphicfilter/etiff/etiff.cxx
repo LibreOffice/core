@@ -41,7 +41,6 @@
 #define PlanarConfiguration         284
 #define ResolutionUnit              296
 #define ColorMap                    320
-#define ReferenceBlackWhite         532
 
 // -------------
 // - TIFFWriter -

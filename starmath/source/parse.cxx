@@ -19,8 +19,6 @@
 
 #include <stdio.h>
 
-#define SMDLL 1
-
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18npool/lang.h>
 #include <unotools/charclass.hxx>

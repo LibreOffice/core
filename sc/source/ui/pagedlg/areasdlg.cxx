@@ -61,7 +61,6 @@ using ::rtl::OUString;
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ErrorBox( this, WinBits(WB_OK|WB_DEF_OK), \
                             ScGlobal::GetRscString( nId ) ).Execute()
-#define SWAP(x1,x2)         { int n=x1; x1=x2; x2=n; }
 
 // globale Funktionen (->am Ende der Datei):
 

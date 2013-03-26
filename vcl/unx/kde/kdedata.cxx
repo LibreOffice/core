@@ -46,14 +46,6 @@
 
 #include <config_vclplug.h>
 
-#if ENABLE_TDE
-#define THIS_DESKENV_NAME_CAP "TDE"
-#define THIS_DESKENV_NAME_LOW "tde"
-#else // ENABLE_TDE
-#define THIS_DESKENV_NAME_CAP "KDE"
-#define THIS_DESKENV_NAME_LOW "kde"
-#endif // ENABLE_TDE
-
 /* #i59042# override KApplications method for session management
  * since it will interfere badly with our own.
  */

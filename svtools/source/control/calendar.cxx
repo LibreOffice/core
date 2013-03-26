@@ -54,11 +54,9 @@
 #define WEEKNUMBER_HEIGHT               85
 
 #define CALENDAR_HITTEST_DAY            ((sal_uInt16)0x0001)
-#define CALENDAR_HITTEST_WEEK           ((sal_uInt16)0x0002)
 #define CALENDAR_HITTEST_MONTHTITLE     ((sal_uInt16)0x0004)
 #define CALENDAR_HITTEST_PREV           ((sal_uInt16)0x0008)
 #define CALENDAR_HITTEST_NEXT           ((sal_uInt16)0x0010)
-#define CALENDAR_HITTEST_OUTSIDE        ((sal_uInt16)0x1000)
 
 #define MENU_YEAR_COUNT                 3
 

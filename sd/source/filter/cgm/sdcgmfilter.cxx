@@ -31,15 +31,10 @@
 #include "sdcgmfilter.hxx"
 
 #define CGM_IMPORT_CGM      0x00000001
-#define CGM_IMPORT_IM       0x00000002
 
 #define CGM_EXPORT_IMPRESS  0x00000100
-#define CGM_EXPORT_META     0x00000200
-#define CGM_EXPORT_COMMENT  0x00000400
 
-#define CGM_NO_PAD_BYTE     0x00010000
 #define CGM_BIG_ENDIAN      0x00020000
-#define CGM_LITTLE_ENDIAN   0x00040000
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;

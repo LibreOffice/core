@@ -1781,11 +1781,11 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
     }
     else
     {
-        // color to use as foreground for an invalid pattern
-        #define INVALID_PATTERN_FOREGROUND_COLOR Color(COL_WHITE)
         // color to use as background for an invalid pattern
         #define INVALID_PATTERN_BACKGROUND_COLOR Color(0xff6563)
 #if 0
+        // color to use as foreground for an invalid pattern
+        #define INVALID_PATTERN_FOREGROUND_COLOR Color(COL_WHITE)
         //! Gives white on white!?!
         pEd->SetControlBackground( INVALID_PATTERN_BACKGROUND_COLOR);
         pEd->SetControlForeground( INVALID_PATTERN_FOREGROUND_COLOR);

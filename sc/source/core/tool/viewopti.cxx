@@ -40,9 +40,6 @@ using ::rtl::OUString;
 
 TYPEINIT1(ScTpViewItem, SfxPoolItem);
 
-#define SC_VERSION ((sal_uInt16)302)
-
-
 //========================================================================
 // class ScGridOptions
 //========================================================================

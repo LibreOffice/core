@@ -34,7 +34,7 @@
 #define PZSTREAM ((z_stream*) mpsC_Stream)
 
 /* gzip flag byte */
-#define GZ_ASCII_FLAG   0x01 /* bit 0 set: file probably ascii text */
+//      GZ_ASCII_FLAG   0x01 /* bit 0 set: file probably ascii text */
 #define GZ_HEAD_CRC     0x02 /* bit 1 set: header CRC present */
 #define GZ_EXTRA_FIELD  0x04 /* bit 2 set: extra field present */
 #define GZ_ORIG_NAME    0x08 /* bit 3 set: original file name present */

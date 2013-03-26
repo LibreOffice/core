@@ -38,15 +38,8 @@
 
 #endif  /* HAVE_DLFCN_H */
 
-#ifndef INCLUDED_PTHREAD_H
 #include <pthread.h>
-#define INCLUDED_PTHREAD_H
-#endif
-
-#ifndef INCLUDED_STDDEF_H
 #include <stddef.h>
-#define INCLUDED_STDDEF_H
-#endif
 
 /************************************************************************/
 /* Internal data structures and functions */

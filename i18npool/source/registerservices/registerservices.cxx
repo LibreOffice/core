@@ -61,12 +61,10 @@
 #include <indexentrysupplier_common.hxx>
 #include <indexentrysupplier_default.hxx>
 
-#define CCLASS_ALL
 #include <characterclassificationImpl.hxx>
 #include <unoscripttypedetector.hxx>
 #include <cclass_unicode.hxx>
 
-#define COLLATOR_ALL
 #include <collatorImpl.hxx>
 #include <chaptercollator.hxx>
 #include <collator_unicode.hxx>

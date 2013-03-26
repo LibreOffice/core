@@ -103,7 +103,6 @@ using ::std::advance;
 #define TITLE                   "Title"
 #define TARGET_URL              "TargetURL"
 
-#define TARGET_DIR_URL          "TargetDirURL"
 #define COMMAND_TRANSFER        "transfer"
 
 //========================================================================

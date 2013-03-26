@@ -35,8 +35,6 @@
 #define STATE_NON       0x0001
 #define STATE_INPUT     0x0002
 #define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
 #define STATE_MERGESRC  0x0006
 #define STATE_LANGUAGES 0x0007
 

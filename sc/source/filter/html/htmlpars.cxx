@@ -21,7 +21,6 @@
 #include <boost/shared_ptr.hpp>
 #include <comphelper/string.hxx>
 
-#define SC_HTMLPARS_CXX
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 

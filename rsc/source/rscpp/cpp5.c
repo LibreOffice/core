@@ -94,16 +94,8 @@ register int    op;
 {
     return (op >= FIRST_BINOP && op <= LAST_BINOP);
 }
-
-FILE_LOCAL int
-isunary(op)
-register int    op;
-{
-    return (op >= FIRST_UNOP && op <= LAST_UNOP);
-}
 #else
 #define isbinary(op)    (op >= FIRST_BINOP && op <= LAST_BINOP)
-#define isunary(op) (op >= FIRST_UNOP  && op <= LAST_UNOP)
 #endif
 
 /*

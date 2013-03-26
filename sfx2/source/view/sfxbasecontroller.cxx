@@ -81,13 +81,8 @@
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
-#define XCLOSELISTENER                          ::com::sun::star::util::XCloseListener
 #define FRAMEACTIONEVENT                        ::com::sun::star::frame::FrameActionEvent
 #define EVENTOBJECT                             ::com::sun::star::lang::EventObject
-#define OTYPECOLLECTION                         ::cppu::OTypeCollection
-#define OIMPLEMENTATIONID                       ::cppu::OImplementationId
-#define XCOMPONENT                              ::com::sun::star::lang::XComponent
-#define XINTERFACE                              ::com::sun::star::uno::XInterface
 #define XKEYHANDLER                             ::com::sun::star::awt::XKeyHandler
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */

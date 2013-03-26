@@ -41,9 +41,6 @@
 #include <SwXMLBlockExport.hxx>
 #include <swerror.h>
 
-#define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
-#define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
-
 using namespace ::com::sun::star;
 
 

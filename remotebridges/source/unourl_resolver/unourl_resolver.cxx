@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//  #define TRACE(x) OSL_TRACE(x)
-#define TRACE(x)
-
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>

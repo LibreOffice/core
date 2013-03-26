@@ -264,7 +264,9 @@ using ::rtl::OUString;
 using ::rtl::OStringBuffer;
 using ::rtl::OUStringHash;
 
+#if OSL_DEBUG_LEVEL > 2
 #define BSTRING(x) rtl::OUStringToOString( x, osl_getThreadTextEncoding() )
+#endif
 
 namespace
 {

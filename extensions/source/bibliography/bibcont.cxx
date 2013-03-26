@@ -76,7 +76,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::rtl;
 
-#define PROPERTY_FRAME                      1
 //split window size is a percent value
 #define WIN_MIN_HEIGHT 10
 #define WIN_STEP_SIZE 5

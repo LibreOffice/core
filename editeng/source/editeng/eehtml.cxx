@@ -36,9 +36,6 @@
 
 #include "editeng/editeng.hxx"
 
-#define ACTION_INSERTTEXT         1
-#define ACTION_INSERTPARABRK      2
-
 #define STYLE_PRE               101
 
 EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )

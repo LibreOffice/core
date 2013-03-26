@@ -33,7 +33,6 @@
 #define XML_LINE_RIGHT 1
 #define XML_LINE_TOP 2
 #define XML_LINE_BOTTOM 3
-#define MIN_BORDER_DIST 49
 
 using ::rtl::OUString;
 

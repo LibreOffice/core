@@ -36,7 +36,6 @@
 
 #define USER_PACKAGE_MANAGER    OUString("user")
 #define SHARED_PACKAGE_MANAGER  OUString("shared")
-#define BUNDLED_PACKAGE_MANAGER OUString("bundled")
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

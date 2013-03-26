@@ -82,16 +82,6 @@ DBG_NAME(OTableEditorCtrl)
 // Maximum length in description field
 #define MAX_DESCR_LEN       256
 
-
-#define CONTROL_SPACING_X   18  // 6
-#define CONTROL_SPACING_Y   5
-#define CONTROL_HEIGHT      20
-#define CONTROL_WIDTH_1     140 // 100
-#define CONTROL_WIDTH_2     100 // 60
-#define CONTROL_WIDTH_3     250
-#define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
-
-
 //==================================================================
 DBG_NAME(ClipboardInvalidator)
 //------------------------------------------------------------------

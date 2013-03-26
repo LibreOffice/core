@@ -45,8 +45,6 @@ using namespace com::sun::star::ui::dialogs;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-#define MAX_PATH 1024
-
 /*
  *  PaResId
  */

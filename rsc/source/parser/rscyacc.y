@@ -242,9 +242,6 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 
 //#define YYDEBUG 1
 
-#define TYPE_Atom             0
-#define TYPE_RESID                1
-
 #ifdef UNX
 #define YYMAXDEPTH              2000
 #else

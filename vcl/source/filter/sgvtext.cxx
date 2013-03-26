@@ -47,26 +47,13 @@ extern SgfFontLst* pSgfFonts;
 /////////////////////////////////////////////////////////////////////////////////
 // AbsBase.Pas
 
-// die folgenden Werte sind in % vom maximalen Schriftgrad der Zeile   */
-#define  UndlSpace  5 /* Untersteichungsabstand von der Baseline       */
-#define  UndlWidth  6 /* Untersteichungsdicke                          */
-#define  UndlSpac2  7 /* Zwischenraum bei doppelter Unterstreichung    */
-#define  StrkSpace 25 /* Abstand der Durchstreichlinie von der Baseline*/
-#define  StrkWidth  5 /* Durchstreichungsliniendicke                   */
-#define  StrkSpac2  7 /* Zwischenraum bei doppelter Durchstreichung    */
-#define  OutlWidth  2 /* Strichstaerke ist 2% vom Schriftgrad          */
-
 // vvv Sonderzeichen im TextBuffer vvv
 #define  TextEnd        0 /* ^@ Ende der Zeichenkette                           */
 #define  HardSpace      6 /* ^F Hartspace (wird nicht umbrochen) ,' '           */
-#define  GrafText       7 /* ^G Im Text eingebundene Grafik (future)            */
-#define  Tabulator      9 /* ^I Tabulatorzeichen, Pfeil                         */
-#define  LineFeed      10 /* ^J Neue Zeile                                      */
 #define  SoftTrennK    11 /* ^K Zeichen fuer k-c-Austausch bei Trennung, 'k'    */
 #define  AbsatzEnd     13 /* ^M Neuer Absatz =CR                                */
 #define  HardTrenn     16 /* ^P Hartes Trennzeichen (wird nicht umbrochen), '-' */
 #define  SoftTrennAdd  19 /* ^S Zusatz-Zeichen Trennung von z.b."Schiff-fahrt"  */
-#define  Paragraf      21 /* ^U Zeichen welches fuer Paragraf-Zeichen           */
 #define  Escape        27 /* ^[ Escapesequenz einleiten                         */
 #define  SoftTrenn     31 /* ^_ Weiches Trennzeichen, '-' nur Zeilenende        */
 #define  MaxEscValLen  8
@@ -148,7 +135,6 @@ extern SgfFontLst* pSgfFonts;
 
 //==============================================================================
 
-#define  GradDiv             2
 #define  CharTopToBase     100 /* wegen Apostrophe und Umlaute mehr als 75% */
 #define  CharTopToBtm      120 /* Zeilenhoehe ist groesser als Schriftgrad  */
                                // bei Avanti-Bold 'ue' eigentlich sogar 130%
@@ -179,7 +165,6 @@ extern SgfFontLst* pSgfFonts;
 #define  TextSh3DBit  0x0800   /* 3D-Schatten         2.0 */
 #define  TextSh4DBit  0x1000   /* 4D-Schatten         2.0 */
 #define  TextShEbBit  0x2000   /* Embossed-Schatten   2.0 */
-#define  FontAtrBits  (TextBoldBit | TextRSlnBit)
 
 #define  THJustLeft    0x00
 #define  THJustCenter  0x01
@@ -187,10 +172,6 @@ extern SgfFontLst* pSgfFonts;
 #define  THJustBlock   0x03
 #define  THJustDrvOut  0x04 /* Austreibend          Formatiert */
 #define  THJustLocked  0x05 /* A l s   S p e r r s c h r i f t */
-#define  TVJustTop     0x00 /* Future */
-#define  TVJustCenter  0x10 /* Future */
-#define  TVJustBottom  0x20 /* Future */
-#define  TVJustBlock   0x30 /* Future */
 
 #define  MaxCharSlant  4200 /* Maximal 42deg kursiv ! */
 
@@ -529,7 +510,6 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
 /////////////////////////////////////////////////////////////////////////////////
 // iFont.Pas
 
-#define DefaultSlant 1500   /* Default: Italic ist 15deg                  */
 #define SuperSubFact 60     /* SuperScript/SubScript: 60% vom Schriftgrad */
 #define DefaultSpace 40     /* Default: Space ist 40% vom SchriftGrad     */
 

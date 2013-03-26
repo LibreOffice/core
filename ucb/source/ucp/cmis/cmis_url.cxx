@@ -34,9 +34,6 @@
 
 using namespace std;
 
-#define OUSTR_TO_STDSTR(s) string( rtl::OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
-
-
 namespace cmis
 {
     URL::URL( rtl::OUString const & urlStr )

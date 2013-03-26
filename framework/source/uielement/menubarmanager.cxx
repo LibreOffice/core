@@ -139,9 +139,6 @@ namespace framework
 
 // special menu ids/command ids for dynamic popup menus
 #define SID_SFX_START           5000
-#define SID_NEWDOCDIRECT        (SID_SFX_START + 537)
-#define SID_AUTOPILOTMENU       (SID_SFX_START + 1381)
-#define SID_PICKLIST            (SID_SFX_START + 510)
 #define SID_MDIWINDOWLIST       (SID_SFX_START + 610)
 #define SID_ADDONLIST           (SID_SFX_START + 1677)
 #define SID_HELPMENU            (SID_SFX_START + 410)

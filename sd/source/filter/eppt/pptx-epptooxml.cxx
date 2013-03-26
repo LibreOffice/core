@@ -405,22 +405,6 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
     pFS->endElementNS( XML_p, XML_bg );
 }
 
-#define MINIMAL_SPTREE "<p:spTree>\
-      <p:nvGrpSpPr>\
-        <p:cNvPr id=\"1\" name=\"\"/>\
-        <p:cNvGrpSpPr/>\
-        <p:nvPr/>\
-      </p:nvGrpSpPr>\
-      <p:grpSpPr>\
-        <a:xfrm>\
-          <a:off x=\"0\" y=\"0\"/>\
-          <a:ext cx=\"0\" cy=\"0\"/>\
-          <a:chOff x=\"0\" y=\"0\"/>\
-          <a:chExt cx=\"0\" cy=\"0\"/>\
-        </a:xfrm>\
-      </p:grpSpPr>\
-    </p:spTree>"
-
 #define MAIN_GROUP \
      "<p:nvGrpSpPr>\
         <p:cNvPr id=\"1\" name=\"\"/>\

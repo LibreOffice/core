@@ -25,7 +25,6 @@
 # include <com/sun/star/style/LineSpacing.hpp>
 # include <com/sun/star/style/LineSpacingMode.hpp>
 # include <com/sun/star/text/WritingMode.hpp>
-# define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::WritingMode;
 #endif

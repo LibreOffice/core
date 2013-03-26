@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _SVX_PARAITEM_HXX
-#define _SVX_TEXTITEM_HXX
-
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 #include <sfx2/viewfrm.hxx>

@@ -123,7 +123,6 @@ static sal_uInt8 nHeaderPos;
 static sal_uInt8 nFooterPos;
 
 #define SwBaseShell
-#define Shadow
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 

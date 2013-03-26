@@ -305,7 +305,6 @@ MergedCellIterator& MergedCellIterator::operator++()
 #define DBG_FRAME_CHECK_COL( col, funcname )            DBG_FRAME_CHECK( (col) < GetColCount(), funcname, "invalid column index" )
 #define DBG_FRAME_CHECK_ROW( row, funcname )            DBG_FRAME_CHECK( (row) < GetRowCount(), funcname, "invalid row index" )
 #define DBG_FRAME_CHECK_COLROW( col, row, funcname )    DBG_FRAME_CHECK( ((col) < GetColCount()) && ((row) < GetRowCount()), funcname, "invalid cell index" )
-#define DBG_FRAME_CHECK_INDEX( index, funcname )        DBG_FRAME_CHECK( (index) < GetCellCount(), funcname, "invalid cell index" )
 #define DBG_FRAME_CHECK_COL_1( col, funcname )          DBG_FRAME_CHECK( (col) <= GetColCount(), funcname, "invalid column index" )
 #define DBG_FRAME_CHECK_ROW_1( row, funcname )          DBG_FRAME_CHECK( (row) <= GetRowCount(), funcname, "invalid row index" )
 
@@ -1269,7 +1268,6 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
 
 #undef DBG_FRAME_CHECK_ROW_1
 #undef DBG_FRAME_CHECK_COL_1
-#undef DBG_FRAME_CHECK_INDEX
 #undef DBG_FRAME_CHECK_COLROW
 #undef DBG_FRAME_CHECK_ROW
 #undef DBG_FRAME_CHECK_COL

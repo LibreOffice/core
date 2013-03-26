@@ -36,12 +36,6 @@
 
 #include <osl/diagnose.h>
 
-#define HWPHeadLen  128
-#define HWPSummaryLen   1008
-
-#define FILESTG_SIGNATURE       0xF8995567
-#define FILESTG_SIGNATURE_NORMAL    0xF8995568
-
 HWPFile *HWPFile::cur_doc = 0;
 static int ccount = 0;
 static int pcount = 0;

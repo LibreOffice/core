@@ -1183,7 +1183,6 @@ void Export::CleanValue( rtl::OString &rValue )
     }
 }
 
-#define TXT_STATE_NON   0x000
 #define TXT_STATE_TEXT  0x001
 #define TXT_STATE_MACRO 0x002
 

@@ -298,7 +298,6 @@ namespace cairocanvas
         }
     }
 
-#define CANVASBITMAP_IMPLEMENTATION_NAME "CairoCanvas::CanvasBitmap"
 #define PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME "Canvas::ParametricPolyPolygon"
 
     /** surfaceFromXBitmap Create a surface from XBitmap

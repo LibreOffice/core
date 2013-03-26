@@ -255,7 +255,6 @@ static sal_uIntPtr ImplGetPerfTime()
 typedef FILE*       FILETYPE;
 #define FileOpen    fopen
 #define FileRead    fread
-#define FileWrite   fwrite
 #define FilePrintF  fprintf
 #define FileClose   fclose
 

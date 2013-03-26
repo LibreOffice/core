@@ -123,10 +123,11 @@ long int NSP_WriteToPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
 static pid_t nChildPID = 0;
 #endif
 
+#if defined WNT
+
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
 #define MY_STRING(s) (s), MY_LENGTH(s)
 
-#if defined WNT
 namespace {
 
 bool extendEnvironment(boost::scoped_array< WCHAR > * environment) {

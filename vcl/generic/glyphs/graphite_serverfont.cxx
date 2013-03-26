@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// We need this to enable namespace support in libgrengine headers.
-#define GR_NAMESPACE
-
 // Header files
 //
 

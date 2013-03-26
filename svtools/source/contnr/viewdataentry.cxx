@@ -21,13 +21,6 @@
 
 #include "tools/debug.hxx"
 
-// Entryflags that are attached to the View
-#define SVLISTENTRYFLAG_SELECTED        0x0001
-#define SVLISTENTRYFLAG_EXPANDED        0x0002
-#define SVLISTENTRYFLAG_FOCUSED         0x0004
-#define SVLISTENTRYFLAG_CURSORED        0x0008
-#define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
-
 DBG_NAME(SvViewDataEntry);
 
 SvViewDataEntry::SvViewDataEntry() :

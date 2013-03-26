@@ -25,10 +25,7 @@
 #ifndef DISABLE_DBCONNECTIVITY
 #ifndef YYBISON
 #ifndef FLEX_SCANNER
-#ifndef BISON_INCLUDED
-#define BISON_INCLUDED
 #include "sqlbison.hxx"
-#endif
 #endif
 #endif
 #endif

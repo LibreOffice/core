@@ -72,8 +72,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
-#define PROPERTY_FRAME                      1
-
 class BibliographyLoader : public cppu::WeakImplHelper4
                             < XServiceInfo, XNameAccess, XPropertySet, XFrameLoader >
 {

@@ -588,12 +588,6 @@ lcl_ExportSoftPageBreak(
     }
 }
 
-#define REDLINE_PORTION_START_REMOVE 0//removed redlines are visible
-#define REDLINE_PORTION_END_REMOVE   1//removed redlines are visible
-#define REDLINE_PORTION_REMOVE       2//removed redlines are NOT visible
-#define REDLINE_PORTION_INSERT_START 3
-#define REDLINE_PORTION_INSERT_END   4
-
 struct SwXRedlinePortion_Impl
 {
     const SwRedline*    m_pRedline;

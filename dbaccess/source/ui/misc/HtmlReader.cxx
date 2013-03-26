@@ -65,19 +65,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
 #define DBAUI_HTML_FONTSIZES    8       // like export, HTML-Options
-#define HTML_META_NONE          0
-#define HTML_META_AUTHOR        1
-#define HTML_META_DESCRIPTION   2
-#define HTML_META_KEYWORDS      3
-#define HTML_META_REFRESH       4
-#define HTML_META_CLASSIFICATION 5
-#define HTML_META_CREATED       6
-#define HTML_META_CHANGEDBY     7
-#define HTML_META_CHANGED       8
-#define HTML_META_GENERATOR     9
-#define HTML_META_SDFOOTNOTE    10
-#define HTML_META_SDENDNOTE     11
-#define HTML_META_CONTENT_TYPE  12
 
 // ==========================================================================
 DBG_NAME(OHTMLReader)

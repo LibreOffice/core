@@ -91,12 +91,9 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 
-#define KEY_QUALITY     "JPG-EXPORT-QUALITY"
-
 // get parameter from Itemset
 
 #define RESTOHTML( res ) StringToHTMLString(String(SdResId(res)))
-#define S2H( str ) StringToHTMLString( str )
 
 const char *pButtonNames[] =
 {

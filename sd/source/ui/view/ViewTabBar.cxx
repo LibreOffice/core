@@ -20,8 +20,6 @@
 
 #include "ViewTabBar.hxx"
 
-#define USE_TAB_CONTROL
-
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"

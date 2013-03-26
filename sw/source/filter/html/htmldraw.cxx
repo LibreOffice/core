@@ -25,11 +25,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/eeitem.hxx>
-
-#ifndef _OUTLINER_HXX //autogen
-#define _EEITEMID_HXX
 #include <editeng/outliner.hxx>
-#endif
 #include <svx/xfillit.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>

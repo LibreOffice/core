@@ -73,7 +73,6 @@
 #include <svx/svdograf.hxx>
 #include <sfx2/docfilt.hxx> // #i70748#
 #include <istyleaccess.hxx>
-#define LOGFILE_AUTHOR "mb93740"
 
 #include <sfx2/DocumentMetadataAccess.hxx>
 
@@ -142,7 +141,7 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE(rFactory.is(), "factory missing");
     OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sw", LOGFILE_AUTHOR, "ReadThroughComponent" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sw", "mb93740", "ReadThroughComponent" );
 
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
@@ -175,7 +174,7 @@ sal_Int32 ReadThroughComponent(
     // if we do profiling, we want to know the stream
     rtl::OString aString(rtl::OUStringToOString(rStreamName,
         RTL_TEXTENCODING_ASCII_US));
-    RTL_LOGFILE_TRACE_AUTHOR1( "sw", LOGFILE_AUTHOR,
+    RTL_LOGFILE_TRACE_AUTHOR1( "sw", "mb93740",
         "ReadThroughComponent : parsing \"%s\"", aString.getStr() );
 #endif
 

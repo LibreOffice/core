@@ -107,8 +107,6 @@ using namespace ::com::sun::star;
 // here are the SlotID's being included
 // see Idl-file
 #define SwModule
-#define ViewSettings
-#define PrintSettings
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include <cfgid.h>

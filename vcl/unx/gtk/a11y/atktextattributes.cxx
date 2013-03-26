@@ -161,7 +161,6 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 }
 
 #define get_bool_value( list, index ) get_value( list, index, Bool2String )
-#define get_short_value( list, index ) get_value( list, index, Short2String )
 #define get_height_value( list, index ) get_value( list, index, Float2String )
 #define get_justification_value( list, index ) get_value( list, index, Adjust2Justification )
 #define get_cmm_value( list, index ) get_value( list, index, CMM2UnitString )

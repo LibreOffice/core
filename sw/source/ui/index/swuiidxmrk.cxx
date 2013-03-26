@@ -64,7 +64,6 @@
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
-#define POS_USER    2
 
 static sal_uInt16 nTypePos = 1; // TOX_INDEX as standard
 static sal_uInt16 nKey1Pos = USHRT_MAX;

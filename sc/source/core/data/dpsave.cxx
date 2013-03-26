@@ -58,8 +58,6 @@ using ::rtl::OUStringBuffer;
 using ::rtl::OUStringHash;
 using ::std::auto_ptr;
 
-#define SC_DPSAVEMODE_NO 0
-#define SC_DPSAVEMODE_YES 1
 #define SC_DPSAVEMODE_DONTKNOW 2
 
 static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,

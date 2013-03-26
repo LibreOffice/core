@@ -60,6 +60,7 @@
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/processfactory.hxx>
+#include <editeng/langitem.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
@@ -93,11 +94,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include "svtools/treelistentry.hxx"
-
-#ifndef _SVX_LANGITEM_HXX
-#define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
-#include <editeng/langitem.hxx>
-#endif
 
 #ifdef LINUX
 #include <sys/stat.h>

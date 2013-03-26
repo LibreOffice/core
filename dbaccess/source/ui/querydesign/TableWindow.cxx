@@ -57,9 +57,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
 #define TABWIN_SIZING_AREA      4
-#define LISTBOX_SCROLLING_AREA  6
-#define SCROLLING_TIMESPAN      500
-
 #define TABWIN_WIDTH_MIN    90
 #define TABWIN_HEIGHT_MIN   80
 

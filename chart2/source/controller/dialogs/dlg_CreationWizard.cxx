@@ -44,7 +44,6 @@ using namespace ::com::sun::star;
 #define STATE_SIMPLE_RANGE 1
 #define STATE_DATA_SERIES  2
 #define STATE_OBJECTS      3
-#define STATE_LOCATION     4
 #define STATE_LAST         STATE_OBJECTS
 
 namespace

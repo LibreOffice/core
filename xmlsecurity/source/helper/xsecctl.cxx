@@ -47,9 +47,6 @@ const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 /* xml security framework components */
 #define SAXEVENTKEEPER_COMPONENT "com.sun.star.xml.crypto.sax.SAXEventKeeper"
 
-/* string for package protocol */
-#define PACKAGEPROTOCOL "vnd.sun.star.Package:"
-
 XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& rxCtx )
     :mxCtx(rxCtx),
      m_nNextSecurityId(1),

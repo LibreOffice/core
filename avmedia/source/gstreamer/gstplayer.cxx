@@ -37,14 +37,13 @@
 #  define AVMEDIA_GST_PLAYER_SERVICENAME        "com.sun.star.media.Player_GStreamer"
 #endif
 
+#if !defined DBG
+# if OSL_DEBUG_LEVEL > 2
 #ifdef AVMEDIA_GST_0_10
 #  define AVVERSION "gst 0.10: "
 #else
 #  define AVVERSION "gst 1.0: "
 #endif
-
-#if !defined DBG
-# if OSL_DEBUG_LEVEL > 2
 #define DBG(...) do { fprintf (stderr, "%s", AVVERSION); fprintf (stderr, __VA_ARGS__); fprintf (stderr, "\n"); } while (0);
 # else
 #define DBG(...)

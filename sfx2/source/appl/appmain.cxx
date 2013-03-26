@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define _SDINTERN_HXX
-
 #include <stdio.h>
 #include <svtools/ehdl.hxx>
 #include <svl/itempool.hxx>

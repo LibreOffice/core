@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LAZYDELETE_CXX
-#define LAZYDELETE_CXX
-
 #include "vcl/window.hxx"
 #include "vcl/menu.hxx"
 #include "vcl/lazydelete.hxx"
@@ -112,7 +109,5 @@ void DeleteOnDeinitBase::ImplDeleteOnDeInit()
 }
 
 } // namespace vcl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

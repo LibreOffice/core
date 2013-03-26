@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define THREADEX_IMPLEMENTATION
 #include <vcl/threadex.hxx>
 #include <vcl/svapp.hxx>
 

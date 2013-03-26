@@ -64,7 +64,6 @@
 
 #undef      DEL_ONLY_EMPTY_LINES
 #undef      DEL_EMPTY_BOXES_AT_START_AND_END
-#define     DEL_ALL_EMPTY_BOXES
 
 struct _CmpLPt
 {

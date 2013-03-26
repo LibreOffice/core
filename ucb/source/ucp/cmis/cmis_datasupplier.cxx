@@ -18,8 +18,6 @@
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
 
-#define STD_TO_OUSTR( str ) rtl::OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
-
 using namespace com::sun::star;
 using namespace std;
 

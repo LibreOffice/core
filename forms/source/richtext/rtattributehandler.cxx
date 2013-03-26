@@ -27,17 +27,11 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 
-#define ITEMID_ADJUST       EE_PARA_JUST
 #include <editeng/adjustitem.hxx>
-#define ITEMID_WEIGHT       EE_CHAR_WEIGHT
 #include <editeng/wghtitem.hxx>
-#define ITEMID_ESCAPEMENT   EE_CHAR_ESCAPEMENT
 #include <editeng/escapementitem.hxx>
-#define ITEMID_LINESPACING  EE_PARA_SBL
 #include <editeng/lspcitem.hxx>
-#define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
 #include <editeng/fhgtitem.hxx>
-#define ITEMID_FRAMEDIR     EE_PARA_WRITINGDIR
 #include <editeng/frmdiritem.hxx>
 #include <editeng/scripttypeitem.hxx>
 

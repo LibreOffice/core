@@ -86,12 +86,7 @@
 #define EmfPlusObjectTypeRegion 0x400
 #define EmfPlusObjectTypeImage 0x500
 #define EmfPlusObjectTypeFont 0x600
-#define EmfPlusObjectTypeStringFormat 0x700
-#define EmfPlusObjectTypeImageAttributes 0x800
 
-#define EmfPlusRegionInitialStateRectangle 0x10000000
-#define EmfPlusRegionInitialStatePath 0x10000001
-#define EmfPlusRegionInitialStateEmpty 0x10000002
 #define EmfPlusRegionInitialStateInfinite 0x10000003
 
 #if OSL_DEBUG_LEVEL > 1

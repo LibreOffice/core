@@ -27,13 +27,6 @@
 #define RPTUI_ID_BRUSH      8
 #define RPTUI_ID_METRIC     9
 
-#define ITEMID_LRSPACE      RPTUI_ID_LRSPACE
-#define ITEMID_ULSPACE      RPTUI_ID_ULSPACE
-#define ITEMID_SIZE         RPTUI_ID_SIZE
-#define ITEMID_PAGE         RPTUI_ID_PAGE
-#define ITEMID_BRUSH        RPTUI_ID_BRUSH
-
-
 #include "ReportController.hxx"
 #include "ReportDefinition.hxx"
 #include "CondFormat.hxx"
@@ -2402,7 +2395,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SfxAllEnumItem(RPTUI_ID_PAGE_MODE,SVX_PAGE_MODE_STANDARD),
         new SfxAllEnumItem(RPTUI_ID_START,PAPER_A4),
         new SfxAllEnumItem(RPTUI_ID_END,PAPER_E),
-        new SvxBrushItem(ITEMID_BRUSH),
+        new SvxBrushItem(RPTUI_ID_BRUSH),
         new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
     };
 
@@ -2423,7 +2416,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         SAL_WNODEPRECATED_DECLARATIONS_POP
         // fill it
         if ( _xSection.is() )
-            pDescriptor->Put(SvxBrushItem(::Color(_xSection->getBackColor()),ITEMID_BRUSH));
+            pDescriptor->Put(SvxBrushItem(::Color(_xSection->getBackColor()),RPTUI_ID_BRUSH));
         else
         {
             pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));

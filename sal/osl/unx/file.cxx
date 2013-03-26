@@ -55,10 +55,8 @@
 
 #ifdef DEBUG_OSL_FILE
 #   define OSL_FILE_TRACE osl_trace
-#   define PERROR( a, b ) perror( a ); fprintf( stderr, b )
 #else
 #   define OSL_FILE_TRACE(fmt, ...)
-#   define PERROR( a, b )
 #endif
 
 

@@ -35,8 +35,6 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 
-#define ITEMID_COLOR
-#define ITEMID_BRUSH
 #include <svx/tbcontrl.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>

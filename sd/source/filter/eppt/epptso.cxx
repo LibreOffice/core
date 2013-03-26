@@ -88,7 +88,6 @@ using namespace ::com::sun::star;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* Font Families */
-#define FF_DONTCARE             0x00
 #define FF_ROMAN                0x10
 #define FF_SWISS                0x20
 #define FF_MODERN               0x30
@@ -99,7 +98,6 @@ using namespace ::com::sun::star;
 
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
-#define VARIABLE_PITCH          0x02
 
 // ---------------------------------------------------------------------------------------------
 

@@ -42,8 +42,6 @@ typedef unsigned short WORD;
 #define SUBLANG_SPANISH 0x01
 #endif
 
-#define VCL_NEED_BASETSD
-
 #include "cmdline.hxx"
 
 #include <comphelper/string.hxx>

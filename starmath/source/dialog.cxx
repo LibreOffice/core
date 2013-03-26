@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-#define SMDLL 1
 #include "tools/rcid.h"
 #include <comphelper/string.hxx>
 #include <svl/eitem.hxx>

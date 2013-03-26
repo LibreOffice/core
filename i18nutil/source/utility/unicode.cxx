@@ -360,35 +360,13 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
 
 #define TITLEMASK   bit(UnicodeType::TITLECASE_LETTER)
 
-#define DIGITMASK   bit(UnicodeType::DECIMAL_DIGIT_NUMBER)|\
-            bit(UnicodeType::LETTER_NUMBER)|\
-            bit(UnicodeType::OTHER_NUMBER)
-
 #define ALPHAMASK   UPPERMASK|LOWERMASK|TITLEMASK|\
             bit(UnicodeType::MODIFIER_LETTER)|\
             bit(UnicodeType::OTHER_LETTER)
 
-#define BASEMASK    DIGITMASK|ALPHAMASK|\
-            bit(UnicodeType::NON_SPACING_MARK)|\
-            bit(UnicodeType::ENCLOSING_MARK)|\
-            bit(UnicodeType::COMBINING_SPACING_MARK)
-
 #define SPACEMASK   bit(UnicodeType::SPACE_SEPARATOR)|\
             bit(UnicodeType::LINE_SEPARATOR)|\
             bit(UnicodeType::PARAGRAPH_SEPARATOR)
-
-#define PUNCTUATIONMASK bit(UnicodeType::DASH_PUNCTUATION)|\
-            bit(UnicodeType::INITIAL_PUNCTUATION)|\
-            bit(UnicodeType::FINAL_PUNCTUATION)|\
-            bit(UnicodeType::CONNECTOR_PUNCTUATION)|\
-            bit(UnicodeType::OTHER_PUNCTUATION)
-
-#define SYMBOLMASK  bit(UnicodeType::MATH_SYMBOL)|\
-            bit(UnicodeType::CURRENCY_SYMBOL)|\
-            bit(UnicodeType::MODIFIER_SYMBOL)|\
-            bit(UnicodeType::OTHER_SYMBOL)
-
-#define PRINTMASK   BASEMASK|SPACEMASK|PUNCTUATIONMASK|SYMBOLMASK
 
 #define CONTROLMASK bit(UnicodeType::CONTROL)|\
             bit(UnicodeType::FORMAT)|\

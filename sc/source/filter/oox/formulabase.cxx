@@ -265,7 +265,6 @@ const sal_uInt8 A = BIFF_TOKCLASS_ARR;
 
 // abbreviations for parameter infos
 #define RO   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_ORG, false }
-#define RV   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_VAL, false }
 #define RA   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_ARR, false }
 #define RR   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_RPT, false }
 #define RX   { FUNC_PARAM_REGULAR,   FUNC_PARAMCONV_RPX, false }

@@ -88,11 +88,7 @@ struct ImplPropertyInfo
     ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 )
 #define DECL_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
     ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3 )
-#define DECL_PROP_4( asciiname, id, type, attrib1, attrib2, attrib3, attrib4 ) \
-    ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3 | ::com::sun::star::beans::PropertyAttribute::attrib4 )
 
-#define DECL_DEP_PROP_1( asciiname, id, type, attrib1 ) \
-    ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1, sal_True )
 #define DECL_DEP_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
     ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2, sal_True )
 #define DECL_DEP_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \

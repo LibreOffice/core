@@ -67,7 +67,6 @@ struct SdXMLDataStyleNumber
 
 // date
 
-#define DATA_STYLE_NUMBER_END               0
 #define DATA_STYLE_NUMBER_DAY               1   // <number:day/>
 #define DATA_STYLE_NUMBER_DAY_LONG          2   // <number:day number:style="long"/>
 #define DATA_STYLE_NUMBER_MONTH_LONG        3   // <number:month number:style="long"/>

@@ -96,7 +96,6 @@
 
 #define TARGET_DIR_URL          "TargetDirURL"
 #define COMMAND_DELETE          "delete"
-#define COMMAND_TRANSFER        "transfer"
 
 #define STANDARD_FOLDER         "standard"
 

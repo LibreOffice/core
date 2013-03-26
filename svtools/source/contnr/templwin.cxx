@@ -93,8 +93,6 @@ using namespace svtools;
 
 #define aSeparatorStr   "----------------------------------"
 
-#define SPLITSET_ID         0
-#define COLSET_ID           1
 #define ICONWIN_ID          2
 #define FILEWIN_ID          3
 #define FRAMEWIN_ID         4

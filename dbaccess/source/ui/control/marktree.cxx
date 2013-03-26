@@ -26,8 +26,6 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-#define SPACEBETWEENENTRIES     4
-
 DBG_NAME(OMarkableTreeListBox)
 
 OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, WinBits nWinStyle )

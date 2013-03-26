@@ -59,20 +59,10 @@
 #include <shells.hrc>
 
 #define SwWebView
-#define Frames
-#define Graphics
-#define OLEObjects
-#define Controls
 #define Text
-#define Frame
-#define Graphic
-#define Object
-#define Draw
-#define DrawText
 #define TextInTable
 #define ListInText
 #define ListInTable
-#define Page
 #include <swslots.hxx>
 
 

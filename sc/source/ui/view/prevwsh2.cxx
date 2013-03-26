@@ -17,69 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// TOOLS
-#define _BIGINT_HXX
-#define _CACHESTR_HXX
-#define _SVMEMPOOL_HXX
-#define _CACHESTR_HXX
-
-//SV
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _HELP_HXX
-#define _SPIN_HXX
-#define _SOUND_HXX
-
-//svtools
-#define _SCRWIN_HXX
-#define _RULER_HXX
-#define _STDMENU_HXX
-#define _CTRLTOOL_HXX
-
-//SVTOOLS
-#define _FILTER_HXX
-#define _SVTABBX_HXX
-
-//sfxcore.hxx
-#define _SFXGENLINK_HXX
-#define _SFXHINTPOST_HXX
-#define _SFXDOCINF_HXX
-
-// SFX
-#define _SFXMSGPOOL_HXX
-#define _PASSWD_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
-//sfxdlg.hxx
-#define _SFX_DINFDLG_HXX
-#define _SFX_MGETEMPL_HXX
-#define _SFX_TPLPITEM_HXX
-#define _NEWSTYLE_HXX
-#define _SFXDOCKWIN_HXX
-
-//sfxitems.hxx
-#define _SFXFLAGITEM_HXX
-#define _SFXPTITEM_HXX
-#define _SFXRECTITEM_HXX
-#define _SFXITEMITER_HXX
-#define _SFX_WHITER_HXX
-#define _SFXPOOLCACH_HXX
-#define _SFXRNGITEM_HXX
-
-#define _SVX_HYPHEN_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_THESDLG_HXX
-
 #include <svx/svdmodel.hxx>
 #include <svl/smplhint.hxx>
 

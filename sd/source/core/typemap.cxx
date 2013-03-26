@@ -86,30 +86,6 @@
 
 #include <svl/lckbitem.hxx>
 
-
-#define CharSetItem                 SfxUInt16Item
-#define FontFamilyItem              SfxUInt16Item
-#define FontPitchItem               SfxUInt16Item
-#define FontAlignItem               SfxUInt16Item
-#define FontWeightItem              SfxUInt16Item
-#define FontUnderlineItem           SfxUInt16Item
-#define FontStrikeoutItem           SfxUInt16Item
-#define FontItalicItem              SfxUInt16Item
-#define SvxDbTypeItem               SfxUInt16Item
-#define SvxLineSpaceItem            SfxUInt16Item
-#define SvxInterLineSpaceItem       SfxUInt16Item
-#define SvxBreakItem                SfxUInt16Item
-#define BrushStyleItem              SfxUInt16Item
-#define SvxNumTypeItem              SfxUInt16Item
-#define SvxShadowLocationItem       SfxUInt16Item
-#define SvxDbTypeItem               SfxUInt16Item
-#define SvxDrawToolEnumItem         SfxUInt16Item
-#define SvxChooseControlItem        SfxEnumItem
-#define SvxDrawToolItem             SfxUInt16Item
-#define SvxCellHorJustifyEnumItem   SfxUInt16Item
-#define SvxCellVerJustifyEnumItem   SfxUInt16Item
-#define SvxCellOrientationEnumItem  SfxUInt16Item
-#define SvxLanguage                 SfxUInt16Item
 #define avmedia_MediaItem           ::avmedia::MediaItem
 #include <sfx2/tplpitem.hxx>
 #include <svl/ptitem.hxx>

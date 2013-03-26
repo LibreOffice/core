@@ -56,7 +56,6 @@
 
 #include "sddll.hxx"
 #include "sdmod.hxx"
-#define _SD_DIACTRL_CXX
 #include "diactrl.hxx"
 #include "gluectrl.hxx"
 #include "tbx_ww.hxx"

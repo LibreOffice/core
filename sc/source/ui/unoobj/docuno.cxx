@@ -94,7 +94,6 @@
 #include "scresid.hxx"
 
 using namespace com::sun::star;
-#define SC_UNO_VBADOCOBJ "ThisVBADocObj" // perhaps we want to actually make this ThisWorkbook ?
 
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
 #define SC_UNO_VBAGLOBNAME "VBAGlobalConstantName"

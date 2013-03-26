@@ -397,7 +397,6 @@ RTLFUNC(ChrW)
 
 
 #ifdef UNX
-#define _MAX_PATH 260
 #define _PATH_INCR 250
 #endif
 

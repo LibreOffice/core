@@ -27,8 +27,6 @@
 
 ////////////////////// Umsetzen der Standard-Defines //////////////////////
 
-#define _SVDPAGE_HXX        // SdrPage
-
 #ifdef _SDR_NOGRAFOBJ
     #undef _SDR_NOGRAFOBJ
     #define _SVDOGRAF_HXX

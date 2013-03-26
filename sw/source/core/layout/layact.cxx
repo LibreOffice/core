@@ -98,13 +98,6 @@ static void BreakPoint()
     return;
 }
 
-#define CHECKPAGE \
-            {   if ( IsAgain() ) \
-                {   BreakPoint(); \
-                    return; \
-                } \
-            }
-
 #define XCHECKPAGE \
             {   if ( IsAgain() ) \
                 {   BreakPoint(); \
@@ -114,11 +107,6 @@ static void BreakPoint()
                 } \
             }
 #else
-#define CHECKPAGE \
-            {   if ( IsAgain() ) \
-                    return; \
-            }
-
 #define XCHECKPAGE \
             {   if ( IsAgain() ) \
                 { \

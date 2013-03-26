@@ -63,9 +63,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-// Maximal number of Rows, that can be processed being sorted with ORDER BY:
-#define MAX_KEYSET_SIZE 0x40000 // 256K
-
 namespace
 {
     void lcl_throwError(sal_uInt16 _nErrorId,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xContext)

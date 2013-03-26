@@ -25,11 +25,6 @@
 
 
 #include "starmath.hrc"
-#define ITEMID_FONT         1
-#define ITEMID_FONTHEIGHT   2
-#define ITEMID_LRSPACE      3
-#define ITEMID_WEIGHT       4
-
 
 #include <vcl/menu.hxx>
 #include <editeng/editview.hxx>

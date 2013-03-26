@@ -35,12 +35,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::connectivity::hsqldb;
 
-/*****************************************************************************/
-/* exception macros */
-
-#define ThrowException(env, type, msg) { \
-    env->ThrowNew(env->FindClass(type), msg); }
-
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
  * Method:    isStreamElement

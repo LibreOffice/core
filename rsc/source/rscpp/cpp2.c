@@ -53,7 +53,6 @@
 #define L_pragma        ('p' + ('a' << 1))
 #define L_undef         ('u' + ('d' << 1))
 #define L_error         ('e' + ('r' << 1))      /* BP 5.3.92, #error */
-#define MAXLINE 80                              /* BP 5.3.92, #error */
 #if OSL_DEBUG_LEVEL > 1
 #define L_debug         ('d' + ('b' << 1))      /* #debug               */
 #define L_nodebug       ('n' + ('d' << 1))      /* #nodebug             */

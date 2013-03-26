@@ -43,23 +43,14 @@ static hchar jaso2ks(hchar hh);
 
 // ccvHH2ASC    code convert HWP20 to ASC(KSSM)
 
-#define HCA_HALFCH      0x3000
 #define HCA_KSS         0x3400
 #define HCA_TG          0x37C0
-#define none            0x3401                    /* 2.0 null code - space */
-#define noneha          0x00A0
 #define noneks          0xA1A1
-#define none1x          0x2402
 
 #define UNI_HANGUL_FIRST        0xac00
-#define UNI_COMP_JAMO_FIRST   0x3131
 
-#define NUM_CHOSEONG            19
 #define NUM_JOONGSEONG          21
 #define NUM_JONGSEONG           28
-
-
-#define IDX_INVALID     0xFF
 
 /**
  * kssm code table matching with ks index
@@ -547,7 +538,6 @@ static hchar cdkssm2ks_han(hchar kssm)
 
 #define IsHangul(c) ((c) & 0x8000)
 #define IsHanja(c)  (((c) & 0x4000)==0x4000)
-#define IsJapan(c)  (((c) > 0x1f00 && (c) < 0x1fb7))
 
 static const hchar jaso_hh_code[] =
 {

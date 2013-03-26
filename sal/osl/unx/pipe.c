@@ -94,7 +94,6 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
 
 
 /* macros */
-#define ERROR_TO_NATIVE(x)      osl_NativeFromPipeError(x)
 #define ERROR_FROM_NATIVE(y)    osl_PipeErrorFromNative(y)
 
 

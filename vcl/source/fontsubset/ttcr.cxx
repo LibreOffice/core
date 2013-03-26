@@ -58,12 +58,7 @@ namespace vcl
 #define T_hhea  0x68686561
 #define T_hmtx  0x686D7478
 #define T_cmap  0x636D6170
-#define T_vhea  0x76686561
-#define T_vmtx  0x766D7478
-#define T_OS2   0x4F532F32
 #define T_post  0x706F7374
-#define T_kern  0x6B65726E
-#define T_cvt   0x63767420
 
 typedef struct {
     sal_uInt32 tag;

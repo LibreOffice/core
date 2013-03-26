@@ -34,10 +34,7 @@
 #include <svtools/menuoptions.hxx>
 #include <osl/mutex.hxx>
 #include <svx/svxids.hrc>
-#define ITEMID_COLOR        1
-#define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
-#define ITEMID_FONTHEIGHT   4
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/tbcontrl.hxx>

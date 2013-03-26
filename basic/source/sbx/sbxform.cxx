@@ -46,9 +46,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 
 #define _NO_DIGIT                   -1
 
-#define MAX_NO_OF_EXP_DIGITS        5
-                    // +4 because of the value range: between -308 and +308
-                    // +1 for closing 0
 #define MAX_NO_OF_DIGITS            DBL_DIG
 #define MAX_DOUBLE_BUFFER_LENGTH    MAX_NO_OF_DIGITS + 9
                     // +1 for leading sign
@@ -83,7 +80,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 //          decimal point for floating-point-numbers.
 // all format-strings are compatible to Visual-Basic:
 #define GENERALNUMBER_FORMAT        "0.############"
-#define CURRENCY_FORMAT             "@$0.00;@($0.00)"
 #define FIXED_FORMAT                "0.00"
 #define STANDARD_FORMAT             "@0.00"
 #define PERCENT_FORMAT              "0.00%"
@@ -980,7 +976,7 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, OUString sFormatStrg )
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_CURRENCY ) )
     {
-        sFormatStrg = sCurrencyFormatStrg; // old: CURRENCY_FORMAT;
+        sFormatStrg = sCurrencyFormatStrg;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_FIXED ) )
     {

@@ -30,7 +30,6 @@
 #define ATTR_IMP_ITALIC         5
 #define ATTR_IMP_STRIKETHROUGH  6
 #define ATTR_IMP_UNDERLINE      7
-#define ATTR_IMP_WEIGHT         8
 #define ATTR_IMP_SIZE           9
 #define ATTR_IMP_NAME           10
 

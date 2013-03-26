@@ -77,8 +77,6 @@ namespace pcr
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
-#define THISREF()   static_cast< XController* >(this)
-
     //========================================================================
     //= OPropertyBrowserController
     //========================================================================

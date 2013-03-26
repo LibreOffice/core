@@ -40,7 +40,6 @@ using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 
-#define PROPERTY_FRAME                      1
 #define ID_TOOLBAR                          1
 #define ID_GRIDWIN                          2
 

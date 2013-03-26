@@ -135,13 +135,9 @@ TYPEINIT1(SwRedlineHint, SfxHint);
         }
     }
 
-    #define _DEBUG_REDLINE( pDoc ) sw_DebugRedline( pDoc );
-
-
 #else
 
     #define _CHECK_REDLINE( pDoc )
-    #define _DEBUG_REDLINE( pDoc )
 
 #endif
 

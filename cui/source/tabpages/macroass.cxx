@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define ITEMID_MACRO 0
-#include <svl/macitem.hxx>
-#undef ITEMID_MACRO
-
 #include "macroass.hxx"
 
 #include <basic/basmgr.hxx>
 #include <comphelper/string.hxx>
 #include <dialmgr.hxx>
+#include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/svmedit.hxx>
 #include "cfgutil.hxx"

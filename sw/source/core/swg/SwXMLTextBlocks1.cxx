@@ -39,10 +39,6 @@
 #include <swevent.hxx>
 #include <swerror.h>
 
-
-#define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
-#define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
-
 const char XMLN_BLOCKLIST[] = "BlockList.xml";
 
 using namespace ::com::sun::star;

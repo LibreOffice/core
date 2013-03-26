@@ -44,9 +44,6 @@
 
 namespace sd {
 
-#define SWITCH_TIMEOUT  20
-
-
 /**
  * default constructor
  */

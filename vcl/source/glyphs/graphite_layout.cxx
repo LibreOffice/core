@@ -20,10 +20,6 @@
 // Description: An implementation of the SalLayout interface that uses the
 //              Graphite engine.
 
-
-// We need this to enable namespace support in libgrengine headers.
-#define GR_NAMESPACE
-
 // Enable lots of debug info
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>

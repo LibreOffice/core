@@ -83,8 +83,6 @@ using namespace com::sun::star::style;
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
-#define NUM_PAGETYPE_BMP            3
-#define PAGETYPE_USER_START         10
 
 #define SHOW_NUMBERING              0
 #define SHOW_BULLET                 1

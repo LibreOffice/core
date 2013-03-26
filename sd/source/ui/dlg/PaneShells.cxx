@@ -31,8 +31,6 @@ namespace sd {
 
 //===== LeftImpressPaneShell ==================================================
 
-#define ShellClass LeftImpressPaneShell
-
 SFX_SLOTMAP(LeftImpressPaneShell)
 {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
@@ -66,9 +64,6 @@ LeftImpressPaneShell::~LeftImpressPaneShell (void)
 
 //===== LeftDrawPaneShell =====================================================
 
-#undef ShellClass
-#define ShellClass LeftDrawPaneShell
-
 SFX_SLOTMAP(LeftDrawPaneShell)
 {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
@@ -101,9 +96,6 @@ LeftDrawPaneShell::~LeftDrawPaneShell (void)
 
 
 //===== ToolPanelPaneShell ========================================================
-
-#undef ShellClass
-#define ShellClass ToolPanelPaneShell
 
 SFX_SLOTMAP( ToolPanelPaneShell )
 {

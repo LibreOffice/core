@@ -21,11 +21,8 @@
 #include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
-#define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
 #include <editeng/fhgtitem.hxx>
-#define ITEMID_FONT         EE_CHAR_FONTHEIGHT
 #include <editeng/fontitem.hxx>
-#define ITEMID_LANGUAGE     EE_CHAR_LANGUAGE
 #include <editeng/langitem.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/mapunit.hxx>

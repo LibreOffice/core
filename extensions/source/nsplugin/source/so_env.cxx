@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "nsp_func.hxx"
 
 #ifdef UNIX
 #include <sys/types.h>
@@ -34,9 +37,6 @@
 #include <dlfcn.h>
 #endif
 #include <stdarg.h>
-// For vsnprintf()
-#define NSP_vsnprintf vsnprintf
-#include "nsp_func.hxx"
 #endif // End UNIX
 
 #ifdef WNT
@@ -53,8 +53,6 @@
 #include <stdlib.h>
 #include <shlobj.h>
 #include <objidl.h>
-// For vsnprintf()
-#define NSP_vsnprintf _vsnprintf
 
 #ifdef _MSC_VER
 #pragma warning (pop)

@@ -863,7 +863,6 @@ rtl::OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             break;
 
         #if !defined (SunXK_Undo)
-            #define SunXK_Stop      0x0000FF69  // XK_Cancel
             #define SunXK_Props     0x1005FF70
             #define SunXK_Front     0x1005FF71
             #define SunXK_Copy      0x1005FF72
@@ -1116,7 +1115,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 break;
             // - - - - - Sun X-Server keyboard ??? - - - - - - - - - - - -
             case XK_L1: // XK_F11:
-                nKey = KEY_F11; // on a sun keyboard this actually is usally SunXK_Stop,
+                nKey = KEY_F11; // on a sun keyboard this actually is usally SunXK_Stop = 0x0000FF69 (XK_Cancel),
                 // but VCL doesn't have a key defintion for that
                 break;
             case XK_L2: // XK_F12:

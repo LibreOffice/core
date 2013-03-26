@@ -105,7 +105,6 @@
 #define STATUS_SAVE                 1
 #define STATUS_SAVEAS               2
 #define STATUS_SAVEAS_STANDARDNAME  3
-#define STATUS_SAVEACOPY            4
 
 const char aFilterNameString[] = "FilterName";
 const char aFilterOptionsString[] = "FilterOptions";

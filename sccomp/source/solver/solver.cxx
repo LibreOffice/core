@@ -27,7 +27,9 @@
  ************************************************************************/
 
 #undef LANGUAGE_NONE
+#if defined SAL_W32
 #define WINAPI __stdcall
+#endif
 #define LoadInverseLib FALSE
 #define LoadLanguageLib FALSE
 #ifdef SYSTEM_LPSOLVE

@@ -84,18 +84,9 @@
 // Properties of the javavm can be put
 // as a komma separated list in this
 // environment variable
-#define PROPERTIES_ENV "OO_JAVA_PROPERTIES"
 #ifdef UNIX
-#define INI_FILE "javarc"
-#ifdef MACOSX
-#define DEF_JAVALIB "JavaVM.framework"
-#else
-#define DEF_JAVALIB "libjvm.so"
-#endif
 #define TIMEZONE "MEZ"
 #else
-#define INI_FILE "java.ini"
-#define DEF_JAVALIB "jvm.dll"
 #define TIMEZONE "MET"
 #endif
 

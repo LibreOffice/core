@@ -52,41 +52,14 @@ static sal_Unicode NULL_WSTRING[1] = { 0 };
 #define BLOP_OFFSET_MINOR       (BLOP_OFFSET_SIZE + sizeof(sal_uInt32))
 #define BLOP_OFFSET_MAJOR       (BLOP_OFFSET_MINOR + sizeof(sal_uInt16))
 #define BLOP_OFFSET_N_ENTRIES   (BLOP_OFFSET_MAJOR + sizeof(sal_uInt16))
-#define BLOP_OFFSET_TYPE_SOURCE (BLOP_OFFSET_N_ENTRIES + sizeof(sal_uInt16))
-#define BLOP_OFFSET_TYPE_CLASS  (BLOP_OFFSET_TYPE_SOURCE + sizeof(sal_uInt16))
-#define BLOP_OFFSET_THIS        (BLOP_OFFSET_TYPE_CLASS + sizeof(sal_uInt16))
-#define BLOP_OFFSET_UIK         (BLOP_OFFSET_THIS + sizeof(sal_uInt16))
-#define BLOP_OFFSET_DOKU        (BLOP_OFFSET_UIK + sizeof(sal_uInt16))
-#define BLOP_OFFSET_FILENAME    (BLOP_OFFSET_DOKU + sizeof(sal_uInt16))
 #define BLOP_HEADER_N_ENTRIES   6
 
-#define BLOP_OFFSET_N_SUPERTYPES    0
-#define BLOP_OFFSET_SUPERTYPES      (BLOP_OFFSET_N_SUPERTYPES + sizeof(sal_uInt16))
-
-#define BLOP_FIELD_ENTRY_ACCESS     0
-#define BLOP_FIELD_ENTRY_NAME       (BLOP_FIELD_ENTRY_ACCESS + sizeof(sal_uInt16))
-#define BLOP_FIELD_ENTRY_TYPE       (BLOP_FIELD_ENTRY_NAME + sizeof(sal_uInt16))
-#define BLOP_FIELD_ENTRY_VALUE      (BLOP_FIELD_ENTRY_TYPE + sizeof(sal_uInt16))
-#define BLOP_FIELD_ENTRY_DOKU       (BLOP_FIELD_ENTRY_VALUE + sizeof(sal_uInt16))
-#define BLOP_FIELD_ENTRY_FILENAME   (BLOP_FIELD_ENTRY_DOKU + sizeof(sal_uInt16))
 #define BLOP_FIELD_N_ENTRIES        6
 
-#define BLOP_METHOD_SIZE        0
-#define BLOP_METHOD_MODE        (BLOP_METHOD_SIZE + sizeof(sal_uInt16))
-#define BLOP_METHOD_NAME        (BLOP_METHOD_MODE + sizeof(sal_uInt16))
-#define BLOP_METHOD_RETURN      (BLOP_METHOD_NAME + sizeof(sal_uInt16))
-#define BLOP_METHOD_DOKU        (BLOP_METHOD_RETURN + sizeof(sal_uInt16))
 #define BLOP_METHOD_N_ENTRIES   5
 
-#define BLOP_PARAM_TYPE         0
-#define BLOP_PARAM_MODE         (BLOP_PARAM_TYPE + sizeof(sal_uInt16))
-#define BLOP_PARAM_NAME         (BLOP_PARAM_MODE + sizeof(sal_uInt16))
 #define BLOP_PARAM_N_ENTRIES    3
 
-#define BLOP_REFERENCE_TYPE         0
-#define BLOP_REFERENCE_NAME         (BLOP_REFERENCE_TYPE + sizeof(sal_uInt16))
-#define BLOP_REFERENCE_DOKU         (BLOP_REFERENCE_NAME + sizeof(sal_uInt16))
-#define BLOP_REFERENCE_ACCESS       (BLOP_REFERENCE_DOKU + sizeof(sal_uInt16))
 #define BLOP_REFERENCE_N_ENTRIES    4
 
 sal_uInt32 UINT16StringLen(const sal_uInt8* wstring)

@@ -310,7 +310,6 @@ TYPEINIT1( UCBStorage, BaseStorage );
 #define COMMIT_RESULT_SUCCESS           2
 
 #define min( x, y ) (( x < y ) ? x : y)
-#define max( x, y ) (( x > y ) ? x : y)
 
 sal_Int32 GetFormatId_Impl( SvGlobalName aName )
 {

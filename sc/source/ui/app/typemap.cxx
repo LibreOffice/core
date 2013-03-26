@@ -22,8 +22,6 @@
 #include "scitems.hxx"
 #include <editeng/memberids.hrc>
 
-#define ITEMID_DBTYPE           0
-
 #include <sfx2/msg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
@@ -94,7 +92,6 @@
 
 #define SvxDrawToolItem             SfxAllEnumItem
 #define SvxDrawAlignItem            SfxAllEnumItem
-#define SvxChooseControlItem        SfxEnumItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 
 #if defined(IOS)

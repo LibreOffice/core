@@ -47,7 +47,6 @@ const sal_uInt8 A = EXC_TOKCLASS_ARR;
 
 // abbreviations for parameter infos
 #define RO   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_ORG, false }
-#define RV   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_VAL, false }
 #define RA   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_ARR, false }
 #define RR   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_RPT, false }
 #define RX   { EXC_PARAM_REGULAR,   EXC_PARAMCONV_RPX, false }

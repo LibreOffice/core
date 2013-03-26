@@ -27,7 +27,6 @@
 
 DBG_NAME( JobSetup )
 
-#define JOBSET_FILEFORMAT2      3780
 #define JOBSET_FILE364_SYSTEM   ((sal_uInt16)0xFFFF)
 #define JOBSET_FILE605_SYSTEM   ((sal_uInt16)0xFFFE)
 
@@ -326,6 +325,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
     DBG_ASSERTWARNING( rOStream.GetVersion(), "JobSetup::<< - Solar-Version not set on rOStream" );
 
     // We do not have a new FileFormat at this point in time
+    // #define JOBSET_FILEFORMAT2      3780
     // if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
         sal_uInt16 nLen = 0;

@@ -24,10 +24,7 @@
 #include <connectivity/sqlerror.hxx>
 #include <internalnode.hxx>
 #define YYBISON   1
-#ifndef BISON_INCLUDED
-#define BISON_INCLUDED
 #include <sqlbison.hxx>
-#endif
 #include <connectivity/sqlparse.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>

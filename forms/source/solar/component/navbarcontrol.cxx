@@ -64,31 +64,6 @@ namespace frm
         xTypedPeer->method( param1 );  \
     }
 
-#define FORWARD_TO_PEER_1_RET( returnType, unoInterface, method, param1 )   \
-    returnType aReturn; \
-    Reference< unoInterface > xTypedPeer( getPeer(), UNO_QUERY );   \
-    if ( xTypedPeer.is() )  \
-    {   \
-        aReturn = xTypedPeer->method( param1 );  \
-    }   \
-    return aReturn;
-
-#define FORWARD_TO_PEER_3( unoInterface, method, param1, param2, param3 )   \
-    Reference< unoInterface > xTypedPeer( getPeer(), UNO_QUERY );   \
-    if ( xTypedPeer.is() )  \
-    {   \
-        xTypedPeer->method( param1, param2, param3 );  \
-    }
-
-#define FORWARD_TO_PEER_3_RET( returnType, unoInterface, method, param1, param2, param3 )   \
-    returnType aReturn; \
-    Reference< unoInterface > xTypedPeer( getPeer(), UNO_QUERY );   \
-    if ( xTypedPeer.is() )  \
-    {   \
-        aReturn = xTypedPeer->method( param1, param2, param3 );  \
-    }   \
-    return aReturn;
-
     //==================================================================
     // ONavigationBarControl
     //==================================================================

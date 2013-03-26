@@ -54,9 +54,6 @@
 #include <svx/svxitems.hrc>
 #include "srchdlg.hrc"
 
-
-#define ITEMID_SETITEM      0
-
 #include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"

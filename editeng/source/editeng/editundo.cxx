@@ -28,9 +28,6 @@
 
 DBG_NAME( EditUndo )
 
-#define NO_UNDO         0xFFFF
-#define GROUP_NOTFOUND  0xFFFF
-
 static void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
 {
     EPaM aEPaM( nPara, 0 );

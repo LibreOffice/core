@@ -41,7 +41,6 @@
 #define USE_ACCESSIBILITY_FILE "useatjava.txt"
 #endif
 
-#define UNO_JAVA_JFW_JREHOME "UNO_JAVA_JFW_JREHOME"
 namespace {
 
 static bool g_bEnabledSwitchedOn = false;

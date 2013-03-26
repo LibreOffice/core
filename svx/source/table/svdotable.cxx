@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define ITEMID_BOX SDRATTR_TABLE_BORDER
-#define ITEMID_BOXINFO SDRATTR_TABLE_BORDER_INNER
-
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

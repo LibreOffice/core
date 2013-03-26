@@ -54,14 +54,16 @@ using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 using ::rtl::OString;
 
-
+#if defined WNT
 #define SOFFICE1 "soffice.exe"
-#define SOFFICE2 "soffice.bin"
 #define SBASE "sbase.exe"
 #define SCALC "scalc.exe"
 #define SDRAW "sdraw.exe"
 #define SIMPRESS "simpress.exe"
 #define SWRITER "swriter.exe"
+#endif
+
+#define SOFFICE2 "soffice.bin"
 
 namespace dp_misc {
 namespace {

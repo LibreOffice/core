@@ -40,13 +40,8 @@
 #include <tools/debug.hxx>
 #include "comdep.hxx"
 #include <tools/fsys.hxx>
-#define _TOOLS_HXX
 #include <tools/urlobj.hxx>
 #include <vector>
-
-#ifdef UNX
-#define _MAX_PATH 260
-#endif
 
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>

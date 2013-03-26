@@ -53,8 +53,6 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_VISIBLE_SLIDESORTERVIEW   OUString("SlideSorterView")
 #define PROPERTYHANDLE_VISIBLE_SLIDESORTERVIEW 4
 
-#define PROPERTYCOUNT                          5
-
 class SvtToolPanelOptions_Impl : public ConfigItem
 {
     private:

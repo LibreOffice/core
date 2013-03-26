@@ -59,14 +59,8 @@
 #include <svx/xlineit0.hxx>
 #include <svx/svx3ditems.hxx>
 
-#define ITEMID_BOX SDRATTR_TABLE_BORDER
-#define ITEMID_BOXINFO SDRATTR_TABLE_BORDER_INNER
 #include "editeng/boxitem.hxx"
-
-#define ITEMID_SHADOW SDRATTR_TABLE_BORDER_SHADOW
 #include "editeng/shaditem.hxx"
-
-#define ITEMID_LINE 0
 #include "editeng/lineitem.hxx"
 
 using namespace ::rtl;

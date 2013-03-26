@@ -26,8 +26,6 @@
 #include <svl/intitem.hxx>
 #include <vcl/edit.hxx>
 
-#define SVX_OPTGENRL_CXX
-
 #include <cuires.hrc>
 #include <unotools/useroptions.hxx>
 #include "cuioptgenrl.hxx"

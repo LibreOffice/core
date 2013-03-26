@@ -105,19 +105,7 @@ using ::sax_fastparser::FSHelperPtr;
 
 DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
 
-#define IDS(x) (OString(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
-
 namespace oox { namespace drawingml {
-
-#define GETA(propName) \
-    GetProperty( rXPropSet, String(  #propName  ) )
-
-#define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, String(  #propName  ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
-
-#define GET(variable, propName) \
-    if ( GETA(propName) ) \
-        mAny >>= variable;
 
 class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {

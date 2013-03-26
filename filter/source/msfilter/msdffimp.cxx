@@ -143,8 +143,6 @@ using namespace beans               ;
 using namespace drawing             ;
 using namespace container           ;
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-
 // static counter for OLE-Objects
 static sal_uInt32 nMSOleObjCntr = 0;
 #define MSO_OLE_Obj "MSO_OLE_Obj"

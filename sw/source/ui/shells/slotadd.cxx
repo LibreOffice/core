@@ -125,7 +125,6 @@
 
 #define SvxDrawToolItem  SfxAllEnumItem
 #define SvxDrawAlignItem SfxAllEnumItem
-#define SvxDrawBezierItem SfxAllEnumItem
 #define avmedia_MediaItem ::avmedia::MediaItem
 
 #define SFX_TYPEMAP

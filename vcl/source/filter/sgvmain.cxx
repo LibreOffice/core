@@ -29,6 +29,8 @@
 #include "sgvspln.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
+#if defined OSL_BIGENDIAN
+
 #define SWAPPOINT(p) {  \
     p.x=OSL_SWAPWORD(p.x); \
     p.y=OSL_SWAPWORD(p.y); }
@@ -79,6 +81,7 @@
     SWAPPOINT(t.ShdVers);           \
     SWAPAREA(t.BackF);              }
 
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //

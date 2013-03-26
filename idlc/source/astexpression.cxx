@@ -27,11 +27,6 @@
 #include <float.h>
 #include <memory> // auto_ptr<>
 
-#undef  MAXCHAR
-#define MAXCHAR         127
-#undef  MINCHAR
-#define MINCHAR         -128
-
 using namespace ::rtl;
 
 AstExpression::AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *pExpr2)

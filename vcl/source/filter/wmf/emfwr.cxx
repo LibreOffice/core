@@ -24,111 +24,50 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
 
-#define WIN_EMR_HEADER                      1
-#define WIN_EMR_POLYBEZIER                  2
 #define WIN_EMR_POLYGON                     3
 #define WIN_EMR_POLYLINE                    4
 #define WIN_EMR_POLYBEZIERTO                5
 #define WIN_EMR_POLYLINETO                  6
-#define WIN_EMR_POLYPOLYLINE                7
 #define WIN_EMR_POLYPOLYGON                 8
 #define WIN_EMR_SETWINDOWEXTEX              9
 #define WIN_EMR_SETWINDOWORGEX              10
 #define WIN_EMR_SETVIEWPORTEXTEX            11
 #define WIN_EMR_SETVIEWPORTORGEX            12
-#define WIN_EMR_SETBRUSHORGEX               13
 #define WIN_EMR_EOF                         14
 #define WIN_EMR_SETPIXELV                   15
-#define WIN_EMR_SETMAPPERFLAGS              16
 #define WIN_EMR_SETMAPMODE                  17
 #define WIN_EMR_SETBKMODE                   18
-#define WIN_EMR_SETPOLYFILLMODE             19
 #define WIN_EMR_SETROP2                     20
-#define WIN_EMR_SETSTRETCHBLTMODE           21
 #define WIN_EMR_SETTEXTALIGN                22
-#define WIN_EMR_SETCOLORADJUSTMENT          23
 #define WIN_EMR_SETTEXTCOLOR                24
-#define WIN_EMR_SETBKCOLOR                  25
-#define WIN_EMR_OFFSETCLIPRGN               26
 #define WIN_EMR_MOVETOEX                    27
-#define WIN_EMR_SETMETARGN                  28
-#define WIN_EMR_EXCLUDECLIPRECT             29
 #define WIN_EMR_INTERSECTCLIPRECT           30
-#define WIN_EMR_SCALEVIEWPORTEXTEX          31
-#define WIN_EMR_SCALEWINDOWEXTEX            32
 #define WIN_EMR_SAVEDC                      33
 #define WIN_EMR_RESTOREDC                   34
-#define WIN_EMR_SETWORLDTRANSFORM           35
-#define WIN_EMR_MODIFYWORLDTRANSFORM        36
 #define WIN_EMR_SELECTOBJECT                37
 #define WIN_EMR_CREATEPEN                   38
 #define WIN_EMR_CREATEBRUSHINDIRECT         39
 #define WIN_EMR_DELETEOBJECT                40
-#define WIN_EMR_ANGLEARC                    41
 #define WIN_EMR_ELLIPSE                     42
 #define WIN_EMR_RECTANGLE                   43
 #define WIN_EMR_ROUNDRECT                   44
-#define WIN_EMR_ARC                         45
-#define WIN_EMR_CHORD                       46
-#define WIN_EMR_PIE                         47
-#define WIN_EMR_SELECTPALETTE               48
-#define WIN_EMR_CREATEPALETTE               49
-#define WIN_EMR_SETPALETTEENTRIES           50
-#define WIN_EMR_RESIZEPALETTE               51
-#define WIN_EMR_REALIZEPALETTE              52
-#define WIN_EMR_EXTFLOODFILL                53
 #define WIN_EMR_LINETO                      54
-#define WIN_EMR_ARCTO                       55
-#define WIN_EMR_POLYDRAW                    56
-#define WIN_EMR_SETARCDIRECTION             57
-#define WIN_EMR_SETMITERLIMIT               58
 #define WIN_EMR_BEGINPATH                   59
 #define WIN_EMR_ENDPATH                     60
 #define WIN_EMR_CLOSEFIGURE                 61
 #define WIN_EMR_FILLPATH                    62
-#define WIN_EMR_STROKEANDFILLPATH           63
 #define WIN_EMR_STROKEPATH                  64
-#define WIN_EMR_FLATTENPATH                 65
-#define WIN_EMR_WIDENPATH                   66
-#define WIN_EMR_SELECTCLIPPATH              67
-#define WIN_EMR_ABORTPATH                   68
 
 #define WIN_EMR_GDICOMMENT                  70
-#define WIN_EMR_FILLRGN                     71
-#define WIN_EMR_FRAMERGN                    72
-#define WIN_EMR_INVERTRGN                   73
-#define WIN_EMR_PAINTRGN                    74
-#define WIN_EMR_EXTSELECTCLIPRGN            75
-#define WIN_EMR_BITBLT                      76
-#define WIN_EMR_STRETCHBLT                  77
-#define WIN_EMR_MASKBLT                     78
-#define WIN_EMR_PLGBLT                      79
-#define WIN_EMR_SETDIBITSTODEVICE           80
 #define WIN_EMR_STRETCHDIBITS               81
 #define WIN_EMR_EXTCREATEFONTINDIRECTW      82
-#define WIN_EMR_EXTTEXTOUTA                 83
 #define WIN_EMR_EXTTEXTOUTW                 84
-#define WIN_EMR_POLYBEZIER16                85
-#define WIN_EMR_POLYGON16                   86
-#define WIN_EMR_POLYLINE16                  87
-#define WIN_EMR_POLYBEZIERTO16              88
-#define WIN_EMR_POLYLINETO16                89
-#define WIN_EMR_POLYPOLYLINE16              90
-#define WIN_EMR_POLYPOLYGON16               91
-#define WIN_EMR_POLYDRAW16                  92
-#define WIN_EMR_CREATEMONOBRUSH             93
-#define WIN_EMR_CREATEDIBPATTERNBRUSHPT     94
-#define WIN_EMR_EXTCREATEPEN                95
-#define WIN_EMR_POLYTEXTOUTA                96
-#define WIN_EMR_POLYTEXTOUTW                97
 
 #define WIN_SRCCOPY                         0x00CC0020L
 #define WIN_SRCPAINT                        0x00EE0086L
 #define WIN_SRCAND                          0x008800C6L
 #define WIN_SRCINVERT                       0x00660046L
-#define WIN_EMR_COMMENT_EMFSPOOL            0x00000000L
 #define WIN_EMR_COMMENT_EMFPLUS             0x2B464D45L
-#define WIN_EMR_COMMENT_PUBLIC              0x43494447L
 
 #define HANDLE_INVALID                      0xffffffff
 #define MAXHANDLES                          65000
@@ -138,18 +77,12 @@
 #define TEXT_SELECT                         0x00000004
 
 /* Text Alignment Options */
-#define TA_NOUPDATECP                       0
-#define TA_UPDATECP                         1
-
-#define TA_LEFT                             0
 #define TA_RIGHT                            2
-#define TA_CENTER                           6
 
 #define TA_TOP                              0
 #define TA_BOTTOM                           8
 #define TA_BASELINE                         24
 #define TA_RTLREADING                       256
-#define TA_MASK     (TA_BASELINE+TA_CENTER+TA_UPDATECP+TA_RTLREADING)
 
 #define MM_ANISOTROPIC                      8
 

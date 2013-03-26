@@ -44,10 +44,6 @@
 #define _RWMASK     0x0F00  // mask for R/W-bits
 #define _TYPEMASK   0xF000  // mask for the entry's type
 
-#define _READ       0x0100  // can be read
-#define _BWRITE     0x0200  // can be used as Lvalue
-#define _LVALUE     _BWRITE // can be used as Lvalue
-#define _READWRITE  0x0300  // both
 #define _OPT        0x0400  // parameter is optional
 #define _CONST      0x0800  // property is const
 #define _METHOD     0x3000
@@ -58,7 +54,6 @@
 #define _LFUNCTION  0x1300  // mask for function which also works as Lvalue
 #define _SUB        0x2100
 #define _ROPROP     0x4100  // mask Read Only-Property
-#define _WOPROP     0x4200  // mask Write Only-Property
 #define _RWPROP     0x4300  // mask Read/Write-Property
 #define _CPROP      0x4900  // mask for constant
 

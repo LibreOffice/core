@@ -45,9 +45,6 @@
 
 namespace sd {
 
-#define TABCONTROL_INITIAL_SIZE     500
-
-
 sal_Bool DrawViewShell::GotoBookmark(const String& rBookmark)
 {
     sal_Bool bRet = sal_False;

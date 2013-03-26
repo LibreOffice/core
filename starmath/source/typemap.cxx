@@ -17,29 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define CharSetItem SfxVoidItem
-#define FontFamilyItem SfxVoidItem
-#define FontPitchItem SfxVoidItem
-#define FontAlignItem SfxVoidItem
-#define FontWeightItem SfxVoidItem
-#define FontUnderlineItem SfxVoidItem
-#define FontStrikeoutItem SfxVoidItem
-#define FontItalicItem SfxVoidItem
-#define SvxDbTypeItem SfxVoidItem
-#define SvxLineSpaceItem SfxVoidItem
-#define SvxInterLineSpaceItem SfxVoidItem
-#define SvxBreakItem SfxVoidItem
-#define BrushStyleItem SfxVoidItem
-#define SvxNumTypeItem SfxVoidItem
-#define SvxShadowLocationItem SfxVoidItem
-#define SvxLanguage SfxVoidItem
-#define SvxChooseControlEnumItem SfxVoidItem
-#define SvxDrawToolEnumItem SfxVoidItem
-#define SvxChooseControlItem SfxVoidItem
-#define SvxDrawToolItem SfxVoidItem
-#define SvxCellHorJustifyEnumItem SfxVoidItem
-#define SvxCellVerJustifyEnumItem SfxVoidItem
-#define SvxCellOrientationEnumItem SfxVoidItem
 #include <sfx2/msg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>

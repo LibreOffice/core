@@ -126,7 +126,6 @@
 #define MAP_LEN(x) x, sizeof(x) - 1
 #define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
 //  page styles
-#define SC_UNO_PAGE_GRAPHICFILT     "BackGraphicFilter"
 #define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"
 #define SC_UNO_PAGE_RIGHTBORDER     "RightBorder"
 #define SC_UNO_PAGE_BOTTBORDER      "BottomBorder"
@@ -142,13 +141,6 @@
 #define SC_UNO_PAGE_SCALETOPAG      "ScaleToPages"
 #define SC_UNO_PAGE_SCALETOX        "ScaleToPagesX"
 #define SC_UNO_PAGE_SCALETOY        "ScaleToPagesY"
-#define SC_UNO_PAGE_FIRSTPAGE       "FirstPageNumber"
-#define SC_UNO_PAGE_LEFTHDRCONT     "LeftPageHeaderContent"
-#define SC_UNO_PAGE_LEFTFTRCONT     "LeftPageFooterContent"
-#define SC_UNO_PAGE_RIGHTHDRCON     "RightPageHeaderContent"
-#define SC_UNO_PAGE_RIGHTFTRCON     "RightPageFooterContent"
-#define SC_UNO_PAGE_PRINTFORMUL     "PrintFormulas"
-#define SC_UNO_PAGE_PRINTZERO       "PrintZeroValues"
 #define SC_UNO_PAGE_HDRBACKCOL      "HeaderBackColor"
 #define SC_UNO_PAGE_HDRBACKTRAN     "HeaderBackTransparent"
 #define SC_UNO_PAGE_HDRGRFFILT      "HeaderBackGraphicFilter"

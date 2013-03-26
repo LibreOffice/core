@@ -37,8 +37,6 @@
 #include <vcl/svapp.hxx>
 // ---
 
-#define THISREF()   static_cast< XServiceInfo* >(this)
-
 //.........................................................................
 namespace dbaui
 {

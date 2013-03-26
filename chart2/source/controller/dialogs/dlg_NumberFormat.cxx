@@ -24,7 +24,6 @@
 #include <svl/itemset.hxx>
 
 // header for class SvxNumberInfoItem
-#define ITEMID_NUMBERINFO SID_ATTR_NUMBERFORMAT_INFO
 #include <svx/numinf.hxx>
 
 #include <svx/svxdlg.hxx>

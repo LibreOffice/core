@@ -22,7 +22,6 @@
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 
-#define _SVX_FLDITEM_CXX
 #include <unotools/localfilehelper.hxx>
 
 #include <editeng/flditem.hxx>

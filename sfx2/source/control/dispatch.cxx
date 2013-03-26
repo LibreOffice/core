@@ -958,10 +958,6 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
 
 //--------------------------------------------------------------------
 
-#ifndef SFX_USE_BINDINGS
-#define SFX_USE_BINDINGS 0x8000
-#endif
-
 const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
 {
     // Count the number of Shells on the linked Dispatcher

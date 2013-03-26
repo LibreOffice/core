@@ -47,7 +47,6 @@
 
 #define DDELINK_ERROR_APP   1
 #define DDELINK_ERROR_DATA  2
-#define DDELINK_ERROR_LINK  3
 
 using namespace ::com::sun::star::uno;
 

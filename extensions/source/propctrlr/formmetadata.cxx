@@ -94,9 +94,6 @@ namespace pcr
 #define DEF_INFO_4( ident, uinameres, helpid, flag1, flag2, flag3, flag4 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 )
 
-#define DEF_INFO_5( ident, uinameres, helpid, flag1, flag2, flag3, flag4, flag5 ) \
-    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 | PROP_FLAG_##flag5 )
-
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
     //------------------------------------------------------------------------

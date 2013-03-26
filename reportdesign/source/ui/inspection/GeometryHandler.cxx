@@ -76,10 +76,6 @@
 #include "metadata.hxx"
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 #include <svx/xdef.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
@@ -95,12 +91,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svxids.hrc>
-
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_DASH_LIST        SID_DASH_LIST
-#define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 #include <svx/drawitem.hxx>
-#define ITEMID_BRUSH            SID_ATTR_BRUSH
 #include <editeng/brushitem.hxx>
 #include <sfx2/docfilt.hxx>
 

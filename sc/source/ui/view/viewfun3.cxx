@@ -17,50 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _BIGINT_HXX
-#define _CACHESTR_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _CTRLTOOL_HXX
-#define _MACRODLG_HXX
 #define _OUTLINER_HXX
-#define _RULER_HXX
-#define _SCRWIN_HXX
-#define _STDCTRL_HXX
-#define _STDMENU_HXX
-#define _TABBAR_HXX
-#define _VALUESET_HXX
-
-#define _PASSWD_HXX
-
-#define _SFX_PRNMON_HXX
-#define _SFX_RESMGR_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXBASIC_HXX
-#define _SFXCTRLITEM
-#define _SFXMNUITEM_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXOBJFACE_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXTBXCTRL_HXX
-
-#define _SVTABBX_HXX
-#define _SVTREEBOX_HXX
-#define _SVTREELIST_HXX
-
-#define _SVX_HYPHEN_HXX
-#define _SVX_LAYCTRL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SELCTRL_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_STDDLG_HXX
-#define _SVX_THESDLG_HXX
 
 #include "scitems.hxx"
 #include <svx/svdetc.hxx>

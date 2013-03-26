@@ -38,10 +38,6 @@
 
 // STATIC DATA
 #define SwWebTextShell
-#define Paragraph
-#define HyphenZone
-#define TextFont
-#define DropCap
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 

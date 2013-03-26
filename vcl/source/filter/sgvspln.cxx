@@ -58,18 +58,7 @@ extern "C" {
 /* MACH_EPS ist die kleinste positive, auf der Maschine darstellbare
    Zahl x, die der Bedingung genuegt: 1.0 + x > 1.0                   */
 
-#define EPSQUAD   4.930380657631324e-032
-#define EPSROOT   1.490116119384766e-008
-
-#define POSMAX    8.98846567431158e+307    /* groesste positive Zahl  */
-#define POSMIN    5.56268464626800e-309    /* kleinste positive Zahl  */
 #define MAXROOT   9.48075190810918e+153
-
-#define BASIS     2                        /* Basis der Zahlendarst.  */
-#ifndef PI
-#define PI        3.141592653589793e+000
-#endif
-#define EXP_1     2.718281828459045e+000
 
 #else               /*------------------ sonst -----------------------*/
 
@@ -110,21 +99,11 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 
 
 #define MACH_EPS  masch()
-#define EPSQUAD   MACH_EPS * MACH_EPS
-#define EPSROOT   sqrt(MACH_EPS)
 
 #define POSMAX    pow ((double) BASIS, MAXEXPON)
-#define POSMIN    pow ((double) BASIS, MINEXPON)
 #define MAXROOT   sqrt(POSMAX)
 
-#define PI        4.0 * atan (1.0)
-#define EXP_1     exp(1.0)
-
 #endif              /*-------------- ENDE ifdef ----------------------*/
-
-
-#define NEGMAX   -POSMIN                   /* groesste negative Zahl  */
-#define NEGMIN   -POSMAX                   /* kleinste negative Zahl  */
 
 /* Definition von Funktionsmakros:
    */
@@ -132,7 +111,6 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 #define abs(X) ((X) >= 0  ?  (X) : -(X))       /* Absolutbetrag von X */
 #define sign(X, Y) (Y < 0 ? -abs(X) : abs(X))  /* Vorzeichen von      */
                                                /* Y mal abs(X)        */
-#define sqr(X) ((X) * (X))                     /* Quadrat von X       */
 
 /*-------------------  ENDE FILE u_const.h  --------------------------*/
 

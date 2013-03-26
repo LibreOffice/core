@@ -52,7 +52,6 @@ public:
 #define HEADERBAR_ARROWOFF          5
 #define HEADERBAR_SPLITOFF          3
 
-#define HEADERBAR_DRAGOFF           4
 #define HEADERBAR_DRAGOUTOFF        15
 
 #define HEAD_HITTEST_ITEM           ((sal_uInt16)0x0001)

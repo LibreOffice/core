@@ -36,8 +36,6 @@ using namespace ::com::sun::star;
 // Interface implementation
 // --------------------------------------------------------------------
 
-#define IMPL    ((AttrContainerImpl*)mpData)
-
 uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
 {
     return *(new SvUnoAttributeContainer);

@@ -37,8 +37,6 @@
 #define ScGraphicShell
 #include "scslots.hxx"
 
-#define ITEMVALUE(ItemSet,Id,Cast) ((const Cast&)(ItemSet).Get(Id)).GetValue()
-
 class ScExternalToolEdit : public ExternalToolEdit
 {
     FmFormView* m_pView;

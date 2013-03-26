@@ -24,7 +24,6 @@
 #include "sdattr.hxx"
 #include "strings.hrc"
 
-#define _SD_DIACTRL_CXX
 #include "diactrl.hxx"
 
 #include "sdresid.hxx"

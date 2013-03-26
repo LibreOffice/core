@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-#define _SW_FRMVALID_HXX
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
@@ -99,10 +96,6 @@
 #include <chartins.hxx>
 
 #define SwTextShell
-#define Paragraph
-#define HyphenZone
-#define TextFont
-#define DropCap
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <SwRewriter.hxx>

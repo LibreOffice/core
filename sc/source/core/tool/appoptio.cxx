@@ -34,8 +34,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 using ::rtl::OUString;
- // STATIC DATA -----------------------------------------------------------
-#define SC_VERSION ((sal_uInt16)304)
 
 //========================================================================
 //      ScAppOptions - Applikations-Optionen

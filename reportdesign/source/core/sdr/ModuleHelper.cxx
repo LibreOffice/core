@@ -28,7 +28,6 @@
 #include <tools/debug.hxx>
 #include <svl/solar.hrc>
 
-#define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(theOModuleMutex::get()); \
     ensureImpl()

@@ -33,12 +33,6 @@ using namespace com::sun::star::uno;
 
 using ::rtl::OUString;
 
-//------------------------------------------------------------------
-
-// version from which on the item is compatible
-#define SC_VERSION ((sal_uInt16)351)
-
-
 //========================================================================
 // ScInputOptions - input options
 //========================================================================

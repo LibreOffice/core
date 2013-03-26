@@ -19,7 +19,6 @@
 
 
 #include "bridges/cpp_uno/shared/types.hxx"
-#define INCLUDED_BRIDGES_CPP_UNO_SHARED_VTABLES_HXX
 
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"

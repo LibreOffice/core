@@ -51,11 +51,9 @@
 #define GETACT(st)      ((st>>7)&0x1ff)
 
 /* character classes */
-#define C_WS    1
-#define C_ALPH  2
-#define C_NUM   3
-#define C_EOF   4
-#define C_XX    5
+#define C_ALPH  1
+#define C_NUM   2
+#define C_XX    3
 
 enum state
 {

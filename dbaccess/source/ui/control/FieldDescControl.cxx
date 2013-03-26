@@ -74,10 +74,6 @@ using namespace ::com::sun::star::util;
 #define CONTROL_WIDTH_3     250
 #define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - 20 - 5)
 
-#define SBA_DEF_RANGEFORMAT         (100 + 143) // RangeItem
-#define SBA_DEF_FMTVALUE            (100 + 144) // SfxULONG, Format
-#define SBA_ATTR_ALIGN_HOR_JUSTIFY  (100 + 145) //  SvxHorJustifyItem
-
 #define HSCROLL_STEP        20
 
 

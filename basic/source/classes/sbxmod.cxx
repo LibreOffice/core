@@ -55,13 +55,6 @@
 
 using namespace com::sun::star;
 
-// for the bsearch
-#ifdef WNT
-#define CDECL _cdecl
-#endif
-#if defined(UNX)
-#define CDECL
-#endif
 #ifdef UNX
 #include <sys/resource.h>
 #endif

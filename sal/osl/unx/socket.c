@@ -153,7 +153,6 @@ static oslProtocol osl_ProtocolFromNative(sal_uInt32 nativeType)
 */
 
 /* macros */
-#define PROTOCOL_FROM_NATIVE(y) osl_ProtocolFromNative(y)
 #define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
 
 
@@ -236,8 +235,6 @@ static oslSocketOption osl_SocketOptionFromNative(sal_uInt32 nativeType)
 */
 /* macros */
 #define OPTION_TO_NATIVE(x)     OptionMap[x]
-#define OPTION_FROM_NATIVE(y)       osl_SocketOptionFromNative(y)
-
 
 /*****************************************************************************/
 /* enum oslSocketOptionLevel */
@@ -267,7 +264,6 @@ static oslSocketOptionLevel osl_SocketOptionLevelFromNative(sal_uInt32 nativeTyp
 */
 /* macros */
 #define OPTION_LEVEL_TO_NATIVE(x)       OptionLevelMap[x]
-#define OPTION_LEVEL_FROM_NATIVE(y)     osl_SocketOptionLevelFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketMsgFlag */
@@ -301,8 +297,6 @@ static oslSocketMsgFlag osl_SocketMsgFlagFromNative(sal_uInt32 nativeType)
 
 /* macros */
 #define MSG_FLAG_TO_NATIVE(x)       SocketMsgFlagMap[x]
-#define MSG_FLAG_FROM_NATIVE(y)     osl_SocketMsgFlagFromNative(y)
-
 
 /*****************************************************************************/
 /* enum oslSocketDirection */
@@ -334,7 +328,6 @@ static oslSocketDirection osl_SocketDirectionFromNative(sal_uInt32 nativeType)
 
 /* macros */
 #define DIRECTION_TO_NATIVE(x)      SocketDirection[x]
-#define DIRECTION_FROM_NATIVE(y)    osl_SocketDirectionFromNative(y)
 
 /*****************************************************************************/
 /* enum oslSocketError */
@@ -406,7 +399,6 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 }
 
 /* macros */
-#define ERROR_TO_NATIVE(x)      osl_NativeFromSocketError(x)
 #define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
 
 /*****************************************************************************/
@@ -797,7 +789,6 @@ static struct hostent* _osl_gethostbyname_r (
 
 static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
 {
-#   define DOMAINNAME_LENGTH 512
     struct hostent  aHostByName;
     struct hostent *pHostByName;
     sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];

@@ -50,7 +50,6 @@
 //really used ids from old sw3ids.hxx
 #define SWG_INETBROWSER 0x000e      // URL-Grf-Nodes, Browse-Flag, Format-Ums.
 #define SWG_NEWFIELDS   0x0200      // Felder mit Numberformatter-Zahlenformat
-#define SWG_EXPORT40    0x0110      // Version fuer 4.0-Export ab 5.0
 
 using namespace nsSwDocInfoSubType;
 

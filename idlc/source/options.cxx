@@ -29,11 +29,6 @@
 
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
-#ifdef SAL_UNX
-#define SEPARATOR '/'
-#else
-#define SEPARATOR '\\'
-#endif
 
 Options::Options(char const * progname)
   : m_program(progname), m_stdin(false), m_verbose(false), m_quiet(false)

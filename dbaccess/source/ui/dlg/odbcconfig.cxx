@@ -39,17 +39,13 @@
 
 #if defined WNT
 #define ODBC_LIBRARY    "ODBC32.DLL"
-#define ODBC_UI_LIBRARY "ODBCCP32.DLL"
 #endif
 #ifdef UNX
 #ifdef MACOSX
 #define ODBC_LIBRARY        "libiodbc.dylib"
-#define ODBC_UI_LIBRARY     "libiodbcinst.dylib"
 #else
 #define ODBC_LIBRARY_1      "libodbc.so.1"
-#define ODBC_UI_LIBRARY_1   "libodbcinst.so.1"
 #define ODBC_LIBRARY        "libodbc.so"
-#define ODBC_UI_LIBRARY     "libodbcinst.so"
 #endif
 #endif
 
@@ -86,7 +82,6 @@
 #else
 
 #define ODBC_LIBRARY    ""
-#define ODBC_UI_LIBRARY ""
 
 #endif  // HAVE_ODBC_SUPPORT
 
@@ -104,7 +99,6 @@ typedef SQLRETURN (SQL_API* TSQLSetEnvAttr) (SQLHENV EnvironmentHandle, SQLINTEG
 typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMALLINT   Direction, SQLCHAR* ServerName,
                                 SQLSMALLINT BufferLength1, SQLSMALLINT* NameLength1Ptr, SQLCHAR* Description, SQLSMALLINT BufferLength2, SQLSMALLINT* NameLength2Ptr);
 
-#define NSQLManageDataSource(a) (*(TSQLManageDataSource)(m_pSQLManageDataSource))(a)
 #define NSQLAllocHandle(a,b,c) (*(TSQLAllocHandle)(m_pAllocHandle))(a,b,c)
 #define NSQLFreeHandle(a,b) (*(TSQLFreeHandle)(m_pFreeHandle))(a,b)
 #define NSQLSetEnvAttr(a,b,c,d) (*(TSQLSetEnvAttr)(m_pSetEnvAttr))(a,b,c,d)

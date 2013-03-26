@@ -33,8 +33,11 @@
 #include "gconfaccess.hxx"
 
 #define GCONF_PROXY_MODE_KEY "/system/proxy/mode"
+
+#ifdef ENABLE_LOCKDOWN
 #define GCONF_AUTO_SAVE_KEY  "/apps/openoffice/auto_save"
 #define GCONF_USER_AUTO_SAVE_KEY  "/apps/openoffice/user_auto_save"
+#endif
 
 namespace gconfaccess {
 

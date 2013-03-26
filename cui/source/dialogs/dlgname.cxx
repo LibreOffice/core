@@ -26,8 +26,6 @@
 #include "defdlgname.hxx"
 #include <dialmgr.hxx>
 
-#define MAX_DESCRIPTION_LINES   ((long)5)
-
 /*************************************************************************
 |*
 |* Dialog for editing a name

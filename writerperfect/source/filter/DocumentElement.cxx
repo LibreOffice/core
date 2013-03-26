@@ -12,8 +12,6 @@
 #include "FilterInternal.hxx"
 #include <string.h>
 
-#define ASCII_SPACE 0x0020
-
 void TagElement::print() const
 {
     WRITER_DEBUG_MSG(("%s\n", msTagName.cstr()));

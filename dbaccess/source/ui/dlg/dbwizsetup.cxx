@@ -110,9 +110,6 @@ using namespace ::com::sun::star::document;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-#define START_PAGE      0
-#define CONNECTION_PAGE 1
-
 DBG_NAME(ODbTypeWizDialogSetup)
 //=========================================================================
 //= ODbTypeWizDialogSetup

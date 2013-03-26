@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_BIGRANGE_CXX__
-#define __SC_BIGRANGE_CXX__
-
 #include "bigrange.hxx"
 #include "document.hxx"
 
@@ -24,7 +21,5 @@ bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
             || nTab == nInt32Min || nTab == nInt32Max)
         ;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

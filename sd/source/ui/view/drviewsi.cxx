@@ -53,10 +53,6 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-#define ATTR_MISSING    0       // Attribut nicht verfuegbar
-#define ATTR_MIXED      1       // Attribut uneindeutig (bei Mehrfachselektion)
-#define ATTR_SET        2       // Attribut eindeutig
-
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 /**

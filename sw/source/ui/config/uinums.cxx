@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 #define VERSION_30B     ((sal_uInt16)250)
 #define VERSION_31B     ((sal_uInt16)326)
 #define VERSION_40A     ((sal_uInt16)364)
-#define VERSION_50A     ((sal_uInt16)373)
 #define VERSION_53A     ((sal_uInt16)596)
 #define ACT_NUM_VERSION VERSION_53A
 

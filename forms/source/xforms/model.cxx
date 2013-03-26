@@ -79,7 +79,6 @@ using namespace xforms;
 
 #define DBG_INVARIANT() DBG_INVARIANT_TYPE(Model)
 #else
-#define DBG_INVARIANT_TYPE(TYPE)
 #define DBG_INVARIANT()
 #endif
 
@@ -660,8 +659,6 @@ Model::XSet_t Model::getSubmissions()
 //
 
 #define HANDLE_ID 0
-#define HANDLE_Instance 1
-#define HANDLE_InstanceURL 2
 #define HANDLE_ForeignSchema 3
 #define HANDLE_SchemaRef 4
 #define HANDLE_Namespaces 5

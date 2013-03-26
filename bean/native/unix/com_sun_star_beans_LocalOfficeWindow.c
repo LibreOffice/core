@@ -35,17 +35,6 @@
 
 #include "sal/types.h"
 
-#if defined assert
-#undef assert
-#endif
-
-#define assert(X) if (!X) { (*env)->ThrowNew(env, (*env)->FindClass(env, "java/lang/RuntimeException"), "assertion failed"); return;}
-
-
-#define SYSTEM_WIN32   1
-#define SYSTEM_WIN16   2
-#define SYSTEM_JAVA    3
-#define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
 
 SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow

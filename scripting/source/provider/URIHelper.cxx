@@ -23,8 +23,6 @@
 #include <rtl/ustrbuf.hxx>
 #include "URIHelper.hxx"
 
-#define PRTSTR(x) ::rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
-
 namespace func_provider
 {
 

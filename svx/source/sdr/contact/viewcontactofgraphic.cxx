@@ -23,10 +23,6 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
 
-#ifndef ITEMID_GRF_CROP
-#define ITEMID_GRF_CROP 0
-#endif
-
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>

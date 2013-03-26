@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
-
 #include "svx/svdotext.hxx"
 #include "svx/svdetc.hxx"
 #include "editeng/outlobj.hxx"

@@ -35,13 +35,6 @@
 #define ENTRIES_INI     5
 #define ENTRIES_ADD     3
 
-
-#define STR_INI_EXTENSION   "rc"
-#define STR_INI_METAHOME    "?~"
-#define STR_INI_METASYS     "?$"
-#define STR_INI_METACFG     "?^"
-#define STR_INI_METAINS     "?#"
-
 #define STR_INI_BOOLYES     "yes"
 #define STR_INI_BOOLON      "on"
 #define STR_INI_BOOLONE     "1"
@@ -53,21 +46,7 @@
 #define FLG_AUTOOPEN        0x0100
 #define FLG_MODIFIED        0x0200
 
-#define SVERSION_LOCATION   STR_INI_METACFG
-#define SVERSION_FALLBACK   STR_INI_METASYS
-#define SVERSION_NAME       "sversion"
-#define SVERSION_SECTION    "Versions"
-#define SVERSION_SOFFICE    "StarOffice"
-#define SVERSION_PROFILE    "sofficerc"
-#define SVERSION_OPTION     "userid:"
-#define SVERSION_DIRS       { "bin", "program" }
-#define SVERSION_USER       "user"
-
 #define DEFAULT_PMODE   (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
-
-#define _BUILD_STR_(n)  # n
-#define BUILD_STR(n)    _BUILD_STR_(n)
-
 
 /*#define DEBUG_OSL_PROFILE*/
 /*#define TRACE_OSL_PROFILE*/

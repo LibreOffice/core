@@ -47,8 +47,6 @@
 #define DEF_WRITER_LSPACE   500     //Standard Indentation
 #define DEF_DRAW_LSPACE     800     //Standard Indentation
 
-#define NUMITEM_VERSION_01        0x01
-#define NUMITEM_VERSION_02        0x02
 #define NUMITEM_VERSION_03        0x03
 #define NUMITEM_VERSION_04        0x04
 

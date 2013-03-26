@@ -51,11 +51,6 @@
 #include "altstrfunc.hxx"
 #include "simpleguesser.hxx"
 
-#ifndef _UTF8_
-#define _UTF8_
-#endif
-
-
 using namespace std;
 
 

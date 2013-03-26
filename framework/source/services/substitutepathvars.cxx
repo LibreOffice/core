@@ -51,8 +51,6 @@
 
 #define STRPOS_NOTFOUND                  (sal_Int32)-1
 
-#define SEARCHPATH_DELIMITER             ';'
-
 // Variable start/end characters
 #define SIGN_STARTVARIABLE               "$("
 #define SIGN_ENDVARIABLE                 ")"
@@ -843,7 +841,7 @@ throw ( NoSuchElementException, RuntimeException )
                 }
 
                 // Check preconditions to substitue path variables.
-                // 1. A path variable can only be substituted if it follows a SEARCHPATH_DELIMITER ';'!
+                // 1. A path variable can only be substituted if it follows a ';'!
                 // 2. It's located exactly at the start of the string being substituted!
                 if (( aFixedVarTable[ int( nIndex ) ].bAbsPath && (( nPosition == 0 ) || (( nPosition > 0 ) && ( aWorkText[nPosition-1] == ';')))) ||
             ( !aFixedVarTable[ int( nIndex ) ].bAbsPath ))

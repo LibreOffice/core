@@ -20,7 +20,6 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 
-#define CGM_BREAK_ACTION    0xffffffff
 #include <osl/endian.h>
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
@@ -635,6 +634,7 @@ void CGM::ImplDoClass()
 {
 #ifdef CGM_USER_BREAKPOINT
 #ifdef WNT
+#define CGM_BREAK_ACTION    0xffffffff
     if ( mnActCount == CGM_BREAK_ACTION )
         _asm int 0x3;
 #endif

@@ -21,7 +21,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <svx/svxids.hrc>
-#define ITEMID_SCRIPTSPACE          SID_ATTR_PARA_SCRIPTSPACE
 #include <editeng/scriptspaceitem.hxx>
 
 //........................................................................

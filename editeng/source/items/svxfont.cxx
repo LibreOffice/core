@@ -28,9 +28,6 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>
 
-// Minimum: Percentage of kernel
-#define MINKERNPERCENT 5
-
 #ifndef REDUCEDSVXFONT
     const sal_Unicode CH_BLANK = sal_Unicode(' ');  // ' ' Space character
     static sal_Char const sDoubleSpace[] = "  ";

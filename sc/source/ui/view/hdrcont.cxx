@@ -40,10 +40,6 @@
 //  (selection left/right must be first because the continuous lines
 //  are partly overwritten later)
 
-#define SC_HDRPAINT_SEL_RIGHT   0
-#define SC_HDRPAINT_SEL_LEFT    1
-#define SC_HDRPAINT_TOP         2
-#define SC_HDRPAINT_SEL_TOP     3
 #define SC_HDRPAINT_SEL_BOTTOM  4
 #define SC_HDRPAINT_BOTTOM      5
 #define SC_HDRPAINT_TEXT        6
