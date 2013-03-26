@@ -846,7 +846,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
         if (aFiles.hasElements())
         {
-            std::set<const ThumbnailViewItem*>::const_iterator pIter;
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
             for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
             {
                 OUString aTemplateList;
@@ -895,7 +895,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         {
             sal_uInt16 i = 1;
 
-            std::set<const ThumbnailViewItem*>::const_iterator pIter = maSelTemplates.begin();
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
             for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
             {
                 const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(*pIter);
@@ -927,7 +927,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
             sal_uInt16 i = 1;
             sal_uInt16 nRegionItemId = maView->getCurRegionId() + 1;
 
-            std::set<const ThumbnailViewItem*>::const_iterator pIter = maSelTemplates.begin();
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
             for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
             {
                 const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
@@ -1014,7 +1014,7 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
     aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
 
     uno::Reference< XStorable > xStorable;
-    std::set<const ThumbnailViewItem*>::const_iterator pIter;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
     for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter)
     {
         const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
@@ -1053,7 +1053,7 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
 
     if (mpSearchView->IsVisible())
     {
-        std::set<const ThumbnailViewItem*>::const_iterator pIter;
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
         for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
         {
             const TemplateSearchViewItem *pItem =
@@ -1087,7 +1087,7 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     }
     else
     {
-        std::set<const ThumbnailViewItem*>::const_iterator pIter;
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
         for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
         {
             if (maView->removeTemplate((*pIter)->mnId,maView->getCurRegionId()+1))
@@ -1158,7 +1158,7 @@ void SfxTemplateManagerDlg::OnFolderDelete()
 
     OUString aFolderList;
 
-    std::set<const ThumbnailViewItem*>::const_iterator pIter;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
     for (pIter = maSelFolders.begin(); pIter != maSelFolders.end();)
     {
         if (maView->removeRegion((*pIter)->mnId))
@@ -1238,7 +1238,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
             }
             else
             {
-                std::set<const ThumbnailViewItem*>::const_iterator pIter;
+                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
                 for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
                 {
                     TemplateContainerItem *pItem = (TemplateContainerItem*)(*pIter);
@@ -1370,7 +1370,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
         {
             OUString aTemplateList;
 
-            std::set<const ThumbnailViewItem*>::const_iterator pIter;
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
             for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
             {
                 if (aTemplateList.isEmpty())
@@ -1414,7 +1414,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
     {
         OUString aTemplateList;
 
-        std::set<const ThumbnailViewItem*>::const_iterator aIter;
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aIter;
         for (aIter = maSelTemplates.begin(); aIter != maSelTemplates.end(); ++aIter)
         {
             const TemplateSearchViewItem *pItem =
@@ -1470,7 +1470,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
         // Move templates to desired folder if for some reason move fails
         // try copying them.
-        std::set<const ThumbnailViewItem*>::const_iterator aIter;
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aIter;
         std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Copy to avoid invalidating an iterator
 
         for (aIter = aSelTemplates.begin(); aIter != aSelTemplates.end(); ++aIter)
