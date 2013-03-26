@@ -358,10 +358,14 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
     }
 }
 
+#ifndef IOS
+
 void SvpSalGraphics::SetTextColor( SalColor nSalColor )
 {
     m_aTextColor = basebmp::Color( nSalColor );
 }
+
+#endif
 
 void SvpSalGraphics::drawPixel( long nX, long nY )
 {
@@ -699,6 +703,8 @@ sal_Bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
     return sal_False;
 }
 
+#ifndef IOS
+
 SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
 {
     SystemFontData aSysFontData;
@@ -707,17 +713,15 @@ SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
     if (nFallbacklevel < 0 ) nFallbacklevel = 0;
 
     aSysFontData.nSize = sizeof( SystemFontData );
-#ifdef IOS
-    aSysFontData.rCTFont = NULL;
-#else
     aSysFontData.nFontId = 0;
     aSysFontData.nFontFlags = 0;
-#endif
     aSysFontData.bFakeBold = false;
     aSysFontData.bFakeItalic = false;
     aSysFontData.bAntialias = true;
     return aSysFontData;
 }
+
+#endif
 
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 {
