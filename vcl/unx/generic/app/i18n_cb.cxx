@@ -29,6 +29,7 @@
 #include <X11/Xlib.h>
 #include <tools/postx.h>
 
+#include "vcl/cmdevt.hxx"
 #include "unx/salunx.h"
 #include "unx/XIM.h"
 #include "unx/i18n_cb.hxx"
@@ -262,7 +263,7 @@ Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
 }
 
 // Convert the XIM feedback values into appropriate VCL
-// SAL_EXTTEXTINPUT_ATTR values
+// EXTTEXTINPUT_ATTR values
 // returns an allocate list of attributes, which must be freed by caller
 sal_uInt16*
 Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uInt16>& rSalAttr )
@@ -295,17 +296,17 @@ Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<sal_uIn
         else
         {
               if (nfeedback & XIMReverse)
-                nval |= SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                nval |= EXTTEXTINPUT_ATTR_HIGHLIGHT;
               if (nfeedback & XIMUnderline)
-                nval |= SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+                nval |= EXTTEXTINPUT_ATTR_UNDERLINE;
               if (nfeedback & XIMHighlight)
-                nval |= SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                nval |= EXTTEXTINPUT_ATTR_HIGHLIGHT;
               if (nfeedback & XIMPrimary)
-                nval |= SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                nval |= EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
               if (nfeedback & XIMSecondary)
-                nval |= SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                nval |= EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
               if (nfeedback & XIMTertiary) // same as 2ery
-                nval |= SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                nval |= EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
 
         }
         // copy in list

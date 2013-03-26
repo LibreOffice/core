@@ -1539,16 +1539,16 @@ private:
 
             switch (nUnderlineValue & 0xff) {
             case NSUnderlineStyleSingle:
-                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+                aInputFlags[i] = EXTTEXTINPUT_ATTR_UNDERLINE;
                 break;
             case NSUnderlineStyleThick:
-                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_UNDERLINE | SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                aInputFlags[i] = EXTTEXTINPUT_ATTR_UNDERLINE | EXTTEXTINPUT_ATTR_HIGHLIGHT;
                 break;
             case NSUnderlineStyleDouble:
-                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
+                aInputFlags[i] = EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
                 break;
             default:
-                aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                aInputFlags[i] = EXTTEXTINPUT_ATTR_HIGHLIGHT;
                 break;
             }
         }

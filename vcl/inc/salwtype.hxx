@@ -31,24 +31,6 @@ class Window;
 
 class FontSelectPattern;
 
-// ---------------
-// - SalExtInput -
-// ---------------
-
-// Have to match DEFINEs in cmdevt.hxx, as these will not be converted
-
-#define SAL_EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((sal_uInt16)0x0100)
-#define SAL_EXTTEXTINPUT_ATTR_UNDERLINE             ((sal_uInt16)0x0200)
-#define SAL_EXTTEXTINPUT_ATTR_BOLDUNDERLINE         ((sal_uInt16)0x0400)
-#define SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE       ((sal_uInt16)0x0800)
-#define SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE      ((sal_uInt16)0x1000)
-#define SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT             ((sal_uInt16)0x2000)
-#define SAL_EXTTEXTINPUT_ATTR_REDTEXT               ((sal_uInt16)0x4000)
-#define SAL_EXTTEXTINPUT_ATTR_HALFTONETEXT          ((sal_uInt16)0x8000)
-
-#define SAL_EXTTEXTINPUT_CURSOR_INVISIBLE           ((sal_uInt16)0x0001)
-#define SAL_EXTTEXTINPUT_CURSOR_OVERWRITE           ((sal_uInt16)0x0002)
-
 // ------------
 // - SalEvent -
 // ------------
@@ -195,7 +177,7 @@ struct SalExtTextInputEvent
     const sal_uInt16*   mpTextAttr;     // Text-Attribute
     sal_uLong           mnCursorPos;    // Cursor-Position
     sal_uLong           mnDeltaStart;   // Start-Position of last change
-    sal_uInt8           mnCursorFlags;  // SAL_EXTTEXTINPUT_CURSOR_xxx
+    sal_uInt8           mnCursorFlags;  // EXTTEXTINPUT_CURSOR_xxx
     sal_Bool            mbOnlyCursor;   // sal_True: Only Cursor-Position has been changed
 };
 

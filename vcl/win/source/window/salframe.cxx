@@ -5206,17 +5206,17 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                     sal_uInt16   nSalAttr;
                     if ( nWinAttr == ATTR_TARGET_CONVERTED )
                     {
-                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
-                        aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_INVISIBLE;
+                        nSalAttr = EXTTEXTINPUT_ATTR_BOLDUNDERLINE;
+                        aEvt.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
                     }
                     else if ( nWinAttr == ATTR_CONVERTED )
-                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
+                        nSalAttr = EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE;
                     else if ( nWinAttr == ATTR_TARGET_NOTCONVERTED )
-                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                        nSalAttr = EXTTEXTINPUT_ATTR_HIGHLIGHT;
                     else if ( nWinAttr == ATTR_INPUT_ERROR )
-                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_REDTEXT | SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                        nSalAttr = EXTTEXTINPUT_ATTR_REDTEXT | EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
                     else /* ( nWinAttr == ATTR_INPUT ) */
-                        nSalAttr = SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                        nSalAttr = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
                     pSalAttrAry[i] = nSalAttr;
                 }
 
@@ -5248,9 +5248,9 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                     aEvt.mnCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
 
                 if ( pFrame->mbCandidateMode )
-                    aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_INVISIBLE;
+                    aEvt.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
                 if ( lParam & CS_NOMOVECARET )
-                    aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_OVERWRITE;
+                    aEvt.mnCursorFlags |= EXTTEXTINPUT_CURSOR_OVERWRITE;
 
                 pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
             }
