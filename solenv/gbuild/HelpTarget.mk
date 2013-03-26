@@ -447,7 +447,7 @@ gb_HelpJarTarget_COMMAND := zip
 define gb_HelpJarTarget__get_command
 $(call gb_Output_announce,$*,$(true),HEJ,3)
 cd $(HELP_WORKDIR) && \
-$(gb_HelpJarTarget_COMMAND) -q -0 -rX $(HELP_MODULE).jar text/$(HELP_MODULE) && \
+$(gb_HelpJarTarget_COMMAND) -q -0 -rX --filesync --must-match $(HELP_MODULE).jar text/$(HELP_MODULE) && \
 touch $@
 endef
 
@@ -510,7 +510,7 @@ endef
 define gb_HelpTarget__get_command
 $(call gb_Output_announce,$(2),$(true),HLP,4)
 cd $(call gb_HelpTarget_get_workdir,$(2)) && \
-$(gb_HelpJarTarget_COMMAND) -q -0 -rX $(1) \
+$(gb_HelpJarTarget_COMMAND) -q -0 -rX --filesync --must-match $(1) \
 	$(HELP_PACK_FILES) \
 	$(if $(and $(HELP_CONFIGDIR),$(HELP_INDEXED)),$(HELP_MODULE).cfg)
 endef
