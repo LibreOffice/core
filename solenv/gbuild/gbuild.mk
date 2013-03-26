@@ -153,7 +153,7 @@ else
 gb_ENABLE_PCH := $(false)
 endif
 
-ifneq ($(nodep),)
+ifneq ($(nodep)$(ENABLE_PRINT_DEPS),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
