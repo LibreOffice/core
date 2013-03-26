@@ -15,25 +15,16 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+class EventListenerList(object):
 
-from abc import abstractmethod
+    def __init__(self):
+        self.list = []
 
-class ListModel(object):
+    def add(self, listener):
+        self.list.append(listener)
 
-    @abstractmethod
-    def getSize(self):
-        pass
+    def remove(self, listener):
+        self.list.remove(listener)
 
-    @abstractmethod
-    def getElementAt(self, arg0):
-        pass
-
-    @abstractmethod
-    def elements(self):
-        pass
-
-    def addListDataListener(self, listener):
-        pass
-
-    def removeListDataListener(self, listener):
-        pass
+    def getListenerList(self):
+        return self.list

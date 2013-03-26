@@ -535,9 +535,9 @@ class WWD_Startup(WWD_General):
     '''
 
     def fillDocumentList(self, root):
+        print ("DEBUG !!! fillDocumentList -- ")
         ListModelBinder.fillList(self.lstDocuments, root.cp_Documents.childrenList, None)
-        #COMMENTED
-        #self.docsBinder.setListModel(root.cp_Documents)
+        self.docsBinder.setListModel(root.cp_Documents)
         self.disableDocUpDown()
 
     '''

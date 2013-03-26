@@ -25,6 +25,7 @@ from .event.CommonListener import OMouseListenerProcAdapter
 from ..common.PropertyNames import PropertyNames
 from ..common.HelpIds import HelpIds
 from ..common.IRenderer import IRenderer
+from .event.ListDataListener import ListDataListener
 
 from com.sun.star.awt import Size
 
@@ -40,7 +41,7 @@ def synchronized(lock):
         return newFunction
     return wrap
 
-class ImageList(object):
+class ImageList(ListDataListener):
     NO_BORDER = 0
     BACKGROUND_COLOR = 16777216
     HIDE_PAGE = 99
@@ -186,8 +187,7 @@ class ImageList(object):
                 self.m_aImages[r * self.cols + c] = self.createImage(dialog, r, c)
 
         self.refreshImages()
-        #COMMENTED
-        #ImageList.listModel.addListDataListener(None)
+        self.listModel.addListDataListener(self)
 
     #used for optimization
 

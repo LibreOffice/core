@@ -14,26 +14,25 @@
 #   License, Version 2.0 (the "License"); you may not use this file
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
-#
+from com.sun.star.document import EventObject
 
-from abc import abstractmethod
+#class ListDataEvent(EventObject):
+class ListDataEvent:
 
-class ListModel(object):
+    INTERVAL_ADDED = 1
+    INTERVAL_REMOVED = 2
+    CONTENTS_CHANGED = 3
 
-    @abstractmethod
-    def getSize(self):
-        pass
+    # general constructor -
+    # @param source
+    # @param type_
+    def __init__(self, source_, type_, i0, i1):
+        #super(TaskEvent, self).__init__(source)
+        self.index0 = i0
+        self.index1 = i1
 
-    @abstractmethod
-    def getElementAt(self, arg0):
-        pass
+    def getIndex0(self):
+        return self.index0
 
-    @abstractmethod
-    def elements(self):
-        pass
-
-    def addListDataListener(self, listener):
-        pass
-
-    def removeListDataListener(self, listener):
-        pass
+    def getIndex1(self):
+        return self.index1

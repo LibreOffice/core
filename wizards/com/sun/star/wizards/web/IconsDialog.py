@@ -86,6 +86,12 @@ class IconsDialog(ImageListDialog, ImageList.IImageRenderer, ListModel):
             aux = self.objects[icon]
         self.setSelected(aux)
 
+    def addListDataListener(self, listener):
+        pass
+
+    def removeListDataListener(self, listener):
+        pass
+
     def getSize(self):
         return self.set.getSize() * len(self.icons)
 

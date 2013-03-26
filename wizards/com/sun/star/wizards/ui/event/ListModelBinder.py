@@ -16,22 +16,25 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-class ListModelBinder(object):
+from .ListDataListener import ListDataListener
+
+class ListModelBinder(ListDataListener):
 
     def __init__(self, unoListBox, listModel_):
         self.unoList = unoListBox
         self.unoListModel = unoListBox.Model
-        #COMMENTED
-        #self.setListModel(listModel_)
+        self.listModel = None
+        self.setListModel(listModel_)
 
     def setListModel(self, newListModel):
         if self.listModel is not None:
             self.listModel.removeListDataListener(self)
 
         self.listModel = newListModel
-        self.listModel.addListDataListener(this)
+        self.listModel.addListDataListener(self)
 
     def contentsChanged(self, lde):
+        print ("DEBUG !!! contentsChanged -- lde: ", lde)
         selected = self.getSelectedItems()
         i = lde.getIndex0()
         while i <= lde.getIndex1():
@@ -62,11 +65,13 @@ class ListModelBinder(object):
         self.unoListModel.SelectedItems = selected;
 
     def intervalAdded(self, lde):
-        for i in xrange(lde.Index0, lde.Index1):
+        print ("DEBUG !!! intervalAdded -- lde: ", lde)
+        for i in range(lde.getIndex0(), lde.getIndex1()):
             self.insert(i)
 
     def intervalRemoved(self, lde):
-        self.remove(lde.Index0, lde.Index1)
+        print ("DEBUG !!! intervalRemoved -- lde: ", lde)
+        self.remove(lde.getIndex0(), lde.getIndex1())
 
     @classmethod
     def fillList(self, xlist, items, renderer):

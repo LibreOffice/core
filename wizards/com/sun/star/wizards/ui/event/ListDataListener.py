@@ -15,25 +15,19 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-
 from abc import abstractmethod
+from com.sun.star.script import EventListener
 
-class ListModel(object):
-
-    @abstractmethod
-    def getSize(self):
-        pass
+class ListDataListener():
 
     @abstractmethod
-    def getElementAt(self, arg0):
+    def intervalAdded(self, lde):
         pass
 
     @abstractmethod
-    def elements(self):
+    def intervalRemoved(self, lde):
         pass
 
-    def addListDataListener(self, listener):
-        pass
-
-    def removeListDataListener(self, listener):
+    @abstractmethod
+    def contentsChanged(self, lde):
         pass

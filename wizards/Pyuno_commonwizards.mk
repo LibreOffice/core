@@ -74,6 +74,9 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     ui/event/Task.py \
     ui/event/TaskEvent.py \
     ui/event/TaskListener.py \
+    ui/event/ListDataEvent.py \
+    ui/event/ListDataListener.py \
+    ui/event/EventListenerList.py \
 ))
 
 # vim:set noet sw=4 ts=4:
