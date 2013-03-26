@@ -2259,11 +2259,11 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         return *plugin;
 
 #ifndef DISABLE_DYNLOADING
-    #ifdef LIBO_MERGELIBS
-        OUString sFilterLib(SVLIBRARY("merged"));
-    #else
-        OUString sFilterLib(SVLIBRARY("scfilt"));
-    #endif
+#ifdef LIBO_MERGELIBS
+    OUString sFilterLib(SVLIBRARY("merged"));
+#else
+    OUString sFilterLib(SVLIBRARY("scfilt"));
+#endif
     static ::osl::Module aModule;
     bool bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
     if (!bLoaded)
