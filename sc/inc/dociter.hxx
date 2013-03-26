@@ -527,7 +527,7 @@ private:
 
     SCCOL                   nCellCol;
     SCROW                   nCellRow;
-    const ScBaseCell*       pCell;
+    ScBaseCell*             pCell;
     SCCOL                   nAttrCol1;
     SCCOL                   nAttrCol2;
     SCROW                   nAttrRow;
@@ -537,7 +537,8 @@ private:
     SCCOL                   nFoundEndCol;
     SCROW                   nFoundRow;
     const ScPatternAttr*    pFoundPattern;
-    const ScBaseCell*       pFoundCell;
+
+    ScRefCellValue maFoundCell;
 
 public:
             ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
@@ -550,7 +551,7 @@ public:
     SCCOL                   GetEndCol() const       { return nFoundEndCol; }
     SCROW                   GetRow() const          { return nFoundRow; }
     const ScPatternAttr*    GetPattern() const      { return pFoundPattern; }
-    const ScBaseCell*       GetCell() const         { return pFoundCell; }
+    const ScRefCellValue&   GetCell() const;
 };
 
 class ScRowBreakIterator

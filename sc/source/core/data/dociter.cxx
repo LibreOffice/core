@@ -2206,7 +2206,7 @@ bool ScUsedAreaIterator::GetNext()
     {
         if ( IsGreater( nCellCol, nCellRow, nAttrCol1, nAttrRow ) ) // Only attributes at the beginning?
         {
-            pFoundCell = NULL;
+            maFoundCell.clear();
             pFoundPattern = pPattern;
             nFoundRow = nAttrRow;
             nFoundStartCol = nAttrCol1;
@@ -2231,7 +2231,7 @@ bool ScUsedAreaIterator::GetNext()
     }
     else if ( pPattern ) // Just attributes -> take over right away
     {
-        pFoundCell = NULL;
+        maFoundCell.clear();
         pFoundPattern = pPattern;
         nFoundRow = nAttrRow;
         nFoundStartCol = nAttrCol1;
@@ -2242,7 +2242,11 @@ bool ScUsedAreaIterator::GetNext()
 
     if ( bUseCell ) // Cell position
     {
-        pFoundCell = pCell;
+        if (pCell)
+            maFoundCell.assign(*pCell);
+        else
+            maFoundCell.clear();
+
         nFoundRow = nCellRow;
         nFoundStartCol = nFoundEndCol = nCellCol;
     }
@@ -2254,6 +2258,11 @@ bool ScUsedAreaIterator::GetNext()
     }
 
     return bFound;
+}
+
+const ScRefCellValue& ScUsedAreaIterator::GetCell() const
+{
+    return maFoundCell;
 }
 
 //-------------------------------------------------------------------------------

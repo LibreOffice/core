@@ -399,9 +399,8 @@ private:
     bool                mbValue;        /// The cell value.
 };
 
-class ScStringCell;
-class ScEditCell;
 class XclExpHyperlinkHelper;
+class EditTextObject;
 
 /** Represents a text cell record.
 
@@ -417,12 +416,12 @@ public:
     /** Constructs the record from an unformatted Calc string cell. */
     explicit            XclExpLabelCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-                            const ScStringCell& rCell );
+                            const OUString& rStr );
 
     /** Constructs the record from a formatted Calc edit cell. */
     explicit            XclExpLabelCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-                            const ScEditCell& rCell, XclExpHyperlinkHelper& rHlinkHelper );
+                            const EditTextObject* pEditText, XclExpHyperlinkHelper& rHlinkHelper );
 
     /** Returns true if the cell contains multi-line text. */
     virtual bool        IsMultiLineText() const;

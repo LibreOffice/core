@@ -643,25 +643,24 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpLabelCell )
 
 XclExpLabelCell::XclExpLabelCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
-        const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, const ScStringCell& rCell ) :
+        const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, const OUString& rStr ) :
     XclExpSingleCellBase( EXC_ID3_LABEL, 0, rXclPos, nForcedXFId )
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
     XclExpStringRef xText = XclExpStringHelper::CreateCellString(
-        rRoot, rCell.GetString(), pPattern, EXC_STR_DEFAULT, nMaxLen );
+        rRoot, rStr, pPattern, EXC_STR_DEFAULT, nMaxLen);
     Init( rRoot, pPattern, xText );
 }
 
 XclExpLabelCell::XclExpLabelCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-        const ScEditCell& rCell, XclExpHyperlinkHelper& rLinkHelper ) :
+        const EditTextObject* pEditText, XclExpHyperlinkHelper& rLinkHelper ) :
     XclExpSingleCellBase( EXC_ID3_LABEL, 0, rXclPos, nForcedXFId )
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
 
     XclExpStringRef xText;
-    const EditTextObject* pEditText = rCell.GetData();
     if (pEditText)
         xText = XclExpStringHelper::CreateCellString(
             rRoot, *pEditText, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen);
@@ -2301,7 +2300,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         XclAddress aXclPos( static_cast< sal_uInt16 >( nScCol ), static_cast< sal_uInt32 >( nScRow ) );
         sal_uInt16 nLastXclCol = static_cast< sal_uInt16 >( nLastScCol );
 
-        const ScBaseCell* pScCell = aIt.GetCell();
+        const ScRefCellValue& rScCell = aIt.GetCell();
         XclExpCellRef xCell;
 
         const ScPatternAttr* pPattern = aIt.GetPattern();
@@ -2324,12 +2323,11 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
         String aAddNoteText;    // additional text to be appended to a note
 
-        CellType eCellType = pScCell ? pScCell->GetCellType() : CELLTYPE_NONE;
-        switch( eCellType )
+        switch (rScCell.meType)
         {
             case CELLTYPE_VALUE:
             {
-                double fValue = static_cast< const ScValueCell* >( pScCell )->GetValue();
+                double fValue = rScCell.mfValue;
 
                 // try to create a Boolean cell
                 if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
@@ -2355,18 +2353,16 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
             case CELLTYPE_STRING:
             {
-                const ScStringCell& rScStrCell = *static_cast< const ScStringCell* >( pScCell );
-                xCell.reset( new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScStrCell ) );
+                xCell.reset(new XclExpLabelCell(
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, *rScCell.mpString));
             }
             break;
 
             case CELLTYPE_EDIT:
             {
-                const ScEditCell& rScEditCell = *static_cast< const ScEditCell* >( pScCell );
                 XclExpHyperlinkHelper aLinkHelper( GetRoot(), aScPos );
-                xCell.reset( new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScEditCell, aLinkHelper ) );
+                xCell.reset(new XclExpLabelCell(
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.mpEditText, aLinkHelper));
 
                 // add a single created HLINK record to the record list
                 if( aLinkHelper.HasLinkRecord() )
@@ -2379,10 +2375,9 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
             case CELLTYPE_FORMULA:
             {
-                const ScFormulaCell& rScFmlaCell = *static_cast< const ScFormulaCell* >( pScCell );
-                xCell.reset( new XclExpFormulaCell(
+                xCell.reset(new XclExpFormulaCell(
                     GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
-                    rScFmlaCell, maArrayBfr, maShrfmlaBfr, maTableopBfr ) );
+                    *rScCell.mpFormula, maArrayBfr, maShrfmlaBfr, maTableopBfr));
             }
             break;
 
