@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -29,19 +30,7 @@
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//// header for function rtl_createUuid
-//#include <rtl/uuid.h>
-//#include <vcl/pdfextoutdevdata.hxx>
-//
-//#include <com/sun/star/lang/XUnoTunnel.hpp>
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-//#include <svtools/embedhlp.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-
 using namespace ::com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
 
 bool ChartHelper::IsChart(const svt::EmbeddedObjectRef& xObjRef)
 {
@@ -129,5 +118,4 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
     return aRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
