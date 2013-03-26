@@ -124,8 +124,9 @@ struct SystemGraphicsData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HDC             hDC;            // handle to a device context
-#elif defined( MACOSX ) || defined( IOS )
+#elif defined( MACOSX )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
+#elif defined( IOS )
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
@@ -139,7 +140,8 @@ struct SystemGraphicsData
         : nSize( sizeof( SystemGraphicsData ) )
 #if defined( WNT )
         , hDC( 0 )
-#elif defined( MACOSX ) || defined( IOS )
+#elif defined( MACOSX )
+#elif defined( IOS )
 #elif defined( UNX )
         , pDisplay( NULL )
         , hDrawable( 0 )
