@@ -48,7 +48,7 @@
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
-#elif defined __SINPRO_CC
+#elif defined __SUNPRO_CC
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
