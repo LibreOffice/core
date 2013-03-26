@@ -183,6 +183,9 @@ public:
 
     void Clear();
 
+    // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
+    void updateItems(const std::vector<ThumbnailViewItem *> &items);
+
     size_t GetItemPos( sal_uInt16 nItemId ) const;
 
     sal_uInt16 GetItemId( size_t nPos ) const;

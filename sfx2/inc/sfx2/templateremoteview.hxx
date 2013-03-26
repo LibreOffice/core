@@ -25,6 +25,10 @@ public:
 
     virtual ~TemplateRemoteView ();
 
+    virtual void showRootRegion ();
+
+    virtual void showRegion (ThumbnailViewItem *pItem);
+
     bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
 
     virtual sal_uInt16 createRegion (const OUString &rName);

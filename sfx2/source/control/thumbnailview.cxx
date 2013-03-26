@@ -596,12 +596,13 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             if ( rMEvt.GetClicks() == 1 )
             {
                 if (pItem->isSelected() && rMEvt.IsMod1())
-                    DeselectItem( pItem->mnId );
+                    pItem->setSelection(false);
                 else
                 {
                     if (!pItem->isSelected() && !rMEvt.IsMod1())
                         deselectItems( );
-                    SelectItem( pItem->mnId );
+
+                    pItem->setSelection(true);
 
                     bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
                     pItem->setEditTitle(bClickOnTitle);
@@ -803,6 +804,13 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
     if ( nPos < mItemList.size() ) {
         ValueItemList::iterator it = mItemList.begin();
         ::std::advance( it, nPos );
+
+        if ((*it)->isSelected())
+        {
+            (*it)->setSelection(false);
+            maItemStateHdl.Call(*it);
+        }
+
         delete *it;
         mItemList.erase( it );
     }
@@ -831,6 +839,21 @@ void ThumbnailView::Clear()
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
+}
+
+void ThumbnailView::updateItems (const std::vector<ThumbnailViewItem*> &items)
+{
+    ImplDeleteItems();
+
+    // reset variables
+    mnFirstLine     = 0;
+    mnHighItemId    = 0;
+
+    mItemList = items;
+
+    CalculateItemPositions();
+
+    Invalidate();
 }
 
 size_t ThumbnailView::GetItemPos( sal_uInt16 nItemId ) const
