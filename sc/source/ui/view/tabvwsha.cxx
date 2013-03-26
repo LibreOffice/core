@@ -102,7 +102,7 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
                 aStr += '0';
             else
             {
-                //  Anzahl im Standardformat, die anderen nach Cursorposition
+                // Number in the standard format, the other on the cursor position
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 sal_uInt32 nNumFmt = 0;
                 if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
@@ -137,7 +137,7 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 
 
 
-//  Funktionen, die je nach Selektion disabled sind
+//  Functions that are disabled, depending on the selection
 //  Default:
 //      SID_DELETE,
 //      SID_DELETE_CONTENTS,
@@ -223,8 +223,10 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_SEARCH_OPTIONS:
                 {
-                    sal_uInt16 nOptions = 0xffff;       // alles erlaubt
-                                                    // wenn ReadOnly, kein Ersetzen:
+                    // Anything goes
+                    sal_uInt16 nOptions = 0xffff;
+
+                    // No replacement if ReadOnly
                     if (GetViewData()->GetDocShell()->IsReadOnly())
                         nOptions &= ~( SEARCH_OPTIONS_REPLACE | SEARCH_OPTIONS_REPLACE_ALL );
                     rSet.Put( SfxUInt16Item( nWhich, nOptions ) );
@@ -243,7 +245,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_CURRENTTAB:
-                //  Tabelle fuer Basic ist 1-basiert
+                // Table for Basic is 1-based
                 rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData()->GetTabNo()) + 1 ) );
                 break;
 
@@ -272,7 +274,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_RESET_PRINTZOOM:
                 {
-                    //  disablen, wenn schon Default eingestellt
+                    // disable if already set to default
 
                     String aStyleName = pDoc->GetPageStyle( nTab );
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -441,13 +443,13 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_FORMATPAGE:
-                //! bei geschuetzten Tabellen ???
+                // in protected tables
                 if ( pDocShell && ( pDocShell->IsReadOnly() || pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_PRINTPREVIEW:
-                // Toggle-Slot braucht einen State
+                // Toggle slot needs a State
                 rSet.Put( SfxBoolItem( nWhich, false ) );
                 break;
 
@@ -480,7 +482,7 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
                                                     pOldAttrs->GetItemSet() );
 
 
-    // Umrandungs-Items holen und in den Set packen:
+    // Get border items and put them in the set:
     GetSelectionFrame( aLineOuter, aLineInner );
     //Fix border incorrect for RTL fdo#62399
     if( pDoc->IsLayoutRTL( GetViewData()->GetTabNo() ) )
@@ -502,7 +504,7 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
 
     pOldSet->Put( aLineInner );
 
-    // NumberFormat Value aus Value und Language erzeugen und eintueten
+    // Generate NumberFormat Value from Value and Language and box it.
     pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
         pOldAttrs->GetNumberFormat( pDoc->GetFormatTable() ) ) );
 
@@ -708,9 +710,9 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
 
 void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
-    //  nur SID_SAVEDOC / SID_SAVEASDOC
+    // only SID_SAVEDOC / SID_SAVEASDOC
 
-    // Eingabe auf jeden Fall abschliessen, auch wenn eine Formel bearbeitet wird
+    // Finish entering in any case, even if a formula is being processed
     SC_MOD()->InputEnterHandler();
 
     if ( GetViewData()->GetDocShell()->IsDocShared() )
@@ -718,7 +720,7 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
         GetViewData()->GetDocShell()->SetDocumentModified();
     }
 
-    // ansonsten normal weiter
+    // otherwise as normal
     GetViewData()->GetDocShell()->ExecuteSlot( rReq );
 }
 
