@@ -83,21 +83,6 @@ const ne_uri g_sUriDefaultsFTP   = { "ftp",
 // Constructor
 // -------------------------------------------------------------------
 
-namespace {
-
-//TODO! rtl::OString::matchIgnoreAsciiCaseAsciiL() missing
-inline bool matchIgnoreAsciiCase(rtl::OString const & rStr1,
-                                 sal_Char const * pStr2,
-                                 sal_Int32 nStr2Len) SAL_THROW(())
-{
-    return
-        rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
-                rStr1.getStr(), rStr1.getLength(), pStr2, nStr2Len, nStr2Len)
-            == 0;
-}
-
-}
-
 NeonUri::NeonUri( const ne_uri * inUri )
     throw ( DAVException )
 {
