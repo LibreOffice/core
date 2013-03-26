@@ -126,13 +126,18 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
     SvMemoryStream aMemStream;
     const GraphicConversionParameters aParameters(aTargetSizePixel, true, true);
 
-    sal_uInt16 aResult =  rFilter.ExportGraphic( aGraphic.GetBitmapEx(aParameters), String(), aMemStream, nFilterFormat, &aFilterData );
+    const sal_uInt16 nResult = rFilter.ExportGraphic( aGraphic.GetBitmapEx(aParameters), String(), aMemStream, nFilterFormat, &aFilterData );
 
-    SvOutputStream aOutputStream( mxOutputStream );
-    aMemStream.Seek(0);
-    aOutputStream << aMemStream;
+    if ( nResult == GRFILTER_OK )
+    {
+        SvOutputStream aOutputStream( mxOutputStream );
+        aMemStream.Seek(0);
+        aOutputStream << aMemStream;
 
-    return true;
+        return true;
+    }
+
+    return false;
 }
 
 void SAL_CALL GraphicExportFilter::cancel( ) throw (RuntimeException)
