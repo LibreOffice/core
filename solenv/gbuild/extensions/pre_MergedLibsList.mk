@@ -45,6 +45,7 @@ gb_MERGEDLIBS := \
 	filterconfig \
 	for \
 	forui \
+	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \
 	fsstorage \
 	fwe \
 	fwi \

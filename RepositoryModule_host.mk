@@ -79,7 +79,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	fileaccess \
 	filter \
 	$(call gb_Helper_optional,FONTCONFIG,fontconfig) \
-	forms \
+	$(call gb_Helper_optional,DBCONNECTIVITY,forms) \
 	formula \
 	fpicker \
 	framework \
