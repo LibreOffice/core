@@ -26,9 +26,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/implbase3.hxx>
-#ifndef __com_sun_star_awt_Rectangle_hpp_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
