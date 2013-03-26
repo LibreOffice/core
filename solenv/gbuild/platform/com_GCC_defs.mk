@@ -100,8 +100,8 @@ endif
 endif
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
-gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
+gb_CFLAGS_WERROR := -Werror
+gb_CXXFLAGS_WERROR := -Werror
 endif
 
 ifeq ($(MERGELIBS),TRUE)
