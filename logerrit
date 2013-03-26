@@ -81,6 +81,7 @@ case "$1" in
         exit
     ;;
     setup)
+        cd $(dirname $(readlink -f $0))
         echo "Please go to https://gerrit.libreoffice.org/ and:"
         echo "- press the 'register' button in the top right corner"
         echo "- after login set yourself a username (its recommended to use your IRC-nick)"
@@ -106,6 +107,8 @@ case "$1" in
         echo "    HostName gerrit.libreoffice.org"
         echo
         echo "To see if your setup was successful, run './logerrit test' then."
+        # a good place to make sure the hooks are set up
+        ./g -z
     ;;
     test)
         if test -n "`ssh $GERRITHOST 2>&1|grep \"Welcome to Gerrit Code Review\"`"
