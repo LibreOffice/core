@@ -289,11 +289,8 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
 }
 
 bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_uInt16 nSrcItem,
-                                       const sal_uInt16 nTargetItem, bool bCopy)
+                                       const sal_uInt16 nTargetItem)
 {
-    bool bRet = true;
-    bool bRefresh = false;
-
     TemplateContainerItem *pTarget = NULL;
     TemplateContainerItem *pSrc = NULL;
 
@@ -313,16 +310,13 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
 
         const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(pItem);
 
-        bool bOK;
+        bool bCopy = !mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId);
 
         if (bCopy)
-            bOK = mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
-        else
-            bOK = mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
-
-        if (!bOK)
-            return false;
-
+        {
+            if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
+                return false;
+        }
         // move template to destination
 
         TemplateItemProperties aTemplateItem;
@@ -340,37 +334,45 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
             // remove template from region cached data
 
             std::vector<TemplateItemProperties>::iterator aIter;
-            for (aIter = pSrc->maTemplates.begin(); aIter != pSrc->maTemplates.end(); ++aIter)
+            for (aIter = pSrc->maTemplates.begin(); aIter != pSrc->maTemplates.end();)
             {
-                if (aIter->nId == pViewItem->mnId)
+                if (aIter->nDocId == pViewItem->mnDocId)
                 {
-                    pSrc->maTemplates.erase(aIter);
-
-                    RemoveItem(pViewItem->mnId);
-                    break;
+                    aIter = pSrc->maTemplates.erase(aIter);
                 }
+                else
+                {
+                    // Keep region document id syncronized with SfxDocumentTemplates
+                    if (aIter->nDocId > pViewItem->mnDocId)
+                        --aIter->nDocId;
+
+                    ++aIter;
+                }
+            }
+
+            // Keep view document id syncronized with SfxDocumentTemplates
+            std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
+            for (; pItemIter != mItemList.end(); ++pItemIter)
+            {
+                if (static_cast<TemplateViewItem*>(*pItemIter)->mnDocId > pViewItem->mnDocId)
+                    --static_cast<TemplateViewItem*>(*pItemIter)->mnDocId;
             }
         }
 
-        bRefresh = true;
-    }
-    else
-        bRet = false;
-
-    if (bRefresh)
-    {
         lcl_updateThumbnails(pSrc);
         lcl_updateThumbnails(pTarget);
 
         CalculateItemPositions();
         Invalidate();
+
+        return true;
     }
 
-    return bRet;
+    return false;
 }
 
 bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, selection_cmp_fn> &rItems,
-                                      const sal_uInt16 nTargetItem, bool bCopy)
+                                      const sal_uInt16 nTargetItem)
 {
     bool ret = true;
     bool refresh = false;
@@ -400,17 +402,15 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
         {
             const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
 
-            bool bOK;
+            bool bCopy = !mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId);
 
             if (bCopy)
-                bOK = mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
-            else
-                bOK = mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
-
-            if (!bOK)
             {
-                ret = false;
-                continue;
+                if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
+                {
+                    ret = false;
+                    continue;
+                }
             }
 
             // move template to destination
@@ -429,15 +429,30 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             {
                 // remove template from region cached data
 
-                std::vector<TemplateItemProperties>::iterator pIter;
-                for (pIter = pSrc->maTemplates.begin(); pIter != pSrc->maTemplates.end(); ++pIter)
+                std::vector<TemplateItemProperties>::iterator pPropIter;
+                for (pPropIter = pSrc->maTemplates.begin(); pPropIter != pSrc->maTemplates.end();)
                 {
-                    if (pIter->nId == pViewItem->mnId)
+                    if (pPropIter->nDocId == pViewItem->mnDocId)
                     {
-                        pSrc->maTemplates.erase(pIter);
+                        pPropIter = pSrc->maTemplates.erase(pPropIter);
                         aItemIds.push_back(pViewItem->mnId);
-                        break;
                     }
+                    else
+                    {
+                        // Keep region document id syncronized with SfxDocumentTemplates
+                        if (pPropIter->nDocId > pViewItem->mnDocId)
+                            --pPropIter->nDocId;
+
+                        ++pPropIter;
+                    }
+                }
+
+                // Keep view document id syncronized with SfxDocumentTemplates
+                std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
+                for (; pItemIter != mItemList.end(); ++pItemIter)
+                {
+                    if (static_cast<TemplateViewItem*>(*pItemIter)->mnDocId > pViewItem->mnDocId)
+                        --static_cast<TemplateViewItem*>(*pItemIter)->mnDocId;
                 }
             }
 
