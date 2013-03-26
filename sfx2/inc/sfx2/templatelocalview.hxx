@@ -13,7 +13,6 @@
 #include <set>
 
 #include <sfx2/templateabstractview.hxx>
-#include <sfx2/templateproperties.hxx>
 
 class SfxDocumentTemplates;
 class TemplateContainerItem;
@@ -26,6 +25,8 @@ namespace com {
 
 class SFX2_DLLPUBLIC TemplateLocalView : public TemplateAbstractView
 {
+    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
+
 public:
 
     TemplateLocalView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
@@ -36,6 +37,12 @@ public:
     virtual void Populate ();
 
     virtual void reload ();
+
+    virtual void showRootRegion ();
+
+    virtual void showRegion (ThumbnailViewItem *pItem);
+
+    sal_uInt16 getRegionId (size_t pos) const;
 
     std::vector<OUString> getFolderNames ();
 
@@ -51,7 +58,7 @@ public:
     bool moveTemplate (const ThumbnailViewItem* pItem, const sal_uInt16 nSrcItem,
                        const sal_uInt16 nTargetItem, bool bCopy);
 
-    bool moveTemplates (std::set<const ThumbnailViewItem*> &rItems, const sal_uInt16 nTargetItem, bool bCopy);
+    bool moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem, bool bCopy);
 
     bool copyFrom (const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail, const OUString &rPath);
 
@@ -74,6 +81,7 @@ public:
 private:
 
     SfxDocumentTemplates *mpDocTemplates;
+    std::vector<TemplateContainerItem* > maRegions;
 };
 
 #endif // TEMPLATEFOLDERVIEW_HXX
