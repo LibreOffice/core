@@ -31,6 +31,7 @@
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
+#include <jvmaccess/virtualmachine.hxx>
 #include <rtl/process.h>
 
 using namespace ::comphelper;

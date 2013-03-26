@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
 #include <rtl/ref.hxx>

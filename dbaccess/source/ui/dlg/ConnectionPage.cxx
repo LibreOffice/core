@@ -22,6 +22,7 @@
 #include "ConnectionPage.hrc"
 #include "dbu_dlg.hrc"
 #include "dsmeta.hxx"
+#include <jvmaccess/virtualmachine.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/stritem.hxx>

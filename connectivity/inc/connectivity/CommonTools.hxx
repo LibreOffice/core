@@ -19,6 +19,7 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #define _CONNECTIVITY_COMMONTOOLS_HXX_
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -30,7 +31,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <osl/interlck.h>
-#include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "connectivity/dbtoolsdllapi.hxx"
 
@@ -40,6 +40,7 @@ namespace com { namespace sun { namespace star { namespace util {
     struct Time;
 }
 }}}
+namespace jvmaccess { class VirtualMachine; }
 
 namespace connectivity
 {
