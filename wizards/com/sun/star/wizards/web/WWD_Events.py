@@ -956,6 +956,7 @@ class WWD_Events(WWD_Startup):
 
             for i in range(start, len(self.files)):
                 doc = CGDocument()
+                doc.root = self.parent.settings
 
                 if start == 0:
                     doc.cp_URL = self.files[i]
