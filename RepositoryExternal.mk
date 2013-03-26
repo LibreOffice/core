@@ -2554,7 +2554,7 @@ $(call gb_ExternalProject_use_external_project,$(1),apache_commons_httpclient)
 endef
 
 define gb_Jar__use_commons-lang
-$(call gb_Jar_use_jar,$(1),commons-lang-2.3)
+$(call gb_Jar_use_jar,$(1),commons-lang-2.4)
 endef
 define gb_ExternalProject__use_commons-lang
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_lang)
