@@ -312,7 +312,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
     for ( n = 0; n < WW8ListManager::nMaxLevel; ++n )
         aNumVector.push_back( n );
 
-    StarSymbolToMSMultiFont *pConvert = 0;
     for( n = 0; n < nCount; ++n )
     {
         AttrOutput().StartAbstractNumbering( n + 1 );
@@ -499,7 +498,6 @@ void MSWordExportBase::AbstractNumberingDefinitions()
         }
         AttrOutput().EndAbstractNumbering();
     }
-    delete pConvert;
 }
 
 void WW8Export::OutOverrideListTab()
