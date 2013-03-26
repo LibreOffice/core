@@ -1366,8 +1366,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
     {
         // Move templates to desired folder if for some reason move fails
         // try copying them.
-        if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
-                !maView->moveTemplates(maSelTemplates,nItemId,true))
+        if (!maView->moveTemplates(maSelTemplates,nItemId))
         {
             OUString aTemplateList;
 
@@ -1472,13 +1471,14 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
         // Move templates to desired folder if for some reason move fails
         // try copying them.
         std::set<const ThumbnailViewItem*>::const_iterator aIter;
-        for (aIter = maSelTemplates.begin(); aIter != maSelTemplates.end(); ++aIter)
+        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Copy to avoid invalidating an iterator
+
+        for (aIter = aSelTemplates.begin(); aIter != aSelTemplates.end(); ++aIter)
         {
             const TemplateSearchViewItem *pItem =
                     static_cast<const TemplateSearchViewItem*>(*aIter);
 
-            if(!maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,false)
-                    && !maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,true))
+            if(!maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId))
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = (*aIter)->maTitle;
