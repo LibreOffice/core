@@ -541,7 +541,7 @@ sal_Int32 PresenterScreen::GetScreenNumber (
             // is set.
             PresenterConfigurationAccess aConfiguration (
                 xContext,
-                OUString::createFromAscii("/org.openoffice.Office.PresenterScreen/"),
+                OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
             if (aConfiguration.GetConfigurationNode(
@@ -704,7 +704,7 @@ void PresenterScreen::SetupConfiguration (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString::createFromAscii("org.openoffice.Office.PresenterScreen"),
+            OUString::createFromAscii("org.openoffice.Office.extension.PresenterScreen"),
             PresenterConfigurationAccess::READ_ONLY);
         maViewDescriptors.clear();
         ProcessViewDescriptions(aConfiguration);

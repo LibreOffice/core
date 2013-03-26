@@ -20,47 +20,28 @@
 #**************************************************************
 
 
-PRJ=..$/..$/..$/..
 
-PRJNAME=officecfg
-TARGET=data_oopenoffice
-PACKAGE=org.openoffice
+PRJ=..$/..$/..$/..$/..$/..$/..$/..
+
+PRJNAME=sdext
+TARGET=data_ooOfficeext
+PACKAGE=org.openoffice.Office.extension
+EXTENSIONNAME=PresenterScreen
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+XCSROOT=$(PRJ)$/source$/presenter
+ABSXCSROOT=$(PWD)/$(PRJ)$/source$/presenter
+
 # --- Targets ------------------------------------------------------
 
 XCUFILES= \
-    Inet.xcu \
-    Setup.xcu \
-    System.xcu \
-    VCL.xcu \
-    FirstStartWizard.xcu \
-    UserProfile.xcu \
-    Interaction.xcu
+    PresenterScreen.xcu
 
-MODULEFILES= \
-    Inet-macosx.xcu \
-    Inet-unixdesktop.xcu \
-    Inet-wnt.xcu \
-    Setup-brand.xcu \
-    Setup-writer.xcu   \
-    Setup-calc.xcu   \
-    Setup-draw.xcu   \
-    Setup-impress.xcu   \
-    Setup-base.xcu   \
-    Setup-math.xcu \
-    Setup-report.xcu \
-    Setup-start.xcu \
-    UserProfile-gconflockdown.xcu \
-    VCL-gconflockdown.xcu \
-    VCL-unixdesktop.xcu
+MODULEFILES=
 
-LOCALIZEDFILES=Setup.xcu
+LOCALIZEDFILES= \
+    PresenterScreen.xcu
 
 .INCLUDE :  target.mk
-
-LANGUAGEPACKS=$(MISC)$/registry$/spool$/Langpack-{$(alllangiso)}.xcu
-
-ALLTAR : $(LANGUAGEPACKS)

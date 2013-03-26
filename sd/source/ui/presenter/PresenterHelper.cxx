@@ -35,7 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/imagerepository.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -264,17 +263,18 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
 
     if (pCanvas.get()!=NULL && rsURL.getLength()>0 && mpGraphicFilter.get()!=NULL)
     {
-        sal_Int32 nIndex = 0;
-        if( rsURL.getToken( 0, '/', nIndex ).equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( "private:graphicrepository" ) ) )
+        Graphic aGraphic;
+        OUString sFileName;
+        if (osl::FileBase::getSystemPathFromFileURL(rsURL, sFileName)
+            == osl::FileBase::E_None)
         {
-            OUString sPathName( rsURL.copy( nIndex ) );
-            BitmapEx aBitmap;
-            if ( ::vcl::ImageRepository::loadImage( sPathName, aBitmap, false )
-                && !aBitmap.IsEmpty() )
+            if (mpGraphicFilter->ImportGraphic(aGraphic, rsURL) == GRFILTER_OK)
+            {
+                BitmapEx aBitmapEx (aGraphic.GetBitmapEx());
                 return cppcanvas::VCLFactory::getInstance().createBitmap(
                     pCanvas,
-                    aBitmap)->getUNOBitmap();
+                    aBitmapEx)->getUNOBitmap();
+            }
         }
     }
 

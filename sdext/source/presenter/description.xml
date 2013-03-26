@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+<description
+
+  xmlns="http://openoffice.org/extensions/description/2006"
+  xmlns:dep="http://openoffice.org/extensions/description/2006"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <identifier value="com.sun.PresenterScreen-UPDATED_SUPPORTED_PLATFORM" />
+
+  <dependencies>
+    <OpenOffice.org-minimal-version value="4.0" dep:name="OpenOffice"/>
+    <OpenOffice.org-maximal-version value="4.9" dep:name="OpenOffice"/>
+  </dependencies>
+
+  <registration>
+    <simple-license accept-by="admin" default-license-id="lic-en-US" suppress-if-required="true" >
+      <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
+    </simple-license>
+  </registration>
+
+  <version value="1.2.0"/>
+
+  <platform value="UPDATED_SUPPORTED_PLATFORM" />
+
+  <publisher>
+      <name xlink:href="http://www.openoffice.org" lang="en">Apache Software Foundation</name>
+  </publisher>
+
+  <display-name>
+    <name lang="en">Presenter Console</name>
+  </display-name>
+
+  <icon>
+    <default xlink:href="bitmaps/extension_32.png" />
+    <high-contrast xlink:href="bitmaps/extension_32_h.png" />
+  </icon>
+
+</description>

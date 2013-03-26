@@ -21,7 +21,7 @@
  ***********************************************************-->
 
 
-<oor:component-schema xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office" oor:name="PresenterScreen">
+<oor:component-schema xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office.extension" oor:name="PresenterScreen">
   <info>
     <author>AF</author>
     <desc>Configuration of the Presenter Screen extension.</desc>
@@ -159,7 +159,6 @@
       </prop>
     </group>
     <group oor:name="ToolBarDescription">
-      <info><desc>Describes a ToolBar.</desc></info>
       <node-ref oor:name="Font" oor:node-type="Font">
         <info><desc>Font used for displaying the text.</desc></info>
       </node-ref>
@@ -174,7 +173,6 @@
       </prop>
     </group>
     <group oor:name="ToolBarEntry">
-      <info><desc>Describes a ToolBar entry.</desc></info>
       <prop oor:name="Name" oor:type="xs:string">
         <info><desc>Name of the entry.  May be used to have mode dependant entries.</desc></info>
       </prop>
@@ -201,7 +199,6 @@
       </set>
     </group>
     <group oor:name="Button">
-      <info><desc>Describes a Button.</desc></info>
       <prop oor:name="Name" oor:type="xs:string">
         <info><desc>Name of the button that is used to look up the button.</desc></info>
       </prop>
@@ -219,7 +216,6 @@
       </prop>
     </group>
     <group oor:name="HelpEntry">
-      <info><desc>Describes a Help entry.</desc></info>
       <prop oor:name="Left" oor:type="xs:string">
         <info><desc>Typically a list of keyboard key names.</desc></info>
       </prop>
@@ -288,9 +284,8 @@
       </prop>
     </group>
     <group oor:name="PresenterString">
-      <info><desc>A Presenter string</desc></info>
+      <info><desc></desc></info>
       <prop oor:name="String" oor:type="xs:string">
-        <info><desc>The localized string.</desc></info>
       </prop>
     </group>
     <group oor:name="ViewDescription">

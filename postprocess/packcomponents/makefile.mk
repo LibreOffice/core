@@ -175,8 +175,7 @@ my_components = \
     xmx \
     xsltdlg \
     xstor \
-    PresentationMinimizer \
-    PresenterScreen
+    PresentationMinimizer
 
 .IF "$(OS)" == "MACOSX"
 my_components += component/vcl/vcl.macosx

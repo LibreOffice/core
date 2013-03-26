@@ -25,6 +25,7 @@
 #include "precompiled_sdext.hxx"
 
 #include "PresenterClock.hxx"
+#include "PresenterComponent.hxx"
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
@@ -201,6 +202,7 @@ namespace {
         void LoadBitmap (
             const OUString& rsKey,
             const ::std::vector<Any>& rValues,
+            const OUString& rsBitmapPath,
             const Reference<container::XNameAccess>& rxBitmapLoader);
         void ScaleBitmaps (void);
     };
@@ -1034,7 +1036,7 @@ void AnalogBitmapPainter::PrepareBitmaps (const Reference<rendering::XCanvas>& r
         // Get access to the clock bitmaps in the configuration.
         PresenterConfigurationAccess aConfiguration (
             mxComponentContext,
-            OUString::createFromAscii("org.openoffice.Office.PresenterScreen"),
+            OUString::createFromAscii("org.openoffice.Office.extension.PresenterScreen"),
             PresenterConfigurationAccess::READ_ONLY);
 
         Reference<container::XNameAccess> xTheme (GetTheme(aConfiguration));
@@ -1116,6 +1118,17 @@ void AnalogBitmapPainter::LoadBitmaps (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
     (void)rConfiguration;
+
+    // Get base path to bitmaps.
+    Reference<deployment::XPackageInformationProvider> xInformationProvider (
+        mxComponentContext->getValueByName(OUString::createFromAscii(
+            "/singletons/com.sun.star.deployment.PackageInformationProvider")),
+        UNO_QUERY);
+    OUString sLocation;
+    if (xInformationProvider.is())
+        sLocation = xInformationProvider->getPackageLocation(gsExtensionIdentifier);
+    sLocation += OUString::createFromAscii("/");
+
     // Create the bitmap loader.
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY);
@@ -1148,6 +1161,7 @@ void AnalogBitmapPainter::LoadBitmaps (
             this,
             _1,
             _2,
+            sLocation,
             xBitmapLoader));
 }
 
@@ -1157,6 +1171,7 @@ void AnalogBitmapPainter::LoadBitmaps (
 void AnalogBitmapPainter::LoadBitmap (
     const OUString& rsKey,
     const ::std::vector<Any>& rValues,
+    const OUString& rsBitmapPath,
     const Reference<container::XNameAccess>& rxBitmapLoader)
 {
     if (rValues.size() == 3)
@@ -1180,7 +1195,7 @@ void AnalogBitmapPainter::LoadBitmap (
         rValues[2] >>= pDescriptor->maOffset.Y;
 
         pDescriptor->mxBitmap = Reference<rendering::XBitmap>(
-            rxBitmapLoader->getByName(sFileName), UNO_QUERY);
+            rxBitmapLoader->getByName(rsBitmapPath+sFileName), UNO_QUERY);
 
         if ( ! pDescriptor->mxBitmap.is())
             mbThemeLoadingFailed = true;

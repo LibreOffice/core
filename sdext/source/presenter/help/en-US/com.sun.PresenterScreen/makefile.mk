@@ -20,47 +20,28 @@
 #**************************************************************
 
 
-PRJ=..$/..$/..$/..
 
-PRJNAME=officecfg
-TARGET=data_oopenoffice
-PACKAGE=org.openoffice
+PRJ=../../../../..
+PRJNAME=sdext
+TARGET=PresenterScreenHelp
+EXTNAME=PresenterScreen
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+PACKAGE = com.sun.PresenterScreen
 
-# --- Targets ------------------------------------------------------
+# --- Settings ----------------------------------
 
-XCUFILES= \
-    Inet.xcu \
-    Setup.xcu \
-    System.xcu \
-    VCL.xcu \
-    FirstStartWizard.xcu \
-    UserProfile.xcu \
-    Interaction.xcu
+.INCLUDE : settings.mk
 
-MODULEFILES= \
-    Inet-macosx.xcu \
-    Inet-unixdesktop.xcu \
-    Inet-wnt.xcu \
-    Setup-brand.xcu \
-    Setup-writer.xcu   \
-    Setup-calc.xcu   \
-    Setup-draw.xcu   \
-    Setup-impress.xcu   \
-    Setup-base.xcu   \
-    Setup-math.xcu \
-    Setup-report.xcu \
-    Setup-start.xcu \
-    UserProfile-gconflockdown.xcu \
-    VCL-gconflockdown.xcu \
-    VCL-unixdesktop.xcu
+.IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
+do_nothing:
+    @echo "Presenter Screen build disabled."
+.ELSE
 
-LOCALIZEDFILES=Setup.xcu
+XHPFILES= \
+    presenter.xhp
 
-.INCLUDE :  target.mk
 
-LANGUAGEPACKS=$(MISC)$/registry$/spool$/Langpack-{$(alllangiso)}.xcu
+.INCLUDE : target.mk
+.INCLUDE : tg_help.mk
 
-ALLTAR : $(LANGUAGEPACKS)
+.ENDIF

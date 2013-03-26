@@ -121,10 +121,6 @@ MY_FILES_impress = \
     $(MY_MOD)/fcfg_impress_types.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-impress.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-impress.xcu \
-    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-presenterscreen.xcu \
-    $(MY_MOD)/org/openoffice/Office/ProtocolHandler/ProtocolHandler-presenterscreen.xcu \
-    $(MY_XCS)/Office/PresenterScreen.xcs \
-    $(MY_XCU)/Office/PresenterScreen.xcu \
     $(MY_MOD)/org/openoffice/Setup-impress.xcu
 
 MY_FILES_korea = \

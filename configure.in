@@ -519,6 +519,9 @@ AC_ARG_WITH(beanshell-jar,
 [  --with-beanshell-jar=JARFILE   Specify path to jarfile manually ],
 [ BSH_JAR="$withval"
 ])
+AC_ARG_ENABLE(presenter-screen,
+[  --enable-presenter-screen           enables the build of the Presenter Screen extension
+],,)
 AC_ARG_ENABLE(pdfimport,
 [  --enable-pdfimport          enables the build of the PDF Import extension
 ],,)
@@ -6408,6 +6411,16 @@ fi
 AC_SUBST(ENABLE_OPENGL)
 
 
+AC_MSG_CHECKING([whether to build the Presenter Screen extension])
+if test -n "$enable_presenter_screen" -a "$enable_presenter_screen" != "no"; then
+   AC_MSG_RESULT([yes])
+   ENABLE_PRESENTER_SCREEN=YES
+else
+   AC_MSG_RESULT([no])
+   ENABLE_PRESENTER_SCREEN=NO
+fi
+AC_SUBST(ENABLE_PRESENTER_SCREEN)
+
 AC_MSG_CHECKING([whether to build the PDF Import extension])
 if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   AC_MSG_RESULT([yes])
@@ -6435,6 +6448,16 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
+
+if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
+  AC_MSG_CHECKING([for sdext module])
+  if test -d ./sdext; then
+   AC_MSG_RESULT([OK])
+  else
+   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+  fi
+  BUILD_TYPE="$BUILD_TYPE SDEXT"
+fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test  "$WITH_JAVA" != "no"; then

@@ -34,13 +34,13 @@
 # Some extensions that are installed indepently of the language.
 
 # the presenter console extension
-# [ language=all && ENABLE_XXX ]
-#    file://XXX.oxt
+[ language=all && ENABLE_PRESENTER_SCREEN=YES ]
+    file://presenter/presenter-screen.oxt
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
     b7ce02d25eb302e5b23572cdccaea461 http://numbertext.org/tmp/dict-en.oxt
-
+    
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
     e2eab80772ab1aa09716954219351a80 http://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "en_US.oxt"

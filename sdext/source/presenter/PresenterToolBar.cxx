@@ -28,6 +28,7 @@
 
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
+#include "PresenterComponent.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterPaneBase.hxx"
@@ -126,6 +127,7 @@ class PresenterToolBar::Context
     : private ::boost::noncopyable
 {
 public:
+    ::rtl::OUString msBasePath;
     Reference<drawing::XPresenterHelper> mxPresenterHelper;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 };
@@ -771,8 +773,10 @@ void PresenterToolBar::CreateControls (
     // Expand the macro in the bitmap file names.
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString::createFromAscii("/org.openoffice.Office.PresenterScreen/"),
+        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
         PresenterConfigurationAccess::READ_ONLY);
+
+    const OUString sBasePath (PresenterComponent::GetBasePath(mxComponentContext));
 
     mpCurrentContainerPart.reset(new ElementContainerPart());
     maElementContainer.clear();
@@ -787,6 +791,7 @@ void PresenterToolBar::CreateControls (
             PresenterConfigurationAccess::GetConfigurationNode(xToolBarNode, A2S("Entries")),
             UNO_QUERY);
         Context aContext;
+        aContext.msBasePath = sBasePath;
         aContext.mxPresenterHelper = mpPresenterController->GetPresenterHelper();
         aContext.mxCanvas = mxCanvas;
         if (xEntries.is()
@@ -1663,6 +1668,7 @@ void ElementMode::ReadElementMode (
         xIconNode,
         A2S(""),
         rContext.mxPresenterHelper,
+        rContext.msBasePath,
         rContext.mxCanvas,
         rpDefaultMode.get()!=NULL ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
     }

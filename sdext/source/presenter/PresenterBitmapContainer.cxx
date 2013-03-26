@@ -25,6 +25,7 @@
 #include "precompiled_sdext.hxx"
 
 #include "PresenterBitmapContainer.hxx"
+#include "PresenterComponent.hxx"
 #include "PresenterConfigurationAccess.hxx"
 
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
@@ -68,9 +69,11 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     const ::boost::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    const OUString& rsBasePath,
     const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper)
     : mpParentContainer(rpParentContainer),
       maIconContainer(),
+      msBasePath(rsBasePath),
       mxCanvas(rxCanvas),
       mxPresenterHelper(rxPresenterHelper)
 {
@@ -79,7 +82,7 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     // Get access to the configuration.
     PresenterConfigurationAccess aConfiguration (
         rxComponentContext,
-        A2S("org.openoffice.Office.PresenterScreen"),
+        A2S("org.openoffice.Office.extension.PresenterScreen"),
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XNameAccess> xBitmapList (
         aConfiguration.GetConfigurationNode(rsConfigurationBase),
@@ -97,9 +100,11 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     const ::boost::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    const OUString& rsBasePath,
     const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper)
     : mpParentContainer(rpParentContainer),
       maIconContainer(),
+      msBasePath(rsBasePath),
       mxCanvas(rxCanvas),
       mxPresenterHelper(rxPresenterHelper)
 {
@@ -188,6 +193,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
     const ::rtl::OUString& rsPath,
     const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
+    const OUString& rsBasePath,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const SharedBitmapDescriptor& rpDefault)
 {
@@ -204,6 +210,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
                 pBitmap = LoadBitmap(
                     xBitmapProperties,
                     rxPresenterHelper,
+                    rsBasePath,
                     rxCanvas,
                     rpDefault);
         }
@@ -230,6 +237,7 @@ void PresenterBitmapContainer::ProcessBitmap (
     maIconContainer[sName] = LoadBitmap(
         rxProperties,
         mxPresenterHelper,
+        msBasePath,
         mxCanvas,
         SharedBitmapDescriptor());
 }
@@ -240,6 +248,7 @@ void PresenterBitmapContainer::ProcessBitmap (
 SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     const Reference<beans::XPropertySet>& rxProperties,
     const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
+    const OUString& rsBasePath,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const SharedBitmapDescriptor& rpDefault)
 {
@@ -259,7 +268,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::Normal,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                rxPresenterHelper->loadBitmap(rsBasePath + sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -268,7 +277,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::MouseOver,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                rxPresenterHelper->loadBitmap(rsBasePath + sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -277,7 +286,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::ButtonDown,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                rxPresenterHelper->loadBitmap(rsBasePath + sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -286,7 +295,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::Disabled,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                rxPresenterHelper->loadBitmap(rsBasePath + sFileName, rxCanvas));
         }
         catch (Exception&)
         {}
@@ -295,7 +304,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         {
             pBitmap->SetBitmap(
                 BitmapDescriptor::Mask,
-                rxPresenterHelper->loadBitmap(sFileName, rxCanvas));
+                rxPresenterHelper->loadBitmap(rsBasePath + sFileName, rxCanvas));
         }
         catch (Exception&)
         {}

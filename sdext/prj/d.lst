@@ -1,7 +1,10 @@
+mkdir: %_DEST%\bin%_EXT%\presenter
 mkdir: %_DEST%\bin%_EXT%\pdfimport
 ..\%__SRC%\bin\pdf2xml.* %_DEST%\bin%_EXT%\pdf2xml.*
 ..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
 ..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin%_EXT%\pdfimport\pdfimport.oxt
+..\%__SRC%\bin\presenter-screen.oxt %_DEST%\bin%_EXT%\presenter\presenter-screen.oxt
+..\%__SRC%\bin\presenter-screen_develop.zip %_DEST%\bin%_EXT%\presenter\presenter-screen_develop.zip
 
 
 
@@ -14,18 +17,14 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office
-mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Addons
 mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\ProtocolHandler
 
-..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\Addons\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Addons
 ..\%__SRC%\misc\registry\spool\org\openoffice\Office\ProtocolHandler\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\ProtocolHandler
 
 mkdir: %_DEST%\xml%_EXT%
 ..\%__SRC%\misc\PresentationMinimizer.component %_DEST%\xml%_EXT%\PresentationMinimizer.component
-..\%__SRC%\misc\PresenterScreen.component %_DEST%\xml%_EXT%\PresenterScreen.component
 
 ..\%__SRC%\bin\PresentationMinimizer*.dll %_DEST%\bin%_EXT%\PresentationMinimizer*.dll
 ..\%__SRC%\lib\PresentationMinimizer*.so %_DEST%\lib%_EXT%
-..\%__SRC%\bin\PresenterScreen*.dll %_DEST%\bin%_EXT%\PresenterScreen*.dll
-..\%__SRC%\lib\PresenterScreen*.so %_DEST%\lib%_EXT%
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib

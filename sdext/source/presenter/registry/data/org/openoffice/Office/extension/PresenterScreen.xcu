@@ -22,7 +22,7 @@
 
 
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office" oor:name="PresenterScreen">
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office.extension" oor:name="PresenterScreen">
   <node oor:name="PresenterScreenSettings">
     <node oor:name="ToolBars">
       <node oor:name="ToolBar" oor:op="replace">
@@ -33,7 +33,7 @@
             <node oor:name="Normal">
               <prop oor:name="Text"><value xml:lang="en-US">Previous</value></prop>
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlidePreviousNormal.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlidePreviousNormal.png</value></prop>
               </node>
               <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:PrevSlide</value></prop>
               <node oor:name="Font">
@@ -45,7 +45,7 @@
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlidePreviousMouseOver.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlidePreviousMouseOver.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -53,7 +53,7 @@
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlidePreviousDisabled.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlidePreviousDisabled.png</value></prop>
               </node>
             </node>
           </node>
@@ -63,7 +63,7 @@
             <node oor:name="Normal">
               <prop oor:name="Text"><value xml:lang="en-US">Next</value></prop>
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonEffectNextNormal.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonEffectNextNormal.png</value></prop>
               </node>
               <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:NextEffect</value></prop>
               <node oor:name="Font">
@@ -75,7 +75,7 @@
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonEffectNextMouseOver.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonEffectNextMouseOver.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -83,7 +83,7 @@
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonEffectNextDisabled.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonEffectNextDisabled.png</value></prop>
               </node>
             </node>
           </node>
@@ -93,7 +93,7 @@
             <node oor:name="Normal">
               <prop oor:name="Text"><value xml:lang="en-US">Notes</value></prop>
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonNotesNormal.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonNotesNormal.png</value></prop>
               </node>
               <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowNotes</value></prop>
               <node oor:name="Font">
@@ -105,7 +105,7 @@
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonNotesMouseOver.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonNotesMouseOver.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -113,7 +113,7 @@
             </node>
             <node oor:name="Selected">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonNotesSelected.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonNotesSelected.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -122,7 +122,7 @@
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonNotesDisabled.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonNotesDisabled.png</value></prop>
               </node>
             </node>
           </node>
@@ -132,7 +132,7 @@
             <node oor:name="Normal">
               <prop oor:name="Text"><value xml:lang="en-US">Slides</value></prop>
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlideSorterNormal.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlideSorterNormal.png</value></prop>
               </node>
               <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowSlideSorter</value></prop>
               <node oor:name="Font">
@@ -144,7 +144,7 @@
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlideSorterMouseOver.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlideSorterMouseOver.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -152,7 +152,7 @@
             </node>
             <node oor:name="Selected">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlideSorterSelected.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlideSorterSelected.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -161,7 +161,7 @@
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlideSorterDisabled.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlideSorterDisabled.png</value></prop>
               </node>
             </node>
           </node>
@@ -223,7 +223,7 @@
             <node oor:name="Normal">
               <prop oor:name="Text"><value xml:lang="en-US">Help</value></prop>
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonHelpNormal.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonHelpNormal.png</value></prop>
               </node>
               <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShowHelp</value></prop>
               <node oor:name="Font">
@@ -235,7 +235,7 @@
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonHelpMouseOver.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonHelpMouseOver.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -243,7 +243,7 @@
             </node>
             <node oor:name="Selected">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonHelpSelected.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonHelpSelected.png</value></prop>
               </node>
               <node oor:name="Font">
                 <prop oor:name="Color"><value>FFFFFF</value></prop>
@@ -252,7 +252,7 @@
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonHelpDisabled.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonHelpDisabled.png</value></prop>
               </node>
             </node>
           </node>
@@ -277,18 +277,18 @@
             <prop oor:name="Type"><value>Button</value></prop>
             <node oor:name="Normal">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonPlusNormal.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonPlusNormal.png</value></prop>
               </node>
               <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:GrowNotesFont</value></prop>
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonPlusMouseOver.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonPlusMouseOver.png</value></prop>
               </node>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonPlusDisabled.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonPlusDisabled.png</value></prop>
               </node>
             </node>
           </node>
@@ -297,18 +297,18 @@
             <prop oor:name="Type"><value>Button</value></prop>
             <node oor:name="Normal">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonMinusNormal.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonMinusNormal.png</value></prop>
               </node>
               <prop oor:name="Action"><value>vnd.com.sun.star.comp.PresenterScreen:ShrinkNotesFont</value></prop>
             </node>
             <node oor:name="MouseOver">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonMinusMouseOver.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonMinusMouseOver.png</value></prop>
               </node>
             </node>
             <node oor:name="Disabled">
               <node oor:name="Icon">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonMinusDisabled.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/ButtonMinusDisabled.png</value></prop>
               </node>
             </node>
           </node>
@@ -342,35 +342,35 @@
       <node oor:name="Bitmaps">
         <node oor:name="up" oor:op="replace">
           <prop oor:name="Name"><value>Up</value></prop>
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ScrollbarArrowUpNormal.png</value></prop>
-          <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ScrollbarArrowUpMouseOver.png</value></prop>
-          <prop oor:name="DisabledFileName"><value>private:graphicrepository/presenter/ScrollbarArrowUpDisabled.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/ScrollbarArrowUpNormal.png</value></prop>
+          <prop oor:name="MouseOverFileName"><value>bitmaps/ScrollbarArrowUpMouseOver.png</value></prop>
+          <prop oor:name="DisabledFileName"><value>bitmaps/ScrollbarArrowUpDisabled.png</value></prop>
         </node>
         <node oor:name="down" oor:op="replace">
           <prop oor:name="Name"><value>Down</value></prop>
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ScrollbarArrowDownNormal.png</value></prop>
-          <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ScrollbarArrowDownMouseOver.png</value></prop>
-          <prop oor:name="DisabledFileName"><value>private:graphicrepository/presenter/ScrollbarArrowDownDisabled.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/ScrollbarArrowDownNormal.png</value></prop>
+          <prop oor:name="MouseOverFileName"><value>bitmaps/ScrollbarArrowDownMouseOver.png</value></prop>
+          <prop oor:name="DisabledFileName"><value>bitmaps/ScrollbarArrowDownDisabled.png</value></prop>
         </node>
         <node oor:name="pagervertical" oor:op="replace">
           <prop oor:name="Name"><value>PagerVertical</value></prop>
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ScrollbarPagerMiddleNormal.png</value></prop>
-          <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ScrollbarPagerMiddleMouseOver.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/ScrollbarPagerMiddleNormal.png</value></prop>
+          <prop oor:name="MouseOverFileName"><value>bitmaps/ScrollbarPagerMiddleMouseOver.png</value></prop>
         </node>
         <node oor:name="thumbtop" oor:op="replace">
           <prop oor:name="Name"><value>ThumbTop</value></prop>
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ScrollbarThumbTopNormal.png</value></prop>
-          <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ScrollbarThumbTopMouseOver.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/ScrollbarThumbTopNormal.png</value></prop>
+          <prop oor:name="MouseOverFileName"><value>bitmaps/ScrollbarThumbTopMouseOver.png</value></prop>
         </node>
         <node oor:name="thumbbottom" oor:op="replace">
           <prop oor:name="Name"><value>ThumbBottom</value></prop>
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ScrollbarThumbBottomNormal.png</value></prop>
-          <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ScrollbarThumbBottomMouseOver.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/ScrollbarThumbBottomNormal.png</value></prop>
+          <prop oor:name="MouseOverFileName"><value>bitmaps/ScrollbarThumbBottomMouseOver.png</value></prop>
         </node>
         <node oor:name="thumbvertical" oor:op="replace">
           <prop oor:name="Name"><value>ThumbVertical</value></prop>
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ScrollbarThumbMiddleNormal.png</value></prop>
-          <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ScrollbarThumbMiddleMouseOver.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/ScrollbarThumbMiddleNormal.png</value></prop>
+          <prop oor:name="MouseOverFileName"><value>bitmaps/ScrollbarThumbMiddleMouseOver.png</value></prop>
         </node>
       </node>
     </node>
@@ -383,28 +383,28 @@
       </node>
       <node oor:name="CurrentSlideBorderBitmaps">
         <node oor:name="TopLeft" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideTopLeft.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideTopLeft.png</value></prop>
         </node>
         <node oor:name="Top" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideTop.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideTop.png</value></prop>
         </node>
         <node oor:name="TopRight" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideTopRight.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideTopRight.png</value></prop>
         </node>
         <node oor:name="Left" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideLeft.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideLeft.png</value></prop>
         </node>
         <node oor:name="Right" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideRight.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideRight.png</value></prop>
         </node>
         <node oor:name="BottomLeft" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideBottomLeft.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideBottomLeft.png</value></prop>
         </node>
         <node oor:name="Bottom" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideBottom.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideBottom.png</value></prop>
         </node>
         <node oor:name="BottomRight" oor:op="replace">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderCurrentSlideBottomRight.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/BorderCurrentSlideBottomRight.png</value></prop>
         </node>
       </node>
     </node>
@@ -630,39 +630,39 @@
             </node>
             <node oor:name="BorderBitmapList">
               <node oor:name="Top" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderTop.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderTop.png</value></prop>
                 <prop oor:name="YOffset"><value>6</value></prop>
               </node>
               <node oor:name="TopLeft" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderTopLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderTopLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>6</value></prop>
                 <prop oor:name="YOffset"><value>6</value></prop>
               </node>
               <node oor:name="TopRight" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderTopRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderTopRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-6</value></prop>
                 <prop oor:name="YOffset"><value>6</value></prop>
               </node>
               <node oor:name="Left" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>6</value></prop>
               </node>
               <node oor:name="Right" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-6</value></prop>
               </node>
               <node oor:name="BottomLeft" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderBottomLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderBottomLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>6</value></prop>
                 <prop oor:name="YOffset"><value>-6</value></prop>
               </node>
               <node oor:name="BottomRight" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderBottomRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderBottomRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-6</value></prop>
                 <prop oor:name="YOffset"><value>-6</value></prop>
               </node>
               <node oor:name="Bottom" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderBottom.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderBottom.png</value></prop>
                 <prop oor:name="YOffset"><value>-6</value></prop>
               </node>
             </node>
@@ -684,39 +684,39 @@
             </node>
             <node oor:name="BorderBitmapList">
               <node oor:name="Top" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveTop.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveTop.png</value></prop>
                 <prop oor:name="YOffset"><value>6</value></prop>
               </node>
               <node oor:name="TopLeft" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveTopLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveTopLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>6</value></prop>
                 <prop oor:name="YOffset"><value>6</value></prop>
               </node>
               <node oor:name="TopRight" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveTopRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveTopRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-6</value></prop>
                 <prop oor:name="YOffset"><value>6</value></prop>
               </node>
               <node oor:name="Left" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>6</value></prop>
               </node>
               <node oor:name="Right" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-6</value></prop>
               </node>
               <node oor:name="BottomLeft" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveBottomLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveBottomLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>6</value></prop>
                 <prop oor:name="YOffset"><value>-6</value></prop>
               </node>
               <node oor:name="BottomRight" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveBottomRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveBottomRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-6</value></prop>
                 <prop oor:name="YOffset"><value>-6</value></prop>
               </node>
               <node oor:name="Bottom" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveBottom.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveBottom.png</value></prop>
                 <prop oor:name="YOffset"><value>-6</value></prop>
               </node>
             </node>
@@ -739,37 +739,37 @@
             </node>
             <node oor:name="BorderBitmapList">
               <node oor:name="Top" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarTop.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarTop.png</value></prop>
                 <prop oor:name="YOffset"><value>4</value></prop>
               </node>
               <node oor:name="TopLeft" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarTopLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarTopLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>4</value></prop>
                 <prop oor:name="YOffset"><value>4</value></prop>
               </node>
               <node oor:name="TopRight" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarTopRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarTopRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-4</value></prop>
                 <prop oor:name="YOffset"><value>4</value></prop>
               </node>
               <node oor:name="Left" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>4</value></prop>
               </node>
               <node oor:name="Right" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-4</value></prop>
               </node>
               <node oor:name="BottomLeft" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarLeft.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarLeft.png</value></prop>
                 <prop oor:name="XOffset"><value>4</value></prop>
               </node>
               <node oor:name="BottomRight" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarRight.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarRight.png</value></prop>
                 <prop oor:name="XOffset"><value>-4</value></prop>
               </node>
               <node oor:name="Bottom" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderToolbarBottom.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderToolbarBottom.png</value></prop>
                 <prop oor:name="YOffset"><value>-4</value></prop>
               </node>
             </node>
@@ -786,7 +786,7 @@
             </node>
             <node oor:name="BorderBitmapList">
               <node oor:name="BottomCallout" oor:op="replace">
-                <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/BorderActiveBottomCallout.png</value></prop>
+                <prop oor:name="NormalFileName"><value>bitmaps/BorderActiveBottomCallout.png</value></prop>
                 <prop oor:name="YOffset"><value>-6</value></prop>
                 <prop oor:name="XHotSpot"><value>49</value></prop>
                 <prop oor:name="YHotSpot"><value>41</value></prop>
@@ -804,7 +804,7 @@
               </prop>
             </node>
             <node oor:name="Background">
-              <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ViewBackground.png</value></prop>
+              <prop oor:name="NormalFileName"><value>bitmaps/ViewBackground.png</value></prop>
               <prop oor:name="HorizontalTexturingMode"><value>Repeat</value></prop>
               <prop oor:name="VerticalTexturingMode"><value>Repeat</value></prop>
               <prop oor:name="ReplacementColor"><value>33000000</value></prop>
@@ -836,7 +836,7 @@
           </node>
         </node>
         <node oor:name="Background">
-          <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/Background.png</value></prop>
+          <prop oor:name="NormalFileName"><value>bitmaps/Background.png</value></prop>
           <prop oor:name="ReplacementColor"><value>E4EFF9</value></prop>
           <prop oor:name="HorizontalTexturingMode"><value>Repeat</value></prop>
           <prop oor:name="VerticalTexturingMode"><value>Stretch</value></prop>
@@ -844,33 +844,33 @@
         <node oor:name="Bitmaps">
           <node oor:name="ButtonFrameLeft" oor:op="replace">
             <prop oor:name="Name"><value>ButtonFrameLeft</value></prop>
-            <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonFrameLeftNormal.png</value></prop>
-            <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ButtonFrameLeftMouseOver.png</value></prop>
+            <prop oor:name="NormalFileName"><value>bitmaps/ButtonFrameLeftNormal.png</value></prop>
+            <prop oor:name="MouseOverFileName"><value>bitmaps/ButtonFrameLeftMouseOver.png</value></prop>
             <prop oor:name="YOffset"><value>2</value></prop>
           </node>
           <node oor:name="ButtonFrameCenter" oor:op="replace">
             <prop oor:name="Name"><value>ButtonFrameCenter</value></prop>
-            <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonFrameCenterNormal.png</value></prop>
-            <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ButtonFrameCenterMouseOver.png</value></prop>
+            <prop oor:name="NormalFileName"><value>bitmaps/ButtonFrameCenterNormal.png</value></prop>
+            <prop oor:name="MouseOverFileName"><value>bitmaps/ButtonFrameCenterMouseOver.png</value></prop>
             <prop oor:name="YOffset"><value>2</value></prop>
           </node>
           <node oor:name="ButtonFrameRight" oor:op="replace">
             <prop oor:name="Name"><value>ButtonFrameRight</value></prop>
-            <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonFrameRightNormal.png</value></prop>
-            <prop oor:name="MouseOverFileName"><value>private:graphicrepository/presenter/ButtonFrameRightMouseOver.png</value></prop>
+            <prop oor:name="NormalFileName"><value>bitmaps/ButtonFrameRightNormal.png</value></prop>
+            <prop oor:name="MouseOverFileName"><value>bitmaps/ButtonFrameRightMouseOver.png</value></prop>
             <prop oor:name="YOffset"><value>2</value></prop>
           </node>
           <node oor:name="LabelLeft" oor:op="replace">
-            <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/LabelMouseOverLeft.png</value></prop>
+            <prop oor:name="NormalFileName"><value>bitmaps/LabelMouseOverLeft.png</value></prop>
           </node>
           <node oor:name="LabelCenter" oor:op="replace">
-            <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/LabelMouseOverCenter.png</value></prop>
+            <prop oor:name="NormalFileName"><value>bitmaps/LabelMouseOverCenter.png</value></prop>
           </node>
           <node oor:name="LabelRight" oor:op="replace">
-            <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/LabelMouseOverRight.png</value></prop>
+            <prop oor:name="NormalFileName"><value>bitmaps/LabelMouseOverRight.png</value></prop>
           </node>
           <node oor:name="MousePointerNextEffect" oor:op="replace">
-            <prop oor:name="NormalFileName"><value>private:graphicrepository/presenter/ButtonSlideNextNormal.png</value></prop>
+            <prop oor:name="NormalFileName"><value>bitmaps/ButtonSlideNextNormal.png</value></prop>
           </node>
         </node>
         <node oor:name="Fonts">
