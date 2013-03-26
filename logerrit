@@ -82,7 +82,7 @@ case "$1" in
     ;;
     setup)
         echo "Please go to https://gerrit.libreoffice.org/ and:"
-        echo "- press the 'sign-in' button in the top right corner"
+        echo "- press the 'register' button in the top right corner"
         echo "- after login set yourself a username (its recommended to use your IRC-nick)"
         echo "- upload your public ssh-key."
         echo
