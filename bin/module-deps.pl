@@ -6,6 +6,7 @@ use Getopt::Long qw(GetOptions VersionMessage);
 use Pod::Usage;
 
 my $gnumake;
+my $src_root;
 my $makefile_build;
 my $verbose = 0;
 my $from_file;
@@ -162,9 +163,9 @@ sub prune_redundant_deps($)
 sub create_lib_module_map()
 {
     my %l2m;
-    for (glob("*/Library_*.mk"))
+    for (glob($src_root."/*/Library_*.mk"))
     {
-        /(.*)\/Library_(.*)\.mk/;
+        /.*\/(.*)\/Library_(.*)\.mk/;
         # add module -> module
         $l2m{$1} = $1;
         # add lib -> module
@@ -303,6 +304,7 @@ sub parse_options()
     ($gnumake, $makefile_build) = @ARGV if $#ARGV == 1;
     $gnumake = 'make' if (!defined $gnumake);
     $makefile_build = 'Makefile.gbuild' if (!defined $makefile_build);
+    $src_root = defined $ENV{SRC_ROOT} ? $ENV{SRC_ROOT} : ".";
 }
 
 sub main()
