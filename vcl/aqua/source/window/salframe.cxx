@@ -593,19 +593,19 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     NSRect aStateRect = [mpWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
-    if( pState->mnMask & SAL_FRAMESTATE_MASK_X )
+    if( pState->mnMask & WINDOWSTATE_MASK_X )
         aStateRect.origin.x = float(pState->mnX);
-    if( pState->mnMask & SAL_FRAMESTATE_MASK_Y )
+    if( pState->mnMask & WINDOWSTATE_MASK_Y )
         aStateRect.origin.y = float(pState->mnY);
-    if( pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH )
+    if( pState->mnMask & WINDOWSTATE_MASK_WIDTH )
         aStateRect.size.width = float(pState->mnWidth);
-    if( pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT )
+    if( pState->mnMask & WINDOWSTATE_MASK_HEIGHT )
         aStateRect.size.height = float(pState->mnHeight);
     VCLToCocoa( aStateRect );
     aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
 
     [mpWindow setFrame: aStateRect display: NO];
-    if( pState->mnState == SAL_FRAMESTATE_MINIMIZED )
+    if( pState->mnState == WINDOWSTATE_STATE_MINIMIZED )
         [mpWindow miniaturize: NSApp];
     else if( [mpWindow isMiniaturized] )
         [mpWindow deminiaturize: NSApp];
@@ -615,7 +615,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
        the program specified one), but comes closest since the default behavior is
        "maximized" if the user did not intervene
     */
-    if( pState->mnState == SAL_FRAMESTATE_MAXIMIZED )
+    if( pState->mnState == WINDOWSTATE_STATE_MAXIMIZED )
     {
         if(! [mpWindow isZoomed])
             [mpWindow zoom: NSApp];
@@ -631,13 +631,13 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     UpdateFrameGeometry();
 
     sal_uInt16 nEvent = 0;
-    if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y) )
+    if( pState->mnMask & (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y) )
     {
         mbPositioned = true;
         nEvent = SALEVENT_MOVE;
     }
 
-    if( pState->mnMask & (SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT) )
+    if( pState->mnMask & (WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT) )
     {
         mbSized = true;
         nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
@@ -666,11 +666,11 @@ sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    pState->mnMask = SAL_FRAMESTATE_MASK_X                 |
-                     SAL_FRAMESTATE_MASK_Y                 |
-                     SAL_FRAMESTATE_MASK_WIDTH             |
-                     SAL_FRAMESTATE_MASK_HEIGHT            |
-                     SAL_FRAMESTATE_MASK_STATE;
+    pState->mnMask = WINDOWSTATE_MASK_X                 |
+                     WINDOWSTATE_MASK_Y                 |
+                     WINDOWSTATE_MASK_WIDTH             |
+                     WINDOWSTATE_MASK_HEIGHT            |
+                     WINDOWSTATE_MASK_STATE;
 
     NSRect aStateRect = [mpWindow frame];
     aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
@@ -681,11 +681,11 @@ sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnHeight    = long(aStateRect.size.height);
 
     if( [mpWindow isMiniaturized] )
-        pState->mnState = SAL_FRAMESTATE_MINIMIZED;
+        pState->mnState = WINDOWSTATE_STATE_MINIMIZED;
     else if( ! [mpWindow isZoomed] )
-        pState->mnState = SAL_FRAMESTATE_NORMAL;
+        pState->mnState = WINDOWSTATE_STATE_NORMAL;
     else
-        pState->mnState = SAL_FRAMESTATE_MAXIMIZED;
+        pState->mnState = WINDOWSTATE_STATE_MAXIMIZED;
 
     return TRUE;
 }

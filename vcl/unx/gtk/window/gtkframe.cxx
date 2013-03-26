@@ -1916,14 +1916,14 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         return;
 
     const sal_uLong nMaxGeometryMask =
-        SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y |
-        SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT |
-        SAL_FRAMESTATE_MASK_MAXIMIZED_X | SAL_FRAMESTATE_MASK_MAXIMIZED_Y |
-        SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
+        WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y |
+        WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT |
+        WINDOWSTATE_MASK_MAXIMIZED_X | WINDOWSTATE_MASK_MAXIMIZED_Y |
+        WINDOWSTATE_MASK_MAXIMIZED_WIDTH | WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;
 
-    if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+    if( (pState->mnMask & WINDOWSTATE_MASK_STATE) &&
         ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) &&
-        (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
+        (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED) &&
         (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
     {
         resizeWindow( pState->mnWidth, pState->mnHeight );
@@ -1942,29 +1942,29 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
                                        Size( pState->mnWidth, pState->mnHeight ) );
         CallCallback( SALEVENT_RESIZE, NULL );
     }
-    else if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y |
-                               SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT ) )
+    else if( pState->mnMask & (WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y |
+                               WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT ) )
     {
         sal_uInt16 nPosSizeFlags = 0;
         long nX         = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
         long nY         = pState->mnY - (m_pParent ? m_pParent->maGeometry.nY : 0);
-        if( pState->mnMask & SAL_FRAMESTATE_MASK_X )
+        if( pState->mnMask & WINDOWSTATE_MASK_X )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
         else
             nX = maGeometry.nX - (m_pParent ? m_pParent->maGeometry.nX : 0);
-        if( pState->mnMask & SAL_FRAMESTATE_MASK_Y )
+        if( pState->mnMask & WINDOWSTATE_MASK_Y )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
         else
             nY = maGeometry.nY - (m_pParent ? m_pParent->maGeometry.nY : 0);
-        if( pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH )
+        if( pState->mnMask & WINDOWSTATE_MASK_WIDTH )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
-        if( pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT )
+        if( pState->mnMask & WINDOWSTATE_MASK_HEIGHT )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
         SetPosSize( nX, nY, pState->mnWidth, pState->mnHeight, nPosSizeFlags );
     }
-    if( pState->mnMask & SAL_FRAMESTATE_MASK_STATE && ! isChild() )
+    if( pState->mnMask & WINDOWSTATE_MASK_STATE && ! isChild() )
     {
-        if( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
+        if( pState->mnState & WINDOWSTATE_STATE_MAXIMIZED )
             gtk_window_maximize( GTK_WINDOW(m_pWindow) );
         else
             gtk_window_unmaximize( GTK_WINDOW(m_pWindow) );
@@ -1976,7 +1976,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         *  on windows with a parent (that is transient frames) since these tend
         *  to not be represented in an icon task list.
         */
-        if( (pState->mnState & SAL_FRAMESTATE_MINIMIZED)
+        if( (pState->mnState & WINDOWSTATE_STATE_MINIMIZED)
             && ! m_pParent )
             gtk_window_iconify( GTK_WINDOW(m_pWindow) );
         else
@@ -1986,14 +1986,14 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
 
 sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
 {
-    pState->mnState = SAL_FRAMESTATE_NORMAL;
-    pState->mnMask  = SAL_FRAMESTATE_MASK_STATE;
+    pState->mnState = WINDOWSTATE_STATE_NORMAL;
+    pState->mnMask  = WINDOWSTATE_MASK_STATE;
     // rollup ? gtk 2.2 does not seem to support the shaded state
     if( (m_nState & GDK_WINDOW_STATE_ICONIFIED) )
-        pState->mnState |= SAL_FRAMESTATE_MINIMIZED;
+        pState->mnState |= WINDOWSTATE_STATE_MINIMIZED;
     if( m_nState & GDK_WINDOW_STATE_MAXIMIZED )
     {
-        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
+        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED;
         pState->mnX                 = m_aRestorePosSize.Left();
         pState->mnY                 = m_aRestorePosSize.Top();
         pState->mnWidth             = m_aRestorePosSize.GetWidth();
@@ -2002,10 +2002,10 @@ sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
         pState->mnMaximizedY        = maGeometry.nY;
         pState->mnMaximizedWidth    = maGeometry.nWidth;
         pState->mnMaximizedHeight   = maGeometry.nHeight;
-        pState->mnMask  |= SAL_FRAMESTATE_MASK_MAXIMIZED_X          |
-                           SAL_FRAMESTATE_MASK_MAXIMIZED_Y          |
-                           SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH      |
-                           SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
+        pState->mnMask  |= WINDOWSTATE_MASK_MAXIMIZED_X          |
+                           WINDOWSTATE_MASK_MAXIMIZED_Y          |
+                           WINDOWSTATE_MASK_MAXIMIZED_WIDTH      |
+                           WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;
     }
     else
     {
@@ -2014,10 +2014,10 @@ sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
         pState->mnWidth     = maGeometry.nWidth;
         pState->mnHeight    = maGeometry.nHeight;
     }
-    pState->mnMask  |= SAL_FRAMESTATE_MASK_X            |
-                       SAL_FRAMESTATE_MASK_Y            |
-                       SAL_FRAMESTATE_MASK_WIDTH        |
-                       SAL_FRAMESTATE_MASK_HEIGHT;
+    pState->mnMask  |= WINDOWSTATE_MASK_X            |
+                       WINDOWSTATE_MASK_Y            |
+                       WINDOWSTATE_MASK_WIDTH        |
+                       WINDOWSTATE_MASK_HEIGHT;
 
     return sal_True;
 }

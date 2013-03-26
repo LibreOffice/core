@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include "vcl/syswin.hxx"
 #include "headless/svpframe.hxx"
 #include "headless/svpinst.hxx"
 #include "headless/svpgdi.hxx"
@@ -309,8 +310,8 @@ SalFrame* SvpSalFrame::GetParent() const
 }
 
 #define _FRAMESTATE_MASK_GEOMETRY \
-     (SAL_FRAMESTATE_MASK_X     | SAL_FRAMESTATE_MASK_Y |   \
-      SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT)
+     (WINDOWSTATE_MASK_X     | WINDOWSTATE_MASK_Y |   \
+      WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT)
 
 void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 {
@@ -326,13 +327,13 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
         long nHeight = maGeometry.nHeight;
 
         // change requested properties
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_X)
+        if (pState->mnMask & WINDOWSTATE_MASK_X)
             nX = pState->mnX;
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_Y)
+        if (pState->mnMask & WINDOWSTATE_MASK_Y)
             nY = pState->mnY;
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH)
+        if (pState->mnMask & WINDOWSTATE_MASK_WIDTH)
             nWidth = pState->mnWidth;
-        if (pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT)
+        if (pState->mnMask & WINDOWSTATE_MASK_HEIGHT)
             nHeight = pState->mnHeight;
 
         SetPosSize( nX, nY, nWidth, nHeight,
@@ -343,12 +344,12 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 
 sal_Bool SvpSalFrame::GetWindowState( SalFrameState* pState )
 {
-    pState->mnState = SAL_FRAMESTATE_NORMAL;
+    pState->mnState = WINDOWSTATE_STATE_NORMAL;
     pState->mnX      = maGeometry.nX;
     pState->mnY      = maGeometry.nY;
     pState->mnWidth  = maGeometry.nWidth;
     pState->mnHeight = maGeometry.nHeight;
-    pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | SAL_FRAMESTATE_MASK_STATE;
+    pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
 
     return sal_True;
 }

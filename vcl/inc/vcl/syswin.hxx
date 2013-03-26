@@ -71,6 +71,7 @@ class TaskPaneList;
 #define WINDOWSTATE_STATE_ROLLUP         ((sal_uLong)0x00000008)
 #define WINDOWSTATE_STATE_MAXIMIZED_HORZ ((sal_uLong)0x00000010)
 #define WINDOWSTATE_STATE_MAXIMIZED_VERT ((sal_uLong)0x00000020)
+#define WINDOWSTATE_STATE_SYSTEMMASK     ((sal_uLong)0x0000FFFF)
 
 class VCL_PLUGIN_PUBLIC WindowStateData
 {

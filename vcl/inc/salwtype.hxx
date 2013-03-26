@@ -258,25 +258,6 @@ typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,
 // - SalFrameState -
 // -----------------
 
-// Must be the same as in syswin.hxx
-#define SAL_FRAMESTATE_MASK_X                   ((sal_uLong)0x00000001)
-#define SAL_FRAMESTATE_MASK_Y                   ((sal_uLong)0x00000002)
-#define SAL_FRAMESTATE_MASK_WIDTH               ((sal_uLong)0x00000004)
-#define SAL_FRAMESTATE_MASK_HEIGHT              ((sal_uLong)0x00000008)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_X         ((sal_uLong)0x00000100)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_Y         ((sal_uLong)0x00000200)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH     ((sal_uLong)0x00000400)
-#define SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT    ((sal_uLong)0x00000800)
-#define SAL_FRAMESTATE_MASK_STATE               ((sal_uLong)0x00000010)
-
-#define SAL_FRAMESTATE_NORMAL               ((sal_uLong)0x00000001)
-#define SAL_FRAMESTATE_MINIMIZED            ((sal_uLong)0x00000002)
-#define SAL_FRAMESTATE_MAXIMIZED            ((sal_uLong)0x00000004)
-#define SAL_FRAMESTATE_ROLLUP               ((sal_uLong)0x00000008)
-#define SAL_FRAMESTATE_MAXIMIZED_HORZ       ((sal_uLong)0x00000010)
-#define SAL_FRAMESTATE_MAXIMIZED_VERT       ((sal_uLong)0x00000020)
-#define SAL_FRAMESTATE_SYSTEMMASK           ((sal_uLong)0x0000FFFF)
-
 struct SalFrameState
 {
     sal_uLong       mnMask;

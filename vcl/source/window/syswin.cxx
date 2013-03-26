@@ -693,7 +693,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
         //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
-        aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
+        aState.mnState  = nState & WINDOWSTATE_STATE_SYSTEMMASK;
 
         // normalize window positions onto screen
         ImplMoveToScreen( aState.mnX, aState.mnY, aState.mnWidth, aState.mnHeight, pWindow );
@@ -835,22 +835,22 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
                 rData.SetWidth( aState.mnWidth );
             if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
                 rData.SetHeight( aState.mnHeight );
-            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_X )
+            if ( aState.mnMask & WINDOWSTATE_MASK_MAXIMIZED_X )
             {
                 rData.SetMaximizedX( aState.mnMaximizedX );
                 nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_X;
             }
-            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_Y )
+            if ( aState.mnMask & WINDOWSTATE_MASK_MAXIMIZED_Y )
             {
                 rData.SetMaximizedY( aState.mnMaximizedY );
                 nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_Y;
             }
-            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH )
+            if ( aState.mnMask & WINDOWSTATE_MASK_MAXIMIZED_WIDTH )
             {
                 rData.SetMaximizedWidth( aState.mnMaximizedWidth );
                 nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_WIDTH;
             }
-            if ( aState.mnMask & SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT )
+            if ( aState.mnMask & WINDOWSTATE_MASK_MAXIMIZED_HEIGHT )
             {
                 rData.SetMaximizedHeight( aState.mnMaximizedHeight );
                 nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;

@@ -1477,11 +1477,11 @@ void X11SalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
 }
 
 #define _FRAMESTATE_MASK_GEOMETRY \
-     (SAL_FRAMESTATE_MASK_X     | SAL_FRAMESTATE_MASK_Y |   \
-      SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT)
+     (WINDOWSTATE_MASK_X     | WINDOWSTATE_MASK_Y |   \
+      WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT)
 #define _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY \
-     (SAL_FRAMESTATE_MASK_MAXIMIZED_X     | SAL_FRAMESTATE_MASK_MAXIMIZED_Y |   \
-      SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT)
+     (WINDOWSTATE_MASK_MAXIMIZED_X     | WINDOWSTATE_MASK_MAXIMIZED_Y |   \
+      WINDOWSTATE_MASK_MAXIMIZED_WIDTH | WINDOWSTATE_MASK_MAXIMIZED_HEIGHT)
 
 void X11SalFrame::SetWindowState( const SalFrameState *pState )
 {
@@ -1498,8 +1498,8 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
          * in state change below maximize window
          */
         if( ! IsChildWindow() &&
-            (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
-            (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
+            (pState->mnMask & WINDOWSTATE_MASK_STATE) &&
+            (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED) &&
             (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) == _FRAMESTATE_MASK_GEOMETRY &&
             (pState->mnMask & _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
             )
@@ -1537,21 +1537,21 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                 GetPosSize (aPosSize);
 
             // change requested properties
-            if (pState->mnMask & SAL_FRAMESTATE_MASK_X)
+            if (pState->mnMask & WINDOWSTATE_MASK_X)
             {
                 aPosSize.setX (pState->mnX);
             }
-            if (pState->mnMask & SAL_FRAMESTATE_MASK_Y)
+            if (pState->mnMask & WINDOWSTATE_MASK_Y)
             {
                 aPosSize.setY (pState->mnY);
             }
-            if (pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH)
+            if (pState->mnMask & WINDOWSTATE_MASK_WIDTH)
             {
                 long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
                 aPosSize.setWidth (nWidth);
                 bDoAdjust = true;
             }
-            if (pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT)
+            if (pState->mnMask & WINDOWSTATE_MASK_HEIGHT)
             {
                 int nHeight = pState->mnHeight > 0 ? pState->mnHeight - 1 : 0;
                 aPosSize.setHeight (nHeight);
@@ -1597,17 +1597,17 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     }
 
     // request for status change
-    if (pState->mnMask & SAL_FRAMESTATE_MASK_STATE)
+    if (pState->mnMask & WINDOWSTATE_MASK_STATE)
     {
-        if (pState->mnState & SAL_FRAMESTATE_MAXIMIZED)
+        if (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED)
         {
             nShowState_ = SHOWSTATE_NORMAL;
-            if( ! (pState->mnState & (SAL_FRAMESTATE_MAXIMIZED_HORZ|SAL_FRAMESTATE_MAXIMIZED_VERT) ) )
+            if( ! (pState->mnState & (WINDOWSTATE_STATE_MAXIMIZED_HORZ|WINDOWSTATE_STATE_MAXIMIZED_VERT) ) )
                 Maximize();
             else
             {
-                bool bHorz = (pState->mnState & SAL_FRAMESTATE_MAXIMIZED_HORZ) ? true : false;
-                bool bVert = (pState->mnState & SAL_FRAMESTATE_MAXIMIZED_VERT) ? true : false;
+                bool bHorz = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_HORZ) ? true : false;
+                bool bVert = (pState->mnState & WINDOWSTATE_STATE_MAXIMIZED_VERT) ? true : false;
                 GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
             }
             maRestorePosSize.Left() = pState->mnX;
@@ -1618,18 +1618,18 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         else if( mbMaximizedHorz || mbMaximizedVert )
             GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
 
-        if (pState->mnState & SAL_FRAMESTATE_MINIMIZED)
+        if (pState->mnState & WINDOWSTATE_STATE_MINIMIZED)
         {
             if (nShowState_ == SHOWSTATE_UNKNOWN)
                 nShowState_ = SHOWSTATE_NORMAL;
             Minimize();
         }
-        if (pState->mnState & SAL_FRAMESTATE_NORMAL)
+        if (pState->mnState & WINDOWSTATE_STATE_NORMAL)
         {
             if (nShowState_ != SHOWSTATE_NORMAL)
                 Restore();
         }
-        if (pState->mnState & SAL_FRAMESTATE_ROLLUP)
+        if (pState->mnState & WINDOWSTATE_STATE_ROLLUP)
             GetDisplay()->getWMAdaptor()->shade( this, true );
     }
 }
@@ -1637,9 +1637,9 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
 sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
 {
     if( SHOWSTATE_MINIMIZED == nShowState_ )
-        pState->mnState = SAL_FRAMESTATE_MINIMIZED;
+        pState->mnState = WINDOWSTATE_STATE_MINIMIZED;
     else
-        pState->mnState = SAL_FRAMESTATE_NORMAL;
+        pState->mnState = WINDOWSTATE_STATE_NORMAL;
 
     Rectangle aPosSize;
     if( maRestorePosSize.IsEmpty() )
@@ -1648,24 +1648,24 @@ sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
         aPosSize = maRestorePosSize;
 
     if( mbMaximizedHorz )
-        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED_HORZ;
+        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED_HORZ;
     if( mbMaximizedVert )
-        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED_VERT;
+        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED_VERT;
     if( mbShaded )
-        pState->mnState |= SAL_FRAMESTATE_ROLLUP;
+        pState->mnState |= WINDOWSTATE_STATE_ROLLUP;
 
     pState->mnX      = aPosSize.Left();
     pState->mnY      = aPosSize.Top();
     pState->mnWidth  = aPosSize.GetWidth();
     pState->mnHeight = aPosSize.GetHeight();
 
-    pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | SAL_FRAMESTATE_MASK_STATE;
+    pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
 
 
     if (! maRestorePosSize.IsEmpty() )
     {
         GetPosSize( aPosSize );
-        pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
+        pState->mnState |= WINDOWSTATE_STATE_MAXIMIZED;
         pState->mnMaximizedX      = aPosSize.Left();
         pState->mnMaximizedY      = aPosSize.Top();
         pState->mnMaximizedWidth  = aPosSize.GetWidth();

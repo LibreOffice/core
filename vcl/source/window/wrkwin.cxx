@@ -229,7 +229,7 @@ sal_Bool WorkWindow::IsMinimized() const
     //return mpWindowImpl->mpFrameData->mbMinimized;
     SalFrameState aState;
     mpWindowImpl->mpFrame->GetWindowState(&aState);
-    return (( aState.mnState & SAL_FRAMESTATE_MINIMIZED ) != 0);
+    return (( aState.mnState & WINDOWSTATE_STATE_MINIMIZED ) != 0);
 }
 
 // -----------------------------------------------------------------------
@@ -254,7 +254,7 @@ sal_Bool WorkWindow::SetPluginParent( SystemParentData* pParent )
 void WorkWindow::ImplSetFrameState( sal_uLong aFrameState )
 {
     SalFrameState   aState;
-    aState.mnMask   = SAL_FRAMESTATE_MASK_STATE;
+    aState.mnMask   = WINDOWSTATE_MASK_STATE;
     aState.mnState  = aFrameState;
     mpWindowImpl->mpFrame->SetWindowState( &aState );
 }
@@ -262,12 +262,12 @@ void WorkWindow::ImplSetFrameState( sal_uLong aFrameState )
 
 void WorkWindow::Minimize()
 {
-    ImplSetFrameState( SAL_FRAMESTATE_MINIMIZED );
+    ImplSetFrameState( WINDOWSTATE_STATE_MINIMIZED );
 }
 
 void WorkWindow::Restore()
 {
-    ImplSetFrameState( SAL_FRAMESTATE_NORMAL );
+    ImplSetFrameState( WINDOWSTATE_STATE_NORMAL );
 }
 
 sal_Bool WorkWindow::Close()
@@ -283,7 +283,7 @@ sal_Bool WorkWindow::Close()
 
 void WorkWindow::Maximize( sal_Bool bMaximize )
 {
-    ImplSetFrameState( bMaximize ? SAL_FRAMESTATE_MAXIMIZED : SAL_FRAMESTATE_NORMAL );
+    ImplSetFrameState( bMaximize ? WINDOWSTATE_STATE_MAXIMIZED : WINDOWSTATE_STATE_NORMAL );
 }
 
 sal_Bool WorkWindow::IsMaximized() const
@@ -293,9 +293,9 @@ sal_Bool WorkWindow::IsMaximized() const
     SalFrameState aState;
     if( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
     {
-        if( aState.mnState & (SAL_FRAMESTATE_MAXIMIZED          |
-                              SAL_FRAMESTATE_MAXIMIZED_HORZ     |
-                              SAL_FRAMESTATE_MAXIMIZED_VERT ) )
+        if( aState.mnState & (WINDOWSTATE_STATE_MAXIMIZED          |
+                              WINDOWSTATE_STATE_MAXIMIZED_HORZ     |
+                              WINDOWSTATE_STATE_MAXIMIZED_VERT ) )
             bRet = sal_True;
     }
     return bRet;
