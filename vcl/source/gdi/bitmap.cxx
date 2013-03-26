@@ -102,7 +102,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                     aPal[ 14 ] = Color( COL_YELLOW );
                     aPal[ 15 ] = Color( COL_WHITE );
 
-                    // Dither-Palette erzeugen
+                    // Create dither palette
                     if( 8 == nBitCount )
                     {
                         sal_uInt16 nActCol = 16;
@@ -112,7 +112,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                                 for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
                                     aPal[ nActCol++ ] = BitmapColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB );
 
-                        // Standard-Office-Farbe setzen
+                        // Set standard Office colors
                         aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
                     }
                 }
@@ -140,7 +140,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     static BitmapPalette aGreyPalette16;
     static BitmapPalette aGreyPalette256;
 
-    // create greyscale palette with 2, 4, 16 or 256 entries
+    // Create greyscale palette with 2, 4, 16 or 256 entries
     if( 2 == nEntries || 4 == nEntries || 16 == nEntries || 256 == nEntries )
     {
         if( 2 == nEntries )
@@ -206,7 +206,7 @@ bool BitmapPalette::IsGreyPalette() const
     const int nEntryCount = GetEntryCount();
     if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
         return true;
-    // see above: only certain entry values will result in a valid call to GetGreyPalette
+    // See above: only certain entry values will result in a valid call to GetGreyPalette
     if( nEntryCount == 2 || nEntryCount == 4 || nEntryCount == 16 || nEntryCount == 256 )
     {
         const BitmapPalette& rGreyPalette = Bitmap::GetGreyPalette( nEntryCount );
@@ -933,9 +933,8 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                             const sal_uInt16    nCount = pReadAcc->GetPaletteEntryCount();
                             sal_uInt8*          pMap = new sal_uInt8[ nCount ];
 
-                            // Index-Map fuer Farbtabelle
-                            // aufbauen, da das Bild ja (relativ) farbgenau
-                            // kopiert werden soll
+                            // Create index map for the color table, as the bitmap should be copied
+                            // retaining it's color information relatively well
                             for( sal_uInt16 i = 0; i < nCount; i++ )
                                 pMap[ i ] = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( pReadAcc->GetPaletteColor( i ) );
 
@@ -1340,16 +1339,14 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
             const sal_uInt16 nActColors = pAcc->GetPaletteEntryCount();
             const sal_uInt16 nMaxColors = 1 << pAcc->GetBitCount();
 
-            // erst einmal naechste Farbe nehmen
+            // For a start, choose the next color
             aReplace = pAcc->GetBestMatchingColor( rReplaceColor );
 
-            // falls Palettenbild, und die zu setzende Farbe ist nicht
-            // in der Palette, suchen wir nach freien Eintraegen (teuer)
+            // If it's a pallette picture and the color that should be set
+            // is not in the pallette, we try finding a free entry (expensive)
             if( pAcc->GetPaletteColor( (sal_uInt8) aReplace ) != BitmapColor( rReplaceColor ) )
             {
-                // erst einmal nachsehen, ob wir unsere ReplaceColor
-                // nicht auf einen freien Platz am Ende der Palette
-                // setzen koennen
+                // See first if we can put the ReplaceColor at a free entry at the end of the pallette
                 if( nActColors < nMaxColors )
                 {
                     pAcc->SetPaletteEntryCount( nActColors + 1 );
@@ -1360,7 +1357,7 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                 {
                     sal_Bool* pFlags = new sal_Bool[ nMaxColors ];
 
-                    // alle Eintraege auf 0 setzen
+                    // Set all entries to 0
                     memset( pFlags, 0, nMaxColors );
 
                     for( long nY = 0L; nY < nHeight; nY++ )
@@ -1369,7 +1366,7 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
 
                     for( sal_uInt16 i = 0UL; i < nMaxColors; i++ )
                     {
-                        // Hurra, wir haben einen unbenutzten Eintrag
+                        // Hurray, we do have an unsused entry
                         if( !pFlags[ i ] )
                         {
                             pAcc->SetPaletteColor( (sal_uInt16) i, rReplaceColor );
@@ -1764,12 +1761,11 @@ sal_Bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
     return bRet;
 }
 
+// TODO: Have a look at OutputDevice::ImplDrawAlpha() for some
+// optimizations. Might even consolidate the code here and there.
 sal_Bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
 {
-    // TODO: Have a look at OutputDevice::ImplDrawAlpha() for some
-    // optimizations. Might even consolidate the code here and there.
-
-    // convert to a truecolor bitmap, if we're a paletted one. There's
+    // Convert to a truecolor bitmap, if we're a paletted one. There's
     // room for tradeoff decision here, maybe later for an overload (or a flag)
     if( GetBitCount() <= 8 )
         Convert( BMP_CONVERSION_24BIT );

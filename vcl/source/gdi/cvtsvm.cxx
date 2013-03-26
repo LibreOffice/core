@@ -28,10 +28,7 @@
 #include <vcl/cvtsvm.hxx>
 #include <rtl/strbuf.hxx>
 
-// -----------
-// - Inlines -
-// -----------
-
+// Inlines
 void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
 {
     Point aTL;
@@ -43,15 +40,11 @@ void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
     rRect = Rectangle( aTL, aBR );
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWriteRect( SvStream& rOStm, const Rectangle& rRect )
 {
     rOStm << rRect.TopLeft();
     rOStm << rRect.BottomRight();
 }
-
-// ------------------------------------------------------------------------
 
 void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
 {
@@ -63,8 +56,6 @@ void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
     for( sal_uInt16 i = 0; i < (sal_uInt16) nSize; i++ )
         rIStm >> rPoly[ i ];
 }
-
-// ------------------------------------------------------------------------
 
 void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
 {
@@ -79,8 +70,6 @@ void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
         rPolyPoly.Insert( aPoly );
     }
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
 {
@@ -97,8 +86,8 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
 
     for( n = 0; n < nPoly; n++ )
     {
-        // #i102224# Here the evtl. curved nature of Polygon was
-        // ignored (for all those Years). Adapted to at least write
+        // #i102224# Here the possible curved nature of Polygon was
+        // ignored (for all those years). Adapted to at least write
         // a polygon representing the curve as good as possible
          Polygon aSimplePoly;
          rPolyPoly[n].AdaptiveSubdivide(aSimplePoly);
@@ -111,8 +100,6 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void ImplReadColor( SvStream& rIStm, Color& rColor )
 {
     sal_Int16 nVal;
@@ -121,8 +108,6 @@ void ImplReadColor( SvStream& rIStm, Color& rColor )
     rIStm >> nVal; rColor.SetGreen( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
     rIStm >> nVal; rColor.SetBlue( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWriteColor( SvStream& rOStm, const Color& rColor )
 {
@@ -138,8 +123,6 @@ void ImplWriteColor( SvStream& rOStm, const Color& rColor )
     rOStm << nVal;
 }
 
-// ------------------------------------------------------------------------
-
 void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 {
     Point   aOrg;
@@ -153,8 +136,6 @@ void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
     rMapMode = MapMode( (MapUnit) nUnit, aOrg, Fraction( nXNum, nXDenom ), Fraction( nYNum, nYDenom ) );
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
     rOStm << (sal_Int16) rMapMode.GetMapUnit();
@@ -165,23 +146,17 @@ void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
     rOStm << (sal_Int32) rMapMode.GetScaleY().GetDenominator();
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWritePushAction( SvStream& rOStm )
 {
     rOStm << (sal_Int16) GDI_PUSH_ACTION;
     rOStm << (sal_Int32) 4;
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWritePopAction( SvStream& rOStm )
 {
     rOStm << (sal_Int16) GDI_POP_ACTION;
     rOStm << (sal_Int32) 4;
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWriteLineColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle, sal_Int32 nWidth = 0L )
 {
@@ -194,8 +169,6 @@ void ImplWriteLineColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle,
     rOStm << nWidth;
     rOStm << nStyle;
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWriteFillColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle )
 {
@@ -219,8 +192,6 @@ void ImplWriteFillColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle 
         rOStm << (sal_Int16) 0;
     }
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWriteFont( SvStream& rOStm, const Font& rFont,
                     rtl_TextEncoding& rActualCharSet )
@@ -281,14 +252,10 @@ void ImplWriteFont( SvStream& rOStm, const Font& rFont,
         rActualCharSet = osl_getThreadTextEncoding();
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWriteRasterOpAction( SvStream& rOStm, sal_Int16 nRasterOp )
 {
     rOStm << (sal_Int16) GDI_RASTEROP_ACTION << (sal_Int32) 6 << nRasterOp;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const String& rString )
 {
@@ -303,8 +270,6 @@ sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const String& rString )
     }
     return nStringLen != 0;
 }
-
-// ------------------------------------------------------------------------
 
 void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rString )
 {
@@ -327,8 +292,6 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rSt
     rIStm.Seek( nOld );
 }
 
-// ------------------------------------------------------------------------
-
 void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
 {
     sal_Int32 nActionSize;
@@ -340,8 +303,6 @@ void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
         rIStm.SeekRel( nActionSize - 4L );
     }
 }
-
-// ------------------------------------------------------------------------
 
 bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPolyPolygon, bool bOnlyWhenCurve)
 {
@@ -423,8 +384,6 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPol
     return false;
 }
 
-// ------------------------------------------------------------------------
-
 void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
 {
     rPolyPoly.Clear();
@@ -463,10 +422,6 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
     }
 }
 
-// ----------------
-// - SVMConverter -
-// ----------------
-
 SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConvertMode )
 {
     if( !rStm.GetError() )
@@ -477,8 +432,6 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConver
             ImplConvertToSVM1( rStm, rMtf );
     }
 }
-
-// ------------------------------------------------------------------------
 
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
@@ -493,7 +446,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     sal_Int16   nVersion;
 
     // read header
-    rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Kennung
+    rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Identifier
     rIStm >> nSize;                                 // Size
     rIStm >> nVersion;                              // Version
     //#fdo39428 SvStream no longer supports operator>>(long&)
@@ -1368,8 +1321,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.SetNumberFormatInt( nOldFormat );
 }
 
-// ------------------------------------------------------------------------
-
 void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 {
     sal_uLong               nCountPos;
@@ -1384,15 +1335,15 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    //MagicCode schreiben
-    rOStm << "SVGDI";                                   // Kennung
-    rOStm << (sal_Int16) 42;                                // HeaderSize
-    rOStm << (sal_Int16) 200;                               // VERSION
+    // Write MagicCode
+    rOStm << "SVGDI";                                   // Identifier
+    rOStm << (sal_Int16) 42;                            // HeaderSize
+    rOStm << (sal_Int16) 200;                           // VERSION
     rOStm << (sal_Int32) aPrefSize.Width();
     rOStm << (sal_Int32) aPrefSize.Height();
     ImplWriteMapMode( rOStm, rMtf.GetPrefMapMode() );
 
-    // ActionCount wird spaeter geschrieben
+    // ActionCount will be written later
     nCountPos = rOStm.Tell();
     rOStm.SeekRel( 4L );
 
@@ -1411,8 +1362,6 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
         aLineColStack.pop();
     }
 }
-
-// ------------------------------------------------------------------------
 
 sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                                       VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
@@ -1602,8 +1551,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 // #i102224#
                 MetaPolyLineAction* pAct = (MetaPolyLineAction*) pAction;
-                // #i102224# Here the evtl. curved nature of Polygon was
-                // ignored (for all those Years). Adapted to at least write
+                // #i102224# Here the possible curved nature of Polygon was
+                // ignored (for all those years). Adapted to at least write
                 // a polygon representing the curve as good as possible
                  Polygon aSimplePoly;
                  pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
@@ -1688,8 +1637,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_POLYGON_ACTION ):
             {
                 MetaPolygonAction* pAct = (MetaPolygonAction*)pAction;
-                // #i102224# Here the evtl. curved nature of Polygon was
-                // ignored (for all those Years). Adapted to at least write
+                // #i102224# Here the possible curved nature of Polygon was
+                // ignored (for all those years). Adapted to at least write
                 // a polygon representing the curve as good as possible
                  Polygon aSimplePoly;
                  pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
@@ -1753,9 +1702,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rtl::OString aText(rtl::OUStringToOString(pAct->GetText(),
                     rActualCharSet));
                 String                  aUniText( pAct->GetText(), pAct->GetIndex(), pAct->GetLen() );
-                sal_uLong                   nAryLen;
-                sal_uLong                   nLen = pAct->GetLen();
-                const sal_uLong nTextLen = aText.getLength();
+                sal_uLong               nAryLen;
+                sal_uLong               nLen = pAct->GetLen();
+                const sal_uLong         nTextLen = aText.getLength();
                 sal_Int32*              pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
@@ -2126,8 +2075,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 {
                     sal_Int16 nRasterOp;
 
-                    // Falls vorher ROP_0/1 gesetzt war, alten
-                    // Zustand durch Pop erst wieder herstellen
+                    // If ROP_0/1 was set earlier, restore old state
+                    // via a Pop first
                     if( rRop_0_1 )
                     {
                         ImplWritePopAction( rOStm );
@@ -2256,7 +2205,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 {
                     // write actions for float transparence
-                    sal_uLong           nAddCount;
+                    sal_uLong       nAddCount;
                     GDIMetaFile     aMtf( rTransMtf );
                     const Size      aSrcSize( rTransMtf.GetPrefSize() );
                     Point           aSrcPt( rTransMtf.GetPrefMapMode().GetOrigin() );
@@ -2363,8 +2312,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaTextLineColorAction*  pA = (MetaTextLineColorAction*) pAction;
                 const Color&                    rColor = pA->GetColor();
-                const sal_Bool                      bSet = pA->IsSetting();
-                sal_uLong                           nOldPos, nNewPos;
+                const sal_Bool                  bSet = pA->IsSetting();
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm << (sal_Int16) GDI_TEXTLINECOLOR_COMMENT;

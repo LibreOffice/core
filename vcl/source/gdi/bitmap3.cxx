@@ -219,7 +219,7 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
                                      {12,  2, 15,  1, },
                                      {7,   9,  4, 10 } };
 
-    // MagicSquare aufbauen
+    // Build MagicSquare
     for ( i = 0; i < 4; i++ )
        for ( j = 0; j < 4; j++ )
            for ( k = 0; k < 4; k++ )
@@ -227,7 +227,7 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
                     nMax = Max ( pMtx[ (k<<2) + i][(l<<2 ) + j] =
                     (sal_uInt16) ( 0.5 + pMagic[i][j]*fVal + pMagic[k][l]*fVal16 ), nMax );
 
-    // auf Intervall [0;254] skalieren
+    // Scale to interval [0;254]
     for ( i = 0, fVal = 254. / nMax; i < 16; i++ )
         for( j = 0; j < 16; j++ )
             (*pDitherMatrix)[i][j] = (sal_uInt8) ( fVal * pMtx[i][j] );
@@ -713,7 +713,7 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 
             for( nY = 0L; nY < nHeight; nY++, nYTmp++ )
             {
-                // erstes ZeilenPixel
+                // First RowPixel
                 cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex( pQLine1[ 0 ].ImplGetColor() );
                 pWriteAcc->SetPixel( nY, 0, cIndex );
 
@@ -728,14 +728,14 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
                     pWriteAcc->SetPixel( nY, nX, cIndex );
                 }
 
-                // letztes ZeilenPixel
+                // Last RowPixel
                 if( nX < nWidth )
                 {
                     cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex( pQLine1[ nWidth1 ].ImplGetColor() );
                     pWriteAcc->SetPixel( nY, nX, cIndex );
                 }
 
-                // Zeilenpuffer neu fuellen/kopieren
+                // Refill/copy row buffer
                 pQLine1 = pQLine2;
                 pQLine2 = ( bQ1 = !bQ1 ) != sal_False ? pErrQuad2 : pErrQuad1;
 
@@ -751,7 +751,7 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
                 }
             }
 
-            // Zeilenpuffer zerstoeren
+            // Delete row buffer
             delete[] pErrQuad1;
             delete[] pErrQuad2;
 
@@ -1389,7 +1389,7 @@ sal_Bool Bitmap::ImplDitherFloyd()
                     }
                 }
 
-                // erstes Pixel gesondert betrachten
+                // Examine first Pixel separately
                 nX = 0;
                 CALC_ERRORS;
                 CALC_TABLES7;
@@ -1397,7 +1397,7 @@ sal_Bool Bitmap::ImplDitherFloyd()
                 CALC_TABLES5;
                 pWriteAcc->SetPixel( nYAcc, 0, BitmapColor( (sal_uInt8) ( nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ] ) ) );
 
-                // mittlere Pixel ueber Schleife
+                // Get middle Pixels using a loop
                 long nXAcc;
                 for ( nX = 3L, nXAcc = 1L; nX < nW2; nXAcc++ )
                 {
@@ -1409,7 +1409,7 @@ sal_Bool Bitmap::ImplDitherFloyd()
                     pWriteAcc->SetPixel( nYAcc, nXAcc, BitmapColor( (sal_uInt8) ( nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ] ) ) );
                 }
 
-                // letztes Pixel gesondert betrachten
+                // Treat last Pixel separately
                 CALC_ERRORS;
                 nX -= 5;
                 CALC_TABLES3;
@@ -1469,7 +1469,7 @@ sal_Bool Bitmap::ImplDitherFloyd16()
 
         for( nY = 0L; nY < nHeight; nY++, nYTmp++ )
         {
-            // erstes ZeilenPixel
+            // First RowPixel
             aBestCol = pQLine1[ 0 ].ImplGetColor();
             aBestCol.SetRed( ( aBestCol.GetRed() & 248 ) | 7 );
             aBestCol.SetGreen( ( aBestCol.GetGreen() & 248 ) | 7 );
@@ -1490,14 +1490,14 @@ sal_Bool Bitmap::ImplDitherFloyd16()
                 pWriteAcc->SetPixel( nY, nX, aBestCol );
             }
 
-            // letztes ZeilenPixel
+            // Last RowPixel
             aBestCol = pQLine1[ nWidth1 ].ImplGetColor();
             aBestCol.SetRed( ( aBestCol.GetRed() & 248 ) | 7 );
             aBestCol.SetGreen( ( aBestCol.GetGreen() & 248 ) | 7 );
             aBestCol.SetBlue( ( aBestCol.GetBlue() & 248 ) | 7 );
             pWriteAcc->SetPixel( nY, nX, aBestCol );
 
-            // Zeilenpuffer neu fuellen/kopieren
+            // Refill/copy row buffer
             pQLine1 = pQLine2;
             pQLine2 = ( bQ1 = !bQ1 ) != sal_False ? pErrQuad2 : pErrQuad1;
 
@@ -1506,7 +1506,7 @@ sal_Bool Bitmap::ImplDitherFloyd16()
                     pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
         }
 
-        // Zeilenpuffer zerstoeren
+        // Destroy row buffer
         delete[] pErrQuad1;
         delete[] pErrQuad2;
         bRet = sal_True;

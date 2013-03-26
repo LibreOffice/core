@@ -24,26 +24,15 @@
 #include <salinst.hxx>
 #include <svdata.hxx>
 
-// --------------
-// - Callback   -
-// --------------
-
-// --------------------
-// - GraphicConverter -
-// --------------------
-
+// Callback
 GraphicConverter::GraphicConverter() :
     mpConvertData( NULL )
 {
 }
 
-// ------------------------------------------------------------------------
-
 GraphicConverter::~GraphicConverter()
 {
 }
-
-// ------------------------------------------------------------------------
 
 sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uLong nFormat )
 {
@@ -65,8 +54,6 @@ sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uLon
 
     return nRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_uLong GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, sal_uLong nFormat )
 {

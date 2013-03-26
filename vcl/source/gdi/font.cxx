@@ -37,11 +37,7 @@
 
 using namespace vcl;
 
-// =======================================================================
-
 DBG_NAME( Font )
-
-// -----------------------------------------------------------------------
 
 Impl_Font::Impl_Font() :
     maColor( COL_TRANSPARENT ),
@@ -71,8 +67,6 @@ Impl_Font::Impl_Font() :
     mbTransparent       = true;
     mbConfigLookup      = false;
 }
-
-// -----------------------------------------------------------------------
 
 Impl_Font::Impl_Font( const Impl_Font& rImplFont )
 :   maFamilyName( rImplFont.maFamilyName ),
@@ -105,8 +99,6 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont )
     mbTransparent       = rImplFont.mbTransparent;
     mbConfigLookup      = rImplFont.mbConfigLookup;
 }
-
-// -----------------------------------------------------------------------
 
 bool Impl_Font::operator==( const Impl_Font& rOther ) const
 {
@@ -150,8 +142,6 @@ bool Impl_Font::operator==( const Impl_Font& rOther ) const
 
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 void Impl_Font::AskConfig()
 {
@@ -225,8 +215,6 @@ void Impl_Font::AskConfig()
         meWidthType = eWidthType;
 }
 
-// =======================================================================
-
 void Font::MakeUnique()
 {
     // create a copy if others still reference it
@@ -238,8 +226,6 @@ void Font::MakeUnique()
     }
 }
 
-// -----------------------------------------------------------------------
-
 Font::Font()
 {
     DBG_CTOR( Font, NULL );
@@ -249,8 +235,6 @@ Font::Font()
     aStaticImplFont.mnRefCount = 0;
     mpImplFont = &aStaticImplFont;
 }
-
-// -----------------------------------------------------------------------
 
 Font::Font( const Font& rFont )
 {
@@ -264,18 +248,14 @@ Font::Font( const Font& rFont )
         mpImplFont->mnRefCount++;
 }
 
-// -----------------------------------------------------------------------
-
 Font::Font( const String& rFamilyName, const Size& rSize )
 {
     DBG_CTOR( Font, NULL );
 
-    mpImplFont              = new Impl_Font;
-    mpImplFont->maFamilyName= rFamilyName;
-    mpImplFont->maSize      = rSize;
+    mpImplFont               = new Impl_Font;
+    mpImplFont->maFamilyName = rFamilyName;
+    mpImplFont->maSize       = rSize;
 }
-
-// -----------------------------------------------------------------------
 
 Font::Font( const String& rFamilyName, const String& rStyleName, const Size& rSize )
 {
@@ -287,8 +267,6 @@ Font::Font( const String& rFamilyName, const String& rStyleName, const Size& rSi
     mpImplFont->maSize      = rSize;
 }
 
-// -----------------------------------------------------------------------
-
 Font::Font( FontFamily eFamily, const Size& rSize )
 {
     DBG_CTOR( Font, NULL );
@@ -297,8 +275,6 @@ Font::Font( FontFamily eFamily, const Size& rSize )
     mpImplFont->meFamily    = eFamily;
     mpImplFont->maSize      = rSize;
 }
-
-// -----------------------------------------------------------------------
 
 Font::~Font()
 {
@@ -315,8 +291,6 @@ Font::~Font()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetColor( const Color& rColor )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -328,8 +302,6 @@ void Font::SetColor( const Color& rColor )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetFillColor( const Color& rColor )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -339,8 +311,6 @@ void Font::SetFillColor( const Color& rColor )
     if ( rColor.GetTransparency() )
         mpImplFont->mbTransparent = true;
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetTransparent( sal_Bool bTransparent )
 {
@@ -353,8 +323,6 @@ void Font::SetTransparent( sal_Bool bTransparent )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetAlign( FontAlign eAlign )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -366,8 +334,6 @@ void Font::SetAlign( FontAlign eAlign )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetName( const rtl::OUString& rFamilyName )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -376,8 +342,6 @@ void Font::SetName( const rtl::OUString& rFamilyName )
     mpImplFont->maFamilyName = rFamilyName;
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetStyleName( const String& rStyleName )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -385,8 +349,6 @@ void Font::SetStyleName( const String& rStyleName )
     MakeUnique();
     mpImplFont->maStyleName = rStyleName;
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetSize( const Size& rSize )
 {
@@ -399,8 +361,6 @@ void Font::SetSize( const Size& rSize )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetFamily( FontFamily eFamily )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -411,8 +371,6 @@ void Font::SetFamily( FontFamily eFamily )
         mpImplFont->meFamily = eFamily;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetCharSet( CharSet eCharSet )
 {
@@ -425,8 +383,6 @@ void Font::SetCharSet( CharSet eCharSet )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetLanguage( LanguageType eLanguage )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -437,8 +393,6 @@ void Font::SetLanguage( LanguageType eLanguage )
         mpImplFont->meLanguage = eLanguage;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetCJKContextLanguage( LanguageType eLanguage )
 {
@@ -451,8 +405,6 @@ void Font::SetCJKContextLanguage( LanguageType eLanguage )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetPitch( FontPitch ePitch )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -463,8 +415,6 @@ void Font::SetPitch( FontPitch ePitch )
         mpImplFont->mePitch = ePitch;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetOrientation( short nOrientation )
 {
@@ -477,8 +427,6 @@ void Font::SetOrientation( short nOrientation )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetVertical( sal_Bool bVertical )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -489,8 +437,6 @@ void Font::SetVertical( sal_Bool bVertical )
         mpImplFont->mbVertical = bVertical;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetKerning( FontKerning nKerning )
 {
@@ -503,14 +449,10 @@ void Font::SetKerning( FontKerning nKerning )
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Font::IsKerning() const
 {
     return (mpImplFont->mnKerning & KERNING_FONTSPECIFIC) != 0;
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetWeight( FontWeight eWeight )
 {
@@ -523,8 +465,6 @@ void Font::SetWeight( FontWeight eWeight )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetWidthType( FontWidth eWidth )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -535,8 +475,6 @@ void Font::SetWidthType( FontWidth eWidth )
         mpImplFont->meWidthType = eWidth;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetItalic( FontItalic eItalic )
 {
@@ -549,8 +487,6 @@ void Font::SetItalic( FontItalic eItalic )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetOutline( sal_Bool bOutline )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -561,8 +497,6 @@ void Font::SetOutline( sal_Bool bOutline )
         mpImplFont->mbOutline = bOutline;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetShadow( sal_Bool bShadow )
 {
@@ -575,8 +509,6 @@ void Font::SetShadow( sal_Bool bShadow )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetUnderline( FontUnderline eUnderline )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -587,8 +519,6 @@ void Font::SetUnderline( FontUnderline eUnderline )
         mpImplFont->meUnderline = eUnderline;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetOverline( FontUnderline eOverline )
 {
@@ -601,8 +531,6 @@ void Font::SetOverline( FontUnderline eOverline )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetStrikeout( FontStrikeout eStrikeout )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -613,8 +541,6 @@ void Font::SetStrikeout( FontStrikeout eStrikeout )
         mpImplFont->meStrikeout = eStrikeout;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetRelief( FontRelief eRelief )
 {
@@ -627,8 +553,6 @@ void Font::SetRelief( FontRelief eRelief )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -639,8 +563,6 @@ void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
         mpImplFont->meEmphasisMark = eEmphasisMark;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void Font::SetWordLineMode( sal_Bool bWordLine )
 {
@@ -653,21 +575,19 @@ void Font::SetWordLineMode( sal_Bool bWordLine )
     }
 }
 
-// -----------------------------------------------------------------------
-
 Font& Font::operator=( const Font& rFont )
 {
     DBG_CHKTHIS( Font, NULL );
     DBG_CHKOBJ( &rFont, Font, NULL );
     DBG_ASSERT( rFont.mpImplFont->mnRefCount < 0xFFFE, "Font: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    // RefCount == 0 fuer statische Objekte
+    // Increment RefCount first, so that we can reference ourselves
+    // RefCount == 0 for static objects
     if ( rFont.mpImplFont->mnRefCount )
         rFont.mpImplFont->mnRefCount++;
 
-    // Wenn es keine statischen ImplDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // If it's not static ImplData and if it's the last reference, delete it
+    // else decrement RefCount
     if ( mpImplFont->mnRefCount )
     {
         if ( mpImplFont->mnRefCount == 1 )
@@ -681,8 +601,6 @@ Font& Font::operator=( const Font& rFont )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Font::operator==( const Font& rFont ) const
 {
     DBG_CHKTHIS( Font, NULL );
@@ -695,8 +613,6 @@ sal_Bool Font::operator==( const Font& rFont ) const
 
     return sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 void Font::Merge( const Font& rFont )
 {
@@ -761,9 +677,6 @@ void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
     rAttrs.SetSymbolFlag( mpImplFont->meCharSet == RTL_TEXTENCODING_SYMBOL );
 }
 
-
-// -----------------------------------------------------------------------
-
 SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
@@ -809,8 +722,6 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
@@ -847,22 +758,17 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     return rOStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator>>( SvStream& rIStm, Font& rFont )
 {
     rFont.MakeUnique();
     return( rIStm >> *rFont.mpImplFont );
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStm, const Font& rFont )
 {
     return( rOStm << *rFont.mpImplFont );
 }
 
-// -----------------------------------------------------------------------
 namespace
 {
     bool identifyTrueTypeFont( const void* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
@@ -873,7 +779,7 @@ namespace
         {
             TTGlobalFontInfo aInfo;
             GetTTGlobalFontInfo( pTTF, &aInfo );
-            // most important: the family name
+            // most importantly: the family name
             if( aInfo.ufamily )
                 o_rResult.SetName( aInfo.ufamily );
             else if( aInfo.family )
@@ -1071,38 +977,67 @@ Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
     return aResult;
 }
 
-// the inlines from the font.hxx header are now instantiated for pImpl-ification
-// TODO: reformat
+// The inlines from the font.hxx header are now instantiated for pImpl-ification
 const Color& Font::GetColor() const { return mpImplFont->maColor; }
+
 const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }
+
 sal_Bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
+
 FontAlign Font::GetAlign() const { return mpImplFont->meAlign; }
+
 const String& Font::GetName() const { return mpImplFont->maFamilyName; }
+
 const String& Font::GetStyleName() const { return mpImplFont->maStyleName; }
+
 const Size& Font::GetSize() const { return mpImplFont->maSize; }
+
 void Font::SetHeight( long nHeight ) { SetSize( Size( mpImplFont->maSize.Width(), nHeight ) ); }
+
 long Font::GetHeight() const { return mpImplFont->maSize.Height(); }
+
 void Font::SetWidth( long nWidth ) { SetSize( Size( nWidth, mpImplFont->maSize.Height() ) ); }
+
 long Font::GetWidth() const { return mpImplFont->maSize.Width(); }
+
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->meCharSet; }
+
 LanguageType Font::GetLanguage() const { return mpImplFont->meLanguage; }
+
 LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->meCJKLanguage; }
+
 short Font::GetOrientation() const { return mpImplFont->mnOrientation; }
+
 sal_Bool Font::IsVertical() const { return mpImplFont->mbVertical; }
+
 FontKerning Font::GetKerning() const { return mpImplFont->mnKerning; }
+
 FontPitch Font::GetPitch() const { return mpImplFont->GetPitch(); }
+
 FontWeight Font::GetWeight() const { return mpImplFont->GetWeight(); }
+
 FontWidth Font::GetWidthType() const { return mpImplFont->GetWidthType(); }
+
 FontItalic Font::GetItalic() const { return mpImplFont->GetItalic(); }
+
 FontFamily Font::GetFamily() const { return mpImplFont->GetFamily(); }
+
 sal_Bool Font::IsOutline() const { return mpImplFont->mbOutline; }
+
 sal_Bool Font::IsShadow() const { return mpImplFont->mbShadow; }
+
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
+
 FontUnderline Font::GetUnderline() const { return mpImplFont->meUnderline; }
+
 FontUnderline Font::GetOverline()  const { return mpImplFont->meOverline; }
+
 FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
+
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
+
 sal_Bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
+
 sal_Bool Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,9 +58,7 @@ public:
     void    operator++(int);
 };
 
-// =======================================================================
 // template specializations for truecolor pixel formats
-
 template <>
 class TrueColorPixelPtr<BMP_FORMAT_24BIT_TC_RGB> : public BasePixelPtr
 {
@@ -221,8 +219,6 @@ public:
     }
 };
 
-// -----------------------------------------------------------------------
-
 template <>
 class TrueColorPixelPtr<BMP_FORMAT_8BIT_TC_MASK> : public BasePixelPtr
 {
@@ -240,9 +236,7 @@ class TrueColorPixelPtr<BMP_FORMAT_8BIT_PAL>
 : public TrueColorPixelPtr<BMP_FORMAT_8BIT_TC_MASK>
 {};
 
-// =======================================================================
 // converting truecolor formats
-
 template <sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplConvertPixel( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc )
@@ -250,8 +244,6 @@ inline void ImplConvertPixel( const TrueColorPixelPtr<DSTFMT>& rDst,
     rDst.SetColor( rSrc.GetRed(), rSrc.GetGreen(), rSrc.GetBlue() );
     rDst.SetAlpha( rSrc.GetAlpha() );
 }
-
-// -----------------------------------------------------------------------
 
 template <>
 inline void ImplConvertPixel<BMP_FORMAT_16BIT_TC_LSB_MASK, BMP_FORMAT_16BIT_TC_MSB_MASK> (
@@ -264,8 +256,6 @@ inline void ImplConvertPixel<BMP_FORMAT_16BIT_TC_LSB_MASK, BMP_FORMAT_16BIT_TC_M
     pDst[1] = pSrc[0];
     pDst[0] = pSrc[1];
 }
-
-// -----------------------------------------------------------------------
 
 template <sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
@@ -281,9 +271,7 @@ inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
     }
 }
 
-// =======================================================================
 // alpha blending truecolor pixels
-
 template <unsigned ALPHABITS, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, unsigned nAlphaVal )
@@ -314,8 +302,6 @@ inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
     }
 }
 
-// -----------------------------------------------------------------------
-
 template <unsigned ALPHABITS, sal_uLong MASKFMT, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, const TrueColorPixelPtr<MASKFMT>& rMsk,
@@ -332,8 +318,6 @@ inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
         ++aMsk;
     }
 }
-
-// -----------------------------------------------------------------------
 
 template <unsigned ALPHABITS, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
@@ -354,8 +338,6 @@ inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
         }
     }
 }
-
-// =======================================================================
 
 static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
 {
@@ -391,8 +373,6 @@ static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuf
     return true;
 }
 
-// -----------------------------------------------------------------------
-
 template <sal_uLong DSTFMT,sal_uLong SRCFMT>
 bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
@@ -423,8 +403,6 @@ bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
 
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 template <sal_uLong SRCFMT>
 inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc )
@@ -485,14 +463,12 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     return false;
 }
 
-// =======================================================================
-
-// an universal stretching conversion is overkill in most common situations
+// A universal stretching conversion is overkill in most common situations
 // => performance benefits for speeding up the non-stretching cases
 bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     const SalTwoRect& rTR )
 {
-    // horizontal mirroring not implemented yet
+    // TODO:horizontal mirroring not implemented yet
     if( rTR.mnDestWidth < 0 )
         return false;
     // vertical mirroring
@@ -603,14 +579,11 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     return false;
 }
 
-// =======================================================================
-
 template <sal_uLong DSTFMT,sal_uLong SRCFMT> //,sal_uLong MSKFMT>
 bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
 {
-    //DBG_ASSERT( rMskBuffer.mnFormat == MSKFMT, "FastBmp BlendImage: wrong MSKFMT" );
     DBG_ASSERT( rMskBuffer.mnFormat == BMP_FORMAT_8BIT_PAL, "FastBmp BlendImage: unusual MSKFMT" );
 
     const int nSrcLinestep = rSrcBuffer.mnScanlineSize;
@@ -680,8 +653,6 @@ inline bool ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_BGRA,BMP_FORMAT_32BIT_TC_BGRA>
     return ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_RGBA>( aSrcType, rDstBuffer, rSrcBuffer, rMskBuffer );
  }
 
-// -----------------------------------------------------------------------
-
 template <sal_uLong SRCFMT>
 bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const BitmapBuffer& rMsk )
 {
@@ -740,8 +711,6 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
 
     return false;
 }
-
-// -----------------------------------------------------------------------
 
 bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     const BitmapReadAccess& rSrcRA, const BitmapReadAccess& rMskRA,
@@ -938,8 +907,6 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 
     return false;
 }
-
-// =======================================================================
 
 #else // NO_OPTIMIZED_BITMAP_ACCESS
 

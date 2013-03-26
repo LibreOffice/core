@@ -27,10 +27,6 @@
 
 #include <bmpfast.hxx>
 
-// ---------------------
-// - BitmapWriteAccess -
-// ---------------------
-
 void BitmapWriteAccess::SetLineColor( const Color& rColor )
 {
     delete mpLineColor;
@@ -41,8 +37,6 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
         mpLineColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
-// ------------------------------------------------------------------
-
 void BitmapWriteAccess::SetFillColor( const Color& rColor )
 {
     delete mpFillColor;
@@ -52,8 +46,6 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
     else
         mpFillColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
-
-// ------------------------------------------------------------------
 
 void BitmapWriteAccess::Erase( const Color& rColor )
 {
@@ -77,8 +69,6 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     mpFillColor = pOldFillColor;
 }
 
-// ------------------------------------------------------------------
-
 void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 {
     if( mpLineColor )
@@ -88,7 +78,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
 
         if ( rStart.X() == rEnd.X() )
         {
-            // vertikale Line
+            // Vertical Line
             const long nEndY = rEnd.Y();
 
             nX = rStart.X();
@@ -107,7 +97,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
         }
         else if ( rStart.Y() == rEnd.Y() )
         {
-            // horizontale Line
+            // Horizontal Line
             const long nEndX = rEnd.X();
 
             nX = rStart.X();
@@ -215,8 +205,6 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     }
 }
 
-// ------------------------------------------------------------------
-
 void BitmapWriteAccess::FillRect( const Rectangle& rRect )
 {
     if( mpFillColor )
@@ -240,8 +228,6 @@ void BitmapWriteAccess::FillRect( const Rectangle& rRect )
         }
     }
 }
-
-// ------------------------------------------------------------------
 
 void BitmapWriteAccess::DrawRect( const Rectangle& rRect )
 {

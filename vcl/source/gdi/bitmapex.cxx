@@ -120,7 +120,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
     DBG_ASSERT( !rMask || rBmp.GetSizePixel() == rMask.GetSizePixel(),
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and mask." );
 
-    // #105489# Ensure a mask is exactly one bit deep
+    // Ensure a mask is exactly one bit deep
     if( !!aMask && aMask.GetBitCount() != 1 )
     {
         OSL_TRACE("BitmapEx: forced mask to monochrome");
@@ -576,7 +576,7 @@ sal_Bool BitmapEx::Erase( const Color& rFillColor )
 
         if( bRet && ( eTransparent == TRANSPARENT_BITMAP ) && !!aMask )
         {
-            // #104416# Respect transparency on fill color
+            // Respect transparency on fill color
             if( rFillColor.GetTransparency() )
             {
                 const Color aFill( rFillColor.GetTransparency(), rFillColor.GetTransparency(), rFillColor.GetTransparency() );
@@ -679,7 +679,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
     aVirDevice.SetFillColor( COL_TRANSPARENT );
     aVirDevice.SetLineColor( COL_TRANSPARENT );
 
-    //draw a rect into virDevice
+    // Draw a rect into virDevice
     aVirDevice.DrawRect( aRect );
     Point aPointPixel( (long)imgposX, (long)imgposY );
     aVirDevice.DrawBitmapEx( aPointPixel, aRet );
@@ -700,7 +700,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
             {
                 case TRANSPARENT_NONE:
                 {
-                    // not transparent, ergo all covered
+                    // Not transparent, ergo all covered
                     nTransparency = 0x00;
                     break;
                 }
@@ -713,7 +713,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                     {
                         const Color aColor = pRead->GetColor(nY, nX);
 
-                        // if color is not equal to TransparentColor, we are not transparent
+                        // If color is not equal to TransparentColor, we are not transparent
                         if(aColor != aTransparentColor)
                         {
                             nTransparency = 0x00;
