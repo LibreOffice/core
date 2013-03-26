@@ -31,45 +31,40 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#ifndef _COM_SUN_STAR_LANG_XMULTI_COMPONENT_FACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#endif
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 // ----------------------
 // - PPPOptimizerDialog -
 // ----------------------
 
-class PPPOptimizerDialog :  protected ::cppu::BaseMutex,
-                            public  ::cppu::WeakImplHelper3<
+class OptimizerDialog;
+class PPPOptimizerDialog : public   ::cppu::WeakImplHelper4<
                                     com::sun::star::lang::XInitialization,
                                     com::sun::star::lang::XServiceInfo,
-                                    com::sun::star::ui::dialogs::XExecutableDialog >
+                                    com::sun::star::frame::XDispatchProvider,
+                                    com::sun::star::frame::XDispatch >
 {
-private:
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
-    bool mbInitialized;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxMSF;
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxFrame;
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > mxParentWindow;
-    rtl::OUString msTitle;
+    com::sun::star::uno::Reference< com::sun::star::frame::XController > mxController;
+
+    OptimizerDialog*    mpOptimizerDialog;
 
 public:
 
-    PPPOptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    PPPOptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF );
     virtual ~PPPOptimizerDialog();
 
     // XInitialization
     void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
         throw( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -79,6 +74,26 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
     virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw( com::sun::star::uno::RuntimeException );
+
+    // XDispatchProvider
+    virtual com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
+        const com::sun::star::util::URL& aURL, const rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags )
+            throw(com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches(
+        const com::sun::star::uno::Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( com::sun::star::uno::RuntimeException );
+
+    // XDispatch
+    virtual void SAL_CALL dispatch( const com::sun::star::util::URL& aURL,
+                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lArguments )
+        throw( com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL addStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
+                                                const com::sun::star::util::URL& aURL )
+        throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeStatusListener( const com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >& xListener,
+                                                const com::sun::star::util::URL& aURL )
         throw( com::sun::star::uno::RuntimeException );
 };
 

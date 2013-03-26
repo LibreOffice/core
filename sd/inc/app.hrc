@@ -503,6 +503,5 @@
 
 #define SID_ADD_MOTION_PATH                 (SID_SD_START+441)
 #define SID_TABLE_TOOLBOX                   (SID_SD_START+442)
-#define SID_PRESENTATION_MINIMIZER          (SID_SD_START+442)
 
 #endif

@@ -34,22 +34,14 @@
 #endif
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <osl/time.h>
-
-#include "minimizer.hrc"
-#include "helpid.hrc"
-
-#define URL_GRAPHIC_REPO        "private:graphicrepository"
-#define IMAGE_ROADMAP           URL_GRAPHIC_REPO "/minimizer/minimizepresi_80.png"
-#define IMAGE_ROADMAP_HC        URL_GRAPHIC_REPO "/minimizer/minimizepresi_80.png"
 
 // -------------------
 // - OPTIMIZERDIALOG -
 // -------------------
 
+using namespace ::rtl;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::ucb;
@@ -61,7 +53,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
-using ::rtl::OUString;
 
 // -----------------------------------------------------------------------------
 
@@ -71,7 +62,6 @@ void OptimizerDialog::InitDialog()
     OUString pNames[] = {
         TKGet( TK_Closeable ),
         TKGet( TK_Height ),
-        TKGet( TK_HelpURL ),
         TKGet( TK_Moveable ),
         TKGet( TK_PositionX ),
         TKGet( TK_PositionY ),
@@ -81,11 +71,10 @@ void OptimizerDialog::InitDialog()
     Any pValues[] = {
         Any( sal_True ),
         Any( sal_Int32( DIALOG_HEIGHT ) ),
-        Any( HID( HID_SDEXT_MINIMIZER_WIZ_DLG ) ),
         Any( sal_True ),
         Any( sal_Int32( 200 ) ),
         Any( sal_Int32( 52 ) ),
-        Any( getString( STR_PRESENTATION_MINIMIZER ) ),
+        Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( OD_DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
@@ -135,12 +124,12 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 3, sal_True, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
-        rtl::OUString sBitmap(
-            isHighContrast() ?
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMAGE_ROADMAP_HC ) ) :
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMAGE_ROADMAP ) ) );
+        rtl::OUString sBitmapPath( getPath( TK_BitmapPath ) );
+        rtl::OUString sBitmap( isHighContrast() ? rtl::OUString::createFromAscii( "/minimizepresi_80_h.png" )
+                                                : rtl::OUString::createFromAscii( "/minimizepresi_80.png" ) );
+        rtl::OUString sURL( sBitmapPath += sBitmap );
 
-        xPropertySet->setPropertyValue( TKGet( TK_ImageURL ), Any( sBitmap ) );
+        xPropertySet->setPropertyValue( TKGet( TK_ImageURL ), Any( sURL ) );
         xPropertySet->setPropertyValue( TKGet( TK_Activated ), Any( (sal_Bool)sal_True ) );
         xPropertySet->setPropertyValue( TKGet( TK_Complete ), Any( (sal_Bool)sal_True ) );
         xPropertySet->setPropertyValue( TKGet( TK_CurrentItemID ), Any( (sal_Int16)ITEM_ID_INTRODUCTION ) );
@@ -224,21 +213,22 @@ void OptimizerDialog::UpdateConfiguration()
 
 // -----------------------------------------------------------------------------
 
-OptimizerDialog::OptimizerDialog(
-    const Reference< XComponentContext > &rxContext,
-    const Reference< XFrame > &rxFrame,
-    const Reference< XWindowPeer >& rxParent )
-    : UnoDialog( rxContext, rxParent )
-    , ConfigurationAccess( rxContext, NULL )
-    , mxFrame( rxFrame )
-    , mnCurrentStep( 0 )
-    , mnTabIndex( 0 )
+OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
+    UnoDialog( rxMSF, rxFrame ),
+    ConfigurationAccess( rxMSF, NULL ),
+    mnCurrentStep( 0 ),
+    mnTabIndex( 0 ),
+    mxMSF( rxMSF ),
+    mxFrame( rxFrame ),
+    mxItemListener( new ItemListener( *this ) ),
+    mxActionListener( new ActionListener( *this ) ),
+    mxActionListenerListBox0Pg0( new ActionListenerListBox0Pg0( *this ) ),
+    mxTextListenerFormattedField0Pg1( new TextListenerFormattedField0Pg1( *this ) ),
+    mxTextListenerComboBox0Pg1( new TextListenerComboBox0Pg1( *this ) ),
+    mxSpinListenerFormattedField0Pg1( new SpinListenerFormattedField0Pg1( *this ) ),
+    mxStatusDispatcher( rxStatusDispatcher )
 {
-    OSL_TRACE("OptimizerDialog::OptimizerDialog");
-    OSL_ENSURE( mxFrame.is(), "OptimizerDialog: no XFrame!" );
-    Reference< XController > xController( mxFrame->getController() );
-    mxModel = xController->getModel();
-    Reference< XStorable> xStorable( mxModel, UNO_QUERY_THROW );
+    Reference< XStorable > xStorable( mxController->getModel(), UNO_QUERY_THROW );
     mbIsReadonly = xStorable->isReadonly();
 
     InitDialog();
@@ -252,54 +242,29 @@ OptimizerDialog::OptimizerDialog(
     ActivatePage( 0 );
 
     OptimizationStats aStats;
-    aStats.InitializeStatusValuesFromDocument( mxModel );
+    aStats.InitializeStatusValuesFromDocument( mxController->getModel() );
     Sequence< PropertyValue > aStatusSequence( aStats.GetStatusSequence() );
     UpdateStatus( aStatusSequence );
-
-    centerDialog();
 }
 
 // -----------------------------------------------------------------------------
 
 OptimizerDialog::~OptimizerDialog()
 {
-    OSL_TRACE("OptimizerDialog::~OptimizerDialog");
     // not saving configuration if the dialog has been finished via cancel or close window
     if ( mbStatus )
         SaveConfiguration();
-
-    Reference< XComponent > xComponent( mxDialog, UNO_QUERY );
-    if ( xComponent.is() )
-    {
-        OSL_TRACE("OptimizerDialog::~OptimizerDialog - disposing dialog!");
-        xComponent->dispose();
-    }
 }
-
-
-void SAL_CALL OptimizerDialog::statusChanged(
-    const ::com::sun::star::frame::FeatureStateEvent& aState )
-throw (::com::sun::star::uno::RuntimeException)
-{
-    Sequence< PropertyValue > aArguments;
-    if ( ( aState.State >>= aArguments ) && aArguments.getLength() )
-        UpdateStatus( aArguments );
-}
-
-void SAL_CALL OptimizerDialog::disposing(
-    const ::com::sun::star::lang::EventObject& /*aSource*/ )
-throw (::com::sun::star::uno::RuntimeException)
-{}
 
 // -----------------------------------------------------------------------------
 
 sal_Bool OptimizerDialog::execute()
 {
     Reference< XItemEventBroadcaster > maRoadmapBroadcaster( mxRoadmapControl, UNO_QUERY_THROW );
-    maRoadmapBroadcaster->addItemListener( this );
+    maRoadmapBroadcaster->addItemListener( mxItemListener );
     UnoDialog::execute();
     UpdateConfiguration();          // taking actual control settings for the configuration
-    maRoadmapBroadcaster->removeItemListener( this );
+    maRoadmapBroadcaster->removeItemListener( mxItemListener );
     return mbStatus;
 }
 
@@ -385,7 +350,7 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
             if ( *pVal >>= sStatus )
             {
                 setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
-                setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Label ), Any( sStatus ) );
+                setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Label ), Any( getString( TKGet( sStatus ) ) ) );
             }
         }
         pVal = maStats.GetStatusValue( TK_Progress );
@@ -405,7 +370,7 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
 
 // -----------------------------------------------------------------------------
 
-void OptimizerDialog::itemStateChanged( const ItemEvent& Event )
+void ItemListener::itemStateChanged( const ItemEvent& Event )
     throw ( RuntimeException )
 {
     try
@@ -423,28 +388,28 @@ void OptimizerDialog::itemStateChanged( const ItemEvent& Event )
             {
                 case TK_rdmNavi :
                 {
-                    SwitchPage( static_cast< sal_Int16 >( Event.ItemId ) );
+                    mrOptimizerDialog.SwitchPage( static_cast< sal_Int16 >( Event.ItemId ) );
                 }
                 break;
                 case TK_CheckBox1Pg1 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        SetConfigProperty( TK_RemoveCropArea, Any( nState != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_RemoveCropArea, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox2Pg1 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        SetConfigProperty( TK_EmbedLinkedGraphics, Any( nState != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_EmbedLinkedGraphics, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox0Pg2 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
                     {
-                        SetConfigProperty( TK_OLEOptimization, Any( nState != 0 ) );
-                        setControlProperty( TKGet( TK_RadioButton0Pg2 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
-                        setControlProperty( TKGet( TK_RadioButton1Pg2 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_OLEOptimization, Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_RadioButton0Pg2 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_RadioButton1Pg2 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
                     }
                 }
                 break;
@@ -454,9 +419,9 @@ void OptimizerDialog::itemStateChanged( const ItemEvent& Event )
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nInt16 )
                     {
                         nInt16 ^= 1;
-                        SetConfigProperty( TK_JPEGCompression, Any( nInt16 != 0 ) );
-                        setControlProperty( TKGet( TK_FixedText1Pg1 ), TKGet( TK_Enabled ), Any( nInt16 != 0 ) );
-                        setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_Enabled ), Any( nInt16 != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_JPEGCompression, Any( nInt16 != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_FixedText1Pg1 ), TKGet( TK_Enabled ), Any( nInt16 != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_Enabled ), Any( nInt16 != 0 ) );
                     }
                 }
                 break;
@@ -464,9 +429,9 @@ void OptimizerDialog::itemStateChanged( const ItemEvent& Event )
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
                     {
-                        SetConfigProperty( TK_JPEGCompression, Any( nState != 0 ) );
-                        setControlProperty( TKGet( TK_FixedText1Pg1 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
-                        setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_JPEGCompression, Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_FixedText1Pg1 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
                     }
                 }
                 break;
@@ -476,51 +441,51 @@ void OptimizerDialog::itemStateChanged( const ItemEvent& Event )
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nInt16 )
                     {
                         nInt16 ^= 1;
-                        SetConfigProperty( TK_OLEOptimizationType, Any( nInt16 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_OLEOptimizationType, Any( nInt16 ) );
                     }
                 }
                 break;
                 case TK_RadioButton1Pg2 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        SetConfigProperty( TK_OLEOptimizationType, Any( nState ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_OLEOptimizationType, Any( nState ) );
                 }
                 break;
                 case TK_CheckBox0Pg3 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        SetConfigProperty( TK_DeleteUnusedMasterPages, Any( nState != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_DeleteUnusedMasterPages, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox1Pg3 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        SetConfigProperty( TK_DeleteNotesPages, Any( nState != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_DeleteNotesPages, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox2Pg3 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        SetConfigProperty( TK_DeleteHiddenSlides, Any( nState != 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_DeleteHiddenSlides, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox3Pg3 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        setControlProperty( TKGet( TK_ListBox0Pg3 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_ListBox0Pg3 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox1Pg4 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
                 }
                 break;
                 case TK_RadioButton0Pg4 :
                 case TK_RadioButton1Pg4 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        SetConfigProperty( TK_SaveAs, Any( eControl == TK_RadioButton1Pg4 ? nState != 0 : nState == 0 ) );
+                        mrOptimizerDialog.SetConfigProperty( TK_SaveAs, Any( eControl == TK_RadioButton1Pg4 ? nState != 0 : nState == 0 ) );
                 }
                 break;
                 default:
@@ -530,42 +495,93 @@ void OptimizerDialog::itemStateChanged( const ItemEvent& Event )
     }
     catch ( Exception& )
     {
+
     }
+}
+void ItemListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
 }
 
 // -----------------------------------------------------------------------------
 
-void OptimizerDialog::actionPerformed( const ActionEvent& rEvent )
+void ActionListener::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
 {
     switch( TKGet( rEvent.ActionCommand ) )
     {
-        case TK_btnNavBack :    SwitchPage( mnCurrentStep - 1 ); break;
-        case TK_btnNavNext :    SwitchPage( mnCurrentStep + 1 ); break;
+        case TK_btnNavHelp :
+        {
+            try
+            {
+                static Reference< XFrame > xHelpFrame;
+                if ( !xHelpFrame.is() )
+                {
+                    rtl::OUString sHelpFile( mrOptimizerDialog.getPath( TK_HelpFile ) );
+                    Reference< XDesktop > desktop( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
+                            OUString::createFromAscii( "com.sun.star.frame.Desktop" ), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
+                    Reference< XSimpleFileAccess > xSimpleFileAccess( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
+                            OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
+                    Reference< XInputStream > xInputStream( xSimpleFileAccess->openFileRead( sHelpFile ) );
+                    Reference< XDesktop > xDesktop( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
+                            OUString::createFromAscii( "com.sun.star.frame.Desktop" ), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
+                    Reference< XFrame > xDesktopFrame( xDesktop, UNO_QUERY_THROW );
+                    xHelpFrame = Reference< XFrame >( xDesktopFrame->findFrame( TKGet( TK__blank ), 0 ) );
+                    Reference< XCloseBroadcaster > xCloseBroadcaster( xHelpFrame, UNO_QUERY_THROW );
+                    xCloseBroadcaster->addCloseListener( new HelpCloseListener( xHelpFrame ) );
+                    Reference< XComponentLoader > xLoader( xHelpFrame, UNO_QUERY_THROW );
+
+                    Sequence< PropertyValue > aLoadProps( 2 );
+                    aLoadProps[ 0 ].Name = TKGet( TK_ReadOnly );
+                    aLoadProps[ 0 ].Value <<= (sal_Bool)( sal_True );
+                    aLoadProps[ 1 ].Name = TKGet( TK_InputStream );
+                    aLoadProps[ 1 ].Value <<= xInputStream;
+
+                    Reference< XComponent >( xLoader->loadComponentFromURL( OUString::createFromAscii( "private:stream" ),
+                        TKGet( TK__self ), 0, aLoadProps ) );
+
+                    Reference< XPropertySet > xPropSet( xHelpFrame, UNO_QUERY_THROW );
+                    Reference< XLayoutManager > xLayoutManager;
+                    if ( xPropSet->getPropertyValue( OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager )
+                    {
+                        xLayoutManager->setVisible( sal_False );
+                        xLayoutManager->hideElement( OUString::createFromAscii( "private:resource/menubar/menubar" ) );
+                        xLayoutManager->destroyElement( OUString::createFromAscii( "private:resource/statusbar/statusbar" ) );
+                    }
+                }
+            }
+            catch( Exception& )
+            {
+
+            }
+        }
+        break;
+        case TK_btnNavBack :    mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep - 1 ); break;
+        case TK_btnNavNext :    mrOptimizerDialog.SwitchPage( mrOptimizerDialog.mnCurrentStep + 1 ); break;
         case TK_btnNavFinish :
         {
-            UpdateConfiguration();
+            mrOptimizerDialog.UpdateConfiguration();
 
-            SwitchPage( ITEM_ID_SUMMARY );
-            DisablePage( ITEM_ID_SUMMARY );
-            setControlProperty( TKGet( TK_btnNavHelp ), TKGet( TK_Enabled ), Any( sal_False ) );
-            setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_False ) );
-            setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
-            setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_False ) );
-            setControlProperty( TKGet( TK_btnNavCancel ), TKGet( TK_Enabled ), Any( sal_False ) );
-            setControlProperty( TKGet( TK_FixedText0Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
+            mrOptimizerDialog.SwitchPage( ITEM_ID_SUMMARY );
+            mrOptimizerDialog.DisablePage( ITEM_ID_SUMMARY );
+            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavHelp ), TKGet( TK_Enabled ), Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavCancel ), TKGet( TK_Enabled ), Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( TKGet( TK_FixedText0Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
 
             // check if we have to open the FileDialog
             sal_Bool    bSuccessfullyExecuted = sal_True;
             sal_Int16   nInt16 = 0;
-            getControlProperty( TKGet( TK_RadioButton1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
+            mrOptimizerDialog.getControlProperty( TKGet( TK_RadioButton1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
             if ( nInt16 )
             {
                 rtl::OUString aSaveAsURL;
-                FileOpenDialog aFileOpenDialog( mxContext, Reference< XWindow >( mxParent, UNO_QUERY ) );
+                FileOpenDialog aFileOpenDialog( ((UnoDialog&)mrOptimizerDialog).mxMSF );
 
                 // generating default file name
-                Reference< XStorable > xStorable( mxModel, UNO_QUERY );
+                Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );
                 if ( xStorable.is() && xStorable->hasLocation() )
                 {
                     rtl::OUString aLocation( xStorable->getLocation() );
@@ -592,8 +608,8 @@ void OptimizerDialog::actionPerformed( const ActionEvent& rEvent )
                 if ( bDialogExecuted )
                 {
                     aSaveAsURL = aFileOpenDialog.getURL();
-                    SetConfigProperty( TK_SaveAsURL, Any( aSaveAsURL ) );
-                    SetConfigProperty( TK_FilterName, Any( aFileOpenDialog.getFilterName() ) );
+                    mrOptimizerDialog.SetConfigProperty( TK_SaveAsURL, Any( aSaveAsURL ) );
+                    mrOptimizerDialog.SetConfigProperty( TK_FilterName, Any( aFileOpenDialog.getFilterName() ) );
                 }
                 if ( !aSaveAsURL.getLength() )
                 {
@@ -602,23 +618,23 @@ void OptimizerDialog::actionPerformed( const ActionEvent& rEvent )
                 }
 
                 // waiting for 500ms
-                if ( mxReschedule.is() )
+                if ( mrOptimizerDialog.mxReschedule.is() )
                 {
-                    mxReschedule->reschedule();
+                    mrOptimizerDialog.mxReschedule->reschedule();
                     for ( sal_uInt32 i = osl_getGlobalTimer(); ( i + 500 ) > ( osl_getGlobalTimer() ); )
-                    mxReschedule->reschedule();
+                    mrOptimizerDialog.mxReschedule->reschedule();
                 }
             }
             if ( bSuccessfullyExecuted )
             {   // now check if we have to store a session template
                 nInt16 = 0;
                 OUString aSettingsName;
-                getControlProperty( TKGet( TK_CheckBox1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
-                getControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Text ) ) >>= aSettingsName;
+                mrOptimizerDialog.getControlProperty( TKGet( TK_CheckBox1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
+                mrOptimizerDialog.getControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Text ) ) >>= aSettingsName;
                 if ( nInt16 && aSettingsName.getLength() )
                 {
-                    std::vector< OptimizerSettings >::iterator aIter( GetOptimizerSettingsByName( aSettingsName ) );
-                    std::vector< OptimizerSettings >& rSettings( GetOptimizerSettings() );
+                    std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( aSettingsName ) );
+                    std::vector< OptimizerSettings >& rSettings( mrOptimizerDialog.GetOptimizerSettings() );
                     OptimizerSettings aNewSettings( rSettings[ 0 ] );
                     aNewSettings.maName = aSettingsName;
                     if ( aIter == rSettings.end() )
@@ -630,10 +646,10 @@ void OptimizerDialog::actionPerformed( const ActionEvent& rEvent )
             if ( bSuccessfullyExecuted )
             {
                 Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= mxFrame;
+                aArgs[ 0 ] <<= mrOptimizerDialog.GetFrame();
 
-                Reference < XDispatch > xDispatch( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    OUString::createFromAscii( "com.sun.star.comp.PPPOptimizer" ), aArgs, mxContext ), UNO_QUERY );
+                Reference < XDispatch > xDispatch( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    OUString::createFromAscii( "com.sun.star.comp.PPPOptimizer" ), aArgs, mrOptimizerDialog.GetComponentContext() ), UNO_QUERY );
 
                 URL aURL;
                 aURL.Protocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.com.sun.star.comp.PPPOptimizer:" ) );
@@ -641,151 +657,179 @@ void OptimizerDialog::actionPerformed( const ActionEvent& rEvent )
 
                 Sequence< PropertyValue > lArguments( 3 );
                 lArguments[ 0 ].Name = TKGet( TK_Settings );
-                lArguments[ 0 ].Value <<= GetConfigurationSequence();
-                lArguments[ 1 ].Name = TKGet( TK_StatusListener );
-                lArguments[ 1 ].Value <<= Reference< XStatusListener >( this );
-                lArguments[ 2 ].Name = TKGet( TK_ParentWindow );
-                lArguments[ 2 ].Value <<= mxDialogWindowPeer;
+                lArguments[ 0 ].Value <<= mrOptimizerDialog.GetConfigurationSequence();
+                lArguments[ 1 ].Name = TKGet( TK_StatusDispatcher );
+                lArguments[ 1 ].Value <<= mrOptimizerDialog.GetStatusDispatcher();
+                lArguments[ 2 ].Name = TKGet( TK_InformationDialog );
+                lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
 
                 if( xDispatch.is() )
                     xDispatch->dispatch( aURL, lArguments );
 
-                endExecute( bSuccessfullyExecuted );
+                mrOptimizerDialog.endExecute( bSuccessfullyExecuted );
             }
             else
             {
-                setControlProperty( TKGet( TK_btnNavHelp ), TKGet( TK_Enabled ), Any( sal_True ) );
-                setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_True ) );
-                setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
-                setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_True ) );
-                setControlProperty( TKGet( TK_btnNavCancel ), TKGet( TK_Enabled ), Any( sal_True ) );
-                EnablePage( ITEM_ID_SUMMARY );
+                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavHelp ), TKGet( TK_Enabled ), Any( sal_True ) );
+                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_True ) );
+                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
+                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_True ) );
+                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavCancel ), TKGet( TK_Enabled ), Any( sal_True ) );
+                mrOptimizerDialog.EnablePage( ITEM_ID_SUMMARY );
             }
         }
         break;
-        case TK_btnNavCancel :  endExecute( sal_False ); break;
+        case TK_btnNavCancel :  mrOptimizerDialog.endExecute( sal_False ); break;
         case TK_Button0Pg0 :    // delete configuration
         {
-            OUString aSelectedItem( GetSelectedString( TK_ListBox0Pg0 ) );
+            OUString aSelectedItem( mrOptimizerDialog.GetSelectedString( TK_ListBox0Pg0 ) );
             if ( aSelectedItem.getLength() )
             {
-                std::vector< OptimizerSettings >::iterator aIter( GetOptimizerSettingsByName( aSelectedItem ) );
-                std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
+                std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( aSelectedItem ) );
+                std::vector< OptimizerSettings >& rList( mrOptimizerDialog.GetOptimizerSettings() );
                 if ( aIter != rList.end() )
                 {
                     rList.erase( aIter );
-                    UpdateControlStates();
+                    mrOptimizerDialog.UpdateControlStates();
                 }
             }
         }
         break;
-        default:
-        {
-            Reference< XControl > xControl( rEvent.Source, UNO_QUERY );
-            if ( xControl.is() )
-            {
-                OUString aName;
-                Reference< XPropertySet > xProps( xControl->getModel(), UNO_QUERY );
-                xProps->getPropertyValue( TKGet( TK_Name ) ) >>= aName;
-                if ( TKGet( aName ) == TK_ListBox0Pg0 )
-                {
-                    if ( rEvent.ActionCommand.getLength() )
-                    {
-                        std::vector< OptimizerSettings >::iterator aIter( GetOptimizerSettingsByName( rEvent.ActionCommand ) );
-                        std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
-                        if ( aIter != rList.end() )
-                            rList[ 0 ] = *aIter;
-                    }
-                    UpdateControlStates();
-                }
-            }
-        }
-            break;
+        default: break;
     }
 }
-
-// -----------------------------------------------------------------------------
-
-void OptimizerDialog::textChanged( const TextEvent& rEvent )
+void ActionListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    Reference< XSpinField > xFormattedField( rEvent.Source, UNO_QUERY );
-    if ( xFormattedField.is() )
-    {
-        double fDouble = 0;
-        Any aAny = getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
-        if ( aAny >>= fDouble )
-            SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
-        return;
-    }
-
-    Reference< XComboBox > xComboBox( rEvent.Source, UNO_QUERY );
-    if ( xComboBox.is() )
-    {
-        rtl::OUString aString;
-        Any aAny = getControlProperty( TKGet( TK_ComboBox0Pg1 ), TKGet( TK_Text ) );
-        if ( aAny >>= aString )
-        {
-            sal_Int32 nI0, nI1, nI2, nI3, nI4;
-            nI0 = nI1 = nI2 = nI3 = nI4 = 0;
-
-            if ( getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';', nI0 ) == aString )
-                aString = getString( STR_IMAGE_RESOLUTION_0 ).getToken( 0, ';', nI4 );
-            else if ( getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';', nI1 ) == aString )
-                aString = getString( STR_IMAGE_RESOLUTION_1 ).getToken( 0, ';', nI4 );
-            else if ( getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';', nI2 ) == aString )
-                aString = getString( STR_IMAGE_RESOLUTION_2 ).getToken( 0, ';', nI4 );
-            else if ( getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 ) == aString )
-                aString = getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI4 );
-
-            SetConfigProperty( TK_ImageResolution, Any( aString.toInt32() ) );
-        }
-    }
 }
 
 // -----------------------------------------------------------------------------
 
-void OptimizerDialog::up( const SpinEvent& /* rEvent */ )
+void ActionListenerListBox0Pg0::actionPerformed( const ActionEvent& rEvent )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+    if ( rEvent.ActionCommand.getLength() )
+    {
+        std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( rEvent.ActionCommand ) );
+        std::vector< OptimizerSettings >& rList( mrOptimizerDialog.GetOptimizerSettings() );
+        if ( aIter != rList.end() )
+            rList[ 0 ] = *aIter;
+    }
+    mrOptimizerDialog.UpdateControlStates();
+}
+void ActionListenerListBox0Pg0::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+    double fDouble = 0;
+    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    if ( aAny >>= fDouble )
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+}
+void TextListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+    rtl::OUString aString;
+    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_ComboBox0Pg1 ), TKGet( TK_Text ) );
+    if ( aAny >>= aString )
+    {
+        sal_Int32 nI0, nI1, nI2, nI3, nI4;
+        nI0 = nI1 = nI2 = nI3 = nI4 = 0;
+
+        if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';', nI0 ) == aString )
+            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_0 ).getToken( 0, ';', nI4 );
+        else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';', nI1 ) == aString )
+            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_1 ).getToken( 0, ';', nI4 );
+        else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';', nI2 ) == aString )
+            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_2 ).getToken( 0, ';', nI4 );
+        else if ( mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 ) == aString )
+            aString = mrOptimizerDialog.getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI4 );
+
+        mrOptimizerDialog.SetConfigProperty( TK_ImageResolution, Any( aString.toInt32() ) );
+    }
+}
+void TextListenerComboBox0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
     double fDouble;
-    Any aAny = getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
     if ( aAny >>= fDouble )
     {
         fDouble += 9;
         if ( fDouble > 100 )
             fDouble = 100;
-        setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
-        SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
     }
 }
-
-void OptimizerDialog::down( const SpinEvent& /* rEvent */ )
+void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
     double fDouble;
-    Any aAny = getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
     if ( aAny >>= fDouble )
     {
         fDouble -= 9;
         if ( fDouble < 0 )
             fDouble = 0;
-        setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
-        SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
     }
 }
-
-void OptimizerDialog::first( const SpinEvent& /* rEvent */ )
+void SpinListenerFormattedField0Pg1::first( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 0 ) ) );
-    SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)0 ) );
+    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 0 ) ) );
+    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)0 ) );
 }
-
-void OptimizerDialog::last( const SpinEvent& /* rEvent */ )
+void SpinListenerFormattedField0Pg1::last( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 100 ) ) );
-    SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)100 ) );
+    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 100 ) ) );
+    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)100 ) );
+}
+void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
 }
 
+// -----------------------------------------------------------------------------
+
+void HelpCloseListener::addCloseListener( const Reference < XCloseListener >& ) throw( RuntimeException )
+{
+}
+void HelpCloseListener::removeCloseListener( const Reference < XCloseListener >& ) throw( RuntimeException )
+{
+}
+void HelpCloseListener::queryClosing( const EventObject&, sal_Bool /* bDeliverOwnership */ )
+        throw ( RuntimeException, CloseVetoException )
+{
+}
+void HelpCloseListener::notifyClosing( const EventObject& )
+        throw ( RuntimeException )
+{
+}
+void HelpCloseListener::disposing( const EventObject& ) throw ( RuntimeException )
+{
+    mrXFrame = NULL;
+}

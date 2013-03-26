@@ -112,6 +112,7 @@ static const TokenTable pTokenTableArray[] =
     { "Alpha",              TK_Alpha },
     { "Animated",           TK_Animated },
     { "Background",         TK_Background },
+    { "BitmapPath",         TK_BitmapPath },
     { "Border",             TK_Border },
     { "Closeable",          TK_Closeable },
     { "ColorMode",          TK_ColorMode },
@@ -145,11 +146,11 @@ static const TokenTable pTokenTableArray[] =
     { "GraphicURL",         TK_GraphicURL },
     { "GraphicStreamURL",   TK_GraphicStreamURL },
     { "Height",             TK_Height },
-    { "HelpURL",            TK_HelpURL },
+    { "HelpFile",           TK_HelpFile },
     { "Hidden",             TK_Hidden },
     { "ID",                 TK_ID },
     { "ImageURL",           TK_ImageURL },
-    { "ParentWindow",       TK_ParentWindow },// TODO move it
+    { "InformationDialog",  TK_InformationDialog },
     { "InputStream",        TK_InputStream },
     { "Interlaced",         TK_Interlaced },
     { "IsInternal",         TK_IsInternal },
@@ -185,7 +186,7 @@ static const TokenTable pTokenTableArray[] =
     { "Spin",               TK_Spin },
     { "Step",               TK_Step },
     { "State",              TK_State },
-    { "StatusListener",     TK_StatusListener },
+    { "StatusDispatcher",   TK_StatusDispatcher },
     { "StringItemList",     TK_StringItemList },
     { "Strings",            TK_Strings },
     { "TabIndex",           TK_TabIndex },
@@ -225,8 +226,8 @@ static const TokenTable pTokenTableArray[] =
     { "CurrentGraphicObject",TK_CurrentGraphicObject },
     { "OLEObjects",         TK_OLEObjects },
     { "CurrentOLEObject",   TK_CurrentOLEObject },
-#if 0
-    { "STR_PRESENTATION_MINIMIZER",STR_PRESENTATION_MINIMIZER },
+
+    { "STR_SUN_OPTIMIZATION_WIZARD2",STR_SUN_OPTIMIZATION_WIZARD2 },
     { "STR_STEPS",                  STR_STEPS },
     { "STR_HELP",                   STR_HELP },
     { "STR_BACK",                   STR_BACK },
@@ -291,7 +292,7 @@ static const TokenTable pTokenTableArray[] =
     { "STR_OPTIMIZING_GRAPHICS",    STR_OPTIMIZING_GRAPHICS },
     { "STR_CREATING_OLE_REPLACEMENTS",STR_CREATING_OLE_REPLACEMENTS },
     { "STR_FileSizeSeparator",      STR_FILESIZESEPARATOR },
-#endif
+
     { "Last",               TK_Last },
     { "NotFound",           TK_NotFound }
 };

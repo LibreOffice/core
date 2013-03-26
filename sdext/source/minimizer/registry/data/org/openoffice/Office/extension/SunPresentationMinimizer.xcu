@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="SunPresentationMinimizer" oor:package="org.openoffice.Office.extension">
+
+    <prop oor:name="BitmapPath" oor:type="xs:string">
+        <value>%origin%/../../../../../../bitmaps</value>
+    </prop>
+
+    <prop oor:name="HelpFile" oor:type="xs:string">
+        <value xml:lang="en-US">%origin%/../../../../../../help/help_en-US.odt</value>
+    </prop>
+
+    <node oor:name="Strings">
+        <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2">
+            <value xml:lang="en-US">@MINIMIZEREXTENSIONPRODUCTNAME@</value>
+        </prop>
+        <prop oor:name="STR_STEPS">
+            <value xml:lang="en-US">Steps</value>
+        </prop>
+        <prop oor:name="STR_HELP">
+            <value xml:lang="en-US">~Help</value>
+        </prop>
+        <prop oor:name="STR_BACK">
+            <value xml:lang="en-US">&lt; ~Back</value>
+        </prop>
+        <prop oor:name="STR_NEXT">
+            <value xml:lang="en-US">~Next &gt;</value>
+        </prop>
+        <prop oor:name="STR_FINISH">
+            <value xml:lang="en-US">~Finish</value>
+        </prop>
+        <prop oor:name="STR_CANCEL">
+            <value xml:lang="en-US">Cancel</value>
+        </prop>
+        <prop oor:name="STR_INTRODUCTION">
+            <value xml:lang="en-US">Introduction</value>
+        </prop>
+        <prop oor:name="STR_INTRODUCTION_T">
+            <value xml:lang="en-US">The @MINIMIZEREXTENSIONPRODUCTNAME@ is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
+
+        At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
+        </prop>
+        <prop oor:name="STR_CHOSE_SETTINGS">
+            <value xml:lang="en-US">~Choose settings for @MINIMIZEREXTENSIONPRODUCTNAME@</value>
+        </prop>
+        <prop oor:name="STR_REMOVE">
+            <value xml:lang="en-US">~Delete</value>
+        </prop>
+        <prop oor:name="STR_GRAPHIC_OPTIMIZATION">
+            <value xml:lang="en-US">Choose settings for optimizing pictures and graphics</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_OPTIMIZATION">
+            <value xml:lang="en-US">Graphics</value>
+        </prop>
+        <prop oor:name="STR_LOSSLESS_COMPRESSION">
+            <value xml:lang="en-US">~Lossless compression</value>
+        </prop>
+        <prop oor:name="STR_JPEG_COMPRESSION">
+            <value xml:lang="en-US">~JPEG compression</value>
+        </prop>
+        <prop oor:name="STR_QUALITY">
+            <value xml:lang="en-US">~Quality in %</value>
+        </prop>
+        <prop oor:name="STR_REMOVE_CROP_AREA">
+            <value xml:lang="en-US">~Delete cropped graphic areas</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_RESOLUTION">
+            <value xml:lang="en-US">Reduce ~image resolution</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_RESOLUTION_0">
+            <value xml:lang="en-US">0;&lt;no change&gt;</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_RESOLUTION_1">
+            <value xml:lang="en-US">90;90 DPI (screen resolution)</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_RESOLUTION_2">
+            <value xml:lang="en-US">150;150 DPI (projector resolution)</value>
+        </prop>
+        <prop oor:name="STR_IMAGE_RESOLUTION_3">
+            <value xml:lang="en-US">300;300 DPI (print resolution)</value>
+        </prop>
+        <prop oor:name="STR_EMBED_LINKED_GRAPHICS">
+            <value xml:lang="en-US">~Break links to external graphics</value>
+        </prop>
+        <prop oor:name="STR_OLE_OBJECTS">
+            <value xml:lang="en-US">OLE Objects</value>
+        </prop>
+        <prop oor:name="STR_OLE_OPTIMIZATION">
+            <value xml:lang="en-US">Choose settings for replacing OLE objects</value>
+        </prop>
+        <prop oor:name="STR_OLE_REPLACE">
+            <value xml:lang="en-US">Create static replacement graphics for OLE objects</value>
+        </prop>
+        <prop oor:name="STR_ALL_OLE_OBJECTS">
+            <value xml:lang="en-US">For ~all OLE objects</value>
+        </prop>
+        <prop oor:name="STR_ALIEN_OLE_OBJECTS_ONLY">
+            <value xml:lang="en-US">~For OLE objects not based on OpenDocument format</value>
+        </prop>
+        <prop oor:name="STR_OLE_OBJECTS_DESC">
+            <value xml:lang="en-US">Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
+
+The current presentation contains OLE objects.</value>
+        </prop>
+        <prop oor:name="STR_NO_OLE_OBJECTS_DESC">
+            <value xml:lang="en-US">Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
+
+The current presentation contains no OLE objects.</value>
+        </prop>
+        <prop oor:name="STR_SLIDES">
+            <value xml:lang="en-US">Slides</value>
+        </prop>
+        <prop oor:name="STR_CHOOSE_SLIDES">
+            <value xml:lang="en-US">Choose which slides to delete</value>
+        </prop>
+        <prop oor:name="STR_MASTER_PAGES">
+            <value xml:lang="en-US">Master Pages</value>
+        </prop>
+        <prop oor:name="STR_DELETE_MASTER_PAGES">
+            <value xml:lang="en-US">Delete unused ~master pages</value>
+        </prop>
+        <prop oor:name="STR_DELETE_NOTES_PAGES">
+            <value xml:lang="en-US">~Clear notes</value>
+        </prop>
+        <prop oor:name="STR_DELETE_HIDDEN_SLIDES">
+            <value xml:lang="en-US">Delete hidden ~slides</value>
+        </prop>
+        <prop oor:name="STR_CUSTOM_SHOW">
+            <value xml:lang="en-US">Delete slides that are not used for the ~custom slide show</value>
+        </prop>
+        <prop oor:name="STR_SUMMARY">
+            <value xml:lang="en-US">Summary</value>
+        </prop>
+        <prop oor:name="STR_SUMMARY_TITLE">
+            <value xml:lang="en-US">Choose where to apply the following changes</value>
+        </prop>
+        <prop oor:name="STR_PROGRESS">
+            <value xml:lang="en-US">Progress</value>
+        </prop>
+        <prop oor:name="STR_OBJECTS_OPTIMIZED">
+            <value xml:lang="en-US">Objects optimized</value>
+        </prop>
+        <prop oor:name="STR_APPLY_TO_CURRENT">
+            <value xml:lang="en-US">~Apply changes to current presentation</value>
+        </prop>
+        <prop oor:name="STR_AUTOMATICALLY_OPEN">
+            <value xml:lang="en-US">~Open newly created presentation</value>
+        </prop>
+        <prop oor:name="STR_SAVE_SETTINGS">
+            <value xml:lang="en-US">~Save settings as</value>
+        </prop>
+        <prop oor:name="STR_SAVE_AS">
+            <value xml:lang="en-US">~Duplicate presentation before applying changes</value>
+        </prop>
+        <prop oor:name="STR_DELETE_SLIDES">
+            <value xml:lang="en-US">Delete %SLIDES slides.</value>
+        </prop>
+        <prop oor:name="STR_OPTIMIZE_IMAGES">
+            <value xml:lang="en-US">Optimize %IMAGES graphics to %QUALITY% JPEG quality at %RESOLUTION DPI.</value>
+        </prop>
+        <prop oor:name="STR_CREATE_REPLACEMENT">
+            <value xml:lang="en-US">Create replacement graphics for %OLE objects.</value>
+        </prop>
+        <prop oor:name="STR_CURRENT_FILESIZE">
+            <value xml:lang="en-US">Current file size:</value>
+        </prop>
+        <prop oor:name="STR_ESTIMATED_FILESIZE">
+            <value xml:lang="en-US">Estimated new file size:</value>
+        </prop>
+        <prop oor:name="STR_MB">
+            <value xml:lang="en-US">%1 MB</value>
+        </prop>
+        <prop oor:name="MY_SETTINGS">
+            <value xml:lang="en-US">My Settings </value>
+        </prop>
+        <prop oor:name="STR_DEFAULT_SESSION">
+            <value xml:lang="en-US">default session</value>
+        </prop>
+        <prop oor:name="STR_MODIFY_WARNING">
+            <value xml:lang="en-US">The optimization will modify the current document. Do you want to continue?</value>
+        </prop>
+        <prop oor:name="STR_YES">
+            <value xml:lang="en-US">~Yes</value>
+        </prop>
+        <prop oor:name="STR_OK">
+            <value xml:lang="en-US">OK</value>
+        </prop>
+        <prop oor:name="STR_INFO_1">
+            <value xml:lang="en-US">The @MINIMIZEREXTENSIONPRODUCTNAME@ has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to %NEWFILESIZE MB.</value>
+        </prop>
+        <prop oor:name="STR_INFO_2">
+            <value xml:lang="en-US">The @MINIMIZEREXTENSIONPRODUCTNAME@ has successfully updated the presentation '%TITLE'. The file size has changed from %OLDFILESIZE MB to approximated %NEWFILESIZE MB.</value>
+        </prop>
+        <prop oor:name="STR_INFO_3">
+            <value xml:lang="en-US">The @MINIMIZEREXTENSIONPRODUCTNAME@ has successfully updated the presentation '%TITLE'. The file size has changed to %NEWFILESIZE MB.</value>
+        </prop>
+        <prop oor:name="STR_INFO_4">
+            <value xml:lang="en-US">The @MINIMIZEREXTENSIONPRODUCTNAME@ has successfully updated the presentation '%TITLE'. The file size has changed to approximated %NEWFILESIZE MB.</value>
+        </prop>
+        <prop oor:name="STR_DUPLICATING_PRESENTATION">
+            <value xml:lang="en-US">Duplicating presentation...</value>
+        </prop>
+        <prop oor:name="STR_DELETING_SLIDES">
+            <value xml:lang="en-US">Deleting slides...</value>
+        </prop>
+        <prop oor:name="STR_OPTIMIZING_GRAPHICS">
+            <value xml:lang="en-US">Optimizing graphics...</value>
+        </prop>
+        <prop oor:name="STR_CREATING_OLE_REPLACEMENTS">
+            <value xml:lang="en-US">Creating replacement graphics for OLE objects...</value>
+        </prop>
+        <prop oor:name="STR_FILESIZESEPARATOR">
+            <value xml:lang="en-US">.</value>
+        </prop>
+    </node>
+    <node oor:name="LastUsedSettings">
+        <prop oor:name="Name">
+            <value xml:lang="en-US">Projector optimized</value>
+        </prop>
+        <prop oor:name="JPEGCompression">
+            <value>true</value>
+        </prop>
+        <prop oor:name="JPEGQuality">
+            <value>50</value>
+        </prop>
+        <prop oor:name="RemoveCropArea">
+            <value>true</value>
+        </prop>
+        <prop oor:name="ImageResolution">
+            <value>150</value>
+        </prop>
+        <prop oor:name="EmbedLinkedGraphics">
+            <value>true</value>
+        </prop>
+        <prop oor:name="OLEOptimization">
+            <value>true</value>
+        </prop>
+        <prop oor:name="OLEOptimizationType">
+            <value>0</value>
+        </prop>
+        <prop oor:name="DeleteUnusedMasterPages">
+            <value>true</value>
+        </prop>
+        <prop oor:name="DeleteHiddenSlides">
+            <value>true</value>
+        </prop>
+        <prop oor:name="DeleteNotesPages">
+            <value>false</value>
+        </prop>
+        <prop oor:name="SaveAs">
+            <value>true</value>
+        </prop>
+        <prop oor:name="OpenNewDocument">
+            <value>true</value>
+        </prop>
+    </node>
+    <node oor:name="Settings">
+        <node oor:name="Templates">
+            <node oor:name="template1" oor:op="replace">
+                <prop oor:name="Name">
+                    <value xml:lang="en-US">Screen optimized (smallest file size)</value>
+                </prop>
+                <prop oor:name="JPEGCompression">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="JPEGQuality">
+                    <value>25</value>
+                </prop>
+                <prop oor:name="RemoveCropArea">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ImageResolution">
+                    <value>90</value>
+                </prop>
+                <prop oor:name="EmbedLinkedGraphics">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimization">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimizationType">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="DeleteUnusedMasterPages">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteHiddenSlides">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteNotesPages">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="SaveAs">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OpenNewDocument">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="template2" oor:op="replace">
+                <prop oor:name="Name">
+                    <value xml:lang="en-US">Projector optimized</value>
+                </prop>
+                <prop oor:name="JPEGCompression">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="JPEGQuality">
+                    <value>50</value>
+                </prop>
+                <prop oor:name="RemoveCropArea">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ImageResolution">
+                    <value>150</value>
+                </prop>
+                <prop oor:name="EmbedLinkedGraphics">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimization">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimizationType">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="DeleteUnusedMasterPages">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteHiddenSlides">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteNotesPages">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="SaveAs">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OpenNewDocument">
+                    <value>true</value>
+                </prop>
+            </node>
+            <node oor:name="template3" oor:op="replace">
+                <prop oor:name="Name">
+                    <value xml:lang="en-US">Print optimized</value>
+                </prop>
+                <prop oor:name="JPEGCompression">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="JPEGQuality">
+                    <value>75</value>
+                </prop>
+                <prop oor:name="RemoveCropArea">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ImageResolution">
+                    <value>300</value>
+                </prop>
+                <prop oor:name="EmbedLinkedGraphics">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimization">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OLEOptimizationType">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="DeleteUnusedMasterPages">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteHiddenSlides">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DeleteNotesPages">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="SaveAs">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="OpenNewDocument">
+                    <value>true</value>
+                </prop>
+            </node>
+        </node>
+    </node>
+</oor:component-data>

@@ -519,6 +519,9 @@ AC_ARG_WITH(beanshell-jar,
 [  --with-beanshell-jar=JARFILE   Specify path to jarfile manually ],
 [ BSH_JAR="$withval"
 ])
+AC_ARG_ENABLE(minimizer,
+[  --enable-minimizer          enables the build of the Presentation Minimizer extension
+],,)
 AC_ARG_ENABLE(presenter-screen,
 [  --enable-presenter-screen           enables the build of the Presenter Screen extension
 ],,)
@@ -6410,6 +6413,15 @@ fi
 
 AC_SUBST(ENABLE_OPENGL)
 
+AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
+if test -n "$enable_minimizer" -a "$enable_minimizer" != "no"; then
+   AC_MSG_RESULT([yes])
+   ENABLE_MINIMIZER=YES
+else
+   AC_MSG_RESULT([no])
+   ENABLE_MINIMIZER=NO
+fi
+AC_SUBST(ENABLE_MINIMIZER)
 
 AC_MSG_CHECKING([whether to build the Presenter Screen extension])
 if test -n "$enable_presenter_screen" -a "$enable_presenter_screen" != "no"; then
@@ -6449,7 +6461,7 @@ AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
 
-if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
+if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
   AC_MSG_CHECKING([for sdext module])
   if test -d ./sdext; then
    AC_MSG_RESULT([OK])

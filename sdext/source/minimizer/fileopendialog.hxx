@@ -30,7 +30,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 
 class FileOpenDialog
 {
@@ -47,14 +46,13 @@ class FileOpenDialog
         FilterEntry() :
             maFlags( 0 ) {}
     };
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxMSF;
     com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > mxFilePicker;
 
     std::vector< FilterEntry > aFilterEntryList;
 
 public :
-        FileOpenDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                        const com::sun::star::uno::Reference< com::sun::star::awt::XWindow > &rxParent );
+        FileOpenDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF );
         ~FileOpenDialog();
 
         sal_Int16 execute();

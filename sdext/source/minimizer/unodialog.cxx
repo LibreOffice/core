@@ -25,23 +25,20 @@
 #include "precompiled_sdext.hxx"
 
 #include "unodialog.hxx"
-
-#include <com/sun/star/awt/MessageBoxButtons.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/XMessageBoxFactory.hpp>
-#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/view/XControlAccess.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XControlAccess.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/awt/XMessageBoxFactory.hpp>
+#include <com/sun/star/awt/MessageBoxButtons.hpp>
 
 // -------------
 // - UnoDialog -
 // -------------
 
+using namespace ::rtl;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -51,58 +48,44 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 
-using ::rtl::OUString;
-
-UnoDialog::UnoDialog(
-    const Reference< XComponentContext > &rxContext,
-    const Reference< XWindowPeer >& rxParent ) :
-    mxContext( rxContext ),
-    mxParent( rxParent ),
-    mxDialogModel( mxContext->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.awt.UnoControlDialogModel" ) ), mxContext ), UNO_QUERY_THROW ),
+UnoDialog::UnoDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame ) :
+    mxMSF( rxMSF ),
+    mxController( rxFrame->getController() ),
+    mxDialogModel( mxMSF->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.awt.UnoControlDialogModel" ) ), mxMSF ), UNO_QUERY_THROW ),
     mxDialogModelMultiPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelMSF( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelNameContainer( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelNameAccess( mxDialogModel, UNO_QUERY_THROW ),
     mxControlModel( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialog( mxContext->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.awt.UnoControlDialog" ) ), mxContext ), UNO_QUERY_THROW ),
+    mxDialog( mxMSF->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.awt.UnoControlDialog" ) ), mxMSF ), UNO_QUERY_THROW ),
     mxControl( mxDialog, UNO_QUERY_THROW ),
     mbStatus( sal_False )
 {
-    OSL_TRACE("UnoDialog::UnoDialog");
     mxControl->setModel( mxControlModel );
     mxDialogControlContainer = Reference< XControlContainer >( mxDialog, UNO_QUERY_THROW );
-    mxDialogWindow = Reference< XWindow >( mxDialog, UNO_QUERY );
-    mxDialogWindowPeer = createWindowPeer();
+    mxDialogComponent = Reference< XComponent >( mxDialog, UNO_QUERY_THROW );
+    mxDialogWindow = Reference< XWindow >( mxDialog, UNO_QUERY_THROW );
+
+    Reference< XFrame > xFrame( mxController->getFrame() );
+    Reference< XWindow > xContainerWindow( xFrame->getContainerWindow() );
+    mxWindowPeer = Reference< XWindowPeer >( xContainerWindow, UNO_QUERY_THROW );
+    createWindowPeer( mxWindowPeer );
 }
 
 // -----------------------------------------------------------------------------
 
 UnoDialog::~UnoDialog()
 {
-    OSL_TRACE("UnoDialog::~UnoDialog");
-    Reference< XComponent > xComponent( mxDialog, UNO_QUERY );
-    if ( xComponent.is() )
-    {
-        xComponent->dispose();
-    }
+
 }
 
 // -----------------------------------------------------------------------------
 
-void UnoDialog::setTitle( const rtl::OUString &rTitle )
-{
-    if ( rTitle.getLength() )
-    {
-        mxDialog->setTitle( rTitle );
-    }
-}
-
 void UnoDialog::execute()
 {
-    OSL_TRACE("UnoDialog::execute");
     mxDialogWindow->setEnable( sal_True );
     mxDialogWindow->setVisible( sal_True );
     mxDialog->execute();
@@ -110,55 +93,22 @@ void UnoDialog::execute()
 
 void UnoDialog::endExecute( sal_Bool bStatus )
 {
-    OSL_TRACE("UnoDialog::endExecute");
     mbStatus = bStatus;
     mxDialog->endExecute();
 }
 
-void UnoDialog::centerDialog()
-{
-    Reference< XWindow > xParent( mxParent, UNO_QUERY );
-    if ( !xParent.is() )
-        return;
-
-    Rectangle aParentPosSize = xParent->getPosSize();
-    Rectangle aWinPosSize = mxDialogWindow->getPosSize();
-    Point aWinPos((aParentPosSize.Width - aWinPosSize.Width) / 2,
-                  (aParentPosSize.Height - aWinPosSize.Height) / 2);
-
-    if ( ( aWinPos.X + aWinPosSize.Width ) > ( aParentPosSize.X + aParentPosSize.Width ) )
-        aWinPos.X = aParentPosSize.X + aParentPosSize.Width - aWinPosSize.Width;
-
-    if ( ( aWinPos.Y + aWinPosSize.Height ) > ( aParentPosSize.Y + aParentPosSize.Height ) )
-        aWinPos.Y = aParentPosSize.Y + aParentPosSize.Height - aWinPosSize.Height;
-
-    mxDialogWindow->setPosSize( aWinPos.X, aWinPos.Y,
-                                aWinPosSize.Width,
-                                aWinPosSize.Height,
-                                PosSize::POS );
-}
-
 // -----------------------------------------------------------------------------
 
-Reference< XWindowPeer > UnoDialog::createWindowPeer()
+Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > xParentPeer )
     throw ( Exception )
 {
     mxDialogWindow->setVisible( sal_False );
-
-    // reuse the parent's toolkit
-    Reference< XToolkit > xToolkit;
-    if ( mxParent.is() )
-        xToolkit.set( mxParent->getToolkit() );
-
-    if ( !xToolkit.is() )
-         xToolkit.set( mxContext->getServiceManager()->createInstanceWithContext(
-             OUString( RTL_CONSTASCII_USTRINGPARAM(
-                 "com.sun.star.awt.Toolkit" ) ), mxContext ),
-                    UNO_QUERY_THROW  );
-
+    Reference< XToolkit > xToolkit( mxMSF->getServiceManager()->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ) ), mxMSF ), UNO_QUERY_THROW  );
+    if ( !xParentPeer.is() )
+        xParentPeer = xToolkit->getDesktopWindow();
     mxReschedule = Reference< XReschedule >( xToolkit, UNO_QUERY );
-    mxControl->createPeer( xToolkit, mxParent );
-
+    mxControl->createPeer( xToolkit, xParentPeer );
+//  xWindowPeer = xControl.getPeer();
     return mxControl->getPeer();
 }
 
@@ -203,9 +153,14 @@ sal_Bool UnoDialog::isHighContrast()
     sal_Bool bHighContrast = sal_False;
     try
     {
-        Reference< XStyleSettingsSupplier > xStyleSettingsSuppl( mxDialogWindow, UNO_QUERY_THROW );
-        Reference< XStyleSettings > xStyleSettings( xStyleSettingsSuppl->getStyleSettings() );
-        bHighContrast = xStyleSettings->getHighContrastMode();
+        sal_Int32 nBackgroundColor = 0;
+        if ( mxDialogModelPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) ) ) >>= nBackgroundColor )
+        {
+            sal_uInt8 nLum( static_cast< sal_uInt8 >( ( static_cast< sal_uInt8 >( nBackgroundColor >> 16 ) * 28 +
+                                                        static_cast< sal_uInt8 >( nBackgroundColor >> 8 ) * 151 +
+                                                        static_cast< sal_uInt8 >( nBackgroundColor ) * 77 ) >> 8 ) );
+            bHighContrast = nLum <= 38;
+        }
     }
     catch( Exception& )
     {

@@ -82,14 +82,14 @@ class GraphicCollector
     };
 
     static const com::sun::star::awt::DeviceInfo& GetDeviceInfo( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxFact );
-    static com::sun::star::awt::Size GetOriginalSize( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+    static com::sun::star::awt::Size GetOriginalSize( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF,
                 const com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic >& rxGraphic );
 
     // collecting graphic instances, the downside of this method is that every graphic is swapped in
-    static void CollectGraphics( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel,
+    static void CollectGraphics( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, std::vector< GraphicEntity >& io_rGraphicList );
     // counting graphics without swapping in graphics
-    static void CountGraphics( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel,
+    static void CountGraphics( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, sal_Int32& rGraphics );
 };
 

@@ -88,6 +88,7 @@ enum PPPOptimizerTokenEnum
     TK_Alpha,
     TK_Animated,
     TK_Background,
+    TK_BitmapPath,
     TK_Border,
     TK_Closeable,
     TK_ColorMode,
@@ -121,11 +122,11 @@ enum PPPOptimizerTokenEnum
     TK_GraphicURL,
     TK_GraphicStreamURL,
     TK_Height,
-    TK_HelpURL,
+    TK_HelpFile,
     TK_Hidden,
     TK_ID,
     TK_ImageURL,
-    TK_ParentWindow,
+    TK_InformationDialog,
     TK_InputStream,
     TK_Interlaced,
     TK_IsInternal,
@@ -161,7 +162,7 @@ enum PPPOptimizerTokenEnum
     TK_Spin,
     TK_Step,
     TK_State,
-    TK_StatusListener,
+    TK_StatusDispatcher,
     TK_StringItemList,
     TK_Strings,
     TK_TabIndex,
@@ -201,8 +202,8 @@ enum PPPOptimizerTokenEnum
     TK_CurrentGraphicObject,
     TK_OLEObjects,
     TK_CurrentOLEObject,
-#if 0
-    STR_PRESENTATION_MINIMIZER,
+
+    STR_SUN_OPTIMIZATION_WIZARD2,
     STR_STEPS,
     STR_HELP,
     STR_BACK,
@@ -267,7 +268,7 @@ enum PPPOptimizerTokenEnum
     STR_OPTIMIZING_GRAPHICS,
     STR_CREATING_OLE_REPLACEMENTS,
     STR_FILESIZESEPARATOR,
-#endif
+
     TK_Last,
     TK_NotFound
 };

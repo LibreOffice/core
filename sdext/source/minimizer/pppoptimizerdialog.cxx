@@ -27,40 +27,30 @@
 #include "pppoptimizerdialog.hxx"
 #include "optimizerdialog.hxx"
 
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <rtl/strbuf.hxx>
-#include <rtl/ref.hxx>
-
-#define SERVICE_NAME "com.sun.star.ui.dialogs.PresentationMinimizerDialog"
-#define IMPLEMENTATION_NAME "com.sun.star.comp.ui.dialogs.PresentationMinimizerDialog"
-
+using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-using ::rtl::OUString;
-using ::com::sun::star::awt::XWindow;
-using ::com::sun::star::awt::XWindowPeer;
+#define SERVICE_NAME "com.sun.star.comp.SunPresentationMinimizer"
+#include <rtl/ustrbuf.hxx>
 
 // ----------------------
 // - PPPOptimizerDialog -
 // ----------------------
 
-PPPOptimizerDialog::PPPOptimizerDialog(
-    const Reference< XComponentContext > &rxContext )
-    : m_xContext( rxContext )
-    , mbInitialized( false )
+PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &rxMSF ) :
+    mxMSF( rxMSF ),
+    mpOptimizerDialog( NULL )
 {
-    OSL_TRACE("PPPOptimizerDialog::PPPOptimizerDialog");
 }
 
 // -----------------------------------------------------------------------------
 
 PPPOptimizerDialog::~PPPOptimizerDialog()
 {
-    OSL_TRACE("PPPOptimizerDialog::~PPPOptimizerDialog");
 }
 
 // -----------------------------------------------------------------------------
@@ -70,60 +60,12 @@ PPPOptimizerDialog::~PPPOptimizerDialog()
 void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments )
     throw ( Exception, RuntimeException )
 {
-    OSL_TRACE("PPPOptimizerDialog::initialize");
-    osl::ResettableMutexGuard aGuard( m_aMutex );
-    if ( mbInitialized )
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "PPPOptimizerDialog has already been initialized!") ),
-                    Reference< XInterface >() );
-    aGuard.clear();
+    if( aArguments.getLength() != 1 )
+        throw IllegalArgumentException();
 
-    Reference< XFrame > xFrame;
-    Reference< XController > xController;
-    Reference< XModel > xModel;
-    Reference< XWindow > xWindow;
-
-    const Any *pAny = aArguments.getConstArray();
-    const Any *pEnd = pAny + aArguments.getLength();
-    for ( ; pAny != pEnd && !xFrame.is() && !xWindow.is(); pAny++ )
-    {
-        if ( ( *pAny >>= xFrame ) && xFrame.is() )
-        {
-            xWindow = xFrame->getContainerWindow();
-        }
-        else if ( ( *pAny >>= xController ) && xController.is() )
-        {
-            xFrame = xController->getFrame();
-            if ( xFrame.is() )
-                xWindow = xFrame->getContainerWindow();
-        }
-        else if ( ( *pAny >>= xModel ) && xModel.is() )
-        {
-            xController = xModel->getCurrentController();
-            if ( xController.is() )
-            {
-                xFrame = xController->getFrame();
-                if ( xFrame.is() )
-                    xWindow = xFrame->getContainerWindow();
-            }
-        }
-        else
-            *pAny >>= xWindow;
-    }
-
-    if ( !xFrame.is() )
-        throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "PPPOptimizerDialog must be initialized with an "
-                "XFrame, XController or XModel!") ),
-                    Reference< XInterface >(), 0 );
-
-    aGuard.reset();
-    mxFrame = xFrame;
-    mxParentWindow.set( xWindow, UNO_QUERY );
-    mbInitialized = true;
-    aGuard.clear();
+    aArguments[ 0 ] >>= mxFrame;
+    if ( mxFrame.is() )
+        mxController = mxFrame->getController();
 }
 
 // -----------------------------------------------------------------------------
@@ -148,48 +90,110 @@ Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
     return PPPOptimizerDialog_getSupportedServiceNames();
 }
 
+// -----------------------------------------------------------------------------
+// XDispatchProvider
+// -----------------------------------------------------------------------------
 
-void SAL_CALL PPPOptimizerDialog::setTitle( const ::rtl::OUString& aTitle )
-throw (::com::sun::star::uno::RuntimeException)
+Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
+    const URL& aURL, const ::rtl::OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
 {
-    osl::MutexGuard aGuard( m_aMutex );
-    msTitle = aTitle;
+    Reference < XDispatch > xRet;
+    if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) == 0 )
+        xRet = this;
+
+    return xRet;
 }
 
-::sal_Int16 SAL_CALL PPPOptimizerDialog::execute(  )
-throw (::com::sun::star::uno::RuntimeException)
+//------------------------------------------------------------------------------
+
+Sequence< Reference< com::sun::star::frame::XDispatch > > SAL_CALL PPPOptimizerDialog::queryDispatches(
+    const Sequence< com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException )
 {
-    OSL_TRACE("PPPOptimizerDialog::execute");
-    sal_Int16 aRet = ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
-
-    osl::ClearableMutexGuard aGuard( m_aMutex );
-    bool bInit( mbInitialized );
-    Reference< XFrame > xFrame( mxFrame );
-    Reference< XWindowPeer > xParent( mxParentWindow );
-    aGuard.clear();
-
-    if ( !bInit || !xFrame.is() || !xParent.is() )
-        throw RuntimeException();
-    try
+    Sequence< Reference< com::sun::star::frame::XDispatch> > aReturn( aDescripts.getLength() );
+    Reference< com::sun::star::frame::XDispatch>* pReturn = aReturn.getArray();
+    const com::sun::star::frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
+    for (sal_Int16 i = 0; i < aDescripts.getLength(); ++i, ++pReturn, ++pDescripts )
     {
-        OptimizerDialog *pDialog(
-            new OptimizerDialog( m_xContext, xFrame, xParent ) );
-        pDialog->setTitle( msTitle );
-        aRet = pDialog->execute();
-        delete pDialog;
+        *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
     }
-    catch( ... )
-    {
-    }
+    return aReturn;
+}
 
-    return aRet;
+// -----------------------------------------------------------------------------
+// XDispatch
+// -----------------------------------------------------------------------------
+
+void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
+                                            const Sequence< PropertyValue >& rArguments )
+    throw( RuntimeException )
+{
+    sal_Int64 nFileSizeSource = 0;
+    sal_Int64 nFileSizeDest = 0;
+
+    if ( mxController.is() && ( rURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) == 0 ) )
+    {
+        if ( rURL.Path.compareToAscii( "execute" ) == 0 )
+        {
+            sal_Bool bDialogExecuted = sal_False;
+
+            try
+            {
+                mpOptimizerDialog = new OptimizerDialog( mxMSF, mxFrame, this );
+                bDialogExecuted = mpOptimizerDialog->execute();
+
+                const Any* pVal( mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeSource ) );
+                if ( pVal )
+                    *pVal >>= nFileSizeSource;
+                pVal = mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeDestination );
+                if ( pVal )
+                    *pVal >>= nFileSizeDest;
+
+                if ( nFileSizeSource && nFileSizeDest )
+                {
+                    rtl::OUStringBuffer sBuf( rtl::OUString::createFromAscii( "Your Presentation has been minimized from:" ) );
+                    sBuf.append( rtl::OUString::valueOf( nFileSizeSource >> 10 ) );
+                    sBuf.append( rtl::OUString::createFromAscii( "KB to " ) );
+                    sBuf.append( rtl::OUString::valueOf( nFileSizeDest >> 10 ) );
+                    sBuf.append( rtl::OUString::createFromAscii( "KB." ) );
+                    OUString sResult( sBuf.makeStringAndClear() );
+//                  mpOptimizerDialog->showMessageBox( sResult, sResult, sal_False );
+                }
+                delete mpOptimizerDialog, mpOptimizerDialog = NULL;
+            }
+            catch( ... )
+            {
+
+            }
+        }
+        else if ( rURL.Path.compareToAscii( "statusupdate" ) == 0 )
+        {
+            if ( mpOptimizerDialog )
+                mpOptimizerDialog->UpdateStatus( rArguments );
+        }
+    }
+}
+
+//===============================================
+void SAL_CALL PPPOptimizerDialog::addStatusListener( const Reference< XStatusListener >&, const URL& )
+    throw( RuntimeException )
+{
+    // TODO
+    // OSL_ENSURE( sal_False, "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
+}
+
+//===============================================
+void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatusListener >&, const URL& )
+    throw( RuntimeException )
+{
+    // TODO
+    // OSL_ENSURE( sal_False, "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
 }
 
 // -----------------------------------------------------------------------------
 
 OUString PPPOptimizerDialog_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.SunPresentationMinimizerImp" ) );
 }
 
 Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()

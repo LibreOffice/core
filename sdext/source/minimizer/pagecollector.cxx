@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -41,8 +42,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
-
-using ::rtl::OUString;
 
 void PageCollector::CollectCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, const rtl::OUString& rCustomShowName, std::vector< Reference< XDrawPage > >& rUsedPageList )
 {

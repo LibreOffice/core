@@ -75,11 +75,6 @@ interface ImpressEditView : DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-    SID_PRESENTATION_MINIMIZER
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
     SID_CLEAR_UNDO_STACK // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

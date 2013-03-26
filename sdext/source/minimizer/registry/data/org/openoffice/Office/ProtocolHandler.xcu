@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--***********************************************************
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,12 +19,13 @@
  * under the License.
  *
  ***********************************************************-->
-<component loader="com.sun.star.loader.SharedLibrary"
-    xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.PPPOptimizerImp">
-    <service name="com.sun.star.comp.PPPOptimizer"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.ui.dialogs.PresentationMinimizerDialog">
-    <service name="com.sun.star.ui.dialogs.PresentationMinimizerDialog"/>
-  </implementation>
-</component>
+
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="ProtocolHandler" oor:package="org.openoffice.Office">
+    <node oor:name="HandlerSet">
+        <node oor:name="com.sun.star.comp.SunPresentationMinimizerImp" oor:op="replace">
+            <prop oor:name="Protocols" oor:type="oor:string-list">
+                <value>vnd.com.sun.star.comp.SunPresentationMinimizer:*</value>
+            </prop>
+        </node>
+    </node>
+</oor:component-data>

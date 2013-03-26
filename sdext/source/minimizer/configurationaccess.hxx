@@ -40,7 +40,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <map>
 
-
 struct OptimizerSettings
 {
     rtl::OUString   maName;
@@ -87,12 +86,13 @@ class ConfigurationAccess
 {
     public :
 
-        ConfigurationAccess( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+        ConfigurationAccess( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rXFactory,
                                 OptimizerSettings* pDefaultSettings = NULL );
         ~ConfigurationAccess();
         void SaveConfiguration();
 
-        static rtl::OUString getString( sal_Int32 nResId );
+        rtl::OUString getPath( const PPPOptimizerTokenEnum );
+        rtl::OUString getString( const PPPOptimizerTokenEnum ) const;
 
         // access to current OptimizerSettings (stored in the first entry of maSettings)
         com::sun::star::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
@@ -110,9 +110,19 @@ class ConfigurationAccess
 
     private :
 
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
+        struct Compare
+        {
+            bool operator()( const PPPOptimizerTokenEnum s1, const PPPOptimizerTokenEnum s2 ) const
+            {
+                return s1 < s2;
+            }
+        };
+        std::map < PPPOptimizerTokenEnum, rtl::OUString, Compare > maStrings;
+
         std::vector< OptimizerSettings > maSettings;
         std::vector< OptimizerSettings > maInitialSettings;
+
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxMSF;
 
         void LoadStrings();
         void LoadConfiguration();

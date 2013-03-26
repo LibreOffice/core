@@ -30,8 +30,8 @@
 #include "pagecollector.hxx"
 #include "informationdialog.hxx"
 
-#include "minimizer.hrc"
-
+#include <unotools/localfilehelper.hxx>
+#include <unotools/processfactory.hxx>
 #include <vector>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
@@ -43,9 +43,12 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#ifndef _COM_SUN_STAR_FRAME_FrameSearchFlag_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -58,7 +61,9 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#ifndef _COM_SUN_STAR_UNO_RUNTIME_EXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
+#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -68,6 +73,7 @@
 #include <com/sun/star/util/URL.hpp>
 
 using namespace ::std;
+using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::awt;
@@ -81,8 +87,6 @@ using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
-
-using ::rtl::OUString;
 
 void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUString& rCustomShowName )
 {
@@ -262,7 +266,7 @@ void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const
     }
 }
 
-Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& rxContext,
+Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& rxMSF,
     const Reference< XGraphic >& xGraphic, const awt::Size& aLogicalSize, const text::GraphicCrop& aGraphicCropLogic,
         const GraphicSettings& rGraphicSettings )
 {
@@ -297,7 +301,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                         // cropping has to be removed from SourceSizePixel
                         if ( aGraphicCropLogic.Left || aGraphicCropLogic.Top || aGraphicCropLogic.Right || aGraphicCropLogic.Bottom )
                         {
-                            const awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
+                            const awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
 
                             if ( bRemoveCropArea )
                                 bNeedsOptimizing = sal_True;
@@ -346,9 +350,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             }
                             if ( bNeedsOptimizing && aDestSizePixel.Width && aDestSizePixel.Height )
                             {
-                                Reference< XStream > xTempFile( rxContext->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxContext ), UNO_QUERY_THROW );
+                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxMSF ), UNO_QUERY_THROW );
                                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                                Reference< XGraphicProvider > xGraphicProvider( rxContext->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxContext ), UNO_QUERY_THROW );
+                                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxMSF ), UNO_QUERY_THROW );
 
                                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, bRemoveCropArea, aGraphicCropLogic );
                                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
@@ -366,9 +370,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             else // this is a metafile
             {
                 rtl::OUString aDestMimeType( aSourceMimeType );
-                Reference< XStream > xTempFile( rxContext->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxContext ), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxMSF ), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                Reference< XGraphicProvider > xGraphicProvider( rxContext->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxContext ), UNO_QUERY_THROW );
+                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxMSF ), UNO_QUERY_THROW );
                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
@@ -386,7 +390,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
     return xNewGraphic;
 }
 
-void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentContext >& rxContext, const GraphicSettings& rGraphicSettings,
+void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentContext >& rxMSF, const GraphicSettings& rGraphicSettings,
     std::vector< GraphicCollector::GraphicEntity >& rGraphicList )
 {
     try
@@ -421,8 +425,8 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                 if ( xGraphic.is() )
                 {
                     Reference< XPropertySet > xNewGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
-                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
-                    Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxContext, xGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
+                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
+                    Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxMSF, xGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
                     if ( xNewGraphic.is() )
                     {
                         // applying graphic to each user
@@ -442,7 +446,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                     text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
                                     if ( !aGraphicSettings.mbRemoveCropArea )
                                     {
-                                        awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxContext, xNewGraphic ) );
+                                        awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxMSF, xNewGraphic ) );
                                         aGraphicCropLogic.Left = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Left * ((double)aNewSize.Width / (double)aSize100thMM.Width));
                                         aGraphicCropLogic.Top = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Top * ((double)aNewSize.Height / (double)aSize100thMM.Height));
                                         aGraphicCropLogic.Right = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Right * ((double)aNewSize.Width / (double)aSize100thMM.Width));
@@ -493,8 +497,8 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 // - ImpOptimizer -
 // ----------------
 
-ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel ) :
-    mxContext                       ( rxContext ),
+ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxMSF, const Reference< XModel >& rxModel ) :
+    mxMSF                       ( rxMSF ),
     mxModel                     ( rxModel ),
     mbJPEGCompression           ( sal_False ),
     mnJPEGQuality               ( 90 ),
@@ -508,35 +512,30 @@ ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, con
     mbDeleteNotesPages          ( sal_False ),
     mbOpenNewDocument           ( sal_True )
 {
-    OSL_TRACE("ImpOptimizer::ImpOptimizer");
-    Reference< XController > xController( mxModel->getCurrentController() );
-    if (xController.is() )
-        mxFrame.set( xController->getFrame() );
 }
 
 // -----------------------------------------------------------------------------
 
 ImpOptimizer::~ImpOptimizer()
 {
-    OSL_TRACE("ImpOptimizer::~ImpOptimizer");
 }
 
 // -----------------------------------------------------------------------------
 
 void ImpOptimizer::DispatchStatus()
 {
-    if ( mxStatusListener.is() )
+    if ( mxStatusDispatcher.is() )
     {
-        FeatureStateEvent aState;
-        aState.IsEnabled = sal_True;
-        aState.State <<= GetStatusSequence();
-        mxStatusListener->statusChanged( aState );
+        URL aURL;
+        aURL.Protocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) );
+        aURL.Path = OUString( RTL_CONSTASCII_USTRINGPARAM( "statusupdate" ) );
+        mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ImpOptimizer::ImplOptimize()
+sal_Bool ImpOptimizer::Optimize()
 {
 
     if ( maCustomShowName.getLength() )
@@ -545,7 +544,7 @@ sal_Bool ImpOptimizer::ImplOptimize()
     if ( mbDeleteUnusedMasterPages )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( ConfigurationAccess::getString( STR_DELETING_SLIDES ) ) );
+        SetStatusValue( TK_Status, Any( TKGet( STR_DELETING_SLIDES ) ) );
         DispatchStatus();
         ImpDeleteUnusedMasterPages( mxModel );
     }
@@ -553,14 +552,14 @@ sal_Bool ImpOptimizer::ImplOptimize()
     if ( mbDeleteHiddenSlides )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( ConfigurationAccess::getString( STR_DELETING_SLIDES ) ) );
+        SetStatusValue( TK_Status, Any( TKGet( STR_DELETING_SLIDES ) ) );
         DispatchStatus();
         ImpDeleteHiddenSlides( mxModel );
     }
 
     if ( mbDeleteNotesPages )
     {
-        SetStatusValue( TK_Status, Any( ConfigurationAccess::getString( STR_DELETING_SLIDES ) ) );
+        SetStatusValue( TK_Status, Any( TKGet( STR_DELETING_SLIDES ) ) );
         DispatchStatus();
         ImpDeleteNotesPages( mxModel );
     }
@@ -568,7 +567,7 @@ sal_Bool ImpOptimizer::ImplOptimize()
     if ( mbOLEOptimization )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 45 ) ) );
-        SetStatusValue( TK_Status, Any( ConfigurationAccess::getString( STR_CREATING_OLE_REPLACEMENTS ) ) );
+        SetStatusValue( TK_Status, Any( TKGet( STR_CREATING_OLE_REPLACEMENTS ) ) );
         DispatchStatus();
         ImpConvertOLE( mxModel, mnOLEOptimizationType );
     }
@@ -576,13 +575,13 @@ sal_Bool ImpOptimizer::ImplOptimize()
     if ( mbJPEGCompression || mbRemoveCropArea || mnImageResolution )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 50 ) ) );
-        SetStatusValue( TK_Status, Any( ConfigurationAccess::getString( STR_OPTIMIZING_GRAPHICS ) ) );
+        SetStatusValue( TK_Status, Any( TKGet( STR_OPTIMIZING_GRAPHICS ) ) );
         DispatchStatus();
 
         std::vector< GraphicCollector::GraphicEntity > aGraphicList;
         GraphicSettings aGraphicSettings( mbJPEGCompression, mnJPEGQuality, mbRemoveCropArea, mnImageResolution, mbEmbedLinkedGraphics );
-        GraphicCollector::CollectGraphics( mxContext, mxModel, aGraphicSettings, aGraphicList );
-        CompressGraphics( *this, mxContext, aGraphicSettings, aGraphicList );
+        GraphicCollector::CollectGraphics( mxMSF, mxModel, aGraphicSettings, aGraphicList );
+        CompressGraphics( *this, mxMSF, aGraphicSettings, aGraphicList );
     }
     SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 100 ) ) );
     DispatchStatus();
@@ -613,12 +612,10 @@ static void DispatchURL( Reference< XComponentContext > xMSF, OUString sURL, Ref
 
 sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 {
-    OSL_TRACE("ImpOptimizer::Optimize");
     sal_Bool bRet = sal_True;
 
     if ( mxModel.is() )
     {
-        Reference< XWindowPeer > xParentWindow;
         sal_Int64 nEstimatedFileSize = 0;
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 0 ) ) );
         DispatchStatus();
@@ -628,8 +625,8 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         {
             switch( TKGet( rArguments[ i ].Name ) )
             {
-                case TK_StatusListener : rArguments[ i ].Value >>= mxStatusListener; break;
-                case TK_ParentWindow: rArguments[ i ].Value >>= xParentWindow; break;
+                case TK_StatusDispatcher : rArguments[ i ].Value >>= mxStatusDispatcher; break;
+                case TK_InformationDialog: rArguments[ i ].Value >>= mxInformationDialog; break;
                 case TK_Settings :
                 {
                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aSettings;
@@ -671,7 +668,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         {
 
             SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
-            SetStatusValue( TK_Status, Any( ConfigurationAccess::getString( STR_DUPLICATING_PRESENTATION ) ) );
+            SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
             DispatchStatus();
 
             Reference< XStorable >xStorable( mxModel, UNO_QUERY );
@@ -693,11 +690,11 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                     nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
 
                 SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 30 ) ) );
-                SetStatusValue( TK_Status, Any( ConfigurationAccess::getString( STR_DUPLICATING_PRESENTATION ) ) );
+                SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
                 DispatchStatus();
 
-                Reference< XDesktop > xDesktop( mxContext->getServiceManager()->createInstanceWithContext(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), mxContext ), UNO_QUERY );
+                Reference< XDesktop > xDesktop( mxMSF->getServiceManager()->createInstanceWithContext(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ), mxMSF ), UNO_QUERY );
                 Reference< XFrame > xFrame( xDesktop, UNO_QUERY );
                 xSelf = xFrame->findFrame( TKGet( TK__blank ), FrameSearchFlag::CREATE );
                 Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
@@ -715,15 +712,15 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         if ( xStorable.is() && !xStorable->isReadonly() )
         {
             mxModel->lockControllers();
-            bRet = ImplOptimize();
+            bRet = Optimize();
             mxModel->unlockControllers();
 
             // clearing undo stack:
-            Reference< XFrame > xFrame( mxFrame );
+            Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
             if ( xFrame.is() )
             {
                 const OUString sSlot( RTL_CONSTASCII_USTRINGPARAM( "slot:27115" ) );
-                DispatchURL( mxContext, sSlot, xFrame );
+                DispatchURL( mxMSF, sSlot, xFrame );
             }
         }
 
@@ -736,11 +733,9 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             }
         }
 
-        if ( xParentWindow.is() )
+        if ( mxInformationDialog.is() )
         {
-            InformationDialog aInformationDialog(
-                mxContext, xParentWindow,  maSaveAsURL, mbOpenNewDocument,
-                nSourceSize, nDestSize, nEstimatedFileSize );
+            InformationDialog aInformationDialog( mxMSF, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
             aInformationDialog.execute();
             SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
             DispatchStatus();

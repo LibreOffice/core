@@ -37,6 +37,12 @@
 [ language=all && ENABLE_PRESENTER_SCREEN=YES ]
     file://presenter/presenter-screen.oxt
 
+# the presentation minimizer
+[ language=all && ENABLE_MINIMIZER=YES ]
+    file://minimizer/presentation-minimizer.oxt
+
+
+
 # English dictionary
 [ language=en.* || language=de || language=it ]
     b7ce02d25eb302e5b23572cdccaea461 http://numbertext.org/tmp/dict-en.oxt

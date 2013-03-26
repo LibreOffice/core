@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -103,7 +102,6 @@
 #include "fuformatpaintbrush.hxx"
 
 using ::rtl::OUString;
-using com::sun::star::ui::dialogs::XExecutableDialog;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
@@ -1471,34 +1469,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             // #96090# moved implementation to BaseClass
             ImpSidRedo(sal_True, rReq);
-        }
-        break;
-
-        case SID_PRESENTATION_MINIMIZER:
-        {
-            if ( GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS &&
-                 GetViewShellBase().GetController() != NULL )
-            {
-                try
-                {
-                    uno::Reference< uno::XComponentContext > xContext(
-                        ::comphelper::getProcessComponentContext() );
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[0] <<= GetViewShellBase().GetController();
-
-                    uno::Reference< XExecutableDialog > xDialog(
-                        xContext->getServiceManager()->
-                            createInstanceWithArgumentsAndContext(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.ui.dialogs.PresentationMinimizerDialog")),
-                                        aArgs, xContext), uno::UNO_QUERY_THROW );
-                    xDialog->execute();
-                }
-                catch (...)
-                {}
-            }
-
-            rReq.Done();
         }
         break;
 

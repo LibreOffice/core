@@ -126,5 +126,3 @@ STD_RES_FILE( gid_File_Res_T602Filter, t602filter )
 STD_RES_FILE( gid_File_Res_Forui, forui )
 STD_RES_FILE( gid_File_Res_For, for )
 
-STD_RES_FILE( gid_File_Res_PresentationMinimizer, minimizer )
-

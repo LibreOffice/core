@@ -1,7 +1,9 @@
 dx	sdext	:	L10N:l10n offuh comphelper unotools readlicense_oo cppu tools cppuhelper sal javaunohelper officecfg LIBXSLT:libxslt xmlhelp NULL
 dx	sdext									usr1	-	all	sdext_mkout NULL
 dx	sdext\prj								get		-	all	sdext_prj NULL
-dx	sdext\source\minimizer					nmake	-	all sdext_minimizer sdext_inc NULL
+dx	sdext\source\minimizer					nmake	-	all sdext_minimizer sdext_minimizer_rdoooe sdext_minimizer_rdooo sdext_inc NULL
+dx	sdext\source\minimizer\registry\data\org\openoffice\Office\extension	nmake	-	all sdext_minimizer_rdoooe NULL
+dx	sdext\source\minimizer\registry\data\org\openoffice\Office 		nmake	-	all sdext_minimizer_rdooo NULL
 dx  sdext\source\presenter\registry\data\org\openoffice\Office\extension nmake   - all sdext_presenter_xcu  NULL
 dx	sdext\source\presenter\help\en-US\com.sun.PresenterScreen					nmake	-	all sdext_presenter_help NULL
 dx	sdext\source\presenter					nmake	-	all sdext_presenter sdext_inc sdext_presenter_xcu sdext_presenter_help NULL

@@ -35,6 +35,7 @@
 
 #include "impoptimizer.hxx"
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -43,8 +44,6 @@ using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::presentation;
-
-using ::rtl::OUString;
 
 const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentContext >& rxFact )
 {
@@ -96,7 +95,7 @@ void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntit
     }
 }
 
-void ImpAddGraphicEntity( const Reference< XComponentContext >& rxContext, Reference< XShape >& rxShape, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
+void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference< XShape >& rxShape, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
 {
     Reference< XGraphic > xGraphic;
     Reference< XPropertySet > xShapePropertySet( rxShape, UNO_QUERY_THROW );
@@ -115,7 +114,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxContext, Refer
         // calculating the logical size, as if there were no cropping
         if ( aGraphicCropLogic.Left || aGraphicCropLogic.Right || aGraphicCropLogic.Top || aGraphicCropLogic.Bottom )
         {
-            awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
+            awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
             if ( aSize100thMM.Width && aSize100thMM.Height )
             {
                 awt::Size aCropSize( aSize100thMM.Width - ( aGraphicCropLogic.Left + aGraphicCropLogic.Right ),
@@ -134,7 +133,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxContext, Refer
     }
 }
 
-void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxContext, const Reference< XPropertySet >& rxPropertySet, const awt::Size& rLogicalSize,
+void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const Reference< XPropertySet >& rxPropertySet, const awt::Size& rLogicalSize,
     std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const Reference< XPropertySet >& rxPagePropertySet )
 {
     try
@@ -172,7 +171,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxContext, co
                                             {
                                                 if ( !aSize.Width || !aSize.Height )
                                                 {
-                                                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
+                                                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
                                                     if ( aSize100thMM.Width && aSize100thMM.Height )
                                                         aLogicalSize = aSize100thMM;
                                                 }
@@ -206,7 +205,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxContext, co
     }
 }
 
-void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxContext, const Reference< XDrawPage >& rxDrawPage, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
+void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxMSF, const Reference< XDrawPage >& rxDrawPage, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
 {
     try
     {
@@ -217,14 +216,14 @@ void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxContex
 
         Reference< XPropertySet > xBackgroundPropSet;
         if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
-            ImpAddFillBitmapEntity( rxContext, xBackgroundPropSet, aLogicalSize, rGraphicEntities, rGraphicSettings, xPropertySet );
+            ImpAddFillBitmapEntity( rxMSF, xBackgroundPropSet, aLogicalSize, rGraphicEntities, rGraphicSettings, xPropertySet );
     }
     catch( Exception& )
     {
     }
 }
 
-void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxContext, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
+void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMSF, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
 {
     for ( sal_Int32 i = 0; i < rxShapes->getCount(); i++ )
     {
@@ -237,18 +236,18 @@ void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxContext, 
             if ( sShapeType == sGroupShape )
             {
                 Reference< XShapes > xShapes( xShape, UNO_QUERY_THROW );
-                ImpCollectGraphicObjects( rxContext, xShapes, rGraphicSettings, rGraphicEntities );
+                ImpCollectGraphicObjects( rxMSF, xShapes, rGraphicSettings, rGraphicEntities );
                 continue;
             }
 
             if ( sShapeType == sGraphicObjectShape )
-                ImpAddGraphicEntity( rxContext, xShape, rGraphicSettings, rGraphicEntities );
+                ImpAddGraphicEntity( rxMSF, xShape, rGraphicSettings, rGraphicEntities );
 
             // now check for a fillstyle
             Reference< XPropertySet > xEmptyPagePropSet;
             Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
             awt::Size aLogicalSize( xShape->getSize() );
-            ImpAddFillBitmapEntity( rxContext, xShapePropertySet, aLogicalSize, rGraphicEntities, rGraphicSettings, xEmptyPagePropSet );
+            ImpAddFillBitmapEntity( rxMSF, xShapePropertySet, aLogicalSize, rGraphicEntities, rGraphicSettings, xEmptyPagePropSet );
         }
         catch( Exception& )
         {
@@ -256,7 +255,7 @@ void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxContext, 
     }
 }
 
-awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext >& rxContext, const Reference< XGraphic >& rxGraphic )
+awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext >& rxMSF, const Reference< XGraphic >& rxGraphic )
 {
     awt::Size aSize100thMM( 0, 0 );
     Reference< XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
@@ -267,7 +266,7 @@ awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext 
             awt::Size aSourceSizePixel( 0, 0 );
             if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_SizePixel ) ) >>= aSourceSizePixel )
             {
-                const DeviceInfo& rDeviceInfo( GraphicCollector::GetDeviceInfo( rxContext ) );
+                const DeviceInfo& rDeviceInfo( GraphicCollector::GetDeviceInfo( rxMSF ) );
                 if ( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
                 {
                     aSize100thMM.Width = static_cast< sal_Int32 >( ( aSourceSizePixel.Width * 100000.0 ) / rDeviceInfo.PixelPerMeterX );
@@ -279,7 +278,7 @@ awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext 
     return aSize100thMM;
 }
 
-void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel,
+void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rxMSF, const Reference< XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicList )
 {
     try
@@ -290,24 +289,24 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
         for ( i = 0; i < xDrawPages->getCount(); i++ )
         {
             Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
-            ImpCollectBackgroundGraphic( rxContext, xDrawPage, rGraphicSettings, rGraphicList );
+            ImpCollectBackgroundGraphic( rxMSF, xDrawPage, rGraphicSettings, rGraphicList );
             Reference< XShapes > xDrawShapes( xDrawPage, UNO_QUERY_THROW );
-            ImpCollectGraphicObjects( rxContext, xDrawShapes, rGraphicSettings, rGraphicList );
+            ImpCollectGraphicObjects( rxMSF, xDrawShapes, rGraphicSettings, rGraphicList );
 
             Reference< XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
             Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
-            ImpCollectBackgroundGraphic( rxContext, xNotesPage, rGraphicSettings, rGraphicList );
+            ImpCollectBackgroundGraphic( rxMSF, xNotesPage, rGraphicSettings, rGraphicList );
             Reference< XShapes > xNotesShapes( xNotesPage, UNO_QUERY_THROW );
-            ImpCollectGraphicObjects( rxContext, xNotesShapes, rGraphicSettings, rGraphicList );
+            ImpCollectGraphicObjects( rxMSF, xNotesShapes, rGraphicSettings, rGraphicList );
         }
         Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
         Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
         for ( i = 0; i < xMasterPages->getCount(); i++ )
         {
             Reference< XDrawPage > xMasterPage( xMasterPages->getByIndex( i ), UNO_QUERY_THROW );
-            ImpCollectBackgroundGraphic( rxContext, xMasterPage, rGraphicSettings, rGraphicList );
+            ImpCollectBackgroundGraphic( rxMSF, xMasterPage, rGraphicSettings, rGraphicList );
             Reference< XShapes > xMasterPageShapes( xMasterPage, UNO_QUERY_THROW );
-            ImpCollectGraphicObjects( rxContext, xMasterPageShapes, rGraphicSettings, rGraphicList );
+            ImpCollectGraphicObjects( rxMSF, xMasterPageShapes, rGraphicSettings, rGraphicList );
         }
 
         std::vector< GraphicCollector::GraphicEntity >::iterator aGraphicIter( rGraphicList.begin() );
@@ -349,7 +348,7 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
     }
 }
 
-void ImpCountGraphicObjects( const Reference< XComponentContext >& rxContext, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, sal_Int32& rnGraphics )
+void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, sal_Int32& rnGraphics )
 {
     for ( sal_Int32 i = 0; i < rxShapes->getCount(); i++ )
     {
@@ -362,7 +361,7 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxContext, co
             if ( sShapeType == sGroupShape )
             {
                 Reference< XShapes > xShapes( xShape, UNO_QUERY_THROW );
-                ImpCountGraphicObjects( rxContext, xShapes, rGraphicSettings, rnGraphics );
+                ImpCountGraphicObjects( rxMSF, xShapes, rGraphicSettings, rnGraphics );
                 continue;
             }
 
@@ -391,7 +390,7 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxContext, co
     }
 }
 
-void ImpCountBackgroundGraphic( const Reference< XComponentContext >& /* rxContext */, const Reference< XDrawPage >& rxDrawPage,
+void ImpCountBackgroundGraphic( const Reference< XComponentContext >& /* rxMSF */, const Reference< XDrawPage >& rxDrawPage,
                                const GraphicSettings& /* rGraphicSettings */, sal_Int32& rnGraphics )
 {
     try
@@ -419,7 +418,7 @@ void ImpCountBackgroundGraphic( const Reference< XComponentContext >& /* rxConte
     }
 }
 
-void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel,
+void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxMSF, const Reference< XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, sal_Int32& rnGraphics )
 {
     try
@@ -430,24 +429,24 @@ void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxCo
         for ( i = 0; i < xDrawPages->getCount(); i++ )
         {
             Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
-            ImpCountBackgroundGraphic( rxContext, xDrawPage, rGraphicSettings, rnGraphics );
+            ImpCountBackgroundGraphic( rxMSF, xDrawPage, rGraphicSettings, rnGraphics );
             Reference< XShapes > xDrawShapes( xDrawPage, UNO_QUERY_THROW );
-            ImpCountGraphicObjects( rxContext, xDrawShapes, rGraphicSettings, rnGraphics );
+            ImpCountGraphicObjects( rxMSF, xDrawShapes, rGraphicSettings, rnGraphics );
 
             Reference< XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
             Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
-            ImpCountBackgroundGraphic( rxContext, xNotesPage, rGraphicSettings, rnGraphics );
+            ImpCountBackgroundGraphic( rxMSF, xNotesPage, rGraphicSettings, rnGraphics );
             Reference< XShapes > xNotesShapes( xNotesPage, UNO_QUERY_THROW );
-            ImpCountGraphicObjects( rxContext, xNotesShapes, rGraphicSettings, rnGraphics );
+            ImpCountGraphicObjects( rxMSF, xNotesShapes, rGraphicSettings, rnGraphics );
         }
         Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
         Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
         for ( i = 0; i < xMasterPages->getCount(); i++ )
         {
             Reference< XDrawPage > xMasterPage( xMasterPages->getByIndex( i ), UNO_QUERY_THROW );
-            ImpCountBackgroundGraphic( rxContext, xMasterPage, rGraphicSettings, rnGraphics );
+            ImpCountBackgroundGraphic( rxMSF, xMasterPage, rGraphicSettings, rnGraphics );
             Reference< XShapes > xMasterPageShapes( xMasterPage, UNO_QUERY_THROW );
-            ImpCountGraphicObjects( rxContext, xMasterPageShapes, rGraphicSettings, rnGraphics );
+            ImpCountGraphicObjects( rxMSF, xMasterPageShapes, rGraphicSettings, rnGraphics );
         }
     }
     catch ( Exception& )

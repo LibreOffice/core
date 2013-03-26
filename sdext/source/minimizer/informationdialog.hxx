@@ -46,68 +46,49 @@
 // ---------------------
 // - InformationDialog -
 // ---------------------
-
-class InformationDialog : public UnoDialog
-                        , public ConfigurationAccess
+class InformationDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
 
-    InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                       const com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >& rxParent,
-                       const rtl::OUString& rSaveAsURL,
-                       sal_Bool& bOpenNewDocument,
-                       const sal_Int64& nSourceSize,
-                       const sal_Int64& nDestSize,
-                       const sal_Int64& nApproxDest );
+    InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF,
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, const rtl::OUString& rSaveAsURL,
+                sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
     sal_Bool                execute();
+
 private :
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
+    com::sun::star::uno::Reference< com::sun::star::io::XStream >           mxTempFile;
+
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
+
+    void InitDialog();
+
     sal_Int64 mnSourceSize;
     sal_Int64 mnDestSize;
     sal_Int64 mnApproxSize;
     sal_Bool& mrbOpenNewDocument;
     const rtl::OUString& maSaveAsURL;
-    com::sun::star::uno::Reference< com::sun::star::awt::XCheckBox > mxCheckBox;
 
-    void InitDialog();
-    com::sun::star::uno::Reference< com::sun::star::awt::XFixedText > InsertFixedText(
-        const rtl::OUString& rControlName,
-        const rtl::OUString& rLabel,
-        sal_Int32 nXPos,
-        sal_Int32 nYPos,
-        sal_Int32 nWidth,
-        sal_Int32 nHeight,
-        sal_Bool bMultiLine,
-        sal_Int16 nTabIndex );
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl > InsertImage(
-        const rtl::OUString& rControlName,
-        const rtl::OUString& rURL,
-        sal_Int32 nPosX,
-        sal_Int32 nPosY,
-        sal_Int32 nWidth,
-        sal_Int32 nHeight,
-        sal_Bool bScale );
-    com::sun::star::uno::Reference< com::sun::star::awt::XCheckBox > InsertCheckBox(
-        const rtl::OUString& rControlName,
-        const rtl::OUString& rLabel,
-        const rtl::OUString& rHelpURL,
-        sal_Int32 nXPos,
-        sal_Int32 nYPos,
-        sal_Int32 nWidth,
-        sal_Int32 nHeight,
-        sal_Int16 nTabIndex );
-    com::sun::star::uno::Reference< com::sun::star::awt::XButton > InsertButton(
-        const rtl::OUString& rControlName,
-        sal_Int32 nXPos,
-        sal_Int32 nYPos,
-        sal_Int32 nWidth,
-        sal_Int32 nHeight,
-        sal_Int16 nTabIndex,
-        sal_Int32 nResID );
+public :
 
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxMSF; };
+};
+
+class OKActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+{
+public:
+    OKActionListener( InformationDialog& rInformationDialog ) : mrInformationDialog( rInformationDialog ){};
+
+    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    InformationDialog& mrInformationDialog;
 };
 
 #endif

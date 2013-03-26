@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
 
 class Point;
 class Size;
@@ -48,9 +47,9 @@ class ImpOptimizer : public OptimizationStats
 {
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    mxContext;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    mxMSF;
     com::sun::star::uno::Reference< com::sun::star::frame::XModel >             mxModel;
-    com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >    mxStatusListener;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >          mxStatusDispatcher;
 
     sal_Bool        mbJPEGCompression;
     sal_Int32       mnJPEGQuality;
@@ -67,9 +66,9 @@ private:
     rtl::OUString   maFilterName;
     sal_Bool        mbOpenNewDocument;
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxFrame;
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxInformationDialog;
 
-    sal_Bool ImplOptimize();
+    sal_Bool Optimize();
 
 public:
 

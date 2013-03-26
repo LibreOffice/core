@@ -31,38 +31,12 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/resource/XResourceBundleLoader.hpp>
 
-#include <rtl/ustrbuf.hxx>
-
-#include "minimizer.hrc"
-
+using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-
-using rtl::OUString;
-using rtl::OUStringBuffer;
-
-
-#include <rtl/instance.hxx>
-
-typedef std::map < sal_Int32, rtl::OUString > StringResourceMap;
-
-struct StaticResourceMap
-    : public rtl::StaticWithInit< StringResourceMap, StaticResourceMap  >
-{
-    StringResourceMap &
-    operator()() const;
-};
-
-StringResourceMap &
-StaticResourceMap::operator()() const
-{
-    static StringResourceMap aMap;
-    return aMap;
-}
 
 static const OUString& GetConfigurationProviderServiceName (void)
 {
@@ -74,29 +48,8 @@ static const OUString& GetConfigurationProviderServiceName (void)
 static const OUString& GetPathToConfigurationRoot (void)
 {
     static const OUString sPathToConfigurationRoot (
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Impress/PresentationMinimizer"));
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.extension.SunPresentationMinimizer"));
     return sPathToConfigurationRoot;
-}
-
-static OUString lcl_loadString(
-    const Reference< resource::XResourceBundle > xResourceBundle,
-    sal_Int32 nResourceId )
-{
-    OUString sString;
-    OUStringBuffer sKey;
-    sKey.appendAscii( RTL_CONSTASCII_STRINGPARAM( "string:" ) );
-    sKey.append( nResourceId );
-
-    try
-    {
-        OSL_VERIFY( xResourceBundle->getByName( sKey.makeStringAndClear() ) >>= sString );
-    }
-    catch( const uno::Exception& )
-    {
-        OSL_ENSURE( false, "OptimizerSettings: missing resource!" );
-    }
-
-    return sString;
 }
 
 void OptimizerSettings::LoadSettingsFromConfiguration( const Reference< XNameAccess >& rSettings )
@@ -206,8 +159,8 @@ sal_Bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSetti
 }
 
 
-ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxContext, OptimizerSettings* pDefaultSettings ) :
-    m_xContext( rxContext )
+ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxMSF, OptimizerSettings* pDefaultSettings ) :
+    mxMSF( rxMSF )
 {
     LoadStrings();
     maSettings.push_back( pDefaultSettings ?
@@ -221,101 +174,66 @@ ConfigurationAccess::~ConfigurationAccess()
 {
 }
 
-rtl::OUString ConfigurationAccess::getString( sal_Int32 nResId )
+rtl::OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
 {
-    const StringResourceMap &aStrings = StaticResourceMap::get();
-    StringResourceMap::const_iterator aIter( aStrings.find( nResId ) );
-    return aIter != aStrings.end() ? ((*aIter).second) : rtl::OUString();
+    rtl::OUString aPath;
+    try
+    {
+        static const OUString sProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.expand:" ) );
+        static const OUString stheMacroExpander( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" ) );
+        Reference< container::XNameAccess > xSet( OpenConfiguration( true ), UNO_QUERY_THROW );
+        if ( xSet->hasByName( TKGet( eToken ) ) )
+            xSet->getByName( TKGet( eToken ) ) >>= aPath;
+        if ( aPath.match( sProtocol, 0 ) )
+        {
+            rtl::OUString aTmp( aPath.copy( 20 ) );
+            Reference< util::XMacroExpander > xExpander;
+            if ( mxMSF->getValueByName( stheMacroExpander ) >>= xExpander )
+            {
+                aPath = xExpander->expandMacros( aTmp );
+            }
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+    return aPath;
+}
+
+rtl::OUString ConfigurationAccess::getString( const PPPOptimizerTokenEnum eToken ) const
+{
+    std::map< PPPOptimizerTokenEnum, rtl::OUString, Compare >::const_iterator aIter( maStrings.find( eToken ) );
+    return aIter != maStrings.end() ? ((*aIter).second) : rtl::OUString();
 }
 
 void ConfigurationAccess::LoadStrings()
 {
-    static bool bLoaded = false;
-    if ( bLoaded )
-        return;
-    else
-        bLoaded = true;
     try
     {
-
-        Reference< resource::XResourceBundleLoader > xResourceBundleLoader(
-            m_xContext->getValueByName(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "/singletons/com.sun.star.resource.OfficeResourceLoader" ) ) ),
-                        UNO_QUERY_THROW );
-
-        Reference< resource::XResourceBundle > xResourceBundle(
-            xResourceBundleLoader->loadBundle_Default(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "minimizer" ) ) ),
-                    UNO_SET_THROW );
-
-        StringResourceMap &aStrings = StaticResourceMap::get();
-        aStrings[ STR_PRESENTATION_MINIMIZER   ] = lcl_loadString( xResourceBundle, STR_PRESENTATION_MINIMIZER );
-        aStrings[ STR_STEPS                    ] = lcl_loadString( xResourceBundle, STR_STEPS );
-        aStrings[ STR_HELP                     ] = lcl_loadString( xResourceBundle, STR_HELP );
-        aStrings[ STR_BACK                     ] = lcl_loadString( xResourceBundle, STR_BACK );
-        aStrings[ STR_NEXT                     ] = lcl_loadString( xResourceBundle, STR_NEXT );
-        aStrings[ STR_FINISH                   ] = lcl_loadString( xResourceBundle, STR_FINISH );
-        aStrings[ STR_CANCEL                   ] = lcl_loadString( xResourceBundle, STR_CANCEL );
-        aStrings[ STR_INTRODUCTION             ] = lcl_loadString( xResourceBundle, STR_INTRODUCTION );
-        aStrings[ STR_INTRODUCTION_T           ] = lcl_loadString( xResourceBundle, STR_INTRODUCTION_T );
-        aStrings[ STR_CHOSE_SETTINGS           ] = lcl_loadString( xResourceBundle, STR_CHOSE_SETTINGS );
-        aStrings[ STR_REMOVE                   ] = lcl_loadString( xResourceBundle, STR_REMOVE );
-        aStrings[ STR_GRAPHIC_OPTIMIZATION     ] = lcl_loadString( xResourceBundle, STR_GRAPHIC_OPTIMIZATION );
-        aStrings[ STR_IMAGE_OPTIMIZATION       ] = lcl_loadString( xResourceBundle, STR_IMAGE_OPTIMIZATION );
-        aStrings[ STR_LOSSLESS_COMPRESSION     ] = lcl_loadString( xResourceBundle, STR_LOSSLESS_COMPRESSION );
-        aStrings[ STR_JPEG_COMPRESSION         ] = lcl_loadString( xResourceBundle, STR_JPEG_COMPRESSION );
-        aStrings[ STR_QUALITY                  ] = lcl_loadString( xResourceBundle, STR_QUALITY );
-        aStrings[ STR_REMOVE_CROP_AREA         ] = lcl_loadString( xResourceBundle, STR_REMOVE_CROP_AREA );
-        aStrings[ STR_IMAGE_RESOLUTION         ] = lcl_loadString( xResourceBundle, STR_IMAGE_RESOLUTION );
-        aStrings[ STR_IMAGE_RESOLUTION_0       ] = lcl_loadString( xResourceBundle, STR_IMAGE_RESOLUTION_0 );
-        aStrings[ STR_IMAGE_RESOLUTION_1       ] = lcl_loadString( xResourceBundle, STR_IMAGE_RESOLUTION_1 );
-        aStrings[ STR_IMAGE_RESOLUTION_2       ] = lcl_loadString( xResourceBundle, STR_IMAGE_RESOLUTION_2 );
-        aStrings[ STR_IMAGE_RESOLUTION_3       ] = lcl_loadString( xResourceBundle, STR_IMAGE_RESOLUTION_3 );
-        aStrings[ STR_EMBED_LINKED_GRAPHICS    ] = lcl_loadString( xResourceBundle, STR_EMBED_LINKED_GRAPHICS );
-        aStrings[ STR_OLE_OBJECTS              ] = lcl_loadString( xResourceBundle, STR_OLE_OBJECTS );
-        aStrings[ STR_OLE_OPTIMIZATION         ] = lcl_loadString( xResourceBundle, STR_OLE_OPTIMIZATION );
-        aStrings[ STR_OLE_REPLACE              ] = lcl_loadString( xResourceBundle, STR_OLE_REPLACE );
-        aStrings[ STR_ALL_OLE_OBJECTS          ] = lcl_loadString( xResourceBundle, STR_ALL_OLE_OBJECTS );
-        aStrings[ STR_ALIEN_OLE_OBJECTS_ONLY   ] = lcl_loadString( xResourceBundle, STR_ALIEN_OLE_OBJECTS_ONLY );
-        aStrings[ STR_OLE_OBJECTS_DESC         ] = lcl_loadString( xResourceBundle, STR_OLE_OBJECTS_DESC );
-        aStrings[ STR_NO_OLE_OBJECTS_DESC      ] = lcl_loadString( xResourceBundle, STR_NO_OLE_OBJECTS_DESC );
-        aStrings[ STR_SLIDES                   ] = lcl_loadString( xResourceBundle, STR_SLIDES );
-        aStrings[ STR_CHOOSE_SLIDES            ] = lcl_loadString( xResourceBundle, STR_CHOOSE_SLIDES );
-        aStrings[ STR_MASTER_PAGES             ] = lcl_loadString( xResourceBundle, STR_MASTER_PAGES );
-        aStrings[ STR_DELETE_MASTER_PAGES      ] = lcl_loadString( xResourceBundle, STR_DELETE_MASTER_PAGES );
-        aStrings[ STR_DELETE_NOTES_PAGES       ] = lcl_loadString( xResourceBundle, STR_DELETE_NOTES_PAGES );
-        aStrings[ STR_DELETE_HIDDEN_SLIDES     ] = lcl_loadString( xResourceBundle, STR_DELETE_HIDDEN_SLIDES );
-        aStrings[ STR_CUSTOM_SHOW              ] = lcl_loadString( xResourceBundle, STR_CUSTOM_SHOW );
-        aStrings[ STR_SUMMARY                  ] = lcl_loadString( xResourceBundle, STR_SUMMARY );
-        aStrings[ STR_SUMMARY_TITLE            ] = lcl_loadString( xResourceBundle, STR_SUMMARY_TITLE );
-        aStrings[ STR_PROGRESS                 ] = lcl_loadString( xResourceBundle, STR_PROGRESS );
-        aStrings[ STR_OBJECTS_OPTIMIZED        ] = lcl_loadString( xResourceBundle, STR_OBJECTS_OPTIMIZED );
-        aStrings[ STR_APPLY_TO_CURRENT         ] = lcl_loadString( xResourceBundle, STR_APPLY_TO_CURRENT );
-        aStrings[ STR_AUTOMATICALLY_OPEN       ] = lcl_loadString( xResourceBundle, STR_AUTOMATICALLY_OPEN );
-        aStrings[ STR_SAVE_SETTINGS            ] = lcl_loadString( xResourceBundle, STR_SAVE_SETTINGS );
-        aStrings[ STR_SAVE_AS                  ] = lcl_loadString( xResourceBundle, STR_SAVE_AS );
-        aStrings[ STR_DELETE_SLIDES            ] = lcl_loadString( xResourceBundle, STR_DELETE_SLIDES );
-        aStrings[ STR_OPTIMIZE_IMAGES          ] = lcl_loadString( xResourceBundle, STR_OPTIMIZE_IMAGES );
-        aStrings[ STR_CREATE_REPLACEMENT       ] = lcl_loadString( xResourceBundle, STR_CREATE_REPLACEMENT );
-        aStrings[ STR_CURRENT_FILESIZE         ] = lcl_loadString( xResourceBundle, STR_CURRENT_FILESIZE );
-        aStrings[ STR_ESTIMATED_FILESIZE       ] = lcl_loadString( xResourceBundle, STR_ESTIMATED_FILESIZE );
-        aStrings[ STR_MB                       ] = lcl_loadString( xResourceBundle, STR_MB );
-        aStrings[ STR_MY_SETTINGS              ] = lcl_loadString( xResourceBundle, STR_MY_SETTINGS );
-        aStrings[ STR_DEFAULT_SESSION          ] = lcl_loadString( xResourceBundle, STR_DEFAULT_SESSION );
-        aStrings[ STR_MODIFY_WARNING           ] = lcl_loadString( xResourceBundle, STR_MODIFY_WARNING );
-        aStrings[ STR_YES                      ] = lcl_loadString( xResourceBundle, STR_YES );
-        aStrings[ STR_OK                       ] = lcl_loadString( xResourceBundle, STR_OK );
-        aStrings[ STR_INFO_1                   ] = lcl_loadString( xResourceBundle, STR_INFO_1 );
-        aStrings[ STR_INFO_2                   ] = lcl_loadString( xResourceBundle, STR_INFO_2 );
-        aStrings[ STR_INFO_3                   ] = lcl_loadString( xResourceBundle, STR_INFO_3 );
-        aStrings[ STR_INFO_4                   ] = lcl_loadString( xResourceBundle, STR_INFO_4 );
-        aStrings[ STR_DUPLICATING_PRESENTATION ] = lcl_loadString( xResourceBundle, STR_DUPLICATING_PRESENTATION );
-        aStrings[ STR_DELETING_SLIDES          ] = lcl_loadString( xResourceBundle, STR_DELETING_SLIDES );
-        aStrings[ STR_OPTIMIZING_GRAPHICS      ] = lcl_loadString( xResourceBundle, STR_OPTIMIZING_GRAPHICS );
-        aStrings[ STR_CREATING_OLE_REPLACEMENTS] = lcl_loadString( xResourceBundle, STR_CREATING_OLE_REPLACEMENTS );
-        aStrings[ STR_FILESIZESEPARATOR        ] = lcl_loadString( xResourceBundle, STR_FILESIZESEPARATOR );
-        aStrings[ STR_INFO_DIALOG              ] = lcl_loadString( xResourceBundle, STR_INFO_DIALOG );
+        do
+        {
+            Reference< XInterface > xRoot( OpenConfiguration( true ) );
+            if ( !xRoot.is() )
+                break;
+            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, TKGet( TK_Strings ) ), UNO_QUERY );
+            if ( xSet.is() )
+            {
+                const Sequence< OUString > aElements( xSet->getElementNames() );
+                for ( int i = 0; i < aElements.getLength(); i++ )
+                {
+                    try
+                    {
+                        OUString aString, aPropertyName( aElements[ i ] );
+                        if ( xSet->getByName( aPropertyName ) >>= aString )
+                            maStrings[ TKGet( aPropertyName ) ] = aString;
+                    }
+                    catch( Exception& )
+                    {
+                    }
+                }
+            }
+        }
+        while( false );
     }
     catch( Exception& )
     {
@@ -416,7 +334,7 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
     Reference< XInterface > xRoot;
     try
     {
-        Reference< lang::XMultiServiceFactory > xProvider( m_xContext->getServiceManager()->createInstanceWithContext( GetConfigurationProviderServiceName(), m_xContext ), UNO_QUERY );
+        Reference< lang::XMultiServiceFactory > xProvider( mxMSF->getServiceManager()->createInstanceWithContext( GetConfigurationProviderServiceName(), mxMSF ), UNO_QUERY );
         if ( xProvider.is() )
         {
             Sequence< Any > aCreationArguments( 2 );

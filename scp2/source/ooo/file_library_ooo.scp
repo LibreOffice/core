@@ -1337,19 +1337,6 @@ File gid_File_Lib_Slideshow
   #endif
 End
 
-File gid_File_Lib_PresentationMinimizer
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(PresentationMinimizer.uno,UNXSUFFIX));
-  #elif defined OS2
-    Name = "PresentationMinimizer.dll";
-  #else
-    Name = "PresentationMinimizer.uno.dll";
-  #endif
-End
-
 File gid_File_Lib_Sdbc_2
     TXT_FILE_BODY;
     Styles = (PACKED);

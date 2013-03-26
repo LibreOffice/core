@@ -102,8 +102,7 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Tfu,
              gid_File_Res_Eps,
              gid_File_Res_UpdChk,
-             gid_File_Res_Upd,
-             gid_File_Res_PresentationMinimizer);
+             gid_File_Res_Upd);
 End
 
 Module gid_Module_Langpack_Help_Template

@@ -51,8 +51,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #define MAX_STEP        4
 #define OD_DIALOG_WIDTH 330
@@ -68,47 +66,36 @@
 // -------------------
 // - OPTIMIZERDIALOG -
 // -------------------
-
-typedef ::cppu::WeakImplHelper5<
-    com::sun::star::frame::XStatusListener,
-    com::sun::star::awt::XSpinListener,
-    com::sun::star::awt::XItemListener,
-    com::sun::star::awt::XActionListener,
-    com::sun::star::awt::XTextListener > OptimizerDialog_Base;
-
-class OptimizerDialog : public UnoDialog, public ConfigurationAccess, public OptimizerDialog_Base
+class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
 
-    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
-                     const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,
-                     const com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >& rxParent );
+    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher );
     ~OptimizerDialog();
-
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& aState ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL up( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL down( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL first( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL last( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
 
     sal_Bool                execute();
 
-private :
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
     sal_Int16               mnCurrentStep;
     sal_Int16               mnTabIndex;
     sal_Bool                mbIsReadonly;
-    com::sun::star::uno::Reference< com::sun::star::frame::XModel >         mxModel;
+
+private :
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
+
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControl;
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControlModel;
 
+    com::sun::star::uno::Reference< com::sun::star::awt::XItemListener >    mxItemListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListenerListBox0Pg0;
+    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerFormattedField0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::awt::XTextListener >    mxTextListenerComboBox0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::awt::XSpinListener >    mxSpinListenerFormattedField0Pg1;
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >      mxStatusDispatcher;
+
     std::vector< std::vector< rtl::OUString > > maControlPages;
-    OptimizationStats maStats;
 
     void InitDialog();
     void InitRoadmap();
@@ -126,90 +113,133 @@ private :
 
     void ActivatePage( sal_Int16 nStep );
     void DeactivatePage( sal_Int16 nStep );
-    void EnablePage( sal_Int16 nStep );
-    void DisablePage( sal_Int16 nStep );
-    void SwitchPage( sal_Int16 nNewStep );
+    void InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const rtl::OUString& rLabel, const sal_Int32 nItemID );
+
+public :
+
+    OptimizationStats maStats;
+
+    void UpdateStatus( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rStatus );
 
     // the ConfigurationAccess is updated to actual control settings
     void UpdateConfiguration();
-    void UpdateStatus( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rStatus );
+
+    void EnablePage( sal_Int16 nStep );
+    void DisablePage( sal_Int16 nStep );
+
+    void SwitchPage( sal_Int16 nNewStep );
     void UpdateControlStates( sal_Int16 nStep = -1 );
 
     rtl::OUString GetSelectedString( PPPOptimizerTokenEnum eListBox );
-    void ImplSetBold( const rtl::OUString& rControl );
-    void InsertRoadmapItem( const sal_Int32 nIndex,
-                            const sal_Bool bEnabled,
-                            const rtl::OUString& rLabel,
-                            const sal_Int32 nItemID );
-    rtl::OUString ImplInsertSeparator( const rtl::OUString& rControlName,
-                                       sal_Int32 nOrientation,
-                                       sal_Int32 nPosX,
-                                       sal_Int32 nPosY,
-                                       sal_Int32 nWidth,
-                                       sal_Int32 nHeight );
-    rtl::OUString ImplInsertButton( const rtl::OUString& rControlName,
-                                    const rtl::OUString& rHelpURL,
-                                    sal_Int32 nXPos,
-                                    sal_Int32 nYPos,
-                                    sal_Int32 nWidth,
-                                    sal_Int32 nHeight,
-                                    sal_Int16 nTabIndex,
-                                    sal_Bool bEnabled,
-                                    sal_Int32 nResID,
-                                    sal_Int16 nPushButtonType );
-    rtl::OUString ImplInsertFixedText( const rtl::OUString& rControlName,
-                                       const rtl::OUString& rLabel,
-                                       sal_Int32 nXPos,
-                                       sal_Int32 nYPos,
-                                       sal_Int32 nWidth,
-                                       sal_Int32 nHeight,
-                                       sal_Bool bMultiLine,
-                                       sal_Bool bBold,
-                                       sal_Int16 nTabIndex );
-    rtl::OUString ImplInsertCheckBox( const rtl::OUString& rControlName,
-                                      const rtl::OUString& rLabel,
-                                      const rtl::OUString& rHelpURL,
-                                      sal_Int32 nXPos,
-                                      sal_Int32 nYPos,
-                                      sal_Int32 nWidth,
-                                      sal_Int32 nHeight,
-                                      sal_Int16 nTabIndex );
-    rtl::OUString ImplInsertFormattedField( const rtl::OUString& rControlName,
-                                            const rtl::OUString& rHelpURL,
-                                            sal_Int32 nXPos,
-                                            sal_Int32 nYPos,
-                                            sal_Int32 nWidth,
-                                            double fEffectiveMin,
-                                            double fEffectiveMax,
-                                            sal_Int16 nTabIndex );
-    rtl::OUString ImplInsertComboBox( const rtl::OUString& rControlName,
-                                      const rtl::OUString& rHelpURL,
-                                      const sal_Bool bEnabled,
-                                      const com::sun::star::uno::Sequence< rtl::OUString >& rItemList,
-                                      sal_Int32 nXPos,
-                                      sal_Int32 nYPos,
-                                      sal_Int32 nWidth,
-                                      sal_Int32 nHeight,
-                                      sal_Int16 nTabIndex,
-                                      bool bListen = true );
-    rtl::OUString ImplInsertRadioButton( const rtl::OUString& rControlName,
-                                         const rtl::OUString& rLabel,
-                                         const rtl::OUString& rHelpURL,
-                                         sal_Int32 nXPos,
-                                         sal_Int32 nYPos,
-                                         sal_Int32 nWidth,
-                                         sal_Int32 nHeight,
-                                         sal_Bool bMultiLine,
-                                         sal_Int16 nTabIndex );
-    rtl::OUString ImplInsertListBox( const rtl::OUString& rControlName,
-                                     const rtl::OUString& rHelpURL,
-                                     const sal_Bool bEnabled,
-                                     const com::sun::star::uno::Sequence< rtl::OUString >& rItemList,
-                                     sal_Int32 nXPos,
-                                     sal_Int32 nYPos,
-                                     sal_Int32 nWidth,
-                                     sal_Int32 nHeight,
-                                     sal_Int16 nTabIndex );
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxMSF; };
 };
+
+// -----------------------------------------------------------------------------
+
+class ItemListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XItemListener >
+{
+public:
+    ItemListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class ActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+{
+public:
+    ActionListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >
+{
+public:
+    ActionListenerListBox0Pg0( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL actionPerformed( const ::com::sun::star::awt::ActionEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
+{
+public:
+    TextListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XTextListener >
+{
+public:
+    TextListenerComboBox0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< com::sun::star::awt::XSpinListener >
+{
+public:
+    SpinListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
+
+    virtual void SAL_CALL up( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL down( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL first( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL last( const ::com::sun::star::awt::SpinEvent& Event ) throw ( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( com::sun::star::uno::RuntimeException);
+private:
+
+    OptimizerDialog& mrOptimizerDialog;
+};
+
+// -----------------------------------------------------------------------------
+
+class HelpCloseListener : public ::cppu::WeakImplHelper1< com::sun::star::util::XCloseListener >
+{
+public:
+    HelpCloseListener( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rXFrame ) : mrXFrame( rXFrame ){};
+
+    virtual void SAL_CALL addCloseListener(const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
+    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException) ;
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException) ;
+
+private:
+
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& mrXFrame;
+};
+
 
 #endif // OPTIMIZERDIALOG_HXX
