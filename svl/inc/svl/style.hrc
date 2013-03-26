@@ -22,6 +22,7 @@
 
 #define SFXSTYLEBIT_AUTO        0x0000 // automatisch; Flags kommen von der Applikation
 #define SFXSTYLEBIT_HIDDEN      0x0200 // benutzte Vorlage (als Suchmaske)
+#define SFXSTYLEBIT_HIERARCHY   0x1000 // hierarchical view - just for dialog
 #define SFXSTYLEBIT_READONLY    0x2000 // benutzte Vorlage (als Suchmaske)
 #define SFXSTYLEBIT_USED        0x4000 // benutzte Vorlage (als Suchmaske)
 #define SFXSTYLEBIT_USERDEF     0x8000 // benutzerdefinierte Vorlage

@@ -164,6 +164,7 @@ protected:
                                 bUpdateByExampleDisabled:1,
                                 bTreeDrag               :1,
                                 bHierarchical           :1,
+                                m_bWantHierarchical     :1,
                                 bBindingUpdate          :1;
 
     DECL_LINK( FilterSelectHdl, ListBox * );
@@ -224,6 +225,7 @@ protected:
 
     sal_Int32           LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh );
     void                SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter );
+    SfxObjectShell *    SaveSelection();
 
 public:
     TYPEINFO();

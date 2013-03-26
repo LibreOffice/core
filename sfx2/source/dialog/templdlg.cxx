@@ -744,6 +744,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     bUpdateByExampleDisabled( sal_False ),
     bTreeDrag               ( sal_True ),
     bHierarchical           ( sal_False ),
+    m_bWantHierarchical     ( sal_False ),
     bBindingUpdate          ( sal_True )
 {
     aFmtLb.SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST).toString());
@@ -1232,8 +1233,10 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             }
 
             // if the tree view again, select family hierarchy
-            if(pTreeBox)
+            if (pTreeBox || m_bWantHierarchical)
+            {
                 aFilterLb.SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString());
+            }
 
             // show maximum 14 entries
             aFilterLb.SetDropDownLineCount( MAX_FILTER_ENTRIES );
@@ -1241,12 +1244,21 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
         }
         else
         {
-            if( nActFilter < aFilterLb.GetEntryCount() - 1)
-                aFilterLb.SelectEntryPos(nActFilter + 1);
-            else
+            if (m_bWantHierarchical)
             {
                 nActFilter = 0;
-                aFilterLb.SelectEntryPos(1);
+                aFilterLb.SelectEntry(SfxResId(
+                            STR_STYLE_FILTER_HIERARCHICAL).toString());
+            }
+            else
+            {
+                if (nActFilter < aFilterLb.GetEntryCount() - 1)
+                    aFilterLb.SelectEntryPos(nActFilter + 1);
+                else
+                {
+                    nActFilter = 0;
+                    aFilterLb.SelectEntryPos(1);
+                }
             }
         }
 
@@ -1590,7 +1602,6 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
 
 
 //-------------------------------------------------------------------------
-
 // Other filters; can be switched by the users or as a result of new or
 // editing, if the current document has been assigned a different filter.
 void SfxCommonTemplateDialog_Impl::FilterSelect(
@@ -1601,14 +1612,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
     if( nEntry != nActFilter || bForce )
     {
         nActFilter = nEntry;
-        SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-        SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
-        if (pDocShell)
-        {
-            pDocShell->SetAutoStyleFilterIndex(nActFilter);
-            SaveFactoryStyleFilter( pDocShell, nActFilter );
-        }
-
+        SfxObjectShell *const pDocShell = SaveSelection();
         SfxStyleSheetBasePool *pOldStyleSheetPool = pStyleSheetPool;
         pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): 0;
         if ( pOldStyleSheetPool != pStyleSheetPool )
@@ -1700,6 +1704,8 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
         {
             // Turn on treeView
             bHierarchical=sal_True;
+            m_bWantHierarchical = sal_True;
+            SaveSelection(); // fdo#61429 store "hierarchical"
             const String aSelectEntry( GetSelectedEntry());
             aFmtLb.Hide();
 
@@ -1732,6 +1738,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
         aFmtLb.Show();
         // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start
+        m_bWantHierarchical = sal_False; // before FilterSelect
         FilterSelect(pBox->GetSelectEntryPos() - 1, bHierarchical );
         bHierarchical=sal_False;
     }
@@ -1874,6 +1881,10 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
     sal_Int32 nDefault = -1;
     nFilter = aFactoryProps.getUnpackedValueOrDefault( "ooSetupFactoryStyleFilter", nDefault );
 
+    m_bWantHierarchical =
+        (nFilter & SFXSTYLEBIT_HIERARCHY) ? sal_True : sal_False;
+    nFilter &= ~SFXSTYLEBIT_HIERARCHY; // clear it
+
     return nFilter;
 }
 
@@ -1884,8 +1895,21 @@ void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pOb
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     Sequence< PropertyValue > lProps(1);
     lProps[0].Name = "ooSetupFactoryStyleFilter";
-    lProps[0].Value = makeAny( i_nFilter );;
+    lProps[0].Value = makeAny(
+            i_nFilter | (m_bWantHierarchical ? SFXSTYLEBIT_HIERARCHY : 0));
     xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
+}
+
+SfxObjectShell* SfxCommonTemplateDialog_Impl::SaveSelection()
+{
+    SfxViewFrame *const pViewFrame(pBindings->GetDispatcher_Impl()->GetFrame());
+    SfxObjectShell *const pDocShell(pViewFrame->GetObjectShell());
+    if (pDocShell)
+    {
+        pDocShell->SetAutoStyleFilterIndex(nActFilter);
+        SaveFactoryStyleFilter( pDocShell, nActFilter );
+    }
+    return pDocShell;
 }
 
 //-------------------------------------------------------------------------
