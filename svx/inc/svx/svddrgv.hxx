@@ -139,8 +139,7 @@ public:
     sal_Bool IsInsertGluePoint() const { return bInsGluePoint; }
 
     // Interaktives einfuegen eines neuen Punktes. nIdx=0 => vor dem ersten Punkt.
-    sal_Bool IsInsObjPointPossible() const;
-    sal_Bool IsInsPointPossible() const { return IsInsObjPointPossible(); }
+    bool IsInsObjPointPossible() const;
     sal_Bool BegInsObjPoint(const Point& rPnt, sal_Bool bNewObj) { return ImpBegInsObjPoint(sal_False, 0L, rPnt, bNewObj, 0L); }
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
     sal_Bool EndInsObjPoint(SdrCreateCmd eCmd);

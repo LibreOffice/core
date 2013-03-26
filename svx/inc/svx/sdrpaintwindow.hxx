@@ -112,7 +112,7 @@ public:
     Rectangle GetVisibleArea() const;
 
     // Is OutDev a printer?
-    sal_Bool OutputToPrinter() const { return (OUTDEV_PRINTER == mrOutputDevice.GetOutDevType()); }
+    bool OutputToPrinter() const { return (OUTDEV_PRINTER == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a window?
     sal_Bool OutputToWindow() const { return (OUTDEV_WINDOW == mrOutputDevice.GetOutDevType()); }
@@ -121,7 +121,7 @@ public:
     sal_Bool OutputToVirtualDevice() const { return (OUTDEV_VIRDEV == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a recording MetaFile?
-    sal_Bool OutputToRecordingMetaFile() const;
+    bool OutputToRecordingMetaFile() const;
 
     // prepare PreRendering (evtl.)
     void PreparePreRenderDevice();

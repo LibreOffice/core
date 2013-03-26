@@ -90,14 +90,14 @@ namespace sdr
     }
 
     // operators
-    sal_Bool MasterPageDescriptor::operator==(const MasterPageDescriptor& rCandidate) const
+    bool MasterPageDescriptor::operator==(const MasterPageDescriptor& rCandidate) const
     {
         return (&maOwnerPage == &rCandidate.maOwnerPage
             && &maUsedPage == &rCandidate.maUsedPage
             && maVisibleLayers == rCandidate.maVisibleLayers);
     }
 
-    sal_Bool MasterPageDescriptor::operator!=(const MasterPageDescriptor& rCandidate) const
+    bool MasterPageDescriptor::operator!=(const MasterPageDescriptor& rCandidate) const
     {
         return (&maOwnerPage != &rCandidate.maOwnerPage
             || &maUsedPage != &rCandidate.maUsedPage

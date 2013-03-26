@@ -114,13 +114,13 @@ public:
     void SetGluePointEditMode(sal_Bool bOn=sal_True) { SdrDragView::SetGluePointEditMode(bOn); CheckEdgeMode(); }
 
     // Determine whether a text tool is activated
-    sal_Bool IsTextTool() const;
+    bool IsTextTool() const;
 
     // Determine whether an object connector tool activated
-    sal_Bool IsEdgeTool() const;
+    bool IsEdgeTool() const;
 
     // Determine whether a measurement tool activated
-    sal_Bool IsMeasureTool() const;
+    bool IsMeasureTool() const;
 
     void SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent=SdrInventor);
     void TakeCurrentObj(sal_uInt16& nIdent, sal_uInt32& nInvent) const  { nInvent=nAktInvent; nIdent=nAktIdent; }

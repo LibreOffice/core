@@ -276,7 +276,7 @@ void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedire
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
     // get to be processed layers
-    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
+    const bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
     // create PaintInfoRec; use Rectangle only temporarily
@@ -328,7 +328,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectC
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
     // get the layers to process
-    const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
+    const bool bPrinter(GetPaintWindow().OutputToPrinter());
     SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
 
     // is the given layer visible at all?
@@ -337,7 +337,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectC
         // find out if we are painting the ControlLayer
         const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
         const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), sal_False);
-        const sal_Bool bControlLayerProcessingActive(pId && nControlLayerId == *pId);
+        const bool bControlLayerProcessingActive(pId && nControlLayerId == *pId);
 
         // create PaintInfoRec, use Rectangle only temporarily
         const Region& rRegion = GetPaintWindow().GetRedrawRegion();

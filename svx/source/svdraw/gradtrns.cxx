@@ -179,7 +179,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 //////////////////////////////////////////////////////////////////////////////
 
 void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj,
-    sal_Bool bMoveSingle, sal_Bool bMoveFirst)
+    bool bMoveSingle, bool bMoveFirst)
 {
     // fill old gradient to new gradient to have a base
     rG = rGOld;

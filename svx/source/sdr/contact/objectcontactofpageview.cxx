@@ -144,7 +144,7 @@ namespace sdr
         {
             // visualize entered group when that feature is switched on and it's not
             // a print output. #i29129# No ghosted display for printing.
-            sal_Bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !isOutputToPrinter());
+            bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !isOutputToPrinter());
 
             // Visualize entered groups: Set to ghosted as default
             // start. Do this only for the DrawPage, not for MasterPages
@@ -156,12 +156,12 @@ namespace sdr
             // #114359# save old and set clip region
             OutputDevice* pOutDev = TryToGetOutputDevice();
             OSL_ENSURE(0 != pOutDev, "ObjectContactOfPageView without OutDev, someone has overloaded TryToGetOutputDevice wrong (!)");
-            sal_Bool bClipRegionPushed(sal_False);
+            bool bClipRegionPushed(false);
             const Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 
             if(!rRedrawArea.IsEmpty())
             {
-                bClipRegionPushed = sal_True;
+                bClipRegionPushed = true;
                 pOutDev->Push(PUSH_CLIPREGION);
                 pOutDev->IntersectClipRegion(rRedrawArea);
             }

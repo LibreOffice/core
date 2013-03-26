@@ -1192,12 +1192,12 @@ void SdrMarkView::SetFrameHandles(sal_Bool bOn)
 void SdrMarkView::SetEditMode(SdrViewEditMode eMode)
 {
     if (eMode!=eEditMode) {
-        sal_Bool bGlue0=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
-        sal_Bool bEdge0=((SdrCreateView*)this)->IsEdgeTool();
+        bool bGlue0=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
+        bool bEdge0=((SdrCreateView*)this)->IsEdgeTool();
         eEditMode0=eEditMode;
         eEditMode=eMode;
-        sal_Bool bGlue1=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
-        sal_Bool bEdge1=((SdrCreateView*)this)->IsEdgeTool();
+        bool bGlue1=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
+        bool bEdge1=((SdrCreateView*)this)->IsEdgeTool();
         // avoid flickering when switching between GlueEdit and EdgeTool
         if (bGlue1 && !bGlue0) ImpSetGlueVisible2(bGlue1);
         if (bEdge1!=bEdge0) ImpSetGlueVisible3(bEdge1);

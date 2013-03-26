@@ -593,7 +593,7 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 /******************************************************************************
  *  Beschreibung: Ist ein DrawTextObjekt selektiert?
  ******************************************************************************/
-sal_Bool SwView::IsTextTool() const
+bool SwView::IsTextTool() const
 {
     sal_uInt16 nId;
     sal_uInt32 nInvent;
@@ -612,7 +612,7 @@ SdrView* SwView::GetDrawView() const
     return GetWrtShell().GetDrawView();
 }
 
-sal_Bool SwView::IsBezierEditMode()
+bool SwView::IsBezierEditMode()
 {
     return (!IsDrawSelMode() && GetWrtShell().GetDrawView()->HasMarkablePoints());
 }

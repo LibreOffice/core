@@ -169,7 +169,7 @@ sal_Bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, sal_Bool bTR ) const
         if (pObj->ISA(SdrCaptionObj))
         {
             Point aPt(((SdrCaptionObj*)pObj)->GetTailPos());
-            sal_Bool bTail=eDragHdl==HDL_POLY; // drag tail
+            bool bTail=eDragHdl==HDL_POLY; // drag tail
             sal_Bool bOwn=mpCurrentSdrDragMethod->ISA(SdrDragObjOwn); // specific to object
             if (!bTail)
             { // for bTail, TakeActionRect already does the right thing
@@ -246,7 +246,7 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
         bDragHdl=eDragHdl==HDL_REF1 || eDragHdl==HDL_REF2 || eDragHdl==HDL_MIRX;
 
         // Expand test for HDL_ANCHOR_TR
-        sal_Bool bNotDraggable = (HDL_ANCHOR == eDragHdl || HDL_ANCHOR_TR == eDragHdl);
+        bool bNotDraggable = (HDL_ANCHOR == eDragHdl || HDL_ANCHOR_TR == eDragHdl);
 
         if(pHdl && (pHdl->GetKind() == HDL_SMARTTAG) && pForcedMeth )
         {
@@ -268,12 +268,12 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                         case HDL_UPPER: case HDL_LOWER:
                         {
                             // are 3D objects selected?
-                            sal_Bool b3DObjSelected = sal_False;
+                            bool b3DObjSelected = false;
                             for(sal_uInt32 a=0;!b3DObjSelected && a<GetMarkedObjectCount();a++)
                             {
                                 SdrObject* pObj = GetMarkedObjectByIndex(a);
                                 if(pObj && pObj->ISA(E3dObject))
-                                    b3DObjSelected = sal_True;
+                                    b3DObjSelected = true;
                             }
                             // If yes, allow shear even when !IsShearAllowed,
                             // because 3D objects are limited rotations
@@ -416,14 +416,14 @@ sal_Bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* 
                                     return sal_False;
                                 }
 
-                                sal_Bool bSingleTextObjMark = sal_False;    // SJ: #i100490#
+                                bool bSingleTextObjMark = false;    // SJ: #i100490#
                                 if ( GetMarkedObjectCount() == 1 )
                                 {
                                     pMarkedObj=GetMarkedObjectByIndex(0);
                                     if ( pMarkedObj &&
                                         pMarkedObj->ISA( SdrTextObj ) &&
                                         static_cast<SdrTextObj*>(pMarkedObj)->IsTextFrame() )
-                                        bSingleTextObjMark = sal_True;
+                                        bSingleTextObjMark = true;
                                 }
                                 if ( bSingleTextObjMark )
                                     mpCurrentSdrDragMethod = new SdrDragObjOwn(*this);
@@ -623,7 +623,7 @@ void SdrDragView::BrkDragObj()
     }
 }
 
-sal_Bool SdrDragView::IsInsObjPointPossible() const
+bool SdrDragView::IsInsObjPointPossible() const
 {
     return pMarkedObj!=NULL && pMarkedObj->IsPolyObj();
 }

@@ -326,7 +326,7 @@ sal_Bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         {
             // TODO: Change default hit tolerance at IsMarkedHit() some time!
             Point aPos(pWin->PixelToLogic(rMEvt.GetPosPixel()));
-            sal_Bool bMarkHit=PickHandle(aPos)!=NULL || IsMarkedObjHit(aPos);
+            bool bMarkHit=PickHandle(aPos)!=NULL || IsMarkedObjHit(aPos);
             SdrObjConnection aCon;
             if (!bMarkHit) SdrEdgeObj::ImpFindConnector(aPos,*pPV,aCon,NULL,pWin);
             SetConnectMarker(aCon,*pPV);
@@ -335,17 +335,17 @@ sal_Bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
     return SdrDragView::MouseMove(rMEvt,pWin);
 }
 
-sal_Bool SdrCreateView::IsTextTool() const
+bool SdrCreateView::IsTextTool() const
 {
     return eEditMode==SDREDITMODE_CREATE && nAktInvent==SdrInventor && (nAktIdent==OBJ_TEXT || nAktIdent==OBJ_TEXTEXT || nAktIdent==OBJ_TITLETEXT || nAktIdent==OBJ_OUTLINETEXT);
 }
 
-sal_Bool SdrCreateView::IsEdgeTool() const
+bool SdrCreateView::IsEdgeTool() const
 {
     return eEditMode==SDREDITMODE_CREATE && nAktInvent==SdrInventor && (nAktIdent==OBJ_EDGE);
 }
 
-sal_Bool SdrCreateView::IsMeasureTool() const
+bool SdrCreateView::IsMeasureTool() const
 {
     return eEditMode==SDREDITMODE_CREATE && nAktInvent==SdrInventor && (nAktIdent==OBJ_MEASURE);
 }
@@ -605,7 +605,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
             return sal_False; // sal_False = event not interpreted
         }
 
-        sal_Bool bPntsEq=nAnz>1;
+        bool bPntsEq=nAnz>1;
         sal_uIntPtr i=1;
         Point aP0=aDragStat.GetPoint(0);
         while (bPntsEq && i<nAnz) { bPntsEq=aP0==aDragStat.GetPoint(i); i++; }
@@ -642,7 +642,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 pObj->SetLayer(nLayer);
 
                 // recognize creation of a new 3D object inside a 3D scene
-                sal_Bool bSceneIntoScene(sal_False);
+                bool bSceneIntoScene(false);
 
                 if(pObjMerk
                     && pObjMerk->ISA(E3dScene)
@@ -659,7 +659,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                         SdrObject::Free( pObjMerk );
                         pObjMerk = 0L;
                         bRet = sal_False;
-                        bSceneIntoScene = sal_True;
+                        bSceneIntoScene = true;
                     }
                 }
 

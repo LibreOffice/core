@@ -277,9 +277,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE sal_uLong         FUNC_Search( const SwSearchOptions& rOptions );
     SW_DLLPRIVATE void          Replace();
 
-    sal_Bool                                IsDocumentBorder();
+    bool                        IsDocumentBorder();
 
-    SW_DLLPRIVATE sal_Bool          IsTextTool() const;
+    SW_DLLPRIVATE bool          IsTextTool() const;
 
     // create control elements
     SW_DLLPRIVATE void          CreateBtns();
@@ -563,7 +563,7 @@ public:
     void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom.Erase();}
     sal_Bool            IsDrawMode()        { return (m_nDrawSfxId != USHRT_MAX || m_nFormSfxId != USHRT_MAX); }
     bool            IsFormMode() const;
-    sal_Bool            IsBezierEditMode();
+    bool            IsBezierEditMode();
     bool            AreOnlyFormsSelected() const;
     sal_Bool            HasDrwObj(SdrObject *pSdrObj) const;
     sal_Bool            HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const;

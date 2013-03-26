@@ -183,7 +183,7 @@ Rectangle SdrPaintWindow::GetVisibleArea() const
     return Rectangle(GetOutputDevice().PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)));
 }
 
-sal_Bool SdrPaintWindow::OutputToRecordingMetaFile() const
+bool SdrPaintWindow::OutputToRecordingMetaFile() const
 {
     GDIMetaFile* pMetaFile = mrOutputDevice.GetConnectMetaFile();
     return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
@@ -191,7 +191,7 @@ sal_Bool SdrPaintWindow::OutputToRecordingMetaFile() const
 
 void SdrPaintWindow::PreparePreRenderDevice()
 {
-    const sal_Bool bPrepareBufferedOutput(
+    const bool bPrepareBufferedOutput(
         mrPaintView.IsBufferedOutputAllowed()
         && !OutputToPrinter()
         && !OutputToVirtualDevice()

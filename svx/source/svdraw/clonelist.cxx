@@ -31,14 +31,14 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
     maCloneList.push_back(pClone);
 
     // look for subobjects, too.
-    sal_Bool bOriginalIsGroup(pOriginal->IsGroupObject());
-    sal_Bool bCloneIsGroup(pClone->IsGroupObject());
+    bool bOriginalIsGroup(pOriginal->IsGroupObject());
+    bool bCloneIsGroup(pClone->IsGroupObject());
 
     if(bOriginalIsGroup && pOriginal->ISA(E3dObject) && !pOriginal->ISA(E3dScene))
-        bOriginalIsGroup = sal_False;
+        bOriginalIsGroup = false;
 
     if(bCloneIsGroup && pClone->ISA(E3dObject) && !pClone->ISA(E3dScene))
-        bCloneIsGroup = sal_False;
+        bCloneIsGroup = false;
 
     if(bOriginalIsGroup && bCloneIsGroup)
     {

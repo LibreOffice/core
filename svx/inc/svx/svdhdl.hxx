@@ -302,8 +302,8 @@ private:
     unsigned                    bGradient : 1;
 
     // select which handle to move
-    unsigned                    bMoveSingleHandle : 1;
-    unsigned                    bMoveFirstHandle : 1;
+    bool                        bMoveSingleHandle : 1;
+    bool                        bMoveFirstHandle : 1;
 
     // create marker for this kind
     virtual void CreateB2dIAObject();
@@ -329,10 +329,10 @@ public:
     void FromIAOToItem(SdrObject* pObj, sal_Bool bSetItemOnObject, sal_Bool bUndo);
 
     // selection flags for interaction
-    sal_Bool IsMoveSingleHandle() const { return bMoveSingleHandle; }
-    void SetMoveSingleHandle(sal_Bool bNew) { bMoveSingleHandle = bNew; }
-    sal_Bool IsMoveFirstHandle() const { return bMoveFirstHandle; }
-    void SetMoveFirstHandle(sal_Bool bNew) { bMoveFirstHandle = bNew; }
+    bool IsMoveSingleHandle() const { return bMoveSingleHandle; }
+    void SetMoveSingleHandle(bool bNew) { bMoveSingleHandle = bNew; }
+    bool IsMoveFirstHandle() const { return bMoveFirstHandle; }
+    void SetMoveFirstHandle(bool bNew) { bMoveFirstHandle = bNew; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

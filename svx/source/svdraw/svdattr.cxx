@@ -840,7 +840,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
     OUString& rText, const IntlWrapper * pIntlWrapper) const
 {
     sal_Int32 nValue(GetValue());
-    sal_Bool bNeg(nValue < 0);
+    bool bNeg(nValue < 0);
 
     if(bNeg)
         nValue = -nValue;
@@ -864,8 +864,8 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
             aText.insert(0, aUnicodeNull);
 
         sal_Int32 nLen = aText.getLength();
-        sal_Bool bNull1(aText[nLen-1] == aUnicodeNull);
-        sal_Bool bNull2(bNull1 && aText[nLen-2] == aUnicodeNull);
+        bool bNull1(aText[nLen-1] == aUnicodeNull);
+        bool bNull2(bNull1 && aText[nLen-2] == aUnicodeNull);
 
         if(bNull2)
         {

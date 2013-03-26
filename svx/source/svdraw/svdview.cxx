@@ -322,10 +322,10 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     const Point aLocalLogicPosition(rLogicPos);
 
     sal_Bool bEditMode=IsEditMode();
-    sal_Bool bPointMode=bEditMode && HasMarkablePoints();
+    bool bPointMode=bEditMode && HasMarkablePoints();
     sal_Bool bGluePointMode=IsGluePointEditMode();
-    sal_Bool bInsPolyPt=bPointMode && IsInsObjPointMode() && IsInsObjPointPossible();
-    sal_Bool bInsGluePt=bGluePointMode && IsInsGluePointMode() && IsInsGluePointPossible();
+    bool bInsPolyPt=bPointMode && IsInsObjPointMode() && IsInsObjPointPossible();
+    bool bInsGluePt=bGluePointMode && IsInsGluePointMode() && IsInsGluePointPossible();
     sal_Bool bIsTextEdit=IsTextEdit();
     sal_Bool bTextEditHit=IsTextEditHit(aLocalLogicPosition,0/*nHitTolLog*/);
     sal_Bool bTextEditSel=IsTextEditInSelectionMode();

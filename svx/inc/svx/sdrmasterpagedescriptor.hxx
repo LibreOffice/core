@@ -80,8 +80,8 @@ namespace sdr
         void SetVisibleLayers(const SetOfByte& rNew);
 
         // operators
-        sal_Bool operator==(const MasterPageDescriptor& rCandidate) const;
-        sal_Bool operator!=(const MasterPageDescriptor& rCandidate) const;
+        bool operator==(const MasterPageDescriptor& rCandidate) const;
+        bool operator!=(const MasterPageDescriptor& rCandidate) const;
 
         const SdrPageProperties* getCorrectSdrPageProperties() const;
     };

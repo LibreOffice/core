@@ -51,11 +51,11 @@
 #define WB_RIGHT_ALIGNED    ((WinBits)0x00008000)
 #endif
 
-static sal_Bool bProtectDocShellVisArea = sal_False;
+static bool bProtectDocShellVisArea = false;
 
 static sal_uInt16 nPgNum = 0;
 
-sal_Bool SwView::IsDocumentBorder()
+bool SwView::IsDocumentBorder()
 {
     return GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
            m_pWrtShell->GetViewOptions()->getBrowseMode() ||
@@ -74,7 +74,7 @@ inline long GetLeftMargin( SwView &rView )
 static void lcl_GetPos(SwView* pView,
                 Point& rPos,
                 SwScrollbar* pScrollbar,
-                sal_Bool bBorder)
+                bool bBorder)
 {
     SwWrtShell &rSh = pView->GetWrtShell();
     const Size m_aDocSz( rSh.GetDocSize() );
@@ -744,7 +744,7 @@ IMPL_LINK( SwView, EndScrollHdl, SwScrollbar *, pScrollbar )
             Help::ShowQuickHelp(pScrollbar, Rectangle(), aEmptyStr, 0);
         }
         Point aPos( m_aVisArea.TopLeft() );
-        sal_Bool bBorder = IsDocumentBorder();
+        bool bBorder = IsDocumentBorder();
         lcl_GetPos(this, aPos, pScrollbar, bBorder);
         if ( bBorder && aPos == m_aVisArea.TopLeft() )
             UpdateScrollbars();
@@ -1035,7 +1035,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
         //EditWin niemals einstellen!
 
         //VisArea einstellen, aber dort nicht das SetVisArea der DocShell rufen!
-        bProtectDocShellVisArea = sal_True;
+        bProtectDocShellVisArea = true;
         CalcVisArea( aEditSz );
         //visibility changes of the automatic horizontal scrollbar
         //require to repeat the ViewResizePixel() call - but only once!
@@ -1045,7 +1045,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
                 bVScrollVisible != m_pVScrollbar->IsVisible(sal_True))
             bRepeat = sal_True;
     }while( bRepeat );
-    bProtectDocShellVisArea = sal_False;
+    bProtectDocShellVisArea = false;
     m_bInInnerResizePixel = sal_False;
 }
 
@@ -1209,7 +1209,7 @@ sal_Bool SwView::UpdateScrollbars()
     sal_Bool bRet = sal_False;
     if ( !m_aVisArea.IsEmpty() )
     {
-        const sal_Bool bBorder = IsDocumentBorder();
+        const bool bBorder = IsDocumentBorder();
         Rectangle aTmpRect( m_aVisArea );
         if ( bBorder )
         {
