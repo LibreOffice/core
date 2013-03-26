@@ -51,19 +51,19 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   AddonsToolBoxFactory                            ,
-                                            ::cppu::OWeakObject                             ,
-                                            SERVICENAME_TOOLBARFACTORY                      ,
-                                            IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY
-                                        )
+PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( AddonsToolBoxFactory,
+                                      ::cppu::OWeakObject,
+                                      SERVICENAME_TOOLBARFACTORY,
+                                      IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY )
+PRIVATE_DEFINE_ONEINSTANCEFACTORY( AddonsToolBoxFactory )
 
 DEFINE_INIT_SERVICE                     (   AddonsToolBoxFactory, {} )
 
 AddonsToolBoxFactory::AddonsToolBoxFactory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
+    , m_xContext( xContext )
+    , m_xModuleManager( ModuleManager::create( xContext ) )
 {
 }
 
@@ -186,7 +186,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         aPropSeq[2] <<= aPropValue;
 
         SolarMutexGuard aGuard;
-        AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xServiceManager );
+        AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xContext );
         xToolBar = Reference< ::com::sun::star::ui::XUIElement >( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
         xInit->initialize( aPropSeq );

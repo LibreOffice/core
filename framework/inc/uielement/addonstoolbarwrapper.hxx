@@ -24,7 +24,7 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {
@@ -33,7 +33,7 @@ class AddonsToolBarManager;
 class AddonsToolBarWrapper : public UIElementWrapperBase
 {
     public:
-        AddonsToolBarWrapper( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        AddonsToolBarWrapper( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
         virtual ~AddonsToolBarWrapper();
 
         // XComponent
@@ -49,7 +49,7 @@ class AddonsToolBarWrapper : public UIElementWrapperBase
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
     private:
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                             m_xServiceManager;
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >                                 m_xContext;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                                       m_xToolBarManager;
         com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > m_aConfigData;
 };

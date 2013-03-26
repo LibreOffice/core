@@ -30,7 +30,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
@@ -48,7 +47,7 @@ class AddonsToolBoxFactory :  protected ThreadHelpBase                          
                                                               com::sun::star::ui::XUIElementFactory >
 {
     public:
-        AddonsToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        AddonsToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
         virtual ~AddonsToolBoxFactory();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -61,7 +60,7 @@ class AddonsToolBoxFactory :  protected ThreadHelpBase                          
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >     m_xModuleManager;
 };
 
