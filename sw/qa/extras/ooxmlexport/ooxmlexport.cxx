@@ -84,6 +84,7 @@ public:
     void testTextframeGradient();
     void testCellBtlr();
     void testTableStylerPrSz();
+    void testMathLiteral();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -128,6 +129,7 @@ void Test::run()
         {"textframe-gradient.docx", &Test::testTextframeGradient},
         {"cell-btlr.docx", &Test::testCellBtlr},
         {"table-style-rPr-sz.docx", &Test::testTableStylerPrSz},
+        {"math-literal.docx", &Test::testMathLiteral},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -649,6 +651,13 @@ void Test::testTableStylerPrSz()
 //    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xPara, 1), "CharWeight"));
 //    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(getRun(xPara, 1), "CharPosture"));
 }
+
+void Test::testMathLiteral()
+{
+    CHECK_FORMULA( "iiint from {V} to <?> {\"div\" \"F\"}  dV= llint from {S} to <?> {\"F\" ∙ \"n \" dS}",
+        getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
