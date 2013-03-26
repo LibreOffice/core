@@ -799,7 +799,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
         Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
     }
     else
-    pArr += 2;
+        pArr += 2;
 
     Set_UInt16( pArr, nCropL );                     // set dxaCropLeft
     Set_UInt16( pArr, nCropT );                     // set dyaCropTop
