@@ -45,7 +45,7 @@ struct ScQueryParam;
 struct ScDBQueryParamInternal;
 struct ScDBQueryParamMatrix;
 class ScFormulaCell;
-class ScCellValue;
+struct ScCellValue;
 
 class ScDocumentIterator                // walk through all non-empty cells
 {
