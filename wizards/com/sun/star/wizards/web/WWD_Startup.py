@@ -634,21 +634,24 @@ class WWD_Startup(WWD_General):
 
     def disableDocUpDown(self):
         try:
-            if len(WWD_Startup.selectedDoc) == 0:
-                aux = False
-                aux2 = False
-            else:
-                if WWD_Startup.selectedDoc[0] == 0:
-                    aux = False
-                else:
-                    aux = True
-                if WWD_Startup.selectedDoc[0] + 1 < \
-                    WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize():
-                    aux2 = True
-                else:
-                    aux2 = False
-            self.btnDocUp.Model.Enabled = aux
-            self.btnDocDown.Model.Enabled = aux2
+            self.btnDocUp.Model.Enabled = False if (len(self.selectedDoc) == 0) else (False if (self.selectedDoc[0] == 0) else True)
+            self.btnDocDown.Model.Enabled = False if (len(self.selectedDoc) == 0) else (True if (self.selectedDoc[0] + 1 < self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()) else False)
+
+            #if len(WWD_Startup.selectedDoc) == 0:
+            #    aux = False
+            #    aux2 = False
+            #else:
+            #    if WWD_Startup.selectedDoc[0] == 0:
+            #        aux = False
+            #    else:
+            #        aux = True
+            #    if WWD_Startup.selectedDoc[0] + 1 < \
+            #        WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize():
+            #        aux2 = True
+            #    else:
+            #        aux2 = False
+            #self.btnDocUp.Model.Enabled = aux
+            #self.btnDocDown.Model.Enabled = aux2
         except Exception:
             traceback.print_exc()
 

@@ -294,7 +294,7 @@ class WWD_Events(WWD_Startup):
             WWD_Startup.selectedDoc = []
             # update the list to show the right selection.
 
-        docListDA.updateUI()
+        self.docListDA.updateUI()
         # disables all the next steps, if the list of docuemnts
         # is empty.
         self.checkSteps()
@@ -311,7 +311,7 @@ class WWD_Events(WWD_Startup):
             WWD_Startup.selectedDoc[0])
         WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.add(
             WWD_Startup.selectedDoc[0] - 1, doc)
-        docListDA.updateUI()
+        self.docListDA.updateUI()
         self.disableDocUpDown()
 
     '''
@@ -326,7 +326,7 @@ class WWD_Events(WWD_Startup):
             WWD_Startup.selectedDoc[0])
         WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.add(
             (WWD_Startup.selectedDoc[0] + 1), doc)
-        docListDA.updateUI()
+        self.docListDA.updateUI()
         self.disableDocUpDown()
 
     '''
