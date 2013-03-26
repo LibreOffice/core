@@ -17,45 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
-
-// Solar Definitionen
-#include <tools/solar.h>
-
-// Programmabhaengige Includes.
 #include <rscclobj.hxx>
 #include <rsctop.hxx>
 
-/****************** C O D E **********************************************/
 
-/****************** R e f N o d e ****************************************/
-/*************************************************************************
-|*
-|*    RefNode::RefNode()
-|*
-*************************************************************************/
 RefNode::RefNode( Atom nTyp ){
     pObjBiTree = 0;
     nTypNameId = nTyp;
 }
 
-/*************************************************************************
-|*
-|*    RefNode::GetId()
-|*
-*************************************************************************/
 sal_uInt32 RefNode::GetId() const
 {
     return( nTypNameId );
 }
 
-/*************************************************************************
-|*
-|*    RefNode::PutObjNode()
-|*
-*************************************************************************/
 sal_Bool RefNode::PutObjNode( ObjNode * pPutObject ){
 // insert a node in the b-tree pObjBiTree
 // if the node with the same name is in pObjBiTree,
@@ -68,12 +44,6 @@ sal_Bool RefNode::PutObjNode( ObjNode * pPutObject ){
     return( sal_True );
 }
 
-/****************** O b j N o d e ****************************************/
-/*************************************************************************
-|*
-|*    RefNode::GetObjNode()
-|*
-*************************************************************************/
 ObjNode * RefNode :: GetObjNode( const RscId & rRscId ){
 // insert a node in the b-tree pObjBiTree
 // if the node with the same name is in pObjBiTree,
@@ -85,22 +55,12 @@ ObjNode * RefNode :: GetObjNode( const RscId & rRscId ){
     return( NULL );
 }
 
-/*************************************************************************
-|*
-|*    ObjNode::ObjNode()
-|*
-*************************************************************************/
 ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey ){
     pRscObj  = pData;
     aRscId   = rId;
     lFileKey = lKey;
 }
 
-/*************************************************************************
-|*
-|*    ObjNode::DelObjNode()
-|*
-*************************************************************************/
 ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
     ObjNode * pRetNode = this;
 
@@ -126,21 +86,11 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
     return pRetNode;
 }
 
-/*************************************************************************
-|*
-|*    ObjNode::GetId()
-|*
-*************************************************************************/
 sal_uInt32 ObjNode::GetId() const
 {
     return( (sal_uInt32)(long)aRscId );
 }
 
-/*************************************************************************
-|*
-|*    ObjNode::IsConsistent()
-|*
-*************************************************************************/
 sal_Bool ObjNode::IsConsistent()
 {
     sal_Bool bRet = sal_True;

@@ -17,45 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include <rscflag.hxx>
 
-/****************** C O D E **********************************************/
-/****************** R s c F l a g ****************************************/
-/*************************************************************************
-|*
-|*    RscFlag::RscFlag()
-|*
-*************************************************************************/
 RscFlag::RscFlag( Atom nId, sal_uInt32 nTypeId )
             : RscConst( nId, nTypeId )
 {}
 
-/*************************************************************************
-|*
-|*    RscFlag::Size()
-|*
-|*    Beschreibung      Die Groe�e der Instanzdaten richtet sich nach
-|*                      der Anzahl der Flags
-|*
-*************************************************************************/
 sal_uInt32 RscFlag::Size()
 {
     return( ALIGNED_SIZE( sizeof( RscFlagInst ) *
             ( 1 + (nEntries -1) / (sizeof( sal_uInt32 ) * 8) ) ) );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::SetNotConst()
-|*
-*************************************************************************/
 ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
 {
     sal_uInt32 i = 0;
@@ -71,11 +49,6 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
     return( ERR_RSCFLAG );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::SetConst()
-|*
-*************************************************************************/
 ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )
 {
     sal_uInt32 i = 0;
@@ -91,11 +64,6 @@ ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
     return( ERR_RSCFLAG );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::CreateBasic()
-|*
-*************************************************************************/
 RSCINST RscFlag::CreateBasic( RSCINST * pInst )
 {
     RSCINST aInst;
@@ -110,11 +78,6 @@ RSCINST RscFlag::CreateBasic( RSCINST * pInst )
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::Create()
-|*
-*************************************************************************/
 RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass )
 {
     RSCINST aInst = CreateBasic( pInst );
@@ -136,11 +99,6 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnCl
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::CreateClient()
-|*
-*************************************************************************/
 RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
                                sal_Bool bOwnClass, Atom nConstId )
 {
@@ -169,11 +127,6 @@ RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::SetToDefault()
-|*
-*************************************************************************/
 void RscFlag::SetToDefault( const RSCINST & rInst )
 {
     sal_uInt32 i = 0;
@@ -182,11 +135,6 @@ void RscFlag::SetToDefault( const RSCINST & rInst )
         ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::IsDlft()
-|*
-*************************************************************************/
 sal_Bool RscFlag::IsDefault( const RSCINST & rInst )
 {
     sal_uInt32 i = 0;
@@ -212,11 +160,6 @@ sal_Bool RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
     return( sal_True );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
                               Atom nConstId )
 {
@@ -262,11 +205,6 @@ sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::IsSet()
-|*
-*************************************************************************/
 sal_Bool RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
 {
     sal_uInt32 i = 0, nFlag = 0;
@@ -282,11 +220,6 @@ sal_Bool RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
     return( sal_True );
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::WriteSrc()
-|*
-*************************************************************************/
 void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                         RscTypCont *, sal_uInt32, const char * )
 {
@@ -313,11 +246,6 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     };
 }
 
-/*************************************************************************
-|*
-|*    RscFlag::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                           RscTypCont *, sal_uInt32, sal_Bool )
 {
@@ -339,11 +267,6 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscClient::RscClient()
-|*
-*************************************************************************/
 RscClient::RscClient( Atom nId, sal_uInt32 nTypeId, RscFlag * pClass,
                        Atom nConstantId )
            : RscTop ( nId, nTypeId )
@@ -352,21 +275,11 @@ RscClient::RscClient( Atom nId, sal_uInt32 nTypeId, RscFlag * pClass,
    nConstId = nConstantId;
 }
 
-/*************************************************************************
-|*
-|*    RscClient::GetClassType()
-|*
-*************************************************************************/
 RSCCLASS_TYPE RscClient::GetClassType() const
 {
     return RSCCLASS_BOOL;
 }
 
-/*************************************************************************
-|*
-|*    RscClient::WriteSrc()
-|*
-*************************************************************************/
 void RscClient::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont *, sal_uInt32, const char * )
 {
@@ -376,11 +289,6 @@ void RscClient::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         fprintf( fOutput, "FALSE" );
 }
 
-/*************************************************************************
-|*
-|*    RscClient::Create()
-|*
-*************************************************************************/
 RSCINST RscClient::Create( RSCINST * pInst, const RSCINST & rDflt,
                            sal_Bool bOwnClass )
 {

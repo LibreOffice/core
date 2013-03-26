@@ -17,27 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-// Programmabh�ngige Includes.
 #include <rscdb.hxx>
 #include <rscstr.hxx>
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 
-/****************** C O D E **********************************************/
-/****************** R s c S t r i n g ************************************/
-/*************************************************************************
-|*
-|*    RscString::RscString()
-|*
-*************************************************************************/
 RscString::RscString( Atom nId, sal_uInt32 nTypeId )
                 : RscTop( nId, nTypeId )
 {
@@ -45,21 +35,11 @@ RscString::RscString( Atom nId, sal_uInt32 nTypeId )
     pRefClass = NULL;
 }
 
-/*************************************************************************
-|*
-|*    RscString::GetClassType()
-|*
-*************************************************************************/
 RSCCLASS_TYPE RscString::GetClassType() const
 {
     return RSCCLASS_STRING;
 }
 
-/*************************************************************************
-|*
-|*    RscString::SetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
     char    * pTmp;
     ERRTYPE aError;
@@ -85,31 +65,16 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscString::GetString()
-|*
-*************************************************************************/
 ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr ){
     *ppStr = ((RscStringInst *)rInst.pData)->pStr;
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscString::GetRef()
-|*
-*************************************************************************/
 ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId ){
     *pRscId = ((RscStringInst *)rInst.pData)->aRefId;
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscString::SetRef()
-|*
-*************************************************************************/
 ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     if( pRefClass ){
         ((RscStringInst *)rInst.pData)->aRefId = rRefId;
@@ -121,11 +86,6 @@ ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     return ERR_OK;
 }
 
-/*************************************************************************
-|*
-|*    RscString::Create()
-|*
-*************************************************************************/
 RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
                            sal_Bool bOwnClass )
 {
@@ -156,22 +116,12 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscString::Destroy()
-|*
-*************************************************************************/
 void RscString::Destroy( const RSCINST & rInst ){
     if( ((RscStringInst *)rInst.pData)->pStr )
         rtl_freeMemory( ((RscStringInst *)rInst.pData)->pStr );
     ((RscStringInst *)rInst.pData)->aRefId.Destroy();
 }
 
-/*************************************************************************
-|*
-|*    RscString::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     RscStringInst * pData    = (RscStringInst*)rInst.pData;
     RscStringInst * pDefData = (RscStringInst*)pDef;
@@ -215,11 +165,6 @@ sal_Bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    RscString::WriteSrc()
-|*
-*************************************************************************/
 void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont *, sal_uInt32, const char * )
 {
@@ -259,11 +204,6 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     }
 }
 
-/*************************************************************************
-|*
-|*    RscString::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                             RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
@@ -330,19 +270,6 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
         };
     };
     return( aError );
-}
-
-//==================================================================
-void RscString::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * /*pTC*/,
-    const char * pName
-)
-{
-    fprintf( fOutput, "\t\tString aStr( (const char*)(pResData+nOffset) );\n" );
-    fprintf( fOutput, "\t\tSet%s( aStr );\n", pName );
-    fprintf( fOutput, "\t\tnOffset += GetStringSizeRes( aStr );\n" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,42 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-// Programmabh�ngige Includes.
 #include <tools/link.hxx>
 #include <rsctree.hxx>
 
-/****************** C O D E **********************************************/
 
-/****************** B i N o d e ******************************************/
-/*************************************************************************
-|*
-|*    BiNode::BiNode()
-|*
-*************************************************************************/
 BiNode::BiNode(){
     pLeft = pRight = NULL;
 }
 
-/*************************************************************************
-|*
-|*    BiNode::~BiNode()
-|*
-*************************************************************************/
 BiNode::~BiNode(){
 }
 
-/*************************************************************************
-|*
-|*    BiNode::EnumNodes()
-|*
-*************************************************************************/
 void BiNode::EnumNodes( Link aLink ) const{
     if( Left() )
         Left()->EnumNodes( aLink );
@@ -61,11 +41,6 @@ void BiNode::EnumNodes( Link aLink ) const{
         Right()->EnumNodes( aLink );
 }
 
-/*************************************************************************
-|*
-|*    BiNode::ChangeDLListBTree()
-|*
-*************************************************************************/
 BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
     BiNode * pMiddle;
     BiNode * pTmp;
@@ -100,11 +75,6 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
     return( pList );
 }
 
-/*************************************************************************
-|*
-|*    BiNode::ChangeBTreeDLList()
-|*
-*************************************************************************/
 BiNode * BiNode::ChangeBTreeDLList(){
     BiNode * pList;
     BiNode * pLL_RN;    // linke Liste rechter Knoten
@@ -125,12 +95,6 @@ BiNode * BiNode::ChangeBTreeDLList(){
     return( pList );
 }
 
-/****************** N a m e N o d e **************************************/
-/*************************************************************************
-|*
-|*    NameNode::Remove()
-|*
-*************************************************************************/
 NameNode * NameNode::Remove( NameNode * pRemove ){
     NameNode * pRoot = this;
     NameNode * pParent = SearchParent( pRemove );
@@ -165,11 +129,6 @@ NameNode * NameNode::Remove( NameNode * pRemove ){
 }
 
 
-/*************************************************************************
-|*
-|*    NameNode::Compare
-|*
-*************************************************************************/
 COMPARE NameNode::Compare( const NameNode * pCompare ) const{
     if( (long)this < (long)pCompare )
         return LESS;
@@ -188,11 +147,6 @@ COMPARE NameNode::Compare( const void * pCompare ) const{
         return EQUAL;
 }
 
-/*************************************************************************
-|*
-|*    NameNode::SearchParent
-|*
-*************************************************************************/
 NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
 // search for a parent node.
 // return a pointer to the parent node if found.
@@ -216,11 +170,6 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
     return( (NameNode *)NULL );
 }
 
-/*************************************************************************
-|*
-|*    NameNode::Search
-|*
-*************************************************************************/
 NameNode* NameNode::Search( const NameNode * pSearch ) const{
 // search for a node.
 // return a pointer to the node if found.
@@ -261,11 +210,6 @@ NameNode* NameNode::Search( const void * pSearch ) const{
     return( NULL );
 }
 
-/*************************************************************************
-|*
-|*    NameNode::Insert()
-|*
-*************************************************************************/
 sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 // Ein Knoten wird in den Baum eingefuegt
 // Gibt es einen Knoten mit dem gleichen Namen, dann return sal_False
@@ -292,11 +236,6 @@ sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
     return( bRet );
 }
 
-/*************************************************************************
-|*
-|*    NameNode::Insert()
-|*
-*************************************************************************/
 sal_Bool NameNode::Insert( NameNode * pTN ){
 // insert a node in the tree.
 // if the node with the same name is in, return sal_False and no insert.
@@ -317,11 +256,6 @@ sal_Bool NameNode::Insert( NameNode * pTN ){
     return( bRet );
 }
 
-/*************************************************************************
-|*
-|*    NameNode::OrderTree()
-|*
-*************************************************************************/
 void NameNode::OrderTree(){
     NameNode * pTmpLeft = (NameNode *)Left();
     NameNode * pTmpRight = (NameNode *)Right();
@@ -344,21 +278,10 @@ void NameNode::SubOrderTree( NameNode * pOrderNode ){
     }
 }
 
-/****************** I d N o d e ******************************************/
-/*************************************************************************
-|*
-|*    IdNode::Search()
-|*
-*************************************************************************/
 IdNode * IdNode::Search( sal_uInt32 nTypeName ) const{
     return( (IdNode *)NameNode::Search( (const void *)&nTypeName ) );
 }
 
-/*************************************************************************
-|*
-|*    IdNode::Compare()
-|*
-*************************************************************************/
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
 {
     if( GetId() < (sal_uInt32)(((const IdNode *)pSearch)->GetId()) )
@@ -380,30 +303,15 @@ COMPARE IdNode::Compare( const void * pSearch ) const{
         return EQUAL;
 }
 
-/*************************************************************************
-|*
-|*    IdNode::GetId()
-|*
-*************************************************************************/
 sal_uInt32 IdNode::GetId() const
 {
     return( 0xFFFFFFFF );
 }
 
-/*************************************************************************
-|*
-|*    StringNode::Search()
-|*
-*************************************************************************/
 StringNode * StringNode::Search( const char * pSearch ) const{
     return (StringNode *)NameNode::Search( (const void *)pSearch );
 }
 
-/*************************************************************************
-|*
-|*    StringNode::Compare()
-|*
-*************************************************************************/
 COMPARE StringNode::Compare( const NameNode * pSearch ) const
 {
     int nCmp = strcmp( m_aName.getStr(),

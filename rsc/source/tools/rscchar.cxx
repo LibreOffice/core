@@ -17,26 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-// Solar Definitionen
-#include <tools/solar.h>
 #include <rsctools.hxx>
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/alloc.h>
 
-/*************************************************************************
-|*
-|*    RscChar::MakeChar()
-|*
-|*    Beschreibung      Der String wird nach C-Konvention umgesetzt
-|*
-*************************************************************************/
 char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 {
     sal_Size nMaxUniCodeBuf = strlen( pStr ) + 1;
@@ -103,7 +93,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         }
                         if( nChar > 255 )
                         {
-                            // Wert zu gross, oder kein 3 Ziffern
+                            // value is too big, or more than 3 digits
                             delete [] pOrgStr;
                             return( NULL );
                         }
@@ -160,7 +150,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
     delete[] pOrgStr, pOrgStr = 0;
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
-    // factor fo 6 is the maximum size of an UNICODE character as utf8
+    // factor of 6 is the maximum size of an UNICODE character as utf8
     char * pUtf8 = (char *)rtl_allocateMemory( nUniSize * 6 );
     rtl_convertUnicodeToText( hConv, 0,
                             pUniCode, nUniSize,

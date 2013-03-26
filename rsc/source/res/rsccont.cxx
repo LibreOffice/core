@@ -17,25 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
-
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-// Programmabh�ngige Includes.
 #include <rsccont.hxx>
 
 #include <tools/rcid.h>
 
-/****************** C O D E **********************************************/
-/****************** E N T R Y S T R U C T ********************************/
-/*************************************************************************
-|*
-|*    ENTRYSTRUCT::Destroy()
-|*
-*************************************************************************/
 void ENTRY_STRUCT::Destroy()
 {
     aName.Destroy();
@@ -45,12 +34,6 @@ void ENTRY_STRUCT::Destroy()
     };
 }
 
-/****************** R s c B a s e C o n t ********************************/
-/*************************************************************************
-|*
-|*    RscBaseCont::RscBaseCont()
-|*
-*************************************************************************/
 RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
                           sal_Bool bNoIdent )
     : RscTop( nId, nTypeId, pSuper ),
@@ -63,30 +46,15 @@ RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
     nSize = nOffInstData + ALIGNED_SIZE( sizeof( RscBaseContInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::~RscBaseCont()
-|*
-*************************************************************************/
 RscBaseCont::~RscBaseCont()
 {
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::GetClassType()
-|*
-*************************************************************************/
 RSCCLASS_TYPE RscBaseCont::GetClassType() const
 {
     return RSCCLASS_COMPLEX;
 }
 
-/*************************************************************************
-|*
-|*    DestroyElements()
-|*
-*************************************************************************/
 void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 {
     if( pClassData->nEntries ){
@@ -100,11 +68,6 @@ void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
     };
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::Create()
-|*
-*************************************************************************/
 RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
                              sal_Bool bOwnClass )
 {
@@ -153,11 +116,6 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::Destroy()
-|*
-*************************************************************************/
 void RscBaseCont::Destroy( const RSCINST & rInst ){
     RscBaseContInst * pClassData;
 
@@ -167,11 +125,6 @@ void RscBaseCont::Destroy( const RSCINST & rInst ){
     DestroyElements( pClassData );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::SearchEle()
-|*
-*************************************************************************/
 RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName,
                                    RscTop * pClass, sal_uInt32 nPos )
 {
@@ -194,22 +147,12 @@ RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName
     return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::SearchEle()
-|*
-*************************************************************************/
 RSCINST RscBaseCont::SearchEle( const RSCINST & rInst, const RscId & rEleName,
                                 RscTop * pClass )
 {
     return SearchElePos( rInst, rEleName, pClass, 0 );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::GetElement()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
                                  RscTop * pCreateClass,
                                  const RSCINST & rCreateInst, RSCINST * pGetInst )
@@ -226,12 +169,10 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
         if( !pCreateClass->InHierarchy( pTypeClass ) ){
             if( pTypeClass1 ){
                 if( !pCreateClass->InHierarchy( pTypeClass1 ) ){
-                    // Falscher Typ
                     return ERR_CONT_INVALIDTYPE;
                 }
             }
             else{
-                // Falscher Typ
                 return ERR_CONT_INVALIDTYPE;
             };
         };
@@ -283,11 +224,6 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
     return aError;
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::GetCount()
-|*
-*************************************************************************/
 sal_uInt32 RscBaseCont::GetCount( const RSCINST & rInst ){
     RscBaseContInst * pClassData;
 
@@ -295,11 +231,6 @@ sal_uInt32 RscBaseCont::GetCount( const RSCINST & rInst ){
     return( pClassData->nEntries );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::GetPosEle()
-|*
-*************************************************************************/
 RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
     RscBaseContInst * pClassData;
 
@@ -310,11 +241,6 @@ RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
     return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::MovePosEle()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
                                  sal_uInt32 nSourcePos )
 {
@@ -345,11 +271,6 @@ ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
     return aError;
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::SetPosRscId()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                                   const RscId & rId ){
     RscBaseContInst * pClassData;
@@ -372,11 +293,6 @@ ERRTYPE RscBaseCont::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::GetInfoEle()
-|*
-*************************************************************************/
 SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
     RscBaseContInst * pClassData;
     SUBINFO_STRUCT  aInfo;
@@ -391,11 +307,6 @@ SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos )
     return( aInfo );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::SetString()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
 {
     RscBaseContInst * pClassData;
@@ -405,8 +316,7 @@ ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-//?B 040991
-//?W 040991 sonst Endlosrekursion moeglich
+// otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() ){
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetString( aTmpI, &pTmpStr );
@@ -429,11 +339,6 @@ ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::SetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
@@ -442,8 +347,7 @@ ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-//?B 040991
-//?W 040991 sonst Endlosrekursion moeglich
+// otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() ){
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetNumber( aTmpI, &lNumber );
@@ -466,7 +370,6 @@ ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
     return( aError );
 }
 
-//==================================================================
 ERRTYPE RscBaseCont::SetBool
 (
     const RSCINST & rInst,
@@ -480,8 +383,7 @@ ERRTYPE RscBaseCont::SetBool
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-    //?B 040991
-    //?W 040991 sonst Endlosrekursion moeglich
+    // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
     {
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
@@ -505,7 +407,6 @@ ERRTYPE RscBaseCont::SetBool
     return( aError );
 }
 
-//==================================================================
 ERRTYPE RscBaseCont::SetConst
 (
     const RSCINST & rInst,
@@ -520,8 +421,7 @@ ERRTYPE RscBaseCont::SetConst
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-//?B 040991
-//?W 040991 sonst Endlosrekursion moeglich
+    // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() ){
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetConst( aTmpI, &nConst );
@@ -544,11 +444,6 @@ ERRTYPE RscBaseCont::SetConst
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::SetRef()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     RscBaseContInst * pClassData;
     RSCINST aTmpI;
@@ -557,8 +452,7 @@ ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId ){
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-//?B 040991
-//?W 040991 sonst Endlosrekursion moeglich
+    // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() ){
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
         aError = aTmpI.pClass->GetRef( aTmpI, &aId );
@@ -581,11 +475,6 @@ ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::IsConsistent()
-|*
-*************************************************************************/
 sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst ) {
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
@@ -617,11 +506,6 @@ sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst ) {
     return( bRet );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::SetToDefault()
-|*
-*************************************************************************/
 void RscBaseCont::SetToDefault( const RSCINST & rInst )
 {
     sal_uInt32  i = 0;
@@ -638,11 +522,6 @@ void RscBaseCont::SetToDefault( const RSCINST & rInst )
     RscTop::SetToDefault( rInst );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::IsDefault()
-|*
-*************************************************************************/
 sal_Bool RscBaseCont::IsDefault( const RSCINST & rInst ){
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
@@ -663,11 +542,6 @@ sal_Bool RscBaseCont::IsDefault( const RSCINST & rInst ){
     return( RscTop::IsDefault( rInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     RscBaseContInst * pClassData;
@@ -683,11 +557,6 @@ sal_Bool RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
         return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::Delete()
-|*
-*************************************************************************/
 void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
                           const RscId & rId )
 {
@@ -708,11 +577,6 @@ void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
 
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::DeletePos()
-|*
-*************************************************************************/
 void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
     RscBaseContInst *   pClassData;
 
@@ -730,11 +594,6 @@ void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
     };
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::ContWriteSrc()
-|*
-*************************************************************************/
 void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
                                 RscTypCont * pTC, sal_uInt32 nTab,
                                 const char * pVarName )
@@ -756,11 +615,6 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
     };
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::ContWriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                               RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
@@ -784,41 +638,6 @@ ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return( aError );
 }
 
-//==================================================================
-void RscBaseCont::ContWriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * pTC,
-    const char * pName,
-    sal_Bool bWriteSize
-)
-{
-    if( (bNoId || bWriteSize) && !pTypeClass1 )
-    {
-        fprintf( fOutput, "\t\tsal_uInt32 nItems = *(sal_uInt32 *)(pResData+nOffset) );\n" );
-        fprintf( fOutput, "\t\tnOffset += sizeof( sal_uInt32 );\n" );
-
-        fprintf( fOutput, "\t\t// Items hinzufuegen\n" );
-        fprintf( fOutput, "\t\tfor( sal_uInt32 i = 0; i < nItems; i++ )\n" );
-        fprintf( fOutput, "\t\t{\n" );
-        pTypeClass->WriteRcAccess( fOutput, pTC, "Item" );
-        fprintf( fOutput, "\t\t}\n" );
-    }
-    else
-    {
-        fprintf( fOutput, "\t\tSet%s( %s ", pName, pHS->getString( GetId() ).getStr() );
-        fprintf( fOutput, "%s ", aCallPar2.getStr() );
-        fprintf( fOutput, "ResId( (RSHEADER_TYPE*)(pResData+nOffset) ) ) );\n" );
-        fprintf( fOutput, "\t\tnOffset += GetObjSizeRes( (RSHEADER_TYPE*)(pResData+nOffset) );\n" );
-    }
-}
-
-
-/*************************************************************************
-|*
-|*    RscBaseCont::WriteSrc()
-|*
-*************************************************************************/
 void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                             RscTypCont * pTC, sal_uInt32 nTab,
                             const char * pVarName )
@@ -827,11 +646,6 @@ void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     ContWriteSrc( rInst, fOutput, pTC, nTab, pVarName );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                               RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
@@ -844,84 +658,11 @@ ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscBaseCont::WriteHxx()
-|*
-*************************************************************************/
-ERRTYPE RscBaseCont::WriteHxx( const RSCINST & rInst, FILE * fOutput,
-                               RscTypCont * pTC, const RscId & rRscId )
-{
-    sal_uInt32        i = 0;
-    RscBaseContInst * pClassData;
-    ERRTYPE       aError;
-
-    aError = RscTop::WriteHxx( rInst, fOutput, pTC, rRscId );
-
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
-
-    for( i = 0; i < pClassData->nEntries && aError.IsOk(); i++ )
-    {
-        if( pClassData->pEntries[ i ].aName.IsId()
-          && pClassData->pEntries[ i ].aInst.pClass->IsCodeWriteable() )
-        {
-            aError = pClassData->pEntries[ i ].aInst.pClass->
-                         WriteHxx( pClassData->pEntries[ i ].aInst,
-                                   fOutput, pTC,
-                                   pClassData->pEntries[ i ].aName );
-        }
-    };
-
-    return( aError );
-}
-
-/*************************************************************************
-|*
-|*    RscBaseCont::WriteCxx()
-|*
-*************************************************************************/
-ERRTYPE RscBaseCont::WriteCxx( const RSCINST & rInst, FILE * fOutput,
-                               RscTypCont * pTC, const RscId & rRscId )
-{
-    sal_uInt32        i = 0;
-    RscBaseContInst * pClassData;
-    ERRTYPE       aError;
-
-    aError = RscTop::WriteCxx( rInst, fOutput, pTC, rRscId );
-
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
-
-    for( i = 0; i < pClassData->nEntries && aError.IsOk(); i++ )
-    {
-        if( pClassData->pEntries[ i ].aName.IsId()
-          && pClassData->pEntries[ i ].aInst.pClass->IsCodeWriteable() )
-        {
-            aError = pClassData->pEntries[ i ].aInst.pClass->
-                         WriteCxx( pClassData->pEntries[ i ].aInst,
-                                   fOutput, pTC,
-                                   pClassData->pEntries[ i ].aName );
-        }
-    };
-
-    return( aError );
-}
-
-/*************** R s c C o n t W r i t e S r c ***************************/
-/*************************************************************************
-|*
-|*    RscContWriteSrc::RscContWriteSrc()
-|*
-*************************************************************************/
 RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId,
                                  RscTop * pSuper, sal_Bool bNoIdent )
                   : RscBaseCont( nId, nTypeId, pSuper, bNoIdent )
 {}
 
-/*************************************************************************
-|*
-|*    RscContWriteSrc::WriteSrc()
-|*
-*************************************************************************/
 void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                                 RscTypCont * pTC, sal_uInt32 nTab,
                                 const char * pVarName )
@@ -942,21 +683,10 @@ void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     fprintf( fOutput, "}" );
 }
 
-/*************** R s c C o n t *******************************************/
-/*************************************************************************
-|*
-|*    RscCont::RscCont()
-|*
-*************************************************************************/
 RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, sal_Bool bNoIdent )
               : RscContWriteSrc( nId, nTypeId, pSuper, bNoIdent )
 {}
 
-/*************************************************************************
-|*
-|*    RscCont::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                                  RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
@@ -975,32 +705,11 @@ ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-//==================================================================
-void RscCont::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * pTC,
-    const char * pName
-)
-{
-    ContWriteRcAccess( fOutput, pTC, pName, sal_True );
-}
-
-/*************************************************************************
-|*
-|*    RscContExtraData::RscContExtraData()
-|*
-*************************************************************************/
 RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId,
                              RscTop * pSuper, sal_Bool bNoIdent )
                      : RscContWriteSrc( nId, nTypeId, pSuper, bNoIdent )
 {}
 
-/*************************************************************************
-|*
-|*    RscContExtraData::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscContExtraData::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                              RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {

@@ -24,7 +24,6 @@
 #include <rschash.hxx>
 #include <rsctop.hxx>
 
-/******************* R s c C l a s s *************************************/
 class RscClass : public RscTop
 {
 protected:
@@ -91,11 +90,6 @@ public:
                                  RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    void            WriteSyntax( FILE * fOutput, RscTypCont * pTC );
-
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                const char * );
-    void            WriteRcCtor( FILE * fOutput, RscTypCont * pTC );
 };
 
 class RscSysDepend : public RscClass

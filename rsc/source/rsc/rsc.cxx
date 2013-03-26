@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************************************************************/
-/*                  Include File        */
-/****************************************************************/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -62,8 +58,6 @@
 using comphelper::string::getToken;
 using comphelper::string::getTokenCount;
 
-/*************** F o r w a r d s *****************************************/
-/*************** G l o b a l e   V a r i a b l e n **********************/
 rtl::OString*  pStdParType  = NULL;
 rtl::OString*  pStdPar1     = NULL;
 rtl::OString*  pStdPar2     = NULL;
@@ -74,14 +68,6 @@ sal_uInt32      nRefDeep     = 10;
 AtomContainer*  pHS          = NULL;
 
 
-/*************** R s c C m d L i n e ************************************/
-/*************************************************************************
-|*
-|*    RscCmdLine::Init()
-|*
-|*    Beschreibung      Kommandozeile interpretierten
-|*
-*************************************************************************/
 void RscCmdLine::Init()
 {
     nCommands       = 0;
@@ -92,22 +78,15 @@ void RscCmdLine::Init()
     m_aOutputFiles.push_back( OutputFile() );
 }
 
-/*************************************************************************
-|*
-|*    RscCmdLine::RscCmdLine()
-|*
-|*    Beschreibung      Kommandozeile interpretierten
-|*
-*************************************************************************/
 RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 {
     char *          pStr;
     char **         ppStr;
-    RscPtrPtr       aCmdLine;       // Kommandozeile
+    RscPtrPtr       aCmdLine;
     sal_uInt32      i;
     sal_Bool        bOutputSrsIsSet = sal_False;
 
-    Init(); // Defaults setzen
+    Init();
 
     pStr = ::ResponseFile( &aCmdLine, argv, argc );
     if( pStr )
@@ -126,24 +105,15 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         {
             if( !rsc_stricmp( (*ppStr) + 1, "h" )
               || !strcmp( (*ppStr) + 1, "?" ) )
-            { // Hilfe
+            { // Write help to standard output
                 nCommands |= HELP_FLAG;
             }
-            else if( !rsc_stricmp( (*ppStr) + 1, "syntax" ) )
-            { // Hilfe
-                nCommands |= PRINTSYNTAX_FLAG;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "RefDeep", 7 ) )
-            {
-                // maximale Aufloesungtiefe fuer Referenzen
-                nRefDeep = rtl::OString((*ppStr) + 1 + RTL_CONSTASCII_LENGTH("RefDeep")).toInt32();
-            }
             else if( !rsc_stricmp( (*ppStr) + 1, "p" ) )
-            { // kein Preprozessor
+            { // No preprocessor
                 nCommands |= NOPREPRO_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "s" ) )
-            { // nicht linken
+            { // Syntax analysis, creates .srs file
                 nCommands |= NOLINK_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "l" ) )
@@ -181,16 +151,12 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             { // Byte Ordnung beim Schreiben
                 nByteOrder = RSC_BIGENDIAN;
             }
-            else if( !rsc_stricmp( (*ppStr) + 1, "SMART" ) )
-            { // Byte Ordnung beim Schreiben
-                nCommands |= SMART_FLAG;
-            }
             else if( !rsc_strnicmp( (*ppStr) + 1, "d", 1 ) )
             { // Symbole definieren
                 nCommands |= DEFINE_FLAG;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "i", 1 ) )
-            { // Include-Pfade definieren
+            { // define include path
                 nCommands |= INCLUDE_FLAG;
                 rtl::OStringBuffer aBuffer(aPath);
                 if (aBuffer.getLength())
@@ -199,7 +165,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 aPath = aBuffer.makeStringAndClear();
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fs=", 3 ) )
-            { // anderer Name fuer .rc-file
+            { // define name of .res file
                 if( m_aOutputFiles.back().aOutputRc.getLength() )
                     m_aOutputFiles.push_back( OutputFile() );
                 m_aOutputFiles.back().aOutputRc = (*ppStr) + 4;
@@ -226,33 +192,9 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 }
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
-            { // anderer Name fuer .srs-file
+            { // define name of .srs file
                 aOutputSrs = (*ppStr) + 4;
                 bOutputSrsIsSet = sal_True;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fl=", 3 ) )
-            { // Name fuer listing-file
-                aOutputLst = (*ppStr) + 4;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fh=", 3 ) )
-            { // Name fuer .hxx-file
-                aOutputHxx = (*ppStr) + 4;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fc=", 3 ) )
-            { // Name fuer .cxx-file
-                aOutputCxx = (*ppStr) + 4;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fr=", 3 ) )
-            { // Name fuer .cxx-file der Resource Konstruktoren
-                aOutputRcCtor = (*ppStr) + 4;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fx=", 3 ) )
-            { // Name fuer .src-file
-                aOutputSrc = (*ppStr) + 4;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "ft=", 3 ) )
-            { // touch file
-                aTouchFile = (*ppStr) + 4;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "oil=", 4 ) )
             {
@@ -263,12 +205,8 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 nCommands |= NOSYSRESTEST_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "SrsDefault" ) )
-            { // Bitmap, Pointers, Icons nicht ueberpruefen
+            { // Only write one language to srs file
                 nCommands |= SRSDEFAULT_FLAG;
-            }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "CHARSET_", 8 ) )
-            {
-                // ignore (was an option once)
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "lg" ) )
             {
@@ -306,29 +244,16 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         if( ! bOutputSrsIsSet )
             aOutputSrs = ::OutputFile( *aInputList.front(), "srs" );
     }
-    else if( !(nCommands & PRINTSYNTAX_FLAG) )
+    else
         pEH->FatalError( ERR_NOINPUT, RscId() );
 }
 
-/*************************************************************************
-|*
-|*    RscCmdLine::~RscCmdLine()
-|*
-|*    Beschreibung      dtor
-|*
-*************************************************************************/
 RscCmdLine::~RscCmdLine()
 {
     for ( size_t i = 0, n = aInputList.size(); i < n; ++i )
         delete aInputList[ i ];
     aInputList.clear();
 }
-
-/*************************************************************************
-|*
-|*    RscCmdLine::substitutePaths()
-|*
-*************************************************************************/
 
 OString RscCmdLine::substitutePaths( const OString& rIn )
 {
@@ -360,41 +285,16 @@ OString RscCmdLine::substitutePaths( const OString& rIn )
     return aRet.makeStringAndClear();
 }
 
-/*************** R s c C o m p i l e r **********************************/
-/****************************************************************/
-/*                                                              */
-/*  RscCompiler :: RscCompiler(int argc, char **argv)           */
-/*                                                              */
-/*  Parameters  :   argc - number of parameters on command line */
-/*                  argv - arry of pointers to input parameters */
-/*                                                              */
-/*  Description :   main calling routine. Calls functions to    */
-/*  check and assign the input parameters. It then builds the   */
-/*  command line to call the Glockenspiel preprocessor          */
-/****************************************************************/
-
 RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 {
     fListing      = NULL;
     fExitFile     = NULL;
 
-    //Kommandozeile setzen, TypContainer setzen
+    //Set Command Line, set Type Container
     pCL = pLine;
     pTC = pTypCont;
-
-    if( !pCL->aOutputLst.isEmpty() )
-    {
-        if ( NULL == (fListing = fopen( pCL->aOutputLst.getStr(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputLst.getStr() );
-        pTC->pEH->SetListFile( fListing );
-    }
 }
 
-/*************************************************************************
-|*
-|*    RscCompiler :: RscCompiler()
-|*
-*************************************************************************/
 RscCompiler::~RscCompiler()
 {
     pTC->pEH->SetListFile( NULL );
@@ -404,36 +304,13 @@ RscCompiler::~RscCompiler()
 
     if( fExitFile )
         fclose( fExitFile );
-    if( !aTmpOutputHxx.isEmpty() )
-        unlink( aTmpOutputHxx.getStr() );
-    if( !aTmpOutputCxx.isEmpty() )
-        unlink( aTmpOutputCxx.getStr() );
-    if( !aTmpOutputRcCtor.isEmpty() )
-        unlink( aTmpOutputRcCtor.getStr() );
-    if( !aTmpOutputSrc.isEmpty() )
-        unlink( aTmpOutputSrc.getStr() );
 }
 
-/*************************************************************************
-|*
-|*    RscCompiler::Start()
-|*
-|*    Beschreibung      Datei in Kommandozeile aendern
-|*
-*************************************************************************/
 ERRTYPE RscCompiler::Start()
 {
     ERRTYPE         aError;
     RscFile*        pFName;
 
-    if( PRINTSYNTAX_FLAG & pCL->nCommands )
-    {
-        pTC->WriteSyntax( stdout );
-        printf( "khg\n" );
-        return ERR_OK;
-    }
-
-    // Kein Parameter, dann Hilfe
     if( pCL->aInputList.empty() )
         pTC->pEH->FatalError( ERR_NOINPUT, RscId() );
 
@@ -489,13 +366,7 @@ ERRTYPE RscCompiler::Start()
 
     return( aError );
 }
-/*************************************************************************
-|*
-|*    RscCmdLine::EndCompile()
-|*
-|*    Beschreibung      Datei in Kommandozeile aendern
-|*
-*************************************************************************/
+
 void RscCompiler::EndCompile()
 {
     if( !pCL->aOutputSrs.isEmpty() && (pCL->nCommands & NOLINK_FLAG) )
@@ -531,73 +402,8 @@ void RscCompiler::EndCompile()
             };
         };
     }
-
-    if ( !aTmpOutputHxx.isEmpty() )
-    {
-        pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
-        pTC->pEH->StdOut( pCL->aOutputHxx.getStr(), RscVerbosityVerbose );
-        pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
-
-        // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputHxx.getStr() );   // Zieldatei loeschen
-        Append( pCL->aOutputHxx, aTmpOutputHxx );
-        unlink( aTmpOutputHxx.getStr() );// TempDatei  loeschen
-        aTmpOutputHxx = rtl::OString();
-    }
-
-    if( !aTmpOutputCxx.isEmpty() )
-    {
-        pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
-        pTC->pEH->StdOut( pCL->aOutputCxx.getStr(), RscVerbosityVerbose );
-        pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
-
-        // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputCxx.getStr() );   // Zieldatei loeschen
-        Append( pCL->aOutputCxx, aTmpOutputCxx );
-        unlink( aTmpOutputCxx.getStr() );// TempDatei  loeschen
-        aTmpOutputCxx = rtl::OString();
-    }
-
-    if( !aTmpOutputRcCtor.isEmpty() )
-    {
-        pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
-        pTC->pEH->StdOut( pCL->aOutputRcCtor.getStr(), RscVerbosityVerbose );
-        pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
-
-        // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputRcCtor.getStr() );   // Zieldatei loeschen
-        Append( pCL->aOutputRcCtor, aTmpOutputRcCtor );
-        unlink( aTmpOutputRcCtor.getStr() );// TempDatei  loeschen
-        aTmpOutputRcCtor = rtl::OString();
-    }
-
-    if( !aTmpOutputSrc.isEmpty() )
-    {
-        // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputSrc.getStr() );   // Zieldatei loeschen
-        Append( pCL->aOutputSrc, aTmpOutputSrc );
-        unlink( aTmpOutputSrc.getStr() );// TempDatei  loeschen
-        aTmpOutputSrc = rtl::OString();
-    }
-
-    if( !pCL->aTouchFile.isEmpty() )
-    {
-        FILE* fp = fopen( pCL->aTouchFile.getStr(), "w" );
-        if( fp )
-        {
-            fprintf( fp, "Done\n" );
-            fclose( fp );
-        }
-        else
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aTouchFile.getStr() );
-    }
 }
 
-/*************************************************************************
-|*
-|*    RscCompiler::IncludeParser()
-|*
-*************************************************************************/
 ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
 {
     FILE            * finput;
@@ -657,11 +463,6 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
     return aError;
 }
 
-/*************************************************************************
-|*
-|*    RscCompiler :: ParseOneFile()
-|*
-*************************************************************************/
 ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                                      const RscCmdLine::OutputFile* pOutputFile,
                                      const WriteRcContext* pContext )
@@ -731,12 +532,6 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
 
     return( aError );
 }
-
-/*************************************************************************
-|*
-|*    RscCompiler :: Link()
-|*
-*************************************************************************/
 
 namespace
 {
@@ -949,87 +744,9 @@ ERRTYPE RscCompiler::Link()
         };
     }
 
-    // hxx-Datei schreiben
-    if( !pCL->aOutputHxx.isEmpty() && aError.IsOk() )
-    {
-        aTmpOutputHxx = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputHxx.getStr(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputHxx.getStr() );
-
-        pTC->pEH->StdOut( "Generating .hxx file\n" );
-
-        // Schreibe Datei
-        aError = pTC->WriteHxx( foutput, NOFILE_INDEX );
-
-        fclose( foutput );
-        fExitFile = NULL;
-    }
-
-    // cxx-Datei schreiben
-    if( !pCL->aOutputCxx.isEmpty() && aError.IsOk() )
-    {
-        aTmpOutputCxx = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputCxx.getStr(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputCxx.getStr() );
-
-        pTC->pEH->StdOut( "Generating .cxx file\n" );
-
-        rtl::OString aHxx = pCL->aOutputHxx;
-        if( aHxx.isEmpty() )
-        {
-            rtl::OUString aUniOutputCxx(rtl::OStringToOUString(pCL->aOutputCxx, RTL_TEXTENCODING_ASCII_US));
-            aHxx = rtl::OStringBuffer(rtl::OUStringToOString(DirEntry(aUniOutputCxx).GetBase(),
-                RTL_TEXTENCODING_ASCII_US)).append(".hxx").makeStringAndClear();
-        }
-
-        // Schreibe Datei
-        aError = pTC->WriteCxx( foutput, NOFILE_INDEX, aHxx );
-
-        fclose( foutput );
-        fExitFile = NULL;
-    }
-
-    // RcCtor-Datei schreiben
-    if( !pCL->aOutputRcCtor.isEmpty() && aError.IsOk() )
-    {
-        aTmpOutputRcCtor = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputRcCtor.getStr(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputRcCtor.getStr() );
-
-        pTC->pEH->StdOut( "Generating .cxx resource constructor file\n" );
-
-        // Schreibe Datei
-        pTC->WriteRcCtor( foutput );
-
-        fclose( foutput );
-        fExitFile = NULL;
-    }
-
-    // src-Datei schreiben
-    if( !pCL->aOutputSrc.isEmpty() && aError.IsOk() )
-    {
-        aTmpOutputSrc = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputSrc.getStr(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputSrc.getStr() );
-
-        // Schreibe Datei
-        pTC->WriteSrc( foutput, NOFILE_INDEX );
-
-        fclose( foutput );
-        fExitFile = NULL;
-    };
-
     return( aError );
 }
 
-/********************************************************************/
-/*                                                                  */
-/*  Function    :   Append( )                                       */
-/*                                                                  */
-/*  Parameters  :   psw     - pointer to a preprocessor switch      */
-/*                                                                  */
-/*  Description :   appends text files                              */
-/********************************************************************/
 void RscCompiler::Append( const rtl::OString& rOutputSrs,
                           const rtl::OString& rTmpFile )
 {
@@ -1040,12 +757,6 @@ void RscCompiler::Append( const rtl::OString& rOutputSrs,
         pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTemp.getStr() );
     }
 }
-
-/*************************************************************************
-|*
-|*    GetImageFilePath()
-|*
-|*************************************************************************/
 
 bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                     const WriteRcContext& rContext,
@@ -1129,8 +840,6 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
     return bFound;
 }
-
-// ------------------------------------------------------------------------------
 
 void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                      const WriteRcContext& rContext,

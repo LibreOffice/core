@@ -17,45 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-// Programmabhaengige Includes.
 #include <rscmgr.hxx>
 #include <rscdb.hxx>
 
-/****************** C O D E **********************************************/
-/****************** R s c M g r ******************************************/
-/*************************************************************************
-|*
-|*    RscMgr::RscMgr()
-|*
-*************************************************************************/
 RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
             : RscClass( nId, nTypeId, pSuperCl )
 {
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::Size()
-|*
-*************************************************************************/
 sal_uInt32 RscMgr::Size()
 {
     return RscClass::Size() + ALIGNED_SIZE( sizeof( RscMgrInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::Create()
-|*
-*************************************************************************/
 RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
     RSCINST aInst;
     RscMgrInst * pClassData;
@@ -82,11 +62,6 @@ RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnCla
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::Destroy()
-|*
-*************************************************************************/
 void RscMgr::Destroy( const RSCINST & rInst ){
     RscMgrInst * pClassData;
 
@@ -96,11 +71,6 @@ void RscMgr::Destroy( const RSCINST & rInst ){
     pClassData->Destroy();
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::SetToDefault()
-|*
-*************************************************************************/
 void RscMgr::SetToDefault( const RSCINST & rInst )
 {
     RscMgrInst * pClassData;
@@ -111,11 +81,6 @@ void RscMgr::SetToDefault( const RSCINST & rInst )
     RscClass::SetToDefault( rInst );
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::IsDefault()
-|*
-*************************************************************************/
 sal_Bool RscMgr::IsDefault( const RSCINST & rInst ){
     RscMgrInst * pClassData;
 
@@ -126,11 +91,6 @@ sal_Bool RscMgr::IsDefault( const RSCINST & rInst ){
     return( RscClass::IsDefault( rInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( !RscClass::IsValueDefault( rInst, pDef ) )
         return sal_False;
@@ -148,11 +108,6 @@ sal_Bool RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 }
 
 
-/*************************************************************************
-|*
-|*    RscMgr::WriteSrcHeader()
-|*
-*************************************************************************/
 void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                              RscTypCont * pTC, sal_uInt32 nTab,
                              const RscId & rId, const char * pVarName )
@@ -184,21 +139,11 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
     }
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::WriteSrc()
-|*
-*************************************************************************/
 void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
                         const char * )
 {
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::WriteRcHeader()
-|*
-*************************************************************************/
 ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId &rId,
                                sal_uInt32 nDeep, sal_Bool bExtra )
@@ -286,11 +231,6 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
                          RscTypCont *, sal_uInt32, sal_Bool )
 
@@ -298,221 +238,6 @@ ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
     return( ERR_OK );
 }
 
-
-static rtl::OString MakeSmartName( const rtl::OString& rDefName )
-{
-    rtl::OStringBuffer aSmartName;
-    if( rDefName.getStr() )
-    {
-        char * pStr = (char *)rDefName.getStr();
-        aSmartName.append(static_cast<sal_Char>(toupper(*pStr)));
-        while( *++pStr )
-        {
-            if( '_' == *pStr )
-            {
-                if( *++pStr )
-                    aSmartName.append(static_cast<sal_Char>(toupper(*pStr)));
-                else
-                    break;
-            }
-            else
-                aSmartName.append(static_cast<sal_Char>(tolower(*pStr)));
-        }
-    }
-    return aSmartName.makeStringAndClear();
-}
-
-static rtl::OString MakeName( RscTypCont * pTypCon, RscTop * pClass,
-                            const rtl::OString& rName )
-{
-    rtl::OStringBuffer aRet;
-    if( !pTypCon->IsSmart() || isdigit( rName[0] ) )
-    {
-        aRet.append(pHS->getString( pClass->GetId() ).getStr());
-        aRet.append(rName);
-    }
-    else
-        aRet.append(MakeSmartName(rName));
-    return aRet.makeStringAndClear();
-}
-
-/*************************************************************************
-|*
-|*    RscMgr::WriteHxxHeader()
-|*
-*************************************************************************/
-ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                RscTypCont * pTC, const RscId &rId )
-{
-    RscMgrInst *    pClassData;
-    ERRTYPE         aError;
-    ObjNode *       pObjNode = NULL;
-
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
-
-    if( pClassData->aRefId.IsId() )
-    {
-        pObjNode = rInst.pClass->GetObjNode( pClassData->aRefId );
-        if( !pObjNode && pTC )
-        {
-            rtl::OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
-            aMsg.append(' ').append(pClassData->aRefId.GetName());
-            aError = WRN_MGR_REFNOTFOUND;
-            pTC->pEH->Error(aError, rInst.pClass, rId, aMsg.getStr());
-        }
-    }
-
-    if( pObjNode )
-    {
-        RSCINST     aRefI;
-
-        aRefI = RSCINST( rInst.pClass, pObjNode->GetRscObj() );
-        aError = aRefI.pClass->WriteHxxHeader( aRefI, fOutput, pTC,
-                                               rId );
-    }
-    else if (pTC)
-    {
-        fprintf( fOutput, "class %s",
-                          MakeName( pTC, rInst.pClass,
-                                    rId.GetName() ).getStr() );
-        fprintf( fOutput, " : public %s",
-                 pHS->getString( rInst.pClass->GetId() ).getStr() );
-        fprintf( fOutput, "\n{\nprotected:\n" );
-
-        aError = RscClass::WriteHxx( rInst, fOutput, pTC, rId );
-
-        RSCINST aExtraInst = rInst.pClass->GetCopyVar( rInst, nRsc_EXTRADATA );
-        if( aExtraInst.IsInst() )
-        {
-            if( aExtraInst.pClass->GetCount( aExtraInst ) )
-                fprintf( fOutput, "    char * pExtraData;\n" );
-        }
-        if( aError.IsOk() )
-        {
-            fprintf( fOutput, "public:\n    " );
-            fprintf( fOutput, "%s%s bFreeRes = TRUE )",
-                     MakeName( pTC, rInst.pClass,
-                               rId.GetName() ).getStr(),
-                     (rInst.pClass->aCallParType).getStr() );
-            fprintf( fOutput, ";\n};\n\n" );
-        }
-    };
-    return aError;
-}
-
-/*************************************************************************
-|*
-|*    RscMgr::WriteHxx()
-|*
-*************************************************************************/
-ERRTYPE RscMgr::WriteHxx( const RSCINST & rInst, FILE * fOutput,
-                          RscTypCont * pTC, const RscId & rId )
-{
-    fprintf( fOutput, "    %s", pHS->getString( rInst.pClass->GetId() ).getStr() );
-    fprintf( fOutput, " a%s;\n",
-             MakeName( pTC, rInst.pClass, rId.GetName() ).getStr() );
-
-    return ERR_OK;
-}
-
-/*************************************************************************
-|*
-|*    RscClass::WriteCxxHeader()
-|*
-*************************************************************************/
-ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                RscTypCont * pTC, const RscId & rId )
-{
-    RscMgrInst *    pClassData;
-    ERRTYPE         aError;
-    ObjNode *       pObjNode = NULL;
-
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
-
-    if( pClassData->aRefId.IsId() )
-    {
-        pObjNode = rInst.pClass->GetObjNode( pClassData->aRefId );
-        if( !pObjNode && pTC )
-        {
-            rtl::OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
-            aMsg.append(' ').append(pClassData->aRefId.GetName());
-            aError = WRN_MGR_REFNOTFOUND;
-            pTC->pEH->Error( aError, rInst.pClass, rId, aMsg.getStr() );
-        }
-    }
-
-    if( pObjNode )
-    {
-        RSCINST     aRefI;
-
-        aRefI = RSCINST( rInst.pClass, pObjNode->GetRscObj() );
-        aError = aRefI.pClass->WriteCxxHeader( aRefI, fOutput, pTC,
-                                               rId );
-    }
-    else if (pTC)
-    {
-        fprintf( fOutput, "%s::%s",
-                 MakeName( pTC, rInst.pClass, rId.GetName() ).getStr(),
-                 MakeName( pTC, rInst.pClass, rId.GetName() ).getStr() );
-        fprintf( fOutput, "%s", (rInst.pClass->aCallParType).getStr() );
-        if( GetCount( rInst ) )
-            fprintf( fOutput, " bFreeRes" );
-        fprintf( fOutput, " )\n    : %s", pHS->getString( rInst.pClass->GetId() ).getStr() );
-        fprintf( fOutput, "%s", (rInst.pClass->aCallPar1).getStr() );
-        fprintf( fOutput, " rResId )" );
-
-        aError = RscClass::WriteCxx( rInst, fOutput, pTC, rId );
-
-        fprintf( fOutput, "\n{\n" );
-        RSCINST aExtraInst = rInst.pClass->GetCopyVar( rInst, nRsc_EXTRADATA );
-        if( aExtraInst.IsInst() )
-        {
-            if( aExtraInst.pClass->GetCount( aExtraInst ) )
-            {
-                fprintf( fOutput, "    //read extra data\n" );
-                fprintf( fOutput, "    pExtraData = new char "
-                                "[ GetRemainSizeRes() ];\n" );
-                fprintf( fOutput, "    memcpy( pExtraData, "
-                                "GetClassRes(), GetRemainSizeRes() );\n" );
-                fprintf( fOutput, "    IncrementRes( GetRemainSizeRes() );\n" );
-            }
-        }
-
-        if( GetCount( rInst ) )
-        { // Es gibt UnterResourcen
-            fprintf( fOutput, "    if( bFreeRes ) FreeResource();\n" );
-        }
-        else
-        {
-            fprintf( fOutput,
-                    "    // No subresources, automatic free resource\n" );
-        }
-        fprintf( fOutput, "}\n\n" );
-    }
-    return aError;
-}
-
-/*************************************************************************
-|*
-|*    RscClass::WriteCxx()
-|*
-*************************************************************************/
-ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
-                          RscTypCont * pTC, const RscId & rId )
-{
-    fprintf( fOutput, ",\n    a%s",
-             MakeName( pTC, rInst.pClass, rId.GetName() ).getStr() );
-    fprintf( fOutput, "%s", (rInst.pClass->aCallPar2).getStr() );
-    fprintf( fOutput, " ResId( %s ) )", (rId.GetName()).getStr() );
-
-    return ERR_OK;
-}
-
-/*************************************************************************
-|*
-|*    RscArray::IsConsistent()
-|*
-*************************************************************************/
 sal_Bool RscMgr::IsConsistent( const RSCINST & rInst )
 {
     sal_Bool    bRet;
@@ -532,11 +257,6 @@ sal_Bool RscMgr::IsConsistent( const RSCINST & rInst )
     return( bRet );
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::GetRef()
-|*
-*************************************************************************/
 ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId ){
     RscMgrInst * pClassData;
 
@@ -545,11 +265,6 @@ ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId ){
     return ERR_OK;
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::IsToDeep()
-|*
-*************************************************************************/
 ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
 {
     RscMgrInst *    pClassData;
@@ -585,11 +300,6 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscMgr::SetRef()
-|*
-*************************************************************************/
 ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
 {
     RscMgrInst *    pClassData;

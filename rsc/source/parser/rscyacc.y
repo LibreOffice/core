@@ -37,13 +37,11 @@
 
 #include <rsclex.hxx>
 
-/************** V a r i a b l e n ****************************************/
 ObjectStack                     S;
 RscTop *                        pCurClass;
 sal_uInt32                      nCurMask;
 char                            szErrBuf[ 100 ];
 
-/************** H i l f s F u n k t i o n e n ****************************/
 RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
 {
     RSCINST aInst;
@@ -242,7 +240,6 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
     return aInst;
 }
 
-/************** Y a c c   C o d e ****************************************/
 //#define YYDEBUG 1
 
 #define TYPE_Atom             0
@@ -355,7 +352,6 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 
 %%
 
-/********************** D E F I N I T I O N S ****************************/
 resource_definitions
   :
   | resource_definitions resource_definition
@@ -1137,7 +1133,6 @@ var_body
   | var_bodycomplex
   ;
 
-/********************** work on yacc stack *******************************/
 string_multiline
   : STRING
 	{

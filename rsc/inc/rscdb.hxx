@@ -46,7 +46,6 @@ struct WriteRcContext
     RscCmdLine*         pCmdLine;
 };
 
-/****************** R s c T y p C o n ************************************/
 // Liste die alle Basistypen enthaelt
 typedef ::std::vector< RscTop* > RscBaseList;
 
@@ -298,8 +297,6 @@ public:
 
     sal_Bool            IsPreload() const
                     { return (nFlags & PRELOAD_FLAG) ? sal_True : sal_False; }
-    sal_Bool            IsSmart() const
-                    { return (nFlags & SMART_FLAG) ? sal_True : sal_False; }
     sal_Bool            IsSysResTest() const
                     { return (nFlags & NOSYSRESTEST_FLAG) ? sal_False : sal_True; }
     sal_Bool            IsSrsDefault() const
@@ -333,11 +330,6 @@ public:
     ERRTYPE     WriteRc( WriteRcContext& rContext );
     void        WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
                           sal_Bool bName = sal_True );
-    ERRTYPE     WriteHxx( FILE * fOutput, sal_uLong nFileKey);
-    ERRTYPE     WriteCxx( FILE * fOutput, sal_uLong nFileKey,
-                          const rtl::OString& rHxxName );
-    void        WriteSyntax( FILE * fOutput );
-    void        WriteRcCtor( FILE * fOutput );
     sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
     void        IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };

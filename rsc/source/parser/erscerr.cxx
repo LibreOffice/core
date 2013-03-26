@@ -29,11 +29,6 @@
 
 #include "rsclex.hxx"
 
-/*************************************************************************
-|*
-|*    ERRTYPE::operator = ;
-|*
-*************************************************************************/
 ERRTYPE& ERRTYPE::operator = ( const ERRTYPE & rError )
 {
     if( !IsError() ){
@@ -43,11 +38,6 @@ ERRTYPE& ERRTYPE::operator = ( const ERRTYPE & rError )
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    RscError::StdOut();
-|*
-*************************************************************************/
 void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
 {
     if ( m_verbosity >= _verbosityLevel )
@@ -59,52 +49,27 @@ void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
     }
 }
 
-/*************************************************************************
-|*
-|*    RscError::StdErr();
-|*
-*************************************************************************/
 void RscError::StdErr( const char * pStr )
 {
     if( pStr )
         fprintf( stderr, "%s", pStr );
 }
 
-/*************************************************************************
-|*
-|*    RscError::LstOut();
-|*
-*************************************************************************/
 void RscError::LstOut( const char * pStr ){
     if( fListing && pStr )
         fprintf( fListing, "%s", pStr );
 }
 
-/*************************************************************************
-|*
-|*    RscError::StdLstOut();
-|*
-*************************************************************************/
 void RscError::StdLstOut( const char * pStr ){
     StdOut( pStr );
     LstOut( pStr );
 }
 
-/*************************************************************************
-|*
-|*    RscError::StdLstErr();
-|*
-*************************************************************************/
 void RscError::StdLstErr( const char * pStr ){
     StdErr( pStr );
     LstOut( pStr );
 }
 
-/*************************************************************************
-|*
-|*    RscError::WriteError();
-|*
-*************************************************************************/
 void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
 {
     switch( rError )
@@ -173,7 +138,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "Command line: rsc [Switches] <Source File(s)>\n" );
             StdLstOut( "Command line: rsc @<Command File>\n" );
             StdLstOut( "-h  shows this help.\n" );
-            StdLstOut( "-p  No Preprocessor.\n" );
+            StdLstOut( "-p  No preprocessor.\n" );
             StdLstOut( "-s  Syntax analysis, creates .srs file\n");
             StdLstOut( "-l  Linker, links files created with rsc -s,\n" );
             StdLstOut( "    creates .rc file and .res file.\n" );
@@ -182,24 +147,13 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-i  Include directives for the Preprocessor.\n" );
             StdLstOut( "-presponse     Use response file for Preprocessor.\n" );
             StdLstOut( "-lg<language>  Use a different language.\n" );
-            StdLstOut( "-pp=<filename> Use a different Preprocessor.\n" );
-            StdLstOut( "-rsc2=<filename> Specify the location for rsc2.\n" );
-            StdLstOut( "No longer existent: -rc<filename>  Use a different system resource compiler.\n" );
             StdLstOut( "-fs=<filename> Name of the .res file.\n" );
             StdLstOut( "-lip=<path>    additional search path for system dependant files\n" );
             StdLstOut( "-fp=<filename> Renaming of the .srs file.\n" );
-            StdLstOut( "-fl=<filename> Listing file.\n" );
-            StdLstOut( "-fh=<filename> Header file.\n" );
-            StdLstOut( "-fc=<filename> Code file.\n" );
-            StdLstOut( "-ft=<filename> Touch a file when done in rsc2 (for dependencies)\n" );
-            StdLstOut( "-fr=<filename> Resource constructor .cxx-file.\n" );
-            StdLstOut( "-fx=<filename> Name of .src-file.\n" );
             StdLstOut( "-oil=<dir>     Output directory for image list files\n" );
-            StdLstOut( "-r<ENV>=<path> replace <path> by <ENV> in image list files\n" );
-            StdLstOut( "-CHARSET_...  Convert to this character set.\n" );
+            StdLstOut( "-sub<ENV>=<path> replace <path> by <ENV> in image list files\n" );
             StdLstOut( "-BIGENDIAN    Format of number values.\n" );
             StdLstOut( "-LITTLEENDIAN Format of number values.\n" );
-            StdLstOut( "-SMART        Generate smart names (cxx, hxx).\n" );
             StdLstOut( "-SrsDefault   Only write one language to srs file.\n" );
             StdLstOut( "\nwhen creating multiple .res files in one pass, please give these\n" );
             StdLstOut( "options in consecutive blocks:\n" );
@@ -323,7 +277,6 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstErr( "> could not be found." );
             break;
 
-/****************** W A R N I N G S **************************************/
         case WRN_LOCALID:
             StdLstErr( "Sub resources should have an identifier < 256." );
             break;
@@ -365,11 +318,6 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
     }
 }
 
-/*************************************************************************
-|*
-|*    RscErrorFormat()
-|*
-*************************************************************************/
 void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                             const RscId & aId ){
     char buf[ 10 ];
@@ -423,11 +371,6 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
         StdLstErr( ": " );
 }
 
-/*************************************************************************
-|*
-|*    RscError::Error()
-|*
-*************************************************************************/
 void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId, const char * pMessage )
 {
@@ -442,11 +385,6 @@ void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
     };
 }
 
-/*************************************************************************
-|*
-|*    RscError::FatalError();
-|*
-*************************************************************************/
 void RscError::FatalError( const ERRTYPE& rError, const RscId &aId,
                            const char * pMessage )
 {

@@ -18,8 +18,6 @@
  */
 
 
-/****************** I N C L U D E S **************************************/
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -35,9 +33,6 @@
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 
-/*************************************************************************
-|*    RscTypCont::InsWinBit()
-*************************************************************************/
 void RscTypCont::InsWinBit( RscTop * pClass, const rtl::OString& rName,
                             Atom nVal )
 {
@@ -55,9 +50,6 @@ void RscTypCont::InsWinBit( RscTop * pClass, const rtl::OString& rName,
 #define INS_WINBIT( pClass, WinBit )        \
     InsWinBit( pClass, #WinBit, n##WinBit##Id );
 
-/*************************************************************************
-|*    RscTypCont::InitClassMgr()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMgr()
 {
     RscTop      *   pClassMgr;
@@ -89,9 +81,6 @@ RscTop * RscTypCont::InitClassMgr()
     return pClassMgr;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassString()
-*************************************************************************/
 RscTop * RscTypCont::InitClassString( RscTop * pSuper ){
     Atom        nId;
     RscTop *    pClassString;
@@ -107,9 +96,6 @@ RscTop * RscTypCont::InitClassString( RscTop * pSuper ){
     return( pClassString );
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassBitmap()
-*************************************************************************/
 RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper ){
     Atom        nId;
     RscTop *    pClassBitmap;
@@ -127,9 +113,6 @@ RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper ){
     return( pClassBitmap );
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassColor()
-*************************************************************************/
 RscTop * RscTypCont::InitClassColor( RscTop * pSuper, RscEnum * pColor ){
     Atom        nId;
     RscTop *    pClassColor;
@@ -153,9 +136,6 @@ RscTop * RscTypCont::InitClassColor( RscTop * pSuper, RscEnum * pColor ){
     return( pClassColor );
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassImage()
-*************************************************************************/
 RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
                                      RscTop * pClassColor )
 {
@@ -180,9 +160,6 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
     return( pClassImage );
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassImageList()
-*************************************************************************/
 RscTop * RscTypCont::InitClassImageList( RscTop * pSuper,
                                          RscTop * pClassColor, RscCont * pStrLst )
 {
@@ -218,9 +195,6 @@ RscTop * RscTypCont::InitClassImageList( RscTop * pSuper,
     return( pClassImageList );
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassWindow()
-*************************************************************************/
 RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
                                  RscArray * pLangGeo )
 {
@@ -326,9 +300,6 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     return( pClassWindow );
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassSystemWindow()
-*************************************************************************/
 RscTop * RscTypCont::InitClassSystemWindow( RscTop * pSuper )
 {
     Atom        nId;
@@ -351,9 +322,6 @@ RscTop * RscTypCont::InitClassSystemWindow( RscTop * pSuper )
     return pClassSystemWindow ;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassWorkWindow()
-*************************************************************************/
 RscTop * RscTypCont::InitClassWorkWindow( RscTop * pSuper )
 {
     Atom        nId;
@@ -386,9 +354,6 @@ RscTop * RscTypCont::InitClassWorkWindow( RscTop * pSuper )
     return pClassWorkWindow;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassDialogBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassModalDialog( RscTop * pSuper )
 {
     Atom        nId;
@@ -405,9 +370,6 @@ RscTop * RscTypCont::InitClassModalDialog( RscTop * pSuper )
     return pClassDialog;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassModelessDialog()
-*************************************************************************/
 RscTop * RscTypCont::InitClassModelessDialog( RscTop * pSuper )
 {
     Atom        nId;
@@ -422,9 +384,6 @@ RscTop * RscTypCont::InitClassModelessDialog( RscTop * pSuper )
     return pClassDialog;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassControl()
-*************************************************************************/
 RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
 {
     Atom        nId;
@@ -442,9 +401,6 @@ RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
     return pClassControl;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassCheckBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassCheckBox( RscTop * pSuper )
 {
     Atom        nId;
@@ -468,9 +424,6 @@ RscTop * RscTypCont::InitClassCheckBox( RscTop * pSuper )
     return pClassCheckBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassPushButton()
-*************************************************************************/
 RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
 {
     Atom        nId;
@@ -490,9 +443,6 @@ RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
     return pClassPushButton;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassTriStateBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassTriStateBox( RscTop * pSuper,
                                            RscEnum * pTriState )
 {
@@ -513,9 +463,6 @@ RscTop * RscTypCont::InitClassTriStateBox( RscTop * pSuper,
     return( pClassTriStateBox );
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMenuButton()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMenuButton( RscTop * pSuper,
                                            RscTop * pClassMenu )
 {
@@ -536,9 +483,6 @@ RscTop * RscTypCont::InitClassMenuButton( RscTop * pSuper,
 }
 
 
-/*************************************************************************
-|*    RscTypCont::InitClassImageButton()
-*************************************************************************/
 RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
                                            RscTop * pClassImage,
                                            RscEnum * pTriState )
@@ -606,9 +550,6 @@ RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
     return pClassImageButton;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassEdit()
-*************************************************************************/
 RscTop * RscTypCont::InitClassEdit( RscTop * pSuper )
 {
     Atom        nId;
@@ -632,9 +573,6 @@ RscTop * RscTypCont::InitClassEdit( RscTop * pSuper )
     return pClassEdit;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMultiLineedit()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMultiLineEdit( RscTop * pSuper )
 {
     Atom        nId;
@@ -655,9 +593,6 @@ RscTop * RscTypCont::InitClassMultiLineEdit( RscTop * pSuper )
     return pClassMultiLineEdit;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassScrollBar()
-*************************************************************************/
 RscTop * RscTypCont::InitClassScrollBar( RscTop * pSuper )
 {
     Atom        nId;
@@ -713,9 +648,6 @@ RscTop * RscTypCont::InitClassScrollBar( RscTop * pSuper )
     return pClassScrollBar;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassListBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
 {
     Atom        nId;
@@ -748,9 +680,6 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     return pClassListBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMultiListBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMultiListBox( RscTop * pSuper )
 {
     Atom        nId;
@@ -767,9 +696,6 @@ RscTop * RscTypCont::InitClassMultiListBox( RscTop * pSuper )
     return pClassMultiListBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassComboBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassComboBox( RscTop * pSuper, RscArray * pStrLst )
 {
     Atom        nId;
@@ -796,9 +722,6 @@ RscTop * RscTypCont::InitClassComboBox( RscTop * pSuper, RscArray * pStrLst )
     return pClassComboBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassFixedText()
-*************************************************************************/
 RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
 {
     Atom        nId;
@@ -824,9 +747,6 @@ RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
     return pClassFixedText;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassFixedBitmap()
-*************************************************************************/
 RscTop * RscTypCont::InitClassFixedBitmap( RscTop * pSuper, RscTop * pClassBitmap )
 {
     Atom        nId;
@@ -847,9 +767,6 @@ RscTop * RscTypCont::InitClassFixedBitmap( RscTop * pSuper, RscTop * pClassBitma
     return pClassFixedBitmap;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassFixedImage()
-*************************************************************************/
 RscTop * RscTypCont::InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage )
 {
     Atom        nId;
@@ -868,9 +785,6 @@ RscTop * RscTypCont::InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage 
     return pClassFixedImage;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassImageRadioButton()
-*************************************************************************/
 RscTop * RscTypCont::InitClassRadioButton( RscTop * pSuper )
 {
     Atom        nId;
@@ -894,9 +808,6 @@ RscTop * RscTypCont::InitClassRadioButton( RscTop * pSuper )
     return pClassRadioButton;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassImageRadioButton()
-*************************************************************************/
 RscTop * RscTypCont::InitClassImageRadioButton( RscTop * pSuper, RscTop * pClassImage )
 {
     Atom        nId;
@@ -916,9 +827,6 @@ RscTop * RscTypCont::InitClassImageRadioButton( RscTop * pSuper, RscTop * pClass
     return pClassImageRadioButton;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassKeyCode()
-*************************************************************************/
 RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 {
     Atom        nId;
@@ -1009,9 +917,6 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
     return pClassKeyCode;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassAccelItem()
-*************************************************************************/
 RscTop * RscTypCont::InitClassAccelItem( RscTop * pSuper,
                                                                                 RscTop * pClassKeyCode )
 {
@@ -1035,9 +940,6 @@ RscTop * RscTypCont::InitClassAccelItem( RscTop * pSuper,
     return pClassAccelItem;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassAccelm()
-*************************************************************************/
 RscTop * RscTypCont::InitClassAccel( RscTop * pSuper, RscTop * pClassAccelItem )
 {
     Atom        nId;
@@ -1066,9 +968,6 @@ RscTop * RscTypCont::InitClassAccel( RscTop * pSuper, RscTop * pClassAccelItem )
     return pClassAccel;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMenuItem()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
                                         RscTop * pClassBitmap,
                                                                                 RscTop * pClassKeyCode )
@@ -1179,9 +1078,6 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
     return pClassMenuItem;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMenu()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
                                     RscTop * pClassMenuItem )
 {
@@ -1212,9 +1108,6 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
     return pClassMenu;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMessageBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMessBox( RscTop * pSuper,
                                        RscEnum * pMessButtons,
                                        RscEnum * pMessDefButton )
@@ -1247,9 +1140,6 @@ RscTop * RscTypCont::InitClassMessBox( RscTop * pSuper,
     return pClassMessBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassSplitter()
-*************************************************************************/
 RscTop * RscTypCont::InitClassSplitter( RscTop * pSuper )
 {
     Atom        nId;
@@ -1268,9 +1158,6 @@ RscTop * RscTypCont::InitClassSplitter( RscTop * pSuper )
     return pClassSplitter;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassSplitWindow()
-*************************************************************************/
 RscTop * RscTypCont::InitClassSplitWindow( RscTop * pSuper )
 {
     Atom        nId;
@@ -1289,9 +1176,6 @@ RscTop * RscTypCont::InitClassSplitWindow( RscTop * pSuper )
     return pClassSplitWindow;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassTime()
-*************************************************************************/
 RscTop * RscTypCont::InitClassTime( RscTop * pSuper )
 {
     Atom        nId;
@@ -1320,9 +1204,6 @@ RscTop * RscTypCont::InitClassTime( RscTop * pSuper )
     return pClassTime;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassDate()
-*************************************************************************/
 RscTop * RscTypCont::InitClassDate( RscTop * pSuper )
 {
     Atom        nId;
@@ -1348,9 +1229,6 @@ RscTop * RscTypCont::InitClassDate( RscTop * pSuper )
     return pClassDate;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassPatternFormatter()
-*************************************************************************/
 RscTop * RscTypCont::InitClassPatternFormatter( RscTop * pSuper )
 {
     Atom        nId;
@@ -1375,9 +1253,6 @@ RscTop * RscTypCont::InitClassPatternFormatter( RscTop * pSuper )
         return pClassPattern;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassNumericFormatter()
-*************************************************************************/
 RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
 {
     Atom        nId;
@@ -1411,9 +1286,6 @@ RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
     return pClassNumeric;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMetricFormatter()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
                                                                                         RscEnum * pFieldUnits )
 {
@@ -1436,9 +1308,6 @@ RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
     return pClassMetric;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassCurrencyFormatter()
-*************************************************************************/
 RscTop * RscTypCont::InitClassCurrencyFormatter(RscTop * pSuper)
 {
     Atom        nId;
@@ -1452,9 +1321,6 @@ RscTop * RscTypCont::InitClassCurrencyFormatter(RscTop * pSuper)
     return pClassCurrency;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassDateFormatter()
-*************************************************************************/
 RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
                         RscTop * pClassDate )
 {
@@ -1486,9 +1352,6 @@ RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
         return pClassDateF;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassTimeFormatter()
-*************************************************************************/
 RscTop * RscTypCont::InitClassTimeFormatter( RscTop * pSuper,
                         RscTop * pClassTime,
                         RscEnum * pTimeFieldFormat )
@@ -1524,9 +1387,6 @@ RscTop * RscTypCont::InitClassTimeFormatter( RscTop * pSuper,
     return pClassTimeF;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassSpinField()
-*************************************************************************/
 RscTop * RscTypCont::InitClassSpinField( RscTop * pSuper )
 {
     Atom        nId;
@@ -1545,9 +1405,6 @@ RscTop * RscTypCont::InitClassSpinField( RscTop * pSuper )
     return pClassSpinField;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassPatternField()
-*************************************************************************/
 RscTop * RscTypCont::InitClassPatternField( RscTop * pSuper )
 {
     Atom        nId;
@@ -1563,9 +1420,6 @@ RscTop * RscTypCont::InitClassPatternField( RscTop * pSuper )
     return pClassPatternField;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassNumericField()
-*************************************************************************/
 RscTop * RscTypCont::InitClassNumericField( RscTop * pSuper )
 {
     Atom        nId;
@@ -1591,9 +1445,6 @@ RscTop * RscTypCont::InitClassNumericField( RscTop * pSuper )
     return pClassNumericField;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMetricField()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMetricField( RscTop * pSuper )
 {
     Atom        nId;
@@ -1620,9 +1471,6 @@ RscTop * RscTypCont::InitClassMetricField( RscTop * pSuper )
     return pClassMetricField;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassCurrencyField()
-*************************************************************************/
 RscTop * RscTypCont::InitClassCurrencyField
 (
     const char * pClassName,
@@ -1654,9 +1502,6 @@ RscTop * RscTypCont::InitClassCurrencyField
     return pClassCurrencyField;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassDateField()
-*************************************************************************/
 RscTop * RscTypCont::InitClassDateField( RscTop * pSuper, RscTop * pClassDate )
 {
     Atom        nId;
@@ -1678,9 +1523,6 @@ RscTop * RscTypCont::InitClassDateField( RscTop * pSuper, RscTop * pClassDate )
     return pClassDateField;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassTimeField()
-*************************************************************************/
 RscTop * RscTypCont::InitClassTimeField( RscTop * pSuper, RscTop * pClassTime )
 {
     Atom        nId;
@@ -1702,9 +1544,6 @@ RscTop * RscTypCont::InitClassTimeField( RscTop * pSuper, RscTop * pClassTime )
     return pClassTimeField;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassPatternBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassPatternBox( RscTop * pSuper )
 {
     Atom        nId;
@@ -1720,9 +1559,6 @@ RscTop * RscTypCont::InitClassPatternBox( RscTop * pSuper )
     return pClassPatternBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassNumericBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassNumericBox( RscTop * pSuper )
 {
     Atom        nId;
@@ -1740,9 +1576,6 @@ RscTop * RscTypCont::InitClassNumericBox( RscTop * pSuper )
     return pClassNumericBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMetricBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMetricBox( RscTop * pSuper )
 {
     Atom        nId;
@@ -1760,9 +1593,6 @@ RscTop * RscTypCont::InitClassMetricBox( RscTop * pSuper )
     return pClassMetricBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassCurrencyBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassCurrencyBox
 (
     const char * pClassName,
@@ -1785,9 +1615,6 @@ RscTop * RscTypCont::InitClassCurrencyBox
     return pClassCurrencyBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassDateBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassDateBox( RscTop * pSuper )
 {
     Atom        nId;
@@ -1805,9 +1632,6 @@ RscTop * RscTypCont::InitClassDateBox( RscTop * pSuper )
     return pClassDateBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassTimeBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassTimeBox( RscTop * pSuper )
 {
     Atom        nId;
@@ -1825,9 +1649,6 @@ RscTop * RscTypCont::InitClassTimeBox( RscTop * pSuper )
     return pClassTimeBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassDockWindow()
-*************************************************************************/
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
                                              RscEnum * pMapUnit )
 {
@@ -1865,9 +1686,6 @@ RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
     return pClassDockWindow;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassToolBoxItem()
-*************************************************************************/
 RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
                                            RscTop * pClassBitmap,
                                            RscTop * pClassImage,
@@ -1998,9 +1816,6 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
     return pClassToolBoxItem;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassToolBox()
-*************************************************************************/
 RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
                                        RscTop * pClassToolBoxItem,
                                        RscTop * pClassImageList )
@@ -2082,9 +1897,6 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
     return pClassToolBox;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassStatusBar()
-*************************************************************************/
 RscTop * RscTypCont::InitClassStatusBar( RscTop * pSuper )
 {
     Atom        nId;
@@ -2103,9 +1915,6 @@ RscTop * RscTypCont::InitClassStatusBar( RscTop * pSuper )
     return pClassStatusBar;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassMoreButton()
-*************************************************************************/
 RscTop * RscTypCont::InitClassMoreButton( RscTop * pSuper, RscEnum * pMapUnit )
 {
     Atom        nId;
@@ -2131,9 +1940,6 @@ RscTop * RscTypCont::InitClassMoreButton( RscTop * pSuper, RscEnum * pMapUnit )
     return pClassMoreButton;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassFloatingWindow()
-*************************************************************************/
 RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
                                               RscEnum * pMapUnit )
 {
@@ -2168,9 +1974,6 @@ RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
     return pClassFloatingWindow;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassTabControlItem()
-*************************************************************************/
 RscTop * RscTypCont::InitClassTabControlItem( RscTop * pSuper )
 {
     Atom        nId;
@@ -2195,9 +1998,6 @@ RscTop * RscTypCont::InitClassTabControlItem( RscTop * pSuper )
     return pClassTabControlItem;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassTabControl()
-*************************************************************************/
 RscTop * RscTypCont::InitClassTabControl( RscTop * pSuper,
                                           RscTop * pClassTabControlItem )
 {
@@ -2226,9 +2026,6 @@ RscTop * RscTypCont::InitClassTabControl( RscTop * pSuper,
     return pClassTabControl;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassSfxFamilyStyleItem()
-*************************************************************************/
 RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                                   RscTop * pClassBitmap,
                                                   RscTop * pClassImage,
@@ -2276,9 +2073,6 @@ RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
     return pClassSfxFamilyStyleItem;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassSfxTemplateDialogm()
-*************************************************************************/
 RscTop * RscTypCont::InitClassSfxTemplateDialog( RscTop * pSuper,
                                                  RscTop * pClassFamilyStyleItem )
 {
@@ -2305,9 +2099,6 @@ RscTop * RscTypCont::InitClassSfxTemplateDialog( RscTop * pSuper,
     return pClassSfxTemplateDialog;
 }
 
-/*************************************************************************
-|*    RscTypCont::InitClassSfxSlotInfo()
-*************************************************************************/
 RscTop * RscTypCont::InitClassSfxSlotInfo( RscTop * pSuper )
 {
     Atom        nId;

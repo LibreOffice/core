@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
-// C and C++ Includes.
 #include <ctype.h>      // isdigit(), isalpha()
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,7 +27,6 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 
-// Programmabhaengige Includes.
 #include <rsctree.hxx>
 #include <rsctop.hxx>
 #include <rscmgr.hxx>
@@ -39,11 +36,6 @@
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 
-/*************************************************************************
-|*
-|*    RscTypCont :: RscTypCont
-|*
-*************************************************************************/
 RscTypCont :: RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
                           const rtl::OString& rSearchPath,
@@ -167,11 +159,6 @@ Atom RscTypCont::AddLanguage( const char* pLang )
 }
 
 
-/*************************************************************************
-|*
-|*    RscTypCont :: ~RscTypCont
-|*
-*************************************************************************/
 void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode ){
     if( pObjNode ){
         DestroyNode( pRscTop, (ObjNode*)pObjNode->Left() );
@@ -256,7 +243,6 @@ void RscTypCont::ClearSysNames()
     aSysLst.clear();
 }
 
-//=======================================================================
 RscTop * RscTypCont::SearchType( Atom nId )
 /*  [Beschreibung]
 
@@ -301,11 +287,6 @@ RscTop * RscTypCont::SearchType( Atom nId )
     return NULL;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont :: PutSysName()
-|*
-*************************************************************************/
 sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
                                  sal_uInt32 nConst, sal_uInt32 nId, sal_Bool bFirst )
 {
@@ -349,11 +330,6 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
     return pSysEntry->nKey;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont :: WriteInc
-|*
-*************************************************************************/
 void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
 {
 
@@ -398,11 +374,6 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
     };
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont :: Methoden die ueber all Knoten laufen
-|*
-*************************************************************************/
 
 class RscEnumerateObj
 {
@@ -416,8 +387,6 @@ private:
 
     DECL_LINK( CallBackWriteRc, ObjNode * );
     DECL_LINK( CallBackWriteSrc, ObjNode * );
-    DECL_LINK( CallBackWriteCxx, ObjNode * );
-    DECL_LINK( CallBackWriteHxx, ObjNode * );
 
     ERRTYPE WriteRc( RscTop * pCl, ObjNode * pRoot )
     {
@@ -432,27 +401,10 @@ private:
             pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteSrc ) );
         return aError;
     }
-    ERRTYPE WriteCxx( RscTop * pCl, ObjNode * pRoot ){
-        pClass = pCl;
-        if( pRoot )
-            pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteCxx ) );
-        return aError;
-    }
-    ERRTYPE WriteHxx( RscTop * pCl, ObjNode * pRoot ){
-        pClass = pCl;
-        if( pRoot )
-            pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteHxx ) );
-        return aError;
-    }
 public:
     void WriteRcFile( RscWriteRc & rMem, FILE * fOutput );
 };
 
-/*************************************************************************
-|*
-|*    RscEnumerateObj :: CallBackWriteRc
-|*
-*************************************************************************/
 IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 {
     RscWriteRc      aMem( pTypCont->GetByteOrder() );
@@ -467,11 +419,6 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    RscEnumerateObj :: CallBackWriteSrc
-|*
-*************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 {
     if( pObjNode->GetFileKey() == lFileKey ){
@@ -484,41 +431,6 @@ IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 }
 IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 
-/*************************************************************************
-|*
-|*    RscEnumerateObj :: CallBackWriteCxx
-|*
-*************************************************************************/
-IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
-{
-    if( pClass->IsCodeWriteable() && pObjNode->GetFileKey() == lFileKey )
-        aError = pClass->WriteCxxHeader(
-                              RSCINST( pClass, pObjNode->GetRscObj() ),
-                              fOutput, pTypCont, pObjNode->GetRscId() );
-    return 0;
-}
-IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
-
-/*************************************************************************
-|*
-|*    RscEnumerateObj :: CallBackWriteHxx
-|*
-*************************************************************************/
-IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
-{
-    if( pClass->IsCodeWriteable() && pObjNode->GetFileKey() == lFileKey )
-        aError = pClass->WriteHxxHeader(
-                              RSCINST( pClass, pObjNode->GetRscObj() ),
-                              fOutput, pTypCont, pObjNode->GetRscId() );
-    return 0;
-}
-IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
-
-/*************************************************************************
-|*
-|*    RscEnumerateObj :: WriteRcFile
-|*
-*************************************************************************/
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut )
 {
     // Definition der Struktur, aus denen die Resource aufgebaut ist
@@ -571,10 +483,6 @@ private:
 
     DECL_LINK( CallBackWriteRc, RscTop * );
     DECL_LINK( CallBackWriteSrc, RscTop * );
-    DECL_LINK( CallBackWriteCxx, RscTop * );
-    DECL_LINK( CallBackWriteHxx, RscTop * );
-    DECL_LINK( CallBackWriteSyntax, RscTop * );
-    DECL_LINK( CallBackWriteRcCtor, RscTop * );
 public:
     RscEnumerateObj aEnumObj;
 
@@ -600,43 +508,8 @@ public:
         pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteSrc ) );
         return aEnumObj.aError;
     }
-
-    ERRTYPE WriteCxx( sal_uLong lFileKey )
-    {
-        aEnumObj.lFileKey = lFileKey;
-
-        aEnumObj.aError.Clear();
-        pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteCxx ) );
-        return aEnumObj.aError;
-    }
-
-    ERRTYPE WriteHxx(  sal_uLong lFileKey )
-    {
-        aEnumObj.lFileKey = lFileKey;
-
-        aEnumObj.aError.Clear();
-        pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteHxx ) );
-        return aEnumObj.aError;
-    }
-
-    void    WriteSyntax()
-            {
-                pRoot->EnumNodes( LINK( this, RscEnumerateRef,
-                                        CallBackWriteSyntax ) );
-            }
-
-    void    WriteRcCtor()
-            {
-                pRoot->EnumNodes( LINK( this, RscEnumerateRef,
-                                        CallBackWriteRcCtor ) );
-            }
 };
 
-/*************************************************************************
-|*
-|*    RscRscEnumerateRef :: CallBack...
-|*
-*************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
 {
     aEnumObj.WriteRc( pRef, pRef->GetObjNode() );
@@ -649,38 +522,7 @@ IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteSrc, RscTop *, pRef )
     return 0;
 }
 IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteSrc, RscTop *, pRef )
-IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteCxx, RscTop *, pRef )
-{
-    if( pRef->IsCodeWriteable() )
-        aEnumObj.WriteCxx( pRef, pRef->GetObjNode() );
-    return 0;
-}
-IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteCxx, RscTop *, pRef )
-IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteHxx, RscTop *, pRef )
-{
-    if( pRef->IsCodeWriteable() )
-        aEnumObj.WriteHxx( pRef, pRef->GetObjNode() );
-    return 0;
-}
-IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteHxx, RscTop *, pRef )
-IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteSyntax, RscTop *, pRef )
-{
-    pRef->WriteSyntaxHeader( aEnumObj.fOutput, aEnumObj.pTypCont );
-    return 0;
-}
-IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteSyntax, RscTop *, pRef )
-IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteRcCtor, RscTop *, pRef )
-{
-    pRef->WriteRcCtor( aEnumObj.fOutput, aEnumObj.pTypCont );
-    return 0;
-}
-IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteRcCtor, RscTop *, pRef )
 
-/*************************************************************************
-|*
-|*    RscTypCont :: WriteRc
-|*
-*************************************************************************/
 
 ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 {
@@ -701,11 +543,6 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
     return aError;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont :: WriteSrc
-|*
-*************************************************************************/
 void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
                              sal_Bool bName )
 {
@@ -758,124 +595,6 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
     };
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont :: WriteHxx
-|*
-*************************************************************************/
-ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
-{
-    fprintf( fOutput, "#include <tools/rc.hxx>\n" );
-    fprintf( fOutput, "#include <tools/resid.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/accel.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/bitmap.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/button.hxx>\n" );
-    fprintf( fOutput, "#include <tools/color.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/combobox.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/ctrl.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/dialog.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/edit.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/field.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/fixed.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/group.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/image.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/keycod.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/lstbox.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/mapmod.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/menu.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/menubtn.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/morebtn.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/msgbox.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/scrbar.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/spin.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/spinfld.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/splitwin.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/status.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/tabctrl.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/tabdlg.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/tabpage.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/toolbox.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/window.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/wrkwin.hxx>\n" );
-    fprintf( fOutput, "#include <svtools/svmedit.hxx>\n" );
-
-    RscEnumerateRef aEnumRef( this, pRoot, fOutput );
-    ERRTYPE         aError;
-
-    if( NOFILE_INDEX == nFileKey )
-    {
-        sal_uIntPtr aIndex = aFileTab.FirstIndex();
-        while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
-        {
-            aError = aEnumRef.WriteHxx( aIndex );
-            aIndex = aFileTab.NextIndex( aIndex );
-        };
-    }
-    else
-        aError = aEnumRef.WriteHxx( nFileKey );
-
-    return aError;
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont :: WriteCxx
-|*
-*************************************************************************/
-ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
-                              const rtl::OString& rHxxName )
-{
-    RscEnumerateRef aEnumRef( this, pRoot, fOutput );
-    ERRTYPE         aError;
-    fprintf( fOutput, "#include <string.h>\n" );
-    WriteInc( fOutput, nFileKey );
-    if( !rHxxName.isEmpty() )
-        fprintf( fOutput, "#include \"%s\"\n", rHxxName.getStr() );
-    fprintf( fOutput, "\n\n" );
-
-    if( NOFILE_INDEX == nFileKey )
-    {
-        sal_uIntPtr aIndex = aFileTab.FirstIndex();
-        while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
-        {
-            aError = aEnumRef.WriteCxx( aIndex );
-            aIndex = aFileTab.NextIndex( aIndex );
-        };
-    }
-    else
-        aError = aEnumRef.WriteCxx( nFileKey );
-
-    return aError;
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont :: WriteSyntax
-|*
-*************************************************************************/
-void RscTypCont::WriteSyntax( FILE * fOutput )
-{
-    for( size_t i = 0; i < aBaseLst.size(); i++ )
-        aBaseLst[ i ]->WriteSyntaxHeader( fOutput, this );
-    RscEnumerateRef aEnumRef( this, pRoot, fOutput );
-    aEnumRef.WriteSyntax();
-}
-
-//=======================================================================
-void RscTypCont::WriteRcCtor
-(
-    FILE * fOutput
-)
-{
-    RscEnumerateRef aEnumRef( this, pRoot, fOutput );
-    aEnumRef.WriteRcCtor();
-}
-
-/*************************************************************************
-|*
-|*    RscTypCont :: Delete()
-|*
-*************************************************************************/
 class RscDel
 {
     sal_uLong lFileKey;

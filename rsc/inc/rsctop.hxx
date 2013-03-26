@@ -24,7 +24,6 @@
 #include <rschash.hxx>
 #include <rscclobj.hxx>
 
-/****************** T Y P E S ********************************************/
 typedef sal_uInt32 RSCVAR;
 #define VAR_POINTER     0x0001
 #define VAR_HIDDEN      0x0002
@@ -34,8 +33,6 @@ typedef sal_uInt32 RSCVAR;
 #define VAR_NOENUM      0x0020
 #define VAR_EXTENDABLE  0x0040  /* Auch die Ableitung einer Klasse kann angegeben werden */
 
-/****************** C L A S S E S ****************************************/
-/******************* R s c C l a s s *************************************/
 class RscTop : public RefNode
 {
     RscTop *        pSuperClass;
@@ -216,23 +213,6 @@ public:
                                     sal_uInt32 nDeep, sal_Bool bExtra );
     virtual ERRTYPE WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra );
-
-    // Weiterleitung an Superklassen wird unterbunden
-    virtual ERRTYPE WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, const RscId & rId );
-    virtual ERRTYPE WriteHxx( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, const RscId &rId );
-    virtual ERRTYPE WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, const RscId &rId );
-    virtual ERRTYPE WriteCxx( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, const RscId &rId );
-
-            void WriteSyntaxHeader( FILE * fOutput, RscTypCont * pTC  );
-    virtual void WriteSyntax( FILE * fOutput, RscTypCont * pTC );
-
-    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
-    virtual void    WriteRcCtor( FILE * fOutput, RscTypCont * pTC );
 };
 
 #endif //_RSCTOP_HXX

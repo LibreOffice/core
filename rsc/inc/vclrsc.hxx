@@ -21,7 +21,6 @@
 #define _TOOLS_VCLRSC_HXX
 
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <tools/wintypes.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>

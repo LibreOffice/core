@@ -38,7 +38,6 @@
 #include <sal/main.h>
 #include <rtl/strbuf.hxx>
 
-/*************** C O D E ************************************************/
 
 // Entry point declaration for modules rscpp and rsc2
 extern "C"
@@ -47,11 +46,6 @@ extern "C"
 }
 int rsc2_main(int, char**);
 
-/*************************************************************************
-|*    CallPrePro()
-|*
-|*    Beschreibung
-*************************************************************************/
 static sal_Bool CallPrePro( const rtl::OString& rInput,
     const rtl::OString& rOutput, RscPtrPtr * pCmdLine,
     sal_Bool bResponse )
@@ -148,11 +142,6 @@ static sal_Bool CallPrePro( const rtl::OString& rInput,
 }
 
 
-/*************************************************************************
-|*    CallRsc2
-|*
-|*    Beschreibung
-*************************************************************************/
 static sal_Bool CallRsc2( RscStrList * pInputList,
     const rtl::OString &rSrsName, RscPtrPtr * pCmdLine )
 {
@@ -215,11 +204,6 @@ static sal_Bool CallRsc2( RscStrList * pInputList,
     return( sal_True );
 }
 
-/*************************************************************************
-|*
-|*    main()
-|*
-*************************************************************************/
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     sal_Bool        bPrePro  = sal_True;

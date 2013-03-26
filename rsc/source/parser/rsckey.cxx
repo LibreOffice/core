@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -31,8 +30,6 @@
 #define _cdecl __cdecl
 #endif
 
-/****************** C o d e **********************************************/
-/****************** keyword sort function ********************************/
 extern "C" {
     int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond );
 }
@@ -47,33 +44,18 @@ int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond )
         return( 0 );
 }
 
-/*************************************************************************
-|*
-|*    RscNameTable::RscNameTable()
-|*
-*************************************************************************/
 RscNameTable::RscNameTable() {
     bSort    = sal_True;
     nEntries = 0;
     pTable   = NULL;
 };
 
-/*************************************************************************
-|*
-|*    RscNameTable::~RscNameTable()
-|*
-*************************************************************************/
 RscNameTable::~RscNameTable() {
     if( pTable )
         rtl_freeMemory( pTable );
 };
 
 
-/*************************************************************************
-|*
-|*    RscNameTable::SetSort()
-|*
-*************************************************************************/
 void RscNameTable::SetSort( sal_Bool bSorted ){
     bSort = bSorted;
     if( bSort && pTable){
@@ -83,11 +65,6 @@ void RscNameTable::SetSort( sal_Bool bSorted ){
     };
 };
 
-/*************************************************************************
-|*
-|*    RscNameTable::Put()
-|*
-*************************************************************************/
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue ){
     if( pTable )
         pTable = (KEY_STRUCT *)
@@ -124,11 +101,6 @@ Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass )
     return( Put( nName, nTyp, (long)pClass ) );
 };
 
-/*************************************************************************
-|*
-|*    RscNameTable::Get()
-|*
-*************************************************************************/
 sal_Bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
     KEY_STRUCT * pKey = NULL;
     KEY_STRUCT  aSearchName;

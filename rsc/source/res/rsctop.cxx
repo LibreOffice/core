@@ -17,22 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdio.h>
 #include <string.h>
 
 // Solar Definitionen
 #include <tools/solar.h>
 #include <rsctop.hxx>
-/****************** C O D E **********************************************/
-/****************** R s c T o p ******************************************/
-/*************************************************************************
-|*
-|*    RscTop::RscTop()
-|*
-*************************************************************************/
 RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
     : RefNode( nId )
     , pSuperClass( pSuperCl )
@@ -44,11 +35,6 @@ RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
                     pSuperClass->aCallParType );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetCallPar()
-|*
-*************************************************************************/
 void RscTop::SetCallPar(const rtl::OString& rPar1, const rtl::OString& rPar2,
     const rtl::OString& rParType)
 {
@@ -57,11 +43,6 @@ void RscTop::SetCallPar(const rtl::OString& rPar1, const rtl::OString& rPar2,
     aCallParType = rParType;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetDefault()
-|*
-*************************************************************************/
 RSCINST RscTop::GetDefault()
 {
     if( !aDfltInst.IsInst() )
@@ -69,11 +50,6 @@ RSCINST RscTop::GetDefault()
     return aDfltInst;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::Pre_dtor()
-|*
-*************************************************************************/
 void RscTop :: Pre_dtor(){
     if( aDfltInst.IsInst() ){
         aDfltInst.pClass->Destroy( aDfltInst );
@@ -82,20 +58,10 @@ void RscTop :: Pre_dtor(){
     };
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetConstant()
-|*
-*************************************************************************/
 Atom    RscTop :: GetConstant( sal_uInt32 ){
     return InvalidAtom;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetIndexType()
-|*
-*************************************************************************/
 RscTop * RscTop::GetTypeClass() const
 {
     if( pSuperClass )
@@ -104,11 +70,6 @@ RscTop * RscTop::GetTypeClass() const
         return NULL;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::Size()
-|*
-*************************************************************************/
 sal_uInt32 RscTop :: Size()
 {
     if( pSuperClass )
@@ -117,11 +78,6 @@ sal_uInt32 RscTop :: Size()
         return 0;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetRef()
-|*
-*************************************************************************/
 ERRTYPE RscTop :: GetRef( const RSCINST & rInst, RscId * pRscId ){
     if( pSuperClass )
         return pSuperClass->GetRef( rInst, pRscId );
@@ -129,11 +85,6 @@ ERRTYPE RscTop :: GetRef( const RSCINST & rInst, RscId * pRscId ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::InHierarchy()
-|*
-*************************************************************************/
 sal_Bool RscTop::InHierarchy( RscTop * pClass ){
     if( this == pClass )
         return( sal_True );
@@ -142,11 +93,6 @@ sal_Bool RscTop::InHierarchy( RscTop * pClass ){
     return( sal_False );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetVariable()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
                      RSCINST * pDflt, RSCVAR nVarType, sal_uInt32 nMask,
                      Atom nDataBaseName )
@@ -159,22 +105,12 @@ ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::EnumVariable()
-|*
-*************************************************************************/
 void RscTop::EnumVariables( void * pData, VarEnumCallbackProc pProc )
 {
     if( pSuperClass )
         pSuperClass->EnumVariables( pData, pProc );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetVariable()
-|*
-*************************************************************************/
 RSCINST RscTop::GetVariable
 (
     const RSCINST & rInst,
@@ -191,11 +127,6 @@ RSCINST RscTop::GetVariable
         return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetCopyVar()
-|*
-*************************************************************************/
 RSCINST RscTop::GetCopyVar( const RSCINST & rInst, Atom nVarName )
 {
     if( pSuperClass )
@@ -205,11 +136,6 @@ RSCINST RscTop::GetCopyVar( const RSCINST & rInst, Atom nVarName )
         return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetTupelVar()
-|*
-*************************************************************************/
 RSCINST RscTop::GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                             const RSCINST & rInitInst )
 {
@@ -219,11 +145,6 @@ RSCINST RscTop::GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
         return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetElement()
-|*
-*************************************************************************/
 ERRTYPE RscTop::GetElement( const RSCINST & rInst, const RscId & rEleName,
                     RscTop *pCreateClass, const RSCINST & rCreateInst,
                     RSCINST * pGetInst )
@@ -237,11 +158,6 @@ ERRTYPE RscTop::GetElement( const RSCINST & rInst, const RscId & rEleName,
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetArrayEle()
-|*
-*************************************************************************/
 ERRTYPE RscTop::GetArrayEle
 (
     const RSCINST & rInst,
@@ -256,11 +172,6 @@ ERRTYPE RscTop::GetArrayEle
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetValueEle()
-|*
-*************************************************************************/
 ERRTYPE RscTop::GetValueEle
 (
     const RSCINST & rInst,
@@ -275,11 +186,6 @@ ERRTYPE RscTop::GetValueEle
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SearchEle()
-|*
-*************************************************************************/
 RSCINST RscTop::SearchEle( const RSCINST & rInst, const RscId & rEleName,
                    RscTop * pClass )
 {
@@ -290,11 +196,6 @@ RSCINST RscTop::SearchEle( const RSCINST & rInst, const RscId & rEleName,
         return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetPosEle()
-|*
-*************************************************************************/
 RSCINST RscTop::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
     if( pSuperClass )
         return pSuperClass->
@@ -303,11 +204,6 @@ RSCINST RscTop::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
         return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscTop::MovePosEle()
-|*
-*************************************************************************/
 ERRTYPE RscTop::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
                     sal_uInt32 nSourcePos )
 {
@@ -318,11 +214,6 @@ ERRTYPE RscTop::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetPosRscId()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                      const RscId & rRscId )
 {
@@ -333,11 +224,6 @@ ERRTYPE RscTop::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetInfoEle()
-|*
-*************************************************************************/
 SUBINFO_STRUCT RscTop::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
     if( pSuperClass )
         return pSuperClass->
@@ -346,11 +232,6 @@ SUBINFO_STRUCT RscTop::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
         return SUBINFO_STRUCT();
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetCount()
-|*
-*************************************************************************/
 sal_uInt32  RscTop::GetCount( const RSCINST & rInst ){
     if( pSuperClass )
         return pSuperClass->GetCount( rInst );
@@ -358,11 +239,6 @@ sal_uInt32  RscTop::GetCount( const RSCINST & rInst ){
         return 0;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
     if( pSuperClass )
         return pSuperClass->
@@ -371,11 +247,6 @@ ERRTYPE RscTop::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetBool()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetBool( const RSCINST & rInst, sal_Bool bValue ){
     if( pSuperClass )
         return pSuperClass->
@@ -384,11 +255,6 @@ ERRTYPE RscTop::SetBool( const RSCINST & rInst, sal_Bool bValue ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetConst()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetConst( const RSCINST & rInst, Atom nId, sal_Int32 nVal )
 {
     if( pSuperClass )
@@ -397,11 +263,6 @@ ERRTYPE RscTop::SetConst( const RSCINST & rInst, Atom nId, sal_Int32 nVal )
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetNotConst()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetNotConst( const RSCINST & rInst, Atom nId ){
     if( pSuperClass )
         return pSuperClass->
@@ -410,11 +271,6 @@ ERRTYPE RscTop::SetNotConst( const RSCINST & rInst, Atom nId ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetString()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetString( const RSCINST & rInst, const char * pStr ){
     if( pSuperClass )
         return pSuperClass->
@@ -423,11 +279,6 @@ ERRTYPE RscTop::SetString( const RSCINST & rInst, const char * pStr ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscTop::GetNumber( const RSCINST & rInst, sal_Int32 * pN ){
     if( pSuperClass )
         return pSuperClass->
@@ -436,11 +287,6 @@ ERRTYPE RscTop::GetNumber( const RSCINST & rInst, sal_Int32 * pN ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetBool()
-|*
-*************************************************************************/
 ERRTYPE RscTop::GetBool( const RSCINST & rInst, sal_Bool * pB ){
  if( pSuperClass )
         return pSuperClass->
@@ -449,11 +295,6 @@ ERRTYPE RscTop::GetBool( const RSCINST & rInst, sal_Bool * pB ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetCont()
-|*
-*************************************************************************/
 ERRTYPE RscTop::GetConst( const RSCINST & rInst, Atom * pH ){
     if( pSuperClass )
         return pSuperClass->
@@ -462,11 +303,6 @@ ERRTYPE RscTop::GetConst( const RSCINST & rInst, Atom * pH ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetString()
-|*
-*************************************************************************/
 ERRTYPE RscTop::GetString( const RSCINST & rInst, char ** ppStr ){
     if( pSuperClass )
         return pSuperClass->
@@ -475,11 +311,6 @@ ERRTYPE RscTop::GetString( const RSCINST & rInst, char ** ppStr ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::Create()
-|*
-*************************************************************************/
 RSCINST RscTop::Create( RSCINST * pInst, const RSCINST & rDefInst, sal_Bool bOwnRange )
 {
     if( pSuperClass )
@@ -492,21 +323,11 @@ RSCINST RscTop::Create( RSCINST * pInst, const RSCINST & rDefInst, sal_Bool bOwn
     }
 }
 
-/*************************************************************************
-|*
-|*    RscTop::Destroy()
-|*
-*************************************************************************/
 void    RscTop::Destroy( const RSCINST & rInst ){
     if( pSuperClass )
         pSuperClass->Destroy( rInst );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::IsConsistent()
-|*
-*************************************************************************/
 sal_Bool RscTop::IsConsistent( const RSCINST & rInst )
 {
     if( pSuperClass )
@@ -515,22 +336,12 @@ sal_Bool RscTop::IsConsistent( const RSCINST & rInst )
         return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetToDefault()
-|*
-*************************************************************************/
 void    RscTop::SetToDefault( const RSCINST & rInst )
 {
     if( pSuperClass )
         pSuperClass->SetToDefault( rInst );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::IsDefault()
-|*
-*************************************************************************/
 sal_Bool    RscTop::IsDefault( const RSCINST & rInst ){
     if( pSuperClass )
         return pSuperClass->IsDefault( rInst );
@@ -538,11 +349,6 @@ sal_Bool    RscTop::IsDefault( const RSCINST & rInst ){
         return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool    RscTop::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( pSuperClass )
         return pSuperClass->IsValueDefault( rInst, pDef );
@@ -550,21 +356,11 @@ sal_Bool    RscTop::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
         return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetDefault()
-|*
-*************************************************************************/
 void    RscTop::SetDefault( const RSCINST & rInst, Atom nVarId ){
     if( pSuperClass )
         pSuperClass->SetDefault( rInst, nVarId );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::GetDefault()
-|*
-*************************************************************************/
 RSCINST RscTop::GetDefault( Atom nVarId ){
     if( pSuperClass )
         return pSuperClass->
@@ -573,11 +369,6 @@ RSCINST RscTop::GetDefault( Atom nVarId ){
         return RSCINST();
 }
 
-/*************************************************************************
-|*
-|*    RscTop::Delete()
-|*
-*************************************************************************/
 void    RscTop::Delete( const RSCINST & rInst, RscTop * pClass,
                 const RscId & rId )
 {
@@ -585,22 +376,12 @@ void    RscTop::Delete( const RSCINST & rInst, RscTop * pClass,
         pSuperClass->Delete( rInst, pClass, rId );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::DeletePos()
-|*
-*************************************************************************/
 void    RscTop::DeletePos( const RSCINST & rInst, sal_uInt32 nPos )
 {
     if( pSuperClass )
         pSuperClass->DeletePos( rInst, nPos );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::SetRef()
-|*
-*************************************************************************/
 ERRTYPE RscTop::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     if( pSuperClass )
         return pSuperClass->SetRef( rInst, rRefId );
@@ -608,65 +389,6 @@ ERRTYPE RscTop::SetRef( const RSCINST & rInst, const RscId & rRefId ){
         return ERR_UNKNOWN_METHOD;
 }
 
-/*************************************************************************
-|*
-|*    RscTop::WriteHxxHeader()
-|*
-*************************************************************************/
-ERRTYPE RscTop::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                RscTypCont * pTC, const RscId & rId )
-{
-    if( pSuperClass )
-        return pSuperClass->WriteHxxHeader( rInst, fOutput, pTC, rId );
-    else
-        return rInst.pClass->WriteHxx( rInst, fOutput, pTC, rId );
-}
-
-/*************************************************************************
-|*
-|*    RscTop::WriteHxx()
-|*
-*************************************************************************/
-ERRTYPE RscTop::WriteHxx( const RSCINST & rInst, FILE * fOutput,
-                          RscTypCont * pTC, const RscId & rId ){
-    if( pSuperClass )
-        return pSuperClass->WriteHxx( rInst, fOutput, pTC, rId );
-    else
-        return( ERR_OK );
-}
-
-/*************************************************************************
-|*
-|*    RscTop::WriteCxxHeader()
-|*
-*************************************************************************/
-ERRTYPE RscTop::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                RscTypCont * pTC, const RscId & rId )
-{
-    if( pSuperClass )
-        return pSuperClass->WriteCxxHeader( rInst, fOutput, pTC, rId );
-    else
-        return rInst.pClass->WriteCxx( rInst, fOutput, pTC, rId );
-}
-
-/*************************************************************************
-|*
-|*    RscTop::WriteCxx()
-|*
-*************************************************************************/
-ERRTYPE RscTop::WriteCxx( const RSCINST & rInst, FILE * fOutput,
-                          RscTypCont * pTC, const RscId & rId ){
-    if( pSuperClass )
-        return pSuperClass->WriteCxx( rInst, fOutput, pTC, rId );
-    else
-        return ERR_OK;
-}
-
-/*************************************************************************
-|*
-|*    RscTop::WriteSrcHeader()
-|*
-*************************************************************************/
 void RscTop::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                              RscTypCont * pTC, sal_uInt32 nTab,
                              const RscId & rId, const char * pVarName )
@@ -677,11 +399,6 @@ void RscTop::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
         rInst.pClass->WriteSrc( rInst, fOutput, pTC, nTab, pVarName );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::WriteSrc()
-|*
-*************************************************************************/
 void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                        RscTypCont * pTC, sal_uInt32 nTab, const char * pVarName )
 {
@@ -689,11 +406,6 @@ void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         pSuperClass->WriteSrc( rInst, fOutput, pTC, nTab, pVarName );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::WriteRcHeader()
-|*
-*************************************************************************/
 ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId & rId,
                                sal_uInt32 nDeep, sal_Bool bExtra )
@@ -705,11 +417,6 @@ ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
         return( rInst.pClass->WriteRc( rInst, rMem, pTC, nDeep, bExtra ) );
 }
 
-/*************************************************************************
-|*
-|*    RscTop::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                          RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
@@ -719,54 +426,5 @@ ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     else
         return( ERR_OK );
 }
-
-/*************************************************************************
-|*
-|*    RscTop::WriteSyntaxHeader()
-|*
-*************************************************************************/
-void RscTop::WriteSyntaxHeader( FILE * fOutput, RscTypCont * pTC )
-{
-    if( GetId() != InvalidAtom )
-    {
-        fprintf( fOutput, "class %s \n{\n", pHS->getString( GetId() ).getStr() );
-        WriteSyntax( fOutput, pTC );
-        fprintf( fOutput, "};\n\n" );
-    }
-}
-
-/*************************************************************************
-|*
-|*    RscTop::WriteSyntax()
-|*
-*************************************************************************/
-void RscTop::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
-{
-    if( pSuperClass )
-        pSuperClass->WriteSyntax( fOutput, pTC );
-}
-
-//========================================================================
-void RscTop::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * /*pTC*/,
-    const char * pName
-)
-{
-    if( GetId() != InvalidAtom )
-    {
-        fprintf( fOutput, "\t\t//%s %s\n",
-                pHS->getString( GetId() ).getStr(), pName );
-    }
-}
-
-//========================================================================
-void RscTop::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
-{
-    if( pSuperClass )
-        pSuperClass->WriteRcCtor( fOutput, pTC );
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

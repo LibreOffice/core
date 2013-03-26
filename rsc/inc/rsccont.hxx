@@ -23,7 +23,6 @@
 #include <rscerror.h>
 #include <rsctop.hxx>
 
-/******************* R s c B a s e C o n t *******************************/
 struct ENTRY_STRUCT {
     RscId   aName;
     RSCINST aInst;
@@ -53,8 +52,6 @@ protected:
                                   RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         ContWriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                                  RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    void            ContWriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                        const char *, sal_Bool nWriteSize );
 public:
                     RscBaseCont( Atom nId, sal_uInt32 nTypId,
                                  RscTop * pSuper = NULL,
@@ -103,13 +100,8 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32 , sal_Bool bExtra);
-    ERRTYPE         WriteHxx( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, const RscId & rId );
-    ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, const RscId &rId );
 };
 
-/******************* R s c C o n t W r i t e S r c ***********************/
 class RscContWriteSrc : public RscBaseCont
 {
 public:
@@ -120,7 +112,6 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
 };
 
-/******************* R s c C o n t ***************************************/
 class RscCont : public RscContWriteSrc {
 public:
                     RscCont( Atom nId, sal_uInt32 nTypId,
@@ -128,11 +119,8 @@ public:
                              sal_Bool bNoId = sal_True );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
 };
 
-/******************* R s c C o n t E x t r a D a t a *********************/
 class RscContExtraData : public RscContWriteSrc {
 public:
                     RscContExtraData( Atom nId, sal_uInt32 nTypId,

@@ -22,7 +22,6 @@
 #include <tools/link.hxx>
 #include <rsctools.hxx>
 
-/****************** C L A S S E S ****************************************/
 class BiNode
 {
 protected:
@@ -48,7 +47,6 @@ public:
             void        EnumNodes( Link aLink ) const;
 };
 
-/*************************************************************************/
 class NameNode : public BiNode
 {
     void                SubOrderTree( NameNode * pOrderNode );
@@ -72,7 +70,6 @@ public:
             void        OrderTree();
 };
 
-/*************************************************************************/
 class IdNode : public NameNode
 {
     virtual COMPARE Compare( const NameNode * ) const;
@@ -86,7 +83,6 @@ public:
     virtual sal_uInt32  GetId() const;
 };
 
-/*************************************************************************/
 class StringNode : public NameNode
 {
     virtual COMPARE Compare( const NameNode * ) const;

@@ -18,8 +18,6 @@
  */
 
 
-/****************** I N C L U D E S **************************************/
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -27,7 +25,6 @@
 
 #include <vclrsc.hxx>
 
-// Programmabhaengige Includes.
 #include <rsctree.hxx>
 #include <rsctop.hxx>
 #include <rscrange.hxx>
@@ -43,15 +40,9 @@
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 
-/****************** M a c r o s ******************************************/
 #define INS_WINBIT( pClass, WinBit )        \
     InsWinBit( pClass, #WinBit, n##WinBit##Id );
 
-/*************************************************************************
-|*
-|*    RscTypCont::Init()
-|*
-*************************************************************************/
 void RscTypCont::Init()
 {
     RscEnum *   pFieldUnits;
@@ -159,7 +150,6 @@ void RscTypCont::Init()
 
     aNmTb.SetSort( sal_False );
 {
-    /********** C O M P I L E R   T Y P E N ******************************/
     aNmTb.Put( "LINE",               LINE,           (long)0 );
     aNmTb.Put( "NOT",                NOT,            (long)0 );
     aNmTb.Put( "DEFINE",             DEFINE,         (long)0 );
@@ -182,29 +172,21 @@ void RscTypCont::Init()
     aNmTb.Put( "ZoomInOutputSize",   INZOOMOUTPUTSIZE,(long)0    );
     aNmTb.Put( "FloatingPos",        FLOATINGPOS,    (long)0     );
 }
-    /********** B A S I S   T Y P E N ************************************/
 {
-    /********** S H O R T ************************************************/
     aShort.SetRange( -32768, 32767 );
 
-    /********** U S H O R T **********************************************/
     aUShort.SetRange( 0, 0xFFFF );
 
-    /********** L O N G **************************************************/
     aLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
     aEnumLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 
-    /********** I D U S H O R T ******************************************/
     aIdUShort.SetRange( 0, 0xFFFF );
 
-    /********** I D N O Z E R O U S H O R T ******************************/
     aIdNoZeroUShort.SetRange( 1, 0xFFFF );
 
-    /********** N O Z E R O S H O R T ************************************/
     aNoZeroShort.SetRange( -32768, 32767 );
     aNoZeroShort.SetOutRange( 0 );
 
-    /********** R A N G E S H O R T **************************************/
         a1to12Short.SetRange( 1, 12 );
         a0to23Short.SetRange( 0, 23 );
         a1to31Short.SetRange( 1, 31 );
@@ -212,11 +194,9 @@ void RscTypCont::Init()
         a0to99Short.SetRange( 0, 99 );
         a0to9999Short.SetRange( 0, 9999 );
 
-    /********** I D R A N G E ********************************************/
     aIdLong.SetRange( SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 {
-    /********** W I N B I T S F L A G ************************************/
     // Variablenname fuer WinBits
     nWinBitVarId = aNmTb.Put( "_WinBits", VARNAME );
 
@@ -335,7 +315,6 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nStdPopupId, sal::static_int_cast<sal_Int32>(WB_STDPOPUP) );
 }
 {
-    /********** I n i t   B a s i c   T y p e s **************************/
     InitLangType();
     aBaseLst.push_back( pFieldUnits      = InitFieldUnitsType() );
     aBaseLst.push_back( pTimeFieldFormat = InitTimeFieldFormat() );
@@ -358,23 +337,18 @@ void RscTypCont::Init()
     aBaseLst.push_back( pLangStringLongTupelList = InitLangStringLongTupelList( pStringLongTupelList ) );
 }
 {
-    /********** R E S O U R C E   T Y P E N ******************************/
-    /********** R S C M G R **********************************************/
     pRoot = pClassMgr = InitClassMgr();
 
-    /********** V e r s i o n s k o n t r o l l e ************************/
     aVersion.pClass = new RscClass( pHS->getID( "VersionControl" ),
                                     RSC_VERSIONCONTROL, pClassMgr );
     aVersion = aVersion.pClass->Create( NULL, RSCINST() );
 
-    /********** S T R I N G **********************************************/
     pClassString = InitClassString( pClassMgr );
     pRoot->Insert( pClassString );
 
     // String als Referenzklasse des Basisstrings einsetzen
     aString.SetRefClass( pClassString );
 
-    /********** S T R I N G L I S T **************************************/
     // Klasse anlegen
     nId = pHS->getID( "StringArray" );
     pClassStringArray = new RscClass( nId, RSC_STRINGARRAY, pClassMgr );
@@ -386,64 +360,52 @@ void RscTypCont::Init()
     nId = aNmTb.Put( "ItemList", VARNAME );
     pClassStringArray->SetVariable( nId, pLangStringLongTupelList );
 
-    /********** B I T M A P **********************************************/
     pClassBitmap = InitClassBitmap( pClassMgr );
     pRoot->Insert( pClassBitmap );
 
 }
 {
-    /********** C O L O R ************************************************/
     pClassColor = InitClassColor( pClassMgr, pColor );
     pRoot->Insert( pClassColor );
 
-    /********** I M A G E ************************************************/
     pClassImage = InitClassImage( pClassMgr, pClassBitmap, pClassColor );
     pRoot->Insert( pClassImage );
 
-    /********** I M A G E L I S T ****************************************/
      pClassImageList = InitClassImageList( pClassMgr,
                                           pClassColor, pStringLongTupelList );
     pRoot->Insert( pClassImageList );
 
-    /********** W I N D O W **********************************************/
     pClassWindow = InitClassWindow( pClassMgr, pMapUnit,
                                     pLangGeometry );
     pRoot->Insert( pClassWindow );
 }
 {
 
-    /********** S Y S T E M W I N D O W **********************************/
     pClassSystemWindow = InitClassSystemWindow( pClassWindow );
     //aBaseLst.Insert( pClassSystemWindow, LIST_APPEND );
     pRoot->Insert( pClassSystemWindow );
 
-    /********** W O R K W I N D O W **************************************/
     pClassWorkWindow = InitClassWorkWindow( pClassSystemWindow );
     pRoot->Insert( pClassWorkWindow );
 
-    /********** D I A L O G **********************************************/
     // Klasse anlegen
     pClassDialog = new RscClass( pHS->getID( "Dialog" ),
                                  RSC_DIALOG, pClassSystemWindow );
     pClassDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aBaseLst.push_back( pClassDialog );
 
-    /********** M O D A L D I A L O G ***********************************/
     // Klasse anlegen
     pClassModalDialog = InitClassModalDialog( pClassDialog );
     pRoot->Insert( pClassModalDialog );
 
-    /********** M O D E L E S S D I A L O G ******************************/
     // Klasse anlegen
     pClassModelessDialog = InitClassModelessDialog( pClassDialog );
     pRoot->Insert( pClassModelessDialog );
 }
 {
-    /********** C O N T R O L ********************************************/
     pClassControl = InitClassControl( pClassWindow );
     pRoot->Insert( pClassControl );
 
-    /********** B U T T O N **********************************************/
     // Klasse anlegen
     nId = pHS->getID( "Button" );
     pClassButton = new RscClass( nId, RSC_BUTTON, pClassControl );
@@ -451,16 +413,13 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassButton );
     pRoot->Insert( pClassButton );
 
-    /********** C H E C K B O X ******************************************/
     pClassCheckBox = InitClassCheckBox( pClassButton );
     pRoot->Insert( pClassCheckBox );
 
-    /********** P U S H B U T T O N **************************************/
     // Klasse anlegen
     pClassPushButton = InitClassPushButton( pClassButton );
     pRoot->Insert( pClassPushButton );
 
-    /********** H E L P B U T T O N **************************************/
     // Klasse anlegen
     nId = pHS->getID( "HelpButton" );
     pClassHelpButton = new RscClass( nId, RSC_HELPBUTTON,
@@ -469,7 +428,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassHelpButton );
     pRoot->Insert( pClassHelpButton );
 
-    /********** O K B U T T O N ******************************************/
     // Klasse anlegen
     nId = pHS->getID( "OKButton" );
     pClassOKButton = new RscClass( nId, RSC_OKBUTTON,
@@ -478,7 +436,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassOKButton );
     pRoot->Insert( pClassOKButton );
 
-    /********** C A N C E L B U T T O N **********************************/
     // Klasse anlegen
     nId = pHS->getID( "CancelButton" );
     pClassCancelButton = new RscClass( nId, RSC_CANCELBUTTON,
@@ -488,64 +445,50 @@ void RscTypCont::Init()
     pRoot->Insert( pClassCancelButton );
 }
 {
-    /********** R A D I O B U T T O N ************************************/
     pClassRadioButton = InitClassRadioButton( pClassButton );
     pRoot->Insert( pClassRadioButton );
 
-    /********** I m a g e R a d i o B u t t o n **************************/
     nId = pHS->getID( "ImageRadioButton" );
     pClassImageRadioButton = InitClassImageRadioButton( pClassRadioButton,
                                                         pClassImage );
     pRoot->Insert( pClassImageRadioButton );
 
-    /********** T R I S T A T E B O X ************************************/
     pClassTriStateBox = InitClassTriStateBox( pClassControl, pTriState );
     pRoot->Insert( pClassTriStateBox );
 
-    /********** I M A G E B U T T O N ************************************/
     pClassImageButton = InitClassImageButton( pClassPushButton,
                                               pClassImage, pTriState );
     pRoot->Insert( pClassImageButton );
 
-    /********** E D I T **************************************************/
     pClassEdit = InitClassEdit( pClassControl );
     pRoot->Insert( pClassEdit );
 
-    /********** M U L T I L I N E E D I T ********************************/
     pClassMultiLineEdit = InitClassMultiLineEdit( pClassEdit );
     pRoot->Insert( pClassMultiLineEdit );
 
-    /********** S C R O L L B A R ****************************************/
     pClassScrollBar = InitClassScrollBar( pClassControl );
     pRoot->Insert( pClassScrollBar );
 
 }
 {
-    /********** L I S T B O X ********************************************/
     pClassListBox = InitClassListBox( pClassControl, pLangStringLongTupelList );
     pRoot->Insert( pClassListBox );
 
-    /********** M U L T I L I S T B O X **********************************/
     pClassMultiListBox = InitClassMultiListBox( pClassListBox);
     pRoot->Insert( pClassMultiListBox );
 
-    /********** C O M B O B O X ******************************************/
     pClassComboBox = InitClassComboBox( pClassEdit, pLangStringList );
     pRoot->Insert( pClassComboBox );
 
-    /********** F I X E D T E X T ****************************************/
     pClassFixedText = InitClassFixedText( pClassControl );
     pRoot->Insert( pClassFixedText );
 
-    /********** F i x e d B i t m a p ************************************/
     pClassFixedBitmap = InitClassFixedBitmap( pClassControl, pClassBitmap );
     pRoot->Insert( pClassFixedBitmap );
 
-    /********** F i x e d I m a g e **************************************/
     pClassFixedImage = InitClassFixedImage( pClassControl, pClassImage );
     pRoot->Insert( pClassFixedImage );
 
-    /********** G R O U P B O X ******************************************/
     // Klasse anlegen
     nId = pHS->getID( "GroupBox" );
     pClassGroupBox = new RscClass( nId, RSC_GROUPBOX, pClassControl );
@@ -553,7 +496,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassGroupBox );
     pRoot->Insert( pClassGroupBox );
 
-    /********** K E Y C O D E ********************************************/
     pClassKeyCode = InitClassKeyCode( pClassMgr, pKey );
     pRoot->Insert( pClassKeyCode );
     {
@@ -562,47 +504,38 @@ void RscTypCont::Init()
     aBaseLst.push_back( pLangClassKeyCode );
     }
 
-    /********** A C C E L I T E M  ***************************************/
     pClassAccelItem = InitClassAccelItem( pClassMgr, pLangClassKeyCode );
     pRoot->Insert( pClassAccelItem );
 }
 {
-    /********** A C C E L E R A T O R ************************************/
     pClassAccel = InitClassAccel( pClassMgr, pClassAccelItem );
     pRoot->Insert( pClassAccel );
     nAcceleratorType = pClassAccel->GetId();
 
-    /********** A C C E L I T E M  ***************************************/
     // pClassAccel ist erst hier definiert
     nId = aNmTb.Put( "SubAccelerator", VARNAME );
     pClassAccelItem->SetVariable( nId, pClassAccel, NULL, VAR_SVDYNAMIC,
                                ACCELITEM_ACCEL );
 
-    /********** M E N U I T E M ******************************************/
     pClassMenuItem = InitClassMenuItem( pClassMgr, pClassBitmap,
                                         pLangClassKeyCode );
     pRoot->Insert( pClassMenuItem );
 
-    /********** M E N U **************************************************/
     pClassMenu = InitClassMenu( pClassMgr, pClassMenuItem );
     pRoot->Insert( pClassMenu );
 
-    /********** M E N U I T E M ******************************************/
     // pClassMenu ist erst hier definiert
     nId = aNmTb.Put( "SubMenu", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassMenu, NULL, VAR_SVDYNAMIC,
                                  RSC_MENUITEM_MENU );
 
-    /********** M E N U B U T T O N **************************************/
     pClassMenuButton = InitClassMenuButton( pClassControl, pClassMenu );
     pRoot->Insert( pClassMenuButton );
 
-    /********** M E S S A G E B O X **************************************/
     pClassMessBox = InitClassMessBox( pClassMgr, pMessButtons,
                                          pMessDefButton );
     pRoot->Insert( pClassMessBox );
 
-    /********** I N F O B O X ********************************************/
     // Klasse anlegen
     nId = pHS->getID( "InfoBox" );
     pClassInfoBox = new RscClass( nId, RSC_INFOBOX, pClassMessBox );
@@ -610,7 +543,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassInfoBox );
     pRoot->Insert( pClassInfoBox );
 
-    /********** W A R N I N G B O X **************************************/
     // Klasse anlegen
     nId = pHS->getID( "WarningBox" );
     pClassWarningBox = new RscClass( nId, RSC_WARNINGBOX, pClassMessBox );
@@ -618,7 +550,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassWarningBox );
     pRoot->Insert( pClassWarningBox );
 
-    /********** E R R O R B O X ******************************************/
     // Klasse anlegen
     nId = pHS->getID( "ErrorBox" );
     pClassErrorBox = new RscClass( nId, RSC_ERRORBOX, pClassMessBox );
@@ -626,7 +557,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassErrorBox );
     pRoot->Insert( pClassErrorBox );
 
-    /********** Q U E R Y B O X ******************************************/
     // Klasse anlegen
     nId = pHS->getID( "QueryBox" );
     pClassQueryBox = new RscClass( nId, RSC_QUERYBOX, pClassMessBox );
@@ -635,15 +565,12 @@ void RscTypCont::Init()
     pRoot->Insert( pClassQueryBox );
 }
 {
-    /********** S P L I T T E R ******************************************/
     pClassSplitter = InitClassSplitter( pClassWindow );
     pRoot->Insert( pClassSplitter );
 
-    /********** S P L I T W I N D O W ************************************/
     pClassSplitWindow = InitClassSplitWindow( pClassWindow );
     pRoot->Insert( pClassSplitWindow );
 
-    /********** S P I N B U T T O N **************************************/
     // Klasse anlegen
     nId = pHS->getID( "SpinButton" );
     pClassSpinButton = new RscClass( nId, RSC_SPINBUTTON, pClassControl );
@@ -664,21 +591,17 @@ void RscTypCont::Init()
     pRoot->Insert( pClassSpinButton );
 }
 {
-    /********** T I M E **************************************************/
     pClassTime = InitClassTime( pClassMgr );
     pRoot->Insert( pClassTime );
 
-    /********** D A T E **************************************************/
     pClassDate = InitClassDate( pClassMgr );
     pRoot->Insert( pClassDate );
 }
 {
-    /********** S P I N F I E L D ****************************************/
     pClassSpinField = InitClassSpinField( pClassEdit );
     pRoot->Insert( pClassSpinField );
 }
 {
-    /********** P A T T E R N F I E L D **********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassPatternFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
@@ -686,7 +609,6 @@ void RscTypCont::Init()
     pClassPatternField = InitClassPatternField( pClassTmp );
     pRoot->Insert( pClassPatternField );
     }
-    /********** N U M E R I C F I E L D **********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
@@ -694,7 +616,6 @@ void RscTypCont::Init()
     pClassNumericField = InitClassNumericField( pClassTmp );
     pRoot->Insert( pClassNumericField );
     }
-    /********** M E T R I C F I E L D ************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
@@ -704,7 +625,6 @@ void RscTypCont::Init()
     pClassMetricField = InitClassMetricField( pClassTmp );
     pRoot->Insert( pClassMetricField );
     }
-    /********** C U R R E N C Y F I E L D ********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
@@ -718,7 +638,6 @@ void RscTypCont::Init()
     pRoot->Insert( pClassLongCurrencyField );
 
     }
-    /********** D A T E F I E L D ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassDateFormatter( pClassSpinField, pClassDate );
     aBaseLst.push_back( pClassTmp );
@@ -726,7 +645,6 @@ void RscTypCont::Init()
     pClassDateField = InitClassDateField( pClassTmp, pClassDate );
     pRoot->Insert( pClassDateField );
     }
-    /********** T I M E F I E L D ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassSpinField, pClassTime,
                                                  pTimeFieldFormat );
@@ -735,7 +653,6 @@ void RscTypCont::Init()
     pClassTimeField = InitClassTimeField( pClassTmp, pClassTime );
     pRoot->Insert( pClassTimeField );
     }
-    /********** P A T T E R N B O X **************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassPatternFormatter( pClassComboBox );
     aBaseLst.push_back( pClassTmp );
@@ -743,7 +660,6 @@ void RscTypCont::Init()
     pClassPatternBox = InitClassPatternBox( pClassTmp );
     pRoot->Insert( pClassPatternBox );
     }
-    /********** N U M E R I C B O X **************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.push_back( pClassTmp );
@@ -753,7 +669,6 @@ void RscTypCont::Init()
     }
 }
 {
-    /********** M E T R I C B O X ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.push_back( pClassTmp );
@@ -763,7 +678,6 @@ void RscTypCont::Init()
     pClassMetricBox = InitClassMetricBox( pClassTmp );
     pRoot->Insert( pClassMetricBox );
     }
-    /********** C U R R E N C Y B O X ************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.push_back( pClassTmp );
@@ -776,7 +690,6 @@ void RscTypCont::Init()
     pClassLongCurrencyBox = InitClassCurrencyBox( "LongCurrencyBox", RSC_LONGCURRENCYBOX, pClassTmp );
     pRoot->Insert( pClassLongCurrencyBox );
     }
-    /********** D A T E B O X ********************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassDateFormatter( pClassComboBox, pClassDate );
     aBaseLst.push_back( pClassTmp );
@@ -784,7 +697,6 @@ void RscTypCont::Init()
     pClassDateBox = InitClassDateBox( pClassTmp );
     pRoot->Insert( pClassDateBox );
     }
-    /********** T I M E B O X ********************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassComboBox, pClassTime,
                                                  pTimeFieldFormat );
@@ -793,34 +705,27 @@ void RscTypCont::Init()
     pClassTimeBox = InitClassTimeBox( pClassTmp );
     pRoot->Insert( pClassTimeBox );
     }
-    /********** D O C K I N G W I N D O W ********************************/
     pClassDockingWindow = InitClassDockingWindow( pClassWindow, pMapUnit );
     pRoot->Insert( pClassDockingWindow );
 
-    /********** T O O L B O X I T E M ************************************/
     pClassToolBoxItem = InitClassToolBoxItem( pClassMgr, pClassBitmap,
                                               pClassImage, pTriState );
     pRoot->Insert( pClassToolBoxItem );
 
-    /********** T O O L B O X ********************************************/
     pClassToolBox = InitClassToolBox( pClassDockingWindow, pClassToolBoxItem,
                                       pClassImageList );
     pRoot->Insert( pClassToolBox );
 
-    /********** S T A T U S B A R ****************************************/
     pClassStatusBar = InitClassStatusBar( pClassWindow );
     pRoot->Insert( pClassStatusBar );
 
-    /********** M O R E B U T T O N **************************************/
     pClassMoreButton = InitClassMoreButton( pClassPushButton, pMapUnit );
     pRoot->Insert( pClassMoreButton );
 
-    /********** F L O A T W I N D O W ************************************/
     pClassFloatingWindow = InitClassFloatingWindow( pClassSystemWindow,
                                                     pMapUnit );
     pRoot->Insert( pClassFloatingWindow );
 
-    /********** T A B P A G E ********************************************/
     // Klasse anlegen
     nId = pHS->getID( "TabPage" );
     pClassTabPage =
@@ -829,7 +734,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassTabPage );
     pRoot->Insert( pClassTabPage );
 
-    /********** T A B D I A L O G ****************************************/
     // Klasse anlegen
     nId = pHS->getID( "TabDialog" );
     pClassTabDialog =
@@ -838,16 +742,13 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassTabDialog );
     pRoot->Insert( pClassTabDialog );
 
-    /********** T A B C O N T R O L I T E M *******************************/
     pClassTabControlItem = InitClassTabControlItem( pClassMgr );
     pRoot->Insert( pClassTabControlItem );
 
-    /********** T A B C O N T R O L **************************************/
     pClassTabControl = InitClassTabControl( pClassControl,
                                             pClassTabControlItem );
     pRoot->Insert( pClassTabControl );
 
-    /********** F I X E D L I N E ****************************************/
     // Klasse anlegen
     nId = pHS->getID( "FixedLine" );
     pClassFixedLine =
@@ -859,7 +760,6 @@ void RscTypCont::Init()
     aNmTb.Put( nId, CLASSNAME, pClassFixedLine );
     pRoot->Insert( pClassFixedLine );
 
-    /********** S C R O L L B A R B O X **********************************/
     // Klasse anlegen
     nId = pHS->getID( "ScrollBarBox" );
     pClassScrollBarBox =
@@ -869,19 +769,16 @@ void RscTypCont::Init()
     pRoot->Insert( pClassScrollBarBox );
     INS_WINBIT(pClassScrollBarBox,Sizeable)
 
-    /********** S F X S T Y L E F A M I L Y I T E M **********************/
     pClassSfxStyleFamilyItem = InitClassSfxStyleFamilyItem( pClassMgr,
                                                    pClassBitmap,
                                                    pClassImage,
                                                    pLangStringLongTupelList );
     pRoot->Insert( pClassSfxStyleFamilyItem );
 
-    /********** S F X T E M P L A T E D I A L O G ************************/
     pClassSfxTemplateDialog = InitClassSfxTemplateDialog( pClassMgr,
                                                   pClassSfxStyleFamilyItem );
     pRoot->Insert( pClassSfxTemplateDialog );
 
-    /********** S F X I N F O I T E M ************************************/
     pClassSfxSlotInfo = InitClassSfxSlotInfo( pClassMgr );
     pRoot->Insert( pClassSfxSlotInfo );
 }

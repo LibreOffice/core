@@ -17,39 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
 // Programmuebergreifende Includes.
 #include <rscdef.hxx>
 
-/****************** C o d e **********************************************/
-/****************** R s c I d ********************************************/
 sal_Bool RscId::bNames = sal_True;
 
-/*************************************************************************
-|*
-|*    static RscId::SetNames
-|*    static RscId::SetNoNames
-|*
-*************************************************************************/
 void RscId::SetNames( sal_Bool bSet )  { bNames = bSet;  }
 
-/*************************************************************************
-|*
-|*    RscId::GetNumber
-|*
-*************************************************************************/
 sal_Int32 RscId::GetNumber() const{
     sal_Int32 lVal;
     aExp.Evaluate( &lVal );
     return lVal;
 }
 
-/*************************************************************************
-|*
-|*    RscId::Create()
-|*
-*************************************************************************/
 void RscId::Create( const RscExpType & rExpType )
 {
     aExp = rExpType;
@@ -63,33 +44,18 @@ void RscId::Create( const RscExpType & rExpType )
     }
 }
 
-/*************************************************************************
-|*
-|*    RscId::Destroy()
-|*
-*************************************************************************/
 void RscId::Destroy(){
     if( aExp.IsDefinition() )
         aExp.aExp.pDef->DecRef();
     aExp.cType = RSCEXP_NOTHING;
 }
 
-/*************************************************************************
-|*
-|*    RscId::RscId()
-|*
-*************************************************************************/
 RscId::RscId( const RscId& rRscId ){
     aExp = rRscId.aExp;
     if( aExp.IsDefinition() )
         aExp.aExp.pDef->IncRef();
 }
 
-/*************************************************************************
-|*
-|*    RscId::RscId()
-|*
-*************************************************************************/
 RscId::RscId( RscDefine * pDef ){
     RscExpType aExpType;
 
@@ -98,11 +64,6 @@ RscId::RscId( RscDefine * pDef ){
     Create( aExpType );
 }
 
-/*************************************************************************
-|*
-|*    RscId:: =
-|*
-*************************************************************************/
 RscId& RscId::operator = ( const RscId& rRscId ){
     if( rRscId.aExp.IsDefinition() )
         rRscId.aExp.aExp.pDef->IncRef();
@@ -111,51 +72,26 @@ RscId& RscId::operator = ( const RscId& rRscId ){
     return *this;
 }
 
-/*************************************************************************
-|*
-|*    RscId::operator ==
-|*
-*************************************************************************/
 sal_Bool RscId::operator == ( const RscId& rRscId ) const
 {
     return( GetNumber() == rRscId.GetNumber() );
 }
 
-/*************************************************************************
-|*
-|*    RscId::operator <
-|*
-*************************************************************************/
 sal_Bool RscId::operator < ( const RscId& rRscId ) const
 {
     return( GetNumber() < rRscId.GetNumber() );
 }
 
-/*************************************************************************
-|*
-|*    RscId::operator >
-|*
-*************************************************************************/
 sal_Bool RscId::operator > ( const RscId& rRscId ) const
 {
     return( GetNumber() > rRscId.GetNumber() );
 }
 
-/*************************************************************************
-|*
-|*    RscId::sal_Int32()
-|*
-*************************************************************************/
 RscId::operator sal_Int32() const
 {
     return( GetNumber() );
 }
 
-/*************************************************************************
-|*
-|*    RscId::GetNames()
-|*
-*************************************************************************/
 rtl::OString RscId::GetName() const
 {
     rtl::OStringBuffer aStr;
@@ -171,12 +107,6 @@ rtl::OString RscId::GetName() const
     return aStr.makeStringAndClear();
 }
 
-/****************** R s c D e f i n e ************************************/
-/*************************************************************************
-|*
-|*    RscDefine::RscDefine()
-|*
-*************************************************************************/
 RscDefine::RscDefine( sal_uLong lKey, const rtl::OString& rDefName, sal_Int32 lDefId )
     : StringNode( rDefName )
 {
@@ -196,11 +126,6 @@ RscDefine::RscDefine( sal_uLong lKey, const rtl::OString& rDefName,
     pExp      = pExpression;
 }
 
-/*************************************************************************
-|*
-|*    RscDefine::~RscDefine()
-|*
-*************************************************************************/
 RscDefine::~RscDefine(){
     if( pExp )
         delete pExp;
@@ -208,11 +133,6 @@ RscDefine::~RscDefine(){
         RscExit( 14 );
 }
 
-/*************************************************************************
-|*
-|*    RscDefine::DecRef()
-|*
-*************************************************************************/
 void RscDefine::DecRef(){
     nRefCount--;
     if( 0 == nRefCount ){
@@ -220,11 +140,6 @@ void RscDefine::DecRef(){
     }
 }
 
-/*************************************************************************
-|*
-|*    RscDefine::DefineToNumber()
-|*
-*************************************************************************/
 void RscDefine::DefineToNumber()
 {
     if( pExp )
@@ -233,11 +148,6 @@ void RscDefine::DefineToNumber()
     SetName(rtl::OString::valueOf(lId));
 }
 
-/*************************************************************************
-|*
-|*    RscDefine::Evaluate()
-|*
-*************************************************************************/
 sal_Bool RscDefine::Evaluate(){
     sal_Bool    bRet = sal_True;
 
@@ -247,20 +157,10 @@ sal_Bool RscDefine::Evaluate(){
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*    RscDefine::Search()
-|*
-*************************************************************************/
 RscDefine * RscDefine::Search( const char * pStr ){
     return (RscDefine *)StringNode::Search( pStr );
 }
 
-/*************************************************************************
-|*
-|*    RscDefine::GetMacro()
-|*
-*************************************************************************/
 rtl::OString RscDefine::GetMacro()
 {
     if( pExp )
@@ -268,12 +168,6 @@ rtl::OString RscDefine::GetMacro()
     return rtl::OString::valueOf(lId);
 }
 
-/****************** R s c D e f i n e L i s t ****************************/
-/*************************************************************************
-|*
-|*    RscDefineList::New()
-|*
-*************************************************************************/
 RscDefine * RscDefineList::New( sal_uLong lFileKey, const rtl::OString& rDefName,
                                 sal_Int32 lDefId, size_t lPos )
 {
@@ -320,11 +214,6 @@ sal_Bool RscDefineList::Remove() {
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscDefineList::WriteAll()
-|*
-*************************************************************************/
 void RscDefineList::WriteAll( FILE * fOutput )
 {
     for ( size_t i = 0, n = maList.size(); i < n; ++i ) {
@@ -336,12 +225,6 @@ void RscDefineList::WriteAll( FILE * fOutput )
     };
 }
 
-/****************** R s c E x p T y p e **********************************/
-/*************************************************************************
-|*
-|*    RscExpType::Evaluate()
-|*
-*************************************************************************/
 sal_Bool RscExpType::Evaluate( sal_Int32 * plValue ) const{
     if( IsDefinition() ){
         aExp.pDef->Evaluate();
@@ -369,12 +252,6 @@ void RscExpType::AppendMacro(rtl::OStringBuffer& rStr) const
 }
 
 
-/****************** R s c E x p r e s s i o n ****************************/
-/*************************************************************************
-|*
-|*    RscExpression::RscExpression()
-|*
-*************************************************************************/
 RscExpression::RscExpression( RscExpType aLE, char cOp, RscExpType aRE )
 {
     aLeftExp   = aLE;
@@ -386,11 +263,6 @@ RscExpression::RscExpression( RscExpType aLE, char cOp, RscExpType aRE )
         aRightExp.aExp.pDef->IncRef();
 }
 
-/*************************************************************************
-|*
-|*    RscExpression::~RscExpression()
-|*
-*************************************************************************/
 RscExpression::~RscExpression(){
     if( aLeftExp.IsDefinition() )
         aLeftExp.aExp.pDef->DecRef();
@@ -403,11 +275,6 @@ RscExpression::~RscExpression(){
         delete aRightExp.aExp.pExp;
 }
 
-/*************************************************************************
-|*
-|*    RscExpression::Evaluate()
-|*
-*************************************************************************/
 sal_Bool RscExpression::Evaluate( sal_Int32 * plValue ){
     sal_Int32 lLeft;
     sal_Int32 lRight;
@@ -438,11 +305,6 @@ sal_Bool RscExpression::Evaluate( sal_Int32 * plValue ){
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    RscExpression::GetMacro()
-|*
-*************************************************************************/
 rtl::OString RscExpression::GetMacro()
 {
     rtl::OStringBuffer aLeft;
@@ -479,12 +341,6 @@ rtl::OString RscExpression::GetMacro()
     return aLeft.makeStringAndClear();
 }
 
-/****************** R s c F i l e ****************************************/
-/*************************************************************************
-|*
-|*    RscFile::RscFile()
-|*
-*************************************************************************/
 RscFile :: RscFile(){
     bLoaded  = sal_False;
     bIncFile = sal_False;
@@ -492,11 +348,6 @@ RscFile :: RscFile(){
     bScanned = sal_False;
 }
 
-/*************************************************************************
-|*
-|*    RscFile::~RscFile()
-|*
-*************************************************************************/
 RscFile :: ~RscFile() {
     for ( size_t i = 0, n = aDepLst.size(); i < n; ++i )
         delete aDepLst[ i ];
@@ -507,15 +358,6 @@ RscFile :: ~RscFile() {
     while( aDefLst.Remove() ) ;
 }
 
-/*************************************************************************
-|*
-|*    RscFile::Depend()
-|*
-|*    Beschreibung      Diese Methode gibt sal_True zurueck, wenn lDepend
-|*                      existiert und hinter lFree steht, oder wenn
-|*                      lDepend nicht existiert.
-|*
-*************************************************************************/
 sal_Bool RscFile::Depend( sal_uLong lDepend, sal_uLong lFree ){
     RscDepend * pDep;
 
@@ -535,11 +377,6 @@ sal_Bool RscFile::Depend( sal_uLong lDepend, sal_uLong lFree ){
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscFile::InsertDependFile()
-|*
-*************************************************************************/
 sal_Bool RscFile :: InsertDependFile( sal_uLong lIncFile, size_t lPos )
 {
     for ( size_t i = 0, n = aDepLst.size(); i < n; ++i )
@@ -562,21 +399,10 @@ sal_Bool RscFile :: InsertDependFile( sal_uLong lIncFile, size_t lPos )
     return sal_True;
 }
 
-/****************** R s c D e f T r e e **********************************/
-/*************************************************************************
-|*
-|*    RscDefTree::~RscDefTree()
-|*
-*************************************************************************/
 RscDefTree::~RscDefTree(){
     Remove();
 }
 
-/*************************************************************************
-|*
-|*    RscDefTree::Remove()
-|*
-*************************************************************************/
 void RscDefTree::Remove(){
     RscDefine * pDef;
     while( pDefRoot ){
@@ -586,22 +412,12 @@ void RscDefTree::Remove(){
     }
 }
 
-/*************************************************************************
-|*
-|*    RscDefTree::~Search()
-|*
-*************************************************************************/
 RscDefine * RscDefTree::Search( const char * pName ){
     if( pDefRoot )
         return pDefRoot->Search( pName );
     return NULL;
 }
 
-/*************************************************************************
-|*
-|*    RscDefTree::Insert()
-|*
-*************************************************************************/
 void RscDefTree::Insert( RscDefine * pDef ){
     if( pDefRoot )
         pDefRoot->Insert( pDef );
@@ -610,11 +426,6 @@ void RscDefTree::Insert( RscDefine * pDef ){
     pDef->IncRef();
 }
 
-/*************************************************************************
-|*
-|*    RscDefTree::Remove()
-|*
-*************************************************************************/
 void RscDefTree::Remove( RscDefine * pDef ){
     if( pDefRoot ){
         //falls pDef == pDefRoot
@@ -623,11 +434,6 @@ void RscDefTree::Remove( RscDefine * pDef ){
     pDef->DecRef();
 }
 
-/*************************************************************************
-|*
-|*    RscDefTree::Evaluate()
-|*
-*************************************************************************/
 sal_Bool RscDefTree::Evaluate( RscDefine * pDef ){
     if( pDef ){
         if( !Evaluate( (RscDefine *)pDef->Left() ) )
@@ -638,20 +444,9 @@ sal_Bool RscDefTree::Evaluate( RscDefine * pDef ){
     return sal_True;
 }
 
-/****************** R s c F i l e T a b **********************************/
-/*************************************************************************
-|*
-|*    RscFileTab::RscFileTab()
-|*
-*************************************************************************/
 RscFileTab::RscFileTab(){
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::~RscFileTab()
-|*
-*************************************************************************/
 RscFileTab :: ~RscFileTab(){
 
     aDefTree.Remove();
@@ -663,11 +458,6 @@ RscFileTab :: ~RscFileTab(){
     };
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::Find()
-|*
-*************************************************************************/
 sal_uLong  RscFileTab :: Find( const rtl::OString& rName )
 {
     sal_uIntPtr aIndex = FirstIndex();
@@ -680,20 +470,12 @@ sal_uLong  RscFileTab :: Find( const rtl::OString& rName )
         return NOFILE_INDEX;
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::FindDef()
-|*
-*************************************************************************/
 RscDefine * RscFileTab::FindDef( const char * pName ){
     return aDefTree.Search( pName );
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::Depend()
-|*
-*************************************************************************/
+/* This method gives back sal_True when lDepend
+   exists and is behind lFree, or when lDepend does not exist. */
 sal_Bool RscFileTab::Depend( sal_uLong lDepend, sal_uLong lFree ){
     if( lDepend == lFree )
         return sal_True;
@@ -711,11 +493,6 @@ sal_Bool RscFileTab::Depend( sal_uLong lDepend, sal_uLong lFree ){
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::TestDef()
-|*
-*************************************************************************/
 sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
                           const RscDefine * pDefDec )
 {
@@ -731,11 +508,6 @@ sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
     return TestDef( lFileKey, lPos, pDefDec->pExp );
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::TestDef()
-|*
-*************************************************************************/
 sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
                           const RscExpression * pExpDec )
 {
@@ -761,11 +533,6 @@ sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::NewDef()
-|*
-*************************************************************************/
 RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName,
                                 sal_Int32 lId, sal_uLong lPos )
 {
@@ -785,11 +552,6 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName
     return( pDef );
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::NewDef()
-|*
-*************************************************************************/
 RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName,
                                 RscExpression * pExp, sal_uLong lPos )
 {
@@ -817,11 +579,6 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName
     return( pDef );
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::DeleteFileContext()
-|*
-*************************************************************************/
 void RscFileTab :: DeleteFileContext( sal_uLong lFileKey ){
     RscFile     * pFName;
 
@@ -837,11 +594,6 @@ void RscFileTab :: DeleteFileContext( sal_uLong lFileKey ){
     }
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::NewCodeFile()
-|*
-*************************************************************************/
 sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
 {
     sal_uLong lKey = Find( rName );
@@ -856,11 +608,6 @@ sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
     return lKey;
 }
 
-/*************************************************************************
-|*
-|*    RscFileTab::NewIncFile()
-|*
-*************************************************************************/
 sal_uLong  RscFileTab :: NewIncFile(const rtl::OString& rName,
     const rtl::OString& rPath)
 {

@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 
-// Programmabhaengige Includes.
 #include <rscall.h>
 #include <rsckey.hxx>
 

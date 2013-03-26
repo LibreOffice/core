@@ -17,27 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-// Programmabhaengige Includes.
 #include <rscdb.hxx>
 #include <rscclass.hxx>
 
 #include <tools/rcid.h>
 #include <tools/rc.h>
 
-/****************** C O D E **********************************************/
-/****************** R s c C l a s s **************************************/
-/*************************************************************************
-|*
-|*    RscClass::RscClass()
-|*
-*************************************************************************/
 RscClass::RscClass( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
     : RscTop( nId, nTypeId, pSuperCl )
 {
@@ -47,11 +37,6 @@ RscClass::RscClass( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
     nSize = nSuperSize + ALIGNED_SIZE( sizeof( RscClassInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::Pre_dtor()
-|*
-*************************************************************************/
 void RscClass::Pre_dtor()
 {
     sal_uInt32  i;
@@ -71,32 +56,17 @@ void RscClass::Pre_dtor()
     };
 }
 
-/*************************************************************************
-|*
-|*    RscClass::~RscClass()
-|*
-*************************************************************************/
 RscClass::~RscClass()
 {
     if( pVarTypeList )
         rtl_freeMemory( (void *)pVarTypeList );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::GetClassType()
-|*
-*************************************************************************/
 RSCCLASS_TYPE RscClass::GetClassType() const
 {
     return RSCCLASS_COMPLEX;
 }
 
-/*************************************************************************
-|*
-|*    RscClass::GetInstData()
-|*
-*************************************************************************/
 RSCINST RscClass::GetInstData
 (
     CLASS_DATA pData,
@@ -142,13 +112,6 @@ RSCINST RscClass::GetInstData
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::GetInstDflt()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 CLASS_DATA RscClass::GetDfltData( sal_uInt32 nEle )
 {
     if( pVarTypeList[ nEle ].pDefault )
@@ -157,11 +120,6 @@ CLASS_DATA RscClass::GetDfltData( sal_uInt32 nEle )
     return pVarTypeList[ nEle ].pClass->GetDefault().pData;
 }
 
-/*************************************************************************
-|*
-|*    RscClass::SetVarDflt()
-|*
-*************************************************************************/
 void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, sal_Bool bSet )
 {
     RscClassInst * pClass;
@@ -173,11 +131,6 @@ void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, sal_Bool bSet )
         pClass->nVarDflt &= ~((sal_uLong)1 << nEle);
 }
 
-/*************************************************************************
-|*
-|*    RscClass::IsDflt()
-|*
-*************************************************************************/
 sal_Bool RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
 {
     RscClassInst *  pClass;
@@ -191,11 +144,6 @@ sal_Bool RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*    RscClass::Create()
-|*
-*************************************************************************/
 RSCINST RscClass::Create
 (
     RSCINST * pInst,
@@ -260,13 +208,6 @@ RSCINST RscClass::Create
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::Destroy()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void RscClass::Destroy( const RSCINST & rInst )
 {
     sal_uInt32  i;
@@ -294,13 +235,6 @@ void RscClass::Destroy( const RSCINST & rInst )
     };
 }
 
-/*************************************************************************
-|*
-|*    RscClass::SetVariable()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 ERRTYPE RscClass::SetVariable
 (
     Atom nVarName,
@@ -356,13 +290,6 @@ ERRTYPE RscClass::SetVariable
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::EnumVariable()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void RscClass::EnumVariables( void * pData, VarEnumCallbackProc pProc )
 {
     sal_uInt32 i;
@@ -376,13 +303,6 @@ void RscClass::EnumVariables( void * pData, VarEnumCallbackProc pProc )
     }
 }
 
-/*************************************************************************
-|*
-|*    RscClass::GetVariable()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 RSCINST RscClass::GetVariable
 (
     const RSCINST & rInst,
@@ -456,13 +376,6 @@ RSCINST RscClass::GetVariable
                                 bInitDflt, pCreateClass ) );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::GetCopyVar()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 RSCINST RscClass::GetCopyVar
 (
     const RSCINST & rInst,
@@ -500,13 +413,6 @@ RSCINST RscClass::GetCopyVar
     return RscTop::GetCopyVar( rInst, nVarName );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::IsConsistent()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 sal_Bool RscClass::IsConsistent( const RSCINST & rInst )
 {
     sal_uInt32  i = 0;
@@ -530,13 +436,6 @@ sal_Bool RscClass::IsConsistent( const RSCINST & rInst )
     return( bRet );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::SetToDefault()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void RscClass::SetToDefault( const RSCINST & rInst )
 {
     sal_uInt32  i;
@@ -561,13 +460,6 @@ void RscClass::SetToDefault( const RSCINST & rInst )
     RscTop::SetToDefault( rInst );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::IsDefault()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 sal_Bool RscClass::IsDefault( const RSCINST & rInst )
 {
     sal_uInt32  i;
@@ -585,13 +477,6 @@ sal_Bool RscClass::IsDefault( const RSCINST & rInst )
     return( RscTop::IsDefault( rInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::GetDefault()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 RSCINST RscClass::GetDefault( Atom nVarId )
 {
     sal_uInt32  i;
@@ -611,13 +496,6 @@ RSCINST RscClass::GetDefault( Atom nVarId )
     return( RscTop::GetDefault( nVarId ) );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::IsValueDflt()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 sal_Bool RscClass::IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle )
 {
     RSCINST aTmpI;
@@ -638,13 +516,6 @@ sal_Bool RscClass::IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscClass::IsValueDefault()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 sal_Bool RscClass::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     RSCINST aTmpI;
@@ -679,13 +550,6 @@ sal_Bool RscClass::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    RscClass::SetDefault()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void RscClass::SetDefault( const RSCINST & rInst, Atom nVarName )
 {
     sal_uInt32  i = 0;
@@ -710,13 +574,6 @@ void RscClass::SetDefault( const RSCINST & rInst, Atom nVarName )
 }
 
 
-/*************************************************************************
-|*
-|*    RscClass::WriteSrc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void RscClass::WriteSrc
 (
     const RSCINST & rInst,
@@ -798,13 +655,6 @@ void RscClass::WriteSrc
     return;
 }
 
-/*************************************************************************
-|*
-|*    RscClass::WriteInstRc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 sal_Int32 RscClass::GetCorrectValues
 (
     const RSCINST & rInst,
@@ -925,13 +775,6 @@ ERRTYPE RscClass::WriteInstRc
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::WriteRc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 ERRTYPE RscClass::WriteRc
 (
     const RSCINST & rInst,
@@ -950,113 +793,10 @@ ERRTYPE RscClass::WriteRc
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscClass::WriteSyntax()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-void RscClass::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
-{
-    RscTop::WriteSyntax( fOutput, pTC );
-
-    sal_uInt32 i;
-    // Wenn eine Variable Maskierung hat, dann Maskenfeld
-    fprintf( fOutput, "\t//%s\n", pHS->getString( GetId() ).getStr() );
-    for( i = 0; i < nEntries; i++ )
-    {
-        fprintf( fOutput, "\t%s", pHS->getString( pVarTypeList[ i ].nVarName ).getStr() );
-        sal_uInt32 n = strlen( pHS->getString( pVarTypeList[ i ].nVarName ).getStr() );
-        while( n < 20 )
-        {
-            putc( ' ', fOutput );
-            n++;
-        }
-        fprintf( fOutput, " = %s;\n",
-                pHS->getString( pVarTypeList[ i ].pClass->GetId() ).getStr() );
-    };
-}
-
-//==================================================================
-void RscClass::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * /*pTC*/,
-    const char * pName
-)
-{
-    fprintf( fOutput, "\t\tSet%s( %s ", pName, pHS->getString( GetId() ).getStr() );
-    fprintf( fOutput, "%s ", aCallPar2.getStr() );
-    fprintf( fOutput, "ResId( (RSHEADER_TYPE*)(pResData+nOffset) ) ) );\n" );
-    fprintf( fOutput, "\t\tnOffset += GetObjSizeRes( (RSHEADER_TYPE*)(pResData+nOffset) );\n" );
-}
-
-//==================================================================
-void RscClass::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
-{
-    if( GetId() != InvalidAtom )
-    {
-        // Konstruktor
-        fprintf( fOutput, "%s::%s%s bFreeResource )",
-                pHS->getString( GetId() ).getStr(),
-                pHS->getString( GetId() ).getStr(),
-                aCallParType.getStr() );
-        if( GetSuperClass() )
-        {
-            // Superaufruf
-            fprintf( fOutput, "\n\t: %s", pHS->getString( GetSuperClass()->GetId() ).getStr() );
-            fprintf( fOutput, "%s", GetSuperClass()->aCallPar1.getStr() );
-            fprintf( fOutput, " rResId.SetRT2( 0x%lx ) )",
-                     sal::static_int_cast< unsigned long >(GetTypId()) );
-        }
-        fprintf( fOutput, "\n{\n" );
-        fprintf( fOutput, "\tsal_uInt32\tnObjMask;\n" );
-        fprintf( fOutput, "\tsal_uInt32\tnOffset = 0;\n" );
-        fprintf( fOutput, "\tBYTE *\tpResData;\n\n" );
-        fprintf( fOutput, "\tpResData = (tBYTE *)GetClassRes();\n\n" );
-        fprintf( fOutput, "\tnObjMask = *(sal_uInt32*)pResData;\n" );
-        fprintf( fOutput, "\tnOffset += 4;\n\n" );
-
-        for( sal_uInt32 i = 0; i < nEntries; i++ )
-        {
-            if( !((VAR_NODATAINST | VAR_NORC) & pVarTypeList[ i ].nVarType ))
-            {
-                fprintf( fOutput, "\tif( nObjMask & 0x%lx )\n\t{\n",
-                         sal::static_int_cast< unsigned long >(
-                             pVarTypeList[ i ].nMask) );
-
-                pVarTypeList[ i ].pClass->WriteRcAccess( fOutput, pTC,
-                                    pHS->getString( pVarTypeList[ i ].nVarName ).getStr() );
-
-                fprintf( fOutput, "\t}\n" );
-            }
-        }
-        fprintf( fOutput, "\tIncrementRes( nOffset );\n" );
-        fprintf( fOutput, "\tif( bFreeResource )\n" );
-        fprintf( fOutput, "\t\tFreeResource();\n" );
-        fprintf( fOutput, "}\n\n" );
-    }
-}
-
-/*************************************************************************
-|*
-|*    RscSysDepend::RscSysDepend()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 RscSysDepend::RscSysDepend( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
             : RscClass( nId, nTypeId, pSuper )
 {}
 
-/*************************************************************************
-|*
-|*    RscSysDepend::WriteRc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem,
                 RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra, sal_Bool bFirst )
 {
@@ -1091,13 +831,6 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscSysDepend::WriteRc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                             RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
@@ -1109,24 +842,10 @@ ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-/*************************************************************************
-|*
-|*    RscTupel::RscTupel()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 RscTupel::RscTupel( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
     : RscClass( nId, nTypeId, pSuper )
 {}
 
-/*************************************************************************
-|*
-|*    RscTupel::GetTupelVar()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 RSCINST RscTupel::GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RSCINST & rInitInst )
 {
@@ -1138,13 +857,6 @@ RSCINST RscTupel::GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
         return GetVariable( rInst, pVarTypeList[ nPos ].nVarName, rInitInst );
 }
 
-/*************************************************************************
-|*
-|*    RscTupel::WriteSrc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void RscTupel::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont * pTC, sal_uInt32 nTab,
                          const char * pVarName )

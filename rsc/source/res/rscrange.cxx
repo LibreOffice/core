@@ -17,27 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-// Solar Definitionen
-#include <tools/solar.h>
-
-// Programmabh�ngige Includes.
 #include <rscrange.hxx>
 
-/****************** D E F I N E S ****************************************/
-/****************** C O D E **********************************************/
-/****************** R s c R a n g e **************************************/
-/*************************************************************************
-|*
-|*    RscRange::RscRange()
-|*
-*************************************************************************/
 RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
                         : RscTop( nId, nTypeId )
 {
@@ -45,21 +31,11 @@ RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
     nSize = ALIGNED_SIZE( sizeof( RscRangeInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscRange::GetClassType()
-|*
-*************************************************************************/
 RSCCLASS_TYPE RscRange::GetClassType() const
 {
     return RSCCLASS_NUMBER;
 }
 
-/*************************************************************************
-|*
-|*    RscRange::SetRange()
-|*
-*************************************************************************/
 ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 {
     if( nMinimum > nMaximum )
@@ -76,11 +52,6 @@ ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscRange::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     if( pDef )
@@ -95,11 +66,6 @@ sal_Bool RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    RscRange::SetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
@@ -109,22 +75,12 @@ ERRTYPE RscRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscRange::GetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 {
     *pN = ((RscRangeInst *)rInst.pData)->nValue + nMin;
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscRange::Create()
-|*
-*************************************************************************/
 RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
                             sal_Bool bOwnClass )
 {
@@ -155,22 +111,12 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscRange::WriteSrc()
-|*
-*************************************************************************/
 void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, sal_uInt32, const char * )
 {
     fprintf( fOutput, "%ld", long( ((RscRangeInst *)rInst.pData)->nValue + nMin ) );
 }
 
-/*************************************************************************
-|*
-|*    RscRange::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                            RscTypCont *, sal_uInt32, sal_Bool )
 {
@@ -190,28 +136,6 @@ ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return( ERR_OK );
 }
 
-//=======================================================================
-void RscRange::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * /*pTC*/,
-    const char * pName
-)
-{
-    fprintf( fOutput, "\t\tSet%s( ", pName );
-    if( nMin >= 0 )
-        fprintf( fOutput, "*(sal_uInt32 *)(pResData+nOffset) );\n" );
-    else
-        fprintf( fOutput, "*(sal_Int32 *)(pResData+nOffset) );\n" );
-    fprintf( fOutput, "\t\tnOffset += sizeof( sal_uInt32 );\n" );
-}
-
-/****************** R s c L o n g R a n g e ******************************/
-/*************************************************************************
-|*
-|*    RscLongRange::RscLongRange()
-|*
-*************************************************************************/
 RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
                         : RscTop( nId, nTypeId )
 {
@@ -219,21 +143,11 @@ RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
     nSize = ALIGNED_SIZE( sizeof( RscLongRangeInst ) );
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::GetClassType()
-|*
-*************************************************************************/
 RSCCLASS_TYPE RscLongRange::GetClassType() const
 {
     return RSCCLASS_NUMBER;
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::SetRange()
-|*
-*************************************************************************/
 ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 {
     if( nMinimum > nMaximum )
@@ -250,11 +164,6 @@ ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     if( pDef )
@@ -265,11 +174,6 @@ sal_Bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::SetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
@@ -280,11 +184,6 @@ ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::GetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 {
     memmove( pN, &((RscLongRangeInst*)rInst.pData)->nValue,
@@ -292,11 +191,6 @@ ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::Create()
-|*
-*************************************************************************/
 RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
                               sal_Bool bOwnClass )
 {
@@ -330,11 +224,6 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::WriteSrc()
-|*
-*************************************************************************/
 void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, sal_uInt32, const char * )
 {
@@ -343,11 +232,6 @@ void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     fprintf( fOutput, "%d", static_cast<int>(lVal) );
 }
 
-/*************************************************************************
-|*
-|*    RscLongRange::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                                RscTypCont *, sal_uInt32, sal_Bool )
 {
@@ -359,47 +243,17 @@ ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return( ERR_OK );
 }
 
-//=======================================================================
-void RscLongRange::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * /*pTC*/,
-    const char * pName
-)
-{
-    fprintf( fOutput, "\t\tSet%s( ", pName );
-    fprintf( fOutput, "GetLong( pResData+nOffset ) );\n" );
-    fprintf( fOutput, "\t\tnOffset += sizeof( sal_Int32 );\n" );
-}
-
-/****************** R s c L o n g E n u m R a n g e *********************/
-/*************************************************************************
-|*    RscLongEnumRange::RscLongEnumRange()
-|*
-|*    Beschreibung
-*************************************************************************/
 RscLongEnumRange::RscLongEnumRange( Atom nId, sal_uInt32 nTypeId )
                         : RscLongRange( nId, nTypeId )
 {
 }
 
-/*************************************************************************
-|*    RscLongEnumRange::SetConst()
-|*
-|*    Beschreibung
-*************************************************************************/
 ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom /*nConst*/,
                                     sal_Int32 nValue )
 {
     return SetNumber( rInst, nValue );
 }
 
-/****************** R s c I d R a n g e **********************************/
-/*************************************************************************
-|*
-|*    RscIdRange::RscIdRange()
-|*
-*************************************************************************/
 RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
             : RscTop( nId, nTypeId )
 {
@@ -407,21 +261,11 @@ RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
     nMin = nMax = 0;
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::RscIdRange()
-|*
-*************************************************************************/
 RSCCLASS_TYPE RscIdRange::GetClassType() const
 {
     return RSCCLASS_NUMBER;
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::Create()
-|*
-*************************************************************************/
 RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
     RSCINST aInst;
     RscId * pClassData;
@@ -455,20 +299,10 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOw
     return( aInst );
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::Destroy()
-|*
-*************************************************************************/
 void RscIdRange :: Destroy( const RSCINST & rInst ){
     ((RscId *)rInst.pData)->Destroy();
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::IsValueDefault()
-|*
-*************************************************************************/
 sal_Bool RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( pDef ){
         if( ((RscId*)rInst.pData)->aExp.IsNumber()
@@ -485,11 +319,6 @@ sal_Bool RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::SetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
@@ -500,21 +329,11 @@ ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::GetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, sal_Int32 * plValue ){
     *plValue = ((RscId *)rInst.pData)->GetNumber();
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::SetRef()
-|*
-*************************************************************************/
 ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId ){
     ERRTYPE aError;
     if( rRscId.IsId() ){
@@ -530,33 +349,18 @@ ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId ){
     return( aError );
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::GetRef()
-|*
-*************************************************************************/
 ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId ){
     *pRscId = *(RscId *)rInst.pData;
 
     return( ERR_OK );
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::WriteSrc()
-|*
-*************************************************************************/
 void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                            RscTypCont *, sal_uInt32, const char * )
 {
     fprintf( fOutput, "%s", ((RscId *)rInst.pData)->GetName().getStr() );
 }
 
-/*************************************************************************
-|*
-|*    RscIdRange::WriteRc()
-|*
-*************************************************************************/
 ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont *, sal_uInt32, sal_Bool )
 {
@@ -567,24 +371,6 @@ ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return( ERR_OK );
 }
 
-//=======================================================================
-void RscIdRange::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * /*pTC*/,
-    const char * pName
-)
-{
-    fprintf( fOutput, "\t\tSet%s( ", pName );
-    fprintf( fOutput, "GetLong( pResData+nOffset ) );\n" );
-    fprintf( fOutput, "\t\tnOffset += sizeof( sal_Int32 );\n" );
-}
-
-/*************************************************************************
-|*
-|*    RscIdRange::IsConsistent()
-|*
-*************************************************************************/
 sal_Bool RscIdRange::IsConsistent( const RSCINST & rInst )
 {
     long nValue = ((RscId *)rInst.pData)->GetNumber();
@@ -595,33 +381,17 @@ sal_Bool RscIdRange::IsConsistent( const RSCINST & rInst )
     }
 }
 
-/****************** R s c B o o l ****************************************/
-/*************************************************************************
-|*
-|*    RscBool::RscBool()
-|*
-*************************************************************************/
 RscBool::RscBool( Atom nId, sal_uInt32 nTypeId )
         : RscRange( nId, nTypeId )
 {
     RscRange::SetRange( 0, 1 );
 }
 
-/*************************************************************************
-|*
-|*    RscBool::GetClassType()
-|*
-*************************************************************************/
 RSCCLASS_TYPE  RscBool::GetClassType() const
 {
     return RSCCLASS_BOOL;
 }
 
-/*************************************************************************
-|*
-|*    RscBool::WriteSrc()
-|*
-*************************************************************************/
 void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                         RscTypCont *, sal_uInt32, const char * )
 {
@@ -634,36 +404,12 @@ void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         fprintf( fOutput, "FALSE" );
 }
 
-//=======================================================================
-void RscBool::WriteRcAccess
-(
-    FILE * fOutput,
-    RscTypCont * /*pTC*/,
-    const char * pName
-)
-{
-    fprintf( fOutput, "\t\tSet%s( ", pName );
-    fprintf( fOutput, "(sal_Bool)*(short *)(pResData+nOffset) );\n" );
-    fprintf( fOutput, "\t\tnOffset += sizeof( short );\n" );
-}
-
-/****************** R s c B r e a k R a n g e ****************************/
-/*************************************************************************
-|*
-|*    RscBreakRange::SetNumber()
-|*
-*************************************************************************/
 RscBreakRange :: RscBreakRange( Atom nId, sal_uInt32 nTypeId )
                         : RscRange( nId, nTypeId )
 {
     nOutRange = 0xFFFFFFFF;
 }
 
-/*************************************************************************
-|*
-|*    RscBreakRange::SetNumber()
-|*
-*************************************************************************/
 ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue ){
     if( nValue == nOutRange )
         return( ERR_RSCRANGE_OUTDEFSET );
@@ -671,11 +417,6 @@ ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue ){
         return( RscRange::SetNumber( rInst, nValue ) );
 }
 
-/*************************************************************************
-|*
-|*    RscBreakRange::Create()
-|*
-*************************************************************************/
 RSCINST RscBreakRange::Create( RSCINST * pInst, const RSCINST & rDflt,
                                sal_Bool bOwnClass )
 {

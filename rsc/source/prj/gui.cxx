@@ -23,16 +23,9 @@
 #include <rscrsc.hxx>
 #include <rscdb.hxx>
 
-/*************** G l o b a l e   V a r i a b l e n **********************/
 static RscCompiler * pRscCompiler = NULL;
-/****************************************************************/
-/*                                                              */
-/*  Function    :   ExitProgram()                               */
-/*                                                              */
-/*  Description :   Gibt die Temporaeren Dateien frei.          */
-/****************************************************************/
 #if defined( UNX ) || defined ( __GNUC__ ) || defined(__MINGW32__)
-        void ExitProgram( void ){
+    void ExitProgram( void ){
 #else
     void cdecl ExitProgram( void ){
 #endif

@@ -55,14 +55,6 @@ public:
                                    sal_uInt32, sal_Bool bExtra );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    ERRTYPE         WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, const RscId & rId );
-    ERRTYPE         WriteHxx( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, const RscId & rId );
-    ERRTYPE         WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
-                                    RscTypCont * pTC, const RscId & rId );
-    ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, const RscId & rId );
     sal_Bool        IsConsistent( const RSCINST & rInst );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );

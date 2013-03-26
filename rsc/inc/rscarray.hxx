@@ -25,7 +25,6 @@
 
 class RscEnum;
 
-/******************* R s c A r r a y ************************************/
 class RscInstNode : public IdNode
 {
     sal_uInt32  nTypeId;
@@ -96,8 +95,6 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
 };
 
 class RscClassArray : public RscArray

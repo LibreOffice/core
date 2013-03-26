@@ -54,7 +54,6 @@ const char* StringContainer::putString( const char* pString )
     return aInsert.first->getStr();
 }
 
-/*************************************************************************/
 int             c;
 sal_Bool            bLastInclude;// War letztes Symbol INCLUDE
 RscFileInst*    pFI;
@@ -69,7 +68,6 @@ sal_Bool bTargetDefined;
 StringContainer* pStringContainer = NULL;
 
 
-/****************** C O D E **********************************************/
 sal_uInt32 GetNumber(){
     sal_uInt32  l = 0;
     sal_uInt32  nLog = 10;
@@ -307,7 +305,6 @@ int yylex()
     return( aKeyVal[ 0 ].nKeyWord );
 }
 
-/****************** yyerror **********************************************/
 #ifdef RS6000
 extern "C" void yyerror( char* pMessage )
 #elif defined SOLARIS
@@ -319,7 +316,6 @@ void yyerror( char* pMessage )
     pTC->pEH->Error( ERR_YACC, NULL, RscId(), pMessage );
 }
 
-/****************** parser start function ********************************/
 void InitParser( RscFileInst * pFileInst )
 {
     pTC = pFileInst->pTypCont;          // Datenkontainer setzten

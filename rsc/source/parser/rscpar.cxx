@@ -17,19 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
-// C and C++ Includes.
 #include <string.h>
 #include <rscpar.hxx>
 #include <rscdb.hxx>
 
-/****************** R s c F i l e I n s t ********************************/
-/****************** C O D E **********************************************/
-/*************************************************************************
-|*
-|*    RscFileInst::Init()
-|*
-*************************************************************************/
 void RscFileInst::Init()
 {
     nLineNo = 0;
@@ -41,11 +32,6 @@ void RscFileInst::Init()
     bEof = sal_False;
 };
 
-/*************************************************************************
-|*
-|*    RscFileInst::RscFileInst()
-|*
-*************************************************************************/
 RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
                           sal_uLong lFIndex, FILE * fFile )
 {
@@ -61,11 +47,6 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
     pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
 
-/*************************************************************************
-|*
-|*    RscFileInst::~RscFileInst()
-|*
-*************************************************************************/
 RscFileInst::~RscFileInst(){
     if( pInput )
         rtl_freeMemory( pInput );
@@ -73,11 +54,6 @@ RscFileInst::~RscFileInst(){
         rtl_freeMemory( pLine );
 }
 
-/*************************************************************************
-|*
-|*    RscFileInst::GetChar()
-|*
-*************************************************************************/
 int RscFileInst::GetChar()
 {
     if( pLine[ nScanPos ] )
@@ -95,11 +71,6 @@ int RscFileInst::GetChar()
     }
 }
 
-/*************************************************************************
-|*
-|*    RscFileInst::GetNewLine()
-|*
-*************************************************************************/
 void RscFileInst::GetNewLine()
 {
     nLineNo++;
@@ -172,11 +143,6 @@ END:
     }
 }
 
-/*************************************************************************
-|*
-|*    RscFileInst::SetError()
-|*
-*************************************************************************/
 void RscFileInst::SetError( ERRTYPE aError )
 {
     if( aError.IsOk() )

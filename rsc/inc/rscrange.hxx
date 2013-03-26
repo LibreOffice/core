@@ -24,7 +24,6 @@
 #include <rschash.hxx>
 #include <rsctop.hxx>
 
-/******************* R s c R a n g e *************************************/
 class RscRange : public RscTop
 {
 protected:
@@ -60,11 +59,8 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
 };
 
-/******************* R s c L o n g R a n g e ******************************/
 class RscLongRange : public RscTop
 {
 protected:
@@ -101,12 +97,9 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
 
 };
 
-/******************* R s c L o n g E n u m R a n g e ******************/
 class RscLongEnumRange : public RscLongRange
 {
 public:
@@ -116,7 +109,6 @@ public:
                               sal_Int32 nValue );
 };
 
-/******************* R s c I d R a n g e ***********************************/
 class RscIdRange : public RscTop
 {
     sal_uInt32  nSize;
@@ -156,12 +148,8 @@ public:
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
     sal_Bool        IsConsistent( const RSCINST & rInst );
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
-
 };
 
-/******************* R s c B o o l ***************************************/
 class RscBool : public RscRange
 {
 public:
@@ -182,9 +170,6 @@ public:
                     };
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
-    void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
-
 };
 
 class RscBreakRange : public RscRange {

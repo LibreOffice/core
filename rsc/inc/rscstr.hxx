@@ -24,7 +24,6 @@
 #include <rschash.hxx>
 #include <rsctop.hxx>
 
-/******************* R s c S t r i n g ***********************************/
 class RscString : public RscTop
 {
     RscTop * pRefClass;
@@ -64,8 +63,6 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
 };
 
 #endif // _RSCSTR_HXX

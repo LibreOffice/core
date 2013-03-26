@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/****************** I N C L U D E S **************************************/
 
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #if defined (WNT )
@@ -28,25 +26,13 @@
 #include <string.h>
 #include <ctype.h>
 
-// Include
 #include <rscdef.hxx>
 #include <rsctools.hxx>
 
 #include <osl/file.h>
 #include <rtl/alloc.h>
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-
-/****************** C o d e **********************************************/
-/*************************************************************************
-|*
-|*    rsc_strnicmp()
-|*
-|*    Beschreibung      Vergleicht zwei Strings Case-Unabhaengig bis zu
-|*                      einer bestimmten Laenge
-|*
-*************************************************************************/
+/* case insensitive compare of two strings up to a given length */
 int rsc_strnicmp( const char *string1, const char *string2, size_t count )
 {
     size_t i;
@@ -67,13 +53,7 @@ int rsc_strnicmp( const char *string1, const char *string2, size_t count )
     return( 0 );
 }
 
-/*************************************************************************
-|*
-|*    rsc_strnicmp()
-|*
-|*    Beschreibung      Vergleicht zwei Strings Case-Unabhaengig
-|*
-*************************************************************************/
+/* case insensitive compare of two strings */
 int rsc_stricmp( const char *string1, const char *string2 ){
     int i;
 
@@ -98,15 +78,6 @@ char* rsc_strdup( const char* pStr )
     return pBuffer;
 }
 
-/*************************************************************************
-|*
-|*    GetTmpFileName()
-|*
-|*    Beschreibung      Gibt einen String eines eindeutigen Dateinamens
-|*                      zurueck. Der Speicher fuer den String wird mit
-|*                      malloc allokiert
-|*
-*************************************************************************/
 rtl::OString GetTmpFileName()
 {
     OUString aTmpURL, aTmpFile;
@@ -115,14 +86,6 @@ rtl::OString GetTmpFileName()
     return OUStringToOString( aTmpFile, RTL_TEXTENCODING_MS_1252 );
 }
 
-/********************************************************************/
-/*                                                                  */
-/*  Function    :   Append( )                                       */
-/*                                                                  */
-/*  Parameters  :   psw     - pointer to a preprocessor switch      */
-/*                                                                  */
-/*  Description :   appends text files                              */
-/********************************************************************/
 sal_Bool Append(FILE * fDest, const rtl::OString &rTmpFile)
 {
 #define MAX_BUF 4096
@@ -138,7 +101,7 @@ sal_Bool Append(FILE * fDest, const rtl::OString &rTmpFile)
     char szBuf[ MAX_BUF ];
     size_t nItems;
 
-    do //appemd
+    do //append
     {
         nItems = fread( szBuf, 1, MAX_BUF, fSource );
         bSuccess = (nItems == fwrite(szBuf, 1, nItems, fDest));
@@ -161,15 +124,7 @@ sal_Bool Append(const rtl::OString &rOutputSrs, const rtl::OString &rTmpFile)
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*    OutputFile
-|*
-|*    Beschreibung      Ersetzt Extension durch eine andere
-|*    Parameter:        input, der Input-Dateiname.
-|*                      pExt, die Extension des Ausgabenamens
-|*
-*************************************************************************/
+/* replaces extension of a file name */
 rtl::OString OutputFile(const rtl::OString &rInput, const char * pExt)
 {
     sal_Int32 nSepInd = rInput.lastIndexOf(".");
@@ -182,13 +137,6 @@ rtl::OString OutputFile(const rtl::OString &rInput, const char * pExt)
     return rInput.concat(OString(".")).concat(OString(pExt));
 }
 
-/*************************************************************************
-|*
-|*    ::ResonseFile()
-|*
-|*    Beschreibung      Kommandozeile aufbereiten
-|*
-*************************************************************************/
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
 {
     FILE    *fFile;
@@ -197,11 +145,11 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
     sal_uInt32  i;
     bool bInQuotes = false;
 
-    // Programmname
+    // program name
     ppCmd->Append( rsc_strdup( *ppArgv ) );
     for( i = 1; i < nArgc; i++ )
     {
-        if( '@' == **(ppArgv +i) ){ // wenn @, dann Response-Datei
+        if( '@' == **(ppArgv +i) ){ // when @, then response file
             if( NULL == (fFile = fopen( (*(ppArgv +i)) +1, "r" )) )
                 return( (*(ppArgv +i)) );
             nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
@@ -241,36 +189,15 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
 }
 
 
-/*************** R s c P t r P t r **************************************/
-/*************************************************************************
-|*
-|*    RscPtrPtr :: RscPtrPtr()
-|*
-|*    Beschreibung      Eine Tabelle mit Zeigern
-|*
-*************************************************************************/
 RscPtrPtr :: RscPtrPtr(){
     nCount = 0;
     pMem = NULL;
 }
 
-/*************************************************************************
-|*
-|*    RscPtrPtr :: ~RscPtrPtr()
-|*
-|*    Beschreibung      Zerst�rt eine Tabelle mit Zeigern, die Zeiger werde
-|*                      ebenfalls freigegebn
-|*
-*************************************************************************/
 RscPtrPtr :: ~RscPtrPtr(){
     Reset();
 }
 
-/*************************************************************************
-|*
-|*    RscPtrPtr :: Reset()
-|*
-*************************************************************************/
 void RscPtrPtr :: Reset(){
     sal_uInt32 i;
 
@@ -285,13 +212,6 @@ void RscPtrPtr :: Reset(){
     pMem = NULL;
 }
 
-/*************************************************************************
-|*
-|*    RscPtrPtr :: Append()
-|*
-|*    Beschreibung      Haengt einen Eintrag an.
-|*
-*************************************************************************/
 sal_uInt32 RscPtrPtr :: Append( void * pBuffer ){
     if( !pMem )
         pMem = (void **)rtl_allocateMemory( (nCount +1) * sizeof( void * ) );
@@ -303,25 +223,12 @@ sal_uInt32 RscPtrPtr :: Append( void * pBuffer ){
     return( nCount++ );
 }
 
-/*************************************************************************
-|*
-|*    RscPtrPtr :: GetEntry()
-|*
-|*    Beschreibung      Liefert einen Eintrag, NULL wenn nicht vorhanden.
-|*
-*************************************************************************/
 void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry ){
     if( nEntry < nCount )
         return( pMem[ nEntry ] );
     return( NULL );
 }
 
-/****************** R S C W R I T E R C **********************************/
-/*************************************************************************
-|*
-|*    RscWriteRc :: RscWriteRc()
-|*
-*************************************************************************/
 RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
 {
     short               nSwapTest = 1;
@@ -341,22 +248,12 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
     pMem = NULL;
 }
 
-/*************************************************************************
-|*
-|*    RscWriteRc :: ~RscWriteRc()
-|*
-*************************************************************************/
 RscWriteRc :: ~RscWriteRc()
 {
     if( pMem )
         rtl_freeMemory( pMem );
 }
 
-/*************************************************************************
-|*
-|*    RscWriteRc :: IncSize()
-|*
-*************************************************************************/
 sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
 {
     sal_uInt32 nOrigPos = nLen;
@@ -368,11 +265,6 @@ sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
     return nOrigPos;
 }
 
-/*************************************************************************
-|*
-|*    RscWriteRc :: GetPointer()
-|*
-*************************************************************************/
 char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 {
     if( !pMem )
@@ -381,11 +273,6 @@ char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 }
 
 
-/*************************************************************************
-|*
-|*    RscWriteRc :: Put()
-|*
-*************************************************************************/
 void RscWriteRc :: Put( sal_uInt16 nVal )
 {
     sal_uInt32  nOldLen;

@@ -45,13 +45,7 @@ public:
     rtl::OString        aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     unsigned short      nCommands;      // Steuerbits
-    rtl::OString        aOutputLst;     // Name der List-Ausgabedatei
     rtl::OString        aOutputSrs;     // Name der Srs-Ausgabedatei
-    rtl::OString        aOutputSrc;     // Name der Src-Ausgabedatei
-    rtl::OString        aOutputRcCtor;  // Name der Ctor-Ausgabedatei
-    rtl::OString        aOutputCxx;     // Name der Cxx-Ausgabedatei
-    rtl::OString        aOutputHxx;     // Name der Hxx-Ausgabedatei
-    rtl::OString        aTouchFile;     // create this file when done in rsc2
     rtl::OString        aILDir;
 
     struct OutputFile
@@ -79,11 +73,6 @@ struct WriteRcContext;
 class RscCompiler
 {
 private:
-    rtl::OString    aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
-    rtl::OString    aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
-    rtl::OString    aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei
-    rtl::OString    aTmpOutputSrc;  // Name der TempSrc-Ausgabedatei
-
     void            CreateResFile( const char * pRc );
     void            Append( const rtl::OString& rOutputSrs, const rtl::OString& rTmpFile );
 

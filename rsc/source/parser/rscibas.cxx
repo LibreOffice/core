@@ -18,8 +18,6 @@
  */
 
 
-/****************** I N C L U D E S **************************************/
-// C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -43,7 +41,6 @@
 
 #include <boost/unordered_map.hpp>
 
-/****************** M A C R O S ******************************************/
 void RscTypCont::SETCONST( RscConst * pClass, const char * szString, sal_uInt32 nVal )
 {
 #if OSL_DEBUG_LEVEL > 2
@@ -62,12 +59,6 @@ void RscTypCont::SETCONST( RscConst * pClass, Atom nName, sal_uInt32 nVal )
                          CONSTNAME, nVal ), nVal );
 }
 
-/****************** C O D E **********************************************/
-/*************************************************************************
-|*    RscTypCont::InitLangType()
-|*
-|*    Beschreibung
-*************************************************************************/
 
 typedef boost::unordered_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
 static langmap ULong_Iso_map;
@@ -198,11 +189,6 @@ RscEnum * RscTypCont::InitLangType()
     return( &aLangType );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitFieldUnitsType()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitFieldUnitsType()
 {
     RscEnum * pFieldUnits;
@@ -227,11 +213,6 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     return pFieldUnits;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitTimeFieldFormat()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitTimeFieldFormat()
 {
     RscEnum * pTimeFieldFormat;
@@ -245,11 +226,6 @@ RscEnum * RscTypCont::InitTimeFieldFormat()
     return pTimeFieldFormat;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitColor()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitColor(){
     RscEnum * pColor;
     pColor = new RscEnum( pHS->getID( "EnumColor" ), RSC_NOTYPE );
@@ -274,11 +250,6 @@ RscEnum * RscTypCont::InitColor(){
     return( pColor );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitMapUnit()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitMapUnit(){
     RscEnum * pMapUnit;
     pMapUnit = new RscEnum( pHS->getID( "EnumMapUnit" ), RSC_NOTYPE );
@@ -300,11 +271,6 @@ RscEnum * RscTypCont::InitMapUnit(){
     return( pMapUnit );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitKey()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitKey(){
     RscEnum * pKey;
     pKey = new RscEnum( pHS->getID( "EnumKey" ), RSC_NOTYPE );
@@ -420,11 +386,6 @@ RscEnum * RscTypCont::InitKey(){
     return( pKey );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitTriState()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitTriState(){
     RscEnum * pTriState;
     pTriState = new RscEnum( pHS->getID( "EnumTriState" ), RSC_NOTYPE );
@@ -436,11 +397,6 @@ RscEnum * RscTypCont::InitTriState(){
     return( pTriState );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitMessButtons()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitMessButtons()
 {
     RscEnum * pMessButtons;
@@ -454,11 +410,6 @@ RscEnum * RscTypCont::InitMessButtons()
     return( pMessButtons );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitMessDefButton()
-|*
-*************************************************************************/
 RscEnum * RscTypCont::InitMessDefButton(){
     RscEnum * pMessDefButton;
     pMessDefButton = new RscEnum( pHS->getID( "EnumMessDefButton" ),
@@ -473,11 +424,6 @@ RscEnum * RscTypCont::InitMessDefButton(){
     return( pMessDefButton );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitGeometry()
-|*
-*************************************************************************/
 RscTupel * RscTypCont::InitGeometry()
 {
     RscTop *    pTupel;
@@ -498,21 +444,11 @@ RscTupel * RscTypCont::InitGeometry()
     return (RscTupel *)pTupel;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitLangGeometry()
-|*
-*************************************************************************/
 RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
 {
     return new RscArray( pHS->getID( "Lang_TupelGeometry" ), RSC_NOTYPE, pGeo, &aLangType );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitStringList()
-|*
-*************************************************************************/
 RscCont * RscTypCont::InitStringList()
 {
     RscCont * pCont;
@@ -523,22 +459,12 @@ RscCont * RscTypCont::InitStringList()
     return pCont;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitLangStringList()
-|*
-*************************************************************************/
 RscArray * RscTypCont::InitLangStringList( RscCont * pStrLst )
 {
     return new RscArray( pHS->getID( "Lang_CharsList" ),
                          RSC_NOTYPE, pStrLst, &aLangType );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitStringTupel()
-|*
-*************************************************************************/
 RscTupel * RscTypCont::InitStringTupel()
 {
     RscTop *    pTupel;
@@ -554,11 +480,6 @@ RscTupel * RscTypCont::InitStringTupel()
     return (RscTupel *)pTupel;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitStringLongTupel()
-|*
-*************************************************************************/
 RscTupel * RscTypCont::InitStringLongTupel()
 {
     RscTop *    pTupel;
@@ -574,11 +495,6 @@ RscTupel * RscTypCont::InitStringLongTupel()
     return (RscTupel *)pTupel;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitStringTupelList()
-|*
-*************************************************************************/
 RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
 {
     RscCont * pCont;
@@ -589,11 +505,6 @@ RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )
     return pCont;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitStringLongTupelList()
-|*
-*************************************************************************/
 RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
 {
     RscCont * pCont;
@@ -604,22 +515,12 @@ RscCont * RscTypCont::InitStringLongTupelList( RscTupel * pStringLong )
     return pCont;
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitLangStringTupelList()
-|*
-*************************************************************************/
 RscArray * RscTypCont::InitLangStringTupelList( RscCont * pStrTupelLst )
 {
     return new RscArray( pHS->getID( "Lang_CharsCharsTupel" ),
                     RSC_NOTYPE, pStrTupelLst, &aLangType );
 }
 
-/*************************************************************************
-|*
-|*    RscTypCont::InitLangStringLongTupelList()
-|*
-*************************************************************************/
 RscArray * RscTypCont::InitLangStringLongTupelList( RscCont * pStrLongTupelLst )
 {
     return new RscArray( pHS->getID( "Lang_CharsLongTupelList" ),

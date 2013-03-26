@@ -24,7 +24,6 @@
 #include <rschash.hxx>
 #include <rsctop.hxx>
 
-/******************* R s c C o n s t *************************************/
 class RscConst : public RscTop
 {
 protected:
@@ -45,12 +44,8 @@ public:
     sal_Bool            GetConstValue( Atom nConstId, sal_Int32 * pVal ) const;
     sal_Bool            GetValueConst( sal_Int32 nValue, Atom  * pConstId ) const;
     sal_uInt32          GetConstPos( Atom nConstId );
-    virtual void    WriteSyntax( FILE * fOutput, RscTypCont * pTC );
-    virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
-                                    const char * );
 };
 
-/******************* R s c E n u m ***************************************/
 class RscEnum : public RscConst {
     struct RscEnumInst {
         sal_uInt32  nValue; // Position der Konstanten im Array
