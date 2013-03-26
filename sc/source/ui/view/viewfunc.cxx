@@ -629,7 +629,6 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         sal_Bool bSimple = false;
         sal_Bool bCommon = false;
         ScPatternAttr* pCellAttrs = NULL;
-        EditTextObject* pNewData = NULL;
         String aString;
 
         const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -743,7 +742,6 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
 
         delete pCellAttrs;
-        delete pNewData;
     }
     else
     {
