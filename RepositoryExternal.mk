@@ -2533,14 +2533,14 @@ gb_ExternalProject__use_commons-logging :=
 else # !SYSTEM_APACHE_COMMONS
 
 $(eval $(call gb_Helper_register_jars,OXT,\
-	commons-codec-1.3 \
+	commons-codec-1.6 \
 	commons-httpclient-3.1 \
 	commons-lang-2.3 \
 	commons-logging-1.1.1 \
 ))
 
 define gb_Jar__use_commons-codec
-$(call gb_Jar_use_jar,$(1),commons-codec-1.3)
+$(call gb_Jar_use_jar,$(1),commons-codec-1.6)
 endef
 define gb_ExternalProject__use_commons-codec
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_codec)
