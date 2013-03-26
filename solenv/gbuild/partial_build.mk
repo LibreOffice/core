@@ -1,8 +1,13 @@
 ifeq ($(gb_Side),)
 gb_Side:=host
 endif
+
+ifeq (,$(BUILDDIR))
+BUILDDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../..
+endif
+
 ifeq ($(SOLARENV),)
-include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../../config_$(gb_Side).mk
+include $(BUILDDIR)/config_$(gb_Side).mk
 endif
 
 gb_PARTIAL_BUILD := T
