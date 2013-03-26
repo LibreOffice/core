@@ -11369,9 +11369,6 @@ AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
 AC_SUBST(GIT_NEEDED_SUBMODULES)
 
-
-PathFormat "$SRC_ROOT/translations"
-L10N_MODULE="$formatted_path"
 WITH_POOR_HELP_LOCALIZATIONS=
 if test -d "$SRC_ROOT/translations/source"; then
     for l in `ls -1 $SRC_ROOT/translations/source`; do
@@ -11380,7 +11377,6 @@ if test -d "$SRC_ROOT/translations/source"; then
         fi
     done
 fi
-AC_SUBST(L10N_MODULE)
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 
 dnl git submodule update --reference
