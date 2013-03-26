@@ -175,8 +175,10 @@ static AquaSalFrame* getMouseContainerFrame()
 
     // disable OSX>=10.7 window restoration until we support it directly
     const SEL setRestorable = @selector(setRestorable:);
-    if( [pNSWindow respondsToSelector: setRestorable])
-        [pNSWindow performSelector:setRestorable withObject:NO];
+    if( [pNSWindow respondsToSelector: setRestorable]) {
+        NSNumber* bNO = [NSNumber numberWithBool:NO];
+        [pNSWindow performSelector:setRestorable withObject:bNO];
+    }
 
     return pNSWindow;
 }
