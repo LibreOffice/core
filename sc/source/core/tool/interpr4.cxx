@@ -543,10 +543,10 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
         break;
 #if OSL_DEBUG_LEVEL > 0
         case CELLTYPE_DESTROYED:
-#endif
             SetError(errCellNoValue);
             fValue = 0.0;
         break;
+#endif
     }
 
     return fValue;
@@ -610,10 +610,10 @@ double ScInterpreter::GetCellValueOrZero( ScCellIterator& rIter )
         break;
 #if OSL_DEBUG_LEVEL > 0
         case CELLTYPE_DESTROYED:
-#endif
             SetError(errCellNoValue);
             fValue = 0.0;
         break;
+#endif
     }
 
     return fValue;
