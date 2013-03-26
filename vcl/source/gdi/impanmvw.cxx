@@ -23,10 +23,6 @@
 #include <vcl/window.hxx>
 #include <tools/helpers.hxx>
 
-// ----------------
-// - ImplAnimView -
-// ----------------
-
 ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
                             sal_uLong nExtraData,
@@ -48,7 +44,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
 {
     mpParent->ImplIncAnimCount();
 
-    // mirrored horizontically?
+    // Mirrored horizontally?
     if( mbHMirr )
     {
         maDispPt.X() = maPt.X() + maSz.Width() + 1L;
@@ -61,7 +57,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         maDispSz.Width() = maSz.Width();
     }
 
-    // mirrored vertically?
+    // Mirrored vertically?
     if( mbVMirr )
     {
         maDispPt.Y() = maPt.Y() + maSz.Height() + 1L;
@@ -88,15 +84,13 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
     else
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
 
-    // initial drawing to actual position
+    // Initialize drawing to actual position
     ImplDrawToPos( mpParent->ImplGetCurPos() );
 
-    // if first frame OutputDevice is set, update variables now for real OutputDevice
+    // If first frame OutputDevice is set, update variables now for real OutputDevice
     if( pFirstFrameOutDev )
         maClip = ( mpOut = pOut )->GetClipRegion();
 }
-
-// ------------------------------------------------------------------------
 
 ImplAnimView::~ImplAnimView()
 {
@@ -105,8 +99,6 @@ ImplAnimView::~ImplAnimView()
 
     mpParent->ImplDecAnimCount();
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
 {
@@ -122,8 +114,6 @@ sal_Bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix )
 {
@@ -153,16 +143,14 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
     rSizePix.Width() = aPt2.X() - rPosPix.X() + 1L;
     rSizePix.Height() = aPt2.Y() - rPosPix.Y() + 1L;
 
-    // mirrored horizontically?
+    // Mirrored horizontally?
     if( mbHMirr )
         rPosPix.X() = maSzPix.Width() - 1L - aPt2.X();
 
-    // mirrored vertically?
+    // Mirrored vertically?
     if( mbVMirr )
         rPosPix.Y() = maSzPix.Height() - 1L - aPt2.Y();
 }
-
-// ------------------------------------------------------------------------
 
 void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
 {
@@ -187,14 +175,10 @@ void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void ImplAnimView::ImplDraw( sal_uLong nPos )
 {
     ImplDraw( nPos, NULL );
 }
-
-// ------------------------------------------------------------------------
 
 void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 {
@@ -215,7 +199,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 
         ImplGetPosSize( rAnm, aPosPix, aSizePix );
 
-        // mirrored horizontically?
+        // Mirrored horizontally?
         if( mbHMirr )
         {
             aBmpPosPix.X() = aPosPix.X() + aSizePix.Width() - 1L;
@@ -227,7 +211,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
             aBmpSizePix.Width() = aSizePix.Width();
         }
 
-        // mirrored vertically?
+        // Mirrored vertically?
         if( mbVMirr )
         {
             aBmpPosPix.Y() = aPosPix.Y() + aSizePix.Height() - 1L;
@@ -270,9 +254,9 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
         maRestPt = aPosPix;
         maRestSz = aSizePix;
 
-        // Was muessen wir beim naechsten Mal restaurieren ?
-        // ==> ggf. in eine Bitmap stecken, ansonsten SaveBitmap
-        // aus Speichergruenden loeschen
+        // What do we need to restore the next time?
+        // Put it into a bitmap if needed, else delete
+        // SaveBitmap to conserve memory
         if( ( meLastDisposal == DISPOSE_BACK ) || ( meLastDisposal == DISPOSE_NOT ) )
             mpRestore->SetOutputSizePixel( Size( 1, 1 ), sal_False );
         else
@@ -306,8 +290,6 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void ImplAnimView::ImplRepaint()
 {
     const sal_Bool bOldPause = mbPause;
@@ -327,8 +309,6 @@ void ImplAnimView::ImplRepaint()
     ImplDrawToPos( mnActPos );
     mbPause = bOldPause;
 }
-
-// ------------------------------------------------------------------------
 
 AInfo* ImplAnimView::ImplCreateAInfo() const
 {
