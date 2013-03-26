@@ -477,6 +477,38 @@ bool ScRefCellValue::hasNumeric() const
     return hasNumericImpl(meType, mpFormula);
 }
 
+double ScRefCellValue::getValue()
+{
+    switch (meType)
+    {
+        case CELLTYPE_VALUE:
+            return mfValue;
+        case CELLTYPE_FORMULA:
+            return mpFormula->GetValue();
+        default:
+            ;
+    }
+    return 0.0;
+}
+
+OUString ScRefCellValue::getString()
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            return *mpString;
+        case CELLTYPE_EDIT:
+            if (mpEditText)
+                return ScEditUtil::GetString(*mpEditText);
+        break;
+        case CELLTYPE_FORMULA:
+            return mpFormula->GetString();
+        default:
+            ;
+    }
+    return EMPTY_OUSTRING;
+}
+
 bool ScRefCellValue::isEmpty() const
 {
     return meType == CELLTYPE_NOTE || meType == CELLTYPE_NONE;

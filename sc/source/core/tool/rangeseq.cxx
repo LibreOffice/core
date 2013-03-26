@@ -243,22 +243,6 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
     return sal_True;
 }
 
-//------------------------------------------------------------------------
-
-static double lcl_GetValueFromCell( ScBaseCell& rCell )
-{
-    //! ScBaseCell member function?
-
-    CellType eType = rCell.GetCellType();
-    if ( eType == CELLTYPE_VALUE )
-        return ((ScValueCell&)rCell).GetValue();
-    else if ( eType == CELLTYPE_FORMULA )
-        return ((ScFormulaCell&)rCell).GetValue();      // called only if result is value
-
-    OSL_FAIL( "GetValueFromCell: wrong type" );
-    return 0;
-}
-
 sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange,
                                         sal_Bool bAllowNV )
 {
@@ -281,22 +265,24 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
             uno::Any& rElement = pColAry[nCol];
 
             ScAddress aPos( (SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab );
-            ScBaseCell* pCell = pDoc->GetCell( aPos );
-            if ( pCell )
+            ScRefCellValue aCell;
+            aCell.assign(*pDoc, aPos);
+
+            if (aCell.isEmpty())
             {
-                if ( pCell->GetCellType() == CELLTYPE_FORMULA &&
-                        ((ScFormulaCell*)pCell)->GetErrCode() != 0 )
-                {
-                    // if NV is allowed, leave empty for errors
-                    bHasErrors = sal_True;
-                }
-                else if ( pCell->HasValueData() )
-                    rElement <<= (double) lcl_GetValueFromCell( *pCell );
-                else
-                    rElement <<= rtl::OUString( pCell->GetStringData() );
+                rElement <<= EMPTY_OUSTRING;
+                continue;
             }
+
+            if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetErrCode() != 0)
+            {
+                // if NV is allowed, leave empty for errors
+                bHasErrors = true;
+            }
+            else if (aCell.hasNumeric())
+                rElement <<= aCell.getValue();
             else
-                rElement <<= rtl::OUString();       // empty: empty string
+                rElement <<= aCell.getString();
         }
         pRowAry[nRow] = aColSeq;
     }

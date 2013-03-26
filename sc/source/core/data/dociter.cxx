@@ -1060,20 +1060,7 @@ CellType ScCellIterator::getType() const
 
 OUString ScCellIterator::getString()
 {
-    switch (maCurCell.meType)
-    {
-        case CELLTYPE_STRING:
-            return *maCurCell.mpString;
-        case CELLTYPE_EDIT:
-            if (maCurCell.mpEditText)
-                return ScEditUtil::GetString(*maCurCell.mpEditText);
-        break;
-        case CELLTYPE_FORMULA:
-            return maCurCell.mpFormula->GetString();
-        default:
-            ;
-    }
-    return EMPTY_OUSTRING;
+    return maCurCell.getString();
 }
 
 const EditTextObject* ScCellIterator::getEditText() const
@@ -1091,18 +1078,9 @@ const ScFormulaCell* ScCellIterator::getFormulaCell() const
     return maCurCell.mpFormula;
 }
 
-double ScCellIterator::getValue() const
+double ScCellIterator::getValue()
 {
-    switch (maCurCell.meType)
-    {
-        case CELLTYPE_VALUE:
-            return maCurCell.mfValue;
-        case CELLTYPE_FORMULA:
-            return maCurCell.mpFormula->GetValue();
-        default:
-            ;
-    }
-    return 0.0;
+    return maCurCell.getValue();
 }
 
 ScCellValue ScCellIterator::getCellValue() const

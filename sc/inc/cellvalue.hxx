@@ -124,6 +124,10 @@ struct SC_DLLPUBLIC ScRefCellValue
 
     bool hasNumeric() const;
 
+    double getValue();
+
+    OUString getString();
+
     bool isEmpty() const;
 
     bool equalsWithoutFormat( const ScRefCellValue& r ) const;

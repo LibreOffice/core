@@ -37,7 +37,7 @@
 #include "uiitems.hxx"
 #include "editsh.hxx"
 #include "hints.hxx"
-
+#include "cellvalue.hxx"
 
 //==================================================================
 
@@ -314,62 +314,47 @@ void ScTabViewShell::MakeNumberInfoItem( ScDocument*         pDoc,
     //------------------------------
     // NumberInfo-Item konstruieren:
     //------------------------------
-    ScBaseCell*         pCell = NULL;
     SvxNumberValueType  eValType        = SVX_VALUE_TYPE_UNDEFINED;
     double              nCellValue      = 0;
-    String              aCellString;
+    OUString aCellString;
 
-    pDoc->GetCell( pViewData->GetCurX(),
-                   pViewData->GetCurY(),
-                   pViewData->GetTabNo(),
-                   pCell );
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, pViewData->GetCurPos());
 
-    if ( pCell )
+    switch (aCell.meType)
     {
-        switch ( pCell->GetCellType() )
+        case CELLTYPE_VALUE:
         {
-            case CELLTYPE_VALUE:
-                {
-                    nCellValue = ((ScValueCell*)pCell)->GetValue();
-                    eValType = SVX_VALUE_TYPE_NUMBER;
-                    aCellString.Erase();
-                }
-                break;
+            nCellValue = aCell.mfValue;
+            eValType = SVX_VALUE_TYPE_NUMBER;
+        }
+        break;
 
-            case CELLTYPE_STRING:
-                {
-                    aCellString = ((ScStringCell*)pCell)->GetString();
-                    eValType = SVX_VALUE_TYPE_STRING;
-                }
-                break;
+        case CELLTYPE_STRING:
+        {
+            aCellString = *aCell.mpString;
+            eValType = SVX_VALUE_TYPE_STRING;
+        }
+        break;
 
-            case CELLTYPE_FORMULA:
-                {
-                    if ( ((ScFormulaCell*)pCell)->IsValue() )
-                    {
-                        nCellValue = ((ScFormulaCell*)pCell)->GetValue();
-                        eValType = SVX_VALUE_TYPE_NUMBER;
-                    }
-                    else
-                    {
-                        nCellValue = 0;
-                        eValType   = SVX_VALUE_TYPE_UNDEFINED;
-                    }
-                    aCellString.Erase();
-                }
-                break;
-
-            default:
+        case CELLTYPE_FORMULA:
+        {
+            if (aCell.mpFormula->IsValue())
+            {
+                nCellValue = aCell.mpFormula->GetValue();
+                eValType = SVX_VALUE_TYPE_NUMBER;
+            }
+            else
+            {
                 nCellValue = 0;
                 eValType   = SVX_VALUE_TYPE_UNDEFINED;
-                aCellString.Erase();
+            }
         }
-    }
-    else // Zelle noch leer (== nicht erzeugt)
-    {
-        nCellValue = 0;
-        eValType   = SVX_VALUE_TYPE_UNDEFINED;
-        aCellString.Erase();
+        break;
+
+        default:
+            nCellValue = 0;
+            eValType   = SVX_VALUE_TYPE_UNDEFINED;
     }
 
     switch ( eValType )

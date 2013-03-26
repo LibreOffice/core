@@ -237,7 +237,7 @@ public:
     const EditTextObject* getEditText() const;
     ScFormulaCell* getFormulaCell();
     const ScFormulaCell* getFormulaCell() const;
-    double getValue() const;
+    double getValue();
     ScCellValue getCellValue() const;
     const ScRefCellValue& getRefCellValue() const;
 
