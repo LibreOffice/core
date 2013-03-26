@@ -1917,7 +1917,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-else # !SYSTEM_OPENLDAP
+else ifeq ($(SYSTEM_OPENLDAP),NO)
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 	ldap \
