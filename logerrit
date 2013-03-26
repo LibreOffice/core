@@ -52,6 +52,7 @@ case "$1" in
 		echo "Usage: ./logerrit subcommand [options]"
 		echo "simple and basic tool to interact with LibreOffice gerrit"
 		echo "subcommands:"
+		echo "             setup                   walking you though your gerrit setup"
 		echo "             test                    test your gerrit setup"
 		echo " --- for submitters:"
 		echo "             submit [BRANCH]         submit your change for review"
@@ -70,6 +71,33 @@ case "$1" in
 		echo "http://wiki.documentfoundation.org/Development/GitReview"
 		exit
 	;;
+    setup)
+        echo "Please go to https://gerrit.libreoffice.org/ and:"
+        echo "- press the 'sign-in' button in the top right corner"
+        echo "- after login set yourself a username (its recommended to use your IRC-nick)"
+        echo "- upload your public ssh-key."
+        echo
+        echo "Note that you need to register additional email addresses, if you want to"
+        echo "commit from them. Additional emails must be confirmed with repling to the"
+        echo "invitation mail it sends you.  Which user name did you choose? Sweetshark"
+        echo
+		read -p 'Which user name did you choose? ' GERRITUSER
+        echo
+        echo "Please now add the following to your ~/.ssh/config, creating the file if needed:"
+        echo
+        echo "Host logerrit"
+        echo "    IdentityFile ~/.ssh/id_rsa"
+        echo "    User $GERRIUSER"
+        echo "    Port 29418"
+        echo "    HostName gerrit.libreoffice.org"
+        echo "Host gerrit.libreoffice.org"
+        echo "    IdentityFile ~/.ssh/id_rsa"
+        echo "    User $GERRIUSER"
+        echo "    Port 29418"
+        echo "    HostName gerrit.libreoffice.org"
+        echo
+        echo "To see if your setup was successful, run './logerrit test' then."
+    ;;
 	test)
 		if test -n "`ssh $GERRITHOST 2>&1|grep \"Welcome to Gerrit Code Review\"`"
 		then
