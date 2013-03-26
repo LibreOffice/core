@@ -3038,7 +3038,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) ), sal_True ) )
                             {
                                 MSO_GeoTextAlign  gTextAlign = mso_alignTextCenter;
-                                SdrFitToSizeType  eFTS( ((SdrTextFitToSizeTypeItem&)pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
                                 drawing::TextHorizontalAdjust   eHA( drawing::TextHorizontalAdjust_LEFT );
                                 aAny >>= eHA;
                                 switch( eHA )
