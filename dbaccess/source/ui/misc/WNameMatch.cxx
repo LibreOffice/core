@@ -65,10 +65,10 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_CTRL_LEFT.SetStyle( m_CTRL_LEFT.GetStyle() | WB_FORCE_MAKEVISIBLE );
     m_CTRL_RIGHT.SetStyle( m_CTRL_RIGHT.GetStyle() | WB_FORCE_MAKEVISIBLE );
 
-    m_sSourceText   = m_FT_TABLE_LEFT.GetText();
-    m_sSourceText.AppendAscii("\n");
-    m_sDestText     = m_FT_TABLE_RIGHT.GetText();
-    m_sDestText.AppendAscii("\n");
+    m_sSourceText = m_FT_TABLE_LEFT.GetText();
+    m_sSourceText += "\n";
+    m_sDestText   = m_FT_TABLE_RIGHT.GetText();
+    m_sDestText   += "\n";
 
     FreeResource();
 }
@@ -101,14 +101,14 @@ void OWizNameMatching::ActivatePage( )
     DBG_CHKTHIS(OWizNameMatching,NULL);
 
     // set source table name
-    String aName = m_sSourceText;
-    aName += String(m_pParent->m_sSourceName);
+    OUString aName = m_sSourceText;
+    aName += m_pParent->m_sSourceName;
 
     m_FT_TABLE_LEFT.SetText(aName);
 
     // set dest table name
     aName = m_sDestText;
-    aName += String(m_pParent->m_sName);
+    aName += m_pParent->m_sName;
     m_FT_TABLE_RIGHT.SetText(aName);
 
 
