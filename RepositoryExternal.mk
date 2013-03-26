@@ -2535,7 +2535,7 @@ else # !SYSTEM_APACHE_COMMONS
 $(eval $(call gb_Helper_register_jars,OXT,\
 	commons-codec-1.6 \
 	commons-httpclient-3.1 \
-	commons-lang-2.3 \
+	commons-lang-2.4 \
 	commons-logging-1.1.1 \
 ))
 
