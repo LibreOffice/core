@@ -17,6 +17,7 @@ class TemplateContainerItem : public ThumbnailViewItem
 {
 public:
 
+    sal_uInt16 mnRegionId;
     BitmapEx maPreview2;
     BitmapEx maPreview3;
     BitmapEx maPreview4;
