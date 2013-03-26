@@ -970,7 +970,7 @@ void* StgDirStrm::GetEntry( sal_Int32 n, bool bDirty )
         return NULL;
 
     n *= STGENTRY_SIZE;
-    if( n < 0 && n >= nSize )
+    if( n >= nSize )
         return NULL;
     return GetPtr( n, true, bDirty );
 }
