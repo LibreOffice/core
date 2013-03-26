@@ -73,6 +73,7 @@ define gb_HelpTranslatePartTarget_HelpTranslatePartTarget
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : HELP_LANG := $(2)
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : POFILES := $(gb_POLOCATION)/$(2)/$(3).po
 
+$(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(lastword $(MAKEFILE_LIST))
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(gb_POLOCATION)/$(2)/$(3).po
 $(gb_POLOCATION)/$(2)/$(3).po :
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(dir $(call gb_HelpTranslatePartTarget_get_target,$(1))).dir
@@ -304,8 +305,11 @@ $(call gb_HelpLinkTarget_get_clean_target,%) :
 
 # Create a help linking target.
 #
+# depend on makefile to re-build when files are removed
+#
 # gb_HelpLinkTarget_HelpLinkTarget name module lang workdir
 define gb_HelpLinkTarget_HelpLinkTarget
+$(call gb_HelpLinkTarget_get_target,$(1)) : $(lastword $(MAKEFILE_LIST))
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_ADD_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_CONFIGDIR :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES :=
@@ -540,6 +544,8 @@ $(call gb_HelpTarget_get_clean_target,%) :
 
 # Create a help target.
 #
+# depend on makefile to re-build filelist when files are removed
+#
 # gb_HelpTarget_HelpTarget target module lang
 define gb_HelpTarget_HelpTarget
 $(call gb_HelpTarget_get_target,$(1)) : HELP_CONFIGDIR :=
@@ -549,6 +555,7 @@ $(call gb_HelpTarget_get_target,$(1)) : HELP_LANG := $(3)
 $(call gb_HelpTarget_get_target,$(1)) : HELP_PACK_FILES :=
 
 $(call gb_HelpTarget_get_translation_target,$(1)) : HELP_FILES :=
+$(call gb_HelpTarget_get_translation_target,$(1)) : $(lastword $(MAKEFILE_LIST))
 
 $(call gb_HelpTarget__HelpTarget_impl,$(1),$(2),$(3),$(call gb_HelpTarget_get_workdir,$(1)))
 
