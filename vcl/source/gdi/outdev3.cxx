@@ -2178,9 +2178,9 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
 #if ENABLE_GRAPHITE
     // check for features
     if ((rA.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
-         != STRING_NOTFOUND ||
+         != -1 ||
          rB.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
-         != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
+         != -1) && rA.maTargetName != rB.maTargetName)
         return false;
 #endif
 
