@@ -24,6 +24,7 @@
 #include "MeasureHandler.hxx"
 #include "TablePropertiesHandler.hxx"
 #include "TDefTableHandler.hxx"
+#include "DomainMapperTableManager.hxx"
 
 #include <ooxml/resourceids.hxx>
 #include <doctok/sprmids.hxx>
@@ -153,6 +154,13 @@ namespace dmapper {
 #endif
                     insertTableProps( pTablePropMap );
                 }
+            }
+            break;
+            case NS_ooxml::LN_CT_TblPrBase_tblLayout:
+            {
+                DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
+                if (pManager)
+                    pManager->SetLayoutType(static_cast<sal_uInt32>(nIntValue));
             }
             break;
             case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
