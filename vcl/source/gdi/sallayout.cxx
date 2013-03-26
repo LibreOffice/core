@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
 #include <cstdio>
 
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include <sal/alloca.h>
 

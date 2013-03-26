@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <com/sun/star/lang/XComponent.hpp>
 
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include <vcl/metaact.hxx>   // for TakeContour
 #include <vcl/cvtsvm.hxx>

@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _USE_MATH_DEFINES
+#include "sal/config.h"
+
 #include <math.h>
 #include <algorithm>
 

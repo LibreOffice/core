@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef  _USE_MATH_DEFINES
-#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
-#endif
+#include "sal/config.h"
+
 #include <math.h>
 
 #include <comphelper/processfactory.hxx>

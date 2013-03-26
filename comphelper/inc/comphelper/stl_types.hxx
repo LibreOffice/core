@@ -19,17 +19,13 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #define _COMPHELPER_STLTYPES_HXX_
 
+#include "sal/config.h"
+
 #include <vector>
 #include <map>
 
 #include <stack>
 #include <set>
-
-#ifdef _MSC_VER
-# ifndef _USE_MATH_DEFINES
-#  define _USE_MATH_DEFINES // needed by Visual C++ for math constants
-# endif
-#endif
 
 #include <math.h> // prevent conflict between exception and std::exception
 #include <functional>

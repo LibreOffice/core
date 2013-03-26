@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <grid.hrc>
 #include <cstdio>
 #include <math.h> // for M_LN10 and M_E
 
-#define _USE_MATH_DEFINES
 #include <cmath>
-#undef _USE_MATH_DEFINES
 
 #include <grid.hxx>
 
