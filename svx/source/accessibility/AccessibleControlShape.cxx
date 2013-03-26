@@ -39,7 +39,6 @@
 #include "svx/svdstr.hrc"
 #include <algorithm>
 
-using namespace ::comphelper;
 using namespace ::accessibility;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -123,7 +122,7 @@ AccessibleControlShape::AccessibleControlShape (
     ,   m_bDisposeNativeContext( false )
     ,   m_bWaitingForControl( false )
 {
-    m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessComponentContext() );
+    m_pChildManager = new comphelper::OWrappedAccessibleChildrenManager( comphelper::getProcessComponentContext() );
     m_pChildManager->acquire();
 
     osl_atomic_increment( &m_refCount );
@@ -260,7 +259,7 @@ void AccessibleControlShape::Init()
                 // .................................................................
                 // finally, aggregate a proxy for the control context
                 // first a factory for the proxy
-                Reference< XProxyFactory > xFactory = ProxyFactory::create( comphelper::getComponentContext(getProcessServiceFactory()) );
+                Reference< XProxyFactory > xFactory = ProxyFactory::create( comphelper::getProcessComponentContext() );
                 // then the proxy itself
                 if ( xNativeControlContext.is() )
                 {
@@ -438,7 +437,7 @@ Sequence< Type > SAL_CALL AccessibleControlShape::getTypes() throw (RuntimeExcep
     if ( m_xControlContextTypeAccess.is() )
         aAggregateTypes = m_xControlContextTypeAccess->getTypes();
 
-    Sequence< Type > aAllTypes = concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
+    Sequence< Type > aAllTypes = comphelper::concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
 
     // remove duplicates
     Type* pBegin = aAllTypes.getArray();

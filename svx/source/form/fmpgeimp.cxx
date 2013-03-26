@@ -329,11 +329,11 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
         m_bAttemptedFormCreation = true;
 
         const OUString sFormsCollectionServiceName("com.sun.star.form.Forms");
-        m_xForms = Reference< XNameContainer > (
-            ::comphelper::getProcessServiceFactory()->createInstance( sFormsCollectionServiceName ),
-            UNO_QUERY
+        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        m_xForms.set(
+            xContext->getServiceManager()->createInstanceWithContext( sFormsCollectionServiceName, xContext),
+            UNO_QUERY_THROW
         );
-        DBG_ASSERT( m_xForms.is(), "FmFormPageImpl::getForms: could not create a forms collection!" );
 
         if ( m_aFormsCreationHdl.IsSet() )
         {

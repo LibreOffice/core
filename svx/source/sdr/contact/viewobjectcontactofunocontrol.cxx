@@ -1205,8 +1205,8 @@ namespace sdr { namespace contact {
         {
             const OUString sControlServiceName( _rUnoObject.GetUnoControlTypeName() );
 
-            Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-            _out_rControl = Reference< XControl >( xFactory->createInstance( sControlServiceName ), UNO_QUERY_THROW );
+            Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            _out_rControl = Reference<XControl>( xContext->getServiceManager()->createInstanceWithContext(sControlServiceName, xContext), UNO_QUERY_THROW );
 
             // knit the model and the control
             _out_rControl.setModel( xControlModel );

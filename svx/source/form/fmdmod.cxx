@@ -28,20 +28,21 @@
 using namespace ::svxform;
 
 //-----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
-    if ( ServiceSpecifier.indexOf( "com.sun.star.form.component." ) == 0 )
+    if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
     {
-        xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceSpecifier);
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        xRet = xContext->getServiceManager()->createInstanceWithContext(rServiceSpecifier, xContext);
     }
-    else if ( ServiceSpecifier == "com.sun.star.drawing.ControlShape" )
+    else if ( rServiceSpecifier == "com.sun.star.drawing.ControlShape" )
     {
         SdrObject* pObj = new FmFormObj();
         xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
     }
     if (!xRet.is())
-        xRet = SvxUnoDrawMSFactory::createInstance(ServiceSpecifier);
+        xRet = SvxUnoDrawMSFactory::createInstance(rServiceSpecifier);
     return xRet;
 }
 

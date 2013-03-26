@@ -1166,7 +1166,8 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                 return false;
 
             OUString sNewName( getServiceNameByControlType( nObjectTypes[ lookupSlot ] ) );
-            Reference< XControlModel> xNewModel( ::comphelper::getProcessServiceFactory()->createInstance( sNewName ), UNO_QUERY );
+            Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+            Reference< XControlModel> xNewModel( xContext->getServiceManager()->createInstanceWithContext(sNewName, xContext), UNO_QUERY );
             if (!xNewModel.is())
                 return false;
 

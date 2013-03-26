@@ -395,33 +395,30 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
-    if( xMgr.is() )
-    {
-        uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
+    uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
                                                       OUString("com.sun.star.awt.XProgressMonitor") ),
                                                       uno::UNO_QUERY );
 
-        if ( xMonitor.is() )
+    if ( xMonitor.is() )
+    {
+        mxProgressBar = uno::Reference< awt::XProgressBar >( xMonitor, uno::UNO_QUERY );
+
+        if( mxProgressBar.is() )
         {
-            mxProgressBar = uno::Reference< awt::XProgressBar >( xMonitor, uno::UNO_QUERY );
+            String aProgressText;
 
-            if( mxProgressBar.is() )
+            if( mpFilter )
             {
-                String aProgressText;
-
-                if( mpFilter )
-                {
-                    aProgressText = GAL_RESSTR(RID_SVXSTR_GALLERY_FILTER);
-//                  mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
-//                                                                                              // so I am removing this. The gallery progress should
-//                                                                                              // be changed to use the XStatusIndicator instead of XProgressMonitor
-                }
-                else
-                    aProgressText = String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) );
-
-                xMonitor->addText( String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ), aProgressText, sal_False ) ;
-                mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
+                aProgressText = GAL_RESSTR(RID_SVXSTR_GALLERY_FILTER);
+//              mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
+//                                                                                          // so I am removing this. The gallery progress should
+//                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor
             }
+            else
+                aProgressText = String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) );
+
+            xMonitor->addText( String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ), aProgressText, sal_False ) ;
+            mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
         }
     }
 }

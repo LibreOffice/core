@@ -452,9 +452,8 @@ void SvxSearchDialog::Construct_Impl()
     {
         try
         {
-            uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
             uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
-                    configuration::theDefaultProvider::get( comphelper::getComponentContext(xMgr) );
+                    configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
             uno::Sequence< uno::Any > aArgs(1);
             OUString sPath( "/org.openoffice.Office.Common/SearchOptions/");
             aArgs[0] <<= sPath;

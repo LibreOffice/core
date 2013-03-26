@@ -1429,7 +1429,8 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // Neue Component erzeugen
-        Reference< XFormComponent >  xNewComponent(::comphelper::getProcessServiceFactory()->createInstance(rServiceName), UNO_QUERY);
+        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        Reference<XFormComponent> xNewComponent( xContext->getServiceManager()->createInstanceWithContext(rServiceName, xContext), UNO_QUERY);
         if (!xNewComponent.is())
             return NULL;
 
