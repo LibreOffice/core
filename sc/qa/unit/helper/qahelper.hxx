@@ -38,6 +38,11 @@
 
 #include <osl/detail/android-bootstrap.h>
 
+bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
+{
+    return ( labs( nVal1 - nVal2 ) <= nTol );
+}
+
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling
 // wrappers here and there (and then having to handle the Android (and
