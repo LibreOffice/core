@@ -257,9 +257,6 @@ void ThumbnailView::CalculateItemPositions ()
     if ( !mnLines )
         mnLines = 1;
 
-    // check if scroll is needed
-    mbScroll = mnLines > mnVisLines;
-
     if ( mnLines <= mnVisLines )
         mnFirstLine = 0;
     else
@@ -370,7 +367,11 @@ void ThumbnailView::CalculateItemPositions ()
     // arrange ScrollBar, set values and show it
     if ( mpScrBar )
     {
-        long nLines = (nCurCount+mnCols-1)/mnCols;
+        mnLines = (nCurCount+mnCols-1)/mnCols;
+
+        // check if scroll is needed
+        mbScroll = mnLines > mnVisLines;
+
 
         Point aPos( aWinSize.Width() - nScrBarWidth - mnScrBarOffset, mnHeaderHeight );
         Size aSize( nScrBarWidth - mnScrBarOffset, aWinSize.Height() - mnHeaderHeight );
@@ -383,7 +384,7 @@ void ThumbnailView::CalculateItemPositions ()
         if ( nPageSize < 1 )
             nPageSize = 1;
         mpScrBar->SetPageSize( nPageSize );
-        mpScrBar->Show( nLines > mnVisLines );
+        mpScrBar->Show( mbScroll );
     }
 
     // delete ScrollBar
@@ -596,12 +597,13 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             if ( rMEvt.GetClicks() == 1 )
             {
                 if (pItem->isSelected() && rMEvt.IsMod1())
-                    DeselectItem( pItem->mnId );
+                    pItem->setSelection(false);
                 else
                 {
                     if (!pItem->isSelected() && !rMEvt.IsMod1())
                         deselectItems( );
-                    SelectItem( pItem->mnId );
+
+                    pItem->setSelection(true);
 
                     bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
                     pItem->setEditTitle(bClickOnTitle);
@@ -803,6 +805,13 @@ void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
     if ( nPos < mItemList.size() ) {
         ValueItemList::iterator it = mItemList.begin();
         ::std::advance( it, nPos );
+
+        if ((*it)->isSelected())
+        {
+            (*it)->setSelection(false);
+            maItemStateHdl.Call(*it);
+        }
+
         delete *it;
         mItemList.erase( it );
     }
@@ -831,6 +840,21 @@ void ThumbnailView::Clear()
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
+}
+
+void ThumbnailView::updateItems (const std::vector<ThumbnailViewItem*> &items)
+{
+    ImplDeleteItems();
+
+    // reset variables
+    mnFirstLine     = 0;
+    mnHighItemId    = 0;
+
+    mItemList = items;
+
+    CalculateItemPositions();
+
+    Invalidate();
 }
 
 size_t ThumbnailView::GetItemPos( sal_uInt16 nItemId ) const

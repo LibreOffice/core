@@ -8,10 +8,10 @@
  */
 
 #include <sfx2/templateabstractview.hxx>
-#include <sfx2/templatecontaineritem.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <sfx2/templateview.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -23,6 +23,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+#include "../doc/doc.hrc"
+#include "templateview.hrc"
 
 bool ViewFilter_Application::isValid (const OUString &rPath) const
 {
@@ -115,113 +118,85 @@ bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
 
 TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
-      mpItemView(new TemplateView(pParent)),
-      mbFilteredResults(false),
-      meFilterOption(FILTER_APP_WRITER)
+      mnCurRegionId(0),
+      maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),
+      maFTName(this, SfxResId(FT_NAME))
 {
-    mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
+    maAllButton.Hide();
+    maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
+    maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
+    maFTName.Hide();
 }
 
 TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
-      mpItemView(new TemplateView(pParent)),
-      mbFilteredResults(false),
-      meFilterOption(FILTER_APP_WRITER)
+      mnCurRegionId(0),
+      maAllButton(this, SfxResId(BTN_ALL_TEMPLATES)),
+      maFTName(this, SfxResId(FT_NAME))
 {
-    mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
+    maAllButton.Hide();
+    maAllButton.SetStyle(maAllButton.GetStyle() | WB_FLATBUTTON);
+    maAllButton.SetClickHdl(LINK(this,TemplateAbstractView,ShowRootRegionHdl));
+    maFTName.Hide();
 }
 
 TemplateAbstractView::~TemplateAbstractView ()
 {
-    delete mpItemView;
 }
 
-void TemplateAbstractView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
+void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties> &rTemplates)
 {
-    ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
-
-    mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
-}
-
-sal_uInt16 TemplateAbstractView::getOverlayRegionId() const
-{
-    return mpItemView->getId();
-}
-
-const OUString &TemplateAbstractView::getOverlayName() const
-{
-    return mpItemView->getName();
-}
-
-bool TemplateAbstractView::isOverlayVisible () const
-{
-    return mpItemView->IsVisible();
-}
-
-void TemplateAbstractView::deselectOverlayItems()
-{
-    mpItemView->deselectItems();
-}
-
-void TemplateAbstractView::sortOverlayItems(const boost::function<bool (const ThumbnailViewItem*,
-                                                                        const ThumbnailViewItem*) > &func)
-{
-    mpItemView->sortItems(func);
-}
-
-void TemplateAbstractView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
-{
-    meFilterOption = eApp;
-
-    if (mpItemView->IsVisible())
+    std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
+    for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
-        mbFilteredResults = true;
-        mpItemView->filterItems(ViewFilter_Application(eApp));
-    }
-    else
-    {
-        filterItems(ViewFilter_Application(eApp));
-    }
-}
+        //TODO: CHECK IF THE ITEM IS A FOLDER OR NOT
+        TemplateViewItem *pChild = new TemplateViewItem(*this);
+        const TemplateItemProperties *pCur = &rTemplates[i];
 
-void TemplateAbstractView::showOverlay (bool bVisible)
-{
-    Show(!bVisible);
-    mpItemView->Show(bVisible);
+        pChild->mnId = pCur->nId;
+        pChild->mnDocId = pCur->nDocId;
+        pChild->mnRegionId = pCur->nRegionId;
+        pChild->maTitle = pCur->aName;
+        pChild->setPath(pCur->aPath);
+        pChild->maPreview1 = pCur->aThumbnail;
 
-    mpItemView->SetPosSizePixel(GetPosPixel(), GetSizePixel());
-    mpItemView->SetStyle(GetStyle());
-
-    mpItemView->GrabFocus();
-
-    // Clear items is the overlay is closed.
-    if (!bVisible)
-    {
-        // Check if the folder view needs to be filtered
-        if (mbFilteredResults)
+        if ( pCur->aThumbnail.IsEmpty() )
         {
-            filterItems(ViewFilter_Application(meFilterOption));
+            // Use the default thumbnail if we have nothing else
+            pChild->maPreview1 = TemplateAbstractView::getDefaultThumbnail(pCur->aPath);
         }
 
-        mpItemView->Clear();
+        pChild->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
+
+        aItems[i] = pChild;
     }
+
+    updateItems(aItems);
 }
 
-void TemplateAbstractView::filterTemplatesByKeyword(const OUString &rKeyword)
+sal_uInt16 TemplateAbstractView::getCurRegionId() const
 {
-    if (mpItemView->IsVisible())
-        mpItemView->filterItems(ViewFilter_Keyword(rKeyword));
+    return mnCurRegionId;
 }
 
-void TemplateAbstractView::setOpenHdl(const Link &rLink)
+const OUString &TemplateAbstractView::getCurRegionName() const
 {
-    maOpenHdl = rLink;
-    mpItemView->setOpenHdl(rLink);
+    return maCurRegionName;
 }
 
-void TemplateAbstractView::setOverlayCloseHdl(const Link &rLink)
+bool TemplateAbstractView::isNonRootRegionVisible () const
 {
-    mpItemView->setCloseHdl(rLink);
+    return mnCurRegionId;
+}
+
+void TemplateAbstractView::setOpenRegionHdl(const Link &rLink)
+{
+    maOpenRegionHdl = rLink;
+}
+
+void TemplateAbstractView::setOpenTemplateHdl(const Link &rLink)
+{
+    maOpenTemplateHdl = rLink;
 }
 
 BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long height)
@@ -256,6 +231,31 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
         aImg.Scale(Size(nDestWidth,nDestHeight));
     }
 
+    return aImg;
+}
+
+BitmapEx TemplateAbstractView::getDefaultThumbnail( const OUString& rPath )
+{
+    INetURLObject aUrl(rPath);
+    OUString aExt = aUrl.getExtension();
+
+    BitmapEx aImg;
+    if ( aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
+    }
+    else if ( aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
+    }
+    else if ( aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
+    }
+    else if ( aExt == "otg" || aExt == "std" )
+    {
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
+    }
     return aImg;
 }
 
@@ -360,49 +360,29 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
     return TemplateAbstractView::scaleImg(aThumbnail,width,height);
 }
 
-void TemplateAbstractView::Resize()
+IMPL_LINK_NOARG(TemplateAbstractView, ShowRootRegionHdl)
 {
-    mpItemView->SetSizePixel(GetSizePixel());
-    ThumbnailView::Resize();
-}
-
-void TemplateAbstractView::Paint(const Rectangle &rRect)
-{
-    if (!mpItemView->IsVisible())
-        ThumbnailView::Paint(rRect);
-}
-
-void TemplateAbstractView::DrawItem(ThumbnailViewItem *pItem)
-{
-    if (!mpItemView->IsVisible())
-        ThumbnailView::DrawItem(pItem);
-}
-
-IMPL_LINK(TemplateAbstractView, OverlayItemStateHdl, const ThumbnailViewItem*, pItem)
-{
-    maOverlayItemStateHdl.Call((void*)pItem);
+    showRootRegion();
     return 0;
 }
 
 void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
 {
+    //Check if the item is a TemplateContainerItem (Folder) or a TemplateViewItem (File)
+
     TemplateContainerItem* pContainerItem = dynamic_cast<TemplateContainerItem*>(pItem);
     if ( pContainerItem )
     {
         // Fill templates
-        sal_uInt16 nRegionId = pContainerItem->mnId-1;
 
-        mpItemView->setId(nRegionId);
-        mpItemView->setName(pContainerItem->maTitle);
-        mpItemView->InsertItems(pContainerItem->maTemplates);
-
-        mpItemView->filterItems(ViewFilter_Application(meFilterOption));
-
-        showOverlay(true);
+        mnCurRegionId = pContainerItem->mnId-1;
+        maCurRegionName = pContainerItem->maTitle;
+        maFTName.SetText(maCurRegionName);
+        showRegion(pItem);
     }
     else
     {
-        maOpenHdl.Call(pItem);
+        maOpenTemplateHdl.Call(pItem);
     }
 }
 
