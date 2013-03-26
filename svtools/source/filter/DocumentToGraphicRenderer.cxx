@@ -71,20 +71,21 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
     renderProperties[2].Name = "View";
     renderProperties[2].Value <<= mxController;
 
-    Sequence< beans::PropertyValue > aResult;
+    awt::Size aSize;
 
     sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
-
-    aResult = mxRenderable->getRenderer(aCurrentPage - 1, selection, renderProperties );
-
-    awt::Size aSize;
-    for( sal_Int32 nProperty = 0, nPropertyCount = aResult.getLength(); nProperty < nPropertyCount; ++nProperty )
+    if (nPages >= aCurrentPage)
     {
-        if ( aResult[ nProperty ].Name == "PageSize" )
+        Sequence< beans::PropertyValue > aResult = mxRenderable->getRenderer(aCurrentPage - 1, selection, renderProperties );
+        for( sal_Int32 nProperty = 0, nPropertyCount = aResult.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
-            aResult[ nProperty ].Value >>= aSize;
+            if ( aResult[ nProperty ].Name == "PageSize" )
+            {
+                aResult[ nProperty ].Value >>= aSize;
+            }
         }
     }
+
     return Size( aSize.Width, aSize.Height );
 }
 
