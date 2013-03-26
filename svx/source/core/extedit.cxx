@@ -22,6 +22,11 @@
  * instead of those above.
  */
 
+#include <vcl/svapp.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/cvtgrf.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <svx/xoutbmp.hxx>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -30,21 +35,17 @@
 #include <osl/thread.hxx>
 #include <osl/process.h>
 #include <osl/time.h>
-#include <vcl/graphicfilter.hxx>
 #include <svtools/filechangedchecker.hxx>
-#include <svx/xoutbmp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/cvtgrf.hxx>
-
-#include "com/sun/star/system/SystemShellExecute.hpp"
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include <comphelper/processfactory.hxx>
-
 #include <boost/bind.hpp>
 
-using namespace ::com::sun::star;
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+
+using namespace css::uno;
+using namespace css::system;
+
 ExternalToolEdit::ExternalToolEdit()
 {}
 
@@ -73,9 +74,7 @@ IMPL_LINK (ExternalToolEdit, StartListeningEvent, void*, pEvent)
     //Start an event listener implemented via VCL timeout
     ExternalToolEdit* pData = ( ExternalToolEdit* )pEvent;
 
-    new FileChangedChecker(
-        pData->m_aFileName,
-        ::boost::bind(&HandleCloseEvent, pData));
+    new FileChangedChecker(pData->m_aFileName, ::boost::bind(&HandleCloseEvent, pData));
 
     return 0;
 }
@@ -88,9 +87,9 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
     // getting changed
     Application::PostUserEvent( LINK( NULL, ExternalToolEdit, StartListeningEvent ), pThreadData);
 
-    uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-        com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
-    xSystemShellExecute->execute( pData->m_aFileName, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+    Reference<XSystemShellExecute> xSystemShellExecute(
+        SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
+    xSystemShellExecute->execute( pData->m_aFileName, OUString(), SystemShellExecuteFlags::URIS_ONLY );
 }
 
 void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
@@ -100,37 +99,36 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
     const Graphic aGraphic = pGraphicObject->GetGraphic();
 
     //get the Preferred File Extension for this graphic
-    String fExtension;
+    OUString fExtension;
     GraphicHelper::GetPreferedExtension(fExtension, aGraphic);
 
     //Create the temp File
-    rtl::OUString tempFileBase, tempFileName;
+    OUString aTempFileBase;
+    OUString aTempFileName;
+
     oslFileHandle pHandle;
-    osl::FileBase::createTempFile(0, &pHandle, &tempFileBase);
+    osl::FileBase::createTempFile(0, &pHandle, &aTempFileBase);
 
     // Move it to a file name with image extension properly set
-    tempFileName = tempFileBase + rtl::OUString('.') + rtl::OUString(fExtension);
-    osl::File::move(tempFileBase, tempFileName);
+    aTempFileName = aTempFileBase + OUString('.') + OUString(fExtension);
+    osl::File::move(aTempFileBase, aTempFileName);
 
     //Write Graphic to the Temp File
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilter(rGraphicFilter.GetExportFormatNumber(fExtension));
+
     String aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
-    String sPath(tempFileName);
+    String sPath(aTempFileName);
 
     // Write the Graphic to the file now
-    XOutBitmap::WriteGraphic(aGraphic, sPath, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE|XOUTBMP_DONT_EXPAND_FILENAME);
+    XOutBitmap::WriteGraphic(aGraphic, sPath, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE | XOUTBMP_DONT_EXPAND_FILENAME);
 
     // There is a possiblity that sPath extnesion might have been changed if the
     // provided extension is not writable
-    tempFileName = rtl::OUString(sPath);
+    m_aFileName = OUString(sPath);
 
     //Create a thread
-    rtl_uString* aFileName = new rtl_uString();
-    rtl_uString_newFromAscii(
-        &aFileName,
-        rtl::OUStringToOString(tempFileName, RTL_TEXTENCODING_UTF8).getStr());
-    m_aFileName = aFileName;
+
     // Create the data that is needed by the thread later
     osl_createThread(ExternalToolEdit::threadWorker, this);
 }

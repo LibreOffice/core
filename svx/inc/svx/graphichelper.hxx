@@ -23,12 +23,18 @@
 #include <vcl/graph.hxx>
 #include <svx/svxdllapi.h>
 
+#include <com/sun/star/drawing/XShape.hpp>
+
+using namespace css::uno;
+using namespace css::drawing;
+
 class SVX_DLLPUBLIC GraphicHelper
 {
 
 public:
-    static void GetPreferedExtension( String &rExt, const Graphic &rGrf );
-    static String ExportGraphic( const Graphic &rGraphic, const String &rGrfName );
+    static void GetPreferedExtension( OUString& rExtension, const Graphic& rGraphic );
+    static OUString ExportGraphic( const Graphic& rGraphic, const OUString& rGraphicName );
+    static void SaveShapeAsGraphic( const Reference< XShape >& xShape );
 };
 
 

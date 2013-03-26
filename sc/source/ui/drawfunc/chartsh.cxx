@@ -40,6 +40,8 @@
 #define ScChartShell
 #include "scslots.hxx"
 
+using namespace ::css::uno;
+
 SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL) )
 {
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
@@ -88,13 +90,8 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
 
         if( pObject && pObject->ISA( SdrOle2Obj ) )
         {
-            SdrOle2Obj* aOle2Object = ((SdrOle2Obj*) pObject)->Clone();
-            aOle2Object->NbcResize(Point(), Fraction(1,1), Fraction(1,1));
-            const Graphic* pGraphic = aOle2Object->GetGraphic();
-            if( pGraphic != NULL )
-            {
-                GraphicHelper::ExportGraphic( *pGraphic,  String("") );
-            }
+            Reference< XShape > xSourceDoc = Reference< XShape >( pObject->getUnoShape(), UNO_QUERY_THROW );
+            GraphicHelper::SaveShapeAsGraphic( xSourceDoc );
         }
     }
 
