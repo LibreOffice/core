@@ -67,6 +67,7 @@ gb_CFLAGS_COMMON := \
 	-Wendif-labels \
 	-Wextra \
 	-Wundef \
+	-Wunused-macros \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
@@ -76,6 +77,7 @@ gb_CXXFLAGS_COMMON := \
 	-Wendif-labels \
 	-Wextra \
 	-Wundef \
+	-Wunused-macros \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
