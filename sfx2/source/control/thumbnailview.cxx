@@ -606,15 +606,22 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ( rMEvt.GetClicks() == 1 )
             {
-                if (pItem->isSelected() && rMEvt.IsMod1())
-                    pItem->setSelection(false);
+                if (rMEvt.IsMod1())
+                {
+                    //Keep selected item group state and just invert current desired one state
+                    pItem->setSelection(!pItem->isSelected());
+                }
                 else
                 {
-                    if (!pItem->isSelected() && !rMEvt.IsMod1())
-                        deselectItems( );
-
+                    //If we got a group of selected items deselect the rest and only keep the desired one
+                    //mark items as not selected to not fire unnecessary change state events.
+                    pItem->setSelection(false);
+                    deselectItems();
                     pItem->setSelection(true);
+                }
 
+                if (pItem->isSelected())
+                {
                     bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
                     pItem->setEditTitle(bClickOnTitle);
                 }
@@ -623,13 +630,11 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     DrawItem(pItem);
 
                 maItemStateHdl.Call(pItem);
+
+                //fire accessible event??
             }
             else if ( rMEvt.GetClicks() == 2 )
             {
-                // The mouse button down event 1 click right before is pointless
-                pItem->setSelection(false);
-                maItemStateHdl.Call(pItem);
-
                 Rectangle aRect(pItem->getDrawArea());
 
                 if (aRect.IsInside(rMEvt.GetPosPixel()))
