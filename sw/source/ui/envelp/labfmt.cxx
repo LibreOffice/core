@@ -631,7 +631,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
     {
         if ( rCfg.IsPredefinedLabel(sMake, sType) )
         {
-            SAL_WARN( "IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)", "label is predefined and cannot be overwritten" );
+            SAL_WARN( "sw.envelp", "label is predefined and cannot be overwritten" );
             WarningBox( this, SW_RES( WB_PREDEFINED_LABEL ) ).Execute();
             return 0;
         }
