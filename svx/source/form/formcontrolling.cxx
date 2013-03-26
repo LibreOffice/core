@@ -32,6 +32,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/anytostring.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
@@ -44,7 +45,7 @@ namespace svx
 //........................................................................
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::form::XForm;
     using ::com::sun::star::form::runtime::FormOperations;
@@ -195,18 +196,15 @@ namespace svx
     //= ControllerFeatures
     //====================================================================
     //--------------------------------------------------------------------
-    ControllerFeatures::ControllerFeatures( const Reference< XMultiServiceFactory >& _rxORB, IControllerFeatureInvalidation* _pInvalidationCallback )
-        :m_aContext( _rxORB )
-        ,m_pInvalidationCallback( _pInvalidationCallback )
+    ControllerFeatures::ControllerFeatures( IControllerFeatureInvalidation* _pInvalidationCallback )
+        :m_pInvalidationCallback( _pInvalidationCallback )
         ,m_pImpl( NULL )
     {
     }
 
     //--------------------------------------------------------------------
-    ControllerFeatures::ControllerFeatures( const Reference< XMultiServiceFactory >& _rxORB,
-            const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
-        :m_aContext( _rxORB )
-        ,m_pInvalidationCallback( _pInvalidationCallback )
+    ControllerFeatures::ControllerFeatures( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
+        :m_pInvalidationCallback( _pInvalidationCallback )
         ,m_pImpl( NULL )
     {
         assign( _rxController );
@@ -216,7 +214,7 @@ namespace svx
     void ControllerFeatures::assign( const Reference< XFormController >& _rxController )
     {
         dispose();
-        m_pImpl = new FormControllerHelper( m_aContext, _rxController, m_pInvalidationCallback );
+        m_pImpl = new FormControllerHelper( _rxController, m_pInvalidationCallback );
         m_pImpl->acquire();
     }
 
@@ -241,15 +239,13 @@ namespace svx
     //= FormControllerHelper
     //====================================================================
     //--------------------------------------------------------------------
-    FormControllerHelper::FormControllerHelper( const ::comphelper::ComponentContext& _rContext,
-            const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
-        :m_aContext( _rContext )
-        ,m_pInvalidationCallback( _pInvalidationCallback )
+    FormControllerHelper::FormControllerHelper( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
+        :m_pInvalidationCallback( _pInvalidationCallback )
     {
         osl_atomic_increment( &m_refCount );
         try
         {
-            m_xFormOperations = FormOperations::createWithFormController( m_aContext.getUNOContext(), _rxController );
+            m_xFormOperations = FormOperations::createWithFormController( comphelper::getProcessComponentContext(), _rxController );
             if ( m_xFormOperations.is() )
                 m_xFormOperations->setFeatureInvalidation( this );
 

@@ -645,8 +645,8 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         ,m_nActivationEvent( 0 )
         ,m_pShell( &_rShell )
         ,m_pTextShell( new ::svx::FmTextControlShell( _pViewFrame ) )
-        ,m_aActiveControllerFeatures( ::comphelper::getProcessServiceFactory(), this )
-        ,m_aNavControllerFeatures( ::comphelper::getProcessServiceFactory(), this )
+        ,m_aActiveControllerFeatures( this )
+        ,m_aNavControllerFeatures( this )
         ,m_eDocumentType( eUnknownDocumentType )
         ,m_nLockSlotInvalidation( 0 )
         ,m_bHadPropertyBrowserInDesignMode( sal_False )
@@ -3266,7 +3266,7 @@ void FmXFormShell::CreateExternalView()
             if ( m_xExternalViewController == getActiveController() )
             {
                 Reference< runtime::XFormController > xAsFormController( m_xExternalViewController, UNO_QUERY );
-                ControllerFeatures aHelper( ::comphelper::getProcessServiceFactory(), xAsFormController, NULL );
+                ControllerFeatures aHelper( xAsFormController, NULL );
                 aHelper->commitCurrentControl();
             }
 

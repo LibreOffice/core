@@ -22,13 +22,11 @@
 
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <comphelper/componentcontext.hxx>
 
 #include <vector>
 
@@ -83,7 +81,6 @@ namespace svx
     class ControllerFeatures
     {
     protected:
-        ::comphelper::ComponentContext  m_aContext;
         IControllerFeatureInvalidation* m_pInvalidationCallback;    // necessary as long as m_pImpl is not yet constructed
         FormControllerHelper*           m_pImpl;
 
@@ -92,21 +89,14 @@ namespace svx
 
             The instance is not functional until <method>assign</method> is used.
 
-            @param _rxORB
-                a multi service factory for creating various needed components
-
             @param _pInvalidationCallback
                 the callback for invalidating feature states
         */
         ControllerFeatures(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
         /** constructs the instance from a <type scope="com::sun::star::form::runtime">XFormController<type> instance
-
-            @param _rxORB
-                a multi service factory for creating various needed components
 
             @param _rxController
                 The form controller which the helper should be responsible for. Must not
@@ -116,7 +106,6 @@ namespace svx
                 the callback for invalidating feature states
         */
         ControllerFeatures(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
@@ -159,7 +148,6 @@ namespace svx
     class FormControllerHelper : public FormControllerHelper_Base
     {
     protected:
-        ::comphelper::ComponentContext  m_aContext;
         IControllerFeatureInvalidation* m_pInvalidationCallback;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >
                                         m_xFormOperations;
@@ -169,8 +157,6 @@ namespace svx
     public:
         /** constructs the helper from a <type scope="com::sun::star::form::runtime">XFormController<type> instance
 
-            @param _rContext
-                the context the component lives in
             @param _rxController
                 The form controller which the helper should be responsible for. Must not
                 be <NULL/>, and must have a valid model (form).
@@ -178,7 +164,6 @@ namespace svx
                 the callback for invalidating feature states
         */
         FormControllerHelper(
-            const ::comphelper::ComponentContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
