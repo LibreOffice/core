@@ -448,8 +448,7 @@ void UpdateableResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
     checkUpdate( columnIndex );
 
     Statics &st = getStatics();
-    if( x )
-        m_updateableField[columnIndex-1].value <<=  ( x ? st.TRUE : st.FALSE );
+    m_updateableField[columnIndex-1].value <<=  ( x ? st.TRUE : st.FALSE );
 
 }
 
