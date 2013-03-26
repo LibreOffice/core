@@ -13,7 +13,7 @@ ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
 endif
 
-SHELL=/usr/bin/env bash
+SHELL=@BASH@
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
 
