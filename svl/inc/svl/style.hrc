@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_STYLE_HRC
-#define _SFX_STYLE_HRC
+#ifndef SFX_STYLE_HRC
+#define SFX_STYLE_HRC
 
-#define SFXSTYLEBIT_AUTO        0x0000 // automatisch; Flags kommen von der Applikation
-#define SFXSTYLEBIT_HIDDEN      0x0200 // benutzte Vorlage (als Suchmaske)
-#define SFXSTYLEBIT_HIERARCHY   0x1000 // hierarchical view - just for dialog
-#define SFXSTYLEBIT_READONLY    0x2000 // benutzte Vorlage (als Suchmaske)
-#define SFXSTYLEBIT_USED        0x4000 // benutzte Vorlage (als Suchmaske)
-#define SFXSTYLEBIT_USERDEF     0x8000 // benutzerdefinierte Vorlage
-#define SFXSTYLEBIT_ALL_VISIBLE 0xFDFF // alle Vorlagen
-#define SFXSTYLEBIT_ALL         0xFFFF // alle Vorlagen
+#define SFXSTYLEBIT_AUTO        0x0000 ///< automatic: flags from application
+#define SFXSTYLEBIT_HIDDEN      0x0200 ///< hidden styles (search mask)
+#define SFXSTYLEBIT_HIERARCHY   0x1000 ///< hierarchical view - just for dialog
+#define SFXSTYLEBIT_READONLY    0x2000 ///< readonly styles (search mask)
+#define SFXSTYLEBIT_USED        0x4000 ///< used styles (search mask)
+#define SFXSTYLEBIT_USERDEF     0x8000 ///< user defined styles (search mask)
+#define SFXSTYLEBIT_ALL_VISIBLE 0xFDFF ///< all styles
+#define SFXSTYLEBIT_ALL         0xFFFF ///< all styles
 
 #endif
 
