@@ -29,7 +29,7 @@
 
 //___________________________________________________________________
 
-class ScCellValue;
+struct ScCellValue;
 class ScChangeAction;
 class ScChangeTrack;
 class XclImpChTrFmlConverter;
