@@ -1733,27 +1733,21 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
         case CELLTYPE_STRING :
         case CELLTYPE_EDIT :
             return SC_CACCT_NORMAL;
-        //break;
         case CELLTYPE_FORMULA :
             switch (rCell.mpFormula->GetMatrixFlag())
             {
                 case MM_NONE :
                     return SC_CACCT_NORMAL;
-                //break;
                 case MM_FORMULA :
                 case MM_FAKE :
                     return SC_CACCT_MATORG;
-                //break;
                 case MM_REFERENCE :
                     return SC_CACCT_MATREF;
-                //break;
             }
             return SC_CACCT_NORMAL;
-        //break;
         default:
             return SC_CACCT_NONE;
     }
-    return SC_CACCT_NONE;
 }
 
 ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScCellIterator& rIter )
