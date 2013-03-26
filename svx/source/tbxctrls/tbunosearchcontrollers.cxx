@@ -70,10 +70,10 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 
 FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle,
     css::uno::Reference< css::frame::XFrame >& xFrame,
-    const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager) :
+    const css::uno::Reference< css::uno::XComponentContext >& xContext) :
     ComboBox( pParent, nStyle ),
     m_xFrame(xFrame),
-    m_xServiceManager(xServiceManager)
+    m_xContext(xContext)
 {
     SetPlaceholderText(SVX_RESSTR(RID_SVXSTR_FINDBAR_FIND));
     EnableAutocomplete(sal_True, sal_True);
@@ -178,7 +178,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
                 lArgs[2].Value <<= (sal_Int32)0;
 
-                impl_executeSearch( comphelper::getComponentContext(m_xServiceManager), m_xFrame, lArgs);
+                impl_executeSearch( m_xContext, m_xFrame, lArgs);
                 nRet = 1;
             }
             break;
@@ -420,7 +420,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
     if ( pParent )
     {
         ToolBox* pToolbar =  ( ToolBox* )pParent;
-        m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)  );
+        m_pFindTextFieldControl = new FindTextFieldControl( pToolbar, WinBits( WB_DROPDOWN | WB_VSCROLL), m_xFrame, m_xContext  );
 
         Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
         m_pFindTextFieldControl->SetSizePixel( aSize );
@@ -720,14 +720,12 @@ void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::Feat
 //-----------------------------------------------------------------------------------------------------------
 // class FindbarDispatcher
 
-FindbarDispatcher::FindbarDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory)
-    : m_xFactory( xFactory )
+FindbarDispatcher::FindbarDispatcher()
 {
 }
 
 FindbarDispatcher::~FindbarDispatcher()
 {
-    m_xFactory = NULL;
     m_xFrame = NULL;
 }
 
@@ -907,9 +905,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxControlle
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
+    const css::uno::Reference< css::lang::XMultiServiceFactory >&  )
 {
-    return static_cast< cppu::OWeakObject * >( new FindbarDispatcher( rSMgr ) );
+    return static_cast< cppu::OWeakObject * >( new FindbarDispatcher );
 }
 
 //-----------------------------------------------------------------------------------------------------------

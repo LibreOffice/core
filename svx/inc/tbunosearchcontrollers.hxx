@@ -47,7 +47,7 @@ class FindTextFieldControl : public ComboBox
 public:
     FindTextFieldControl( Window* pParent, WinBits nStyle,
         css::uno::Reference< css::frame::XFrame >& xFrame,
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+        const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~FindTextFieldControl();
 
     virtual long PreNotify( NotifyEvent& rNEvt );
@@ -58,7 +58,7 @@ public:
 private:
 
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
 class SearchToolbarControllersManager
@@ -225,7 +225,7 @@ class FindbarDispatcher : public css::lang::XServiceInfo,
 {
 public:
 
-    FindbarDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+    FindbarDispatcher();
     virtual ~FindbarDispatcher();
 
     // XInterface
@@ -259,7 +259,6 @@ public:
 
 private:
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
 
 };
