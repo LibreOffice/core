@@ -539,6 +539,25 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
     }
 }
 
-// ===========================================================================
+void SvpSalGraphics::SetTextColor( SalColor nSalColor )
+{
+    m_aTextColor = basebmp::Color( nSalColor );
+}
+
+SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
+{
+    SystemFontData aSysFontData;
+
+    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
+    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+
+    aSysFontData.nSize = sizeof( SystemFontData );
+    aSysFontData.nFontId = 0;
+    aSysFontData.nFontFlags = 0;
+    aSysFontData.bFakeBold = false;
+    aSysFontData.bFakeItalic = false;
+    aSysFontData.bAntialias = true;
+    return aSysFontData;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
