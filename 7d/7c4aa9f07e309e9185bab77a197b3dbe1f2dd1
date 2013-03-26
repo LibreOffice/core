@@ -1,0 +1,11 @@
+Code-Review+1: Thorsten Behrens <tbehrens@suse.com>
+Verified+1: Thorsten Behrens <tbehrens@suse.com>
+Code-Review+2: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Verified+1: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Code-Review+1: Petr Mladek <pmladek@suse.cz>
+Verified+1: Petr Mladek <pmladek@suse.cz>
+Submitted-by: Markus Mohrhard <markus.mohrhard@googlemail.com>
+Submitted-at: Tue, 26 Mar 2013 09:26:37 +0000
+Reviewed-on: https://gerrit.libreoffice.org/3037
+Project: core
+Branch: refs/heads/libreoffice-4-0-2
