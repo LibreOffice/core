@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.MWAWImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Mariner Write v1.6 - v3.5</value>
+            <value xml:lang="x-default">Mariner Write Mac Classic v1.6 - v3.5</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_Mariner_Write</value></prop>

@@ -338,7 +338,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_MindWrite \
 	writer_Nisus_Writer \
 	writer_TeachText \
+	writer_TexEdit \
 	writer_WriteNow \
+	writer_WriterPlus \
 	writer_ZWrite \
 	writer_T602_Document \
 	writer_LotusWordPro_Document \
@@ -372,7 +374,6 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	DocMaker \
 	eDoc_Document \
 	FullWrite_Professional \
-	HanMac_Word_J \
 	HanMac_Word_K \
 	LightWayText \
 	Mac_Word \
@@ -383,7 +384,9 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	MindWrite \
 	Nisus_Writer \
 	TeachText \
+	TexEdit \
 	WriteNow \
+	WriterPlus \
 	ZWrite \
 	T602Document \
 	LotusWordPro \

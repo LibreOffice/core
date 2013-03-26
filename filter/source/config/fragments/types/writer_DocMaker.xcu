@@ -18,12 +18,12 @@
     <node oor:name="writer_DocMaker" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.Writer.MWAWImportFilter</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>dummy</value></prop>
+        <prop oor:name="Extensions"><value>hqx zip</value></prop>
         <prop oor:name="MediaType"><value></value></prop>
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>DocMaker</value></prop>
         <prop oor:name="UIName">
-            <value>DocMaker (v4) Document</value>
+            <value>DOCMaker (v4) Document</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

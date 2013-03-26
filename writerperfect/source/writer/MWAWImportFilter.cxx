@@ -971,13 +971,13 @@ throw( com::sun::star::uno::RuntimeException )
                 sTypeName = "writer_TeachText";
                 break;
             case MWAWDocument::TEDIT: // Tex-Edit v2
-                sTypeName = "writer_TexEDit";
+                sTypeName = "writer_TexEdit";
                 break;
             case MWAWDocument::WNOW: // WriteNow
                 sTypeName = "writer_WriteNow";
                 break;
             case MWAWDocument::WPLUS: // writerplus document
-                sTypeName = "writer_WritePlus";
+                sTypeName = "writer_WriterPlus";
                 break;
             case MWAWDocument::ZWRT: // Z-Write : v1.3
                 sTypeName = "writer_ZWrite";

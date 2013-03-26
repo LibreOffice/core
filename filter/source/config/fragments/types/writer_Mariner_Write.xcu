@@ -23,7 +23,7 @@
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>Mariner_Write</value></prop>
         <prop oor:name="UIName">
-            <value>Mariner Write v1.6 - v3.5</value>
+            <value>Mariner Write Mac Classic v1.6 - v3.5</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

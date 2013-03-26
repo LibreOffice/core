@@ -18,12 +18,12 @@
     <node oor:name="writer_Nisus_Writer" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.Writer.MWAWImportFilter</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>dummy</value></prop>
+        <prop oor:name="Extensions"><value>hqx zip</value></prop>
         <prop oor:name="MediaType"><value></value></prop>
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>Nisus_Writer</value></prop>
         <prop oor:name="UIName">
-            <value>Nisus Writer Document v3.4 - 6.5</value>
+            <value>Nisus Writer Mac Classic v3.4 - 6.5</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
