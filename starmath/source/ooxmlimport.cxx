@@ -570,11 +570,21 @@ OUString SmOoxmlImport::handleNary()
 OUString SmOoxmlImport::handleR()
 {
     stream.ensureOpeningTag( M_TOKEN( r ));
-    if( XmlStream::Tag rPr = stream.checkOpeningTag( OOX_TOKEN( doc, rPr )))
-    { // TODO
-//        stream.checkOpeningTag( OOX_TOKEN( doc, rFonts ));
-//        stream.ensureClosingTag( OOX_TOKEN( doc, rFonts ));
-        stream.ensureClosingTag( OOX_TOKEN( doc, rPr ));
+    bool normal = false;
+    bool literal = false;
+    if( XmlStream::Tag rPr = stream.checkOpeningTag( M_TOKEN( rPr )))
+    {
+        if( XmlStream::Tag litTag = stream.checkOpeningTag( M_TOKEN( lit )))
+        {
+            literal = litTag.attribute( M_TOKEN( val ), true );
+            stream.ensureClosingTag( M_TOKEN( lit ));
+        }
+        if( XmlStream::Tag norTag = stream.checkOpeningTag( M_TOKEN( nor )))
+        {
+            normal = norTag.attribute( M_TOKEN( val ), true );
+            stream.ensureClosingTag( M_TOKEN( nor ));
+        }
+        stream.ensureClosingTag( M_TOKEN( rPr ));
     }
     OUString text;
     while( !stream.atEnd() && stream.currentToken() != CLOSING( stream.currentToken()))
@@ -597,6 +607,8 @@ OUString SmOoxmlImport::handleR()
         }
     }
     stream.ensureClosingTag( M_TOKEN( r ));
+    if( normal || literal )
+        text = "\"" + text + "\"";
     return text.replaceAll("{", "\\{").replaceAll("}", "\\}");
 }
 
