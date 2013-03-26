@@ -175,6 +175,10 @@ struct TabDlg_Impl
         pData           ( new SfxTabDlgData_Impl( nCnt ) ),
         pController     ( NULL )
     {}
+    ~TabDlg_Impl()
+    {
+        delete(pData);
+    }
 };
 
 Data_Impl* Find( SfxTabDlgData_Impl& rArr, sal_uInt16 nId, sal_uInt16* pPos = 0 );
