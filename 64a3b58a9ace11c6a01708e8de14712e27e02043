@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+Zc\u003d",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2013-03-26T14:52:39Z",
+      "side": 0,
+      "message": "It would be good to update the comment as well",
+      "revId": "64a3b58a9ace11c6a01708e8de14712e27e02043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
