@@ -24,10 +24,6 @@
 
 DBG_NAME( Hatch )
 
-// --------------
-// - ImplHatch -
-// --------------
-
 ImplHatch::ImplHatch() :
     mnRefCount  ( 1 ),
     maColor     ( COL_BLACK ),
@@ -36,8 +32,6 @@ ImplHatch::ImplHatch() :
     mnAngle     ( 0 )
 {
 }
-
-// -----------------------------------------------------------------------
 
 ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
     mnRefCount  ( 1 ),
@@ -48,17 +42,11 @@ ImplHatch::ImplHatch( const ImplHatch& rImplHatch ) :
 {
 }
 
-// ---------
-// - Hatch -
-// ---------
-
 Hatch::Hatch()
 {
     DBG_CTOR( Hatch, NULL );
     mpImplHatch = new ImplHatch;
 }
-
-// -----------------------------------------------------------------------
 
 Hatch::Hatch( const Hatch& rHatch )
 {
@@ -67,8 +55,6 @@ Hatch::Hatch( const Hatch& rHatch )
     mpImplHatch = rHatch.mpImplHatch;
     mpImplHatch->mnRefCount++;
 }
-
-// -----------------------------------------------------------------------
 
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
               long nDistance, sal_uInt16 nAngle10 )
@@ -81,16 +67,12 @@ Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
     mpImplHatch->mnAngle = nAngle10;
 }
 
-// -----------------------------------------------------------------------
-
 Hatch::~Hatch()
 {
     DBG_DTOR( Hatch, NULL );
     if( !( --mpImplHatch->mnRefCount ) )
         delete mpImplHatch;
 }
-
-// -----------------------------------------------------------------------
 
 Hatch& Hatch::operator=( const Hatch& rHatch )
 {
@@ -106,8 +88,6 @@ Hatch& Hatch::operator=( const Hatch& rHatch )
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Hatch::operator==( const Hatch& rHatch ) const
 {
     DBG_CHKTHIS( Hatch, NULL );
@@ -120,8 +100,6 @@ sal_Bool Hatch::operator==( const Hatch& rHatch ) const
               mpImplHatch->mnAngle == rHatch.mpImplHatch->mnAngle ) );
 }
 
-// -----------------------------------------------------------------------
-
 void Hatch::ImplMakeUnique()
 {
     if( mpImplHatch->mnRefCount != 1 )
@@ -133,16 +111,12 @@ void Hatch::ImplMakeUnique()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Hatch::SetColor( const Color& rColor )
 {
     DBG_CHKTHIS( Hatch, NULL );
     ImplMakeUnique();
     mpImplHatch->maColor = rColor;
 }
-
-// -----------------------------------------------------------------------
 
 void Hatch::SetDistance( long nDistance )
 {
@@ -151,16 +125,12 @@ void Hatch::SetDistance( long nDistance )
     mpImplHatch->mnDistance = nDistance;
 }
 
-// -----------------------------------------------------------------------
-
 void Hatch::SetAngle( sal_uInt16 nAngle10 )
 {
     DBG_CHKTHIS( Hatch, NULL );
     ImplMakeUnique();
     mpImplHatch->mnAngle = nAngle10;
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
 {
@@ -176,8 +146,6 @@ SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStm, const ImplHatch& rImplHatch )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
@@ -189,15 +157,11 @@ SvStream& operator<<( SvStream& rOStm, const ImplHatch& rImplHatch )
     return rOStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator>>( SvStream& rIStm, Hatch& rHatch )
 {
     rHatch.ImplMakeUnique();
     return( rIStm >> *rHatch.mpImplHatch );
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStm, const Hatch& rHatch )
 {

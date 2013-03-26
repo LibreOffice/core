@@ -21,15 +21,11 @@
 
 #include <vcl/graphictools.hxx>
 
-////////////////////////////////////////////////////////////////////////////
-
 SvtGraphicFill::Transform::Transform()
 {
     matrix[0] = 1.0; matrix[1] = 0.0; matrix[2] = 0.0;
     matrix[3] = 0.0; matrix[4] = 1.0; matrix[5] = 0.0;
 }
-
-////////////////////////////////////////////////////////////////////////////
 
 SvtGraphicStroke::SvtGraphicStroke() :
     maPath(),
@@ -176,9 +172,6 @@ SvStream& operator>>( SvStream& rIStm, SvtGraphicStroke& rClass )
 
     return rIStm;
 }
-
-
-/////////////////////////////////////////////////////////////////////////////
 
 SvtGraphicFill::SvtGraphicFill() :
     maPath(),

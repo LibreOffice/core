@@ -29,10 +29,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 
-// -----------
-// - GfxLink -
-// -----------
-
 GfxLink::GfxLink() :
     meType      ( GFX_LINK_TYPE_NONE ),
     mpBuf       ( NULL ),
@@ -43,15 +39,11 @@ GfxLink::GfxLink() :
 {
 }
 
-// ------------------------------------------------------------------------
-
 GfxLink::GfxLink( const GfxLink& rGfxLink ) :
     mpImpData( new ImpGfxLink )
 {
     ImplCopy( rGfxLink );
 }
-
-// ------------------------------------------------------------------------
 
 GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, sal_Bool bOwns ) :
     mpImpData( new ImpGfxLink )
@@ -75,8 +67,6 @@ GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, sal_Bool
         mpBuf = NULL;
 }
 
-// ------------------------------------------------------------------------
-
 GfxLink::~GfxLink()
 {
     if( mpBuf && !( --mpBuf->mnRefCount ) )
@@ -87,8 +77,6 @@ GfxLink::~GfxLink()
 
     delete mpImpData;
 }
-
-// ------------------------------------------------------------------------
 
 GfxLink& GfxLink::operator=( const GfxLink& rGfxLink )
 {
@@ -105,8 +93,6 @@ GfxLink& GfxLink::operator=( const GfxLink& rGfxLink )
 
     return *this;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
 {
@@ -128,8 +114,6 @@ sal_Bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
     return bIsEqual;
 }
 
-// ------------------------------------------------------------------------
-
 void GfxLink::ImplCopy( const GfxLink& rGfxLink )
 {
     mnBufSize = rGfxLink.mnBufSize;
@@ -146,28 +130,20 @@ void GfxLink::ImplCopy( const GfxLink& rGfxLink )
         mpSwap->mnRefCount++;
 }
 
-// ------------------------------------------------------------------------
-
 GfxLinkType GfxLink::GetType() const
 {
     return meType;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GfxLink::IsNative() const
 {
     return( meType >= GFX_LINK_FIRST_NATIVE_ID && meType <= GFX_LINK_LAST_NATIVE_ID );
 }
 
-// ------------------------------------------------------------------------
-
 sal_uInt32 GfxLink::GetDataSize() const
 {
     return mnBufSize;
 }
-
-// ------------------------------------------------------------------------
 
 const sal_uInt8* GfxLink::GetData() const
 {
@@ -177,14 +153,10 @@ const sal_uInt8* GfxLink::GetData() const
     return( mpBuf ? mpBuf->mpBuffer : NULL );
 }
 
-// ------------------------------------------------------------------------
-
 const Size& GfxLink::GetPrefSize() const
 {
     return mpImpData->maPrefSize;
 }
-
-// ------------------------------------------------------------------------
 
 void GfxLink::SetPrefSize( const Size& rPrefSize )
 {
@@ -192,21 +164,15 @@ void GfxLink::SetPrefSize( const Size& rPrefSize )
     mpImpData->mbPrefSizeValid = true;
 }
 
-// ------------------------------------------------------------------------
-
 bool GfxLink::IsPrefSizeValid()
 {
     return mpImpData->mbPrefSizeValid;
 }
 
-// ------------------------------------------------------------------------
-
 const MapMode& GfxLink::GetPrefMapMode() const
 {
     return mpImpData->maPrefMapMode;
 }
-
-// ------------------------------------------------------------------------
 
 void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
@@ -214,14 +180,10 @@ void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
     mpImpData->mbPrefMapModeValid = true;
 }
 
-// ------------------------------------------------------------------------
-
 bool GfxLink::IsPrefMapModeValid()
 {
     return mpImpData->mbPrefMapModeValid;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
 {
@@ -260,8 +222,6 @@ sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void GfxLink::SwapOut()
 {
     if( !IsSwappedOut() && mpBuf )
@@ -283,8 +243,6 @@ void GfxLink::SwapOut()
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GfxLink::SwapIn()
 {
     if( IsSwappedOut() )
@@ -298,8 +256,6 @@ void GfxLink::SwapIn()
     }
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool GfxLink::ExportNative( SvStream& rOStream ) const
 {
     if( GetDataSize() )
@@ -312,8 +268,6 @@ sal_Bool GfxLink::ExportNative( SvStream& rOStream ) const
 
     return ( rOStream.GetError() == ERRCODE_NONE );
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
 {
@@ -337,8 +291,6 @@ SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
 
     return rOStream;
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 {
@@ -377,10 +329,6 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
     return rIStream;
 }
 
-// -----------
-// - ImpSwap -
-// -----------
-
 ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
             mnDataSize( nDataSize ),
             mnRefCount( 1UL )
@@ -409,15 +357,11 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
     }
 }
 
-// ------------------------------------------------------------------------
-
 ImpSwap::~ImpSwap()
 {
     if( IsSwapped() )
         osl_removeFile( maURL.pData );
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt8* ImpSwap::GetData() const
 {
@@ -444,8 +388,6 @@ sal_uInt8* ImpSwap::GetData() const
 
     return pData;
 }
-
-// ------------------------------------------------------------------------
 
 void ImpSwap::WriteTo( SvStream& rOStm ) const
 {

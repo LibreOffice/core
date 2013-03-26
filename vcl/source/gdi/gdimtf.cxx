@@ -132,7 +132,7 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     bRecord         ( sal_False ),
     bUseCanvas      ( rMtf.bUseCanvas )
 {
-    // RefCount der MetaActions erhoehen
+    // Increment RefCount of MetaActions
     for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
     {
         rMtf.GetAction( i )->Duplicate();
@@ -195,7 +195,7 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
     {
         Clear();
 
-        // RefCount der MetaActions erhoehen
+        // Increment RefCount of MetaActions
         for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
         {
             rMtf.GetAction( i )->Duplicate();
@@ -690,7 +690,6 @@ void GDIMetaFile::push_back( MetaAction* pAction )
     aList.push_back( pAction );
 }
 
-// @since #110496#
 void GDIMetaFile::RemoveAction( size_t nPos )
 {
     if ( nPos < aList.size() )
@@ -908,8 +907,7 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
                                      const PolyPolygon&   rPolyPoly,
                                      const Gradient&      rGrad     )
 {
-    // #105055# Generate comment, GradientEx and Gradient actions
-    // (within DrawGradient)
+    // Generate comment, GradientEx and Gradient actions (within DrawGradient)
     VirtualDevice aVDev( rMapDev, 0 );
     aVDev.EnableOutput( sal_False );
     GDIMetaFile aGradMtf;
@@ -1162,7 +1160,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                // #105055# Handle gradientex comment block correctly
+                // Handle gradientex comment block correctly
                 case( META_COMMENT_ACTION ):
                 {
                     MetaCommentAction* pCommentAct = (MetaCommentAction*) pAction;
@@ -2888,8 +2886,6 @@ sal_Bool GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
                                     const BitmapEx* pOverlay,
                                     const Rectangle* pOverlayRect ) const
 {
-    // the implementation is provided by KA
-
     // initialization seems to be complicated but is used to avoid rounding errors
     VirtualDevice   aVDev;
     const Point     aNullPt;
@@ -3011,7 +3007,7 @@ MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererSe
 {
     const sal_uInt8* pData=(sal_uInt8*)_pData;
 
-    // data gets copied twice, unfortunately
+    // FIXME: Data gets copied twice, unfortunately
     rtl::OString aRendererServiceName(
         rRendererServiceName.getStr(),
         rRendererServiceName.getLength(),
