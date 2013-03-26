@@ -220,7 +220,7 @@ void LwpOleObject::Read()
     {
         m_pObjStrm->QuickReaduInt16();
 
-        OUString sFormat = m_pObjStrm->QuickReadStringPtr();
+        m_pObjStrm->QuickReadStringPtr();
 
         if (LwpFileHeader::m_nFileRevision < 0x000B)
         {
