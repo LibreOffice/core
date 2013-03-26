@@ -621,23 +621,6 @@ bool CoreTextLayout::LayoutText( ImplLayoutArgs& rArgs)
         return false;
     }
 
-#ifdef IOS
-    // This might be a red herring and unnecessary once the CoreText
-    // code actually works;)
-
-    // If the string contains U+FFFD ("REPLACEMENT CHARACTER"), which
-    // happens at least for the ooo80484-1.slk document in
-    // sc_filters_test, the CTTypesetterCreateWithAttributedString()
-    // call below crashes, at least in the iOS simulator. Go figure.
-    // (In that case the string consists of *only* such characters,
-    // but play it safe.)
-    for (int i = 0; i < mnCharCount; i++)
-    {
-        if ( rArgs.mpStr[rArgs.mnMinCharPos+i] == 0xFFFD)
-            return false;
-    }
-#endif
-
     SAL_INFO( "vcl.coretext.layout", "LayoutText() returning,  mnGlyphCount=" << mnGlyphCount );
 
     return true;
