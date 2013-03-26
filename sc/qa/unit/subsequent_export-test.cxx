@@ -34,6 +34,9 @@
 #include "scitems.hxx"
 #include "document.hxx"
 #include "cellform.hxx"
+#include "drwlayer.hxx"
+#include "userdat.hxx"
+#include "svx/svdpage.hxx"
 
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
@@ -78,6 +81,7 @@ public:
     void testPasswordExport();
     void testConditionalFormatExportXLSX();
     void testMiscRowHeightExport();
+    void testRotatedFlippedShapes();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -86,6 +90,7 @@ public:
 #endif
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
+    CPPUNIT_TEST(testRotatedFlippedShapes);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -371,6 +376,79 @@ void ScExportTest::testMiscRowHeightExport()
     }
 }
 
+void ScExportTest::testRotatedFlippedShapes()
+{
+    ScDocShellRef xShell = loadDocument("rotflipshapes.", ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDrawLayer *pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("must have a draw layer", pDrawLayer != NULL);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != NULL);
+    struct TestData
+    {
+        long mnShapeX;
+        long mnShapeY;
+        long mnShapeWidth;
+        long mnShapeHeight;
+        SCROW startAnchorRow;
+        SCCOL startAnchorCol;
+        SCROW endAnchorRow;
+        SCCOL endAnchorCol;
+    };
+
+    TestData testData[] =
+    {
+        { 1, 1356, 2194, 1255, 3, 0, 5, 0  },
+        { 2194, 5771, 2195, 1205, 12, 0, 15, 1 },
+        { 5154, 1382, 904, 1170, 3, 2, 5, 2 },
+        { 6085, 5712, 903, 1120, 12, 2, 15, 3 },
+        { 9367, 1906, 1382, 772, 4, 4, 5, 4 },
+        { 10557, 5732, 1383, 745, 12, 4, 14, 5 },
+        { 14106, 1674, 957, 957, 3, 6, 5, 6 },
+        { 15087, 5447, 956, 932, 12, 6, 14, 7 },
+        { 18087, 2050, 904, 1010, 4, 8, 6, 8 },
+        { 19122, 5569, 904, 985, 12, 8, 14, 8 }
+    };
+
+    int nCount( pPage->GetObjCount() );
+    int nData = SAL_N_ELEMENTS(testData);
+    CPPUNIT_ASSERT_MESSAGE("must have test data for all objects", nCount == nData );
+
+    for (int i = 0; i < nData; ++i )
+
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+        ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj, false);
+        Point aObjPos( pObj->GetLogicRect().TopLeft() );
+
+       long nTol = 20; // 20hmm
+       printf( "comparing object[%d] pos ( %ld, %ld ) with expected ( %ld, %ld ) - with tolerance %ld\n",
+            i, aObjPos.X(), aObjPos.Y(), testData[ i ].mnShapeX, testData[ i ].mnShapeY, nTol );
+       CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aObjPos.X(), testData[ i ].mnShapeX, nTol  ) );
+       CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aObjPos.Y(), testData[ i ].mnShapeY, nTol  ) );
+
+       printf( "comparing object[%d] Width, Height ( %ld, %ld ) with expected ( %ld, %ld ) - with tolerance %ld\n",
+             i, pObj->GetLogicRect().GetWidth(), pObj->GetLogicRect().GetHeight(),
+             testData[ i ].mnShapeWidth, testData[ i ].mnShapeHeight, nTol );
+       CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance(pObj->GetLogicRect().GetWidth(), testData[ i ].mnShapeWidth, nTol  ) );
+       CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance(pObj->GetLogicRect().GetHeight(), testData[ i ].mnShapeHeight, nTol  ) );
+
+       printf( "comparing object[%d] anchor start ( %" SAL_PRIdINT32 ", %d ) with expected ( %" SAL_PRIdINT32 ", %d ) \n",
+             i, pData->maStart.Row(), pData->maStart.Col(),  testData[ i ].startAnchorRow, testData[ i ].startAnchorCol );
+
+       CPPUNIT_ASSERT_EQUAL( pData->maStart.Row(), testData[ i ].startAnchorRow );
+       CPPUNIT_ASSERT_EQUAL( pData->maStart.Col(), testData[ i ].startAnchorCol );
+
+       printf( "comparing object[%d] anchor end ( %" SAL_PRIdINT32 ", %d ) with expected ( %" SAL_PRIdINT32 ", %d ) \n",
+             i, pData->maEnd.Row(), pData->maEnd.Col(),  testData[ i ].endAnchorRow, testData[ i ].endAnchorCol );
+       CPPUNIT_ASSERT_EQUAL( pData->maEnd.Row(), testData[ i ].endAnchorRow );
+       CPPUNIT_ASSERT_EQUAL( pData->maEnd.Col(), testData[ i ].endAnchorCol );
+    }
+}
 ScExportTest::ScExportTest()
       : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
 {

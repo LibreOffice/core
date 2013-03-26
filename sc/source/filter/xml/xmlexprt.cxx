@@ -128,6 +128,7 @@
 
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //! not found in unonames.hxx
 #define SC_LAYERID "LayerID"
@@ -3149,6 +3150,37 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         {
             if (aItr->xShape.is())
             {
+                SdrObject* pObj = SdrObject::getSdrObjectFromXShape( aItr->xShape );
+                if ( pObj )
+                {
+                    // Sometimes the position indicated by aTRTranslate and
+                    // the position reported by the object are different
+                    // ( seems to happen when objects are flipped say
+                    // vertically ) This doesn't seem to happen when the
+                    // objects are just rotated in a similar way e.g.
+                    // although a rotation of 180 deg. is roughly equivalent
+                    // to a vertical flip, the Transformation and Obj position
+                    // are equal wheras in the vertical flip case they are not.
+                    // This difference when exporting ( which attempts to
+                    // output the position of the object relative to the top
+                    // left corner of the nearest cell ) results in incorrect
+                    // values being generated.
+                    basegfx::B2DPolyPolygon aTmp;
+                    basegfx::B2DHomMatrix aTmpMatrix;
+                    uno::Reference<beans::XPropertySet> xPropertySet(aItr->xShape, uno::UNO_QUERY);
+                    GetShapeExport()->ImpExportNewTrans_GetB2DHomMatrix( aTmpMatrix, xPropertySet );
+                    double fTRShear(0.0);
+                    double fTRRotate(0.0);
+                    basegfx::B2DTuple aTRTranslate;
+                    basegfx::B2DTuple aTRScale;
+
+                    aTmpMatrix.decompose(aTRScale, aTRTranslate, fTRRotate, fTRShear);
+                    Point aObjPos = pObj->GetLogicRect().TopLeft();
+                    Point aTransPos( aTRTranslate.getX(), aTRTranslate.getY() );
+                    aObjPos -= aTransPos;
+                    aPoint.X = aPoint.X - aObjPos.X();
+                    aPoint.Y = aPoint.Y - aObjPos.Y();
+                }
                 if (bNegativePage)
                     aPoint.X = 2 * aItr->xShape->getPosition().X + aItr->xShape->getSize().Width - aPoint.X;
                 if ( !aItr->xShape->getShapeType().equals(sCaptionShape) )
