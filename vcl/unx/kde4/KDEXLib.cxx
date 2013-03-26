@@ -19,8 +19,6 @@
 
 #include "VCLKDEApplication.hxx"
 
-#define Region QtXRegion
-
 #include <kapplication.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -29,8 +27,6 @@
 #include <qabstracteventdispatcher.h>
 #include <qclipboard.h>
 #include <qthread.h>
-
-#undef Region
 
 #include "KDEXLib.hxx"
 

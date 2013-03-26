@@ -19,9 +19,7 @@
 
 #include "VCLKDEApplication.hxx"
 
-#define Region QtXRegion
 #include <QEvent>
-#undef Region
 
 #include "KDESalDisplay.hxx"
 
