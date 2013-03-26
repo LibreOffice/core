@@ -37,7 +37,7 @@
 
 class ScFormulaCell;
 class ScTokenArray;
-class ScRefCellValue;
+struct ScRefCellValue;
 
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
