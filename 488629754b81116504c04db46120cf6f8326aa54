@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+ZM\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2013-03-26T14:58:02Z",
+      "side": 1,
+      "message": "I think you lost one \"p\" in the \"1bb\"",
+      "revId": "488629754b81116504c04db46120cf6f8326aa54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
