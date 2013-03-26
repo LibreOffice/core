@@ -41,11 +41,7 @@ namespace ucbhelper { class ProxyDecider; }
 namespace webdav_ucp
 {
 
-// -------------------------------------------------------------------
-// NeonSession
 // A DAVSession implementation using the neon/expat library
-// -------------------------------------------------------------------
-
 class NeonSession : public DAVSession
 {
 private:

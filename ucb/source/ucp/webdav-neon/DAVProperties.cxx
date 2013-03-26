@@ -46,8 +46,6 @@ const ::rtl::OUString DAVProperties::SUPPORTEDLOCK("DAV:supportedlock");
 
 const ::rtl::OUString DAVProperties::EXECUTABLE("http://apache.org/dav/props/executable");
 
-// -------------------------------------------------------------------
-// static
 void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
                                         NeonPropName & rName )
 {
@@ -106,8 +104,6 @@ void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
     }
 }
 
-// -------------------------------------------------------------------
-// static
 void DAVProperties::createUCBPropName( const char * nspace,
                                        const char * name,
                                        rtl::OUString & rFullName )
@@ -168,8 +164,6 @@ void DAVProperties::createUCBPropName( const char * nspace,
     }
 }
 
-// -------------------------------------------------------------------
-// static
 bool DAVProperties::isUCBDeadProperty( const NeonPropName & rName )
 {
     return ( rName.nspace &&

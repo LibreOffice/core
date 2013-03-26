@@ -60,7 +60,6 @@ private:
 
 } // namespace webdav_ucp
 
-// -------------------------------------------------------------------
 void TickerThread::execute()
 {
     OSL_TRACE( "TickerThread: start." );
@@ -86,14 +85,12 @@ void TickerThread::execute()
     OSL_TRACE( "TickerThread: stop." );
 }
 
-// -------------------------------------------------------------------
 NeonLockStore::NeonLockStore()
     : m_pNeonLockStore( ne_lockstore_create() )
 {
     OSL_ENSURE( m_pNeonLockStore, "Unable to create neon lock store!" );
 }
 
-// -------------------------------------------------------------------
 NeonLockStore::~NeonLockStore()
 {
     stopTicker();
@@ -118,7 +115,6 @@ NeonLockStore::~NeonLockStore()
     ne_lockstore_destroy( m_pNeonLockStore );
 }
 
-// -------------------------------------------------------------------
 void NeonLockStore::startTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -130,7 +126,6 @@ void NeonLockStore::startTicker()
     }
 }
 
-// -------------------------------------------------------------------
 void NeonLockStore::stopTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -143,7 +138,6 @@ void NeonLockStore::stopTicker()
     }
 }
 
-// -------------------------------------------------------------------
 void NeonLockStore::registerSession( HttpSession * pHttpSession )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -151,7 +145,6 @@ void NeonLockStore::registerSession( HttpSession * pHttpSession )
     ne_lockstore_register( m_pNeonLockStore, pHttpSession );
 }
 
-// -------------------------------------------------------------------
 NeonLock * NeonLockStore::findByUri( rtl::OUString const & rUri )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -162,7 +155,6 @@ NeonLock * NeonLockStore::findByUri( rtl::OUString const & rUri )
     return ne_lockstore_findbyuri( m_pNeonLockStore, &aUri );
 }
 
-// -------------------------------------------------------------------
 void NeonLockStore::addLock( NeonLock * pLock,
                              rtl::Reference< NeonSession > const & xSession,
                              sal_Int32 nLastChanceToSendRefreshRequest )
@@ -176,7 +168,6 @@ void NeonLockStore::addLock( NeonLock * pLock,
     startTicker();
 }
 
-// -------------------------------------------------------------------
 void NeonLockStore::updateLock( NeonLock * pLock,
                                 sal_Int32 nLastChanceToSendRefreshRequest )
 {
@@ -193,7 +184,6 @@ void NeonLockStore::updateLock( NeonLock * pLock,
     }
 }
 
-// -------------------------------------------------------------------
 void NeonLockStore::removeLock( NeonLock * pLock )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -205,7 +195,6 @@ void NeonLockStore::removeLock( NeonLock * pLock )
         stopTicker();
 }
 
-// -------------------------------------------------------------------
 void NeonLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );

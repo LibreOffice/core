@@ -79,10 +79,6 @@ const ne_uri g_sUriDefaultsFTP   = { "ftp",
 # pragma enable_warn
 #endif
 
-// -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
-
 NeonUri::NeonUri( const ne_uri * inUri )
     throw ( DAVException )
 {
@@ -164,9 +160,6 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
     }
 }
 
-// -------------------------------------------------------------------
-// Destructor
-// -------------------------------------------------------------------
 NeonUri::~NeonUri( )
 {
 }

@@ -39,10 +39,7 @@ namespace webdav_ucp
 #define DEFAULT_HTTPS_PORT      443
 #define DEFAULT_FTP_PORT        21
 
-// -------------------------------------------------------------------
-// NeonUri
 // A URI implementation for use with the neon/expat library
-// -------------------------------------------------------------------
 class NeonUri
 {
     private:

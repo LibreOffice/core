@@ -79,10 +79,6 @@ using namespace webdav_ucp;
 #    define EOL "\r\n"
 #endif
 
-// -------------------------------------------------------------------
-// RequestData
-// -------------------------------------------------------------------
-
 struct RequestData
 {
     // POST
@@ -94,10 +90,6 @@ struct RequestData
                  const rtl::OUString & rReferer )
     : aContentType( rContentType ), aReferer( rReferer ) {}
 };
-
-// -------------------------------------------------------------------
-// RequestDataMap
-// -------------------------------------------------------------------
 
 struct equalPtr
 {
@@ -124,9 +116,6 @@ typedef boost::unordered_map
 >
 RequestDataMap;
 
-// -------------------------------------------------------------------
-// Helper function
-// -------------------------------------------------------------------
 static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 {
     // Extract status code from session error string. Unfortunately
@@ -149,7 +138,6 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
     return sal_uInt16( rStatusText.copy( 0, nPos ).toInt32() );
 }
 
-// -------------------------------------------------------------------
 static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
 {
     if ( !rFlags.hasElements() )
@@ -169,7 +157,6 @@ static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
     return false;
 }
 
-// -------------------------------------------------------------------
 struct NeonRequestContext
 {
     uno::Reference< io::XOutputStream >    xOutputStream;
@@ -198,19 +185,7 @@ struct NeonRequestContext
       pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
 };
 
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-//
-// Callback functions
-//
-//--------------------------------------------------------------------
-//--------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-// ResponseBlockReader
 // A simple Neon response_block_reader for use with an XInputStream
-// -------------------------------------------------------------------
-
 extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
                                                const char * inBuf,
                                                size_t inLen )
@@ -230,11 +205,7 @@ extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
     return 0;
 }
 
-// -------------------------------------------------------------------
-// ResponseBlockWriter
 // A simple Neon response_block_reader for use with an XOutputStream
-// -------------------------------------------------------------------
-
 extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
                                                 const char * inBuf,
                                                 size_t inLen )
@@ -256,7 +227,6 @@ extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
     return 0;
 }
 
-// -------------------------------------------------------------------
 extern "C" int NeonSession_NeonAuth( void *       inUserData,
 #ifdef NE_FEATURE_SSPI
                                      const char * inAuthProtocol,
@@ -369,11 +339,7 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
     return theRetVal;
 }
 
-// -------------------------------------------------------------------
-
 namespace {
-    // -------------------------------------------------------------------
-    // Helper function
     ::rtl::OUString GetHostnamePart( const ::rtl::OUString& _rRawString )
     {
         ::rtl::OUString sPart;
@@ -390,7 +356,6 @@ namespace {
     }
 } // namespace
 
-// -------------------------------------------------------------------
 extern "C" int NeonSession_CertificationNotify( void *userdata,
                                                 int failures,
                                                 const ne_ssl_certificate *cert )
@@ -540,7 +505,6 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     return 1;
 }
 
-// -------------------------------------------------------------------
 extern "C" void NeonSession_PreSendRequest( ne_request * req,
                                             void * userdata,
                                             ne_buffer * headers )
@@ -612,8 +576,7 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
     }
 }
 
-// -------------------------------------------------------------------
-// static members!
+// static members
 bool NeonSession::m_bGlobalsInited = false;
 //See https://bugzilla.redhat.com/show_bug.cgi?id=544619#c4
 //neon is threadsafe, but uses gnutls which is only thread-safe
@@ -623,9 +586,6 @@ bool NeonSession::m_bGlobalsInited = false;
 osl::Mutex aGlobalNeonMutex;
 NeonLockStore NeonSession::m_aNeonLockStore;
 
-// -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
 NeonSession::NeonSession(
         const rtl::Reference< DAVSessionFactory > & rSessionFactory,
         const rtl::OUString& inUri,
@@ -644,9 +604,6 @@ NeonSession::NeonSession(
     m_nPort      = theUri.GetPort();
 }
 
-// -------------------------------------------------------------------
-// Destructor
-// -------------------------------------------------------------------
 NeonSession::~NeonSession( )
 {
     if ( m_pHttpSession )
@@ -660,7 +617,6 @@ NeonSession::~NeonSession( )
     delete static_cast< RequestDataMap * >( m_pRequestData );
 }
 
-// -------------------------------------------------------------------
 void NeonSession::Init( const DAVRequestEnvironment & rEnv )
   throw ( DAVException )
 {
@@ -669,7 +625,6 @@ void NeonSession::Init( const DAVRequestEnvironment & rEnv )
     Init();
 }
 
-// -------------------------------------------------------------------
 void NeonSession::Init()
     throw ( DAVException )
 {
@@ -844,8 +799,6 @@ void NeonSession::Init()
     }
 }
 
-// -------------------------------------------------------------------
-// virtual
 sal_Bool NeonSession::CanUse( const rtl::OUString & inUri,
                               const uno::Sequence< beans::NamedValue >& rFlags )
 {
@@ -865,17 +818,12 @@ sal_Bool NeonSession::CanUse( const rtl::OUString & inUri,
     return sal_False;
 }
 
-// -------------------------------------------------------------------
-// virtual
 sal_Bool NeonSession::UsesProxy()
 {
     Init();
     return  !m_aProxyName.isEmpty() ;
 }
 
-// -------------------------------------------------------------------
-// OPTIONS
-// -------------------------------------------------------------------
 void NeonSession::OPTIONS( const rtl::OUString & inPath,
                            DAVCapabilities & outCapabilities,
                            const DAVRequestEnvironment & rEnv )
@@ -900,9 +848,6 @@ void NeonSession::OPTIONS( const rtl::OUString & inPath,
     outCapabilities.executable = !!servercaps.dav_executable;
 }
 
-// -------------------------------------------------------------------
-// PROPFIND - allprop & named
-// -------------------------------------------------------------------
 void NeonSession::PROPFIND( const rtl::OUString & inPath,
                             const Depth inDepth,
                             const std::vector< rtl::OUString > & inPropNames,
@@ -926,9 +871,6 @@ void NeonSession::PROPFIND( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// PROPFIND - propnames
-// -------------------------------------------------------------------
 void NeonSession::PROPFIND( const rtl::OUString & inPath,
                             const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
@@ -950,9 +892,6 @@ void NeonSession::PROPFIND( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// PROPPATCH
-// -------------------------------------------------------------------
 void NeonSession::PROPPATCH( const rtl::OUString & inPath,
                              const std::vector< ProppatchValue > & inValues,
                              const DAVRequestEnvironment & rEnv )
@@ -1081,9 +1020,6 @@ void NeonSession::PROPPATCH( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// HEAD
-// -------------------------------------------------------------------
 void NeonSession::HEAD( const ::rtl::OUString &  inPath,
                         const std::vector< ::rtl::OUString > & inHeaderNames,
                         DAVResource & ioResource,
@@ -1104,9 +1040,6 @@ void NeonSession::HEAD( const ::rtl::OUString &  inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
 uno::Reference< io::XInputStream >
 NeonSession::GET( const rtl::OUString & inPath,
                   const DAVRequestEnvironment & rEnv )
@@ -1130,9 +1063,6 @@ NeonSession::GET( const rtl::OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
 void NeonSession::GET( const rtl::OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const DAVRequestEnvironment & rEnv )
@@ -1153,9 +1083,6 @@ void NeonSession::GET( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
 uno::Reference< io::XInputStream >
 NeonSession::GET( const rtl::OUString & inPath,
                   const std::vector< ::rtl::OUString > & inHeaderNames,
@@ -1184,9 +1111,6 @@ NeonSession::GET( const rtl::OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
 void NeonSession::GET( const rtl::OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const std::vector< ::rtl::OUString > & inHeaderNames,
@@ -1212,9 +1136,6 @@ void NeonSession::GET( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// PUT
-// -------------------------------------------------------------------
 void NeonSession::PUT( const rtl::OUString & inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
                        const DAVRequestEnvironment & rEnv )
@@ -1238,9 +1159,6 @@ void NeonSession::PUT( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// POST
-// -------------------------------------------------------------------
 uno::Reference< io::XInputStream >
 NeonSession::POST( const rtl::OUString & inPath,
                    const rtl::OUString & rContentType,
@@ -1274,9 +1192,6 @@ NeonSession::POST( const rtl::OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-// -------------------------------------------------------------------
-// POST
-// -------------------------------------------------------------------
 void NeonSession::POST( const rtl::OUString & inPath,
                         const rtl::OUString & rContentType,
                         const rtl::OUString & rReferer,
@@ -1307,9 +1222,6 @@ void NeonSession::POST( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// MKCOL
-// -------------------------------------------------------------------
 void NeonSession::MKCOL( const rtl::OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -1325,9 +1237,6 @@ void NeonSession::MKCOL( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// COPY
-// -------------------------------------------------------------------
 void NeonSession::COPY( const rtl::OUString & inSourceURL,
                         const rtl::OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
@@ -1354,9 +1263,6 @@ void NeonSession::COPY( const rtl::OUString & inSourceURL,
     HandleError( theRetVal, inSourceURL, rEnv );
 }
 
-// -------------------------------------------------------------------
-// MOVE
-// -------------------------------------------------------------------
 void NeonSession::MOVE( const rtl::OUString & inSourceURL,
                         const rtl::OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
@@ -1381,9 +1287,6 @@ void NeonSession::MOVE( const rtl::OUString & inSourceURL,
     HandleError( theRetVal, inSourceURL, rEnv );
 }
 
-// -------------------------------------------------------------------
-// DESTROY
-// -------------------------------------------------------------------
 void NeonSession::DESTROY( const rtl::OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -1399,7 +1302,6 @@ void NeonSession::DESTROY( const rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
 namespace
 {
     sal_Int32 lastChanceToSendRefreshRequest( TimeValue const & rStart,
@@ -1429,9 +1331,7 @@ namespace
 
 } // namespace
 
-// -------------------------------------------------------------------
-// LOCK (set new lock)
-// -------------------------------------------------------------------
+// Set new lock
 void NeonSession::LOCK( const ::rtl::OUString & inPath,
                         ucb::Lock & rLock,
                         const DAVRequestEnvironment & rEnv )
@@ -1524,9 +1424,7 @@ void NeonSession::LOCK( const ::rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// LOCK (refresh existing lock)
-// -------------------------------------------------------------------
+// Refresh existing lock
 sal_Int64 NeonSession::LOCK( const ::rtl::OUString & inPath,
                              sal_Int64 nTimeout,
                              const DAVRequestEnvironment & rEnv )
@@ -1562,9 +1460,7 @@ sal_Int64 NeonSession::LOCK( const ::rtl::OUString & inPath,
     return theLock->timeout;
 }
 
-// -------------------------------------------------------------------
-// LOCK (refresh existing lock)
-// -------------------------------------------------------------------
+// Refresh existing lock
 bool NeonSession::LOCK( NeonLock * pLock,
                         sal_Int32 & rlastChanceToSendRefreshRequest )
 {
@@ -1596,9 +1492,6 @@ bool NeonSession::LOCK( NeonLock * pLock,
     }
 }
 
-// -------------------------------------------------------------------
-// UNLOCK
-// -------------------------------------------------------------------
 void NeonSession::UNLOCK( const ::rtl::OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -1630,9 +1523,6 @@ void NeonSession::UNLOCK( const ::rtl::OUString & inPath,
     HandleError( theRetVal, inPath, rEnv );
 }
 
-// -------------------------------------------------------------------
-// UNLOCK
-// -------------------------------------------------------------------
 bool NeonSession::UNLOCK( NeonLock * pLock )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -1655,14 +1545,12 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
     }
 }
 
-// -------------------------------------------------------------------
 void NeonSession::abort()
     throw ( DAVException )
 {
     SAL_INFO("ucb.ucp.webdav", "neon commands cannot be aborted");
 }
 
-// -------------------------------------------------------------------
 const ucbhelper::InternetProxyServer & NeonSession::getProxySettings() const
 {
     if ( m_aScheme == "http" || m_aScheme == "https" )
@@ -1679,7 +1567,6 @@ const ucbhelper::InternetProxyServer & NeonSession::getProxySettings() const
     }
 }
 
-// -------------------------------------------------------------------
 namespace {
 
 bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
@@ -1700,7 +1587,6 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
 
 } // namespace
 
-// -------------------------------------------------------------------
 bool NeonSession::removeExpiredLocktoken( const rtl::OUString & inURL,
                                           const DAVRequestEnvironment & rEnv )
 {
@@ -1765,10 +1651,7 @@ bool NeonSession::removeExpiredLocktoken( const rtl::OUString & inURL,
     return false;
 }
 
-// -------------------------------------------------------------------
-// HandleError
-// Common Error Handler
-// -------------------------------------------------------------------
+// Common error handler
 void NeonSession::HandleError( int nError,
                                const rtl::OUString & inPath,
                                const DAVRequestEnvironment & rEnv )
@@ -1867,7 +1750,6 @@ void NeonSession::HandleError( int nError,
     }
 }
 
-// -------------------------------------------------------------------
 namespace {
 
 void runResponseHeaderHandler( void * userdata,
@@ -1927,8 +1809,6 @@ void runResponseHeaderHandler( void * userdata,
 
 } // namespace
 
-// -------------------------------------------------------------------
-// static
 int NeonSession::GET( ne_session * sess,
                       const char * uri,
                       ne_block_reader reader,
@@ -1971,8 +1851,6 @@ int NeonSession::GET( ne_session * sess,
     return ret;
 }
 
-// -------------------------------------------------------------------
-// static
 int NeonSession::PUT( ne_session * sess,
                       const char * uri,
                       const char * buffer,
@@ -1998,7 +1876,6 @@ int NeonSession::PUT( ne_session * sess,
     return ret;
 }
 
-// -------------------------------------------------------------------
 int NeonSession::POST( ne_session * sess,
                        const char * uri,
                        const char * buffer,
@@ -2058,8 +1935,6 @@ int NeonSession::POST( ne_session * sess,
     return ret;
 }
 
-// -------------------------------------------------------------------
-// static
 bool
 NeonSession::getDataFromInputStream(
     const uno::Reference< io::XInputStream > & xStream,
@@ -2148,7 +2023,6 @@ NeonSession::getDataFromInputStream(
     return false;
 }
 
-// ---------------------------------------------------------------------
 sal_Bool
 NeonSession::isDomainMatch( rtl::OUString certHostName )
 {
@@ -2169,7 +2043,6 @@ NeonSession::isDomainMatch( rtl::OUString certHostName )
     return sal_False;
 }
 
-// ---------------------------------------------------------------------
 rtl::OUString NeonSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
 {
     try

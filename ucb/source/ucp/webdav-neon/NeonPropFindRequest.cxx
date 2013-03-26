@@ -47,7 +47,6 @@ using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OStringToOUString;
 
-// -------------------------------------------------------------------
 namespace
 {
     // strip "DAV:" namespace from XML snippets to avoid
@@ -81,7 +80,6 @@ namespace
     }
 }
 
-// -------------------------------------------------------------------
 extern "C" int NPFR_propfind_iter( void* userdata,
                                    const NeonPropName* pname,
                                    const char* value,
@@ -190,7 +188,6 @@ extern "C" int NPFR_propfind_iter( void* userdata,
     return 0; // Go on.
 }
 
-// -------------------------------------------------------------------
 extern "C" void NPFR_propfind_results( void* userdata,
                                        const ne_uri* uri,
                                        const NeonPropFindResultSet* set )
@@ -207,7 +204,7 @@ extern "C" void NPFR_propfind_results( void* userdata,
         = static_cast< vector< DAVResource > * >( userdata );
     theResources->push_back( theResource );
 }
-// -------------------------------------------------------------------
+
 extern "C" int NPFR_propnames_iter( void* userdata,
                                     const NeonPropName* pname,
                                     const char* /*value*/,
@@ -223,7 +220,6 @@ extern "C" int NPFR_propnames_iter( void* userdata,
     return 0;
 }
 
-// -------------------------------------------------------------------
 extern "C" void NPFR_propnames_results( void* userdata,
                                         const ne_uri* uri,
                                         const NeonPropFindResultSet* results )
@@ -243,10 +239,6 @@ extern "C" void NPFR_propnames_results( void* userdata,
 }
 
 extern osl::Mutex aGlobalNeonMutex;
-
-// -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
 
 NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
                                           const char* inPath,
@@ -303,11 +295,6 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         nError = NE_ERROR;
 }
 
-// -------------------------------------------------------------------
-// Constructor
-// - obtains property names
-// -------------------------------------------------------------------
-
 NeonPropFindRequest::NeonPropFindRequest(
                             HttpSession* inSession,
                             const char* inPath,
@@ -329,9 +316,6 @@ NeonPropFindRequest::NeonPropFindRequest(
         nError = NE_ERROR;
 }
 
-// -------------------------------------------------------------------
-// Destructor
-// -------------------------------------------------------------------
 NeonPropFindRequest::~NeonPropFindRequest( )
 {
 }

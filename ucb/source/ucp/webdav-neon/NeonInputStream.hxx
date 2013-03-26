@@ -38,11 +38,8 @@
 namespace webdav_ucp
 {
 
-// -------------------------------------------------------------------
-// NeonInputStream
 // A simple XInputStream implementation provided specifically for use
 // by the DAVSession::GET method.
-// -------------------------------------------------------------------
 class NeonInputStream : public ::com::sun::star::io::XInputStream,
                         public ::com::sun::star::io::XSeekable,
                         public ::cppu::OWeakObject

@@ -87,10 +87,6 @@ void process_headers( ne_request * req,
 
 } // namespace
 
-// -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
-
 extern osl::Mutex aGlobalNeonMutex;
 
 NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
@@ -124,9 +120,6 @@ NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
     ne_request_destroy( req );
 }
 
-// -------------------------------------------------------------------
-// Destructor
-// -------------------------------------------------------------------
 NeonHeadRequest::~NeonHeadRequest()
 {
 }
