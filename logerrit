@@ -8,29 +8,6 @@ get_SHA_for_change() {
     SHA=`ssh ${GERRITHOST?} gerrit query --all-approvals change:$1|grep ref|tail -1|cut -d: -f2`
 }
 
-get_REVISION_for_change() {
-    REVISION=`ssh ${GERRITHOST?} gerrit query --all-approvals change:$1|grep revision|tail -1|cut -d: -f2`
-}
-
-ask_tristate() {
-    case $1 in
-        [yY] | [yY][Ee][Ss] | [+] )
-            ANSWER=y
-        ;;
-        [nN] | [n|N][O|o] | [-] )
-            ANSWER=n
-        ;;
-        [] )
-            ANSWER=
-        ;;
-        * )
-            echo "Please answer with either +,-,y,n,yes,no or the empty string."
-            exit 1
-        ;;
-    esac
-
-}
-
 submit() {
         TYPE=$1
         BRANCH=$2
@@ -72,7 +49,6 @@ case "$1" in
         echo "             pull CHANGEID           pull (and merge) the changes on current branch"
         echo "             cherry-pick CHANGEID    cherry-pick the change on current branch"
         echo "             patch CHANGEID          show the change as a patch"
-        echo "             review [CHANGEID]       interactively review a change (current one if no changeid given)"
         echo "             query ....              query for changes for review on project core"
         echo "             <any other gerrit command>"
         echo
@@ -163,82 +139,17 @@ case "$1" in
         fi
         git reset --hard remotes/origin/$BRANCH
     ;;
-    review)
-        CHANGEID=$2
-        if test -z "$CHANGEID"
-        then
-            CHANGEID=`git log --format=format:%b -1 HEAD|grep Change-Id|cut -d: -f2`
-            if test -z "$CHANGEID"
-            then
-                echo "could not find a Change-Id in your last commit, sorry"
-                exit 1
-            fi
-            echo "no Change-Id given on the command line, reviewing change$CHANGEID"
-        fi
-        MESSAGEREQ=""
-        read -p 'was the change verified to build successfully (+) or found not to build (-) or none of that ()? ' VERIFIED
-        ask_tristate $VERIFIED
-        case "$ANSWER" in
-            "y")
-                VERIFIEDFLAG=--verified=+1
-            ;;
-            "n")
-                VERIFIEDFLAG="--verified=-1"
-                MESSAGEREQ="$MESSAGEREQ and explain why you could not verify this"
-            ;;
-            *)
-                VERIFIEDFLAG="--verified=0"
-            ;;
-
-        esac
-        read -p 'is the code looking good (+), bad (-) or none of that ()? ' CODEREVIEW
-        ask_tristate $CODEREVIEW
-        SUBMITFLAG=""
-        case "$ANSWER" in
-            "y")
-                read -p 'do you approve the change (+) too, or prefer someone else to do that ()? ' CODEREVIEW
-                ask_tristate $CODEREVIEW
-                case "$ANSWER" in
-                    "y")
-                        CODEREVIEWFLAG="--code-review=2"
-                        SUBMITFLAG="--submit"
-                    ;;
-                    "n")
-                        CODEREVIEWFLAG="--code-review=1"
-                    ;;
-                    *)
-                        CODEREVIEWFLAG="--code-review=1"
-                    ;;
-                esac
-            ;;
-            "n")
-                read -p 'do you still allow the change to go in () or not (-)? ' CODEREVIEW
-                ask_tristate $CODEREVIEW
-                case "$ANSWER" in
-                    "y")
-                        CODEREVIEWFLAG="--code-review=-1"
-                        MESSAGEREQ="$MESSAGEREQ and explain why you have reservations about the code"
-                    ;;
-                    "n")
-                        CODEREVIEWFLAG="--code-review=-2"
-                        MESSAGEREQ="$MESSAGEREQ and explain why you want to block this"
-                    ;;
-                    *)
-                        CODEREVIEWFLAG="--code-review=-1"
-                        MESSAGEREQ="$MESSAGEREQ and explain why you have reservations about the code"
-                    ;;
-                esac
-            ;;
-            *)
-            ;;
-        esac
-        read -p "please type a friendly comment$MESSAGEREQ: " MESSAGE
-        get_REVISION_for_change $CHANGEID
-        ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $SUBMITFLAG $REVISION
-    ;;
     checkout)
         get_SHA_for_change $2
         git fetch $GERRITURL $SHA && git checkout FETCH_HEAD
+    ;;
+    review)
+        echo "'./logerrit review' has be removed as obsolete."
+        echo "Please use either:"
+        echo " - git-review:              https://wiki.documentfoundation.org/Development/GitReview"
+        echo " - or the web-UI directly:  https://gerrit.libreoffice.org/"
+        echo "Both provide a better experience."
+        exit 1;
     ;;
     pull)
         get_SHA_for_change $2
