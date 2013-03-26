@@ -382,7 +382,7 @@ void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
     {
         // Fill templates
 
-        mnCurRegionId = pContainerItem->mnId-1;
+        mnCurRegionId = pContainerItem->mnRegionId+1;
         maCurRegionName = pContainerItem->maTitle;
         maFTName.SetText(maCurRegionName);
         showRegion(pItem);
