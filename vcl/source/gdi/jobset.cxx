@@ -25,8 +25,6 @@
 
 #include <jobset.h>
 
-// =======================================================================
-
 DBG_NAME( JobSetup )
 
 #define JOBSET_FILEFORMAT2      3780
@@ -53,8 +51,6 @@ struct Impl364JobSetupData
     SVBT32  nPaperHeight;
 };
 
-// =======================================================================
-
 ImplJobSetup::ImplJobSetup()
 {
     mnRefCount          = 1;
@@ -68,8 +64,6 @@ ImplJobSetup::ImplJobSetup()
     mnDriverDataLen     = 0;
     mpDriverData        = NULL;
 }
-
-// -----------------------------------------------------------------------
 
 ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     maPrinterName( rJobSetup.maPrinterName ),
@@ -94,14 +88,10 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     maValueMap          = rJobSetup.maValueMap;
 }
 
-// -----------------------------------------------------------------------
-
 ImplJobSetup::~ImplJobSetup()
 {
     rtl_freeMemory( mpDriverData );
 }
-
-// =======================================================================
 
 ImplJobSetup* JobSetup::ImplGetData()
 {
@@ -116,16 +106,12 @@ ImplJobSetup* JobSetup::ImplGetData()
     return mpData;
 }
 
-// -----------------------------------------------------------------------
-
 ImplJobSetup* JobSetup::ImplGetConstData()
 {
     if ( !mpData )
         mpData = new ImplJobSetup;
     return mpData;
 }
-
-// -----------------------------------------------------------------------
 
 const ImplJobSetup* JobSetup::ImplGetConstData() const
 {
@@ -134,16 +120,12 @@ const ImplJobSetup* JobSetup::ImplGetConstData() const
     return mpData;
 }
 
-// =======================================================================
-
 JobSetup::JobSetup()
 {
     DBG_CTOR( JobSetup, NULL );
 
     mpData = NULL;
 }
-
-// -----------------------------------------------------------------------
 
 JobSetup::JobSetup( const JobSetup& rJobSetup )
 {
@@ -155,8 +137,6 @@ JobSetup::JobSetup( const JobSetup& rJobSetup )
     if ( mpData )
         mpData->mnRefCount++;
 }
-
-// -----------------------------------------------------------------------
 
 JobSetup::~JobSetup()
 {
@@ -171,8 +151,6 @@ JobSetup::~JobSetup()
     }
 }
 
-// -----------------------------------------------------------------------
-
 rtl::OUString JobSetup::GetPrinterName() const
 {
     if ( mpData )
@@ -180,8 +158,6 @@ rtl::OUString JobSetup::GetPrinterName() const
     else
         return rtl::OUString();
 }
-
-// -----------------------------------------------------------------------
 
 rtl::OUString JobSetup::GetDriverName() const
 {
@@ -191,8 +167,6 @@ rtl::OUString JobSetup::GetDriverName() const
         return rtl::OUString();
 }
 
-// -----------------------------------------------------------------------
-
 void JobSetup::SetValue( const rtl::OUString& rKey, const rtl::OUString& rValue )
 {
     if( ! mpData )
@@ -201,20 +175,18 @@ void JobSetup::SetValue( const rtl::OUString& rKey, const rtl::OUString& rValue 
     mpData->maValueMap[ rKey ] = rValue;
 }
 
-// -----------------------------------------------------------------------
-
 JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 {
     DBG_CHKTHIS( JobSetup, NULL );
     DBG_CHKOBJ( &rJobSetup, JobSetup, NULL );
     DBG_ASSERT( !rJobSetup.mpData || (rJobSetup.mpData->mnRefCount) < 0xFFFE, "JobSetup: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    // Increment refcount first, so that we can assign to ourselves
     if ( rJobSetup.mpData )
         rJobSetup.mpData->mnRefCount++;
 
-    // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // If it's not static ImpData and the last reference, delete it, else
+    // decrement refcount
     if ( mpData )
     {
         if ( mpData->mnRefCount == 1 )
@@ -227,8 +199,6 @@ JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 {
@@ -260,8 +230,6 @@ sal_Bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 
     return sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
 {
@@ -300,7 +268,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
             pJobData->maPrinterName = OStringToOUString(pData->cPrinterName, aStreamEncoding);
             pJobData->maDriver = OStringToOUString(pData->cDriverName, aStreamEncoding);
 
-            // Sind es unsere neuen JobSetup-Daten?
+            // Are these our new JobSetup files?
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
@@ -353,14 +321,12 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     return rIStream;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "JobSetup::<< - Solar-Version not set on rOStream" );
 
-    // Zur Zeit haben wir noch kein neues FileFormat
-//    if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
+    // We do not have a new FileFormat at this point in time
+    // if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
         sal_uInt16 nLen = 0;
         if ( !rJobSetup.mpData )
@@ -371,7 +337,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
 
             const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
             Impl364JobSetupData aOldJobData;
-            sal_uInt16              nOldJobDataSize = sizeof( aOldJobData );
+            sal_uInt16 nOldJobDataSize = sizeof( aOldJobData );
             ShortToSVBT16( nOldJobDataSize, aOldJobData.nSize );
             ShortToSVBT16( pJobData->mnSystem, aOldJobData.nSystem );
             UInt32ToSVBT32( pJobData->mnDriverDataLen, aOldJobData.nDriverDataLen );
@@ -422,11 +388,6 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.Seek( nPos + nLen );
         }
     }
-/*
-    else
-    {
-    }
-*/
 
     return rOStream;
 }

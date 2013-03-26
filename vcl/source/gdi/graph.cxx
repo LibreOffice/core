@@ -32,10 +32,6 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------
-// - Default-Drawmethode -
-// -----------------------
-
 static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                              Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
@@ -51,7 +47,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
 
     pOutDev->SetFillColor();
 
-    // Auf dem Drucker ein schwarzes Rechteck und auf dem Bildschirm eins mit 3D-Effekt
+    // On the printer a black rectangle and on the screen one with 3D effect
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
         pOutDev->SetLineColor( COL_BLACK );
     else
@@ -112,10 +108,10 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
             long nTextWidth = pOutDev->GetTextWidth( *pText );
             if ( nTextHeight )
             {
-                // Die N"aherung ber"ucksichtigt keine Ungenauigkeiten durch
-                // Wortumbr"uche
+                // The approximation does not respect imprecisions caused
+                // by word wraps
                 long nLines = aSize.Height() / nTextHeight;
-                long nWidth = aSize.Width() * nLines; // N"aherung!!!
+                long nWidth = aSize.Width() * nLines; // Approximation!!!
 
                 if ( nTextWidth <= nWidth || aSz.Height() <= nThreshold )
                 {
@@ -165,8 +161,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
         }
     }
 
-    // Falls die Default-Graphik keinen Inhalt hat,
-    // malen wir ein rotes Kreuz
+    // If the default graphic does not have content, we draw a red rectangle
     if( !bFilled )
     {
         aBorderRect.Left()++;
@@ -182,20 +177,12 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     pOutDev->Pop();
 }
 
-// -----------
-// - Graphic -
-// -----------
-
 TYPEINIT1_AUTOFACTORY( Graphic, SvDataCopyStream );
-
-// ------------------------------------------------------------------------
 
 Graphic::Graphic()
 {
     mpImpGraphic = new ImpGraphic;
 }
-
-// ------------------------------------------------------------------------
 
 Graphic::Graphic( const Graphic& rGraphic ) :
 SvDataCopyStream()
@@ -209,42 +196,30 @@ SvDataCopyStream()
     }
 }
 
-// ------------------------------------------------------------------------
-
 Graphic::Graphic( const Bitmap& rBmp )
 {
     mpImpGraphic = new ImpGraphic( rBmp );
 }
-
-// ------------------------------------------------------------------------
 
 Graphic::Graphic( const BitmapEx& rBmpEx )
 {
     mpImpGraphic = new ImpGraphic( rBmpEx );
 }
 
-// ------------------------------------------------------------------------
-
 Graphic::Graphic(const SvgDataPtr& rSvgDataPtr)
 {
     mpImpGraphic = new ImpGraphic(rSvgDataPtr);
 }
-
-// ------------------------------------------------------------------------
 
 Graphic::Graphic( const Animation& rAnimation )
 {
     mpImpGraphic = new ImpGraphic( rAnimation );
 }
 
-// ------------------------------------------------------------------------
-
 Graphic::Graphic( const GDIMetaFile& rMtf )
 {
     mpImpGraphic = new ImpGraphic( rMtf );
 }
-
-// ------------------------------------------------------------------------
 
 Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic )
 {
@@ -268,8 +243,6 @@ Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::grap
         mpImpGraphic = new ImpGraphic;
 }
 
-// ------------------------------------------------------------------------
-
 Graphic::~Graphic()
 {
     if( mpImpGraphic->mnRefCount == 1UL )
@@ -277,8 +250,6 @@ Graphic::~Graphic()
     else
         mpImpGraphic->mnRefCount--;
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::ImplTestRefCount()
 {
@@ -288,8 +259,6 @@ void Graphic::ImplTestRefCount()
         mpImpGraphic = new ImpGraphic( *mpImpGraphic );
     }
 }
-
-// ------------------------------------------------------------------------
 
 Graphic& Graphic::operator=( const Graphic& rGraphic )
 {
@@ -320,49 +289,35 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
     return *this;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::operator==( const Graphic& rGraphic ) const
 {
     return( *mpImpGraphic == *rGraphic.mpImpGraphic );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Graphic::operator!=( const Graphic& rGraphic ) const
 {
     return( *mpImpGraphic != *rGraphic.mpImpGraphic );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::operator!() const
 {
     return( GRAPHIC_NONE == mpImpGraphic->ImplGetType() );
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::Load( SvStream& rIStm )
 {
     rIStm >> *this;
 }
 
-// ------------------------------------------------------------------------
-
 void Graphic::Save( SvStream& rOStm )
 {
     rOStm << *this;
 }
 
-// ------------------------------------------------------------------------
-
 void Graphic::Assign( const SvDataCopyStream& rCopyStream )
 {
     *this = (const Graphic& ) rCopyStream;
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::Clear()
 {
@@ -370,14 +325,10 @@ void Graphic::Clear()
     mpImpGraphic->ImplClear();
 }
 
-// ------------------------------------------------------------------------
-
 GraphicType Graphic::GetType() const
 {
     return mpImpGraphic->ImplGetType();
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::SetDefaultType()
 {
@@ -385,70 +336,50 @@ void Graphic::SetDefaultType()
     mpImpGraphic->ImplSetDefaultType();
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::IsSupportedGraphic() const
 {
     return mpImpGraphic->ImplIsSupportedGraphic();
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Graphic::IsTransparent() const
 {
     return mpImpGraphic->ImplIsTransparent();
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::IsAlpha() const
 {
     return mpImpGraphic->ImplIsAlpha();
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Graphic::IsAnimated() const
 {
     return mpImpGraphic->ImplIsAnimated();
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::IsEPS() const
 {
     return mpImpGraphic->ImplIsEPS();
 }
-
-// ------------------------------------------------------------------------
 
 Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
 {
     return mpImpGraphic->ImplGetBitmap(rParameters);
 }
 
-// ------------------------------------------------------------------------
-
 BitmapEx Graphic::GetBitmapEx(const GraphicConversionParameters& rParameters) const
 {
     return mpImpGraphic->ImplGetBitmapEx(rParameters);
 }
-
-// ------------------------------------------------------------------------
 
 Animation Graphic::GetAnimation() const
 {
     return mpImpGraphic->ImplGetAnimation();
 }
 
-// ------------------------------------------------------------------------
-
 const GDIMetaFile& Graphic::GetGDIMetaFile() const
 {
     return mpImpGraphic->ImplGetGDIMetaFile();
 }
-
-// ------------------------------------------------------------------------
 
 uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
 {
@@ -471,14 +402,10 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
     return xRet;
 }
 
-// ------------------------------------------------------------------------
-
 Size Graphic::GetPrefSize() const
 {
     return mpImpGraphic->ImplGetPrefSize();
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::SetPrefSize( const Size& rPrefSize )
 {
@@ -486,22 +413,16 @@ void Graphic::SetPrefSize( const Size& rPrefSize )
     mpImpGraphic->ImplSetPrefSize( rPrefSize );
 }
 
-// ------------------------------------------------------------------------
-
 MapMode Graphic::GetPrefMapMode() const
 {
     return mpImpGraphic->ImplGetPrefMapMode();
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
     ImplTestRefCount();
     mpImpGraphic->ImplSetPrefMapMode( rPrefMapMode );
 }
-
-// ------------------------------------------------------------------
 
 Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
 {
@@ -515,21 +436,15 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
     return aRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_uLong Graphic::GetSizeBytes() const
 {
     return mpImpGraphic->ImplGetSizeBytes();
 }
 
-// ------------------------------------------------------------------------
-
 void Graphic::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
     mpImpGraphic->ImplDraw( pOutDev, rDestPt );
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::Draw( OutputDevice* pOutDev,
                     const Point& rDestPt, const Size& rDestSz ) const
@@ -540,16 +455,12 @@ void Graphic::Draw( OutputDevice* pOutDev,
         mpImpGraphic->ImplDraw( pOutDev, rDestPt, rDestSz );
 }
 
-// ------------------------------------------------------------------------
-
 void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
                     Font& rFont, const BitmapEx& rBitmap,
                     const Point& rDestPt, const Size& rDestSz )
 {
     ImplDrawDefault( pOutDev, &rText, &rFont, NULL, &rBitmap, rDestPt, rDestSz );
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
                               const Size& rDestSz, long nExtraData,
@@ -559,71 +470,51 @@ void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
     mpImpGraphic->ImplStartAnimation( pOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev );
 }
 
-// ------------------------------------------------------------------------
-
 void Graphic::StopAnimation( OutputDevice* pOutDev, long nExtraData )
 {
     ImplTestRefCount();
     mpImpGraphic->ImplStopAnimation( pOutDev, nExtraData );
 }
 
-// ------------------------------------------------------------------------
-
 void Graphic::SetAnimationNotifyHdl( const Link& rLink )
 {
     mpImpGraphic->ImplSetAnimationNotifyHdl( rLink );
 }
-
-// ------------------------------------------------------------------------
 
 Link Graphic::GetAnimationNotifyHdl() const
 {
     return mpImpGraphic->ImplGetAnimationNotifyHdl();
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong Graphic::GetAnimationLoopCount() const
 {
     return mpImpGraphic->ImplGetAnimationLoopCount();
 }
-
-// ------------------------------------------------------------------------
 
 GraphicReader* Graphic::GetContext()
 {
     return mpImpGraphic->ImplGetContext();
 }
 
-// ------------------------------------------------------------------------
-
 void Graphic::SetContext( GraphicReader* pReader )
 {
     mpImpGraphic->ImplSetContext( pReader );
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::SetDocFileName( const String& rName, sal_uLong nFilePos )
 {
     mpImpGraphic->ImplSetDocFileName( rName, nFilePos );
 }
 
-// ------------------------------------------------------------------------
-
 const String& Graphic::GetDocFileName() const
 {
     return mpImpGraphic->ImplGetDocFileName();
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong Graphic::GetDocFilePos() const
 {
     return mpImpGraphic->ImplGetDocFilePos();
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Graphic::SwapOut()
 {
@@ -631,15 +522,11 @@ sal_Bool Graphic::SwapOut()
     return mpImpGraphic->ImplSwapOut();
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::SwapOut( SvStream* pOStream )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapOut( pOStream );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Graphic::SwapIn()
 {
@@ -647,22 +534,16 @@ sal_Bool Graphic::SwapIn()
     return mpImpGraphic->ImplSwapIn();
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::SwapIn( SvStream* pStrm )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapIn( pStrm );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::IsSwapOut() const
 {
     return mpImpGraphic->ImplIsSwapOut();
 }
-
-// ------------------------------------------------------------------------
 
 void Graphic::SetLink( const GfxLink& rGfxLink )
 {
@@ -670,35 +551,25 @@ void Graphic::SetLink( const GfxLink& rGfxLink )
     mpImpGraphic->ImplSetLink( rGfxLink );
 }
 
-// ------------------------------------------------------------------------
-
 GfxLink Graphic::GetLink() const
 {
     return mpImpGraphic->ImplGetLink();
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Graphic::IsLink() const
 {
     return mpImpGraphic->ImplIsLink();
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong Graphic::GetChecksum() const
 {
     return mpImpGraphic->ImplGetChecksum();
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Graphic::ExportNative( SvStream& rOStream ) const
 {
     return mpImpGraphic->ImplExportNative( rOStream );
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStream, Graphic& rGraphic )
 {
@@ -706,14 +577,10 @@ SvStream& operator>>( SvStream& rIStream, Graphic& rGraphic )
     return rIStream >> *rGraphic.mpImpGraphic;
 }
 
-// ------------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStream, const Graphic& rGraphic )
 {
     return rOStream << *rGraphic.mpImpGraphic;
 }
-
-// ------------------------------------------------------------------------
 
 const SvgDataPtr& Graphic::getSvgData() const
 {
