@@ -3053,6 +3053,14 @@ OUString ScDocument::GetString( const ScAddress& rPos ) const
     return aStr;
 }
 
+const OUString* ScDocument::GetStringCell( const ScAddress& rPos ) const
+{
+    if (!TableExists(rPos.Tab()))
+        return NULL;
+
+    return maTabs[rPos.Tab()]->GetStringCell(rPos.Col(), rPos.Row());
+}
+
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )

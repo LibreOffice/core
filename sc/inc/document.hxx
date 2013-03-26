@@ -802,6 +802,17 @@ public:
 
     SC_DLLPUBLIC OUString GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     OUString GetString( const ScAddress& rPos ) const;
+
+    /**
+     * Return a pointer to the string object stored in string cell.
+     *
+     * @param rPos cell position.
+     *
+     * @return pointer to the string object stored in string cell, or NULL if
+     *         the cell at specified position is not a string cell. Note that
+     *         it returns NULL even for a edit cell.
+     */
+    const OUString* GetStringCell( const ScAddress& rPos ) const;
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     sal_uInt16                  GetStringForFormula( const ScAddress& rPos, rtl::OUString& rString );

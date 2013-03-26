@@ -272,6 +272,7 @@ public:
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
     void        GetString( SCROW nRow, rtl::OUString& rString ) const;
+    const OUString* GetStringCell( SCROW nRow ) const;
     void        GetInputString( SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;

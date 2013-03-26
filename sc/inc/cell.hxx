@@ -175,6 +175,7 @@ public:
 
     inline void     SetString( const rtl::OUString& rString ) { maString = rString; }
     inline const    rtl::OUString& GetString() const { return maString; }
+    const OUString* GetStringPtr() const { return &maString; }
 
 private:
     rtl::OUString   maString;

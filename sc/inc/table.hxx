@@ -318,6 +318,7 @@ public:
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
     void        GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
+    const OUString* GetStringCell( SCCOL nCol, SCROW nRow ) const;
     void        GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( const ScAddress& rPos ) const
                     {

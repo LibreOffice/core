@@ -1758,6 +1758,18 @@ void ScColumn::GetString( SCROW nRow, rtl::OUString& rString ) const
         rString = rtl::OUString();
 }
 
+const OUString* ScColumn::GetStringCell( SCROW nRow ) const
+{
+    SCSIZE  nIndex;
+    if (!Search(nRow, nIndex))
+        return NULL;
+
+    const ScBaseCell* pCell = maItems[nIndex].pCell;
+    if (pCell->GetCellType() != CELLTYPE_STRING)
+        return NULL;
+
+    return static_cast<const ScStringCell*>(pCell)->GetStringPtr();
+}
 
 void ScColumn::GetInputString( SCROW nRow, rtl::OUString& rString ) const
 {

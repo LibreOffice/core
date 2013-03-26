@@ -16,6 +16,121 @@
 #include "editutil.hxx"
 #include "formula/token.hxx"
 
+namespace {
+
+CellType adjustCellType( CellType eOrig )
+{
+    switch (eOrig)
+    {
+        case CELLTYPE_NOTE:
+            return CELLTYPE_NONE;
+        case CELLTYPE_EDIT:
+            return CELLTYPE_STRING;
+        default:
+            ;
+    }
+    return eOrig;
+}
+
+template<typename _T>
+OUString getString( const _T& rVal )
+{
+    if (rVal.meType == CELLTYPE_STRING)
+        return *rVal.mpString;
+
+    if (rVal.meType == CELLTYPE_EDIT)
+    {
+        OUStringBuffer aRet;
+        size_t n = rVal.mpEditText->GetParagraphCount();
+        for (size_t i = 0; i < n; ++i)
+        {
+            if (i > 0)
+                aRet.append('\n');
+            aRet.append(rVal.mpEditText->GetText(i));
+        }
+        return aRet.makeStringAndClear();
+    }
+
+    return EMPTY_OUSTRING;
+}
+
+bool equalsFormulaCells( const ScFormulaCell* p1, const ScFormulaCell* p2 )
+{
+    const ScTokenArray* pCode1 = p1->GetCode();
+    const ScTokenArray* pCode2 = p2->GetCode();
+
+    if (pCode1->GetLen() != pCode2->GetLen())
+        return false;
+
+    sal_uInt16 n = pCode1->GetLen();
+    formula::FormulaToken** ppToken1 = pCode1->GetArray();
+    formula::FormulaToken** ppToken2 = pCode2->GetArray();
+    for (sal_uInt16 i = 0; i < n; ++i)
+    {
+        if (!ppToken1[i]->TextEqual(*(ppToken2[i])))
+            return false;
+    }
+
+    return true;
+}
+
+template<typename _T>
+bool equalsWithoutFormatImpl( const _T& left, const _T& right )
+{
+    CellType eType1 = adjustCellType(left.meType);
+    CellType eType2 = adjustCellType(right.meType);
+    if (eType1 != eType2)
+        return false;
+
+    switch (eType1)
+    {
+        case CELLTYPE_NONE:
+            return true;
+        case CELLTYPE_VALUE:
+            return left.mfValue == right.mfValue;
+        case CELLTYPE_STRING:
+        {
+            OUString aStr1 = getString(left);
+            OUString aStr2 = getString(right);
+            return aStr1 == aStr2;
+        }
+        case CELLTYPE_FORMULA:
+            return equalsFormulaCells(left.mpFormula, right.mpFormula);
+        default:
+            ;
+    }
+    return false;
+}
+
+bool hasStringImpl( CellType eType, ScFormulaCell* pFormula )
+{
+    switch (eType)
+    {
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return true;
+        case CELLTYPE_FORMULA:
+            return !pFormula->IsValue();
+        default:
+            return false;
+    }
+}
+
+bool hasNumericImpl( CellType eType, ScFormulaCell* pFormula )
+{
+    switch (eType)
+    {
+        case CELLTYPE_VALUE:
+            return true;
+        case CELLTYPE_FORMULA:
+            return pFormula->IsValue();
+        default:
+            return false;
+    }
+}
+
+}
+
 ScCellValue::ScCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
 ScCellValue::ScCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
 ScCellValue::ScCellValue( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
@@ -223,29 +338,12 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
 
 bool ScCellValue::hasString() const
 {
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-        case CELLTYPE_EDIT:
-            return true;
-        case CELLTYPE_FORMULA:
-            return !mpFormula->IsValue();
-        default:
-            return false;
-    }
+    return hasStringImpl(meType, mpFormula);
 }
 
 bool ScCellValue::hasNumeric() const
 {
-    switch (meType)
-    {
-        case CELLTYPE_VALUE:
-            return true;
-        case CELLTYPE_FORMULA:
-            return mpFormula->IsValue();
-        default:
-            return false;
-    }
+    return hasNumericImpl(meType, mpFormula);
 }
 
 bool ScCellValue::isEmpty() const
@@ -253,87 +351,9 @@ bool ScCellValue::isEmpty() const
     return meType == CELLTYPE_NOTE || meType == CELLTYPE_NONE;
 }
 
-namespace {
-
-CellType adjustCellType( CellType eOrig )
-{
-    switch (eOrig)
-    {
-        case CELLTYPE_NOTE:
-            return CELLTYPE_NONE;
-        case CELLTYPE_EDIT:
-            return CELLTYPE_STRING;
-        default:
-            ;
-    }
-    return eOrig;
-}
-
-OUString getString( const ScCellValue& rVal )
-{
-    if (rVal.meType == CELLTYPE_STRING)
-        return *rVal.mpString;
-
-    if (rVal.meType == CELLTYPE_EDIT)
-    {
-        OUStringBuffer aRet;
-        size_t n = rVal.mpEditText->GetParagraphCount();
-        for (size_t i = 0; i < n; ++i)
-        {
-            if (i > 0)
-                aRet.append('\n');
-            aRet.append(rVal.mpEditText->GetText(i));
-        }
-        return aRet.makeStringAndClear();
-    }
-
-    return EMPTY_OUSTRING;
-}
-
-}
-
 bool ScCellValue::equalsWithoutFormat( const ScCellValue& r ) const
 {
-    CellType eType1 = adjustCellType(meType);
-    CellType eType2 = adjustCellType(r.meType);
-    if (eType1 != eType2)
-        return false;
-
-    switch (meType)
-    {
-        case CELLTYPE_NONE:
-            return true;
-        case CELLTYPE_VALUE:
-            return mfValue == r.mfValue;
-        case CELLTYPE_STRING:
-        {
-            OUString aStr1 = getString(*this);
-            OUString aStr2 = getString(r);
-            return aStr1 == aStr2;
-        }
-        case CELLTYPE_FORMULA:
-        {
-            ScTokenArray* pCode1 = mpFormula->GetCode();
-            ScTokenArray* pCode2 = r.mpFormula->GetCode();
-
-            if (pCode1->GetLen() != pCode2->GetLen())
-                return false;
-
-            sal_uInt16 n = pCode1->GetLen();
-            formula::FormulaToken** ppToken1 = pCode1->GetArray();
-            formula::FormulaToken** ppToken2 = pCode2->GetArray();
-            for (sal_uInt16 i = 0; i < n; ++i)
-            {
-                if (!ppToken1[i]->TextEqual(*(ppToken2[i])))
-                    return false;
-            }
-
-            return true;
-        }
-        default:
-            ;
-    }
-    return false;
+    return equalsWithoutFormatImpl(*this, r);
 }
 
 ScCellValue& ScCellValue::operator= ( const ScCellValue& r )
@@ -344,6 +364,137 @@ ScCellValue& ScCellValue::operator= ( const ScCellValue& r )
 }
 
 void ScCellValue::swap( ScCellValue& r )
+{
+    std::swap(meType, r.meType);
+
+    // double is 8 bytes, whereas a pointer may be 4 or 8 bytes depending on
+    // the platform. Swap by double values.
+    std::swap(mfValue, r.mfValue);
+}
+
+ScRefCellValue::ScRefCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
+ScRefCellValue::ScRefCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
+ScRefCellValue::ScRefCellValue( const OUString* pString ) : meType(CELLTYPE_STRING), mpString(pString) {}
+ScRefCellValue::ScRefCellValue( const EditTextObject* pEditText ) : meType(CELLTYPE_EDIT), mpEditText(pEditText) {}
+ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORMULA), mpFormula(pFormula) {}
+
+// It should be enough to copy the double value, which is at least as large
+// as the pointer values.
+ScRefCellValue::ScRefCellValue( const ScRefCellValue& r ) : meType(r.meType), mfValue(r.mfValue) {}
+
+ScRefCellValue::~ScRefCellValue()
+{
+    clear();
+}
+
+void ScRefCellValue::clear()
+{
+    // Reset to empty value.
+    meType = CELLTYPE_NONE;
+    mfValue = 0.0;
+}
+
+void ScRefCellValue::assign( ScDocument& rDoc, const ScAddress& rPos )
+{
+    clear();
+
+    meType = rDoc.GetCellType(rPos);
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = rDoc.GetStringCell(rPos);
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = rDoc.GetEditText(rPos);
+        break;
+        case CELLTYPE_VALUE:
+            mfValue = rDoc.GetValue(rPos);
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = rDoc.GetFormulaCell(rPos);
+        break;
+        default:
+            meType = CELLTYPE_NONE; // reset to empty.
+    }
+}
+
+void ScRefCellValue::assign( ScBaseCell& rCell )
+{
+    clear();
+
+    meType = rCell.GetCellType();
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = static_cast<const ScStringCell&>(rCell).GetStringPtr();
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = static_cast<const ScEditCell&>(rCell).GetData();
+        break;
+        case CELLTYPE_VALUE:
+            mfValue = static_cast<const ScValueCell&>(rCell).GetValue();
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = static_cast<ScFormulaCell*>(&rCell);
+        break;
+        default:
+            meType = CELLTYPE_NONE; // reset to empty.
+    }
+}
+
+void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+        {
+            ScSetStringParam aParam;
+            aParam.setTextInput();
+            rDoc.SetString(rPos, *mpString, &aParam);
+        }
+        break;
+        case CELLTYPE_EDIT:
+            rDoc.SetEditText(rPos, mpEditText->Clone());
+        break;
+        case CELLTYPE_VALUE:
+            rDoc.SetValue(rPos, mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+            rDoc.SetFormulaCell(rPos, mpFormula->Clone());
+        break;
+        default:
+            rDoc.SetEmptyCell(rPos);
+    }
+}
+
+bool ScRefCellValue::hasString() const
+{
+    return hasStringImpl(meType, mpFormula);
+}
+
+bool ScRefCellValue::hasNumeric() const
+{
+    return hasNumericImpl(meType, mpFormula);
+}
+
+bool ScRefCellValue::isEmpty() const
+{
+    return meType == CELLTYPE_NOTE || meType == CELLTYPE_NONE;
+}
+
+bool ScRefCellValue::equalsWithoutFormat( const ScRefCellValue& r ) const
+{
+    return equalsWithoutFormatImpl(*this, r);
+}
+
+ScRefCellValue& ScRefCellValue::operator= ( const ScRefCellValue& r )
+{
+    ScRefCellValue aTmp(r);
+    swap(aTmp);
+    return *this;
+}
+
+void ScRefCellValue::swap( ScRefCellValue& r )
 {
     std::swap(meType, r.meType);
 

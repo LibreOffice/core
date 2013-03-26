@@ -19,7 +19,8 @@ class ScBaseCell;
 
 /**
  * Store arbitrary cell value of any kind.  It only stores cell value and
- * nothing else.
+ * nothing else.  It creates a copy of the original cell value, and manages
+ * the life cycle of the copied value.
  */
 struct SC_DLLPUBLIC ScCellValue
 {
@@ -76,6 +77,59 @@ struct SC_DLLPUBLIC ScCellValue
     ScCellValue& operator= ( const ScCellValue& r );
 
     void swap( ScCellValue& r );
+};
+
+/**
+ * This is very similar to ScCellValue, except that it points to the
+ * original value instead of copying it.  As such, don't hold an instance of
+ * this class any longer than necessary.
+ */
+struct SC_DLLPUBLIC ScRefCellValue
+{
+    CellType meType;
+    union {
+        double mfValue;
+        const OUString* mpString;
+        const EditTextObject* mpEditText;
+        ScFormulaCell* mpFormula;
+    };
+
+    ScRefCellValue();
+    ScRefCellValue( double fValue );
+    ScRefCellValue( const OUString* pString );
+    ScRefCellValue( const EditTextObject* pEditText );
+    ScRefCellValue( ScFormulaCell* pFormula );
+    ScRefCellValue( const ScRefCellValue& r );
+    ~ScRefCellValue();
+
+    void clear();
+
+    /**
+     * Take cell value from specified position in specified document.
+     */
+    void assign( ScDocument& rDoc, const ScAddress& rPos );
+
+    /**
+     * TODO: Remove this later.
+     */
+    void assign( ScBaseCell& rCell );
+
+    /**
+     * Set cell value at specified position in specified document.
+     */
+    void commit( ScDocument& rDoc, const ScAddress& rPos ) const;
+
+    bool hasString() const;
+
+    bool hasNumeric() const;
+
+    bool isEmpty() const;
+
+    bool equalsWithoutFormat( const ScRefCellValue& r ) const;
+
+    ScRefCellValue& operator= ( const ScRefCellValue& r );
+
+    void swap( ScRefCellValue& r );
 };
 
 #endif
