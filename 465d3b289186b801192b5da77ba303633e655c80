@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+ZU\u003d",
+        "filename": "i18npool/source/calendar/calendar_gregorian.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2013-03-26T14:55:04Z",
+      "side": 1,
+      "message": "I\u0027d go for a little bit longer variable names here",
+      "revId": "465d3b289186b801192b5da77ba303633e655c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
