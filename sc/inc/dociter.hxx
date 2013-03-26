@@ -239,7 +239,7 @@ public:
     const ScFormulaCell* getFormulaCell() const;
     double getValue() const;
     ScCellValue getCellValue() const;
-    ScRefCellValue getRefCellValue() const;
+    const ScRefCellValue& getRefCellValue() const;
 
     bool hasString() const;
     bool hasNumeric() const;

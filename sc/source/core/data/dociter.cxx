@@ -1131,7 +1131,7 @@ ScCellValue ScCellIterator::getCellValue() const
     return aRet;
 }
 
-ScRefCellValue ScCellIterator::getRefCellValue() const
+const ScRefCellValue& ScCellIterator::getRefCellValue() const
 {
     return maCurCell;
 }
