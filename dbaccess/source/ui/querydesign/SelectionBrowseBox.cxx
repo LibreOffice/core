@@ -487,16 +487,16 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             m_pFieldCell->Clear();
             m_pFieldCell->SetText(String());
 
-            String aField(pEntry->GetField());
+            OUString aField(pEntry->GetField());
             String aTable(pEntry->GetAlias());
 
             getDesignView()->fillValidFields(aTable, m_pFieldCell);
 
             // replace with alias.*
-            if ((aField.GetChar(0) == '*') && aTable.Len())
+            if ((aField[0] == '*') && aTable.Len())
             {
                 aField = aTable;
-                aField.AppendAscii(".*");
+                aField += ".*";
             }
             m_pFieldCell->SetText(aField);
         }   break;

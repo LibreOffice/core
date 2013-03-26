@@ -395,35 +395,35 @@ namespace
                                 const OQueryTableConnectionData* pData)
     {
 
-        String aErg(rLh);
+        OUString aErg(rLh);
         if ( pData->isNatural() && pData->GetJoinType() != CROSS_JOIN )
-            aErg.AppendAscii(" NATURAL ");
+            aErg += " NATURAL ";
         switch(pData->GetJoinType())
         {
             case LEFT_JOIN:
-                aErg.AppendAscii(" LEFT OUTER ");
+                aErg += " LEFT OUTER ";
                 break;
             case RIGHT_JOIN:
-                aErg.AppendAscii(" RIGHT OUTER ");
+                aErg += " RIGHT OUTER ";
                 break;
             case CROSS_JOIN:
                 OSL_ENSURE(!pData->isNatural(),"OQueryDesignView::BuildJoin: This should not happen!");
-                aErg.AppendAscii(" CROSS ");
+                aErg += " CROSS ";
                 break;
             case INNER_JOIN:
                 OSL_ENSURE(pData->isNatural(),"OQueryDesignView::BuildJoin: This should not happen!");
-                aErg.AppendAscii(" INNER ");
+                aErg += " INNER ";
                 break;
             default:
-                aErg.AppendAscii(" FULL OUTER ");
+                aErg += " FULL OUTER ";
                 break;
         }
-        aErg.AppendAscii("JOIN ");
-        aErg += String(rRh);
+        aErg += "JOIN ";
+        aErg += rRh;
         if ( CROSS_JOIN != pData->GetJoinType() && !pData->isNatural() )
         {
-            aErg.AppendAscii(" ON ");
-            aErg += String(BuildJoinCriteria(_xConnection,pData->GetConnLineDataList(),pData));
+            aErg += " ON ";
+            aErg += BuildJoinCriteria(_xConnection,pData->GetConnLineDataList(),pData);
         }
 
         return aErg;
