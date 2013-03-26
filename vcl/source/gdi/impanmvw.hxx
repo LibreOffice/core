@@ -22,10 +22,6 @@
 
 #include <vcl/animate.hxx>
 
-// ----------------
-// - ImplAnimView -
-// ----------------
-
 class Animation;
 class OutputDevice;
 class VirtualDevice;

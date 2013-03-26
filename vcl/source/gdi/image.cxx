@@ -45,17 +45,11 @@ DBG_NAME( ImageList )
 
 using namespace ::com::sun::star;
 
-// ---------
-// - Image -
-// ---------
-
 Image::Image() :
     mpImplData( NULL )
 {
     DBG_CTOR( Image, NULL );
 }
-
-// -----------------------------------------------------------------------
 
 Image::Image( const ResId& rResId ) :
     mpImplData( NULL )
@@ -104,8 +98,6 @@ Image::Image( const ResId& rResId ) :
     }
 }
 
-// -----------------------------------------------------------------------
-
 Image::Image( const Image& rImage ) :
     mpImplData( rImage.mpImplData )
 {
@@ -115,8 +107,6 @@ Image::Image( const Image& rImage ) :
         ++mpImplData->mnRefCount;
 }
 
-// -----------------------------------------------------------------------
-
 Image::Image( const BitmapEx& rBitmapEx ) :
     mpImplData( NULL )
 {
@@ -125,8 +115,6 @@ Image::Image( const BitmapEx& rBitmapEx ) :
     ImplInit( rBitmapEx );
 }
 
-// -----------------------------------------------------------------------
-
 Image::Image( const Bitmap& rBitmap ) :
     mpImplData( NULL )
 {
@@ -134,8 +122,6 @@ Image::Image( const Bitmap& rBitmap ) :
 
     ImplInit( rBitmap );
 }
-
-// -----------------------------------------------------------------------
 
 Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
     mpImplData( NULL )
@@ -147,8 +133,6 @@ Image::Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap ) :
     ImplInit( aBmpEx );
 }
 
-// -----------------------------------------------------------------------
-
 Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
     mpImplData( NULL )
 {
@@ -159,8 +143,6 @@ Image::Image( const Bitmap& rBitmap, const Color& rColor ) :
     ImplInit( aBmpEx );
 }
 
-// -----------------------------------------------------------------------
-
 Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
     mpImplData( NULL )
 {
@@ -170,8 +152,6 @@ Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
     ImplInit( aGraphic.GetBitmapEx() );
 }
 
-// -----------------------------------------------------------------------
-
 Image::~Image()
 {
     DBG_DTOR( Image, NULL );
@@ -179,8 +159,6 @@ Image::~Image()
     if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
         delete mpImplData;
 }
-
-// -----------------------------------------------------------------------
 
 void Image::ImplInit( const BitmapEx& rBmpEx )
 {
@@ -201,8 +179,6 @@ void Image::ImplInit( const BitmapEx& rBmpEx )
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 Size Image::GetSizePixel() const
 {
@@ -227,8 +203,6 @@ Size Image::GetSizePixel() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
-
 BitmapEx Image::GetBitmapEx() const
 {
     DBG_CHKTHIS( Image, NULL );
@@ -252,16 +226,12 @@ BitmapEx Image::GetBitmapEx() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
-
 uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 {
     const Graphic aGraphic( GetBitmapEx() );
 
     return aGraphic.GetXGraphic();
 }
-
-// -----------------------------------------------------------------------
 
 Image& Image::operator=( const Image& rImage )
 {
@@ -278,8 +248,6 @@ Image& Image::operator=( const Image& rImage )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Image::operator==( const Image& rImage ) const
 {
@@ -315,10 +283,6 @@ sal_Bool Image::operator==( const Image& rImage ) const
     return bRet;
 }
 
-// -------------
-// - ImageList -
-// -------------
-
 ImageList::ImageList( sal_uInt16 nInit, sal_uInt16 nGrow ) :
     mpImplData( NULL ),
     mnInitSize( nInit ),
@@ -326,8 +290,6 @@ ImageList::ImageList( sal_uInt16 nInit, sal_uInt16 nGrow ) :
 {
     DBG_CTOR( ImageList, NULL );
 }
-
-// -----------------------------------------------------------------------
 
 ImageList::ImageList( const ResId& rResId ) :
     mpImplData( NULL ),
@@ -377,8 +339,6 @@ ImageList::ImageList( const ResId& rResId ) :
     }
 }
 
-// -----------------------------------------------------------------------
-
 ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
                       const ::rtl::OUString& rPrefix,
                       const Color* ) :
@@ -399,8 +359,6 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
     }
 }
 
-// -----------------------------------------------------------------------
-
 ImageList::ImageList( const ImageList& rImageList ) :
     mpImplData( rImageList.mpImplData ),
     mnInitSize( rImageList.mnInitSize ),
@@ -411,8 +369,6 @@ ImageList::ImageList( const ImageList& rImageList ) :
     if( mpImplData )
         ++mpImplData->mnRefCount;
 }
-
-// -----------------------------------------------------------------------
 
 ImageList::~ImageList()
 {
@@ -429,8 +385,6 @@ void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
     mpImplData->maImages.reserve( nItems );
     mpImplData->maImageSize = rSize;
 }
-
-// -----------------------------------------------------------------------
 
 void ImageAryData::Load(const rtl::OUString &rPrefix)
 {
@@ -458,8 +412,7 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 #endif
 }
 
-// -----------------------------------------------------------------------
-// Rather a performance hazard:
+// FIXME: Rather a performance hazard
 BitmapEx ImageList::GetAsHorizontalStrip() const
 {
     Size aSize( mpImplData->maImageSize );
@@ -498,8 +451,6 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     return aResult;
 }
 
-// -----------------------------------------------------------------------
-
 void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                            const std::vector< rtl::OUString > &rNameVector )
 {
@@ -520,8 +471,6 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
         mpImplData->AddImage( rNameVector[ nIdx ], nIdx + 1, aBitmap );
     }
 }
-
-// -----------------------------------------------------------------------
 
 void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
                                             sal_uInt16       nCount,
@@ -545,8 +494,6 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
     InsertFromHorizontalStrip( aBmpEx, aNames );
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -558,8 +505,6 @@ sal_uInt16 ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------
-
 void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage )
 {
     DBG_ASSERT( GetImagePos( rImageName ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageName already exists" );
@@ -570,8 +515,6 @@ void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage
     mpImplData->AddImage( rImageName, GetImageCount() + 1,
                           rImage.GetBitmapEx() );
 }
-
-// -----------------------------------------------------------------------
 
 void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage )
 {
@@ -587,8 +530,6 @@ void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rI
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ImageList::RemoveImage( sal_uInt16 nId )
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -602,8 +543,6 @@ void ImageList::RemoveImage( sal_uInt16 nId )
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 Image ImageList::GetImage( sal_uInt16 nId ) const
 {
@@ -638,8 +577,6 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
-
 Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
 {
     if( mpImplData )
@@ -657,16 +594,12 @@ Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
     return Image();
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 ImageList::GetImageCount() const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
     return mpImplData ? static_cast< sal_uInt16 >( mpImplData->maImages.size() ) : 0;
 }
-
-// -----------------------------------------------------------------------
 
 sal_uInt16 ImageList::GetImagePos( sal_uInt16 nId ) const
 {
@@ -689,8 +622,6 @@ bool ImageList::HasImageAtPos( sal_uInt16 nId ) const
     return GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -707,8 +638,6 @@ sal_uInt16 ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
     return IMAGELIST_IMAGE_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -719,8 +648,6 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
 ::rtl::OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -730,8 +657,6 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
 
     return ::rtl::OUString();
 }
-
-// -----------------------------------------------------------------------
 
 void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
 {
@@ -751,8 +676,6 @@ void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 Size ImageList::GetImageSize() const
 {
@@ -775,8 +698,6 @@ Size ImageList::GetImageSize() const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
-
 ImageList& ImageList::operator=( const ImageList& rImageList )
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -792,8 +713,6 @@ ImageList& ImageList::operator=( const ImageList& rImageList )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool ImageList::operator==( const ImageList& rImageList ) const
 {

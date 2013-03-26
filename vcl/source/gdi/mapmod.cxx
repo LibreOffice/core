@@ -22,11 +22,7 @@
 #include <tools/debug.hxx>
 #include <vcl/mapmod.hxx>
 
-// =======================================================================
-
 DBG_NAME( MapMode )
-
-// -----------------------------------------------------------------------
 
 ImplMapMode::ImplMapMode() :
     maOrigin( 0, 0 ),
@@ -38,8 +34,6 @@ ImplMapMode::ImplMapMode() :
     mbSimple    = sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
     maOrigin( rImplMapMode.maOrigin ),
     maScaleX( rImplMapMode.maScaleX ),
@@ -49,8 +43,6 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
     meUnit          = rImplMapMode.meUnit;
     mbSimple        = sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStm, ImplMapMode& rImplMapMode )
 {
@@ -64,8 +56,6 @@ SvStream& operator>>( SvStream& rIStm, ImplMapMode& rImplMapMode )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
@@ -78,8 +68,6 @@ SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 
     return rOStm;
 }
-
-// -----------------------------------------------------------------------
 
 ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
 {
@@ -102,11 +90,9 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
     return pImplMapMode;
 }
 
-// -----------------------------------------------------------------------
-
 inline void MapMode::ImplMakeUnique()
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // If there are other references, copy
     if ( mpImplMapMode->mnRefCount != 1 )
     {
         if ( mpImplMapMode->mnRefCount )
@@ -115,8 +101,6 @@ inline void MapMode::ImplMakeUnique()
     }
 }
 
-// -----------------------------------------------------------------------
-
 MapMode::MapMode()
 {
     DBG_CTOR( MapMode, NULL );
@@ -124,22 +108,18 @@ MapMode::MapMode()
     mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
 }
 
-// -----------------------------------------------------------------------
-
 MapMode::MapMode( const MapMode& rMapMode )
 {
     DBG_CTOR( MapMode, NULL );
     DBG_CHKOBJ( &rMapMode, MapMode, NULL );
     DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
-    // shared Instance Daten uebernehmen und Referenzcounter erhoehen
+    // Take over Shared Instance Data and increment refcount
     mpImplMapMode = rMapMode.mpImplMapMode;
-    // RefCount == 0 fuer statische Objekte
+    // RefCount == 0 for static objects
     if ( mpImplMapMode->mnRefCount )
         mpImplMapMode->mnRefCount++;
 }
-
-// -----------------------------------------------------------------------
 
 MapMode::MapMode( MapUnit eUnit )
 {
@@ -147,8 +127,6 @@ MapMode::MapMode( MapUnit eUnit )
 
     mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( eUnit );
 }
-
-// -----------------------------------------------------------------------
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
                   const Fraction& rScaleX, const Fraction& rScaleY )
@@ -162,14 +140,12 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
     mpImplMapMode->maScaleY = rScaleY;
 }
 
-// -----------------------------------------------------------------------
-
 MapMode::~MapMode()
 {
     DBG_DTOR( MapMode, NULL );
 
-    // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // If it's not static ImpData and it's the last reference, delete it,
+    // else decrement refcounter
     if ( mpImplMapMode->mnRefCount )
     {
         if ( mpImplMapMode->mnRefCount == 1 )
@@ -179,8 +155,6 @@ MapMode::~MapMode()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void MapMode::SetMapUnit( MapUnit eUnit )
 {
     DBG_CHKTHIS( MapMode, NULL );
@@ -188,8 +162,6 @@ void MapMode::SetMapUnit( MapUnit eUnit )
     ImplMakeUnique();
     mpImplMapMode->meUnit = eUnit;
 }
-
-// -----------------------------------------------------------------------
 
 void MapMode::SetOrigin( const Point& rLogicOrg )
 {
@@ -199,8 +171,6 @@ void MapMode::SetOrigin( const Point& rLogicOrg )
     mpImplMapMode->maOrigin = rLogicOrg;
 }
 
-// -----------------------------------------------------------------------
-
 void MapMode::SetScaleX( const Fraction& rScaleX )
 {
     DBG_CHKTHIS( MapMode, NULL );
@@ -208,8 +178,6 @@ void MapMode::SetScaleX( const Fraction& rScaleX )
     ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
 }
-
-// -----------------------------------------------------------------------
 
 void MapMode::SetScaleY( const Fraction& rScaleY )
 {
@@ -219,21 +187,19 @@ void MapMode::SetScaleY( const Fraction& rScaleY )
     mpImplMapMode->maScaleY = rScaleY;
 }
 
-// -----------------------------------------------------------------------
-
 MapMode& MapMode::operator=( const MapMode& rMapMode )
 {
     DBG_CHKTHIS( MapMode, NULL );
     DBG_CHKOBJ( &rMapMode, MapMode, NULL );
     DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    // RefCount == 0 fuer statische Objekte
+    // First increment refcount so that we can reference ourselves
+    // RefCount == 0 for static objects
     if ( rMapMode.mpImplMapMode->mnRefCount )
         rMapMode.mpImplMapMode->mnRefCount++;
 
-    // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // If it's not static ImpData and it's the last reference, delete it,
+    // else decrement refcounter
     if ( mpImplMapMode->mnRefCount )
     {
         if ( mpImplMapMode->mnRefCount == 1 )
@@ -246,8 +212,6 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool MapMode::operator==( const MapMode& rMapMode ) const
 {
@@ -266,8 +230,6 @@ sal_Bool MapMode::operator==( const MapMode& rMapMode ) const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool MapMode::IsDefault() const
 {
     DBG_CHKTHIS( MapMode, NULL );
@@ -285,15 +247,11 @@ sal_Bool MapMode::IsDefault() const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator>>( SvStream& rIStm, MapMode& rMapMode )
 {
     rMapMode.ImplMakeUnique();
     return (rIStm >> *rMapMode.mpImplMapMode);
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStm, const MapMode& rMapMode )
 {

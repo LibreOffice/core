@@ -23,11 +23,7 @@
 #include <tools/gen.hxx>
 #include <vcl/gradient.hxx>
 
-// =======================================================================
-
 DBG_NAME( Gradient )
-
-// -----------------------------------------------------------------------
 
 Impl_Gradient::Impl_Gradient() :
     maStartColor( COL_BLACK ),
@@ -44,8 +40,6 @@ Impl_Gradient::Impl_Gradient() :
     mnStepCount         = 0;
 }
 
-// -----------------------------------------------------------------------
-
 Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
     maStartColor( rImplGradient.maStartColor ),
     maEndColor( rImplGradient.maEndColor )
@@ -61,11 +55,9 @@ Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
     mnStepCount         = rImplGradient.mnStepCount;
 }
 
-// -----------------------------------------------------------------------
-
 void Gradient::MakeUnique()
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // If there are still other references, copy
     if ( mpImplGradient->mnRefCount != 1 )
     {
         if( mpImplGradient->mnRefCount )
@@ -75,8 +67,6 @@ void Gradient::MakeUnique()
     }
 }
 
-// -----------------------------------------------------------------------
-
 Gradient::Gradient()
 {
     DBG_CTOR( Gradient, NULL );
@@ -84,19 +74,15 @@ Gradient::Gradient()
     mpImplGradient = new Impl_Gradient;
 }
 
-// -----------------------------------------------------------------------
-
 Gradient::Gradient( const Gradient& rGradient )
 {
     DBG_CTOR( Gradient, NULL );
     DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
-    // Instance Daten uebernehmen und Referenzcounter erhoehen
+    // Take over instance data and increment refcount
     mpImplGradient = rGradient.mpImplGradient;
     mpImplGradient->mnRefCount++;
 }
-
-// -----------------------------------------------------------------------
 
 Gradient::Gradient( GradientStyle eStyle,
                     const Color& rStartColor, const Color& rEndColor )
@@ -109,21 +95,17 @@ Gradient::Gradient( GradientStyle eStyle,
     mpImplGradient->maEndColor      = rEndColor;
 }
 
-// -----------------------------------------------------------------------
-
 Gradient::~Gradient()
 {
     DBG_DTOR( Gradient, NULL );
 
-    // Wenn es die letzte Referenz ist, loeschen,
-    // sonst Referenzcounter decrementieren
+    // If it's the last reference, delete it, otherwise
+    // decrement refcount
     if ( mpImplGradient->mnRefCount == 1 )
         delete mpImplGradient;
     else
         mpImplGradient->mnRefCount--;
 }
-
-// -----------------------------------------------------------------------
 
 void Gradient::SetStyle( GradientStyle eStyle )
 {
@@ -133,8 +115,6 @@ void Gradient::SetStyle( GradientStyle eStyle )
     mpImplGradient->meStyle = eStyle;
 }
 
-// -----------------------------------------------------------------------
-
 void Gradient::SetStartColor( const Color& rColor )
 {
     DBG_CHKTHIS( Gradient, NULL );
@@ -142,8 +122,6 @@ void Gradient::SetStartColor( const Color& rColor )
     MakeUnique();
     mpImplGradient->maStartColor = rColor;
 }
-
-// -----------------------------------------------------------------------
 
 void Gradient::SetEndColor( const Color& rColor )
 {
@@ -153,8 +131,6 @@ void Gradient::SetEndColor( const Color& rColor )
     mpImplGradient->maEndColor = rColor;
 }
 
-// -----------------------------------------------------------------------
-
 void Gradient::SetAngle( sal_uInt16 nAngle )
 {
     DBG_CHKTHIS( Gradient, NULL );
@@ -162,8 +138,6 @@ void Gradient::SetAngle( sal_uInt16 nAngle )
     MakeUnique();
     mpImplGradient->mnAngle = nAngle;
 }
-
-// -----------------------------------------------------------------------
 
 void Gradient::SetBorder( sal_uInt16 nBorder )
 {
@@ -173,8 +147,6 @@ void Gradient::SetBorder( sal_uInt16 nBorder )
     mpImplGradient->mnBorder = nBorder;
 }
 
-// -----------------------------------------------------------------------
-
 void Gradient::SetOfsX( sal_uInt16 nOfsX )
 {
     DBG_CHKTHIS( Gradient, NULL );
@@ -182,8 +154,6 @@ void Gradient::SetOfsX( sal_uInt16 nOfsX )
     MakeUnique();
     mpImplGradient->mnOfsX = nOfsX;
 }
-
-// -----------------------------------------------------------------------
 
 void Gradient::SetOfsY( sal_uInt16 nOfsY )
 {
@@ -193,8 +163,6 @@ void Gradient::SetOfsY( sal_uInt16 nOfsY )
     mpImplGradient->mnOfsY = nOfsY;
 }
 
-// -----------------------------------------------------------------------
-
 void Gradient::SetStartIntensity( sal_uInt16 nIntens )
 {
     DBG_CHKTHIS( Gradient, NULL );
@@ -202,8 +170,6 @@ void Gradient::SetStartIntensity( sal_uInt16 nIntens )
     MakeUnique();
     mpImplGradient->mnIntensityStart = nIntens;
 }
-
-// -----------------------------------------------------------------------
 
 void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 {
@@ -213,8 +179,6 @@ void Gradient::SetEndIntensity( sal_uInt16 nIntens )
     mpImplGradient->mnIntensityEnd = nIntens;
 }
 
-// -----------------------------------------------------------------------
-
 void Gradient::SetSteps( sal_uInt16 nSteps )
 {
     DBG_CHKTHIS( Gradient, NULL );
@@ -222,8 +186,6 @@ void Gradient::SetSteps( sal_uInt16 nSteps )
     MakeUnique();
     mpImplGradient->mnStepCount = nSteps;
 }
-
-// -----------------------------------------------------------------------
 
 void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Point& rCenter ) const
 {
@@ -277,29 +239,29 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 
         if( GetStyle() == GradientStyle_RADIAL )
         {
-            // Radien-Berechnung fuer Kreis
+            // Calculation of radii for circle
             aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
             aSize.Height() = aSize.Width();
         }
         else if( GetStyle() == GradientStyle_ELLIPTICAL )
         {
-            // Radien-Berechnung fuer Ellipse
+            // Calculation of radii for ellipse
             aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
             aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
         }
 
-        // neue Mittelpunkte berechnen
+        // Calculate new centers
         long    nZWidth = aRect.GetWidth() * (long) GetOfsX() / 100;
         long    nZHeight = aRect.GetHeight() * (long) GetOfsY() / 100;
         long    nBorderX = (long) GetBorder() * aSize.Width()  / 100;
         long    nBorderY = (long) GetBorder() * aSize.Height() / 100;
         rCenter = Point( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
 
-        // Rand beruecksichtigen
+        // Respect borders
         aSize.Width() -= nBorderX;
         aSize.Height() -= nBorderY;
 
-        // Ausgaberechteck neu setzen
+        // Recalculate output rectangle
         aRect.Left() = rCenter.X() - ( aSize.Width() >> 1 );
         aRect.Top() = rCenter.Y() - ( aSize.Height() >> 1 );
 
@@ -308,18 +270,15 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
     }
 }
 
-// -----------------------------------------------------------------------
-
 Gradient& Gradient::operator=( const Gradient& rGradient )
 {
     DBG_CHKTHIS( Gradient, NULL );
     DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
+    // Increment refcount first so that we can reference ourselves
     rGradient.mpImplGradient->mnRefCount++;
 
-    // Wenn es die letzte Referenz ist, loeschen,
-    // sonst Referenzcounter decrementieren
+    // If it's the last reference, delete it, otherwise decrement
     if ( mpImplGradient->mnRefCount == 1 )
         delete mpImplGradient;
     else
@@ -328,8 +287,6 @@ Gradient& Gradient::operator=( const Gradient& rGradient )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Gradient::operator==( const Gradient& rGradient ) const
 {
@@ -374,8 +331,6 @@ SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
@@ -394,15 +349,11 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
     return rOStm;
 }
 
-// -----------------------------------------------------------------------
-
 SvStream& operator>>( SvStream& rIStm, Gradient& rGradient )
 {
     rGradient.MakeUnique();
     return( rIStm >> *rGradient.mpImplGradient );
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStm, const Gradient& rGradient )
 {
