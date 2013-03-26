@@ -1851,7 +1851,9 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
         {
             aToken = rType.getToken( 0, ';', nIndex );
             // Assume all have the "*.<extn>" syntax
-            aToken = aToken.copy( aToken.lastIndexOf( aStarDot ) + 2 );
+            sal_Int32 nStarDot = aToken.lastIndexOf( aStarDot );
+            if (nStarDot >= 0)
+                aToken = aToken.copy( nStarDot + 2 );
             if (!aToken.isEmpty())
             {
                 if (!aTokens.isEmpty())
