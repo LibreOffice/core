@@ -530,10 +530,10 @@ OUString SmOoxmlImport::handleNary()
             ret = "int";
             break;
         case MS_IINT:
-            ret = "liint";
+            ret = "iint";
             break;
         case MS_IIINT:
-            ret = "liiint";
+            ret = "iiint";
             break;
         case MS_LINT:
             ret = "lint";
