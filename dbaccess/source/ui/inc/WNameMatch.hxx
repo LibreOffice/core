@@ -64,8 +64,8 @@ namespace dbaui
         ImageButton         m_ibColumn_down_right;
         PushButton          m_pbAll;
         PushButton          m_pbNone;
-        String              m_sSourceText;
-        String              m_sDestText;
+        OUString            m_sSourceText;
+        OUString            m_sDestText;
 
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( RightButtonClickHdl, Button * );
