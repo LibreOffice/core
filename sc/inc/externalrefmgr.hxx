@@ -690,7 +690,7 @@ private:
     void fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const;
 
     ScExternalRefCache::TokenRef getSingleRefTokenFromSrcDoc(
-        sal_uInt16 nFileId, const ScDocument* pSrcDoc, const ScAddress& rCell,
+        sal_uInt16 nFileId, ScDocument* pSrcDoc, const ScAddress& rPos,
         ScExternalRefCache::CellFormat* pFmt);
 
     /**
@@ -708,7 +708,7 @@ private:
      * @return range token array
      */
     ScExternalRefCache::TokenArrayRef getDoubleRefTokensFromSrcDoc(
-        const ScDocument* pSrcDoc, const ::rtl::OUString& rTabName, ScRange& rRange,
+        ScDocument* pSrcDoc, const ::rtl::OUString& rTabName, ScRange& rRange,
         ::std::vector<ScExternalRefCache::SingleRangeData>& rCacheData);
 
     /**
@@ -724,10 +724,10 @@ private:
      * @return range name token array
      */
     ScExternalRefCache::TokenArrayRef getRangeNameTokensFromSrcDoc(
-        sal_uInt16 nFileId, const ScDocument* pSrcDoc, ::rtl::OUString& rName);
+        sal_uInt16 nFileId, ScDocument* pSrcDoc, ::rtl::OUString& rName);
 
-    const ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
-    const ScDocument* getSrcDocument(sal_uInt16 nFileId);
+    ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
+    ScDocument* getSrcDocument(sal_uInt16 nFileId);
     SfxObjectShellRef loadSrcDocument(sal_uInt16 nFileId, ::rtl::OUString& rFilter);
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);

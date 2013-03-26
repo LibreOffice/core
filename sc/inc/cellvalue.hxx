@@ -130,6 +130,8 @@ struct SC_DLLPUBLIC ScRefCellValue
 
     bool isEmpty() const;
 
+    bool hasEmptyValue();
+
     bool equalsWithoutFormat( const ScRefCellValue& r ) const;
 
     ScRefCellValue& operator= ( const ScRefCellValue& r );

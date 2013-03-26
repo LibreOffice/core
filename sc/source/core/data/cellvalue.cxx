@@ -514,6 +514,17 @@ bool ScRefCellValue::isEmpty() const
     return meType == CELLTYPE_NOTE || meType == CELLTYPE_NONE;
 }
 
+bool ScRefCellValue::hasEmptyValue()
+{
+    if (isEmpty())
+        return true;
+
+    if (meType == CELLTYPE_FORMULA)
+        return mpFormula->IsEmpty();
+
+    return false;
+}
+
 bool ScRefCellValue::equalsWithoutFormat( const ScRefCellValue& r ) const
 {
     return equalsWithoutFormatImpl(*this, r);

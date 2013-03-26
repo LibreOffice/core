@@ -31,6 +31,7 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
+#include "cellvalue.hxx"
 
 #include "sfx2/app.hxx"
 #include "sfx2/docfilt.hxx"
@@ -1261,34 +1262,24 @@ IMPL_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
 
 // ============================================================================
 
-static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
+static FormulaToken* convertToToken( ScRefCellValue& rCell )
 {
-    if (!pCell || pCell->HasEmptyData())
+    if (rCell.hasEmptyValue())
     {
-        bool bInherited = (pCell && pCell->GetCellType() == CELLTYPE_FORMULA);
-        return new ScEmptyCellToken( bInherited, false);
+        bool bInherited = (rCell.meType == CELLTYPE_FORMULA);
+        return new ScEmptyCellToken(bInherited, false);
     }
 
-    switch (pCell->GetCellType())
+    switch (rCell.meType)
     {
         case CELLTYPE_EDIT:
-        {
-            rtl::OUString aStr = static_cast<ScEditCell*>(pCell)->GetString();
-            return new formula::FormulaStringToken(aStr);
-        }
         case CELLTYPE_STRING:
-        {
-            rtl::OUString aStr = static_cast<ScStringCell*>(pCell)->GetString();
-            return new formula::FormulaStringToken(aStr);
-        }
+            return new formula::FormulaStringToken(rCell.getString());
         case CELLTYPE_VALUE:
-        {
-            double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
-            return new formula::FormulaDoubleToken(fVal);
-        }
+            return new formula::FormulaDoubleToken(rCell.mfValue);
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+            ScFormulaCell* pFCell = rCell.mpFormula;
             sal_uInt16 nError = pFCell->GetErrCode();
             if (nError)
                 return new FormulaErrorToken( nError);
@@ -1299,7 +1290,7 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
             }
             else
             {
-                rtl::OUString aStr = pFCell->GetString();
+                OUString aStr = pFCell->GetString();
                 return new formula::FormulaStringToken(aStr);
             }
         }
@@ -1310,8 +1301,8 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
     return NULL;
 }
 
-static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange& rRange,
-                                             vector<ScExternalRefCache::SingleRangeData>& rCacheData)
+static ScTokenArray* convertToTokenArray(
+    ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
@@ -1356,40 +1347,31 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
         ScMatrixRef xMat = new ScMatrix(
             static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
+        ScRefCellValue aCell;
         for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
         {
             for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
             {
                 SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
-                ScBaseCell* pCell;
-                pSrcDoc->GetCell(nCol, nRow, nTab, pCell);
-                if (!pCell || pCell->HasEmptyData())
+
+                aCell.assign(*pSrcDoc, ScAddress(nCol, nRow, nTab));
+
+                if (aCell.hasEmptyValue())
                     // Skip empty cells.  Matrix's default values are empty elements.
                     continue;
 
-                switch (pCell->GetCellType())
+                switch (aCell.meType)
                 {
                     case CELLTYPE_EDIT:
-                    {
-                        rtl::OUString aStr = static_cast<ScEditCell*>(pCell)->GetString();
-                        xMat->PutString(aStr, nC, nR);
-                    }
-                    break;
                     case CELLTYPE_STRING:
-                    {
-                        rtl::OUString aStr = static_cast<ScStringCell*>(pCell)->GetString();
-                        xMat->PutString(aStr, nC, nR);
-                    }
+                        xMat->PutString(aCell.getString(), nC, nR);
                     break;
                     case CELLTYPE_VALUE:
-                    {
-                        double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
-                        xMat->PutDouble(fVal, nC, nR);
-                    }
+                        xMat->PutDouble(aCell.mfValue, nC, nR);
                     break;
                     case CELLTYPE_FORMULA:
                     {
-                        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                        ScFormulaCell* pFCell = aCell.mpFormula;
                         sal_uInt16 nError = pFCell->GetErrCode();
                         if (nError)
                             xMat->PutDouble( CreateDoubleError( nError), nC, nR);
@@ -1400,7 +1382,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
                         }
                         else
                         {
-                            rtl::OUString aStr = pFCell->GetString();
+                            OUString aStr = pFCell->GetString();
                             xMat->PutString(aStr, nC, nR);
                         }
                     }
@@ -1684,7 +1666,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (pFmt)
         pFmt->mbIsSet = false;
 
-    const ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
+    ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
     if (pSrcDoc)
     {
         // source document already loaded in memory.  Re-use this instance.
@@ -1771,7 +1753,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     maybeLinkExternalFile(nFileId);
 
     ScRange aDataRange(rRange);
-    const ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
+    ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
     if (pSrcDoc)
     {
         // Document already loaded in memory.
@@ -1817,7 +1799,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(
     maybeLinkExternalFile(nFileId);
 
     OUString aName = rName; // make a copy to have the casing corrected.
-    const ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
+    ScDocument* pSrcDoc = getInMemorySrcDocument(nFileId);
     if (pSrcDoc)
     {
         // Document already loaded in memory.
@@ -1908,13 +1890,13 @@ void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCach
 }
 
 ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
-    sal_uInt16 nFileId, const ScDocument* pSrcDoc, const ScAddress& rCell,
+    sal_uInt16 nFileId, ScDocument* pSrcDoc, const ScAddress& rPos,
     ScExternalRefCache::CellFormat* pFmt)
 {
     // Get the cell from src doc, and convert it into a token.
-    ScBaseCell* pCell = NULL;
-    pSrcDoc->GetCell(rCell.Col(), rCell.Row(), rCell.Tab(), pCell);
-    ScExternalRefCache::TokenRef pToken(lcl_convertToToken(pCell));
+    ScRefCellValue aCell;
+    aCell.assign(*pSrcDoc, rPos);
+    ScExternalRefCache::TokenRef pToken(convertToToken(aCell));
 
     if (!pToken.get())
     {
@@ -1924,14 +1906,14 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
 
     // Get number format information.
     sal_uInt32 nFmtIndex = 0;
-    pSrcDoc->GetNumberFormat(rCell.Col(), rCell.Row(), rCell.Tab(), nFmtIndex);
+    pSrcDoc->GetNumberFormat(rPos.Col(), rPos.Row(), rPos.Tab(), nFmtIndex);
     nFmtIndex = getMappedNumberFormat(nFileId, nFmtIndex, pSrcDoc);
     fillCellFormat(nFmtIndex, pFmt);
     return pToken;
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSrcDoc(
-    const ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
+    ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
     vector<ScExternalRefCache::SingleRangeData>& rCacheData)
 {
     ScExternalRefCache::TokenArrayRef pArray;
@@ -1967,14 +1949,14 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray.reset(lcl_convertToTokenArray(pSrcDoc, aRange, aCacheData));
+    pArray.reset(convertToTokenArray(pSrcDoc, aRange, aCacheData));
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSrcDoc(
-    sal_uInt16 nFileId, const ScDocument* pSrcDoc, OUString& rName)
+    sal_uInt16 nFileId, ScDocument* pSrcDoc, OUString& rName)
 {
     ScRangeName* pExtNames = pSrcDoc->GetRangeName();
     String aUpperName = ScGlobal::pCharClass->uppercase(rName);
@@ -2027,7 +2009,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     return pNew;
 }
 
-const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
+ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
 {
     const OUString* pFileName = getExternalFileName(nFileId);
     if (!pFileName)
@@ -2071,7 +2053,7 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
     return pSrcDoc;
 }
 
-const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
+ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 {
     if (!mpDoc->IsExecuteLinkEnabled())
         return NULL;
