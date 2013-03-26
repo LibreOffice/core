@@ -832,7 +832,10 @@ gb_LINKED_LIBS := $(if $(filter $(gb_MERGEDLIBS),$(2)), \
 
 # used by bin/module-deps.pl
 ifneq ($(ENABLE_PRINT_DEPS),)
+# exclude libraries in Library_merged
+ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),)
 $$(eval $$(call gb_PrintDeps_info,$(1),$$(gb_LINKED_LIBS),$(3),$(4)))
+endif
 endif
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $$(gb_LINKED_LIBS)
