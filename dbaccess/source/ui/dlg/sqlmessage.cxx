@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
     SvTreeListEntry* pSelected = m_aExceptionList.FirstSelected();
     OSL_ENSURE(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
 
-    String sText;
+    OUString sText;
 
     if ( pSelected )
     {
@@ -404,21 +404,21 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
         if ( aExceptionInfo.sSQLState.Len() )
         {
             sText += m_sStatusLabel;
-            sText.AppendAscii(": ");
+            sText += ": ";
             sText += aExceptionInfo.sSQLState;
-            sText.AppendAscii("\n");
+            sText += "\n";
         }
 
         if ( aExceptionInfo.sErrorCode.Len() )
         {
             sText += m_sErrorCodeLabel;
-            sText.AppendAscii(": ");
+            sText += ": ";
             sText += aExceptionInfo.sErrorCode;
-            sText.AppendAscii("\n");
+            sText += "\n";
         }
 
-        if ( sText.Len() )
-            sText.AppendAscii( "\n" );
+        if ( !sText.isEmpty() )
+            sText += "\n";
 
         sText += aExceptionInfo.sMessage;
     }
