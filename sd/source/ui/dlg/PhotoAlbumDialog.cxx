@@ -332,7 +332,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
                 mpGraphicFilter->ImportGraphic( aGraphic, sImgUrl, *pStream, nFilter, NULL, nFilterImportFlags );
             else
                 mpGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, NULL, nFilterImportFlags );
-                delete pStream;
+            delete pStream;
         }
         else
         {
