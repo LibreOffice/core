@@ -1072,11 +1072,11 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
         U+0020 may be drawn with a wrong width (from non-fixed-width Asian or
         Complex font). Now we draw every non-space portion separately. */
     xub_StrLen nTokenCount = comphelper::string::getTokenCount(aPlainText, ' ');
-    sal_Int32 nCharIx = 0;
+    sal_Int32 nCharIxInt = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCount; ++nToken )
     {
-        sal_Int32 nBeginIx = nCharIx;
-        String aToken = aPlainText.GetToken( 0, ' ', nCharIx );
+        sal_Int32 nBeginIx = nCharIxInt;
+        String aToken = aPlainText.GetToken( 0, ' ', nCharIxInt );
         if( aToken.Len() > 0 )
         {
             sal_Int32 nX = rPos.X() + GetCharWidth() * nBeginIx;
@@ -1085,8 +1085,8 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
         }
     }
 
-    nCharIx = 0;
-    while( (nCharIx = rText.Search( '\t', nCharIx )) != -1 )
+    xub_StrLen nCharIx = 0;
+    while( (nCharIx = rText.Search( '\t', nCharIx )) != STRING_NOTFOUND )
     {
         sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
         sal_Int32 nX2 = nX1 + GetCharWidth() - 2;
@@ -1099,7 +1099,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
         ++nCharIx;
     }
     nCharIx = 0;
-    while( (nCharIx = rText.Search( '\n', nCharIx )) != -1 )
+    while( (nCharIx = rText.Search( '\n', nCharIx )) != STRING_NOTFOUND )
     {
         sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
         sal_Int32 nX2 = nX1 + GetCharWidth() - 2;
