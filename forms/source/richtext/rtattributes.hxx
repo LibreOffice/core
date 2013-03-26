@@ -24,10 +24,8 @@
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
 
-//........................................................................
 namespace frm
 {
-//........................................................................
 
     //====================================================================
     //= misc
@@ -62,10 +60,10 @@ namespace frm
     public:
         AttributeCheckState eSimpleState;
 
-        //................................................................
         inline          AttributeState( );
         inline explicit AttributeState( AttributeCheckState _eCheckState );
         inline          AttributeState( const AttributeState& _rSource );
+        inline          ~AttributeState( );
 
         inline AttributeState& operator=( const AttributeState& _rSource );
 
@@ -78,21 +76,18 @@ namespace frm
     //====================================================================
     //= AttributeState (inline implementation)
     //====================================================================
-    //................................................................
     inline AttributeState::AttributeState( )
         :pItemHandle( NULL )
         ,eSimpleState( eIndetermined )
     {
     }
 
-    //................................................................
     inline AttributeState::AttributeState( AttributeCheckState _eCheckState )
         :pItemHandle( NULL )
         ,eSimpleState( _eCheckState )
     {
     }
 
-    //................................................................
     inline AttributeState::AttributeState( const AttributeState& _rSource )
         :pItemHandle( NULL )
         ,eSimpleState( eIndetermined )
@@ -100,7 +95,11 @@ namespace frm
         operator=( _rSource );
     }
 
-    //................................................................
+    inline AttributeState::~AttributeState( )
+    {
+        delete(pItemHandle);
+    }
+
     inline AttributeState& AttributeState::operator=( const AttributeState& _rSource )
     {
         if ( &_rSource == this )
@@ -111,13 +110,11 @@ namespace frm
         return *this;
     }
 
-    //................................................................
     inline const SfxPoolItem* AttributeState::getItem() const
     {
         return pItemHandle ? &pItemHandle->GetItem() : NULL;
     }
 
-    //................................................................
     inline void AttributeState::setItem( const SfxPoolItem* _pItem )
     {
         if ( pItemHandle )
@@ -128,7 +125,6 @@ namespace frm
             pItemHandle = NULL;
     }
 
-    //................................................................
     inline bool AttributeState::operator==( const AttributeState& _rRHS )
     {
         if ( eSimpleState != _rRHS.eSimpleState )
@@ -159,9 +155,7 @@ namespace frm
         ~IMultiAttributeDispatcher() {}
     };
 
-//........................................................................
 } // namespace frm
-//........................................................................
 
 #endif // FORMS_SOURCE_RICHTEXT_RTATTRIBUTES_HXX
 
