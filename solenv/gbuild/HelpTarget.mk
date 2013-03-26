@@ -260,8 +260,11 @@ gb_HelpLinkTarget_DEPS := \
 	$(gb_HelpLinkTarget_IDXCAPTIONTARGET) \
 	$(gb_HelpLinkTarget_IDXCONTENTTARGET)
 
+# first delete the index stuff since when it is generated an existing _0.cfs
+# will not be overwritten; instead a new _1.cfs etc. created until disk is full
 define gb_HelpLinkTarget__command
 $(call gb_Output_announce,$(2),$(true),HLK,3)
+	$(if $(HELP_INDEXED),rm -rf $(addprefix $(HELP_WORKDIR)/,$(HELP_INDEXED)) && \)
 RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	-lang $(HELP_LANG) \
 	-mod $(HELP_MODULE) \
@@ -345,9 +348,9 @@ $(call gb_HelpLinkTarget_get_target,$(1)) : $(2)
 
 endef
 
-# gb_HelpLinkTarget_set_indexed target
+# gb_HelpLinkTarget_set_indexed target indexfiles
 define gb_HelpLinkTarget_set_indexed
-$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_INDEXED := $(true)
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_INDEXED := $(2)
 
 endef
 
@@ -597,12 +600,8 @@ endef
 # Add index files into the zip.
 #
 # gb_HelpTarget__add_index_files target module
-define gb_HelpTarget__add_index_files
-$(call gb_HelpTarget__add_file,$(1),$(2).db)
-$(call gb_HelpTarget__add_file,$(1),$(2).ht)
-$(call gb_HelpTarget__add_file,$(1),$(2).idxl)
-$(call gb_HelpTarget__add_file,$(1),$(2).key)
-
+define gb_HelpTarget__get_index_files
+$(foreach suffix,.db .ht .idxl .key,$(addsuffix $(suffix),$(call gb_HelpTarget__get_module,$(1))))
 endef
 
 # gb_HelpTarget__add_file target file
@@ -640,8 +639,8 @@ endef
 #
 # gb_HelpTarget_set_indexed target
 define gb_HelpTarget_set_indexed
-$(call gb_HelpLinkTarget_set_indexed,$(1))
-$(call gb_HelpTarget__add_index_files,$(1),$(call gb_HelpTarget__get_module,$(1)))
+$(call gb_HelpLinkTarget_set_indexed,$(1),$(call gb_HelpTarget__get_index_files,$(1)))
+$(foreach file,$(call gb_HelpTarget__get_index_files,$(1)),$(call gb_HelpTarget__add_file,$(1),$(file)))
 
 $(call gb_HelpTarget_get_target,$(1)) : HELP_INDEXED := $(true)
 
