@@ -114,6 +114,16 @@ void ThumbnailView::ImplDeleteItems()
     for ( size_t i = 0; i < n; ++i )
     {
         ThumbnailViewItem *const pItem = mItemList[i];
+
+        // deselect all current selected items and fire events
+        if (pItem->isSelected())
+        {
+            pItem->setSelection(false);
+            maItemStateHdl.Call(pItem);
+
+            // fire accessible event???
+        }
+
         if ( pItem->isVisible() && ImplHasAccessibleListeners() )
         {
             ::com::sun::star::uno::Any aOldAny, aNewAny;
