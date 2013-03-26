@@ -359,7 +359,7 @@ sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader,
             rIStm >> rHeader.nColsImportant;
         }
 
-        // Eventuell bis zur Palette ueberlesen
+        // Skip to palette if we can
         if ( rHeader.nSize > DIBINFOHEADERSIZE )
             rIStm.SeekRel( rHeader.nSize - DIBINFOHEADERSIZE );
     }
@@ -374,7 +374,7 @@ sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader,
     if ( rHeader.nWidth < 0 )
         rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-    // #144105# protect a little against damaged files
+    // Protect against damaged files a little bit
     if( rHeader.nSizeImage > ( 16 * static_cast< sal_uInt32 >( rHeader.nWidth * rHeader.nHeight ) ) )
         rHeader.nSizeImage = 0;
 

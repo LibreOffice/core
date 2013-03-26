@@ -26,10 +26,6 @@
 
 #include <string.h>
 
-// --------------------
-// - BitmapReadAccess -
-// --------------------
-
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, sal_Bool bModify ) :
             mpBuffer        ( NULL ),
             mpScanBuf       ( NULL ),
@@ -39,8 +35,6 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, sal_Bool bModify ) :
 {
     ImplCreate( rBitmap );
 }
-
-// ------------------------------------------------------------------
 
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
             mpBuffer        ( NULL ),
@@ -52,14 +46,10 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
     ImplCreate( rBitmap );
 }
 
-// ------------------------------------------------------------------
-
 BitmapReadAccess::~BitmapReadAccess()
 {
     ImplDestroy();
 }
-
-// ------------------------------------------------------------------
 
 void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
 {
@@ -129,8 +119,6 @@ void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
     }
 }
 
-// ------------------------------------------------------------------
-
 void BitmapReadAccess::ImplDestroy()
 {
     ImpBitmap* pImpBmp = maBitmap.ImplGetImpBitmap();
@@ -144,8 +132,6 @@ void BitmapReadAccess::ImplDestroy()
         mpBuffer = NULL;
     }
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
 {
@@ -177,8 +163,6 @@ sal_Bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 void BitmapReadAccess::ImplZeroInitUnusedBits()
 {
@@ -288,16 +272,10 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
     }
 }
 
-// ------------------------------------------------------------------
-
 sal_uInt16 BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const
 {
     return( HasPalette() ? mpBuffer->maPalette.GetBestIndex( rBitmapColor ) : 0 );
 }
-
-// ---------------------
-// - BitmapWriteAccess -
-// ---------------------
 
 BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
             BitmapReadAccess( rBitmap, sal_True ),
@@ -306,15 +284,11 @@ BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
 {
 }
 
-// ------------------------------------------------------------------
-
 BitmapWriteAccess::~BitmapWriteAccess()
 {
     delete mpLineColor;
     delete mpFillColor;
 }
-
-// ------------------------------------------------------------------
 
 void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
 {
@@ -333,7 +307,6 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
             SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
 }
 
-// ------------------------------------------------------------------
 
 void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                                       sal_uLong nSrcScanlineFormat, sal_uLong nSrcScanlineSize )
@@ -395,9 +368,6 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
         }
     }
 }
-
-
-// ------------------------------------------------------------------
 
 void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
 {

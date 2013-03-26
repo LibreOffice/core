@@ -37,10 +37,6 @@ using ::rtl::OUString;
 
 #define SETTINGS_CONFIGNODE "VCL/Settings"
 
-/*
- *  SettingsConfigItem::get
- */
-
 SettingsConfigItem* SettingsConfigItem::get()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -48,10 +44,6 @@ SettingsConfigItem* SettingsConfigItem::get()
         pSVData->mpSettingsConfigItem = new SettingsConfigItem();
     return pSVData->mpSettingsConfigItem;
 }
-
-/*
- *  SettignsConfigItem constructor
- */
 
 SettingsConfigItem::SettingsConfigItem()
         :
@@ -62,19 +54,11 @@ SettingsConfigItem::SettingsConfigItem()
     getValues();
 }
 
-/*
- *  SettingsConfigItem destructor
- */
-
 SettingsConfigItem::~SettingsConfigItem()
 {
     if( IsModified() )
         Commit();
 }
-
-/*
- *  SettingsConfigItem::Commit
- */
 
 void SettingsConfigItem::Commit()
 {
@@ -106,18 +90,11 @@ void SettingsConfigItem::Commit()
     }
 }
 
-/*
- *  SettingsConfigItem::Notify
- */
-
 void SettingsConfigItem::Notify( const Sequence< OUString >& )
 {
     getValues();
 }
 
-/*
- *  SettingsConfigItem::getValues
- */
 void SettingsConfigItem::getValues()
 {
     if( ! IsValidConfigMgr() )
@@ -166,10 +143,6 @@ void SettingsConfigItem::getValues()
     }
 }
 
-/*
- *  SettingsConfigItem::getDefaultFont
- */
-
 const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
 {
     ::boost::unordered_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
@@ -180,10 +153,6 @@ const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUSt
     }
     return group->second.find(rKey)->second;
 }
-
-/*
- *  SettingsConfigItem::setDefaultFont
- */
 
 void SettingsConfigItem::setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue )
 {

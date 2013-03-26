@@ -174,10 +174,10 @@ sal_Bool Animation::IsTransparent() const
     Rectangle   aRect( aPoint, maGlobalSize );
     sal_Bool        bRet = sal_False;
 
-    // Falls irgendein 'kleines' Bildchen durch den Hintergrund
-    // ersetzt werden soll, muessen wir 'transparent' sein, um
-    // richtig dargestellt zu werden, da die Appl. aus Optimierungsgruenden
-    // kein Invalidate auf nicht-transp. Grafiken ausfuehren
+    // If some small bitmap needs to be replaced by the background,
+    // we need to be transparent, in order to be displayed correctly
+    // as the application (?) does not invalidate on non-transparent
+    // graphics due to performance reasons.
     for( size_t i = 0, nCount = maList.size(); i < nCount; i++ )
     {
         const AnimationBitmap* pAnimBmp = maList[ i ];
@@ -494,7 +494,7 @@ sal_Bool Animation::Insert( const AnimationBitmap& rStepBmp )
         maGlobalSize = aGlobalRect.Union( Rectangle( rStepBmp.aPosPix, rStepBmp.aSizePix ) ).GetSize();
         maList.push_back( new AnimationBitmap( rStepBmp ) );
 
-        // zunaechst nehmen wir die erste BitmapEx als Ersatz-BitmapEx
+        // As a start, we make the first BitmapEx the replacement BitmapEx
         if( maList.size() == 1 )
             maBitmapEx = rStepBmp.aBmpEx;
 
@@ -517,10 +517,8 @@ void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 
     delete maList[ nAnimation ];
     maList[ nAnimation ] = new AnimationBitmap( rNewAnimationBitmap );
 
-    // Falls wir an erster Stelle einfuegen,
-    // muessen wir natuerlich auch,
-    // auch die Ersatzdarstellungs-BitmapEx
-    // aktualisieren;
+    // If we insert at first position we also need to
+    // update the replacement BitmapEx
     if ( (  !nAnimation
          && (  !mbLoopTerminated
             || ( maList.size() == 1 )
@@ -707,14 +705,14 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
     {
         const sal_uInt32    nDummy32 = 0UL;
 
-        // Falls keine BitmapEx gesetzt wurde, schreiben wir
-        // einfach die erste Bitmap der Animation
+        // If no BitmapEx was set we write the first Bitmap of
+        // the Animation
         if( !rAnimation.GetBitmapEx().GetBitmap() )
             rOStm << rAnimation.Get( 0 ).aBmpEx;
         else
             rOStm << rAnimation.GetBitmapEx();
 
-        // Kennung schreiben ( SDANIMA1 )
+        // Write identifier ( SDANIMA1 )
         rOStm << (sal_uInt32) 0x5344414e << (sal_uInt32) 0x494d4931;
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
@@ -722,7 +720,7 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             const AnimationBitmap&  rAnimBmp = rAnimation.Get( i );
             const sal_uInt16            nRest = nCount - i - 1;
 
-            // AnimationBitmap schreiben
+            // Write AnimationBitmap
             rOStm << rAnimBmp.aBmpEx;
             rOStm << rAnimBmp.aPosPix;
             rOStm << rAnimBmp.aSizePix;
@@ -731,11 +729,11 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << (sal_uInt16) rAnimBmp.eDisposal;
             rOStm << (sal_uInt8) rAnimBmp.bUserInput;
             rOStm << (sal_uInt32) rAnimation.mnLoopCount;
-            rOStm << nDummy32;  // unbenutzt
-            rOStm << nDummy32;  // unbenutzt
-            rOStm << nDummy32;  // unbenutzt
+            rOStm << nDummy32; // Unused
+            rOStm << nDummy32; // Unused
+            rOStm << nDummy32; // Unused
             write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, rtl::OString()); // dummy
-            rOStm << nRest;     // Anzahl der Strukturen, die noch _folgen_
+            rOStm << nRest; // Count of remaining structures
         }
     }
 
@@ -756,11 +754,11 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
 
     rAnimation.Clear();
 
-    // Wenn die BitmapEx am Anfang schon gelesen
-    // wurde ( von Graphic ), koennen wir direkt die Animationsbitmaps einlesen
+    // If the BitmapEx at the beginning have already been read (by Graphic)
+    // we can start reading the AnimationBitmaps right away
     if( ( nAnimMagic1 == 0x5344414e ) && ( nAnimMagic2 == 0x494d4931 ) && !rIStm.GetError() )
         bReadAnimations = sal_True;
-    // ansonsten versuchen wir erstmal die Bitmap(-Ex) zu lesen
+    // Else, we try reading the Bitmap(-Ex)
     else
     {
         rIStm.Seek( nStmPos );
@@ -774,7 +772,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
             rIStm.Seek( nStmPos );
     }
 
-    // ggf. Animationsbitmaps lesen
+    // Read AnimationBitmaps
     if( bReadAnimations )
     {
         AnimationBitmap aAnimBmp;
@@ -793,11 +791,11 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
             rIStm >> nTmp16; aAnimBmp.eDisposal = ( Disposal) nTmp16;
             rIStm >> cTmp; aAnimBmp.bUserInput = (sal_Bool) cTmp;
             rIStm >> nTmp32; rAnimation.mnLoopCount = (sal_uInt16) nTmp32;
-            rIStm >> nTmp32;    // unbenutzt
-            rIStm >> nTmp32;    // unbenutzt
-            rIStm >> nTmp32;    // unbenutzt
-            read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // unbenutzt
-            rIStm >> nTmp16;    // Rest zu lesen
+            rIStm >> nTmp32; // Unused
+            rIStm >> nTmp32; // Unused
+            rIStm >> nTmp32; // Unused
+            read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Unused
+            rIStm >> nTmp16; // The rest to read
 
             rAnimation.Insert( aAnimBmp );
         }

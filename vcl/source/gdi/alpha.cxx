@@ -22,10 +22,6 @@
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
 
-// -------------
-// - AlphaMask -
-// -------------
-
 AlphaMask::AlphaMask()
 {
 }
@@ -83,8 +79,7 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
                            const AlphaMask* pAlphaSrc )
 {
     // Note: this code is copied from Bitmap::CopyPixel but avoids any palette lookups
-    // this optimization is possible because the palettes of AlphaMasks are always identical (8bit GreyPalette, see ctor)
-
+    // This optimization is possible because the palettes of AlphaMasks are always identical (8bit GreyPalette, see ctor)
     const Size  aSizePix( GetSizePixel() );
     Rectangle   aRectDst( rRectDst );
     sal_Bool        bRet = sal_False;

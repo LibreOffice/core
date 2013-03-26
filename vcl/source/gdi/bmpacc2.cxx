@@ -20,16 +20,10 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 
-// ----------------
-// - BitmapAccess -
-// ----------------
-
 IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_MSB_PAL )
 {
     return( pScanline[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_MSB_PAL )
 {
@@ -39,14 +33,10 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_MSB_PAL )
                                       ( rByte &= ~( 1 << ( 7 - ( nX & 7 ) ) ) );
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_LSB_PAL )
 {
     return( pScanline[ nX >> 3 ] & ( 1 << ( nX & 7 ) ) ? 1 : 0 );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_LSB_PAL )
 {
@@ -56,14 +46,10 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_LSB_PAL )
                                       ( rByte &= ~( 1 << ( nX & 7 ) ) );
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_MSN_PAL )
 {
     return( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_MSN_PAL )
 {
@@ -73,14 +59,10 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_MSN_PAL )
                  ( rByte &= 0x0f, rByte |= ( rBitmapColor.GetIndex() << 4 ) );
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_LSN_PAL )
 {
     return( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 4 : 0 ) ) & 0x0f );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_LSN_PAL )
 {
@@ -90,21 +72,15 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_LSN_PAL )
                  ( rByte &= 0xf0, rByte |= ( rBitmapColor.GetIndex() & 0x0f ) );
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_GETPIXEL_NOMASK( _8BIT_PAL )
 {
     return pScanline[ nX ];
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL_NOMASK( _8BIT_PAL )
 {
     pScanline[ nX ] = rBitmapColor.GetIndex();
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL( _8BIT_TC_MASK )
 {
@@ -113,14 +89,10 @@ IMPL_FORMAT_GETPIXEL( _8BIT_TC_MASK )
     return aColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL( _8BIT_TC_MASK )
 {
     rMask.SetColorFor8Bit( rBitmapColor, pScanline + nX );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL( _16BIT_TC_MSB_MASK )
 {
@@ -129,14 +101,10 @@ IMPL_FORMAT_GETPIXEL( _16BIT_TC_MSB_MASK )
     return aColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL( _16BIT_TC_MSB_MASK )
 {
     rMask.SetColorFor16BitMSB( rBitmapColor, pScanline + ( nX << 1UL ) );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL( _16BIT_TC_LSB_MASK )
 {
@@ -145,14 +113,10 @@ IMPL_FORMAT_GETPIXEL( _16BIT_TC_LSB_MASK )
     return aColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL( _16BIT_TC_LSB_MASK )
 {
     rMask.SetColorFor16BitLSB( rBitmapColor, pScanline + ( nX << 1UL ) );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _24BIT_TC_BGR )
 {
@@ -165,16 +129,12 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _24BIT_TC_BGR )
     return aBitmapColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL_NOMASK( _24BIT_TC_BGR )
 {
     *( pScanline = pScanline + nX * 3 )++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline = rBitmapColor.GetRed();
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _24BIT_TC_RGB )
 {
@@ -187,16 +147,12 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _24BIT_TC_RGB )
     return aBitmapColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL_NOMASK( _24BIT_TC_RGB )
 {
     *( pScanline = pScanline + nX * 3 )++ = rBitmapColor.GetRed();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline = rBitmapColor.GetBlue();
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL( _24BIT_TC_MASK )
 {
@@ -205,14 +161,10 @@ IMPL_FORMAT_GETPIXEL( _24BIT_TC_MASK )
     return aColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL( _24BIT_TC_MASK )
 {
     rMask.SetColorFor24Bit( rBitmapColor, pScanline + nX * 3L );
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_ABGR )
 {
@@ -225,8 +177,6 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_ABGR )
     return aBitmapColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_ABGR )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = 0;
@@ -234,8 +184,6 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_ABGR )
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline = rBitmapColor.GetRed();
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_ARGB )
 {
@@ -248,8 +196,6 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_ARGB )
     return aBitmapColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_ARGB )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = 0;
@@ -257,8 +203,6 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_ARGB )
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline = rBitmapColor.GetBlue();
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_BGRA )
 {
@@ -271,8 +215,6 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_BGRA )
     return aBitmapColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_BGRA )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = rBitmapColor.GetBlue();
@@ -280,8 +222,6 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_BGRA )
     *pScanline++ = rBitmapColor.GetRed();
     *pScanline = 0;
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_RGBA )
 {
@@ -294,8 +234,6 @@ IMPL_FORMAT_GETPIXEL_NOMASK( _32BIT_TC_RGBA )
     return aBitmapColor;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_RGBA )
 {
     *( pScanline = pScanline + ( nX << 2 ) )++ = rBitmapColor.GetRed();
@@ -304,16 +242,12 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _32BIT_TC_RGBA )
     *pScanline = 0;
 }
 
-// ------------------------------------------------------------------
-
 IMPL_FORMAT_GETPIXEL( _32BIT_TC_MASK )
 {
     BitmapColor aColor;
     rMask.GetColorFor32Bit( aColor, pScanline + ( nX << 2UL ) );
     return aColor;
 }
-
-// ------------------------------------------------------------------
 
 IMPL_FORMAT_SETPIXEL( _32BIT_TC_MASK )
 {
