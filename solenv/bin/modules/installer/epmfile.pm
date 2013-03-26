@@ -18,7 +18,7 @@
 
 package installer::epmfile;
 
-use Cwd;
+use Cwd qw();
 use installer::converter;
 use installer::exiter;
 use installer::files;
@@ -1111,7 +1111,7 @@ sub set_topdir_in_specfile
 {
     my ($changefile, $filename, $newepmdir) = @_;
 
-    $newepmdir = cwd() . $installer::globals::separator . $newepmdir; # only absolute path allowed
+    $newepmdir = Cwd::cwd() . $installer::globals::separator . $newepmdir; # only absolute path allowed
 
     # removing "%define _topdir", if existing
 
@@ -2070,7 +2070,7 @@ sub create_packages_without_epm
 
         if ( $rpmversion >= 4 )
         {
-            my $dir = getcwd;
+            my $dir = Cwd::getcwd;
             my $buildroot = $dir . "/" . $epmdir . "buildroot/";
             $buildrootstring = "--buildroot=$buildroot";
             mkdir($buildroot = $dir . "/" . $epmdir . "BUILD/");
