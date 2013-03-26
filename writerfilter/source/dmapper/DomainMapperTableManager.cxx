@@ -53,6 +53,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_bOOXML( bOOXML ),
     m_bPushCurrentWidth(false),
     m_bRowSizeTypeInserted(false),
+    m_nLayoutType(0),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
@@ -403,6 +404,7 @@ void DomainMapperTableManager::startLevel( )
     m_aTablePositions.push_back( pNewPositionHandler );
     m_nCell.push_back( 0 );
     m_nTableWidth = 0;
+    m_nLayoutType = 0;
 
     // And push it back to the right level.
     if (oCurrentWidth)
@@ -416,6 +418,7 @@ void DomainMapperTableManager::endLevel( )
     m_aCellWidths.pop_back( );
     m_nCell.pop_back( );
     m_nTableWidth = 0;
+    m_nLayoutType = 0;
 
 
     DomainMapperTableManager_Base_t::endLevel( );
@@ -556,12 +559,13 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
         insertRowProps(pPropMap);
     }
-    else if (pCellWidths->size() > 0)
+    else if (pCellWidths->size() > 0 && m_nLayoutType == NS_ooxml::LN_Value_wordprocessingml_ST_TblLayout_fixed)
     {
         // If we're here, then the number of cells does not equal to the amount
         // defined by the grid, even after taking care of
         // gridSpan/gridBefore/gridAfter. Handle this by ignoring the grid and
-        // providing the separators based on the provided cell widths.
+        // providing the separators based on the provided cell widths, as long
+        // as we have a fixed layout.
         uno::Sequence< text::TableColumnSeparator > aSeparators(pCellWidths->size() - 1);
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nSum = 0;
@@ -602,7 +606,7 @@ void DomainMapperTableManager::endOfRowAction()
 
 void DomainMapperTableManager::clearData()
 {
-    m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
+    m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
     m_sTableStyleName = OUString();
     m_pTableStyleTextProperies.reset();
 }

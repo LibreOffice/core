@@ -161,6 +161,13 @@ namespace dmapper {
                 }
             }
             break;
+            case NS_ooxml::LN_CT_TblPrBase_tblLayout:
+            {
+                DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
+                if (pManager)
+                    pManager->SetLayoutType(static_cast<sal_uInt32>(nIntValue));
+            }
+            break;
             case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
             //contains CT_TcBorders_left, right, top, bottom
             {

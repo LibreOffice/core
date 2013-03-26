@@ -17882,7 +17882,7 @@
           <xs:documentation>Revision Identifier for Table Row Properties</xs:documentation>
         </attribute>
       </define>
-      <define name="ST_TblLayoutType">
+      <define name="ST_TblLayout">
         <list>
           <xs:documentation>Table Layout Type</xs:documentation>
           <choice>
@@ -17893,9 +17893,9 @@
           </choice>
         </list>
       </define>
-      <define name="CT_TblLayoutType">
+      <define name="CT_TblLayout">
         <attribute name="type">
-          <text/>
+          <ref name="ST_TblLayout"/>
           <xs:documentation>Table Layout Setting</xs:documentation>
         </attribute>
       </define>
@@ -18095,7 +18095,7 @@
         </optional>
         <optional>
           <element name="tblLayout">
-            <ref name="CT_TblLayoutType"/>
+            <ref name="CT_TblLayout"/>
           </element>
         </optional>
         <optional>
@@ -18150,7 +18150,7 @@
         </optional>
         <optional>
           <element name="tblLayout">
-            <ref name="CT_TblLayoutType"/>
+            <ref name="CT_TblLayout"/>
           </element>
         </optional>
         <optional>
@@ -22938,9 +22938,12 @@
       <action name="end" action="sendTableProperties"/>
       <action name="end" action="endRow"/>
     </resource>
-    <resource name="ST_TblLayoutType" resource="List" generated="yes">
-      <value name="fixed" tokenid="ooxml:Value_wordprocessingml_ST_TblLayoutType_fixed">fixed</value>
-      <value name="autofit" tokenid="ooxml:Value_wordprocessingml_ST_TblLayoutType_autofit">autofit</value>
+    <resource name="ST_TblLayout" resource="List">
+      <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_fixed">fixed</value>
+      <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_autofit">autofit</value>
+    </resource>
+    <resource name="CT_TblLayout" resource="Value" tag="table">
+      <attribute name="type" tokenid="ooxml:CT_TblLayout_type" action="setValue"/>
     </resource>
     <resource name="ST_TblOverlap" resource="List">
       <value tokenid="ooxml:Value_ST_TblOverlap_never">never</value>

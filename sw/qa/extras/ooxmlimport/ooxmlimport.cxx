@@ -122,6 +122,7 @@ public:
     void testFdo61343();
     void testToolsLineNumbering();
     void testFdo60922();
+    void testFdo59273();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -195,6 +196,7 @@ void Test::run()
         {"fdo61343.docx", &Test::testFdo61343},
         {"tools-line-numbering.docx", &Test::testToolsLineNumbering},
         {"fdo60922.docx", &Test::testFdo60922},
+        {"fdo59273.docx", &Test::testFdo59273},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1286,6 +1288,16 @@ void Test::testFdo60922()
 {
     // This was 0, not 100, due to wrong import of w:position w:val="0"
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapementHeight"));
+}
+
+void Test::testFdo59273()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Was 9997, so the 4th column had ~zero width
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7498), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[2].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
