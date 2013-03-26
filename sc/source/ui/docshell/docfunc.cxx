@@ -761,8 +761,7 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
         return false;
     }
 
-    ScBaseCell* pDocCell = pDoc->GetCell( rPos );
-    sal_Bool bEditDeleted = (pDocCell && pDocCell->GetCellType() == CELLTYPE_EDIT);
+    bool bEditDeleted = (pDoc->GetCellType(rPos) == CELLTYPE_EDIT);
     ScUndoEnterData::ValuesType aOldValues;
 
     if (bUndo)
@@ -770,7 +769,7 @@ sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos,
         ScUndoEnterData::Value aOldValue;
 
         aOldValue.mnTab = rPos.Tab();
-        aOldValue.mpCell = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
+        aOldValue.maCell.assign(*pDoc, rPos);
 
         const SfxPoolItem* pItem;
         const ScPatternAttr* pPattern = pDoc->GetPattern( rPos.Col(),rPos.Row(),rPos.Tab() );

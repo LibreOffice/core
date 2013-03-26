@@ -29,10 +29,11 @@
 
 //___________________________________________________________________
 
-class ScBaseCell;
+class ScCellValue;
 class ScChangeAction;
 class ScChangeTrack;
 class XclImpChTrFmlConverter;
+
 
 //___________________________________________________________________
 
@@ -90,11 +91,7 @@ private:
     void                        ReadFormula(
                                     ScTokenArray*& rpTokenArray,
                                     const ScAddress& rPosition );
-    void                        ReadCell(
-                                    ScBaseCell*& rpCell,
-                                    sal_uInt32& rFormat,
-                                    sal_uInt16 nFlags,
-                                    const ScAddress& rPosition );
+    void ReadCell( ScCellValue& rCell, sal_uInt32& rFormat, sal_uInt16 nFlags, const ScAddress& rPosition );
 
     void                        ReadChTrInsert();           // 0x0137
     void                        ReadChTrInfo();             // 0x0138

@@ -208,8 +208,6 @@ private:
 class EditEngine;
 class EditTextObject;
 class SdrTextObj;
-class ScStringCell;
-class ScEditCell;
 class ScPatternAttr;
 
 /** This class provides methods to create an XclExpString.
@@ -276,7 +274,7 @@ public:
         @return  The new string object (shared pointer). */
     static XclExpStringRef CreateCellString(
                             const XclExpRoot& rRoot,
-                            const ScStringCell& rStringCell,
+                            const OUString& rString,
                             const ScPatternAttr* pCellAttr,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
@@ -292,7 +290,7 @@ public:
         @return  The new string object (shared pointer). */
     static XclExpStringRef CreateCellString(
                             const XclExpRoot& rRoot,
-                            const ScEditCell& rEditCell,
+                            const EditTextObject& rEditText,
                             const ScPatternAttr* pCellAttr,
                             XclExpHyperlinkHelper& rLinkHelper,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,

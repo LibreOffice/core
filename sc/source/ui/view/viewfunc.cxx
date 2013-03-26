@@ -588,10 +588,9 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
         if (aTester.IsEditable())
         {
             ScAddress aPos( nCol, nRow, nTab );
-            ScBaseCell* pOldCell = pDoc->GetCell( aPos );
-
-            //  undo
-            ScBaseCell* pUndoCell = (bUndo && pOldCell) ? pOldCell->Clone( *pDoc ) : 0;
+            ScCellValue aUndoCell;
+            if (bUndo)
+                aUndoCell.assign(*pDoc, aPos);
 
             pDoc->SetValue( nCol, nRow, nTab, rValue );
 
@@ -599,7 +598,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
             if (bUndo)
             {
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterValue( pDocSh, aPos, pUndoCell, rValue ) );
+                    new ScUndoEnterValue(pDocSh, aPos, aUndoCell, rValue));
             }
 
             pDocSh->PostPaintCell( aPos );
@@ -678,9 +677,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             {
                 ScUndoEnterData::Value aOldValue;
                 aOldValue.mnTab = *itr;
-                ScBaseCell* pDocCell;
-                pDoc->GetCell( nCol, nRow, *itr, pDocCell );
-                aOldValue.mpCell = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
+                aOldValue.maCell.assign(*pDoc, ScAddress(nCol, nRow, *itr));
                 aOldValues.push_back(aOldValue);
             }
 

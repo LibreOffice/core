@@ -38,7 +38,6 @@ class ScMarkData;
 class ScPatternAttr;
 class ScRange;
 class ScRangeList;
-class ScBaseCell;
 class ScFormulaCell;
 class ScTokenArray;
 struct ScTabOpParam;

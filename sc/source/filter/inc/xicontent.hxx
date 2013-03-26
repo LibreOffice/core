@@ -45,8 +45,6 @@ globals for the document).
 
 // Shared string table ========================================================
 
-class ScBaseCell;
-
 /** The SST (shared string table) contains all strings used in a BIFF8 file.
 
     This class loads the SST, provides access to the strings, and is able to

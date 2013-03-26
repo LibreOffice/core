@@ -11,7 +11,9 @@
 #include "document.hxx"
 #include "cell.hxx"
 #include "editeng/editobj.hxx"
+#include "editeng/editstat.hxx"
 #include "stringutil.hxx"
+#include "editutil.hxx"
 #include "formula/token.hxx"
 
 ScCellValue::ScCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
@@ -89,7 +91,80 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
     }
 }
 
-void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos )
+void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int nCloneFlags )
+{
+    clear();
+
+    meType = rOther.meType;
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = new OUString(*rOther.mpString);
+        break;
+        case CELLTYPE_EDIT:
+        {
+            // Switch to the pool of the destination document.
+            ScFieldEditEngine& rEngine = rDestDoc.GetEditEngine();
+            if (rOther.mpEditText->HasOnlineSpellErrors())
+            {
+                sal_uLong nControl = rEngine.GetControlWord();
+                const sal_uLong nSpellControl = EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS;
+                bool bNewControl = ((nControl & nSpellControl) != nSpellControl);
+                if (bNewControl)
+                    rEngine.SetControlWord(nControl | nSpellControl);
+                rEngine.SetText(*rOther.mpEditText);
+                mpEditText = rEngine.CreateTextObject();
+                if (bNewControl)
+                    rEngine.SetControlWord(nControl);
+            }
+            else
+            {
+                rEngine.SetText(*rOther.mpEditText);
+                mpEditText = rEngine.CreateTextObject();
+            }
+        }
+        break;
+        case CELLTYPE_VALUE:
+            mfValue = rOther.mfValue;
+        break;
+        case CELLTYPE_FORMULA:
+            // Switch to the destination document.
+            mpFormula = new ScFormulaCell(*rOther.mpFormula, rDestDoc, rOther.mpFormula->aPos, nCloneFlags);
+        break;
+        default:
+            meType = CELLTYPE_NONE; // reset to empty.
+    }
+}
+
+void ScCellValue::assign( const ScBaseCell& rCell )
+{
+    clear();
+
+    meType = rCell.GetCellType();
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = new OUString(static_cast<const ScStringCell&>(rCell).GetString());
+        break;
+        case CELLTYPE_EDIT:
+        {
+            const EditTextObject* p = static_cast<const ScEditCell&>(rCell).GetData();
+            if (p)
+                mpEditText = p->Clone();
+        }
+        break;
+        case CELLTYPE_VALUE:
+            mfValue = static_cast<const ScValueCell&>(rCell).GetValue();
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = static_cast<const ScFormulaCell&>(rCell).Clone();
+        break;
+        default:
+            meType = CELLTYPE_NONE; // reset to empty.
+    }
+}
+
+void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
 {
     switch (meType)
     {
@@ -112,6 +187,38 @@ void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos )
         default:
             rDoc.SetEmptyCell(rPos);
     }
+}
+
+void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+        {
+            // Currently, string cannot be placed without copying.
+            ScSetStringParam aParam;
+            aParam.setTextInput();
+            rDoc.SetString(rPos, *mpString, &aParam);
+            delete mpString;
+        }
+        break;
+        case CELLTYPE_EDIT:
+            // Cell takes the ownership of the text object.
+            rDoc.SetEditText(rPos, mpEditText);
+        break;
+        case CELLTYPE_VALUE:
+            rDoc.SetValue(rPos, mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+            // This formula cell instance is directly placed in the document without copying.
+            rDoc.SetFormulaCell(rPos, mpFormula);
+        break;
+        default:
+            rDoc.SetEmptyCell(rPos);
+    }
+
+    meType = CELLTYPE_NONE;
+    mfValue = 0.0;
 }
 
 bool ScCellValue::hasString() const
@@ -229,22 +336,20 @@ bool ScCellValue::equalsWithoutFormat( const ScCellValue& r ) const
     return false;
 }
 
-ScBaseCell* getHackedBaseCell( ScDocument* pDoc, const ScCellValue& rVal )
+ScCellValue& ScCellValue::operator= ( const ScCellValue& r )
 {
-    switch (rVal.meType)
-    {
-        case CELLTYPE_STRING:
-            return new ScStringCell(*rVal.mpString);
-        case CELLTYPE_EDIT:
-            return new ScEditCell(rVal.mpEditText->Clone(), pDoc);
-        case CELLTYPE_VALUE:
-            return new ScValueCell(rVal.mfValue);
-        case CELLTYPE_FORMULA:
-            return rVal.mpFormula->Clone();
-        default:
-            ;
-    }
-    return NULL;
+    ScCellValue aTmp(r);
+    swap(aTmp);
+    return *this;
+}
+
+void ScCellValue::swap( ScCellValue& r )
+{
+    std::swap(meType, r.meType);
+
+    // double is 8 bytes, whereas a pointer may be 4 or 8 bytes depending on
+    // the platform. Swap by double values.
+    std::swap(mfValue, r.mfValue);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

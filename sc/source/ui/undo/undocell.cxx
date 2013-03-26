@@ -164,7 +164,7 @@ sal_Bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0), mpCell(NULL) {}
+ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0) {}
 
 ScUndoEnterData::ScUndoEnterData(
     ScDocShell* pNewDocShell, const ScAddress& rPos, ValuesType& rOldValues,
@@ -180,23 +180,7 @@ ScUndoEnterData::ScUndoEnterData(
     SetChangeTrack();
 }
 
-namespace {
-
-struct DeleteCell : std::unary_function<ScUndoEnterData::Value, void>
-{
-    void operator() (ScUndoEnterData::Value& rVal)
-    {
-        if (rVal.mpCell)
-            rVal.mpCell->Delete();
-    }
-};
-
-}
-
-ScUndoEnterData::~ScUndoEnterData()
-{
-    std::for_each(maOldValues.begin(), maOldValues.end(), DeleteCell());
-}
+ScUndoEnterData::~ScUndoEnterData() {}
 
 rtl::OUString ScUndoEnterData::GetComment() const
 {
@@ -232,7 +216,7 @@ void ScUndoEnterData::SetChangeTrack()
             sal_uLong nFormat = 0;
             if (maOldValues[i].mbHasFormat)
                 nFormat = maOldValues[i].mnFormat;
-            pChangeTrack->AppendContent(aPos, maOldValues[i].mpCell, nFormat);
+            pChangeTrack->AppendContent(aPos, maOldValues[i].maCell, nFormat);
         }
         if ( mnEndChangeAction > pChangeTrack->GetActionMax() )
             mnEndChangeAction = 0;       // nothing is appended
@@ -249,10 +233,11 @@ void ScUndoEnterData::Undo()
     for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
     {
         Value& rVal = maOldValues[i];
-        ScBaseCell* pNewCell = rVal.mpCell ? rVal.mpCell->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
+        ScCellValue aNewCell;
+        aNewCell.assign(rVal.maCell, *pDoc, SC_CLONECELL_STARTLISTENING);
         ScAddress aPos = maPos;
         aPos.SetTab(rVal.mnTab);
-        pDoc->PutCell(aPos, pNewCell);
+        aNewCell.release(*pDoc, aPos);
 
         if (rVal.mbHasFormat)
             pDoc->ApplyAttr(maPos.Col(), maPos.Row(), rVal.mnTab,
@@ -341,11 +326,12 @@ sal_Bool ScUndoEnterData::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-ScUndoEnterValue::ScUndoEnterValue( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
-                                    ScBaseCell* pUndoCell, double nVal ) :
+ScUndoEnterValue::ScUndoEnterValue(
+    ScDocShell* pNewDocShell, const ScAddress& rNewPos,
+    const ScCellValue& rUndoCell, double nVal ) :
     ScSimpleUndo( pNewDocShell ),
     aPos        ( rNewPos ),
-    pOldCell    ( pUndoCell ),
+    maOldCell(rUndoCell),
     nValue      ( nVal )
 {
     SetChangeTrack();
@@ -353,8 +339,6 @@ ScUndoEnterValue::ScUndoEnterValue( ScDocShell* pNewDocShell, const ScAddress& r
 
 ScUndoEnterValue::~ScUndoEnterValue()
 {
-    if (pOldCell)
-        pOldCell->Delete();
 }
 
 rtl::OUString ScUndoEnterValue::GetComment() const
@@ -369,7 +353,7 @@ void ScUndoEnterValue::SetChangeTrack()
     if ( pChangeTrack )
     {
         nEndChangeAction = pChangeTrack->GetActionMax() + 1;
-        pChangeTrack->AppendContent( aPos, pOldCell );
+        pChangeTrack->AppendContent(aPos, maOldCell);
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
             nEndChangeAction = 0;       // nothing is appended
     }
@@ -382,9 +366,9 @@ void ScUndoEnterValue::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pOldCell ? pOldCell->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
-
-    pDoc->PutCell( aPos, pNewCell );
+    ScCellValue aNewCell;
+    aNewCell.assign(maOldCell, *pDoc, SC_CLONECELL_STARTLISTENING);
+    aNewCell.release(*pDoc, aPos);
 
     pDocShell->PostPaintCell( aPos );
 
@@ -478,13 +462,7 @@ void ScUndoSetCell::SetChangeTrack()
     {
         mnEndChangeAction = pChangeTrack->GetActionMax() + 1;
 
-        {
-            // TODO: Come back to this later.
-            ScBaseCell* pOldCell = getHackedBaseCell(pDoc, maOldValue);
-            pChangeTrack->AppendContent(maPos, pOldCell);
-            if (pOldCell)
-                pOldCell->Delete();
-        }
+        pChangeTrack->AppendContent(maPos, maOldValue);
 
         if (mnEndChangeAction > pChangeTrack->GetActionMax())
             mnEndChangeAction = 0;       // Nothing is appended
@@ -688,14 +666,18 @@ ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
     pUndoTObject = (pUndoTObj) ? pUndoTObj->Clone() : NULL;
     pRedoTObject = (pRedoTObj) ? pRedoTObj->Clone() : NULL;
 
-    ScBaseCell* pOldCell;
+    ScCellValue aOldCell;
     if ( pUndoTObject )
-        // A clone of pUndoTObject will be stored in the cell.
-        pOldCell = new ScEditCell(*pUndoTObject, pDocShell->GetDocument(), NULL);
+    {
+        aOldCell.meType = CELLTYPE_EDIT;
+        aOldCell.mpEditText = pUndoTObject->Clone();
+    }
     else
-        pOldCell = new ScStringCell( aUndoStr );
-    SetChangeTrack( pOldCell );
-    pOldCell->Delete();
+    {
+        aOldCell.meType = CELLTYPE_STRING;
+        aOldCell.mpString = new OUString(aUndoStr);
+    }
+    SetChangeTrack(aOldCell);
 }
 
 ScUndoThesaurus::~ScUndoThesaurus()
@@ -709,13 +691,13 @@ rtl::OUString ScUndoThesaurus::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_THESAURUS );    // "Thesaurus"
 }
 
-void ScUndoThesaurus::SetChangeTrack( ScBaseCell* pOldCell )
+void ScUndoThesaurus::SetChangeTrack( const ScCellValue& rOldCell )
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
     {
         nEndChangeAction = pChangeTrack->GetActionMax() + 1;
-        pChangeTrack->AppendContent( ScAddress( nCol, nRow, nTab ), pOldCell );
+        pChangeTrack->AppendContent(ScAddress(nCol, nRow, nTab), rOldCell);
         if ( nEndChangeAction > pChangeTrack->GetActionMax() )
             nEndChangeAction = 0;       // nothing is appended
     }
@@ -735,33 +717,39 @@ void ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
         pViewShell->MoveCursorAbs( nCol, nRow, SC_FOLLOW_JUMP, false, false );
     }
 
+    ScAddress aPos(nCol, nRow, nTab);
+
     if (pTObj)
     {
-        ScBaseCell* pCell;
-        pDoc->GetCell( nCol, nRow, nTab, pCell );
-        if (pCell)
+        // This is edit text.
+        if (pDoc->GetCellType(aPos) == CELLTYPE_EDIT)
         {
-            if (pCell->GetCellType() == CELLTYPE_EDIT )
-            {
-                // A copy of pTObj will be stored in the cell.
-                pDoc->SetEditText(ScAddress(nCol,nRow,nTab), *pTObj, pDoc->GetEditPool());
-                if ( !bUndo )
-                    SetChangeTrack( pCell );
-            }
-            else
-            {
-                OSL_FAIL("Not CELLTYPE_EDIT for Un/RedoThesaurus");
-            }
+            ScCellValue aOldCell;
+            if (!bUndo)
+                aOldCell.assign(*pDoc, aPos);
+
+            // A copy of pTObj will be stored in the cell.
+            pDoc->SetEditText(aPos, *pTObj, pDoc->GetEditPool());
+
+            if ( !bUndo )
+                SetChangeTrack(aOldCell);
+        }
+        else
+        {
+            OSL_FAIL("Not CELLTYPE_EDIT for Un/RedoThesaurus");
         }
     }
     else
     {
-        ScBaseCell* pCell = NULL;
-        if ( !bUndo )
-            pDoc->GetCell( nCol, nRow, nTab, pCell );
+        // This is simple unformatted string.
+        ScCellValue aOldCell;
+        if (!bUndo)
+            aOldCell.assign(*pDoc, aPos);
+
         pDoc->SetString( nCol, nRow, nTab, rStr );
-        if ( !bUndo )
-            SetChangeTrack( pCell );
+
+        if (!bUndo)
+            SetChangeTrack(aOldCell);
     }
 
     pDocShell->PostPaintCell( nCol, nRow, nTab );

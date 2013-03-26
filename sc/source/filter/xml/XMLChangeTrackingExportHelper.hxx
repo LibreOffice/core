@@ -30,7 +30,7 @@
 class ScChangeAction;
 class ScChangeTrack;
 class ScXMLExport;
-class ScBaseCell;
+class ScCellValue;
 class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
@@ -61,11 +61,11 @@ class ScChangeTrackingExportHelper
 
     void WriteEmptyCell();
     void SetValueAttributes(const double& fValue, const String& sValue);
-    void WriteValueCell(const ScBaseCell* pCell, const String& sValue);
-    void WriteStringCell(const ScBaseCell* pCell);
-    void WriteEditCell(const ScBaseCell* pCell);
-    void WriteFormulaCell(const ScBaseCell* pCell, const String& sValue);
-    void WriteCell(const ScBaseCell* pCell, const String& sValue);
+    void WriteValueCell(const ScCellValue& rCell, const OUString& sValue);
+    void WriteStringCell(const ScCellValue& rCell);
+    void WriteEditCell(const ScCellValue& rCell);
+    void WriteFormulaCell(const ScCellValue& rCell, const OUString& sValue);
+    void WriteCell(const ScCellValue& rCell, const OUString& sValue);
 
     void WriteContentChange(ScChangeAction* pAction);
     void AddInsertionAttributes(const ScChangeAction* pAction);
@@ -77,7 +77,7 @@ class ScChangeTrackingExportHelper
     void WriteMovement(ScChangeAction* pAction);
     void WriteRejection(ScChangeAction* pAction);
 
-    void CollectCellAutoStyles(const ScBaseCell* pBaseCell);
+    void CollectCellAutoStyles(const ScCellValue& rCell);
     void CollectActionAutoStyles(ScChangeAction* pAction);
     void WorkWithChangeAction(ScChangeAction* pAction);
 public:

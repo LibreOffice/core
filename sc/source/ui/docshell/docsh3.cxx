@@ -1007,9 +1007,9 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             rtl::OUString aValue;
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                             sal_uInt8 eMatrix = MM_NONE;
-                            const ScBaseCell* pCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
-                            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                                eMatrix = ((const ScFormulaCell*)pCell)->GetMatrixFlag();
+                            const ScCellValue& rCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
+                            if (rCell.meType == CELLTYPE_FORMULA)
+                                eMatrix = rCell.mpFormula->GetMatrixFlag();
                             switch ( eMatrix )
                             {
                                 case MM_NONE :
@@ -1019,7 +1019,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                 {
                                     SCCOL nCols;
                                     SCROW nRows;
-                                    ((const ScFormulaCell*)pCell)->GetMatColsRows( nCols, nRows );
+                                    rCell.mpFormula->GetMatColsRows(nCols, nRows);
                                     aSourceRange.aEnd.SetCol( aPos.Col() + nCols - 1 );
                                     aSourceRange.aEnd.SetRow( aPos.Row() + nRows - 1 );
                                     aValue = aValue.copy(1, aValue.getLength()-2); // remove the 1st and last characters.

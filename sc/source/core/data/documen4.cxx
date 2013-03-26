@@ -1185,19 +1185,21 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 {
                     SCCOL nOtherCol = static_cast<SCCOL>(pOtherCols[nThisCol]);
                     ScAddress aThisPos( nThisCol, nThisRow, nThisTab );
-                    const ScBaseCell* pThisCell = GetCell( aThisPos );
-                    const ScBaseCell* pOtherCell = NULL;
+                    ScCellValue aThisCell;
+                    aThisCell.assign(*this, aThisPos);
+                    ScCellValue aOtherCell; // start empty
                     if ( ValidCol(nOtherCol) && ValidRow(nOtherRow) )
                     {
                         ScAddress aOtherPos( nOtherCol, nOtherRow, nOtherTab );
-                        pOtherCell = rOtherDoc.GetCell( aOtherPos );
+                        aOtherCell.assign(*this, aOtherPos);
                     }
-                    if ( !ScBaseCell::CellEqual( pThisCell, pOtherCell ) )
+
+                    if (!aThisCell.equalsWithoutFormat(aOtherCell))
                     {
                         ScRange aRange( aThisPos );
                         ScChangeActionContent* pAction = new ScChangeActionContent( aRange );
-                        pAction->SetOldValue( pOtherCell, &rOtherDoc, this );
-                        pAction->SetNewValue( pThisCell, this );
+                        pAction->SetOldValue(aOtherCell, &rOtherDoc, this);
+                        pAction->SetNewValue(aThisCell, this);
                         pChangeTrack->Append( pAction );
                     }
                 }

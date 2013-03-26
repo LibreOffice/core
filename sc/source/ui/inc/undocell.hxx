@@ -28,7 +28,6 @@
 #include <boost/scoped_ptr.hpp>
 
 class ScDocShell;
-class ScBaseCell;
 class ScPatternAttr;
 class EditTextObject;
 class SdrUndoAction;
@@ -84,7 +83,7 @@ public:
         SCTAB mnTab;
         bool mbHasFormat;
         sal_uInt32 mnFormat;
-        ScBaseCell* mpCell;
+        ScCellValue maCell;
 
         Value();
     };
@@ -121,9 +120,10 @@ class ScUndoEnterValue: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoEnterValue( ScDocShell* pNewDocShell,
-                            const ScAddress& rNewPos,
-                            ScBaseCell* pUndoCell, double nVal );
+    ScUndoEnterValue(
+        ScDocShell* pNewDocShell, const ScAddress& rNewPos,
+        const ScCellValue& rUndoCell, double nVal );
+
     virtual         ~ScUndoEnterValue();
 
     virtual void    Undo();
@@ -135,7 +135,7 @@ public:
 
 private:
     ScAddress       aPos;
-    ScBaseCell*     pOldCell;
+    ScCellValue maOldCell;
     double          nValue;
     sal_uLong           nEndChangeAction;
 
@@ -248,7 +248,7 @@ private:
 
     void            DoChange( sal_Bool bUndo, const String& rStr,
                                 const EditTextObject* pTObj );
-    void            SetChangeTrack( ScBaseCell* pOldCell );
+    void SetChangeTrack( const ScCellValue& rOldCell );
 };
 
 // ============================================================================

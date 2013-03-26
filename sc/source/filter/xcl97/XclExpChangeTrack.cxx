@@ -28,6 +28,7 @@
 #include "cell.hxx"
 #include "xcl97rec.hxx"
 #include "document.hxx"
+#include "editutil.hxx"
 
 #include <oox/token/tokens.hxx>
 #include <rtl/strbuf.hxx>
@@ -806,28 +807,25 @@ void XclExpChTrCellContent::MakeEmptyChTrData( XclExpChTrData*& rpData )
 }
 
 void XclExpChTrCellContent::GetCellData(
-        const XclExpRoot& rRoot,
-        const ScBaseCell* pScCell,
-        XclExpChTrData*& rpData,
-        sal_uInt32& rXclLength1,
-        sal_uInt16& rXclLength2 )
+    const XclExpRoot& rRoot, const ScCellValue& rScCell,
+    XclExpChTrData*& rpData, sal_uInt32& rXclLength1, sal_uInt16& rXclLength2 )
 {
     MakeEmptyChTrData( rpData );
     rXclLength1 = 0x0000003A;
     rXclLength2 = 0x0000;
 
-    if( !pScCell )
+    if (rScCell.isEmpty())
     {
         delete rpData;
         rpData = NULL;
         return;
     }
 
-    switch( pScCell->GetCellType() )
+    switch (rScCell.meType)
     {
         case CELLTYPE_VALUE:
         {
-            rpData->fValue = ((const ScValueCell*) pScCell)->GetValue();
+            rpData->fValue = rScCell.mfValue;
             if( XclTools::GetRKFromDouble( rpData->nRKValue, rpData->fValue ) )
             {
                 rpData->nType = EXC_CHTR_TYPE_RK;
@@ -847,32 +845,38 @@ void XclExpChTrCellContent::GetCellData(
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
         {
-            String sCellStr;
-            if( pScCell->GetCellType() == CELLTYPE_STRING )
+            OUString sCellStr;
+            if (rScCell.meType == CELLTYPE_STRING)
             {
-                const ScStringCell* pStrCell = static_cast< const ScStringCell* >( pScCell );
-                sCellStr = pStrCell->GetString();
-                rpData->mpFormattedString = XclExpStringHelper::CreateCellString( rRoot,
-                        *pStrCell, NULL );
+                sCellStr = *rScCell.mpString;
+                rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
+                    rRoot, *rScCell.mpString, NULL);
             }
             else
             {
-                const ScEditCell* pEditCell = static_cast< const ScEditCell* >( pScCell );
-                sCellStr = pEditCell->GetString();
                 XclExpHyperlinkHelper aLinkHelper( rRoot, aPosition );
-                rpData->mpFormattedString = XclExpStringHelper::CreateCellString( rRoot,
-                        *pEditCell, NULL, aLinkHelper );
+                if (rScCell.mpEditText)
+                {
+                    sCellStr = ScEditUtil::GetString(*rScCell.mpEditText);
+                    rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
+                        rRoot, *rScCell.mpEditText, NULL, aLinkHelper);
+                }
+                else
+                {
+                    rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
+                        rRoot, EMPTY_OUSTRING, NULL);
+                }
             }
             rpData->pString = new XclExpString( sCellStr, EXC_STR_DEFAULT, 32766 );
             rpData->nType = EXC_CHTR_TYPE_STRING;
             rpData->nSize = 3 + rpData->pString->GetSize();
-            rXclLength1 = 64 + (sCellStr.Len() << 1);
-            rXclLength2 = 6 + (sal_uInt16)(sCellStr.Len() << 1);
+            rXclLength1 = 64 + (sCellStr.getLength() << 1);
+            rXclLength2 = 6 + (sal_uInt16)(sCellStr.getLength() << 1);
         }
         break;
         case CELLTYPE_FORMULA:
         {
-            const ScFormulaCell* pFmlCell = (const ScFormulaCell*) pScCell;
+            const ScFormulaCell* pFmlCell = rScCell.mpFormula;
             rpData->mpFormulaCell = pFmlCell;
 
             const ScTokenArray* pTokenArray = pFmlCell->GetCode();

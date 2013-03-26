@@ -26,6 +26,9 @@
 #include "cell.hxx"
 #include "textuno.hxx"
 #include "rangeutl.hxx"
+#include "cellvalue.hxx"
+#include "editutil.hxx"
+
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -276,148 +279,136 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
 }
 
 
-void ScChangeTrackingExportHelper::WriteValueCell(const ScBaseCell* pCell, const String& sValue)
+void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, const OUString& sValue)
 {
-    const ScValueCell* pValueCell = static_cast<const ScValueCell*>(pCell);
-    if (pValueCell)
+    OSL_ASSERT(rCell.meType == CELLTYPE_VALUE);
+
+    SetValueAttributes(rCell.mfValue, sValue);
+    SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
+}
+
+void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
+{
+    OSL_ASSERT(rCell.meType == CELLTYPE_STRING);
+
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
+    SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
+    if (!rCell.mpString->isEmpty())
     {
-        SetValueAttributes(pValueCell->GetValue(), sValue);
-        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
+        SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
+        bool bPrevCharWasSpace(true);
+        rExport.GetTextParagraphExport()->exportText(*rCell.mpString, bPrevCharWasSpace);
     }
 }
 
-void ScChangeTrackingExportHelper::WriteStringCell(const ScBaseCell* pCell)
+void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 {
-    const ScStringCell* pStringCell = static_cast<const ScStringCell*>(pCell);
-    if (pStringCell)
+    OSL_ASSERT(rCell.meType == CELLTYPE_EDIT);
+
+    OUString sString;
+    if (rCell.mpEditText)
+        sString = ScEditUtil::GetString(*rCell.mpEditText);
+
+    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
+    SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
+    if (!sString.isEmpty())
     {
-        rtl::OUString sOUString = pStringCell->GetString();
-        rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
+        if (!pEditTextObj)
+        {
+            pEditTextObj = new ScEditEngineTextObj();
+            xText.set(pEditTextObj);
+        }
+        pEditTextObj->SetText(*rCell.mpEditText);
+        if (xText.is())
+            rExport.GetTextParagraphExport()->exportText(xText, false, false);
+    }
+}
+
+void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, const OUString& sValue)
+{
+    OSL_ASSERT(rCell.meType == CELLTYPE_FORMULA);
+
+    ScFormulaCell* pFormulaCell = rCell.mpFormula;
+    OUString sAddress;
+    const ScDocument* pDoc = rExport.GetDocument();
+    ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
+    const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+    sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
+    OUString sFormula;
+    pFormulaCell->GetFormula(sFormula, eGrammar);
+    sal_uInt8 nMatrixFlag(pFormulaCell->GetMatrixFlag());
+    if (nMatrixFlag)
+    {
+        if (nMatrixFlag == MM_FORMULA)
+        {
+            SCCOL nColumns;
+            SCROW nRows;
+            pFormulaCell->GetMatColsRows(nColumns, nRows);
+            OUStringBuffer sColumns;
+            OUStringBuffer sRows;
+            ::sax::Converter::convertNumber(sColumns, static_cast<sal_Int32>(nColumns));
+            ::sax::Converter::convertNumber(sRows, static_cast<sal_Int32>(nRows));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED, sColumns.makeStringAndClear());
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED, sRows.makeStringAndClear());
+        }
+        else
+        {
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MATRIX_COVERED, XML_TRUE);
+        }
+        OUString sMatrixFormula = sFormula.copy(1, sFormula.getLength() - 2);
+        OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sMatrixFormula, false );
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
+    }
+    else
+    {
+        OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sFormula, false );
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
+    }
+    if (pFormulaCell->IsValue())
+    {
+        SetValueAttributes(pFormulaCell->GetValue(), sValue);
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-        if (!sOUString.isEmpty())
+    }
+    else
+    {
+        rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
+        OUString sCellValue = pFormulaCell->GetString();
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
+        if (!sCellValue.isEmpty())
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
             bool bPrevCharWasSpace(true);
-            rExport.GetTextParagraphExport()->exportText(sOUString, bPrevCharWasSpace);
+            rExport.GetTextParagraphExport()->exportText(sCellValue, bPrevCharWasSpace);
         }
     }
 }
 
-void ScChangeTrackingExportHelper::WriteEditCell(const ScBaseCell* pCell)
+void ScChangeTrackingExportHelper::WriteCell(const ScCellValue& rCell, const OUString& sValue)
 {
-    const ScEditCell* pEditCell = static_cast<const ScEditCell*>(pCell);
-    if (pEditCell)
+    if (rCell.isEmpty())
     {
-        String sString = pEditCell->GetString();
-        rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-        if (sString.Len())
-        {
-            if (!pEditTextObj)
-            {
-                pEditTextObj = new ScEditEngineTextObj();
-                xText.set(pEditTextObj);
-            }
-            pEditTextObj->SetText(*(pEditCell->GetData()));
-            if (xText.is())
-                rExport.GetTextParagraphExport()->exportText(xText, false, false);
-        }
-    }
-}
-
-void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, const String& sValue)
-{
-    ScBaseCell* pBaseCell = const_cast<ScBaseCell*>(pCell);
-    ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(pBaseCell);
-    if (pFormulaCell)
-    {
-        rtl::OUString sAddress;
-        const ScDocument* pDoc = rExport.GetDocument();
-        ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc, ::formula::FormulaGrammar::CONV_OOO);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
-        const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-        sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
-        rtl::OUString sFormula;
-        pFormulaCell->GetFormula(sFormula, eGrammar);
-        rtl::OUString sOUFormula(sFormula);
-        sal_uInt8 nMatrixFlag(pFormulaCell->GetMatrixFlag());
-        if (nMatrixFlag)
-        {
-            if (nMatrixFlag == MM_FORMULA)
-            {
-                SCCOL nColumns;
-                SCROW nRows;
-                pFormulaCell->GetMatColsRows(nColumns, nRows);
-                rtl::OUStringBuffer sColumns;
-                rtl::OUStringBuffer sRows;
-                ::sax::Converter::convertNumber(sColumns, static_cast<sal_Int32>(nColumns));
-                ::sax::Converter::convertNumber(sRows, static_cast<sal_Int32>(nRows));
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED, sColumns.makeStringAndClear());
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED, sRows.makeStringAndClear());
-            }
-            else
-            {
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MATRIX_COVERED, XML_TRUE);
-            }
-            rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sMatrixFormula, false );
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
-        }
-        else
-        {
-            rtl::OUString sQValue = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sFormula, false );
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sQValue);
-        }
-        if (pFormulaCell->IsValue())
-        {
-            SetValueAttributes(pFormulaCell->GetValue(), sValue);
-            SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-        }
-        else
-        {
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-            String sCellValue = pFormulaCell->GetString();
-            rtl::OUString sOUValue(sCellValue);
-            SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-            if (!sOUValue.isEmpty())
-            {
-                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
-                bool bPrevCharWasSpace(true);
-                rExport.GetTextParagraphExport()->exportText(sOUValue, bPrevCharWasSpace);
-            }
-        }
-    }
-}
-
-void ScChangeTrackingExportHelper::WriteCell(const ScBaseCell* pCell, const String& sValue)
-{
-    if (pCell)
-    {
-        switch (pCell->GetCellType())
-        {
-            case CELLTYPE_NONE:
-                WriteEmptyCell();
-                break;
-            case CELLTYPE_VALUE:
-                WriteValueCell(pCell, sValue);
-                break;
-            case CELLTYPE_STRING:
-                WriteStringCell(pCell);
-                break;
-            case CELLTYPE_EDIT:
-                WriteEditCell(pCell);
-                break;
-            case CELLTYPE_FORMULA:
-                WriteFormulaCell(pCell, sValue);
-                break;
-            default:
-            {
-                // added to avoid warnings
-            }
-        }
-    }
-    else
         WriteEmptyCell();
+        return;
+    }
+
+    switch (rCell.meType)
+    {
+        case CELLTYPE_VALUE:
+            WriteValueCell(rCell, sValue);
+            break;
+        case CELLTYPE_STRING:
+            WriteStringCell(rCell);
+            break;
+        case CELLTYPE_EDIT:
+            WriteEditCell(rCell);
+            break;
+        case CELLTYPE_FORMULA:
+            WriteFormulaCell(rCell, sValue);
+            break;
+        default:
+            WriteEmptyCell();
+    }
 }
 
 void ScChangeTrackingExportHelper::WriteContentChange(ScChangeAction* pAction)
@@ -649,37 +640,34 @@ void ScChangeTrackingExportHelper::WriteRejection(ScChangeAction* pAction)
     WriteDependings(pAction);
 }
 
-void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScBaseCell* pBaseCell)
+void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScCellValue& rCell)
 {
-    if (pBaseCell && (pBaseCell->GetCellType() == CELLTYPE_EDIT))
+    if (rCell.meType != CELLTYPE_EDIT)
+        return;
+
+    if (!pEditTextObj)
     {
-        const ScEditCell* pEditCell = static_cast<const ScEditCell*>(pBaseCell);
-        if (pEditCell)
-        {
-            if (!pEditTextObj)
-            {
-                pEditTextObj = new ScEditEngineTextObj();
-                xText.set(pEditTextObj);
-            }
-            pEditTextObj->SetText(*(pEditCell->GetData()));
-            if (xText.is())
-                rExport.GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
-        }
+        pEditTextObj = new ScEditEngineTextObj();
+        xText.set(pEditTextObj);
     }
+
+    pEditTextObj->SetText(*rCell.mpEditText);
+    if (xText.is())
+        rExport.GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
 }
 
 void ScChangeTrackingExportHelper::CollectActionAutoStyles(ScChangeAction* pAction)
 {
-    if (pAction->GetType() == SC_CAT_CONTENT)
+    if (pAction->GetType() != SC_CAT_CONTENT)
+        return;
+
+    if (pChangeTrack->IsGenerated(pAction->GetActionNumber()))
+        CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetNewCell());
+    else
     {
-        if (pChangeTrack->IsGenerated(pAction->GetActionNumber()))
-             CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetNewCell());
-        else
-        {
-             CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetOldCell());
-            if (static_cast<ScChangeActionContent*>(pAction)->IsTopContent() && pAction->IsDeletedIn())
-                 CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetNewCell());
-        }
+        CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetOldCell());
+        if (static_cast<ScChangeActionContent*>(pAction)->IsTopContent() && pAction->IsDeletedIn())
+            CollectCellAutoStyles(static_cast<ScChangeActionContent*>(pAction)->GetNewCell());
     }
 }
 

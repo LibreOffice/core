@@ -30,10 +30,6 @@
 #include "excrecds.hxx"
 
 //___________________________________________________________________
-
-class ScBaseCell;
-
-//___________________________________________________________________
 // XclExpUserBView - one UserBView record for each user
 
 class XclExpUserBView : public ExcRecord
@@ -471,12 +467,9 @@ private:
 protected:
     ScAddress                   aPosition;
 
-    void                        GetCellData(
-                                    const XclExpRoot& rRoot,
-                                    const ScBaseCell* pScCell,
-                                    XclExpChTrData*& rpData,
-                                    sal_uInt32& rXclLength1,
-                                    sal_uInt16& rXclLength2 );
+    void GetCellData(
+        const XclExpRoot& rRoot, const ScCellValue& rScCell, XclExpChTrData*& rpData,
+        sal_uInt32& rXclLength1, sal_uInt16& rXclLength2 );
 
     virtual void                SaveActionData( XclExpStream& rStrm ) const;
 

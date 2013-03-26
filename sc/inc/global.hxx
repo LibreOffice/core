@@ -255,6 +255,23 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define SC_SCENARIO_VALUE       32
 #define SC_SCENARIO_PROTECT     64
 
+/** Default cell clone flags: do not start listening, do not adjust 3D refs to
+    old position, clone note captions of cell notes. */
+const int SC_CLONECELL_DEFAULT          = 0x0000;
+
+/** If set, cloned formula cells will start to listen to the document. */
+const int SC_CLONECELL_STARTLISTENING   = 0x0001;
+
+/** If set, relative 3D references of cloned formula cells will be adjusted to
+    old position (used while swapping cells for sorting a cell range). */
+const int SC_CLONECELL_ADJUST3DREL      = 0x0002;
+
+/** If set, the caption object of a cell note will not be cloned (used while
+    copying cells to undo document, where captions are handled in drawing undo). */
+const int SC_CLONECELL_NOCAPTION        = 0x0004;
+
+/** If set, absolute refs will not transformed to external references */
+const int SC_CLONECELL_NOMAKEABS_EXTERNAL = 0x0008;
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }

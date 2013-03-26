@@ -29,11 +29,12 @@
 
 #define SC_CHANGE_ID_PREFIX "ct"
 
-ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
-            const formula::FormulaGrammar::Grammar eTempGrammar, const rtl::OUString& rInputString,
-            const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
-            const sal_Int32 nTempMatrixRows)
-    : pCell(pTempCell),
+ScMyCellInfo::ScMyCellInfo(
+    const ScCellValue& rCell, const OUString& rFormulaAddress, const OUString& rFormula,
+    const formula::FormulaGrammar::Grammar eTempGrammar, const OUString& rInputString,
+    const double& rValue, const sal_uInt16 nTempType, const sal_uInt8 nTempMatrixFlag, const sal_Int32 nTempMatrixCols,
+    const sal_Int32 nTempMatrixRows ) :
+    maCell(rCell),
     sFormulaAddress(rFormulaAddress),
     sFormula(rFormula),
     sInputString(rInputString),
@@ -46,21 +47,21 @@ ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaA
 {
 }
 
-ScMyCellInfo::~ScMyCellInfo()
-{
-    if (pCell)
-        pCell->Delete();
-}
+ScMyCellInfo::~ScMyCellInfo() {}
 
-ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
+const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
 {
-    if (!pCell && !sFormula.isEmpty() && !sFormulaAddress.isEmpty())
+    if (!maCell.isEmpty())
+        return maCell;
+
+    if (!sFormula.isEmpty() && !sFormulaAddress.isEmpty())
     {
         ScAddress aPos;
         sal_Int32 nOffset(0);
         ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
-        pCell = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
-        static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
+        maCell.meType = CELLTYPE_FORMULA;
+        maCell.mpFormula = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
+        maCell.mpFormula->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
     }
 
     if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.Len() == 0)
@@ -73,7 +74,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
     }
 
-    return pCell ? pCell->Clone( *pDoc ) : 0;
+    return maCell;
 }
 
 ScMyDeleted::ScMyDeleted()
@@ -505,9 +506,9 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAc
 
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
 {
-    ScBaseCell* pCell = NULL;
+    ScCellValue aCell;
     if (pAction->pCellInfo)
-         pCell = pAction->pCellInfo->CreateCell(pDoc);
+         aCell = pAction->pCellInfo->CreateCell(pDoc);
 
     DateTime aDateTime( Date(0), Time(0) );
     String aUser;
@@ -516,7 +517,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
     String sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionContent(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
-        pAction->aBigRange, aUser, aDateTime, sComment, pCell, pDoc, pAction->pCellInfo->sInputString);
+        pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, pAction->pCellInfo->sInputString);
     return pNewAction;
 }
 
@@ -530,13 +531,13 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
         {
             if ((*aItr)->nID == 0)
             {
-                ScBaseCell* pCell = NULL;
+                ScCellValue aCell;
                 if ((*aItr)->pCellInfo)
-                    pCell = (*aItr)->pCellInfo->CreateCell(pDoc);
+                    aCell = (*aItr)->pCellInfo->CreateCell(pDoc);
 
-                if (pCell)
+                if (!aCell.isEmpty())
                 {
-                    (*aItr)->nID = pTrack->AddLoadedGenerated(pCell, (*aItr)->aBigRange, (*aItr)->pCellInfo->sInputString );
+                    (*aItr)->nID = pTrack->AddLoadedGenerated(aCell, (*aItr)->aBigRange, (*aItr)->pCellInfo->sInputString);
                     OSL_ENSURE((*aItr)->nID, "could not insert generated action");
                 }
             }
@@ -634,30 +635,25 @@ void ScXMLChangeTrackingImportHelper::SetMovementDependencies(ScMyMoveAction* pA
 
 void ScXMLChangeTrackingImportHelper::SetContentDependencies(ScMyContentAction* pAction, ScChangeActionContent* pActContent)
 {
-    if (pAction->nPreviousAction)
-    {
-        OSL_ENSURE(pAction->nActionType == SC_CAT_CONTENT, "wrong action type");
-        ScChangeAction* pPrevAct = pTrack->GetAction(pAction->nPreviousAction);
-        if (pPrevAct)
-        {
-            ScChangeActionContent* pPrevActContent = static_cast<ScChangeActionContent*>(pPrevAct);
-            if (pPrevActContent && pActContent)
-            {
-                pActContent->SetPrevContent(pPrevActContent);
-                pPrevActContent->SetNextContent(pActContent);
-                const ScBaseCell* pOldCell = pActContent->GetOldCell();
-                if (pOldCell)
-                {
-                    ScBaseCell* pNewCell = pOldCell->Clone( *pDoc );
-                    if (pNewCell)
-                    {
-                        pPrevActContent->SetNewCell(pNewCell, pDoc, EMPTY_STRING);
-                        pPrevActContent->SetNewValue(pActContent->GetOldCell(), pDoc);
-                    }
-                }
-            }
-        }
-    }
+    if (!pAction->nPreviousAction)
+        return;
+
+    OSL_ENSURE(pAction->nActionType == SC_CAT_CONTENT, "wrong action type");
+    ScChangeAction* pPrevAct = pTrack->GetAction(pAction->nPreviousAction);
+    if (!pPrevAct)
+        return;
+
+    ScChangeActionContent* pPrevActContent = static_cast<ScChangeActionContent*>(pPrevAct);
+    if (!pPrevActContent || !pActContent)
+        return;
+
+    pActContent->SetPrevContent(pPrevActContent);
+    pPrevActContent->SetNextContent(pActContent);
+    const ScCellValue& rOldCell = pActContent->GetOldCell();
+    if (rOldCell.isEmpty())
+        return;
+
+    pPrevActContent->SetNewCell(rOldCell, pDoc, EMPTY_OUSTRING);
 }
 
 void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
@@ -688,12 +684,12 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
                     ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pDeletedAct);
                     if (pContentAct && (*aItr)->pCellInfo)
                     {
-                        ScBaseCell* pCell = (*aItr)->pCellInfo->CreateCell(pDoc);
-                        if (!ScBaseCell::CellEqual(pCell, pContentAct->GetNewCell()))
+                        const ScCellValue& rCell = (*aItr)->pCellInfo->CreateCell(pDoc);
+                        if (!rCell.equalsWithoutFormat(pContentAct->GetNewCell()))
                         {
                             // #i40704# Don't overwrite SetNewCell result by calling SetNewValue,
                             // instead pass the input string to SetNewCell.
-                            pContentAct->SetNewCell(pCell, pDoc, (*aItr)->pCellInfo->sInputString);
+                            pContentAct->SetNewCell(rCell, pDoc, (*aItr)->pCellInfo->sInputString);
                         }
                     }
                 }
@@ -735,21 +731,26 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                     ScAddress aAddress (static_cast<SCCOL>(nCol),
                                         static_cast<SCROW>(nRow),
                                         static_cast<SCTAB>(nTab));
-                    ScBaseCell* pCell = pDoc->GetCell(aAddress);
-                    if (pCell)
+                    ScCellValue aCell;
+                    aCell.assign(*pDoc, aAddress);
+                    if (!aCell.isEmpty())
                     {
-                        ScBaseCell* pNewCell = NULL;
-                        if (pCell->GetCellType() != CELLTYPE_FORMULA)
-                            pNewCell = pCell->Clone( *pDoc );
+                        ScCellValue aNewCell;
+                        if (aCell.meType != CELLTYPE_FORMULA)
+                        {
+                            aNewCell = aCell;
+                            pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_STRING);
+                            pChangeActionContent->SetNewValue(aCell, pDoc);
+                        }
                         else
                         {
-                            sal_uInt8 nMatrixFlag = static_cast<ScFormulaCell*>(pCell)->GetMatrixFlag();
+                            sal_uInt8 nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
                             rtl::OUString sFormula;
                             // With GRAM_ODFF reference detection is faster on compilation.
                             /* FIXME: new cell should be created with a clone
                              * of the token array instead. Any reason why this
                              * wasn't done? */
-                            static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula,formula::FormulaGrammar::GRAM_ODFF);
+                            aCell.mpFormula->GetFormula(sFormula, formula::FormulaGrammar::GRAM_ODFF);
 
                             // #i87826# [Collaboration] Rejected move destroys formulas
                             // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
@@ -764,23 +765,19 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                                 sFormula2 = sFormula.copy( 1, sFormula.getLength() - 1 );
                             }
 
-                            pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
-                            if (pNewCell)
+                            aNewCell.meType = CELLTYPE_FORMULA;
+                            aNewCell.mpFormula = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
+                            if (nMatrixFlag == MM_FORMULA)
                             {
-                                if (nMatrixFlag == MM_FORMULA)
-                                {
-                                    SCCOL nCols;
-                                    SCROW nRows;
-                                    static_cast<ScFormulaCell*>(pCell)->GetMatColsRows(nCols, nRows);
-                                    static_cast<ScFormulaCell*>(pNewCell)->SetMatColsRows(nCols, nRows);
-                                }
-                                static_cast<ScFormulaCell*>(pNewCell)->SetInChangeTrack(true);
+                                SCCOL nCols;
+                                SCROW nRows;
+                                aCell.mpFormula->GetMatColsRows(nCols, nRows);
+                                aNewCell.mpFormula->SetMatColsRows(nCols, nRows);
                             }
+                            aNewCell.mpFormula->SetInChangeTrack(true);
+                            pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
+                            // #i40704# don't overwrite the formula string via SetNewValue()
                         }
-                        pChangeActionContent->SetNewCell(pNewCell, pDoc, EMPTY_STRING);
-                        // #i40704# don't overwrite the formula string from above with pCell's content
-                        if (pCell->GetCellType() != CELLTYPE_FORMULA)
-                            pChangeActionContent->SetNewValue(pCell, pDoc);
                     }
                 }
                 else

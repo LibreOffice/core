@@ -36,6 +36,7 @@
 #include "queryentry.hxx"
 #include "globstr.hrc"
 #include "editutil.hxx"
+#include "cellvalue.hxx"
 
 #include "tools/fract.hxx"
 #include "editeng/editobj.hxx"
@@ -201,6 +202,14 @@ bool ScDocumentIterator::GetNext()
 ScBaseCell* ScDocumentIterator::GetCell()
 {
     return pCell;
+}
+
+ScCellValue ScDocumentIterator::GetCellValue() const
+{
+    ScCellValue aRet;
+    if (pCell)
+        aRet.assign(*pCell);
+    return aRet;
 }
 
 const ScPatternAttr* ScDocumentIterator::GetPattern()
@@ -1103,6 +1112,32 @@ double ScCellIterator::getValue() const
             ;
     }
     return 0.0;
+}
+
+ScCellValue ScCellIterator::getCellValue() const
+{
+    ScCellValue aRet;
+    aRet.meType = meCurType;
+
+    switch (meCurType)
+    {
+        case CELLTYPE_STRING:
+            aRet.mpString = new OUString(maCurString);
+        break;
+        case CELLTYPE_EDIT:
+            aRet.mpEditText = mpCurEditText->Clone();
+        break;
+        case CELLTYPE_VALUE:
+            aRet.mfValue = mfCurValue;
+        break;
+        case CELLTYPE_FORMULA:
+            aRet.mpFormula = mpCurFormula->Clone();
+        break;
+        default:
+            ;
+    }
+
+    return aRet;
 }
 
 bool ScCellIterator::hasString() const

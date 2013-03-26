@@ -24,7 +24,6 @@
 #include <list>
 #include <com/sun/star/util/DateTime.hpp>
 
-class ScBaseCell;
 class ScDocument;
 class DateTime;
 
@@ -37,7 +36,7 @@ struct ScMyActionInfo
 
 struct ScMyCellInfo
 {
-    ScBaseCell*        pCell;
+    ScCellValue maCell;
     rtl::OUString      sFormulaAddress;
     rtl::OUString      sFormula;
     String             sInputString;
@@ -48,13 +47,14 @@ struct ScMyCellInfo
     sal_uInt16         nType;
     sal_uInt8          nMatrixFlag;
 
-    ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula,
-                const formula::FormulaGrammar::Grammar eGrammar, const rtl::OUString& sInputString,
-                const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag, const sal_Int32 nMatrixCols,
-                const sal_Int32 nMatrixRows);
+    ScMyCellInfo(
+        const ScCellValue& rCell, const OUString& sFormulaAddress, const OUString& sFormula,
+        const formula::FormulaGrammar::Grammar eGrammar, const OUString& sInputString,
+        const double& fValue, const sal_uInt16 nType, const sal_uInt8 nMatrixFlag,
+        const sal_Int32 nMatrixCols, const sal_Int32 nMatrixRows );
     ~ScMyCellInfo();
 
-    ScBaseCell* CreateCell(ScDocument* pDoc);
+    const ScCellValue& CreateCell( ScDocument* pDoc );
 };
 
 struct ScMyDeleted

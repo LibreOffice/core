@@ -15,12 +15,13 @@
 class ScDocument;
 class ScFormulaCell;
 class EditTextObject;
+class ScBaseCell;
 
 /**
  * Store arbitrary cell value of any kind.  It only stores cell value and
  * nothing else.
  */
-struct ScCellValue
+struct SC_DLLPUBLIC ScCellValue
 {
     CellType meType;
     union {
@@ -45,10 +46,24 @@ struct ScCellValue
      */
     void assign( const ScDocument& rDoc, const ScAddress& rPos );
 
+    void assign( const ScCellValue& rOther, ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT );
+
+    /**
+     * TODO: Remove this later.
+     */
+    void assign( const ScBaseCell& rCell );
+
     /**
      * Set cell value at specified position in specified document.
      */
-    void commit( ScDocument& rDoc, const ScAddress& rPos );
+    void commit( ScDocument& rDoc, const ScAddress& rPos ) const;
+
+    /**
+     * Set cell value at specified position in specified document. But unlike
+     * commit(), this method sets the original value to the document without
+     * copying.  After this call, the value gets cleared.
+     */
+    void release( ScDocument& rDoc, const ScAddress& rPos );
 
     bool hasString() const;
 
@@ -57,11 +72,11 @@ struct ScCellValue
     bool isEmpty() const;
 
     bool equalsWithoutFormat( const ScCellValue& r ) const;
-};
 
-// TODO: temporary workaround.  To be removed later.
-class ScBaseCell;
-ScBaseCell* getHackedBaseCell( ScDocument* pDoc, const ScCellValue& rVal );
+    ScCellValue& operator= ( const ScCellValue& r );
+
+    void swap( ScCellValue& r );
+};
 
 #endif
 

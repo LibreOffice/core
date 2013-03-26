@@ -951,8 +951,10 @@ void ScUndoReplace::SetChangeTrack()
             nStartChangeAction = pChangeTrack->GetActionMax() + 1;
             ScChangeActionContent* pContent = new ScChangeActionContent(
                 ScRange( aCursorPos) );
+            ScCellValue aCell;
+            aCell.assign(*pDoc, aCursorPos);
             pContent->SetOldValue( aUndoStr, pDoc );
-            pContent->SetNewValue( pDoc->GetCell( aCursorPos ), pDoc );
+            pContent->SetNewValue(aCell, pDoc);
             pChangeTrack->Append( pContent );
             nEndChangeAction = pChangeTrack->GetActionMax();
         }

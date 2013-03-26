@@ -45,6 +45,7 @@ struct ScQueryParam;
 struct ScDBQueryParamInternal;
 struct ScDBQueryParamMatrix;
 class ScFormulaCell;
+class ScCellValue;
 
 class ScDocumentIterator                // walk through all non-empty cells
 {
@@ -76,6 +77,7 @@ public:
     bool                    GetNext();
 
     ScBaseCell*             GetCell();
+    ScCellValue GetCellValue() const;
     const ScPatternAttr*    GetPattern();
     void                    GetPos( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );
 };
@@ -243,6 +245,7 @@ public:
     ScFormulaCell* getFormulaCell();
     const ScFormulaCell* getFormulaCell() const;
     double getValue() const;
+    ScCellValue getCellValue() const;
 
     bool hasString() const;
     bool hasNumeric() const;

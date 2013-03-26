@@ -561,40 +561,34 @@ void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot&
 }
 
 XclExpStringRef XclExpStringHelper::CreateCellString(
-        const XclExpRoot& rRoot, const ScStringCell& rStringCell, const ScPatternAttr* pCellAttr,
+        const XclExpRoot& rRoot, const OUString& rString, const ScPatternAttr* pCellAttr,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    rtl::OUString aCellText = rStringCell.GetString();
-    return lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
+    return lclCreateFormattedString(rRoot, rString, pCellAttr, nFlags, nMaxLen);
 }
 
 XclExpStringRef XclExpStringHelper::CreateCellString(
-        const XclExpRoot& rRoot, const ScEditCell& rEditCell, const ScPatternAttr* pCellAttr,
+        const XclExpRoot& rRoot, const EditTextObject& rEditText, const ScPatternAttr* pCellAttr,
         XclExpHyperlinkHelper& rLinkHelper, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     XclExpStringRef xString;
-    if( const EditTextObject* pEditObj = rEditCell.GetData() )
-    {
-        // formatted cell
-        ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-        sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
-        rEE.SetUpdateMode( sal_True );
-        // default items
-        const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
-        SfxItemSet* pEEItemSet = new SfxItemSet( rEE.GetEmptyItemSet() );
-        ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
-        rEE.SetDefaults( pEEItemSet );      // edit engine takes ownership
-        // create the string
-        rEE.SetText( *pEditObj );
-        xString = lclCreateFormattedString( rRoot, rEE, &rLinkHelper, nFlags, nMaxLen );
-        rEE.SetUpdateMode( bOldUpdateMode );
-    }
-    else
-    {
-        // unformatted cell
-        String aCellText = rEditCell.GetString();
-        xString = lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
-    }
+
+    // formatted cell
+    ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
+    sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+    rEE.SetUpdateMode( sal_True );
+
+    // default items
+    const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
+    SfxItemSet* pEEItemSet = new SfxItemSet( rEE.GetEmptyItemSet() );
+    ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
+    rEE.SetDefaults( pEEItemSet );      // edit engine takes ownership
+
+    // create the string
+    rEE.SetText(rEditText);
+    xString = lclCreateFormattedString( rRoot, rEE, &rLinkHelper, nFlags, nMaxLen );
+    rEE.SetUpdateMode( bOldUpdateMode );
+
     return xString;
 }
 

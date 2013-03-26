@@ -33,8 +33,8 @@
 #include "bigrange.hxx"
 #include "scdllapi.h"
 #include "refupdat.hxx"
+#include "cellvalue.hxx"
 
-class ScBaseCell;
 class ScDocument;
 class ScFormulaCell;
 class ScCellIterator;
@@ -648,10 +648,11 @@ class ScChangeActionContent : public ScChangeAction
 {
     friend class ScChangeTrack;
 
-    rtl::OUString aOldValue;
-    rtl::OUString aNewValue;
-    ScBaseCell*         pOldCell;
-    ScBaseCell*         pNewCell;
+    ScCellValue maOldCell;
+    ScCellValue maNewCell;
+
+    OUString maOldValue;
+    OUString maNewValue;
     ScChangeActionContent*  pNextContent;   // at the same position
     ScChangeActionContent*  pPrevContent;
     ScChangeActionContent*  pNextInSlot;    // in the same slot
@@ -682,30 +683,27 @@ class ScChangeActionContent : public ScChangeAction
 
     void ClearTrack();
 
-    static void GetStringOfCell( rtl::OUString& rStr, const ScBaseCell* pCell,
-                                 const ScDocument* pDoc, const ScAddress& rPos );
+    static void GetStringOfCell(
+        OUString& rStr, const ScCellValue& rCell, const ScDocument* pDoc, const ScAddress& rPos );
 
-    static void GetStringOfCell( rtl::OUString& rStr, const ScBaseCell* pCell,
-                                 const ScDocument* pDoc, sal_uLong nFormat );
+    static void GetStringOfCell(
+        OUString& rStr, const ScCellValue& rCell, const ScDocument* pDoc, sal_uLong nFormat );
 
-    static void SetValue( rtl::OUString& rStr, ScBaseCell*& pCell, const ScAddress& rPos,
-                          const ScBaseCell* pOrgCell, const ScDocument* pFromDoc,
+    static void SetValue( OUString& rStr, ScCellValue& rCell, const ScAddress& rPos,
+                          const ScCellValue& rOrgCell, const ScDocument* pFromDoc,
                           ScDocument* pToDoc );
 
-    static void SetValue( rtl::OUString& rStr, ScBaseCell*& pCell, sal_uLong nFormat,
-                          const ScBaseCell* pOrgCell, const ScDocument* pFromDoc,
+    static void SetValue( OUString& rStr, ScCellValue& rCell, sal_uLong nFormat,
+                          const ScCellValue& rOrgCell, const ScDocument* pFromDoc,
                           ScDocument* pToDoc );
 
-    static void SetCell( rtl::OUString& rStr, ScBaseCell* pCell,
-                         sal_uLong nFormat, const ScDocument* pDoc );
+    static void SetCell( OUString& rStr, ScCellValue& rCell, sal_uLong nFormat, const ScDocument* pDoc );
 
-    static bool NeedsNumberFormat( const ScBaseCell* );
+    static bool NeedsNumberFormat( const ScCellValue& rVal );
 
-    void SetValueString( rtl::OUString& rValue, ScBaseCell*& pCell,
-                         const rtl::OUString& rStr, ScDocument* pDoc );
+    void SetValueString( OUString& rValue, ScCellValue& rCell, const OUString& rStr, ScDocument* pDoc );
 
-    void GetValueString( rtl::OUString& rStr, const rtl::OUString& rValue,
-                         const ScBaseCell* pCell ) const;
+    void GetValueString( OUString& rStr, const OUString& rValue, const ScCellValue& rCell ) const;
 
     void GetFormulaString( rtl::OUString& rStr, const ScFormulaCell* pCell ) const;
 
@@ -726,8 +724,7 @@ class ScChangeActionContent : public ScChangeAction
                  bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions );
 
     void PutValueToDoc(
-        ScBaseCell* pCell, const rtl::OUString& rValue, ScDocument* pDoc,
-        SCsCOL nDx, SCsROW nDy ) const;
+        const ScCellValue& rCell, const OUString& rValue, ScDocument* pDoc, SCsCOL nDx, SCsROW nDy ) const;
 
 protected:
     using ScChangeAction::GetRefString;
@@ -736,26 +733,19 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionContent )
 
-    ScChangeActionContent( const ScRange& rRange )
-        : ScChangeAction( SC_CAT_CONTENT, rRange ),
-            pOldCell( NULL ),
-            pNewCell( NULL ),
-            pNextContent( NULL ),
-            pPrevContent( NULL ),
-            pNextInSlot( NULL ),
-            ppPrevInSlot( NULL )
-        {}
+    ScChangeActionContent( const ScRange& rRange );
+
     ScChangeActionContent(
         const sal_uLong nActionNumber,  const ScChangeActionState eState,
         const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
-        const rtl::OUString& aUser, const DateTime& aDateTime,
-        const rtl::OUString &sComment, ScBaseCell* pOldCell,
-        ScDocument* pDoc, const rtl::OUString& sOldValue); // to use for XML Import
+        const OUString& aUser, const DateTime& aDateTime,
+        const OUString &sComment, const ScCellValue& rOldCell,
+        ScDocument* pDoc, const OUString& sOldValue ); // to use for XML Import
 
     ScChangeActionContent(
-        const sal_uLong nActionNumber, ScBaseCell* pNewCell,
+        const sal_uLong nActionNumber, const ScCellValue& rNewCell,
         const ScBigRange& aBigRange, ScDocument* pDoc,
-        const rtl::OUString& sNewValue); // to use for XML Import of Generated Actions
+        const OUString& sNewValue ); // to use for XML Import of Generated Actions
 
     virtual ~ScChangeActionContent();
 
@@ -772,25 +762,21 @@ public:
     void                PutNewValueToDoc( ScDocument*,
                             SCsCOL nDx, SCsROW nDy ) const;
 
-    void                SetOldValue( const ScBaseCell*,
-                            const ScDocument* pFromDoc,
-                            ScDocument* pToDoc,
-                            sal_uLong nFormat );
-    void                SetOldValue( const ScBaseCell*,
-                            const ScDocument* pFromDoc,
-                            ScDocument* pToDoc );
-    void                SetNewValue( const ScBaseCell*, ScDocument* );
+    void SetOldValue( const ScCellValue& rCell, const ScDocument* pFromDoc, ScDocument* pToDoc, sal_uLong nFormat );
 
-                        // Used in import filter AppendContentOnTheFly,
-                        // takes ownership of cells.
-    void                SetOldNewCells( ScBaseCell* pOldCell,
-                            sal_uLong nOldFormat, ScBaseCell* pNewCell,
-                            sal_uLong nNewFormat, ScDocument* pDoc );
+    void SetOldValue( const ScCellValue& rCell, const ScDocument* pFromDoc, ScDocument* pToDoc );
+
+    void SetNewValue( const ScCellValue& rCell, ScDocument* pDoc );
+
+    // Used in import filter AppendContentOnTheFly,
+    void SetOldNewCells(
+        const ScCellValue& rOldCell, sal_uLong nOldFormat,
+        const ScCellValue& rNewCell, sal_uLong nNewFormat, ScDocument* pDoc );
 
     // Use this only in the XML import,
     // takes ownership of cell.
     void SetNewCell(
-        ScBaseCell* pCell, ScDocument* pDoc, const rtl::OUString& rFormatted );
+        const ScCellValue& rCell, ScDocument* pDoc, const OUString& rFormatted );
 
                         // These functions should be protected but for
                         // the XML import they are public.
@@ -801,19 +787,19 @@ public:
 
     // don't use:
     // assigns string / creates forumula cell
-    void SetOldValue( const rtl::OUString& rOld, ScDocument* pDoc );
+    void SetOldValue( const OUString& rOld, ScDocument* pDoc );
 
     void GetOldString( rtl::OUString& rStr ) const;
     void GetNewString( rtl::OUString& rStr ) const;
-    const ScBaseCell*   GetOldCell() const { return pOldCell; }
-    const ScBaseCell*   GetNewCell() const { return pNewCell; }
+    SC_DLLPUBLIC const ScCellValue& GetOldCell() const;
+    SC_DLLPUBLIC const ScCellValue& GetNewCell() const;
     virtual void GetDescription(
         rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
 
     virtual void GetRefString(
         rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 
-    static  ScChangeActionContentCellType   GetContentCellType( const ScBaseCell* );
+    static ScChangeActionContentCellType GetContentCellType( const ScCellValue& rCell );
     static ScChangeActionContentCellType GetContentCellType( const ScCellIterator& rIter );
 
     // NewCell
@@ -951,7 +937,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     // true if one is MM_FORMULA and the other is
     // not, or if both are and range differs
     static bool IsMatrixFormulaRangeDifferent(
-        const ScBaseCell* pOldCell, const ScBaseCell* pNewCell );
+        const ScCellValue& rOldCell, const ScCellValue& rNewCell );
 
     void                Init();
     void                DtorClear();
@@ -1004,9 +990,10 @@ class ScChangeTrack : public utl::ConfigurationListener
                                     ScChangeAction* pButNotThis ) const;
     void                DeleteGeneratedDelContent(
                                     ScChangeActionContent* );
-    ScChangeActionContent*  GenerateDelContent( const ScAddress&,
-                                    const ScBaseCell*,
-                                    const ScDocument* pFromDoc );
+
+    ScChangeActionContent* GenerateDelContent(
+        const ScAddress& rPos, const ScCellValue& rCell, const ScDocument* pFromDoc );
+
     void                DeleteCellEntries(
                                     ScChangeActionCellListEntry*&,
                                     ScChangeAction* pDeletor );
@@ -1127,13 +1114,11 @@ public:
                         // after new value was set in the document,
                         // old value from pOldCell, nOldFormat,
                         // RefDoc==NULL => Doc
-    void                AppendContent( const ScAddress& rPos,
-                            const ScBaseCell* pOldCell,
-                            sal_uLong nOldFormat, ScDocument* pRefDoc = NULL );
+    void AppendContent( const ScAddress& rPos, const ScCellValue& rOldCell,
+                        sal_uLong nOldFormat, ScDocument* pRefDoc = NULL );
                         // after new value was set in the document,
                         // old value from pOldCell, format from Doc
-    void                AppendContent( const ScAddress& rPos,
-                            const ScBaseCell* pOldCell );
+    void AppendContent( const ScAddress& rPos, const ScCellValue& rOldCell );
                         // after new values were set in the document,
                         // old values from RefDoc/UndoDoc.
                         // All contents with a cell in RefDoc
@@ -1148,11 +1133,9 @@ public:
                         // The action is returned and may be used to
                         // set user name, description, date/time et al.
                         // Takes ownership of the cells!
-    SC_DLLPUBLIC    ScChangeActionContent*  AppendContentOnTheFly( const ScAddress& rPos,
-                                    ScBaseCell* pOldCell,
-                                    ScBaseCell* pNewCell,
-                                    sal_uLong nOldFormat = 0,
-                                    sal_uLong nNewFormat = 0 );
+    SC_DLLPUBLIC ScChangeActionContent* AppendContentOnTheFly(
+        const ScAddress& rPos, const ScCellValue& rOldCell, const ScCellValue& rNewCell,
+        sal_uLong nOldFormat = 0, sal_uLong nNewFormat = 0 );
 
     // Only use the following two if there is no different solution! (Assign
     // string for NewValue or creation of a formula respectively)
@@ -1240,7 +1223,7 @@ public:
                             sal_uLong nStartAction, sal_uLong nEndAction );
 
     sal_uLong AddLoadedGenerated(
-        ScBaseCell* pOldCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue ); // only to use in the XML import
+        const ScCellValue& rNewCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue ); // only to use in the XML import
     void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import

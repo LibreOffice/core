@@ -94,7 +94,6 @@ public:
 
 // String->EditEngine conversion ==============================================
 
-class ScBaseCell;
 class EditTextObject;
 
 /** This class provides methods to convert an XclImpString.

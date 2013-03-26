@@ -214,12 +214,9 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
 }
 
 void XclImpChangeTrack::ReadCell(
-        ScBaseCell*& rpCell,
-        sal_uInt32& rFormat,
-        sal_uInt16 nFlags,
-        const ScAddress& rPosition )
+    ScCellValue& rCell, sal_uInt32& rFormat, sal_uInt16 nFlags, const ScAddress& rPosition )
 {
-    rpCell = NULL;
+    rCell.clear();
     rFormat = 0;
     switch( nFlags & EXC_CHTR_TYPE_MASK )
     {
@@ -229,7 +226,10 @@ void XclImpChangeTrack::ReadCell(
         {
             double fValue = ReadRK();
             if( pStrm->IsValid() )
-                rpCell = new ScValueCell( fValue );
+            {
+                rCell.meType = CELLTYPE_VALUE;
+                rCell.mfValue = fValue;
+            }
         }
         break;
         case EXC_CHTR_TYPE_DOUBLE:
@@ -237,14 +237,20 @@ void XclImpChangeTrack::ReadCell(
             double fValue;
             *pStrm >> fValue;
             if( pStrm->IsValid() )
-                rpCell = new ScValueCell( fValue );
+            {
+                rCell.meType = CELLTYPE_VALUE;
+                rCell.mfValue = fValue;
+            }
         }
         break;
         case EXC_CHTR_TYPE_STRING:
         {
-            String sString( pStrm->ReadUniString() );
+            OUString sString = pStrm->ReadUniString();
             if( pStrm->IsValid() )
-                rpCell = new ScStringCell( sString );
+            {
+                rCell.meType = CELLTYPE_STRING;
+                rCell.mpString = new OUString(sString);
+            }
         }
         break;
         case EXC_CHTR_TYPE_BOOL:
@@ -252,7 +258,8 @@ void XclImpChangeTrack::ReadCell(
             double fValue = (double) ReadBool();
             if( pStrm->IsValid() )
             {
-                rpCell = new ScValueCell( fValue );
+                rCell.meType = CELLTYPE_VALUE;
+                rCell.mfValue = fValue;
                 rFormat = GetFormatter().GetStandardFormat( NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
             }
         }
@@ -262,7 +269,10 @@ void XclImpChangeTrack::ReadCell(
             ScTokenArray* pTokenArray = NULL;
             ReadFormula( pTokenArray, rPosition );
             if( pStrm->IsValid() && pTokenArray )
-                rpCell = new ScFormulaCell( GetDocPtr(), rPosition, pTokenArray );
+            {
+                rCell.meType = CELLTYPE_FORMULA;
+                rCell.mpFormula = new ScFormulaCell(GetDocPtr(), rPosition, pTokenArray);
+            }
             delete pTokenArray;
         }
         break;
@@ -355,24 +365,22 @@ void XclImpChangeTrack::ReadChTrCellContent()
             default:        OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - unknown format info" );
         }
 
-        ScBaseCell* pOldCell;
-        ScBaseCell* pNewCell;
+        ScCellValue aOldCell;
+        ScCellValue aNewCell;
         sal_uInt32 nOldFormat;
         sal_uInt32 nNewFormat;
-        ReadCell( pOldCell, nOldFormat, nOldValueType, aPosition );
-        ReadCell( pNewCell, nNewFormat, nNewValueType, aPosition );
+        ReadCell(aOldCell, nOldFormat, nOldValueType, aPosition);
+        ReadCell(aNewCell, nNewFormat, nNewValueType, aPosition);
         if( !pStrm->IsValid() || (pStrm->GetRecLeft() > 0) )
         {
             OSL_FAIL( "XclImpChangeTrack::ReadChTrCellContent - bytes left, action ignored" );
-            if( pOldCell )
-                pOldCell->Delete();
-            if( pNewCell )
-                pNewCell->Delete();
+            aOldCell.clear();
+            aNewCell.clear();
         }
         else
         {
             ScChangeActionContent* pNewAction =
-                pChangeTrack->AppendContentOnTheFly( aPosition, pOldCell, pNewCell, nOldFormat, nNewFormat );
+                pChangeTrack->AppendContentOnTheFly(aPosition, aOldCell, aNewCell, nOldFormat, nNewFormat);
             DoAcceptRejectAction( pNewAction );
         }
     }

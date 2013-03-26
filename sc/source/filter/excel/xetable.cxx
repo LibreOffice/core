@@ -647,7 +647,8 @@ XclExpLabelCell::XclExpLabelCell(
     XclExpSingleCellBase( EXC_ID3_LABEL, 0, rXclPos, nForcedXFId )
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
-    XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, EXC_STR_DEFAULT, nMaxLen );
+    XclExpStringRef xText = XclExpStringHelper::CreateCellString(
+        rRoot, rCell.GetString(), pPattern, EXC_STR_DEFAULT, nMaxLen );
     Init( rRoot, pPattern, xText );
 }
 
@@ -658,7 +659,16 @@ XclExpLabelCell::XclExpLabelCell(
     XclExpSingleCellBase( EXC_ID3_LABEL, 0, rXclPos, nForcedXFId )
 {
     sal_uInt16 nMaxLen = (rRoot.GetBiff() == EXC_BIFF8) ? EXC_STR_MAXLEN : EXC_LABEL_MAXLEN;
-    XclExpStringRef xText = XclExpStringHelper::CreateCellString( rRoot, rCell, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen );
+
+    XclExpStringRef xText;
+    const EditTextObject* pEditText = rCell.GetData();
+    if (pEditText)
+        xText = XclExpStringHelper::CreateCellString(
+            rRoot, *pEditText, pPattern, rLinkHelper, EXC_STR_DEFAULT, nMaxLen);
+    else
+        xText = XclExpStringHelper::CreateCellString(
+            rRoot, EMPTY_OUSTRING, pPattern, EXC_STR_DEFAULT, nMaxLen);
+
     Init( rRoot, pPattern, xText );
 }
 
