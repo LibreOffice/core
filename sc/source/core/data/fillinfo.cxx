@@ -39,6 +39,7 @@
 #include "conditio.hxx"
 #include "colorscale.hxx"
 #include "stlpool.hxx"
+#include "cellvalue.hxx"
 
 #include <iostream>
 
@@ -520,8 +521,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         if(!pCondForm)
                                             continue;
 
-                                        ScCondFormatData aData = pCondForm->GetData( pInfo->pCell,
-                                                ScAddress( nX, nCurRow, nTab ) );
+                                        ScRefCellValue aTmpCell;
+                                        if (pInfo->pCell)
+                                            aTmpCell.assign(*pInfo->pCell);
+                                        ScCondFormatData aData = pCondForm->GetData(
+                                            aTmpCell, ScAddress(nX, nCurRow, nTab));
                                         if (!aData.aStyleName.isEmpty())
                                         {
                                             SfxStyleSheetBase* pStyleSheet =

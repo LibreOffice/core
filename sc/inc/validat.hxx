@@ -125,12 +125,11 @@ public:
         @return  true = rStrings has been filled with at least one entry. */
     bool FillSelectionList(std::vector<ScTypedStrData>& rStrings, const ScAddress& rPos) const;
 
-                    //  with string: during input, with cell: for detective / RC_FORCED
-    sal_Bool            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
-                                    const ScAddress& rPos ) const;
-    sal_Bool            IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    //  with string: during input, with cell: for detective / RC_FORCED
+    bool IsDataValid(
+        const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const;
 
-    bool IsDataValid( ScCellIterator& rIter ) const;
+    bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
                     // TRUE -> break
     sal_Bool            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
@@ -160,14 +159,14 @@ private:
         @param rMatch    (out-param) the index of the first item that matched, -1 if nothing matched.
         @return  true = Cell range found, rRange is valid, or an error entry stuffed into the list if pCell==NULL. */
     bool GetSelectionFromFormula(
-        std::vector<ScTypedStrData>* pStrings, ScBaseCell* pCell, const ScAddress& rPos,
+        std::vector<ScTypedStrData>* pStrings, ScRefCellValue& rCell, const ScAddress& rPos,
         const ScTokenArray& rTokArr, int& rMatch) const;
 
     /** Tests, if pCell is equal to what the passed token array represents. */
-    bool            IsEqualToTokenArray( ScBaseCell* pCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const;
+    bool IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const;
 
     /** Tests, if contents of pCell occur in cell range referenced by own formula, or in a string list. */
-    bool            IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    bool IsListValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 };
 
 //

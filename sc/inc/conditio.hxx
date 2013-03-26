@@ -35,10 +35,9 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 
-class ScBaseCell;
 class ScFormulaCell;
 class ScTokenArray;
-
+class ScRefCellValue;
 
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
@@ -196,7 +195,7 @@ public:
 
     virtual void SetParent( ScConditionalFormat* pNew )  { pCondFormat = pNew; }
 
-    bool            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     ScConditionMode GetOperation() const        { return eOp; }
     bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
@@ -406,9 +405,9 @@ public:
 
     const ScFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
-    const rtl::OUString&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    const OUString& GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
-    ScCondFormatData GetData( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    ScCondFormatData GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     bool            EqualEntries( const ScConditionalFormat& r ) const;
 

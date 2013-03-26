@@ -36,6 +36,8 @@
 #include "stlpool.hxx"
 #include "rangenam.hxx"
 #include "colorscale.hxx"
+#include "cellvalue.hxx"
+#include "editutil.hxx"
 
 using namespace formula;
 //------------------------------------------------------------------------
@@ -731,46 +733,39 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     bFirstRun = false;
 }
 
-static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, rtl::OUString& rArgStr )
+static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rArg, OUString& rArgStr )
 {
+
+    if (rCell.isEmpty())
+        return !bIsStr1;
+
     bool bVal = true;
 
-    if ( pCell )
+    switch (rCell.meType)
     {
-        CellType eType = pCell->GetCellType();
-        switch( eType )
+        case CELLTYPE_VALUE:
+            rArg = rCell.mfValue;
+        break;
+        case CELLTYPE_FORMULA:
         {
-            case CELLTYPE_VALUE:
-                rArg = ((ScValueCell*)pCell)->GetValue();
-                break;
-            case CELLTYPE_FORMULA:
-                {
-                    ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                    bVal = pFCell->IsValue();
-                    if (bVal)
-                        rArg = pFCell->GetValue();
-                    else
-                        rArgStr = pFCell->GetString();
-                }
-                break;
-            case CELLTYPE_STRING:
-            case CELLTYPE_EDIT:
-                bVal = false;
-                if ( eType == CELLTYPE_STRING )
-                    rArgStr = ((ScStringCell*)pCell)->GetString();
-                else
-                    rArgStr = ((ScEditCell*)pCell)->GetString();
-                break;
-
-            default:
-                pCell = NULL;           // Note-Zellen wie leere
-                break;
+            bVal = rCell.mpFormula->IsValue();
+            if (bVal)
+                rArg = rCell.mpFormula->GetValue();
+            else
+                rArgStr = rCell.mpFormula->GetString();
         }
+        break;
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            bVal = false;
+            if (rCell.meType == CELLTYPE_STRING)
+                rArgStr = *rCell.mpString;
+            else if (rCell.mpEditText)
+                rArgStr = ScEditUtil::GetString(*rCell.mpEditText);
+        break;
+        default:
+            ;
     }
-
-    if( !pCell )
-        if( bIsStr1 )
-            bVal = false;               // leere Zellen je nach Bedingung
 
     return bVal;
 }
@@ -803,23 +798,28 @@ void ScConditionEntry::FillCache() const
             for( SCROW r = nRowStart; r <= nRow; r++ )
                 for( SCCOL c = nColStart; c <= nCol; c++ )
                 {
-                    double nVal = 0.0;
-                    ScBaseCell *pCell = NULL;
-
-                    mpDoc->GetCell( c, r, nTab, pCell );
-                    if( !pCell )
+                    ScRefCellValue aCell;
+                    aCell.assign(*mpDoc, ScAddress(c, r, nTab));
+                    if (aCell.isEmpty())
                         continue;
 
-                    rtl::OUString aStr;
-                    if( !lcl_GetCellContent( pCell, false, nVal, aStr ) )
+                    double nVal = 0.0;
+                    OUString aStr;
+                    if (!lcl_GetCellContent(aCell, false, nVal, aStr))
                     {
-                        std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult = mpCache->maStrings.insert(std::pair<rtl::OUString, sal_Int32>(aStr, static_cast<sal_Int32>(1)));
+                        std::pair<ScConditionEntryCache::StringCacheType::iterator, bool> aResult =
+                            mpCache->maStrings.insert(
+                                ScConditionEntryCache::StringCacheType::value_type(aStr, 1));
+
                         if(!aResult.second)
                             aResult.first->second++;
                     }
                     else
                     {
-                        std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult = mpCache->maValues.insert(std::pair<double, sal_Int32>(nVal, (sal_Int32)1));
+                        std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult =
+                            mpCache->maValues.insert(
+                                ScConditionEntryCache::ValueCacheType::value_type(nVal, 1));
+
                         if(!aResult.second)
                             aResult.first->second++;
 
@@ -978,17 +978,13 @@ bool ScConditionEntry::IsAboveAverage( double nArg, bool bEqual ) const
 
 bool ScConditionEntry::IsError( const ScAddress& rPos ) const
 {
-    ScBaseCell* pCell = mpDoc->GetCell(rPos);
-    if(!pCell)
-        return false;
-
-    switch(pCell->GetCellType())
+    switch (mpDoc->GetCellType(rPos))
     {
         case CELLTYPE_VALUE:
             return false;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(pCell);
+            ScFormulaCell* pFormulaCell = const_cast<ScFormulaCell*>(mpDoc->GetFormulaCell(rPos));
             if(pFormulaCell->GetErrCode())
                 return true;
         }
@@ -1267,13 +1263,13 @@ bool ScConditionEntry::IsValidStr( const rtl::OUString& rArg, const ScAddress& r
     return bValid;
 }
 
-bool ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const
+bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     ((ScConditionEntry*)this)->Interpret(rPos);         // Formeln auswerten
 
     double nArg = 0.0;
     rtl::OUString aArgStr;
-    bool bVal = lcl_GetCellContent( pCell, bIsStr1, nArg, aArgStr );
+    bool bVal = lcl_GetCellContent( rCell, bIsStr1, nArg, aArgStr );
     if (bVal)
         return IsValid( nArg, rPos );
     else
@@ -1651,12 +1647,14 @@ ScCondDateFormatEntry::ScCondDateFormatEntry( ScDocument* pDoc, const ScCondDate
 
 bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
 {
-    ScBaseCell* pBaseCell = mpDoc->GetCell( rPos );
+    CellType eCellType = mpDoc->GetCellType(rPos);
 
-    if(!pBaseCell)
+    if (eCellType == CELLTYPE_NONE || eCellType == CELLTYPE_NOTE)
+        // empty cell.
         return false;
 
-    if(pBaseCell->GetCellType() != CELLTYPE_VALUE && pBaseCell->GetCellType() != CELLTYPE_FORMULA)
+    if (eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
+        // non-numerical cell.
         return false;
 
     if( !mpCache )
@@ -1903,14 +1901,14 @@ const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
         return NULL;
 }
 
-const rtl::OUString& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const
+const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     for (CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         if(itr->GetType() == condformat::CONDITION)
         {
             const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*itr);
-            if ( rEntry.IsCellValid( pCell, rPos ) )
+            if (rEntry.IsCellValid(rCell, rPos))
                 return rEntry.GetStyle();
         }
         else if(itr->GetType() == condformat::DATE)
@@ -1924,7 +1922,7 @@ const rtl::OUString& ScConditionalFormat::GetCellStyle( ScBaseCell* pCell, const
     return EMPTY_OUSTRING;
 }
 
-ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddress& rPos ) const
+ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     ScCondFormatData aData;
     for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
@@ -1932,7 +1930,7 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
         if(itr->GetType() == condformat::CONDITION && aData.aStyleName.isEmpty())
         {
             const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*itr);
-            if ( rEntry.IsCellValid( pCell, rPos ) )
+            if (rEntry.IsCellValid(rCell, rPos))
                 aData.aStyleName = rEntry.GetStyle();
         }
         else if(itr->GetType() == condformat::COLORSCALE && !aData.pColorScale)

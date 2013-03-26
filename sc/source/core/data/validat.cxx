@@ -41,6 +41,7 @@
 #include "dbdata.hxx"
 #include "typedstrdata.hxx"
 #include "dociter.hxx"
+#include "editutil.hxx"
 
 #include <math.h>
 #include <memory>
@@ -414,17 +415,18 @@ sal_Bool ScValidationData::DoError( Window* pParent, const String& rInput,
 }
 
 
-sal_Bool ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
-                                    const ScAddress& rPos ) const
+bool ScValidationData::IsDataValid(
+    const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const
 {
     if ( eDataMode == SC_VALID_ANY ) // check if any cell content is allowed
         return sal_True;
 
-    if ( rTest.GetChar(0) == '=' )   // formulas do not pass the validity test
-        return sal_False;
-
-    if ( !rTest.Len() )              // check whether empty cells are allowed
+    if (rTest.isEmpty())              // check whether empty cells are allowed
         return IsIgnoreBlank();
+
+    if (rTest[0] == '=')   // formulas do not pass the validity test
+        return false;
+
 
     SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
 
@@ -438,7 +440,7 @@ sal_Bool ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr
     {
         double nLenVal;
         if (!bIsVal)
-            nLenVal = static_cast<double>( rTest.Len() );
+            nLenVal = static_cast<double>(rTest.getLength());
         else
         {
             // For numeric values use the resulting input line string to
@@ -449,133 +451,55 @@ sal_Bool ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr
             pFormatter->GetInputLineString( nVal, nFormat, aStr);
             nLenVal = static_cast<double>( aStr.Len() );
         }
-        ScValueCell aTmpCell( nLenVal );
-        bRet = IsCellValid( &aTmpCell, rPos );
+        ScRefCellValue aTmpCell(nLenVal);
+        bRet = IsCellValid(aTmpCell, rPos);
     }
     else
     {
         if (bIsVal)
         {
-            ScValueCell aTmpCell( nVal );
-            bRet = IsDataValid( &aTmpCell, rPos );
+            ScRefCellValue aTmpCell(nVal);
+            bRet = IsDataValid(aTmpCell, rPos);
         }
         else
         {
-            ScStringCell aTmpCell( rTest );
-            bRet = IsDataValid( &aTmpCell, rPos );
+            ScRefCellValue aTmpCell(&rTest);
+            bRet = IsDataValid(aTmpCell, rPos);
         }
     }
 
     return bRet;
 }
 
-sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const
+bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     if( eDataMode == SC_VALID_LIST )
-        return IsListValid( pCell, rPos );
+        return IsListValid(rCell, rPos);
 
     double nVal = 0.0;
-    String aString;
-    sal_Bool bIsVal = sal_True;
-
-    switch (pCell->GetCellType())
-    {
-        case CELLTYPE_VALUE:
-            nVal = ((ScValueCell*)pCell)->GetValue();
-            break;
-        case CELLTYPE_STRING:
-            aString = ((ScStringCell*)pCell)->GetString();
-            bIsVal = false;
-            break;
-        case CELLTYPE_EDIT:
-            aString = ((ScEditCell*)pCell)->GetString();
-            bIsVal = false;
-            break;
-        case CELLTYPE_FORMULA:
-            {
-                ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                bIsVal = pFCell->IsValue();
-                if ( bIsVal )
-                    nVal  = pFCell->GetValue();
-                else
-                    aString = pFCell->GetString();
-            }
-            break;
-        default:                        // Notizen, Broadcaster
-            return IsIgnoreBlank();     // wie eingestellt
-    }
-
-    sal_Bool bOk = sal_True;
-    switch (eDataMode)
-    {
-        // SC_VALID_ANY schon oben
-
-        case SC_VALID_WHOLE:
-        case SC_VALID_DECIMAL:
-        case SC_VALID_DATE:         // Date/Time ist nur Formatierung
-        case SC_VALID_TIME:
-            bOk = bIsVal;
-            if ( bOk && eDataMode == SC_VALID_WHOLE )
-                bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // ganze Zahlen
-            if ( bOk )
-                bOk = IsCellValid( pCell, rPos );
-            break;
-
-        case SC_VALID_CUSTOM:
-            //  fuer Custom muss eOp == SC_COND_DIRECT sein
-            //! der Wert muss im Dokument stehen !!!!!!!!!!!!!!!!!!!!
-            bOk = IsCellValid( pCell, rPos );
-            break;
-
-        case SC_VALID_TEXTLEN:
-            bOk = !bIsVal;          // nur Text
-            if ( bOk )
-            {
-                double nLenVal = (double) aString.Len();
-                ScValueCell* pTmpCell = new ScValueCell( nLenVal );
-                bOk = IsCellValid( pTmpCell, rPos );
-                pTmpCell->Delete();
-            }
-            break;
-
-        default:
-            OSL_FAIL("not yet done");
-            break;
-    }
-
-    return bOk;
-}
-
-bool ScValidationData::IsDataValid( ScCellIterator& rIter ) const
-{
-    const ScAddress& rPos = rIter.GetPos();
-
-    if( eDataMode == SC_VALID_LIST )
-    {
-        ScBaseCell* pBC = rIter.getHackedBaseCell();
-        return IsListValid(pBC, rPos);
-    }
-
-    double fVal = 0.0;
     OUString aString;
     bool bIsVal = true;
 
-    switch (rIter.getType())
+    switch (rCell.meType)
     {
         case CELLTYPE_VALUE:
-            fVal = rIter.getValue();
-            break;
+            nVal = rCell.mfValue;
+        break;
         case CELLTYPE_STRING:
-        case CELLTYPE_EDIT:
-            aString = rIter.getString();
+            aString = *rCell.mpString;
             bIsVal = false;
-            break;
+        break;
+        case CELLTYPE_EDIT:
+            if (rCell.mpEditText)
+                aString = ScEditUtil::GetString(*rCell.mpEditText);
+            bIsVal = false;
+        break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rIter.getFormulaCell();
+            ScFormulaCell* pFCell = rCell.mpFormula;
             bIsVal = pFCell->IsValue();
             if ( bIsVal )
-                fVal  = pFCell->GetValue();
+                nVal  = pFCell->GetValue();
             else
                 aString = pFCell->GetString();
         }
@@ -595,30 +519,24 @@ bool ScValidationData::IsDataValid( ScCellIterator& rIter ) const
         case SC_VALID_TIME:
             bOk = bIsVal;
             if ( bOk && eDataMode == SC_VALID_WHOLE )
-                bOk = ::rtl::math::approxEqual( fVal, floor(fVal+0.5) );        // ganze Zahlen
+                bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // ganze Zahlen
             if ( bOk )
-            {
-                ScBaseCell* pBC = rIter.getHackedBaseCell();
-                bOk = IsCellValid(pBC, rPos);
-            }
+                bOk = IsCellValid(rCell, rPos);
             break;
 
         case SC_VALID_CUSTOM:
-        {
             //  fuer Custom muss eOp == SC_COND_DIRECT sein
             //! der Wert muss im Dokument stehen !!!!!!!!!!!!!!!!!!!!
-            ScBaseCell* pBC = rIter.getHackedBaseCell();
-            bOk = IsCellValid(pBC, rPos);
-        }
-        break;
+            bOk = IsCellValid(rCell, rPos);
+            break;
+
         case SC_VALID_TEXTLEN:
             bOk = !bIsVal;          // nur Text
             if ( bOk )
             {
                 double nLenVal = (double) aString.getLength();
-                ScValueCell* pTmpCell = new ScValueCell( nLenVal );
-                bOk = IsCellValid( pTmpCell, rPos );
-                pTmpCell->Delete();
+                ScRefCellValue aTmpCell(nLenVal);
+                bOk = IsCellValid(aTmpCell, rPos);
             }
             break;
 
@@ -629,8 +547,6 @@ bool ScValidationData::IsDataValid( ScCellIterator& rIter ) const
 
     return bOk;
 }
-
-// ----------------------------------------------------------------------------
 
 namespace {
 
@@ -701,7 +617,7 @@ bool ScValidationData::HasSelectionList() const
 }
 
 bool ScValidationData::GetSelectionFromFormula(
-    std::vector<ScTypedStrData>* pStrings, ScBaseCell* pCell, const ScAddress& rPos,
+    std::vector<ScTypedStrData>* pStrings, ScRefCellValue& rCell, const ScAddress& rPos,
     const ScTokenArray& rTokArr, int& rMatch) const
 {
     bool bOk = true;
@@ -816,7 +732,7 @@ bool ScValidationData::GetSelectionFromFormula(
                 if( NULL != pStrings )
                     pEntry = new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard);
 
-                if( pCell && rMatch < 0 )
+                if (!rCell.isEmpty() && rMatch < 0)
                     aCondTokArr.AddString( aValStr );
             }
             else
@@ -842,7 +758,7 @@ bool ScValidationData::GetSelectionFromFormula(
                         pFormatter->GetInputLineString( nMatVal.fVal, 0, aValStr );
                 }
 
-                if( pCell && rMatch < 0 )
+                if (!rCell.isEmpty() && rMatch < 0)
                 {
                     // I am not sure errors will work here, but a user can no
                     // manually enter an error yet so the point is somewhat moot.
@@ -852,7 +768,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     pEntry = new ScTypedStrData( aValStr, nMatVal.fVal, ScTypedStrData::Value);
             }
 
-            if( rMatch < 0 && NULL != pCell && IsEqualToTokenArray( pCell, rPos, aCondTokArr ) )
+            if (rMatch < 0 && !rCell.isEmpty() && IsEqualToTokenArray(rCell, rPos, aCondTokArr))
             {
                 rMatch = n;
                 // short circuit on the first match if not filling the list
@@ -871,7 +787,7 @@ bool ScValidationData::GetSelectionFromFormula(
 
     // In case of no match needed and an error occurred, return that error
     // entry as valid instead of silently failing.
-    return bOk || NULL == pCell;
+    return bOk || rCell.isEmpty();
 }
 
 bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, const ScAddress& rPos) const
@@ -902,7 +818,8 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
         if (!bOk)
         {
             int nMatch;
-            bOk = GetSelectionFromFormula( &rStrColl, NULL, rPos, *pTokArr, nMatch );
+            ScRefCellValue aEmptyCell;
+            bOk = GetSelectionFromFormula(&rStrColl, aEmptyCell, rPos, *pTokArr, nMatch);
         }
     }
 
@@ -911,14 +828,14 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
 
 // ----------------------------------------------------------------------------
 
-bool ScValidationData::IsEqualToTokenArray( ScBaseCell* pCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
+bool ScValidationData::IsEqualToTokenArray( ScRefCellValue& rCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
 {
     // create a condition entry that tests on equality and set the passed token array
     ScConditionEntry aCondEntry( SC_COND_EQUAL, &rTokArr, NULL, GetDocument(), rPos );
-    return aCondEntry.IsCellValid( pCell, rPos );
+    return aCondEntry.IsCellValid(rCell, rPos);
 }
 
-bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) const
+bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
     bool bIsValid = false;
 
@@ -955,7 +872,7 @@ bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) c
             else
                 aCondTokArr.AddString( *pString );
 
-            bIsValid = IsEqualToTokenArray( pCell, rPos, aCondTokArr );
+            bIsValid = IsEqualToTokenArray(rCell, rPos, aCondTokArr);
         }
     }
 
@@ -968,7 +885,7 @@ bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) c
     if (!bIsValid)
     {
         int nMatch;
-        bIsValid = GetSelectionFromFormula( NULL, pCell, rPos, *pTokArr, nMatch );
+        bIsValid = GetSelectionFromFormula(NULL, rCell, rPos, *pTokArr, nMatch);
         bIsValid = bIsValid && nMatch >= 0;
     }
 

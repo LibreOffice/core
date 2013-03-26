@@ -1366,7 +1366,8 @@ sal_Bool ScDetectiveFunc::MarkInvalid(sal_Bool& rOverflow)
                             DrawCircle( nCol, nRow, aData );
                             ++nInsCount;
                         }
-                    if (!pData->IsDataValid(aCellIter))
+                    ScRefCellValue aCell = aCellIter.getRefCellValue();
+                    if (!pData->IsDataValid(aCell, aCellIter.GetPos()))
                     {
                         DrawCircle( nCol, nCellRow, aData );
                         ++nInsCount;

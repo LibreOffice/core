@@ -1688,7 +1688,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             if ( nValidation )
             {
                 const ScValidationData* pData = pDocument->GetValidationEntry( nValidation );
-                if ( pData && !pData->IsDataValid( this, aPos ) )
+                ScRefCellValue aTmpCell(this);
+                if ( pData && !pData->IsDataValid(aTmpCell, aPos))
                     pData->DoCalcError( this );
             }
         }

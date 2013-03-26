@@ -80,9 +80,10 @@ struct SC_DLLPUBLIC ScCellValue
 };
 
 /**
- * This is very similar to ScCellValue, except that it points to the
+ * This is very similar to ScCellValue, except that it references the
  * original value instead of copying it.  As such, don't hold an instance of
- * this class any longer than necessary.
+ * this class any longer than necessary, and absolutely not after the
+ * original cell has been destroyed.
  */
 struct SC_DLLPUBLIC ScRefCellValue
 {
