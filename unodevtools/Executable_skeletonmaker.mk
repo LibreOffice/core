@@ -54,7 +54,6 @@ $(eval $(call gb_Executable_use_static_libraries,uno-skeletonmaker,\
 $(eval $(call gb_Executable_add_exception_objects,uno-skeletonmaker,\
     unodevtools/source/unodevtools/options \
     unodevtools/source/unodevtools/typeblob \
-    unodevtools/source/unodevtools/typemanager \
     unodevtools/source/skeletonmaker/skeletonmaker \
     unodevtools/source/skeletonmaker/skeletoncommon \
     unodevtools/source/skeletonmaker/javatypemaker \

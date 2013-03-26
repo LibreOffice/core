@@ -28,32 +28,6 @@ using ::rtl::OString;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
 
-TypeManager::TypeManager()
-{
-    m_pImpl = new TypeManagerImpl();
-    acquire();
-}
-
-TypeManager::~TypeManager()
-{
-    release();
-}
-
-sal_Int32 TypeManager::acquire()
-{
-    return osl_atomic_increment(&m_pImpl->m_refCount);
-}
-
-sal_Int32 TypeManager::release()
-{
-    sal_Int32 refCount = 0;
-    if (0 == (refCount = osl_atomic_decrement(&m_pImpl->m_refCount)) )
-    {
-        delete m_pImpl;
-    }
-    return refCount;
-}
-
 sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
 {
     if ( name == "short" )
@@ -90,33 +64,14 @@ sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
     return sal_False;
 }
 
-RegistryTypeManager::RegistryTypeManager()
+TypeManager::TypeManager() {}
+
+TypeManager::~TypeManager()
 {
-    m_pImpl = new RegistryTypeManagerImpl();
-    acquire();
+    freeRegistries();
 }
 
-RegistryTypeManager::~RegistryTypeManager()
-{
-    release();
-}
-
-void RegistryTypeManager::acquire()
-{
-    TypeManager::acquire();
-}
-
-void RegistryTypeManager::release()
-{
-    if (0 == TypeManager::release())
-    {
-        freeRegistries();
-
-        delete m_pImpl;
-    }
-}
-
-sal_Bool RegistryTypeManager::init(
+sal_Bool TypeManager::init(
     const StringVector& regFiles,
     StringVector const & extraFiles )
 {
@@ -129,7 +84,7 @@ sal_Bool RegistryTypeManager::init(
     while (iter != regFiles.end())
     {
         if (!tmpReg.open( convertToFileUrl(*iter), REG_READONLY))
-            m_pImpl->m_registries.push_back(new Registry(tmpReg));
+            m_registries.push_back(new Registry(tmpReg));
         else
         {
             freeRegistries();
@@ -141,7 +96,7 @@ sal_Bool RegistryTypeManager::init(
     while (iter != extraFiles.end())
     {
         if (!tmpReg.open( convertToFileUrl(*iter), REG_READONLY))
-            m_pImpl->m_extra_registries.push_back(new Registry(tmpReg));
+            m_extra_registries.push_back(new Registry(tmpReg));
         else
         {
             freeRegistries();
@@ -153,11 +108,11 @@ sal_Bool RegistryTypeManager::init(
     return sal_True;
 }
 
-::rtl::OString RegistryTypeManager::getTypeName(RegistryKey& rTypeKey) const
+::rtl::OString TypeManager::getTypeName(RegistryKey& rTypeKey) const
 {
     OString typeName = OUStringToOString(rTypeKey.getName(), RTL_TEXTENCODING_UTF8);
 
-    if (m_pImpl->m_base.getLength() > 1)
+    if (m_base.getLength() > 1)
         typeName = typeName.copy(typeName.indexOf('/', 1) + 1);
     else
         typeName = typeName.copy(1);
@@ -165,7 +120,7 @@ sal_Bool RegistryTypeManager::init(
     return typeName;
 }
 
-typereg::Reader RegistryTypeManager::getTypeReader(
+typereg::Reader TypeManager::getTypeReader(
     const OString& name, sal_Bool * pIsExtraType ) const
 {
     typereg::Reader reader;
@@ -190,7 +145,7 @@ typereg::Reader RegistryTypeManager::getTypeReader(
     return reader;
 }
 
-typereg::Reader RegistryTypeManager::getTypeReader(RegistryKey& rTypeKey) const
+typereg::Reader TypeManager::getTypeReader(RegistryKey& rTypeKey) const
 {
     typereg::Reader reader;
 
@@ -214,11 +169,11 @@ typereg::Reader RegistryTypeManager::getTypeReader(RegistryKey& rTypeKey) const
 }
 
 
-RTTypeClass RegistryTypeManager::getTypeClass(const OString& name) const
+RTTypeClass TypeManager::getTypeClass(const OString& name) const
 {
-    if (m_pImpl->m_t2TypeClass.count(name) > 0)
+    if (m_t2TypeClass.count(name) > 0)
     {
-        return m_pImpl->m_t2TypeClass[name];
+        return m_t2TypeClass[name];
     } else
     {
         RegistryKey key(searchTypeKey(name));
@@ -240,7 +195,7 @@ RTTypeClass RegistryTypeManager::getTypeClass(const OString& name) const
 
                     rtl_freeMemory(pBuffer);
 
-                    m_pImpl->m_t2TypeClass[name] = ret;
+                    m_t2TypeClass[name] = ret;
                     return ret;
                 }
                 rtl_freeMemory(pBuffer);
@@ -251,13 +206,13 @@ RTTypeClass RegistryTypeManager::getTypeClass(const OString& name) const
     return RT_TYPE_INVALID;
 }
 
-RTTypeClass RegistryTypeManager::getTypeClass(RegistryKey& rTypeKey) const
+RTTypeClass TypeManager::getTypeClass(RegistryKey& rTypeKey) const
 {
     OString name = getTypeName(rTypeKey);
 
-    if (m_pImpl->m_t2TypeClass.count(name) > 0)
+    if (m_t2TypeClass.count(name) > 0)
     {
-        return m_pImpl->m_t2TypeClass[name];
+        return m_t2TypeClass[name];
     } else
     {
         if (rTypeKey.isValid())
@@ -277,7 +232,7 @@ RTTypeClass RegistryTypeManager::getTypeClass(RegistryKey& rTypeKey) const
 
                     rtl_freeMemory(pBuffer);
 
-                    m_pImpl->m_t2TypeClass[name] = ret;
+                    m_t2TypeClass[name] = ret;
                     return ret;
                 }
                 rtl_freeMemory(pBuffer);
@@ -288,39 +243,39 @@ RTTypeClass RegistryTypeManager::getTypeClass(RegistryKey& rTypeKey) const
     return RT_TYPE_INVALID;
 }
 
-void RegistryTypeManager::setBase(const OString& base)
+void TypeManager::setBase(const OString& base)
 {
 
     if (base.lastIndexOf('/') == (base.getLength() - 1))
-        m_pImpl->m_base += base.copy(0, base.lastIndexOf('/') - 1);
+        m_base += base.copy(0, base.lastIndexOf('/') - 1);
     else
-        m_pImpl->m_base += base;
+        m_base += base;
 }
 
-void RegistryTypeManager::freeRegistries()
+void TypeManager::freeRegistries()
 {
-    RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
-    while (iter != m_pImpl->m_registries.end())
+    RegistryList::const_iterator iter = m_registries.begin();
+    while (iter != m_registries.end())
     {
         delete *iter;
         ++iter;
     }
-    iter = m_pImpl->m_extra_registries.begin();
-    while (iter != m_pImpl->m_extra_registries.end())
+    iter = m_extra_registries.begin();
+    while (iter != m_extra_registries.end())
     {
         delete *iter;
         ++iter;
     }
 }
 
-RegistryKey RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtraType )
+RegistryKey TypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtraType )
     const
 {
-    OUString name( OStringToOUString(m_pImpl->m_base + "/" + name_, RTL_TEXTENCODING_UTF8) );
+    OUString name( OStringToOUString(m_base + "/" + name_, RTL_TEXTENCODING_UTF8) );
     RegistryKey key, rootKey;
 
-    RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
-    while (iter != m_pImpl->m_registries.end())
+    RegistryList::const_iterator iter = m_registries.begin();
+    while (iter != m_registries.end())
     {
         if (!(*iter)->openRootKey(rootKey))
         {
@@ -333,8 +288,8 @@ RegistryKey RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * 
         }
         ++iter;
     }
-    iter = m_pImpl->m_extra_registries.begin();
-    while (iter != m_pImpl->m_extra_registries.end())
+    iter = m_extra_registries.begin();
+    while (iter != m_extra_registries.end())
     {
         if (!(*iter)->openRootKey(rootKey))
         {
@@ -351,24 +306,24 @@ RegistryKey RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * 
     return key;
 }
 
-RegistryKeyList RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) const
+RegistryKeyList TypeManager::getTypeKeys(const ::rtl::OString& name_) const
 {
     RegistryKeyList keyList= RegistryKeyList();
     OString tmpName;
-    if ( name_ == "/" || name_ == m_pImpl->m_base ) {
-        tmpName = m_pImpl->m_base;
+    if ( name_ == "/" || name_ == m_base ) {
+        tmpName = m_base;
     } else {
-        if ( m_pImpl->m_base == "/" )
+        if ( m_base == "/" )
             tmpName = name_;
         else
-            tmpName = m_pImpl->m_base + "/" + name_;
+            tmpName = m_base + "/" + name_;
     }
 
     OUString name( OStringToOUString(tmpName, RTL_TEXTENCODING_UTF8) );
     RegistryKey key, rootKey;
 
-    RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
-    while (iter != m_pImpl->m_registries.end())
+    RegistryList::const_iterator iter = m_registries.begin();
+    while (iter != m_registries.end())
     {
         if (!(*iter)->openRootKey(rootKey))
         {
@@ -379,8 +334,8 @@ RegistryKeyList RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) co
         }
         ++iter;
     }
-    iter = m_pImpl->m_extra_registries.begin();
-    while (iter != m_pImpl->m_extra_registries.end())
+    iter = m_extra_registries.begin();
+    while (iter != m_extra_registries.end())
     {
         if (!(*iter)->openRootKey(rootKey))
         {

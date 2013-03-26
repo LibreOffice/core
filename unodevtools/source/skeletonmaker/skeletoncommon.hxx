@@ -19,6 +19,9 @@
 #ifndef INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCOMMON_HXX
 #define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCOMMON_HXX
 
+#include "sal/config.h"
+
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 #include "registry/reader.hxx"
 #include "codemaker/typemanager.hxx"
@@ -95,12 +98,12 @@ bool getOutputStream(ProgramOptions const & options,
                      rtl::OString & tmpSourceFileName);
 
 codemaker::UnoType::Sort decomposeResolveAndCheck(
-    TypeManager const & manager, rtl::OString const & type,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
     RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
     std::vector< rtl::OString > * arguments);
 
-void checkType(TypeManager const & manager,
+void checkType(rtl::Reference< TypeManager > const & manager,
                rtl::OString const & type,
                boost::unordered_set< rtl::OString, rtl::OStringHash >& interfaceTypes,
                boost::unordered_set< rtl::OString, rtl::OStringHash >& serviceTypes,
@@ -112,7 +115,7 @@ void checkDefaultInterfaces(
     const rtl::OString & propertyhelper);
 
 rtl::OString checkPropertyHelper(
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     const boost::unordered_set< rtl::OString, rtl::OStringHash >& services,
     const boost::unordered_set< rtl::OString, rtl::OStringHash >& interfaces,
     AttributeInfo& attributes,
@@ -127,7 +130,7 @@ rtl::OString checkPropertyHelper(
    @param reader a registry type reader of an interface defining
                  calc add-in functions
 */
-void checkAddInTypes(TypeManager const & manager,
+void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
                      typereg::Reader const & reader);
 
 
@@ -141,7 +144,7 @@ void checkAddInTypes(TypeManager const & manager,
 
    @return true if XComponent have to be supported
 */
-bool checkXComponentSupport(TypeManager const & manager,
+bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
          boost::unordered_set< rtl::OString, rtl::OStringHash >& interfaces);
 
 
@@ -151,7 +154,7 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
 
 void generateFunctionParameterMap(std::ostream& o,
          ProgramOptions const & options,
-         TypeManager const & manager,
+         rtl::Reference< TypeManager > const & manager,
          const boost::unordered_set< ::rtl::OString, ::rtl::OStringHash >& interfaces);
 
 }

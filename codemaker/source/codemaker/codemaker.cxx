@@ -63,7 +63,7 @@ rtl::OString convertString(rtl::OUString const & string) {
 }
 
 codemaker::UnoType::Sort decomposeAndResolve(
-    TypeManager const & manager, rtl::OString const & type,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
     RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
     std::vector< rtl::OString > * arguments)
@@ -95,7 +95,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
             return sort;
 
         case codemaker::UnoType::SORT_COMPLEX:
-            typereg::Reader reader(manager.getTypeReader(*name));
+            typereg::Reader reader(manager->getTypeReader(*name));
             *typeClass = reader.getTypeClass();
             switch (*typeClass) {
             case RT_TYPE_ENUM:

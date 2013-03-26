@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
 #define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
 
+#include "sal/config.h"
+
+#include "rtl/ref.hxx"
+
 namespace codemaker { class GeneratedTypeSet; }
 namespace rtl { class OString; }
 class JavaOptions;
@@ -27,10 +31,10 @@ class TypeManager;
 class RegistryKey;
 
 bool produceType(
-    rtl::OString const & type, TypeManager const & manager,
+    rtl::OString const & type, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions * pOptions);
 
-bool produceType(RegistryKey& typeName, bool bIsExtraType, TypeManager const & typeMgr,
+bool produceType(RegistryKey& typeName, bool bIsExtraType, rtl::Reference< TypeManager > const & typeMgr,
                  codemaker::GeneratedTypeSet & generated,
                  JavaOptions* pOptions);
 

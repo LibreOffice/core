@@ -20,11 +20,10 @@
 #ifndef INCLUDED_UNODEVTOOLS_OPTIONS_HXX
 #define INCLUDED_UNODEVTOOLS_OPTIONS_HXX
 
-#include <rtl/ustrbuf.hxx>
+#include "sal/config.h"
 
-namespace com { namespace sun { namespace star { namespace uno {
-class RuntimeException;
-} } } }
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <rtl/ustrbuf.hxx>
 
 namespace unodevtools {
 

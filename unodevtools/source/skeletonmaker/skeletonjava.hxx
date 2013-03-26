@@ -27,44 +27,44 @@
 namespace skeletonmaker { namespace java {
 
 void printType(std::ostream & o,
-               ProgramOptions const & options, TypeManager const & manager,
+               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
                codemaker::UnoType::Sort sort, RTTypeClass typeClass,
                rtl::OString const & name, sal_Int32 rank,
                std::vector< rtl::OString > const & arguments,
                bool referenceType, bool defaultvalue=false);
 
 void printType(std::ostream & o,
-               ProgramOptions const & options, TypeManager const & manager,
+               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
                rtl::OString const & type, bool referenceType,
                bool defaultvalue=false);
 
 bool printConstructorParameters(std::ostream & o,
                                 ProgramOptions const & options,
-                                TypeManager const & manager,
+                                rtl::Reference< TypeManager > const & manager,
                                 typereg::Reader const & reader,
                                 typereg::Reader const & outerReader,
                                 std::vector< rtl::OString > const & arguments);
 
 void printConstructor(std::ostream & o,
-                      ProgramOptions const & options, TypeManager const & manager,
+                      ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
                       typereg::Reader const & reader,
                       std::vector< rtl::OString > const & arguments);
 
 void printMethodParameters(std::ostream & o,
                            ProgramOptions const & options,
-                           TypeManager const & manager,
+                           rtl::Reference< TypeManager > const & manager,
                            typereg::Reader const & reader,
                            sal_uInt16 method, bool previous,
                            bool withtype);
 
 void printExceptionSpecification(std::ostream & o,
                                  ProgramOptions const & options,
-                                 TypeManager const & manager,
+                                 rtl::Reference< TypeManager > const & manager,
                                  typereg::Reader const & reader,
                                  sal_uInt16 method);
 
 void printMethods(std::ostream & o,
-                  ProgramOptions const & options, TypeManager const & manager,
+                  ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
                   typereg::Reader const & reader,
                   codemaker::GeneratedTypeSet & generated,
                   rtl::OString const & delegate,
@@ -74,19 +74,19 @@ void printMethods(std::ostream & o,
 
 void printConstructionMethods(std::ostream & o,
                               ProgramOptions const & options,
-                              TypeManager const & manager,
+                              rtl::Reference< TypeManager > const & manager,
                               typereg::Reader const & reader);
 
 void printServiceMembers(std::ostream & o,
                          ProgramOptions const & options,
-                         TypeManager const & manager,
+                         rtl::Reference< TypeManager > const & manager,
                          typereg::Reader const & reader,
                          rtl::OString const & type,
                          rtl::OString const & delegate);
 
 void printMapsToJavaType(std::ostream & o,
                          ProgramOptions const & options,
-                         TypeManager const & manager,
+                         rtl::Reference< TypeManager > const & manager,
                          codemaker::UnoType::Sort sort,
                          RTTypeClass typeClass,
                          rtl::OString const & name, sal_Int32 rank,
@@ -95,11 +95,11 @@ void printMapsToJavaType(std::ostream & o,
 
 void generateDocumentation(std::ostream & o,
                            ProgramOptions const & options,
-                           TypeManager const & manager,
+                           rtl::Reference< TypeManager > const & manager,
                            rtl::OString const & type,
                            rtl::OString const & delegate);
 
-void generateSkeleton(ProgramOptions const & options, TypeManager const & manager, std::vector< rtl::OString > const & types);
+void generateSkeleton(ProgramOptions const & options, rtl::Reference< TypeManager > const & manager, std::vector< rtl::OString > const & types);
 
 } }
 

@@ -42,7 +42,7 @@ struct Bad {};
 }
 
 Dependencies::Dependencies(
-    TypeManager const & manager, rtl::OString const & type):
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type):
     m_voidDependency(false), m_booleanDependency(false),
     m_byteDependency(false), m_shortDependency(false),
     m_unsignedShortDependency(false), m_longDependency(false),
@@ -52,7 +52,7 @@ Dependencies::Dependencies(
     m_stringDependency(false), m_typeDependency(false), m_anyDependency(false),
     m_sequenceDependency(false)
 {
-    typereg::Reader reader(manager.getTypeReader(type));
+    typereg::Reader reader(manager->getTypeReader(type));
     m_valid = reader.isValid();
     if (m_valid) {
         // Not everything is checked for consistency, just things that are cheap

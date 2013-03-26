@@ -91,7 +91,7 @@ bool getOutputStream(ProgramOptions const & options,
 }
 
 codemaker::UnoType::Sort decomposeResolveAndCheck(
-    TypeManager const & manager, OString const & type,
+    rtl::Reference< TypeManager > const & manager, OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
     RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
     std::vector< OString > * arguments)
@@ -125,7 +125,7 @@ bool containsAttribute(AttributeInfo& attributes, OString const & attrname)
 }
 
 // collect attributes including inherited attributes
-void checkAttributes(TypeManager const & manager,
+void checkAttributes(rtl::Reference< TypeManager > const & manager,
                      const typereg::Reader& reader,
                      AttributeInfo& attributes,
                      boost::unordered_set< OString, OStringHash >& propinterfaces)
@@ -140,7 +140,7 @@ void checkAttributes(TypeManager const & manager,
     }
 
     for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
-        typereg::Reader supertype(manager.getTypeReader(
+        typereg::Reader supertype(manager->getTypeReader(
                                   codemaker::convertString(
                                       reader.getSuperTypeName(i))));
         if ( !supertype.isValid() ) {
@@ -167,7 +167,7 @@ void checkAttributes(TypeManager const & manager,
     }
 }
 
-void checkType(TypeManager const & manager,
+void checkType(rtl::Reference< TypeManager > const & manager,
                OString const & type,
                boost::unordered_set< OString, OStringHash >& interfaceTypes,
                boost::unordered_set< OString, OStringHash >& serviceTypes,
@@ -175,7 +175,7 @@ void checkType(TypeManager const & manager,
 {
 
     OString binType(type.replace('.', '/'));
-    typereg::Reader reader(manager.getTypeReader(binType));
+    typereg::Reader reader(manager->getTypeReader(binType));
     if ( !reader.isValid() ) {
         throw CannotDumpException("Bad type library entity " + binType);
     }
@@ -205,7 +205,7 @@ void checkType(TypeManager const & manager,
                 if ( interfaceTypes.find(supername) == interfaceTypes.end() ) {
                     interfaceTypes.insert(supername);
 
-                    typereg::Reader supertype(manager.getTypeReader(
+                    typereg::Reader supertype(manager->getTypeReader(
                                   codemaker::convertString(
                                       reader.getSuperTypeName(0))));
                     if ( !supertype.isValid() ) {
@@ -288,7 +288,7 @@ void checkDefaultInterfaces(
     }
 }
 
-bool checkServiceProperties(TypeManager const & manager,
+bool checkServiceProperties(rtl::Reference< TypeManager > const & manager,
                             const typereg::Reader & reader)
 {
     if ( reader.getFieldCount() > 0 )
@@ -298,7 +298,7 @@ bool checkServiceProperties(TypeManager const & manager,
         for ( sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i ) {
             if ( reader.getReferenceSort(i) == RT_REF_EXPORTS ) {
                 typereg::Reader refreader(
-                    manager.getTypeReader(
+                    manager->getTypeReader(
                         codemaker::convertString(reader.getReferenceTypeName(i))));
 
                 if ( checkServiceProperties(manager, refreader) )
@@ -312,7 +312,7 @@ bool checkServiceProperties(TypeManager const & manager,
 
 OString checkPropertyHelper(
     ProgramOptions const & options,
-    TypeManager const & manager,
+    rtl::Reference< TypeManager > const & manager,
     const boost::unordered_set< OString, OStringHash >& services,
     const boost::unordered_set< OString, OStringHash >& interfaces,
     AttributeInfo& attributes,
@@ -331,13 +331,13 @@ OString checkPropertyHelper(
 
     bool oldStyleWithProperties = false;
     while ( iter != end ) {
-        typereg::Reader reader(manager.getTypeReader((*iter).replace('.', '/')));
+        typereg::Reader reader(manager->getTypeReader((*iter).replace('.', '/')));
 
         if ( !services.empty() ) {
             if ( options.supportpropertysetmixin && reader.getSuperTypeCount() > 0 )
             {
                 typereg::Reader supertype(
-                    manager.getTypeReader(
+                    manager->getTypeReader(
                         codemaker::convertString(
                             reader.getSuperTypeName(0))));
                 if ( !supertype.isValid() ) {
@@ -371,7 +371,7 @@ OString checkPropertyHelper(
     return (oldStyleWithProperties ? "_" : "");
 }
 
-bool checkXComponentSupport(TypeManager const & manager,
+bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
                             typereg::Reader const & reader)
 {
     static OUString s( "com/sun/star/lang/XComponent");
@@ -380,7 +380,7 @@ bool checkXComponentSupport(TypeManager const & manager,
 
     for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
         typereg::Reader super(
-            manager.getTypeReader(
+            manager->getTypeReader(
                 codemaker::convertString(
                     reader.getSuperTypeName(i))));
         if ( !super.isValid() ) {
@@ -399,7 +399,7 @@ bool checkXComponentSupport(TypeManager const & manager,
 
 // if XComponent is directly specified, return true and remove it from the
 // supported interfaces list
-bool checkXComponentSupport(TypeManager const & manager,
+bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
          boost::unordered_set< OString, OStringHash >& interfaces)
 {
     if ( interfaces.empty() )
@@ -412,7 +412,7 @@ bool checkXComponentSupport(TypeManager const & manager,
             interfaces.erase("com.sun.star.lang.XComponent");
             return true;
         }
-        typereg::Reader reader(manager.getTypeReader((*iter).replace('.', '/')));
+        typereg::Reader reader(manager->getTypeReader((*iter).replace('.', '/')));
         if ( checkXComponentSupport(manager, reader) )
             return true;
         ++iter;
@@ -465,7 +465,7 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
 // This function checks if the specified types for parameters and return
 // types are allowed add-in types, for more info see the com.sun.star.sheet.AddIn
 // service description
-bool checkAddinType(TypeManager const & manager,
+bool checkAddinType(rtl::Reference< TypeManager > const & manager,
                     OString const & type, bool & bLastAny,
                     bool & bHasXPropertySet, bool bIsReturn)
 {
@@ -515,7 +515,7 @@ bool checkAddinType(TypeManager const & manager,
     return false;
 }
 
-void checkAddInTypes(TypeManager const & manager,
+void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
                      typereg::Reader const & reader)
 {
     OString sType(codemaker::convertString(reader.getTypeName()).replace('/', '.'));
@@ -568,7 +568,7 @@ void checkAddInTypes(TypeManager const & manager,
 
 void generateFunctionParamterMap(std::ostream& o,
                                  ProgramOptions const & options,
-                                 TypeManager const & manager,
+                                 rtl::Reference< TypeManager > const & manager,
                                  typereg::Reader const & reader,
                                  ::codemaker::GeneratedTypeSet & generated,
                                  bool bFirst)
@@ -590,7 +590,7 @@ void generateFunctionParamterMap(std::ostream& o,
 
     for ( sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i ) {
         typereg::Reader super(
-            manager.getTypeReader(
+            manager->getTypeReader(
                 codemaker::convertString(
                     reader.getSuperTypeName(i))));
         if ( !super.isValid() ) {
@@ -669,14 +669,14 @@ void generateFunctionParamterMap(std::ostream& o,
 
 void generateFunctionParameterMap(std::ostream& o,
          ProgramOptions const & options,
-         TypeManager const & manager,
+         rtl::Reference< TypeManager > const & manager,
          const boost::unordered_set< OString, OStringHash >& interfaces)
 {
     ::codemaker::GeneratedTypeSet generated;
     bool bFirst = true;
     boost::unordered_set< OString, OStringHash >::const_iterator iter = interfaces.begin();
     while ( iter != interfaces.end() ) {
-        typereg::Reader reader(manager.getTypeReader((*iter).replace('.','/')));
+        typereg::Reader reader(manager->getTypeReader((*iter).replace('.','/')));
         if (!reader.isValid()) {
             throw CannotDumpException(
                 "Bad type library entity "

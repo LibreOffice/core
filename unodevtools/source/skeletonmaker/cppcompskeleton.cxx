@@ -499,7 +499,7 @@ void generateXDispatchProvider(std::ostream& o,
 
 void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
-         TypeManager const & manager, const OString & classname,
+         rtl::Reference< TypeManager > const & manager, const OString & classname,
          const boost::unordered_set< OString, OStringHash >& interfaces)
 {
     o << classname << "::" << classname
@@ -575,7 +575,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
 void generateMemberInitialization(std::ostream& o,
                                   ProgramOptions const & options,
-                                  TypeManager const & manager,
+                                  rtl::Reference< TypeManager > const & manager,
                                   AttributeInfo const & members)
 {
     if (!members.empty()) {
@@ -602,7 +602,7 @@ void generateMemberInitialization(std::ostream& o,
 
 void generateMemberDeclaration(std::ostream& o,
                                ProgramOptions const & options,
-                               TypeManager const & manager,
+                               rtl::Reference< TypeManager > const & manager,
                                AttributeInfo const & members)
 {
     for (AttributeInfo::const_iterator i(members.begin());
@@ -617,7 +617,7 @@ void generateMemberDeclaration(std::ostream& o,
 
 OString generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
-         TypeManager const & manager,
+         rtl::Reference< TypeManager > const & manager,
          OString const & classname,
          boost::unordered_set< OString, OStringHash > const & interfaces,
          AttributeInfo const & properties,
@@ -705,7 +705,7 @@ OString generateClassDefinition(std::ostream& o,
     codemaker::GeneratedTypeSet generated;
     while (it != interfaces.end())
     {
-        typereg::Reader reader(manager.getTypeReader((*it).replace('.','/')));
+        typereg::Reader reader(manager->getTypeReader((*it).replace('.','/')));
         printMethods(o, options, manager, reader, generated, "", "", "    ",
                      true, propertyhelper);
         ++it;
@@ -880,7 +880,7 @@ void generateXServiceInfoBodies(std::ostream& o,
 
 void generateMethodBodies(std::ostream& o,
         ProgramOptions const & options,
-        TypeManager const & manager,
+        rtl::Reference< TypeManager > const & manager,
         boost::unordered_set< OString, OStringHash > const & interfaces,
         OString const & classname,
         OString const & comphelpernamespace,
@@ -895,7 +895,7 @@ void generateMethodBodies(std::ostream& o,
             generateXServiceInfoBodies(o, name, comphelpernamespace);
             generated.add(*iter);
         } else {
-            typereg::Reader reader(manager.getTypeReader((*iter).replace('.','/')));
+            typereg::Reader reader(manager->getTypeReader((*iter).replace('.','/')));
             printMethods(o, options, manager, reader, generated, "_",
                          name, "", true, propertyhelper);
         }
@@ -905,7 +905,7 @@ void generateMethodBodies(std::ostream& o,
 
 void generateQueryInterface(std::ostream& o,
                             ProgramOptions const & options,
-                            TypeManager const & manager,
+                            rtl::Reference< TypeManager > const & manager,
                             const boost::unordered_set< OString, OStringHash >& interfaces,
                             OString const & parentname,
                             OString const & classname,
@@ -954,7 +954,7 @@ void generateQueryInterface(std::ostream& o,
 }
 
 void generateSkeleton(ProgramOptions const & options,
-                      TypeManager const & manager,
+                      rtl::Reference< TypeManager > const & manager,
                       std::vector< OString > const & types)
 {
     // special handling of calc add-ins
@@ -1093,7 +1093,7 @@ void generateSkeleton(ProgramOptions const & options,
 }
 
 void generateCalcAddin(ProgramOptions const & options,
-                       TypeManager const & manager,
+                       rtl::Reference< TypeManager > const & manager,
                        std::vector< OString > const & types)
 {
     boost::unordered_set< OString, OStringHash > interfaces;

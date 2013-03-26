@@ -26,6 +26,7 @@
 #include "codemaker/commoncpp.hxx"
 #include "registry/reader.hxx"
 #include "registry/types.h"
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 
 namespace rtl { class OUString; }
@@ -50,7 +51,7 @@ class CppuType
 public:
     CppuType(typereg::Reader& typeReader,
              const ::rtl::OString& typeName,
-             const TypeManager& typeMgr);
+             rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~CppuType();
 
@@ -144,7 +145,7 @@ protected:
     ::rtl::OString      m_typeName;
     ::rtl::OString      m_name;
     typereg::Reader     m_reader;
-    TypeManager const & m_typeMgr;
+    rtl::Reference< TypeManager > m_typeMgr;
     codemaker::Dependencies m_dependencies;
 
 private:
@@ -157,7 +158,7 @@ class InterfaceType : public CppuType
 public:
     InterfaceType(typereg::Reader& typeReader,
                  const ::rtl::OString& typeName,
-                 const TypeManager& typeMgr);
+                  rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~InterfaceType();
 
@@ -218,7 +219,7 @@ class ConstantsType : public CppuType
 public:
     ConstantsType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
-                  const TypeManager& typeMgr);
+                  rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~ConstantsType();
 
@@ -235,7 +236,7 @@ class ModuleType : public ConstantsType
 public:
     ModuleType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
-               const TypeManager& typeMgr);
+               rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~ModuleType();
 
@@ -248,7 +249,7 @@ class StructureType : public CppuType
 public:
     StructureType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
-                  const TypeManager& typeMgr);
+                  rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~StructureType();
 
@@ -286,7 +287,7 @@ class ExceptionType : public CppuType
 public:
     ExceptionType(typereg::Reader& typeReader,
                   const ::rtl::OString& typeName,
-                  const TypeManager& typeMgr);
+                  rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~ExceptionType();
 
@@ -302,7 +303,7 @@ class EnumType : public CppuType
 public:
     EnumType(typereg::Reader& typeReader,
               const ::rtl::OString& typeName,
-              const TypeManager& typeMgr);
+             rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~EnumType();
 
@@ -319,7 +320,7 @@ class TypeDefType : public CppuType
 public:
     TypeDefType(typereg::Reader& typeReader,
               const ::rtl::OString& typeName,
-              const TypeManager& typeMgr);
+                rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~TypeDefType();
 
@@ -332,7 +333,7 @@ class ConstructiveType: public CppuType {
 public:
     ConstructiveType(
         typereg::Reader & reader, rtl::OString const & name,
-        TypeManager const & manager):
+        rtl::Reference< TypeManager > const & manager):
         CppuType(reader, name, manager) {}
 
     virtual sal_Bool dumpHFile(
@@ -347,7 +348,7 @@ class ServiceType: public ConstructiveType {
 public:
     ServiceType(
         typereg::Reader & reader, rtl::OString const & name,
-        TypeManager const & manager):
+        rtl::Reference< TypeManager > const & manager):
         ConstructiveType(reader, name, manager) {}
 
     bool isSingleInterfaceBased();
@@ -371,7 +372,7 @@ class SingletonType: public ConstructiveType {
 public:
     SingletonType(
         typereg::Reader & reader, rtl::OString const & name,
-        TypeManager const & manager):
+        rtl::Reference< TypeManager > const & manager):
         ConstructiveType(reader, name, manager) {}
 
     bool isInterfaceBased();
@@ -382,13 +383,13 @@ public:
 };
 
 bool produceType(const ::rtl::OString& typeName,
-                     TypeManager const & typeMgr,
+                 rtl::Reference< TypeManager > const & typeMgr,
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions)
                  throw( CannotDumpException );
 
 bool produceType(RegistryKey& typeName, bool bIsExtraType,
-                     TypeManager const & typeMgr,
+                 rtl::Reference< TypeManager > const & typeMgr,
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions)
                  throw( CannotDumpException );

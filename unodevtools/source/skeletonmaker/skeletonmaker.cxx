@@ -18,10 +18,10 @@
  */
 #include <iostream>
 
+#include "codemaker/typemanager.hxx"
 #include "sal/main.h"
 #include "rtl/process.h"
 #include "rtl/ustrbuf.hxx"
-#include "unodevtools/typemanager.hxx"
 #include "unodevtools/options.hxx"
 #include "skeletonjava.hxx"
 #include "skeletoncpp.hxx"
@@ -143,7 +143,7 @@ SAL_IMPLEMENT_MAIN()
     }
 
     ProgramOptions options;
-    std::vector< OUString > registries;
+    std::vector< OString > registries;
     std::vector< OString > types;
     OString delegate;
 
@@ -243,7 +243,7 @@ SAL_IMPLEMENT_MAIN()
             continue;
         }
         if ( readOption( &sOption, "l", &nPos, arg) ) {
-            registries.push_back(sOption);
+            registries.push_back(OUStringToOString(sOption, RTL_TEXTENCODING_UTF8));
             continue;
         }
         if ( readOption( &sOption, "t", &nPos, arg) ) {
@@ -274,7 +274,7 @@ SAL_IMPLEMENT_MAIN()
         buf.append(arg);
         buf.append("\"!");
         throw RuntimeException(buf.makeStringAndClear(),
-                               Reference< XInterface >());
+                               css::uno::Reference< XInterface >());
     }
 
     if ( types.empty() && options.componenttype != 3) {
@@ -284,8 +284,8 @@ SAL_IMPLEMENT_MAIN()
         exit(EXIT_FAILURE);
     }
 
-    UnoTypeManager manager;
-    if ( !manager.init(registries) ) {
+    rtl::Reference< TypeManager > manager(new TypeManager);
+    if ( !manager->init(registries) ) {
         std::cerr
             << ("\nError: Using the binary type libraries failed, check the -L"
                 " options\n");

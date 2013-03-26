@@ -28,6 +28,7 @@
 #include "codemaker/unotype.hxx"
 
 #include "osl/diagnose.h"
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -37,8 +38,8 @@
 using codemaker::cppumaker::Includes;
 
 Includes::Includes(
-    TypeManager const & manager, codemaker::Dependencies const & dependencies,
-    bool hpp):
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::Dependencies const & dependencies, bool hpp):
     m_manager(manager), m_map(dependencies.getMap()), m_hpp(hpp),
     m_includeCassert(false), m_includeAny(dependencies.hasAnyDependency()),
     m_includeReference(false),
@@ -275,7 +276,7 @@ void Includes::dumpInclude(
 }
 
 bool Includes::isInterfaceType(rtl::OString const & registryType) const {
-    return m_manager.getTypeClass(registryType) == RT_TYPE_INTERFACE;
+    return m_manager->getTypeClass(registryType) == RT_TYPE_INTERFACE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

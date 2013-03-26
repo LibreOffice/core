@@ -23,6 +23,7 @@
 #include "sal/config.h"
 #include "codemaker/unotype.hxx"
 #include "registry/types.h"
+#include "rtl/ref.hxx"
 #include "sal/types.h"
 
 #include <vector>
@@ -38,7 +39,7 @@ namespace codemaker {
 rtl::OString convertString(rtl::OUString const & string);
 
 codemaker::UnoType::Sort decomposeAndResolve(
-    TypeManager const & manager, rtl::OString const & type,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
     RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
     std::vector< rtl::OString > * arguments);

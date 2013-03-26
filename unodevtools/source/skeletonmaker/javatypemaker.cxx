@@ -27,12 +27,12 @@ using namespace ::rtl;
 namespace skeletonmaker { namespace java {
 
 void printType(std::ostream & o,
-               ProgramOptions const & options, TypeManager const & manager,
+               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
                OString const & type, bool referenceType,
                bool defaultvalue);
 
 void printType(std::ostream & o,
-               ProgramOptions const & options, TypeManager const & manager,
+               ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
                codemaker::UnoType::Sort sort, RTTypeClass typeClass,
                OString const & name, sal_Int32 rank,
                std::vector< OString > const & arguments, bool referenceType,
@@ -115,7 +115,7 @@ void printType(std::ostream & o,
 }
 
 void printType(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OString const & type, bool referenceType, bool defaultvalue)
 {
     RTTypeClass typeClass;
@@ -130,7 +130,7 @@ void printType(std::ostream & o,
 }
 
 bool printConstructorParameters(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     typereg::Reader const & reader, typereg::Reader const & outerReader,
     std::vector< OString > const & arguments)
 {
@@ -138,7 +138,7 @@ bool printConstructorParameters(std::ostream & o,
     if ( reader.getSuperTypeCount() != 0 ) {
         OString super(
             codemaker::convertString(reader.getSuperTypeName(0)));
-        typereg::Reader superReader(manager.getTypeReader(super));
+        typereg::Reader superReader(manager->getTypeReader(super));
         if ( !superReader.isValid() ) {
             throw CannotDumpException("Bad type library entity " + super);
         }
@@ -180,7 +180,7 @@ bool printConstructorParameters(std::ostream & o,
 }
 
 void printConstructor(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     typereg::Reader const & reader,
     std::vector< OString > const & arguments)
 {
@@ -191,7 +191,7 @@ void printConstructor(std::ostream & o,
 }
 
 void printMethodParameters(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     typereg::Reader const & reader, sal_uInt16 method, bool previous,
     bool withtype)
 {
@@ -226,7 +226,7 @@ void printMethodParameters(std::ostream & o,
 }
 
 void printExceptionSpecification(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     typereg::Reader const & reader, sal_uInt16 method)
 {
     if ( reader.getMethodExceptionCount(method) > 0 ) {
@@ -345,7 +345,7 @@ void generateXFastPropertySetBodies(std::ostream& o);
 void generateXPropertyAccessBodies(std::ostream& o);
 
 void printMethods(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     typereg::Reader const & reader,
     codemaker::GeneratedTypeSet & generated,
     OString const & delegate, OString const & indentation,
@@ -384,7 +384,7 @@ void printMethods(std::ostream & o,
     if ( options.all || defaultvalue ) {
         for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
             typereg::Reader super(
-                manager.getTypeReader(
+                manager->getTypeReader(
                     codemaker::convertString(
                         reader.getSuperTypeName(i))));
             if ( !super.isValid() ) {
@@ -544,7 +544,7 @@ void printMethods(std::ostream & o,
 }
 
 void printConstructionMethods(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     typereg::Reader const & reader)
 {
     for ( sal_uInt16 i = 0; i < reader.getMethodCount(); ++i ) {
@@ -569,11 +569,11 @@ void printConstructionMethods(std::ostream & o,
 }
 
 void generateDocumentation(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OString const & type);
 
 void printServiceMembers(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     typereg::Reader const & reader, OString const & type,
     OString const & delegate)
 {
@@ -608,7 +608,7 @@ void printServiceMembers(std::ostream & o,
 }
 
 void printMapsToJavaType(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
     OString const & name, sal_Int32 rank,
     std::vector< OString > const & arguments, const char * javaTypeSort)
@@ -628,7 +628,7 @@ void printMapsToJavaType(std::ostream & o,
 }
 
 void generateDocumentation(std::ostream & o,
-    ProgramOptions const & options, TypeManager const & manager,
+    ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
     OString const & type, OString const & delegate)
 {
     if ( type.indexOf('/') >= 0 ) {
@@ -658,7 +658,7 @@ void generateDocumentation(std::ostream & o,
         } else if ( sort != codemaker::UnoType::SORT_COMPLEX ) {
             o << " simple type";
         } else {
-            typereg::Reader reader(manager.getTypeReader(name));
+            typereg::Reader reader(manager->getTypeReader(name));
             if ( !reader.isValid() ) {
                 throw CannotDumpException("Bad type library entity " + name);
             }
@@ -702,7 +702,7 @@ void generateDocumentation(std::ostream & o,
                 break;
 
             case RT_TYPE_SINGLETON:
-                if ( (manager.getTypeReader(
+                if ( (manager->getTypeReader(
                           codemaker::convertString(
                               reader.getSuperTypeName(0))).getTypeClass())
                      == RT_TYPE_INTERFACE )
@@ -736,7 +736,7 @@ void generateDocumentation(std::ostream & o,
             options, manager, sort, typeClass, name, rank, arguments, 0);
         o << '\n';
     } else {
-        typereg::Reader reader(manager.getTypeReader(name));
+        typereg::Reader reader(manager->getTypeReader(name));
         if ( !reader.isValid() ) {
             throw CannotDumpException("Bad type library entity " + name);
         }
@@ -820,7 +820,7 @@ void generateDocumentation(std::ostream & o,
 
         case RT_TYPE_SINGLETON:
             if ( reader.getSuperTypeCount() > 0 &&
-                 ((manager.getTypeReader(
+                 ((manager->getTypeReader(
                        codemaker::convertString(
                            reader.getSuperTypeName(0))).getTypeClass())
                   == RT_TYPE_INTERFACE) ) {

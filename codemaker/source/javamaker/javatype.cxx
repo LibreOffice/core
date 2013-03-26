@@ -35,6 +35,7 @@
 #include "registry/reader.hxx"
 #include "registry/refltype.hxx"
 #include "registry/types.h"
+#include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -58,7 +59,7 @@ namespace {
 
 // helper function for createUnoName
 void appendUnoName(
-    TypeManager const & manager, rtl::OString const & nucleus, sal_Int32 rank,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & nucleus, sal_Int32 rank,
     std::vector< rtl::OString > const & arguments, rtl::OStringBuffer * buffer)
 {
     OSL_ASSERT(rank >= 0 && buffer != 0);
@@ -91,7 +92,7 @@ void appendUnoName(
 // type, polymorphic struct type template, or interface type, decomposed into
 // nucleus, rank, and arguments) into a core UNO type name:
 rtl::OString createUnoName(
-    TypeManager const & manager, rtl::OString const & nucleus, sal_Int32 rank,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & nucleus, sal_Int32 rank,
     std::vector< rtl::OString > const & arguments)
 {
     rtl::OStringBuffer buf;
@@ -138,14 +139,15 @@ struct PolymorphicUnoType {
 };
 
 SpecialType translateUnoTypeToDescriptor(
-    TypeManager const & manager, rtl::OString const & type, bool array,
-    bool classType, Dependencies * dependencies,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
+    bool array, bool classType, Dependencies * dependencies,
     rtl::OStringBuffer * descriptor, rtl::OStringBuffer * signature,
     bool * needsSignature, PolymorphicUnoType * polymorphicUnoType);
 
 SpecialType translateUnoTypeToDescriptor(
-    TypeManager const & manager, codemaker::UnoType::Sort sort,
-    RTTypeClass typeClass, rtl::OString const & nucleus, sal_Int32 rank,
+    rtl::Reference< TypeManager > const & manager,
+    codemaker::UnoType::Sort sort, RTTypeClass typeClass,
+    rtl::OString const & nucleus, sal_Int32 rank,
     std::vector< rtl::OString > const & arguments, bool array, bool classType,
     Dependencies * dependencies, rtl::OStringBuffer * descriptor,
     rtl::OStringBuffer * signature, bool * needsSignature,
@@ -258,8 +260,8 @@ SpecialType translateUnoTypeToDescriptor(
 }
 
 SpecialType translateUnoTypeToDescriptor(
-    TypeManager const & manager, rtl::OString const & type, bool array,
-    bool classType, Dependencies * dependencies,
+    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
+    bool array, bool classType, Dependencies * dependencies,
     rtl::OStringBuffer * descriptor, rtl::OStringBuffer * signature,
     bool * needsSignature, PolymorphicUnoType * polymorphicUnoType)
 {
@@ -277,7 +279,7 @@ SpecialType translateUnoTypeToDescriptor(
 }
 
 SpecialType getFieldDescriptor(
-    TypeManager const & manager, Dependencies * dependencies,
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
     rtl::OString const & type, rtl::OString * descriptor,
     rtl::OString * signature, PolymorphicUnoType * polymorphicUnoType)
 {
@@ -302,8 +304,9 @@ SpecialType getFieldDescriptor(
 class MethodDescriptor {
 public:
     MethodDescriptor(
-        TypeManager const & manager, Dependencies * dependencies,
-        rtl::OString const & returnType, SpecialType * specialReturnType,
+        rtl::Reference< TypeManager > const & manager,
+        Dependencies * dependencies, rtl::OString const & returnType,
+        SpecialType * specialReturnType,
         PolymorphicUnoType * polymorphicUnoType);
 
     SpecialType addParameter(
@@ -317,7 +320,7 @@ public:
     rtl::OString getSignature() const;
 
 private:
-    TypeManager const & m_manager;
+    rtl::Reference< TypeManager > m_manager;
     Dependencies * m_dependencies;
     rtl::OStringBuffer m_descriptorStart;
     rtl::OString m_descriptorEnd;
@@ -327,7 +330,7 @@ private:
 };
 
 MethodDescriptor::MethodDescriptor(
-    TypeManager const & manager, Dependencies * dependencies,
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
     rtl::OString const & returnType, SpecialType * specialReturnType,
     PolymorphicUnoType * polymorphicUnoType):
     m_manager(manager), m_dependencies(dependencies), m_needsSignature(false)
@@ -663,11 +666,12 @@ void addTypeInfo(
 }
 
 typedef void (* handleUnoTypeRegistryEntityFunction)(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies);
+    rtl::Reference< TypeManager > const & manager,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    Dependencies * dependencies);
 
 void handleEnumType(
-    SAL_UNUSED_PARAMETER TypeManager const &,
+    SAL_UNUSED_PARAMETER rtl::Reference< TypeManager > const &,
     JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
     SAL_UNUSED_PARAMETER Dependencies *)
 {
@@ -838,7 +842,7 @@ void handleEnumType(
 }
 
 void addField(
-    TypeManager const & manager, Dependencies * dependencies,
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
     ClassFile * classFile, std::vector< TypeInfo > * typeInfo,
     sal_Int32 typeParameterIndex, rtl::OString const & type,
     rtl::OString const & name, sal_Int32 index)
@@ -864,10 +868,10 @@ void addField(
 }
 
 sal_uInt16 addFieldInit(
-    TypeManager const & manager, rtl::OString const & className,
-    rtl::OString const & fieldName, bool typeParameter,
-    rtl::OString const & fieldType, Dependencies * dependencies,
-    ClassFile::Code * code)
+    rtl::Reference< TypeManager > const & manager,
+    rtl::OString const & className, rtl::OString const & fieldName,
+    bool typeParameter, rtl::OString const & fieldType,
+    Dependencies * dependencies, ClassFile::Code * code)
 {
     OSL_ASSERT(dependencies != 0 && code != 0);
     if (typeParameter) {
@@ -905,7 +909,7 @@ sal_uInt16 addFieldInit(
                 case RT_TYPE_ENUM:
                     {
                         code->loadLocalReference(0);
-                        typereg::Reader reader(manager.getTypeReader(nucleus));
+                        typereg::Reader reader(manager->getTypeReader(nucleus));
                         if (reader.getFieldCount() == 0) {
                             throw CannotDumpException("Bad type information"); //TODO
                         }
@@ -981,8 +985,8 @@ sal_uInt16 addFieldInit(
 }
 
 sal_uInt16 addLoadLocal(
-    TypeManager const & manager, ClassFile::Code * code, sal_uInt16 * index,
-    bool typeParameter, rtl::OString const & type, bool any,
+    rtl::Reference< TypeManager > const & manager, ClassFile::Code * code,
+    sal_uInt16 * index, bool typeParameter, rtl::OString const & type, bool any,
     Dependencies * dependencies)
 {
     OSL_ASSERT(
@@ -1321,13 +1325,13 @@ sal_uInt16 addLoadLocal(
 }
 
 void addBaseArguments(
-    TypeManager const & manager, Dependencies * dependencies,
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
     MethodDescriptor * methodDescriptor, ClassFile::Code * code,
     RTTypeClass typeClass, rtl::OString const & type, sal_uInt16 * index)
 {
     OSL_ASSERT(
         dependencies != 0 && methodDescriptor != 0 && code != 0 && index != 0);
-    typereg::Reader reader(manager.getTypeReader(type));
+    typereg::Reader reader(manager->getTypeReader(type));
     if (!reader.isValid() || reader.getTypeClass() != typeClass
         || codemaker::convertString(reader.getTypeName()) != type
         || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
@@ -1373,7 +1377,7 @@ void addBaseArguments(
 }
 
 sal_uInt16 addDirectArgument(
-    TypeManager const & manager, Dependencies * dependencies,
+    rtl::Reference< TypeManager > const & manager, Dependencies * dependencies,
     MethodDescriptor * methodDescriptor, ClassFile::Code * code,
     sal_uInt16 * index, rtl::OString const & className,
     rtl::OString const & fieldName, bool typeParameter,
@@ -1397,8 +1401,9 @@ sal_uInt16 addDirectArgument(
 }
 
 void handleAggregatingType(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    rtl::Reference< TypeManager > const & manager,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
     if (reader.getMethodCount() != 0)
@@ -1615,9 +1620,10 @@ void handleAggregatingType(
 }
 
 void createExceptionsAttribute(
-    TypeManager const & manager, typereg::Reader const & reader,
-    sal_uInt16 methodIndex, Dependencies * dependencies,
-    std::vector< rtl::OString > * exceptions, codemaker::ExceptionTree * tree)
+    rtl::Reference< TypeManager > const & manager,
+    typereg::Reader const & reader, sal_uInt16 methodIndex,
+    Dependencies * dependencies, std::vector< rtl::OString > * exceptions,
+    codemaker::ExceptionTree * tree)
 {
     OSL_ASSERT(dependencies != 0 && exceptions != 0);
     sal_uInt16 n = reader.getMethodExceptionCount(methodIndex);
@@ -1634,8 +1640,9 @@ void createExceptionsAttribute(
 }
 
 void handleInterfaceType(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    rtl::Reference< TypeManager > const & manager,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
 
@@ -1855,7 +1862,7 @@ void handleInterfaceType(
 }
 
 void handleTypedef(
-    TypeManager const & manager,
+    rtl::Reference< TypeManager > const & manager,
     SAL_UNUSED_PARAMETER JavaOptions /*TODO const*/ &,
     typereg::Reader const & reader, Dependencies * dependencies)
 {
@@ -1895,9 +1902,9 @@ void handleTypedef(
 }
 
 void addConstant(
-    TypeManager const & manager, typereg::Reader const & reader,
-    bool publishable, sal_uInt16 index, Dependencies * dependencies,
-    ClassFile * classFile)
+    rtl::Reference< TypeManager > const & manager,
+    typereg::Reader const & reader, bool publishable, sal_uInt16 index,
+    Dependencies * dependencies, ClassFile * classFile)
 {
     OSL_ASSERT(dependencies != 0 && classFile != 0);
     RTFieldAccess flags = reader.getFieldFlags(index);
@@ -2010,8 +2017,9 @@ void addConstant(
 }
 
 void handleConstantGroup(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    rtl::Reference< TypeManager > const & manager,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
     if (reader.getSuperTypeCount() != 0 || reader.getMethodCount() != 0
@@ -2037,8 +2045,9 @@ void handleConstantGroup(
 }
 
 void handleModule(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    rtl::Reference< TypeManager > const & manager,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
     if (reader.getSuperTypeCount() != 0 || reader.getMethodCount() != 0
@@ -2084,11 +2093,12 @@ void addExceptionHandlers(
 }
 
 void addConstructor(
-    TypeManager const & manager, rtl::OString const & realJavaBaseName,
-    rtl::OString const & unoName, rtl::OString const & className,
-    typereg::Reader const & reader, sal_uInt16 methodIndex,
-    rtl::OString const & methodName, rtl::OString const & returnType,
-    bool defaultConstructor, Dependencies * dependencies, ClassFile * classFile)
+    rtl::Reference< TypeManager > const & manager,
+    rtl::OString const & realJavaBaseName, rtl::OString const & unoName,
+    rtl::OString const & className, typereg::Reader const & reader,
+    sal_uInt16 methodIndex, rtl::OString const & methodName,
+    rtl::OString const & returnType, bool defaultConstructor,
+    Dependencies * dependencies, ClassFile * classFile)
 {
     OSL_ASSERT(dependencies != 0 && classFile != 0);
     MethodDescriptor desc(manager, dependencies, returnType, 0, 0);
@@ -2230,8 +2240,9 @@ void addConstructor(
 }
 
 void handleService(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    rtl::Reference< TypeManager > const & manager,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
     sal_uInt16 superTypes = reader.getSuperTypeCount();
@@ -2347,8 +2358,9 @@ void handleService(
 }
 
 void handleSingleton(
-    TypeManager const & manager, JavaOptions /*TODO const*/ & options,
-    typereg::Reader const & reader, Dependencies * dependencies)
+    rtl::Reference< TypeManager > const & manager,
+    JavaOptions /*TODO const*/ & options, typereg::Reader const & reader,
+    Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
     if (reader.getSuperTypeCount() != 1 || reader.getFieldCount() != 0
@@ -2359,7 +2371,7 @@ void handleSingleton(
     }
     rtl::OString base(codemaker::convertString(reader.getSuperTypeName(0)));
     rtl::OString realJavaBaseName(base.replace('/', '.'));
-    switch (manager.getTypeReader(base).getTypeClass()) {
+    switch (manager->getTypeReader(base).getTypeClass()) {
     case RT_TYPE_INTERFACE:
         break;
 
@@ -2470,16 +2482,16 @@ void handleSingleton(
 }
 
 bool produceType(
-    rtl::OString const & type, TypeManager const & manager,
+    rtl::OString const & type, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions * options)
 {
     OSL_ASSERT(options != 0);
-    if (type == "/" || type == manager.getBase() || generated.contains(type))
+    if (type == "/" || type == manager->getBase() || generated.contains(type))
     {
         return true;
     }
     sal_Bool extra = sal_False;
-    typereg::Reader reader(manager.getTypeReader(type, &extra));
+    typereg::Reader reader(manager->getTypeReader(type, &extra));
     if (extra) {
         generated.add(type);
         return true;
@@ -2540,17 +2552,19 @@ bool produceType(
 }
 
 bool produceType(
-    RegistryKey & rTypeKey, bool bIsExtraType, TypeManager const & manager,
+    RegistryKey & rTypeKey, bool bIsExtraType,
+    rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, JavaOptions * options)
 {
-    ::rtl::OString typeName = manager.getTypeName(rTypeKey);
+    ::rtl::OString typeName = manager->getTypeName(rTypeKey);
 
     OSL_ASSERT(options != 0);
-    if (typeName == "/" || typeName == manager.getBase() || generated.contains(typeName))
+    if (typeName == "/" || typeName == manager->getBase()
+        || generated.contains(typeName))
     {
         return true;
     }
-    typereg::Reader reader(manager.getTypeReader(rTypeKey));
+    typereg::Reader reader(manager->getTypeReader(rTypeKey));
     if (bIsExtraType) {
         generated.add(typeName);
         return true;

@@ -20,6 +20,9 @@
 #ifndef INCLUDED_CODEMAKER_DEPENDENCIES_HXX
 #define INCLUDED_CODEMAKER_DEPENDENCIES_HXX
 
+#include "sal/config.h"
+
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 
 #include <boost/unordered_map.hpp>
@@ -58,7 +61,9 @@ public:
        type, polymorphic struct type template, exception type, interface type,
        typedef, module, constant group, service, or singleton
      */
-    Dependencies(TypeManager const & manager, rtl::OString const & type);
+    Dependencies(
+        rtl::Reference< TypeManager > const & manager,
+        rtl::OString const & type);
 
     ~Dependencies();
 

@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 
+#include "rtl/ref.hxx"
 #include "sal/main.h"
 
 #include "codemaker/typemanager.hxx"
@@ -40,17 +41,19 @@ void failed(rtl::OString const & typeName, CppuOptions * options) {
 }
 
 void produce(
-    RegistryKey& rTypeKey, bool bIsExtraType, TypeManager const & typeMgr,
+    RegistryKey& rTypeKey, bool bIsExtraType,
+    rtl::Reference< TypeManager > const & typeMgr,
     codemaker::GeneratedTypeSet & generated, CppuOptions * options)
 {
     if (!produceType(rTypeKey, bIsExtraType, typeMgr, generated, options)) {
-        OString typeName = typeMgr.getTypeName(rTypeKey);
+        OString typeName = typeMgr->getTypeName(rTypeKey);
         failed(typeName, options);
     }
 }
 
 void produce(
-    rtl::OString const & typeName, TypeManager const & typeMgr,
+    rtl::OString const & typeName,
+    rtl::Reference< TypeManager > const & typeMgr,
     codemaker::GeneratedTypeSet & generated, CppuOptions * options)
 {
     if (!produceType(typeName, typeMgr, generated, options)) {
@@ -59,17 +62,17 @@ void produce(
 }
 
 void produceAllTypes(RegistryKey& rTypeKey, bool bIsExtraType,
-                         TypeManager const & typeMgr,
+                     rtl::Reference< TypeManager > const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,
                          CppuOptions* pOptions,
                          sal_Bool bFullScope)
     throw( CannotDumpException )
 {
-    OString typeName = typeMgr.getTypeName(rTypeKey);
+    OString typeName = typeMgr->getTypeName(rTypeKey);
 
     produce(rTypeKey, bIsExtraType, typeMgr, generated, pOptions);
 
-    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList typeKeys = typeMgr->getTypeKeys(typeName);
     RegistryKeyList::const_iterator iter = typeKeys.begin();
     RegistryKey key, subKey;
     RegistryKeyArray subKeys;
@@ -100,7 +103,7 @@ void produceAllTypes(RegistryKey& rTypeKey, bool bIsExtraType,
 }
 
 void produceAllTypes(const OString& typeName,
-                     TypeManager const & typeMgr,
+                     rtl::Reference< TypeManager > const & typeMgr,
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions,
                      sal_Bool bFullScope)
@@ -108,7 +111,7 @@ void produceAllTypes(const OString& typeName,
 {
     produce(typeName, typeMgr, generated, pOptions);
 
-    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList typeKeys = typeMgr->getTypeKeys(typeName);
     RegistryKeyList::const_iterator iter = typeKeys.begin();
     RegistryKey key, subKey;
     RegistryKeyArray subKeys;
@@ -156,9 +159,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(99);
     }
 
-    RegistryTypeManager typeMgr;
+    rtl::Reference< TypeManager > typeMgr(new TypeManager);
 
-    if (!typeMgr.init(options.getInputFiles(), options.getExtraInputFiles()))
+    if (!typeMgr->init(options.getInputFiles(), options.getExtraInputFiles()))
     {
         fprintf(stderr, "%s : init registries failed, check your registry files.\n", options.getProgramName().getStr());
         exit(99);
@@ -166,7 +169,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (options.isValid("-B"))
     {
-        typeMgr.setBase(options.getOption("-B"));
+        typeMgr->setBase(options.getOption("-B"));
     }
 
     codemaker::GeneratedTypeSet generated;

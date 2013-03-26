@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 
+#include "rtl/ref.hxx"
 #include "sal/main.h"
 
 #include "codemaker/typemanager.hxx"
@@ -30,13 +31,13 @@
 using ::rtl::OUString;
 using ::rtl::OString;
 sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
-                         TypeManager const & typeMgr,
+                         rtl::Reference< TypeManager > const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,
                          JavaOptions* pOptions,
                          sal_Bool bFullScope)
     throw( CannotDumpException )
 {
-    OString typeName = typeMgr.getTypeName(rTypeKey);
+    OString typeName = typeMgr->getTypeName(rTypeKey);
 
     if (!produceType(rTypeKey, bIsExtraType, typeMgr, generated, pOptions))
     {
@@ -46,7 +47,7 @@ sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
         exit(99);
     }
 
-    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList typeKeys = typeMgr->getTypeKeys(typeName);
     RegistryKeyList::const_iterator iter = typeKeys.begin();
     RegistryKey key, subKey;
     RegistryKeyArray subKeys;
@@ -82,7 +83,7 @@ sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
 }
 
 sal_Bool produceAllTypes(const OString& typeName,
-                         TypeManager const & typeMgr,
+                         rtl::Reference< TypeManager > const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,
                          JavaOptions* pOptions,
                          sal_Bool bFullScope)
@@ -96,7 +97,7 @@ sal_Bool produceAllTypes(const OString& typeName,
         exit(99);
     }
 
-    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList typeKeys = typeMgr->getTypeKeys(typeName);
     RegistryKeyList::const_iterator iter = typeKeys.begin();
     RegistryKey key, subKey;
     RegistryKeyArray subKeys;
@@ -147,9 +148,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(99);
     }
 
-    RegistryTypeManager typeMgr;
+    rtl::Reference< TypeManager > typeMgr(new TypeManager);
 
-    if (!typeMgr.init(options.getInputFiles(), options.getExtraInputFiles()))
+    if (!typeMgr->init(options.getInputFiles(), options.getExtraInputFiles()))
     {
         fprintf(stderr, "%s : init registries failed, check your registry files.\n", options.getProgramName().getStr());
         exit(99);
@@ -157,7 +158,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (options.isValid("-B"))
     {
-        typeMgr.setBase(options.getOption("-B"));
+        typeMgr->setBase(options.getOption("-B"));
     }
 
     try

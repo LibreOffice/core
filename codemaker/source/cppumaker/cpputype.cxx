@@ -27,6 +27,7 @@
 
 #include "registry/reader.hxx"
 #include "rtl/alloc.h"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.hxx"
 
@@ -151,7 +152,7 @@ bool isBootstrapType(rtl::OString const & name) {
 //*************************************************************************
 CppuType::CppuType(typereg::Reader& typeReader,
                    const OString& typeName,
-                   const TypeManager& typeMgr)
+                   rtl::Reference< TypeManager > const & typeMgr)
     : m_inheritedMemberCount(0)
     , m_cppuTypeLeak(false)
     , m_cppuTypeDynamic(true)
@@ -422,7 +423,7 @@ void CppuType::addDefaultHIncludes(codemaker::cppumaker::Includes & includes)
 {
     //TODO: Only include what is really needed
     includes.addCppuMacrosHxx();
-    if (m_typeMgr.getTypeClass(m_typeName) == RT_TYPE_INTERFACE) {
+    if (m_typeMgr->getTypeClass(m_typeName) == RT_TYPE_INTERFACE) {
         includes.addReference();
     }
 }
@@ -434,7 +435,7 @@ void CppuType::addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes)
     includes.addRtlInstanceHxx();
     includes.addOslMutexHxx();
     includes.addType();
-    if (m_typeMgr.getTypeClass(m_typeName) == RT_TYPE_INTERFACE) {
+    if (m_typeMgr->getTypeClass(m_typeName) == RT_TYPE_INTERFACE) {
         includes.addReference();
     }
 }
@@ -470,10 +471,10 @@ void CppuType::dumpInitializer(
                     break;
 
                 case codemaker::UnoType::SORT_COMPLEX:
-                    switch (m_typeMgr.getTypeClass(t)) {
+                    switch (m_typeMgr->getTypeClass(t)) {
                     case RT_TYPE_ENUM:
                         {
-                            typereg::Reader reader(m_typeMgr.getTypeReader(t));
+                            typereg::Reader reader(m_typeMgr->getTypeReader(t));
                             OSL_ASSERT(reader.isValid());
                             out << scopedCppName(t) << "_"
                                 << rtl::OUStringToOString(
@@ -879,7 +880,7 @@ sal_uInt32 CppuType::checkInheritedMemberCount(const typereg::Reader* pReader)
     }
     if (!superType.isEmpty())
     {
-        typereg::Reader aSuperReader(m_typeMgr.getTypeReader(superType));
+        typereg::Reader aSuperReader(m_typeMgr->getTypeReader(superType));
         if ( aSuperReader.isValid() )
         {
             count = checkInheritedMemberCount(&aSuperReader);
@@ -923,7 +924,7 @@ OString CppuType::getTypeClass(const OString& type, sal_Bool bCStyle)
     if (!type.isEmpty())
     {
         typeName = type;
-        rtTypeClass = m_typeMgr.getTypeClass(typeName);
+        rtTypeClass = m_typeMgr->getTypeClass(typeName);
     } else
     {
         typeName = m_typeName;
@@ -1004,7 +1005,7 @@ void CppuType::dumpType(FileStream& o, const OString& type,
         codemaker::UnoType::decompose(
             checkRealBaseType(type, true), &seqNum, &args));
 
-    RTTypeClass typeClass = m_typeMgr.getTypeClass(relType);
+    RTTypeClass typeClass = m_typeMgr->getTypeClass(relType);
 
     if (bConst) o << "const ";
 
@@ -1074,7 +1075,7 @@ void CppuType::dumpCppuGetType(FileStream& o, const OString& type, sal_Bool bDec
 
     if (eDeclFlag == CPPUTYPEDECL_ONLYINTERFACES)
     {
-         if (m_typeMgr.getTypeClass(relType) == RT_TYPE_INTERFACE)
+         if (m_typeMgr->getTypeClass(relType) == RT_TYPE_INTERFACE)
         {
             o << indent() << "::cppu::UnoType< ";
             dumpType(o, type, false, false, false, true);
@@ -1092,7 +1093,7 @@ void CppuType::dumpCppuGetType(FileStream& o, const OString& type, sal_Bool bDec
         } else
         {
             if (eDeclFlag == CPPUTYPEDECL_NOINTERFACES &&
-                m_typeMgr.getTypeClass(relType) == RT_TYPE_INTERFACE)
+                m_typeMgr->getTypeClass(relType) == RT_TYPE_INTERFACE)
                 return;
 
             o << indent() << "::cppu::UnoType< ";
@@ -1146,7 +1147,7 @@ bool CppuType::passByReference(rtl::OString const & unoType) {
         return true;
 
     case codemaker::UnoType::SORT_COMPLEX:
-        return m_typeMgr.getTypeClass(type) != RT_TYPE_ENUM;
+        return m_typeMgr->getTypeClass(type) != RT_TYPE_ENUM;
     }
 }
 
@@ -1156,12 +1157,12 @@ OString CppuType::resolveTypedefs(const OString& type) const
 
     RegistryKey     key;
     RTTypeClass     typeClass;
-    sal_Bool        isTypeDef = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
+    sal_Bool        isTypeDef = (m_typeMgr->getTypeClass(baseType) == RT_TYPE_TYPEDEF);
     typereg::Reader reader;
 
     while (isTypeDef)
     {
-        reader = m_typeMgr.getTypeReader(baseType);
+        reader = m_typeMgr->getTypeReader(baseType);
 
         if (reader.isValid())
         {
@@ -1188,12 +1189,12 @@ OString CppuType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOn
 
     RegistryKey     key;
     RTTypeClass     typeClass;
-    sal_Bool        mustBeChecked = (m_typeMgr.getTypeClass(baseType) == RT_TYPE_TYPEDEF);
+    sal_Bool        mustBeChecked = (m_typeMgr->getTypeClass(baseType) == RT_TYPE_TYPEDEF);
     typereg::Reader reader;
 
     while (mustBeChecked)
     {
-        reader = m_typeMgr.getTypeReader(baseType);
+        reader = m_typeMgr->getTypeReader(baseType);
 
         if (reader.isValid())
         {
@@ -1359,7 +1360,7 @@ void dumpDeprecation(FileStream & o, bool deprecated) {
 
 InterfaceType::InterfaceType(typereg::Reader& typeReader,
                               const OString& typeName,
-                             const TypeManager& typeMgr)
+                             rtl::Reference< TypeManager > const & typeMgr)
     : CppuType(typeReader, typeName, typeMgr)
 {
     m_inheritedMemberCount = 0;
@@ -1865,7 +1866,9 @@ namespace {
 
 class BaseOffset {
 public:
-    BaseOffset(TypeManager const & theManager, typereg::Reader const & reader);
+    BaseOffset(
+        rtl::Reference< TypeManager > const & theManager,
+        typereg::Reader const & reader);
 
     sal_Int32 get() const { return offset; }
 
@@ -1874,13 +1877,14 @@ private:
 
     void calculate(typereg::Reader const & reader);
 
-    TypeManager const & manager;
+    rtl::Reference< TypeManager > manager;
     std::set< rtl::OString > set;
     sal_Int32 offset;
 };
 
 BaseOffset::BaseOffset(
-    TypeManager const & theManager, typereg::Reader const & reader):
+    rtl::Reference< TypeManager > const & theManager,
+    typereg::Reader const & reader):
     manager(theManager)
 {
     offset = 0;
@@ -1890,7 +1894,7 @@ BaseOffset::BaseOffset(
 void BaseOffset::calculateBases(typereg::Reader const & reader) {
     for (sal_Int16 i = 0; i < reader.getSuperTypeCount(); ++i) {
         typereg::Reader super(
-            manager.getTypeReader(
+            manager->getTypeReader(
                 rtl::OUStringToOString(
                     reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8)));
         if (super.isValid()) {
@@ -2323,7 +2327,7 @@ sal_Int32 InterfaceType::dumpAttributeExceptionTypeNames(
 //*************************************************************************
 ConstantsType::ConstantsType(typereg::Reader& typeReader,
                              const OString& typeName,
-                             const TypeManager& typeMgr)
+                             rtl::Reference< TypeManager > const & typeMgr)
     : CppuType(typeReader, typeName, typeMgr)
 {
 }
@@ -2441,7 +2445,7 @@ sal_Bool ConstantsType::dumpHxxFile(
 //*************************************************************************
 ModuleType::ModuleType(typereg::Reader& typeReader,
                        const OString& typeName,
-                       const TypeManager& typeMgr)
+                       rtl::Reference< TypeManager > const & typeMgr)
     : ConstantsType(typeReader, typeName, typeMgr)
 {
 }
@@ -2481,7 +2485,7 @@ void dumpTypeParameterName(FileStream & out, rtl::OString const & name) {
 
 StructureType::StructureType(typereg::Reader& typeReader,
                               const OString& typeName,
-                             const TypeManager& typeMgr)
+                             rtl::Reference< TypeManager > const & typeMgr)
     : CppuType(typeReader, typeName, typeMgr)
 {
 }
@@ -3086,7 +3090,7 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
 
     if (!superType.isEmpty())
     {
-        typereg::Reader aSuperReader(m_typeMgr.getTypeReader(superType));
+        typereg::Reader aSuperReader(m_typeMgr->getTypeReader(superType));
 
         if (aSuperReader.isValid())
         {
@@ -3230,7 +3234,7 @@ void StructureType::dumpTemplateParameters(FileStream & out) const {
 //*************************************************************************
 ExceptionType::ExceptionType(typereg::Reader& typeReader,
                               const OString& typeName,
-                             const TypeManager& typeMgr)
+                             rtl::Reference< TypeManager > const & typeMgr)
     : CppuType(typeReader, typeName, typeMgr)
 {
 }
@@ -3527,7 +3531,7 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
 
     if (!superType.isEmpty())
     {
-        typereg::Reader aSuperReader(m_typeMgr.getTypeReader(superType));
+        typereg::Reader aSuperReader(m_typeMgr->getTypeReader(superType));
 
         if (aSuperReader.isValid())
         {
@@ -3580,7 +3584,7 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
 //*************************************************************************
 EnumType::EnumType(typereg::Reader& typeReader,
                     const OString& typeName,
-                   const TypeManager& typeMgr)
+                   rtl::Reference< TypeManager > const & typeMgr)
     : CppuType(typeReader, typeName, typeMgr)
 {
 }
@@ -3767,7 +3771,7 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
 //*************************************************************************
 TypeDefType::TypeDefType(typereg::Reader& typeReader,
                              const OString& typeName,
-                            const TypeManager& typeMgr)
+                         rtl::Reference< TypeManager > const & typeMgr)
     : CppuType(typeReader, typeName, typeMgr)
 {
 }
@@ -4208,7 +4212,7 @@ void ServiceType::dumpCatchClauses(
 //*************************************************************************
 
 bool SingletonType::isInterfaceBased() {
-    return (m_typeMgr.getTypeClass(
+    return (m_typeMgr->getTypeClass(
                 rtl::OUStringToOString(
                     m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8)))
         == RT_TYPE_INTERFACE;
@@ -4285,19 +4289,19 @@ sal_Bool SingletonType::dumpHxxFile(
 // produceType
 //*************************************************************************
 bool produceType(const OString& typeName,
-                 TypeManager const & typeMgr,
+                 rtl::Reference< TypeManager > const & typeMgr,
                  codemaker::GeneratedTypeSet & generated,
                  CppuOptions* pOptions)
     throw( CannotDumpException )
 {
-    if (typeName == "/" || typeName == typeMgr.getBase() ||
+    if (typeName == "/" || typeName == typeMgr->getBase() ||
         TypeManager::isBaseType(typeName) || generated.contains(typeName))
     {
         return true;
     }
 
     sal_Bool bIsExtraType = sal_False;
-    typereg::Reader reader(typeMgr.getTypeReader(typeName, &bIsExtraType));
+    typereg::Reader reader(typeMgr->getTypeReader(typeName, &bIsExtraType));
     if (bIsExtraType) {
         generated.add(typeName);
         return true;
@@ -4419,14 +4423,14 @@ bool produceType(const OString& typeName,
 }
 
 bool produceType(RegistryKey& rTypeKey, bool bIsExtraType,
-                     TypeManager const & typeMgr,
+                 rtl::Reference< TypeManager > const & typeMgr,
                      codemaker::GeneratedTypeSet & generated,
                      CppuOptions* pOptions)
     throw( CannotDumpException )
 {
-    OString typeName = typeMgr.getTypeName(rTypeKey);
+    OString typeName = typeMgr->getTypeName(rTypeKey);
 
-    if (typeName == "/" ||typeName == typeMgr.getBase() ||
+    if (typeName == "/" ||typeName == typeMgr->getBase() ||
         TypeManager::isBaseType(typeName) || generated.contains(typeName))
     {
         return true;
@@ -4437,7 +4441,7 @@ bool produceType(RegistryKey& rTypeKey, bool bIsExtraType,
         return true;
     }
 
-    typereg::Reader reader(typeMgr.getTypeReader(rTypeKey));
+    typereg::Reader reader(typeMgr->getTypeReader(rTypeKey));
     if (!reader.isValid()) {
         return false;
     }

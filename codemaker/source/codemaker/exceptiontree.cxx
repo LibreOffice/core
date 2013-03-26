@@ -47,7 +47,8 @@ void ExceptionTreeNode::clearChildren() {
     children.clear();
 }
 
-void ExceptionTree::add(rtl::OString const & name, TypeManager const & manager)
+void ExceptionTree::add(
+    rtl::OString const & name, rtl::Reference< TypeManager > const & manager)
     throw( CannotDumpException )
 {
     typedef std::vector< rtl::OString > OStringList;
@@ -59,7 +60,7 @@ void ExceptionTree::add(rtl::OString const & name, TypeManager const & manager)
             break;
         }
         stringlist.push_back(n);
-        typereg::Reader reader(manager.getTypeReader(n));
+        typereg::Reader reader(manager->getTypeReader(n));
         if (!reader.isValid())
             throw CannotDumpException(
                 ::rtl::OString("Unknown type '" + n.replace('/', '.')

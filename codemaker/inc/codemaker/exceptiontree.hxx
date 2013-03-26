@@ -21,6 +21,7 @@
 #define INCLUDED_CODEMAKER_EXCEPTIONTREE_HXX
 
 #include "codemaker/global.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 
 #include <vector>
@@ -92,7 +93,9 @@ public:
        if different calls to this member function use different, incompatible
        type managers
      */
-    void add(rtl::OString const & name, TypeManager const & manager)
+    void add(
+        rtl::OString const & name,
+        rtl::Reference< TypeManager > const & manager)
         throw( CannotDumpException );
 
     /**

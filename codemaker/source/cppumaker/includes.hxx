@@ -21,6 +21,7 @@
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 
 #include "codemaker/dependencies.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 class FileStream;
@@ -31,7 +32,7 @@ namespace codemaker { namespace cppumaker {
 class Includes {
 public:
     Includes(
-        TypeManager const & manager,
+        rtl::Reference< TypeManager > const & manager,
         codemaker::Dependencies const & dependencies, bool hpp);
 
     ~Includes();
@@ -70,7 +71,7 @@ private:
 
     bool isInterfaceType(rtl::OString const & registryType) const;
 
-    TypeManager const & m_manager;
+    rtl::Reference< TypeManager > m_manager;
     codemaker::Dependencies::Map m_map;
     bool m_hpp;
     bool m_includeCassert;

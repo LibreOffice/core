@@ -503,7 +503,7 @@ void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & opt
 
 void generateMethodBodies(std::ostream& o,
          ProgramOptions const & options,
-         TypeManager const & manager,
+         rtl::Reference< TypeManager > const & manager,
          const boost::unordered_set< OString, OStringHash >& interfaces,
          const OString& indentation, bool usepropertymixin)
 {
@@ -559,7 +559,7 @@ void generateMethodBodies(std::ostream& o,
                     continue;
                 }
             }
-            typereg::Reader reader(manager.getTypeReader(type.replace('.','/')));
+            typereg::Reader reader(manager->getTypeReader(type.replace('.','/')));
             printMethods(o, options, manager, reader, generated, "_",
                          indentation, true, usepropertymixin);
         }
@@ -575,7 +575,7 @@ static const char* propcomment=
 
 void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
-         TypeManager const & manager, const OString & classname,
+         rtl::Reference< TypeManager > const & manager, const OString & classname,
          const boost::unordered_set< OString, OStringHash >& services,
          const boost::unordered_set< OString, OStringHash >& interfaces)
 {
@@ -720,7 +720,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
 void generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
-         TypeManager const & manager,
+         rtl::Reference< TypeManager > const & manager,
          const OString & classname,
          const boost::unordered_set< OString, OStringHash >& services,
          const boost::unordered_set< OString, OStringHash >& interfaces,
@@ -840,7 +840,7 @@ void generateClassDefinition(std::ostream& o,
 }
 
 void generateSkeleton(ProgramOptions const & options,
-                      TypeManager const & manager,
+                      rtl::Reference< TypeManager > const & manager,
                       std::vector< OString > const & types)
 {
     boost::unordered_set< OString, OStringHash > interfaces;
