@@ -26,7 +26,6 @@
 #include <list>
 
 class RscTypCont;
-class DirEntry;
 
 /****************** T Y P E S ********************************************/
 
@@ -83,8 +82,8 @@ private:
                                       FILE* pSysListFile );
     void            PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                        const WriteRcContext& rContext,
-                                       const DirEntry& rSrsInPath,
-                                       const DirEntry& rSrsOutPath );
+                                       const OUString& rSrsInPath,
+                                       const OUString& rSrsOutPath );
 
 public:
     RscTypCont*     pTC;        // String und Id-Verwalter

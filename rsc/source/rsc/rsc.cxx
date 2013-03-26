@@ -35,7 +35,6 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <rscerror.h>
 #include <rsctop.hxx>
@@ -132,11 +131,8 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                     ;
                 if( *pEqual )
                 {
-                    const rtl::OString aSPath( pEqual + 1 );
-                    DirEntry            aSDir(rtl::OStringToOUString(aSPath, RTL_TEXTENCODING_ASCII_US));
-
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
-                        rtl::OUStringToOString(aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US) ) );
+                        OString( pEqual + 1 ) ) );
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
@@ -160,7 +156,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 nCommands |= INCLUDE_FLAG;
                 rtl::OStringBuffer aBuffer(aPath);
                 if (aBuffer.getLength())
-                    aBuffer.append(rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US));
+                    aBuffer.append(SAL_PATHSEPARATOR);
                 aBuffer.append((*ppStr) + 2);
                 aPath = aBuffer.makeStringAndClear();
             }
@@ -177,14 +173,11 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 // ignore empty -lip= arguments that we get lots of these days
                 if (!aSysSearchDir.isEmpty())
                 {
-                    DirEntry aSysDir(rtl::OStringToOUString(aSysSearchDir, RTL_TEXTENCODING_ASCII_US));
-                    m_aOutputFiles.back().aSysSearchDirs.push_back(
-                        rtl::OUStringToOString(aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US) );
+                    m_aOutputFiles.back().aSysSearchDirs.push_back(aSysSearchDir);
                     rtl::OString aLangSearchPath = m_aOutputFiles.back().aLangSearchPath;
                     if( !aLangSearchPath.isEmpty() )
                     {
-                        aLangSearchPath = aLangSearchPath +
-                        rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US);
+                        aLangSearchPath = aLangSearchPath + OString( SAL_PATHSEPARATOR );
                     }
                     aLangSearchPath = aLangSearchPath + aSysSearchDir;
 
@@ -280,7 +273,10 @@ OString RscCmdLine::substitutePaths( const OString& rIn )
         aRet.append( "%" );
         nIndex = last_match->second.getLength();
     }
-    aRet.append( rIn.copy( nIndex ) );
+    if( rIn.match( "/", nIndex ) )
+        aRet.append( rIn.copy( nIndex ) );
+    else
+        aRet.append( rIn.copy( nIndex - 1 ) );
 
     return aRet.makeStringAndClear();
 }
@@ -446,15 +442,7 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
                 // Kein Pfad und Include Datei
                 if( pFNTmp && !pFNTmp->bLoaded )
                 {
-                    rtl::OUString aUniFileName(rtl::OStringToOUString(pFNTmp->aFileName, RTL_TEXTENCODING_ASCII_US));
-                    DirEntry aFullName(aUniFileName);
-                    if ( aFullName.Find(rtl::OStringToOUString(pCL->aPath, RTL_TEXTENCODING_ASCII_US)) )
-                    {
-                        pFNTmp->aPathName = rtl::OUStringToOString(
-                            aFullName.GetFull(), RTL_TEXTENCODING_ASCII_US);
-                    }
-                    else
-                        aError = ERR_OPENFILE;
+                   pFNTmp->aPathName = pFNTmp->aFileName;
                 }
             };
         };
@@ -491,20 +479,20 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
             pFName->bLoaded = sal_False; //bei Fehler nicht geladenen
         else
         {
-            rtl::OUString aTmpName(rtl::OStringToOUString(::GetTmpFileName(), RTL_TEXTENCODING_ASCII_US));
-            DirEntry    aTmpPath( aTmpName ), aSrsPath(rtl::OStringToOUString(pFName->aPathName, RTL_TEXTENCODING_ASCII_US));
+            OUString aTmpPath;
+            OUString aSrsPath = OStringToOUString( pFName->aPathName, RTL_TEXTENCODING_ASCII_US );
 
-            aTmpPath.ToAbs();
-            aSrsPath.ToAbs();
+            osl::FileBase::createTempFile( 0, 0, &aTmpPath );
+            osl::FileBase::getFileURLFromSystemPath( aSrsPath, aSrsPath );
 
             if( pContext && pOutputFile )
                 PreprocessSrsFile( *pOutputFile, *pContext, aSrsPath, aTmpPath );
             else
-                aSrsPath.CopyTo( aTmpPath, FSYS_ACTION_COPYFILE );
+                osl::File::copy( aSrsPath, aTmpPath );
 
-            rtl::OString aParseFile(rtl::OUStringToOString(aTmpPath.GetFull(),
-                RTL_TEXTENCODING_ASCII_US));
-            finput = fopen(aParseFile.getStr(), "r");
+            OUString aParseFile;
+            osl::FileBase::getSystemPathFromFileURL( aTmpPath, aParseFile );
+            finput = fopen(OUStringToOString(aParseFile, RTL_TEXTENCODING_ASCII_US).getStr(), "r");
 
             if( !finput )
             {
@@ -516,7 +504,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                 RscFileInst aFileInst( pTC, lFileKey, lFileKey, finput );
 
                 pTC->pEH->StdOut( "reading file ", RscVerbosityVerbose );
-                pTC->pEH->StdOut( aParseFile.getStr(), RscVerbosityVerbose );
+                pTC->pEH->StdOut( OUStringToOString(aParseFile, RTL_TEXTENCODING_ASCII_US).getStr(), RscVerbosityVerbose );
                 pTC->pEH->StdOut( " ", RscVerbosityVerbose );
 
                 aError = ::parser( &aFileInst );
@@ -526,7 +514,7 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                 fclose( finput );
             };
 
-            aTmpPath.Kill();
+            osl::File::remove( aTmpPath );
         };
     };
 
@@ -637,8 +625,8 @@ ERRTYPE RscCompiler::Link()
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
 
             // Schreibe Datei
-            sal_Char cSearchDelim = rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US)[0];
-            sal_Char cAccessDelim = rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US)[0];
+            sal_Char cSearchDelim = SAL_PATHSEPARATOR;
+            sal_Char cAccessDelim = SAL_PATHDELIMITER;
             pTC->ChangeLanguage( it->aLangName );
             pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
             pTC->ClearSysNames();
@@ -778,22 +766,28 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
         while( ( aDirIter != rOutputFile.aSysSearchDirs.end() ) && !bFound )
         {
-            const DirEntry  aPath( rtl::OStringToOUString(*aDirIter, RTL_TEXTENCODING_ASCII_US) );
-            DirEntry        aRelPath( aPath );
-            DirEntry        aAbsPath( aRelPath += DirEntry(rtl::OStringToOUString(*aFileIter, RTL_TEXTENCODING_ASCII_US)) );
+            const OString aSysPath = *aDirIter + "/" + *aFileIter;
+            OUString aAbsPath = OStringToOUString( aSysPath, RTL_TEXTENCODING_ASCII_US );
 
-            aAbsPath.ToAbs();
-            const FileStat aFS( aAbsPath.GetFull() );
+
+            osl::FileBase::getFileURLFromSystemPath( aAbsPath, aAbsPath );
+            osl::DirectoryItem aDirectoryItem;
+            bool bFile = false;
+            if (osl::DirectoryItem::E_None == osl::DirectoryItem::get( aAbsPath, aDirectoryItem ))
+            {
+                osl::FileStatus aFS(osl_FileStatus_Mask_Type);
+                if (osl::DirectoryItem::E_None == aDirectoryItem.getFileStatus( aFS ))
+                    bFile = aFS.isRegular();
+            }
 
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Searching image: %s\n", rtl::OUStringToOString(aRelPath.GetFull(), RTL_TEXTENCODING_ASCII_US).getStr() );
+            fprintf( stderr, "Searching image: %s\n", aSysPath.getStr() );
 #endif
 
-            if( aFS.IsKind( FSYS_KIND_FILE ) )
+            if( bFile )
             {
                 std::list< std::pair< OString, OString > >::const_iterator  aReplIter( rContext.pCmdLine->m_aReplacements.begin() );
-                String                                                      aStr( aRelPath.GetFull() );
-                OString                                                     aRelPathStr( aStr.GetBuffer(), aStr.Len(), RTL_TEXTENCODING_ASCII_US );
+                OString aRelPathStr( aSysPath );
 
                 while( ( aReplIter != rContext.pCmdLine->m_aReplacements.end() ) && !bFound )
                 {
@@ -820,11 +814,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
                 if( bFound && pSysListFile )
                 {
-                    DirEntry    aSysPath(rtl::OStringToOUString(*aDirIter, RTL_TEXTENCODING_ASCII_US));
-                    String      aSysPathFull( ( aSysPath += DirEntry( rtl::OStringToOUString( *aFileIter, RTL_TEXTENCODING_ASCII_US ) ) ).GetFull() );
-                    OString     aSysPathStr( aSysPathFull.GetBuffer(), aSysPathFull.Len(), RTL_TEXTENCODING_ASCII_US );
-
-                    fprintf( pSysListFile, "%s\n", rContext.pCmdLine->substitutePaths( aSysPathStr ).getStr() );
+                    fprintf( pSysListFile, "%s\n", rContext.pCmdLine->substitutePaths( aSysPath ).getStr() );
                 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -843,11 +833,11 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
 void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                      const WriteRcContext& rContext,
-                                     const DirEntry& rSrsInPath,
-                                     const DirEntry& rSrsOutPath )
+                                     const OUString& rSrsInPath,
+                                     const OUString& rSrsOutPath )
 {
-    SvFileStream                aIStm( rSrsInPath.GetFull(), STREAM_READ );
-    SvFileStream                aOStm( rSrsOutPath.GetFull(), STREAM_WRITE | STREAM_TRUNC );
+    SvFileStream                aIStm( rSrsInPath, STREAM_READ );
+    SvFileStream                aOStm( rSrsOutPath, STREAM_WRITE | STREAM_TRUNC );
     ::std::vector< rtl::OString > aMissingImages;
     FILE*                       pSysListFile = rContext.aOutputSysList.isEmpty() ? NULL : fopen( rContext.aOutputSysList.getStr(), "ab" );
 
