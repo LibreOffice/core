@@ -24,8 +24,5 @@ else
 $(eval $(call gb_ExternalPackage_add_files,postgresql,lib,\
 	src/interfaces/libpq/libpq.a \
 ))
-$(eval $(call gb_ExternalPackage_add_files,postgresql,inc/postgresql,\
-	src/interfaces/libpq/libpq-flags.mk \
-))
 endif
 # vim: set noet sw=4 ts=4:

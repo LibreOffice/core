@@ -163,6 +163,7 @@ sub prune_redundant_deps($)
 sub create_lib_module_map()
 {
     my %l2m;
+    $l2m{'merged'} = 'merged';
     for (glob($src_root."/*/Library_*.mk"))
     {
         /.*\/(.*)\/Library_(.*)\.mk/;
