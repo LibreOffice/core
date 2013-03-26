@@ -43,8 +43,6 @@ using namespace css::beans;
 class SVT_DLLPUBLIC GraphicExportOptionsDialog : public ModalDialog
 {
 private:
-    const Reference<XComponent>& mxSourceDocument;
-
     NumericField*    mpWidth;
     NumericField*    mpHeight;
     ComboBox*        mpResolution;

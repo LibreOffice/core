@@ -21,7 +21,6 @@
 
 GraphicExportOptionsDialog::GraphicExportOptionsDialog(Window* pWindow, const Reference<XComponent>& rxSourceDocument) :
     ModalDialog(pWindow, "GraphicExporter", "svt/ui/GraphicExportOptionsDialog.ui"),
-    mxSourceDocument(rxSourceDocument),
     mResolution(96.0),
     mRenderer(rxSourceDocument)
 {
