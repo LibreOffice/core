@@ -192,6 +192,8 @@ public:
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
 
+    sal_uInt16 getNextItemId () const;
+
     long GetItemWidth() const { return mnItemWidth; }
 
     long GetItemHeight() const { return mnItemHeight; }
