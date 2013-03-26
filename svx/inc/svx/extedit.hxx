@@ -24,10 +24,10 @@
 #ifndef _EXTEDIT_HXX
 #define _EXTEDIT_HXX
 
+#include <svtools/grfmgr.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <vcl/graph.hxx>
-#include <svtools/grfmgr.hxx>
 #include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>
 
@@ -35,14 +35,13 @@ class SVX_DLLPUBLIC ExternalToolEdit
 {
 public:
     GraphicObject* m_pGraphicObject;
-    rtl::OUString m_aFileName;
+    OUString m_aFileName;
 
     ExternalToolEdit();
     virtual ~ExternalToolEdit();
 
     virtual void Update( Graphic& aGraphic ) = 0;
     void Edit( GraphicObject *pGraphic );
-
 
     DECL_LINK( StartListeningEvent, void *pEvent );
 
