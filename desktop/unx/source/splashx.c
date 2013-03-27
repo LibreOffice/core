@@ -36,8 +36,6 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
-#define USE_LIBPNG
-
 #include "osl/endian.h"
 #include <fcntl.h>
 #include <stdint.h>
