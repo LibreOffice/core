@@ -280,7 +280,7 @@ RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	$(if $(and $(HELP_CONFIGDIR),$(HELP_INDEXED)),-add $(HELP_MODULE).cfg $(HELP_CONFIGDIR)/$(HELP_LANG)/$(HELP_MODULE).cfg) \
 	$(if $(HELP_TREE),-add $(HELP_MODULE).tree $(HELP_TREE)) \
 	$(foreach file,$(HELP_ADD_FILES),-add $(notdir $(file)) $(file)) \
-	$(foreach extra,$(HELP_EXTRA_ADD_FILES),-add $(subst :, ,$(extra))) \
+	$(foreach extra,$(HELP_EXTRA_ADD_FILES),-add $(subst $(COMMA), ,$(extra))) \
 	$(HELP_FILES) \
 	$(if $(HELP_LINKED_MODULES),\
 		$(shell cat $(foreach module,$(HELP_LINKED_MODULES),$(call gb_HelpTarget_get_filelist,$(module)))) \
@@ -378,7 +378,7 @@ endef
 #
 # gb_HelpLinkTarget_add_renamed_file target filename file
 define gb_HelpLinkTarget_add_renamed_file
-$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES += $(strip $(2)):$(strip $(3))
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES += $(strip $(2)),$(strip $(3))
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(3)
 
 endef
