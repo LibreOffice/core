@@ -58,15 +58,13 @@ class FmFilterAdapter;
 //========================================================================
 class FmFilterData
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
     FmParentData*           m_pParent;
     OUString         m_aText;
 
 public:
     TYPEINFO();
-    FmFilterData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent = NULL, const OUString& rText = OUString())
-        :m_xORB( _rxFactory )
-        ,m_pParent( pParent )
+    FmFilterData(FmParentData* pParent = NULL, const OUString& rText = OUString())
+        :m_pParent( pParent )
         ,m_aText( rText )
     {}
     virtual ~FmFilterData(){}
@@ -86,8 +84,8 @@ protected:
 
 public:
     TYPEINFO();
-    FmParentData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent, const OUString& rText)
-        : FmFilterData(_rxFactory,pParent, rText)
+    FmParentData(FmParentData* pParent, const OUString& rText)
+        : FmFilterData(pParent, rText)
     {}
     virtual ~FmParentData();
 
@@ -104,10 +102,10 @@ class FmFormItem : public FmParentData
 public:
     TYPEINFO();
 
-    FmFormItem(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* _pParent,
+    FmFormItem(  FmParentData* _pParent,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & _xController,
                  const OUString& _rText)
-        :FmParentData( _rxFactory, _pParent, _rText )
+        :FmParentData( _pParent, _rText )
         ,m_xController( _xController )
         ,m_xFilterController( _xController, ::com::sun::star::uno::UNO_QUERY_THROW )
     {
@@ -127,8 +125,8 @@ class FmFilterItems : public FmParentData
 {
 public:
     TYPEINFO();
-    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, OUString()){}
-    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
+    FmFilterItems() : FmParentData(NULL, OUString()) {}
+    FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
 
     FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
     virtual Image GetImage() const;
@@ -143,7 +141,6 @@ class FmFilterItem : public FmFilterData
 public:
     TYPEINFO();
     FmFilterItem(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
         FmFilterItems* pParent,
         const OUString& aFieldName,
         const OUString& aCondition,
@@ -165,13 +162,12 @@ class FmFilterModel : public FmParentData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >           m_xControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xORB;
     FmFilterAdapter*        m_pAdapter;
     FmFilterItems*          m_pCurrentItems;
 
 public:
     TYPEINFO();
-    FmFilterModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+    FmFilterModel();
     virtual ~FmFilterModel();
 
     void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xCurrent);
@@ -183,7 +179,6 @@ public:
     FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? (FmFormItem*)m_pCurrentItems->GetParent() : NULL;}
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
     void SetCurrentItems(FmFilterItems* pCurrent);
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & GetControllers() const {return m_xControllers;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & GetCurrentController() const {return m_xController;}

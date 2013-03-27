@@ -202,12 +202,11 @@ Image FmFilterItems::GetImage() const
 //========================================================================
 TYPEINIT1(FmFilterItem, FmFilterData);
 //------------------------------------------------------------------------
-FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
-                            FmFilterItems* pParent,
+FmFilterItem::FmFilterItem( FmFilterItems* pParent,
                             const OUString& aFieldName,
                             const OUString& aText,
                             const sal_Int32 _nComponentIndex )
-          :FmFilterData(_rxFactory,pParent, aText)
+          :FmFilterData(pParent, aText)
           ,m_aFieldName(aFieldName)
           ,m_nComponentIndex( _nComponentIndex )
 {
@@ -465,7 +464,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
         // searching the component by field name
         OUString aFieldName( lcl_getLabelName_nothrow( xFilterController->getFilterComponent( _Event.FilterComponent ) ) );
 
-        pFilterItem = new FmFilterItem( m_pModel->getORB(), pFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent );
+        pFilterItem = new FmFilterItem( pFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent );
         m_pModel->Insert(pFilter->GetChildren().end(), pFilterItem);
     }
 
@@ -532,7 +531,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
 
     const ::std::vector< FmFilterData* >::iterator insertPos = pFormItem->GetChildren().begin() + nInsertPos;
 
-    FmFilterItems* pFilterItems = new FmFilterItems( m_pModel->getORB(), pFormItem, String( SVX_RES( RID_STR_FILTER_FILTER_OR ) ) );
+    FmFilterItems* pFilterItems = new FmFilterItems( pFormItem, String( SVX_RES( RID_STR_FILTER_FILTER_OR ) ) );
     m_pModel->Insert( insertPos, pFilterItems );
 }
 
@@ -541,10 +540,9 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
 //========================================================================
 TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
-FmFilterModel::FmFilterModel(const Reference< XMultiServiceFactory >& _rxFactory)
-              :FmParentData(_rxFactory,NULL, OUString())
-              ,OSQLParserClient(comphelper::getComponentContext(_rxFactory))
-              ,m_xORB(_rxFactory)
+FmFilterModel::FmFilterModel()
+              :FmParentData(NULL, OUString())
+              ,OSQLParserClient(comphelper::getProcessComponentContext())
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)
 {
@@ -630,7 +628,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             OSL_VERIFY( xFormProperties->getPropertyValue( FM_PROP_NAME ) >>= aName );
 
             // Insert a new item for the form
-            FmFormItem* pFormItem = new FmFormItem( m_xORB, pParent, xController, aName );
+            FmFormItem* pFormItem = new FmFormItem( pParent, xController, aName );
             Insert( pParent->GetChildren().end(), pFormItem );
 
             Reference< XFilterController > xFilterController( pFormItem->GetFilterController(), UNO_SET_THROW );
@@ -645,7 +643,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
                 )
             {
                 // we always display one row, even if there's no term to be displayed
-                FmFilterItems* pFilterItems = new FmFilterItems( m_xORB, pFormItem, aTitle );
+                FmFilterItems* pFilterItems = new FmFilterItems( pFormItem, aTitle );
                 Insert( pFormItem->GetChildren().end(), pFilterItems );
 
                 const Sequence< OUString >& rDisjunction( *pConjunctionTerm );
@@ -665,7 +663,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
                     const OUString sDisplayName( lcl_getLabelName_nothrow( xFilterControl ) );
 
                     // insert a new entry
-                    FmFilterItem* pANDCondition = new FmFilterItem( m_xORB, pFilterItems, sDisplayName, *pDisjunctiveTerm, nComponentIndex );
+                    FmFilterItem* pANDCondition = new FmFilterItem( pFilterItems, sDisplayName, *pDisjunctiveTerm, nComponentIndex );
                     Insert( pFilterItems->GetChildren().end(), pANDCondition );
                 }
 
@@ -888,7 +886,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUStr
         // obtain a number formatter for this connection
         // TODO: shouldn't this be cached?
         Reference< XNumberFormatsSupplier > xFormatSupplier = aStaticTools.getNumberFormats( xConnection, sal_True );
-        Reference< XNumberFormatter > xFormatter( NumberFormatter::create( comphelper::getComponentContext(m_xORB) ), UNO_QUERY_THROW );
+        Reference< XNumberFormatter > xFormatter( NumberFormatter::create( comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
 
         // get the field (database column) which the item is responsible for
@@ -1161,7 +1159,7 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
         );
     }
 
-    m_pModel = new FmFilterModel(comphelper::getProcessServiceFactory());
+    m_pModel = new FmFilterModel();
     StartListening( *m_pModel );
 
     EnableInplaceEditing( sal_True );
@@ -1619,7 +1617,7 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
         String aText = pLookupItem->GetText();
         if ( !pFilterItem )
         {
-            pFilterItem = new FmFilterItem( m_pModel->getORB(), _pTargetItems, pLookupItem->GetFieldName(), aText, pLookupItem->GetComponentIndex() );
+            pFilterItem = new FmFilterItem( _pTargetItems, pLookupItem->GetFieldName(), aText, pLookupItem->GetComponentIndex() );
             m_pModel->Append( _pTargetItems, pFilterItem );
         }
 
