@@ -590,6 +590,42 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
     return false;
 }
 
+bool TemplateLocalView::copyFrom(const OUString &rPath)
+{
+    assert(mnCurRegionId);
+
+    TemplateContainerItem *pRegItem = maRegions[mnCurRegionId-1];
+
+    sal_uInt16 nId = getNextItemId();
+    sal_uInt16 nDocId = 0;
+    sal_uInt16 nRegionId = pRegItem->mnRegionId;
+
+    String aPath(rPath);
+
+    if (!pRegItem->maTemplates.empty())
+        nDocId = (pRegItem->maTemplates.back()).nDocId+1;
+
+    if (!mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
+        return false;
+
+    TemplateItemProperties aTemplate;
+    aTemplate.aIsFolder = false;
+    aTemplate.nId = nId;
+    aTemplate.nDocId = nDocId;
+    aTemplate.nRegionId = nRegionId;
+    aTemplate.aName = aPath;
+    aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,
+                                                                TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                TEMPLATE_THUMBNAIL_MAX_HEIGHT);
+    aTemplate.aPath = rPath;
+
+    pRegItem->maTemplates.push_back(aTemplate);
+
+    insertItem(aTemplate);
+
+    return true;
+}
+
 bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &rPath)
 {
     sal_uInt16 nId = 1;

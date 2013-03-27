@@ -884,15 +884,41 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
         if (aFiles.hasElements())
         {
-            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-            for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+            if (!maSelFolders.empty())
             {
-                OUString aTemplateList;
-                TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
+                //Import to the selected regions
+                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+                {
+                    OUString aTemplateList;
+                    TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
 
+                    for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
+                    {
+                        if(!maView->copyFrom(pFolder,aFiles[i]))
+                        {
+                            if (aTemplateList.isEmpty())
+                                aTemplateList = aFiles[i];
+                            else
+                                aTemplateList = aTemplateList + "\n" + aFiles[i];
+                        }
+                    }
+
+                    if (!aTemplateList.isEmpty())
+                    {
+                        OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
+                        aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
+                        ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
+                    }
+                }
+            }
+            else
+            {
+                //Import to current region
+                OUString aTemplateList;
                 for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
                 {
-                    if(!maView->copyFrom(pFolder,aFiles[i]))
+                    if(!maView->copyFrom(aFiles[i]))
                     {
                         if (aTemplateList.isEmpty())
                             aTemplateList = aFiles[i];
@@ -904,7 +930,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 if (!aTemplateList.isEmpty())
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
-                    aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
+                    aMsg = aMsg.replaceFirst("$1",maView->getCurRegionName());
                     ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
                 }
             }

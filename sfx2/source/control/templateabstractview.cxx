@@ -144,6 +144,32 @@ TemplateAbstractView::~TemplateAbstractView ()
 {
 }
 
+void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
+{
+    const TemplateItemProperties *pCur = &rTemplate;
+
+    TemplateViewItem *pChild = new TemplateViewItem(*this);
+    pChild->mnId = pCur->nId;
+    pChild->mnDocId = pCur->nDocId;
+    pChild->mnRegionId = pCur->nRegionId;
+    pChild->maTitle = pCur->aName;
+    pChild->setPath(pCur->aPath);
+    pChild->maPreview1 = pCur->aThumbnail;
+
+    if ( pCur->aThumbnail.IsEmpty() )
+    {
+        // Use the default thumbnail if we have nothing else
+        pChild->maPreview1 = TemplateAbstractView::getDefaultThumbnail(pCur->aPath);
+    }
+
+    pChild->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
+
+    mItemList.push_back(pChild);
+
+    CalculateItemPositions();
+    Invalidate();
+}
+
 void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties> &rTemplates)
 {
     std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
