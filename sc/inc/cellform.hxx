@@ -27,7 +27,7 @@ class SvNumberFormatter;
 class Color;
 class ScDocument;
 class ScAddress;
-class ScRefCellValue;
+struct ScRefCellValue;
 
 enum ScForceTextFmt {
     ftDontForce,            // numbers as numbers
