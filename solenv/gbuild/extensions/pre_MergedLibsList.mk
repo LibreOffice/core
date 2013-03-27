@@ -70,7 +70,11 @@ gb_MERGEDLIBS := \
 	hyphen \
 	i18npool \
 	i18nutil \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),javaloader) \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),java_uno) \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),juh) \
+	$(if $(filter-out IOS,$(OS)),jvmaccess) \
 	jvmfwk \
 	lng \
 	lnth \

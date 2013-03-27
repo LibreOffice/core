@@ -87,12 +87,6 @@ $(eval $(call gb_Library_use_externals,merged,\
 ))
 endif
 
-ifneq ($(OS),IOS)
-$(eval $(call gb_Library_use_libraries,merged,\
-	jvmaccess \
-))
-endif
-
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_use_externals,merged,\
 	fontconfig \
