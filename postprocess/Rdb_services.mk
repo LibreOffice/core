@@ -21,6 +21,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	configmgr/source/configmgr \
 	cppcanvas/source/uno/mtfrenderer \
 	cui/util/cui \
+	desktop/source/deployment/deployment \
 	drawinglayer/drawinglayer \
 	dtrans/util/mcnttype \
 	embeddedobj/util/embobj \
@@ -269,7 +270,6 @@ endif # DBCONNECTIVITY
 ifeq (DESKTOP,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Rdb_add_components,services,\
-	desktop/source/deployment/deployment \
 	desktop/source/deployment/gui/deploymentgui \
 	desktop/source/migration/services/migrationoo2 \
 	desktop/source/migration/services/migrationoo3 \

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
@@ -352,11 +353,11 @@ Reference< XInterface > invokeComponentFactory(
     // It seems that the only UNO components that have
     // component_getImplementationEnvironment functions are the JDBC
     // and ADO (whatever that is) database connectivity thingies
-    // neither of which make sense on iOS (which is the only platform
-    // for which DISABLE_DYNLOADING is intended, really). So we can
-    // simoly bypass the getLibEnv() stuff and don't need to wonder
-    // how to find out what function to call at this point if
-    // statically linked.
+    // neither of which make sense on iOS and Android (which are the
+    // only platforms for which DISABLE_DYNLOADING is intended,
+    // really). So we can simply bypass the getLibEnv() stuff and
+    // don't need to wonder how to find out what function to call at
+    // this point if statically linked.
     aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 #else
     getLibEnv(lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
@@ -444,6 +445,9 @@ extern "C"
     extern void * bootstrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+#if HAVE_FEATURE_EXTENSIONS
+    extern void * deployment_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+#endif
     extern void * expwrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fastsax_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -553,6 +557,9 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "stocservices.uno.a", stocservices_component_getFactory },
 #endif
         { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
+#if HAVE_FEATURE_EXTENSIONS
+        { "libdeployment.a", deployment_component_getFactory },
+#endif
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libpackage2.a", package2_component_getFactory },
