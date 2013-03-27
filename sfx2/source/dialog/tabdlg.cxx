@@ -177,7 +177,8 @@ struct TabDlg_Impl
     {}
     ~TabDlg_Impl()
     {
-        delete(pData);
+        delete pController;
+        delete pData;
     }
 };
 
@@ -534,8 +535,6 @@ SfxTabDialog::~SfxTabDialog()
         delete pDataObject;
     }
 
-    delete pImpl->pController;
-    delete pImpl->pData;
     delete pImpl;
     delete pOutSet;
     delete pExampleSet;
