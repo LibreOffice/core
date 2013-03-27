@@ -2671,7 +2671,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     bIndexTableInitialized = true;
-    DBG_ASSERT( nNewExtended <= ZF_STANDARD_NEWEXTENDEDMAX,
+    SAL_WARN_IF( nNewExtended > ZF_STANDARD_NEWEXTENDEDMAX, "svl.numbers",
         "ImpGenerateFormats: overflow of nNewExtended standard formats" );
 
     // Now all additional format codes provided by I18N, but only if not
