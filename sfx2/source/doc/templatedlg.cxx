@@ -1185,7 +1185,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 
             if (maView->isNonRootRegionVisible())
             {
-                sal_uInt16 nRegionItemId = maView->getCurRegionId()+1;
+                sal_uInt16 nRegionItemId = maView->getRegionId(maView->getCurRegionId()-1);
 
                 if (!maView->isTemplateNameUnique(nRegionItemId,aName))
                 {
