@@ -73,6 +73,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
+#define RTL_OK 1
+
 namespace sdr { namespace table {
 
 // --------------------------------------------------------------------
@@ -731,7 +733,8 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
-        if( pDlg.get() && pDlg->Execute() )
+        // On Clicking Cancel button in Format Cells should not change Values.
+        if( pDlg.get() && ( pDlg->Execute() == RTL_OK ) )
         {
             SfxItemSet aNewSet( *(pDlg->GetOutputItemSet ()) );
 
