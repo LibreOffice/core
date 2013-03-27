@@ -1427,7 +1427,11 @@ static String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, 
                     }
                 }
                 else
-                    ScCellFormat::GetInputString( pCell, nNumFmt, aVal, *pFormatter );
+                {
+                    ScRefCellValue aCell;
+                    aCell.assign(*pCell);
+                    ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter);
+                }
 
                 //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
                 if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )

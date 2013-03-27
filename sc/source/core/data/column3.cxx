@@ -1527,9 +1527,11 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTy
             break;
 
         ScBaseCell* pCell = maItems[nIndex].pCell;
+        ScRefCellValue aCell;
+        aCell.assign(*maItems[nIndex].pCell);
         sal_uLong nFormat = GetNumberFormat( nRow );
 
-        ScCellFormat::GetInputString( pCell, nFormat, aString, *pFormatter );
+        ScCellFormat::GetInputString(aCell, nFormat, aString, *pFormatter);
 
         if ( pDocument->HasStringData( nCol, nRow, nTab ) )
         {
@@ -1778,11 +1780,12 @@ void ScColumn::GetInputString( SCROW nRow, rtl::OUString& rString ) const
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = maItems[nIndex].pCell;
-        if (pCell->GetCellType() != CELLTYPE_NOTE)
+        ScRefCellValue aCell;
+        aCell.assign(*maItems[nIndex].pCell);
+        if (aCell.meType != CELLTYPE_NOTE)
         {
             sal_uLong nFormat = GetNumberFormat( nRow );
-            ScCellFormat::GetInputString( pCell, nFormat, rString, *(pDocument->GetFormatTable()) );
+            ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()));
         }
         else
             rString = rtl::OUString();
@@ -1996,14 +1999,15 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
         Search( nRowStart, nIndex );
         while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRowEnd )
         {
-            ScBaseCell* pCell = maItems[nIndex].pCell;
-            CellType eType = pCell->GetCellType();
+            ScRefCellValue aCell;
+            aCell.assign(*maItems[nIndex].pCell);
+            CellType eType = aCell.meType;
             if ( eType == CELLTYPE_VALUE || (eType == CELLTYPE_FORMULA
-                    && ((ScFormulaCell*)pCell)->IsValue()) )
+                    && aCell.mpFormula->IsValue()) )
             {
                 sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
                     nRow, ATTR_VALUE_FORMAT ))->GetValue();
-                ScCellFormat::GetInputString( pCell, nFormat, aString, *pNumFmt );
+                ScCellFormat::GetInputString(aCell, nFormat, aString, *pNumFmt);
                 xub_StrLen nLen = aString.getLength();
                 if ( nLen )
                 {

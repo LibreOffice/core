@@ -231,60 +231,42 @@ OUString ScCellFormat::GetString(
     return aString;
 }
 
-void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, OUString& rString,
-                                      SvNumberFormatter& rFormatter )
+void ScCellFormat::GetInputString(
+    ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter )
 {
-    if (&rFormatter==NULL)
+    if (&rFormatter == NULL)
     {
-        rString = OUString();
+        rString = EMPTY_OUSTRING;
         return;
     }
 
-    String aString = rString;
-    CellType eType = pCell->GetCellType();
-    switch(eType)
+    OUString aString = rString;
+    switch (rCell.meType)
     {
         case CELLTYPE_STRING:
-            {
-                aString = ((ScStringCell*)pCell)->GetString();
-            }
-            break;
         case CELLTYPE_EDIT:
-            {
-                aString = ((ScEditCell*)pCell)->GetString();
-            }
-            break;
+            aString = rCell.getString();
+        break;
         case CELLTYPE_VALUE:
-            {
-                double nValue = ((ScValueCell*)pCell)->GetValue();
-                rFormatter.GetInputLineString( nValue, nFormat, aString );
-            }
-            break;
+            rFormatter.GetInputLineString(rCell.mfValue, nFormat, aString );
+        break;
         case CELLTYPE_FORMULA:
-            {
-                if (((ScFormulaCell*)pCell)->IsEmptyDisplayedAsString())
-                {
-                    aString.Erase();
-                }
-                else if (((ScFormulaCell*)pCell)->IsValue())
-                {
-                    double nValue = ((ScFormulaCell*)pCell)->GetValue();
-                    rFormatter.GetInputLineString( nValue, nFormat, aString );
-                }
-                else
-                {
-                    aString = ((ScFormulaCell*)pCell)->GetString();
-                }
+        {
+            ScFormulaCell* pFC = rCell.mpFormula;
+            if (pFC->IsEmptyDisplayedAsString())
+                aString = EMPTY_OUSTRING;
+            else if (pFC->IsValue())
+                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, aString);
+            else
+                aString = pFC->GetString();
 
-                sal_uInt16 nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
-                if (nErrCode != 0)
-                {
-                    aString.Erase();
-                }
-            }
-            break;
+            sal_uInt16 nErrCode = pFC->GetErrCode();
+            if (nErrCode != 0)
+                aString = EMPTY_OUSTRING;
+        }
+        break;
         default:
-            aString.Erase();
+            aString = EMPTY_OUSTRING;
             break;
     }
     rString = aString;

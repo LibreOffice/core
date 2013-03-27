@@ -1482,6 +1482,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     if (!pCol->maItems.size())
         return 0;
 
+    ScRefCellValue aCell;
     ScBaseCell* pCell;
     SCSIZE nHi, nLo;
     CollatorWrapper* pCollator = (mpParam->bCaseSens ? ScGlobal::GetCaseCollator() :
@@ -1503,8 +1504,8 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     {
         rtl::OUString aCellStr;
         sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[nLo].nRow);
-        ScCellFormat::GetInputString( pCol->maItems[nLo].pCell, nFormat, aCellStr,
-                rFormatter);
+        aCell.assign(*pCol->maItems[nLo].pCell);
+        ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);
         sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
         if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                 (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
@@ -1529,27 +1530,24 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         aLastInRangeString.Assign( sal_Unicode(0xFFFF));
     if (nLastInRange < pCol->maItems.size())
     {
-        pCell = pCol->maItems[nLastInRange].pCell;
-        if (pCell->HasStringData())
+        aCell.assign(*pCol->maItems[nLastInRange].pCell);
+        if (aCell.hasString())
         {
             sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[nLastInRange].nRow);
-            rtl::OUString aStr;
-            ScCellFormat::GetInputString( pCell, nFormat, aStr,
-                    rFormatter);
+            OUString aStr;
+            ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter);
             aLastInRangeString = aStr;
         }
         else
         {
-            switch ( pCell->GetCellType() )
+            switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
-                    fLastInRangeValue =
-                        static_cast<ScValueCell*>(pCell)->GetValue();
-                    break;
+                    fLastInRangeValue = aCell.mfValue;
+                break;
                 case CELLTYPE_FORMULA :
-                    fLastInRangeValue =
-                        static_cast<ScFormulaCell*>(pCell)->GetValue();
-                    break;
+                    fLastInRangeValue = aCell.mpFormula->GetValue();
+                break;
                 default:
                 {
                     // added to avoid warnings
@@ -1639,8 +1637,9 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         {
             rtl::OUString aCellStr;
             sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[i].nRow);
-            ScCellFormat::GetInputString( pCol->maItems[i].pCell, nFormat, aCellStr,
-                    rFormatter);
+            aCell.assign(*pCol->maItems[i].pCell);
+            ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);
+
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
             if (nRes < 0 && bLessEqual)
             {

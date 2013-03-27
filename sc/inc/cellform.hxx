@@ -53,8 +53,8 @@ public:
         Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
         bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce, bool bUseStarFormat = false );
 
-    static void     GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
-                                      SvNumberFormatter& rFormatter );
+    static void GetInputString(
+        ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter );
 };
 
 

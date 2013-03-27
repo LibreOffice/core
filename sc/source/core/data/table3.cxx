@@ -52,6 +52,7 @@
 #include "segmenttree.hxx"
 #include "subtotalparam.hxx"
 #include "docpool.hxx"
+#include "cellvalue.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>
@@ -1367,7 +1368,9 @@ public:
             else if (pCell->GetCellType() != CELLTYPE_NOTE)
             {
                 sal_uLong nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
-                ScCellFormat::GetInputString(pCell, nFormat, aCellStr, *mrDoc.GetFormatTable());
+                ScRefCellValue aCell;
+                aCell.assign(*pCell);
+                ScCellFormat::GetInputString(aCell, nFormat, aCellStr, *mrDoc.GetFormatTable());
             }
         }
         else
