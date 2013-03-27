@@ -807,6 +807,12 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     if (bAllowFallbacks)
     {
         pFound = LanguageTag::getFallback(lLocalizedValues, rLanguageTag);
+        // if we found a valid locale ... take it over to our in/out parameter
+        // rLanguageTag
+        if (pFound != lLocalizedValues.end())
+        {
+            rLanguageTag = *pFound;
+        }
     }
     else
     {
@@ -817,12 +823,6 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
             if (*pFound == rLanguageTag)
                 break;
         }
-    }
-
-    // if we found a valid locale ... take it over to our in/out parameter rLanguageTag
-    if (pFound != lLocalizedValues.end())
-    {
-        rLanguageTag = *pFound;
     }
 
     return pFound;
