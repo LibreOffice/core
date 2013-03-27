@@ -127,6 +127,7 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -5079,7 +5080,7 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
         aPaperSize.Width() = nThisColLogic;
     aEngine.SetPaperSize( aPaperSize );
 
-    ::std::auto_ptr< EditTextObject > pTextObj;
+    boost::scoped_ptr<EditTextObject> pTextObj;
     if(pCell->GetCellType() == CELLTYPE_EDIT)
     {
         const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();

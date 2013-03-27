@@ -169,8 +169,7 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
             ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
             SvxURLField aUrlField( rUrl, aDisplText, SVXURLFORMAT_APPDEFAULT );
 
-            const ScEditCell* pEditCell = (eCellType == CELLTYPE_EDIT) ? static_cast< const ScEditCell* >( rDoc.GetCell( aScPos ) ) : 0;
-            const EditTextObject* pEditObj = pEditCell ? pEditCell->GetData() : 0;
+            const EditTextObject* pEditObj = rDoc.GetEditText(aScPos);
             if( pEditObj )
             {
                 rEE.SetText( *pEditObj );

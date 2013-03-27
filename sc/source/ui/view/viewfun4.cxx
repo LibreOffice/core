@@ -307,7 +307,6 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScSplitPos eWhich = GetViewData()->GetActivePart();
-    CellType eCellType;
     EESpellState eState;
     String sOldText, sNewString;
     EditTextObject* pOldTObj = NULL;
@@ -333,21 +332,22 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     }
     nTab = GetViewData()->GetTabNo();
 
+    ScAddress aPos(nCol, nRow, nTab);
     ScEditableTester aTester( pDoc, nCol, nRow, nCol, nRow, rMark );
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
         return;
     }
-    pDoc->GetCellType(nCol, nRow, nTab, eCellType);
+
+    CellType eCellType = pDoc->GetCellType(aPos);
     if (eCellType != CELLTYPE_STRING && eCellType != CELLTYPE_EDIT)
     {
         ErrorMessage(STR_THESAURUS_NO_STRING);
         return;
     }
 
-    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1>
-                                        xSpeller = LinguMgr::GetSpellChecker();
+    uno::Reference<linguistic2::XSpellChecker1> xSpeller = LinguMgr::GetSpellChecker();
 
     pThesaurusEngine = new ScEditEngineDefaulter( pDoc->GetEnginePool() );
     pThesaurusEngine->SetEditTextObjectPool( pDoc->GetEditPool() );
@@ -357,7 +357,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     const ScPatternAttr* pPattern = NULL;
     SfxItemSet* pEditDefaults = new SfxItemSet(pThesaurusEngine->GetEmptyItemSet());
     pPattern = pDoc->GetPattern(nCol, nRow, nTab);
-    if (pPattern )
+    if (pPattern)
     {
         pPattern->FillEditItemSet( pEditDefaults );
         pThesaurusEngine->SetDefaults( *pEditDefaults );
@@ -365,20 +365,16 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
 
     if (eCellType == CELLTYPE_STRING)
     {
-        sOldText = pDoc->GetString(nCol, nRow, nTab);
+        sOldText = pDoc->GetString(aPos);
         pThesaurusEngine->SetText(sOldText);
     }
     else if (eCellType == CELLTYPE_EDIT)
     {
-        pDoc->GetCell(nCol, nRow, nTab, pCell);
-        if (pCell)
+        pTObject = pDoc->GetEditText(aPos);
+        if (pTObject)
         {
-            pTObject = static_cast<ScEditCell*>(pCell)->GetData();
-            if (pTObject)
-            {
-                pOldTObj = pTObject->Clone();
-                pThesaurusEngine->SetText(*pTObject);
-            }
+            pOldTObj = pTObject->Clone();
+            pThesaurusEngine->SetText(*pTObject);
         }
     }
     else
@@ -723,23 +719,17 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
     ScDocument* pDoc = GetViewData()->GetDocument();
     SCTAB nTab = GetViewData()->GetTabNo();
     ScAddress aCellPos( nPosX, nPosY, nTab );
-    ScBaseCell* pCell = pDoc->GetCell( aCellPos );
     EditEngine aEngine( pDoc->GetEnginePool() );
-    if (pCell)
+
+    const EditTextObject* pOld = pDoc->GetEditText(aCellPos);
+    if (pOld)
+        aEngine.SetText(*pOld);
+    else
     {
-        if (pCell->GetCellType() == CELLTYPE_EDIT)
-        {
-            const EditTextObject* pOld = static_cast<ScEditCell*>(pCell)->GetData();
-            if (pOld)
-                aEngine.SetText(*pOld);
-        }
-        else
-        {
-            String aOld;
-            pDoc->GetInputString( nPosX, nPosY, nTab, aOld );
-            if (aOld.Len())
-                aEngine.SetText(aOld);
-        }
+        OUString aOld;
+        pDoc->GetInputString(nPosX, nPosY, nTab, aOld);
+        if (!aOld.isEmpty())
+            aEngine.SetText(aOld);
     }
 
     sal_uInt16 nPara = aEngine.GetParagraphCount();
@@ -765,40 +755,41 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
     EnterData(nPosX, nPosY, nTab, *pData);
 }
 
-sal_Bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
+bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
 {
     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
 
-    ScBaseCell* pCell = pDoc->GetCell( aPos );
-    if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
+    const EditTextObject* pData = pDoc->GetEditText(aPos);
+    if (pData)
+        return false;
+
+    if (!pData->IsFieldObject())
+        // not a field object.
+        return false;
+
+    const SvxFieldItem* pFieldItem = pData->GetField();
+    if (!pFieldItem)
+        // doesn't have a field item.
+        return false;
+
+    const SvxFieldData* pField = pFieldItem->GetField();
+    if (!pField)
+        // doesn't have a field item data.
+        return false;
+
+    if (pField->GetClassId() != com::sun::star::text::textfield::Type::URL)
+        // not a URL field.
+        return false;
+
+    if (pContent)
     {
-        const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
-        if (pData)
-        {
-            sal_Bool bField = pData->IsFieldObject();
-            if (bField)
-            {
-                const SvxFieldItem* pFieldItem = pData->GetField();
-                if (pFieldItem)
-                {
-                    const SvxFieldData* pField = pFieldItem->GetField();
-                    if ( pField && pField->ISA(SvxURLField) )
-                    {
-                        if (pContent)
-                        {
-                            const SvxURLField* pURLField = (const SvxURLField*)pField;
-                            pContent->SetName( pURLField->GetRepresentation() );
-                            pContent->SetURL( pURLField->GetURL() );
-                            pContent->SetTargetFrame( pURLField->GetTargetFrame() );
-                        }
-                        return sal_True;
-                    }
-                }
-            }
-        }
+        const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
+        pContent->SetName( pURLField->GetRepresentation() );
+        pContent->SetURL( pURLField->GetURL() );
+        pContent->SetTargetFrame( pURLField->GetTargetFrame() );
     }
-    return false;
+    return true;
 }
 
 

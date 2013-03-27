@@ -2003,7 +2003,7 @@ void XclImpXFRangeBuffer::Finalize()
         {
             bool bTextWrap = static_cast< const SfxBoolItem* >( rDoc.GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
             if( !bTextWrap && (rDoc.GetCellType( rStart ) == CELLTYPE_EDIT) )
-                if( const EditTextObject* pEditObj = static_cast< const ScEditCell* >( rDoc.GetCell( rStart ) )->GetData() )
+                if (const EditTextObject* pEditObj = rDoc.GetEditText(rStart))
                     bTextWrap = pEditObj->GetParagraphCount() > 1;
             if( bTextWrap )
                 GetOldRoot().pColRowBuff->SetManualRowHeight( rStart.Row() );

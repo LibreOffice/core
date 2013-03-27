@@ -1003,20 +1003,23 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
         }
 
-        const ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
-            pEditEngine->SetTextNewDefaults( *((const ScEditCell*)pCell)->GetData(), aDefaults );
+        if (pDoc->GetCellType(aCellPos) == CELLTYPE_EDIT)
+        {
+            const EditTextObject* pObj = pDoc->GetEditText(aCellPos);
+            if (pObj)
+                pEditEngine->SetTextNewDefaults(*pObj, aDefaults);
+        }
         else
         {
-            GetCellText( aCellPos, aText );
+            GetCellText(aCellPos, aText);
             if (aText.Len())
-                pEditEngine->SetTextNewDefaults( aText, aDefaults );
+                pEditEngine->SetTextNewDefaults(aText, aDefaults);
             else
                 pEditEngine->SetDefaults(aDefaults);
         }
     }
 
-    bDataValid = sal_True;
+    bDataValid = true;
     return pForwarder;
 }
 

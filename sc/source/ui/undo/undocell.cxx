@@ -100,12 +100,11 @@ void ScUndoCursorAttr::SetEditData( EditTextObject* pOld, EditTextObject* pNew )
 void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const shared_ptr<EditTextObject>& pEditData ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
+    ScAddress aPos(nCol, nRow, nTab);
     pDoc->SetPattern( nCol, nRow, nTab, *pWhichPattern, true );
 
-    ScBaseCell* pCell;
-    pDoc->GetCell(nCol, nRow, nTab, pCell);
-    if (pCell && pCell->GetCellType() == CELLTYPE_EDIT && pEditData)
-        static_cast<ScEditCell*>(pCell)->SetData(*pEditData, NULL);
+    if (pDoc->GetCellType(aPos) == CELLTYPE_EDIT && pEditData)
+        pDoc->SetEditText(aPos, *pEditData, NULL);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)

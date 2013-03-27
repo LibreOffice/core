@@ -247,31 +247,25 @@ void ScConversionEngineBase::ShowFinishDialog()
 
 void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    CellType eCellType;
-    mrDoc.GetCellType( nCol, nRow, nTab, eCellType );
+    ScAddress aPos(nCol, nRow, nTab);
 
-    switch( eCellType )
+    switch (mrDoc.GetCellType(aPos))
     {
         case CELLTYPE_STRING:
         {
-            OUString aText = mrDoc.GetString(nCol, nRow, nTab);
+            OUString aText = mrDoc.GetString(aPos);
             SetText( aText );
         }
         break;
         case CELLTYPE_EDIT:
         {
-            ScBaseCell* pCell = NULL;
-            mrDoc.GetCell( nCol, nRow, nTab, pCell );
-            if( pCell )
-            {
-                const EditTextObject* pNewEditObj = static_cast<ScEditCell*>(pCell)->GetData();
-                if( pNewEditObj )
-                    SetText( *pNewEditObj );
-            }
+            const EditTextObject* pNewEditObj = mrDoc.GetEditText(aPos);
+            if (pNewEditObj)
+                SetText(*pNewEditObj);
         }
         break;
         default:
-            SetText( EMPTY_STRING );
+            SetText(EMPTY_OUSTRING);
     }
 }
 

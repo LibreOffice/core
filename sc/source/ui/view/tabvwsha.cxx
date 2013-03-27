@@ -627,6 +627,7 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
         SCROW                   nStartRow   = 0;
         SCCOL                   nEndCol     = 0;
         SCROW                   nEndRow     = 0;
+        ScAddress aPos = pViewData->GetCurPos();
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,   nEndTab );
@@ -635,8 +636,8 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
         PutInOrder( nStartRow, nEndRow );
         PutInOrder( nStartTab, nEndTab );
 
-        sal_Bool bHideFormula = false;
-        sal_Bool bHideAll     = false;
+        bool bHideFormula = false;
+        bool bHideAll     = false;
 
         if (pDoc->IsTabProtected(nTab))
         {
@@ -649,7 +650,7 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
 
         if (!bHideAll)
         {
-            pDoc->GetCellType( nPosX, nPosY, nTab, eType );
+            eType = pDoc->GetCellType(aPos);
             if (eType == CELLTYPE_FORMULA)
             {
                 if (!bHideFormula)
@@ -657,9 +658,7 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
             }
             else if (eType == CELLTYPE_EDIT)
             {
-                ScBaseCell* pCell;
-                pDoc->GetCell( nPosX, nPosY, nTab, pCell );
-                pObject = static_cast<ScEditCell*>(pCell)->GetData();
+                pObject = pDoc->GetEditText(aPos);
             }
             else
             {

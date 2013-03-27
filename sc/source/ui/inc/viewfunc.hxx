@@ -146,7 +146,7 @@ public:
     void            InsertBookmark( const String& rDescription, const String& rURL,
                                     SCCOL nPosX, SCROW nPosY, const String* pTarget = NULL,
                                     sal_Bool bTryReplace = false );
-    sal_Bool            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
+    bool HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
     long            DropRequestHdl( Exchange* pExchange );
     sal_Bool            MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,

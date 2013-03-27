@@ -264,23 +264,21 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             SCCOL nCol = aBlock.aStart.Col();
             SCROW nRow = aBlock.aStart.Row();
             SCTAB nTab = aBlock.aStart.Tab();
+            ScAddress aPos(nCol, nRow, nTab);
 
             const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
             ScTabEditEngine aEngine( *pPattern, pDoc->GetEditPool() );
-            ScBaseCell* pCell = NULL;
-            pDoc->GetCell( nCol, nRow, nTab, pCell );
-            if (pCell)
+            if (pDoc->GetCellType(aPos) == CELLTYPE_EDIT)
             {
-                if (pCell->GetCellType() == CELLTYPE_EDIT)
-                {
-                    const EditTextObject* pObj = static_cast<const ScEditCell*>(pCell)->GetData();
-                    aEngine.SetText( *pObj );
-                }
-                else
-                {
-                    OUString aText = pDoc->GetString(nCol, nRow, nTab);
+                const EditTextObject* pObj = pDoc->GetEditText(aPos);
+                if (pObj)
+                    aEngine.SetText(*pObj);
+            }
+            else
+            {
+                OUString aText = pDoc->GetString(nCol, nRow, nTab);
+                if (!aText.isEmpty())
                     aEngine.SetText(aText);
-                }
             }
 
             bOK = SetObject( &aEngine,
