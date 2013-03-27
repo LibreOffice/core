@@ -359,7 +359,7 @@ namespace svxform
 
         ImageList                   m_aNormalImages;
 
-        void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
+        void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >& xForms );
         FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
 
         void InsertForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm, sal_uInt32 nRelPos);
@@ -395,7 +395,7 @@ namespace svxform
         void Clear();
         void SetModified( sal_Bool bMod=sal_True );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >    GetForms() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >    GetForms() const;
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
         FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, sal_Bool bRecurs=sal_True );

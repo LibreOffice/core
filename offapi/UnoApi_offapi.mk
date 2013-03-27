@@ -144,6 +144,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
 	OOoEmbeddedObjectFactory \
 	StorageFactory \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form,\
+	Forms \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/control,\
 	FilterControl \
 ))
@@ -790,7 +793,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form,\
 	FormControlModel \
 	FormController \
 	FormControllerDispatcher \
-	Forms \
 	PropertyBrowserController \
 	modules \
 ))
@@ -2440,6 +2442,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/form,\
 	XErrorBroadcaster \
 	XErrorListener \
 	XForm \
+	XForms \
 	XFormComponent \
 	XFormController \
 	XFormControllerListener \

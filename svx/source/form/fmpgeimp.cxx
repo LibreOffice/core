@@ -35,6 +35,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/container/EnumerableMap.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/form/Forms.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <svx/fmglob.hxx>
@@ -159,18 +160,11 @@ namespace
 void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 {
     // clone the Forms collection
-    const Reference< XNameContainer > xForeignForms( const_cast< FmFormPageImpl& >( i_foreignImpl ).getForms( false ) );
-    const Reference< XCloneable > xCloneable( xForeignForms, UNO_QUERY );
-    if ( !xCloneable.is() )
-    {
-        // great, nothing to do
-        OSL_ENSURE( !xForeignForms.is(), "FmFormPageImpl::FmFormPageImpl: a non-cloneable forms container!?" );
-        return;
-    }
+    const Reference< css::form::XForms > xForeignForms( const_cast< FmFormPageImpl& >( i_foreignImpl ).getForms( false ) );
 
     try
     {
-        m_xForms.set( xCloneable->createClone(), UNO_QUERY_THROW );
+        m_xForms.set( xForeignForms->createClone(), UNO_QUERY_THROW );
 
         // create a mapping between the original control models and their clones
         MapControlModels aModelAssignment;
@@ -179,7 +173,7 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
         FormComponentVisitor aVisitor = FormComponentVisitor( FormHierarchyComparator() );
 
         FormComponentAssignment aAssignmentProcessor( aModelAssignment );
-        aVisitor.process( FormComponentPair( xCloneable, m_xForms ), aAssignmentProcessor );
+        aVisitor.process( FormComponentPair( xForeignForms, m_xForms ), aAssignmentProcessor );
 
         // assign the cloned models to their SdrObjects
         SdrObjListIter aForeignIter( i_foreignImpl.m_rPage );
@@ -318,7 +312,7 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
 }
 
 //------------------------------------------------------------------------------
-const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate )
+const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getForms" );
     if ( m_xForms.is() || !_bForceCreate )
@@ -328,12 +322,8 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
     {
         m_bAttemptedFormCreation = true;
 
-        const OUString sFormsCollectionServiceName("com.sun.star.form.Forms");
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-        m_xForms.set(
-            xContext->getServiceManager()->createInstanceWithContext( sFormsCollectionServiceName, xContext),
-            UNO_QUERY_THROW
-        );
+        m_xForms = css::form::Forms::create( xContext );
 
         if ( m_aFormsCreationHdl.IsSet() )
         {
@@ -343,17 +333,13 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
         FmFormModel* pFormsModel = PTR_CAST( FmFormModel, m_rPage.GetModel() );
 
         // give the newly created collection a place in the universe
-        Reference< XChild > xAsChild( m_xForms, UNO_QUERY );
-        if ( xAsChild.is() )
-        {
-            SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : NULL;
-            if ( pObjShell )
-                xAsChild->setParent( pObjShell->GetModel() );
-        }
+        SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : NULL;
+        if ( pObjShell )
+            m_xForms->setParent( pObjShell->GetModel() );
 
         // tell the UNDO environment that we have a new forms collection
         if ( pFormsModel )
-            pFormsModel->GetUndoEnv().AddForms( m_xForms );
+            pFormsModel->GetUndoEnv().AddForms( Reference<XNameContainer>(m_xForms,UNO_QUERY_THROW) );
     }
     return m_xForms;
 }
@@ -395,13 +381,13 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultForm" );
     Reference< XForm > xForm;
 
-    Reference< XNameContainer > xForms( getForms() );
+    Reference< XForms > xForms( getForms() );
 
     // by default, we use our "current form"
     if ( !validateCurForm() )
     {
         // check whether there is a "standard" form
-        if ( xForms->hasElements() )
+        if ( Reference<XNameAccess>(xForms,UNO_QUERY_THROW)->hasElements() )
         {
             // suche die Standardform
             OUString sStandardFormname = String( SVX_RES( RID_STR_STDFORMNAME ) );
@@ -412,8 +398,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
                     xForm.set( xForms->getByName( sStandardFormname ), UNO_QUERY_THROW );
                 else
                 {
-                    Reference< XIndexAccess > xFormsByIndex( xForms, UNO_QUERY_THROW );
-                    xForm.set( xFormsByIndex->getByIndex(0), UNO_QUERY_THROW );
+                    xForm.set( xForms->getByIndex(0), UNO_QUERY_THROW );
                 }
             }
             catch( const Exception& )

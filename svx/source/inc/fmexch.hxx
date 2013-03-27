@@ -23,6 +23,7 @@
 #include <svtools/transfer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/form/XForms.hpp>
 #include <tools/link.hxx>
 
 #include <svx/svxdllapi.h>
@@ -137,7 +138,7 @@ namespace svxform
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                             m_aHiddenControlModels;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >
                             m_xFormsRoot;       // the root of the forms collection where the entries we represent reside
                                                 // this uniquely identifies the page and the document
 
@@ -171,7 +172,7 @@ namespace svxform
         size_t  onEntryRemoved( SvTreeListEntry* _pEntry );
 
         void setFormsRoot(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxFormsRoot
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >& _rxFormsRoot
             ) { m_xFormsRoot = _rxFormsRoot; }
 
         void buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
@@ -192,7 +193,7 @@ namespace svxform
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >
                                 getFormsRoot() const { return m_xFormsRoot; }
     };
 

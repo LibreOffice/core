@@ -20,8 +20,9 @@
 #define _SVX_FMOBJ_HXX
 
 #include <svx/svdouno.hxx>
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/form/XForms.hpp>
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 //==================================================================
 // FmFormObj
@@ -36,7 +37,7 @@ class FmFormObj: public SdrUnoObj
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>     m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xEnvironmentHistory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >                  m_xEnvironmentHistory;
     sal_Int32           m_nPos;
 
     OutputDevice*       m_pLastKnownRefDevice;
@@ -78,7 +79,9 @@ public:
 
     virtual void clonedFrom(const FmFormObj* _pSource);
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> _rTopLevelDestContainer);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> ensureModelEnv(
+                  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rSourceContainer,
+                  const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& _rTopLevelDestContainer);
 
     /** returns the FmFormObj behind the given SdrObject
 

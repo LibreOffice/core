@@ -175,7 +175,7 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 
     if ( pToBeRemovedPage )
     {
-        Reference< XNameContainer > xForms( pToBeRemovedPage->GetForms( false ) );
+        Reference< XNameContainer > xForms( pToBeRemovedPage->GetForms( false ), css::uno::UNO_QUERY );
         if ( xForms.is() )
             m_pImpl->pUndoEnv->RemoveForms( xForms );
     }
@@ -210,7 +210,7 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 
     if ( pPage )
     {
-        Reference< XNameContainer > xForms( pPage->GetForms( false ) );
+        Reference< XNameContainer > xForms( pPage->GetForms( false ), css::uno::UNO_QUERY );
         if ( xForms.is() )
             m_pImpl->pUndoEnv->RemoveForms( xForms );
     }

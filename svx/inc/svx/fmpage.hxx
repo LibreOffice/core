@@ -30,8 +30,8 @@ class FmFormModel;
 class FmFormPageImpl;   // contains a list of all forms
 
 namespace com { namespace sun { namespace star {
-    namespace container {
-        class XNameContainer;
+    namespace form {
+        class XForms;
     }
 }}}
 
@@ -63,7 +63,7 @@ public:
     virtual SdrObject* RemoveObject(sal_uLong nObjNum);
 
     // access to all forms
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& GetForms( bool _bForceCreate = true ) const;
 
     FmFormPageImpl& GetImpl() const { return *m_pImpl; }
 

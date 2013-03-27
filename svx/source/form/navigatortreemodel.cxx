@@ -253,10 +253,8 @@ namespace svxform
     void NavigatorTreeModel::Clear()
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Clear" );
-        Reference< XNameContainer >  xForms( GetForms());
-        Reference< XContainer >  xContainer(xForms, UNO_QUERY);
-        if (xContainer.is())
-            xContainer->removeContainerListener((XContainerListener*)m_pPropChangeList);
+        Reference< css::form::XForms >  xForms( GetForms());
+        xForms->removeContainerListener((XContainerListener*)m_pPropChangeList);
 
         //////////////////////////////////////////////////////////////////////
         // RootList loeschen
@@ -269,7 +267,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    Reference< XNameContainer >  NavigatorTreeModel::GetForms() const
+    Reference< css::form::XForms >  NavigatorTreeModel::GetForms() const
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::GetForms" );
         if( !m_pFormShell || !m_pFormShell->GetCurPage())
@@ -869,7 +867,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::UpdateContent( const Reference< XNameContainer > & xForms )
+    void NavigatorTreeModel::UpdateContent( const Reference< css::form::XForms > & xForms )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::UpdateContent" );
         //////////////////////////////////////////////////////////////////////
@@ -877,9 +875,7 @@ namespace svxform
         Clear();
         if (xForms.is())
         {
-            Reference< XContainer >  xFormContainer(xForms, UNO_QUERY);
-            if (xFormContainer.is())
-                xFormContainer->addContainerListener((XContainerListener*)m_pPropChangeList);
+            xForms->addContainerListener((XContainerListener*)m_pPropChangeList);
 
             FillBranch(NULL);
 

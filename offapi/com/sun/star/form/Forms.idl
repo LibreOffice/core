@@ -19,10 +19,7 @@
 #ifndef __com_sun_star_form_Forms_idl__
 #define __com_sun_star_form_Forms_idl__
 
-#include <com/sun/star/container/XNameContainer.idl>
-#include <com/sun/star/container/XIndexContainer.idl>
-#include <com/sun/star/container/XEnumerationAccess.idl>
-#include <com/sun/star/form/FormComponents.idl>
+#include <com/sun/star/form/XForms.idl>
 
 
  module com {  module sun {  module star {  module form {
@@ -36,10 +33,7 @@
 
     @see com::sun::star::form::component::Form
  */
-published service Forms
-{
-    service FormComponents;
-};
+published service Forms : XForms;
 
 
 }; }; }; };

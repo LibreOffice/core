@@ -258,7 +258,10 @@ void ensureClassInfos()
 
     // ========================================================================
     // = various
-    REGISTER_CLASS1(OFormsCollection, FRM_SUN_FORMS_COLLECTION);
+    aServices.realloc(1);
+    aServices.getArray()[0] = OUString("com.sun.star.form.Forms");
+    REGISTER_CLASS_CORE(OFormsCollection);
+
     REGISTER_CLASS1(ImageProducer, SRV_AWT_IMAGEPRODUCER);
 
     // ========================================================================

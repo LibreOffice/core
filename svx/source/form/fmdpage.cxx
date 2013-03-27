@@ -112,7 +112,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 
     FmFormPage *pFmPage = PTR_CAST( FmFormPage, GetSdrPage() );
     if( pFmPage )
-        xForms = pFmPage->GetForms();
+        xForms.set( pFmPage->GetForms(), css::uno::UNO_QUERY_THROW );
 
     return xForms;
 }

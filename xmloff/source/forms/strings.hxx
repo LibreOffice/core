@@ -142,7 +142,6 @@ namespace xmloff
     #define PROPERTY_RICH_TEXT "RichText"
 
     // services
-    #define SERVICE_FORMSCOLLECTION "com.sun.star.form.Forms"
     #define SERVICE_SPREADSHEET_DOCUMENT "com.sun.star.sheet.SpreadsheetDocument"
     #define SERVICE_CELLVALUEBINDING "com.sun.star.table.CellValueBinding"
     #define SERVICE_LISTINDEXCELLBINDING "com.sun.star.table.ListPositionCellBinding"

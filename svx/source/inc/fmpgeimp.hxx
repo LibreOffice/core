@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XForms.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -49,7 +50,7 @@ class SVX_DLLPRIVATE FmFormPageImpl
 {
     ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >,SdrObject* > m_aComponentMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >               xCurrentForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xForms;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >              m_xForms;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XMap >       m_aControlShapeMap;
 
     FmFormPage&     m_rPage;
@@ -90,7 +91,7 @@ public:
     inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
     inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& getForms( bool _bForceCreate = true );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& getForms( bool _bForceCreate = true );
 
     void        SetFormsCreationHdl( const Link& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
     const Link& GetFormsCreationHdl() const { return m_aFormsCreationHdl; }

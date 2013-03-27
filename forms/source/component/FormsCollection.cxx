@@ -46,7 +46,7 @@ InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServ
 //------------------------------------------------------------------------------
 OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
 {
-    return OUString(FRM_SUN_FORMS_COLLECTION);
+    return OUString("com.sun.star.form.Forms");
 }
 
 //------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
 {
     StringSequence aReturn(2);
 
-    aReturn.getArray()[0] = FRM_SUN_FORMS_COLLECTION;
+    aReturn.getArray()[0] = OUString("com.sun.star.form.Forms");
     aReturn.getArray()[1] = OUString("com.sun.star.form.FormComponents");
 
     return aReturn;
@@ -141,7 +141,7 @@ Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (Runtim
     osl_atomic_increment( &pClone->m_refCount );
     pClone->clonedFrom( *this );
     osl_atomic_decrement( &pClone->m_refCount );
-    return pClone;
+    return static_cast<OInterfaceContainer*>(pClone);
 }
 
 // OComponentHelper

@@ -181,8 +181,6 @@ namespace frm
     #define FRM_SUN_CONTROL_RICHTEXTCONTROL "com.sun.star.form.control.RichTextControl"
     #define FRM_SUN_CONTROL_SUBMITBUTTON   "com.sun.star.form.control.SubmitButton"
 
-    #define FRM_SUN_FORMS_COLLECTION "com.sun.star.form.Forms"
-
     #define BINDABLE_DATABASE_CHECK_BOX      "com.sun.star.form.binding.BindableDatabaseCheckBox"
     #define BINDABLE_DATABASE_COMBO_BOX      "com.sun.star.form.binding.BindableDatabaseComboBox"
     #define BINDABLE_DATABASE_FORMATTED_FIELD "com.sun.star.form.binding.BindableDatabaseFormattedField"

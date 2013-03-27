@@ -31,9 +31,10 @@
 #include "svx/dialmgr.hxx"
 
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/script/XEventAttacherManager.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/form/Forms.hpp>
+#include <com/sun/star/io/XPersistObject.hpp>
+#include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include "svx/fmtools.hxx"
 
@@ -84,9 +85,8 @@ FmFormObj::~FmFormObj()
 {
     DBG_DTOR(FmFormObj, NULL);
 
-    Reference< XComponent> xHistory(m_xEnvironmentHistory, UNO_QUERY);
-    if (xHistory.is())
-        xHistory->dispose();
+    if (m_xEnvironmentHistory.is())
+        m_xEnvironmentHistory->dispose();
 
     m_xEnvironmentHistory = NULL;
     m_aEventsHistory.realloc(0);
@@ -194,7 +194,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         return;
     }
 
-    Reference< XIndexContainer >        xNewPageForms( pNewFormPage->GetForms( true ), UNO_QUERY );
+    Reference< css::form::XForms >      xNewPageForms = pNewFormPage->GetForms( true );
     Reference< XIndexContainer >        xNewParent;
     Sequence< ScriptEventDescriptor>    aNewEvents;
 
@@ -204,7 +204,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     {
         // the element in m_xEnvironmentHistory which is equivalent to my new parent (which (perhaps) has to be created within _pNewPage->GetForms)
         // is the right-most element in the tree.
-        Reference< XIndexContainer > xRightMostLeaf = m_xEnvironmentHistory;
+        Reference< XIndexContainer > xRightMostLeaf( m_xEnvironmentHistory, UNO_QUERY_THROW );
         try
         {
             while ( xRightMostLeaf->getCount() )
@@ -318,9 +318,8 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     }
 
     // delete my history
-    Reference< XComponent> xHistory(m_xEnvironmentHistory, UNO_QUERY);
-    if (xHistory.is())
-        xHistory->dispose();
+    if (m_xEnvironmentHistory.is())
+        m_xEnvironmentHistory->dispose();
 
     m_xEnvironmentHistory = NULL;
     m_aEventsHistory.realloc(0);
@@ -345,9 +344,8 @@ sal_uInt16 FmFormObj::GetObjIdentifier() const
 void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 {
     DBG_ASSERT(_pSource != NULL, "FmFormObj::clonedFrom : invalid source !");
-    Reference< XComponent> xHistory(m_xEnvironmentHistory, UNO_QUERY);
-    if (xHistory.is())
-        xHistory->dispose();
+    if (m_xEnvironmentHistory.is())
+       m_xEnvironmentHistory->dispose();
 
     m_xEnvironmentHistory = NULL;
     m_aEventsHistory.realloc(0);
@@ -358,17 +356,11 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 
     Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
-    m_xEnvironmentHistory = Reference< XIndexContainer >(
-        ::comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.form.Forms") ),
-        UNO_QUERY);
-    DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
+    m_xEnvironmentHistory = css::form::Forms::create( comphelper::getProcessComponentContext() );
 
-    if (m_xEnvironmentHistory.is())
-    {
-        ensureModelEnv(xSourceContainer, m_xEnvironmentHistory);
-        m_aEventsHistory = aEvts;
-            // if we we're clone there was a call to operator=, so aEvts are excatly the events we need here ...
-    }
+    ensureModelEnv(xSourceContainer, m_xEnvironmentHistory);
+    m_aEventsHistory = aEvts;
+        // if we we're clone there was a call to operator=, so aEvts are excatly the events we need here ...
 }
 
 //------------------------------------------------------------------
@@ -454,7 +446,7 @@ namespace
 }
 
 //------------------------------------------------------------------
-Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
+Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const Reference<css::form::XForms>& _rTopLevelDestContainer)
 {
     Reference< XInterface >  xTopLevelSouce;
     OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
@@ -462,7 +454,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         // something went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
         return Reference< XInterface > ();
 
-    Reference< XIndexContainer >  xDestContainer(_rTopLevelDestContainer);
+    Reference< XIndexContainer >  xDestContainer(_rTopLevelDestContainer, UNO_QUERY_THROW);
     Reference< XIndexContainer >  xSourceContainer(xTopLevelSouce, UNO_QUERY);
     DBG_ASSERT(xSourceContainer.is(), "FmFormObj::ensureModelEnv : the top level source is invalid !");
 

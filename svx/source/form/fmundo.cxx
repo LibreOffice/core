@@ -214,7 +214,7 @@ void FmXUndoEnvironment::dispose()
         FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
         if ( pPage )
         {
-            Reference< XInterface > xForms = pPage->GetForms( false ).get();
+            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
             if ( xForms.is() )
                 RemoveElement( xForms );
         }
@@ -226,7 +226,7 @@ void FmXUndoEnvironment::dispose()
         FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
         if ( pPage )
         {
-            Reference< XInterface > xForms = pPage->GetForms( false ).get();
+            Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
             if ( xForms.is() )
                 RemoveElement( xForms );
         }
@@ -265,7 +265,7 @@ void FmXUndoEnvironment::ModeChanged()
             FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetPage(i) );
             if ( pPage )
             {
-                Reference< XInterface > xForms = pPage->GetForms( false ).get();
+                Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
                 if ( xForms.is() )
                     TogglePropertyListening( xForms );
             }
@@ -277,7 +277,7 @@ void FmXUndoEnvironment::ModeChanged()
             FmFormPage* pPage = PTR_CAST( FmFormPage, rModel.GetMasterPage(i) );
             if ( pPage )
             {
-                Reference< XInterface > xForms = pPage->GetForms( false ).get();
+                Reference< css::form::XForms > xForms = pPage->GetForms( false ).get();
                 if ( xForms.is() )
                     TogglePropertyListening( xForms );
             }

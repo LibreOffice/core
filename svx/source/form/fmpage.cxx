@@ -99,19 +99,15 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
     {
         try
         {
-            Reference< XNameContainer > xForms( m_pImpl->getForms( false ) );
+            Reference< css::form::XForms > xForms( m_pImpl->getForms( false ) );
             if ( xForms.is() )
             {
                 // we want to keep the current collection, just reset the model
                 // with which it's associated.
-                Reference< XChild > xAsChild( xForms, UNO_QUERY );
-                if ( xAsChild.is() )
-                {
-                    FmFormModel* pDrawModel = (FmFormModel*) GetModel();
-                    SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
-                    if ( pObjShell )
-                        xAsChild->setParent( pObjShell->GetModel() );
-                }
+                FmFormModel* pDrawModel = (FmFormModel*) GetModel();
+                SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
+                if ( pObjShell )
+                    xForms->setParent( pObjShell->GetModel() );
             }
         }
         catch( ::com::sun::star::uno::Exception const& )
@@ -140,7 +136,7 @@ void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
 }
 
 //------------------------------------------------------------------
-const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms( bool _bForceCreate ) const
+const Reference< css::form::XForms > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::GetForms" );
     const SdrPage& rMasterPage( *this );

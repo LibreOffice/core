@@ -127,7 +127,7 @@ namespace xmloff
         if (!xSI.is())
             return sal_False;
 
-        if (!xSI->supportsService(SERVICE_FORMSCOLLECTION))
+        if (!xSI->supportsService("com.sun.star.form.Forms"))
         {
             OSL_FAIL("OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
             // nothing to do
