@@ -1387,7 +1387,9 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             bool bIsErrorActive = (pErrorAttr && pErrorAttr->GetStart() == m_nErrorStart) ||
                     (pErrorAttrLeft && pErrorAttrLeft->GetStart() == m_nErrorStart);
 
-            DBG_ASSERT(nSelectionType != INVALID, "selection type not set!");
+            SAL_WARN_IF(
+                nSelectionType == INVALID, "cui.dialogs",
+                "selection type not set");
 
             const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
             bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
