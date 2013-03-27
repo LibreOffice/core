@@ -293,6 +293,8 @@ struct WMF_EXTERNALHEADER;
 #define WIN_MTF_ASSERT_MIFE     0x20000000
 
 void WinMtfAssertHandler( const sal_Char*, sal_uInt32 nFlags = WIN_MTF_ASSERT_MIFE );
+#else
+inline void WinMtfAssertHandler( const sal_Char*, sal_uInt32 = 0 ) {}
 #endif
 
 class WinMtfClipPath

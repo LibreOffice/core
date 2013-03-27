@@ -1269,7 +1269,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 }
                 break;
 
-#ifdef WIN_MTF_ASSERT
                 default :                           WinMtfAssertHandler( "Unknown Meta Action" );       break;
                 case EMR_MASKBLT :                  WinMtfAssertHandler( "MaskBlt" );                   break;
                 case EMR_PLGBLT :                   WinMtfAssertHandler( "PlgBlt" );                    break;
@@ -1326,7 +1325,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 case EMR_GDICOMMENT :
                 case EMR_HEADER :               // has already been read at ReadHeader()
                 break;
-#endif
             }
         }
         pWMF->Seek( nNextPos );
