@@ -24,15 +24,6 @@
 #include "global.hxx"
 #include "viewdata.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-// -----------------------------------------------------------------------
-
-
-inline Fraction MakeFraction( long nA, long nB )
-{
-    return ( nA && nB ) ? Fraction(nA,nB) : Fraction(1,1);
-}
 
 void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,

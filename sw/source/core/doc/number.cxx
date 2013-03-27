@@ -1104,15 +1104,6 @@ namespace numfunc
                 return *mpFont;
             }
 
-            inline short GetFontWeight() const
-            {
-                return static_cast<short>(meFontWeight);
-            }
-
-            inline short GetFontItalic() const
-            {
-                return static_cast<short>(meFontItalic);
-            }
             inline sal_Unicode GetChar( sal_uInt8 p_nListLevel ) const
             {
                 if (p_nListLevel >= MAXLEVEL)

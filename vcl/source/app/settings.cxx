@@ -834,14 +834,6 @@ void StyleSettings::CopyData()
 
 // -----------------------------------------------------------------------
 
-inline sal_Bool ImplIsBackOrWhite( const Color& rColor )
-{
-    sal_uInt8 nLuminance = rColor.GetLuminance();
-    return ( nLuminance < 8 ) || ( nLuminance > 250 );
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 {
     if ( mpData == rSet.mpData )

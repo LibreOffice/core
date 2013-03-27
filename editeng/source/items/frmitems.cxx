@@ -88,28 +88,6 @@ using namespace ::com::sun::star::table::BorderLineStyle;
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
-// STATIC DATA -----------------------------------------------------------
-
-inline void SetValueProp( XubString& rStr, const sal_uInt16 nValue,
-                          const sal_uInt16 nProp )
-{
-    if( 100 == nProp )
-        rStr += OUString::number( nValue );
-    else
-        rStr += OUString::number(nProp) + "%";
-}
-
-inline void SetValueProp( XubString& rStr, const short nValue,
-                          const sal_uInt16 nProp )
-{
-    if( 100 == nProp )
-        rStr += OUString::number( nValue );
-    else
-        rStr += OUString::number(nProp) + "%";
-}
-
-// -----------------------------------------------------------------------
-
 /*
 SvxBorderLine is not an SfxPoolItem, and has no Store/Create serialization/deserialization methods.
 Since border line information needs to be serialized by the table autoformat code, these file-local

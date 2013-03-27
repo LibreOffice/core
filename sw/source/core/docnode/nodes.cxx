@@ -1836,11 +1836,6 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 |*
 *************************************************************************/
 
-inline sal_uInt8 MaxLvl( sal_uInt8 nMin, sal_uInt8 nMax, short nNew )
-{
-    return (sal_uInt8)(nNew < nMin ? nMin : nNew > nMax ? nMax : nNew);
-}
-
 void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             const SwNodeIndex& rIndex, sal_Bool bNewFrms, sal_Bool bTblInsDummyNode ) const
 {

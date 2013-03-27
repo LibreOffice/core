@@ -57,23 +57,6 @@ enum FillInfoLinePos
     };
 
 
-inline const ::editeng::SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, FillInfoLinePos eWhich )
-{
-    if (pBox)
-    {
-        if (eWhich==FILP_TOP)
-            return pBox->GetTop();
-        else if (eWhich==FILP_BOTTOM)
-            return pBox->GetBottom();
-        else if (eWhich==FILP_LEFT)
-            return pBox->GetLeft();
-        else
-            return pBox->GetRight();
-    }
-    else
-        return NULL;
-}
-
 //  aehnlich wie in output.cxx
 
 static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,

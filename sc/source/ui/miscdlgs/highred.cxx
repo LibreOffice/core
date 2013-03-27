@@ -42,14 +42,6 @@
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
-inline void EnableDisable( Window& rWin, sal_Bool bEnable )
-{
-    if (bEnable)
-        rWin.Enable();
-    else
-        rWin.Disable();
-}
-
 //============================================================================
 //  class ScHighlightChgDlg
 

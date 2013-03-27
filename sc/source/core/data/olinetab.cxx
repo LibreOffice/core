@@ -108,13 +108,6 @@ void ScOutlineEntry::SetVisible( bool bNewVisible )
 
 ScOutlineCollection::ScOutlineCollection() {}
 
-inline short IntCompare( SCCOLROW nX, SCCOLROW nY )
-{
-    if ( nX==nY ) return 0;
-    else if ( nX<nY ) return -1;
-    else return 1;
-}
-
 size_t ScOutlineCollection::size() const
 {
     return maEntries.size();

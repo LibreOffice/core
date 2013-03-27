@@ -51,14 +51,6 @@
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
-inline void EnableDisable( Window& rWin, bool bEnable )
-{
-    if (bEnable)
-        rWin.Enable();
-    else
-        rWin.Disable();
-}
-
 #define RD_SPECIAL_NONE         0
 #define RD_SPECIAL_CONTENT      1
 #define RD_SPECIAL_VISCONTENT   2

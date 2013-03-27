@@ -266,8 +266,6 @@ inline sal_Int8 GetInt8Property(const OUString&,
                                       const Reference<XPropertySet> &);
 inline util::DateTime const GetDateTimeProperty( const OUString& sPropName,
                                            const Reference<XPropertySet> & xPropSet);
-inline util::Date const GetDateProperty( const OUString& sPropName,
-                                   const Reference<XPropertySet> & xPropSet);
 inline Sequence<OUString> const GetStringSequenceProperty(
                                    const OUString& sPropName,
                                    const Reference<XPropertySet> & xPropSet);
@@ -3585,16 +3583,6 @@ inline util::DateTime const GetDateTimeProperty(
     util::DateTime aTime;
     aAny >>= aTime;
     return aTime;
-}
-
-inline util::Date const GetDateProperty(
-    const OUString& sPropName,
-    const Reference<XPropertySet> & xPropSet)
-{
-    Any aAny = xPropSet->getPropertyValue(sPropName);
-    util::Date aDate;
-    aAny >>= aDate;
-    return aDate;
 }
 
 inline Sequence<OUString> const GetStringSequenceProperty(

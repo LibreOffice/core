@@ -1900,11 +1900,6 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 // 5        - A, .., AA, ..,    - 9
 // 6        - a, .., aa, ..,    - 10
 
-inline sal_uInt16 GetNumPos( sal_uInt16 n )
-{
-    return SVX_NUM_ARABIC < n ? n - 4 : n;
-}
-
 inline SvxExtNumType GetNumType( sal_uInt16 n )
 {
     return (SvxExtNumType)(4 < n ? n + 4 : n );
