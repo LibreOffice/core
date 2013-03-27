@@ -57,6 +57,7 @@ gb_MERGEDLIBS := \
 	fwi \
 	fwk \
 	fwl \
+	$(call gb_Helper_optional,DESKTOP,helplinker) \
 	i18npool \
 	i18nutil \
 	lng \

@@ -50,14 +50,17 @@ $(eval $(call gb_Library_use_static_libraries,merged,\
 endif
 
 $(eval $(call gb_Library_use_externals,merged,\
+	$(call gb_Helper_optional,DESKTOP,clucene) \
 	cppunit \
 	cups \
+	$(call gb_Helper_optional,DESKTOP,expat_utf8) \
 	icui18n \
 	icule \
 	icuuc \
 	jpeg \
 	lcms2 \
 	libxml2 \
+	$(call gb_Helper_optional,DESKTOP,libxslt) \
 	nss3 \
 	openssl \
 	orcus \
