@@ -26,9 +26,6 @@
 #include <sot/clsids.hxx>
 #include <svx/svdview.hxx>
 #include <string.h>
-#ifndef _STRING_H
-#define _STRING_H
-#endif
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>
