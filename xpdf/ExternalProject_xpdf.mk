@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,xpdf,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
 			LIBS="-lgdi32" \
-		&& $(MAKE) \
+		&& MAKEFLAGS="$(subst r,,$(MAKEFLAGS))" $(MAKE) \
 	)
 else # COM=MSC
 $(call gb_ExternalProject_get_state_target,xpdf,build):
