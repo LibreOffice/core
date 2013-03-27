@@ -55,6 +55,7 @@ gb_MERGEDLIBS := \
 	fwe \
 	fwi \
 	fwk \
+	fwl \
 	i18npool \
 	i18nutil \
 	lng \
@@ -69,8 +70,10 @@ gb_MERGEDLIBS := \
 	sax \
 	sb \
 	sc \
+	scui \
 	scfilt \
 	sd \
+	sdui \
 	sfx \
 	sofficeapp \
 	sot \
@@ -81,6 +84,7 @@ gb_MERGEDLIBS := \
 	svx \
 	svxcore \
 	sw \
+	swui \
 	swd \
 	test \
 	tk \

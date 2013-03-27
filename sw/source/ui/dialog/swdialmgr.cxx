@@ -21,7 +21,7 @@
 #include "tools/string.hxx"
 #include <sfx2/app.hxx>
 
-#ifndef DISABLE_DYNLOADING
+#if !defined(DISABLE_DYNLOADING) && !defined (LIBO_MERGELIBS)
 //copy from core\bastyp\swtypes.cxx
 String aEmptyStr; // constant strings
 
