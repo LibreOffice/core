@@ -25,8 +25,10 @@ $(eval $(call gb_ExternalProject_register_targets,redland,\
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,redland,build):
 	$(call gb_ExternalProject_run,build,\
+		PATH="$(OUTDIR)/bin:$$PATH" \
 		CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols $(subst ;, -L,$(ILIB))" \
+		CPPFLAGS="-I$(OUTDIR)/inc/external" \
+		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols -L$(OUTDIR)/lib" \
 		LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
 		XSLTLIB="$(if $(filter YES,$(SYSTEM_LIBXSLT)),$(LIBXSLT_LIBS),-lxslt)" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
