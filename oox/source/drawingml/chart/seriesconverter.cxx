@@ -235,6 +235,9 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     for( DataLabelsModel::DataLabelVector::iterator aIt = mrModel.maPointLabels.begin(), aEnd = mrModel.maPointLabels.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->maNumberFormat.maFormatCode = mrModel.maNumberFormat.maFormatCode;
+        if( !mrModel.maNumberFormat.maFormatCode.isEmpty() )
+            (*aIt)->maNumberFormat.mbSourceLinked = false;
+
         DataLabelConverter aLabelConv( *this, **aIt );
         aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
     }
