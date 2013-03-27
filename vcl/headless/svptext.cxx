@@ -29,6 +29,7 @@
 #include <impfont.hxx>
 #include <rtl/instance.hxx>
 
+#include "vcl/sysdata.hxx"
 #include "generic/geninst.h"
 #include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
