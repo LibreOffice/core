@@ -82,6 +82,8 @@ public:
 
     virtual ~TemplateAbstractView ();
 
+    void insertItem (const TemplateItemProperties &rTemplate);
+
     // Fill view with new item list
     void insertItems (const std::vector<TemplateItemProperties> &rTemplates);
 
