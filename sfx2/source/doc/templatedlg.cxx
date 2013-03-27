@@ -1441,7 +1441,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
             const TemplateSearchViewItem *pItem =
                     static_cast<const TemplateSearchViewItem*>(*aIter);
 
-            if(!maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId))
+            if(!maView->moveTemplate(pItem,pItem->mnRegionId,nItemId))
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = (*aIter)->maTitle;
