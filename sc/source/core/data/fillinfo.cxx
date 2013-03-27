@@ -286,7 +286,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
             CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
             pInfo->bEmptyCellText = true;
-            pInfo->pCell = NULL;
+            pInfo->maCell.clear();
             if (bPaintMarks)
                 pInfo->bMarked = ( nX >= nBlockStartX && nX <= nBlockEndX
                                 && nY >= nBlockStartY && nY <= nBlockEndY );
@@ -380,8 +380,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
-                        pInfo->pCell = pThisCol->maItems[nUIndex].pCell;
-                        if (pInfo->pCell->GetCellType() != CELLTYPE_NOTE)
+                        pInfo->maCell.assign(*pThisCol->maItems[nUIndex].pCell);
+                        if (pInfo->maCell.meType != CELLTYPE_NOTE)
                         {
                             pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
                             pInfo->bEmptyCellText = false;                      // Zelle nicht leer
@@ -504,11 +504,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         if(!pCondForm)
                                             continue;
 
-                                        ScRefCellValue aTmpCell;
-                                        if (pInfo->pCell)
-                                            aTmpCell.assign(*pInfo->pCell);
                                         ScCondFormatData aData = pCondForm->GetData(
-                                            aTmpCell, ScAddress(nX, nCurRow, nTab));
+                                            pInfo->maCell, ScAddress(nX, nCurRow, nTab));
                                         if (!aData.aStyleName.isEmpty())
                                         {
                                             SfxStyleSheetBase* pStyleSheet =
@@ -552,9 +549,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     }
                                 }
 
-                                if (bHidden || ( bFormulaMode && bHideFormula && pInfo->pCell
-                                                    && pInfo->pCell->GetCellType()
-                                                        == CELLTYPE_FORMULA ))
+                                if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.meType == CELLTYPE_FORMULA))
                                     pInfo->bEmptyCellText = true;
 
                                 ++nArrY;

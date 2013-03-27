@@ -207,7 +207,7 @@ private:
     sal_Bool            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
                                     SCCOL& rOverX, SCROW& rOverY, sal_Bool bVisRowChanged );
     sal_Bool            IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
-    void            GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell );
+    void GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScRefCellValue& rCell );
 
     sal_Bool            IsAvailable( SCCOL nX, SCROW nY );
 

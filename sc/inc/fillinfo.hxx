@@ -23,6 +23,7 @@
 #include <svx/framelinkarray.hxx>
 #include "global.hxx"
 #include "colorscale.hxx"
+#include "cellvalue.hxx"
 
 class SfxItemSet;
 class SvxBrushItem;
@@ -92,7 +93,7 @@ struct ScIconSetInfo
 
 struct CellInfo
 {
-    ScBaseCell*                 pCell;
+    ScRefCellValue              maCell;
 
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;

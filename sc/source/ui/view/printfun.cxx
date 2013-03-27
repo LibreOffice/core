@@ -373,8 +373,8 @@ static void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
                 if (((const ScProtectionAttr&)rCellInfo.pPatternAttr->
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet)).GetHidePrint())
                 {
-                    pThisRowInfo->pCellInfo[nX+1].pCell          = NULL;
-                    pThisRowInfo->pCellInfo[nX+1].bEmptyCellText = sal_True;
+                    pThisRowInfo->pCellInfo[nX+1].maCell.clear();
+                    pThisRowInfo->pCellInfo[nX+1].bEmptyCellText = true;
                 }
         }
     }

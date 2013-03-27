@@ -102,7 +102,7 @@ class ScDrawStringsVars
     long                nDotWidth;
     long                nExpWidth;
 
-    ScBaseCell*         pLastCell;
+    ScRefCellValue      maLastCell;
     sal_uLong               nValueFormat;
     sal_Bool                bLineBreak;
     sal_Bool                bRepeat;
@@ -129,9 +129,9 @@ public:
 
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
-    sal_Bool        SetText( ScBaseCell* pCell );   // TRUE -> pOldPattern vergessen
+    bool SetText( ScRefCellValue& rCell );   // TRUE -> pOldPattern vergessen
     void        SetHashText();
-    void        SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth );
+    void SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth );
     void        SetAutoText( const String& rAutoText );
 
     const ScPatternAttr*    GetPattern() const      { return pPattern; }
@@ -148,7 +148,7 @@ public:
     const Size&             GetTextSize() const     { return aTextSize; }
     long                    GetOriginalWidth() const { return nOriginalWidth; }
 
-    sal_uLong   GetResultValueFormat( const ScBaseCell* pCell ) const;
+    sal_uLong GetResultValueFormat( const ScRefCellValue& rCell ) const;
 
     sal_uLong   GetValueFormat() const                  { return nValueFormat; }
     sal_Bool    GetLineBreak() const                    { return bLineBreak; }
@@ -194,7 +194,6 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, sal_Bool bPTL) :
     nSignWidth( 0 ),
     nDotWidth( 0 ),
     nExpWidth( 0 ),
-    pLastCell   ( NULL ),
     nValueFormat( 0 ),
     bLineBreak  ( false ),
     bRepeat     ( false ),
@@ -429,7 +428,7 @@ void ScDrawStringsVars::SetPattern(
     //  zumindest die Text-Groesse muss neu geholt werden
     //! unterscheiden, und den Text nicht neu vom Numberformatter holen?
 
-    pLastCell = NULL;
+    maLastCell.clear();
 }
 
 void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet )
@@ -457,7 +456,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
                     ((SvxLanguageItem*)pLangItem)->GetLanguage() );
 
     if (nValueFormat != nOld)
-        pLastCell = NULL;           // immer neu formatieren
+        maLastCell.clear();           // immer neu formatieren
 
     //  Raender
 
@@ -473,29 +472,26 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     bShrink = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
 }
 
-inline sal_Bool SameValue( ScBaseCell* pCell, ScBaseCell* pOldCell )    // pCell ist != 0
+inline bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
 {
-    return pOldCell && pOldCell->GetCellType() == CELLTYPE_VALUE &&
-            pCell->GetCellType() == CELLTYPE_VALUE &&
-            ((ScValueCell*)pCell)->GetValue() == ((ScValueCell*)pOldCell)->GetValue();
+    return rOldCell.meType == CELLTYPE_VALUE && rCell.meType == CELLTYPE_VALUE &&
+        rCell.mfValue == rOldCell.mfValue;
 }
 
-sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
+bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
 {
     bool bChanged = false;
 
-    if (pCell)
+    if (!rCell.isEmpty())
     {
-        if ( !SameValue( pCell, pLastCell ) )
+        if (!SameValue(rCell, maLastCell))
         {
-            pLastCell = pCell;          //  Zelle merken
+            maLastCell = rCell;          //  Zelle merken
 
             Color* pColor;
             sal_uLong nFormat = GetValueFormat();
             OUString aOUString = aString;
-            ScRefCellValue aCell;
-            aCell.assign(*pCell);
-            ScCellFormat::GetString( aCell,
+            ScCellFormat::GetString( rCell,
                                      nFormat, aOUString, &pColor,
                                      *pOutput->mpDoc->GetFormatTable(),
                                      pOutput->mbShowNullValues,
@@ -525,8 +521,8 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
                 OutputDevice* pDev = pOutput->mpDev;
                 aFont.SetColor(*pColor);
                 pDev->SetFont( aFont ); // nur fuer Ausgabe
-                bChanged = sal_True;
-                pLastCell = NULL;       // naechstes Mal wieder hierherkommen
+                bChanged = true;
+                maLastCell.clear();       // naechstes Mal wieder hierherkommen
             }
 
             TextChanged();
@@ -536,7 +532,7 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
     else
     {
         aString.Erase();
-        pLastCell = NULL;
+        maLastCell.clear();
         aTextSize = Size(0,0);
         nOriginalWidth = 0;
     }
@@ -571,23 +567,20 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
     TextChanged();
 }
 
-void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
+void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth )
 {
     // #i113045# do the single-character width calculations in logic units
     if (bPixelToLogic)
         nWidth = pOutput->mpRefDevice->PixelToLogic(Size(nWidth,0)).Width();
 
-    if (!pCell)
-        return;
-
-    CellType eType = pCell->GetCellType();
+    CellType eType = rCell.meType;
     if (eType != CELLTYPE_VALUE && eType != CELLTYPE_FORMULA)
         // must be a value or formula cell.
         return;
 
     if (eType == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+        ScFormulaCell* pFCell = rCell.mpFormula;
         if (pFCell->GetErrCode() != 0 || pOutput->mbShowFormulas)
         {
             SetHashText();      // If the error string doesn't fit, always use "###". Also for "display formulas" (#i116691#)
@@ -607,7 +600,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         }
     }
 
-    sal_uLong nFormat = GetResultValueFormat(pCell);
+    sal_uLong nFormat = GetResultValueFormat(rCell);
     if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
     {
         // Not 'General' number format.  Set hash text and bail out.
@@ -615,8 +608,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         return;
     }
 
-    double fVal = (eType == CELLTYPE_VALUE) ?
-        static_cast<ScValueCell*>(pCell)->GetValue() : static_cast<ScFormulaCell*>(pCell)->GetValue();
+    double fVal = rCell.getValue();
 
     const SvNumberformat* pNumFormat = pOutput->mpDoc->GetFormatTable()->GetEntry(nFormat);
     if (!pNumFormat)
@@ -683,7 +675,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
     }
 
     TextChanged();
-    pLastCell = NULL;   // #i113022# equal cell and format in another column may give different string
+    maLastCell.clear();   // #i113022# equal cell and format in another column may give different string
 }
 
 void ScDrawStringsVars::SetAutoText( const String& rAutoText )
@@ -713,7 +705,7 @@ void ScDrawStringsVars::SetAutoText( const String& rAutoText )
     if ( bPixelToLogic )
         aTextSize = pRefDevice->LogicToPixel( aTextSize );
 
-    pLastCell = NULL;       // derselbe Text kann in der naechsten Zelle wieder passen
+    maLastCell.clear();       // derselbe Text kann in der naechsten Zelle wieder passen
 }
 
 long ScDrawStringsVars::GetMaxDigitWidth()
@@ -794,13 +786,13 @@ sal_Bool ScDrawStringsVars::HasEditCharacters() const
     return aString.SearchChar( pChars ) != STRING_NOTFOUND;
 }
 
-sal_uLong ScDrawStringsVars::GetResultValueFormat( const ScBaseCell* pCell ) const
+sal_uLong ScDrawStringsVars::GetResultValueFormat( const ScRefCellValue& rCell ) const
 {
     // Get the effective number format, including formula result types.
     // This assumes that a formula cell has already been calculated.
 
-    if ( (nValueFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-        return static_cast<const ScFormulaCell*>(pCell)->GetStandardFormat(*pOutput->mpDoc->GetFormatTable(), nValueFormat);
+    if ((nValueFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && rCell.meType == CELLTYPE_FORMULA)
+        return rCell.mpFormula->GetStandardFormat(*pOutput->mpDoc->GetFormatTable(), nValueFormat);
     else
         return nValueFormat;
 }
@@ -1119,11 +1111,11 @@ sal_Bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW n
     return bEmpty;
 }
 
-void ScOutputData::GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTabP, ScBaseCell*& rpCell )
+void ScOutputData::GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTabP, ScRefCellValue& rCell )
 {
-    mpDoc->GetCell( nCol, nRow, nTabP, rpCell );
-    if ( rpCell && IsEmptyCellText( NULL, nCol, nRow ) )
-        rpCell = NULL;
+    rCell.assign(*mpDoc, ScAddress(nCol, nRow, nTabP));
+    if (!rCell.isEmpty() && IsEmptyCellText(NULL, nCol, nRow))
+        rCell.clear();
 }
 
 sal_Bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
@@ -1551,17 +1543,17 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                 //  output the cell text
                 //
 
-                ScBaseCell* pCell = NULL;
+                ScRefCellValue aCell;
                 if (bDoCell)
                 {
                     if ( nCellY == nY && nCellX == nX && nCellX >= nX1 && nCellX <= nX2 )
-                        pCell = pThisRowInfo->pCellInfo[nCellX+1].pCell;
+                        aCell = pThisRowInfo->pCellInfo[nCellX+1].maCell;
                     else
-                        GetVisibleCell( nCellX, nCellY, nTab, pCell );      // get from document
-                    if ( !pCell )
+                        GetVisibleCell( nCellX, nCellY, nTab, aCell );      // get from document
+                    if (aCell.isEmpty())
                         bDoCell = false;
-                    else if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                        bNeedEdit = sal_True;
+                    else if (aCell.meType == CELLTYPE_EDIT)
+                        bNeedEdit = true;
                 }
                 if (bDoCell && !bNeedEdit)
                 {
@@ -1585,7 +1577,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         pCondSet = mpDoc->GetCondResult( nCellX, nCellY, nTab );
                     }
 
-                    if (pCell->HasValueData() &&
+                    if (aCell.hasNumeric() &&
                         static_cast<const SfxBoolItem&>(
                             pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue())
                     {
@@ -1610,8 +1602,6 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         if ( StringDiffer(pOldPattern,pPattern) ||
                              pCondSet != pOldCondSet || nScript != nOldScript || mbSyntaxMode )
                         {
-                            ScRefCellValue aCell;
-                            aCell.assign(*pCell);
                             aVars.SetPattern(pPattern, pCondSet, aCell, nScript);
                         }
                         else
@@ -1628,22 +1618,21 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                 }
                 if (bDoCell && !bNeedEdit)
                 {
-                    sal_Bool bFormulaCell = (pCell->GetCellType() == CELLTYPE_FORMULA );
+                    bool bFormulaCell = (aCell.meType == CELLTYPE_FORMULA);
                     if ( bFormulaCell )
-                        lcl_CreateInterpretProgress( bProgress, mpDoc, (ScFormulaCell*)pCell );
-                    if ( aVars.SetText(pCell) )
+                        lcl_CreateInterpretProgress(bProgress, mpDoc, aCell.mpFormula);
+                    if ( aVars.SetText(aCell) )
                         pOldPattern = NULL;
-                    bNeedEdit = aVars.HasEditCharacters() ||
-                                    (bFormulaCell && ((ScFormulaCell*)pCell)->IsMultilineResult());
+                    bNeedEdit = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
                 }
                 long nTotalMargin = 0;
                 if (bDoCell && !bNeedEdit)
                 {
-                    CellType eCellType = pCell->GetCellType();
+                    CellType eCellType = aCell.meType;
                     bCellIsValue = ( eCellType == CELLTYPE_VALUE );
                     if ( eCellType == CELLTYPE_FORMULA )
                     {
-                        ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+                        ScFormulaCell* pFCell = aCell.mpFormula;
                         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
                     }
 
@@ -1662,13 +1651,13 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     if ( eOutHorJust == SVX_HOR_JUSTIFY_BLOCK || eOutHorJust == SVX_HOR_JUSTIFY_REPEAT )
                         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
 
-                    sal_Bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
+                    bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
-                    if ( bBreak && bCellIsValue && ( aVars.GetResultValueFormat(pCell) % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
-                        bBreak = sal_False;
+                    if (bBreak && bCellIsValue && (aVars.GetResultValueFormat(aCell) % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                        bBreak = false;
 
-                    sal_Bool bRepeat = aVars.IsRepeat() && !bBreak;
-                    sal_Bool bShrink = aVars.IsShrink() && !bBreak && !bRepeat;
+                    bool bRepeat = aVars.IsRepeat() && !bBreak;
+                    bool bShrink = aVars.IsShrink() && !bBreak && !bRepeat;
 
                     nTotalMargin =
                         static_cast<long>(aVars.GetLeftTotal() * mnPPTX) +
@@ -1784,7 +1773,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                             aVars.SetHashText();
                         else
                             // Adjust the decimals to fit the available column width.
-                            aVars.SetTextToWidthOrHash(pCell, aAreaParam.mnColWidth - nTotalMargin);
+                            aVars.SetTextToWidthOrHash(aCell, aAreaParam.mnColWidth - nTotalMargin);
 
                         nNeededWidth = aVars.GetTextSize().Width() +
                                     (long) ( aVars.GetLeftTotal() * mnPPTX ) +
@@ -2001,14 +1990,10 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         }
 
                         // PDF: whole-cell hyperlink from formula?
-                        sal_Bool bHasURL = pPDFData && pCell && pCell->GetCellType() == CELLTYPE_FORMULA &&
-                                        static_cast<ScFormulaCell*>(pCell)->IsHyperLinkCell();
+                        bool bHasURL = pPDFData && aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
                         if ( bHasURL )
                         {
                             Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
-                            ScRefCellValue aCell;
-                            if (pCell)
-                                aCell.assign(*pCell);
                             lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
                         }
                     }
@@ -2057,30 +2042,25 @@ static void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
                     SfxItemSet( *rPara.GetPool(), rPara.GetRanges() ) );
 }
 
-static sal_Bool lcl_SafeIsValue( ScBaseCell* pCell )
+static bool lcl_SafeIsValue( ScRefCellValue& rCell )
 {
-    if (!pCell)
-        return false;
-
-    sal_Bool bRet = false;
-    switch ( pCell->GetCellType() )
+    switch (rCell.meType)
     {
         case CELLTYPE_VALUE:
-            bRet = sal_True;
-            break;
+            return true;
         case CELLTYPE_FORMULA:
-            {
-                ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-                if ( pFCell->IsRunning() || pFCell->IsValue() )
-                    bRet = sal_True;
-            }
-            break;
+        {
+            ScFormulaCell* pFCell = rCell.mpFormula;
+            if (pFCell->IsRunning() || pFCell->IsValue())
+                return true;
+        }
+        break;
         default:
         {
             // added to avoid warnings
         }
     }
-    return bRet;
+    return false;
 }
 
 static void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
@@ -4554,7 +4534,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
     bool bHyphenatorSet = false;
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet*    pOldCondSet = NULL;
-    ScBaseCell* pCell = NULL;
+    ScRefCellValue aCell;
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
@@ -4606,7 +4586,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                             bDoCell = sal_True;
                         }
                     }
-                    else if ( nX == nX2 && !pThisRowInfo->pCellInfo[nX+1].pCell )
+                    else if ( nX == nX2 && pThisRowInfo->pCellInfo[nX+1].maCell.isEmpty() )
                     {
                         //  Rest of a long text further to the right?
 
@@ -4640,15 +4620,15 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                             CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
                             pPattern = rCellInfo.pPatternAttr;
                             pCondSet = rCellInfo.pConditionSet;
-                            pCell = rCellInfo.pCell;
+                            aCell = rCellInfo.maCell;
                         }
                         else        // get from document
                         {
                             pPattern = mpDoc->GetPattern( nCellX, nCellY, nTab );
                             pCondSet = mpDoc->GetCondResult( nCellX, nCellY, nTab );
-                            GetVisibleCell( nCellX, nCellY, nTab, pCell );
+                            GetVisibleCell( nCellX, nCellY, nTab, aCell );
                         }
-                        if ( !pCell )
+                        if (aCell.isEmpty())
                             bDoCell = false;
                     }
                     if (bDoCell)
@@ -4661,13 +4641,12 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         // fdo#32530: Check if the first character is RTL.
                         rtl::OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
 
-                        DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
+                        DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(aCell));
                         aParam.mbPixelToLogic = bPixelToLogic;
                         aParam.mbHyphenatorSet = bHyphenatorSet;
                         aParam.mbRTL = beginsWithRTLCharacter(aStr);
                         aParam.mpEngine = pEngine;
-                        if (pCell)
-                            aParam.maCell.assign(*pCell);
+                        aParam.maCell = aCell;
                         aParam.mnArrY = nArrY;
                         aParam.mnX = nX;
                         aParam.mnY = nY;
@@ -4740,7 +4719,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
     const SfxItemSet*    pCondSet;
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet*    pOldCondSet = NULL;
-    ScBaseCell* pCell = NULL;
+    ScRefCellValue aCell;
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
@@ -4793,15 +4772,15 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                             pPattern = mpDoc->GetPattern( nX, nY, nTab );
                             bFromDoc = sal_True;
                         }
-                        pCell = pInfo->pCell;
+                        aCell = pInfo->maCell;
                         if (bFromDoc)
                             pCondSet = mpDoc->GetCondResult( nX, nY, nTab );
 
-                        if (!pCell && nX>nX2)
-                            GetVisibleCell( nX, nY, nTab, pCell );
+                        if (aCell.isEmpty() && nX>nX2)
+                            GetVisibleCell( nX, nY, nTab, aCell );
 
-                        if ( !pCell || IsEmptyCellText( pThisRowInfo, nX, nY ) )
-                            bHidden = sal_True;     // nRotateDir is also set without a cell
+                        if (aCell.isEmpty() || IsEmptyCellText(pThisRowInfo, nX, nY))
+                            bHidden = true;     // nRotateDir is also set without a cell
 
                         long nCellWidth = (long) pRowInfo[0].pCellInfo[nX+1].nWidth;
 
@@ -4972,51 +4951,39 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
 
                             //  Daten aus Zelle lesen
 
-                            if (pCell)
+                            if (aCell.meType == CELLTYPE_EDIT)
                             {
-                                if (pCell->GetCellType() == CELLTYPE_EDIT)
-                                {
-                                    const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
-                                    if (pData)
-                                        pEngine->SetText(*pData);
-                                    else
-                                    {
-                                        OSL_FAIL("pData == 0");
-                                    }
-                                }
+                                if (aCell.mpEditText)
+                                    pEngine->SetText(*aCell.mpEditText);
                                 else
                                 {
-                                    sal_uLong nFormat = pPattern->GetNumberFormat(
-                                                                mpDoc->GetFormatTable(), pCondSet );
-                                    rtl::OUString aString;
-                                    Color* pColor;
-                                    ScRefCellValue aCell;
-                                    aCell.assign(*pCell);
-                                    ScCellFormat::GetString( aCell,
-                                                             nFormat,aString, &pColor,
-                                                             *mpDoc->GetFormatTable(),
-                                                             mbShowNullValues,
-                                                             mbShowFormulas,
-                                                             ftCheck );
-
-                                    pEngine->SetText(aString);
-                                    if ( pColor && !mbSyntaxMode && !( mbUseStyleColor && mbForceAutoColor ) )
-                                        lcl_SetEditColor( *pEngine, *pColor );
+                                    OSL_FAIL("pData == 0");
                                 }
-
-                                if ( mbSyntaxMode )
-                                {
-                                    ScRefCellValue aCell;
-                                    aCell.assign(*pCell);
-                                    SetEditSyntaxColor(*pEngine, aCell);
-                                }
-                                else if ( mbUseStyleColor && mbForceAutoColor )
-                                    lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
                             }
                             else
                             {
-                                OSL_FAIL("pCell == NULL");
+                                sal_uLong nFormat = pPattern->GetNumberFormat(
+                                                            mpDoc->GetFormatTable(), pCondSet );
+                                rtl::OUString aString;
+                                Color* pColor;
+                                ScCellFormat::GetString( aCell,
+                                                         nFormat,aString, &pColor,
+                                                         *mpDoc->GetFormatTable(),
+                                                         mbShowNullValues,
+                                                         mbShowFormulas,
+                                                         ftCheck );
+
+                                pEngine->SetText(aString);
+                                if ( pColor && !mbSyntaxMode && !( mbUseStyleColor && mbForceAutoColor ) )
+                                    lcl_SetEditColor( *pEngine, *pColor );
                             }
+
+                            if ( mbSyntaxMode )
+                            {
+                                SetEditSyntaxColor(*pEngine, aCell);
+                            }
+                            else if ( mbUseStyleColor && mbForceAutoColor )
+                                lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
 
                             pEngine->SetUpdateMode( sal_True );     // after SetText, before CalcTextWidth/GetTextHeight
 

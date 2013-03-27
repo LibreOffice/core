@@ -1960,14 +1960,12 @@ void ScOutputData::FindChanged()
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         for (nX=nX1; nX<=nX2; nX++)
         {
-            ScBaseCell* pCell = pThisRowInfo->pCellInfo[nX+1].pCell;
-            if (!pCell)
+            const ScRefCellValue& rCell = pThisRowInfo->pCellInfo[nX+1].maCell;
+
+            if (rCell.meType != CELLTYPE_FORMULA)
                 continue;
 
-            if (pCell->GetCellType() != CELLTYPE_FORMULA)
-                continue;
-
-            ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+            ScFormulaCell* pFCell = rCell.mpFormula;
             if ( !bProgress && pFCell->GetDirty() )
             {
                 ScProgress::CreateInterpretProgress(mpDoc, true);
