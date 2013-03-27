@@ -1859,13 +1859,17 @@ void SwCrsrShell::RefreshBlockCursor()
 /// create a copy of the cursor and save it in the stack
 void SwCrsrShell::Push()
 {
-    pCrsrStk = new SwShellCrsr( *this, *pCurCrsr->GetPoint(),
-                                    pCurCrsr->GetPtPos(), pCrsrStk );
+    // fdo#60513: if we have a table cursor, copy that; else copy current.
+    // This seems to work because UpdateCrsr() will fix this up on Pop(),
+    // then MakeBoxSels() will re-create the current pCurCrsr cell ring.
+    SwShellCrsr *const pCurrent((pTblCrsr) ? pTblCrsr : pCurCrsr);
+    pCrsrStk = new SwShellCrsr( *this, *pCurrent->GetPoint(),
+                                    pCurrent->GetPtPos(), pCrsrStk );
 
-    if( pCurCrsr->HasMark() )
+    if (pCurrent->HasMark())
     {
         pCrsrStk->SetMark();
-        *pCrsrStk->GetMark() = *pCurCrsr->GetMark();
+        *pCrsrStk->GetMark() = *pCurrent->GetMark();
     }
 }
 
