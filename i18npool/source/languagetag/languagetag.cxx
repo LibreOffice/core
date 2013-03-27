@@ -145,7 +145,7 @@ void LiblantagDataRef::setupDataPath()
         lt_db_set_datadir( maDataPath.getStr());
 }
 
-LanguageTag::LanguageTag( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize )
+LanguageTag::LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize )
     :
         maBcp47( rBcp47LanguageTag),
         mpImplLangtag( NULL),
@@ -209,7 +209,7 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
 }
 
 
-LanguageTag::LanguageTag( const rtl::OUString& rLanguage, const rtl::OUString& rCountry )
+LanguageTag::LanguageTag( const OUString& rLanguage, const OUString& rCountry )
     :
         maLocale( rLanguage, rCountry, ""),
         mpImplLangtag( NULL),
@@ -353,7 +353,7 @@ void LanguageTag::resetVars()
 }
 
 
-void LanguageTag::reset( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize )
+void LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize )
 {
     resetVars();
     maBcp47             = rBcp47LanguageTag;
@@ -684,7 +684,7 @@ void LanguageTag::convertFromRtlLocale()
 }
 
 
-const rtl::OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
+const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
         return theEmptyBcp47::get();
@@ -699,7 +699,7 @@ const rtl::OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
 }
 
 
-rtl::OUString LanguageTag::getLanguageFromLangtag()
+OUString LanguageTag::getLanguageFromLangtag()
 {
     OUString aLanguage;
     if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
@@ -726,7 +726,7 @@ rtl::OUString LanguageTag::getLanguageFromLangtag()
 }
 
 
-rtl::OUString LanguageTag::getScriptFromLangtag()
+OUString LanguageTag::getScriptFromLangtag()
 {
     OUString aScript;
     if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
@@ -753,7 +753,7 @@ rtl::OUString LanguageTag::getScriptFromLangtag()
 }
 
 
-rtl::OUString LanguageTag::getRegionFromLangtag()
+OUString LanguageTag::getRegionFromLangtag()
 {
     OUString aRegion;
     if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
@@ -817,7 +817,7 @@ LanguageType LanguageTag::getLanguageType( bool bResolveSystem ) const
 }
 
 
-void LanguageTag::getIsoLanguageCountry( rtl::OUString& rLanguage, rtl::OUString& rCountry ) const
+void LanguageTag::getIsoLanguageCountry( OUString& rLanguage, OUString& rCountry ) const
 {
     if (!isIsoLocale())
     {
@@ -848,7 +848,7 @@ bool isUpperAscii( sal_Unicode c )
 
 
 // static
-bool LanguageTag::isIsoLanguage( const rtl::OUString& rLanguage )
+bool LanguageTag::isIsoLanguage( const OUString& rLanguage )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
     bool b2chars;
@@ -865,7 +865,7 @@ bool LanguageTag::isIsoLanguage( const rtl::OUString& rLanguage )
 
 
 // static
-bool LanguageTag::isIsoCountry( const rtl::OUString& rRegion )
+bool LanguageTag::isIsoCountry( const OUString& rRegion )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
     if (rRegion.isEmpty() ||
@@ -878,7 +878,7 @@ bool LanguageTag::isIsoCountry( const rtl::OUString& rRegion )
 
 
 // static
-bool LanguageTag::isIsoScript( const rtl::OUString& rScript )
+bool LanguageTag::isIsoScript( const OUString& rScript )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
     if (rScript.isEmpty() ||
@@ -894,7 +894,7 @@ bool LanguageTag::isIsoScript( const rtl::OUString& rScript )
 }
 
 
-rtl::OUString LanguageTag::getLanguage() const
+OUString LanguageTag::getLanguage() const
 {
     if (!mbCachedLanguage)
     {
@@ -905,7 +905,7 @@ rtl::OUString LanguageTag::getLanguage() const
 }
 
 
-rtl::OUString LanguageTag::getScript() const
+OUString LanguageTag::getScript() const
 {
     if (!mbCachedScript)
     {
@@ -916,7 +916,7 @@ rtl::OUString LanguageTag::getScript() const
 }
 
 
-rtl::OUString LanguageTag::getLanguageAndScript() const
+OUString LanguageTag::getLanguageAndScript() const
 {
     OUString aLanguageScript( getLanguage());
     OUString aScript( getScript());
@@ -930,7 +930,7 @@ rtl::OUString LanguageTag::getLanguageAndScript() const
 }
 
 
-rtl::OUString LanguageTag::getCountry() const
+OUString LanguageTag::getCountry() const
 {
     if (!mbCachedCountry)
     {
@@ -943,7 +943,7 @@ rtl::OUString LanguageTag::getCountry() const
 }
 
 
-rtl::OUString LanguageTag::getRegion() const
+OUString LanguageTag::getRegion() const
 {
     return const_cast<LanguageTag*>(this)->getRegionFromLangtag();
 }
@@ -1115,10 +1115,10 @@ bool LanguageTag::operator!=( const LanguageTag & rLanguageTag ) const
 
 
 // static
-bool LanguageTag::simpleExtract( const rtl::OUString& rBcp47,
-                                 rtl::OUString& rLanguage,
-                                 rtl::OUString& rScript,
-                                 rtl::OUString& rCountry )
+bool LanguageTag::simpleExtract( const OUString& rBcp47,
+                                 OUString& rLanguage,
+                                 OUString& rScript,
+                                 OUString& rCountry )
 {
     bool bRet = false;
     const sal_Int32 nLen = rBcp47.getLength();

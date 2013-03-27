@@ -45,7 +45,7 @@ public:
         so specifying bCanonicalize=false is not a guarantee that the tag will
         stay identical to what was passed.
      */
-    explicit LanguageTag( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize = false );
+    explicit LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize = false );
 
     /** Init LanguageTag with Locale. */
     explicit LanguageTag( const com::sun::star::lang::Locale & rLocale );
@@ -59,7 +59,7 @@ public:
         country to replace the MsLangId::convert...IsoNames...() calls. Avoid
         use in new code.
      */
-    explicit LanguageTag( const rtl::OUString& rLanguage, const rtl::OUString& rCountry );
+    explicit LanguageTag( const OUString& rLanguage, const OUString& rCountry );
 
     /** Init LanguageTag with rtl_Locale.
 
@@ -78,7 +78,7 @@ public:
                locale to the real locale used.
                If FALSE, return an empty OUString for such a tag.
      */
-    const rtl::OUString &           getBcp47( bool bResolveSystem = true ) const;
+    const OUString &                getBcp47( bool bResolveSystem = true ) const;
 
     /** Obtain language tag as Locale.
 
@@ -118,13 +118,13 @@ public:
 
         Always resolves an empty tag to the system locale.
      */
-    void                            getIsoLanguageCountry( rtl::OUString& rLanguage, rtl::OUString& rCountry ) const;
+    void                            getIsoLanguageCountry( OUString& rLanguage, OUString& rCountry ) const;
 
     /** Get ISO 639 language code, or BCP 47 language.
 
         Always resolves an empty tag to the system locale.
      */
-    rtl::OUString                   getLanguage() const;
+    OUString                        getLanguage() const;
 
     /** Get ISO 15924 script code, if not the default script according to
         BCP 47. For default script an empty string is returned.
@@ -133,7 +133,7 @@ public:
 
         Always resolves an empty tag to the system locale.
      */
-    rtl::OUString                   getScript() const;
+    OUString                        getScript() const;
 
     /** Get combined language and script code, separated by '-' if
         non-default script, if default script only language.
@@ -142,21 +142,21 @@ public:
 
         Always resolves an empty tag to the system locale.
      */
-    rtl::OUString                   getLanguageAndScript() const;
+    OUString                        getLanguageAndScript() const;
 
     /** Get ISO 3166 country alpha code. Empty if the BCP 47 tags denote a
         region not expressable as 2 character country code.
 
         Always resolves an empty tag to the system locale.
      */
-    rtl::OUString                   getCountry() const;
+    OUString                        getCountry() const;
 
     /** Get BCP 47 region tag, which may be an ISO 3166 country alpha code or
         any other BCP 47 region tag.
 
         Always resolves an empty tag to the system locale.
      */
-    rtl::OUString                   getRegion() const;
+    OUString                        getRegion() const;
 
     /** If language tag has a non-default script specified.
      */
@@ -197,7 +197,7 @@ public:
 
 
     /** Reset with existing BCP 47 language tag string. See ctor. */
-    void                            reset( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize = false );
+    void                            reset( const OUString & rBcp47LanguageTag, bool bCanonicalize = false );
 
     /** Reset with Locale. */
     void                            reset( const com::sun::star::lang::Locale & rLocale );
@@ -272,10 +272,10 @@ private:
     };
 
     mutable com::sun::star::lang::Locale    maLocale;
-    mutable rtl::OUString                   maBcp47;
-    mutable rtl::OUString                   maCachedLanguage;   ///< cache getLanguage()
-    mutable rtl::OUString                   maCachedScript;     ///< cache getScript()
-    mutable rtl::OUString                   maCachedCountry;    ///< cache getCountry()
+    mutable OUString                        maBcp47;
+    mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
+    mutable OUString                        maCachedScript;     ///< cache getScript()
+    mutable OUString                        maCachedCountry;    ///< cache getCountry()
     mutable void*                           mpImplLangtag;      ///< actually lt_tag_t pointer, encapsulated
     mutable LanguageType                    mnLangID;
     mutable Decision                        meIsValid;
@@ -302,9 +302,9 @@ private:
 
     bool    canonicalize();
 
-    rtl::OUString   getLanguageFromLangtag();
-    rtl::OUString   getScriptFromLangtag();
-    rtl::OUString   getRegionFromLangtag();
+    OUString    getLanguageFromLangtag();
+    OUString    getScriptFromLangtag();
+    OUString    getRegionFromLangtag();
 
     void            resetVars();
 
@@ -315,9 +315,9 @@ private:
      */
     bool            cacheSimpleLSC();
 
-    static bool     isIsoLanguage( const rtl::OUString& rLanguage );
-    static bool     isIsoScript( const rtl::OUString& rScript );
-    static bool     isIsoCountry( const rtl::OUString& rRegion );
+    static bool     isIsoLanguage( const OUString& rLanguage );
+    static bool     isIsoScript( const OUString& rScript );
+    static bool     isIsoCountry( const OUString& rRegion );
 
     /** Of a simple language tag of the form lll[-Ssss][-CC] (i.e. one that
         would fulfill the isIsoODF() condition) extract the portions.
@@ -326,10 +326,10 @@ private:
 
         @return TRUE if it detected a simple tag, else FALSE.
      */
-    static bool     simpleExtract( const rtl::OUString& rBcp47,
-                                   rtl::OUString& rLanguage,
-                                   rtl::OUString& rScript,
-                                   rtl::OUString& rCountry );
+    static bool     simpleExtract( const OUString& rBcp47,
+                                   OUString& rLanguage,
+                                   OUString& rScript,
+                                   OUString& rCountry );
 };
 
 #endif  // INCLUDED_I18NPOOL_LANGUAGETAG_HXX
