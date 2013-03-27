@@ -38,7 +38,6 @@ String RID_DRAW_MEDIA_TOOLBOX
 
 String RID_DRAW_TABLE_TOOLBOX
 {
-    TEXT [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
 };
 

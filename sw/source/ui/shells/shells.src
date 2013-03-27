@@ -244,6 +244,6 @@ String STR_SWBG_FOOTER
  //Ende: Strings fuer Gallery/Hintergrund
 
 // #i68101# no longer needed:
-// String STR_NAME_SHAPE_LABEL {// String STR_NAME_SHAPE_DIALOG { Text [ de ] = "Objekt benennen" ; Text [ en-US ] = "Name Object"; };
+// String STR_NAME_SHAPE_LABEL {// String STR_NAME_SHAPE_DIALOG { Text [ en-US ] = "Name Object"; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
