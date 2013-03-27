@@ -304,13 +304,13 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                             fSuccess = WriteFile(  hPipe, "", 1, &dwBytesWritten, NULL );
                             if ( fSuccess )
                             {
-                                DWORD   dwBytesRead = 0;
-                                char    *pBuffer = (char *)_alloca( sizeof(PIPE_TERMINATION_SEQUENCE) );
-                                fSuccess = ReadFile( hPipe, pBuffer, sizeof(PIPE_TERMINATION_SEQUENCE) - 1, &dwBytesRead, NULL );
+                                DWORD   dwBytesRead2 = 0;
+                                char    *pBuffer2 = (char *)_alloca( sizeof(PIPE_TERMINATION_SEQUENCE) );
+                                fSuccess = ReadFile( hPipe, pBuffer2, sizeof(PIPE_TERMINATION_SEQUENCE) - 1, &dwBytesRead2, NULL );
                                 if ( fSuccess )
                                 {
-                                    pBuffer[dwBytesRead] = 0;
-                                    if ( 0 != strcmp( PIPE_TERMINATION_SEQUENCE, pBuffer ) )
+                                    pBuffer2[dwBytesRead2] = 0;
+                                    if ( 0 != strcmp( PIPE_TERMINATION_SEQUENCE, pBuffer2 ) )
                                         fSuccess = FALSE;
                                 }
                             }
