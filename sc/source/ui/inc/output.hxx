@@ -21,6 +21,7 @@
 #define SC_OUTPUT_HXX
 
 #include "address.hxx"
+#include "cellvalue.hxx"
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -84,14 +85,14 @@ private:
         long                    mnPosX;
         long                    mnPosY;
         long                    mnInitPosX;
-        bool                    mbBreak;
-        bool                    mbCellIsValue;
-        bool                    mbAsianVertical;
-        bool                    mbPixelToLogic;
-        bool                    mbHyphenatorSet;
-        bool                    mbRTL;
+        bool                    mbBreak:1;
+        bool                    mbCellIsValue:1;
+        bool                    mbAsianVertical:1;
+        bool                    mbPixelToLogic:1;
+        bool                    mbHyphenatorSet:1;
+        bool                    mbRTL:1;
         ScFieldEditEngine*      mpEngine;
-        ScBaseCell*             mpCell;
+        ScRefCellValue          maCell;
         const ScPatternAttr*    mpPattern;
         const SfxItemSet*       mpCondSet;
         const ScPatternAttr*    mpOldPattern;
@@ -223,8 +224,8 @@ private:
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 
-    void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
-    void            SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell );
+    void SetSyntaxColor( Font* pFont, const ScRefCellValue& rCell );
+    void SetEditSyntaxColor( EditEngine& rEngine, ScRefCellValue& rCell );
 
     double          GetStretch();
 

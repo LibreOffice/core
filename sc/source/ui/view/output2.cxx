@@ -53,7 +53,6 @@
 #include "progress.hxx"
 #include "scmod.hxx"
 #include "fillinfo.hxx"
-#include "cellvalue.hxx"
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
@@ -124,7 +123,10 @@ public:
                 //  SetPattern = ex-SetVars
                 //  SetPatternSimple: ohne Font
 
-    void        SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet, ScBaseCell* pCell, sal_uInt8 nScript );
+    void SetPattern(
+        const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
+        sal_uInt8 nScript );
+
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
     sal_Bool        SetText( ScBaseCell* pCell );   // TRUE -> pOldPattern vergessen
@@ -272,8 +274,9 @@ bool lcl_GetBoolValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const Sf
 
 }
 
-void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet,
-                                    ScBaseCell* pCell, sal_uInt8 nScript )
+void ScDrawStringsVars::SetPattern(
+    const ScPatternAttr* pNew, const SfxItemSet* pSet, const ScRefCellValue& rCell,
+    sal_uInt8 nScript )
 {
     nMaxDigitWidth = 0;
     nSignWidth     = 0;
@@ -375,7 +378,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     //  Syntax-Modus
 
     if (pOutput->mbSyntaxMode)
-        pOutput->SetSyntaxColor( &aFont, pCell );
+        pOutput->SetSyntaxColor(&aFont, rCell);
 
     pDev->SetFont( aFont );
     if ( pFmtDevice != pDev )
@@ -836,15 +839,15 @@ double ScOutputData::GetStretch()
 //  output strings
 //
 
-static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCell* pCell )
+static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScRefCellValue& rCell )
 {
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
 
-    rtl::OUString aCellText;
-    rtl::OUString aURL;
-    if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+    OUString aCellText;
+    OUString aURL;
+    if (rCell.meType == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+        ScFormulaCell* pFCell = rCell.mpFormula;
         if ( pFCell->IsHyperLinkCell() )
             pFCell->GetURLResult( aURL, aCellText );
     }
@@ -859,25 +862,22 @@ static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, S
     }
 }
 
-void ScOutputData::SetSyntaxColor( Font* pFont, ScBaseCell* pCell )
+void ScOutputData::SetSyntaxColor( Font* pFont, const ScRefCellValue& rCell )
 {
-    if (pCell)
+    switch (rCell.meType)
     {
-        switch (pCell->GetCellType())
+        case CELLTYPE_VALUE:
+            pFont->SetColor(*pValueColor);
+        break;
+        case CELLTYPE_STRING:
+            pFont->SetColor(*pTextColor);
+        break;
+        case CELLTYPE_FORMULA:
+            pFont->SetColor(*pFormulaColor);
+        break;
+        default:
         {
-            case CELLTYPE_VALUE:
-                pFont->SetColor( *pValueColor );
-                break;
-            case CELLTYPE_STRING:
-                pFont->SetColor( *pTextColor );
-                break;
-            case CELLTYPE_FORMULA:
-                pFont->SetColor( *pFormulaColor );
-                break;
-            default:
-            {
-                // added to avoid warnings
-            }
+            // added to avoid warnings
         }
     }
 }
@@ -891,29 +891,26 @@ static void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
     // function is called with update mode set to FALSE
 }
 
-void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell )
+void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, ScRefCellValue& rCell )
 {
-    if (pCell)
+    Color aColor;
+    switch (rCell.meType)
     {
-        Color aColor;
-        switch (pCell->GetCellType())
+        case CELLTYPE_VALUE:
+            aColor = *pValueColor;
+            break;
+        case CELLTYPE_STRING:
+            aColor = *pTextColor;
+            break;
+        case CELLTYPE_FORMULA:
+            aColor = *pFormulaColor;
+            break;
+        default:
         {
-            case CELLTYPE_VALUE:
-                aColor = *pValueColor;
-                break;
-            case CELLTYPE_STRING:
-                aColor = *pTextColor;
-                break;
-            case CELLTYPE_FORMULA:
-                aColor = *pFormulaColor;
-                break;
-            default:
-            {
-                // added to avoid warnings
-            }
+            // added to avoid warnings
         }
-        lcl_SetEditColor( rEngine, aColor );
     }
+    lcl_SetEditColor( rEngine, aColor );
 }
 
 sal_Bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
@@ -1612,7 +1609,11 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     {
                         if ( StringDiffer(pOldPattern,pPattern) ||
                              pCondSet != pOldCondSet || nScript != nOldScript || mbSyntaxMode )
-                            aVars.SetPattern( pPattern, pCondSet, pCell, nScript );
+                        {
+                            ScRefCellValue aCell;
+                            aCell.assign(*pCell);
+                            aVars.SetPattern(pPattern, pCondSet, aCell, nScript);
+                        }
                         else
                             aVars.SetPatternSimple( pPattern, pCondSet );
                         pOldPattern = pPattern;
@@ -2005,7 +2006,10 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         if ( bHasURL )
                         {
                             Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
-                            lcl_DoHyperlinkResult( mpDev, aURLRect, pCell );
+                            ScRefCellValue aCell;
+                            if (pCell)
+                                aCell.assign(*pCell);
+                            lcl_DoHyperlinkResult(mpDev, aURLRect, aCell);
                         }
                     }
                 }
@@ -2242,7 +2246,6 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mbHyphenatorSet(false),
     mbRTL(false),
     mpEngine(NULL),
-    mpCell(NULL),
     mpPattern(pPattern),
     mpCondSet(pCondSet),
     mpOldPattern(NULL),
@@ -2253,15 +2256,9 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
 bool ScOutputData::DrawEditParam::readCellContent(
     ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields)
 {
-    if (!mpCell)
+    if (maCell.meType == CELLTYPE_EDIT)
     {
-        OSL_FAIL("pCell == NULL");
-        return false;
-    }
-
-    if (mpCell->GetCellType() == CELLTYPE_EDIT)
-    {
-        const EditTextObject* pData = static_cast<ScEditCell*>(mpCell)->GetData();
+        const EditTextObject* pData = maCell.mpEditText;
         if (pData)
         {
             mpEngine->SetText(*pData);
@@ -2286,9 +2283,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
                                     pDoc->GetFormatTable(), mpCondSet );
         OUString aString;
         Color* pColor;
-        ScRefCellValue aCell;
-        aCell.assign(*mpCell);
-        ScCellFormat::GetString( aCell,
+        ScCellFormat::GetString( maCell,
                                  nFormat,aString, &pColor,
                                  *pDoc->GetFormatTable(),
                                  bShowNullValues,
@@ -2413,13 +2408,10 @@ bool ScOutputData::DrawEditParam::hasLineBreak() const
 
 bool ScOutputData::DrawEditParam::isHyperlinkCell() const
 {
-    if (!mpCell)
+    if (maCell.meType != CELLTYPE_FORMULA)
         return false;
 
-    if (mpCell->GetCellType() != CELLTYPE_FORMULA)
-        return false;
-
-    return static_cast<ScFormulaCell*>(mpCell)->IsHyperLinkCell();
+    return maCell.mpFormula->IsHyperLinkCell();
 }
 
 bool ScOutputData::DrawEditParam::isVerticallyOriented() const
@@ -2554,13 +2546,12 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
     }
 
     mpEngine->SetVertical(mbAsianVertical);
-    if (mpCell && mpCell->GetCellType() == CELLTYPE_EDIT)
+    if (maCell.meType == CELLTYPE_EDIT)
     {
         // We need to synchronize the vertical mode in the EditTextObject
         // instance too.  No idea why we keep this state in two separate
         // instances.
-        ScEditCell* pEditCell = static_cast<ScEditCell*>(mpCell);
-        const EditTextObject* pData = pEditCell->GetData();
+        const EditTextObject* pData = maCell.mpEditText;
         if (pData)
             const_cast<EditTextObject*>(pData)->SetVertical(mbAsianVertical);
     }
@@ -2623,7 +2614,7 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, Outpu
         aURLStart.X() -= nURLWidth;
 
     Rectangle aURLRect( aURLStart, Size( nURLWidth, nURLHeight ) );
-    lcl_DoHyperlinkResult( pDev, aURLRect, mpCell );
+    lcl_DoHyperlinkResult(pDev, aURLRect, maCell);
 }
 
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
@@ -2748,7 +2739,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         return;
 
     if ( mbSyntaxMode )
-        SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
+        SetEditSyntaxColor(*rParam.mpEngine, rParam.maCell);
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
@@ -3130,7 +3121,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         return;
 
     if ( mbSyntaxMode )
-        SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
+        SetEditSyntaxColor( *rParam.mpEngine, rParam.maCell );
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
@@ -3500,7 +3491,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         return;
 
     if ( mbSyntaxMode )
-        SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
+        SetEditSyntaxColor( *rParam.mpEngine, rParam.maCell );
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
@@ -3884,7 +3875,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         return;
 
     if ( mbSyntaxMode )
-        SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
+        SetEditSyntaxColor( *rParam.mpEngine, rParam.maCell );
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
@@ -4293,7 +4284,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         return;
 
     if ( mbSyntaxMode )
-        SetEditSyntaxColor( *rParam.mpEngine, rParam.mpCell );
+        SetEditSyntaxColor( *rParam.mpEngine, rParam.maCell );
     else if ( mbUseStyleColor && mbForceAutoColor )
         lcl_SetEditColor( *rParam.mpEngine, COL_AUTO );     //! or have a flag at EditEngine
 
@@ -4675,7 +4666,8 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mbHyphenatorSet = bHyphenatorSet;
                         aParam.mbRTL = beginsWithRTLCharacter(aStr);
                         aParam.mpEngine = pEngine;
-                        aParam.mpCell = pCell;
+                        if (pCell)
+                            aParam.maCell.assign(*pCell);
                         aParam.mnArrY = nArrY;
                         aParam.mnX = nX;
                         aParam.mnY = nY;
@@ -5013,7 +5005,11 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                                 }
 
                                 if ( mbSyntaxMode )
-                                    SetEditSyntaxColor( *pEngine, pCell );
+                                {
+                                    ScRefCellValue aCell;
+                                    aCell.assign(*pCell);
+                                    SetEditSyntaxColor(*pEngine, aCell);
+                                }
                                 else if ( mbUseStyleColor && mbForceAutoColor )
                                     lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
                             }
