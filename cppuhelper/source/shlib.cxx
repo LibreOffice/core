@@ -445,9 +445,7 @@ extern "C"
     extern void * bootstrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * comphelp_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-#if HAVE_FEATURE_EXTENSIONS
     extern void * deployment_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-#endif
     extern void * expwrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fastsax_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -462,6 +460,7 @@ extern "C"
     extern void * stocservices_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucb_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * ucpexpand1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucpfile_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * utl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * vcl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -546,6 +545,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "liblocalebe1.uno.a", localebe1_component_getFactory },
         { "libreflection.uno.a", reflection_component_getFactory },
         { "libstocservices.uno.a", stocservices_component_getFactory },
+        { "libucpexpand1.uno.a", ucpexpand1_component_getFactory },
 #else
         { "configmgr.uno.a", configmgr_component_getFactory },
         { "expwrap.uno.a", expwrap_component_getFactory },
@@ -555,11 +555,10 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "localebe1.uno.a", localebe1_component_getFactory },
         { "reflection.uno.a", reflection_component_getFactory },
         { "stocservices.uno.a", stocservices_component_getFactory },
+        { "ucpexpand1.uno.a", ucpexpand1_component_getFactory },
 #endif
         { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
-#if HAVE_FEATURE_EXTENSIONS
         { "libdeployment.a", deployment_component_getFactory },
-#endif
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libpackage2.a", package2_component_getFactory },
