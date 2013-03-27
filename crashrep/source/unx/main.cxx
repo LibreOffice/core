@@ -75,12 +75,6 @@ static char g_szStackFile[L_tmpnam] = "";
 static char g_szDescriptionFile[2048] = "";
 static char g_szReportFile[2048] = "";
 
-#ifdef LINUX
-#define PMAP_CMD            "cat /proc/%d/maps"
-#else
-#define PMAP_CMD            "pmap %d"
-#endif
-
 #define REPORT_SERVER   (g_strReportServer.c_str())
 #define REPORT_PORT     g_uReportPort
 
