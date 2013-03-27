@@ -65,6 +65,7 @@ typedef void (CALLTYPE* FARPROC) ( void );
 
 }
 
+#ifndef DISABLE_DYNLOADING
 #define GETFUNCTIONCOUNT        "GetFunctionCount"
 #define GETFUNCTIONDATA         "GetFunctionData"
 #define SETLANGUAGE             "SetLanguage"
@@ -72,6 +73,7 @@ typedef void (CALLTYPE* FARPROC) ( void );
 #define ISASYNC                 "IsAsync"
 #define ADVICE                  "Advice"
 #define UNADVICE                "Unadvice"
+#endif
 
 class ModuleData
 {
