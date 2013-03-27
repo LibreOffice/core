@@ -2150,9 +2150,8 @@ fi
 AC_SUBST(DISABLE_DBCONNECTIVITY)
 
 if test -z "$enable_extensions"; then
-    # For iOS disable extensions unless specifically overridden with
-    # --enable-extensions.
-    if test $_os != iOS; then
+    # For iOS and Android disable extensions unless specifically overridden with --enable-extensions.
+    if test $_os != iOS -a $_os != Android; then
         enable_extensions=yes
     fi
 fi
