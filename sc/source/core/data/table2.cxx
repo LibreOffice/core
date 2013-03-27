@@ -1436,6 +1436,14 @@ const EditTextObject* ScTable::GetEditText( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].GetEditText(nRow);
 }
 
+void ScTable::RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
+{
+    if (!ValidColRow(nCol, nRow))
+        return;
+
+    return aCol[nCol].RemoveEditTextCharAttribs(nRow, rAttr);
+}
+
 void ScTable::GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const
 {
     if (ValidColRow(nCol,nRow))

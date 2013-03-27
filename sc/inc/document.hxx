@@ -820,6 +820,7 @@ public:
     SC_DLLPUBLIC double GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
     SC_DLLPUBLIC void GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
     SC_DLLPUBLIC const EditTextObject* GetEditText( const ScAddress& rPos ) const;
+    void RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr );
     SC_DLLPUBLIC double RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const;
     SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      sal_uInt32& rFormat ) const;

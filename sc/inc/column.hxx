@@ -279,6 +279,7 @@ public:
     void        GetInputString( SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;
+    void RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr );
     void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCROW nRow ) const;

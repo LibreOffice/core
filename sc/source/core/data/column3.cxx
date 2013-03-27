@@ -1835,6 +1835,20 @@ const EditTextObject* ScColumn::GetEditText( SCROW nRow ) const
     return pEditCell->GetData();
 }
 
+void ScColumn::RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr )
+{
+    SCSIZE nIndex;
+    if (!Search(nRow, nIndex))
+        return;
+
+    ScBaseCell* pCell = maItems[nIndex].pCell;
+    if (pCell->GetCellType() != CELLTYPE_EDIT)
+        return;
+
+    ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
+    pEditCell->RemoveCharAttribs(rAttr);
+}
+
 void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
 {
     SCSIZE  nIndex;

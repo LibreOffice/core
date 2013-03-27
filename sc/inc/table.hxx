@@ -328,6 +328,7 @@ public:
                     }
     double      GetValue( SCCOL nCol, SCROW nRow ) const;
     const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
+    void RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
     void GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( SCCOL nCol, SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow ) const;

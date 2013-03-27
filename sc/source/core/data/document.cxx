@@ -3132,7 +3132,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
 
 void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    if (TableExists(nTab))
         rValue = maTabs[nTab]->GetValue( nCol, nRow );
     else
         rValue = 0.0;
@@ -3141,10 +3141,18 @@ void ScDocument::GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) 
 const EditTextObject* ScDocument::GetEditText( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
+    if (!TableExists(nTab))
         return NULL;
 
     return maTabs[nTab]->GetEditText(rPos.Col(), rPos.Row());
+}
+
+void ScDocument::RemoveEditTextCharAttribs( const ScAddress& rPos, const ScPatternAttr& rAttr )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    return maTabs[rPos.Tab()]->RemoveEditTextCharAttribs(rPos.Col(), rPos.Row(), rAttr);
 }
 
 double ScDocument::GetValue( const ScAddress& rPos ) const

@@ -1222,19 +1222,17 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         SCROW nRow = pViewData->GetCurY();
         SCTAB nTab = pViewData->GetTabNo();
 
-        ScBaseCell* pCell;
-        pDoc->GetCell(nCol, nRow, nTab, pCell);
         EditTextObject* pOldEditData = NULL;
         EditTextObject* pNewEditData = NULL;
-        if (pCell && pCell->GetCellType() == CELLTYPE_EDIT)
+        ScAddress aPos(nCol, nRow, nTab);
+        if (pDoc->GetCellType(aPos) == CELLTYPE_EDIT)
         {
-            ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
-            pOldEditData = pEditCell->GetData()->Clone();
-            pEditCell->RemoveCharAttribs(rAttr);
-            pNewEditData = pEditCell->GetData()->Clone();
+            pOldEditData = pDoc->GetEditText(aPos)->Clone();
+            pDoc->RemoveEditTextCharAttribs(aPos, rAttr);
+            pNewEditData = pDoc->GetEditText(aPos)->Clone();
         }
 
-        aChangeRanges.Append( ScRange( nCol, nRow, nTab ) );
+        aChangeRanges.Append(aPos);
         ScPatternAttr* pOldPat = new ScPatternAttr(*pDoc->GetPattern( nCol, nRow, nTab ));
 
         pDoc->ApplyPattern( nCol, nRow, nTab, rAttr );
