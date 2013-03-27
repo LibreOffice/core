@@ -1088,29 +1088,18 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     else
     {
         sal_uInt16 nRegionItemId = maView->getCurRegionItemId();
+        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates;  //Avoid invalid iterators
 
         std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+        for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
         {
-            if (maView->removeTemplate((*pIter)->mnId,nRegionItemId))
-                maSelTemplates.erase(pIter++);
-            else
+            if (!maView->removeTemplate((*pIter)->mnId,nRegionItemId))
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = (*pIter)->maTitle;
                 else
                     aTemplateList = aTemplateList + "\n" + (*pIter)->maTitle;
-
-                ++pIter;
             }
-        }
-
-        if (maSelTemplates.empty())
-        {
-            mpTemplateBar->SetItemDown(TBI_TEMPLATE_DELETE,false);
-            mpTemplateBar->Show(false);
-            mpViewBar->Show();
-            mpActionBar->Show();
         }
     }
 
