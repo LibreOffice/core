@@ -508,21 +508,21 @@ public:
     void            EnableHScrollbar(bool bEnable);
     void            EnableVScrollbar(bool bEnable);
 
-    int             CreateVLineal();
-    int             KillVLineal();
+    int             CreateVRuler();
+    int             KillVRuler();
     int             CreateTab();
     int             KillTab();
 
-    int             StatVLineal() const { return ((Window*)m_pVRuler)->IsVisible(); }
-    void            ChangeVLinealMetric(FieldUnit eUnit);
-    void            GetVLinealMetric(FieldUnit& rToFill) const;
+    int             StatVRuler() const { return ((Window*)m_pVRuler)->IsVisible(); }
+    void            ChangeVRulerMetric(FieldUnit eUnit);
+    void            GetVRulerMetric(FieldUnit& rToFill) const;
 
     int             StatTab() const { return ((Window*)m_pHRuler)->IsVisible(); }
-    SvxRuler&       GetHLineal()    { return *m_pHRuler; }
-    SvxRuler&       GetVLineal()    { return *m_pVRuler; }
+    SvxRuler&       GetHRuler()    { return *m_pHRuler; }
+    SvxRuler&       GetVRuler()    { return *m_pVRuler; }
     void            InvalidateRulerPos();
     void            ChangeTabMetric(FieldUnit eUnit);
-    void            GetHLinealMetric(FieldUnit& rToFill) const;
+    void            GetHRulerMetric(FieldUnit& rToFill) const;
 
         // Handler
     void            Execute(SfxRequest&);

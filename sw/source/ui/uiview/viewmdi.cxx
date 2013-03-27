@@ -538,7 +538,7 @@ void SwView::ChangeTabMetric( FieldUnit eUnit )
     }
 }
 
-void SwView::ChangeVLinealMetric( FieldUnit eUnit )
+void SwView::ChangeVRulerMetric( FieldUnit eUnit )
 {
     if(m_pVRuler->GetUnit() != eUnit)
     {
@@ -547,17 +547,17 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
     }
 }
 
-void SwView::GetVLinealMetric(FieldUnit& eToFill) const
+void SwView::GetVRulerMetric(FieldUnit& eToFill) const
 {
     eToFill = m_pVRuler->GetUnit();
 }
 
-void SwView::GetHLinealMetric(FieldUnit& eToFill) const
+void SwView::GetHRulerMetric(FieldUnit& eToFill) const
 {
     eToFill = m_pHRuler->GetUnit();
 }
 
-int SwView::CreateVLineal()
+int SwView::CreateVRuler()
 {
     m_pHRuler->SetBorderPos( m_pVRuler->GetSizePixel().Width()-1 );
 
@@ -567,7 +567,7 @@ int SwView::CreateVLineal()
     return 1;
 }
 
-int SwView::KillVLineal()
+int SwView::KillVRuler()
 {
     m_pVRuler->Hide();
     m_pHRuler->SetBorderPos( 0 );

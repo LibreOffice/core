@@ -799,7 +799,7 @@ void SwXViewSettings::_postSetValues ()
         if(mbApplyHRulerMetric)
             pView->ChangeTabMetric((FieldUnit)eHRulerUnit);
         if(mbApplyVRulerMetric)
-            pView->ChangeVLinealMetric((FieldUnit)eVRulerUnit);
+            pView->ChangeVRulerMetric((FieldUnit)eVRulerUnit);
 
     }
     else
@@ -942,7 +942,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             if ( pView )
             {
                 FieldUnit eUnit;
-                pView->GetHLinealMetric( eUnit );
+                pView->GetHRulerMetric( eUnit );
                 rValue <<= (sal_Int32)eUnit;
             }
             else
@@ -958,7 +958,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             if ( pView )
             {
                 FieldUnit eUnit;
-                pView->GetVLinealMetric( eUnit );
+                pView->GetVRulerMetric( eUnit );
                 rValue <<= (sal_Int32)eUnit;
             }
             else

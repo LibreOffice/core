@@ -204,9 +204,9 @@ sal_Bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
     // draw ticks of ruler
     SwView * pView = ::GetActiveView();
     if ( m_bHRulerChanged )
-        pView->GetHLineal().DrawTicks();
+        pView->GetHRuler().DrawTicks();
     if ( m_bVRulerChanged )
-        pView->GetVLineal().DrawTicks();
+        pView->GetVRuler().DrawTicks();
     return bRet;
 }
 
@@ -294,8 +294,8 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
                 m_bHRulerChanged = sal_True;
             }
             m_bVRulerChanged = sal_True;
-            pView->GetHLineal().SetCharWidth((long)(aCharWidthMF.GetValue(FUNIT_TWIP)/56.7));
-            pView->GetVLineal().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
+            pView->GetHRuler().SetCharWidth((long)(aCharWidthMF.GetValue(FUNIT_TWIP)/56.7));
+            pView->GetVRuler().SetLineHeight((long)(aTextSizeMF.GetValue(FUNIT_TWIP)/56.7));
         }
 }
 

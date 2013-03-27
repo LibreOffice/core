@@ -129,8 +129,8 @@ SwInputWindow::~SwInputWindow()
     //Lineale aufwecken
     if(pView)
     {
-        pView->GetHLineal().SetActive( sal_True );
-        pView->GetVLineal().SetActive( sal_True );
+        pView->GetHRuler().SetActive( sal_True );
+        pView->GetVRuler().SetActive( sal_True );
     }
     delete pMgr;
     if(pWrtShell)
@@ -194,8 +194,8 @@ void SwInputWindow::ShowWin()
     //Lineale anhalten
     if(pView)
     {
-        pView->GetHLineal().SetActive( sal_False );
-        pView->GetVLineal().SetActive( sal_False );
+        pView->GetHRuler().SetActive( sal_False );
+        pView->GetVRuler().SetActive( sal_False );
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in Tabelle

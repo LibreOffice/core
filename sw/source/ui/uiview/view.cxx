@@ -882,7 +882,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // isn't reset, if document is already modified.
     const bool bIsDocModified = m_pWrtShell->GetDoc()->IsModified();
 
-    // damit unter anderem das HLineal im
+    // damit unter anderem das HRuler im
     //              ReadonlyFall nicht angezeigt wird
     aUsrPref.SetReadonly( m_pWrtShell->GetViewOptions()->IsReadonly() );
 
@@ -912,7 +912,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     StartListening( *pViewFrame, sal_True );
     StartListening( *pDocSh, sal_True );
 
-    // Set Zoom-factor from HLineal
+    // Set Zoom-factor from HRuler
     Fraction aZoomFract( aUsrPref.GetZoom(), 100 );
     m_pHRuler->SetZoom( aZoomFract );
     m_pVRuler->SetZoom( aZoomFract );
@@ -963,7 +963,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if( aUsrPref.IsViewHRuler() )
         CreateTab();
     if( aUsrPref.IsViewVRuler() )
-        CreateVLineal();
+        CreateVRuler();
 
     m_pWrtShell->SetUIOptions( aUsrPref );
     m_pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
@@ -1652,9 +1652,9 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     rSh.SetReadonlyOption( GetDocShell()->IsReadOnly() );
 
                     if ( rSh.GetViewOptions()->IsViewVRuler() )
-                        CreateVLineal();
+                        CreateVRuler();
                     else
-                        KillVLineal();
+                        KillVRuler();
                     if ( rSh.GetViewOptions()->IsViewHRuler() )
                         CreateTab();
                     else

@@ -177,12 +177,12 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 
     FieldUnit eUnit = pPref->GetHScrollMetric();
     if(pAppView)
-        pAppView->GetHLinealMetric(eUnit);
+        pAppView->GetHRulerMetric(eUnit);
     pRet->Put(SfxUInt16Item( FN_HSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit)));
 
     eUnit = pPref->GetVScrollMetric();
     if(pAppView)
-        pAppView->GetVLinealMetric(eUnit);
+        pAppView->GetVRulerMetric(eUnit);
     pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit) ));
     pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(pPref->GetMetric()) ));
     pRet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, pPref->IsApplyCharUnit()));
@@ -322,7 +322,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
         pPref->SetVScrollMetric(eUnit);
         if(pAppView)
-            pAppView->ChangeVLinealMetric(eUnit);
+            pAppView->ChangeVRulerMetric(eUnit);
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, sal_False, &pItem ) )

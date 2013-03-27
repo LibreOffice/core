@@ -846,27 +846,27 @@ void ViewResizePixel( const Window &rRef,
                     ImageButton* pPageDownBtn,
                     ImageButton* pNaviBtn,
                     Window& rScrollBarBox,
-                    SvxRuler* pVLineal,
-                    SvxRuler* pHLineal,
+                    SvxRuler* pVRuler,
+                    SvxRuler* pHRuler,
                     sal_Bool bWebView,
                     sal_Bool bVRulerRight )
 {
 // ViewResizePixel wird auch von der PreView benutzt!!!
 
-    const sal_Bool bHLineal = pHLineal && pHLineal->IsVisible();
-    const long nHLinSzHeight = bHLineal ?
-                        pHLineal->GetSizePixel().Height() : 0;
-    const sal_Bool bVLineal = pVLineal && pVLineal->IsVisible();
-    const long nVLinSzWidth = bVLineal ?
-                        pVLineal->GetSizePixel().Width() : 0;
+    const sal_Bool bHRuler = pHRuler && pHRuler->IsVisible();
+    const long nHLinSzHeight = bHRuler ?
+                        pHRuler->GetSizePixel().Height() : 0;
+    const sal_Bool bVRuler = pVRuler && pVRuler->IsVisible();
+    const long nVLinSzWidth = bVRuler ?
+                        pVRuler->GetSizePixel().Width() : 0;
 
     long nScrollBarSize = rRef.GetSettings().GetStyleSettings().GetScrollBarSize();
     long nHBSzHeight = rHScrollbar.IsVisible(true) ? nScrollBarSize : 0;
     long nVBSzWidth = rVScrollbar.IsVisible(true) ? nScrollBarSize : 0;
 
-    if(pVLineal)
+    if(pVRuler)
     {
-        WinBits nStyle = pVLineal->GetStyle()&~WB_RIGHT_ALIGNED;
+        WinBits nStyle = pVRuler->GetStyle()&~WB_RIGHT_ALIGNED;
         Point aPos( rOfst.X(), rOfst.Y()+nHLinSzHeight );
         if(bVRulerRight)
         {
@@ -875,25 +875,25 @@ void ViewResizePixel( const Window &rRef,
         }
         Size  aSize( nVLinSzWidth, rEditSz.Height() );
         if(!aSize.Width())
-            aSize.Width() = pVLineal->GetSizePixel().Width();
-        pVLineal->SetStyle(nStyle);
-        pVLineal->SetPosSizePixel( aPos, aSize );
-        if(!pVLineal->IsVisible())
-            pVLineal->Resize();
+            aSize.Width() = pVRuler->GetSizePixel().Width();
+        pVRuler->SetStyle(nStyle);
+        pVRuler->SetPosSizePixel( aPos, aSize );
+        if(!pVRuler->IsVisible())
+            pVRuler->Resize();
     }
 //  Lineal braucht ein Resize, sonst funktioniert es nicht im unischtbaren Zustand
-    if(pHLineal)
+    if(pHRuler)
     {
         Size aSize( rSize.Width(), nHLinSzHeight );
         if ( nVBSzWidth && !bVRulerRight)
             aSize.Width() -= nVBSzWidth;
         if(!aSize.Height())
-            aSize.Height() = pHLineal->GetSizePixel().Height();
-        pHLineal->SetPosSizePixel( rOfst, aSize );
+            aSize.Height() = pHRuler->GetSizePixel().Height();
+        pHRuler->SetPosSizePixel( rOfst, aSize );
 //      VCL ruft an unsichtbaren Fenstern kein Resize
 //      fuer das Lineal ist das aber keine gute Idee
-        if(!pHLineal->IsVisible())
-            pHLineal->Resize();
+        if(!pHRuler->IsVisible())
+            pHRuler->Resize();
     }
 
     // Scrollbars und SizeBox anordnen
@@ -919,7 +919,7 @@ void ViewResizePixel( const Window &rRef,
         if(bVRulerRight)
         {
             aPos.X() = rOfst.X();
-            if(bHLineal)
+            if(bHRuler)
             {
                 aPos.Y() += nHLinSzHeight;
                 aSize.Height() -= nHLinSzHeight;

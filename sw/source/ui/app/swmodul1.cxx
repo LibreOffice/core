@@ -96,9 +96,9 @@ static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* 
 
     // Rulers on / off
     if(pNewPref->IsViewVRuler())
-        pView->CreateVLineal();
+        pView->CreateVRuler();
     else
-        pView->KillVLineal();
+        pView->KillVRuler();
 
     // TabWindow on / off
     if(pNewPref->IsViewHRuler())
@@ -236,7 +236,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb )
         {
             if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
             {
-                pTmpView->ChangeVLinealMetric(eVScrollMetric);
+                pTmpView->ChangeVRulerMetric(eVScrollMetric);
                 pTmpView->ChangeTabMetric(eHScrollMetric);
             }
 
@@ -273,7 +273,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bo
             if( bHorizontal )
                 pTmpView->ChangeTabMetric(eMetric);
             else
-                pTmpView->ChangeVLinealMetric(eMetric);
+                pTmpView->ChangeVRulerMetric(eMetric);
         }
         pTmpView = SwModule::GetNextView(pTmpView);
     }
@@ -331,7 +331,7 @@ void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
     {
         if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
         {
-            pTmpView->ChangeVLinealMetric(eVScrollMetric);
+            pTmpView->ChangeVRulerMetric(eVScrollMetric);
             pTmpView->ChangeTabMetric(eHScrollMetric);
         }
 

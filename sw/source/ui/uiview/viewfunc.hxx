@@ -48,8 +48,8 @@ void ViewResizePixel( const Window &rRef,
                     ImageButton* pPageDownBtn,
                     ImageButton* pNaviBtn,
                     Window& rScrollBarBox,
-                    SvxRuler* pVLineal = 0,
-                    SvxRuler* pHLineal = 0,
+                    SvxRuler* pVRuler = 0,
+                    SvxRuler* pHRuler = 0,
                     sal_Bool bWebView = sal_False,
                     sal_Bool bVRulerRight = sal_False );
 
