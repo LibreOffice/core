@@ -89,6 +89,8 @@ gb_MERGEDLIBS := \
 	oox \
 	package2 \
 	pricing \
+	$(call gb_Helper_optional,PYUNO,pythonloader) \
+	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \

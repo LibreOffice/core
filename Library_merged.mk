@@ -69,6 +69,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	nss3 \
 	openssl \
 	orcus \
+	$(call gb_Helper_optional,PYUNO,python) \
 	$(if $(filter-out IOS,$(OS)),wpd) \
 	$(if $(filter-out IOS,$(OS)),wpg) \
 	$(if $(filter-out IOS,$(OS)),wps) \
