@@ -1,0 +1,8 @@
+Code-Review+2: Thorsten Behrens <tbehrens@suse.com>
+Verified+1: Thorsten Behrens <tbehrens@suse.com>
+Code-Review-1: Petr Mladek <pmladek@suse.cz>
+Submitted-by: Thorsten Behrens <tbehrens@suse.com>
+Submitted-at: Wed, 27 Mar 2013 12:24:18 +0000
+Reviewed-on: https://gerrit.libreoffice.org/3050
+Project: core
+Branch: refs/heads/master
