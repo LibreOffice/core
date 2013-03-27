@@ -64,11 +64,8 @@ namespace uno = com::sun::star::uno ;
 
 #define PROPERTY_TITLE          "BubbleHeading"
 #define PROPERTY_TEXT           "BubbleText"
-#define PROPERTY_IMAGE          "BubbleImageURL"
 #define PROPERTY_SHOW_BUBBLE    "BubbleVisible"
 #define PROPERTY_CLICK_HDL      "MenuClickHDL"
-#define PROPERTY_DEFAULT_TITLE  "DefaultHeading"
-#define PROPERTY_DEFAULT_TEXT   "DefaultText"
 #define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
 
 extern "C" bool SAL_CALL WNT_hasInternetConnection();
