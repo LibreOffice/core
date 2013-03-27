@@ -391,6 +391,12 @@ const OUString& FuncData::GetModuleName() const
 
 bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const
 {
+#ifdef DISABLE_DYNLOADING
+    (void) aName;
+    (void) aDesc;
+    (void) nParam;
+    return false;
+#else
     bool bRet = false;
     if ( nParam <= nParamCount )
     {
@@ -414,6 +420,7 @@ bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam
         aDesc = OUString();
     }
     return bRet;
+#endif
 }
 
 FuncCollection::FuncCollection() {}
