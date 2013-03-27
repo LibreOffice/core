@@ -351,11 +351,11 @@ void SAL_CALL FmXGridControlMultiplexer::columnChanged( const EventObject& _even
 //------------------------------------------------------------------
 Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    return *(new FmXGridControl(_rxFactory));
+    return *(new FmXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }
 DBG_NAME(FmXGridControl )
 //------------------------------------------------------------------------------
-FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFactory)
+FmXGridControl::FmXGridControl(const Reference< XComponentContext >& _rxContext)
                :UnoControl()
                ,m_aModifyListeners(*this, GetMutex())
                ,m_aUpdateListeners(*this, GetMutex())
@@ -364,7 +364,7 @@ FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFacto
                ,m_aGridControlListeners(*this, GetMutex())
                ,m_nPeerCreationLevel(0)
                ,m_bInDraw(sal_False)
-               ,m_xServiceFactory(_rxFactory)
+               ,m_xContext(_rxContext)
 {
     DBG_CTOR(FmXGridControl ,NULL);
 }
@@ -475,7 +475,7 @@ sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< ::com::sun::star::aw
 //------------------------------------------------------------------------------
 FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
 {
-    FmXGridPeer* pReturn = new FmXGridPeer(m_xServiceFactory);
+    FmXGridPeer* pReturn = new FmXGridPeer(m_xContext);
 
     // translate properties into WinBits
     WinBits nStyle = WB_TABSTOP;
@@ -1057,7 +1057,7 @@ void FmXGridPeer::GridListenerDelegator::columnChanged()
 //------------------------------------------------------------------
 Reference< XInterface >  FmXGridPeer_CreateInstance(const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    FmXGridPeer* pNewObject = new FmXGridPeer(_rxFactory);
+    FmXGridPeer* pNewObject = new FmXGridPeer( comphelper::getComponentContext(_rxFactory) );
     pNewObject->Create(NULL, WB_TABSTOP);
     return *pNewObject;
 }
@@ -1122,7 +1122,7 @@ namespace fmgridif
 using namespace fmgridif;
 
 //------------------------------------------------------------------
-FmXGridPeer::FmXGridPeer(const Reference< XMultiServiceFactory >& _rxFactory)
+FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             :m_aModifyListeners(m_aMutex)
             ,m_aUpdateListeners(m_aMutex)
             ,m_aContainerListeners(m_aMutex)
@@ -1134,7 +1134,7 @@ FmXGridPeer::FmXGridPeer(const Reference< XMultiServiceFactory >& _rxFactory)
             ,m_pStateCache(NULL)
             ,m_pDispatchers(NULL)
             ,m_pGridListener(NULL)
-            ,m_xServiceFactory(_rxFactory)
+            ,m_xContext(_rxContext)
 {
     // Create must be called after this constructure
     m_pGridListener = new GridListenerDelegator( this );
@@ -1143,7 +1143,7 @@ FmXGridPeer::FmXGridPeer(const Reference< XMultiServiceFactory >& _rxFactory)
 //------------------------------------------------------------------------------
 FmGridControl* FmXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
 {
-    return new FmGridControl(m_xServiceFactory, pParent, this, nStyle);
+    return new FmGridControl(m_xContext, pParent, this, nStyle);
 }
 
 //------------------------------------------------------------------------------
@@ -1826,7 +1826,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     if (::comphelper::getBOOL(aHidden))
         pGrid->HideColumn(pCol->GetId());
 
-    FormControlFactory( m_xServiceFactory ).initializeTextFieldLineEnds( xNewColumn );
+    FormControlFactory( m_xContext ).initializeTextFieldLineEnds( xNewColumn );
 }
 
 //------------------------------------------------------------------------------

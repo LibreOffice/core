@@ -178,7 +178,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
     DbCellControl* pCellControl = NULL;
     if (m_rParent.IsFilterMode())
     {
-        pCellControl = new DbFilterField(comphelper::getComponentContext(m_rParent.getServiceManager()),*this);
+        pCellControl = new DbFilterField(m_rParent.getContext(),*this);
     }
     else
     {
@@ -191,7 +191,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case TYPE_DATEFIELD: pCellControl = new DbDateField(*this); break;
             case TYPE_LISTBOX: pCellControl = new DbListBox(*this); break;
             case TYPE_NUMERICFIELD: pCellControl = new DbNumericField(*this); break;
-            case TYPE_PATTERNFIELD: pCellControl = new DbPatternField( *this, ::comphelper::ComponentContext( m_rParent.getServiceManager() ) ); break;
+            case TYPE_PATTERNFIELD: pCellControl = new DbPatternField( *this, m_rParent.getContext() ); break;
             case TYPE_TEXTFIELD: pCellControl = new DbTextField(*this); break;
             case TYPE_TIMEFIELD: pCellControl = new DbTimeField(*this); break;
             case TYPE_FORMATTEDFIELD: pCellControl = new DbFormattedField(*this); break;

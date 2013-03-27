@@ -285,8 +285,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             try
             {
                 OUString sSignificantSource( sDatasouce.isEmpty() ? sDatabaseLocation : sDatasouce );
-                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, OUString(),OUString(),
-                                  comphelper::getComponentContext( static_cast<FmGridControl*>(GetParent())->getServiceManager() ));
+                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, OUString(), OUString(),
+                                  static_cast<FmGridControl*>(GetParent())->getContext() );
             }
             catch(NoSuchElementException&)
             {   // allowed, means sDatasouce isn't a valid data source name ....
@@ -1017,11 +1017,11 @@ void FmGridHeader::Command(const CommandEvent& rEvt)
 
 //------------------------------------------------------------------------------
 FmGridControl::FmGridControl(
-                Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxFactory,
+                const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 Window* pParent,
                 FmXGridPeer* _pPeer,
                 WinBits nBits)
-        :DbGridControl(_rxFactory, pParent, nBits)
+        :DbGridControl(_rxContext, pParent, nBits)
         ,m_pPeer(_pPeer)
         ,m_nCurrentSelectedColumn(-1)
         ,m_nMarkedColumnId(BROWSER_INVALIDID)

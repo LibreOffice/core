@@ -221,8 +221,8 @@ private:
     Link            m_aMasterStateProvider;
     Link            m_aMasterSlotExecutor;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
 
     DbGridColumns   m_aColumns;         // Column description
     NavigationBar   m_aBar;
@@ -365,7 +365,7 @@ protected:
 
 public:
     DbGridControl(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >,
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >,
         Window* pParent,
         WinBits nBits = WB_BORDER);
 
@@ -496,8 +496,8 @@ public:
     */
     void        ForceHideScrollbars( sal_Bool _bForce );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-        getServiceManager() const { return m_xServiceFactory; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        getContext() const { return m_xContext; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard
     sal_Bool    canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId);

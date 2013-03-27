@@ -66,7 +66,7 @@ namespace dbaui
         StatusMultiplexerArray      m_aStatusMultiplexer;
 
     public:
-        SbaXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        SbaXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
         virtual ~SbaXGridControl();
 
         // UNO
@@ -111,7 +111,7 @@ namespace dbaui
         ::cppu::OMultiTypeInterfaceContainerHelperVar< ::com::sun::star::util::URL,SbaURLHash , SbaURLCompare>  m_aStatusListeners;
 
     public:
-        SbaXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        SbaXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
         virtual ~SbaXGridPeer();
 
         // UNO
@@ -246,7 +246,7 @@ namespace dbaui
         sal_uInt16  GetCurrentActionColumn() const  { return m_nCurrentActionColId; }
 
     public:
-        SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
+        SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
         virtual ~SbaGridControl();
 
         virtual void Command( const CommandEvent& rCEvt );

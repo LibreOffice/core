@@ -93,7 +93,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         m_xMe = VCLUnoHelper::CreateControlContainer(this);
 
         // create the (UNO-) control
-        m_xGrid = new SbaXGridControl(Reference<XMultiServiceFactory>(getORB()->getServiceManager(), UNO_QUERY_THROW) );
+        m_xGrid = new SbaXGridControl( getORB() );
         OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
         m_xGrid->setDesignMode(sal_True);

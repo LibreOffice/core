@@ -118,7 +118,7 @@ extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    return *(new SbaXGridControl(_rxFactory));
+    return *(new SbaXGridControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
@@ -151,7 +151,7 @@ Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw
 }
 DBG_NAME(SbaXGridControl );
 //---------------------------------------------------------------------------------------
-SbaXGridControl::SbaXGridControl(const Reference< XMultiServiceFactory >& _rM)
+SbaXGridControl::SbaXGridControl(const Reference< XComponentContext >& _rM)
     : FmXGridControl(_rM)
 {
     DBG_CTOR(SbaXGridControl ,NULL);
@@ -166,7 +166,7 @@ SbaXGridControl::~SbaXGridControl()
 //---------------------------------------------------------------------------------------
 FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
 {
-    FmXGridPeer* pReturn = new SbaXGridPeer(m_xServiceFactory);
+    FmXGridPeer* pReturn = new SbaXGridPeer(m_xContext);
 
     // translate properties into WinBits
     WinBits nStyle = WB_TABSTOP;
@@ -328,7 +328,7 @@ void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 //=======================================================================================
 DBG_NAME(SbaXGridPeer )
 //---------------------------------------------------------------------------------------
-SbaXGridPeer::SbaXGridPeer(const Reference< XMultiServiceFactory >& _rM)
+SbaXGridPeer::SbaXGridPeer(const Reference< XComponentContext >& _rM)
 : FmXGridPeer(_rM)
 ,m_aStatusListeners(m_aMutex)
 {
@@ -606,7 +606,7 @@ SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rx
 //---------------------------------------------------------------------------------------
 FmGridControl* SbaXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
 {
-    return new SbaGridControl(m_xServiceFactory, pParent, this, nStyle);
+    return new SbaGridControl( m_xContext, pParent, this, nStyle);
 }
 
 //==================================================================
@@ -772,7 +772,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 //==================================================================
 DBG_NAME(SbaGridControl );
 //---------------------------------------------------------------------------------------
-SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
+SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
                                Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_pMasterListener(NULL)
@@ -836,7 +836,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 //------------------------------------------------------------------------------
 SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 {
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), sal_True, comphelper::getComponentContext(getServiceManager()));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)), sal_True, getContext());
 
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if ( !pSupplierImpl )
@@ -958,10 +958,8 @@ void SbaGridControl::SetBrowserAttrs()
         Sequence< Any > aDialogArgs(1);
         aDialogArgs[0] <<= aArg;
 
-        Reference< XInterface > xDialog = getServiceManager()->createInstanceWithArguments(
-            OUString("com.sun.star.form.ControlFontDialog"),
-            aDialogArgs
-            );
+        Reference< XComponentContext > xContext = getContext();
+        Reference< XInterface > xDialog = xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.form.ControlFontDialog", aDialogArgs, xContext);
         if (!xDialog.is())
         {
             ShowServiceNotAvailableError(this, OUString("com.sun.star.form.ControlFontDialog"), sal_True);
@@ -1304,7 +1302,7 @@ void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfC
     Reference< XResultSet> xRowSetClone;
     try
     {
-        ODataClipboard* pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, comphelper::getComponentContext(getServiceManager()) );
+        ODataClipboard* pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, getContext() );
 
         Reference< XTransferable > xEnsureDelete = pTransfer;
         if ( _bTrueIfClipboardFalseIfDrag )
@@ -1555,7 +1553,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
         if ( !bCountFinal )
             setDataSource(NULL); // deattach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
-        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, comphelper::getComponentContext(getServiceManager()));
+        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, getContext());
         Reference<XEventListener> xHolder = pImExport;
         Hide();
         try
@@ -1574,7 +1572,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
         {
             AfterDrop();
             Show();
-            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,comphelper::getComponentContext(getServiceManager()));
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo(e), this, getContext() );
         }
         catch(const Exception& )
         {

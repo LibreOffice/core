@@ -218,10 +218,10 @@ protected:
     sal_uInt16  m_nPeerCreationLevel;
     sal_Bool    m_bInDraw;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
 
 public:
-    FmXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    FmXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
     virtual ~FmXGridControl();
 
     // UNO connection
@@ -367,11 +367,11 @@ class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
     GridListenerDelegator*  m_pGridListener;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
-    ::osl::Mutex                                                                        m_aMutex;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+    ::osl::Mutex                                                                    m_aMutex;
 
 public:
-    FmXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    FmXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
     ~FmXGridPeer();
 
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !

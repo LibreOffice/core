@@ -904,11 +904,11 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
 DBG_NAME(DbGridControl);
 //------------------------------------------------------------------------------
 DbGridControl::DbGridControl(
-                Reference< XMultiServiceFactory > _rxFactory,
+                Reference< XComponentContext > _rxContext,
                 Window* pParent,
                 WinBits nBits)
             :DbGridControl_Base(pParent, EBBF_NONE, nBits, DEFAULT_BROWSE_MODE )
-            ,m_xServiceFactory(_rxFactory)
+            ,m_xContext(_rxContext)
             ,m_aBar(this)
             ,m_nAsynAdjustEvent(0)
             ,m_pDataSourcePropMultiplexer(NULL)
@@ -1448,7 +1448,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     if (xSupplier.is())
     {
         m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(
-            ::com::sun::star::util::NumberFormatter::create(comphelper::getComponentContext(m_xServiceFactory)),
+            ::com::sun::star::util::NumberFormatter::create(m_xContext),
             UNO_QUERY);
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
