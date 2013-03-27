@@ -37,11 +37,14 @@ DBG_NAME( UniString )
 #define STRCODEU        sal_Unicode
 #define STRING          UniString
 #define STRINGDATA      UniStringData
-#define DBGCHECKSTRING  DbgCheckUniString
 #define STRING_TYPE     rtl_uString
 #define STRING_ACQUIRE  rtl_uString_acquire
 #define STRING_RELEASE  rtl_uString_release
 #define STRING_NEW      rtl_uString_new
+
+#if defined DBG_UTIL
+#define DBGCHECKSTRING  DbgCheckUniString
+#endif
 
 #include <strimp.cxx>
 #include <strucvt.cxx>
