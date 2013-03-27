@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLHATCHATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -55,8 +56,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC FillHatchAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpFillHatchAttribute > ImplType;
+
         private:
-            ImpFillHatchAttribute*              mpFillHatchAttribute;
+            ImplType mpFillHatchAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
