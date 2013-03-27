@@ -105,7 +105,7 @@ bool isAccessibilitySupportDesired()
     }
     RegCloseKey(hKey);
 
-#elif UNX
+#elif defined UNX
     char buf[16];
     // use 2 shells to suppress the eventual "gcontool-2 not found" message
     // of the shell trying to execute the command
