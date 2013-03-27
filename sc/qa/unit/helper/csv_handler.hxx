@@ -34,6 +34,7 @@
 #include "scitems.hxx"
 #include "document.hxx"
 #include "cellform.hxx"
+#include "cellvalue.hxx"
 
 #define DEBUG_CSV_HANDLER 0
 
@@ -43,8 +44,9 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
 {
     rtl::OUString aString;
     Color* pColor;
-    ScBaseCell* pCell = pDoc->GetCell(ScAddress(nCol, nRow, nTab));
-    if(!pCell)
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    if (aCell.isEmpty())
         return aString;
 
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );

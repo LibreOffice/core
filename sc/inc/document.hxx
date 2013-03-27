@@ -834,8 +834,8 @@ public:
                         const ScAddress& rPos, const ScBaseCell* pCell ) const;
     void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( const ScAddress& rPos ) const;
-    const ScFormulaCell* GetFormulaCell( const ScAddress& rPos ) const;
-    ScFormulaCell* GetFormulaCell( const ScAddress& rPos );
+    SC_DLLPUBLIC const ScFormulaCell* GetFormulaCell( const ScAddress& rPos ) const;
+    SC_DLLPUBLIC ScFormulaCell* GetFormulaCell( const ScAddress& rPos );
     SC_DLLPUBLIC void           GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula ) const;
     SC_DLLPUBLIC void           GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
     SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;

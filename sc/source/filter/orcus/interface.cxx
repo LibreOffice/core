@@ -123,16 +123,15 @@ void ScOrcusSheet::set_formula(
 
 void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_t n)
 {
-    ScBaseCell* pCell;
-    mrDoc.GetCell( col, row, mnTab, pCell );
-    if(!pCell || pCell->GetCellType() != CELLTYPE_FORMULA)
+    ScFormulaCell* pCell = mrDoc.GetFormulaCell(ScAddress(col, row, mnTab));
+    if (!pCell)
     {
         SAL_WARN("sc", "trying to set formula result for non formula \
                 cell! Col: " << col << ";Row: " << row << ";Tab: " << mnTab);
         return;
     }
     OUString aResult( p, n, RTL_TEXTENCODING_UTF8);
-    static_cast<ScFormulaCell*>(pCell)->SetHybridString(aResult);
+    pCell->SetHybridString(aResult);
 }
 
 void ScOrcusSheet::set_shared_formula(

@@ -145,11 +145,9 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
     {
         ScAddress aCellPos;
         ScUnoConversion::FillScAddress( aCellPos, it->first );
-        ScBaseCell* pBaseCell = rDoc.GetCell( aCellPos );
-        SAL_WARN_IF( !pBaseCell, "sc", "why is the formula not imported? bug?");
-        if ( pBaseCell && pBaseCell->GetCellType() == CELLTYPE_FORMULA )
+        ScFormulaCell* pCell = rDoc.GetFormulaCell(aCellPos);
+        if (pCell)
         {
-            ScFormulaCell* pCell = static_cast< ScFormulaCell* >( pBaseCell );
             pCell->SetHybridDouble( it->second );
             pCell->ResetDirty();
             pCell->ResetChanged();

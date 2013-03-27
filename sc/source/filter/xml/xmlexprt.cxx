@@ -58,6 +58,7 @@
 #include "cachedattraccess.hxx"
 #include "colorscale.hxx"
 #include "conditio.hxx"
+#include "cellvalue.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -2899,11 +2900,12 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         break;
     case table::CellContentType_FORMULA :
         {
-            ScBaseCell* pBaseCell = pDoc ? pDoc->GetCell(aCellPos) : NULL;
-            if (pBaseCell && pBaseCell->GetCellType() == CELLTYPE_FORMULA)
+            ScRefCellValue aCellVal;
+            aCellVal.assign(*pDoc, aCellPos);
+            if (aCellVal.meType == CELLTYPE_FORMULA)
             {
                 rtl::OUStringBuffer sFormula;
-                ScFormulaCell* pFormulaCell((ScFormulaCell*) pBaseCell);
+                ScFormulaCell* pFormulaCell = aCellVal.mpFormula;
                 if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
                 {
                     const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
@@ -3369,13 +3371,14 @@ bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress,
     ScAddress aCoreAddress(static_cast<SCCOL>(aAddress.Column),
                         static_cast<SCROW>(aAddress.Row),
                         static_cast<SCTAB>(aAddress.Sheet));
-    ScBaseCell* pBaseCell = GetDocument() ? GetDocument()->GetCell(aCoreAddress) : NULL;
-    if (pMyCell)
-        pMyCell->pBaseCell = pBaseCell;
 
-    if (pBaseCell)
-        return (pBaseCell->GetCellType() == CELLTYPE_EDIT);
-    return false;
+    ScRefCellValue aCell;
+    aCell.assign(const_cast<ScDocument&>(*GetDocument()), aCoreAddress);
+
+    if (pMyCell)
+        pMyCell->maBaseCell = aCell;
+
+    return (aCell.meType == CELLTYPE_EDIT);
 }
 
 bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
@@ -3392,26 +3395,23 @@ bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
 
 bool ScXMLExport::IsMultiLineFormulaCell(ScMyCell& rCell) const
 {
-    if (rCell.pBaseCell)
+    if (!rCell.maBaseCell.isEmpty())
     {
-        if (rCell.pBaseCell->GetCellType() != CELLTYPE_FORMULA)
+        if (rCell.maBaseCell.meType != CELLTYPE_FORMULA)
             return false;
 
-        return static_cast<ScFormulaCell*>(rCell.pBaseCell)->IsMultilineResult();
+        return rCell.maBaseCell.mpFormula->IsMultilineResult();
     }
 
     ScAddress aAddr(static_cast<SCCOL>(rCell.aCellAddress.Column),
                     static_cast<SCROW>(rCell.aCellAddress.Row),
                     static_cast<SCTAB>(rCell.aCellAddress.Sheet));
-    ScBaseCell* pBaseCell = pDoc ? pDoc->GetCell(aAddr) : NULL;
-    if (!pBaseCell)
+
+    rCell.maBaseCell.assign(*pDoc, aAddr);
+    if (rCell.maBaseCell.meType != CELLTYPE_FORMULA)
         return false;
 
-    rCell.pBaseCell = pBaseCell;
-    if (rCell.pBaseCell->GetCellType() != CELLTYPE_FORMULA)
-        return false;
-
-    return static_cast<ScFormulaCell*>(rCell.pBaseCell)->IsMultilineResult();
+    return rCell.maBaseCell.mpFormula->IsMultilineResult();
 }
 
 bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)

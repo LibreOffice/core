@@ -1870,9 +1870,9 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr = r.first;
     }
 
-    ScBaseCell* pCell = mpDoc->GetCell(rCell);
-    if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-        itr->second.insert(static_cast<ScFormulaCell*>(pCell));
+    ScFormulaCell* pCell = mpDoc->GetFormulaCell(rCell);
+    if (pCell)
+        itr->second.insert(pCell);
 }
 
 void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const

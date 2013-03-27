@@ -35,6 +35,7 @@
 #include "stlalgorithm.hxx"
 #include "tokenuno.hxx"
 #include "docsh.hxx"
+#include "cellvalue.hxx"
 
 #include "formula/opcode.hxx"
 
@@ -3262,12 +3263,13 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
     if (!pFormatter)
         return nFormat;
 
-    ScBaseCell* pCell = pDoc->GetCell(rPos);
-    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA || nFormat)
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, rPos);
+    if (aCell.isEmpty() || aCell.meType != CELLTYPE_FORMULA || nFormat)
         return nFormat;
 
     // With formula cell, the format may be inferred from the formula result.
-    return static_cast<ScFormulaCell*>(pCell)->GetStandardFormat(*pFormatter, nFormat);
+    return aCell.mpFormula->GetStandardFormat(*pFormatter, nFormat);
 }
 
 }
@@ -3328,8 +3330,9 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
                     {
                         // TODO: use nicer heuristic
                         // return format of first non-empty cell
-                        ScBaseCell* pCell = m_pDocument->GetCell(aPos);
-                        if (pCell)
+                        ScRefCellValue aCell;
+                        aCell.assign(*m_pDocument, aPos);
+                        if (!aCell.isEmpty())
                             return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, aPos));
                     }
                     else if( nCount == nIndex )

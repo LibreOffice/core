@@ -34,12 +34,12 @@
 #include "detfunc.hxx"
 #include "detdata.hxx"
 #include "postit.hxx"
+#include "cellvalue.hxx"
 
 class   ScHorizontalCellIterator;
 struct  ScMyCell;
 class   ScXMLExport;
 class   ScFormatRangeStyles;
-class   ScBaseCell;
 
 //==============================================================================
 
@@ -291,8 +291,6 @@ public:
 // contains data to export for the current cell position
 struct ScMyCell
 {
-//  com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
-//  com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xNoteShape;
     com::sun::star::table::CellAddress      aCellAddress;
@@ -313,7 +311,7 @@ struct ScMyCell
     sal_Int32                   nNumberFormat;
     com::sun::star::table::CellContentType  nType;
 
-    ScBaseCell*                 pBaseCell;
+    ScRefCellValue              maBaseCell;
 
     bool                        bIsAutoStyle;
 

@@ -600,7 +600,6 @@ ScMyCell::ScMyCell() :
     aDetectiveObjVec(),
     fValue(0.0),
     nValidationIndex(-1),
-    pBaseCell(NULL),
     bIsAutoStyle( false ),
     bHasShape( false ),
     bIsMergedBase( false ),

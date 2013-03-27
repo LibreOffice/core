@@ -18,12 +18,6 @@ class ScBaseCell;
 
 namespace {
 
-rtl::OUString cellToString( ScBaseCell *pCell )
-{
-    (void)pCell; // FIXME: implement me
-    return rtl::OUString();
-}
-
 OUString formulaCellToString( ScFormulaCell *pCell )
 {
     (void)pCell; // FIXME: implement me
@@ -40,12 +34,6 @@ EditTextObject stringToEdit( const OUString& rStr )
 {
     // FIXME: implement me.
     return EditTextObject();
-}
-
-ScBaseCell* stringToCell( const rtl::OUString &rString )
-{
-    (void)rString; // FIXME: implement me
-    return NULL;
 }
 
 ScFormulaCell* stringToFormulaCell( const OUString &rString )
@@ -103,11 +91,6 @@ public:
     {
         aMessage.appendAscii( b ? "true" : "false" );
         appendSeparator();
-    }
-
-    void appendCell( ScBaseCell *pCell )
-    {
-        appendString( cellToString( pCell ) );
     }
 
     void appendFormulaCell( ScFormulaCell *pCell )
@@ -229,11 +212,6 @@ public:
     bool getBool( sal_Int32 n )
     {
         return getString( n ).equalsIgnoreAsciiCase( "true" );
-    }
-
-    ScBaseCell *getCell( sal_Int32 n )
-    {
-        return stringToCell( getString( n ) );
     }
 
     ScFormulaCell* getFormulaCell( sal_Int32 n )

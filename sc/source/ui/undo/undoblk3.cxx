@@ -439,25 +439,23 @@ void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
     ScDocument* pDoc = pDocShell->GetDocument();
     for (const ScEditDataArray::Item* pItem = mpDataArray->First(); pItem; pItem = mpDataArray->Next())
     {
-        ScBaseCell* pCell;
-        pDoc->GetCell(pItem->GetCol(), pItem->GetRow(), pItem->GetTab(), pCell);
-        if (!pCell || pCell->GetCellType() != CELLTYPE_EDIT)
+        ScAddress aPos(pItem->GetCol(), pItem->GetRow(), pItem->GetTab());
+        if (pDoc->GetCellType(aPos) != CELLTYPE_EDIT)
             continue;
 
-        ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
         if (bUndo)
         {
             if (pItem->GetOldData())
-                pEditCell->SetData(*pItem->GetOldData(), NULL);
+                pDoc->SetEditText(aPos, *pItem->GetOldData(), NULL);
             else
-                pEditCell->ClearData();
+                pDoc->SetEmptyCell(aPos);
         }
         else
         {
             if (pItem->GetNewData())
-                pEditCell->SetData(*pItem->GetNewData(), NULL);
+                pDoc->SetEditText(aPos, *pItem->GetNewData(), NULL);
             else
-                pEditCell->ClearData();
+                pDoc->SetEmptyCell(aPos);
         }
     }
 }

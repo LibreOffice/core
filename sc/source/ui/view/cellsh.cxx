@@ -678,13 +678,11 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     else
                     {
                         sal_uInt16 nErrCode = 0;
-                        ScBaseCell* pCell;
-                        pDoc->GetCell( nPosX, nPosY, nTab, pCell );
-                        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+                        ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(nPosX, nPosY, nTab));
+                        if (pCell)
                         {
-                            ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-                            if (!pFCell->IsRunning())
-                                nErrCode = pFCell->GetErrCode();
+                            if (!pCell->IsRunning())
+                                nErrCode = pCell->GetErrCode();
                         }
 
                         String aFuncStr;
