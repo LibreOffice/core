@@ -1541,7 +1541,7 @@ int Desktop::Main()
         */
         Application::GetDefaultDevice();
 
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!

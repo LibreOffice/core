@@ -17,13 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 //TODO: Large parts of this file were copied from dp_component.cxx; those parts
 // should be consolidated.
 
+#include <config_features.h>
+
 #include "dp_configuration.hrc"
 #include "dp_backend.h"
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
 #include "dp_persmap.h"
 #endif
 #include "dp_ucb.h"
@@ -111,7 +112,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     // for backwards compatibility - nil if no (compatible) back-compat db present
     ::std::auto_ptr<PersistentMap> m_registeredPackages;
 #endif
@@ -217,7 +218,7 @@ BackendImpl::BackendImpl(
 
         configmgrini_verify_init( xCmdEnv );
 
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<PersistentMap> pMap;
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -554,7 +555,7 @@ BackendImpl::PackageImpl::isRegistered_(
     if (that->hasActiveEntry(getURL()))
         bReg = true;
 
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     if (!bReg && that->m_registeredPackages.get())
     {
         // fallback for user extension registered in berkeley DB
@@ -743,7 +744,7 @@ void BackendImpl::PackageImpl::processPackage_(
     }
     else // revoke
     {
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
         if (!that->removeFromConfigmgrIni(m_isSchema, url, xCmdEnv) &&
             that->m_registeredPackages.get()) {
             // Obsolete package database handling - should be removed for LibreOffice 4.0

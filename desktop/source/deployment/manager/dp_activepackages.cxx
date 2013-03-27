@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "sal/config.h"
 
@@ -43,7 +44,7 @@
 //   key: 0xFF UTF8(identifier)
 //   value: UTF8(tempname) 0xFF UTF8(filename) 0xFF UTF8(mediatype)
 
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
 
 namespace {
 
@@ -117,7 +118,7 @@ namespace dp_manager {
 ActivePackages::ActivePackages() {}
 
 ActivePackages::ActivePackages(::rtl::OUString const & url, bool readOnly)
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     : m_map(url, readOnly)
 #endif
 {
@@ -137,7 +138,7 @@ bool ActivePackages::get(
     Data * data, ::rtl::OUString const & id, ::rtl::OUString const & fileName)
     const
 {
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     ::rtl::OString v;
     if (m_map.get(&v, newKey(id))) {
         if (data != NULL) {
@@ -162,7 +163,7 @@ bool ActivePackages::get(
 
 ActivePackages::Entries ActivePackages::getEntries() const {
     Entries es;
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     ::dp_misc::t_string2string_map m(m_map.getEntries());
     for (::dp_misc::t_string2string_map::const_iterator i(m.begin());
          i != m.end(); ++i)
@@ -188,7 +189,7 @@ ActivePackages::Entries ActivePackages::getEntries() const {
 }
 
 void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     ::rtl::OStringBuffer b;
     b.append(
         ::rtl::OUStringToOString(data.temporaryName, RTL_TEXTENCODING_UTF8));
@@ -210,7 +211,7 @@ void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
 void ActivePackages::erase(
     ::rtl::OUString const & id, ::rtl::OUString const & fileName)
 {
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     m_map.erase(newKey(id), true) || m_map.erase(oldKey(fileName), true);
 #else
     (void) id;

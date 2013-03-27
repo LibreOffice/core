@@ -2157,13 +2157,10 @@ if test -z "$enable_extensions"; then
     fi
 fi
 
-DISABLE_EXTENSIONS=''
 if test "$enable_extensions" = yes; then
     BUILD_TYPE="$BUILD_TYPE EXTENSIONS"
-else
-    DISABLE_EXTENSIONS='TRUE'
+    AC_DEFINE(HAVE_FEATURE_EXTENSIONS)
 fi
-AC_SUBST(DISABLE_EXTENSIONS)
 
 if test -z "$enable_scripting"; then
     # Disable scripting for iOS unless specifically overridden
@@ -2659,7 +2656,7 @@ AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
 if test \( -z "$enable_readonly_installset" -a "$ENABLE_MACOSX_SANDBOX" = YES \) -o \
-        "$DISABLE_EXTENSIONS" = TRUE; then
+        "$enable_extensions" != yes; then
     enable_readonly_installset=yes
 fi
 if test "$enable_readonly_installset" = yes; then

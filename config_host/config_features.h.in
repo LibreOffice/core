@@ -21,6 +21,15 @@
 
 #define HAVE_FEATURE_DESKTOP 0
 
+/* EXTENSIONS - Whether we have any extension mechanism at all
+ *
+ * Primarily intended for non-desktop platforms where supporting
+ * extensions can be complicated, or even prohibited by the OS (as on
+ * iOS).
+ */
+
+#define HAVE_FEATURE_EXTENSIONS 0
+
 /* HELP - Whether we have the "normal" desktop-style help mechanism
  *
  * Can be turned on/off also for desktop environments with

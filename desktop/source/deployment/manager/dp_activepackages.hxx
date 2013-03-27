@@ -20,12 +20,14 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_ACTIVEPACKAGES_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_ACTIVEPACKAGES_HXX
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <utility>
 #include <vector>
 
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
 #include "dp_persmap.h"
 #endif
 
@@ -84,7 +86,7 @@ public:
 private:
     ActivePackages(ActivePackages &); // not defined
     void operator =(ActivePackages &); // not defined
-#ifndef DISABLE_EXTENSIONS
+#if HAVE_FEATURE_EXTENSIONS
     ::dp_misc::PersistentMap m_map;
 #endif
 };
