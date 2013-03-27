@@ -544,39 +544,14 @@ namespace
         return (pWindow && isVisibleInLayout(pWindow) && isEnabledInLayout(pWindow) && pWindow->IsInputEnabled());
     }
 
-    bool backInGroup(std::vector<RadioButton*>::reverse_iterator aRevStart, std::vector<RadioButton*> &rGroup)
-    {
-        std::vector<RadioButton*>::reverse_iterator aI(aRevStart);
-        while (aI != rGroup.rend())
-        {
-            Window *pWindow = *aI;
-
-            if (isSuitableDestination(pWindow))
-            {
-                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
-                return true;
-            }
-        }
-
-        aI = rGroup.rbegin();
-        while (aI != aRevStart)
-        {
-            Window *pWindow = *aI;
-
-            if (isSuitableDestination(pWindow))
-            {
-                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    bool forwardInGroup(std::vector<RadioButton*>::iterator aStart, std::vector<RadioButton*> &rGroup)
+    bool focusNextInGroup(std::vector<RadioButton*>::iterator aStart, std::vector<RadioButton*> &rGroup)
     {
         std::vector<RadioButton*>::iterator aI(aStart);
-        while (++aI != rGroup.end())
+
+        if (aStart != rGroup.end())
+            ++aI;
+
+        for (; aI != rGroup.end(); ++aI)
         {
             Window *pWindow = *aI;
 
@@ -587,8 +562,7 @@ namespace
             }
         }
 
-        aI = rGroup.begin();
-        while (aI != aStart)
+        for (aI = rGroup.begin(); aI != aStart; ++aI)
         {
             Window *pWindow = *aI;
 
@@ -597,6 +571,7 @@ namespace
                 pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_FORWARD );
                 return true;
             }
+            aI++;
         }
 
         return false;
@@ -609,14 +584,14 @@ namespace
         if (aGroup.size() == 1) //only one button in group
             return false;
 
+        if (bBackward)
+            std::reverse(aGroup.begin(), aGroup.end());
+
         std::vector<RadioButton*>::iterator aStart(std::find(aGroup.begin(), aGroup.end(), pSourceWindow));
 
         assert(aStart != aGroup.end());
 
-        if (bBackward)
-            return backInGroup(std::vector<RadioButton*>::reverse_iterator(aStart), aGroup);
-        else
-            return forwardInGroup(aStart, aGroup);
+        return focusNextInGroup(aStart, aGroup);
     }
 }
 
