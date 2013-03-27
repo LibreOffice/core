@@ -1220,8 +1220,9 @@ ATTR_SETEMPHASIS:
                                 if (nToken == BRACELEFT && !bFirstToken)
                                 {
                                     nToken = GetNextToken();
-                                    DBG_ASSERT( nToken == BRACERIGHT,
-                                        "} did not follow { as expected\n");
+                                    SAL_WARN_IF( nToken != BRACERIGHT,
+                                        "editeng",
+                                        "} did not follow { as expected");
                                 }
                             }
                             else if( (nToken & ~(0xff| RTF_SWGDEFS)) == RTF_BRDRDEF)
