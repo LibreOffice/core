@@ -571,7 +571,6 @@ namespace
                 pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_FORWARD );
                 return true;
             }
-            aI++;
         }
 
         return false;
