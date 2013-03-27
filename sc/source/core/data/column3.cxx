@@ -45,6 +45,7 @@
 #include "stringutil.hxx"
 #include "docpool.hxx"
 #include "globalnames.hxx"
+#include "cellvalue.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
@@ -1745,17 +1746,18 @@ void ScColumn::GetString( SCROW nRow, rtl::OUString& rString ) const
     Color* pColor;
     if (Search(nRow, nIndex))
     {
-        ScBaseCell* pCell = maItems[nIndex].pCell;
-        if (pCell->GetCellType() != CELLTYPE_NOTE)
+        ScRefCellValue aCell;
+        aCell.assign(*maItems[nIndex].pCell);
+        if (aCell.meType != CELLTYPE_NOTE)
         {
             sal_uLong nFormat = GetNumberFormat( nRow );
-            ScCellFormat::GetString( pCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()) );
+            ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()));
         }
         else
-            rString = rtl::OUString();
+            rString = EMPTY_OUSTRING;
     }
     else
-        rString = rtl::OUString();
+        rString = EMPTY_OUSTRING;
 }
 
 const OUString* ScColumn::GetStringCell( SCROW nRow ) const
@@ -1942,14 +1944,14 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
         Search( nRowStart, nIndex );
         while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRowEnd )
         {
-            ScBaseCell* pCell = maItems[nIndex].pCell;
-            if ( pCell->GetCellType() != CELLTYPE_NOTE )
+            ScRefCellValue aCell;
+            aCell.assign(*maItems[nIndex].pCell);
+            if (aCell.meType != CELLTYPE_NOTE)
             {
                 Color* pColor;
                 sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
                     nRow, ATTR_VALUE_FORMAT ))->GetValue();
-                ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
-                    *pNumFmt );
+                ScCellFormat::GetString(aCell, nFormat, aString, &pColor, *pNumFmt);
                 sal_Int32 nLen;
                 if (bIsOctetTextEncoding)
                 {

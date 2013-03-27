@@ -30,6 +30,7 @@
 #include "detfunc.hxx"          // for Notes in Sort/Swap
 #include "postit.hxx"
 #include "globalnames.hxx"
+#include "cellvalue.hxx"
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -792,6 +793,16 @@ ScBaseCell* ScColumn::GetCell( SCROW nRow ) const
     if (Search(nRow, nIndex))
         return maItems[nIndex].pCell;
     return NULL;
+}
+
+ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const
+{
+    ScRefCellValue aVal;
+    SCSIZE nIndex;
+    if (Search(nRow, nIndex))
+        aVal.assign(*maItems[nIndex].pCell);
+
+    return aVal;
 }
 
 void ScColumn::ReserveSize( SCSIZE nSize )

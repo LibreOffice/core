@@ -53,6 +53,7 @@
 #include "progress.hxx"
 #include "scmod.hxx"
 #include "fillinfo.hxx"
+#include "cellvalue.hxx"
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
@@ -478,7 +479,7 @@ inline sal_Bool SameValue( ScBaseCell* pCell, ScBaseCell* pOldCell )    // pCell
 
 sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
 {
-    sal_Bool bChanged = false;
+    bool bChanged = false;
 
     if (pCell)
     {
@@ -488,8 +489,10 @@ sal_Bool ScDrawStringsVars::SetText( ScBaseCell* pCell )
 
             Color* pColor;
             sal_uLong nFormat = GetValueFormat();
-            rtl::OUString aOUString = aString;
-            ScCellFormat::GetString( pCell,
+            OUString aOUString = aString;
+            ScRefCellValue aCell;
+            aCell.assign(*pCell);
+            ScCellFormat::GetString( aCell,
                                      nFormat, aOUString, &pColor,
                                      *pOutput->mpDoc->GetFormatTable(),
                                      pOutput->mbShowNullValues,
@@ -2281,9 +2284,11 @@ bool ScOutputData::DrawEditParam::readCellContent(
     {
         sal_uLong nFormat = mpPattern->GetNumberFormat(
                                     pDoc->GetFormatTable(), mpCondSet );
-        rtl::OUString aString;
+        OUString aString;
         Color* pColor;
-        ScCellFormat::GetString( mpCell,
+        ScRefCellValue aCell;
+        aCell.assign(*mpCell);
+        ScCellFormat::GetString( aCell,
                                  nFormat,aString, &pColor,
                                  *pDoc->GetFormatTable(),
                                  bShowNullValues,
@@ -4993,7 +4998,9 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                                                                 mpDoc->GetFormatTable(), pCondSet );
                                     rtl::OUString aString;
                                     Color* pColor;
-                                    ScCellFormat::GetString( pCell,
+                                    ScRefCellValue aCell;
+                                    aCell.assign(*pCell);
+                                    ScCellFormat::GetString( aCell,
                                                              nFormat,aString, &pColor,
                                                              *mpDoc->GetFormatTable(),
                                                              mbShowNullValues,

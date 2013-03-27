@@ -53,6 +53,7 @@
 #include "fillinfo.hxx"
 #include "segmenttree.hxx"
 #include "docparam.hxx"
+#include "cellvalue.hxx"
 
 #include <math.h>
 
@@ -97,7 +98,9 @@ long ScColumn::GetNeededSize(
     double nPPT = bWidth ? nPPTX : nPPTY;
     if (Search(nRow,nIndex))
     {
-        ScBaseCell* pCell = maItems[nIndex].pCell;
+        ScRefCellValue aCell;
+        aCell.assign(*maItems[nIndex].pCell);
+
         const ScPatternAttr* pPattern = rOptions.pPattern;
         if (!pPattern)
             pPattern = pAttrArray->GetPattern( nRow );
@@ -148,11 +151,11 @@ long ScColumn::GetNeededSize(
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
         sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
         // #i111387# disable automatic line breaks only for "General" number format
-        if ( bBreak && pCell->HasValueData() && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+        if (bBreak && aCell.hasNumeric() && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
         {
             // also take formula result type into account for number format
-            if ( pCell->GetCellType() != CELLTYPE_FORMULA ||
-                 ( static_cast<ScFormulaCell*>(pCell)->GetStandardFormat(*pFormatter, nFormat) % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+            if (aCell.meType != CELLTYPE_FORMULA ||
+                (aCell.mpFormula->GetStandardFormat(*pFormatter, nFormat) % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 bBreak = false;
         }
 
@@ -229,20 +232,20 @@ long ScColumn::GetNeededSize(
         }
 
         bool bAddMargin = true;
-        CellType eCellType = pCell->GetCellType();
+        CellType eCellType = aCell.meType;
 
-        bool bEditEngine = ( eCellType == CELLTYPE_EDIT ||
-                                eOrient == SVX_ORIENTATION_STACKED ||
-                                IsAmbiguousScript( nScript ) ||
-                                ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) );
+        bool bEditEngine = (eCellType == CELLTYPE_EDIT ||
+                            eOrient == SVX_ORIENTATION_STACKED ||
+                            IsAmbiguousScript(nScript) ||
+                            ((eCellType == CELLTYPE_FORMULA) && aCell.mpFormula->IsMultilineResult()));
 
         if (!bEditEngine)                                   // direct output
         {
             Color* pColor;
             rtl::OUString aValStr;
-            ScCellFormat::GetString( pCell, nFormat, aValStr, &pColor,
-                                        *pFormatter,
-                                        true, rOptions.bFormula, ftCheck );
+            ScCellFormat::GetString(
+                aCell, nFormat, aValStr, &pColor, *pFormatter, true, rOptions.bFormula, ftCheck);
+
             if (!aValStr.isEmpty())
             {
                 //  SetFont is moved up
@@ -394,18 +397,18 @@ long ScColumn::GetNeededSize(
             }
             pEngine->SetPaperSize(aPaper);
 
-            if ( pCell->GetCellType() == CELLTYPE_EDIT )
+            if (aCell.meType == CELLTYPE_EDIT)
             {
-                const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
-                pEngine->SetTextNewDefaults(*pData, pSet);
+                pEngine->SetTextNewDefaults(*aCell.mpEditText, pSet);
             }
             else
             {
                 Color* pColor;
-                rtl::OUString aString;
-                ScCellFormat::GetString( pCell, nFormat, aString, &pColor,
-                                            *pFormatter,
-                                            true, rOptions.bFormula, ftCheck );
+                OUString aString;
+                ScCellFormat::GetString(
+                    aCell, nFormat, aString, &pColor, *pFormatter, true,
+                    rOptions.bFormula, ftCheck);
+
                 if (!aString.isEmpty())
                     pEngine->SetTextNewDefaults(aString, pSet);
                 else
@@ -560,9 +563,9 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         Color* pColor;
         if (pParam->mnMaxTextRow >= 0)
         {
-            ScBaseCell* pCell = GetCell(pParam->mnMaxTextRow);
+            ScRefCellValue aCell = GetCellValue(pParam->mnMaxTextRow);
             ScCellFormat::GetString(
-                pCell, nFormat, aLongStr, &pColor, *pFormatter, true, false, ftCheck );
+                aCell, nFormat, aLongStr, &pColor, *pFormatter, true, false, ftCheck);
         }
         else
         {
@@ -573,10 +576,11 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                     // Out-of-bound reached.  No need to keep going.
                     break;
 
-                ScBaseCell* pCell = maItems[nIndex].pCell;
-                rtl::OUString aValStr;
+                ScRefCellValue aCell;
+                aCell.assign(*maItems[nIndex].pCell);
+                OUString aValStr;
                 ScCellFormat::GetString(
-                    pCell, nFormat, aValStr, &pColor, *pFormatter, true, false, ftCheck );
+                    aCell, nFormat, aValStr, &pColor, *pFormatter, true, false, ftCheck);
 
                 if (aValStr.getLength() > nLongLen)
                 {

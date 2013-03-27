@@ -41,12 +41,6 @@ enum ScForceTextFmt {
 class SC_DLLPUBLIC ScCellFormat
 {
 public:
-    static void     GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
-                               Color** ppColor, SvNumberFormatter& rFormatter,
-                               sal_Bool bNullVals = sal_True,
-                               sal_Bool bFormula  = false,
-                               ScForceTextFmt eForceTextFmt = ftDontForce,
-                               bool bUseStarFormat = false );
 
     static void GetString(
         ScRefCellValue& rCell, sal_uLong nFormat, rtl::OUString& rString,

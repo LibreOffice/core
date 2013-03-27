@@ -73,6 +73,8 @@ struct ScSetStringParam;
 struct ScColWidthParam;
 class ScColumnTextWidthIterator;
 struct ScFormulaCellGroup;
+struct ScRefCellValue;
+
 typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
 
 struct ScNeededSizeOptions
@@ -152,6 +154,7 @@ public:
 
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
     ScBaseCell* GetCell( SCROW nRow ) const;
+    ScRefCellValue GetCellValue( SCROW nRow ) const;
     void        Insert( SCROW nRow, ScBaseCell* pCell );
     void        Insert( SCROW nRow, sal_uInt32 nFormatIndex, ScBaseCell* pCell );
     void        Append( SCROW nRow, ScBaseCell* pCell );
