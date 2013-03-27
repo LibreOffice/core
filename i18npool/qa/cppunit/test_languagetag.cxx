@@ -205,6 +205,30 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( qty.getLanguageType() == LANGUAGE_SYSTEM );
     }
 
+    // 'x-comment' is a privateuse known "locale"
+    {
+        OUString s_xcomment( "x-comment" );
+        LanguageTag xcomment( s_xcomment );
+        lang::Locale aLocale = xcomment.getLocale();
+        CPPUNIT_ASSERT( xcomment.getBcp47() == s_xcomment );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "x-comment" );
+        CPPUNIT_ASSERT( xcomment.getLanguageType() == LANGUAGE_USER_PRIV_COMMENT );
+    }
+
+    // 'x-foobar' is a privateuse unknown "locale"
+    {
+        OUString s_xfoobar( "x-foobar" );
+        LanguageTag xfoobar( s_xfoobar );
+        lang::Locale aLocale = xfoobar.getLocale();
+        CPPUNIT_ASSERT( xfoobar.getBcp47() == s_xfoobar );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "x-foobar" );
+        CPPUNIT_ASSERT( xfoobar.getLanguageType() == LANGUAGE_SYSTEM );
+    }
+
     // test reset() methods
     {
         LanguageTag aTag( LANGUAGE_DONTKNOW );
