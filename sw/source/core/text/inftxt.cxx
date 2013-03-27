@@ -66,6 +66,7 @@
 #include <cstdio>
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
+#include <docufld.hxx>
 
 #include <unomid.h>
 
@@ -1108,17 +1109,14 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                 // If this is a comment range, need to look up the color of the comment author.
                 if (pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
                 {
-                    // Search for the position of the postit field
-                    const sal_Unicode fld[] = { CH_TXTATR_INWORD, 0 };
-                    xub_StrLen nEndIdx = GetTxt().SearchChar(fld, GetIdx());
-                    if (nEndIdx != STRING_NOTFOUND)
+                    // Search for the postit field
+                    const SwFmtFld* pField = SwPostItField::GetByName(pNd->GetDoc(), pFieldmark->GetName());
+                    if (pField)
                     {
-                        SwTxtAttr* pTxtAttr = pNd->GetTxtAttrForCharAt(nEndIdx, RES_TXTATR_FIELD);
-                        const SwFmtFld& rPostItField = pTxtAttr->GetFld();
                         // Look up the author name
-                        const OUString& rAuthor = rPostItField.GetFld()->GetPar1();
+                        const OUString& rAuthor = pField->GetFld()->GetPar1();
                         sal_uInt16 nIndex = pNd->GetDoc()->InsertRedlineAuthor(rAuthor);
-                        pOutDev->SetFillColor( SwPostItMgr::GetColorLight(nIndex) );
+                        pOutDev->SetFillColor(SwPostItMgr::GetColorLight(nIndex));
                         bFilled = true;
                     }
                 }
