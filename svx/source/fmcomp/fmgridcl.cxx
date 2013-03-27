@@ -33,7 +33,6 @@
 #include "svx/fmgridcl.hxx"
 #include "svx/svxdlg.hxx"
 #include "svx/svxids.hrc"
-#include "trace.hxx"
 
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -1404,7 +1403,7 @@ void FmGridControl::DeleteSelectedRows()
 //------------------------------------------------------------------------------
 void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& /*rEvent*/)
 {
-    TRACE_RANGE("FmGridControl::positioned");
+    SAL_INFO("svx.fmcmop", "FmGridControl::positioned");
     // position on the data source (force it to be done in the main thread)
     implAdjustInSolarThread(sal_False);
 }

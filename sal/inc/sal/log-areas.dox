@@ -188,6 +188,7 @@ certain functionality.
 @section svx
 
 @li @c svx.dialog
+@li @c svx.fmcomp
 @li @c svx.form
 @li @c svx.stbcrtls - StatusBarControl
 @li @c svx.table

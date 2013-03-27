@@ -389,7 +389,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/fmcomp/gridcell \
     svx/source/fmcomp/gridcols \
     svx/source/fmcomp/gridctrl \
-    svx/source/fmcomp/trace \
     svx/source/fmcomp/xmlexchg \
     svx/source/form/dataaccessdescriptor \
     svx/source/form/datalistener \

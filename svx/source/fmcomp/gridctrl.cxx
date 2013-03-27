@@ -56,7 +56,6 @@
 
 #include <comphelper/stl_types.hxx>
 #include <comphelper/property.hxx>
-#include "trace.hxx"
 
 #include <algorithm>
 
@@ -72,7 +71,7 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star::accessibility;
 
-#define ROWSTATUS(row)  !row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID"
+#define ROWSTATUS(row) (!row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID")
 
 
 #define DEFAULT_BROWSE_MODE             \
@@ -2223,7 +2222,7 @@ void DbGridControl::setDisplaySynchron(sal_Bool bSync)
 //------------------------------------------------------------------------------
 void DbGridControl::AdjustDataSource(sal_Bool bFull)
 {
-    TRACE_RANGE("DbGridControl::AdjustDataSource");
+    SAL_INFO("svx.fmcomp", "DbGridControl::AdjustDataSource");
     SolarMutexGuard aGuard;
     // wird die aktuelle Zeile gerade neu bestimmt,
     // wird kein abgleich vorgenommen
@@ -2251,7 +2250,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
                 // position of my data cursor is the same as the position our current row points tpo
                 // sync the status, repaint, done
                 DBG_ASSERT(m_xDataRow == m_xCurrentRow, "Fehler in den Datenzeilen");
-                TRACE_RANGE_MESSAGE1("same position, new state : %s", ROWSTATUS(m_xCurrentRow));
+                SAL_INFO("svx.fmcomp", "same position, new state: " << ROWSTATUS(m_xCurrentRow));
                 RowModified(m_nCurrentPos);
                 return;
             }
@@ -2767,7 +2766,7 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
 //------------------------------------------------------------------------------
 void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
-    TRACE_RANGE("DbGridControl::DataSourcePropertyChanged");
+    SAL_INFO("svx.fmcomp", "DbGridControl::DataSourcePropertyChanged");
     SolarMutexGuard aGuard;
     // prop "IsModified" changed ?
     // during update don't care about the modified state
@@ -2812,7 +2811,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
             m_xCurrentRow->SetStatus(::comphelper::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN);
             m_xCurrentRow->SetNew( bIsNew );
             InvalidateStatusCell(m_nCurrentPos);
-            TRACE_RANGE_MESSAGE1("modified flag changed, new state : %s", ROWSTATUS(m_xCurrentRow));
+            SAL_INFO("svx.fmcomp", "modified flag changed, new state: " << ROWSTATUS(m_xCurrentRow));
         }
     }
 }
@@ -2998,13 +2997,13 @@ void DbGridControl::InitController(CellControllerRef& /*rController*/, long /*nR
 //------------------------------------------------------------------------------
 void DbGridControl::CellModified()
 {
-    TRACE_RANGE("DbGridControl::CellModified");
+    SAL_INFO("svx.fmcomp", "DbGridControl::CellModified");
 
     {
         ::osl::MutexGuard aGuard(m_aAdjustSafety);
         if (m_nAsynAdjustEvent)
         {
-            TRACE_RANGE_MESSAGE1("forcing a synchron call to ", m_bPendingAdjustRows ? "AdjustRows" : "AdustDataSource");
+            SAL_INFO("svx.fmcomp", "forcing a synchron call to " << (m_bPendingAdjustRows ? "AdjustRows" : "AdustDataSource"));
             RemoveUserEvent(m_nAsynAdjustEvent);
             m_nAsynAdjustEvent = 0;
 
@@ -3024,7 +3023,7 @@ void DbGridControl::CellModified()
         if (m_xCurrentRow->IsNew())
         {
             m_xCurrentRow->SetStatus(GRS_MODIFIED);
-            TRACE_RANGE_MESSAGE("current row is new, new state : MODIFIED");
+            SAL_INFO("svx.fmcomp", "current row is new, new state: MODIFIED");
             // wenn noch keine Zeile hinzugefuegt wurde, dann neue hinzunehmen
             if (m_nCurrentPos == GetRowCount() - 1)
             {
@@ -3037,9 +3036,9 @@ void DbGridControl::CellModified()
         else if (m_xCurrentRow->GetStatus() != GRS_MODIFIED)
         {
             m_xCurrentRow->SetState(m_pDataCursor, sal_False);
-            TRACE_RANGE_MESSAGE1("current row is not new, after SetState, new state : %s", ROWSTATUS(m_xCurrentRow));
+            SAL_INFO("svx.fmcomp", "current row is not new, after SetState, new state: " << ROWSTATUS(m_xCurrentRow));
             m_xCurrentRow->SetStatus(GRS_MODIFIED);
-            TRACE_RANGE_MESSAGE("current row is not new, new state : MODIFIED");
+            SAL_INFO("svx.fmcomp", "current row is not new, new state: MODIFIED");
             InvalidateStatusCell(m_nCurrentPos);
         }
     }
@@ -3193,7 +3192,7 @@ sal_Bool DbGridControl::IsInsertionRow(long nRow) const
 //------------------------------------------------------------------------------
 sal_Bool DbGridControl::SaveModified()
 {
-    TRACE_RANGE("DbGridControl::SaveModified");
+    SAL_INFO("svx.fmcomp", "DbGridControl::SaveModified");
     DBG_ASSERT(IsValid(m_xCurrentRow), "GridControl:: Invalid row");
     if (!IsValid(m_xCurrentRow))
         return sal_True;
@@ -3223,15 +3222,13 @@ sal_Bool DbGridControl::SaveModified()
         if ( IsValid(m_xCurrentRow) )
         {
             m_xCurrentRow->SetState(m_pDataCursor, sal_False);
-            TRACE_RANGE_MESSAGE1("explicit SetState, new state : %s", ROWSTATUS(m_xCurrentRow));
+            SAL_INFO("svx.fmcomp", "explicit SetState, new state: " << ROWSTATUS(m_xCurrentRow));
             InvalidateStatusCell( m_nCurrentPos );
         }
-#ifdef DBG_UTIL
         else
         {
-            TRACE_RANGE_MESSAGE1("no SetState, new state : %s", ROWSTATUS(m_xCurrentRow));
+            SAL_INFO("svx.fmcomp", "no SetState, new state: " << ROWSTATUS(m_xCurrentRow));
         }
-#endif
     }
     else
     {
@@ -3245,7 +3242,7 @@ sal_Bool DbGridControl::SaveModified()
 //------------------------------------------------------------------------------
 sal_Bool DbGridControl::SaveRow()
 {
-    TRACE_RANGE("DbGridControl::SaveRow");
+    SAL_INFO("svx.fmcomp", "DbGridControl::SaveRow");
     // gueltige Zeile
     if (!IsValid(m_xCurrentRow) || !IsModified())
         return sal_True;
@@ -3283,7 +3280,7 @@ sal_Bool DbGridControl::SaveRow()
             // if we are appending we still sit on the insert row
             // we don't move just clear the flags not to move on the current row
             m_xCurrentRow->SetState(m_pDataCursor, sal_False);
-            TRACE_RANGE_MESSAGE1("explicit SetState after a successfull update, new state : %s", ROWSTATUS(m_xCurrentRow));
+            SAL_INFO("svx.fmcomp", "explicit SetState after a successfull update, new state: " << ROWSTATUS(m_xCurrentRow));
             m_xCurrentRow->SetNew(sal_False);
 
             // adjust the seekcursor if it is on the same position as the datacursor
@@ -3541,27 +3538,23 @@ sal_uInt16 DbGridControl::GetModelColumnPos( sal_uInt16 nId ) const
 //------------------------------------------------------------------------------
 void DbGridControl::implAdjustInSolarThread(sal_Bool _bRows)
 {
-    TRACE_RANGE("DbGridControl::implAdjustInSolarThread");
+    SAL_INFO("svx.fmcomp", "DbGridControl::implAdjustInSolarThread");
     ::osl::MutexGuard aGuard(m_aAdjustSafety);
     if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
     {
         m_nAsynAdjustEvent = PostUserEvent(LINK(this, DbGridControl, OnAsyncAdjust), reinterpret_cast< void* >( _bRows ));
         m_bPendingAdjustRows = _bRows;
-#ifdef DBG_UTIL
         if (_bRows)
-            TRACE_RANGE_MESSAGE("posting an AdjustRows")
+            SAL_INFO("svx.fmcomp", "posting an AdjustRows");
         else
-            TRACE_RANGE_MESSAGE("posting an AdjustDataSource")
-#endif
+            SAL_INFO("svx.fmcomp", "posting an AdjustDataSource");
     }
     else
     {
-#ifdef DBG_UTIL
         if (_bRows)
-            TRACE_RANGE_MESSAGE("doing an AdjustRows")
+            SAL_INFO("svx.fmcomp", "doing an AdjustRows");
         else
-            TRACE_RANGE_MESSAGE("doing an AdjustDataSource")
-#endif
+            SAL_INFO("svx.fmcomp", "doing an AdjustDataSource");
         // always adjust the rows before adjusting the data source
         // If this is not necessary (because the row count did not change), nothing is done
         // The problem is that we can't rely on the order of which the calls come in: If the cursor was moved
