@@ -32,6 +32,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 #include <vcl/svapp.hxx>
 #include <swmodeltestbase.hxx>
@@ -70,6 +71,7 @@ public:
     void testFdo53604();
     void testFdo52286();
     void testFdo61507();
+    void testFdo30983();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -115,6 +117,7 @@ void Test::run()
         {"fdo53604.odt", &Test::testFdo53604},
         {"fdo52286.odt", &Test::testFdo52286},
         {"fdo61507.rtf", &Test::testFdo61507},
+        {"fdo30983.rtf", &Test::testFdo30983},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -480,6 +483,16 @@ void Test::testFdo61507()
 
     // Only "Hello.", no additional characters.
     CPPUNIT_ASSERT_EQUAL(6, getLength());
+}
+
+void Test::testFdo30983()
+{
+    // These were 'page text area', not 'entire page', i.e. both the horizontal
+    // and vertical positions were incorrect.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "HoriOrientRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "VertOrientRelation"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

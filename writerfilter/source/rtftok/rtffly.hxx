@@ -99,7 +99,7 @@ namespace writerfilter {
                     struct
                     {
                         sal_uInt16 nOrient : 4;
-                        sal_uInt16 nRelOrient : 1;
+                        sal_uInt16 nRelOrient : 4;
                     } Flags;
                     sal_uInt16 nVal;
                 } Value;
@@ -180,7 +180,7 @@ namespace writerfilter {
                     {
                         sal_uInt16 nOrient : 4;
                         sal_uInt16 nRelAnchor : 4;
-                        sal_uInt16 nRelOrient : 1;
+                        sal_uInt16 nRelOrient : 4;
                     } Flags;
                     sal_uInt16 nVal;
                 } Value;
