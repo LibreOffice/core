@@ -195,4 +195,9 @@ bool TemplateRemoteView::isNestedRegionAllowed() const
     return true;
 }
 
+bool TemplateRemoteView::isImportAllowed() const
+{
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

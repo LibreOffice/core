@@ -33,6 +33,8 @@ public:
 
     virtual bool isNestedRegionAllowed () const;
 
+    virtual bool isImportAllowed () const;
+
 private:
 
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;

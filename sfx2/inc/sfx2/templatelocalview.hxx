@@ -57,6 +57,8 @@ public:
 
     virtual bool isNestedRegionAllowed () const;
 
+    virtual bool isImportAllowed () const;
+
     bool removeRegion (const sal_uInt16 nItemId);
 
     bool removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId);
