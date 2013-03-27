@@ -1938,6 +1938,10 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 
 endef
 
+else # no openldap
+
+gb_LinkTarget__use_openldap :=
+
 endif # SYSTEM_OPENLDAP
 
 
