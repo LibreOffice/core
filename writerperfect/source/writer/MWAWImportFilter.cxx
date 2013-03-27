@@ -941,7 +941,7 @@ throw( com::sun::star::uno::RuntimeException )
                 sTypeName = "writer_HanMac_Word_K";
                 break;
             case MWAWDocument::HMACJ: // HanMac Word-J ( almost nothing done for J document)
-                sTypeName = "writer_HanMac_Word_J";
+                // sTypeName = "writer_HanMac_Word_J";
                 break;
             case MWAWDocument::LWTEXT: // LightWayText ( only v4.5 Mac format )
                 sTypeName = "writer_LightWayText";

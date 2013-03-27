@@ -327,7 +327,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_DocMaker \
 	writer_eDoc_Document \
 	writer_FullWrite_Professional \
-	writer_HanMac_Word_J \
 	writer_HanMac_Word_K \
 	writer_LightWayText \
 	writer_Mac_Word \
