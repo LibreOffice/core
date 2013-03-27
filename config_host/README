@@ -19,7 +19,6 @@ Adding a new setting:
         - add config_host/config_XXX.h.in here, with just #ifndef include guard
         - add AC_CONFIG_HEADERS([config_host/config_XXX.h]) next to the others
             in configure.ac
-        - add config_XXX.h to config_host/.gitignore
 - add #define HAVE_FOO 0 to the config_host/config_XXX.h , possibly with a comment
   (do not use #undef HAVE_FOO, unless the setting has more values than on/off)
 - add #include <config_XXX.h> before any #if HAVE_FOO in a source file
