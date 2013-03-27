@@ -63,7 +63,6 @@ catch(const Exception& rEx)   \
     lcl_CFG_DBG_EXCEPTION(a, rEx);\
 }
 #else
-    #define lcl_CFG_DBG_EXCEPTION( a, b)
     #define CATCH_INFO(a) catch(const Exception&){}
 #endif
 
