@@ -94,6 +94,9 @@ public:
 
     virtual void showRegion (ThumbnailViewItem *pItem) = 0;
 
+    // Return if we can have regions inside the current region
+    virtual bool isNestedRegionAllowed () const = 0;
+
     sal_uInt16 getCurRegionId () const;
 
     const OUString& getCurRegionName () const;

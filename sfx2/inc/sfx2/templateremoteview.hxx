@@ -31,6 +31,8 @@ public:
 
     bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
 
+    virtual bool isNestedRegionAllowed () const;
+
 private:
 
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
