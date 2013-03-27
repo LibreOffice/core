@@ -146,7 +146,7 @@ void MsLangId::Conversion::convertLanguageToLocale( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
     if (!rLocale.Variant.isEmpty())
-        rLocale.Variant = rtl::OUString();
+        rLocale.Variant = OUString();
     convertLanguageToIsoNames( nLang, rLocale.Language, rLocale.Country);
     /* FIXME: this x-... is temporary until conversion will be moved up to
      * LanguageTag */

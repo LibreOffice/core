@@ -97,7 +97,7 @@ public:
     // TODO: refactor to LanguageTag, used only in
     // i18npool/source/isolang/inunx.cxx to convert Unix locale string
 
-    static LanguageType convertUnxByteStringToLanguage( const rtl::OString& rString );
+    static LanguageType convertUnxByteStringToLanguage( const OString& rString );
 
 
     static LanguageType resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType );
@@ -206,7 +206,7 @@ public:
                 const ::com::sun::star::lang::Locale & rLocale );
 
         friend LanguageType MsLangId::convertUnxByteStringToLanguage(
-                const rtl::OString& rString );
+                const OString& rString );
 
 
         /** Convert a Locale to a LanguageType with handling of an empty
@@ -217,16 +217,16 @@ public:
 
         /** Convert x-... privateuse, used by convertLocaleToLanguage(Locale) */
         I18NISOLANG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
-                const rtl::OUString& rPriv );
+                const OUString& rPriv );
 
         /** Used by convertLocaleToLanguage(Locale) */
         I18NISOLANG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
-                const rtl::OUString& rLang, const rtl::OUString& rCountry );
+                const OUString& rLang, const OUString& rCountry );
 
 
         /** Used by convertUnxByteStringToLanguage(OString) */
         I18NISOLANG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
-                const rtl::OString& rLang, const rtl::OString& rCountry );
+                const OString& rLang, const OString& rCountry );
 
 
         /** Convert a LanguageType to a Locale.
@@ -248,7 +248,7 @@ public:
 
         /** Used by convertLanguageToLocale(LanguageType,Locale) */
         I18NISOLANG_DLLPRIVATE static void convertLanguageToIsoNames(
-                LanguageType nLang, rtl::OUString& rLangStr, rtl::OUString& rCountry );
+                LanguageType nLang, OUString& rLangStr, OUString& rCountry );
 
 
         I18NISOLANG_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );

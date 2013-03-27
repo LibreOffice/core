@@ -642,7 +642,7 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 
 // static
 void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
-        rtl::OUString& rLangStr, rtl::OUString& rCountry )
+        OUString& rLangStr, OUString& rCountry )
 {
     if ( nLang == LANGUAGE_SYSTEM )
         nLang = MsLangId::getSystemLanguage();
@@ -653,8 +653,8 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     {
         if ( pEntry->mnLang == nLang )
         {
-            rLangStr = rtl::OUString::createFromAscii( pEntry->maLangStr );
-            rCountry = rtl::OUString::createFromAscii( pEntry->maCountry );
+            rLangStr = OUString::createFromAscii( pEntry->maLangStr );
+            rCountry = OUString::createFromAscii( pEntry->maCountry );
             return;
         }
         ++pEntry;
@@ -669,8 +669,8 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     {
         if ( pNoneStdEntry->mnLang == nLang )
         {
-            rLangStr = rtl::OUString::createFromAscii( pNoneStdEntry->maLangStr );
-            rCountry = rtl::OUString::createFromAscii( pNoneStdEntry->maCountry );
+            rLangStr = OUString::createFromAscii( pNoneStdEntry->maLangStr );
+            rCountry = OUString::createFromAscii( pNoneStdEntry->maCountry );
             return;
         }
         ++pNoneStdEntry;
@@ -683,7 +683,7 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     {
         if ( pPrivateEntry->mnLang == nLang )
         {
-            rLangStr = rtl::OUString::createFromAscii( pPrivateEntry->mpLangStr );
+            rLangStr = OUString::createFromAscii( pPrivateEntry->mpLangStr );
             rCountry = OUString();
             return;
         }
@@ -692,8 +692,8 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // not found
-    rLangStr = rtl::OUString();
-    rCountry = rtl::OUString();
+    rLangStr = OUString();
+    rCountry = OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -764,9 +764,9 @@ LanguageType MsLangId::Conversion::lookupFallbackLanguage( LanguageType nLang )
 {
     const MsLangId::IsoLangEntry& rEntry = lcl_lookupFallbackEntry( nLang);
     return ::com::sun::star::lang::Locale(
-            rtl::OUString::createFromAscii( rEntry.maLangStr),
-            rtl::OUString::createFromAscii( rEntry.maCountry),
-            rtl::OUString());
+            OUString::createFromAscii( rEntry.maLangStr),
+            OUString::createFromAscii( rEntry.maCountry),
+            OUString());
 }
 
 // -----------------------------------------------------------------------
@@ -775,9 +775,9 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
         const ::com::sun::star::lang::Locale & rLocale )
 {
     // language is lower case in table
-    rtl::OUString aLowerLang = rLocale.Language.toAsciiLowerCase();
+    OUString aLowerLang = rLocale.Language.toAsciiLowerCase();
     // country is upper case in table
-    rtl::OUString aUpperCountry = rLocale.Country.toAsciiUpperCase();
+    OUString aUpperCountry = rLocale.Country.toAsciiUpperCase();
     sal_Int32 nCountryLen = aUpperCountry.getLength();
 
     // Search for locale and remember first lang-only.
@@ -840,15 +840,15 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
 {
     const MsLangId::IsoLangEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
     return ::com::sun::star::lang::Locale(
-            rtl::OUString::createFromAscii( rEntry.maLangStr),
-            rtl::OUString::createFromAscii( rEntry.maCountry),
-            rtl::OUString());
+            OUString::createFromAscii( rEntry.maLangStr),
+            OUString::createFromAscii( rEntry.maCountry),
+            OUString());
 }
 
 // =======================================================================
 
 // static
-LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const rtl::OUString& rPriv )
+LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& rPriv )
 {
     const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
     do
@@ -862,13 +862,13 @@ LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const rtl::OUStr
 
 
 // static
-LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OUString& rLang,
-        const rtl::OUString& rCountry )
+LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rLang,
+        const OUString& rCountry )
 {
     // language is lower case in table
-    rtl::OUString aLowerLang = rLang.toAsciiLowerCase();
+    OUString aLowerLang = rLang.toAsciiLowerCase();
     // country is upper case in table
-    rtl::OUString aUpperCountry = rCountry.toAsciiUpperCase();
+    OUString aUpperCountry = rCountry.toAsciiUpperCase();
 
     //  first look for exact match
     const IsoLangEntry* pFirstLang = NULL;
@@ -969,11 +969,11 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OUStrin
 // -----------------------------------------------------------------------
 
 // static
-LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OString& rLang,
-        const rtl::OString& rCountry )
+LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLang,
+        const OString& rCountry )
 {
-    rtl::OUString aLang = OStringToOUString( rLang, RTL_TEXTENCODING_ASCII_US);
-    rtl::OUString aCountry = OStringToOUString( rCountry, RTL_TEXTENCODING_ASCII_US);
+    OUString aLang = OStringToOUString( rLang, RTL_TEXTENCODING_ASCII_US);
+    OUString aCountry = OStringToOUString( rCountry, RTL_TEXTENCODING_ASCII_US);
     return convertIsoNamesToLanguage( aLang, aCountry);
 }
 
@@ -1004,11 +1004,11 @@ static IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
 
 // static
 LanguageType MsLangId::convertUnxByteStringToLanguage(
-        const rtl::OString& rString )
+        const OString& rString )
 {
-    rtl::OString  aLang;
-    rtl::OString  aCountry;
-    rtl::OString  aAtString;
+    OString  aLang;
+    OString  aCountry;
+    OString  aAtString;
 
     sal_Int32  nLangSepPos    = rString.indexOf( (sal_Char)'_' );
     sal_Int32  nCountrySepPos = rString.indexOf( (sal_Char)'.' );
@@ -1039,9 +1039,9 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
     if (!aAtString.isEmpty())
     {
         // language is lower case in table
-        rtl::OString aLowerLang = aLang.toAsciiLowerCase();
+        OString aLowerLang = aLang.toAsciiLowerCase();
         // country is upper case in table
-        rtl::OString aUpperCountry = aCountry.toAsciiUpperCase();
+        OString aUpperCountry = aCountry.toAsciiUpperCase();
         const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
         do
         {                         // avoid embedded \0 warning
