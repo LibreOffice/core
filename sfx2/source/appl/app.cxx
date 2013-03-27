@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #if defined UNX
 #include <limits.h>
 #else // UNX
@@ -127,7 +129,10 @@ SfxApplication* SfxApplication::pApp = NULL;
 #ifndef DISABLE_SCRIPTING
 static BasicDLL*       pBasic   = NULL;
 #endif
+
+#if HAVE_FEATURE_HELP
 static SfxHelp*        pSfxHelp = NULL;
+#endif
 
 namespace
 {
@@ -162,7 +167,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
         ::framework::SetActivateToolPanel( &SfxViewFrame::ActivateToolPanel );
-
+#if HAVE_FEATURE_HELP
         Application::SetHelp( pSfxHelp );
         if ( SvtHelpOptions().IsHelpTips() )
             Help::EnableQuickHelp();
@@ -172,6 +177,7 @@ SfxApplication* SfxApplication::GetOrCreate()
             Help::EnableBalloonHelp();
         else
             Help::DisableBalloonHelp();
+#endif
     }
     return pApp;
 }
@@ -206,7 +212,9 @@ SfxApplication::SfxApplication()
     (void)bOk;
 #endif
 
+#if HAVE_FEATURE_HELP
     pSfxHelp = new SfxHelp;
+#endif
 
 #ifndef DISABLE_SCRIPTING
     pBasic   = new BasicDLL;
@@ -223,11 +231,14 @@ SfxApplication::~SfxApplication()
 
     SfxModule::DestroyModules_Impl();
 
+#if HAVE_FEATURE_HELP
     delete pSfxHelp;
     Application::SetHelp( NULL );
+#endif
 
     // delete global options
     SvtViewOptions::ReleaseOptions();
+
 #ifndef DISABLE_SCRIPTING
     delete pBasic;
 #endif
