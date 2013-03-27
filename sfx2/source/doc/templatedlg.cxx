@@ -86,18 +86,41 @@ class SearchView_Keyword
 {
 public:
 
-    SearchView_Keyword (const OUString &rKeyword)
-        : maKeyword(rKeyword)
+    SearchView_Keyword (const OUString &rKeyword, FILTER_APPLICATION App)
+        : maKeyword(rKeyword), meApp(App)
     {}
 
     bool operator() (const TemplateItemProperties &rItem)
     {
-        return rItem.aName.matchIgnoreAsciiCase(maKeyword);
+        bool bRet = true;
+
+        INetURLObject aUrl(rItem.aPath);
+        OUString aExt = aUrl.getExtension();
+
+        if (meApp == FILTER_APP_WRITER)
+        {
+            bRet = aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx";
+        }
+        else if (meApp == FILTER_APP_CALC)
+        {
+            bRet = aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx";
+        }
+        else if (meApp == FILTER_APP_IMPRESS)
+        {
+            bRet = aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx";
+        }
+        else if (meApp == FILTER_APP_DRAW)
+        {
+            bRet = aExt == "otg" || aExt == "std";
+        }
+
+        return bRet && rItem.aName.matchIgnoreAsciiCase(maKeyword);
     }
 
 private:
 
     OUString maKeyword;
+    FILTER_APPLICATION meApp;
 };
 
 /***
@@ -668,8 +691,25 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
 
         bool bDisplayFolder = !mpCurView->isNonRootRegionVisible();
 
+        FILTER_APPLICATION eFilter = FILTER_APP_NONE;
+        switch (maTabControl.GetCurPageId())
+        {
+            case FILTER_DOCS:
+                eFilter = FILTER_APP_WRITER;
+                break;
+            case FILTER_PRESENTATIONS:
+                eFilter = FILTER_APP_IMPRESS;
+                break;
+            case FILTER_SHEETS:
+                eFilter = FILTER_APP_CALC;
+                break;
+            case FILTER_DRAWS:
+                eFilter = FILTER_APP_DRAW;
+                break;
+        }
+
         std::vector<TemplateItemProperties> aItems =
-                maView->getFilteredItems(SearchView_Keyword(aKeyword));
+                maView->getFilteredItems(SearchView_Keyword(aKeyword,eFilter));
 
         for (size_t i = 0; i < aItems.size(); ++i)
         {
