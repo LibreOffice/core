@@ -425,7 +425,7 @@ private:
     SCTAB           nTab;
     SCCOL           nStartCol;
     SCCOL           nEndCol;
-   SCROW           nStartRow;
+    SCROW           nStartRow;
     SCROW           nEndRow;
     SCROW*          pNextRows;
     SCSIZE*         pNextIndices;

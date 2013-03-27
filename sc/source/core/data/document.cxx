@@ -4309,11 +4309,18 @@ const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich
 
 const ScPatternAttr* ScDocument::GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    if (TableExists(nTab))
         return maTabs[nTab]->GetPattern( nCol, nRow );
     return NULL;
 }
 
+const ScPatternAttr* ScDocument::GetPattern( const ScAddress& rPos ) const
+{
+    if (TableExists(rPos.Tab()))
+        return maTabs[rPos.Tab()]->GetPattern(rPos.Col(), rPos.Row());
+
+    return NULL;
+}
 
 const ScPatternAttr* ScDocument::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const
 {

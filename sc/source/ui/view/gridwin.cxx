@@ -379,13 +379,15 @@ static void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pD
     }
 }
 
-static sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTAB nTab, ScBaseCell*& rpCell, OUString& rURL )
+static bool lcl_GetHyperlinkCell(
+    ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTAB nTab, ScRefCellValue& rCell, OUString& rURL )
 {
-    sal_Bool bFound = false;
+    bool bFound = false;
     do
     {
-        pDoc->GetCell( rPosX, rPosY, nTab, rpCell );
-        if ( !rpCell || rpCell->GetCellType() == CELLTYPE_NOTE )
+        ScAddress aPos(rPosX, rPosY, nTab);
+        rCell.assign(*pDoc, aPos);
+        if (rCell.isEmpty())
         {
             if ( rPosX <= 0 )
                 return false;                           // alles leer bis links
@@ -394,17 +396,16 @@ static sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPos
         }
         else
         {
-            const ScPatternAttr* pPattern = pDoc->GetPattern( rPosX, rPosY, nTab );
+            const ScPatternAttr* pPattern = pDoc->GetPattern(aPos);
             if ( !((SfxStringItem&)pPattern->GetItem(ATTR_HYPERLINK)).GetValue().isEmpty() )
             {
                 rURL =  ((SfxStringItem&)pPattern->GetItem(ATTR_HYPERLINK)).GetValue();
                 bFound = true;
             }
-            else if ( rpCell->GetCellType() == CELLTYPE_EDIT)
-                bFound = sal_True;
-            else if (rpCell->GetCellType() == CELLTYPE_FORMULA &&
-                static_cast<ScFormulaCell*>(rpCell)->IsHyperLinkCell())
-                bFound = sal_True;
+            else if (rCell.meType == CELLTYPE_EDIT)
+                bFound = true;
+            else if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->IsHyperLinkCell())
+                bFound = true;
             else
                 return false;                               // andere Zelle
         }
@@ -2325,9 +2326,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 SCsROW nPosY;
                 SCTAB nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-                ScBaseCell* pCell = NULL;
                 OUString sURL;
-                if( lcl_GetHyperlinkCell( pDoc, nPosX, nPosY, nTab, pCell, sURL ) )
+                ScRefCellValue aCell;
+                if (lcl_GetHyperlinkCell(pDoc, nPosX, nPosY, nTab, aCell, sURL))
                 {
                     ScAddress aCellPos( nPosX, nPosY, nTab );
                     uno::Reference< table::XCell > xCell( new ScCellObj( pViewData->GetDocShell(), aCellPos ) );
@@ -5009,9 +5010,9 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
     SCTAB nTab = pViewData->GetTabNo();
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    ScBaseCell* pCell = NULL;
     OUString sURL;
-    sal_Bool bFound = lcl_GetHyperlinkCell( pDoc, nPosX, nPosY, nTab, pCell, sURL );
+    ScRefCellValue aCell;
+    bool bFound = lcl_GetHyperlinkCell(pDoc, nPosX, nPosY, nTab, aCell, sURL);
     if( !bFound )
         return false;
 
@@ -5067,7 +5068,7 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
     Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
     long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
     Size aPaperSize = Size( 1000000, 1000000 );
-    if(pCell->GetCellType() == CELLTYPE_FORMULA)
+    if (aCell.meType == CELLTYPE_FORMULA)
     {
         long nSizeX  = 0;
         long nSizeY  = 0;
@@ -5081,20 +5082,19 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
     aEngine.SetPaperSize( aPaperSize );
 
     boost::scoped_ptr<EditTextObject> pTextObj;
-    if(pCell->GetCellType() == CELLTYPE_EDIT)
+    if (aCell.meType == CELLTYPE_EDIT)
     {
-        const EditTextObject* pData = static_cast<ScEditCell*>(pCell)->GetData();
-        if (pData)
-            aEngine.SetText(*pData);
+        if (aCell.mpEditText)
+            aEngine.SetText(*aCell.mpEditText);
     }
     else  // Not an Edit cell and is a formula cell with 'Hyperlink'
           // function if we have no URL, otherwise it could be a formula
           // cell ( or other type ? ) with a hyperlink associated with it.
     {
-        if (  sURL.isEmpty() )
-            pTextObj.reset((static_cast<ScFormulaCell*>(pCell))->CreateURLObject());
+        if (sURL.isEmpty())
+            pTextObj.reset(aCell.mpFormula->CreateURLObject());
         else
-            pTextObj.reset( ScBaseCell::CreateURLObjectFromURL( *pDoc, sURL, sURL ) );
+            pTextObj.reset(ScEditUtil::CreateURLObjectFromURL(*pDoc, sURL, sURL));
 
         if (pTextObj.get())
             aEngine.SetText(*pTextObj);
@@ -5119,8 +5119,7 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
     // There is one glitch when dealing with a hyperlink cell and
     // the cell content is NUMERIC. This defaults to right aligned and
     // we need to adjust accordingly.
-    if(pCell->GetCellType() == CELLTYPE_FORMULA &&
-        static_cast<ScFormulaCell*>(pCell)->IsValue() &&
+    if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsValue() &&
         eHorJust == SVX_HOR_JUSTIFY_STANDARD)
     {
         aLogicEdit.Right() = aLogicEdit.Left() + nThisColLogic - 1;

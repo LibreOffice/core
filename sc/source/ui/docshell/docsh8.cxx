@@ -72,6 +72,7 @@
 #include "docpool.hxx"
 #include "segmenttree.hxx"
 #include "docparam.hxx"
+#include "cellvalue.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>
@@ -761,10 +762,13 @@ void lcl_GetColumnTypes(
     }
 }
 
-inline void lcl_getLongVarCharEditString( rtl::OUString& rString,
-        const ScBaseCell* pCell, ScFieldEditEngine& rEditEngine )
+inline void lcl_getLongVarCharEditString( OUString& rString,
+        const ScRefCellValue& rCell, ScFieldEditEngine& rEditEngine )
 {
-    rEditEngine.SetText( *((const ScEditCell*)pCell)->GetData() );
+    if (!rCell.mpEditText)
+        return;
+
+    rEditEngine.SetText(*rCell.mpEditText);
     rString = rEditEngine.GetText( LINEEND_CRLF );
 }
 
@@ -968,27 +972,26 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                 switch (pColTypes[nCol])
                 {
                     case sdbc::DataType::LONGVARCHAR:
+                    {
+                        ScRefCellValue aCell;
+                        aCell.assign(aDocument, ScAddress(nDocCol, nDocRow, nTab));
+                        if (!aCell.isEmpty())
                         {
-                            ScBaseCell* pCell;
-                            aDocument.GetCell( nDocCol, nDocRow, nTab, pCell );
-                            if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
-                            {
-                                if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                {   // Paragraphs erhalten
-                                    lcl_getLongVarCharEditString( aString,
-                                            pCell, aEditEngine);
-                                }
-                                else
-                                {
-                                    lcl_getLongVarCharString(
-                                        aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);
-                                }
-                                xRowUpdate->updateString( nCol+1, aString );
+                            if (aCell.meType == CELLTYPE_EDIT)
+                            {   // Paragraphs erhalten
+                                lcl_getLongVarCharEditString(aString, aCell, aEditEngine);
                             }
                             else
-                                xRowUpdate->updateNull( nCol+1 );
+                            {
+                                lcl_getLongVarCharString(
+                                    aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);
+                            }
+                            xRowUpdate->updateString( nCol+1, aString );
                         }
-                        break;
+                        else
+                            xRowUpdate->updateNull( nCol+1 );
+                    }
+                    break;
 
                     case sdbc::DataType::VARCHAR:
                         aString = aDocument.GetString(nDocCol, nDocRow, nTab);
@@ -1090,8 +1093,11 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                             if ( pCell->GetCellType() != CELLTYPE_NOTE )
                             {
                                 if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                    lcl_getLongVarCharEditString( aString,
-                                            pCell, aEditEngine);
+                                {
+                                    ScRefCellValue aCell;
+                                    aCell.assign(*pCell);
+                                    lcl_getLongVarCharEditString(aString, aCell, aEditEngine);
+                                }
                                 else
                                     lcl_getLongVarCharString(
                                         aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);

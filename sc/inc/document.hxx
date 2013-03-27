@@ -1227,6 +1227,7 @@ public:
     SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const;
     SC_DLLPUBLIC const SfxPoolItem* GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
     SC_DLLPUBLIC const ScPatternAttr*   GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC const ScPatternAttr* GetPattern( const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     const ScPatternAttr*    GetSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
     ScPatternAttr*          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );

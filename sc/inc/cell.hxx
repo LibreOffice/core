@@ -105,8 +105,6 @@ public:
     bool            HasValueData() const;
     bool            HasStringData() const;
     rtl::OUString   GetStringData() const;          // only real strings
-    // default implementation, creates url object from passed url
-    static EditTextObject* CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText );
 
     static bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 

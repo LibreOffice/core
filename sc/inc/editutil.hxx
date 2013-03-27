@@ -61,6 +61,9 @@ public:
 
     SC_DLLPUBLIC static OUString GetString( const EditTextObject& rEditText );
 
+    static EditTextObject* CreateURLObjectFromURL(
+        ScDocument& rDoc, const OUString& rURL, const OUString& rText );
+
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,

@@ -104,6 +104,16 @@ OUString ScEditUtil::GetString( const EditTextObject& rEditText )
     return aRet.makeStringAndClear();
 }
 
+EditTextObject* ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
+{
+    SvxURLField aUrlField( rURL, rText, SVXURLFORMAT_APPDEFAULT);
+    EditEngine& rEE = rDoc.GetEditEngine();
+    rEE.SetText( EMPTY_OUSTRING );
+    rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0xFFFF, 0xFFFF ) );
+
+    return rEE.CreateTextObject();
+}
+
 //------------------------------------------------------------------------
 
 Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )
