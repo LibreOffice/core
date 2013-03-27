@@ -19,6 +19,8 @@
 #ifndef _SFX_OBJSH_HXX
 #define _SFX_OBJSH_HXX
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include "tools/solar.h"
@@ -271,7 +273,7 @@ public:
     virtual sal_Bool            AcceptStateUpdate() const;
     sal_Bool                    IsHelpDocument() const;
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     sal_Bool                    IsDocShared() const;
     ::rtl::OUString             GetSharedFileURL() const;
     sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );

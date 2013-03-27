@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <svl/inetmsg.hxx>
 #include <tools/diagnose_ex.h>
@@ -495,7 +496,7 @@ void SfxObjectShell::SetModalMode_Impl( sal_Bool bModal )
     }
 }
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
 sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
 {

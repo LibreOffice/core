@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sfx2/docfile.hxx>
 #include "sfx2/signaturestate.hxx"
 
@@ -135,7 +137,7 @@ static const sal_Int8 LOCK_UI_NOLOCK = 0;
 static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
 static const sal_Int8 LOCK_UI_TRY = 2;
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
 bool IsSystemFileLockingUsed()
 {
@@ -984,7 +986,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUStri
 
 namespace
 {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     bool isSuitableProtocolForLocking(const String & rLogicName)
     {
         INetURLObject aUrl( rLogicName );
@@ -999,7 +1001,7 @@ namespace
 // if user cancel the loading the ERROR_ABORT is set
 bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 {
-#ifndef LIBO_FEATURE_DESKTOP
+#if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) bLoading;
     (void) bNoUI;
     return true;
@@ -2682,7 +2684,7 @@ void SfxMedium::CloseAndRelease()
 
 void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
 {
-#ifndef LIBO_FEATURE_DESKTOP
+#if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) bReleaseLockStream;
 #else
     if ( pImp->m_xLockingStream.is() )

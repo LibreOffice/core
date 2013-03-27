@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "docsh.hxx"
 
 #include "scitems.hxx"
@@ -635,7 +637,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SFX_EVENT_LOADFINISHED:
                 {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     // the readonly documents should not be opened in shared mode
                     if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() && !IsReadOnly() )
                     {
@@ -660,7 +662,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
             case SFX_EVENT_VIEWCREATED:
                 {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading() )
                     {
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
@@ -720,7 +722,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
             case SFX_EVENT_SAVEDOC:
                 {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
                     {
                         bool bSuccess = false;

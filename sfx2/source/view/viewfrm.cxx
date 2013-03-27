@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <stdio.h>
 
@@ -673,7 +674,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                 // TODO/LATER: Temporary solution, the SfxMedium must know the original URL as aLogicName
                 //             SfxMedium::Transfer_Impl() will be forbidden then.
                 if ( xOldObj->IsDocShared() )
@@ -790,7 +791,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xNewObj->SetReadOnlyUI( !bForEdit );
                     }
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     if ( xNewObj->IsDocShared() )
                     {
                         // the file is shared but the closing can change the sharing control file

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "app.hxx"
 #include "officeipcthread.hxx"
@@ -59,7 +60,7 @@ namespace {
 
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
 
 static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
 static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
@@ -105,7 +106,7 @@ namespace desktop
 
 namespace {
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
 
 class Parser: public CommandLineArgs::Supplier {
 public:
@@ -451,7 +452,7 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -613,7 +614,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
 void OfficeIPCThread::DisableOfficeIPCThread(bool join)
 {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -673,7 +674,7 @@ void OfficeIPCThread::SetReady(
 
 void OfficeIPCThread::execute()
 {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
     do
     {
         osl::StreamPipe aStreamPipe;

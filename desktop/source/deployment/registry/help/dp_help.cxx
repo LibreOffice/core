@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "dp_help.hrc"
 #include "dp_backend.h"
@@ -31,7 +32,7 @@
 #include "uno/current_context.hxx"
 #include "unotools/pathoptions.hxx"
 
-#ifdef LIBO_FEATURE_HELP
+#if HAVE_FEATURE_HELP
 #include <helpcompiler/compilehelp.hxx>
 #include <helpcompiler/HelpIndexer.hxx>
 #endif
@@ -386,7 +387,7 @@ void BackendImpl::implProcessHelp(
             data.dataUrl = xPackage->getURL();
             if (!package->extensionContainsCompiledHelp())
             {
-#ifdef LIBO_FEATURE_HELP
+#if HAVE_FEATURE_HELP
                 const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
                 data.dataUrl = sHelpFolder;
 

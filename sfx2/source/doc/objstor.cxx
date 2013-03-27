@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <cassert>
@@ -2687,7 +2689,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             if ( pFilterOptItem )
                 pSet->Put( *pFilterOptItem );
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
             if ( IsDocShared() && !aTempFileURL.isEmpty() )
             {
                 // this is a shared document that has to be disconnected from the old location

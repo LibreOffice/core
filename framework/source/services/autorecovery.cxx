@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "services/autorecovery.hxx"
 #include <loadenv/loadenv.hxx>
@@ -2020,7 +2021,7 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 */
 void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
 {
-#ifndef LIBO_FEATURE_DESKTOP
+#if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) rInfo;
 #else
     if ( rInfo.Document.is() )

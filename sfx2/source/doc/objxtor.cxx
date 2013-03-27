@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "arrdecl.hxx"
 #include <map>
@@ -390,7 +391,7 @@ SfxObjectShell::~SfxObjectShell()
     {
         pMedium->CloseAndReleaseStreams_Impl();
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         if ( IsDocShared() )
             FreeSharedFile();
 #endif

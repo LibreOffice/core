@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -727,7 +729,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pOtherDocSh->GetError() )                 // nur Errors
                     {
                         sal_Bool bHadTrack = ( aDocument.GetChangeTrack() != NULL );
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                         sal_uLong nStart = 0;
                         if ( nSlot == SID_DOCUMENT_MERGE && pChangeTrack )
                         {
@@ -767,7 +769,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 aDocument.SetChangeViewSettings(aChangeViewSet);
                             }
                         }
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                         else if ( nSlot == SID_DOCUMENT_MERGE && IsDocShared() && pChangeTrack )
                         {
                             sal_uLong nEnd = pChangeTrack->GetActionMax();
@@ -898,7 +900,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         }
         break;
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         case SID_SHARE_DOC:
             {
                 ScViewData* pViewData = GetViewData();
@@ -2301,7 +2303,7 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     return 0;
 }
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
 void ScDocShell::EnableSharedSettings( bool bEnable )
 {

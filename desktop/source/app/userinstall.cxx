@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include "userinstall.hxx"
@@ -116,7 +118,7 @@ namespace desktop {
         }
     }
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
     static osl::FileBase::RC copy_recursive( const rtl::OUString& srcUnqPath, const rtl::OUString& dstUnqPath)
     {
         FileBase::RC err;

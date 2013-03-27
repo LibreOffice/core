@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <sal/config.h>
 
@@ -1661,7 +1662,7 @@ void DbgPrintMsgBox( const char* pLine )
     }
 
     strcpy( aDbgOutBuf, pLine );
-#if defined UNX && defined LIBO_FEATURE_DESKTOP
+#if defined UNX && HAVE_FEATURE_DESKTOP
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=core dump)" );
 #elif defined _WIN32
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=try to invoke debugger)" );

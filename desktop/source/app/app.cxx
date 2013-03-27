@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <iostream>
@@ -1387,7 +1389,7 @@ int Desktop::Main()
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
     OUString aUnknown( rCmdLineArgs.GetUnknown() );
     if ( !aUnknown.isEmpty() )
     {
@@ -1452,7 +1454,7 @@ int Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_xLockfile.reset(new Lockfile);
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
         if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
         {
@@ -1539,7 +1541,7 @@ int Desktop::Main()
         */
         Application::GetDefaultDevice();
 
-#ifdef LIBO_FEATURE_DESKTOP
+#ifndef DISABLE_EXTENSIONS
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!

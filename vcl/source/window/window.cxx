@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <i18npool/mslangid.hxx>
 
 #include "tools/time.hxx"
@@ -8325,7 +8327,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
 
     if( mpWindowImpl->mpFrameData )
     {

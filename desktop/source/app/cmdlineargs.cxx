@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <cmdlineargs.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uri.hxx>
@@ -442,7 +444,7 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
     {
         m_nologo = true;
     }
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     else if ( oArg == "nolockcheck" )
     {
         m_nolockcheck = true;

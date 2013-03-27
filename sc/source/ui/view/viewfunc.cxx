@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -1531,7 +1533,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, sal_Bool bRecord )
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         const ScMarkData& rMark = GetViewData()->GetMarkData();
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
         // #i94841# [Collaboration] if deleting rows is rejected, the content is sometimes wrong
         if ( pDocSh->IsDocShared() && ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS ) )
         {

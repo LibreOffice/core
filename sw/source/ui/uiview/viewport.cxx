@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "hintids.hxx"
 #include <vcl/help.hxx>
@@ -1056,7 +1057,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         return;
     m_bInOuterResizePixel = sal_True;
 
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP
 // feststellen, ob Scrollbars angezeigt werden duerfen
     sal_Bool bShowH = sal_True,
          bShowV = sal_True,
@@ -1203,7 +1204,7 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 
 sal_Bool SwView::UpdateScrollbars()
 {
-#ifndef LIBO_FEATURE_DESKTOP
+#if !HAVE_FEATURE_DESKTOP
     return sal_True;
 #else
     sal_Bool bRet = sal_False;

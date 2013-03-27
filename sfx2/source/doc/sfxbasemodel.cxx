@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -2952,7 +2954,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     }
                     catch( const lang::IllegalArgumentException& )
                     {
-#ifdef LIBO_FEATURE_DESKTOP
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                         // some additional arguments do not allow to use saving, SaveAs should be done
                         // but only for normal documents, the shared documents would be overwritten in this case
                         // that would mean an information loss
