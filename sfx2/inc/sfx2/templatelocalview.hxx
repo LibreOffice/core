@@ -46,6 +46,8 @@ public:
 
     sal_uInt16 getRegionId (size_t pos) const;
 
+    OUString getRegionName(const sal_uInt16 nRegionId) const;
+
     std::vector<OUString> getFolderNames ();
 
     std::vector<TemplateItemProperties>
