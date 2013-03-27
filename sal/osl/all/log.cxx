@@ -51,7 +51,7 @@
 #if defined WNT
 #include <process.h>
 #define OSL_DETAIL_GETPID _getpid()
-#else
+#elif !defined ANDROID
 #include <unistd.h>
 #define OSL_DETAIL_GETPID getpid()
 #endif
