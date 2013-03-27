@@ -40,6 +40,7 @@ $(eval $(call gb_StaticLibrary_set_include,transex,\
 $(eval $(call gb_StaticLibrary_use_externals,transex,\
 	boost_headers \
 	icu_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,transex,\
