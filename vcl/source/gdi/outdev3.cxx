@@ -313,8 +313,8 @@ void OutputDevice::EndFontSubstitution()
     }
 }
 
-void OutputDevice::AddFontSubstitute( const XubString& rFontName,
-                                      const XubString& rReplaceFontName,
+void OutputDevice::AddFontSubstitute( const OUString& rFontName,
+                                      const OUString& rReplaceFontName,
                                       sal_uInt16 nFlags )
 {
     ImplDirectFontSubstitution*& rpSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
@@ -342,8 +342,8 @@ ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
     GetEnglishSearchFontName( maSearchReplaceName );
 }
 
-void OutputDevice::ImplAddDevFontSubstitute( const XubString& rFontName,
-                                             const XubString& rReplaceFontName,
+void OutputDevice::ImplAddDevFontSubstitute( const OUString& rFontName,
+                                             const OUString& rReplaceFontName,
                                              sal_uInt16 nFlags )
 {
     ImplInitOutDevData();
@@ -4687,7 +4687,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 }
 
 long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
-                                     long nWidth, const XubString& rStr,
+                                     long nWidth, const OUString& rStr,
                                      sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout )
 {
     DBG_ASSERTWARNING( nWidth >= 0, "ImplGetTextLines: nWidth <= 0!" );
@@ -4697,7 +4697,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
     long nMaxLineWidth  = 0;
     rLineInfo.Clear();
-    if ( rStr.Len() && (nWidth > 0) )
+    if ( !rStr.isEmpty() && (nWidth > 0) )
     {
         ::rtl::OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
@@ -4710,13 +4710,13 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
-        xub_StrLen nPos = 0;
-        xub_StrLen nLen = rStr.Len();
+        sal_Int32 nPos = 0;
+        sal_Int32 nLen = rStr.getLength();
         while ( nPos < nLen )
         {
-            xub_StrLen nBreakPos = nPos;
+            sal_Int32 nBreakPos = nPos;
 
-            while ( ( nBreakPos < nLen ) && ( rStr.GetChar( nBreakPos ) != _CR ) && ( rStr.GetChar( nBreakPos ) != _LF ) )
+            while ( ( nBreakPos < nLen ) && ( rStr[ nBreakPos ] != _CR ) && ( rStr[ nBreakPos ] != _LF ) )
                 nBreakPos++;
 
             long nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
@@ -4749,11 +4749,11 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
                 //          sal_uInt16 nWordStart = nBreakPos;
                 //          sal_uInt16 nBreakPos_OLD = nBreakPos;
-                            sal_uInt16 nWordStart = nPos;
-                            sal_uInt16 nWordEnd = (sal_uInt16) aBoundary.endPos;
+                            sal_Int32 nWordStart = nPos;
+                            sal_Int32 nWordEnd = (sal_Int32) aBoundary.endPos;
                             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
 
-                            sal_uInt16 nWordLen = nWordEnd - nWordStart;
+                            sal_Int32 nWordLen = nWordEnd - nWordStart;
                             if ( ( nWordEnd >= nSoftBreak ) && ( nWordLen > 3 ) )
                             {
                                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
@@ -4834,12 +4834,12 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 else
                 {
                     // fallback to something really simple
-                    sal_uInt16 nSpacePos = STRING_LEN;
+                    sal_Int32 nSpacePos = rStr.getLength();
                     long nW = 0;
                     do
                     {
-                        nSpacePos = rStr.SearchBackward( sal_Unicode(' '), nSpacePos );
-                        if( nSpacePos != STRING_NOTFOUND )
+                        nSpacePos = rStr.lastIndexOf( sal_Unicode(' '), nSpacePos );
+                        if( nSpacePos != -1 )
                         {
                             if( nSpacePos > nPos )
                                 nSpacePos--;
@@ -4847,11 +4847,11 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         }
                     } while( nW > nWidth );
 
-                    if( nSpacePos != STRING_NOTFOUND )
+                    if( nSpacePos != -1 )
                     {
                         nBreakPos = nSpacePos;
                         nLineWidth = _rLayout.GetTextWidth( rStr, nPos, nBreakPos-nPos );
-                        if( nBreakPos < rStr.Len()-1 )
+                        if( nBreakPos < rStr.getLength()-1 )
                             nBreakPos++;
                     }
                 }
@@ -4866,11 +4866,11 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 nBreakPos++;
             nPos = nBreakPos;
 
-            if ( ( rStr.GetChar( nPos ) == _CR ) || ( rStr.GetChar( nPos ) == _LF ) )
+            if ( ( rStr[ nPos ] == _CR ) || ( rStr[ nPos ] == _LF ) )
             {
                 nPos++;
                 // CR/LF?
-                if ( ( nPos < nLen ) && ( rStr.GetChar( nPos ) == _LF ) && ( rStr.GetChar( nPos-1 ) == _CR ) )
+                if ( ( nPos < nLen ) && ( rStr[ nPos ] == _LF ) && ( rStr[ nPos-1 ] == _CR ) )
                     nPos++;
             }
         }
@@ -5578,17 +5578,17 @@ long OutputDevice::GetTextArray( const OUString& rStr, sal_Int32* pDXAry,
     return nWidth;
 }
 
-bool OutputDevice::GetCaretPositions( const XubString& rStr, sal_Int32* pCaretXArray,
-    xub_StrLen nIndex, xub_StrLen nLen,
+bool OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXArray,
+    sal_Int32 nIndex, sal_Int32 nLen,
     sal_Int32* pDXAry, long nLayoutWidth,
     sal_Bool bCellBreaking ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( nIndex >= rStr.Len() )
+    if( nIndex >= rStr.getLength() )
         return false;
-    if( (sal_uLong)nIndex+nLen >= rStr.Len() )
-        nLen = rStr.Len() - nIndex;
+    if( nIndex+nLen >= rStr.getLength() )
+        nLen = rStr.getLength() - nIndex;
 
     // layout complex text
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen,
@@ -6156,7 +6156,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
         if( nExtraPixelWidth > 0 )
             nTextPixelWidth -= nExtraPixelWidth;
 
-        rHyphenatorPos = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
+        rHyphenatorPos = sal::static_int_cast<sal_Int32>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
 
         if( rHyphenatorPos > nRetVal )
             rHyphenatorPos = nRetVal;
