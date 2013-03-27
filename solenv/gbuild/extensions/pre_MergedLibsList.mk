@@ -65,6 +65,8 @@ gb_MERGEDLIBS := \
 	localedata_euro \
 	localedata_others \
 	msfilter \
+	$(if $(filter-out ANDROID IOS,$(OS)),odbc) \
+	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
 	oox \
 	package2 \
 	sax \
