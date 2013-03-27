@@ -57,12 +57,12 @@
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
-#endif
-
+#else
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/valgrind.h>
 #else
 #define RUNNING_ON_VALGRIND 0
+#endif
 #endif
 
 #define SUN_MICRO "Sun Microsystems Inc."
