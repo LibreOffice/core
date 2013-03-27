@@ -89,8 +89,8 @@ def nsinstall(argv):
       options.m = int(options.m, 8)
       # I have no idea why nss insists on using this mode for installed headers.
       # It causes problems with updating the files during a rebuild.
-      if options.m == 0444:
-        options.m = 0644
+      if options.m == 0o444:
+        options.m = 0o644
     except:
       sys.stderr.write('nsinstall: ' + options.m + ' is not a valid mode\n')
       return 1
@@ -147,7 +147,7 @@ def nsinstall(argv):
         shutil.copy2(srcpath, targetpath)
       else:
         if os.path.exists(targetpath):
-          os.chmod(targetpath, 0755)
+          os.chmod(targetpath, 0o755)
           os.remove(targetpath)
         shutil.copy(srcpath, targetpath)
 
