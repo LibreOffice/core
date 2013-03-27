@@ -750,11 +750,6 @@ case ExtendedFilePickerElementIds::CHECKBOX_##elem: \
     pWidget = m_pToggles[elem]; \
     break
 
-#define MAP_BUTTON( elem ) \
-case ExtendedFilePickerElementIds::PUSHBUTTON_##elem: \
-    pWidget = m_pButtons[elem]; \
-    break
-
 #define MAP_LIST( elem ) \
 case ExtendedFilePickerElementIds::LISTBOX_##elem: \
     pWidget = m_pListControls[elem]; \
