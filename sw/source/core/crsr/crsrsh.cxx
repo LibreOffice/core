@@ -808,15 +808,7 @@ void SwCrsrShell::ClearMark()
             delete pCurCrsr->GetNext();
         pTblCrsr->DeleteMark();
 
-        if( pCurCrsr->HasMark() )
-        {
-            // move content part from mark to nodes array if not all indices
-            // were moved correctly (e.g. when deleting header/footer)
-            SwPosition& rPos = *pCurCrsr->GetMark();
-            rPos.nNode.Assign( mpDoc->GetNodes(), 0 );
-            rPos.nContent.Assign( 0, 0 );
-            pCurCrsr->DeleteMark();
-        }
+        pCurCrsr->DeleteMark();
 
         *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
         pCurCrsr->GetPtPos() = pTblCrsr->GetPtPos();
@@ -827,11 +819,6 @@ void SwCrsrShell::ClearMark()
     {
         if( !pCurCrsr->HasMark() )
             return;
-        // move content part from mark to nodes array if not all indices
-        // were moved correctly (e.g. when deleting header/footer)
-        SwPosition& rPos = *pCurCrsr->GetMark();
-        rPos.nNode.Assign( mpDoc->GetNodes(), 0 );
-        rPos.nContent.Assign( 0, 0 );
         pCurCrsr->DeleteMark();
         if( !nCrsrMove )
             pCurCrsr->SwSelPaintRects::Show();
@@ -1214,8 +1201,7 @@ void SwCrsrShell::UpdateCrsrPos()
         aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
         GetLayout()->GetCrsrOfst( pShellCrsr->GetPoint(), pShellCrsr->GetPtPos(),
                                      &aTmpState );
-        if( pShellCrsr->HasMark())
-            pShellCrsr->DeleteMark();
+        pShellCrsr->DeleteMark();
     }
     IGrammarContact *pGrammarContact = GetDoc() ? GetDoc()->getGrammarContact() : 0;
     if( pGrammarContact )
@@ -2354,10 +2340,9 @@ sal_Bool SwCrsrShell::ParkTblCrsr()
     while( pCurCrsr->GetNext() != pCurCrsr )
         delete pCurCrsr->GetNext();
 
-    // *always* move cursor's SPoint and Mark
-    pCurCrsr->SetMark();
-    *pCurCrsr->GetMark() = *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
+    // *always* move cursor's Point and Mark
     pCurCrsr->DeleteMark();
+    *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
 
     return sal_True;
 }
@@ -2388,7 +2373,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
                 pTmpDel = pTmp;
 
         bGoNext = true;
-        if( pTmpDel ) // is the pam in area -> delete
+        if (pTmpDel) // is the pam in the range -> delete
         {
             sal_Bool bDelete = sal_True;
             if( *ppDelRing == pTmpDel )
@@ -2409,19 +2394,9 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
                 delete pTmpDel; // invalidate old area
             else
             {
-                pTmpDel->GetPoint()->nContent.Assign( 0, 0 );
-                pTmpDel->GetPoint()->nNode = 0;
-                pTmpDel->SetMark();
                 pTmpDel->DeleteMark();
             }
             pTmpDel = 0;
-        }
-        else if( !pTmp->HasMark() )
-        {
-            // Take care that not used indices are considered.
-            // SPoint is not in area but maybe GetMark is, thus set it.
-            pTmp->SetMark();
-            pTmp->DeleteMark();
         }
         if( bGoNext )
             pTmp = (SwPaM*)pTmp->GetNext();
@@ -2478,9 +2453,6 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
                 SwNode* pTblNd = pTCrsr->GetPoint()->nNode.GetNode().FindTableNode();
                 if ( pTblNd )
                 {
-                    pTCrsr->GetPoint()->nContent.Assign( 0, 0 );
-                    pTCrsr->GetPoint()->nNode = 0;
-                    pTCrsr->SetMark();
                     pTCrsr->DeleteMark();
                     pSh->pCurCrsr->GetPoint()->nNode = *pTblNd;
                 }
@@ -3065,14 +3037,6 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
     EndAction();
 }
 
-static void lcl_RemoveMark( SwPaM* pPam )
-{
-    OSL_ENSURE( pPam->HasMark(), "Don't remove pPoint!" );
-    pPam->GetMark()->nContent.Assign( 0, 0 );
-    pPam->GetMark()->nNode = 0;
-    pPam->DeleteMark();
-}
-
 static const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 {
     const SwStartNode *pRet = rNode.StartOfSectionNode();
@@ -3135,7 +3099,7 @@ void SwCrsrShell::ClearUpCrsrs()
 
     if( pStartCrsr->HasMark() && !sw_PosOk( *pStartCrsr->GetMark() ) )
     {
-        lcl_RemoveMark( pStartCrsr );
+        pStartCrsr->DeleteMark();
         bChanged = true;
     }
     if( !sw_PosOk( *pStartCrsr->GetPoint() ) )
