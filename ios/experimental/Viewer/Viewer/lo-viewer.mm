@@ -36,8 +36,6 @@ using namespace com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-#define SMALLSIZE 100
-
 extern "C" {
     extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
