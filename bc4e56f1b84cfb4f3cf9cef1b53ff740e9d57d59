@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+UY\u003d",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4281,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-03-27T11:58:14Z",
+      "side": 1,
+      "message": "Next time please use SAL_WARN_IF in new code, OSL_ASSERT is obsolete.",
+      "revId": "bc4e56f1b84cfb4f3cf9cef1b53ff740e9d57d59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
