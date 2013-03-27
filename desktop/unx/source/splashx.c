@@ -99,18 +99,6 @@ struct splash
 #define PROGRESS_YOFFSET 18
 #define PROGRESS_BARSPACE 2
 
-#define UINT8( x )      ( (unsigned int)( ( (uint8_t *)( x ) )[0] ) )
-
-#define UINT16( x ) (   ( (unsigned int)( ( (uint8_t *)( x ) )[0] ) ) + \
-                      ( ( (unsigned int)( ( (uint8_t *)( x ) )[1] ) ) << 8 ) )
-
-#define UINT32( x ) (   ( (unsigned int)( ( (uint8_t *)( x ) )[0] ) ) + \
-                      ( ( (unsigned int)( ( (uint8_t *)( x ) )[1] ) ) << 8  ) + \
-                      ( ( (unsigned int)( ( (uint8_t *)( x ) )[2] ) ) << 16 ) + \
-                      ( ( (unsigned int)( ( (uint8_t *)( x ) )[3] ) ) << 24 ) )
-
-#define MAX( x, y ) ( ( (x) > (y) )? (x): (y) )
-
 /* libpng-1.2.41 */
 #ifndef PNG_TRANSFORM_GRAY_TO_RGB
 #  define PNG_TRANSFORM_GRAY_TO_RGB   0x2000
