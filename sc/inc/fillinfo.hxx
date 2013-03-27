@@ -117,21 +117,18 @@ struct CellInfo
     sal_uInt16                      nWidth;
     sal_uInt8                        nRotateDir;
 
-    sal_Bool                        bMarked : 1;
-    sal_Bool                        bEmptyCellText : 1;
-
-    sal_Bool                        bMerged : 1;
-    sal_Bool                        bHOverlapped : 1;
-    sal_Bool                        bVOverlapped : 1;
-    sal_Bool                        bAutoFilter : 1;
+    bool                        bMarked : 1;
+    bool                        bEmptyCellText : 1;
+    bool                        bMerged : 1;
+    bool                        bHOverlapped : 1;
+    bool                        bVOverlapped : 1;
+    bool                        bAutoFilter : 1;
     bool                        bPivotButton:1;
     bool                        bPivotPopupButton:1;
     bool                        bFilterActive:1;
-
-    sal_Bool                        bPrinted : 1;               // when required (pagebreak mode)
-
-    sal_Bool                        bHideGrid : 1;              // output-internal
-    sal_Bool                        bEditEngine : 1;            // output-internal
+    bool                        bPrinted : 1;               // when required (pagebreak mode)
+    bool                        bHideGrid : 1;              // output-internal
+    bool                        bEditEngine : 1;            // output-internal
 
     CellInfo():
         pColorScale(NULL),
