@@ -27,6 +27,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
+#include "vcl/syswin.hxx"
 
 #include "aqua/saldata.hxx"
 #include "aqua/salgdi.h"
