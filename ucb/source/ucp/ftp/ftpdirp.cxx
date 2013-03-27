@@ -741,40 +741,40 @@ sal_Bool FTPDirectoryParser::parseVMS (
             ++p;
         }
         if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("JAN")) == 0)
+                pMonth, monthLen, "JAN", monthLen) == 0)
             rEntry.m_aDate.SetMonth(1);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("FEB")) == 0)
+                     pMonth, monthLen, "FEB", monthLen) == 0)
             rEntry.m_aDate.SetMonth(2);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("MAR")) == 0)
+                     pMonth, monthLen, "MAR", monthLen) == 0)
             rEntry.m_aDate.SetMonth(3);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("APR")) == 0)
+                     pMonth, monthLen, "APR", monthLen) == 0)
             rEntry.m_aDate.SetMonth(4);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("MAY")) == 0)
+                     pMonth, monthLen, "MAY", monthLen) == 0)
             rEntry.m_aDate.SetMonth(5);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("JUN")) == 0)
+                     pMonth, monthLen, "JUN", monthLen) == 0)
             rEntry.m_aDate.SetMonth(6);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("JUL")) == 0)
+                     pMonth, monthLen, "JUL", monthLen) == 0)
             rEntry.m_aDate.SetMonth(7);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("AUG")) == 0)
+                     pMonth, monthLen, "AUG", monthLen) == 0)
             rEntry.m_aDate.SetMonth(8);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("SEP")) == 0)
+                     pMonth, monthLen, "SEP", monthLen) == 0)
             rEntry.m_aDate.SetMonth(9);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("OCT")) == 0)
+                     pMonth, monthLen, "OCT", monthLen) == 0)
             rEntry.m_aDate.SetMonth(10);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("NOV")) == 0)
+                     pMonth, monthLen, "NOV", monthLen) == 0)
             rEntry.m_aDate.SetMonth(11);
         else if (rtl_str_compareIgnoreAsciiCase_WithLength(
-                     pMonth, monthLen, RTL_CONSTASCII_STRINGPARAM("DEC")) == 0)
+                     pMonth, monthLen, "DEC", monthLen) == 0)
             rEntry.m_aDate.SetMonth(12);
         else
             return sal_False;

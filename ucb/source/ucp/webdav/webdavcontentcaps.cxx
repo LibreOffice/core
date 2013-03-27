@@ -354,64 +354,43 @@ uno::Sequence< beans::Property > Content::getProperties(
             {
                 bHasGetContentLength = sal_True;
             }
-            else if ( !bHasContentType &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+            else if ( !bHasContentType && (*it) == "ContentType" )
             {
                 bHasContentType = sal_True;
             }
-            else if ( !bHasIsDocument &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            else if ( !bHasIsDocument && (*it) == "IsDocument" )
             {
                 bHasIsDocument = sal_True;
             }
-            else if ( !bHasIsFolder &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            else if ( !bHasIsFolder && (*it) == "IsFolder" )
             {
                 bHasIsFolder = sal_True;
             }
-            else if ( !bHasTitle &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            else if ( !bHasTitle && (*it) == "Title" )
             {
                 bHasTitle = sal_True;
             }
-            else if ( !bHasBaseURI &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "BaseURI" ) ) )
+            else if ( !bHasBaseURI && (*it) == "BaseURI" )
             {
                 bHasBaseURI = sal_True;
             }
-            else if ( !bHasDateCreated &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+            else if ( !bHasDateCreated && (*it) == "DateCreated" )
             {
                 bHasDateCreated = sal_True;
             }
-            else if ( !bHasDateModified &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+            else if ( !bHasDateModified && (*it) == "DateModified" )
             {
                 bHasDateModified = sal_True;
             }
-            else if ( !bHasMediaType &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+            else if ( !bHasMediaType && (*it) == "MediaType" )
             {
                 bHasMediaType = sal_True;
             }
-            else if ( !bHasSize &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+            else if ( !bHasSize && (*it) == "Size" )
             {
                 bHasSize = sal_True;
             }
-            else if ( !bHasCreatableInfos &&
-                      (*it).equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "CreatableContentsInfo" ) ) )
+            else if ( !bHasCreatableInfos && (*it) == "CreatableContentsInfo" )
             {
                 bHasCreatableInfos = sal_True;
             }
