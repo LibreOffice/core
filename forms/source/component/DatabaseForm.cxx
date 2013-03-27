@@ -73,7 +73,6 @@
 #include <svl/inettype.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/fsys.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucblockbytes.hxx>
@@ -1058,18 +1057,15 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
         if( INET_PROT_FILE == aURL.GetProtocol() )
         {
             aFileName = INetURLObject::decode(aURL.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
-            DirEntry aDirEntry( aFileName );
-            if( aDirEntry.Exists() )
+            pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, STREAM_READ);
+            if (!pStream || (pStream->GetError() != ERRCODE_NONE))
             {
-                pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, STREAM_READ);
-                if (!pStream || (pStream->GetError() != ERRCODE_NONE))
-                {
-                    delete pStream;
-                    pStream = 0;
-                }
+                delete pStream;
+                pStream = 0;
             }
-            INetContentType eContentType = INetContentTypes::GetContentType4Extension(
-                                                                aDirEntry.GetExtension() );
+            sal_Int32 nSepInd = aFileName.lastIndexOf(".");
+            OUString aExtension = aFileName.copy( nSepInd + 1, aFileName.getLength() - nSepInd - 1 );
+            INetContentType eContentType = INetContentTypes::GetContentType4Extension( aExtension );
             if (eContentType != CONTENT_TYPE_UNKNOWN)
                 aContentType = INetContentTypes::GetContentType(eContentType);
         }
