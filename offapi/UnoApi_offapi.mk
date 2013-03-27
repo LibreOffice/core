@@ -116,6 +116,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	XMLOasisBasicImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
+	ColorTable \
 	GraphicExportFilter \
 	ModuleDispatcher \
 	ShapeCollection \

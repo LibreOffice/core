@@ -23,6 +23,7 @@
 #include "boost/unordered_map.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
+#include "com/sun/star/drawing/ColorTable.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -54,19 +55,15 @@ ColorNameMap::ColorNameMap() {
     try
     {
         // Create color table in which to look up the given color.
-        css::uno::Reference< css::container::XNameContainer > xColorTable (
-            comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.drawing.ColorTable" ),
-            css::uno::UNO_QUERY);
+            css::uno::Reference< css::container::XNameContainer > xColorTable =
+                 css::drawing::ColorTable::create( comphelper::getProcessComponentContext() );
 
         // Get list of color names in order to iterate over the color table.
-        xNA = css::uno::Reference< css::container::XNameAccess >(xColorTable, css::uno::UNO_QUERY);
-        if (xNA.is())
-        {
-            // Lock the solar mutex here as workarround for missing lock in
-            // called function.
-            SolarMutexGuard aGuard;
-            aNames = xNA->getElementNames();
-        }
+
+        // Lock the solar mutex here as workarround for missing lock in
+        // called function.
+        SolarMutexGuard aGuard;
+        aNames = xNA->getElementNames();
     }
     catch (css::uno::RuntimeException const&)
     {
