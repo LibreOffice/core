@@ -169,4 +169,9 @@ sal_uInt16 TemplateRemoteView::createRegion(const OUString &/*rName*/)
     return 0;
 }
 
+bool TemplateRemoteView::isNestedRegionAllowed() const
+{
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

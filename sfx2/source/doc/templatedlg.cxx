@@ -643,6 +643,8 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl)
     maSelFolders.clear();
     maSelTemplates.clear();
 
+    mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_NEW,mpCurView->isNestedRegionAllowed());
+
     mpTemplateBar->Hide();
     mpViewBar->Show();
     mpActionBar->Show();

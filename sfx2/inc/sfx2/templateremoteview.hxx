@@ -33,6 +33,8 @@ public:
 
     virtual sal_uInt16 createRegion (const OUString &rName);
 
+    virtual bool isNestedRegionAllowed () const;
+
 private:
 
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
