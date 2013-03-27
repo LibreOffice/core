@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+VY\u003d",
+        "filename": "dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2013-03-27T00:03:27Z",
+      "side": 0,
+      "message": "Is GetChar(0) save on empty strings? I think aField[0] isn\u0027t.\n\nBut I\u0027m not sure if this can ever happen (i.e. if pEntry-\u003eGetField() is never empty).",
+      "revId": "60e55c7c2e9f9e6ad389b4527fa6332378e55e12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
