@@ -47,9 +47,9 @@
 #define STR_FRM_WIDTH                   (RC_ATTR_BEGIN + 23)
 #define STR_FRM_FIXEDHEIGHT             (RC_ATTR_BEGIN + 24)
 #define STR_FRM_MINHEIGHT               (RC_ATTR_BEGIN + 25)
-#define STR_FLY_AT_PARA                                 (RC_ATTR_BEGIN + 26)
-#define STR_FLY_AS_CHAR                                 (RC_ATTR_BEGIN + 27)
-#define STR_FLY_AT_PAGE                                 (RC_ATTR_BEGIN + 28)
+#define STR_FLY_AT_PARA                 (RC_ATTR_BEGIN + 26)
+#define STR_FLY_AS_CHAR                 (RC_ATTR_BEGIN + 27)
+#define STR_FLY_AT_PAGE                 (RC_ATTR_BEGIN + 28)
 #define STR_POS_X                       (RC_ATTR_BEGIN + 29)
 #define STR_POS_Y                       (RC_ATTR_BEGIN + 30)
 #define STR_VERT_TOP                    (RC_ATTR_BEGIN + 31)
@@ -81,7 +81,6 @@
 #define STR_LINECOUNT                   (RC_ATTR_BEGIN + 57)
 #define STR_DONTLINECOUNT               (RC_ATTR_BEGIN + 58)
 #define STR_LINCOUNT_START              (RC_ATTR_BEGIN + 59)
-
 #define STR_LUMINANCE                   (RC_ATTR_BEGIN + 60)
 #define STR_CHANNELR                    (RC_ATTR_BEGIN + 61)
 #define STR_CHANNELG                    (RC_ATTR_BEGIN + 62)
@@ -94,22 +93,21 @@
 #define STR_DRAWMODE                    (RC_ATTR_BEGIN + 69)
 #define STR_DRAWMODE_STD                (RC_ATTR_BEGIN + 70)
 #define STR_DRAWMODE_GREY               (RC_ATTR_BEGIN + 71)
-#define STR_DRAWMODE_BLACKWHITE                         (RC_ATTR_BEGIN + 72)
-#define STR_DRAWMODE_WATERMARK                          (RC_ATTR_BEGIN + 73)
+#define STR_DRAWMODE_BLACKWHITE         (RC_ATTR_BEGIN + 72)
+#define STR_DRAWMODE_WATERMARK          (RC_ATTR_BEGIN + 73)
 #define STR_ROTATION                    (RC_ATTR_BEGIN + 74)
-#define STR_GRID_NONE                                   (RC_ATTR_BEGIN + 75)
-#define STR_GRID_LINES_ONLY                             (RC_ATTR_BEGIN + 76)
-#define STR_GRID_LINES_CHARS                            (RC_ATTR_BEGIN + 77)
-#define STR_FOLLOW_TEXT_FLOW                            (RC_ATTR_BEGIN + 78)
-#define STR_DONT_FOLLOW_TEXT_FLOW                       (RC_ATTR_BEGIN + 79)
-#define STR_CONNECT_BORDER_ON                           (RC_ATTR_BEGIN + 80)
-#define STR_CONNECT_BORDER_OFF                          (RC_ATTR_BEGIN + 81)
-
+#define STR_GRID_NONE                   (RC_ATTR_BEGIN + 75)
+#define STR_GRID_LINES_ONLY             (RC_ATTR_BEGIN + 76)
+#define STR_GRID_LINES_CHARS            (RC_ATTR_BEGIN + 77)
+#define STR_FOLLOW_TEXT_FLOW            (RC_ATTR_BEGIN + 78)
+#define STR_DONT_FOLLOW_TEXT_FLOW       (RC_ATTR_BEGIN + 79)
+#define STR_CONNECT_BORDER_ON           (RC_ATTR_BEGIN + 80)
+#define STR_CONNECT_BORDER_OFF          (RC_ATTR_BEGIN + 81)
 
 #define ATTR_ACT_END                                    STR_CONNECT_BORDER_OFF
 
 #if ATTR_ACT_END > RC_ATTR_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource-Id overflow in #file, #line
 #endif
 
 #endif
