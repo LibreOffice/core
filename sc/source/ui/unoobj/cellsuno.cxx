@@ -6663,19 +6663,18 @@ table::CellContentType ScCellObj::GetResultType_Impl()
 sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nError = 0;
     ScDocShell* pDocSh = GetDocShell();
-    if (pDocSh)
-    {
-        ScBaseCell* pCell = pDocSh->GetDocument()->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-            nError = ((ScFormulaCell*)pCell)->GetErrCode();
-        // sonst bleibt's bei 0
-    }
-    else
+    if (!pDocSh)
     {
         OSL_FAIL("keine DocShell");     //! Exception oder so?
+        return 0;
     }
+
+    sal_uInt16 nError = 0;
+    ScRefCellValue aCell;
+    aCell.assign(*pDocSh->GetDocument(), aCellPos);
+    if (aCell.meType == CELLTYPE_FORMULA)
+        nError = aCell.mpFormula->GetErrCode();
 
     return nError;
 }
@@ -6687,16 +6686,17 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens() throw(uno::Ru
     SolarMutexGuard aGuard;
     uno::Sequence<sheet::FormulaToken> aSequence;
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
+    if (!pDocSh)
+        return aSequence;
+
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, aCellPos);
+    if (aCell.meType == CELLTYPE_FORMULA)
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-        {
-            ScTokenArray* pTokenArray = static_cast<ScFormulaCell*>(pCell)->GetCode();
-            if ( pTokenArray )
-                (void)ScTokenConversion::ConvertToTokenSequence( *pDoc, aSequence, *pTokenArray );
-        }
+        ScTokenArray* pTokenArray = aCell.mpFormula->GetCode();
+        if (pTokenArray)
+            ScTokenConversion::ConvertToTokenSequence(*pDoc, aSequence, *pTokenArray);
     }
     return aSequence;
 }
@@ -9245,24 +9245,25 @@ ScCellsEnumeration::ScCellsEnumeration(ScDocShell* pDocSh, const ScRangeList& rR
 
 void ScCellsEnumeration::CheckPos_Impl()
 {
-    if (pDocShell)
+    if (!pDocShell)
+        return;
+
+    bool bFound = false;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, aPos);
+    if (!aCell.isEmpty())
     {
-        sal_Bool bFound = false;
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScBaseCell* pCell = pDoc->GetCell(aPos);
-        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
+        if (!pMark)
         {
-            if (!pMark)
-            {
-                pMark = new ScMarkData;
-                pMark->MarkFromRangeList( aRanges, false );
-                pMark->MarkToMulti();   // needed for GetNextMarkedCell
-            }
-            bFound = pMark->IsCellMarked( aPos.Col(), aPos.Row() );
+            pMark = new ScMarkData;
+            pMark->MarkFromRangeList(aRanges, false);
+            pMark->MarkToMulti();   // needed for GetNextMarkedCell
         }
-        if (!bFound)
-            Advance_Impl();
+        bFound = pMark->IsCellMarked(aPos.Col(), aPos.Row());
     }
+    if (!bFound)
+        Advance_Impl();
 }
 
 ScCellsEnumeration::~ScCellsEnumeration()
