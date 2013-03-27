@@ -54,14 +54,9 @@
 #include "osl/detail/android-bootstrap.h"
 
 #undef LOGI
-#undef LOGW
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "lo-bootstrap", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "lo-bootstrap", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "lo-bootstrap", __VA_ARGS__))
-#define LOGF(...) ((void)__android_log_print(ANDROID_LOG_FATAL, "lo-bootstrap", __VA_ARGS__))
-
-#define ROUND_DOWN(ptr,multiple) (void *)(((unsigned) (ptr)) & ~((multiple)-1))
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
@@ -80,8 +75,6 @@ static JavaVM *the_java_vm;
 
 /* compression methods */
 #define STORE    0
-#define DEFLATE  8
-#define LZMA    14
 
 struct local_file_header {
     uint32_t signature;
