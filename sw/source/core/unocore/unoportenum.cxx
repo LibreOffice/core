@@ -322,28 +322,6 @@ lcl_FillFieldMarkArray(FieldMarks_t & rFieldMarks, SwUnoCrsr const & rUnoCrsr,
     }
 }
 
-static const SwFmtFld* lcl_getFieldByName(SwDoc* pDoc, const OUString& rName)
-{
-    const SwFldTypes* pFldTypes = pDoc->GetFldTypes();
-    sal_uInt16 nCount = pFldTypes->size();
-    for (sal_uInt16 nType = 0; nType < nCount; ++nType)
-    {
-        const SwFieldType *pCurType = (*pFldTypes)[nType];
-        SwIterator<SwFmtFld, SwFieldType> aIter(*pCurType);
-        for (const SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next())
-        {
-            // Ignore the field if it's not an annotation or it doesn't have an anchor.
-            if (pCurFldFmt->GetFld()->GetTyp()->Which() != RES_POSTITFLD || !pCurFldFmt->GetTxtFld())
-                continue;
-
-            const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetFld());
-            if (pField->GetName() == rName)
-                return pCurFldFmt;
-        }
-    }
-    return 0;
-}
-
 static uno::Reference<text::XTextRange>
 lcl_ExportFieldMark(
         uno::Reference< text::XText > const & i_xParentText,
@@ -380,7 +358,7 @@ lcl_ExportFieldMark(
         {
             pPortion->SetBookmark( SwXFieldmark::CreateXFieldmark( *pDoc, *pFieldmark ) );
             Reference<XTextField> xField;
-            const SwFmtFld* pField = lcl_getFieldByName(pDoc, pFieldmark->GetName());
+            const SwFmtFld* pField = SwPostItField::GetByName(pDoc, pFieldmark->GetName());
             if (pField)
                 xField = SwXTextField::CreateSwXTextField(*pDoc, *pField);
             pPortion->SetTextField(xField);
