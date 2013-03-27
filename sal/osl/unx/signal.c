@@ -26,7 +26,9 @@
 #if defined( INTEL )
 #include "backtrace.h"
 #define INCLUDE_BACKTRACE
+#ifdef SAL_ENABLE_CRASH_REPORT
 #define STACKTYPE "MacOsX_X86"
+#endif
 #endif /* INTEL */
 
 #endif /* MACOSX */
