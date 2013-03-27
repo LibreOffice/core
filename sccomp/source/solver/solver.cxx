@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #undef LANGUAGE_NONE
 #if defined SAL_W32
 #define WINAPI __stdcall
