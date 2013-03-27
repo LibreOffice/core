@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <rtl/instance.hxx>
 #include <tools/string.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -29,9 +30,6 @@ namespace drawinglayer
         class ImpFontAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             /// core data
             String                                      maFamilyName;       // Font Family Name
             String                                      maStyleName;        // Font Style Name
@@ -57,8 +55,7 @@ namespace drawinglayer
                 bool bOutline,
                 bool bRTL,
                 bool bBiDiStrong)
-            :   mnRefCount(0),
-                maFamilyName(rFamilyName),
+            :   maFamilyName(rFamilyName),
                 maStyleName(rStyleName),
                 mnWeight(nWeight),
                 mbSymbol(bSymbol),
@@ -68,6 +65,20 @@ namespace drawinglayer
                 mbRTL(bRTL),
                 mbBiDiStrong(bBiDiStrong),
                 mbMonospaced(bMonospaced)
+            {
+            }
+
+            ImpFontAttribute()
+            :   maFamilyName(),
+                maStyleName(),
+                mnWeight(0),
+                mbSymbol(false),
+                mbVertical(false),
+                mbItalic(false),
+                mbOutline(false),
+                mbRTL(false),
+                mbBiDiStrong(false),
+                mbMonospaced(false)
             {
             }
 
@@ -96,25 +107,13 @@ namespace drawinglayer
                     && getBiDiStrong() == rCompare.getBiDiStrong()
                     && getMonospaced() == rCompare.getMonospaced());
             }
-
-            static ImpFontAttribute* get_global_default()
-            {
-                static ImpFontAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpFontAttribute(
-                        String(), String(),
-                        0,
-                        false, false, false, false, false, false, false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< FontAttribute::ImplType, theGlobalDefault > {};
+        }
 
         FontAttribute::FontAttribute(
             const String& rFamilyName,
@@ -127,73 +126,39 @@ namespace drawinglayer
             bool bOutline,
             bool bRTL,
             bool bBiDiStrong)
-        :   mpFontAttribute(new ImpFontAttribute(
+        :   mpFontAttribute(ImpFontAttribute(
                 rFamilyName, rStyleName, nWeight, bSymbol, bVertical, bItalic, bMonospaced, bOutline, bRTL, bBiDiStrong))
         {
         }
 
         FontAttribute::FontAttribute()
-        :   mpFontAttribute(ImpFontAttribute::get_global_default())
+        :   mpFontAttribute(theGlobalDefault::get())
         {
-            mpFontAttribute->mnRefCount++;
         }
 
         FontAttribute::FontAttribute(const FontAttribute& rCandidate)
         :   mpFontAttribute(rCandidate.mpFontAttribute)
         {
-            mpFontAttribute->mnRefCount++;
         }
 
         FontAttribute::~FontAttribute()
         {
-            if(mpFontAttribute->mnRefCount)
-            {
-                mpFontAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpFontAttribute;
-            }
         }
 
         bool FontAttribute::isDefault() const
         {
-            return mpFontAttribute == ImpFontAttribute::get_global_default();
+            return mpFontAttribute.same_object(theGlobalDefault::get());
         }
 
         FontAttribute& FontAttribute::operator=(const FontAttribute& rCandidate)
         {
-            if(rCandidate.mpFontAttribute != mpFontAttribute)
-            {
-                if(mpFontAttribute->mnRefCount)
-                {
-                    mpFontAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpFontAttribute;
-                }
-
-                mpFontAttribute = rCandidate.mpFontAttribute;
-                mpFontAttribute->mnRefCount++;
-            }
-
+            mpFontAttribute = rCandidate.mpFontAttribute;
             return *this;
         }
 
         bool FontAttribute::operator==(const FontAttribute& rCandidate) const
         {
-            if(rCandidate.mpFontAttribute == mpFontAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpFontAttribute == *mpFontAttribute);
+            return rCandidate.mpFontAttribute == mpFontAttribute;
         }
 
         const String& FontAttribute::getFamilyName() const
