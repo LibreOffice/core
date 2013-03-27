@@ -30,6 +30,7 @@ ifeq ($(MERGELIBS),TRUE)
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
 	avmedia \
+	$(if $(filter unx,$(GUIBASE)),basebmp) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	canvastools \
 	chartcore \
@@ -96,6 +97,7 @@ gb_MERGEDLIBS := \
 	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
 	ucpfile1 \
+	unotest \
 	utl \
 	uui \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
