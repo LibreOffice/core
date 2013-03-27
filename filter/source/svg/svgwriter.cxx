@@ -3716,6 +3716,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     mapCurShape.reset();
 
     ImplWriteActions( rMtf, nWriteFlags, pElementId, pXShape, pTextEmbeddedBitmapMtf );
+    maTextWriter.endTextParagraph();
 
     // draw open shape that doesn't have a border
     if( mapCurShape.get() )
