@@ -333,6 +333,10 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
             break;
     }
     mpCurView->filterItems(ViewFilter_Application(eFilter));
+
+    if (mpSearchView->IsVisible())
+        SearchUpdateHdl(NULL);
+
     return 0;
 }
 
