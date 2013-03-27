@@ -115,9 +115,6 @@ extern "C" {
 }
 #endif
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
-
 bool ShutdownIcon::LoadModule( osl::Module **pModule,
                                oslGenericFunction *pInit,
                                oslGenericFunction *pDeInit )
@@ -147,6 +144,10 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
 
     oslGenericFunction pTmpInit = NULL;
     oslGenericFunction pTmpDeInit = NULL;
+
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
+
     if ( pPlugin->loadRelative( &thisModule, OUString (STRING( PLUGIN_NAME  ) ) ) )
     {
         pTmpInit = pPlugin->getFunctionSymbol(
