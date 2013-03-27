@@ -37,9 +37,7 @@ LimitBox::LimitBox( Window* pParent, WinBits nStyle )
     SetShowTrailingZeros( sal_False );
     SetDecimalDigits( 0 );
     SetMin( -1 );
-
-    ///Use the maximum value of Int32
-    SetMax( 2147483647 );
+    SetMax( SAL_MAX_INT64 );
     LoadDefaultLimits();
 
     Size aSize(
