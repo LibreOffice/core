@@ -76,7 +76,7 @@ typedef int NSP_PIPE_FD;
 
 //for pipe()
 typedef HANDLE NSP_PIPE_FD;
-SECURITY_ATTRIBUTES  NSP_pipe_access = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE};
+static SECURITY_ATTRIBUTES  NSP_pipe_access = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE};
 #define NSP_Inherited_Pipe(fd) (!CreatePipe(&fd[0], &fd[1], &NSP_pipe_access, 1024*10))
 #define NSP_Close_Pipe(fp)    CloseHandle(fp)
 //for write(), read()
