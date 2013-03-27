@@ -34,8 +34,6 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwBookmarkControl, SfxStringItem );
 
-// class BookmarkPopup_Impl --------------------------------------------------
-
 class BookmarkPopup_Impl : public PopupMenu
 {
 public:
@@ -59,8 +57,6 @@ void BookmarkPopup_Impl::Select()
 {
     nCurId = GetCurItemId();
 }
-
-// class SvxZoomStatusBarControl ------------------------------------------
 
 SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
                                       sal_uInt16 _nId,

@@ -26,7 +26,7 @@ using namespace ::svx;
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 
-// STATIC DATA -----------------------------------------------------------
+// STATIC DATA
 
 ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId ),
@@ -35,9 +35,8 @@ ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Drop moeglich, bzw Format bekannt?
- --------------------------------------------------------------------*/
+// Drop possible, respectively format known?
+
 sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return OColumnTransferable::canExtractColumnDescriptor

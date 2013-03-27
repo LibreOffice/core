@@ -53,9 +53,7 @@
 #include <fmtftntx.hxx>
 #include <fmtfollowtextflow.hxx>
 
-
 using namespace com::sun::star;
-
 
 TYPEINIT2(SwFmtCharFmt,SfxPoolItem,SwClient);
 
@@ -89,9 +87,6 @@ void SwAttrSet::GetPresentation(
         }
     }
 }
-
-// ATT_CHARFMT *********************************************
-
 
 SfxItemPresentation SwFmtCharFmt::GetPresentation
 (
@@ -127,9 +122,6 @@ SfxItemPresentation SwFmtCharFmt::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// ATT_AUTOFMT *********************************************
-
-
 SfxItemPresentation SwFmtAutoFmt::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -154,9 +146,6 @@ SfxItemPresentation SwFmtAutoFmt::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-// ATT_INETFMT *********************************************
-
 
 SfxItemPresentation SwFmtINetFmt::GetPresentation
 (
@@ -203,11 +192,6 @@ SfxItemPresentation SwFmtRuby::GetPresentation( SfxItemPresentation ePres,
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-/*************************************************************************
-|*    class     SwFmtDrop
-*************************************************************************/
-
-
 SfxItemPresentation SwFmtDrop::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -247,11 +231,6 @@ SfxItemPresentation SwFmtDrop::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-/*************************************************************************
-|*    class     SwRegisterItem
-*************************************************************************/
-
-
 SfxItemPresentation SwRegisterItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -277,11 +256,6 @@ SfxItemPresentation SwRegisterItem::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-/*************************************************************************
-|*    class     SwNumRuleItem
-*************************************************************************/
-
 
 SfxItemPresentation SwNumRuleItem::GetPresentation
 (
@@ -311,9 +285,6 @@ SfxItemPresentation SwNumRuleItem::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-/*************************************************************************
-|*    class     SwParaConnectBorderItem
-*************************************************************************/
 
 SfxItemPresentation SwParaConnectBorderItem::GetPresentation
 (
@@ -341,12 +312,7 @@ SfxItemPresentation SwParaConnectBorderItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
-
-/******************************************************************************
- *  Frame-Attribute:
- ******************************************************************************/
-
+// Frame attribute
 
 SfxItemPresentation SwFmtFrmSize::GetPresentation
 (
@@ -398,9 +364,8 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//Kopfzeile, fuer Seitenformate
-//Client von FrmFmt das den Header beschreibt.
-
+//Header for page formats.
+//Client of FrmFmt which describes the header.
 
 SfxItemPresentation SwFmtHeader::GetPresentation
 (
@@ -428,9 +393,8 @@ SfxItemPresentation SwFmtHeader::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//Fusszeile, fuer Seitenformate
-//Client von FrmFmt das den Footer beschreibt.
-
+//Footer for page formats.
+//Client of FrmFmt which describes the footer.
 
 SfxItemPresentation SwFmtFooter::GetPresentation
 (
@@ -457,7 +421,6 @@ SfxItemPresentation SwFmtFooter::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
 
 SfxItemPresentation SwFmtSurround::GetPresentation
 (
@@ -513,10 +476,7 @@ SfxItemPresentation SwFmtSurround::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
-//VertOrientation, wie und woran orientiert --
-//  sich der FlyFrm in der Vertikalen -----------
-
+//VertOrientation, how and by what orientate the FlyFrm in the vertical?
 
 SfxItemPresentation SwFmtVertOrient::GetPresentation
 (
@@ -574,9 +534,7 @@ SfxItemPresentation SwFmtVertOrient::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//HoriOrientation, wie und woran orientiert --
-//  sich der FlyFrm in der Hoizontalen ----------
-
+//HoriOrientation, how and by what orientate the FlyFrm in the horizontal?
 
 SfxItemPresentation SwFmtHoriOrient::GetPresentation
 (
@@ -634,8 +592,7 @@ SfxItemPresentation SwFmtHoriOrient::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//FlyAnchor, Anker des Freifliegenden Rahmen ----
-
+// FlyAnchor, Anchor of the free-flying frame
 
 SfxItemPresentation SwFmtAnchor::GetPresentation
 (
@@ -677,7 +634,6 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
 SfxItemPresentation SwFmtPageDesc::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -707,8 +663,7 @@ SfxItemPresentation SwFmtPageDesc::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//Der ColumnDescriptor --------------------------
-
+//The ColumnDescriptor
 
 SfxItemPresentation SwFmtCol::GetPresentation
 (
@@ -748,8 +703,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//URL's und Maps
-
+//URL's and maps
 
 SfxItemPresentation SwFmtURL::GetPresentation
 (
@@ -789,10 +743,6 @@ SfxItemPresentation SwFmtURL::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
-//SwFmtEditInReadonly
-
-
 SfxItemPresentation SwFmtEditInReadonly::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -819,7 +769,6 @@ SfxItemPresentation SwFmtEditInReadonly::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
 
 SfxItemPresentation SwFmtLayoutSplit::GetPresentation
 (
@@ -935,7 +884,6 @@ SfxItemPresentation SwFmtChain::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
 SfxItemPresentation SwFmtLineNumber::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -1010,10 +958,6 @@ SfxItemPresentation SwTextGridItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
-//SwHeaderAndFooterEatSpacingItem
-
-
 SfxItemPresentation SwHeaderAndFooterEatSpacingItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
@@ -1026,8 +970,7 @@ SfxItemPresentation SwHeaderAndFooterEatSpacingItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-
-// ---------------------- Grafik-Attribute --------------------------
+// Graphic attributes
 
 SfxItemPresentation SwMirrorGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
@@ -1062,7 +1005,6 @@ SfxItemPresentation SwMirrorGrf::GetPresentation(
     }
     return ePres;
 }
-
 
 SfxItemPresentation SwRotationGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
