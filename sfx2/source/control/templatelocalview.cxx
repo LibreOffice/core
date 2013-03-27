@@ -263,6 +263,11 @@ bool TemplateLocalView::isNestedRegionAllowed() const
     return !mnCurRegionId;
 }
 
+bool TemplateLocalView::isImportAllowed() const
+{
+    return mnCurRegionId;
+}
+
 bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
 {
     sal_uInt16 nRegionId = USHRT_MAX;
