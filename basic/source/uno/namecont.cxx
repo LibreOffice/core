@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1258,6 +1260,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
 void SfxLibraryContainer::implScanExtensions( void )
 {
+#if HAVE_FEATURE_EXTENSIONS
     ScriptExtensionIterator aScriptIt;
     OUString aLibURL;
 
@@ -1297,6 +1300,7 @@ void SfxLibraryContainer::implScanExtensions( void )
         const bool bReadOnly = false;
         Reference< XNameAccess > xLib = createLibraryLink( aLibName, aIndexFileURL, bReadOnly );
     }
+#endif
 }
 
 // Handle maLibInfoFileURL and maStorageURL correctly
