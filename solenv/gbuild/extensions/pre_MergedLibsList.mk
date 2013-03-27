@@ -60,6 +60,8 @@ gb_MERGEDLIBS := \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
 	i18npool \
 	i18nutil \
+	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
+	jvmfwk \
 	lng \
 	localebe1 \
 	localedata_en \

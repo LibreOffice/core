@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	cppu \
 	cppuhelper \
 	i18nisolang1 \
-    jvmfwk \
 	sal \
 	salhelper \
 	tl \

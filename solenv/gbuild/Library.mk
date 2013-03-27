@@ -123,8 +123,11 @@ $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)))
 $(call gb_Library__get_final_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_outdir_target,$(2))
+# prevent circular deps: Library_merged -> localedata -> saxparser -> services.rdb -> javavm.component
+ifneq ($(gb_Library__get_name),merged)
 $(call gb_ComponentTarget_get_target,$(2)) :| \
 	$(call gb_Library_get_target,$(gb_Library__get_name))
+endif
 $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
 endef
