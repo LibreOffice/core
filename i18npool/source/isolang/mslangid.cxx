@@ -148,6 +148,13 @@ void MsLangId::Conversion::convertLanguageToLocale( LanguageType nLang,
     if (!rLocale.Variant.isEmpty())
         rLocale.Variant = rtl::OUString();
     convertLanguageToIsoNames( nLang, rLocale.Language, rLocale.Country);
+    /* FIXME: this x-... is temporary until conversion will be moved up to
+     * LanguageTag */
+    if (rLocale.Language.startsWith( "x-"))
+    {
+        rLocale.Variant = rLocale.Language;
+        rLocale.Language = "qlt";
+    }
 }
 
 
@@ -178,8 +185,11 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguage(
     if (rLocale.Language.isEmpty())
         return LANGUAGE_SYSTEM;
 
-    LanguageType nRet = convertIsoNamesToLanguage( rLocale.Language,
-            rLocale.Country);
+    /* FIXME: this x-... is temporary until conversion will be moved up to
+     * LanguageTag */
+    LanguageType nRet = ((!rLocale.Variant.isEmpty() && rLocale.Variant.startsWithIgnoreAsciiCase( "x-")) ?
+            convertPrivateUseToLanguage( rLocale.Variant) :
+            convertIsoNamesToLanguage( rLocale.Language, rLocale.Country));
     if (nRet == LANGUAGE_DONTKNOW)
         nRet = LANGUAGE_SYSTEM;
 

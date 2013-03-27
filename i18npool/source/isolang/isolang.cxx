@@ -848,6 +848,20 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
 // =======================================================================
 
 // static
+LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const rtl::OUString& rPriv )
+{
+    const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
+    do
+    {
+        if ( rPriv.equalsIgnoreAsciiCaseAscii( pPrivateEntry->mpLangStr ) )
+            return pPrivateEntry->mnLang;
+        ++pPrivateEntry;
+    } while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
+    return LANGUAGE_DONTKNOW;
+}
+
+
+// static
 LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OUString& rLang,
         const rtl::OUString& rCountry )
 {
@@ -935,14 +949,9 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OUStrin
     }
 
     // Look for privateuse definitions.
-    const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
-    do
-    {
-        if ( aLowerLang.equalsAscii( pPrivateEntry->mpLangStr ) )
-            return pPrivateEntry->mnLang;
-        ++pPrivateEntry;
-    }
-    while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
+    LanguageType nLang = convertPrivateUseToLanguage( aLowerLang);
+    if (nLang != LANGUAGE_DONTKNOW)
+        return nLang;
 
     // Now look for all other definitions, which are not standard
     const IsoLangOtherEntry* pOtherEntry = aImplOtherEntries;

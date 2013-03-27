@@ -215,6 +215,10 @@ public:
         I18NISOLANG_DLLPRIVATE static LanguageType convertLocaleToLanguage(
                 const ::com::sun::star::lang::Locale & rLocale );
 
+        /** Convert x-... privateuse, used by convertLocaleToLanguage(Locale) */
+        I18NISOLANG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
+                const rtl::OUString& rPriv );
+
         /** Used by convertLocaleToLanguage(Locale) */
         I18NISOLANG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
                 const rtl::OUString& rLang, const rtl::OUString& rCountry );
