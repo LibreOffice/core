@@ -79,8 +79,8 @@ static OString encodeString( const OString& rStr)
     // short circuit for the simple non-encoded case
     while( --i >= 0)
     {
-        const sal_Char c = *(pChar++);
-        if( (0x00 <= c) && (c <= 0x0F))
+        const unsigned char c = (unsigned char) *(pChar++);
+        if( c <= 0x0F )
             break;
         if( c == '%')
             break;
@@ -93,8 +93,8 @@ static OString encodeString( const OString& rStr)
     aEncStr.append( pChar - (nLen-i), nLen - i);
     while( --i >= 0)
     {
-        sal_Char c = *(pChar++);
-        if( (0x00 <= c) && (c <= 0x0F))
+        unsigned char c = (unsigned char) *(pChar++);
+        if( c <= 0x0F )
         {
             aEncStr.append( '%');
             c += (c <= 0x09) ? '0' : 'A'-10;
