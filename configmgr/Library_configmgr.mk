@@ -74,6 +74,7 @@ $(eval $(call gb_Library_use_libraries,configmgr, \
     sal \
     salhelper \
     xmlreader \
+	i18nisolang1 \
 	$(gb_UWINAPI) \
 ))
 

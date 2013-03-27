@@ -57,6 +57,8 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include <i18npool/languagetag.hxx>
+
 #include "components.hxx"
 #include "configurationprovider.hxx"
 #include "lock.hxx"
@@ -337,20 +339,10 @@ void Service::setLocale(css::lang::Locale const & eLocale)
 css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(*lock_);
     css::lang::Locale loc;
-    if ( locale_ == "*" ) {
+    if ( locale_ == "*" ) {     /* FIXME-BCP47: WTF is this?!? */
         loc.Language = locale_;
     } else if (! locale_.isEmpty()) {
-        try {
-            comphelper::Locale l(locale_);
-            loc.Language = l.getLanguage();
-            loc.Country = l.getCountry();
-            loc.Variant = l.getVariant();
-        } catch (comphelper::Locale::MalFormedLocaleException & e) {
-            throw css::uno::RuntimeException(
-                (OUString("MalformedLocaleException: ") +
-                 e.Message),
-                static_cast< cppu::OWeakObject * >(this));
-        }
+        loc = LanguageTag( locale_).getLocale( false);
     }
     return loc;
 }
