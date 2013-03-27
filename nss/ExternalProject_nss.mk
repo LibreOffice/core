@@ -52,14 +52,18 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 else
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
-		CC="$(CC) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-		CXX="$(CXX) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-		OS_LIBS="-ladvapi32 -lws2_32 -lmwsock -lwinm $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
-		OS_TARGET=WINNT RC="$(WINDRES)" OS_RELEASE="5.0" \
-		IMPORT_LIB_SUFFIX=dll.a \
-		NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
-		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py" \
 		$(MAKE) -j1 nss_build_all \
+			NS_USE_GCC=1 \
+			CC="$(CC) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
+			CXX="$(CXX) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
+			OS_LIBS="-ladvapi32 -lws2_32 -lmswsock -lwinmm $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
+			LDFLAGS="" \
+			PATH="$(PATH)" \
+			RANLIB="$(RANLIB)" \
+			OS_TARGET=WINNT RC="$(WINDRES)" OS_RELEASE="5.0" \
+			IMPORT_LIB_SUFFIX=dll.a \
+			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
+			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py" \
 	,mozilla/security/nss)
 
 endif
