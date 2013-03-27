@@ -131,7 +131,7 @@ rtl::OString OutputFile(const rtl::OString &rInput, const char * pExt)
 
     if( nSepInd != -1 )
     {
-        return rInput.copy(0, rInput.getLength() - nSepInd).concat(OString(pExt));
+        return rInput.copy(0, nSepInd + 1).concat(OString(pExt));
     }
 
     return rInput.concat(OString(".")).concat(OString(pExt));
