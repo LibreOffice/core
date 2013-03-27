@@ -14,26 +14,26 @@
 
 #ifdef __APPLE__
 #ifdef __x86_64__
-#define CORE_BIG_ENDIAN 0
-#define CORE_LITTLE_ENDIAN 1
+#undef CORE_BIG_ENDIAN
+#define CORE_LITTLE_ENDIAN
 #define USE_MEMORY_ALIGNMENT 64 /* big value -> no alignment */
 #else
-#define CORE_BIG_ENDIAN 1
-#define CORE_LITTLE_ENDIAN 0
+#define CORE_BIG_ENDIAN
+#undef CORE_LITTLE_ENDIAN
 #define USE_MEMORY_ALIGNMENT 4
 #endif
 
 #endif
 #ifdef _AIX
-#define CORE_BIG_ENDIAN 1
-#define CORE_LITTLE_ENDIAN 0
+#define CORE_BIG_ENDIAN
+#undef CORE_LITTLE_ENDIAN
 #define USE_MEMORY_ALIGNMENT 4
 #endif /* Def _AIX */
 
 #ifdef _MSC_VER
 #define __windows
-#define CORE_BIG_ENDIAN 0
-#define CORE_LITTLE_ENDIAN 1
+#undef CORE_BIG_ENDIAN
+#define CORE_LITTLE_ENDIAN
 #define USE_MEMORY_ALIGNMENT 64 /* big value -> no alignment */
 #endif /* Def _MSC_VER */
 
@@ -42,8 +42,8 @@
     defined(__DragonFly__) || defined(__FreeBSD_kernel__)
 #include <sys/param.h>
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-#define CORE_BIG_ENDIAN 0
-#define CORE_LITTLE_ENDIAN 1
+#undef CORE_BIG_ENDIAN
+#define CORE_LITTLE_ENDIAN
 #if defined(__x86_64) || defined(__i386)
 #define USE_MEMORY_ALIGNMENT 64
 #else
@@ -51,8 +51,8 @@
 #endif
 #else /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
 #if __BYTE_ORDER == __BIG_ENDIAN
-#define CORE_BIG_ENDIAN 1
-#define CORE_LITTLE_ENDIAN 0
+#define CORE_BIG_ENDIAN
+#undef CORE_LITTLE_ENDIAN
 #define USE_MEMORY_ALIGNMENT 4
 #endif /* __BYTE_ORDER == __BIG_ENDIAN */
 #endif /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
@@ -60,12 +60,12 @@
 
 #ifdef __sun
 #ifdef __sparc
-#define CORE_BIG_ENDIAN 1
-#define CORE_LITTLE_ENDIAN 0
+#define CORE_BIG_ENDIAN
+#undef CORE_LITTLE_ENDIAN
 #define USE_MEMORY_ALIGNMENT 4
 #else  /* Ndef __sparc */
-#define CORE_BIG_ENDIAN 0
-#define CORE_LITTLE_ENDIAN 1
+#undef CORE_BIG_ENDIAN
+#define CORE_LITTLE_ENDIAN
 #define USE_MEMORY_ALIGNMENT 4
 #endif /* Ndef __sparc */
 #endif /* Def __sun */
@@ -342,18 +342,16 @@ struct hash
 #define rot(x,k) (((x)<<(k)) | ((x)>>(32-(k))))
 
 
-#if CORE_BIG_ENDIAN
+#if defined CORE_BIG_ENDIAN
 #define MASK_C1 0xFFFFFF00
 #define MASK_C2 0xFFFF0000
 #define MASK_C3 0xFF000000
-#else
-#if CORE_LITTLE_ENDIAN
+#elif defined CORE_LITTLE_ENDIAN
 #define MASK_C1 0xFFFFFF
 #define MASK_C2 0xFFFF
 #define MASK_C3 0xFF
 #else
 #error "Missing Endianness definition"
-#endif
 #endif
 
 
