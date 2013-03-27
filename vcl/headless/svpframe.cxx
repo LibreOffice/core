@@ -84,14 +84,11 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_aSystemChildData.nSize        = sizeof( SystemChildData );
 #ifdef IOS
     // Nothing
+#elif defined ANDROID
+    // Nothing
 #else
     m_aSystemChildData.pSalFrame    = this;
-#ifdef ANDROID
-    // We want 32-bit RGBA bitmaps
-    m_aSystemChildData.nDepth       = 32;
-#else
     m_aSystemChildData.nDepth       = 24;
-#endif
 #endif
 
     if( m_pParent )

@@ -64,6 +64,8 @@ struct SystemEnvData
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
+#elif defined( ANDROID )
+    // Nothing
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
@@ -94,6 +96,8 @@ struct SystemParentData
     HWND            hWnd;             // the window hwnd
 #elif defined( MACOSX )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
+#elif defined( ANDROID )
+    // Nothing
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
@@ -114,6 +118,8 @@ struct SystemMenuData
     HMENU           hMenu;          // the menu handle of the menu bar
 #elif defined( MACOSX )
     // Nothing
+#elif defined( ANDROID )
+    // Nothing
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
@@ -132,6 +138,8 @@ struct SystemGraphicsData
     HDC             hDC;            // handle to a device context
 #elif defined( MACOSX )
     CGContextRef    rCGContext;     // CoreGraphics graphic context
+#elif defined( ANDROID )
+    // Nothing
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
@@ -148,6 +156,8 @@ struct SystemGraphicsData
 #if defined( WNT )
         , hDC( 0 )
 #elif defined( MACOSX )
+    // Nothing
+#elif defined( ANDROID )
     // Nothing
 #elif defined( IOS )
     // Nothing
@@ -174,7 +184,9 @@ struct SystemWindowData
 #if defined( WNT )                  // meaningless on Windows
 #elif defined( MACOSX )             // meaningless on Mac OS X
     // Nothing
-#elif defined( IOS )                // and maybe on iOS, too, then
+#elif defined( ANDROID )
+    // Nothing
+#elif defined( IOS )
     // Nothing
 #elif defined( UNX )
     void*           pVisual;        // the visual to be used

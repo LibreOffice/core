@@ -84,6 +84,9 @@ IMPL_XTYPEPROVIDER_END
             {
                  aRet <<= (sal_IntPtr)pSysData->pView;
             }
+#elif (defined ANDROID)
+            // Nothing
+            (void) SystemType;
 #elif (defined IOS)
             // Nothing
             (void) SystemType;

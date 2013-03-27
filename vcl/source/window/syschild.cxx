@@ -224,6 +224,8 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
 #elif defined MACOSX
     // FIXME: this is wrong
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->pView );
+#elif defined ANDROID
+    // Nothing
 #elif defined IOS
     // Nothing
 #elif defined UNX

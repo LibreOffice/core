@@ -85,6 +85,8 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( MACOSX )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);
+#elif defined( ANDROID )
+    // Nothing
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
