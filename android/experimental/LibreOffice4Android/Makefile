@@ -75,7 +75,7 @@ copy-stuff:
 # Set up bootstraprc
 	echo '[Bootstrap]' > assets/program/bootstraprc
 	echo 'InstallMode=<installmode>' >> assets/program/bootstraprc
-	echo 'ProductKey=LibreOffice 3.6' >> assets/program/bootstraprc
+	echo 'ProductKey=LibreOffice $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)' >> assets/program/bootstraprc
 	echo 'UserInstallation=file://$$APP_DATA_DIR' >> assets/program/bootstraprc
 #
 # Set up versionrc
