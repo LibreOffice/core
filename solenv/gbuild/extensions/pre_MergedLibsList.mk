@@ -39,6 +39,7 @@ gb_MERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	deploymentmisc \
+	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
 	desktopbe1 \
 	drawinglayer \
 	editeng \
@@ -70,12 +71,14 @@ gb_MERGEDLIBS := \
 	sofficeapp \
 	sot \
 	spl \
+	subsequenttest \
 	svl \
 	svt \
 	svx \
 	svxcore \
 	sw \
 	swd \
+	test \
 	tk \
 	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
@@ -84,6 +87,7 @@ gb_MERGEDLIBS := \
 	uui \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
+	$(if $(filter unx,$(GUIBASE)),vclplug_svp) \
 	$(if $(filter-out IOS,$(OS)),wpftdraw) \
 	$(if $(filter-out IOS,$(OS)),wpftwriter) \
 	writerfilter \

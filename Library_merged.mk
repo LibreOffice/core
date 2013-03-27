@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_library_objects,merged,\
 ))
 
 $(eval $(call gb_Library_use_libraries,merged,\
+	$(if $(filter unx,$(GUIBASE)),basebmp) \
 	basegfx \
 	comphelper \
 	cppu \
@@ -39,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	salhelper \
 	tl \
 	ucbhelper \
+	unotest \
 	xmlreader \
 	$(gb_UWINAPI) \
 ))
@@ -50,6 +52,7 @@ $(eval $(call gb_Library_use_static_libraries,merged,\
 endif
 
 $(eval $(call gb_Library_use_externals,merged,\
+	cppunit \
 	cups \
 	icui18n \
 	icule \
@@ -109,6 +112,18 @@ $(eval $(call gb_Library_add_libs,merged,\
 	-lm \
 	-ldl \
 	-lpthread \
+))
+endif
+
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_add_libs,merged,\
+	-lX11 \
+	-lXext \
+	-lSM \
+	-lICE \
+))
+$(eval $(call gb_Library_use_static_libraries,merged,\
+	headless \
 ))
 endif
 
