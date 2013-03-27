@@ -60,11 +60,13 @@ endif
 $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 	boost_headers \
 	postgresql \
-	openssl \
-	openldap \
-	nss3 \
-	plc4 \
-	ssl3 \
+	$(if $(filter-out MSC,$(COM)), \
+		openssl \
+		openldap \
+		nss3 \
+		plc4 \
+		ssl3 \
+	) \
 ))
 
 ifneq ($(SYSTEM_POSTGRESQL),YES)
