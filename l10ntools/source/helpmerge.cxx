@@ -40,6 +40,7 @@
 #include <direct.h>
 #endif
 
+#include "export.hxx"
 #include "common.hxx"
 #include "helper.hxx"
 #include "po.hxx"
@@ -135,7 +136,7 @@ bool HelpParser::CreatePO(
                         replaceAll("\n",OString()).
                         replaceAll("\t",OString()).trim());
 
-                Export::writePoEntry(
+                common::writePoEntry(
                     "Helpex", aPoOutput, sHelpFile, rGsi1,
                     posm->first, pXMLElement->GetOldref(), OString(), data);
 

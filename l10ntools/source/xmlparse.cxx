@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include "sal/config.h"
 
 #include <iterator> /* std::iterator*/
@@ -24,12 +23,14 @@
 #include <stdio.h>
 #include <sal/alloca.h>
 
+#include "helper.hxx"
 #include "common.hxx"
 #include "xmlparse.hxx"
 #include <fstream>
 #include <iostream>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
+#include <osl/process.h>
 #include <rtl/strbuf.hxx>
 
 using namespace std;
@@ -868,6 +869,32 @@ XMLDefault& XMLDefault::operator=(const XMLDefault& obj){
 #define XML_CHAR_TO_OUSTRING(x) OStringToOUString(OString(x), RTL_TEXTENCODING_UTF8)
 #define XML_CHAR_N_TO_OUSTRING(x,n) OStringToOUString(OString(x,n), RTL_TEXTENCODING_UTF8 )
 
+namespace
+{
+
+static OUString lcl_pathnameToAbsoluteUrl(const OUString& rPathname) {
+    OUString sUrl;
+    if (osl::FileBase::getFileURLFromSystemPath(rPathname, sUrl)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert input pathname to URL\n";
+        std::exit(EXIT_FAILURE);
+    }
+    OUString sCwd;
+    if (osl_getProcessWorkingDir(&sCwd.pData) != osl_Process_E_None) {
+        std::cerr << "Error: Cannot determine cwd\n";
+        std::exit(EXIT_FAILURE);
+    }
+    if (osl::FileBase::getAbsoluteFileURL(sCwd, sUrl, sUrl)
+        != osl::FileBase::E_None)
+    {
+        std::cerr << "Error: Cannot convert input URL to absolute URL\n";
+        std::exit(EXIT_FAILURE);
+    }
+    return sUrl;
+}
+}
+
 
 /*****************************************************************************/
 SimpleXMLParser::SimpleXMLParser()
@@ -1008,7 +1035,7 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
     aErrorInformation.sMessage = rtl::OUString( "ERROR: Unable to open file ");
     aErrorInformation.sMessage += rFileName;
 
-    rtl::OUString aFileURL(common::pathnameToAbsoluteUrl(rFileName));
+    rtl::OUString aFileURL(lcl_pathnameToAbsoluteUrl(rFileName));
 
     oslFileHandle h;
     if (osl_openFile(aFileURL.pData, &h, osl_File_OpenFlag_Read)
@@ -1145,50 +1172,11 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
     return pXMLFile;
 }
 
-/*****************************************************************************/
-void XMLUtil::QuotHTML( rtl::OUString &rString )
-/*****************************************************************************/
+
+void XMLUtil::QuotHTML( OUString &rString )
 {
-    OUStringBuffer sReturn;
-    for (sal_Int32 i = 0; i < rString.getLength(); ++i) {
-        switch (rString[i]) {
-        case '\\':
-            if (i < rString.getLength()) {
-                switch (rString[i + 1]) {
-                case '"':
-                case '<':
-                case '>':
-                case '\\':
-                    ++i;
-                    break;
-                }
-            }
-            // fall through
-        default:
-            sReturn.append(rString[i]);
-            break;
-
-        case '<':
-            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&lt;"));
-            break;
-
-        case '>':
-            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&gt;"));
-            break;
-
-        case '"':
-            sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&quot;"));
-            break;
-
-        case '&':
-            if (rString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&amp;"), i))
-                sReturn.append('&');
-            else
-                sReturn.appendAscii(RTL_CONSTASCII_STRINGPARAM("&amp;"));
-            break;
-        }
-    }
-    rString = sReturn.makeStringAndClear();
+    const OString sString(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+    rString = OStringToOUString(helper::QuotHTML( sString ), RTL_TEXTENCODING_UTF8);
 }
 
 void XMLUtil::UnQuotHTML( rtl::OUString &rString ){

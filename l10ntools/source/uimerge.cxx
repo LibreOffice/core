@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "common.hxx"
+#include "helper.hxx"
 #include "export.hxx"
 #include "tokens.h"
 #include "po.hxx"
@@ -30,19 +31,6 @@
 
 rtl::OString sInputFileName;
 rtl::OString sOutputFile;
-
-namespace
-{
-    //Convert xmlChar* to OString
-    static OString lcl_xmlStrToOString( const xmlChar* pString )
-    {
-        xmlChar* pTemp = xmlStrdup( pString );
-        OString sResult =
-            static_cast<OString>(reinterpret_cast<sal_Char*>( pTemp ));
-        xmlFree( pTemp );
-        return sResult;
-    }
-}
 
 int extractTranslations()
 {
@@ -73,11 +61,11 @@ int extractTranslations()
                 for(xmlAttrPtr attribute = nodeLevel2->properties; attribute != NULL; attribute = attribute->next)
                 {
                     xmlChar *content = xmlNodeListGetString(res, attribute->children, 1);
-                    vIDs.push_back(lcl_xmlStrToOString(content));
+                    vIDs.push_back(helper::xmlStrToOString(content));
                     xmlFree(content);
                 }
-                OString sText = lcl_xmlStrToOString(xmlNodeGetContent(nodeLevel2));
-                Export::writePoEntry(
+                OString sText = helper::xmlStrToOString(xmlNodeGetContent(nodeLevel2));
+                common::writePoEntry(
                     "Uiex", aPOStream, sInputFileName, vIDs[0],
                     (vIDs.size()>=2) ? vIDs[1] : OString(),
                     (vIDs.size()>=3) ? vIDs[2] : OString(),
@@ -99,50 +87,6 @@ int extractTranslations()
 
 namespace
 {
-    rtl::OString QuotHTML(const rtl::OString &rString)
-    {
-        rtl::OStringBuffer sReturn;
-        for (sal_Int32 i = 0; i < rString.getLength(); ++i) {
-            switch (rString[i]) {
-            case '\\':
-                if (i < rString.getLength()) {
-                    switch (rString[i + 1]) {
-                    case '"':
-                    case '<':
-                    case '>':
-                    case '\\':
-                        ++i;
-                        break;
-                    }
-                }
-                // fall through
-            default:
-                sReturn.append(rString[i]);
-                break;
-
-            case '<':
-                sReturn.append("&lt;");
-                break;
-
-            case '>':
-                sReturn.append("&gt;");
-                break;
-
-            case '"':
-                sReturn.append("&quot;");
-                break;
-
-            case '&':
-                if (rString.matchL(RTL_CONSTASCII_STRINGPARAM("&amp;"), i))
-                    sReturn.append('&');
-                else
-                    sReturn.append(RTL_CONSTASCII_STRINGPARAM("&amp;"));
-                break;
-            }
-        }
-        return sReturn.makeStringAndClear();
-    }
-
     bool lcl_MergeLang(
             const MergeDataHashMap &rMap,
             const rtl::OString &rLanguage,
@@ -172,7 +116,7 @@ namespace
             aDestination << " <e "
                 << "g=\"" << aI->second->sGID.getStr() << "\" "
                 << "i=\"" << aI->second->sLID.getStr() << "\">"
-                << QuotHTML(sOut).getStr() << "</e>\n";
+                << helper::QuotHTML(sOut).getStr() << "</e>\n";
         }
 
         aDestination << "</t>";
@@ -240,10 +184,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     int nRetValue = 0;
 
-    HandledArgs aArgs;
-    if ( !Export::handleArguments(argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if ( !common::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("uiex","*.ui");
+        common::writeUsage("uiex","*.ui");
         return 1;
     }
 

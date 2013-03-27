@@ -25,6 +25,7 @@
 
 #include "common.hxx"
 #include "export.hxx"
+#include "po.hxx"
 #include "xrmmerge.hxx"
 #include "tokens.h"
 #include "helper.hxx"
@@ -59,8 +60,8 @@ extern char *GetOutputFile( int argc, char* argv[])
     bDisplayName = sal_False;
     bExtensionDescription = sal_False;
 
-    HandledArgs aArgs;
-    if ( Export::handleArguments(argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if ( common::handleArguments(argc, argv, aArgs) )
     {
         // command line is valid
         bMergeMode = aArgs.m_bMergeMode;
@@ -75,7 +76,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     else
     {
         // command line is not valid
-        Export::writeUsage("xrmex","*.xrm/*.xml");
+        common::writeUsage("xrmex","*.xrm/*.xml");
         return NULL;
     }
 }
@@ -421,7 +422,7 @@ void XRMResExport::EndOfText(
                 pResData->sText[sCur].replaceAll("\x0A", rtl::OString()));
 
             if( !sAct.isEmpty() )
-                Export::writePoEntry(
+                common::writePoEntry(
                     "Xrmex", pOutputStream, sPath, sResourceType,
                     pResData->sGId, OString(), OString(), sAct );
         }
@@ -565,7 +566,7 @@ void XRMResMerge::WorkOnText(
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
             if ( pEntrys ) {
                 rtl::OString sContent;
-                if ( Export::isAllowed( sLang ) &&
+                if ( !sLang.equalsIgnoreAsciiCase("en-US") &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sLang )) &&
                     ( sContent != "-" ) && !sContent.isEmpty() &&

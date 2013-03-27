@@ -18,23 +18,10 @@
 #include <libxml/xmlstring.h>
 
 #include "export.hxx"
+#include "helper.hxx"
 #include "common.hxx"
 #include "po.hxx"
 #include "stringmerge.hxx"
-
-
-namespace
-{
-    //Convert xmlChar* to OString
-    static OString lcl_xmlStrToOString( const xmlChar* pString )
-    {
-        xmlChar* pTemp = xmlStrdup( pString );
-        OString sResult =
-            static_cast<OString>(reinterpret_cast<sal_Char*>( pTemp ));
-        xmlFree( pTemp );
-        return sResult;
-    }
-}
 
 //Parse strings.xml file
 StringParser::StringParser(
@@ -84,10 +71,10 @@ void StringParser::Extract( const OString& rPOFile )
             xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("name"));
             xmlChar* pText = xmlNodeGetContent(pCurrent);
 
-            Export::writePoEntry(
+            common::writePoEntry(
                 "Stringex", aPOStream, m_pSource->name, "string",
-                lcl_xmlStrToOString( pID ), OString(), OString(),
-                lcl_xmlStrToOString( pText ));
+                helper::xmlStrToOString( pID ), OString(), OString(),
+                helper::xmlStrToOString( pText ));
 
             xmlFree( pID );
             xmlFree( pText );
@@ -134,7 +121,7 @@ void StringParser::Merge(
         {
             xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("name"));
             ResData  aResData(
-                "", lcl_xmlStrToOString( pID ),
+                "", helper::xmlStrToOString( pID ),
                 static_cast<OString>(m_pSource->name) );
             xmlFree( pID );
             aResData.sResTyp = "string";

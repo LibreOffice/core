@@ -10,15 +10,15 @@
 #include <iostream>
 #include "sal/main.h"
 
-#include "export.hxx"
+#include "common.hxx"
 #include "stringmerge.hxx"
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    HandledArgs aArgs;
-    if( !Export::handleArguments(argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if( !common::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("stringex","string.xml");
+        common::writeUsage("stringex","string.xml");
         return 1;
     }
 

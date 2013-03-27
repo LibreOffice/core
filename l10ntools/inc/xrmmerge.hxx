@@ -20,7 +20,6 @@
 #include "sal/config.h"
 
 #include <fstream>
-#include "po.hxx"
 
 //
 // XRMResParser

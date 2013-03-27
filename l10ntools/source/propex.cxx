@@ -9,15 +9,15 @@
 
 #include "sal/main.h"
 
-#include "export.hxx"
+#include "common.hxx"
 #include "propmerge.hxx"
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    HandledArgs aArgs;
-    if( !Export::handleArguments(argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if( !common::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("propex","*.properties");
+        common::writeUsage("propex","*.properties");
         return 1;
     }
 

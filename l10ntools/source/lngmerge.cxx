@@ -24,13 +24,22 @@
 #include <iterator>
 #include <string>
 
-#include "common.hxx"
+#include "po.hxx"
 #include "lngmerge.hxx"
 
 namespace {
 
 rtl::OString getBracketedContent(rtl::OString text) {
     return text.getToken(1, '[').getToken(0, ']');
+}
+
+static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
+{
+    if( rString.getLength() >= 3 && rString[0] == '\xEF' &&
+        rString[1] == '\xBB' && rString[2] == '\xBF' )
+    {
+        rString = rString.copy(3);
+    }
 }
 
 }
@@ -59,7 +68,7 @@ LngParser::LngParser(const rtl::OString &rLngFile,
             if( bFirstLine )
             {
                 // Always remove UTF8 BOM from the first line
-                Export::RemoveUTF8ByteOrderMarker( sLine );
+                lcl_RemoveUTF8ByteOrderMarker( sLine );
                 bFirstLine = false;
             }
 
@@ -129,7 +138,7 @@ void LngParser::WritePO(PoOfstream &aPOStream,
            if ( sAct.isEmpty() && !sCur.isEmpty() )
                sAct = rText_inout[ rtl::OString("en-US") ];
 
-           Export::writePoEntry(
+           common::writePoEntry(
                 "Ulfex", aPOStream, rActFileName, "LngText",
                 rID, OString(), OString(), sAct);
        }

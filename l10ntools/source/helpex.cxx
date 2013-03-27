@@ -30,6 +30,7 @@
 #include "sal/main.h"
 
 #include "helpmerge.hxx"
+#include "common.hxx"
 
 #ifndef TESTDRIVER
 
@@ -60,8 +61,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         }
     }
 
-    HandledArgs aArgs;
-    if ( !Export::handleArguments( argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if ( !common::handleArguments( argc, argv, aArgs) )
     {
         WriteUsage();
         return 1;

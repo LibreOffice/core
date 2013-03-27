@@ -109,6 +109,8 @@ public:
 class ResData
 {
 public:
+    ResData(const rtl::OString &rPF, const rtl::OString &rGId);
+    ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename);
     ~ResData();
     sal_Bool SetId(const rtl::OString &rId, sal_uInt16 nLevel);
 
@@ -153,67 +155,6 @@ public:
     ExportList  *pPairedList;
 
     rtl::OString sPForm;
-
-    ResData(const rtl::OString &rPF, const rtl::OString &rGId)
-            :
-            nWidth( 0 ),
-            nChildIndex( 0 ),
-            nIdLevel( ID_LEVEL_NULL ),
-            bChild( sal_False ),
-            bChildWithText( sal_False ),
-            bText( sal_False ),
-            bHelpText( sal_False ),
-            bQuickHelpText( sal_False ),
-            bTitle( sal_False ),
-            bList( sal_False ),
-            bRestMerged( sal_False ),
-            sGId( rGId ),
-            nTextRefId( REFID_NONE ),
-            nHelpTextRefId( REFID_NONE ),
-            nQuickHelpTextRefId( REFID_NONE ),
-            nTitleRefId( REFID_NONE ),
-            sTextTyp( "Text" ),
-            pStringList( NULL ),
-            pUIEntries( NULL ),
-            pItemList( NULL ),
-            pFilterList( NULL ),
-            pPairedList( NULL ),
-            sPForm( rPF )
-    {
-        sGId = sGId.replaceAll("\r", rtl::OString());
-        sPForm = sPForm.replaceAll("\r", rtl::OString());
-    }
-
-    ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
-            :
-            nWidth( 0 ),
-            nChildIndex( 0 ),
-            nIdLevel( ID_LEVEL_NULL ),
-            bChild( sal_False ),
-            bChildWithText( sal_False ),
-            bText( sal_False ),
-            bHelpText( sal_False ),
-            bQuickHelpText( sal_False ),
-            bTitle( sal_False ),
-            bList( sal_False ),
-            bRestMerged( sal_False ),
-            sGId( rGId ),
-            sFilename( rFilename ),
-            nTextRefId( REFID_NONE ),
-            nHelpTextRefId( REFID_NONE ),
-            nQuickHelpTextRefId( REFID_NONE ),
-            nTitleRefId( REFID_NONE ),
-            sTextTyp( "Text" ),
-            pStringList( NULL ),
-            pUIEntries( NULL ),
-            pItemList( NULL ),
-            pFilterList( NULL ),
-            pPairedList( NULL ),
-            sPForm( rPF )
-    {
-        sGId = sGId.replaceAll("\r", rtl::OString());
-        sPForm = sPForm.replaceAll("\r", rtl::OString());
-    }
 };
 
 
@@ -243,23 +184,6 @@ typedef ::std::vector< ResData* > ResStack;
 // forwards
 class WordTransformer;
 class ParserQueue;
-
-//result type of handleArguments()
-struct HandledArgs
-{
-    OString m_sInputFile;
-    OString m_sOutputFile;
-    OString m_sMergeSrc;
-    OString m_sLanguage;
-    bool m_bMergeMode;
-    HandledArgs()
-        : m_sInputFile( OString() )
-        , m_sOutputFile( OString() )
-        , m_sMergeSrc( OString() )
-        , m_sLanguage( OString() )
-        , m_bMergeMode( false )
-    {}
-};
 
 class Export
 {
@@ -292,40 +216,11 @@ private:
     sal_Bool bReadOver;
     sal_Bool bDontWriteOutput;
     rtl::OString sLastTextTyp;
-    static bool isInitialized;
+    bool isInitialized;
     rtl::OString sFilename;
+    rtl::OString sLanguages;
 
-
-public:
-    ParserQueue* pParseQueue; // public ?
-    static rtl::OString sLanguages; // public ?
-
-    static bool handleArguments(int argc, char * argv[], HandledArgs& o_aHandledArgs);
-    static void writeUsage(const OString& rName, const OString& rFileType);
-    static void writePoEntry(const OString& rExecutable, PoOfstream& rPoStream, const OString& rSourceFile,
-                             const OString& rResType, const OString& rGroupId, const OString& rLocalId,
-                             const OString& rHelpText, const OString& rText,
-                             const PoEntry::TYPE eType = PoEntry::TTEXT);
-
-    static void InitLanguages( bool bMergeMode = false );
-    static void InitForcedLanguages( bool bMergeMode = false );
-    static std::vector<rtl::OString> GetLanguages();
-
-    static void SetLanguages( std::vector<rtl::OString> val );
-    static void RemoveUTF8ByteOrderMarker( rtl::OString &rString );
-    static bool hasUTF8ByteOrderMarker( const rtl::OString &rString );
-    static rtl::OString QuoteHTML( rtl::OString const &rString );
-
-    static rtl::OString UnquoteHTML( rtl::OString const &rString );
-
-    static bool isSourceLanguage(const rtl::OString &rLanguage);
-    static bool isAllowed(const rtl::OString &rLanguage);
-
-    static void Languages( std::vector<rtl::OString>::const_iterator& begin , std::vector<rtl::OString>::const_iterator& end );
-
-private:
-    static std::vector<rtl::OString> aLanguages;
-    static std::vector<rtl::OString> aForcedLanguages;
+    std::vector<rtl::OString> aLanguages;
 
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
@@ -352,17 +247,20 @@ private:
     void WriteToMerged(const rtl::OString &rText , bool bSDFContent);
     void SetChildWithText();
 
+    void InitLanguages( bool bMergeMode = false );
+
     void CutComment( rtl::OString &rText );
 
 public:
-    Export(const rtl::OString &rOutput);
-    Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput);
+    Export(const OString &rOutput, const OString &rLanguage);
+    Export(const OString &rMergeSource, const OString &rOutput, const OString &rLanguage);
     ~Export();
 
     void Init();
     int Execute( int nToken, const char * pToken ); // called from lexer
     void SetError() { bError = sal_True; }
     sal_Bool GetError() { return bError; }
+    ParserQueue* pParseQueue; // public!!
 };
 
 

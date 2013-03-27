@@ -43,7 +43,8 @@ $(eval $(call gb_StaticLibrary_use_externals,transex,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,transex,\
-    l10ntools/source/export2 \
+    l10ntools/source/helper \
+    l10ntools/source/common \
     l10ntools/source/merge \
     l10ntools/source/po \
 ))

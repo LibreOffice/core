@@ -60,6 +60,108 @@ namespace
 }
 
 //
+//  class ResData
+//
+
+ResData::ResData(const rtl::OString &rPF, const rtl::OString &rGId)
+    :
+    nWidth( 0 ),
+    nChildIndex( 0 ),
+    nIdLevel( ID_LEVEL_NULL ),
+    bChild( sal_False ),
+    bChildWithText( sal_False ),
+    bText( sal_False ),
+    bHelpText( sal_False ),
+    bQuickHelpText( sal_False ),
+    bTitle( sal_False ),
+    bList( sal_False ),
+    bRestMerged( sal_False ),
+    sGId( rGId ),
+    nTextRefId( REFID_NONE ),
+    nHelpTextRefId( REFID_NONE ),
+    nQuickHelpTextRefId( REFID_NONE ),
+    nTitleRefId( REFID_NONE ),
+    sTextTyp( "Text" ),
+    pStringList( NULL ),
+    pUIEntries( NULL ),
+    pItemList( NULL ),
+    pFilterList( NULL ),
+    pPairedList( NULL ),
+    sPForm( rPF )
+{
+    sGId = sGId.replaceAll("\r", rtl::OString());
+    sPForm = sPForm.replaceAll("\r", rtl::OString());
+}
+
+ResData::ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
+    :
+    nWidth( 0 ),
+    nChildIndex( 0 ),
+    nIdLevel( ID_LEVEL_NULL ),
+    bChild( sal_False ),
+    bChildWithText( sal_False ),
+    bText( sal_False ),
+    bHelpText( sal_False ),
+    bQuickHelpText( sal_False ),
+    bTitle( sal_False ),
+    bList( sal_False ),
+    bRestMerged( sal_False ),
+    sGId( rGId ),
+    sFilename( rFilename ),
+    nTextRefId( REFID_NONE ),
+    nHelpTextRefId( REFID_NONE ),
+    nQuickHelpTextRefId( REFID_NONE ),
+    nTitleRefId( REFID_NONE ),
+    sTextTyp( "Text" ),
+    pStringList( NULL ),
+    pUIEntries( NULL ),
+    pItemList( NULL ),
+    pFilterList( NULL ),
+    pPairedList( NULL ),
+    sPForm( rPF )
+{
+    sGId = sGId.replaceAll("\r", rtl::OString());
+    sPForm = sPForm.replaceAll("\r", rtl::OString());
+}
+
+
+ResData::~ResData()
+{
+    if ( pStringList ) {
+        // delete existing res. of type StringList
+        for ( size_t i = 0; i < pStringList->size(); i++ ) {
+            ExportListEntry* test = (*pStringList)[ i ];
+            if( test != NULL ) delete test;
+        }
+        delete pStringList;
+    }
+    if ( pFilterList ) {
+        // delete existing res. of type FilterList
+        for ( size_t i = 0; i < pFilterList->size(); i++ ) {
+            ExportListEntry* test = (*pFilterList)[ i ];
+            delete test;
+        }
+        delete pFilterList;
+    }
+    if ( pItemList ) {
+        // delete existing res. of type ItemList
+        for ( size_t i = 0; i < pItemList->size(); i++ ) {
+            ExportListEntry* test = (*pItemList)[ i ];
+            delete test;
+        }
+        delete pItemList;
+    }
+    if ( pUIEntries ) {
+        // delete existing res. of type UIEntries
+        for ( size_t i = 0; i < pUIEntries->size(); i++ ) {
+            ExportListEntry* test = (*pUIEntries)[ i ];
+            delete test;
+        }
+        delete pUIEntries;
+    }
+}
+
+//
 // class PFormEntrys
 //
 

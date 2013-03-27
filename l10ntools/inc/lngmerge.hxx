@@ -22,8 +22,8 @@
 #include <iosfwd>
 #include <vector>
 
+#include "common.hxx"
 #include "export.hxx"
-#include "po.hxx"
 
 typedef std::vector< rtl::OString* > LngLineList;
 

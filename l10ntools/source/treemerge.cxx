@@ -18,22 +18,14 @@
 #include <libxml/xmlstring.h>
 
 #include "export.hxx"
+#include "helper.hxx"
 #include "common.hxx"
+#include "po.hxx"
 #include "treemerge.hxx"
 
 
 namespace
 {
-    //Convert xmlChar* to OString
-    static OString lcl_xmlStrToOString( const xmlChar* pString )
-    {
-        xmlChar* pTemp = xmlStrdup( pString );
-        OString sResult =
-            static_cast<OString>(reinterpret_cast<sal_Char*>( pTemp ));
-        xmlFree( pTemp );
-        return sResult;
-    }
-
     //Extract strings from nodes on all level recursively
     static void lcl_ExtractLevel(
         const xmlDocPtr pSource, const xmlNodePtr pRoot,
@@ -52,9 +44,9 @@ namespace
                 xmlChar* pText =
                     xmlGetProp(pCurrent, (const xmlChar*)("title"));
 
-                Export::writePoEntry(
-                    "Treex", rPOStream, pSource->name, lcl_xmlStrToOString( pNodeName ),
-                    lcl_xmlStrToOString( pID ), OString(), OString(), lcl_xmlStrToOString( pText ));
+                common::writePoEntry(
+                    "Treex", rPOStream, pSource->name, helper::xmlStrToOString( pNodeName ),
+                    helper::xmlStrToOString( pID ), OString(), OString(), helper::xmlStrToOString( pText ));
 
                 xmlFree( pID );
                 xmlFree( pText );
@@ -73,7 +65,7 @@ namespace
         xmlNodePtr pReturn = pCurrent;
         xmlChar* pID = xmlGetProp(pReturn, (const xmlChar*)("id"));
         const OString sID =
-            lcl_xmlStrToOString( pID );
+            helper::xmlStrToOString( pID );
         xmlFree( pID );
 
         const sal_Int32 nFirstSlash = sID.indexOf("/");
@@ -122,7 +114,7 @@ namespace
                     xmlChar* sTitle =
                         xmlNodeListGetString(pXhpFile, pXhpNode->children, 1);
                     OString sNewTitle =
-                        lcl_xmlStrToOString( sTitle ).
+                        helper::xmlStrToOString( sTitle ).
                             replaceAll("$[officename]","%PRODUCTNAME").
                                 replaceAll("$[officeversion]","%PRODUCTVERSION");
                     xmlNodeSetContent(
@@ -165,10 +157,10 @@ namespace
                 {
                     xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("id"));
                     ResData  aResData(
-                        "", lcl_xmlStrToOString( pID ),
+                        "", helper::xmlStrToOString( pID ),
                         static_cast<OString>(io_pSource->name) );
                     xmlFree( pID );
-                    aResData.sResTyp = lcl_xmlStrToOString( pNodeName );
+                    aResData.sResTyp = helper::xmlStrToOString( pNodeName );
                     PFormEntrys* pEntrys =
                         pMergeDataFile->GetPFormEntrys( &aResData );
                     if( pEntrys )

@@ -11,7 +11,7 @@
 #include <cstring>
 #include "sal/main.h"
 
-#include "export.hxx"
+#include "common.hxx"
 #include "treemerge.hxx"
 
 void WriteUsage()
@@ -45,8 +45,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             break;
         }
     }
-    HandledArgs aArgs;
-    if( !Export::handleArguments(argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if( !common::handleArguments(argc, argv, aArgs) )
     {
         WriteUsage();
         return 1;

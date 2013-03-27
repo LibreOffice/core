@@ -47,10 +47,10 @@ extern "C" {
 
 FILE * init(int argc, char ** argv) {
 
-    HandledArgs aArgs;
-    if ( !Export::handleArguments(argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if ( !common::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("cfgex","*.xcu");
+        common::writeUsage("cfgex","*.xcu");
         std::exit(EXIT_FAILURE);
     }
     global::inputPathname = aArgs.m_sInputFile;
@@ -82,6 +82,88 @@ void workOnTokenSet(int nTyp, char * pTokenText) {
 }
 
 }
+
+namespace
+{
+
+static OString lcl_QuoteHTML( const OString& rString )
+{
+    rtl::OStringBuffer sReturn;
+    for ( sal_Int32 i = 0; i < rString.getLength(); i++ ) {
+        rtl::OString sTemp = rString.copy( i );
+        if ( sTemp.match( "<Arg n=" ) ) {
+            while ( i < rString.getLength() && rString[i] != '>' ) {
+                 sReturn.append(rString[i]);
+                i++;
+            }
+            if ( rString[i] == '>' ) {
+                sReturn.append('>');
+                i++;
+            }
+        }
+        if ( i < rString.getLength()) {
+            switch ( rString[i]) {
+                case '<':
+                    sReturn.append("&lt;");
+                break;
+
+                case '>':
+                    sReturn.append("&gt;");
+                break;
+
+                case '\"':
+                    sReturn.append("&quot;");
+                break;
+
+                case '\'':
+                    sReturn.append("&apos;");
+                break;
+
+                case '&':
+                    if ((( i + 4 ) < rString.getLength()) &&
+                        ( rString.copy( i, 5 ) == "&amp;" ))
+                            sReturn.append(rString[i]);
+                    else
+                        sReturn.append("&amp;");
+                break;
+
+                default:
+                    sReturn.append(rString[i]);
+                break;
+            }
+        }
+    }
+    return sReturn.makeStringAndClear();
+}
+
+static OString lcl_UnquoteHTML( const OString& rString )
+{
+    rtl::OStringBuffer sReturn;
+    for (sal_Int32 i = 0; i != rString.getLength();) {
+        if (rString.match("&amp;", i)) {
+            sReturn.append('&');
+            i += RTL_CONSTASCII_LENGTH("&amp;");
+        } else if (rString.match("&lt;", i)) {
+            sReturn.append('<');
+            i += RTL_CONSTASCII_LENGTH("&lt;");
+        } else if (rString.match("&gt;", i)) {
+            sReturn.append('>');
+            i += RTL_CONSTASCII_LENGTH("&gt;");
+        } else if (rString.match("&quot;", i)) {
+            sReturn.append('"');
+            i += RTL_CONSTASCII_LENGTH("&quot;");
+        } else if (rString.match("&apos;", i)) {
+            sReturn.append('\'');
+            i += RTL_CONSTASCII_LENGTH("&apos;");
+        } else {
+            sReturn.append(rString[i]);
+            ++i;
+        }
+    }
+    return sReturn.makeStringAndClear();
+}
+
+} // anonymous namespace
 
 //
 // class CfgStackData
@@ -407,9 +489,9 @@ void CfgExport::WorkOnResourceEnd()
                 if ( sText.isEmpty())
                     sText = sFallback;
 
-                sText = Export::UnquoteHTML( sText );
+                sText = lcl_UnquoteHTML( sText );
 
-                Export::writePoEntry(
+                common::writePoEntry(
                     "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
                     sGroupId, sLocalId, sXComment, sText);
             }
@@ -422,7 +504,7 @@ void CfgExport::WorkOnText(
     const rtl::OString &rIsoLang
 )
 {
-    if( rIsoLang.getLength() ) rText = Export::UnquoteHTML( rText );
+    if( rIsoLang.getLength() ) rText = lcl_UnquoteHTML( rText );
 }
 
 
@@ -499,10 +581,10 @@ void CfgMerge::WorkOnText(rtl::OString &rText, const rtl::OString& rLangIndex)
             rtl::OString sContent;
             pEntrys->GetText( sContent, STRING_TYP_TEXT, rLangIndex );
 
-            if ( Export::isAllowed( rLangIndex ) &&
+            if ( !rLangIndex.equalsIgnoreAsciiCase("en-US") &&
                 ( sContent != "-" ) && !sContent.isEmpty())
             {
-                rText = Export::QuoteHTML( rText );
+                rText = lcl_QuoteHTML( rText );
             }
         }
     }
@@ -534,7 +616,7 @@ void CfgMerge::WorkOnResourceEnd()
                     ( sContent != "-" ) && !sContent.isEmpty())
                 {
 
-                    rtl::OString sText = Export::QuoteHTML( sContent);
+                    rtl::OString sText = lcl_QuoteHTML( sContent);
 
                     rtl::OString sAdditionalLine( "\t" );
 

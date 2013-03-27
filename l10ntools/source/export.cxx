@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include "common.hxx"
 #include "export.hxx"
-#include "helper.hxx"
 #include "tokens.h"
 #include <iostream>
 #include <rtl/strbuf.hxx>
@@ -45,20 +44,19 @@ OString inputPathname;
 boost::scoped_ptr< Export > exporter;
 
 }
+
 }
 
 extern "C" {
 
 FILE * init(int argc, char ** argv) {
 
-    HandledArgs aArgs;
-    if ( !Export::handleArguments(argc, argv, aArgs) )
+    common::HandledArgs aArgs;
+    if ( !common::handleArguments(argc, argv, aArgs) )
     {
-        Export::writeUsage("transex3","*.src/*.hrc");
+        common::writeUsage("transex3","*.src/*.hrc");
         std::exit(EXIT_FAILURE);
     }
-    Export::sLanguages = aArgs.m_sLanguage;
-    Export::InitLanguages();
     global::inputPathname =  aArgs.m_sInputFile;
 
     FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
@@ -71,9 +69,9 @@ FILE * init(int argc, char ** argv) {
 
     if (aArgs.m_bMergeMode) {
         global::exporter.reset(
-            new Export(aArgs.m_sMergeSrc.getStr(), aArgs.m_sOutputFile.getStr()));
+            new Export(aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage));
     } else {
-        global::exporter.reset(new Export(aArgs.m_sOutputFile.getStr()));
+        global::exporter.reset(new Export(aArgs.m_sOutputFile, aArgs.m_sLanguage));
     }
 
     global::exporter->Init();
@@ -159,7 +157,25 @@ sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
 // class Export
 //
 
-Export::Export(const rtl::OString &rOutput)
+namespace
+{
+
+static sal_Int32 lcl_countOccurrences(const OString& text, char c)
+{
+    sal_Int32 n = 0;
+    for (sal_Int32 i = 0;; ++i) {
+        i = text.indexOf(c, i);
+        if (i == -1) {
+            break;
+        }
+        ++n;
+    }
+    return n;
+}
+
+}
+
+Export::Export(const OString &rOutput, const OString &rLanguage)
                 :
                 pWordTransformer( NULL ),
                 bDefine( sal_False ),
@@ -173,11 +189,12 @@ Export::Export(const rtl::OString &rOutput)
                 bError( sal_False ),
                 bReadOver( sal_False ),
                 bDontWriteOutput( sal_False ),
-                sFilename( global::inputPathname )
+                isInitialized( false ),
+                sFilename( global::inputPathname ),
+                sLanguages( rLanguage ),
+                pParseQueue( new ParserQueue( *this ) )
 {
-    pParseQueue = new ParserQueue( *this );
-
-    if( !isInitialized ) InitLanguages();
+    InitLanguages();
     // used when export is enabled
 
     // open output stream
@@ -188,7 +205,9 @@ Export::Export(const rtl::OString &rOutput)
     }
 }
 
-Export::Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput)
+Export::Export(
+    const OString &rMergeSource, const OString &rOutput,
+    const OString &rLanguage )
                 :
                 pWordTransformer( NULL ),
                 bDefine( sal_False ),
@@ -203,10 +222,12 @@ Export::Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput)
                 bError( sal_False ),
                 bReadOver( sal_False ),
                 bDontWriteOutput( sal_False ),
-                sFilename( global::inputPathname )
+                isInitialized( false ),
+                sFilename( global::inputPathname ),
+                sLanguages( rLanguage ),
+                pParseQueue( new ParserQueue( *this ) )
 {
-    pParseQueue = new ParserQueue( *this );
-    if( !isInitialized ) InitLanguages( bMergeMode );
+    InitLanguages( bMergeMode );
     // used when merge is enabled
 
     // open output stream
@@ -544,8 +565,8 @@ int Export::Execute( int nToken, const char * pToken )
                 nListLevel = 0;
             }
             if (sToken.indexOf( '{' ) != -1
-                && (helper::countOccurrences(sToken, '{')
-                    > helper::countOccurrences(sToken, '}')))
+                && (lcl_countOccurrences(sToken, '{')
+                    > lcl_countOccurrences(sToken, '}')))
             {
                 Parse( LEVELUP, "" );
             }
@@ -642,7 +663,7 @@ int Export::Execute( int nToken, const char * pToken )
                 SetChildWithText();
                 sal_Int32 n = 0;
                 rtl::OString sEntry(sToken.getToken(1, '"', n));
-                if ( helper::countOccurrences(sToken, '"') > 2 )
+                if ( lcl_countOccurrences(sToken, '"') > 2 )
                     sEntry += "\"";
                 if ( sEntry == "\\\"" )
                     sEntry = "\"";
@@ -686,7 +707,7 @@ int Export::Execute( int nToken, const char * pToken )
                         sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UINAME")))
                     {
                         SetChildWithText();
-                        if ( Export::isSourceLanguage( sLangIndex ) )
+                        if ( sLangIndex.equalsIgnoreAsciiCase("en-US") )
                             pResData->SetId( sText, ID_LEVEL_TEXT );
 
                         pResData->bText = sal_True;
@@ -935,16 +956,16 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         if (sXText.isEmpty())
             sXText = "-";
 
-        writePoEntry(
+        common::writePoEntry(
             "Transex3", *aOutput.mPo, global::inputPathname,
             pResData->sResTyp, sGID, sLID, sXHText, sXText);
         if( !sXQHText.isEmpty() )
-            writePoEntry(
+            common::writePoEntry(
                 "Transex3", *aOutput.mPo, global::inputPathname, pResData->sResTyp,
                 sGID, sLID, OString(), sXQHText, PoEntry::TQUICKHELPTEXT );
 
         if( !sXTitle.isEmpty() )
-            writePoEntry(
+            common::writePoEntry(
                 "Transex3", *aOutput.mPo, global::inputPathname, pResData->sResTyp,
                 sGID, sLID, OString(), sXTitle, PoEntry::TTITLE );
 
@@ -1051,7 +1072,7 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
                     if( sText == "\\\"" )
                         sText = "\"";
                 }
-                writePoEntry(
+                common::writePoEntry(
                     "Transex3", *aOutput.mPo, global::inputPathname,
                     rTyp, sGID, sLID, OString(), sText);
             }
@@ -1150,7 +1171,7 @@ void Export::InsertListEntry(const rtl::OString &rText, const rtl::OString &rLin
     }else
         (*pCurEntry)[ m_sListLang ] = rText;
 
-    if ( Export::isSourceLanguage( m_sListLang ) ) {
+    if ( m_sListLang.equalsIgnoreAsciiCase("en-US") ) {
         (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;
 
         pList->NewSourceLanguageListEntry();
@@ -1204,7 +1225,7 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
                 replaceAll("\\0x7F", "-=<[0x7F]>=-");
 
             sal_uInt16 nState = TXT_STATE_TEXT;
-            for (sal_Int32 i = 1; i <= helper::countOccurrences(sTmp, '"'); ++i)
+            for (sal_Int32 i = 1; i <= lcl_countOccurrences(sTmp, '"'); ++i)
             {
                 rtl::OString sToken(sTmp.getToken(i, '"'));
                 if (!sToken.isEmpty()) {
@@ -1501,7 +1522,10 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
 
         // Init Languages
         if( Export::sLanguages.equalsIgnoreAsciiCase("ALL") )
-            SetLanguages( pMergeDataFile->GetLanguages() );
+        {
+            aLanguages = pMergeDataFile->GetLanguages();
+            isInitialized = true;
+        }
         else if( !isInitialized )InitLanguages();
 
     }
@@ -1518,13 +1542,13 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
 
     rtl::OString sContent;
     pEntrys->GetTransex3Text(sContent, nTyp, rLangIndex);
-    if (sContent.isEmpty() && (!Export::isSourceLanguage(rLangIndex)))
+    if (sContent.isEmpty() && !rLangIndex.equalsIgnoreAsciiCase("en-US"))
     {
         rText = sOrigText;
         return sal_False; // no data found
     }
 
-    if (Export::isSourceLanguage(rLangIndex))
+    if (rLangIndex.equalsIgnoreAsciiCase("en-US"))
         return sal_False;
 
     rtl::OString sPostFix( rText.copy( ++nEnd ));
@@ -1565,7 +1589,7 @@ void Export::ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const rtl::O
 
             sOutput += rTextType;
 
-            if ( ! Export::isSourceLanguage( sCur ) ) {
+            if ( !sCur.equalsIgnoreAsciiCase("en-US") ) {
                 sOutput += "[ ";
                 sOutput += sCur;
                 sOutput += " ] ";
@@ -1602,7 +1626,10 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 
         // Init Languages
         if (Export::sLanguages.equalsIgnoreAsciiCase("ALL"))
-            SetLanguages( pMergeDataFile->GetLanguages() );
+        {
+            aLanguages = pMergeDataFile->GetLanguages();
+            isInitialized = true;
+        }
         else if( !isInitialized )InitLanguages();
 
     }
@@ -1895,6 +1922,29 @@ void Export::SetChildWithText()
         for ( size_t i = 0; i < aResStack.size() - 1; i++ ) {
             aResStack[ i ]->bChildWithText = sal_True;
         }
+    }
+}
+
+void Export::InitLanguages( bool bMerge ){
+
+    if( !isInitialized )
+    {
+        rtl::OString sTmp;
+        OStringBoolHashMap aEnvLangs;
+
+        sal_Int32 nIndex = 0;
+        do
+        {
+            rtl::OString aToken = sLanguages.getToken(0, ',', nIndex);
+            sTmp = aToken.getToken(0, '=').trim();
+            if( bMerge && sTmp.equalsIgnoreAsciiCase("en-US") ){}
+            else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) ){
+                aLanguages.push_back( sTmp );
+            }
+        }
+        while ( nIndex >= 0 );
+
+        isInitialized = true;
     }
 }
 
