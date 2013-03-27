@@ -628,6 +628,16 @@ static IsoLangOtherEntry const aImplOtherEntries[] =
     { LANGUAGE_DONTKNOW,                    NULL             }  // marks end of table
 };
 
+
+// in this table are only privateuse names
+static IsoLangOtherEntry const aImplPrivateUseEntries[] =
+{
+    { LANGUAGE_USER_PRIV_NOTRANSLATE,       "x-no-translate" }, //! not BCP47 but legacy in .xcu configmgr
+    { LANGUAGE_USER_PRIV_DEFAULT,           "x-default"      },
+    { LANGUAGE_USER_PRIV_COMMENT,           "x-comment"      },
+    { LANGUAGE_DONTKNOW,                    NULL             }  // marks end of table
+};
+
 // =======================================================================
 
 // static
@@ -666,6 +676,20 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
         ++pNoneStdEntry;
     }
     while ( pNoneStdEntry->mnLang != LANGUAGE_DONTKNOW );
+
+    // Look for privateuse definitions.
+    const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
+    do
+    {
+        if ( pPrivateEntry->mnLang == nLang )
+        {
+            rLangStr = rtl::OUString::createFromAscii( pPrivateEntry->mpLangStr );
+            rCountry = OUString();
+            return;
+        }
+        ++pPrivateEntry;
+    }
+    while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // not found
     rLangStr = rtl::OUString();
@@ -909,6 +933,16 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const rtl::OUStrin
 
         aLowerLang = aUpperCountry.toAsciiLowerCase();
     }
+
+    // Look for privateuse definitions.
+    const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
+    do
+    {
+        if ( aLowerLang.equalsAscii( pPrivateEntry->mpLangStr ) )
+            return pPrivateEntry->mnLang;
+        ++pPrivateEntry;
+    }
+    while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // Now look for all other definitions, which are not standard
     const IsoLangOtherEntry* pOtherEntry = aImplOtherEntries;
