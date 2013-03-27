@@ -30,12 +30,14 @@ ifeq ($(MERGELIBS),TRUE)
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
 	avmedia \
+	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	canvastools \
 	chartcore \
 	configmgr \
 	cppcanvas \
 	cui \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	deploymentmisc \
@@ -43,7 +45,9 @@ gb_MERGEDLIBS := \
 	desktopbe1 \
 	drawinglayer \
 	editeng \
+	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
 	filterconfig \
+	$(call gb_Helper_optional,DBCONNECTIVITY,flat) \
 	for \
 	forui \
 	$(call gb_Helper_optional,DBCONNECTIVITY,frm) \

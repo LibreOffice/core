@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Module_Module,connectivity))
 
-ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-
 $(eval $(call gb_Module_add_targets,connectivity,\
 	AllLangResTarget_cnr \
 	AllLangResTarget_sdbcl \
@@ -164,7 +162,5 @@ endif
 $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_commontools \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
