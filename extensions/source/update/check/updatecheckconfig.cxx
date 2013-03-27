@@ -46,7 +46,6 @@ namespace util = com::sun::star::util ;
 namespace uno = com::sun::star::uno ;
 
 #define LAST_CHECK              "LastCheck"
-#define VERSION_FOUND           "UpdateVersionFound"
 #define UPDATE_VERSION          "UpdateVersion"
 #define UPDATE_BUILDID          "UpdateBuildId"
 #define UPDATE_DESCRIPTION      "UpdateDescription"
