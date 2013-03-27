@@ -20,9 +20,6 @@
 #include "svddrgm1.hxx"
 #include <math.h>
 
-#ifndef _MATH_H
-#define _MATH_H
-#endif
 #include <tools/bigint.hxx>
 #include <vcl/svapp.hxx>
 
