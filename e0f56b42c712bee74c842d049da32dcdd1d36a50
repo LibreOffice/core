@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+Q0\u003d",
+        "filename": "dbaccess/source/core/dataaccess/commanddefinition.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2013-03-27T19:09:45Z",
+      "side": 1,
+      "message": "The indention is broken here ...",
+      "revId": "e0f56b42c712bee74c842d049da32dcdd1d36a50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Qw\u003d",
+        "filename": "dbaccess/source/core/dataaccess/commanddefinition.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000064
+      },
+      "writtenOn": "2013-03-27T19:09:45Z",
+      "side": 1,
+      "message": "... and here as well",
+      "revId": "e0f56b42c712bee74c842d049da32dcdd1d36a50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
