@@ -25,6 +25,19 @@ submit() {
         git push $GERRITURL HEAD:refs/$TYPE/$BRANCH
 }
 
+logerrit() {
+        echo "Host logerrit"
+        echo "    IdentityFile ~/.ssh/id_rsa"
+        echo "    User $1"
+        echo "    Port 29418"
+        echo "    HostName gerrit.libreoffice.org"
+        echo "Host gerrit.libreoffice.org"
+        echo "    IdentityFile ~/.ssh/id_rsa"
+        echo "    User $1"
+        echo "    Port 29418"
+        echo "    HostName gerrit.libreoffice.org"
+}
+
 case "$1" in
     help|--help|"")
         echo "Usage: ./logerrit subcommand [options]"
@@ -58,30 +71,56 @@ case "$1" in
     ;;
     setup)
         cd $(dirname $(readlink -f $0))
+	ssh_home="$HOME/.ssh";
+	ssh_key=
+	created_ssh=
+	if ! test -d $ssh_home; then
+	    echo "It appears that you have no ssh setup, running ssh-keygen to create that:"
+	    mkdir $ssh_home
+	    chmod 0700 $ssh_home
+	    created_ssh=TRUE
+	    echo
+	    echo "Hit enter to generate an ssh key - you will need to enter a pass-phrase"
+	    echo
+	    read
+	    ssh-keygen -t rsa -f "$ssh_home/id_rsa"
+	fi
+	if test -d $ssh_home; then
+	    if test -f "$ssh_home/id_rsa.pub"; then
+		ssh_key=`cat $ssh_home/id_rsa.pub`;
+	    elif test -f "$ssh_home/id_dsa.pub"; then
+		ssh_key=`cat $ssh_home/id_dsa.pub`;
+	    fi
+	fi
         echo "Please go to https://gerrit.libreoffice.org/ and:"
         echo "- press the 'register' button in the top right corner"
         echo "- after login set yourself a username (its recommended to use your IRC-nick)"
-        echo "- upload your public ssh-key."
+	if test "z$ssh_key" = "z"; then
+            echo "- add your public ssh-key into the ssh keys settings."
+	else
+	    echo "- paste the key below into the 'Add SSH Public Key' box."
+	    echo
+	    echo "$ssh_key"
+	    echo
+	fi
         echo
         echo "Note that you need to register additional email addresses, if you want to"
         echo "commit from them. Additional emails must be confirmed with repling to the"
         echo "invitation mail it sends you."
         echo
         read -p 'Which user name did you choose? ' GERRITUSER
-        echo
-        echo "Please now add the following to your ~/.ssh/config, creating the file if needed:"
-        echo
-        echo "Host logerrit"
-        echo "    IdentityFile ~/.ssh/id_rsa"
-        echo "    User $GERRIUSER"
-        echo "    Port 29418"
-        echo "    HostName gerrit.libreoffice.org"
-        echo "Host gerrit.libreoffice.org"
-        echo "    IdentityFile ~/.ssh/id_rsa"
-        echo "    User $GERRIUSER"
-        echo "    Port 29418"
-        echo "    HostName gerrit.libreoffice.org"
-        echo
+	if test "z$created_ssh" = "z"; then
+            echo
+            echo "Please now add the following to your ~/.ssh/config, creating the file if needed:"
+            echo
+	    logerrit $GERRITUSER
+            echo
+        else
+	    echo "Automatically creating your ssh config"
+	    (logerrit $GERRITUSER) > "$ssh_home/config"
+	fi
+	# setup the remote properly ...
+	git config remote.origin.pushurl ssh://logerrit/core
         echo "To see if your setup was successful, run './logerrit test' then."
         # a good place to make sure the hooks are set up
         ./g -z
