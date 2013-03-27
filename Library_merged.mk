@@ -49,10 +49,13 @@ $(eval $(call gb_Library_use_static_libraries,merged,\
 endif
 
 $(eval $(call gb_Library_use_externals,merged,\
+	$(if $(filter-out IOS,$(OS)),cdr) \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
 	cppunit \
 	cups \
-	$(call gb_Helper_optional,DESKTOP,expat_utf8) \
+	expat_utf8 \
+	hunspell \
+	hyphen \
 	icui18n \
 	icule \
 	icuuc \
@@ -60,33 +63,23 @@ $(eval $(call gb_Library_use_externals,merged,\
 	lcms2 \
 	libxml2 \
 	$(call gb_Helper_optional,DESKTOP,libxslt) \
+	$(if $(filter-out IOS,$(OS)),mspub) \
+	$(if $(filter-out IOS,$(OS)),mwaw) \
+	mythes \
 	nss3 \
 	openssl \
 	orcus \
-	$(if $(filter-out IOS,$(OS)),\
-	cdr \
-	wpd \
-	wpg \
-	wps \
-	mwaw \
-	mspub \
-	visio) \
+	$(if $(filter-out IOS,$(OS)),wpd) \
+	$(if $(filter-out IOS,$(OS)),wpg) \
+	$(if $(filter-out IOS,$(OS)),wps) \
+	$(if $(filter-out IOS,$(OS)),visio) \
 	zlib \
 ))
 
-# This would be needed on all platforms but only on android we merge libraries from lingucomponent
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_use_externals,merged,\
-	hunspell \
-	expat_utf8 \
-	mythes \
-	hyphen \
-))
 $(eval $(call gb_Library_use_static_libraries,merged,\
 	sax_shared \
 	ulingu \
 ))
-endif
 
 ifeq ($(ENABLE_GRAPHITE),TRUE)
 $(eval $(call gb_Library_use_externals,merged,\
@@ -167,10 +160,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
 endif
 
 ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_use_static_libraries,merged,\
-	basebmp \
-))
-
 $(eval $(call gb_Library_use_libraries,merged,\
 	libotouch \
 ))

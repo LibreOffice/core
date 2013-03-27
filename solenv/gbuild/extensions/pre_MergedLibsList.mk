@@ -29,6 +29,7 @@ ifeq ($(MERGELIBS),TRUE)
 
 # we link all object files from these libraries into one, merged library
 gb_MERGEDLIBS := \
+	analysis \
 	avmedia \
 	$(if $(filter unx,$(GUIBASE)),basebmp) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
@@ -36,7 +37,9 @@ gb_MERGEDLIBS := \
 	chartcore \
 	configmgr \
 	cppcanvas \
+	ctl \
 	cui \
+	date \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dba) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbase) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
@@ -46,7 +49,11 @@ gb_MERGEDLIBS := \
 	desktopbe1 \
 	drawinglayer \
 	editeng \
+	embobj \
+	evtatt \
+	fastsax \
 	$(call gb_Helper_optional,DBCONNECTIVITY,file) \
+	fileacc \
 	filterconfig \
 	$(call gb_Helper_optional,DBCONNECTIVITY,flat) \
 	for \
@@ -57,12 +64,16 @@ gb_MERGEDLIBS := \
 	fwi \
 	fwk \
 	fwl \
+	fwm \
 	$(call gb_Helper_optional,DESKTOP,helplinker) \
+	hwp \
+	hyphen \
 	i18npool \
 	i18nutil \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),javavm) \
 	jvmfwk \
 	lng \
+	lnth \
 	localebe1 \
 	localedata_en \
 	localedata_es \
@@ -73,6 +84,7 @@ gb_MERGEDLIBS := \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
 	oox \
 	package2 \
+	pricing \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \
@@ -86,6 +98,7 @@ gb_MERGEDLIBS := \
 	sfx \
 	sofficeapp \
 	sot \
+	spell \
 	spl \
 	subsequenttest \
 	svl \
@@ -111,29 +124,8 @@ gb_MERGEDLIBS := \
 	writerfilter \
 	xmlscript \
 	xmlsecurity \
-	xo
-
-ifeq ($(OS),ANDROID)
-gb_MERGEDLIBS += \
-	analysis \
-	ctl \
-	date \
-	embobj \
-	evtatt \
-	fastsax \
-	fileacc \
-	for \
-	forui \
-	fwl \
-	fwm \
-	hwp \
-	hyphen \
-	lnth \
-	pricing \
-	spell \
-	xstor \
-
-endif
+	xo \
+	xstor
 
 endif
 
