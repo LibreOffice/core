@@ -113,7 +113,7 @@ public:
     void testFdo52052();
     void testInk();
     void testFdo52389();
-    void testFdo49655();
+    void testFdo49655_62805();
     void testFdo52475();
     void testFdo55493();
     void testCopyPastePageStyle();
@@ -232,7 +232,8 @@ void Test::run()
         {"fdo52052.rtf", &Test::testFdo52052},
         {"ink.rtf", &Test::testInk},
         {"fdo52389.rtf", &Test::testFdo52389},
-        {"fdo49655.rtf", &Test::testFdo49655},
+        {"fdo49655.rtf", &Test::testFdo49655_62805},
+        {"fdo62805.rtf", &Test::testFdo49655_62805},
         {"fdo52475.rtf", &Test::testFdo52475},
         {"fdo55493.rtf", &Test::testFdo55493},
         {"copypaste-pagestyle.rtf", &Test::testCopyPastePageStyle},
@@ -861,12 +862,17 @@ void Test::testFdo52389()
     CPPUNIT_ASSERT_EQUAL(6, getLength());
 }
 
-void Test::testFdo49655()
+void Test::testFdo49655_62805()
 {
     /*
+     * 49655 :
      * The problem was that the table was not imported due to the '  ' string in the middle of the table definition.
      *
      * xray ThisComponent.TextTables.Count 'was 0
+     *
+     * 62805 :
+     * The problem was that the table was not imported due to the absence of \pard after \row.
+     * The table was instead in a group (the '}' replace the \pard).
      */
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
