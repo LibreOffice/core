@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -44,8 +45,11 @@ namespace drawinglayer
          */
         class DRAWINGLAYER_DLLPUBLIC FontAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpFontAttribute > ImplType;
+
         private:
-            ImpFontAttribute*               mpFontAttribute;
+            ImplType mpFontAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
