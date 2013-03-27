@@ -1389,69 +1389,68 @@ static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRang
 }
 
 //  used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
-static String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, sal_Bool bEnglish )
+static OUString lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPos, sal_Bool bEnglish )
 {
-    rtl::OUString aVal;
-    if ( pDoc )
+    if (!pDoc)
+        return EMPTY_OUSTRING;
+
+
+    ScBaseCell* pCell = pDoc->GetCell(rPos);
+    if (!pCell || pCell->GetCellType() == CELLTYPE_NOTE)
+        return EMPTY_OUSTRING;
+
+    OUString aVal;
+
+    CellType eType = pCell->GetCellType();
+    if (eType == CELLTYPE_FORMULA)
     {
-        ScBaseCell* pCell = pDoc->GetCell( rPosition );
-        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
+        ScFormulaCell* pForm = (ScFormulaCell*)pCell;
+        pForm->GetFormula( aVal,formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
+        return aVal;
+    }
+
+    SvNumberFormatter* pFormatter = bEnglish ? ScGlobal::GetEnglishFormatter() :
+                                                pDoc->GetFormatTable();
+    // Since the English formatter was constructed with
+    // LANGUAGE_ENGLISH_US the "General" format has index key 0,
+    // we don't have to query.
+    sal_uInt32 nNumFmt = bEnglish ? 0 : pDoc->GetNumberFormat(rPos);
+
+    if ( eType == CELLTYPE_EDIT )
+    {
+        //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
+        //  hier werden die Umbrueche aber gebraucht
+        const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
+        if (pData)
         {
-            CellType eType = pCell->GetCellType();
-            if ( eType == CELLTYPE_FORMULA )
-            {
-                ScFormulaCell* pForm = (ScFormulaCell*)pCell;
-                pForm->GetFormula( aVal,formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
-            }
-            else
-            {
-                SvNumberFormatter* pFormatter = bEnglish ? ScGlobal::GetEnglishFormatter() :
-                                                            pDoc->GetFormatTable();
-                // Since the English formatter was constructed with
-                // LANGUAGE_ENGLISH_US the "General" format has index key 0,
-                // we don't have to query.
-                sal_uInt32 nNumFmt = bEnglish ?
-                        0 :
-                        pDoc->GetNumberFormat( rPosition );
-
-                if ( eType == CELLTYPE_EDIT )
-                {
-                    //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-                    //  hier werden die Umbrueche aber gebraucht
-                    const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
-                    if (pData)
-                    {
-                        EditEngine& rEngine = pDoc->GetEditEngine();
-                        rEngine.SetText( *pData );
-                        aVal = rEngine.GetText( LINEEND_LF );
-                    }
-                }
-                else
-                {
-                    ScRefCellValue aCell;
-                    aCell.assign(*pCell);
-                    ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter);
-                }
-
-                //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
-                if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
-                {
-                    double fDummy;
-                    String aTempString = aVal;
-                    sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aTempString, nNumFmt, fDummy));
-                    if ( bIsNumberFormat )
-                        aTempString.Insert('\'',0);
-                    else if ( aTempString.Len() && aTempString.GetChar(0) == '\'' )
-                    {
-                        //  if the string starts with a "'", add another one because setFormula
-                        //  strips one (like text input, except for "text" number formats)
-                        if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
-                            aTempString.Insert('\'',0);
-                    }
-                    aVal = aTempString;
-                }
-            }
+            EditEngine& rEngine = pDoc->GetEditEngine();
+            rEngine.SetText( *pData );
+            aVal = rEngine.GetText( LINEEND_LF );
         }
+    }
+    else
+    {
+        ScRefCellValue aCell;
+        aCell.assign(*pCell);
+        ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter);
+    }
+
+    //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
+    if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
+    {
+        double fDummy;
+        String aTempString = aVal;
+        sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aTempString, nNumFmt, fDummy));
+        if ( bIsNumberFormat )
+            aTempString.Insert('\'',0);
+        else if ( aTempString.Len() && aTempString.GetChar(0) == '\'' )
+        {
+            //  if the string starts with a "'", add another one because setFormula
+            //  strips one (like text input, except for "text" number formats)
+            if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
+                aTempString.Insert('\'',0);
+        }
+        aVal = aTempString;
     }
     return aVal;
 }
