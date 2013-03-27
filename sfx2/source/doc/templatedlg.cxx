@@ -900,7 +900,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
                 OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                if (!maView->exportTo(pItem->mnDocId,pItem->mnRegionId+1,aPath))
+                if (!maView->exportTo(pItem->mnAssocId,pItem->mnRegionId,aPath))
                 {
                     if (aTemplateList.isEmpty())
                         aTemplateList = pItem->maTitle;
