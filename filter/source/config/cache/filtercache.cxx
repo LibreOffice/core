@@ -49,6 +49,7 @@
 #include <rtl/uri.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <comphelper/configurationhelper.hxx>
 
@@ -1631,7 +1632,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
 
     // find right UIName for current office locale
     // Use fallbacks too!
-    pLocale = ::comphelper::Locale::getFallback(lLocales, sActLocale);
+    pLocale = LanguageTag::getFallback(lLocales, sActLocale);
     if (pLocale == lLocales.end())
     {
 #if OSL_DEBUG_LEVEL > 0

@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,filterconfig,\
 	cppu \
 	sal \
 	salhelper \
+	i18nisolang1 \
 	$(gb_UWINAPI) \
 ))
 
