@@ -37,7 +37,9 @@
 #include <execinfo.h>
 #include <link.h>
 #define INCLUDE_BACKTRACE
+#if defined SAL_ENABLE_CRASH_REPORT
 #define STACKTYPE "Linux"
+#endif
 #endif
 
 #ifdef SOLARIS
@@ -45,12 +47,14 @@
 #include "backtrace.h"
 #define INCLUDE_BACKTRACE
 
+#if defined SAL_ENABLE_CRASH_REPORT
 #if defined( SPARC )
 #define STACKTYPE "Solaris_Sparc"
 #elif defined( INTEL )
 #define STACKTYPE "Solaris_X86"
 #else
 #define STACKTYPE "Solaris_Unknown"
+#endif
 #endif
 
 #endif /* defined SOLARIS */
