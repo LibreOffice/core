@@ -2106,6 +2106,8 @@ dnl cross-compiling would imply a non-desktop OS.
 
 if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
+    AC_DEFINE(HAVE_FEATURE_DESKTOP)
+    AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
 fi
 
 DISABLE_EXPORT=''
@@ -4388,6 +4390,7 @@ AC_MSG_CHECKING([whether to build help])
 if test "$with_help" = "yes" -a $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE HELP"
+    AC_DEFINE(HAVE_FEATURE_HELP)
     SCPDEFS="$SCPDEFS -DWITH_HELP"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
 else
@@ -11863,6 +11866,7 @@ fi
 
 AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
+AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])

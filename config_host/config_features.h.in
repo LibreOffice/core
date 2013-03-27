@@ -1,0 +1,47 @@
+/* Configuration of high-level features that either 1) depend on the
+ * platform (but are common to several platforms so just checking for
+ * the feature is simpler than checking for several platforms), or 2)
+ * are build-time configurable.
+ */
+
+#ifndef CONFIG_FEATURES_H
+#define CONFIG_FEATURES_H
+
+/* DESKTOP - Whether we have a "normal" desktop UI or not.
+ *
+ * Non-DESKTOP in practice means touch-based mobile devices, Android
+ * or iOS for now. Support for those is work in pogress.
+ *
+ * Non-DESKTOP implies that the OS makes sure that only one instance
+ * of each LibreOffice-based "app" at a time can be running, and thus
+ * the LibreOffice code does not need to handle such things itself.
+ *
+ * Non-DESKTOP implies no traditional inter-app drag and drop concept.
+ */
+
+#define HAVE_FEATURE_DESKTOP 0
+
+/* HELP - Whether we have the "normal" desktop-style help mechanism
+ *
+ * Can be turned on/off also for desktop environments with
+ * --with-help, so thus a separate feature.
+ */
+
+#define HAVE_FEATURE_HELP 0
+
+/* MULTIUSER_ENVIRONMENT - Wheter running on a "normal" multi-user
+ * desktop (or server) OS
+ *
+ * Non-MULTIUSER implies that the OS makes sure that only one
+ * LibreOffice-based process at a time can be running that could
+ * access the same local documents, and that thus no locking of local
+ * documents is needed, and that no "shared documents" in Calc
+ * is meaningful.
+ *
+ * Non-MULTIUSER in practice means Android or iOS for now, so thus is
+ * work in progress.
+ */
+
+#define HAVE_FEATURE_MULTIUSER_ENVIRONMENT 0
+
+#endif
