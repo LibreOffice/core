@@ -43,9 +43,13 @@
 #define HAVE_O_EXLOCK
 
 // add MACOSX Time Value
+#if MACOSX_SDK_VERSION < 1070
 #define TimeValue CFTimeValue
+#endif
 #include <CoreFoundation/CoreFoundation.h>
+#if MACOSX_SDK_VERSION < 1070
 #undef TimeValue
+#endif
 
 #endif /* MACOSX */
 
