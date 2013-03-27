@@ -41,10 +41,10 @@ namespace vcl
     {
     public:
         virtual long        GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
-        virtual void        DrawText( const Point& _rStartPoint, const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength,
+        virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength,
                                 MetricVector* _pVector, OUString* _pDisplayText ) = 0;
-        virtual bool        GetCaretPositions( const XubString& _rText, sal_Int32* _pCaretXArray, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
-        virtual xub_StrLen  GetTextBreak( const XubString& _rText, long _nMaxTextWidth, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
+        virtual bool        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
+        virtual xub_StrLen  GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual bool        DecomposeTextRectAction() const = 0;
 
     protected:
@@ -74,23 +74,23 @@ namespace vcl
                             ) const;
         virtual void        DrawText(
                                 const Point& _rStartPoint,
-                                const XubString& _rText,
-                                xub_StrLen _nStartIndex,
-                                xub_StrLen _nLength,
+                                const OUString& _rText,
+                                sal_Int32 _nStartIndex,
+                                sal_Int32 _nLength,
                                 MetricVector* _pVector,
                                 OUString* _pDisplayText
                             );
         virtual bool        GetCaretPositions(
-                                const XubString& _rText,
+                                const OUString& _rText,
                                 sal_Int32* _pCaretXArray,
-                                xub_StrLen _nStartIndex,
-                                xub_StrLen _nLength
+                                sal_Int32 _nStartIndex,
+                                sal_Int32 _nLength
                             ) const;
         virtual xub_StrLen  GetTextBreak(
-                                const XubString& _rText,
+                                const OUString& _rText,
                                 long _nMaxTextWidth,
-                                xub_StrLen _nStartIndex,
-                                xub_StrLen _nLength
+                                sal_Int32 _nStartIndex,
+                                sal_Int32 _nLength
                             ) const;
         virtual bool        DecomposeTextRectAction() const;
 

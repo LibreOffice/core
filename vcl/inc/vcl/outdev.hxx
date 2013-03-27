@@ -415,7 +415,7 @@ public:
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, sal_Bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, sal_Bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     static
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const XubString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
@@ -505,8 +505,8 @@ public:
 
     SAL_DLLPRIVATE sal_Bool         ImplIsRecordLayout() const;
 
-                   void         ImplAddDevFontSubstitute( const XubString& rFontName,
-                                                  const XubString& rReplaceFontName,
+                   void         ImplAddDevFontSubstitute( const OUString& rFontName,
+                                                  const OUString& rReplaceFontName,
                                                   sal_uInt16 nFlags = 0 );
 
     SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
@@ -583,8 +583,8 @@ public:
                                        xub_StrLen nLen = STRING_LEN );
     long                GetTextArray( const OUString& rStr, sal_Int32* pDXAry = NULL,
                                       sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
-    bool                GetCaretPositions( const XubString&, sal_Int32* pCaretXArray,
-                                      xub_StrLen nIndex, xub_StrLen nLen,
+    bool                GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
+                                      sal_Int32 nIndex, sal_Int32 nLen,
                                       sal_Int32* pDXAry = NULL, long nWidth = 0,
                                       sal_Bool bCellBreaking = sal_True ) const;
     void                DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
@@ -1092,8 +1092,8 @@ public:
 
     static void         BeginFontSubstitution();
     static void         EndFontSubstitution();
-    static void         AddFontSubstitute( const XubString& rFontName,
-                                           const XubString& rReplaceFontName,
+    static void         AddFontSubstitute( const OUString& rFontName,
+                                           const OUString& rReplaceFontName,
                                            sal_uInt16 nFlags = 0 );
     static void         RemoveFontSubstitute( sal_uInt16 n );
     static sal_uInt16       GetFontSubstituteCount();
