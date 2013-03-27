@@ -64,8 +64,10 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
+#ifndef DISABLE_DYNLOADING
 #define IMPORT_FUNCTION_NAME    "GraphicImport"
 #define EXPORT_FUNCTION_NAME    "GraphicExport"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

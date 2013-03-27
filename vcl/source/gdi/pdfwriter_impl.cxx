@@ -99,7 +99,9 @@ using ::rtl::OUStringBuffer;
 #define DEBUG_DISABLE_PDFCOMPRESSION // also do not compress streams
 #endif
 
+#if !defined(ANDROID) && !defined(IOS)
 #define MAX_SIGNATURE_CONTENT_LENGTH 0x4000
+#endif
 
 #ifdef DO_TEST_PDF
 class PDFTestOutputStream : public PDFOutputStream
