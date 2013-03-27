@@ -39,7 +39,7 @@ define i18npool_LD_RULE
 $(i18npool_LDDIR)/localedata_$(1).cxx : \
 		$(SRCDIR)/i18npool/source/localedata/data/$(1).xml \
 		$(i18npool_LDDIR)/saxparser.rdb \
-		$(call gb_Executable_get_runtime_dependencies,saxparser)
+		| $(call gb_Executable_get_runtime_dependencies,saxparser)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),SAX,1)
 	$$(call gb_Helper_abbreviate_dirs, \
 		$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
