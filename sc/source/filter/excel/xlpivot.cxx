@@ -86,19 +86,9 @@ void XclPCItem::SetInteger( sal_Int16 nValue )
 void XclPCItem::SetError( sal_uInt16 nError )
 {
     meType = EXC_PCITEM_ERROR;
+    //! TODO convert error to string
     maText = rtl::OUString();
     mnError = nError;
-    switch( nError )
-    {
-    case 0x00: maText = "#NULL!"; break;
-    case 0x07: maText = "#DIV/0!"; break;
-    case 0x0F: maText = "#VALUE!"; break;
-    case 0x17: maText = "#REF!"; break;
-    case 0x1D: maText = "#NAME?"; break;
-    case 0x24: maText = "#NUM!"; break;
-    case 0x2A: maText = "#N/A"; break;
-    default: break;
-    }
 }
 
 void XclPCItem::SetBool( bool bValue )
@@ -135,7 +125,7 @@ bool XclPCItem::IsEmpty() const
 
 const rtl::OUString* XclPCItem::GetText() const
 {
-    return (meType == EXC_PCITEM_TEXT || meType == EXC_PCITEM_ERROR) ? &maText : NULL;
+    return (meType == EXC_PCITEM_TEXT) ? &maText : 0;
 }
 
 const double* XclPCItem::GetDouble() const
