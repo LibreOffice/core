@@ -17893,7 +17893,7 @@
           </choice>
         </list>
       </define>
-      <define name="CT_TblLayout">
+      <define name="CT_TblLayoutType">
         <attribute name="type">
           <ref name="ST_TblLayout"/>
           <xs:documentation>Table Layout Setting</xs:documentation>
@@ -18095,7 +18095,7 @@
         </optional>
         <optional>
           <element name="tblLayout">
-            <ref name="CT_TblLayout"/>
+            <ref name="CT_TblLayoutType"/>
           </element>
         </optional>
         <optional>
@@ -18150,7 +18150,7 @@
         </optional>
         <optional>
           <element name="tblLayout">
-            <ref name="CT_TblLayout"/>
+            <ref name="CT_TblLayoutType"/>
           </element>
         </optional>
         <optional>
@@ -22942,8 +22942,8 @@
       <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_fixed">fixed</value>
       <value tokenid="ooxml:Value_wordprocessingml_ST_TblLayout_autofit">autofit</value>
     </resource>
-    <resource name="CT_TblLayout" resource="Value" tag="table">
-      <attribute name="type" tokenid="ooxml:CT_TblLayout_type" action="setValue"/>
+    <resource name="CT_TblLayoutType" resource="Value" tag="table">
+      <attribute name="type" tokenid="ooxml:CT_TblLayoutType_type" action="setValue"/>
     </resource>
     <resource name="ST_TblOverlap" resource="List">
       <value tokenid="ooxml:Value_ST_TblOverlap_never">never</value>
