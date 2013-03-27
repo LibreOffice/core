@@ -455,7 +455,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     As a negative result the special iterator lLocalizedValues.end() will be returned.
          */
         ::std::vector< ::rtl::OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< ::rtl::OUString >& lLocalizedValues,
-                                                                                               LanguageTag&             rLanguageTag         ,
+                                                                                               OUString&             rLanguageTag         ,
                                                                                                sal_Bool                          bAllowFallbacks );
 
         //---------------------------------------
@@ -489,7 +489,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(::rtl::OUString&      sPath         ,
                                                                                          sal_Int32             eMode         ,
                                                                                          sal_Bool              bShare        ,
-                                                                                         LanguageTag&          rLanguageTag  ,
+                                                                                         OUString&             rLanguageTag  ,
                                                                                          sal_Bool              bAllowFallback);
 
         //---------------------------------------

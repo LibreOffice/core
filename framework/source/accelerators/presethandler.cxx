@@ -488,7 +488,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         // First try to find the right localized set inside share layer.
         // Fallbacks are allowed there.
-        LanguageTag          aShareLocale( rLanguageTag);
+        OUString             aShareLocale( rLanguageTag.getBcp47());
         ::rtl::OUString      sLocalizedSharePath(sRelPathShare);
         sal_Bool             bAllowFallbacks    = sal_True     ;
         xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aShareLocale, bAllowFallbacks);
@@ -496,7 +496,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         // The try to locate the right sub dir inside user layer ... without using fallbacks!
         // Normaly the corresponding sub dir should be created matching the specified locale.
         // Because we allow creation of storages inside user layer by default.
-        LanguageTag          aUserLocale( rLanguageTag);
+        OUString             aUserLocale( rLanguageTag.getBcp47());
         ::rtl::OUString      sLocalizedUserPath(sRelPathUser);
                              bAllowFallbacks    = sal_False  ;
         xUser = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath, eUserMode , sal_False, aUserLocale, bAllowFallbacks);
@@ -800,22 +800,21 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
 //-----------------------------------------------
 ::std::vector< ::rtl::OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
         const ::std::vector< ::rtl::OUString >& lLocalizedValues,
-        LanguageTag& rLanguageTag,
+        OUString& rLanguageTag,
         sal_Bool bAllowFallbacks )
 {
     ::std::vector< ::rtl::OUString >::const_iterator pFound = lLocalizedValues.end();
     if (bAllowFallbacks)
     {
-        pFound = LanguageTag::getFallback(lLocalizedValues, rLanguageTag.getBcp47());
+        pFound = LanguageTag::getFallback(lLocalizedValues, rLanguageTag);
     }
     else
     {
-        OUString aCheck( rLanguageTag.getBcp47());
         for (  pFound  = lLocalizedValues.begin();
                pFound != lLocalizedValues.end()  ;
              ++pFound                            )
         {
-            if (*pFound == aCheck)
+            if (*pFound == rLanguageTag)
                 break;
         }
     }
@@ -823,7 +822,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     // if we found a valid locale ... take it over to our in/out parameter rLanguageTag
     if (pFound != lLocalizedValues.end())
     {
-        rLanguageTag.reset( *pFound);
+        rLanguageTag = *pFound;
     }
 
     return pFound;
@@ -834,7 +833,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
         ::rtl::OUString&      sPath         ,
         sal_Int32             eMode         ,
         sal_Bool              bShare        ,
-        LanguageTag&          rLanguageTag  ,
+        OUString&             rLanguageTag  ,
         sal_Bool              bAllowFallback)
 {
     css::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
@@ -857,7 +856,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     if (pLocaleFolder != lSubFolders.end())
         sLocalizedPath += *pLocaleFolder;
     else
-        sLocalizedPath += rLanguageTag.getBcp47();
+        sLocalizedPath += rLanguageTag;
 
     css::uno::Reference< css::embed::XStorage > xLocalePath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
 
