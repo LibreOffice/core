@@ -268,7 +268,10 @@ sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
 char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 {
     if( !pMem )
+    {
         pMem = (char *)rtl_allocateMemory( nLen );
+        memset( pMem, 0, nLen );
+    }
     return( pMem + nSize );
 }
 
