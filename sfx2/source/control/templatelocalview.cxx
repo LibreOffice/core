@@ -397,7 +397,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
         sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
         std::vector<sal_uInt16> aItemIds;    // List of moved items ids (also prevents the invalidation of rItems iterators when we remove them as we go)
 
-        std::set<const ThumbnailViewItem*,selection_cmp_fn>::iterator aSelIter;
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aSelIter;
         for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx )
         {
             const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);

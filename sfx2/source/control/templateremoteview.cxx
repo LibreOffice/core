@@ -62,7 +62,7 @@ void TemplateRemoteView::showRootRegion()
     //TODO:
 }
 
-void TemplateRemoteView::showRegion(ThumbnailViewItem */*pItem*/)
+void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
 {
     //TODO:
 }
