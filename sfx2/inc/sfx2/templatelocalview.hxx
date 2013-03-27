@@ -70,6 +70,9 @@ public:
 
     bool copyFrom (const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail, const OUString &rPath);
 
+    // Import a template to the current region
+    bool copyFrom (const OUString &rPath);
+
     bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
 
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
