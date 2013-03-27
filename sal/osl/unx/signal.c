@@ -21,8 +21,6 @@
 /* system headers */
 #include "system.h"
 
-#define MAX_STACK_FRAMES 256
-
 #if defined( MACOSX )
 
 #if defined( INTEL )
@@ -54,6 +52,10 @@
 #endif
 
 #endif /* defined SOLARIS */
+
+#if defined INCLUDE_BACKTRACE
+#define MAX_STACK_FRAMES 256
+#endif
 
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
@@ -409,8 +411,6 @@ static int fputs_xml( const char *string, FILE *stream )
 
 /* Create intermediate files and run crash reporter */
 
-#define REPORTENV_PARAM     "-crashreportenv:"
-
 #if defined SAL_ENABLE_CRASH_REPORT && defined INCLUDE_BACKTRACE && \
     defined LINUX
 
@@ -496,6 +496,9 @@ dynamic_section_offset(const char *name)
 static int ReportCrash( int Signal )
 {
 #ifdef SAL_ENABLE_CRASH_REPORT
+
+#define REPORTENV_PARAM     "-crashreportenv:"
+
     static sal_Bool bCrashReporterExecuted = sal_False;
     sal_Bool        bAutoCrashReport = sal_False;
 
