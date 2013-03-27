@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+RM\u003d",
+        "filename": "vcl/source/window/dlgctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-03-27T17:38:25Z",
+      "side": 1,
+      "message": "is this increase of the iterator wanted? it is already increased in the for(...) statement",
+      "revId": "c1ac727b2af27d253ba31da65f2cac50f5af9c1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
