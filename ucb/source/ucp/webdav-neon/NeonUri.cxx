@@ -52,21 +52,21 @@ using namespace webdav_ucp;
 
 namespace {
 
-const ne_uri g_sUriDefaultsHTTP  = { "http",
+const ne_uri g_sUriDefaultsHTTP  = { (char *) "http",
                                      NULL,
                                      NULL,
                                      DEFAULT_HTTP_PORT,
                                      NULL,
                                      NULL,
                                      NULL };
-const ne_uri g_sUriDefaultsHTTPS = { "https",
+const ne_uri g_sUriDefaultsHTTPS = { (char *) "https",
                                      NULL,
                                      NULL,
                                      DEFAULT_HTTPS_PORT,
                                      NULL,
                                      NULL,
                                      NULL };
-const ne_uri g_sUriDefaultsFTP   = { "ftp",
+const ne_uri g_sUriDefaultsFTP   = { (char *) "ftp",
                                      NULL,
                                      NULL,
                                      DEFAULT_FTP_PORT,
