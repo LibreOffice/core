@@ -177,7 +177,6 @@ static sal_Int32 lcl_countOccurrences(const OString& text, char c)
 
 Export::Export(const OString &rOutput, const OString &rLanguage)
                 :
-                pWordTransformer( NULL ),
                 bDefine( sal_False ),
                 bNextMustBeDefineEOL( sal_False ),
                 nLevel( 0 ),
@@ -209,7 +208,6 @@ Export::Export(
     const OString &rMergeSource, const OString &rOutput,
     const OString &rLanguage )
                 :
-                pWordTransformer( NULL ),
                 bDefine( sal_False ),
                 bNextMustBeDefineEOL( sal_False ),
                 nLevel( 0 ),

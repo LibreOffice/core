@@ -182,14 +182,11 @@ public:
 
 typedef ::std::vector< ResData* > ResStack;
 // forwards
-class WordTransformer;
 class ParserQueue;
 
 class Export
 {
 private:
-    WordTransformer *pWordTransformer;
-
     union
     {
         std::ofstream* mSimple;
