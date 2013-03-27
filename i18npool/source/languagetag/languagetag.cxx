@@ -1159,4 +1159,51 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
 }
 
 
+// static
+::std::vector< OUString >::const_iterator LanguageTag::getFallback(
+        const ::std::vector< OUString > & rList, const OUString & rReference )
+{
+    if (rList.empty())
+        return rList.end();
+
+    ::std::vector< OUString >::const_iterator it;
+
+    // Try the simple case first without constructing fallbacks.
+    for (it = rList.begin(); it != rList.end(); ++it)
+    {
+        if (*it == rReference)
+            return it;  // exact match
+    }
+
+    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings());
+    aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+    if (rReference != "en-US")
+        aFallbacks.push_back( "en-US");
+    if (rReference != "en")
+        aFallbacks.push_back( "en");
+    if (rReference != "x-default")
+        aFallbacks.push_back( "x-default");
+    if (rReference != "x-no-translate")
+        aFallbacks.push_back( "x-no-translate");
+    /* TODO: the original comphelper::Locale::getFallback() code had
+     * "x-notranslate" instead of "x-no-translate", but all .xcu files use
+     * "x-no-translate" and "x-notranslate" apparently was never used anywhere.
+     * Did that ever work? Was it supposed to work at all like this? */
+
+    for (::std::vector< OUString >::const_iterator fb = aFallbacks.begin(); fb != aFallbacks.end(); ++fb)
+    {
+        for (it = rList.begin(); it != rList.end(); ++it)
+        {
+            if (*it == *fb)
+                return it;  // fallback found
+        }
+    }
+
+    // Did not find anything so return something of the list, the first value
+    // will do as well as any other as none did match any of the possible
+    // fallbacks.
+    return rList.begin();
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

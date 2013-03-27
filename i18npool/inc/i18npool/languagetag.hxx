@@ -236,6 +236,46 @@ public:
      */
     ::std::vector< OUString >       getFallbackStrings() const;
 
+
+    /** @short  search for an equal or at least for a similar locale in a list
+                of possible ones.
+
+        @descr  First search for a locale that is equal to the reference
+                locale. (means: same BCP47 string)
+
+                If the reference locale could not be located, check for
+                "similar" locales, in the same order as obtained by
+                getFallbackStrings().
+
+                If no similar locale could be located, we search for a locale
+                "en-US" inside the given locale list.
+
+                If "en-US" could not be located, we search for a locale "en"
+                inside the given list.
+
+                If no "same" nor any "similar" locale could be found, we try
+                "x-default" and "x-no-translate" explicitly. Sometimes
+                variables don't use real localization. For example, in case the
+                localized value is a fix product name.
+
+                If no locale matched until then, we use any other locale that
+                exists inside the set of given ones, namely the first
+                encountered!
+
+        @param  rList
+                the vector of possible locales as BCP47 strings.
+
+        @param  rReference
+                the reference locale, BCP47 string.
+
+        @return An iterator that points to the found element inside the given
+                locale list. If no matching locale could be found it points to
+                the end of the list.
+     */
+    static ::std::vector< OUString >::const_iterator getFallback( const ::std::vector< OUString > & rList,
+                                                                  const OUString & rReference );
+
+
     /** Test equality of two LanguageTag, possibly resolving system locale.
 
         @param bResolveSystem
