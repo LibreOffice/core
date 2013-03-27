@@ -40,7 +40,7 @@ char const* const* OtherInfo::getJavaExePaths(int * size)
 #if defined(WNT)
         "bin/java.exe",
         "jre/bin/java.exe"
-#elif UNX
+#elif defined UNX
         "bin/java",
         "jre/bin/java"
 #endif
@@ -57,7 +57,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
     "/bin/jrockit/jvm.dll"
-#elif UNX
+#elif defined UNX
 #ifdef MACOSX
         "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22
 #else

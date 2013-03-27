@@ -40,7 +40,7 @@ char const* const* SunInfo::getJavaExePaths(int * size)
         "java.exe",
         "bin/java.exe",
         "jre/bin/java.exe"
-#elif UNX
+#elif defined UNX
         "java",
         "bin/java",
         "jre/bin/java"
@@ -59,7 +59,7 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/classic/jvm.dll",
         // The 64-bit JRE has the jvm in bin/server
         "/bin/server/jvm.dll"
-#elif UNX
+#elif defined UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so"
