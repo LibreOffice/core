@@ -34,6 +34,7 @@ class SwTxtFld;
 class SwFrm;
 class OutlinerParaObject;
 class SwTextAPIObject;
+class SwFmtFld;
 
 enum SwAuthorFormat
 {
@@ -529,6 +530,9 @@ public:
     SwPostItField( SwPostItFieldType*,
                    const String& rAuthor, const String& rTxt, const String& rInitials, const String& rName, const DateTime& rDate);
     ~SwPostItField();
+
+    /// Looks up a field identified by its unique name (used to get the postit field of a comment fieldmark)
+    static const SwFmtFld* GetByName(SwDoc* pDoc, const OUString& rName);
 
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
