@@ -53,6 +53,7 @@
 #include <unotools/configpaths.hxx>
 #include <rtl/logfile.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <i18npool/languagetag.hxx>
 #include <stdio.h>
 
 
@@ -607,7 +608,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
 }
 
 //-----------------------------------------------
-::comphelper::Locale XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
+LanguageTag XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -622,8 +623,8 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
     xProp->getPropertyValue("ooLocale") >>= sISOLocale;
 
     if (sISOLocale.isEmpty())
-        return ::comphelper::Locale::EN_US();
-    return ::comphelper::Locale(sISOLocale);
+        return LanguageTag( LANGUAGE_ENGLISH_US);
+    return LanguageTag(sISOLocale);
 }
 
 /*******************************************************************************
@@ -1263,7 +1264,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
         xModules->getByName(m_sModuleCFG) >>= xAccess;
     }
 
-    const ::rtl::OUString sIsoLang       = impl_ts_getLocale().toISO();
+    const ::rtl::OUString sIsoLang       = impl_ts_getLocale().getBcp47();
     const ::rtl::OUString sDefaultLocale("en-US");
 
     css::uno::Reference< css::container::XNameAccess > xKey;
@@ -1491,7 +1492,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     xContainer->getByName(sKey) >>= xKey;
 
     xKey->getByName(CFG_PROP_COMMAND) >>= xCommand;
-    ::rtl::OUString sLocale = impl_ts_getLocale().toISO();
+    ::rtl::OUString sLocale = impl_ts_getLocale().getBcp47();
     if ( !xCommand->hasByName(sLocale) )
         xCommand->insertByName(sLocale, css::uno::makeAny(sCommand));
     else
@@ -1573,7 +1574,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
 
     if (xContainer->hasByName(sKey))
     {
-        ::rtl::OUString sLocale = impl_ts_getLocale().toISO();
+        ::rtl::OUString sLocale = impl_ts_getLocale().getBcp47();
         xContainer->getByName(sKey)    >>= xKey;
         xKey->getByName(CFG_PROP_COMMAND)  >>= xCommand;
         xCommand->getByName(sLocale)       >>= sCommand;
@@ -1645,7 +1646,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 }
 
 //-----------------------------------------------
-::comphelper::Locale XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
+LanguageTag XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -1660,8 +1661,8 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
     xProp->getPropertyValue("ooLocale") >>= sISOLocale;
 
     if (sISOLocale.isEmpty())
-        return ::comphelper::Locale::EN_US();
-    return ::comphelper::Locale(sISOLocale);
+        return LanguageTag( LANGUAGE_ENGLISH_US);
+    return LanguageTag(sISOLocale);
 }
 
 } // namespace framework

@@ -38,6 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <i18npool/languagetag.hxx>
 
 
 #define SUBSTORAGE_GLOBAL       DECLARE_ASCII("global" )
@@ -103,13 +104,14 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::lang::XMultiService
     , m_xSMGR            (xSMGR                                )
     , m_aSharedStorages  (                                     )
     , m_lDocumentStorages()
-    , m_aLocale          (::comphelper::Locale::X_NOTRANSLATE())
+    , m_aLanguageTag     (LANGUAGE_USER_PRIV_NOTRANSLATE)
 {
 }
 
 //-----------------------------------------------
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
+    , m_aLanguageTag( rCopy.m_aLanguageTag)
 {
     m_xSMGR                 = rCopy.m_xSMGR;
     m_eConfigType           = rCopy.m_eConfigType;
@@ -121,7 +123,6 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     m_xWorkingStorageUser   = rCopy.m_xWorkingStorageUser;
     m_lPresets              = rCopy.m_lPresets;
     m_lTargets              = rCopy.m_lTargets;
-    m_aLocale               = rCopy.m_aLocale;
     m_lDocumentStorages     = rCopy.m_lDocumentStorages;
     m_sRelPathShare         = rCopy.m_sRelPathShare;
     m_sRelPathNoLang        = rCopy.m_sRelPathNoLang;
@@ -371,7 +372,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
                                       const ::rtl::OUString&                             sResource    ,
                                       const ::rtl::OUString&                             sModule      ,
                                       const css::uno::Reference< css::embed::XStorage >& xDocumentRoot,
-                                      const ::comphelper::Locale&                        aLocale      )
+                                      const LanguageTag&                                 rLanguageTag )
 {
     // TODO free all current open storages!
 
@@ -381,7 +382,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     m_eConfigType   = eConfigType  ;
     m_sResourceType = sResource    ;
     m_sModule       = sModule      ;
-    m_aLocale       = aLocale      ;
+    m_aLanguageTag  = rLanguageTag ;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -481,13 +482,13 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     sRelPathNoLang = sRelPathShare;
 
     if (
-        (aLocale     != ::comphelper::Locale::X_NOTRANSLATE()) && // localized level?
+        (rLanguageTag != LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)) && // localized level?
         (eConfigType != E_DOCUMENT                           )    // no localization in document mode!
        )
     {
         // First try to find the right localized set inside share layer.
         // Fallbacks are allowed there.
-        ::comphelper::Locale aShareLocale       = aLocale      ;
+        LanguageTag          aShareLocale( rLanguageTag);
         ::rtl::OUString      sLocalizedSharePath(sRelPathShare);
         sal_Bool             bAllowFallbacks    = sal_True     ;
         xShare = impl_openLocalizedPathIgnoringErrors(sLocalizedSharePath, eShareMode, sal_True , aShareLocale, bAllowFallbacks);
@@ -495,7 +496,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         // The try to locate the right sub dir inside user layer ... without using fallbacks!
         // Normaly the corresponding sub dir should be created matching the specified locale.
         // Because we allow creation of storages inside user layer by default.
-        ::comphelper::Locale aUserLocale        = aLocale    ;
+        LanguageTag          aUserLocale( rLanguageTag);
         ::rtl::OUString      sLocalizedUserPath(sRelPathUser);
                              bAllowFallbacks    = sal_False  ;
         xUser = impl_openLocalizedPathIgnoringErrors(sLocalizedUserPath, eUserMode , sal_False, aUserLocale, bAllowFallbacks);
@@ -797,48 +798,48 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
 }
 
 //-----------------------------------------------
-::std::vector< ::rtl::OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(const ::std::vector< ::rtl::OUString >& lLocalizedValues,
-                                                                                                      ::comphelper::Locale&             aLocale         ,
-                                                                                                      sal_Bool                          bAllowFallbacks )
+::std::vector< ::rtl::OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
+        const ::std::vector< ::rtl::OUString >& lLocalizedValues,
+        LanguageTag& rLanguageTag,
+        sal_Bool bAllowFallbacks )
 {
     ::std::vector< ::rtl::OUString >::const_iterator pFound = lLocalizedValues.end();
     if (bAllowFallbacks)
     {
-        pFound = ::comphelper::Locale::getFallback(lLocalizedValues, aLocale.toISO());
+        pFound = LanguageTag::getFallback(lLocalizedValues, rLanguageTag.getBcp47());
     }
     else
     {
+        OUString aCheck( rLanguageTag.getBcp47());
         for (  pFound  = lLocalizedValues.begin();
                pFound != lLocalizedValues.end()  ;
              ++pFound                            )
         {
-            const ::rtl::OUString&     sCheckISO   = *pFound;
-                  ::comphelper::Locale aCheckLocale(sCheckISO);
-            if (aCheckLocale.equals(aLocale))
+            if (*pFound == aCheck)
                 break;
         }
     }
 
-    // if we found a valid locale ... take it over to our in/out parameter aLocale
+    // if we found a valid locale ... take it over to our in/out parameter rLanguageTag
     if (pFound != lLocalizedValues.end())
     {
-        const ::rtl::OUString& sISOLocale = *pFound;
-        aLocale.fromISO(sISOLocale);
+        rLanguageTag.reset( *pFound);
     }
 
     return pFound;
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(::rtl::OUString&      sPath         ,
-                                                                                                sal_Int32             eMode         ,
-                                                                                                sal_Bool              bShare        ,
-                                                                                                ::comphelper::Locale& aLocale       ,
-                                                                                                sal_Bool              bAllowFallback)
+css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
+        ::rtl::OUString&      sPath         ,
+        sal_Int32             eMode         ,
+        sal_Bool              bShare        ,
+        LanguageTag&          rLanguageTag  ,
+        sal_Bool              bAllowFallback)
 {
     css::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
     ::std::vector< ::rtl::OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
-    ::std::vector< ::rtl::OUString >::const_iterator pLocaleFolder = impl_findMatchingLocalizedValue(lSubFolders, aLocale, bAllowFallback);
+    ::std::vector< ::rtl::OUString >::const_iterator pLocaleFolder = impl_findMatchingLocalizedValue(lSubFolders, rLanguageTag, bAllowFallback);
 
     // no fallback ... creation not allowed => no storage
     if (
@@ -856,7 +857,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     if (pLocaleFolder != lSubFolders.end())
         sLocalizedPath += *pLocaleFolder;
     else
-        sLocalizedPath += aLocale.toISO();
+        sLocalizedPath += rLanguageTag.getBcp47();
 
     css::uno::Reference< css::embed::XStorage > xLocalePath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
 

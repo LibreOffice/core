@@ -118,10 +118,13 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
+#if 0
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
-    ::comphelper::Locale aLocale = ::comphelper::Locale(m_sLocale);
+    // XXX: what is this good for? it was a comphelper::Locale but unused
+    LanguageTag aLanguageTag(m_sLocale);
+#endif
 
     // May be the current app module does not have any
     // accelerator config? Handle it gracefully :-)

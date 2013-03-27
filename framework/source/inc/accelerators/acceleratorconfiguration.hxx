@@ -48,7 +48,7 @@
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/locale.hxx>
+#include <i18npool/languagetag.hxx>
 #include <salhelper/singletonref.hxx>
 
 //__________________________________________
@@ -210,10 +210,10 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
         @descr  We does not cache this value, because we are not listen
         for changes on the configuration layer ...
 
-        @return ::comphelper::Locale
+        @return LanguageTag
         The current office locale.
         */
-        ::comphelper::Locale impl_ts_getLocale() const;
+        LanguageTag impl_ts_getLocale() const;
 
         //______________________________________
         // helper
@@ -428,10 +428,10 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
         @descr  We does not cache this value, because we are not listen
         for changes on the configuration layer ...
 
-        @return ::comphelper::Locale
+        @return LanguageTag
         The current office locale.
         */
-        ::comphelper::Locale impl_ts_getLocale() const;
+        LanguageTag impl_ts_getLocale() const;
 
         //______________________________________
         // helper

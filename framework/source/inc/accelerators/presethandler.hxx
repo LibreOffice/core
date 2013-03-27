@@ -31,7 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <salhelper/singletonref.hxx>
-#include <comphelper/locale.hxx>
+#include <i18npool/languagetag.hxx>
 
 namespace framework
 {
@@ -203,9 +203,9 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         /** @short  its the current office locale and will be used
                     to handle localized presets.
 
-            @descr  Default is "x-notranslate" which disable any
+            @descr  Default is "x-no-translate" which disable any
                     localized handling inside this class! */
-        ::comphelper::Locale m_aLocale;
+        LanguageTag m_aLanguageTag;
 
         //---------------------------------------
         /** @short  knows the relative path from the root. */
@@ -306,7 +306,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     configuration files. Note: Thats not the real root of the document ...
                     its only a sub storage. But we interpret it as our root storage.
 
-            @param  aLocale
+            @param  rLanguageTag
                     in case this configuration supports localized entries,
                     the current locale must be set.
 
@@ -325,7 +325,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                const ::rtl::OUString&                             sResourceType ,
                                const ::rtl::OUString&                             sModule       ,
                                const css::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
-                               const ::comphelper::Locale&                        aLocale       = ::comphelper::Locale(::comphelper::Locale::X_NOTRANSLATE()));
+                               const LanguageTag&                                 rLanguageTag  = LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE));
 
         //---------------------------------------
         /** @short  try to copy the specified preset from the share
@@ -442,9 +442,9 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     b) search with using fallbacks
 
             @param  lLocalizedValues
-                    list of ISO locale codes
+                    list of BCP47 language tags / locale codes
 
-            @param  aLocale
+            @param  rLanguageTag
                     [IN ] the current office locale, which should be searched inside lLocalizedValues.
                     [OUT] in case fallbacks was allowed, it contains afterwards the fallback locale.
 
@@ -455,7 +455,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     As a negative result the special iterator lLocalizedValues.end() will be returned.
          */
         ::std::vector< ::rtl::OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< ::rtl::OUString >& lLocalizedValues,
-                                                                                               ::comphelper::Locale&             aLocale         ,
+                                                                                               LanguageTag&             rLanguageTag         ,
                                                                                                sal_Bool                          bAllowFallbacks );
 
         //---------------------------------------
@@ -477,7 +477,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
             @param  bShare
                     force using of the share layer instead of the user layer.
 
-            @param  aLocale
+            @param  rLanguageTag
                     [IN ] contains the start locale for searching localized sub dirs.
                     [OUT] contains the locale of a found localized sub dir
 
@@ -489,7 +489,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(::rtl::OUString&      sPath         ,
                                                                                          sal_Int32             eMode         ,
                                                                                          sal_Bool              bShare        ,
-                                                                                         ::comphelper::Locale& aLocale       ,
+                                                                                         LanguageTag&          rLanguageTag  ,
                                                                                          sal_Bool              bAllowFallback);
 
         //---------------------------------------

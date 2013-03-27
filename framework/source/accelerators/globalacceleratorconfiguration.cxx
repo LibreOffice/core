@@ -33,7 +33,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
 #include <vcl/svapp.hxx>
-#include <comphelper/locale.hxx>
+#include <i18npool/languagetag.hxx>
 #include <comphelper/configurationhelper.hxx>
 
 
@@ -87,10 +87,13 @@ void SAL_CALL GlobalAcceleratorConfiguration::initialize(const css::uno::Sequenc
 //-----------------------------------------------
 void GlobalAcceleratorConfiguration::impl_ts_fillCache()
 {
+#if 0
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
-    ::comphelper::Locale aLocale = ::comphelper::Locale(m_sLocale);
+    // XXX: what is this good for? it was a comphelper::Locale but unused
+    LanguageTag aLanguageTag(m_sLocale);
+#endif
 
     // May be there exists no accelerator config? Handle it gracefully :-)
     try

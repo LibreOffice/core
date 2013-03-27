@@ -44,6 +44,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <i18npool/languagetag.hxx>
 
 
 namespace framework
@@ -156,7 +157,7 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
     // get current office locale ... but dont cache it.
     // Otherwise we must be listener on the configuration layer
     // which seems to superflous for this small implementation .-)
-    ::comphelper::Locale aLocale = impl_ts_getLocale();
+    LanguageTag aLanguageTag( impl_ts_getLocale());
 
     // May be the current document does not contain any
     // accelerator config? Handle it gracefully :-)
@@ -171,7 +172,7 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
             PresetHandler::RESOURCETYPE_ACCELERATOR(),
             ::rtl::OUString(),
             xDocumentRoot,
-            aLocale);
+            aLanguageTag);
 
         DocumentAcceleratorConfiguration::reload();
         m_aPresetHandler.addStorageListener(this);
