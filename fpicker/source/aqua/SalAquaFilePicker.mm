@@ -48,12 +48,6 @@
 
 #pragma mark DEFINES
 
-#define LABEL_TOGGLE( elem ) \
-case elem : \
-aLabel = aResProvider.getResString( CHECKBOX_##elem ); \
-    setLabel( CHECKBOX_##elem, aLabel ); \
-    break
-
 #define CLASS_NAME "SalAquaFilePicker"
 
 //------------------------------------------------------------------------
@@ -687,28 +681,6 @@ void SAL_CALL SalAquaFilePicker::dialogSizeChanged()
     if (m_xListener.is())
         m_xListener->dialogSizeChanged();
 }
-
-//------------------------------------------------------------------------------------
-
-#define MAP_TOGGLE( elem ) \
-case ExtendedFilePickerElementIds::CHECKBOX_##elem: \
-    pWidget = m_pToggles[elem]; \
-    break
-
-#define MAP_BUTTON( elem ) \
-case ExtendedFilePickerElementIds::PUSHBUTTON_##elem: \
-    pWidget = m_pButtons[elem]; \
-    break
-#undef MAP_LIST
-#define MAP_LIST( elem ) \
-case ExtendedFilePickerElementIds::LISTBOX_##elem: \
-    pWidget = m_pListControls[elem]; if (isAList != NULL) *isAList = sal_True; \
-    break
-
-#define MAP_LIST_LABEL( elem ) \
-case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
-    pWidget = m_pListControls[elem]; \
-    break
 
 //--------------------------------------------------
 // Misc
