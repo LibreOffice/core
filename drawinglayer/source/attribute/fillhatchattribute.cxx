@@ -19,6 +19,7 @@
 
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -29,9 +30,6 @@ namespace drawinglayer
         class ImpFillHatchAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // data definitions
             HatchStyle                              meStyle;
             double                                  mfDistance;
@@ -47,12 +45,20 @@ namespace drawinglayer
                 double fAngle,
                 const basegfx::BColor& rColor,
                 bool bFillBackground)
-            :   mnRefCount(0),
-                meStyle(eStyle),
+            :   meStyle(eStyle),
                 mfDistance(fDistance),
                 mfAngle(fAngle),
                 maColor(rColor),
                 mbFillBackground(bFillBackground)
+            {
+            }
+
+            ImpFillHatchAttribute()
+            :   meStyle(HATCHSTYLE_SINGLE),
+                mfDistance(0.0),
+                mfAngle(0.0),
+                maColor(basegfx::BColor()),
+                mbFillBackground(false)
             {
             }
 
@@ -71,26 +77,13 @@ namespace drawinglayer
                     && getColor() == rCandidate.getColor()
                     && isFillBackground()  == rCandidate.isFillBackground());
             }
-
-            static ImpFillHatchAttribute* get_global_default()
-            {
-                static ImpFillHatchAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpFillHatchAttribute(
-                        HATCHSTYLE_SINGLE,
-                        0.0, 0.0,
-                        basegfx::BColor(),
-                        false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< FillHatchAttribute::ImplType, theGlobalDefault > {};
+        }
 
         FillHatchAttribute::FillHatchAttribute(
             HatchStyle eStyle,
@@ -98,73 +91,39 @@ namespace drawinglayer
             double fAngle,
             const basegfx::BColor& rColor,
             bool bFillBackground)
-        :   mpFillHatchAttribute(new ImpFillHatchAttribute(
+        :   mpFillHatchAttribute(ImpFillHatchAttribute(
                 eStyle, fDistance, fAngle, rColor, bFillBackground))
         {
         }
 
         FillHatchAttribute::FillHatchAttribute()
-        :   mpFillHatchAttribute(ImpFillHatchAttribute::get_global_default())
+        :   mpFillHatchAttribute(theGlobalDefault::get())
         {
-            mpFillHatchAttribute->mnRefCount++;
         }
 
         FillHatchAttribute::FillHatchAttribute(const FillHatchAttribute& rCandidate)
         :   mpFillHatchAttribute(rCandidate.mpFillHatchAttribute)
         {
-            mpFillHatchAttribute->mnRefCount++;
         }
 
         FillHatchAttribute::~FillHatchAttribute()
         {
-            if(mpFillHatchAttribute->mnRefCount)
-            {
-                mpFillHatchAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpFillHatchAttribute;
-            }
         }
 
         bool FillHatchAttribute::isDefault() const
         {
-            return mpFillHatchAttribute == ImpFillHatchAttribute::get_global_default();
+            return mpFillHatchAttribute.same_object(theGlobalDefault::get());
         }
 
         FillHatchAttribute& FillHatchAttribute::operator=(const FillHatchAttribute& rCandidate)
         {
-            if(rCandidate.mpFillHatchAttribute != mpFillHatchAttribute)
-            {
-                if(mpFillHatchAttribute->mnRefCount)
-                {
-                    mpFillHatchAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpFillHatchAttribute;
-                }
-
-                mpFillHatchAttribute = rCandidate.mpFillHatchAttribute;
-                mpFillHatchAttribute->mnRefCount++;
-            }
-
+            mpFillHatchAttribute = rCandidate.mpFillHatchAttribute;
             return *this;
         }
 
         bool FillHatchAttribute::operator==(const FillHatchAttribute& rCandidate) const
         {
-            if(rCandidate.mpFillHatchAttribute == mpFillHatchAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpFillHatchAttribute == *mpFillHatchAttribute);
+            return rCandidate.mpFillHatchAttribute == mpFillHatchAttribute;
         }
 
         // data read access
