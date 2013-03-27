@@ -653,56 +653,47 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
 {
-    // if the search view is hidden, hide the folder view and display search one
-    if (!mpCurView->isNonRootRegionVisible() && !mpSearchView->IsVisible())
-    {
-        mpSearchView->Clear();
-        mpSearchView->Show();
-        mpCurView->Hide();
-    }
-
     OUString aKeyword = mpSearchEdit->GetText();
 
     if (!aKeyword.isEmpty())
     {
-        if (mpCurView->isNonRootRegionVisible())
+        mpSearchView->Clear();
+
+        // if the search view is hidden, hide the folder view and display search one
+        if (!mpSearchView->IsVisible())
         {
-            mpCurView->filterItems(ViewFilter_Keyword(aKeyword));
+            mpSearchView->Show();
+            mpCurView->Hide();
         }
-        else
+
+        bool bDisplayFolder = !mpCurView->isNonRootRegionVisible();
+
+        std::vector<TemplateItemProperties> aItems =
+                maView->getFilteredItems(SearchView_Keyword(aKeyword));
+
+        for (size_t i = 0; i < aItems.size(); ++i)
         {
-            mpSearchView->Clear();
+            TemplateItemProperties *pItem = &aItems[i];
 
-            std::vector<TemplateItemProperties> aItems =
-                    maView->getFilteredItems(SearchView_Keyword(aKeyword));
+            OUString aFolderName;
 
-            size_t nCounter = 0;
-            for (size_t i = 0; i < aItems.size(); ++i)
-            {
-                TemplateItemProperties *pItem = &aItems[i];
+            if (bDisplayFolder)
+                aFolderName = maView->getRegionName(pItem->nRegionId);
 
-                mpSearchView->AppendItem(++nCounter,pItem->nRegionId,
-                                         pItem->nId-1,
-                                         pItem->aName,
-                                         maView->GetItemText(pItem->nRegionId+1),
-                                         pItem->aPath,
-                                         pItem->aThumbnail);
-            }
-
-            mpSearchView->Invalidate();
+            mpSearchView->AppendItem(pItem->nId,maView->getRegionId(pItem->nRegionId),
+                                     pItem->nDocId,
+                                     pItem->aName,
+                                     aFolderName,
+                                     pItem->aPath,
+                                     pItem->aThumbnail);
         }
+
+        mpSearchView->Invalidate();
     }
     else
     {
-        if (mpCurView->isNonRootRegionVisible())
-        {
-            mpCurView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
-        }
-        else
-        {
-            mpSearchView->Hide();
-            mpCurView->Show();
-        }
+        mpSearchView->Hide();
+        mpCurView->Show();
     }
 
     return 0;
@@ -909,7 +900,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
                 OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                if (!maView->exportTo(pItem->mnIdx+1,pItem->mnRegionId+1,aPath))
+                if (!maView->exportTo(pItem->mnDocId,pItem->mnRegionId+1,aPath))
                 {
                     if (aTemplateList.isEmpty())
                         aTemplateList = pItem->maTitle;
@@ -1053,37 +1044,24 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
 
     if (mpSearchView->IsVisible())
     {
+        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Avoids invalid iterators
+
         std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+        for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
         {
             const TemplateSearchViewItem *pItem =
                     static_cast<const TemplateSearchViewItem*>(*pIter);
 
-            sal_uInt16 nItemId = pItem->mnIdx + 1;
-            sal_uInt16 nItemRegionId = pItem->mnRegionId + 1;
-
-            if (maView->removeTemplate(nItemId,nItemRegionId))
-                maSelTemplates.erase(pIter++);
-            else
+            if (!maView->removeTemplate(pItem->mnAssocId,pItem->mnRegionId))
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = pItem->maTitle;
                 else
                     aTemplateList = aTemplateList + "\n" + pItem->maTitle;
-
-                ++pIter;
             }
+            else
+                mpSearchView->RemoveItem(pItem->mnId);
         }
-
-        // Update search results
-        if (maSelTemplates.empty())
-        {
-            mpTemplateBar->Show(false);
-            mpViewBar->Show();
-            mpActionBar->Show();
-        }
-
-        SearchUpdateHdl(mpSearchEdit);
     }
     else
     {

@@ -20,14 +20,15 @@ TemplateSearchView::~TemplateSearchView ()
 {
 }
 
-void TemplateSearchView::AppendItem(sal_uInt16 nItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
+void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
                                     const OUString &rTitle, const OUString &rSubtitle,
                                     const OUString &rPath,
                                     const BitmapEx &rImage)
 {
     TemplateSearchViewItem *pItem = new TemplateSearchViewItem(*this);
-    pItem->mnId = nItemId;
-    pItem->mnIdx = nIdx;
+    pItem->mnId = getNextItemId();
+    pItem->mnAssocId = nAssocItemId;
+    pItem->mnDocId = nIdx;
     pItem->mnRegionId = nRegionId;
     pItem->maPreview1 = rImage;
     pItem->maTitle = rTitle;

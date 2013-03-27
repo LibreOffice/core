@@ -177,6 +177,11 @@ sal_uInt16 TemplateLocalView::getRegionId(size_t pos) const
     return maRegions[pos]->mnId;
 }
 
+OUString TemplateLocalView::getRegionName(const sal_uInt16 nRegionId) const
+{
+    return mpDocTemplates->GetRegionName(nRegionId);
+}
+
 std::vector<OUString> TemplateLocalView::getFolderNames()
 {
     size_t n = maRegions.size();
@@ -193,14 +198,27 @@ TemplateLocalView::getFilteredItems(const boost::function<bool (const TemplateIt
 {
     std::vector<TemplateItemProperties> aItems;
 
-    for (size_t i = 0; i < maRegions.size(); ++i)
+    if (mnCurRegionId)
     {
-        TemplateContainerItem *pFolderItem = static_cast<TemplateContainerItem*>(maRegions[i]);
+        TemplateContainerItem *pFolderItem = maRegions[mnCurRegionId-1];
 
         for (size_t j = 0; j < pFolderItem->maTemplates.size(); ++j)
         {
             if (rFunc(pFolderItem->maTemplates[j]))
                 aItems.push_back(pFolderItem->maTemplates[j]);
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < maRegions.size(); ++i)
+        {
+            TemplateContainerItem *pFolderItem = maRegions[i];
+
+            for (size_t j = 0; j < pFolderItem->maTemplates.size(); ++j)
+            {
+                if (rFunc(pFolderItem->maTemplates[j]))
+                    aItems.push_back(pFolderItem->maTemplates[j]);
+            }
         }
     }
 
