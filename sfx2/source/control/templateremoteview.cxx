@@ -190,4 +190,9 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
     return true;
 }
 
+bool TemplateRemoteView::isNestedRegionAllowed() const
+{
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
