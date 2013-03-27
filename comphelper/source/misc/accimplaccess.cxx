@@ -30,9 +30,6 @@ namespace comphelper
 {
 //.........................................................................
 
-#define BITFIELDSIZE    ( sizeof( sal_Int64 ) * 8 )
-    // maximum number of bits we have in a sal_Int64
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Exception;
@@ -89,7 +86,7 @@ namespace comphelper
     //---------------------------------------------------------------------
     void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const sal_Bool _bSet )
     {
-        OSL_ENSURE( _nState >= 0 && static_cast< sal_uInt16 >(_nState) < BITFIELDSIZE, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
+        OSL_ENSURE( _nState >= 0 && static_cast< sal_uInt16 >(_nState) < sizeof( sal_Int64 ) * 8, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
 
         sal_uInt64 nBitMask( 1 );
         nBitMask <<= _nState;
