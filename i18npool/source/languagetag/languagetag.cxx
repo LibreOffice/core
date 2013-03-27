@@ -429,9 +429,10 @@ bool LanguageTag::canonicalize()
                 // without using liblangtag just to see if it is a simple known
                 // locale.
                 OUString aLanguage, aScript, aCountry;
-                if (simpleExtract( maBcp47, aLanguage, aScript, aCountry))
+                Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry);
+                if (eExt == EXTRACTED_LSC || eExt == EXTRACTED_X)
                 {
-                    if (aScript.isEmpty())
+                    if (eExt == EXTRACTED_LSC && aScript.isEmpty())
                     {
                         maLocale.Language = aLanguage;
                         maLocale.Country  = aCountry;
@@ -960,7 +961,7 @@ bool LanguageTag::hasScript() const
 bool LanguageTag::cacheSimpleLSC()
 {
     OUString aLanguage, aScript, aCountry;
-    bool bRet = simpleExtract( maBcp47, aLanguage, aScript, aCountry);
+    bool bRet = (simpleExtract( maBcp47, aLanguage, aScript, aCountry) == EXTRACTED_LSC);
     if (bRet)
     {
         maCachedLanguage = aLanguage;
@@ -1115,19 +1116,22 @@ bool LanguageTag::operator!=( const LanguageTag & rLanguageTag ) const
 
 
 // static
-bool LanguageTag::simpleExtract( const OUString& rBcp47,
-                                 OUString& rLanguage,
-                                 OUString& rScript,
-                                 OUString& rCountry )
+LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
+        OUString& rLanguage, OUString& rScript, OUString& rCountry )
 {
-    bool bRet = false;
+    Extraction eRet = EXTRACTED_NONE;
     const sal_Int32 nLen = rBcp47.getLength();
     const sal_Int32 nHyph1 = rBcp47.indexOf( '-');
-    if ((nLen == 2 || nLen == 3) && nHyph1 < 0)     // ll or lll
+    if (nHyph1 == 1 && rBcp47[0] == 'x')            // x-... privateuse
+    {
+        // x-... privateuse tags MUST be known to us by definition.
+        eRet = EXTRACTED_X;
+    }
+    else if ((nLen == 2 || nLen == 3) && nHyph1 < 0) // ll or lll
     {
         rLanguage = rBcp47;
         rScript = rCountry = OUString();
-        bRet = true;
+        eRet = EXTRACTED_LSC;
     }
     else if (  (nLen == 5 && nHyph1 == 2)           // ll-CC
             || (nLen == 6 && nHyph1 == 3))          // lll-CC
@@ -1135,7 +1139,7 @@ bool LanguageTag::simpleExtract( const OUString& rBcp47,
         rLanguage = rBcp47.copy( 0, nHyph1);
         rCountry  = rBcp47.copy( nHyph1 + 1, 2);
         rScript = OUString();
-        bRet = true;
+        eRet = EXTRACTED_LSC;
     }
     else if (  (nHyph1 == 2 && nLen == 10)          // ll-Ssss-CC check
             || (nHyph1 == 3 && nLen == 11))         // lll-Ssss-CC check
@@ -1146,12 +1150,12 @@ bool LanguageTag::simpleExtract( const OUString& rBcp47,
             rLanguage = rBcp47.copy( 0, nHyph1);
             rScript   = rBcp47.copy( nHyph1 + 1, 4);
             rCountry  = rBcp47.copy( nHyph2 + 1, 2);
-            bRet = true;
+            eRet = EXTRACTED_LSC;
         }
     }
-    if (!bRet)
+    if (eRet == EXTRACTED_NONE)
         rLanguage = rScript = rCountry = OUString();
-    return bRet;
+    return eRet;
 }
 
 

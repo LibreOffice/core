@@ -319,17 +319,25 @@ private:
     static bool     isIsoScript( const OUString& rScript );
     static bool     isIsoCountry( const OUString& rRegion );
 
+    enum Extraction
+    {
+        EXTRACTED_NONE,
+        EXTRACTED_LSC,
+        EXTRACTED_X
+    };
+
     /** Of a simple language tag of the form lll[-Ssss][-CC] (i.e. one that
         would fulfill the isIsoODF() condition) extract the portions.
 
         Does not check case or content!
 
-        @return TRUE if it detected a simple tag, else FALSE.
+        @return EXTRACTED_LSC if simple tag was detected, EXTRACTED_X if x-...
+        privateuse tag was detected, else EXTRACTED_NONE.
      */
-    static bool     simpleExtract( const OUString& rBcp47,
-                                   OUString& rLanguage,
-                                   OUString& rScript,
-                                   OUString& rCountry );
+    static Extraction   simpleExtract( const OUString& rBcp47,
+                                       OUString& rLanguage,
+                                       OUString& rScript,
+                                       OUString& rCountry );
 };
 
 #endif  // INCLUDED_I18NPOOL_LANGUAGETAG_HXX
