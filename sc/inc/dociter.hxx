@@ -431,6 +431,7 @@ private:
     SCSIZE*         pNextIndices;
     SCCOL           nCol;
     SCROW           nRow;
+    ScRefCellValue  maCurCell;
     bool            bMore;
 
 public:
@@ -438,7 +439,7 @@ public:
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScHorizontalCellIterator();
 
-    ScBaseCell*     GetNext( SCCOL& rCol, SCROW& rRow );
+    ScRefCellValue* GetNext( SCCOL& rCol, SCROW& rRow );
     bool            ReturnNext( SCCOL& rCol, SCROW& rRow );
     /// Set a(nother) sheet and (re)init.
     void            SetTab( SCTAB nTab );
@@ -524,7 +525,7 @@ private:
 
     SCCOL                   nCellCol;
     SCROW                   nCellRow;
-    ScBaseCell*             pCell;
+    ScRefCellValue*         pCell;
     SCCOL                   nAttrCol1;
     SCCOL                   nAttrCol2;
     SCROW                   nAttrRow;

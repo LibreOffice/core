@@ -1820,7 +1820,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
     ScHorizontalCellIterator aIter( &aDocument, nTab, nStartCol, nStartRow,
         nEndCol, nEndRow );
-    ScBaseCell* pCell;
+    ScRefCellValue* pCell;
     while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != NULL )
     {
         bool bProgress = false;     // only upon line change
@@ -1879,7 +1879,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         else
             nNextCol = nCol + 1;
 
-        CellType eType = pCell->GetCellType();
+        CellType eType = pCell->meType;
         ScAddress aPos(nCol, nRow, nTab);
         if ( bTabProtect )
         {
@@ -1904,15 +1904,15 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     sal_uInt16 nErrCode;
                     if ( bShowFormulas )
                     {
-                        ((ScFormulaCell*)pCell)->GetFormula( aString );
+                        pCell->mpFormula->GetFormula(aString);
                         bString = true;
                     }
-                    else if ( ( nErrCode = ((ScFormulaCell*)pCell)->GetErrCode() ) != 0 )
+                    else if ((nErrCode = pCell->mpFormula->GetErrCode()) != 0)
                     {
                         aString = ScGlobal::GetErrorString( nErrCode );
                         bString = true;
                     }
-                    else if ( ((ScFormulaCell*)pCell)->IsValue() )
+                    else if (pCell->mpFormula->IsValue())
                     {
                         sal_uInt32 nFormat = aDocument.GetNumberFormat(aPos);
                         if ( bFixedWidth || bSaveAsShown )
@@ -1923,9 +1923,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         }
                         else
                         {
-                            ScRefCellValue aCell;
-                            aCell.assign(*pCell);
-                            ScCellFormat::GetInputString(aCell, nFormat, aString, rFormatter);
+                            ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter);
                             bString = false;
                         }
                     }
@@ -1938,7 +1936,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                             aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                         }
                         else
-                            aString = ((ScFormulaCell*)pCell)->GetString();
+                            aString = pCell->mpFormula->GetString();
                         bString = true;
                     }
                 }
@@ -1951,12 +1949,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                 }
                 else
-                    aString = ((ScStringCell*)pCell)->GetString();
+                    aString = *pCell->mpString;
                 bString = true;
                 break;
             case CELLTYPE_EDIT :
                 {
-                    const EditTextObject* pObj = static_cast<const ScEditCell*>(pCell)->GetData();
+                    const EditTextObject* pObj = pCell->mpEditText;
                     EditEngine& rEngine = aDocument.GetEditEngine();
                     rEngine.SetText( *pObj);
                     aString = rEngine.GetText();  // including LF
@@ -1975,9 +1973,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     }
                     else
                     {
-                        ScRefCellValue aCell;
-                        aCell.assign(*pCell);
-                        ScCellFormat::GetInputString(aCell, nFormat, aString, rFormatter);
+                        ScCellFormat::GetInputString(*pCell, nFormat, aString, rFormatter);
                         bString = false;
                     }
                 }

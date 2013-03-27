@@ -1797,7 +1797,7 @@ void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
         Advance();
 }
 
-ScBaseCell* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
+ScRefCellValue* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 {
     if ( bMore )
     {
@@ -1820,7 +1820,8 @@ ScBaseCell* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
         }
 
         Advance();
-        return pCell;
+        maCurCell.assign(*pCell);
+        return &maCurCell;
     }
     else
         return NULL;
@@ -1917,7 +1918,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
     bool bFound = false;
     while ( !bFound )
     {
-        ScBaseCell* pCell = pCellIter->GetNext( nCurCol, nCurRow );
+        ScRefCellValue* pCell = pCellIter->GetNext( nCurCol, nCurRow );
         while ( !pCell )
         {
             if ( nCurTab < nEndTab )
@@ -1930,12 +1931,12 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
         }
         if ( !bSubTotal || !pDoc->maTabs[nCurTab]->RowFiltered( nCurRow ) )
         {
-            switch (pCell->GetCellType())
+            switch (pCell->meType)
             {
                 case CELLTYPE_VALUE:
                     {
                         bNumValid = false;
-                        rValue = ((ScValueCell*)pCell)->GetValue();
+                        rValue = pCell->mfValue;
                         rErr = 0;
                         if ( bCalcAsShown )
                         {
@@ -1949,12 +1950,12 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
                     break;
                 case CELLTYPE_FORMULA:
                     {
-                        if (!bSubTotal || !((ScFormulaCell*)pCell)->IsSubTotal())
+                        if (!bSubTotal || !pCell->mpFormula->IsSubTotal())
                         {
-                            rErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                            if ( rErr || ((ScFormulaCell*)pCell)->IsValue() )
+                            rErr = pCell->mpFormula->GetErrCode();
+                            if (rErr || pCell->mpFormula->IsValue())
                             {
-                                rValue = ((ScFormulaCell*)pCell)->GetValue();
+                                rValue = pCell->mpFormula->GetValue();
                                 bNumValid = false;
                                 bFound = true;
                             }
@@ -2161,7 +2162,7 @@ bool ScUsedAreaIterator::GetNext()
     if ( pCell && IsGreater( nNextCol, nNextRow, nCellCol, nCellRow ) )
         pCell = aCellIter.GetNext( nCellCol, nCellRow );
 
-    while ( pCell && pCell->IsBlank() )
+    while (pCell && pCell->isEmpty())
         pCell = aCellIter.GetNext( nCellCol, nCellRow );
 
     if ( pPattern && IsGreater( nNextCol, nNextRow, nAttrCol2, nAttrRow ) )
@@ -2215,7 +2216,7 @@ bool ScUsedAreaIterator::GetNext()
     if ( bUseCell ) // Cell position
     {
         if (pCell)
-            maFoundCell.assign(*pCell);
+            maFoundCell = *pCell;
         else
             maFoundCell.clear();
 

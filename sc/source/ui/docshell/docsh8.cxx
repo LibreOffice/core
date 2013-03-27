@@ -1081,7 +1081,7 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
             const sal_Int32* pColLengths = aColLengths.getConstArray();
             ScHorizontalCellIterator aIter( &aDocument, nTab, nFirstCol,
                     nDocRow, nLastCol, nDocRow);
-            ScBaseCell* pCell = NULL;
+            ScRefCellValue* pCell = NULL;
             bool bTest = true;
             while (bTest && ((pCell = aIter.GetNext( nDocCol, nDocRow)) != NULL))
             {
@@ -1090,14 +1090,10 @@ sal_uLong ScDocShell::DBaseExport( const rtl::OUString& rFullFileName, CharSet e
                 {
                     case sdbc::DataType::LONGVARCHAR:
                         {
-                            if ( pCell->GetCellType() != CELLTYPE_NOTE )
+                            if (pCell->meType != CELLTYPE_NOTE)
                             {
-                                if ( pCell->GetCellType() == CELLTYPE_EDIT )
-                                {
-                                    ScRefCellValue aCell;
-                                    aCell.assign(*pCell);
-                                    lcl_getLongVarCharEditString(aString, aCell, aEditEngine);
-                                }
+                                if (pCell->meType == CELLTYPE_EDIT)
+                                    lcl_getLongVarCharEditString(aString, *pCell, aEditEngine);
                                 else
                                     lcl_getLongVarCharString(
                                         aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);

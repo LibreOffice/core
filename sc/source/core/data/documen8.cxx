@@ -752,7 +752,7 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
     ScHorizontalCellIterator aIter( this, nTab,
                                     rSpellRange.aStart.Col(), nRow,
                                     rSpellRange.aEnd.Col(), rSpellRange.aEnd.Row() );
-    ScBaseCell* pCell = aIter.GetNext( nCol, nRow );
+    ScRefCellValue* pCell = aIter.GetNext( nCol, nRow );
     //  skip everything left of rSpellPos:
     while ( pCell && nRow == rSpellPos.Row() && nCol < rSpellPos.Col() )
         pCell = aIter.GetNext( nCol, nRow );
@@ -763,7 +763,7 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
             // Don't spell check within pivot tables.
             continue;
 
-        CellType eType = pCell->GetCellType();
+        CellType eType = pCell->meType;
         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
         {
             if (!pEngine)
@@ -796,11 +796,12 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
             if ( eType == CELLTYPE_STRING )
             {
-                rtl::OUString aText = static_cast<ScStringCell*>(pCell)->GetString();
-                pEngine->SetText( aText );
+                pEngine->SetText(*pCell->mpString);
             }
+            else if (pCell->mpEditText)
+                pEngine->SetText(*pCell->mpEditText);
             else
-                pEngine->SetText( *(static_cast<ScEditCell*>(pCell)->GetData() ) );
+                pEngine->SetText(EMPTY_OUSTRING);
 
             aStatus.bModified = false;
             pEngine->CompleteOnlineSpelling();
@@ -815,12 +816,8 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
                 if ( bNeedEdit )
                 {
-                    if ( eType == CELLTYPE_EDIT )
-                        // The cell will take ownership of pNewData.
-                        static_cast<ScEditCell*>(pCell)->SetData(pEngine->CreateTextObject());
-                    else
-                        // The cell will take ownership of pNewData.
-                        SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());
+                    // The cell will take ownership of pNewData.
+                    SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());
                 }
                 else
                 {
