@@ -162,7 +162,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	registry \
 	remotebridges \
 	reportbuilder \
-	reportdesign \
+	$(call gb_Helper_optional,DBCONNECTIVITY,reportdesign) \
 	$(call gb_Helper_optional,RHINO,rhino) \
 	ridljar \
 	rsc \

@@ -69,6 +69,9 @@ gb_MERGEDLIBS := \
 	$(if $(filter-out ANDROID IOS,$(OS)),odbcbase) \
 	oox \
 	package2 \
+	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,rptxml) \
 	sax \
 	sb \
 	sc \

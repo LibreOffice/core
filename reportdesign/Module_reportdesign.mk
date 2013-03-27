@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Module_Module,reportdesign))
 
-ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-
 $(eval $(call gb_Module_add_targets,reportdesign,\
     AllLangResTarget_rpt \
     AllLangResTarget_rptui \
@@ -43,7 +41,5 @@ $(eval $(call gb_Module_add_targets,reportdesign,\
 #$(eval $(call gb_Module_add_subsequentcheck_targets,reportdesign,\
 	JunitTest_reportdesign_complex \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
