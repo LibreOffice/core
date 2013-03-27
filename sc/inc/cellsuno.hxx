@@ -828,8 +828,8 @@ private:
     sal_Int16               nActionLockCount;
 
 private:
-    String      GetInputString_Impl(sal_Bool bEnglish) const;
-    String      GetOutputString_Impl() const;
+    OUString    GetInputString_Impl(bool bEnglish) const;
+    OUString    GetOutputString_Impl() const;
     void        SetString_Impl(const String& rString, sal_Bool bInterpret, sal_Bool bEnglish);
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
@@ -980,7 +980,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
 
-    static String       GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
+    static OUString GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
 };
 
 

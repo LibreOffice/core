@@ -2348,43 +2348,45 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
             switch ( pEntry->nWID )
             {
                 case EE_CHAR_ESCAPEMENT:    // Specifically for xlsx import
+                {
+                    sal_Int32 nValue = 0;
+                    aValue >>= nValue;
+                    if (nValue)
                     {
-                        sal_Int32 nValue(0);
-                        aValue >>= nValue;
-                        if( nValue )
+                        for (size_t i = 0, n = aRanges.size(); i < n; ++i)
                         {
-                            size_t n = aRanges.size();
-                            for( size_t i = 0; i < n; i++ )
-                            {
-                                ScRange aRange( *aRanges[ i ] );
-                                /* TODO: Iterate through the range */
-                                ScAddress  aAddr = aRange.aStart;
-                                ScDocument *pDoc = pDocShell->GetDocument();
-                                ScBaseCell *pCell = pDoc->GetCell( aAddr );
-                                String aStr( pCell->GetStringData() );
-                                EditEngine aEngine( pDoc->GetEnginePool() );
-                                aEngine.SetEditTextObjectPool(pDoc->GetEditPool());
+                            ScRange aRange = *aRanges[i];
 
-                                /* EE_CHAR_ESCAPEMENT seems to be set on the cell _only_ when
-                                 * there are no other attribs for the cell.
-                                 * So, it is safe to overwrite the complete attribute set.
-                                 * If there is a need - getting CellType and processing
-                                 * the attributes could be considered.
-                                 */
-                                SfxItemSet aAttr = aEngine.GetEmptyItemSet();
-                                aEngine.SetText( aStr );
-                                if( nValue < 0 )    // Subscript
-                                    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUBSCRIPT, EE_CHAR_ESCAPEMENT ) );
-                                else                // Superscript
-                                    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT ) );
-                                aEngine.QuickSetAttribs( aAttr, ESelection( 0, 0, 0, aStr.Len()));
+                            /* TODO: Iterate through the range */
+                            ScAddress aAddr = aRange.aStart;
+                            ScDocument *pDoc = pDocShell->GetDocument();
+                            ScRefCellValue aCell;
+                            aCell.assign(*pDoc, aAddr);
 
-                                // The cell will own the text object instance.
-                                pDoc->SetEditText(aRanges[0]->aStart, aEngine.CreateTextObject());
-                            }
+                            OUString aStr = aCell.getString();
+                            EditEngine aEngine( pDoc->GetEnginePool() );
+                            aEngine.SetEditTextObjectPool(pDoc->GetEditPool());
+
+                            /* EE_CHAR_ESCAPEMENT seems to be set on the cell _only_ when
+                             * there are no other attribs for the cell.
+                             * So, it is safe to overwrite the complete attribute set.
+                             * If there is a need - getting CellType and processing
+                             * the attributes could be considered.
+                             */
+                            SfxItemSet aAttr = aEngine.GetEmptyItemSet();
+                            aEngine.SetText(aStr);
+                            if( nValue < 0 )    // Subscript
+                                aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUBSCRIPT, EE_CHAR_ESCAPEMENT ) );
+                            else                // Superscript
+                                aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT ) );
+                            aEngine.QuickSetAttribs(aAttr, ESelection(0, 0, 0, aStr.getLength()));
+
+                            // The cell will own the text object instance.
+                            pDoc->SetEditText(aRanges[0]->aStart, aEngine.CreateTextObject());
                         }
                     }
-                    break;
+                }
+                break;
                 case SC_WID_UNO_CHCOLHDR:
                     // chart header flags are set for this object, not stored with document
                     bChartColAsHdr = ScUnoHelpFunctions::GetBoolFromAny( aValue );
@@ -5131,25 +5133,27 @@ rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeExcep
     //  also wenn Anfang und Ende des Blocks zur selben Matrix gehoeren.
     //  Sonst Leerstring.
 
-    rtl::OUString aFormula;
     ScDocShell* pDocSh = GetDocShell();
-    if (pDocSh)
+    if (!pDocSh)
+        return EMPTY_OUSTRING;
+
+    OUString aFormula;
+
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ScRefCellValue aCell1;
+    ScRefCellValue aCell2;
+    aCell1.assign(*pDoc, aRange.aStart);
+    aCell2.assign(*pDoc, aRange.aEnd);
+    if (aCell1.meType == CELLTYPE_FORMULA && aCell2.meType == CELLTYPE_FORMULA)
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        const ScBaseCell* pCell1 = pDoc->GetCell( aRange.aStart );
-        const ScBaseCell* pCell2 = pDoc->GetCell( aRange.aEnd );
-        if ( pCell1 && pCell2 && pCell1->GetCellType() == CELLTYPE_FORMULA &&
-                                 pCell2->GetCellType() == CELLTYPE_FORMULA )
+        const ScFormulaCell* pFCell1 = aCell1.mpFormula;
+        const ScFormulaCell* pFCell2 = aCell2.mpFormula;
+        ScAddress aStart1;
+        ScAddress aStart2;
+        if (pFCell1->GetMatrixOrigin(aStart1) && pFCell2->GetMatrixOrigin(aStart2))
         {
-            const ScFormulaCell* pFCell1 = (const ScFormulaCell*)pCell1;
-            const ScFormulaCell* pFCell2 = (const ScFormulaCell*)pCell2;
-            ScAddress aStart1;
-            ScAddress aStart2;
-            if ( pFCell1->GetMatrixOrigin( aStart1 ) && pFCell2->GetMatrixOrigin( aStart2 ) )
-            {
-                if ( aStart1 == aStart2 )               // beides dieselbe Matrix
-                    pFCell1->GetFormula( aFormula );    // egal, von welcher Zelle
-            }
+            if (aStart1 == aStart2)               // beides dieselbe Matrix
+                pFCell1->GetFormula(aFormula);    // egal, von welcher Zelle
         }
     }
     return aFormula;
@@ -5207,29 +5211,31 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens() thr
 
     uno::Sequence<sheet::FormulaToken> aSequence;
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
+    if (!pDocSh)
+        return aSequence;
+
+    ScDocument* pDoc = pDocSh->GetDocument();
+    ScRefCellValue aCell1;
+    ScRefCellValue aCell2;
+    aCell1.assign(*pDoc, aRange.aStart);
+    aCell2.assign(*pDoc, aRange.aEnd);
+    if (aCell1.meType == CELLTYPE_FORMULA && aCell2.meType == CELLTYPE_FORMULA)
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        const ScBaseCell* pCell1 = pDoc->GetCell( aRange.aStart );
-        const ScBaseCell* pCell2 = pDoc->GetCell( aRange.aEnd );
-        if ( pCell1 && pCell2 && pCell1->GetCellType() == CELLTYPE_FORMULA &&
-                                 pCell2->GetCellType() == CELLTYPE_FORMULA )
+        const ScFormulaCell* pFCell1 = aCell1.mpFormula;
+        const ScFormulaCell* pFCell2 = aCell2.mpFormula;
+        ScAddress aStart1;
+        ScAddress aStart2;
+        if (pFCell1->GetMatrixOrigin(aStart1) && pFCell2->GetMatrixOrigin(aStart2))
         {
-            const ScFormulaCell* pFCell1 = (const ScFormulaCell*)pCell1;
-            const ScFormulaCell* pFCell2 = (const ScFormulaCell*)pCell2;
-            ScAddress aStart1;
-            ScAddress aStart2;
-            if ( pFCell1->GetMatrixOrigin( aStart1 ) && pFCell2->GetMatrixOrigin( aStart2 ) )
+            if (aStart1 == aStart2)
             {
-                if ( aStart1 == aStart2 )
-                {
-                    ScTokenArray* pTokenArray = pFCell1->GetCode();
-                    if ( pTokenArray )
-                        (void)ScTokenConversion::ConvertToTokenSequence( *pDoc, aSequence, *pTokenArray );
-                }
+                ScTokenArray* pTokenArray = pFCell1->GetCode();
+                if (pTokenArray)
+                    (void)ScTokenConversion::ConvertToTokenSequence(*pDoc, aSequence, *pTokenArray);
             }
         }
     }
+
     return aSequence;
 }
 
@@ -6238,51 +6244,54 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId() throw(uno::Run
 
 //  Hilfsfunktionen
 
-String ScCellObj::GetInputString_Impl(sal_Bool bEnglish) const      // fuer getFormula / FormulaLocal
+OUString ScCellObj::GetInputString_Impl(bool bEnglish) const      // fuer getFormula / FormulaLocal
 {
     if (GetDocShell())
         return lcl_GetInputString( GetDocShell()->GetDocument(), aCellPos, bEnglish );
     return String();
 }
 
-String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellPos)
+OUString ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellPos)
 {
-    rtl::OUString aVal;
-    if ( pDoc )
+    if (!pDoc)
+        return EMPTY_OUSTRING;
+
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, aCellPos);
+
+    if (aCell.isEmpty())
+        return EMPTY_OUSTRING;
+
+    OUString aVal;
+
+    if (aCell.meType == CELLTYPE_EDIT)
     {
-        ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
+        //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
+        //  hier werden die Umbrueche aber gebraucht
+        const EditTextObject* pData = aCell.mpEditText;
+        if (pData)
         {
-            if ( pCell->GetCellType() == CELLTYPE_EDIT )
-            {
-                //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-                //  hier werden die Umbrueche aber gebraucht
-                const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
-                if (pData)
-                {
-                    EditEngine& rEngine = pDoc->GetEditEngine();
-                    rEngine.SetText( *pData );
-                    aVal = rEngine.GetText( LINEEND_LF );
-                }
-                //  Edit-Zellen auch nicht per NumberFormatter formatieren
-                //  (passend zur Ausgabe)
-            }
-            else
-            {
-                //  wie in GetString am Dokument (column)
-                Color* pColor;
-                sal_uLong nNumFmt = pDoc->GetNumberFormat( aCellPos );
-                aVal = ScCellFormat::GetString(*pDoc, aCellPos, nNumFmt, &pColor, *pDoc->GetFormatTable());
-            }
+            EditEngine& rEngine = pDoc->GetEditEngine();
+            rEngine.SetText(*pData);
+            aVal = rEngine.GetText(LINEEND_LF);
         }
+        //  Edit-Zellen auch nicht per NumberFormatter formatieren
+        //  (passend zur Ausgabe)
+    }
+    else
+    {
+        //  wie in GetString am Dokument (column)
+        Color* pColor;
+        sal_uLong nNumFmt = pDoc->GetNumberFormat( aCellPos );
+        aVal = ScCellFormat::GetString(*pDoc, aCellPos, nNumFmt, &pColor, *pDoc->GetFormatTable());
     }
     return aVal;
 }
 
-String ScCellObj::GetOutputString_Impl() const
+OUString ScCellObj::GetOutputString_Impl() const
 {
     ScDocShell* pDocSh = GetDocShell();
-    String aVal;
+    OUString aVal;
     if ( pDocSh )
         aVal = GetOutputString_Impl(pDocSh->GetDocument(), aCellPos);
     return aVal;
@@ -6640,10 +6649,11 @@ table::CellContentType ScCellObj::GetResultType_Impl()
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        ScBaseCell* pCell = pDocSh->GetDocument()->GetCell(aCellPos);
-        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+        ScRefCellValue aCell;
+        aCell.assign(*pDocSh->GetDocument(), aCellPos);
+        if (aCell.meType == CELLTYPE_FORMULA)
         {
-            sal_Bool bValue = ((ScFormulaCell*)pCell)->IsValue();
+            bool bValue = aCell.mpFormula->IsValue();
             return bValue ? table::CellContentType_VALUE : table::CellContentType_TEXT;
         }
     }
