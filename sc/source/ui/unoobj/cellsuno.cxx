@@ -1394,18 +1394,18 @@ static OUString lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPos, sal
     if (!pDoc)
         return EMPTY_OUSTRING;
 
-
-    ScBaseCell* pCell = pDoc->GetCell(rPos);
-    if (!pCell || pCell->GetCellType() == CELLTYPE_NOTE)
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, rPos);
+    if (aCell.isEmpty())
         return EMPTY_OUSTRING;
 
     OUString aVal;
 
-    CellType eType = pCell->GetCellType();
+    CellType eType = aCell.meType;
     if (eType == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pForm = (ScFormulaCell*)pCell;
-        pForm->GetFormula( aVal,formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
+        ScFormulaCell* pForm = aCell.mpFormula;
+        pForm->GetFormula( aVal, formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
         return aVal;
     }
 
@@ -1416,24 +1416,20 @@ static OUString lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPos, sal
     // we don't have to query.
     sal_uInt32 nNumFmt = bEnglish ? 0 : pDoc->GetNumberFormat(rPos);
 
-    if ( eType == CELLTYPE_EDIT )
+    if (eType == CELLTYPE_EDIT)
     {
         //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
         //  hier werden die Umbrueche aber gebraucht
-        const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
+        const EditTextObject* pData = aCell.mpEditText;
         if (pData)
         {
             EditEngine& rEngine = pDoc->GetEditEngine();
-            rEngine.SetText( *pData );
-            aVal = rEngine.GetText( LINEEND_LF );
+            rEngine.SetText(*pData);
+            aVal = rEngine.GetText(LINEEND_LF);
         }
     }
     else
-    {
-        ScRefCellValue aCell;
-        aCell.assign(*pCell);
         ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter);
-    }
 
     //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
     if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
