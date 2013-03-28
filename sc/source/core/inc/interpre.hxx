@@ -191,7 +191,6 @@ double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
 double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
 double GetValueCellValue( const ScAddress&, double fOrig );
 ScBaseCell* GetCell( const ScAddress& rPos );
-void GetCellString( String& rStr, const ScBaseCell* pCell );
 void GetCellString( OUString& rStr, ScRefCellValue& rCell );
 sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
 

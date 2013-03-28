@@ -515,55 +515,6 @@ ScBaseCell* ScInterpreter::GetCell( const ScAddress& rPos )
     return pDok->GetCell( rPos );
 }
 
-void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellString" );
-    sal_uInt16 nErr = 0;
-    if (pCell)
-    {
-        switch (pCell->GetCellType())
-        {
-            case CELLTYPE_STRING:
-                rStr = ((ScStringCell*) pCell)->GetString();
-            break;
-            case CELLTYPE_EDIT:
-                rStr = ((ScEditCell*) pCell)->GetString();
-            break;
-            case CELLTYPE_FORMULA:
-            {
-                ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-                nErr = pFCell->GetErrCode();
-                if (pFCell->IsValue())
-                {
-                    double fVal = pFCell->GetValue();
-                    sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                        NUMBERFORMAT_NUMBER,
-                                        ScGlobal::eLnge);
-                    pFormatter->GetInputLineString(fVal, nIndex, rStr);
-                }
-                else
-                    rStr = pFCell->GetString();
-            }
-            break;
-            case CELLTYPE_VALUE:
-            {
-                double fVal = ((ScValueCell*) pCell)->GetValue();
-                sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                        NUMBERFORMAT_NUMBER,
-                                        ScGlobal::eLnge);
-                pFormatter->GetInputLineString(fVal, nIndex, rStr);
-            }
-            break;
-            default:
-                rStr = ScGlobal::GetEmptyString();
-            break;
-        }
-    }
-    else
-        rStr = ScGlobal::GetEmptyString();
-    SetError(nErr);
-}
-
 void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
 {
     sal_uInt16 nErr = 0;
