@@ -453,7 +453,7 @@ private:
 };
 
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
-        : ModalDialog( pParent, "SmoothLinesDialog", "modules/scalc/ui/smoothlinesdlg.ui")
+        : ModalDialog( pParent, "SmoothLinesDialog", "modules/chart2/ui/smoothlinesdlg.ui")
 {
     get(m_pRB_Splines_Cubic, "CubicSplineRadioButton");
     get(m_pRB_Splines_B, "BSplineRadioButton");
