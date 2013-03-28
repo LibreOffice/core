@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "interpre.hxx"
+
 #include "scitems.hxx"
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -33,7 +35,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 
-#include "interpre.hxx"
 #include "patattr.hxx"
 #include "global.hxx"
 #include "document.hxx"
@@ -45,16 +46,6 @@
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
 #include "random.hxx"
-
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <vector>
-#include <memory>
-#include <limits>
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
 #include "rangenam.hxx"
@@ -65,6 +56,17 @@
 #include "doubleref.hxx"
 #include "queryparam.hxx"
 #include "queryentry.hxx"
+#include "tokenarray.hxx"
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <vector>
+#include <memory>
+#include <limits>
 
 static const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 

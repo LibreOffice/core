@@ -43,6 +43,7 @@
 #include "attrib.hxx"
 #include "cell.hxx"
 #include "formulacell.hxx"
+#include "tokenarray.hxx"
 
 using namespace formula;
 

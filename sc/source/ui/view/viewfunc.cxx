@@ -74,6 +74,8 @@
 #include "funcdesc.hxx"
 #include "docuno.hxx"
 #include "cellsuno.hxx"
+#include "tokenarray.hxx"
+
 //==================================================================
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )

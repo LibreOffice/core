@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "interpre.hxx"
+
 #include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
@@ -26,7 +28,6 @@
 #include <rtl/logfile.hxx>
 #include <sal/macros.h>
 
-#include "interpre.hxx"
 #include "attrib.hxx"
 #include "sc.hrc"
 #include "ddelink.hxx"
@@ -41,6 +42,7 @@
 #include "hints.hxx"
 #include "dpobject.hxx"
 #include "postit.hxx"
+#include "tokenarray.hxx"
 
 #include <string.h>
 #include <math.h>

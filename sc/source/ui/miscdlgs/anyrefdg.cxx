@@ -41,7 +41,7 @@
 #include "global.hxx"
 #include "inputopt.hxx"
 #include "rangeutl.hxx"
-
+#include "tokenarray.hxx"
 
 ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings)
  : m_pDlg(_pDlg)

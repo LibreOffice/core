@@ -15,6 +15,7 @@
 #include "editeng/editstat.hxx"
 #include "stringutil.hxx"
 #include "editutil.hxx"
+#include "tokenarray.hxx"
 #include "formula/token.hxx"
 
 namespace {

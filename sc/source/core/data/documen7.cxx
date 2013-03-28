@@ -35,6 +35,8 @@
 #include "conditio.hxx"
 #include "colorscale.hxx"
 #include "sheetevents.hxx"
+#include "tokenarray.hxx"
+
 #include <tools/shl.hxx>
 
 

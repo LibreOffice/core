@@ -78,6 +78,7 @@
 #include "tabbgcolor.hxx"
 #include "clipparam.hxx"
 #include "prnsave.hxx"
+#include "tokenarray.hxx"
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>

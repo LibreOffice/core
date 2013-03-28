@@ -37,6 +37,7 @@
 #include "validat.hxx"
 #include "editutil.hxx"
 #include "chgtrack.hxx"
+#include "tokenarray.hxx"
 
 #include "formula/errorcodes.hxx"
 #include "svl/intitem.hxx"
@@ -1691,6 +1692,11 @@ void ScFormulaCell::MaybeInterpret()
 
     if (pDocument->GetAutoCalc() || (cMatrixFlag != MM_NONE))
         Interpret();
+}
+
+bool ScFormulaCell::IsHyperLinkCell() const
+{
+    return pCode && pCode->IsHyperLink();
 }
 
 EditTextObject* ScFormulaCell::CreateURLObject()

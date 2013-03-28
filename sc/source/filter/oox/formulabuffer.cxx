@@ -21,6 +21,7 @@
 #include "rangelst.hxx"
 #include "autonamecache.hxx"
 #include "tokenuno.hxx"
+#include "tokenarray.hxx"
 
 namespace oox {
 namespace xls {

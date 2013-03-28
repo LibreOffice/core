@@ -42,6 +42,7 @@
 #include "typedstrdata.hxx"
 #include "dociter.hxx"
 #include "editutil.hxx"
+#include "tokenarray.hxx"
 
 #include <math.h>
 #include <memory>

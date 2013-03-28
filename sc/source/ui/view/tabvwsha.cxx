@@ -51,6 +51,7 @@
 #include "compiler.hxx"
 #include "markdata.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 {

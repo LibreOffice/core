@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "inputhdl.hxx"
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -74,9 +75,7 @@
 #include "editable.hxx"
 #include "funcdesc.hxx"
 #include "markdata.hxx"
-
-#define _INPUTHDL_CXX
-#include "inputhdl.hxx"
+#include "tokenarray.hxx"
 
 //  max. Ranges im RangeFinder
 #define RANGEFIND_MAX   32

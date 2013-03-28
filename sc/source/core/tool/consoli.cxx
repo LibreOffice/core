@@ -24,6 +24,7 @@
 #include "subtotal.hxx"
 #include "formula/errorcodes.hxx"
 #include "formulacell.hxx"
+#include "tokenarray.hxx"
 
 #include <math.h>
 #include <string.h>

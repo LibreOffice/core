@@ -47,6 +47,7 @@
 #include "docpool.hxx"
 #include "globalnames.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 

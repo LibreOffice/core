@@ -62,6 +62,7 @@
 #include "convuno.hxx"
 #include "tokenuno.hxx"
 #include "formulaparserpool.hxx"
+#include "tokenarray.hxx"
 
 using namespace formula;
 using namespace ::com::sun::star;

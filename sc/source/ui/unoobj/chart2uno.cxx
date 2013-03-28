@@ -36,6 +36,7 @@
 #include "tokenuno.hxx"
 #include "docsh.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 #include "formula/opcode.hxx"
 

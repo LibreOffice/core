@@ -53,6 +53,7 @@
 #include "subtotalparam.hxx"
 #include "docpool.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>

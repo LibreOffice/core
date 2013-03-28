@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
-#include <editeng/boxitem.hxx>
-#include "editeng/editobj.hxx"
-#include <svl/poolcach.hxx>
-#include <unotools/charclass.hxx>
-#include <math.h>
-#include <svl/PasswordHelper.hxx>
-#include <unotools/transliterationwrapper.hxx>
-
 #include "table.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
@@ -51,6 +42,16 @@
 #include "queryentry.hxx"
 #include "dbdata.hxx"
 #include "colorscale.hxx"
+#include "tokenarray.hxx"
+
+#include "scitems.hxx"
+#include <editeng/boxitem.hxx>
+#include "editeng/editobj.hxx"
+#include <svl/poolcach.hxx>
+#include <unotools/charclass.hxx>
+#include <math.h>
+#include <svl/PasswordHelper.hxx>
+#include <unotools/transliterationwrapper.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

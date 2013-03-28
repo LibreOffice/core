@@ -33,6 +33,7 @@
 #include "xecontent.hxx"
 #include "xeescher.hxx"
 #include "xeextlst.hxx"
+#include "tokenarray.hxx"
 
 using namespace ::oox;
 

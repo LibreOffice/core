@@ -55,6 +55,7 @@
 #include "segmenttree.hxx"
 #include "docparam.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 #include <math.h>
 

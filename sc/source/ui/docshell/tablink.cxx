@@ -43,8 +43,7 @@
 #include "formula/opcode.hxx"
 #include "formulacell.hxx"
 #include "formulaiter.hxx"
-
-using ::rtl::OUString;
+#include "tokenarray.hxx"
 
 struct TableLink_Impl
 {

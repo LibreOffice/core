@@ -32,6 +32,7 @@
 #include "postit.hxx"
 #include "globalnames.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>

@@ -121,6 +121,7 @@
 #include "editeng/escapementitem.hxx"
 #include "stringutil.hxx"
 #include "formulaiter.hxx"
+#include "tokenarray.hxx"
 
 #include <list>
 #include <boost/scoped_ptr.hpp>

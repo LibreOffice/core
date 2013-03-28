@@ -43,6 +43,7 @@
 #include "clipparam.hxx"
 #include "dociter.hxx"
 #include "stringutil.hxx"
+#include "tokenarray.hxx"
 
 using namespace com::sun::star;
 

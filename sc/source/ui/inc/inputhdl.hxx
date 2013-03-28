@@ -26,6 +26,8 @@
 
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include "tools/link.hxx"
+#include "vcl/vclevent.hxx"
 #include <editeng/svxenum.hxx>
 
 #include <set>
@@ -118,7 +120,6 @@ private:
     static bool             bAutoComplete;              // from app options
     static bool             bOptLoaded;
 
-#ifdef _INPUTHDL_CXX
 private:
     void            UpdateActiveView();
     void            SyncViews( EditView* pSourceView = NULL );
@@ -157,7 +158,6 @@ private:
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
     DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent* );
-#endif
 
 public:
                     ScInputHandler();

@@ -49,6 +49,7 @@
 #include "docpool.hxx"
 #include "stringutil.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 #include "globstr.hrc"
 #include <vcl/svapp.hxx>

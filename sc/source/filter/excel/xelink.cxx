@@ -26,6 +26,7 @@
 #include "formulacell.hxx"
 #include "scextopt.hxx"
 #include "externalrefmgr.hxx"
+#include "tokenarray.hxx"
 
 #include <vector>
 #include <memory>

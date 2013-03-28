@@ -82,6 +82,7 @@
 #include "dpobject.hxx"
 #include "stringutil.hxx"
 #include "cellvalue.hxx"
+#include "tokenarray.hxx"
 
 #include <memory>
 #include <basic/basmgr.hxx>

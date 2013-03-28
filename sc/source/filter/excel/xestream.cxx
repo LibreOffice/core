@@ -38,6 +38,7 @@
 #include "rangelst.hxx"
 #include "compiler.hxx"
 #include "formulacell.hxx"
+#include "tokenarray.hxx"
 
 #include <../../ui/inc/docsh.hxx>
 #include <../../ui/inc/viewdata.hxx>

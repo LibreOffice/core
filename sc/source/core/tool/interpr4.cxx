@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "interpre.hxx"
+
 #include <rangelst.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -38,7 +40,6 @@
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "interpre.hxx"
 #include "global.hxx"
 #include "dbdata.hxx"
 #include "formulacell.hxx"
@@ -61,6 +62,7 @@
 #include "macromgr.hxx"
 #include "doubleref.hxx"
 #include "queryparam.hxx"
+#include "tokenarray.hxx"
 
 #include <math.h>
 #include <float.h>

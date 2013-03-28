@@ -20,23 +20,12 @@
 #ifndef SC_CELL_HXX
 #define SC_CELL_HXX
 
-#include <stddef.h>
-
-#include <set>
-#include <vector>
-#include <boost/shared_ptr.hpp>
-#include <boost/intrusive_ptr.hpp>
-
-#include <tools/mempool.hxx>
-#include <svl/listener.hxx>
-#include "global.hxx"
-#include "rangenam.hxx"
-#include "formula/grammar.hxx"
-#include "tokenarray.hxx"
-#include "formularesult.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <unotools/fontcvt.hxx>
 #include "scdllapi.h"
+#include "global.hxx"
+
+#include "tools/mempool.hxx"
+
+#include <boost/shared_ptr.hpp>
 
 #define USE_MEMPOOL
 

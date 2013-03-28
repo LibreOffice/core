@@ -38,6 +38,7 @@
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
 #include "editutil.hxx"
+#include "tokenarray.hxx"
 
 using namespace formula;
 //------------------------------------------------------------------------

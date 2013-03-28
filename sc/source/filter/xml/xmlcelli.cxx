@@ -49,6 +49,7 @@
 #include "formulacell.hxx"
 #include "editattributemap.hxx"
 #include "stringutil.hxx"
+#include "tokenarray.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>

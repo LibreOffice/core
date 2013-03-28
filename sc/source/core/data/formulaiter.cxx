@@ -20,6 +20,7 @@
 #include "formulaiter.hxx"
 
 #include "formulacell.hxx"
+#include "tokenarray.hxx"
 #include "formula/token.hxx"
 
 using namespace formula;

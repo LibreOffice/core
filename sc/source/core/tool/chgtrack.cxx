@@ -31,6 +31,7 @@
 #include "markdata.hxx"
 #include "globstr.hrc"
 #include "editutil.hxx"
+#include "tokenarray.hxx"
 
 #include <tools/shl.hxx>        // SHL_CALC
 #include <tools/rtti.hxx>

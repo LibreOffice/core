@@ -21,7 +21,14 @@
 #define SC_FORMULACELL_HXX
 
 #include "cell.hxx"
+#include "formularesult.hxx"
 
+#include "formula/tokenarray.hxx"
+#include "svl/listener.hxx"
+
+#include <set>
+
+class ScTokenArray;
 struct ScSimilarFormulaDelta;
 
 struct SC_DLLPUBLIC ScFormulaCellGroup
@@ -276,9 +283,9 @@ public:
     void            SetResultDouble( double n )     { aResult.SetDouble( n); }
 
     void            SetErrCode( sal_uInt16 n );
-    inline bool     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
+    bool IsHyperLinkCell() const;
     EditTextObject* CreateURLObject();
-    void            GetURLResult( rtl::OUString& rURL, rtl::OUString& rCellText );
+    void GetURLResult( OUString& rURL, OUString& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
