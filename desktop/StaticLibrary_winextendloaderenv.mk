@@ -27,6 +27,12 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,winextendloaderenv))
 
+$(eval $(call gb_StaticLibrary_use_packages,winextendloaderenv,\
+	sal_generated \
+	sal_odk_headers \
+	tools_inc \
+))
+
 $(eval $(call gb_StaticLibrary_add_noexception_objects,winextendloaderenv,\
     desktop/win32/source/extendloaderenvironment \
 ))
