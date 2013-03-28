@@ -4121,21 +4121,22 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         ++nCount;
                     break;
                 }
-                ScBaseCell* pCell = GetCell( aAdr );
-                if ( pCell )
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
                 {
                     if( eFunc == ifCOUNT2 )
                     {
-                        CellType eCellType = pCell->GetCellType();
+                        CellType eCellType = aCell.meType;
                         if (eCellType != CELLTYPE_NONE && eCellType != CELLTYPE_NOTE)
                             nCount++;
                         if ( nGlobalError )
                             nGlobalError = 0;
                     }
-                    else if ( pCell->HasValueData() )
+                    else if (aCell.hasNumeric())
                     {
                         nCount++;
-                        fVal = GetCellValue( aAdr, pCell );
+                        fVal = GetCellValue(aAdr, aCell);
                         CurFmtToFuncFmt();
                         switch( eFunc )
                         {
@@ -4161,7 +4162,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                             default: ; // nothing
                         }
                     }
-                    else if ( bTextAsZero && pCell->HasStringData() )
+                    else if (bTextAsZero && aCell.hasString())
                     {
                         nCount++;
                         if ( eFunc == ifPRODUCT )

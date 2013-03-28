@@ -3061,6 +3061,14 @@ const OUString* ScDocument::GetStringCell( const ScAddress& rPos ) const
     return maTabs[rPos.Tab()]->GetStringCell(rPos.Col(), rPos.Row());
 }
 
+double* ScDocument::GetValueCell( const ScAddress& rPos )
+{
+    if (!TableExists(rPos.Tab()))
+        return NULL;
+
+    return maTabs[rPos.Tab()]->GetValueCell(rPos.Col(), rPos.Row());
+}
+
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3220,15 +3228,14 @@ void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberForma
 }
 
 void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
-            const ScAddress& rPos, const ScBaseCell* pCell ) const
+            const ScAddress& rPos, const ScFormulaCell* pCell ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         nIndex = maTabs[nTab]->GetNumberFormat( rPos );
-        if ( (nIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && pCell &&
-                pCell->GetCellType() == CELLTYPE_FORMULA )
-            static_cast<const ScFormulaCell*>(pCell)->GetFormatInfo( nType, nIndex );
+        if ( (nIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && pCell)
+            pCell->GetFormatInfo(nType, nIndex);
         else
             nType = GetFormatTable()->GetType( nIndex );
     }

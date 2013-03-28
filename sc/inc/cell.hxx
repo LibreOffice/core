@@ -145,6 +145,7 @@ public:
 
     inline void     SetValue( double fValue ) { mfValue = fValue; }
     inline double   GetValue() const { return mfValue; }
+    double* GetValuePtr() { return &mfValue; }
 
 private:
     double          mfValue;

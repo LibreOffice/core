@@ -1748,17 +1748,15 @@ void ScInterpreter::ScBackSolver()
 
         if (nGlobalError == 0)
         {
-            ScBaseCell* pVCell = GetCell( aValueAdr );
-            // CELLTYPE_NOTE: kein Value aber von Formel referiert
-            ScBaseCell* pFCell = GetCell( aFormulaAdr );
+            ScRefCellValue aFCell;
+            double* pVCell = pDok->GetValueCell(aValueAdr);
+            aFCell.assign(*pDok, aFormulaAdr);
 
-            if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE))
-                && pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA )
+            if (pVCell && aFCell.meType == CELLTYPE_FORMULA)
             {
                 ScRange aVRange( aValueAdr, aValueAdr );    // fuer SetDirty
-                double fSaveVal; // Original value to be restored later if necessary
-
-                fSaveVal = GetCellValue( aValueAdr, pVCell );
+                // Original value to be restored later if necessary
+                double fSaveVal = *pVCell;
 
                 const sal_uInt16 nMaxIter = 100;
                 const double fEps = 1E-10;
@@ -1768,8 +1766,7 @@ void ScInterpreter::ScBackSolver()
                 double fBestF, fFPrev;
                 fBestX = fXPrev = fSaveVal;
 
-                ScFormulaCell* pFormula = (ScFormulaCell*) pFCell;
-                ScValueCell* pValue = (ScValueCell*) pVCell;
+                ScFormulaCell* pFormula = aFCell.mpFormula;
 
                 pFormula->Interpret();
                 bool bError = ( pFormula->GetErrCode() != 0 );
@@ -1791,7 +1788,7 @@ void ScInterpreter::ScBackSolver()
                                                 // Nach der Regula Falsi Methode
                 while ( !bDoneIteration && ( nIter++ < nMaxIter ) )
                 {
-                    pValue->SetValue( fX );
+                    *pVCell = fX;
                     pDok->SetDirty( aVRange );
                     pFormula->Interpret();
                     bError = ( pFormula->GetErrCode() != 0 );
@@ -1825,7 +1822,7 @@ void ScInterpreter::ScBackSolver()
                                 else
                                     fHorX = fX - fabs(fF)*fHorTangent;
 
-                                pValue->SetValue( fHorX );
+                                *pVCell = fHorX;
                                 pDok->SetDirty( aVRange );
                                 pFormula->Interpret();
                                 bHorMoveError = ( pFormula->GetErrCode() != 0 );
@@ -1889,7 +1886,7 @@ void ScInterpreter::ScBackSolver()
 
                 if ( bDoneIteration )
                 {
-                    pValue->SetValue( nX );
+                    *pVCell = nX;
                     pDok->SetDirty( aVRange );
                     pFormula->Interpret();
                     if ( fabs( pFormula->GetValue() - fTargetVal ) > fabs( fF ) )
@@ -1899,7 +1896,7 @@ void ScInterpreter::ScBackSolver()
                 {
                     nX = fBestX;
                 }
-                pValue->SetValue( fSaveVal );
+                *pVCell = fSaveVal;
                 pDok->SetDirty( aVRange );
                 pFormula->Interpret();
                 if ( !bDoneIteration )

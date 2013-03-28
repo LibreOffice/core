@@ -1784,6 +1784,19 @@ const OUString* ScColumn::GetStringCell( SCROW nRow ) const
     return static_cast<const ScStringCell*>(pCell)->GetStringPtr();
 }
 
+double* ScColumn::GetValueCell( SCROW nRow )
+{
+    SCSIZE  nIndex;
+    if (!Search(nRow, nIndex))
+        return NULL;
+
+    ScBaseCell* pCell = maItems[nIndex].pCell;
+    if (pCell->GetCellType() != CELLTYPE_VALUE)
+        return NULL;
+
+    return static_cast<ScValueCell*>(pCell)->GetValuePtr();
+}
+
 void ScColumn::GetInputString( SCROW nRow, rtl::OUString& rString ) const
 {
     SCSIZE  nIndex;

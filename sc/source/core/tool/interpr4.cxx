@@ -435,18 +435,6 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
 #endif
 }
 
-
-double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCell )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellValue" );
-    sal_uInt16 nErr = nGlobalError;
-    nGlobalError = 0;
-    double nVal = GetCellValueOrZero( rPos, pCell );
-    if ( !nGlobalError || nGlobalError == errCellNoValue )
-        nGlobalError = nErr;
-    return nVal;
-}
-
 double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell )
 {
     sal_uInt16 nErr = nGlobalError;
@@ -455,78 +443,6 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell
     if ( !nGlobalError || nGlobalError == errCellNoValue )
         nGlobalError = nErr;
     return nVal;
-}
-
-double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCell* pCell )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellValueOrZero" );
-    double fValue = 0.0;
-    if (!pCell)
-        return fValue;
-
-    CellType eType = pCell->GetCellType();
-    switch (eType)
-    {
-        case CELLTYPE_FORMULA:
-        {
-            ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-            sal_uInt16 nErr = pFCell->GetErrCode();
-            if( !nErr )
-            {
-                if (pFCell->IsValue())
-                {
-                    fValue = pFCell->GetValue();
-                    pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
-                        rPos, pFCell );
-                }
-                else
-                {
-                    String aStr = pFCell->GetString();
-                    fValue = ConvertStringToValue( aStr );
-                }
-            }
-            else
-            {
-                fValue = 0.0;
-                SetError(nErr);
-            }
-        }
-        break;
-        case CELLTYPE_VALUE:
-        {
-            fValue = ((ScValueCell*)pCell)->GetValue();
-            nCurFmtIndex = pDok->GetNumberFormat( rPos );
-            nCurFmtType = pFormatter->GetType( nCurFmtIndex );
-            if ( bCalcAsShown && fValue != 0.0 )
-                fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex );
-        }
-        break;
-        case  CELLTYPE_STRING:
-        case  CELLTYPE_EDIT:
-        {
-            // SUM(A1:A2) differs from A1+A2. No good. But people insist on
-            // it ... #i5658#
-            String aStr;
-            if ( eType == CELLTYPE_STRING )
-                aStr = ((ScStringCell*)pCell)->GetString();
-            else
-                aStr = ((ScEditCell*)pCell)->GetString();
-            fValue = ConvertStringToValue( aStr );
-        }
-        break;
-        case CELLTYPE_NONE:
-        case CELLTYPE_NOTE:
-            fValue = 0.0;       // empty or broadcaster cell
-        break;
-#if OSL_DEBUG_LEVEL > 0
-        case CELLTYPE_DESTROYED:
-            SetError(errCellNoValue);
-            fValue = 0.0;
-        break;
-#endif
-    }
-
-    return fValue;
 }
 
 double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue& rCell )
@@ -1115,17 +1031,20 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
 {
     ScRefCellValue aCell;
     aCell.assign(*pDok, rAddress);
-    ScBaseCell* pCell = pDok->GetCell( rAddress);
     if (aCell.hasEmptyValue())
     {
-        if (pRetTypeExpr && pRetIndexExpr)
-            pDok->GetNumberFormatInfo( *pRetTypeExpr, *pRetIndexExpr, rAddress, pCell);
         bool bInherited = (aCell.meType == CELLTYPE_FORMULA);
+        if (pRetTypeExpr && pRetIndexExpr)
+            pDok->GetNumberFormatInfo(*pRetTypeExpr, *pRetIndexExpr, rAddress, (bInherited ? aCell.mpFormula : NULL));
         PushTempToken( new ScEmptyCellToken( bInherited, bDisplayEmptyAsString));
         return;
     }
-    sal_uInt16 nErr;
-    if ((nErr = pCell->GetErrorCode()) != 0)
+
+    sal_uInt16 nErr = 0;
+    if (aCell.meType == CELLTYPE_FORMULA)
+        nErr = aCell.mpFormula->GetErrCode();
+
+    if (nErr)
     {
         PushError( nErr);
         if (pRetTypeExpr)
@@ -1133,10 +1052,10 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         if (pRetIndexExpr)
             *pRetIndexExpr = 0;
     }
-    else if (pCell->HasStringData())
+    else if (aCell.hasString())
     {
-        String aRes;
-        GetCellString( aRes, pCell);
+        OUString aRes;
+        GetCellString( aRes, aCell);
         PushString( aRes);
         if (pRetTypeExpr)
             *pRetTypeExpr = NUMBERFORMAT_TEXT;
@@ -1145,7 +1064,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     }
     else
     {
-        double fVal = GetCellValue( rAddress, pCell);
+        double fVal = GetCellValue(rAddress, aCell);
         PushDouble( fVal);
         if (pRetTypeExpr)
             *pRetTypeExpr = nCurFmtType;
@@ -2354,8 +2273,9 @@ double ScInterpreter::GetDouble()
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
-            ScBaseCell* pCell = GetCell( aAdr );
-            nVal = GetCellValue( aAdr, pCell );
+            ScRefCellValue aCell;
+            aCell.assign(*pDok, aAdr);
+            nVal = GetCellValue(aAdr, aCell);
         }
         break;
         case svDoubleRef:
@@ -2365,8 +2285,9 @@ double ScInterpreter::GetDouble()
             ScAddress aAdr;
             if ( !nGlobalError && DoubleRefToPosSingleRef( aRange, aAdr ) )
             {
-                ScBaseCell* pCell = GetCell( aAdr );
-                nVal = GetCellValue( aAdr, pCell );
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                nVal = GetCellValue(aAdr, aCell);
             }
             else
                 nVal = 0.0;
@@ -3012,15 +2933,16 @@ void ScInterpreter::ScExternal()
                                     ScAddress aAdr;
                                     if ( PopDoubleRefOrSingleRef( aAdr ) )
                                     {
-                                        ScBaseCell* pCell = GetCell( aAdr );
-                                        if ( pCell && pCell->HasStringData() )
+                                        ScRefCellValue aCell;
+                                        aCell.assign(*pDok, aAdr);
+                                        if (aCell.hasString())
                                         {
-                                            String aStr;
-                                            GetCellString( aStr, pCell );
-                                            aElem <<= OUString( aStr );
+                                            OUString aStr;
+                                            GetCellString(aStr, aCell);
+                                            aElem <<= aStr;
                                         }
                                         else
-                                            aElem <<= (double) GetCellValue( aAdr, pCell );
+                                            aElem <<= GetCellValue(aAdr, aCell);
                                     }
                                 }
                                 uno::Sequence<uno::Any> aInner( &aElem, 1 );
@@ -3062,15 +2984,16 @@ void ScInterpreter::ScExternal()
                                 ScAddress aAdr;
                                 if ( PopDoubleRefOrSingleRef( aAdr ) )
                                 {
-                                    ScBaseCell* pCell = GetCell( aAdr );
-                                    if ( pCell && pCell->HasStringData() )
+                                    ScRefCellValue aCell;
+                                    aCell.assign(*pDok, aAdr);
+                                    if (aCell.hasString())
                                     {
-                                        String aStr;
-                                        GetCellString( aStr, pCell );
-                                        aParam <<= OUString( aStr );
+                                        OUString aStr;
+                                        GetCellString(aStr, aCell);
+                                        aParam <<= aStr;
                                     }
                                     else
-                                        aParam <<= (double) GetCellValue( aAdr, pCell );
+                                        aParam <<= GetCellValue(aAdr, aCell);
                                 }
                             }
                             break;

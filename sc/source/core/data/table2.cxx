@@ -1412,6 +1412,14 @@ const OUString* ScTable::GetStringCell( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].GetStringCell(nRow);
 }
 
+double* ScTable::GetValueCell( SCCOL nCol, SCROW nRow )
+{
+    if (!ValidColRow(nCol,nRow))
+        return NULL;
+
+    return aCol[nCol].GetValueCell(nRow);
+}
+
 void ScTable::GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const
 {
     if (ValidColRow(nCol,nRow))

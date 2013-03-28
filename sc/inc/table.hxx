@@ -319,6 +319,7 @@ public:
 
     void        GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
     const OUString* GetStringCell( SCCOL nCol, SCROW nRow ) const;
+    double* GetValueCell( SCCOL nCol, SCROW nRow );
     void        GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( const ScAddress& rPos ) const
                     {

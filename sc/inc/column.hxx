@@ -276,6 +276,7 @@ public:
 
     void        GetString( SCROW nRow, rtl::OUString& rString ) const;
     const OUString* GetStringCell( SCROW nRow ) const;
+    double* GetValueCell( SCROW nRow );
     void        GetInputString( SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;

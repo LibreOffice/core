@@ -611,8 +611,8 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                                 rValue.mfValue = ((ScFormulaCell*)pCell)->GetValue();
                                 rValue.mbIsNumber = true;
                                 mpDoc->GetNumberFormatInfo( nNumFmtType,
-                                    nNumFmtIndex, ScAddress( nCol, nRow, nTab ),
-                                    pCell );
+                                    nNumFmtIndex, ScAddress(nCol, nRow, nTab),
+                                    static_cast<ScFormulaCell*>(pCell));
                                 rValue.mnError = ((ScFormulaCell*)pCell)->GetErrCode();
                                 return true; // Found it!
                             }

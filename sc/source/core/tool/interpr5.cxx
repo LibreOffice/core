@@ -3250,67 +3250,71 @@ void ScInterpreter::ScMatRef()
     Push( (FormulaToken&)*pCur );
     ScAddress aAdr;
     PopSingleRef( aAdr );
-    ScFormulaCell* pCell = (ScFormulaCell*) GetCell( aAdr );
-    if( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-    {
-        const ScMatrix* pMat = pCell->GetMatrix();
-        if( pMat )
-        {
-            SCSIZE nCols, nRows;
-            pMat->GetDimensions( nCols, nRows );
-            SCSIZE nC = static_cast<SCSIZE>(aPos.Col() - aAdr.Col());
-            SCSIZE nR = static_cast<SCSIZE>(aPos.Row() - aAdr.Row());
-            if ((nCols <= nC && nCols != 1) || (nRows <= nR && nRows != 1))
-                PushNA();
-            else
-            {
-                const ScMatrixValue nMatVal = pMat->Get( nC, nR);
-                ScMatValType nMatValType = nMatVal.nType;
 
-                if (ScMatrix::IsNonValueType( nMatValType))
-                {
-                    if (ScMatrix::IsEmptyPathType( nMatValType))
-                    {   // result of empty false jump path
-                        nFuncFmtType = NUMBERFORMAT_LOGICAL;
-                        PushInt(0);
-                    }
-                    else if (ScMatrix::IsEmptyType( nMatValType))
-                    {
-                        // Not inherited (really?) and display as empty string, not 0.
-                        PushTempToken( new ScEmptyCellToken( false, true));
-                    }
-                    else
-                        PushString( nMatVal.GetString() );
-                }
-                else
-                {
-                    PushDouble(nMatVal.fVal);  // handles DoubleError
-                    pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, pCell );
-                    nFuncFmtType = nCurFmtType;
-                    nFuncFmtIndex = nCurFmtIndex;
-                }
-            }
-        }
+    ScRefCellValue aCell;
+    aCell.assign(*pDok, aAdr);
+
+    if (aCell.meType != CELLTYPE_FORMULA)
+    {
+        PushError( errNoRef );
+        return;
+    }
+
+    const ScMatrix* pMat = aCell.mpFormula->GetMatrix();
+    if (pMat)
+    {
+        SCSIZE nCols, nRows;
+        pMat->GetDimensions( nCols, nRows );
+        SCSIZE nC = static_cast<SCSIZE>(aPos.Col() - aAdr.Col());
+        SCSIZE nR = static_cast<SCSIZE>(aPos.Row() - aAdr.Row());
+        if ((nCols <= nC && nCols != 1) || (nRows <= nR && nRows != 1))
+            PushNA();
         else
         {
-            // If not a result matrix, obtain the cell value.
-            sal_uInt16 nErr = pCell->GetErrCode();
-            if (nErr)
-                PushError( nErr );
-            else if( pCell->IsValue() )
-                PushDouble( pCell->GetValue() );
+            const ScMatrixValue nMatVal = pMat->Get( nC, nR);
+            ScMatValType nMatValType = nMatVal.nType;
+
+            if (ScMatrix::IsNonValueType( nMatValType))
+            {
+                if (ScMatrix::IsEmptyPathType( nMatValType))
+                {   // result of empty false jump path
+                    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+                    PushInt(0);
+                }
+                else if (ScMatrix::IsEmptyType( nMatValType))
+                {
+                    // Not inherited (really?) and display as empty string, not 0.
+                    PushTempToken( new ScEmptyCellToken( false, true));
+                }
+                else
+                    PushString( nMatVal.GetString() );
+            }
             else
             {
-                OUString aVal = pCell->GetString();
-                PushString( aVal );
+                PushDouble(nMatVal.fVal);  // handles DoubleError
+                pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr, aCell.mpFormula);
+                nFuncFmtType = nCurFmtType;
+                nFuncFmtIndex = nCurFmtIndex;
             }
-            pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, pCell );
-            nFuncFmtType = nCurFmtType;
-            nFuncFmtIndex = nCurFmtIndex;
         }
     }
     else
-        PushError( errNoRef );
+    {
+        // If not a result matrix, obtain the cell value.
+        sal_uInt16 nErr = aCell.mpFormula->GetErrCode();
+        if (nErr)
+            PushError( nErr );
+        else if (aCell.mpFormula->IsValue())
+            PushDouble(aCell.mpFormula->GetValue());
+        else
+        {
+            OUString aVal = aCell.mpFormula->GetString();
+            PushString( aVal );
+        }
+        pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr, aCell.mpFormula);
+        nFuncFmtType = nCurFmtType;
+        nFuncFmtIndex = nCurFmtIndex;
+    }
 }
 
 void ScInterpreter::ScInfo()
