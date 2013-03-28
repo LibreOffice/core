@@ -1547,17 +1547,13 @@ static void lcl_ResizeBox( const SwTableBox* pBox, sal_uInt16* pWidth )
 
 static void lcl_ResizeLine( const SwTableLine* pLine, sal_uInt16 *pWidth )
 {
-#if OSL_DEBUG_LEVEL > 0
     sal_uInt16 nOldWidth = *pWidth;
-#endif
     *pWidth = 0;
     BOOST_FOREACH( const SwTableBox* pBox, pLine->GetTabBoxes() )
         lcl_ResizeBox(pBox, pWidth );
 
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE( !nOldWidth || Abs(*pWidth-nOldWidth) < COLFUZZY,
-            "A box's rows have all a different length." );
-#endif
+    SAL_WARN_IF( nOldWidth && Abs(*pWidth-nOldWidth) >= COLFUZZY, "sw.core",
+                 "A box's rows have all a different length" );
 }
 
 void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
@@ -1626,8 +1622,8 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
         sal_uInt16 nCalcTabWidth = 0;
         BOOST_FOREACH( const SwTableLine *pLine, pSwTable->GetTabLines() )
             lcl_ResizeLine( pLine, &nCalcTabWidth );
-        OSL_ENSURE( Abs( nRelTabWidth-nCalcTabWidth ) < COLFUZZY,
-                "Table width is not equal to the row width." );
+        SAL_WARN_IF( Abs( nRelTabWidth-nCalcTabWidth ) >= COLFUZZY, "sw.core",
+                     "Table width is not equal to the row width" );
 
         // Lock the table format when altering it, or else the box formats
         // are altered again.
