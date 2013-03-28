@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
+
 #include <comphelper/proxyaggregation.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 
@@ -233,8 +237,11 @@ namespace comphelper
     //--------------------------------------------------------------------
     void SAL_CALL OComponentProxyAggregation::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
-        // simly disambiguate - this is necessary for MSVC to distinguish
-        // "disposing( EventObject )" from "disposing()"
+        // Simply disambiguate---this is necessary for MSVC to distinguish
+        // "disposing(EventObject)" from "disposing()"; but it is also a good
+        // place to check for recursive calls that would be caused by an object
+        // being registered as an XEventListener at itself (cf. rhbz#928568):
+        assert(_rSource.Source != static_cast< cppu::OWeakObject * >(this));
         OComponentProxyAggregationHelper::disposing( _rSource );
     }
 
