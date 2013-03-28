@@ -28,10 +28,16 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,dtobj))
 
-$(eval $(call gb_StaticLibrary_use_api,dtobj,\
-	udkapi \
-	offapi \
+$(eval $(call gb_StaticLibrary_use_packages,dtobj,\
+	comphelper_inc \
+	cppu_odk_headers \
+	cppuhelper_odk_headers \
+	sal_generated \
+	sal_inc \
+	sal_odk_headers \
 ))
+
+$(eval $(call gb_StaticLibrary_use_sdk_api,dtobj))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\
 	dtrans/source/win32/dtobj/APNDataObject \
