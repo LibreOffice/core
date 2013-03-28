@@ -356,7 +356,7 @@ void SfxTemplateManagerDlg::Resize()
 
     long nToolbarsHeight = std::max(std::max(aViewSize.getHeight(), aActionSize.getHeight()), aTemplateSize.getHeight());
 
-    aActionSize.setWidth(3*aActionSize.getWidth());
+    aActionSize.setWidth(2.5*aActionSize.getWidth());
     aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
     aTemplateSize.setWidth(aWinSize.getWidth());
 
@@ -776,7 +776,6 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
             if (maSelTemplates.empty())
             {
                 mpViewBar->Show(false);
-                mpActionBar->Show(false);
                 mpTemplateBar->Show();
             }
             else if (maSelTemplates.size() != 1 || !bInSelection)
@@ -802,7 +801,6 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
                 {
                     mpTemplateBar->Show(false);
                     mpViewBar->Show();
-                    mpActionBar->Show();
                 }
                 else if (maSelTemplates.size() == 1)
                 {
