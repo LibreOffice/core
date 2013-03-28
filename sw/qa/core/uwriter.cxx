@@ -34,8 +34,12 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+
+#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/transliterationwrapper.hxx>
 
 #include <editeng/langitem.hxx>
 #include <editeng/charhiddenitem.hxx>
@@ -92,8 +96,10 @@ public:
     void testGraphicAnchorDeletion();
     void testFdo57938();
     void testFdo59573();
+    void testTransliterate();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
+    CPPUNIT_TEST(testTransliterate);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
@@ -917,6 +923,46 @@ void SwDocTest::testFdo59573()
     // annotation anchor wasn't read-only.
     CPPUNIT_ASSERT_EQUAL(true, aPaM.HasReadonlySel(false));
 }
+
+static OUString
+translitTest(SwDoc & rDoc, SwPaM & rPaM, sal_uInt32 const nType)
+{
+    utl::TransliterationWrapper aTrans(
+            ::comphelper::getProcessComponentContext(), nType);
+    rDoc.TransliterateText(rPaM, aTrans);
+    return rPaM.GetTxt();
+}
+
+void SwDocTest::testTransliterate()
+{
+    // just some simple test to see if it's totally broken
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    m_pDoc->InsertString(aPaM, OUString("foobar"));
+    aPaM.SetMark();
+    aPaM.GetPoint()->nContent = 0;
+    CPPUNIT_ASSERT_EQUAL(String("foobar"), aPaM.GetTxt());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("FOOBAR"),
+            translitTest(*m_pDoc, aPaM,
+                i18n::TransliterationModules_LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
+            translitTest(*m_pDoc, aPaM,
+                i18n::TransliterationModulesExtra::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("fOOBAR"),
+            translitTest(*m_pDoc, aPaM,
+                i18n::TransliterationModulesExtra::TOGGLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"),
+            translitTest(*m_pDoc, aPaM,
+                i18n::TransliterationModules_UPPERCASE_LOWERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
+            translitTest(*m_pDoc, aPaM,
+                i18n::TransliterationModulesExtra::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
+            translitTest(*m_pDoc, aPaM,
+                i18n::TransliterationModules_HIRAGANA_KATAKANA));
+}
+
 
 void SwDocTest::setUp()
 {
