@@ -39,7 +39,7 @@
 #include "stringutil.hxx"
 #include "document.hxx"
 #include "editutil.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "validat.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"

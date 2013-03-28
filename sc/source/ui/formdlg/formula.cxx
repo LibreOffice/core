@@ -39,7 +39,7 @@
 #include "scresid.hxx"
 #include "reffact.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 #include "tabvwsh.hxx"

@@ -33,7 +33,7 @@
 #include <osl/file.hxx>
 
 #include "scdll.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "stringutil.hxx"
 #include "scmatrix.hxx"

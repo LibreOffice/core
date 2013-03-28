@@ -42,6 +42,7 @@
 #include "colorscale.hxx"
 #include "attrib.hxx"
 #include "cell.hxx"
+#include "formulacell.hxx"
 
 using namespace formula;
 

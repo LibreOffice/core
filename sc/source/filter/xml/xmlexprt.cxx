@@ -26,7 +26,7 @@
 #include "document.hxx"
 #include "olinetab.hxx"
 #include "cellsuno.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "rangenam.hxx"
 #include "XMLTableMasterPageExport.hxx"
 #include "drwlayer.hxx"

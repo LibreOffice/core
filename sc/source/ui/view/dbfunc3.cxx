@@ -61,7 +61,7 @@
 #include "docpool.hxx"
 #include "patattr.hxx"
 #include "unonames.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "userlist.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"

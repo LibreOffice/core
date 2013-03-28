@@ -26,6 +26,7 @@
 #include "table.hxx"
 #include "column.hxx"
 #include "cell.hxx"
+#include "formulacell.hxx"
 #include "attarray.hxx"
 #include "patattr.hxx"
 #include "docoptio.hxx"

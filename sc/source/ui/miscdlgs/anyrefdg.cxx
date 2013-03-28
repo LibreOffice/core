@@ -37,7 +37,7 @@
 #include "docsh.hxx"
 #include "rfindlst.hxx"
 #include "compiler.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "global.hxx"
 #include "inputopt.hxx"
 #include "rangeutl.hxx"

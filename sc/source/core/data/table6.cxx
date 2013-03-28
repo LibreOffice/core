@@ -24,7 +24,7 @@
 #include <editeng/editobj.hxx>
 
 #include "table.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "stlpool.hxx"
 #include "markdata.hxx"

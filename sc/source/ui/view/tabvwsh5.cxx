@@ -31,7 +31,7 @@
 #include "global.hxx"
 #include "docsh.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "globstr.hrc"
 #include "scmod.hxx"
 #include "uiitems.hxx"

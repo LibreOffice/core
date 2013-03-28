@@ -43,7 +43,7 @@
 #include "scresid.hxx"
 #include "tabvwsh.hxx"
 #include "impex.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"
 #include "transobj.hxx"

@@ -59,7 +59,7 @@
 #include "global.hxx"
 #include "stlsheet.hxx"
 #include "editutil.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scresid.hxx"
 #include "inputhdl.hxx"
 #include "scmod.hxx"

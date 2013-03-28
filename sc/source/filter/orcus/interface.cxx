@@ -10,7 +10,7 @@
 #include "orcusinterface.hxx"
 
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "rangenam.hxx"
 #include "tokenarray.hxx"
 #include <formula/token.hxx>

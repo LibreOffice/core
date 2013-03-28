@@ -21,7 +21,7 @@
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "table.hxx"
 #include "column.hxx"
 #include "document.hxx"

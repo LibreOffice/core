@@ -32,7 +32,7 @@
 #include "ddelink.hxx"
 #include "scmatrix.hxx"
 #include "compiler.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
 #include "docoptio.hxx"

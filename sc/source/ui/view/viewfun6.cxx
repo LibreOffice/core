@@ -40,7 +40,7 @@
 #include "fusel.hxx"
 #include "reftokenhelper.hxx"
 #include "externalrefmgr.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "markdata.hxx"
 #include "drawview.hxx"
 

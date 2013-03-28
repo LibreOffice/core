@@ -23,7 +23,7 @@
 #include "globstr.hrc"
 #include "subtotal.hxx"
 #include "formula/errorcodes.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 
 #include <math.h>
 #include <string.h>

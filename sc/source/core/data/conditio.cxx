@@ -27,7 +27,7 @@
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 
 #include "conditio.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "hints.hxx"
 #include "compiler.hxx"

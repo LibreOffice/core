@@ -48,7 +48,7 @@
 #include "attrib.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "globstr.hrc"
 #include "attarray.hxx"
 #include "xltracer.hxx"

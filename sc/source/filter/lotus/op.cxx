@@ -35,7 +35,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
 
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "rangenam.hxx"
 #include "document.hxx"
 #include "postit.hxx"

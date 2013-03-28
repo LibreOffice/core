@@ -27,7 +27,7 @@
 #include "document.hxx"
 #include "dociter.hxx"
 #include "scmatrix.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 
 using namespace com::sun::star;
 

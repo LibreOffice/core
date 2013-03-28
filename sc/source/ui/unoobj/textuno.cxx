@@ -43,7 +43,7 @@
 #include "cellsuno.hxx"
 #include "hints.hxx"
 #include "patattr.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "docfunc.hxx"
 #include "scmod.hxx"
 

@@ -58,7 +58,7 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "validat.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"

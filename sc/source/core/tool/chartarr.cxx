@@ -26,7 +26,7 @@
 #include "document.hxx"
 #include "rechead.hxx"
 #include "globstr.hrc"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "docoptio.hxx"
 
 #include <vector>

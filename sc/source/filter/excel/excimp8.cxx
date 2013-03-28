@@ -64,7 +64,7 @@
 
 #include <boost/scoped_array.hpp>
 
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"

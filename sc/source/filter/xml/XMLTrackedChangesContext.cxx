@@ -22,7 +22,7 @@
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
 #include "XMLConverter.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "textuno.hxx"
 #include "editutil.hxx"
 #include "document.hxx"

@@ -76,7 +76,7 @@
 #include "docfunc.hxx"
 #include "postit.hxx"
 #include "dociter.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "drwlayer.hxx"
 #include "rangeutl.hxx"
 #include "markdata.hxx"

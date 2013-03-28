@@ -10,6 +10,7 @@
 #include "cellvalue.hxx"
 #include "document.hxx"
 #include "cell.hxx"
+#include "formulacell.hxx"
 #include "editeng/editobj.hxx"
 #include "editeng/editstat.hxx"
 #include "stringutil.hxx"

@@ -14,7 +14,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCell2.hpp>
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "convuno.hxx"
 

@@ -28,7 +28,7 @@
 
 #include "colorscale.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "fillinfo.hxx"
 #include "iconsets.hrc"
 #include "scresid.hxx"

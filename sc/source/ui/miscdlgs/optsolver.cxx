@@ -29,7 +29,7 @@
 #include "reffact.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "rangeutl.hxx"
 #include "scresid.hxx"
 #include "convuno.hxx"

@@ -29,7 +29,7 @@
 #include "table.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "olinetab.hxx"

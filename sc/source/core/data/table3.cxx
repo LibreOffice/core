@@ -31,7 +31,7 @@
 #include "table.hxx"
 #include "scitems.hxx"
 #include "attrib.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "globstr.hrc"
 #include "global.hxx"

@@ -57,7 +57,7 @@
 #include "stlpool.hxx"
 #include "filter.hxx"
 #include "scflt.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scfobj.hxx"
 #include "docoptio.hxx"
 #include "viewopti.hxx"

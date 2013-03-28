@@ -69,6 +69,7 @@
 #include "sheetevents.hxx"
 #include "colorscale.hxx"
 #include "queryentry.hxx"
+#include "formulacell.hxx"
 
 #include "globalnames.hxx"
 #include <memory>

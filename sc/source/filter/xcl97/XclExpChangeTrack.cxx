@@ -25,7 +25,7 @@
 #include <sot/storage.hxx>
 #include "XclExpChangeTrack.hxx"
 #include "xeformula.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "xcl97rec.hxx"
 #include "document.hxx"
 #include "editutil.hxx"

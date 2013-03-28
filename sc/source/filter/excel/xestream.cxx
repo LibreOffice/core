@@ -37,7 +37,7 @@
 #include "xcl97rec.hxx"
 #include "rangelst.hxx"
 #include "compiler.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 
 #include <../../ui/inc/docsh.hxx>
 #include <../../ui/inc/viewdata.hxx>

@@ -46,7 +46,7 @@
 #include "XMLConverter.hxx"
 #include "scerrors.hxx"
 #include "editutil.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "editattributemap.hxx"
 #include "stringutil.hxx"
 

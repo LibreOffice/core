@@ -52,7 +52,7 @@
 #include "global.hxx"
 #include "undoblk.hxx"
 #include "undocell.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scmod.hxx"
 #include "spelleng.hxx"
 #include "patattr.hxx"

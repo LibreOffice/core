@@ -23,7 +23,7 @@
 #include "document.hxx"
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "textuno.hxx"
 #include "rangeutl.hxx"
 #include "cellvalue.hxx"

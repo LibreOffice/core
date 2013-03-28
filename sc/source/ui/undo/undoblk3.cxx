@@ -44,7 +44,7 @@
 #include "undoutil.hxx"
 #include "chgtrack.hxx"
 #include "dociter.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "paramisc.hxx"
 #include "postit.hxx"
 #include "docuno.hxx"

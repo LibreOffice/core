@@ -21,7 +21,7 @@
 #include "chart2uno.hxx"
 #include "miscuno.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "chartpos.hxx"
 #include "unonames.hxx"
 #include "globstr.hrc"

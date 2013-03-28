@@ -55,7 +55,7 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "dociter.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "drawutil.hxx"
 #include "globstr.hrc"
 #include "scresid.hxx"

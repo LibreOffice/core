@@ -56,7 +56,7 @@
 #include "globstr.hrc"
 #include "docpool.hxx"
 #include "patattr.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "scextopt.hxx"
 #include "attrib.hxx"

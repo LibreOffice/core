@@ -31,7 +31,7 @@
 #include <sfx2/objsh.hxx>
 #include <rtl/ustring.hxx>
 
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "dociter.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"

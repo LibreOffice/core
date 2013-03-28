@@ -41,7 +41,7 @@
 #include "interpre.hxx"
 #include "global.hxx"
 #include "dbdata.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "callform.hxx"
 #include "addincol.hxx"
 #include "document.hxx"

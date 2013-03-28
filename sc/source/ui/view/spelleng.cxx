@@ -36,7 +36,7 @@
 #include "spelldialog.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "patattr.hxx"
 #include "waitoff.hxx"
 #include "globstr.hrc"

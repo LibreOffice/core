@@ -57,7 +57,7 @@
 #include "patattr.hxx"
 #include "stlpool.hxx"
 #include "scresid.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "cellform.hxx"
 #include "docoptio.hxx"
 #include "editutil.hxx"

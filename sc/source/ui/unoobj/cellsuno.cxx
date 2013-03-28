@@ -87,7 +87,7 @@
 #include "dbdocfun.hxx"
 #include "olinefun.hxx"
 #include "hints.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "column.hxx"
 #include "undocell.hxx"
 #include "undotab.hxx"

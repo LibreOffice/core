@@ -41,7 +41,7 @@
 #include "attrib.hxx"
 #include "dociter.hxx"
 #include "autoform.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "cellmergeoption.hxx"
 #include "detdata.hxx"
 #include "detfunc.hxx"

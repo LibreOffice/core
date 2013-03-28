@@ -63,7 +63,7 @@
 #include "scabstdlg.hxx"
 #include <sot/formats.hxx>
 
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "column.hxx"
 #include "postit.hxx"
 #include "global.hxx"

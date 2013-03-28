@@ -22,7 +22,7 @@
 #include <svl/zforlist.hxx>
 
 #include "cellform.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "cellvalue.hxx"
 #include "formula/errorcodes.hxx"

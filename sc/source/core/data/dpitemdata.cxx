@@ -21,7 +21,7 @@
 
 #include "document.hxx"
 #include "dpobject.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "globstr.hrc"
 #include "dptabdat.hxx"
 #include "rtl/math.hxx"

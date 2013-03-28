@@ -26,7 +26,7 @@
 #include "scmod.hxx"
 #include "gridwin.hxx"
 #include "globstr.hrc"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "dociter.hxx"
 
 extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx

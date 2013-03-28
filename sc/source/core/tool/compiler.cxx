@@ -51,7 +51,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "dociter.hxx"
 #include "docoptio.hxx"
 #include <formula/errorcodes.hxx>

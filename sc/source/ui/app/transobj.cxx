@@ -41,7 +41,7 @@
 #include "viewopti.hxx"
 #include "editutil.hxx"
 #include "impex.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "printfun.hxx"
 #include "docfunc.hxx"
 #include "scmod.hxx"

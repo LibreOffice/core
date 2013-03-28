@@ -22,7 +22,7 @@
 #include "autonamecache.hxx"
 #include "dociter.hxx"
 #include "queryparam.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "cellvalue.hxx"
 #include "editutil.hxx"
 #include "document.hxx"

@@ -50,7 +50,7 @@
 #include <editeng/borderline.hxx>
 #include <dbdata.hxx>
 #include "validat.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "dpobject.hxx"

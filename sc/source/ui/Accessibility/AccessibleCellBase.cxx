@@ -24,7 +24,7 @@
 #include "document.hxx"
 #include "docfunc.hxx"
 #include "docsh.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "unonames.hxx"

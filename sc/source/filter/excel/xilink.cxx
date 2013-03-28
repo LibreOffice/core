@@ -19,7 +19,7 @@
 
 #include "xilink.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scextopt.hxx"
 #include "tablink.hxx"
 #include "xistream.hxx"

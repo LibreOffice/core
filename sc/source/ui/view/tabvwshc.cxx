@@ -46,7 +46,7 @@
 #include "rangeutl.hxx"
 #include "crnrdlg.hxx"
 #include "formula.hxx"
-#include "cell.hxx"             // Input Status Edit-Zellen
+#include "formulacell.hxx"             // Input Status Edit-Zellen
 #include "acredlin.hxx"
 #include "highred.hxx"
 #include "simpref.hxx"

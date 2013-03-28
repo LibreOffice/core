@@ -34,7 +34,7 @@
 #include "document.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 
 #include "dptabres.hxx"
 #include "dptabdat.hxx"

@@ -27,7 +27,7 @@
 
 #include "fillinfo.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "table.hxx"
 #include "attrib.hxx"
 #include "attarray.hxx"

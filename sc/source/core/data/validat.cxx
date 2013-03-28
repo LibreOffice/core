@@ -33,7 +33,7 @@
 
 #include "validat.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "patattr.hxx"
 #include "rechead.hxx"
 #include "globstr.hrc"

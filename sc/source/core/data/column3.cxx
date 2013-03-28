@@ -29,6 +29,7 @@
 #include "scitems.hxx"
 #include "column.hxx"
 #include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "attarray.hxx"
 #include "patattr.hxx"
@@ -2087,15 +2088,6 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
         }
     }
     return nStringLen;
-}
-
-
-ScFormulaCellGroup::ScFormulaCellGroup()
-{
-}
-
-ScFormulaCellGroup::~ScFormulaCellGroup()
-{
 }
 
 // Very[!] slow way to look for and merge contiguous runs

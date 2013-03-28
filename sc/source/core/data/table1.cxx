@@ -25,7 +25,7 @@
 
 #include "attrib.hxx"
 #include "patattr.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "table.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"

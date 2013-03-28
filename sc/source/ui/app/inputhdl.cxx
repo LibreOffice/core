@@ -69,7 +69,7 @@
 #include "userlist.hxx"
 #include "rfindlst.hxx"
 #include "inputopt.hxx"
-#include "cell.hxx"             // fuer Formel-Preview
+#include "formulacell.hxx"             // fuer Formel-Preview
 #include "compiler.hxx"         // fuer Formel-Preview
 #include "editable.hxx"
 #include "funcdesc.hxx"

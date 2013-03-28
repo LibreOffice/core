@@ -26,7 +26,7 @@
 #include "document.hxx"
 #include "dociter.hxx"
 #include "olinetab.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
 #include "xehelper.hxx"

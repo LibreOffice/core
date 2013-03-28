@@ -42,7 +42,7 @@
 #include "patattr.hxx"
 #include "filter.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 
 ScQProStyle::ScQProStyle()
 {

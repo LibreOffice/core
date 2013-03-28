@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
 #include <svl/zformat.hxx>
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "drwlayer.hxx"
 
 #include "xcl97rec.hxx"

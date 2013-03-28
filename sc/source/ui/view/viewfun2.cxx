@@ -49,7 +49,7 @@
 
 #include "attrib.hxx"
 #include "autoform.hxx"
-#include "cell.hxx"                 // EnterAutoSum
+#include "formulacell.hxx"                 // EnterAutoSum
 #include "cellmergeoption.hxx"
 #include "compiler.hxx"
 #include "docfunc.hxx"

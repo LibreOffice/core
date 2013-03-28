@@ -39,7 +39,7 @@
 #include "tools/urlobj.hxx"
 #include "docuno.hxx"
 
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"
 #include "compiler.hxx"

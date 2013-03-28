@@ -26,7 +26,7 @@
 #include "docsh.hxx"
 #include "scextopt.hxx"
 #include "rangenam.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"

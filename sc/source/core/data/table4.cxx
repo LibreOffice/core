@@ -44,7 +44,7 @@
 
 #include "attrib.hxx"
 #include "patattr.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "table.hxx"
 #include "globstr.hrc"
 #include "global.hxx"

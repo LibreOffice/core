@@ -46,7 +46,7 @@
 #include "transobj.hxx"
 #include "drwtrans.hxx"
 #include "lnktrans.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "dociter.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"

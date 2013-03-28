@@ -30,7 +30,7 @@
 #include <svl/intitem.hxx>
 
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "dpsave.hxx"
 #include "dpdimsave.hxx"
 #include "dpobject.hxx"

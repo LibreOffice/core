@@ -31,7 +31,7 @@
 #include "tabvwsh.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "target.hxx"
 #include "undoolk.hxx"
 #include "detdata.hxx"

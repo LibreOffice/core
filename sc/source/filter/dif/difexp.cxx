@@ -24,7 +24,7 @@
 #include "dif.hxx"
 #include "filter.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
 #include "progress.hxx"

@@ -49,7 +49,7 @@
 #include "rangelst.hxx"
 #include "document.hxx"
 #include "scitems.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 
 namespace oox {
 namespace xls {

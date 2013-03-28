@@ -47,7 +47,7 @@
 #include "rangeutl.hxx"
 #include "reffact.hxx"
 #include "uiitems.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "inputhdl.hxx"
 #include "autoform.hxx"
 #include "autofmt.hxx"

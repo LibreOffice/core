@@ -22,7 +22,7 @@
 #include "dpshttab.hxx"
 #include "dptabres.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "dpfilteredcache.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"

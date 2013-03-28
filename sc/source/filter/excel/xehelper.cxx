@@ -37,7 +37,7 @@
 
 #include "document.hxx"
 #include "docpool.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "editutil.hxx"
 #include "patattr.hxx"
 #include "xestyle.hxx"

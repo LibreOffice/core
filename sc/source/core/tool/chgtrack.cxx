@@ -18,7 +18,7 @@
  */
 
 #include "chgtrack.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
 #include "global.hxx"

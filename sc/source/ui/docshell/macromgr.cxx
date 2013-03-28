@@ -23,7 +23,7 @@
 #include "basic/basmgr.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "sfx2/objsh.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include <com/sun/star/container/XContainer.hpp>
 
 #include <list>

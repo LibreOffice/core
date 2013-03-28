@@ -45,7 +45,7 @@
 
 #include "output.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "cellform.hxx"

@@ -25,7 +25,7 @@
 #include "interpre.hxx"
 #include "global.hxx"
 #include "compiler.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
 #include "scmatrix.hxx"

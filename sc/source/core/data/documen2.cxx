@@ -85,6 +85,7 @@
 #include "clipparam.hxx"
 #include "macromgr.hxx"
 #include "cell.hxx"
+#include "formulacell.hxx"
 
 using namespace com::sun::star;
 

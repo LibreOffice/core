@@ -58,7 +58,7 @@
 #include "docsh.hxx"
 #include "filter.hxx"
 #include "progress.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "column.hxx"
 #include "editutil.hxx"
 #include "cellform.hxx"

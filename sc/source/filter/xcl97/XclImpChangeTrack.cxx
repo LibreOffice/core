@@ -22,7 +22,7 @@
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
 #include "chgviset.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "chgtrack.hxx"
 #include "xihelper.hxx"
 #include "xilink.hxx"

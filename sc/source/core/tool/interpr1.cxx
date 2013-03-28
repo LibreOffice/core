@@ -38,7 +38,7 @@
 #include "global.hxx"
 #include "document.hxx"
 #include "dociter.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "scmatrix.hxx"
 #include "docoptio.hxx"
 #include "globstr.hrc"

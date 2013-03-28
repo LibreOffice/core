@@ -20,7 +20,7 @@
 #include "dpfilteredcache.hxx"
 #include "document.hxx"
 #include "address.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "dptabdat.hxx"
 #include "dptabsrc.hxx"
 #include "dpobject.hxx"

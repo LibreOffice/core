@@ -28,7 +28,7 @@
 
 #include "sendfunc.hxx"
 
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "sccollaboration.hxx"

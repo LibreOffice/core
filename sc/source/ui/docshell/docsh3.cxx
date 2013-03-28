@@ -50,7 +50,7 @@
 #include "pntlock.hxx"
 #include "chgtrack.hxx"
 #include "docfunc.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "chgviset.hxx"
 #include "progress.hxx"
 #include "redcom.hxx"

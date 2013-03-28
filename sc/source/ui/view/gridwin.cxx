@@ -81,7 +81,7 @@
 #include "uiitems.hxx"          // Filter-Dialog - auslagern !!!
 #include "filtdlg.hxx"
 #include "impex.hxx"            // Sylk-ID fuer CB
-#include "cell.hxx"             // fuer Edit-Felder
+#include "formulacell.hxx"             // fuer Edit-Felder
 #include "patattr.hxx"
 #include "notemark.hxx"
 #include "rfindlst.hxx"

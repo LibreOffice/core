@@ -19,7 +19,7 @@
 
 #include "excform.hxx"
 
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"
 #include "xltracer.hxx"

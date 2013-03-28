@@ -23,7 +23,7 @@
 #include "attrib.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "compiler.hxx"

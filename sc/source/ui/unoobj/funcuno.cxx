@@ -31,7 +31,7 @@
 #include "callform.hxx"
 #include "addincol.hxx"
 #include "rangeseq.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "docoptio.hxx"
 #include "optuno.hxx"
 #include <docuno.hxx>

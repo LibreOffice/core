@@ -32,7 +32,7 @@
 #include "patattr.hxx"
 #include "filter.hxx"
 #include "document.hxx"
-#include "cell.hxx"
+#include "formulacell.hxx"
 #include "biff.hxx"
 #include <tools/stream.hxx>
 
