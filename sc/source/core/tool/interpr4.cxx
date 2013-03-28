@@ -178,16 +178,14 @@ sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellVa
 
 
 /// Only ValueCell, formula cells already store the result rounded.
-double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCell* pCell )
+double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetValueCellValue" );
-    double fVal = pCell->GetValue();
-    if ( bCalcAsShown && fVal != 0.0 )
+    if ( bCalcAsShown && fOrig != 0.0 )
     {
         sal_uLong nFormat = pDok->GetNumberFormat( rPos );
-        fVal = pDok->RoundValueAsShown( fVal, nFormat );
+        fOrig = pDok->RoundValueAsShown( fOrig, nFormat );
     }
-    return fVal;
+    return fOrig;
 }
 
 sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
@@ -744,22 +742,24 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             while (nCol <= nCol2)
             {
                 aAdr.SetCol( nCol );
-                ScBaseCell* pCell = pDok->GetCell( aAdr );
-                if (pCell)
+
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
                 {
                     sal_uInt16  nErr = 0;
                     double  nVal = 0.0;
                     bool    bOk = true;
-                    switch ( pCell->GetCellType() )
+                    switch (aCell.meType)
                     {
                         case CELLTYPE_VALUE :
-                            nVal = GetValueCellValue( aAdr, (ScValueCell*)pCell );
+                            nVal = GetValueCellValue(aAdr, aCell.mfValue);
                             break;
                         case CELLTYPE_FORMULA :
-                            if (((ScFormulaCell*)pCell)->IsValue())
+                            if (aCell.mpFormula->IsValue())
                             {
-                                nErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                                nVal = ((ScFormulaCell*)pCell)->GetValue();
+                                nErr = aCell.mpFormula->GetErrCode();
+                                nVal = aCell.mpFormula->GetValue();
                             }
                             else
                                 bOk = false;
@@ -931,33 +931,31 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             while (nCol <= nCol2)
             {
                 aAdr.SetCol( nCol );
-                ScBaseCell* pCell = pDok->GetCell( aAdr );
-                if (pCell)
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!aCell.isEmpty())
                 {
                     sal_uInt16  nErr = 0;
                     sal_uInt16  nType = 0; // 0 = Zahl; 1 = String
                     double  nVal = 0.0;
                     String  aStr;
                     bool    bOk = true;
-                    switch ( pCell->GetCellType() )
+                    switch (aCell.meType)
                     {
                         case CELLTYPE_STRING :
-                            aStr = ((ScStringCell*)pCell)->GetString();
-                            nType = 1;
-                            break;
                         case CELLTYPE_EDIT :
-                            aStr = ((ScEditCell*)pCell)->GetString();
+                            aStr = aCell.getString();
                             nType = 1;
                             break;
                         case CELLTYPE_VALUE :
-                            nVal = GetValueCellValue( aAdr, (ScValueCell*)pCell );
+                            nVal = GetValueCellValue(aAdr, aCell.mfValue);
                             break;
                         case CELLTYPE_FORMULA :
-                            nErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                            if (((ScFormulaCell*)pCell)->IsValue())
-                                nVal = ((ScFormulaCell*)pCell)->GetValue();
+                            nErr = aCell.mpFormula->GetErrCode();
+                            if (aCell.mpFormula->IsValue())
+                                nVal = aCell.mpFormula->GetValue();
                             else
-                                aStr = ((ScFormulaCell*)pCell)->GetString();
+                                aStr = aCell.mpFormula->GetString();
                             break;
                         default :
                             bOk = false;
@@ -3580,43 +3578,33 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::SetSbxVariable" );
     bool bOk = true;
-    ScBaseCell* pCell = pDok->GetCell( rPos );
-    if (pCell)
+    ScRefCellValue aCell;
+    aCell.assign(*pDok, rPos);
+    if (!aCell.isEmpty())
     {
         sal_uInt16 nErr;
         double nVal;
-        switch( pCell->GetCellType() )
+        switch (aCell.meType)
         {
             case CELLTYPE_VALUE :
-                nVal = GetValueCellValue( rPos, (ScValueCell*)pCell );
+                nVal = GetValueCellValue(rPos, aCell.mfValue);
                 pVar->PutDouble( nVal );
-                break;
+            break;
             case CELLTYPE_STRING :
-            {
-                OUString aVal = ((ScStringCell*)pCell)->GetString();
-                pVar->PutString( aVal );
-                break;
-            }
             case CELLTYPE_EDIT :
-            {
-                OUString aVal = ((ScEditCell*) pCell)->GetString();
-                pVar->PutString( aVal );
-                break;
-            }
+                pVar->PutString(aCell.getString());
+            break;
             case CELLTYPE_FORMULA :
-                nErr = ((ScFormulaCell*)pCell)->GetErrCode();
+                nErr = aCell.mpFormula->GetErrCode();
                 if( !nErr )
                 {
-                    if( ((ScFormulaCell*)pCell)->IsValue() )
+                    if (aCell.mpFormula->IsValue())
                     {
-                        nVal = ((ScFormulaCell*)pCell)->GetValue();
-                        pVar->PutDouble( nVal );
+                        nVal = aCell.mpFormula->GetValue();
+                        pVar->PutDouble(aCell.mpFormula->GetValue());
                     }
                     else
-                    {
-                        OUString aVal = ((ScFormulaCell*)pCell)->GetString();
-                        pVar->PutString( aVal );
-                    }
+                        pVar->PutString(aCell.mpFormula->GetString());
                 }
                 else
                     SetError( nErr ), bOk = false;
