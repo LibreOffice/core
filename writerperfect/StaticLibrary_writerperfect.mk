@@ -23,6 +23,8 @@ $(eval $(call gb_StaticLibrary_use_packages,writerperfect,\
 	comphelper_inc \
 	cppu_odk_headers \
 	cppuhelper_odk_headers \
+	sal_generated \
+	sal_odk_headers \
 	sot_inc \
 	tools_inc \
 	unotools_inc \
