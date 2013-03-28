@@ -342,13 +342,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
 
 void SfxTemplateManagerDlg::Resize()
 {
-    Size aWinSize = GetSizePixel();
-
     // Fit the tab page control and the toolbars
-    Size aTabSize = maTabControl.GetSizePixel();
-    aTabSize.setWidth(aWinSize.getWidth());
-    maTabControl.SetSizePixel(aTabSize);
-    maTabControl.SetTabPageSizePixel(aWinSize);
+    maTabControl.SetSizePixel(GetSizePixel());
+    const Size aWinSize = maTabControl.GetTabPageSizePixel();
 
     // Calculate toolboxes size and positions
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
@@ -372,11 +368,7 @@ void SfxTemplateManagerDlg::Resize()
     Point aViewPos = maView->GetPosPixel();
     aViewPos.setY(nToolbarsHeight);
     aViewPos.setX(0);
-    Size aThumbSize(aWinSize.getWidth(), maTabControl.GetTabPageSizePixel().getHeight() - aViewPos.getY());
-    maView->SetPosSizePixel(aViewPos, aThumbSize);
-
-    if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)
-        aWinSize.setHeight(aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER);
+    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
 
     // Set search box position and size
     Size aSearchSize = mpSearchEdit->CalcMinimumSize();
@@ -385,11 +377,9 @@ void SfxTemplateManagerDlg::Resize()
     mpSearchEdit->SetSizePixel(aSearchSize);
     mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aViewPos.Y()));
 
-    maView->SetSizePixel(aThumbSize);
+    maView->SetPosSizePixel(aViewPos,aThumbSize);
     mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
-    mpSearchView->SetSizePixel(aThumbSize);
-
-    mpCurView->Resize();
+    mpSearchView->SetPosSizePixel(aViewPos,aThumbSize);
 
     ModelessDialog::Resize();
 }

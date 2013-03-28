@@ -91,7 +91,6 @@ void ThumbnailView::ImplInit()
     mnVisLines          = 0;
     mnLines             = 0;
     mnFirstLine         = 0;
-    mnScrBarOffset = 1;
     mnHighItemId        = 0;
     mnCols              = 0;
     mnSpacing           = 0;
@@ -243,7 +242,7 @@ void ThumbnailView::CalculateItemPositions ()
     // calculate ScrollBar width
     long nScrBarWidth = 0;
     if ( mpScrBar )
-        nScrBarWidth = mpScrBar->GetSizePixel().Width()+mnScrBarOffset;
+        nScrBarWidth = mpScrBar->GetSizePixel().Width();
 
     // calculate maximum number of visible columns
     mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth) / (mnItemWidth));
@@ -383,8 +382,8 @@ void ThumbnailView::CalculateItemPositions ()
         mbScroll = mnLines > mnVisLines;
 
 
-        Point aPos( aWinSize.Width() - nScrBarWidth - mnScrBarOffset, mnHeaderHeight );
-        Size aSize( nScrBarWidth - mnScrBarOffset, aWinSize.Height() - mnHeaderHeight );
+        Point aPos( aWinSize.Width() - nScrBarWidth, mnHeaderHeight );
+        Size aSize( nScrBarWidth, aWinSize.Height() - mnHeaderHeight );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
         mpScrBar->SetRangeMax( (nCurCount+mnCols-1)/mnCols);
