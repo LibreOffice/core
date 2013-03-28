@@ -96,10 +96,10 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
             {
                 /* Import categories as String even though it could
                  * be values.
+                 * n#810508: xVal needs to be imported as double
                  * TODO: NumberFormat conversion, remove the check then.
                  */
-                if( isParentElement( C_TOKEN( cat ), 4 ) ||
-                    isParentElement( C_TOKEN( xVal ), 4 ) )
+                if( isParentElement( C_TOKEN( cat ), 4 ) )
                     mrModel.maData[ mnPtIndex ] <<= rChars;
                 else
                     mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();
