@@ -80,7 +80,7 @@ bool lcl_isNamedRange( const rtl::OUString& sAddress, const uno::Reference< fram
 
 
 void
-BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const rtl::OUString& rsCtrlSource, const rtl::OUString& rsRowSource )
+BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const rtl::OUString& rsCtrlSource, const rtl::OUString& rsRowSource, sal_uInt16 nRefTab )
 {
 // XBindable etc.
     uno::Reference< lang::XMultiServiceFactory > xFac;
@@ -100,7 +100,8 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
          {
              // we need this service to properly convert XL notation also
              // Should be easy to extend
-             xConvertor->setPropertyValue( C2U( "XL_A1_Representation" ), uno::makeAny( rsCtrlSource ) );
+             xConvertor->setPropertyValue( C2U( "ReferenceSheet" ), uno::makeAny( nRefTab ) );
+             xConvertor->setPropertyValue( C2U( "XLA1Representation" ), uno::makeAny( rsCtrlSource ) );
              xConvertor->getPropertyValue( C2U( "Address" ) ) >>= aAddress;
          }
 
@@ -132,7 +133,7 @@ BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno
              {
                  // we need this service to properly convert XL notation also
                  // Should be easy to extend
-                 xConvertor->setPropertyValue( C2U( "XL_A1_Representation" ), uno::makeAny( rsRowSource ) );
+                 xConvertor->setPropertyValue( C2U( "XLA1Representation" ), uno::makeAny( rsRowSource ) );
                  xConvertor->getPropertyValue( C2U( "Address" ) ) >>= aAddress;
              }
          }
