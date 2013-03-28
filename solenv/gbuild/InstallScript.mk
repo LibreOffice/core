@@ -101,6 +101,7 @@ define gb_InstallScript_InstallScript
 $(call gb_InstallScriptTarget_InstallScriptTarget,$(1))
 
 $(call gb_InstallScript_get_target,$(1)) : $(call gb_InstallScriptTarget_get_target,$(1))
+$(call gb_InstallScript_get_target,$(1)) :| $(dir $(call gb_InstallScript_get_target,$(1))).dir
 $(call gb_InstallScript_get_clean_target,$(1)) : $(call gb_InstallScriptTarget_get_clean_target,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_InstallScript_get_target,$(1)),$(call gb_InstallScriptTarget_get_target,$(1)),$(1))
