@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/zforlist.hxx>
+#include "cell.hxx"
 
 #include "scitems.hxx"
 #include "attrib.hxx"
-#include "cell.hxx"
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include "document.hxx"
-#include "scmatrix.hxx"
-#include "dociter.hxx"
 #include "docoptio.hxx"
 #include "rechead.hxx"
 #include "rangenam.hxx"
@@ -36,16 +33,15 @@
 #include "progress.hxx"
 #include "editutil.hxx"
 #include "recursionhelper.hxx"
-#include "postit.hxx"
 #include "externalrefmgr.hxx"
 #include "macromgr.hxx"
 #include "dbdata.hxx"
 #include "globalnames.hxx"
+#include "cellvalue.hxx"
 
-#include <editeng/editobj.hxx>
 #include <svl/intitem.hxx>
-#include <editeng/flditem.hxx>
 #include <svl/broadcast.hxx>
+#include <svl/zforlist.hxx>
 
 using namespace formula;
 // More or less arbitrary, of course all recursions must fit into available
