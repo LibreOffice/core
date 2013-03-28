@@ -38,7 +38,7 @@ class WebConfigSet(ConfigGroup):
         self.childClass = childType
         self.childrenMap = {}
         self.childrenList = []
-        self.noNulls = False
+        self.noNulls = True
         self.listenerList = None
 
     def add(self, name, o):
@@ -61,14 +61,10 @@ class WebConfigSet(ConfigGroup):
                 print ("DEBUG !!! WebConfigSet.add -- index: ", i)
                 oldSize = self.getSize()
                 print ("DEBUG !!! WebConfigSet.add -- oldSize: ", oldSize)
-                if oldSize < i:
+                if oldSize <= i:
                     newSize = i - oldSize
                     self.childrenList += [None] * newSize
-                    self.noNulls |= True
-                else:
-                    self.noNulls |= False
-                print ("DEBUG !!! WebConfigSet.add -- inserting object o: ", o)
-                self.childrenList.insert(i, o)
+                self.childrenList[i] = o
                 if oldSize > i:
                     oldSize = i
                 self.fireListDataListenerIntervalAdded(oldSize, i);
