@@ -192,7 +192,7 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
 
 sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
 {
-    return rCell.meType == CELLTYPE_FORMULA ? rCell.mpFormula->GetErrorCode() : 0;
+    return rCell.meType == CELLTYPE_FORMULA ? rCell.mpFormula->GetErrCode() : 0;
 }
 
 /** Convert string content to numeric value.

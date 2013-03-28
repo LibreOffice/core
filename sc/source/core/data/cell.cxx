@@ -141,18 +141,6 @@ void ScBaseCell::DeleteBroadcaster()
     DELETEZ( mpBroadcaster );
 }
 
-sal_uInt16 ScBaseCell::GetErrorCode() const
-{
-    switch ( eCellType )
-    {
-        case CELLTYPE_FORMULA :
-            return ((ScFormulaCell*)this)->GetErrCode();
-        default:
-            return 0;
-    }
-}
-
-
 bool ScBaseCell::HasEmptyData() const
 {
     switch ( eCellType )

@@ -1229,14 +1229,15 @@ public:
     }
 
     bool isQueryByValue(
-        const ScQueryEntry::Item& rItem, SCCOL nCol, SCROW nRow, const ScBaseCell* pCell)
+        const ScQueryEntry::Item& rItem, SCCOL nCol, SCROW nRow, ScBaseCell* pCell)
     {
         if (rItem.meType == ScQueryEntry::ByString)
             return false;
 
         if (pCell)
         {
-            if (pCell->GetErrorCode())
+            if (pCell->GetCellType() == CELLTYPE_FORMULA &&
+                static_cast<ScFormulaCell*>(pCell)->GetErrCode())
                 // Error values are compared as string.
                 return false;
 
@@ -1361,10 +1362,10 @@ public:
 
         if ( pCell )
         {
-            if (pCell->GetCellType() == CELLTYPE_FORMULA && pCell->GetErrorCode())
+            if (pCell->GetCellType() == CELLTYPE_FORMULA && static_cast<ScFormulaCell*>(pCell)->GetErrCode())
             {
                 // Error cell is evaluated as string (for now).
-                aCellStr = ScGlobal::GetErrorString(pCell->GetErrorCode());
+                aCellStr = ScGlobal::GetErrorString(static_cast<ScFormulaCell*>(pCell)->GetErrCode());
             }
             else if (pCell->GetCellType() != CELLTYPE_NOTE)
             {

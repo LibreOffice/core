@@ -1391,7 +1391,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
                 if (rCell.GetDirty() && pDocument->GetAutoCalc())
                     rCell.Interpret();
 
-                if (rCell.GetErrorCode())
+                if (rCell.GetErrCode())
                     // Skip cells with error.
                     break;
 

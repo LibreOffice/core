@@ -80,8 +80,6 @@ public:
     /** Deletes the own cell broadcaster. */
     void            DeleteBroadcaster();
 
-    /** Error code if ScFormulaCell, else 0. */
-    sal_uInt16          GetErrorCode() const;
     /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
         created due to reference to empty cell). */
     bool            HasEmptyData() const;
