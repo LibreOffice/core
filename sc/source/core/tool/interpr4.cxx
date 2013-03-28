@@ -193,11 +193,6 @@ sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
     return rCell.meType == CELLTYPE_FORMULA ? rCell.mpFormula->GetErrorCode() : 0;
 }
 
-bool ScInterpreter::HasCellValueData( const ScBaseCell* pCell )
-{
-    return pCell ? pCell->HasValueData() : false;
-}
-
 /** Convert string content to numeric value.
 
     Converted are only integer numbers including exponent, and ISO 8601 dates

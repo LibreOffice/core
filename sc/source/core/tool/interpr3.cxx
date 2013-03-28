@@ -2234,10 +2234,11 @@ void ScInterpreter::ScZTest()
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
-            ScBaseCell* pCell = GetCell( aAdr );
-            if (HasCellValueData(pCell))
+            ScRefCellValue aCell;
+            aCell.assign(*pDok, aAdr);
+            if (aCell.hasNumeric())
             {
-                fVal = GetCellValue( aAdr, pCell );
+                fVal = GetCellValue(aAdr, aCell);
                 fSum += fVal;
                 fSumSqr += fVal*fVal;
                 rValCount++;
@@ -2665,10 +2666,11 @@ void ScInterpreter::ScHarMean()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
                 {
-                    double x = GetCellValue( aAdr, pCell );
+                    double x = GetCellValue(aAdr, aCell);
                     if (x > 0.0)
                     {
                         nVal += 1.0/x;
@@ -2788,10 +2790,11 @@ void ScInterpreter::ScGeoMean()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
                 {
-                    double x = GetCellValue( aAdr, pCell );
+                    double x = GetCellValue(aAdr, aCell);
                     if (x > 0.0)
                     {
                         nVal += log(x);
@@ -2927,10 +2930,11 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
                 {
-                    fVal = GetCellValue( aAdr, pCell );
+                    fVal = GetCellValue(aAdr, aCell);
                     fSum += fVal;
                     values.push_back(fVal);
                     fCount++;
@@ -3345,9 +3349,10 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
-                    rArray.push_back( GetCellValue( aAdr, pCell));
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
+                    rArray.push_back(GetCellValue(aAdr, aCell));
             }
             break;
             case formula::svDoubleRef :
@@ -3532,10 +3537,11 @@ void ScInterpreter::ScRank()
             ScAddress aAdr;
             PopSingleRef( aAdr );
             double fVal = GetDouble();
-            ScBaseCell* pCell = GetCell( aAdr );
-            if (HasCellValueData(pCell))
+            ScRefCellValue aCell;
+            aCell.assign(*pDok, aAdr);
+            if (aCell.hasNumeric())
             {
-                double x = GetCellValue( aAdr, pCell );
+                double x = GetCellValue(aAdr, aCell);
                 if (x == fVal)
                     bValid = true;
             }
@@ -3651,10 +3657,11 @@ void ScInterpreter::ScAveDev()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
                 {
-                    rVal += GetCellValue( aAdr, pCell );
+                    rVal += GetCellValue(aAdr, aCell);
                     rValCount++;
                 }
             }
@@ -3733,9 +3740,10 @@ void ScInterpreter::ScAveDev()
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
-                    rVal += fabs(GetCellValue( aAdr, pCell ) - nMiddle);
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
+                    rVal += fabs(GetCellValue(aAdr, aCell) - nMiddle);
             }
             break;
             case formula::svDoubleRef :

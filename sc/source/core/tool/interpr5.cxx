@@ -666,13 +666,14 @@ void ScInterpreter::ScMatValue()
                 {
                     ScAddress aAdr( sal::static_int_cast<SCCOL>( nCol1 + nR ),
                                     sal::static_int_cast<SCROW>( nRow1 + nC ), nTab1 );
-                    ScBaseCell* pCell = GetCell( aAdr );
-                    if (HasCellValueData(pCell))
-                        PushDouble(GetCellValue( aAdr, pCell ));
+                    ScRefCellValue aCell;
+                    aCell.assign(*pDok, aAdr);
+                    if (aCell.hasNumeric())
+                        PushDouble(GetCellValue(aAdr, aCell));
                     else
                     {
-                        String aStr;
-                        GetCellString(aStr, pCell);
+                        OUString aStr;
+                        GetCellString(aStr, aCell);
                         PushString(aStr);
                     }
                 }

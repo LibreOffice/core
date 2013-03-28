@@ -196,7 +196,6 @@ ScBaseCell* GetCell( const ScAddress& rPos );
 void GetCellString( String& rStr, const ScBaseCell* pCell );
 void GetCellString( OUString& rStr, ScRefCellValue& rCell );
 sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
-bool HasCellValueData( const ScBaseCell* pCell );
 
 bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);

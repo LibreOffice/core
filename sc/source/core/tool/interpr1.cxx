@@ -1415,11 +1415,12 @@ void ScInterpreter::ScAnd()
                         PopSingleRef( aAdr );
                         if ( !nGlobalError )
                         {
-                            ScBaseCell* pCell = GetCell( aAdr );
-                            if ( HasCellValueData( pCell ) )
+                            ScRefCellValue aCell;
+                            aCell.assign(*pDok, aAdr);
+                            if (aCell.hasNumeric())
                             {
                                 bHaveValue = true;
-                                nRes &= ( GetCellValue( aAdr, pCell ) != 0.0 );
+                                nRes &= ( GetCellValue(aAdr, aCell) != 0.0 );
                             }
                             // else: Xcl raises no error here
                         }
@@ -1515,11 +1516,12 @@ void ScInterpreter::ScOr()
                         PopSingleRef( aAdr );
                         if ( !nGlobalError )
                         {
-                            ScBaseCell* pCell = GetCell( aAdr );
-                            if ( HasCellValueData( pCell ) )
+                            ScRefCellValue aCell;
+                            aCell.assign(*pDok, aAdr);
+                            if (aCell.hasNumeric())
                             {
                                 bHaveValue = true;
-                                nRes |= ( GetCellValue( aAdr, pCell ) != 0.0 );
+                                nRes |= ( GetCellValue(aAdr, aCell) != 0.0 );
                             }
                             // else: Xcl raises no error here
                         }
@@ -1617,11 +1619,12 @@ void ScInterpreter::ScXor()
                         PopSingleRef( aAdr );
                         if ( !nGlobalError )
                         {
-                            ScBaseCell* pCell = GetCell( aAdr );
-                            if ( HasCellValueData( pCell ) )
+                            ScRefCellValue aCell;
+                            aCell.assign(*pDok, aAdr);
+                            if (aCell.hasNumeric())
                             {
                                 bHaveValue = true;
-                                nRes ^= ( GetCellValue( aAdr, pCell ) != 0.0 );
+                                nRes ^= ( GetCellValue(aAdr, aCell) != 0.0 );
                             }
                             /* TODO: set error? Excel doesn't have XOR, but
                              * doesn't set an error in this case for AND and
@@ -5110,7 +5113,7 @@ void ScInterpreter::ScMatch()
         if (nGlobalError == 0)
         {
             double fVal;
-            String sStr;
+            OUString sStr;
             ScQueryParam rParam;
             rParam.nCol1       = nCol1;
             rParam.nRow1       = nRow1;
@@ -5149,16 +5152,17 @@ void ScInterpreter::ScMatch()
                         PushInt(0);
                         return ;
                     }
-                    ScBaseCell* pCell = GetCell( aAdr );
-                    if (HasCellValueData(pCell))
+                    ScRefCellValue aCell;
+                    aCell.assign(*pDok, aAdr);
+                    if (aCell.hasNumeric())
                     {
-                        fVal = GetCellValue( aAdr, pCell );
+                        fVal = GetCellValue(aAdr, aCell);
                         rItem.meType = ScQueryEntry::ByValue;
                         rItem.mfVal = fVal;
                     }
                     else
                     {
-                        GetCellString(sStr, pCell);
+                        GetCellString(sStr, aCell);
                         rItem.meType = ScQueryEntry::ByString;
                         rItem.maString = sStr;
                     }
@@ -5741,10 +5745,11 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                             {
                                 aAdr.SetCol( nCol + nColDiff);
                                 aAdr.SetRow( nRow + nRowDiff);
-                                ScBaseCell* pCell = GetCell( aAdr );
-                                if ( HasCellValueData(pCell) )
+                                ScRefCellValue aCell;
+                                aCell.assign(*pDok, aAdr);
+                                if (aCell.hasNumeric())
                                 {
-                                    fVal = GetCellValue( aAdr, pCell );
+                                    fVal = GetCellValue(aAdr, aCell);
                                     ++fCount;
                                     if ( bNull && fVal != 0.0 )
                                     {
@@ -5792,10 +5797,11 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                         {
                             aAdr.SetCol( aCellIter.GetCol() + nColDiff);
                             aAdr.SetRow( aCellIter.GetRow() + nRowDiff);
-                            ScBaseCell* pCell = GetCell( aAdr );
-                            if ( HasCellValueData(pCell) )
+                            ScRefCellValue aCell;
+                            aCell.assign(*pDok, aAdr);
+                            if (aCell.hasNumeric())
                             {
-                                fVal = GetCellValue( aAdr, pCell );
+                                fVal = GetCellValue(aAdr, aCell);
                                 ++fCount;
                                 if ( bNull && fVal != 0.0 )
                                 {
@@ -6397,10 +6403,11 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                         {
                             aAdr.SetCol( static_cast<SCCOL>(nCol) + nMainCol1);
                             aAdr.SetRow( static_cast<SCROW>(nRow) + nMainRow1);
-                            ScBaseCell* pCell = GetCell( aAdr );
-                            if ( HasCellValueData(pCell) )
+                            ScRefCellValue aCell;
+                            aCell.assign(*pDok, aAdr);
+                            if (aCell.hasNumeric())
                             {
-                                fVal = GetCellValue( aAdr, pCell );
+                                fVal = GetCellValue(aAdr, aCell);
                                 ++fCount;
                                 if ( bNull && fVal != 0.0 )
                                 {
@@ -7399,7 +7406,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
 
         bool    bByVal = true;
         double  nVal = 0.0;
-        String  aStr;
+        OUString  aStr;
         ScRange aMissingRange;
         bool bRangeFake = false;
         switch (GetStackType())
@@ -7417,13 +7424,14 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
                 {
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
-                    ScBaseCell* pCell = GetCell( aAdr );
-                    if (HasCellValueData(pCell))
-                        nVal = GetCellValue( aAdr, pCell );
+                    ScRefCellValue aCell;
+                    aCell.assign(*pDok, aAdr);
+                    if (aCell.hasNumeric())
+                        nVal = GetCellValue(aAdr, aCell);
                     else
                     {
                         bByVal = false;
-                        GetCellString(aStr, pCell);
+                        GetCellString(aStr, aCell);
                     }
                 }
                 break;
