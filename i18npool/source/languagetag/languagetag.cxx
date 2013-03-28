@@ -1178,9 +1178,11 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
     ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings());
     aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
     if (rReference != "en-US")
+    {
         aFallbacks.push_back( "en-US");
-    if (rReference != "en")
-        aFallbacks.push_back( "en");
+        if (rReference != "en")
+            aFallbacks.push_back( "en");
+    }
     if (rReference != "x-default")
         aFallbacks.push_back( "x-default");
     if (rReference != "x-no-translate")
