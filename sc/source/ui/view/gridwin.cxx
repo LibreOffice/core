@@ -353,11 +353,10 @@ static sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
                                     rRange.aEnd.Col(),rRange.aEnd.Row() ) )
         return false;
 
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, rRange.aEnd);
     ScAddress aPos;
-    const ScBaseCell* pCell = pDoc->GetCell( rRange.aEnd );
-    return ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA &&
-            ((ScFormulaCell*)pCell)->GetMatrixOrigin(aPos) && aPos == rRange.aStart );
-
+    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(aPos) && aPos == rRange.aStart);
 }
 
 static void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, const Point& rPos, ScViewData* pViewData )

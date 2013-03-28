@@ -32,7 +32,6 @@ class Font;
 class OutputDevice;
 class EditEngine;
 class ScDocument;
-class ScBaseCell;
 class ScPatternAttr;
 class SdrObject;
 struct RowInfo;
@@ -206,10 +205,10 @@ private:
 
     sal_Bool            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
                                     SCCOL& rOverX, SCROW& rOverY, sal_Bool bVisRowChanged );
-    sal_Bool            IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
+    bool IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
     void GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScRefCellValue& rCell );
 
-    sal_Bool            IsAvailable( SCCOL nX, SCROW nY );
+    bool IsAvailable( SCCOL nX, SCROW nY );
 
     void            GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
                                    SCCOL nCellX, SCROW nCellY, long nNeeded,

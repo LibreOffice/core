@@ -625,20 +625,19 @@ void lcl_GetColumnTypes(
 
         if ( !bTypeDefined )
         {   // Feldtyp
-            ScBaseCell* pCell;
-            pDoc->GetCell( nCol, nFirstDataRow, nTab, pCell );
-            if ( !pCell || pCell->HasStringData() )
+            ScRefCellValue aCell;
+            aCell.assign(*pDoc, ScAddress(nCol, nFirstDataRow, nTab));
+            if (aCell.isEmpty() || aCell.hasString())
                 nDbType = sdbc::DataType::VARCHAR;
             else
             {
                 sal_uInt32 nFormat;
                 pDoc->GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
-                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA
-                  && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) )
+                if (aCell.meType == CELLTYPE_FORMULA && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0))
                 {
                     nFormat = ScGlobal::GetStandardFormat(
-                        ((ScFormulaCell*)pCell)->GetValue(), *pNumFmt, nFormat,
-                        ((ScFormulaCell*)pCell)->GetFormatType() );
+                        aCell.mpFormula->GetValue(), *pNumFmt, nFormat,
+                        aCell.mpFormula->GetFormatType());
                 }
                 switch ( pNumFmt->GetType( nFormat ) )
                 {

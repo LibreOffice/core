@@ -213,13 +213,13 @@ enum ScAutoSum
 static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )
 {
-    ScBaseCell* pCell;
-    pDoc->GetCell( nCol, nRow, nTab, pCell );
-    if ( pCell && pCell->HasValueData() )
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    if (aCell.hasNumeric())
     {
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+        if (aCell.meType == CELLTYPE_FORMULA)
         {
-            ScTokenArray* pCode = ((ScFormulaCell*)pCell)->GetCode();
+            ScTokenArray* pCode = aCell.mpFormula->GetCode();
             if ( pCode && pCode->GetOuterFuncOpCode() == ocSum )
             {
                 if ( pCode->GetAdjacentExtendOfOuterFuncRefs( nExtend,

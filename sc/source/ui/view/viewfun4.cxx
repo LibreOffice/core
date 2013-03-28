@@ -311,7 +311,6 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     String sOldText, sNewString;
     EditTextObject* pOldTObj = NULL;
     const EditTextObject* pTObject = NULL;
-    ScBaseCell* pCell = NULL;
     EditView* pEditView = NULL;
     boost::scoped_ptr<ESelection> pEditSel;
     ScEditEngineDefaulter* pThesaurusEngine;
@@ -406,7 +405,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     if (pThesaurusEngine->IsModified())
     {
         EditTextObject* pNewTObj = NULL;
-        if (pCell && pTObject)
+        if (pTObject)
         {
             // The cell will own the text object instance.
             pDoc->SetEditText(

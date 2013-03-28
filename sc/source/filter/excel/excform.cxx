@@ -131,9 +131,7 @@ void ImportExcel::Formula(
             CellType eCellType = pD->GetCellType(aScPos);
             if( eCellType == CELLTYPE_FORMULA )
             {
-                ScBaseCell* pBaseCell;
-                pD->GetCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pBaseCell );
-                pCell = ( ScFormulaCell* ) pBaseCell;
+                pCell = pD->GetFormulaCell(aScPos);
                 if( pCell )
                     pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
             }

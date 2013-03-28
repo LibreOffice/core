@@ -14,7 +14,6 @@
 
 #include "docfunc.hxx"
 class ScCollaboration;
-class ScBaseCell;
 
 namespace {
 

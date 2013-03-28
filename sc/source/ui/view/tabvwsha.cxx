@@ -50,7 +50,7 @@
 #include "scabstdlg.hxx"
 #include "compiler.hxx"
 #include "markdata.hxx"
-
+#include "cellvalue.hxx"
 
 sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 {
@@ -111,13 +111,10 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                     if ( (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
                     {
-                        ScBaseCell* pCell;
-                        pDoc->GetCell( nPosX, nPosY, nTab, pCell );
-                        if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-                        {
-
-                            nNumFmt = ((ScFormulaCell*)pCell)->GetStandardFormat(*pFormatter, nNumFmt );
-                        }
+                        ScRefCellValue aCell;
+                        aCell.assign(*pDoc, aCursor);
+                        if (aCell.meType == CELLTYPE_FORMULA)
+                            nNumFmt = aCell.mpFormula->GetStandardFormat(*pFormatter, nNumFmt);
                     }
                 }
 

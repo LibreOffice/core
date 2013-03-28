@@ -1072,11 +1072,11 @@ inline sal_Bool IsAmbiguousScript( sal_uInt8 nScript )
              nScript != SCRIPTTYPE_COMPLEX );
 }
 
-sal_Bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
+bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
 {
     // pThisRowInfo may be NULL
 
-    sal_Bool bEmpty;
+    bool bEmpty;
     if ( pThisRowInfo && nX <= nX2 )
         bEmpty = pThisRowInfo->pCellInfo[nX+1].bEmptyCellText;
     else
@@ -1087,23 +1087,22 @@ sal_Bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW n
         //  for the range nX1..nX2 in RowInfo, cell protection attribute is already evaluated
         //  into bEmptyCellText in ScDocument::FillInfo / lcl_HidePrint (printfun)
 
-        sal_Bool bIsPrint = ( eType == OUTTYPE_PRINTER );
+        bool bIsPrint = ( eType == OUTTYPE_PRINTER );
 
         if ( bIsPrint || bTabProtected )
         {
             const ScProtectionAttr* pAttr = (const ScProtectionAttr*)
                     mpDoc->GetEffItem( nX, nY, nTab, ATTR_PROTECTION );
             if ( bIsPrint && pAttr->GetHidePrint() )
-                bEmpty = sal_True;
+                bEmpty = true;
             else if ( bTabProtected )
             {
                 if ( pAttr->GetHideCell() )
-                    bEmpty = sal_True;
+                    bEmpty = true;
                 else if ( mbShowFormulas && pAttr->GetHideFormula() )
                 {
-                    ScBaseCell* pCell = mpDoc->GetCell( ScAddress( nX, nY, nTab ) );
-                    if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                        bEmpty = sal_True;
+                    if (mpDoc->GetCellType(ScAddress(nX, nY, nTab)) == CELLTYPE_FORMULA)
+                        bEmpty = true;
                 }
             }
         }
@@ -1118,17 +1117,16 @@ void ScOutputData::GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTabP, ScRefCel
         rCell.clear();
 }
 
-sal_Bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
+bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
 {
     //  apply the same logic here as in DrawStrings/DrawEdit:
     //  Stop at non-empty or merged or overlapped cell,
     //  where a note is empty as well as a cell that's hidden by protection settings
 
-    const ScBaseCell* pCell = mpDoc->GetCell( ScAddress( nX, nY, nTab ) );
-    if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE && !IsEmptyCellText( NULL, nX, nY ) )
-    {
+    ScRefCellValue aCell;
+    aCell.assign(*mpDoc, ScAddress(nX, nY, nTab));
+    if (!aCell.isEmpty() && !IsEmptyCellText(NULL, nX, nY))
         return false;
-    }
 
     const ScPatternAttr* pPattern = mpDoc->GetPattern( nX, nY, nTab );
     if ( ((const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE)).IsMerged() ||

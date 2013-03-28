@@ -4397,10 +4397,11 @@ void Test::testStreamValid()
     CPPUNIT_ASSERT_MESSAGE("Cell A1 should not have moved.", test.equals(a1));
     test = m_pDoc->GetString(0, 3, 0);
     CPPUNIT_ASSERT_MESSAGE("the old cell A2 should now be at A4.", test.equals(a2));
-    const ScBaseCell* pCell = m_pDoc->GetCell(ScAddress(0, 1, 0));
-    CPPUNIT_ASSERT_MESSAGE("Cell A2 should be empty.", pCell == NULL);
-    pCell = m_pDoc->GetCell(ScAddress(0, 2, 0));
-    CPPUNIT_ASSERT_MESSAGE("Cell A3 should be empty.", pCell == NULL);
+    ScRefCellValue aCell;
+    aCell.assign(*m_pDoc, ScAddress(0,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Cell A2 should be empty.", aCell.isEmpty());
+    aCell.assign(*m_pDoc, ScAddress(0,2,0));
+    CPPUNIT_ASSERT_MESSAGE("Cell A3 should be empty.", aCell.isEmpty());
 
     // After the move, Sheet1, Sheet2, and Sheet4 should have their stream
     // invalidated, whereas Sheet3's stream should still be valid.
@@ -6256,17 +6257,17 @@ void Test::testFormulaGrouping()
 
         for (unsigned j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
         {
-            ScBaseCell *pCell = NULL;
-            m_pDoc->GetCell( 0, (SCROW)j, 0, pCell );
-            if( !pCell )
+            ScRefCellValue aCell;
+            aCell.assign(*m_pDoc, ScAddress(0, (SCROW)j, 0));
+            if (aCell.isEmpty())
             {
                 CPPUNIT_ASSERT_MESSAGE("invalid empty cell", !aGroupTests[i].bGroup[j]);
                 continue;
             }
-            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pCell != NULL);
+            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", !aCell.isEmpty());
             CPPUNIT_ASSERT_MESSAGE("Cell wrong type.",
-                                   pCell->GetCellType() == CELLTYPE_FORMULA);
-            ScFormulaCell *pCur = static_cast< ScFormulaCell *>( pCell );
+                                   aCell.meType == CELLTYPE_FORMULA);
+            ScFormulaCell *pCur = aCell.mpFormula;
 
             if( !!pCur->GetCellGroup().get() ^ aGroupTests[i].bGroup[j] )
             {

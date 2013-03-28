@@ -32,7 +32,6 @@ class SvxLineItem;
 class SvxShadowItem;
 class Color;
 
-class ScBaseCell;
 class ScPatternAttr;
 
 const sal_uInt8 SC_ROTDIR_NONE       = 0;
