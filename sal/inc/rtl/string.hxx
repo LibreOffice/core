@@ -388,7 +388,14 @@ public:
 
       @since LibreOffice 3.5
     */
-    sal_Char operator [](sal_Int32 index) const { return getStr()[index]; }
+    sal_Char operator [](sal_Int32 index) const {
+        assert(index >= 0 && index <= getLength());
+            //TODO: should really check for < getLength(), but there is quite
+            // some clever code out there that violates this function's
+            // documented precondition and relies on s[s.getLength()] == 0 and
+            // that would need to be fixed first
+        return getStr()[index];
+    }
 
     /**
       Compares two strings.

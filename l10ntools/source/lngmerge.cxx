@@ -194,7 +194,8 @@ sal_Bool LngParser::Merge(
     {
         rtl::OString sLine( *(*pLines)[ nPos ] );
         sLine = sLine.trim();
-        if (( sLine[0] == '[' ) &&
+        if (!sLine.isEmpty() &&
+            ( sLine[0] == '[' ) &&
             ( sLine[sLine.getLength() - 1] == ']' ))
         {
             sGroup = getBracketedContent(sLine).trim();
@@ -220,7 +221,8 @@ sal_Bool LngParser::Merge(
         {
             rtl::OString sLine( *(*pLines)[ nPos ] );
             sLine = sLine.trim();
-            if (( sLine[0] == '[' ) &&
+            if (!sLine.isEmpty() &&
+                ( sLine[0] == '[' ) &&
                 ( sLine[sLine.getLength() - 1] == ']' ))
             {
                 sGroup = getBracketedContent(sLine).trim();
