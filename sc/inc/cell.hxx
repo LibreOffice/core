@@ -51,7 +51,7 @@ class SvtBroadcaster;
 class ScProgress;
 class ScPatternAttr;
 
-class SC_DLLPUBLIC ScBaseCell
+class ScBaseCell
 {
 protected:
                     ~ScBaseCell();  // not virtual - not to be called directly.
@@ -91,12 +91,6 @@ public:
     /** Deletes the own cell broadcaster. */
     void            DeleteBroadcaster();
 
-    // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
-    void            StartListeningTo( ScDocument* pDoc );
-    void            EndListeningTo( ScDocument* pDoc,
-                                    ScTokenArray* pArr = NULL,
-                                    ScAddress aPos = ScAddress() );
-
     /** Error code if ScFormulaCell, else 0. */
     sal_uInt16          GetErrorCode() const;
     /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
@@ -120,7 +114,7 @@ protected:
 
 // ============================================================================
 
-class SC_DLLPUBLIC ScNoteCell : public ScBaseCell
+class ScNoteCell : public ScBaseCell
 {
 public:
 #ifdef USE_MEMPOOL
@@ -158,7 +152,7 @@ private:
     double          mfValue;
 };
 
-class SC_DLLPUBLIC ScStringCell : public ScBaseCell
+class ScStringCell : public ScBaseCell
 {
 public:
 #ifdef USE_MEMPOOL
@@ -179,7 +173,7 @@ private:
     rtl::OUString   maString;
 };
 
-class SC_DLLPUBLIC ScEditCell : public ScBaseCell
+class ScEditCell : public ScBaseCell
 {
     EditTextObject* mpData;
     mutable OUString* mpString;        // for faster access to formulas
@@ -578,6 +572,11 @@ public:
     ScSimilarFormulaDelta *BuildDeltaTo( ScFormulaCell *pOther );
     void                   ReleaseDelta( ScSimilarFormulaDelta *pDelta );
     bool                   InterpretFormulaGroup();
+
+    // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
+    void StartListeningTo( ScDocument* pDoc );
+    void EndListeningTo(
+        ScDocument* pDoc, ScTokenArray* pArr = NULL, ScAddress aPos = ScAddress() );
 };
 
 #endif

@@ -84,7 +84,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 
             if ( pOldCell->GetCellType() == CELLTYPE_FORMULA && !pDocument->IsClipOrUndo() )
             {
-                pOldCell->EndListeningTo( pDocument );
+                static_cast<ScFormulaCell*>(pOldCell)->EndListeningTo( pDocument );
                 // If in EndListening NoteCell is destroyed in same Col
                 if ( nIndex >= maItems.size() || maItems[nIndex].nRow != nRow )
                     Search(nRow, nIndex);
@@ -110,8 +110,10 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
     // After Import we call CalcAfterLoad and in there Listening.
     if ( !(pDocument->IsClipOrUndo() || pDocument->IsInsertingFromOtherDoc()) )
     {
-        pNewCell->StartListeningTo( pDocument );
         CellType eCellType = pNewCell->GetCellType();
+        if (eCellType == CELLTYPE_FORMULA)
+            static_cast<ScFormulaCell*>(pNewCell)->StartListeningTo(pDocument);
+
         // A note cell is only created by StartListeningCell when loading,
         // triggering Formula cells must be dirty anyway.
         if ( !(pDocument->IsCalcingAfterLoad() && eCellType == CELLTYPE_NOTE) )
@@ -171,7 +173,8 @@ void ScColumn::Delete( SCROW nRow )
             maScriptTypes.set_empty(nRow, nRow);
             // Should we free memory here (delta)? It'll be slower!
         }
-        pCell->EndListeningTo( pDocument );
+        if (pCell->GetCellType() == CELLTYPE_FORMULA)
+            static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
         pCell->Delete();
         bDirtyGroups = true;
 
@@ -190,7 +193,8 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
         ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), pCell));
     pNoteCell->Delete();
     maItems.erase(maItems.begin() + nIndex);
-    pCell->EndListeningTo( pDocument );
+    if (pCell->GetCellType() == CELLTYPE_FORMULA)
+        static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
     pCell->Delete();
 
     bDirtyGroups = true;
@@ -1446,7 +1450,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 
                 if ( pOldCell->GetCellType() == CELLTYPE_FORMULA )
                 {
-                    pOldCell->EndListeningTo( pDocument );
+                    static_cast<ScFormulaCell*>(pOldCell)->EndListeningTo(pDocument);
                     // If in EndListening NoteCell destroyed in same in gleicher Col
                     if ( i >= maItems.size() || maItems[i].nRow != nRow )
                         Search(nRow, i);
@@ -1460,7 +1464,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )
                 {
-                    pNewCell->StartListeningTo( pDocument );
+                    static_cast<ScFormulaCell*>(pNewCell)->StartListeningTo(pDocument);
                     ((ScFormulaCell*)pNewCell)->SetDirty();
                 }
                 else

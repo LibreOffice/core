@@ -1818,6 +1818,178 @@ bool ScFormulaCell::InterpretFormulaGroup()
     }
 }
 
+void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
+{
+    if ( eCellType == CELLTYPE_FORMULA && !pDoc->IsClipOrUndo()
+            && !pDoc->GetNoListening()
+            && !((ScFormulaCell*)this)->IsInChangeTrack()
+        )
+    {
+        pDoc->SetDetectiveDirty(true);  // It has changed something
+
+        ScFormulaCell* pFormCell = (ScFormulaCell*)this;
+        ScTokenArray* pArr = pFormCell->GetCode();
+        if( pArr->IsRecalcModeAlways() )
+            pDoc->StartListeningArea( BCA_LISTEN_ALWAYS, pFormCell );
+        else
+        {
+            pArr->Reset();
+            ScToken* t;
+            while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+            {
+                StackVar eType = t->GetType();
+                ScSingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef2 = (eType == svDoubleRef ?
+                    t->GetDoubleRef().Ref2 : rRef1);
+                switch( eType )
+                {
+                    case svSingleRef:
+                        rRef1.CalcAbsIfRel( pFormCell->aPos );
+                        if ( rRef1.Valid() )
+                        {
+                            pDoc->StartListeningCell(
+                                ScAddress( rRef1.nCol,
+                                           rRef1.nRow,
+                                           rRef1.nTab ), pFormCell );
+                        }
+                    break;
+                    case svDoubleRef:
+                        t->CalcAbsIfRel( pFormCell->aPos );
+                        if ( rRef1.Valid() && rRef2.Valid() )
+                        {
+                            if ( t->GetOpCode() == ocColRowNameAuto )
+                            {   // automagically
+                                if ( rRef1.IsColRel() )
+                                {   // ColName
+                                    pDoc->StartListeningArea( ScRange (
+                                        rRef1.nCol,
+                                        rRef1.nRow,
+                                        rRef1.nTab,
+                                        rRef2.nCol,
+                                        MAXROW,
+                                        rRef2.nTab ), pFormCell );
+                                }
+                                else
+                                {   // RowName
+                                    pDoc->StartListeningArea( ScRange (
+                                        rRef1.nCol,
+                                        rRef1.nRow,
+                                        rRef1.nTab,
+                                        MAXCOL,
+                                        rRef2.nRow,
+                                        rRef2.nTab ), pFormCell );
+                                }
+                            }
+                            else
+                            {
+                                pDoc->StartListeningArea( ScRange (
+                                    rRef1.nCol,
+                                    rRef1.nRow,
+                                    rRef1.nTab,
+                                    rRef2.nCol,
+                                    rRef2.nRow,
+                                    rRef2.nTab ), pFormCell );
+                            }
+                        }
+                    break;
+                    default:
+                        ;   // nothing
+                }
+            }
+        }
+        pFormCell->SetNeedsListening( false);
+    }
+}
+
+//  pArr gesetzt -> Referenzen von anderer Zelle nehmen
+// Then aPos must also be commited
+
+void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
+        ScAddress aCellPos )
+{
+    if ( eCellType == CELLTYPE_FORMULA && !pDoc->IsClipOrUndo()
+            && !((ScFormulaCell*)this)->IsInChangeTrack()
+        )
+    {
+        pDoc->SetDetectiveDirty(true);  // It has changed something
+
+        ScFormulaCell* pFormCell = (ScFormulaCell*)this;
+        if( pFormCell->GetCode()->IsRecalcModeAlways() )
+            pDoc->EndListeningArea( BCA_LISTEN_ALWAYS, pFormCell );
+        else
+        {
+            if (!pArr)
+            {
+                pArr = pFormCell->GetCode();
+                aCellPos = pFormCell->aPos;
+            }
+            pArr->Reset();
+            ScToken* t;
+            while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+            {
+                StackVar eType = t->GetType();
+                ScSingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef2 = (eType == svDoubleRef ?
+                    t->GetDoubleRef().Ref2 : rRef1);
+                switch( eType )
+                {
+                    case svSingleRef:
+                        rRef1.CalcAbsIfRel( aCellPos );
+                        if ( rRef1.Valid() )
+                        {
+                            pDoc->EndListeningCell(
+                                ScAddress( rRef1.nCol,
+                                           rRef1.nRow,
+                                           rRef1.nTab ), pFormCell );
+                        }
+                    break;
+                    case svDoubleRef:
+                        t->CalcAbsIfRel( aCellPos );
+                        if ( rRef1.Valid() && rRef2.Valid() )
+                        {
+                            if ( t->GetOpCode() == ocColRowNameAuto )
+                            {   // automagically
+                                if ( rRef1.IsColRel() )
+                                {   // ColName
+                                    pDoc->EndListeningArea( ScRange (
+                                        rRef1.nCol,
+                                        rRef1.nRow,
+                                        rRef1.nTab,
+                                        rRef2.nCol,
+                                        MAXROW,
+                                        rRef2.nTab ), pFormCell );
+                                }
+                                else
+                                {   // RowName
+                                    pDoc->EndListeningArea( ScRange (
+                                        rRef1.nCol,
+                                        rRef1.nRow,
+                                        rRef1.nTab,
+                                        MAXCOL,
+                                        rRef2.nRow,
+                                        rRef2.nTab ), pFormCell );
+                                }
+                            }
+                            else
+                            {
+                                pDoc->EndListeningArea( ScRange (
+                                    rRef1.nCol,
+                                    rRef1.nRow,
+                                    rRef1.nTab,
+                                    rRef2.nCol,
+                                    rRef2.nRow,
+                                    rRef2.nTab ), pFormCell );
+                            }
+                        }
+                    break;
+                    default:
+                        ;   // nothing
+                }
+            }
+        }
+    }
+}
+
 // ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
