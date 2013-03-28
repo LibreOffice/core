@@ -32,7 +32,7 @@
 #include "uno/current_context.hxx"
 #include "unotools/pathoptions.hxx"
 
-#if HAVE_FEATURE_HELP
+#if HAVE_FEATURE_DESKTOP
 #include <helpcompiler/compilehelp.hxx>
 #include <helpcompiler/HelpIndexer.hxx>
 #endif
@@ -387,7 +387,7 @@ void BackendImpl::implProcessHelp(
             data.dataUrl = xPackage->getURL();
             if (!package->extensionContainsCompiledHelp())
             {
-#if HAVE_FEATURE_HELP
+#if HAVE_FEATURE_DESKTOP
                 const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
                 data.dataUrl = sHelpFolder;
 

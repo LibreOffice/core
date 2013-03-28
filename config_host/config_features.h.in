@@ -17,6 +17,10 @@
  * the LibreOffice code does not need to handle such things itself.
  *
  * Non-DESKTOP implies no traditional inter-app drag and drop concept.
+ *
+ * Non-DESKTOP implies no traditional help mechanism, and to some
+ * extent (as noticed, and as possible without making the code too
+ * ugly) the related code is ifdeffed out.
  */
 
 #define HAVE_FEATURE_DESKTOP 0
@@ -29,14 +33,6 @@
  */
 
 #define HAVE_FEATURE_EXTENSIONS 0
-
-/* HELP - Whether we have the "normal" desktop-style help mechanism
- *
- * Can be turned on/off also for desktop environments with
- * --with-help, so thus a separate feature.
- */
-
-#define HAVE_FEATURE_HELP 0
 
 /* MULTIUSER_ENVIRONMENT - Wheter running on a "normal" multi-user
  * desktop (or server) OS

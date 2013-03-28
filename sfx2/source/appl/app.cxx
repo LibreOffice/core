@@ -130,7 +130,7 @@ SfxApplication* SfxApplication::pApp = NULL;
 static BasicDLL*       pBasic   = NULL;
 #endif
 
-#if HAVE_FEATURE_HELP
+#if HAVE_FEATURE_DESKTOP
 static SfxHelp*        pSfxHelp = NULL;
 #endif
 
@@ -167,7 +167,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );
         ::framework::SetActivateToolPanel( &SfxViewFrame::ActivateToolPanel );
-#if HAVE_FEATURE_HELP
+#if HAVE_FEATURE_DESKTOP
         Application::SetHelp( pSfxHelp );
         if ( SvtHelpOptions().IsHelpTips() )
             Help::EnableQuickHelp();
@@ -212,7 +212,7 @@ SfxApplication::SfxApplication()
     (void)bOk;
 #endif
 
-#if HAVE_FEATURE_HELP
+#if HAVE_FEATURE_DESKTOP
     pSfxHelp = new SfxHelp;
 #endif
 
@@ -231,7 +231,7 @@ SfxApplication::~SfxApplication()
 
     SfxModule::DestroyModules_Impl();
 
-#if HAVE_FEATURE_HELP
+#if HAVE_FEATURE_DESKTOP
     delete pSfxHelp;
     Application::SetHelp( NULL );
 #endif

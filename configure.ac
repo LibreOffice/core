@@ -4386,7 +4386,6 @@ AC_MSG_CHECKING([whether to build help])
 if test "$with_help" = "yes" -a $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE HELP"
-    AC_DEFINE(HAVE_FEATURE_HELP)
     SCPDEFS="$SCPDEFS -DWITH_HELP"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
 else
