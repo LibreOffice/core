@@ -49,10 +49,13 @@ $(eval $(call gb_Library_use_static_libraries,merged,\
 endif
 
 $(eval $(call gb_Library_use_externals,merged,\
+	boostdatetime \
 	$(if $(filter-out IOS,$(OS)),cdr) \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
+	cmis \
 	cppunit \
 	cups \
+	curl \
 	expat_utf8 \
 	hunspell \
 	hyphen \
@@ -63,6 +66,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	lcms2 \
 	libxml2 \
 	$(call gb_Helper_optional,DESKTOP,libxslt) \
+	$(if $(filter-out IOS,$(OS)),lpsolve) \
 	$(if $(filter-out IOS,$(OS)),mspub) \
 	$(if $(filter-out IOS,$(OS)),mwaw) \
 	mythes \

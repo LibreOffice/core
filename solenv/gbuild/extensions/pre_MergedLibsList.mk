@@ -97,15 +97,18 @@ gb_MERGEDLIBS := \
 	sax \
 	sb \
 	sc \
+	$(if $(DISABLE_SCRIPTING),,scriptframe) \
 	scui \
 	scfilt \
 	sd \
 	sdui \
 	sfx \
 	sofficeapp \
+	$(if $(filter-out IOS,$(OS)),solver) \
 	sot \
 	spell \
 	spl \
+	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	subsequenttest \
 	svl \
 	svt \
@@ -115,9 +118,11 @@ gb_MERGEDLIBS := \
 	swui \
 	swd \
 	test \
+	textfd \
 	tk \
 	$(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes) \
 	ucb1 \
+	ucpcmis1 \
 	ucpfile1 \
 	unotest \
 	utl \
@@ -128,6 +133,8 @@ gb_MERGEDLIBS := \
 	$(if $(filter-out IOS,$(OS)),wpftdraw) \
 	$(if $(filter-out IOS,$(OS)),wpftwriter) \
 	writerfilter \
+	xmlfa \
+	xmlfd \
 	xmlscript \
 	xmlsecurity \
 	xo \
