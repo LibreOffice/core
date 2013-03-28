@@ -27,12 +27,7 @@
 #define LB_CHARTTYPE        2
 #define CT_CHARTVARIANT     3
 
-#define FL_SPLINE_SEPARATOR 2
-#define FL_SPLINE_DIALOGBUTTONS 3
-
 #define FT_CHARTTYPE            1
-#define FT_SPLINE_ORDER         3
-#define FT_SPLINE_RESOLUTION    4
 
 #define CB_X_AXIS_CATEGORIES 1
 #define CB_3D_LOOK           2
@@ -45,11 +40,5 @@
 #define RB_STACK_Y          2
 #define RB_STACK_Y_PERCENT  3
 #define RB_STACK_Z          4
-
-#define RB_SPLINES_CUBIC    5
-#define RB_SPLINES_B        6
-
-#define MF_SPLINE_ORDER         1
-#define MF_SPLINE_RESOLUTION    2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,22 +30,18 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkRadioButton" id="CubicSplineRadioButton">
-                    <property name="label" translatable="yes">Cubic _spline</property>
+                  <object class="GtkLabel" id="TypeLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_right">12</property>
+                    <property name="label" translatable="yes">Line _Type:</property>
                     <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">BSplineRadioButton</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -54,15 +50,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="BSplineRadioButton">
-                    <property name="label" translatable="yes">_B-Spline</property>
+                  <object class="GtkComboBoxText" id="SplineTypeComboBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">CubicSplineRadioButton</property>
+                    <property name="can_focus">False</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item translatable="yes">Cubic spline</item>
+                      <item translatable="yes">B-spline</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -74,11 +69,8 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <object class="GtkGrid" id="grid2">
@@ -89,7 +81,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Resolution</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">12</property>
+                    <property name="label" translatable="yes">_Resolution:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ResolutionSpinbutton</property>
                   </object>
@@ -105,7 +99,9 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Degree of polynomials</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">12</property>
+                    <property name="label" translatable="yes">_Degree of polynomials:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">PolynomialsSpinButton</property>
                   </object>
@@ -122,6 +118,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="invisible_char">●</property>
+                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">ResolutionAdjustment</property>
                   </object>
                   <packing>
@@ -137,6 +134,7 @@
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="invisible_char">●</property>
+                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">PolynomialsAdjustment</property>
                   </object>
                   <packing>
@@ -163,10 +161,11 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
+            <property name="margin_top">12</property>
             <property name="homogeneous">True</property>
-            <property name="layout_style">spread</property>
+            <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="OKButton">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -182,7 +181,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="CancelButton">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -196,7 +195,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="HelpButton">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -220,9 +219,27 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">OKButton</action-widget>
-      <action-widget response="0">CancelButton</action-widget>
-      <action-widget response="0">HelpButton</action-widget>
+      <action-widget response="0">ok</action-widget>
+      <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">help</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkListStore" id="SplineTypeModel">
+    <columns>
+      <!-- column-name TypeName -->
+      <column type="gchararray"/>
+      <!-- column-name TypeInt -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Cubic Spline</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">B-Spline</col>
+        <col id="1">1</col>
+      </row>
+    </data>
   </object>
 </interface>
