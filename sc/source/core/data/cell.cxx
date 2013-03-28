@@ -723,17 +723,16 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
              * pCell only if (!this->IsInChangeTrack()),
              * GetEnglishFormula() omitted that test.
              * Can we live without in all cases? */
-            ScBaseCell* pCell;
+            ScFormulaCell* pCell = NULL;
             ScSingleRefData& rRef = p->GetSingleRef();
             rRef.CalcAbsIfRel( aPos );
             if ( rRef.Valid() )
-                pCell = pDocument->GetCell( ScAddress( rRef.nCol,
-                            rRef.nRow, rRef.nTab ) );
-            else
-                pCell = NULL;
-            if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+                pCell = pDocument->GetFormulaCell(
+                    ScAddress(rRef.nCol, rRef.nRow, rRef.nTab));
+
+            if (pCell)
             {
-                ((ScFormulaCell*)pCell)->GetFormula( rBuffer, eGrammar);
+                pCell->GetFormula( rBuffer, eGrammar);
                 return;
             }
             else

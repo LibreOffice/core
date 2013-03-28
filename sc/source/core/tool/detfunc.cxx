@@ -67,6 +67,7 @@
 #include "rangelst.hxx"
 #include "reftokenhelper.hxx"
 #include "formulaiter.hxx"
+#include "cellvalue.hxx"
 
 #include <vector>
 
@@ -821,14 +822,12 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
 sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
                                             sal_uInt16 nLevel )
 {
-    ScBaseCell* pCell;
-    pDoc->GetCell( nCol, nRow, nTab, pCell );
-    if (!pCell)
-        return DET_INS_EMPTY;
-    if (pCell->GetCellType() != CELLTYPE_FORMULA)
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    if (aCell.meType != CELLTYPE_FORMULA)
         return DET_INS_EMPTY;
 
-    ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+    ScFormulaCell* pFCell = aCell.mpFormula;
     if (pFCell->IsRunning())
         return DET_INS_CIRCULAR;
 
@@ -838,7 +837,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
 
     sal_uInt16 nResult = DET_INS_EMPTY;
 
-    ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
+    ScDetectiveRefIter aIter(pFCell);
     ScRange aRef;
     while ( aIter.GetNextRef( aRef ) )
     {
@@ -912,14 +911,12 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
 {
     OSL_ENSURE( nLevel<1000, "Level" );
 
-    ScBaseCell* pCell;
-    pDoc->GetCell( nCol, nRow, nTab, pCell );
-    if (!pCell)
-        return nLevel;
-    if (pCell->GetCellType() != CELLTYPE_FORMULA)
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    if (aCell.meType != CELLTYPE_FORMULA)
         return nLevel;
 
-    ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+    ScFormulaCell* pFCell = aCell.mpFormula;
     if (pFCell->IsRunning())
         return nLevel;
 
@@ -935,7 +932,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
         DeleteArrowsAt( nCol, nRow, sal_True );                 // Pfeile, die hierher zeigen
     }
 
-    ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
+    ScDetectiveRefIter aIter(pFCell);
     ScRange aRef;
     while ( aIter.GetNextRef( aRef) )
     {
@@ -974,14 +971,12 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
 sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
                                             sal_uInt16 nLevel )
 {
-    ScBaseCell* pCell;
-    pDoc->GetCell( nCol, nRow, nTab, pCell );
-    if (!pCell)
-        return DET_INS_EMPTY;
-    if (pCell->GetCellType() != CELLTYPE_FORMULA)
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
+    if (aCell.meType != CELLTYPE_FORMULA)
         return DET_INS_EMPTY;
 
-    ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+    ScFormulaCell* pFCell = aCell.mpFormula;
     if (pFCell->IsRunning())
         return DET_INS_CIRCULAR;
 
@@ -991,7 +986,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
 
     sal_uInt16 nResult = DET_INS_EMPTY;
 
-    ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
+    ScDetectiveRefIter aIter(pFCell);
     ScRange aRef;
     ScAddress aErrorPos;
     sal_Bool bHasError = false;
