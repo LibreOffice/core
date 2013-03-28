@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+K8\u003d",
+        "filename": "dbaccess/source/ui/dlg/sqlmessage.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-03-28T16:58:02Z",
+      "side": 1,
+      "message": "Note that many of these can be simply written as\nsText +\u003d m_sStatusLabel + \": \" + aExceptionInfo.sSQLState + \"\\n\";\n\nwhich is both more efficient and usually clearer to read.",
+      "revId": "7ee37c3ac6dd486428ee96eed7f147e2f23c1b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
