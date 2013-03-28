@@ -2648,6 +2648,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     // Seems this old syntax has no way to specify a custom radius, and this is the default
                     m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue("CornerRadius", uno::makeAny(sal_Int32(83)));
                 break;
+        case RTF_NOWRAP:
+                m_aStates.top().aFrame.setSprm(NS_sprm::LN_PWr, NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside);
+                break;
         default:
                 {
                     SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
@@ -4785,6 +4788,9 @@ void RTFFrame::setSprm(Id nId, Id nValue)
         case NS_ooxml::LN_CT_FramePr_vAnchor:
             nVertAnchor = nValue;
             break;
+        case NS_sprm::LN_PWr:
+            oWrap.reset(nValue);
+            break;
         default:
             break;
     }
@@ -4876,6 +4882,10 @@ RTFSprms RTFFrame::getSprms()
                         nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_atLeast;
                     pValue.reset(new RTFValue(nHRule));
                 }
+                break;
+            case NS_sprm::LN_PWr:
+                if (oWrap)
+                    pValue.reset(new RTFValue(*oWrap));
                 break;
             default:
                 break;

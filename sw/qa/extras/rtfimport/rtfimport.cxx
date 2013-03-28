@@ -147,6 +147,7 @@ public:
     void testFdo60722();
     void testFdo61909();
     void testFdo62288();
+    void testFdo37716();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -267,6 +268,7 @@ void Test::run()
         {"fdo60722.rtf", &Test::testFdo60722},
         {"fdo61909.rtf", &Test::testFdo61909},
         {"fdo62288.rtf", &Test::testFdo62288},
+        {"fdo37716.rtf", &Test::testFdo37716},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1196,6 +1198,14 @@ void Test::testFdo62288()
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     // Margins were inherited from the previous cell, even there was a \pard there.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
+}
+
+void Test::testFdo37716()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    // \nowrap got ignored, so Surround was text::WrapTextMode_PARALLEL
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(xFrames->getByIndex(0), "Surround"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
