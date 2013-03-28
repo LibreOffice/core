@@ -950,6 +950,29 @@ OUString LanguageTag::getRegion() const
 }
 
 
+OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
+{
+    OUString aRet;
+    if (isIsoLocale())
+    {
+        OUString aCountry( getCountry());
+        if (aCountry.isEmpty())
+            aRet = getLanguage() + rEncoding;
+        else
+            aRet = getLanguage() + "_" + aCountry + rEncoding;
+    }
+    else
+    {
+        /* FIXME: use the aImplIsoLangGLIBCModifiersEntries table from
+         * i18npool/source/isolang/isolang.cxx or let liblangtag handle it. So
+         * far no code was prepared for anything else than a simple
+         * language_country locale so we don't loose anything here right now.
+         * */
+    }
+    return aRet;
+}
+
+
 bool LanguageTag::hasScript() const
 {
     if (!mbCachedScript)

@@ -158,6 +158,19 @@ public:
      */
     OUString                        getRegion() const;
 
+    /** Get a GLIBC locale string.
+
+        Always resolves an empty tag to the system locale.
+
+        @param  rEncoding
+                An encoding to be appended to language_country, for example
+                ".UTF-8" including the dot.
+
+        @return The resulting GLIBC locale string if it could be constructed,
+                if not an empty string is returned.
+     */
+    OUString                        getGlibcLocaleString( const OUString & rEncoding ) const;
+
     /** If language tag has a non-default script specified.
      */
     bool                            hasScript() const;
