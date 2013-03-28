@@ -69,7 +69,7 @@ void ScDocument::Broadcast( sal_uLong nHint, const ScAddress& rAddr,
 {
     if ( !pBASM )
         return ;    // Clipboard or Undo
-    ScHint aHint( nHint, rAddr, pCell );
+    ScHint aHint(nHint, rAddr, pCell ? pCell->GetBroadcaster() : NULL);
     Broadcast( aHint );
 }
 
@@ -82,15 +82,11 @@ void ScDocument::Broadcast( const ScHint& rHint )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
-        ScBaseCell* pCell = rHint.GetCell();
-        if ( pCell )
+        SvtBroadcaster* pBC = rHint.GetBroadcaster();
+        if ( pBC )
         {
-            SvtBroadcaster* pBC = pCell->GetBroadcaster();
-            if ( pBC )
-            {
-                pBC->Broadcast( rHint );
-                bIsBroadcasted = true;
-            }
+            pBC->Broadcast( rHint );
+            bIsBroadcasted = true;
         }
         if ( pBASM->AreaBroadcast( rHint ) || bIsBroadcasted )
             TrackFormulas( rHint.GetId() );
@@ -457,7 +453,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
         pTrack = pFormulaTrack;
         do
         {
-            ScHint aHint( nHintId, pTrack->aPos, pTrack );
+            ScHint aHint( nHintId, pTrack->aPos, pTrack->GetBroadcaster() );
             if ( ( pBC = pTrack->GetBroadcaster() ) != NULL )
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );

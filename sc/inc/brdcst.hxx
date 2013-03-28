@@ -24,7 +24,8 @@
 #include <tools/rtti.hxx>
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
-class ScBaseCell;
+
+class SvtBroadcaster;
 
 #define SC_HINT_DYING       SFX_HINT_DYING
 #define SC_HINT_DATACHANGED SFX_HINT_DATACHANGED
@@ -35,14 +36,13 @@ class ScHint : public SfxSimpleHint
 {
 private:
     ScAddress   aAddress;
-    ScBaseCell* pCell;
+    SvtBroadcaster* mpBroadcaster;
 
 public:
     TYPEINFO();
-                        ScHint( sal_uLong n, const ScAddress& a, ScBaseCell* p )
-                            : SfxSimpleHint( n ), aAddress( a ), pCell( p ) {}
-    ScBaseCell*         GetCell() const { return pCell; }
-    void                SetCell( ScBaseCell* p )    { pCell = p; }
+    ScHint( sal_uLong n, const ScAddress& a, SvtBroadcaster* p );
+    SvtBroadcaster* GetBroadcaster() const;
+    void SetBroadcaster( SvtBroadcaster* p );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
     void                SetAddress( const ScAddress& rAdr ) { aAddress = rAdr; }
