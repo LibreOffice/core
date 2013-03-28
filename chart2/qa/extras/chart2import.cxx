@@ -82,22 +82,30 @@ void Chart2ImportTest::Fdo60083()
     CPPUNIT_ASSERT(xErrorBarYProps.is());
     {
         sal_Int32 nErrorBarStyle;
-        xErrorBarYProps->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle;
-        CPPUNIT_ASSERT_EQUAL(nErrorBarStyle, static_cast<sal_Int32>(chart::ErrorBarStyle::RELATIVE));
+        CPPUNIT_ASSERT(
+            xErrorBarYProps->getPropertyValue("ErrorBarStyle")
+            >>= nErrorBarStyle);
+        CPPUNIT_ASSERT_EQUAL(
+            static_cast<sal_Int32>(chart::ErrorBarStyle::RELATIVE),
+            nErrorBarStyle);
 
         double nVal;
-        xErrorBarYProps->getPropertyValue("PositiveError") >>= nVal;
+        CPPUNIT_ASSERT(
+            xErrorBarYProps->getPropertyValue("PositiveError") >>= nVal);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, nVal, 1e-8);
 
-        xErrorBarYProps->getPropertyValue("NegativeError") >>= nVal;
+        CPPUNIT_ASSERT(
+            xErrorBarYProps->getPropertyValue("NegativeError") >>= nVal);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, nVal, 1e-8);
 
-        sal_Bool bVal;
-        xErrorBarYProps->getPropertyValue("ShowPositiveError") >>= bVal;
-        CPPUNIT_ASSERT_EQUAL(static_cast<bool>(bVal), true);
+        bool bVal;
+        CPPUNIT_ASSERT(
+            xErrorBarYProps->getPropertyValue("ShowPositiveError") >>= bVal);
+        CPPUNIT_ASSERT_EQUAL(bVal, true);
 
-        xErrorBarYProps->getPropertyValue("ShowNegativeError") >>= bVal;
-        CPPUNIT_ASSERT_EQUAL(static_cast<bool>(bVal), true);
+        CPPUNIT_ASSERT(
+            xErrorBarYProps->getPropertyValue("ShowNegativeError") >>= bVal);
+        CPPUNIT_ASSERT_EQUAL(bVal, true);
     }
 
     // test that x error bars are not imported
