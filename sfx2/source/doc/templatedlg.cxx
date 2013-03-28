@@ -1046,6 +1046,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     // Hide search view
     if (bVisible)
     {
+        mpSearchView->deselectItems();
         mpSearchView->Hide();
         mpCurView->Show();
     }
