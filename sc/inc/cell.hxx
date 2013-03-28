@@ -100,8 +100,6 @@ public:
     bool            HasStringData() const;
     rtl::OUString   GetStringData() const;          // only real strings
 
-    static bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
-
 private:
     ScBaseCell&     operator=( const ScBaseCell& );
 

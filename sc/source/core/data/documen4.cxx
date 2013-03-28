@@ -790,18 +790,18 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
 
         if (ValidCol(nOtherCol))    // nur Spalten vergleichen, die in beiden Dateien sind
         {
-            const ScBaseCell* pThisCell = GetCell( ScAddress( nThisCol, nThisRow, nThisTab ) );
-            const ScBaseCell* pOtherCell = rOtherDoc.GetCell( ScAddress( nOtherCol, nOtherRow, nOtherTab ) );
-            if (!ScBaseCell::CellEqual( pThisCell, pOtherCell ))
+            ScRefCellValue aThisCell, aOtherCell;
+            aThisCell.assign(*this, ScAddress(nThisCol, nThisRow, nThisTab));
+            aOtherCell.assign(rOtherDoc, ScAddress(nOtherCol, nOtherRow, nOtherTab));
+            if (!aThisCell.equalsWithoutFormat(aOtherCell))
             {
-                if ( pThisCell && pOtherCell )
+                if (!aThisCell.isEmpty() && !aOtherCell.isEmpty())
                     nDif += 3;
                 else
                     nDif += 4;      // Inhalt <-> leer zaehlt mehr
             }
 
-            if ( ( pThisCell  && pThisCell->GetCellType()!=CELLTYPE_NOTE ) ||
-                 ( pOtherCell && pOtherCell->GetCellType()!=CELLTYPE_NOTE ) )
+            if (!aThisCell.isEmpty() || !aOtherCell.isEmpty())
                 ++nUsed;
         }
     }
@@ -831,18 +831,18 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
 
         if (ValidRow(nOtherRow))    // nur Zeilen vergleichen, die in beiden Dateien sind
         {
-            const ScBaseCell* pThisCell = GetCell( ScAddress( nThisCol, nThisRow, nThisTab ) );
-            const ScBaseCell* pOtherCell = rOtherDoc.GetCell( ScAddress( nOtherCol, nOtherRow, nOtherTab ) );
-            if (!ScBaseCell::CellEqual( pThisCell, pOtherCell ))
+            ScRefCellValue aThisCell, aOtherCell;
+            aThisCell.assign(*this, ScAddress(nThisCol, nThisRow, nThisTab));
+            aOtherCell.assign(rOtherDoc, ScAddress(nOtherCol, nOtherRow, nOtherTab));
+            if (!aThisCell.equalsWithoutFormat(aOtherCell))
             {
-                if ( pThisCell && pOtherCell )
+                if (!aThisCell.isEmpty() && !aOtherCell.isEmpty())
                     nDif += 3;
                 else
                     nDif += 4;      // Inhalt <-> leer zaehlt mehr
             }
 
-            if ( ( pThisCell  && pThisCell->GetCellType()!=CELLTYPE_NOTE ) ||
-                 ( pOtherCell && pOtherCell->GetCellType()!=CELLTYPE_NOTE ) )
+            if (!aThisCell.isEmpty() || !aOtherCell.isEmpty())
                 ++nUsed;
         }
     }
