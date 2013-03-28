@@ -44,6 +44,7 @@ void lo_damaged();
 void lo_runMain();
 void lo_set_view_size(int width, int height);
 void lo_render_windows(char *pixelBuffer, int width, int height);
+void lo_tap(int x, int y);
 
 #ifdef __cplusplus
 }

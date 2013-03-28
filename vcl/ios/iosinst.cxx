@@ -312,4 +312,21 @@ void lo_render_windows(char *pixelBuffer, int width, int height)
         IosSalInstance::getInstance()->RedrawWindows(pixelBuffer, width, height, 0, 0, width, height);
 }
 
+extern "C"
+void lo_tap(int x, int y)
+{
+    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        MouseEvent aEvent;
+        sal_uLong nEvent;
+
+        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
+        Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
+
+        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
+        Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
