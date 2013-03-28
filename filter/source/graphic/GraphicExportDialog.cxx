@@ -141,16 +141,16 @@ void GraphicExportDialog::setSourceDocument( const Reference<XComponent>& xDocum
         if ( !aConfigPath.isEmpty() )
         {
             FilterConfigItem aConfigItem( aConfigPath );
-            String aPropertyName;
+            OUString aPropertyName;
             SvtSysLocale aSysLocale;
 
             if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MEASURE_METRIC )
             {
-                aPropertyName = String( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+                aPropertyName = OUString( "Metric" );
             }
             else
             {
-                aPropertyName = String( RTL_CONSTASCII_USTRINGPARAM( "NonMetric" ) );
+                aPropertyName = OUString( "NonMetric" );
             }
             meFieldUnit = (FieldUnit) aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
         }

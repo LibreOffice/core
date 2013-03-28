@@ -969,7 +969,7 @@ void EscherPropertyContainer::CreateLineProperties(
     AddOpt( ESCHER_Prop_lineJoinStyle, eLineJoin );
 
     if ( EscherPropertyValueHelper::GetPropertyValue(
-        aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineTransparence" ) ), sal_True ) )
+        aAny, rXPropSet, "LineTransparence", sal_True ) )
     {
         sal_Int16 nTransparency = 0;
         if ( aAny >>= nTransparency )
@@ -3035,7 +3035,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 }
                             }
                             //export gTextAlign attr
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) ), sal_True ) )
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "TextHorizontalAdjust", sal_True ) )
                             {
                                 MSO_GeoTextAlign  gTextAlign = mso_alignTextCenter;
                                 drawing::TextHorizontalAdjust   eHA( drawing::TextHorizontalAdjust_LEFT );
@@ -4090,7 +4090,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
     {
         bool bRectangularConnection = true;
 
-        if (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.Custom")))
+        if (aType == "drawing.Custom")
         {
             SdrObject* pCustoShape( GetSdrObjectFromXShape( aXShape ) );
             if ( pCustoShape && pCustoShape->ISA( SdrObjCustomShape ) )

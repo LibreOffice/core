@@ -201,9 +201,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
             rObj.GetType().EqualsAscii( "drawing.Measure" ) )
         {
-            rObj.SetType( String( RTL_CONSTASCII_STRINGPARAM(
-                                "drawing.dontknow" ),
-                                RTL_TEXTENCODING_MS_1252 ));
+            rObj.SetType( String("drawing.dontknow"));
         }
 
         const ::com::sun::star::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
@@ -242,7 +240,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
             {
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", sal_False ) )
                 {
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );        // no fill
@@ -517,7 +515,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                        have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                     */
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_True,  sal_True, sal_False ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", sal_True,  sal_True, sal_False ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                         aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -533,7 +531,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 else
                 {
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False, sal_True ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "GraphicURL", sal_False, sal_True ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }
@@ -602,7 +600,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
 
-                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ), sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", sal_False ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Caption" ))
@@ -610,7 +608,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );
-            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", sal_False ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.dontknow" ))
@@ -618,7 +616,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", sal_False ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else

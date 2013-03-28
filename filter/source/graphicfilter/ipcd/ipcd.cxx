@@ -108,7 +108,7 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
     eResolution = PCDRES_BASE;
     if ( pConfigItem )
     {
-        sal_Int32 nResolution = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), 2 );
+        sal_Int32 nResolution = pConfigItem->ReadInt32( "Resolution", 2 );
         if ( nResolution == 1 )
             eResolution = PCDRES_BASE4;
         else if ( nResolution == 0 )
@@ -177,7 +177,7 @@ void PCDReader::CheckPCDImagePacFile()
     m_rPCD.Seek( 2048 );
     m_rPCD.Read( Buf, 7 );
     Buf[ 7 ] = 0;
-    if (!rtl::OString(Buf).equalsL(RTL_CONSTASCII_STRINGPARAM("PCD_IPI")))
+    if (rtl::OString(Buf) != "PCD_IPI")
         bStatus = sal_False;
 }
 
