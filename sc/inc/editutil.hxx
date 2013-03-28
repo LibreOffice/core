@@ -64,6 +64,8 @@ public:
     static EditTextObject* CreateURLObjectFromURL(
         ScDocument& rDoc, const OUString& rURL, const OUString& rText );
 
+    static void RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAttr& rAttr );
+
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,

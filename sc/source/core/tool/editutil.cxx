@@ -114,6 +114,28 @@ EditTextObject* ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUSt
     return rEE.CreateTextObject();
 }
 
+void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAttr& rAttr )
+{
+    const struct {
+        sal_uInt16 nAttrType;
+        sal_uInt16 nCharType;
+    } AttrTypeMap[] = {
+        { ATTR_FONT,        EE_CHAR_FONTINFO },
+        { ATTR_FONT_HEIGHT, EE_CHAR_FONTHEIGHT },
+        { ATTR_FONT_WEIGHT, EE_CHAR_WEIGHT },
+        { ATTR_FONT_COLOR,  EE_CHAR_COLOR }
+    };
+    sal_uInt16 nMapCount = sizeof (AttrTypeMap) / sizeof (AttrTypeMap[0]);
+
+    const SfxItemSet& rSet = rAttr.GetItemSet();
+    const SfxPoolItem* pItem;
+    for (sal_uInt16 i = 0; i < nMapCount; ++i)
+    {
+        if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SFX_ITEM_SET )
+            rEditText.RemoveCharAttribs(AttrTypeMap[i].nCharType);
+    }
+}
+
 //------------------------------------------------------------------------
 
 Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )

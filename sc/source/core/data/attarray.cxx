@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "attarray.hxx"
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -29,7 +30,6 @@
 #include <editeng/fontitem.hxx>
 #include <unotools/fontcvt.hxx>
 
-#include "attarray.hxx"
 #include "global.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
@@ -41,6 +41,8 @@
 #include "globstr.hrc"
 #include "segmenttree.hxx"
 #include "cell.hxx"
+#include "cellvalue.hxx"
+#include "editutil.hxx"
 #include <rtl/strbuf.hxx>
 
 // STATIC DATA -----------------------------------------------------------
@@ -352,20 +354,24 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
 {
     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
-        ScBaseCell* pCell;
-        pDocument->GetCell(nCol, nRow, nTab, pCell);
-        if (pCell && pCell->GetCellType() == CELLTYPE_EDIT)
+        ScAddress aPos(nCol, nRow, nTab);
+        ScRefCellValue aCell;
+        aCell.assign(*pDocument, aPos);
+        if (aCell.meType != CELLTYPE_EDIT || !aCell.mpEditText)
+            continue;
+
+        EditTextObject* pOldData = NULL;
+        if (pDataArray)
+            pOldData = aCell.mpEditText->Clone();
+
+        // Direct modification of cell content - something to watch out for if
+        // we decide to share edit text instances in the future.
+        ScEditUtil::RemoveCharAttribs(const_cast<EditTextObject&>(*aCell.mpEditText), *pPattern);
+
+        if (pDataArray)
         {
-            EditTextObject* pOldData = NULL;
-            ScEditCell* pEditCell = static_cast<ScEditCell*>(pCell);
-            if (pDataArray)
-                pOldData = pEditCell->GetData()->Clone();
-            pEditCell->RemoveCharAttribs(*pPattern);
-            if (pDataArray)
-            {
-                EditTextObject* pNewData = pEditCell->GetData()->Clone();
-                pDataArray->AddItem(nTab, nCol, nRow, pOldData, pNewData);
-            }
+            EditTextObject* pNewData = aCell.mpEditText->Clone();
+            pDataArray->AddItem(nTab, nCol, nRow, pOldData, pNewData);
         }
     }
 }
