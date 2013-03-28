@@ -119,7 +119,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
                         }
-                        else if( pMeasureHandler->getUnit() == NS_ooxml::LN_Value_ST_TblWidth_pct )
+                        else if( sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_pct )
                         {
                             sal_Int32 nPercent = pMeasureHandler->getValue() / 50;
                             if(nPercent > 100)
@@ -127,7 +127,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, nPercent );
                         }
-                        else if( pMeasureHandler->getUnit() == NS_ooxml::LN_Value_ST_TblWidth_auto )
+                        else if( sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_auto )
                         {
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
