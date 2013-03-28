@@ -599,6 +599,13 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
+ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
+{
+    if (!TableExists(rPos.Tab()))
+        return ScRefCellValue(); // empty
+
+    return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row());
+}
 
 bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                 bool bNotes ) const

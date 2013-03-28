@@ -1543,6 +1543,36 @@ ScFormulaVectorState ScColumn::GetFormulaVectorState( SCROW nRow ) const
     return pCell ? pCell->GetVectorState() : FormulaVectorUnknown;
 }
 
+ScRefCellValue ScColumn::GetRefCellValue( SCROW nRow )
+{
+    ScRefCellValue aCell; // start empty
+    SCSIZE nIndex;
+    if (!Search(nRow, nIndex))
+        return aCell;
+
+    ScBaseCell* pCell = maItems[nIndex].pCell;
+    aCell.meType = pCell->GetCellType();
+    switch (aCell.meType)
+    {
+        case CELLTYPE_STRING:
+            aCell.mpString = static_cast<const ScStringCell*>(pCell)->GetStringPtr();
+        break;
+        case CELLTYPE_EDIT:
+            aCell.mpEditText = static_cast<const ScEditCell*>(pCell)->GetData();
+        break;
+        case CELLTYPE_VALUE:
+            aCell.mfValue = static_cast<const ScValueCell*>(pCell)->GetValue();
+        break;
+        case CELLTYPE_FORMULA:
+            aCell.mpFormula = static_cast<ScFormulaCell*>(pCell);
+        break;
+        default:
+            aCell.meType = CELLTYPE_NONE; // reset to empty.
+    }
+
+    return aCell;
+}
+
 void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )
 {
     short eOldType = pDocument->GetFormatTable()->GetType(

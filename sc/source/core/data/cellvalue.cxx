@@ -188,20 +188,24 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
 {
     clear();
 
-    meType = rDoc.GetCellType(rPos);
+    ScRefCellValue aRefVal;
+    aRefVal.assign(const_cast<ScDocument&>(rDoc), rPos);
+
+    meType = aRefVal.meType;
     switch (meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(rDoc.GetString(rPos));
+            mpString = new OUString(*aRefVal.mpString);
         break;
         case CELLTYPE_EDIT:
-            mpEditText = rDoc.GetEditText(rPos)->Clone();
+            if (aRefVal.mpEditText)
+                mpEditText = aRefVal.mpEditText->Clone();
         break;
         case CELLTYPE_VALUE:
-            mfValue = rDoc.GetValue(rPos);
+            mfValue = aRefVal.mfValue;
         break;
         case CELLTYPE_FORMULA:
-            mpFormula = rDoc.GetFormulaCell(rPos)->Clone();
+            mpFormula = aRefVal.mpFormula->Clone();
         break;
         default:
             meType = CELLTYPE_NONE; // reset to empty.
@@ -398,26 +402,7 @@ void ScRefCellValue::clear()
 
 void ScRefCellValue::assign( ScDocument& rDoc, const ScAddress& rPos )
 {
-    clear();
-
-    meType = rDoc.GetCellType(rPos);
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-            mpString = rDoc.GetStringCell(rPos);
-        break;
-        case CELLTYPE_EDIT:
-            mpEditText = rDoc.GetEditText(rPos);
-        break;
-        case CELLTYPE_VALUE:
-            mfValue = rDoc.GetValue(rPos);
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula = rDoc.GetFormulaCell(rPos);
-        break;
-        default:
-            meType = CELLTYPE_NONE; // reset to empty.
-    }
+    *this = rDoc.GetRefCellValue(rPos);
 }
 
 void ScRefCellValue::assign( ScBaseCell& rCell )

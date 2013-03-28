@@ -442,6 +442,8 @@ public:
 
     ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
 
+    ScRefCellValue GetRefCellValue( SCROW );
+
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
 
 private:

@@ -45,6 +45,7 @@
 #include "colorscale.hxx"
 #include "conditio.hxx"
 #include "globalnames.hxx"
+#include "cellvalue.hxx"
 
 #include <vector>
 
@@ -2110,6 +2111,14 @@ ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) co
         return FormulaVectorUnknown;
 
     return aCol[nCol].GetFormulaVectorState(nRow);
+}
+
+ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
+{
+    if (!ValidColRow(nCol, nRow))
+        return ScRefCellValue();
+
+    return aCol[nCol].GetRefCellValue(nRow);
 }
 
 void ScTable::DeleteConditionalFormat( sal_uLong nIndex )

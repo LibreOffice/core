@@ -818,6 +818,8 @@ public:
 
     ScFormulaVectorState GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const;
 
+    ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
+
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,

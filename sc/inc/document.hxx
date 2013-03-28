@@ -144,6 +144,7 @@ class SvtListener;
 class ScNotes;
 class ScEditDataArray;
 class EditTextObject;
+class ScRefCellValue;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -217,6 +218,7 @@ friend class ScDocRowHeightUpdater;
 friend class ScColumnTextWidthIterator;
 friend class ScFormulaCell;
 friend class ScTable;
+friend class ScRefCellValue;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:
@@ -1975,6 +1977,8 @@ private: // CLOOK-Impl-methods
 
     void PutCell( const ScAddress&, ScBaseCell* pCell, bool bForceTab = false );
     void PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, sal_uLong nFormatIndex, bool bForceTab = false );
+
+    ScRefCellValue GetRefCellValue( const ScAddress& rPos );
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 
