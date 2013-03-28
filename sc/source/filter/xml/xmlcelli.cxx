@@ -1367,8 +1367,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 // cached result.  For import, we only need to set the correct
                 // matrix geometry and the value type of the top-left element.
 
-                ScFormulaCell* pFCell =
-                    static_cast<ScFormulaCell*>( rXMLImport.GetDocument()->GetCell(rCellPos) );
+                ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCellPos);
 
                 ScMatrixRef pMat(new ScMatrix(nMatrixCols, nMatrixRows));
                 if (bFormulaTextResult && maStringValue)

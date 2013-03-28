@@ -440,9 +440,8 @@ void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, bool /* bFirst */, S
         {
             if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
             {
-                ScBaseCell* pOrgCell = pDocument->GetCell( aOrg );
-                if ( pOrgCell && pOrgCell->GetCellType() == CELLTYPE_FORMULA
-                  && ((ScFormulaCell*)pOrgCell)->GetMatrixFlag() == MM_FORMULA )
+                ScFormulaCell* pOrgCell = pDocument->GetFormulaCell(aOrg);
+                if (pOrgCell && pOrgCell->GetMatrixFlag() == MM_FORMULA)
                 {
                     ((ScFormulaCell*)pOrgCell)->SetMatColsRows(
                         nDestCol - aOrg.Col() + 1,

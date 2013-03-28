@@ -1706,15 +1706,12 @@ public:
     void                EndListeningArea( const ScRange& rRange,
                                             SvtListener* pListener );
                         /** Broadcast wrapper, calls
-    SC_DLLPUBLIC                         rHint.GetCell()->Broadcast() and AreaBroadcast()
+                            rHint.GetCell()->Broadcast() and AreaBroadcast()
                             and TrackFormulas() and conditional format list
                             SourceChanged().
                             Preferred.
                          */
     void                Broadcast( const ScHint& rHint );
-                        /// deprecated
-    void                Broadcast( sal_uLong nHint, const ScAddress& rAddr,
-                                    ScBaseCell* pCell );
                         /// only area, no cell broadcast
     void                AreaBroadcast( const ScHint& rHint );
                         /// only areas in range, no cell broadcasts

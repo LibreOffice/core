@@ -6605,7 +6605,7 @@ void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeExc
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh && pDocSh->GetDocument()->GetCellType( aCellPos ) == CELLTYPE_FORMULA )
     {
-        ScFormulaCell* pCell = (ScFormulaCell *)pDocSh->GetDocument()->GetCell( aCellPos );
+        ScFormulaCell* pCell = pDocSh->GetDocument()->GetFormulaCell(aCellPos);
         pCell->SetHybridDouble( nValue );
         pCell->ResetDirty();
         pCell->ResetChanged();

@@ -48,7 +48,7 @@ public:
         bool bUseStarFormat = false );
 
     static OUString GetString(
-        const ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat,
+        ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat,
         Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
         bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce, bool bUseStarFormat = false );
 

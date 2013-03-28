@@ -221,7 +221,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                                 ScFormulaCell* pFCell;
                                 if ( ((ScFormulaCell*)pCell)->GetMatrixFlag()
                                         == MM_REFERENCE )
-                                    pFCell = (ScFormulaCell*) pDocument->GetCell( aOrg );
+                                    pFCell = pDocument->GetFormulaCell(aOrg);
                                 else
                                     pFCell = (ScFormulaCell*)pCell;
                                 SCCOL nC;

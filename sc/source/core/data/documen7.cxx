@@ -62,18 +62,6 @@ void ScDocument::EndListeningArea( const ScRange& rRange,
         pBASM->EndListeningArea( rRange, pListener );
 }
 
-
-void ScDocument::Broadcast( sal_uLong nHint, const ScAddress& rAddr,
-        ScBaseCell* pCell
-    )
-{
-    if ( !pBASM )
-        return ;    // Clipboard or Undo
-    ScHint aHint(nHint, rAddr, pCell ? pCell->GetBroadcaster() : NULL);
-    Broadcast( aHint );
-}
-
-
 void ScDocument::Broadcast( const ScHint& rHint )
 {
     if ( !pBASM )

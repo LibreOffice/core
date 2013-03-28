@@ -48,6 +48,7 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "stringutil.hxx"
+#include "cellvalue.hxx"
 
 #include "globstr.hrc"
 #include <vcl/svapp.hxx>
@@ -1968,9 +1969,9 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             bool bForm = false;
             SCROW r = nRow - nStartRow + 1;
             SCCOL c = nCol - nStartCol + 1;
-            ScBaseCell* pCell;
-            pDoc->GetCell( nCol, nRow, aRange.aStart.Tab(), pCell );
-            CellType eType = (pCell ? pCell->GetCellType() : CELLTYPE_NONE);
+            ScRefCellValue aCell;
+            aCell.assign(*pDoc, ScAddress(nCol, nRow, aRange.aStart.Tab()));
+            CellType eType = aCell.meType;
             switch( eType )
             {
                 case CELLTYPE_FORMULA:
@@ -2014,8 +2015,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 checkformula:
                     if( bForm )
                     {
-                        const ScFormulaCell* pFCell =
-                            static_cast<const ScFormulaCell*>(pCell);
+                        const ScFormulaCell* pFCell = aCell.mpFormula;
                         switch ( pFCell->GetMatrixFlag() )
                         {
                             case MM_REFERENCE :

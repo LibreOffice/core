@@ -593,7 +593,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 rOrgPos = aOrg;
                 ScFormulaCell* pFCell;
                 if ( cMatrixFlag == MM_REFERENCE )
-                    pFCell = (ScFormulaCell*) pDocument->GetCell( aOrg );
+                    pFCell = pDocument->GetFormulaCell(aOrg);
                 else
                     pFCell = this;      // this MM_FORMULA
                 // There's only one this, don't compare pFCell==this.
@@ -607,17 +607,15 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                         nC = 1;
                         nR = 1;
                         ScAddress aTmpOrg;
-                        ScBaseCell* pCell;
+                        ScFormulaCell* pCell;
                         ScAddress aAdr( aOrg );
                         aAdr.IncCol();
                         bool bCont = true;
                         do
                         {
-                            pCell = pDocument->GetCell( aAdr );
-                            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA
-                              && ((ScFormulaCell*)pCell)->cMatrixFlag == MM_REFERENCE
-                              && ((ScFormulaCell*)pCell)->GetMatrixOrigin( aTmpOrg )
-                              && aTmpOrg == aOrg )
+                            pCell = pDocument->GetFormulaCell(aAdr);
+                            if (pCell && pCell->cMatrixFlag == MM_REFERENCE &&
+                                pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nC++;
                                 aAdr.IncCol();
@@ -630,11 +628,9 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                         bCont = true;
                         do
                         {
-                            pCell = pDocument->GetCell( aAdr );
-                            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA
-                              && ((ScFormulaCell*)pCell)->cMatrixFlag == MM_REFERENCE
-                              && ((ScFormulaCell*)pCell)->GetMatrixOrigin( aTmpOrg )
-                              && aTmpOrg == aOrg )
+                            pCell = pDocument->GetFormulaCell(aAdr);
+                            if (pCell && pCell->cMatrixFlag == MM_REFERENCE &&
+                                pCell->GetMatrixOrigin(aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nR++;
                                 aAdr.IncRow();
@@ -1766,13 +1762,10 @@ bool ScFormulaCell::InterpretFormulaGroup()
         InterpretTail( SCITP_NORMAL );
         for ( sal_Int32 i = 0; i < xGroup->mnLength; i++ )
         {
-            ScBaseCell *pBaseCell = NULL;
-            pDocument->GetCell( aPos.Col(),
-                                xGroup->mnStart + i,
-                                aPos.Tab(), pBaseCell );
-            assert( pBaseCell != NULL );
-            assert( pBaseCell->GetCellType() == CELLTYPE_FORMULA );
-            ScFormulaCell *pCell = static_cast<ScFormulaCell *>( pBaseCell );
+            ScAddress aTmpPos = aPos;
+            aTmpPos.SetRow(xGroup->mnStart + i);
+            ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
+            assert( pCell != NULL );
 
             // FIXME: this set of horrors is unclear to me ... certainly
             // the above GetCell is profoundly nasty & slow ...

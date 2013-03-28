@@ -5277,8 +5277,10 @@ bool ScCompiler::HandleSingleRef()
     }
     if ( !bInList && pDoc->GetDocOptions().IsLookUpColRowNames() )
     {   // automagically or created by copying and NamePos isn't in list
-        bool bString = pDoc->HasStringData( nCol, nRow, nTab );
-        if ( !bString && !pDoc->GetCell( aLook ) )
+        ScRefCellValue aCell;
+        aCell.assign(*pDoc, aLook);
+        bool bString = aCell.hasString();
+        if (!bString && aCell.isEmpty())
             bString = true;     // empty cell is ok
         if ( bString )
         {   //! coresponds with ScInterpreter::ScColRowNameAuto()

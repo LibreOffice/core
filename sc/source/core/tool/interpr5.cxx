@@ -437,7 +437,8 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
             if (aCellIter.hasNumeric())
             {
                 ScAddress aAdr(nCol, nThisRow, nTab1);
-                double fVal = GetCellValue(aCellIter);
+                ScRefCellValue aCell = aCellIter.getRefCellValue();
+                double fVal = GetCellValue(aCellIter.GetPos(), aCell);
 
                 if ( nGlobalError )
                 {

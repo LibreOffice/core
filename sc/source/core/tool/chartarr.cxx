@@ -116,7 +116,7 @@ ScMemChart* ScChartArray::CreateMemChart()
 
 namespace {
 
-double getCellValue( const ScDocument& rDoc, const ScAddress& rPos, double fDefault, bool bCalcAsShown )
+double getCellValue( ScDocument& rDoc, const ScAddress& rPos, double fDefault, bool bCalcAsShown )
 {
     double fRet = fDefault;
 
@@ -135,7 +135,7 @@ double getCellValue( const ScDocument& rDoc, const ScAddress& rPos, double fDefa
         break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(rDoc.GetCell(rPos));
+            ScFormulaCell* pFCell = rDoc.GetFormulaCell(rPos);
             if (!pFCell->GetErrCode() && pFCell->IsValue())
                 fRet = pFCell->GetValue();
         }

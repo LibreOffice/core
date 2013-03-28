@@ -470,11 +470,11 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCe
     return nVal;
 }
 
-double ScInterpreter::GetCellValue( ScCellIterator& rIter )
+double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell )
 {
     sal_uInt16 nErr = nGlobalError;
     nGlobalError = 0;
-    double nVal = GetCellValueOrZero(rIter);
+    double nVal = GetCellValueOrZero(rPos, rCell);
     if ( !nGlobalError || nGlobalError == errCellNoValue )
         nGlobalError = nErr;
     return nVal;
@@ -552,18 +552,16 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
     return fValue;
 }
 
-double ScInterpreter::GetCellValueOrZero( ScCellIterator& rIter )
+double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue& rCell )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellValueOrZero" );
     double fValue = 0.0;
 
-    CellType eType = rIter.getType();
-    const ScAddress& rPos = rIter.GetPos();
+    CellType eType = rCell.meType;
     switch (eType)
     {
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rIter.getFormulaCell();
+            ScFormulaCell* pFCell = rCell.mpFormula;
             sal_uInt16 nErr = pFCell->GetErrCode();
             if( !nErr )
             {
@@ -588,7 +586,7 @@ double ScInterpreter::GetCellValueOrZero( ScCellIterator& rIter )
         break;
         case CELLTYPE_VALUE:
         {
-            fValue = rIter.getValue();
+            fValue = rCell.mfValue;
             nCurFmtIndex = pDok->GetNumberFormat( rPos );
             nCurFmtType = pFormatter->GetType( nCurFmtIndex );
             if ( bCalcAsShown && fValue != 0.0 )
@@ -600,7 +598,7 @@ double ScInterpreter::GetCellValueOrZero( ScCellIterator& rIter )
         {
             // SUM(A1:A2) differs from A1+A2. No good. But people insist on
             // it ... #i5658#
-            OUString aStr = rIter.getString();
+            OUString aStr = rCell.getString();
             fValue = ConvertStringToValue( aStr );
         }
         break;
@@ -673,6 +671,48 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
     SetError(nErr);
 }
 
+void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
+{
+    sal_uInt16 nErr = 0;
+
+    switch (rCell.meType)
+    {
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            rStr = rCell.getString();
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFCell = rCell.mpFormula;
+            nErr = pFCell->GetErrCode();
+            if (pFCell->IsValue())
+            {
+                double fVal = pFCell->GetValue();
+                sal_uLong nIndex = pFormatter->GetStandardFormat(
+                                    NUMBERFORMAT_NUMBER,
+                                    ScGlobal::eLnge);
+                pFormatter->GetInputLineString(fVal, nIndex, rStr);
+            }
+            else
+                rStr = pFCell->GetString();
+        }
+        break;
+        case CELLTYPE_VALUE:
+        {
+            double fVal = rCell.mfValue;
+            sal_uLong nIndex = pFormatter->GetStandardFormat(
+                                    NUMBERFORMAT_NUMBER,
+                                    ScGlobal::eLnge);
+            pFormatter->GetInputLineString(fVal, nIndex, rStr);
+        }
+        break;
+        default:
+            rStr = ScGlobal::GetEmptyString();
+        break;
+    }
+
+    SetError(nErr);
+}
 
 bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr)
@@ -3651,15 +3691,18 @@ void ScInterpreter::ScTableOp()
     }
     pTableOp->bCollectNotifications = false;
 
-    ScBaseCell* pFCell = pDok->GetCell( pTableOp->aFormulaPos );
-    if ( pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA )
-        ((ScFormulaCell*)pFCell)->SetDirtyVar();
-    if ( HasCellValueData( pFCell ) )
-        PushDouble( GetCellValue( pTableOp->aFormulaPos, pFCell ));
+    ScRefCellValue aCell;
+    aCell.assign(*pDok, pTableOp->aFormulaPos);
+    if (aCell.meType == CELLTYPE_FORMULA)
+        aCell.mpFormula->SetDirtyVar();
+    if (aCell.hasNumeric())
+    {
+        PushDouble(GetCellValue(pTableOp->aFormulaPos, aCell));
+    }
     else
     {
-        String aCellString;
-        GetCellString( aCellString, pFCell );
+        OUString aCellString;
+        GetCellString(aCellString, aCell);
         PushString( aCellString );
     }
 
@@ -3681,10 +3724,10 @@ void ScInterpreter::ScTableOp()
     if ( !bReuseLastParams )
         pDok->aLastTableOpParams = *pTableOp;
 
-    if ( pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA )
+    if (aCell.meType == CELLTYPE_FORMULA)
     {
-        ((ScFormulaCell*)pFCell)->SetDirtyVar();
-        ((ScFormulaCell*)pFCell)->GetErrCode();     // recalculate original
+        aCell.mpFormula->SetDirtyVar();
+        aCell.mpFormula->GetErrCode();     // recalculate original
     }
 
     // Reset all dirty flags so next incarnation does really collect all cell

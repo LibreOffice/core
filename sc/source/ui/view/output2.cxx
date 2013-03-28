@@ -1080,7 +1080,11 @@ bool ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
     if ( pThisRowInfo && nX <= nX2 )
         bEmpty = pThisRowInfo->pCellInfo[nX+1].bEmptyCellText;
     else
-        bEmpty = ( mpDoc->GetCell( ScAddress( nX, nY, nTab ) ) == NULL );
+    {
+        ScRefCellValue aCell;
+        aCell.assign(*mpDoc, ScAddress(nX, nY, nTab));
+        bEmpty = aCell.isEmpty();
+    }
 
     if ( !bEmpty && ( nX < nX1 || nX > nX2 || !pThisRowInfo ) )
     {

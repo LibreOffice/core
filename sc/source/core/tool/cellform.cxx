@@ -136,7 +136,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
 }
 
 OUString ScCellFormat::GetString(
-    const ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat, Color** ppColor,
+    ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat, Color** ppColor,
     SvNumberFormatter& rFormatter, bool bNullVals, bool bFormula, ScForceTextFmt eForceTextFmt,
     bool bUseStarFormat )
 {
@@ -180,7 +180,7 @@ OUString ScCellFormat::GetString(
         break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(rDoc.GetCell(rPos));
+            ScFormulaCell* pFCell = rDoc.GetFormulaCell(rPos);
             if (bFormula)
             {
                 pFCell->GetFormula(aString);
