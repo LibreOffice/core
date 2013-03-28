@@ -308,6 +308,7 @@ namespace writerfilter {
                 sal_Int32 nHoriPadding, nVertPadding;
                 sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
                 Id nHRule;
+                boost::optional<Id> oWrap;
             public:
                 RTFFrame(RTFParserState* pParserState);
                 sal_Int16 nAnchorType;
