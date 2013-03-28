@@ -1242,7 +1242,7 @@ namespace drawinglayer
                             aHairLinePolyPolygon.transform(maCurrentTransformation);
 
                             // use the transformed line width
-                            LineInfo aLineInfo(LINE_SOLID, getTransformedLineWidth(rLine.getWidth()));
+                            LineInfo aLineInfo(LINE_SOLID, basegfx::fround(getTransformedLineWidth(rLine.getWidth())));
                             aLineInfo.SetLineJoin(rLine.getLineJoin());
                             aLineInfo.SetLineCap(rLine.getLineCap());
 
