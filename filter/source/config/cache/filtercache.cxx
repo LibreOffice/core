@@ -40,7 +40,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <comphelper/sequenceasvector.hxx>
-#include <comphelper/locale.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <unotools/configpaths.hxx>
