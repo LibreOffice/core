@@ -511,7 +511,7 @@ void ScHFEditPage::SetSelectDefinedList()
 
 bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
 {
-    if(!pEngine && !pTextObj)
+    if(!pEngine || !pTextObj)
         return false;
 
     bool bReturn = false;
