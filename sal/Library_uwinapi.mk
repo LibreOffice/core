@@ -29,6 +29,7 @@ $(eval $(call gb_Library_Library,uwinapi))
 
 $(eval $(call gb_Library_use_packages,uwinapi,\
 	sal_inc \
+	sal_generated \
 	sal_odk_headers \
 ))
 
