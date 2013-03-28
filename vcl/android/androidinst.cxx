@@ -209,9 +209,6 @@ AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
 {
     int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
     LOGI("AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
-
-    LOGI("created Android Sal Instance thread: %d",
-         (int)pthread_self());
 }
 
 AndroidSalInstance::~AndroidSalInstance()
