@@ -510,11 +510,6 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
     return fValue;
 }
 
-ScBaseCell* ScInterpreter::GetCell( const ScAddress& rPos )
-{
-    return pDok->GetCell( rPos );
-}
-
 void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
 {
     sal_uInt16 nErr = 0;
@@ -678,26 +673,24 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             SCCOL nCol = nCol1;
             while (nCol <= nCol2)
             {
-                ScBaseCell* pCell;
-                pDok->GetCell(nCol, nRow, nTab, pCell);
-                if (pCell)
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, ScAddress(nCol, nRow, nTab));
+                if (!aCell.isEmpty())
                 {
                     String  aStr;
                     sal_uInt16  nErr = 0;
                     bool    bOk = true;
-                    switch ( pCell->GetCellType() )
+                    switch (aCell.meType)
                     {
-                        case CELLTYPE_STRING :
-                            aStr = ((ScStringCell*)pCell)->GetString();
+                        case CELLTYPE_STRING:
+                        case CELLTYPE_EDIT:
+                            aStr = aCell.getString();
                             break;
-                        case CELLTYPE_EDIT :
-                            aStr = ((ScEditCell*)pCell)->GetString();
-                            break;
-                        case CELLTYPE_FORMULA :
-                            if (!((ScFormulaCell*)pCell)->IsValue())
+                        case CELLTYPE_FORMULA:
+                            if (!aCell.mpFormula->IsValue())
                             {
-                                nErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                                aStr = ((ScFormulaCell*)pCell)->GetString();
+                                nErr = aCell.mpFormula->GetErrCode();
+                                aStr = aCell.mpFormula->GetString();
                             }
                             else
                                 bOk = false;
@@ -3527,9 +3520,10 @@ void ScInterpreter::ScTableOp()
                 iBroadcast != pTableOp->aNotifiedFormulaPos.end();
                 ++iBroadcast )
         {   // emulate broadcast and indirectly collect cell pointers
-            ScBaseCell* pCell = pDok->GetCell( *iBroadcast );
-            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                ((ScFormulaCell*)pCell)->SetTableOpDirty();
+            ScRefCellValue aCell;
+            aCell.assign(*pDok, *iBroadcast);
+            if (aCell.meType == CELLTYPE_FORMULA)
+                aCell.mpFormula->SetTableOpDirty();
         }
     }
     else

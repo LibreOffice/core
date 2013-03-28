@@ -35,7 +35,6 @@
 
 class ScDocument;
 class SbxVariable;
-class ScBaseCell;
 class ScValueCell;
 class ScFormulaCell;
 class SvNumberFormatter;
@@ -190,7 +189,6 @@ double ConvertStringToValue( const String& );
 double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
 double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
 double GetValueCellValue( const ScAddress&, double fOrig );
-ScBaseCell* GetCell( const ScAddress& rPos );
 void GetCellString( OUString& rStr, ScRefCellValue& rCell );
 sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
 

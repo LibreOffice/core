@@ -635,15 +635,16 @@ void ScInterpreter::ScMatValue()
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.meType == CELLTYPE_FORMULA)
                 {
-                    sal_uInt16 nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
+                    sal_uInt16 nErrCode = aCell.mpFormula->GetErrCode();
                     if (nErrCode != 0)
                         PushError( nErrCode);
                     else
                     {
-                        const ScMatrix* pMat = ((ScFormulaCell*)pCell)->GetMatrix();
+                        const ScMatrix* pMat = aCell.mpFormula->GetMatrix();
                         CalculateMatrixValue(pMat,nC,nR);
                     }
                 }
