@@ -44,9 +44,7 @@
 using namespace ::com::sun::star;
 
 
-#if OSL_DEBUG_LEVEL > 0
 #define COLFUZZY 20
-#endif
 #define MAX_TABWIDTH (USHRT_MAX - 2001)
 
 
