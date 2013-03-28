@@ -297,8 +297,11 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
 namespace unnamed_ucb_regexp {
 
 bool matchString(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
-                 sal_Char const * pString, size_t nStringLength)
+                 OString const &rStr )
 {
+    sal_Char const *pString = rStr.getStr();
+    sal_Int32 nStringLength = rStr.getLength();
+
     sal_Unicode const * p = *pBegin;
 
     sal_uChar const * q = reinterpret_cast< sal_uChar const * >(pString);
@@ -374,7 +377,7 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
     if (p == pEnd)
         throw lang::IllegalArgumentException();
 
-    if (matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM(".*")))
+    if (matchString(&p, pEnd, ".*"))
     {
         if (p != pEnd)
             throw lang::IllegalArgumentException();
@@ -382,19 +385,19 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         return Regexp(Regexp::KIND_PREFIX, aPrefix, false, rtl::OUString(),
                       false, rtl::OUString());
     }
-    else if (matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("(.*)->")))
+    else if (matchString(&p, pEnd, "(.*)->"))
     {
         rtl::OUString aReversePrefix;
         scanStringLiteral(&p, pEnd, &aReversePrefix);
 
-        if (!matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("\\1"))
+        if (!matchString(&p, pEnd, "\\1")
             || p != pEnd)
             throw lang::IllegalArgumentException();
 
         return Regexp(Regexp::KIND_PREFIX, aPrefix, false, rtl::OUString(),
                       true, aReversePrefix);
     }
-    else if (matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("([/?#].*)?")))
+    else if (matchString(&p, pEnd, "([/?#].*)?"))
     {
         if (p != pEnd)
             throw lang::IllegalArgumentException();
@@ -402,12 +405,11 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         return Regexp(Regexp::KIND_AUTHORITY, aPrefix, false, rtl::OUString(),
                       false, rtl::OUString());
     }
-    else if (matchString(&p, pEnd,
-                         RTL_CONSTASCII_STRINGPARAM("(([/?#].*)?)->")))
+    else if (matchString(&p, pEnd, "(([/?#].*)?)->"))
     {
         rtl::OUString aReversePrefix;
         if (!(scanStringLiteral(&p, pEnd, &aReversePrefix)
-              && matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("\\1"))
+              && matchString(&p, pEnd, "\\1")
               && p == pEnd))
             throw lang::IllegalArgumentException();
 
@@ -423,7 +425,7 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
             bOpen = true;
         }
 
-        if (!matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("[^/?#]")))
+        if (!matchString(&p, pEnd, "[^/?#]"))
             throw lang::IllegalArgumentException();
 
         if (p == pEnd || (*p != '*' && *p != '+'))
@@ -433,14 +435,14 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         rtl::OUString aInfix;
         scanStringLiteral(&p, pEnd, &aInfix);
 
-        if (!matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("([/?#].*)?")))
+        if (!matchString(&p, pEnd, "([/?#].*)?"))
             throw lang::IllegalArgumentException();
 
         rtl::OUString aReversePrefix;
         if (bOpen
-            && !(matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM(")->"))
+            && !(matchString(&p, pEnd, ")->")
                  && scanStringLiteral(&p, pEnd, &aReversePrefix)
-                 && matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("\\1"))))
+                 && matchString(&p, pEnd, "\\1")))
             throw lang::IllegalArgumentException();
 
         if (p != pEnd)
