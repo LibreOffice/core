@@ -1820,10 +1820,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
 void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
 {
-    if ( eCellType == CELLTYPE_FORMULA && !pDoc->IsClipOrUndo()
-            && !pDoc->GetNoListening()
-            && !((ScFormulaCell*)this)->IsInChangeTrack()
-        )
+    if (!pDoc->IsClipOrUndo() && !pDoc->GetNoListening() && !IsInChangeTrack())
     {
         pDoc->SetDetectiveDirty(true);  // It has changed something
 
@@ -1907,9 +1904,7 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
 void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         ScAddress aCellPos )
 {
-    if ( eCellType == CELLTYPE_FORMULA && !pDoc->IsClipOrUndo()
-            && !((ScFormulaCell*)this)->IsInChangeTrack()
-        )
+    if (!pDoc->IsClipOrUndo() && !IsInChangeTrack())
     {
         pDoc->SetDetectiveDirty(true);  // It has changed something
 
