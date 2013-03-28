@@ -179,18 +179,11 @@ void SalGtkPicker::setGtkLanguage()
     if (bSet)
         return;
 
-    /* FIXME-BCP47: let LanguageTag create glibc locale string! */
-    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-    rtl::OUStringBuffer aBuffer;
-    aBuffer.append( aLocale.Language );
-    aBuffer.appendAscii( "_" );
-    aBuffer.append( aLocale.Country );
-    aBuffer.appendAscii( ".UTF-8" );
-
-    if (aBuffer.getLength() > 8)
+    OUString aLocaleString( Application::GetSettings().GetUILanguageTag().getGlibcLocaleString( ".UTF-8"));
+    if (!aLocaleString.isEmpty())
     {
         rtl::OUString envVar( "LANGUAGE" );
-        osl_setEnvironment( envVar.pData, aBuffer.makeStringAndClear().pData );
+        osl_setEnvironment( envVar.pData, aLocaleString.pData );
     }
     bSet = true;
 }
