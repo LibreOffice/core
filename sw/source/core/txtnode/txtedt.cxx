@@ -1670,7 +1670,7 @@ void SwTxtNode::TransliterateText(
                             GetTxt(), GetLang(nStt), nStt, nLen, &aOffsets) );
 
                 assert(nStt < m_Text.getLength());
-                if (0 == rtl_ustr_shortenedCompare_WithLength(
+                if (0 != rtl_ustr_shortenedCompare_WithLength(
                             m_Text.getStr() + nStt, m_Text.getLength() - nStt,
                             sChgd.getStr(), sChgd.getLength(), nLen))
                 {
@@ -1754,7 +1754,7 @@ void SwTxtNode::TransliterateText(
                     GetLang(nCurrentStart), nCurrentStart, nLen, &aOffsets) );
 
                 assert(nStt < m_Text.getLength());
-                if (0 == rtl_ustr_shortenedCompare_WithLength(
+                if (0 != rtl_ustr_shortenedCompare_WithLength(
                             m_Text.getStr() + nStt, m_Text.getLength() - nStt,
                             sChgd.getStr(), sChgd.getLength(), nLen))
                 {
@@ -1808,7 +1808,7 @@ void SwTxtNode::TransliterateText(
                             m_Text, nLang, nStt, nLen, &aOffsets) );
 
                 assert(nStt < m_Text.getLength());
-                if (0 == rtl_ustr_shortenedCompare_WithLength(
+                if (0 != rtl_ustr_shortenedCompare_WithLength(
                             m_Text.getStr() + nStt, m_Text.getLength() - nStt,
                             sChgd.getStr(), sChgd.getLength(), nLen))
                 {
