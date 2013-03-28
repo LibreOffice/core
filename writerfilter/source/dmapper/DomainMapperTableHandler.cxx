@@ -24,6 +24,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/SizeType.hpp>
 #include <dmapperLoggers.hxx>
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
@@ -318,6 +319,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         sal_Int32 nGapHalf = 0;
         sal_Int32 nLeftMargin = 0;
         sal_Int32 nTableWidth = 0;
+        sal_Int32 nTableWidthType = text::SizeType::FIX;
 
         PropertyMap::iterator aTableStyleIter =
         m_aTableProperties->find( PropertyDefinition( META_PROP_TABLE_STYLE_NAME, false ) );
@@ -457,8 +459,17 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
-        if( nTableWidth > 0 )
-            m_aTableProperties->Insert( PROP_WIDTH, false, uno::makeAny( nTableWidth ));
+        m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType );
+        if( nTableWidthType == text::SizeType::FIX )
+        {
+            if( nTableWidth > 0 )
+                m_aTableProperties->Insert( PROP_WIDTH, false, uno::makeAny( nTableWidth ));
+        }
+        else
+        {
+            m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, false, uno::makeAny( sal_Int16( nTableWidth ) ) );
+            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, false, uno::makeAny( sal_Bool( sal_True ) ) );
+        }
 
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
         m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) ;

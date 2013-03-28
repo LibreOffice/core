@@ -115,7 +115,23 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     {
                         m_nTableWidth = pMeasureHandler->getMeasureValue();
                         if( m_nTableWidth )
+                        {
+                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
+                        }
+                        else if( pMeasureHandler->getUnit() == NS_ooxml::LN_Value_ST_TblWidth_pct )
+                        {
+                            sal_Int32 nPercent = pMeasureHandler->getValue() / 50;
+                            if(nPercent > 100)
+                                nPercent = 100;
+                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
+                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, nPercent );
+                        }
+                        else if( pMeasureHandler->getUnit() == NS_ooxml::LN_Value_ST_TblWidth_auto )
+                        {
+                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
+                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                        }
                     }
 #ifdef DEBUG_DOMAINMAPPER
                     pPropMap->dumpXml( dmapper_logger );
@@ -477,13 +493,6 @@ void DomainMapperTableManager::endOfRowAction()
              m_nTableWidth += *aCellIter++;
         }
 
-        if( m_nTableWidth > 0)
-        {
-            TablePropertyMapPtr pPropMap( new TablePropertyMap );
-            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
-            insertTableProps(pPropMap);
-        }
-
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->endElement();
 #endif
@@ -520,10 +529,14 @@ void DomainMapperTableManager::endOfRowAction()
     for( ; aGridSpanIter != pCurrentSpans->end(); ++aGridSpanIter)
         nGrids += *aGridSpanIter;
 
-    //determine table width
-    double nFullWidth = m_nTableWidth;
-    //the positions have to be distibuted in a range of 10000
-    const double nFullWidthRelative = 10000.;
+    // sj: the grid is having no units... they is containing only relative values.
+    // a table with a grid of "1:2:1" looks identical as if the table is having
+    // a grid of "20:40:20" and it doesn't have to do something with the tableWidth
+    // -> so we have get the sum of each grid entry for the fullWidthRelative:
+    int nFullWidthRelative = 0;
+    for (unsigned int i = 0 ; i < (*pTableGrid.get()).size(); i++ )
+        nFullWidthRelative += (*pTableGrid.get())[ i ];
+
     if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
@@ -542,7 +555,7 @@ void DomainMapperTableManager::endOfRowAction()
             }while( --nGridCount );
 
             sal_Int16 nRelPos =
-                sal::static_int_cast< sal_Int16 >( floor( fGridWidth * nFullWidthRelative / nFullWidth  + 0.5 ) );
+                sal::static_int_cast< sal_Int16 >((fGridWidth * 10000) / nFullWidthRelative);
 
             pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
             pSeparators[nBorder].IsVisible = sal_True;
@@ -574,7 +587,7 @@ void DomainMapperTableManager::endOfRowAction()
         for (sal_uInt32 i = 0; i < pCellWidths->size() - 1; ++i)
         {
             nSum += (*pCellWidths.get())[i];
-            pSeparators[nPos].Position = nSum * nFullWidthRelative / nFullWidth;
+            pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
             pSeparators[nPos].IsVisible = sal_True;
             nPos++;
         }
