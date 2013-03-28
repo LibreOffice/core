@@ -754,6 +754,7 @@ void SfxTemplateManagerDlg::OnRegionState (const ThumbnailViewItem *pItem)
         {
             mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT);
             mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_DEL);
+            mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_NEW);
         }
 
         maSelFolders.insert(pItem);
@@ -766,6 +767,7 @@ void SfxTemplateManagerDlg::OnRegionState (const ThumbnailViewItem *pItem)
         {
             mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
             mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
+            mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_NEW);
         }
     }
 }
