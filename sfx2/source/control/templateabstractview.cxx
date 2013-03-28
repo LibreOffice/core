@@ -103,8 +103,6 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
                 }
             }
         }
-
-        return mApp != FILTER_APP_NONE ? nVisCount : true ;
     }
     return true;
 }
