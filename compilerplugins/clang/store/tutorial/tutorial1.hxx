@@ -25,7 +25,7 @@ class Tutorial1
     {
     public:
         // Ctor, nothing special.
-        Tutorial1( ASTContext& context );
+        Tutorial1( CompilerInstance& compiler );
         // The function that will be called to perform the actual action.
         virtual void run();
         // Function from Clang, it will be called for every return statement in the source.

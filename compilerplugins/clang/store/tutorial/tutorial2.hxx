@@ -22,7 +22,7 @@ class Tutorial2
     , public Plugin
     {
     public:
-        Tutorial2( ASTContext& context );
+        Tutorial2( CompilerInstance& compiler );
         virtual void run();
         // Will be called for every if statement.
         bool VisitIfStmt( IfStmt* ifstmt );

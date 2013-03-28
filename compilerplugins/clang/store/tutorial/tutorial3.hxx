@@ -23,7 +23,7 @@ class Tutorial3
     {
     public:
         // One more argument for ctor.
-        Tutorial3( ASTContext& context, Rewriter& rewriter );
+        Tutorial3( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
         // Will be called for every if statement.
         bool VisitIfStmt( IfStmt* ifstmt );

@@ -21,15 +21,15 @@ if( a == 1 )
 namespace loplugin
 {
 
-Tutorial2::Tutorial2( ASTContext& context )
-    : Plugin( context )
+Tutorial2::Tutorial2( CompilerInstance& compiler )
+    : Plugin( compiler )
     {
     }
 
 void Tutorial2::run()
     {
     // The Clang AST helper class will call VisitIfStmt for every if statement.
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 // This function is called for every if statement.

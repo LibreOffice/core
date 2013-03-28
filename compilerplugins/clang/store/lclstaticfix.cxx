@@ -19,14 +19,14 @@ Check all lcl_ functions and prepend static if needed.
 namespace loplugin
 {
 
-LclStaticFix::LclStaticFix( ASTContext& context, Rewriter& rewriter )
-    : RewritePlugin( context, rewriter )
+LclStaticFix::LclStaticFix( CompilerInstance& compiler, Rewriter& rewriter )
+    : RewritePlugin( compiler, rewriter )
     {
     }
 
 void LclStaticFix::run()
     {
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 bool LclStaticFix::VisitFunctionDecl( FunctionDecl* declaration )

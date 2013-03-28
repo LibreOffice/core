@@ -21,14 +21,14 @@ namespace loplugin
 {
 
 // Ctor, pass arguments.
-Tutorial3::Tutorial3( ASTContext& context, Rewriter& rewriter )
-    : RewritePlugin( context, rewriter )
+Tutorial3::Tutorial3( CompilerInstance& compiler, Rewriter& rewriter )
+    : RewritePlugin( compiler, rewriter )
     {
     }
 
 void Tutorial3::run()
     {
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 bool Tutorial3::VisitIfStmt( IfStmt* ifstmt )

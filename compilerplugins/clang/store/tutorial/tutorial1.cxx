@@ -20,8 +20,8 @@ namespace loplugin
 {
 
 // Ctor, nothing special, pass the argument(s).
-Tutorial1::Tutorial1( ASTContext& context )
-    : Plugin( context )
+Tutorial1::Tutorial1( CompilerInstance& compiler )
+    : Plugin( compiler )
     {
     }
 
@@ -30,7 +30,7 @@ void Tutorial1::run()
     {
     // Traverse the whole AST of the translation unit (i.e. examine the whole source file).
     // The Clang AST helper class will call VisitReturnStmt for every return statement.
-    TraverseDecl( context.getTranslationUnitDecl());
+    TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
 // This function is called for every return statement.

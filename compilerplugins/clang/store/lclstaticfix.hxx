@@ -21,7 +21,7 @@ class LclStaticFix
     , public RewritePlugin
     {
     public:
-        explicit LclStaticFix( ASTContext& context, Rewriter& rewriter );
+        explicit LclStaticFix( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
     };
