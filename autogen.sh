@@ -21,7 +21,7 @@ sub clean()
 {
     system ("rm -Rf autom4te.cache");
     system ("rm -f missing install-sh mkinstalldirs libtool ltmain.sh");
-    print "cleaned the build tree\n";
+    print "Cleaned the build tree\n";
 }
 
 my $aclocal;
@@ -108,9 +108,18 @@ for my $arg (@ARGV) {
 }
 
 my @cmdline_args = ();
-if (!@ARGV) {
-    my $lastrun = "autogen.lastrun";
-    @cmdline_args = read_args ($lastrun) if (-f $lastrun);
+
+my $input = "autogen.input";
+my $lastrun = "autogen.lastrun";
+
+if (-f $input) {
+    warn "Ignoring command-line arguments, using $input.\n" if (@ARGV);
+    warn "Ignoring $lastrun, using $input.\n" if (-f $lastrun);
+    @cmdline_args = read_args ($input);
+} elsif (-f $lastrun) {
+    warn "Ignoring command-line arguments, using $lastrun.\n" if (@ARGV);
+    print STDERR "Reading $lastrun. Please rename it to $input to avoid this message.\n";
+    @cmdline_args = read_args ($lastrun);
 } else {
     @cmdline_args = @ARGV;
 }
@@ -118,7 +127,7 @@ if (!@ARGV) {
 my @args;
 my $default_config = "$src_path/distro-configs/default.conf";
 if (-f $default_config) {
-    print STDERR "Reading default config file: $default_config\n";
+    print STDERR "Reading default config file: $default_config.\n";
     push @args, read_args ($default_config);
 }
 for my $arg (@cmdline_args) {
@@ -164,40 +173,35 @@ if ($src_path ne $build_path)
 system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
 unlink ("configure");
 system ("autoconf -I ${src_path}") && die "Failed to run autoconf";
-die "failed to generate configure" if (! -f "configure");
+die "Failed to generate the configure script" if (! -f "configure");
 
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
 } else {
     # Save autogen.lastrun only if we did get some arguments on the command-line
-    if (@ARGV) {
+    if (! -f $input && @ARGV) {
         if (scalar(@cmdline_args) > 0) {
             # if there's already an autogen.lastrun, make a backup first
-            if (-e "autogen.lastrun") {
-                open (my $fh, "autogen.lastrun") || warn "can't open autogen.lastrun. \n";
-                open (BAK, ">autogen.lastrun.bak") || warn "can't create backup file. \n";
+            if (-e $lastrun) {
+                open (my $fh, $lastrun) || warn "Can't open $lastrun.\n";
+                open (BAK, ">$lastrun.bak") || warn "Can't create backup file $lastrun.bak.\n";
                 while (<$fh>) {
                     print BAK;
                 }
                 close (BAK) && close ($fh);
             }
-            # print "writing args to autogen.lastrun\n";
+            # print "Saving command-line args to $lastrun\n";
             my $fh;
-            open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
+            open ($fh, ">autogen.lastrun") || die "Can't open autogen.lastrun: $!";
             for my $arg (@cmdline_args) {
                 print $fh "$arg\n";
             }
             close ($fh);
         }
     }
-    elsif ( ! -e "autogen.lastrun")
-    {
-        open (my $fh, ">autogen.lastrun") || die "can't create autogen.lastrun";
-        close ($fh);
-    }
     push @args, "--srcdir=$src_path";
 
-    print "running ./configure with '" . join ("' '", @args), "'\n";
+    print "Running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args) && die "Error running configure";
 }
 
