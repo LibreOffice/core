@@ -89,7 +89,7 @@ BUILD_ACTION= $(GNUMAKE) nss_build_all
 #See #i105566# && moz#513024#
 .IF "$(OS)"=="LINUX"
 BUILD_ACTION+=FREEBL_NO_DEPEND=1
-PATCH_FILES+=nss_linux.patch
+PATCH_FILES+=nss_linux.patch nspr-4.8.4-clang.patch
 .ENDIF
 
 .ENDIF			# "$(GUI)"=="UNX"

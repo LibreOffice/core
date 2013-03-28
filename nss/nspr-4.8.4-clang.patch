@@ -1,0 +1,138 @@
+--- misc/nss-3.12.6/mozilla/nsprpub/pr/src/md/unix/os_Linux_x86.s	2006-12-11 10:45:30.000000000 +0100
++++ misc/build/nss-3.12.6/mozilla/nsprpub/pr/src/md/unix/os_Linux_x86.s	2013-03-28 17:11:50.919079879 +0100
+@@ -1,4 +1,4 @@
+-/ -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*-
++/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+ / 
+ / ***** BEGIN LICENSE BLOCK *****
+ / Version: MPL 1.1/GPL 2.0/LGPL 2.1
+@@ -40,7 +40,8 @@
+ /
+ / Atomically increment the integer pointed to by 'val' and return
+ / the result of the increment.
+-/
++/ */
++
+     .text
+     .globl _PR_x86_AtomicIncrement
+     .align 4
+@@ -52,11 +53,11 @@
+     incl %eax
+     ret
+ 
+-/ PRInt32 _PR_x86_AtomicDecrement(PRInt32 *val)
++/* PRInt32 _PR_x86_AtomicDecrement(PRInt32 *val)
+ /
+ / Atomically decrement the integer pointed to by 'val' and return
+ / the result of the decrement.
+-/
++/ */
+     .text
+     .globl _PR_x86_AtomicDecrement
+     .align 4
+@@ -68,7 +69,7 @@
+     decl %eax
+     ret
+ 
+-/ PRInt32 _PR_x86_AtomicSet(PRInt32 *val, PRInt32 newval)
++/* PRInt32 _PR_x86_AtomicSet(PRInt32 *val, PRInt32 newval)
+ /
+ / Atomically set the integer pointed to by 'val' to the new
+ / value 'newval' and return the old value.
+@@ -86,7 +87,7 @@
+ /   cmpxchgl %edx, (%ecx)
+ /   jne retry
+ /   ret
+-/
++/ */
+     .text
+     .globl _PR_x86_AtomicSet
+     .align 4
+@@ -96,11 +97,11 @@
+     xchgl %eax, (%ecx)
+     ret
+ 
+-/ PRInt32 _PR_x86_AtomicAdd(PRInt32 *ptr, PRInt32 val)
++/* PRInt32 _PR_x86_AtomicAdd(PRInt32 *ptr, PRInt32 val)
+ /
+ / Atomically add 'val' to the integer pointed to by 'ptr'
+ / and return the result of the addition.
+-/
++/ */
+     .text
+     .globl _PR_x86_AtomicAdd
+     .align 4
+@@ -113,5 +114,5 @@
+     addl %edx, %eax
+     ret
+ 
+-/ Magic indicating no need for an executable stack
++/* Magic indicating no need for an executable stack */
+ .section .note.GNU-stack, "", @progbits ; .previous
+--- misc/nss-3.12.6/mozilla/nsprpub/pr/src/md/unix/os_Linux_x86_64.s	2006-12-11 10:45:30.000000000 +0100
++++ misc/build/nss-3.12.6/mozilla/nsprpub/pr/src/md/unix/os_Linux_x86_64.s	2013-03-28 17:12:00.215016941 +0100
+@@ -1,4 +1,4 @@
+-/ -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*-
++/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+ / 
+ / ***** BEGIN LICENSE BLOCK *****
+ / Version: MPL 1.1/GPL 2.0/LGPL 2.1
+@@ -40,7 +40,8 @@
+ /
+ / Atomically increment the integer pointed to by 'val' and return
+ / the result of the increment.
+-/
++/ */
++
+     .text
+     .globl _PR_x86_64_AtomicIncrement
+     .align 4
+@@ -51,11 +52,11 @@
+     incl %eax
+     ret
+ 
+-/ PRInt32 _PR_x86_64_AtomicDecrement(PRInt32 *val)
++/* PRInt32 _PR_x86_64_AtomicDecrement(PRInt32 *val)
+ /
+ / Atomically decrement the integer pointed to by 'val' and return
+ / the result of the decrement.
+-/
++/ */
+     .text
+     .globl _PR_x86_64_AtomicDecrement
+     .align 4
+@@ -66,11 +67,11 @@
+     decl %eax
+     ret
+ 
+-/ PRInt32 _PR_x86_64_AtomicSet(PRInt32 *val, PRInt32 newval)
++/* PRInt32 _PR_x86_64_AtomicSet(PRInt32 *val, PRInt32 newval)
+ /
+ / Atomically set the integer pointed to by 'val' to the new
+ / value 'newval' and return the old value.
+-/
++/ */
+     .text
+     .globl _PR_x86_64_AtomicSet
+     .align 4
+@@ -79,11 +80,11 @@
+     xchgl %eax, (%rdi)
+     ret
+ 
+-/ PRInt32 _PR_x86_64_AtomicAdd(PRInt32 *ptr, PRInt32 val)
++/* PRInt32 _PR_x86_64_AtomicAdd(PRInt32 *ptr, PRInt32 val)
+ /
+ / Atomically add 'val' to the integer pointed to by 'ptr'
+ / and return the result of the addition.
+-/
++/ */
+     .text
+     .globl _PR_x86_64_AtomicAdd
+     .align 4
+@@ -94,5 +95,5 @@
+     addl %esi, %eax
+     ret
+ 
+-/ Magic indicating no need for an executable stack
++/* Magic indicating no need for an executable stack */
+ .section .note.GNU-stack, "", @progbits ; .previous
