@@ -33,6 +33,8 @@ $(eval $(call gb_StaticLibrary_use_packages,ulingu,\
 	cppuhelper_odk_headers \
 	i18npool_inc \
 	linguistic_inc \
+	sal_generated \
+	sal_odk_headers \
 	tools_inc \
 	unotools_inc \
 ))
