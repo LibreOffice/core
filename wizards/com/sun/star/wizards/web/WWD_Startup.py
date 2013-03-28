@@ -24,6 +24,7 @@ from .StylePreview import StylePreview
 from ..common.Configuration import Configuration
 from ..common.FileAccess import FileAccess
 from ..common.Desktop import Desktop
+from ..common.Properties import Properties
 from ..document.OfficeDocument import OfficeDocument
 from .data.CGSettings import CGSettings
 from .data.CGDocument import CGDocument
@@ -31,6 +32,8 @@ from .data.CGSessionName import CGSessionName
 from ..ui.event.ListModelBinder import ListModelBinder
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
+from ..ui.event.SimpleDataAware import SimpleDataAware
+from ..ui.event.CommonListener import ItemListenerProcAdapter
 from ..ui.DocumentPreview import DocumentPreview
 from ..ui.event.DataAware import DataAware
 from ..ui.event.Task import Task
@@ -360,6 +363,10 @@ class WWD_Startup(WWD_General):
 
         self.lstLoadSettings.Model.SelectedItems = (selectedSession,)
 
+    def designItemChanged(self, itemEvent):
+        print ("DEBUG !!! designItemChanged --")
+        self.sda.updateData()
+
     '''
     attaches to each ui-data-control (like checkbox, groupbox or
     textbox, no buttons though), a DataObject's JavaBean Property,
@@ -368,8 +375,8 @@ class WWD_Startup(WWD_General):
 
     def makeDataAware(self):
         #page 1
-        ListModelBinder(
-            self.lstLoadSettings, self.settings.cp_SavedSessions)
+        ListModelBinder(self.lstLoadSettings, self.settings.cp_SavedSessions)
+
         #page 2 : document properties
         self.docListDA = UnoDataAware.attachListBox(
             self, "selectedDoc", self.lstDocuments, False)
@@ -390,13 +397,13 @@ class WWD_Startup(WWD_General):
             doc, "cp_Author", self.txtDocAuthor, True))
         self.docAware.append(UnoDataAware.attachListBox(
             doc, "Exporter", self.lstDocTargetType, False))
+
         #page 3 : Layout
         design = self.settings.cp_DefaultSession.cp_Design
+        self.sda = SimpleDataAware(design, "Layout", self.ilLayouts, "Selected")
+        self.ilLayouts.addItemListener(ItemListenerProcAdapter(self.designItemChanged))
+        self.designAware.append(self.sda);
 
-        #COMMENTED
-        #self.sda = SimpleDataAware.SimpleDataAware_unknown(design, DataAware.PropertyValue ("Layout", design), ilLayouts, DataAware.PropertyValue ("Selected", ilLayouts))
-
-        #self.ilLayouts.addItemListener(None)
         #page 4 : layout 2
         self.designAware.append(UnoDataAware.attachCheckBox(
             design, "cp_DisplayDescription", self.chbDocDesc, True))

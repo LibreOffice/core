@@ -53,7 +53,12 @@ class UnoDataAware(DataAware):
         elif self.isShort:
             print ("DEBUG !!! value is sort: ", value)
             value = uno.Any("[]short", (value,))
-        setattr(self.unoModel, self.unoPropName, value)
+        if (hasattr(self.unoModel, self.unoPropName)):
+            setattr(self.unoModel, self.unoPropName, value)
+        else:
+            print ("DEBUG !!! UnoDataAware.setToUI -- dataObject hasn't the attribute, su using the 'setter' method.")
+            uno.invoke(self.unoModel, "set" + self.unoPropName, (ui,))
+
 
     def getFromUI(self):
         return getattr(self.unoModel, self.unoPropName)

@@ -71,6 +71,7 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     ui/event/ListModelBinder.py \
     ui/event/RadioDataAware.py \
     ui/event/UnoDataAware.py \
+    ui/event/SimpleDataAware.py \
     ui/event/Task.py \
     ui/event/TaskEvent.py \
     ui/event/TaskListener.py \

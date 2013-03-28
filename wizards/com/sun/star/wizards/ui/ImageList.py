@@ -82,6 +82,7 @@ class ImageList(ListDataListener):
         self.renderer = None
         self.counterRenderer = self.SimpleCounterRenderer()
         self.MOVE_SELECTION_VALS = list(range(3))
+        self.itemListenerList = None
 
     def onMousePressed(self, event):
         print ("DEBUG !!! onMousePressed -- Mouse pressed.")
@@ -219,6 +220,7 @@ class ImageList(ListDataListener):
             (self.imageSize.Height + self.gap.Height) + self.gap.Height
 
     def refreshImages(self):
+        print ("DEBUG !!! refreshImages -- ")
         if self.showButtons:
             self.refreshCounterText()
 
@@ -261,6 +263,10 @@ class ImageList(ListDataListener):
             return i
 
     def refreshSelection(self):
+        print ("DEBUG !!! refreshSelection -- selected: ", self.selected)
+        print ("DEBUG !!! refreshSelection -- pageStart: ", self.pageStart)
+        print ("DEBUG !!! refreshSelection -- rows: ", self.rows)
+        print ("DEBUG !!! refreshSelection -- cols: ", self.cols)
         if self.selected < self.pageStart or \
                 self.selected >= (self.pageStart + self.rows * self.cols):
             self.hideSelection()
@@ -268,6 +274,7 @@ class ImageList(ListDataListener):
             self.moveSelection(self.getImageIndexFor(self.selected))
 
     def hideSelection(self):
+        print ("DEBUG !!!  -- hideSelection")
         self.grbxSelectedImage.Model.Step = ImageList.HIDE_PAGE
         self.grbxSelectedImage.Visible = False
 
@@ -292,7 +299,7 @@ class ImageList(ListDataListener):
         uno.invoke(self.grbxSelectedImage.Model, "setPropertyValues",
                    ((ImageList.MOVE_SELECTION),
                     (tuple(self.MOVE_SELECTION_VALS))))
-        if (self.grbxSelectedImage.Model.Step == self.step):
+        if (self.dialogModel.Step == self.step):
             self.grbxSelectedImage.Visible = True
             #now focus...
 
@@ -336,8 +343,8 @@ class ImageList(ListDataListener):
                 self.selected += event.getIndex1() - event.getIndex0() + 1
 
         if event.getIndex0() < self.pageStart or \
-                event.getIndex1() < (self.pageStart + getRows() + getCols()):
-            refreshImages()
+                event.getIndex1() < (self.pageStart + self.rows + self.cols):
+            self.refreshImages()
 
     '''
     Registers ItemListener to receive events.
@@ -346,9 +353,9 @@ class ImageList(ListDataListener):
 
     @synchronized(lock)
     def addItemListener(self, listener):
+        print ("DEBUG !!!! ImageList.addItemListener -")
         if self.itemListenerList is None:
-            self.itemListenerList = java.util.ArrayList.ArrayList()
-
+            self.itemListenerList = []
         self.itemListenerList.append(listener)
 
     '''
@@ -358,6 +365,7 @@ class ImageList(ListDataListener):
 
     @synchronized(lock)
     def removeItemListener(self, listener):
+        print ("DEBUG !!!! ImageList.addItemListener -")
         if self.itemListenerList is not None:
             self.itemListenerList.remove(listener)
 
@@ -367,14 +375,16 @@ class ImageList(ListDataListener):
     '''
 
     def fireItemSelected(self):
-        with ImageList.lock:
-            if self.itemListenerList is None:
-                return
-
-            auxlist = self.itemListenerList.clone()
-
+        print ("DEBUG !!!! ImageList.fireItemSelected -")
+        if self.itemListenerList is None:
+            return
+        auxlist = list(self.itemListenerList)
         for i in auxlist:
             i.itemStateChanged(None)
+
+    def getSelected(self):
+        print ("DEBUG !!!! ImageList.getSelected - selected: ", self.selected)
+        return self.selected
 
     def setSelected(self, _object):
         print ("DEBUG !!!! ImageList.setSelected - _object: ", _object)
@@ -393,9 +403,11 @@ class ImageList(ListDataListener):
                 i += 1
 
     def setSelected1(self, index):
-        print ("DEBUG !!!! ImageList.setSelected - _index: ", index)
+        print ("DEBUG !!!! ImageList.setSelected1 - _index: ", index)
+        print ("DEBUG !!!! ImageList.setSelected1 - selected: ", self.selected)
         if self.rowSelect and (index >= 0):
-            index = int((index / self.cols) * self.cols)
+            index = int(index / self.cols) * self.cols
+        print ("DEBUG !!!! ImageList.setSelected1 - index: ", index)
 
         if self.selected == index:
             return
@@ -403,8 +415,7 @@ class ImageList(ListDataListener):
         self.selected = index
         self.refreshImageText()
         self.refreshSelection()
-        #COMMENTED
-        #self.fireItemSelected()
+        self.fireItemSelected()
 
 
     def refreshImageText(self):
@@ -500,6 +511,7 @@ class ImageList(ListDataListener):
         return None
 
     def showSelected(self):
+        print ("DEBUG !!! showSelected -- ")
         oldPageStart = self.pageStart
         if self.selected != -1:
             self.pageStart = \
@@ -510,34 +522,40 @@ class ImageList(ListDataListener):
             self.refreshImages()
 
     def keyPressed(self, ke):
-        image = getImageFromEvent(ke)
-        r = image / getCols()
-        c = image - (r * getCols())
-        d = getKeyMove(ke, r, c)
+        print ("DEBUG !!! keyPressed -- ")
+        image = self.getImageFromEvent(ke)
+        r = image / self.cols
+        c = image - (r * self.cols)
+        d = self.getKeyMove(ke, r, c)
         newImage = image + d
         if newImage == image:
             return
 
-        if isFocusable(newImage):
-            changeFocus(image, newImage)
+        if self.isFocusable(newImage):
+            self.changeFocus(image, newImage)
 
     def isFocusable(self, image):
+        print ("DEBUG !!! isFocusable -- ")
         return (image >= 0) and \
-            (getIndexFor(image) < self.listModel.getSize())
+            (self.getIndexFor(image) < self.listModel.getSize())
 
     def changeFocus(self, oldFocusImage, newFocusImage):
-        focus(newFocusImage)
-        defocus(oldFocusImage)
+        print ("DEBUG !!! changeFocus -- ")
+        self.focus(newFocusImage)
+        self.defocus(oldFocusImage)
 
     def select(self, ke):
-        setSelected(getIndexFor(getImageFromEvent(ke)))
+        print ("DEBUG !!! select -- ")
+        self.setSelected(self.getIndexFor(self.getImageFromEvent(ke)))
 
     def focus(self, image):
+        print ("DEBUG !!! focus -- ")
         self.m_aImages[image].Model.Tabstop = True
         xWindow = self.m_aImages[image]
         xWindow.setFocus()
 
     def defocus(self, image):
+        print ("DEBUG !!! defocus -- ")
         self.m_aImages[image].Model.Tabstop = False
 
     '''jump to the given item (display the screen
@@ -546,11 +564,13 @@ class ImageList(ListDataListener):
     '''
 
     def display(self, i):
-        isAux = (getCols() * getRows())
+        print ("DEBUG !!! display -- ")
+        isAux = (self.cols * self.rows)
         ps = (self.listModel.getSize() / isAux) * isAux
         self.setPageStart(ps)
 
     def setenabled(self, b):
+        print ("DEBUG !!! setenabled -- ")
         i = 0
         while i < len(self.m_aImages):
             UnoDialog2.setEnabled(self.m_aImages[i], b)

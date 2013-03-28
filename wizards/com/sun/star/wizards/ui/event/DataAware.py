@@ -78,7 +78,7 @@ class DataAware(object):
         try:
             data = getattr(self._dataObject, self._field)
         except Exception:
-            print ("DEBUG !!! dataObject hasn't the attribute, su using the 'getter' method.")
+            print ("DEBUG !!! DataAware.updateUI -- dataObject hasn't the attribute, su using the 'getter' method.")
             data = uno.invoke(self._dataObject, "get" + self._field, ())
         ui = self.getFromUI()
         if data is not ui:
@@ -111,18 +111,26 @@ class DataAware(object):
     '''
 
     def updateData(self):
+        print ("DEBUG !!! DataAware.updateData -- field: ", self._field)
+        useUno = False
         try:
             try:
                 data = getattr(self._dataObject, self._field)
             except Exception:
-                print ("DEBUG !!! dataObject hasn't the attribute, su using the 'getter' method.")
+                print ("DEBUG !!! DataAware.updateData -- dataObject hasn't the attribute, su using the 'getter' method.")
+                useUno = True
                 data = uno.invoke(self._dataObject, "get" + self._field, ())
+            print ("DEBUG !!! DataAware.updateData -- data: ", data)
             ui = self.getFromUI()
+            print ("DEBUG !!! DataAware.updateData -- ui: ", ui)
             if data is not ui:
                 if isinstance(ui,tuple):
                     #Selected Element listbox
                     ui = ui[0]
-                setattr(self._dataObject, self._field, ui)
+                if useUno:
+                    uno.invoke(self._dataObject, "set" + self._field, (ui,))
+                else:
+                    setattr(self._dataObject, self._field, ui)
             self.enableControls(ui)
         except Exception:
             traceback.print_exc()
