@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,tvhlp1,\
 	cppuhelper \
 	sal \
 	utl \
+	i18nisolang1 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tvhlp1,\

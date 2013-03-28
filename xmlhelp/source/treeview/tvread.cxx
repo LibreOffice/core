@@ -34,7 +34,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
-#include <comphelper/locale.hxx>
+#include <i18npool/languagetag.hxx>
 #include <comphelper/string.hxx>
 
 namespace treeview {
@@ -1324,13 +1324,7 @@ rtl::OUString TreeFileIterator::implGetTreeFileFromPackage
 
             ::std::vector< ::rtl::OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< ::rtl::OUString >::const_iterator pFound = av.end();
-            try
-            {
-                pFound = ::comphelper::Locale::getFallback( av, m_aLanguage );
-            }
-            catch( ::comphelper::Locale::MalFormedLocaleException& )
-            {}
+            ::std::vector< ::rtl::OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
             if( pFound != av.end() )
                 aLanguage = *pFound;
         }

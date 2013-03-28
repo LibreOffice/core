@@ -50,7 +50,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <comphelper/locale.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
@@ -648,6 +648,8 @@ Databases::getCollator( const rtl::OUString& Language,
             else if( langStr.compareToAscii("ko") == 0 )
                 countryStr = rtl::OUString("KR");
         }
+        /* FIXME-BCP47: all this does not look right for language tag context,
+         * also check processLang() and country() methods */
         it->second->loadDefaultCollator(  Locale( langStr,
                                                   countryStr,
                                                   rtl::OUString() ),
@@ -1491,13 +1493,7 @@ rtl::OUString ExtensionIteratorBase::implGetFileFromPackage(
 
             ::std::vector< ::rtl::OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< ::rtl::OUString >::const_iterator pFound = av.end();
-            try
-            {
-                pFound = ::comphelper::Locale::getFallback( av, m_aLanguage );
-            }
-            catch( ::comphelper::Locale::MalFormedLocaleException& )
-            {}
+            ::std::vector< ::rtl::OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
             if( pFound != av.end() )
                 aLanguage = *pFound;
         }
@@ -1634,13 +1630,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< depl
         {
             ::std::vector< ::rtl::OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
-            ::std::vector< ::rtl::OUString >::const_iterator pFound = av.end();
-            try
-            {
-                pFound = ::comphelper::Locale::getFallback( av, m_aLanguage );
-            }
-            catch( ::comphelper::Locale::MalFormedLocaleException& )
-            {}
+            ::std::vector< ::rtl::OUString >::const_iterator pFound = LanguageTag::getFallback( av, m_aLanguage );
             if( pFound != av.end() )
             {
                 aUsedLanguage = *pFound;
