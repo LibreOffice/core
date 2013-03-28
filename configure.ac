@@ -923,12 +923,12 @@ AC_ARG_ENABLE(gnome-vfs,
     AS_HELP_STRING([--disable-gnome-vfs],
         [Determines whether to use the Gnome Virtual Filing System on platforms
          where that VFS is available.]),
-,enable_gnome_vfs=yes)
+,enable_gnome_vfs=no)
 
 AC_ARG_ENABLE(gio,
     AS_HELP_STRING([--enable-gio],
         [Determines whether to use the GIO support.]),
-,enable_gio=no)
+,enable_gio=yes)
 
 AC_ARG_ENABLE(telepathy,
     AS_HELP_STRING([--enable-telepathy],
