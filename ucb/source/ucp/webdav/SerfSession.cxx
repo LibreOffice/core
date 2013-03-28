@@ -1222,8 +1222,7 @@ void SerfSession::abort()
 // -------------------------------------------------------------------
 const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
 {
-    if ( m_aUri.GetScheme().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http" ) ) ||
-         m_aUri.GetScheme().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
+    if ( m_aUri.GetScheme() == "http" || m_aUri.GetScheme() == "https" )
     {
         return m_rProxyDecider.getProxy( m_aUri.GetScheme(),
                                          m_aUri.GetHost(),

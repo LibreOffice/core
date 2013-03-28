@@ -140,19 +140,19 @@ SerfUri::~SerfUri( )
 void SerfUri::calculateURI ()
 {
     rtl::OUStringBuffer aBuf( mScheme );
-    aBuf.appendAscii( "://" );
+    aBuf.append( "://" );
     if ( mUserInfo.getLength() > 0 )
     {
         aBuf.append( mUserInfo );
-        aBuf.appendAscii( "@" );
+        aBuf.append( "@" );
     }
     // Is host a numeric IPv6 address?
     if ( ( mHostName.indexOf( ':' ) != -1 ) &&
          ( mHostName[ 0 ] != sal_Unicode( '[' ) ) )
     {
-        aBuf.appendAscii( "[" );
+        aBuf.append( "[" );
         aBuf.append( mHostName );
-        aBuf.appendAscii( "]" );
+        aBuf.append( "]" );
     }
     else
     {
@@ -164,16 +164,16 @@ void SerfUri::calculateURI ()
     switch ( mPort )
     {
     case DEFAULT_HTTP_PORT:
-        bAppendPort = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http" ) );
+        bAppendPort = (mScheme != "http");
         break;
 
     case DEFAULT_HTTPS_PORT:
-        bAppendPort = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) );
+        bAppendPort = (mScheme != "https");
         break;
     }
     if ( bAppendPort )
     {
-        aBuf.appendAscii( ":" );
+        aBuf.append( ":" );
         aBuf.append( rtl::OUString::valueOf( mPort ) );
     }
     aBuf.append( mPath );
@@ -256,9 +256,9 @@ rtl::OUString SerfUri::makeConnectionEndPointString(
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
          ( rHostName[ 0 ] != sal_Unicode( '[' ) ) )
     {
-        aBuf.appendAscii( "[" );
+        aBuf.append( "[" );
         aBuf.append( rHostName );
-        aBuf.appendAscii( "]" );
+        aBuf.append( "]" );
     }
     else
     {
@@ -267,7 +267,7 @@ rtl::OUString SerfUri::makeConnectionEndPointString(
 
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
-        aBuf.appendAscii( ":" );
+        aBuf.append( ":" );
         aBuf.append( rtl::OUString::valueOf( sal_Int32( nPort ) ) );
     }
     return aBuf.makeStringAndClear();

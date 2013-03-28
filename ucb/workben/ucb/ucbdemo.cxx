@@ -1096,12 +1096,10 @@ void UcbContent::open( const rtl::OUString & rName, const OUString& rInput,
                     if ( bPrint )
                     {
                         if ( !bFolder && xRow->wasNull() )
-                            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                                   "<null>" ) );
+                            aText.AppendAscii( "<null>" );
                         else
                             aText += bFolder ? OUString("true") : OUString("false");
-                        aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                               " : " ) );
+                        aText.AppendAscii( " : " );
                     }
 
                     // IsDocument:
@@ -1109,8 +1107,7 @@ void UcbContent::open( const rtl::OUString & rName, const OUString& rInput,
                     if ( bPrint )
                     {
                         if ( !bFolder && xRow->wasNull() )
-                            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                "<null>" ) );
+                            aText.AppendAscii( "<null>" );
                         else
                             aText
                                 += bDocument ? OUString("true") : OUString("false"); //  IsDocument
@@ -1606,12 +1603,12 @@ void SAL_CALL UcbContent::contentEvent( const ucb::ContentEvent& evt )
                 aMatch += String(evt.Id->getContentIdentifier());
                 if (evt.Content.is())
                 {
-                    aMatch.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+                    aMatch.AppendAscii(" - ");
                     aMatch += String(evt.Content->getContentType());
                 }
             }
             else
-                aMatch.AppendAscii(RTL_CONSTASCII_STRINGPARAM("<no id>"));
+                aMatch.AppendAscii("<no id>");
             print(aMatch);
             break;
         }

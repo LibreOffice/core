@@ -109,16 +109,9 @@ ContentProvider::queryContent(
 
     const rtl::OUString aScheme
         = Identifier->getContentProviderScheme().toAsciiLowerCase();
-    if ( !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( HTTP_URL_SCHEME ) ) &&
-         !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( HTTPS_URL_SCHEME ) ) &&
-         !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) &&
-         !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) &&
-         !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) )
+    if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME &&
+         aScheme != WEBDAV_URL_SCHEME && aScheme != DAV_URL_SCHEME &&
+         aScheme != DAVS_URL_SCHEME )
         throw ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
@@ -136,8 +129,7 @@ ContentProvider::queryContent(
     uno::Reference< ucb::XContentIdentifier > xCanonicId;
 
     bool bNewId = false;
-    if ( aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+    if ( aScheme == WEBDAV_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                WEBDAV_URL_SCHEME_LENGTH,
@@ -145,8 +137,7 @@ ContentProvider::queryContent(
                                                     HTTP_URL_SCHEME ) );
         bNewId = true;
     }
-    else if ( aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
+    else if ( aScheme == DAV_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAV_URL_SCHEME_LENGTH,
@@ -154,8 +145,7 @@ ContentProvider::queryContent(
                                                     HTTP_URL_SCHEME ) );
         bNewId = true;
     }
-    else if ( aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) )
+    else if ( aScheme == DAVS_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAVS_URL_SCHEME_LENGTH,
