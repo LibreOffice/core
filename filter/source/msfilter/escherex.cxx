@@ -1208,7 +1208,7 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
     OUString aVndUrl( "vnd.sun.star.GraphicObject:" );
     OUString aBmpUrl( rBitmapUrl );
     sal_Int32 nIndex = aBmpUrl.indexOf( aVndUrl, 0 );
-    if( nIndex != STRING_NOTFOUND )
+    if( nIndex != -1 )
     {
         // note: += ist not defined for xub_StrLen -> conversion to int and back to xub_StrLen
         nIndex = nIndex + aVndUrl.getLength();
@@ -1376,7 +1376,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
         {
             OUString aVndUrl( "vnd.sun.star.GraphicObject:" );
             sal_Int32 nIndex = aGraphicUrl.indexOf( aVndUrl, 0 );
-            if ( nIndex != STRING_NOTFOUND )
+            if ( nIndex != -1 )
             {
                 nIndex = nIndex + aVndUrl.getLength();
                 if ( aGraphicUrl.getLength() > nIndex  )
