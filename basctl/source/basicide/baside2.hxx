@@ -122,7 +122,7 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
     void            DoSyntaxHighlight( sal_uLong nPara );
-    String          GetWordAtCursor();
+    OUString        GetWordAtCursor();
     bool            ImpCanModify();
 
 public:
@@ -132,7 +132,7 @@ public:
     ExtTextEngine*  GetEditEngine() const   { return pEditEngine.get(); }
     ExtTextView*    GetEditView() const     { return pEditView.get(); }
 
-    void            CreateProgress( const String& rText, sal_uLong nRange );
+    void            CreateProgress( const OUString& rText, sal_uLong nRange );
     void            DestroyProgress();
 
     void            ParagraphInsertedDeleted( sal_uLong nNewPara, bool bInserted );
@@ -188,13 +188,13 @@ public:
 
 class WatchTreeListBox : public SvHeaderTabListBox
 {
-    String aEditingRes;
+    OUString aEditingRes;
 
 protected:
     virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
     virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-    bool            ImplBasicEntryEdited( SvTreeListEntry* pEntry, const String& rResult );
+    bool            ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUString& rResult );
     SbxBase*        ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement );
 
 public:
@@ -213,7 +213,7 @@ public:
 class WatchWindow : public DockingWindow
 {
 private:
-    String              aWatchStr;
+    OUString            aWatchStr;
     ExtendedEdit        aXEdit;
     ImageButton         aRemoveWatchButton;
     WatchTreeListBox    aTreeListBox;
@@ -233,7 +233,7 @@ public:
                     WatchWindow (Layout* pParent);
                     ~WatchWindow();
 
-    void            AddWatch( const String& rVName );
+    void            AddWatch( const OUString& rVName );
     bool            RemoveSelectedWatch();
     void            UpdateWatches( bool bBasicStopped = false );
 
@@ -245,7 +245,7 @@ class StackWindow : public DockingWindow
 {
 private:
     SvTreeListBox   aTreeListBox;
-    String          aStackStr;
+    OUString        aStackStr;
 
 protected:
     virtual void    Resize();
@@ -361,7 +361,7 @@ public:
     bool            SaveBasicSource();
     bool            ImportDialog();
 
-    void            EditMacro( const String& rMacroName );
+    void            EditMacro( const OUString& rMacroName );
 
     bool            ToggleBreakPoint( sal_uLong nLine );
 
@@ -416,7 +416,7 @@ public:
     virtual void GetState (SfxItemSet&, unsigned nWhich);
     virtual void UpdateDebug (bool bBasicStopped);
 public:
-    void BasicAddWatch (String const&);
+    void BasicAddWatch (OUString const&);
     void BasicRemoveWatch ();
     Color GetSyntaxColor (TokenTypes eType) const { return aSyntaxColors.GetColor(eType); }
 

@@ -891,14 +891,14 @@ class NameClashQueryBox : public MessBox
 {
 public:
     NameClashQueryBox( Window* pParent,
-        const XubString& rTitle, const XubString& rMessage );
+        const OUString& rTitle, const OUString& rMessage );
 };
 
 NameClashQueryBox::NameClashQueryBox( Window* pParent,
-    const XubString& rTitle, const XubString& rMessage )
+    const OUString& rTitle, const OUString& rMessage )
         : MessBox( pParent, 0, rTitle, rMessage )
 {
-    if ( rTitle.Len() )
+    if ( !rTitle.isEmpty() )
         SetText( rTitle );
 
     maMessText = rMessage;
@@ -916,14 +916,14 @@ class LanguageMismatchQueryBox : public MessBox
 {
 public:
     LanguageMismatchQueryBox( Window* pParent,
-        const XubString& rTitle, const XubString& rMessage );
+        const OUString& rTitle, const OUString& rMessage );
 };
 
 LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
-    const XubString& rTitle, const XubString& rMessage )
+    const OUString& rTitle, const OUString& rMessage )
         : MessBox( pParent, 0, rTitle, rMessage )
 {
-    if ( rTitle.Len() )
+    if ( !rTitle.isEmpty() )
         SetText( rTitle );
 
     maMessText = rMessage;
