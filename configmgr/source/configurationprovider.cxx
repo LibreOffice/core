@@ -332,8 +332,7 @@ void Service::setLocale(css::lang::Locale const & eLocale)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard guard(*lock_);
-    locale_ = comphelper::Locale(
-        eLocale.Language, eLocale.Country, eLocale.Variant).toISO();
+    locale_ = LanguageTag( eLocale).getBcp47();
 }
 
 css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
