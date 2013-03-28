@@ -128,7 +128,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             if( !introspection.is() )
             {
                 throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno bridge: Couldn't inspect uno adapter ( the python class must implement com.sun.star.lang.XTypeProvider !)" ) ),
+                    OUString( "pyuno bridge: Couldn't inspect uno adapter ( the python class must implement com.sun.star.lang.XTypeProvider !)" ),
                     Reference< XInterface > () );
             }
 
@@ -270,10 +270,8 @@ Any Adapter::invoke( const OUString &aFunctionName,
                     if( ! ( ret >>= seq ) )
                     {
                         throw RuntimeException(
-                            (OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "pyuno bridge: Couldn't extract out"
-                                    " parameters for method "))
+                            (OUString("pyuno bridge: Couldn't extract out"
+                                    " parameters for method ")
                              + aFunctionName),
                             Reference< XInterface > () );
                     }
@@ -281,13 +279,13 @@ Any Adapter::invoke( const OUString &aFunctionName,
                     if( aOutParamIndex.getLength() +1 != seq.getLength() )
                     {
                         OUStringBuffer buf;
-                        buf.appendAscii( "pyuno bridge: expected for method " );
+                        buf.append( "pyuno bridge: expected for method " );
                         buf.append( aFunctionName );
-                        buf.appendAscii( " one return value and " );
+                        buf.append( " one return value and " );
                         buf.append( (sal_Int32) aOutParamIndex.getLength() );
-                        buf.appendAscii( " out parameters, got a sequence of " );
+                        buf.append( " out parameters, got a sequence of " );
                         buf.append( seq.getLength() );
-                        buf.appendAscii( " elements as return value." );
+                        buf.append( " elements as return value." );
                         throw RuntimeException(buf.makeStringAndClear(), *this );
                     }
 

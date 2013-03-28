@@ -183,9 +183,9 @@ void logException( RuntimeCargo *cargo, const char *intro,
         rtl::OUStringBuffer buf( 128 );
         buf.appendAscii( intro );
         appendPointer(buf, ptr);
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
+        buf.append( "]." );
         buf.append( aFunctionName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
+        buf.append( " = " );
         buf.append(
             val2str( data, type.getTypeLibType(), VAL2STR_MODE_SHALLOW ) );
         log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
@@ -204,16 +204,16 @@ void logReply(
     rtl::OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
+    buf.append( "]." );
     buf.append( aFunctionName );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("()=") );
+    buf.append( "()=" );
     if( isLog( cargo, LogLevel::ARGS ) )
     {
         buf.append(
             val2str( returnValue.getValue(), returnValue.getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
         for( int i = 0; i < aParams.getLength() ; i ++ )
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", " ) );
+            buf.append( ", " );
             buf.append(
                 val2str( aParams[i].getValue(), aParams[i].getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
         }
@@ -229,20 +229,20 @@ void logCall( RuntimeCargo *cargo, const char *intro,
     rtl::OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("].") );
+    buf.append( "]." );
     buf.append( aFunctionName );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("(") );
+    buf.append( "(" );
     if( isLog( cargo, LogLevel::ARGS ) )
     {
         for( int i = 0; i < aParams.getLength() ; i ++ )
         {
             if( i > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", " ) );
+                buf.append( ", " );
             buf.append(
                 val2str( aParams[i].getValue(), aParams[i].getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
         }
     }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(")") );
+    buf.append( ")" );
     log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
 }
 

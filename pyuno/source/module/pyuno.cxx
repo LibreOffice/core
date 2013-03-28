@@ -83,41 +83,41 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     {
     case typelib_TypeClass_INTERFACE:
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( reinterpret_cast< sal_IntPtr >(*(void **)pVal), 16 );
         if( VAL2STR_MODE_DEEP == mode )
         {
-            buf.appendAscii( "{" );        Reference< XInterface > r = *( Reference< XInterface > * ) pVal;
+            buf.append( "{" );        Reference< XInterface > r = *( Reference< XInterface > * ) pVal;
             Reference< XServiceInfo > serviceInfo( r, UNO_QUERY);
             Reference< XTypeProvider > typeProvider(r,UNO_QUERY);
             if( serviceInfo.is() )
             {
-                buf.appendAscii("implementationName=" );
+                buf.append("implementationName=" );
                 buf.append(serviceInfo->getImplementationName() );
-                buf.appendAscii(", supportedServices={" );
+                buf.append(", supportedServices={" );
                 Sequence< OUString > seq = serviceInfo->getSupportedServiceNames();
                 for( int i = 0 ; i < seq.getLength() ; i ++ )
                 {
                     buf.append( seq[i] );
                     if( i +1 != seq.getLength() )
-                        buf.appendAscii( "," );
+                        buf.append( "," );
                 }
-                buf.appendAscii("}");
+                buf.append("}");
             }
 
             if( typeProvider.is() )
             {
-                buf.appendAscii(", supportedInterfaces={" );
+                buf.append(", supportedInterfaces={" );
                 Sequence< Type > seq (typeProvider->getTypes());
                 for( int i = 0 ; i < seq.getLength() ; i ++ )
                 {
                     buf.append(seq[i].getTypeName());
                     if( i +1 != seq.getLength() )
-                        buf.appendAscii( "," );
+                        buf.append( "," );
                 }
-                buf.appendAscii("}");
+                buf.append("}");
             }
-            buf.appendAscii( "}" );
+            buf.append( "}" );
         }
 
         break;
@@ -129,7 +129,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+        buf.append( "{ " );
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
         OSL_ASSERT( pTypeDescr );
@@ -141,7 +141,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         {
             buf.append( val2str( pVal, ((typelib_TypeDescription *)pCompType->pBaseTypeDescription)->pWeakRef,mode ) );
             if (nDescr)
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                buf.append( ", " );
         }
 
         typelib_TypeDescriptionReference ** ppTypeRefs = pCompType->ppTypeRefs;
@@ -151,18 +151,18 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
         {
             buf.append( ppMemberNames[nPos] );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = ") );
+            buf.append( " = " );
             typelib_TypeDescription * pMemberType = 0;
             TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[nPos] );
             buf.append( val2str( (char *)pVal + pMemberOffsets[nPos], pMemberType->pWeakRef, mode ) );
             TYPELIB_DANGER_RELEASE( pMemberType );
             if (nPos < (nDescr -1))
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                buf.append( ", " );
         }
 
         TYPELIB_DANGER_RELEASE( pTypeDescr );
 
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+        buf.append( " }" );
         break;
     }
     case typelib_TypeClass_SEQUENCE:
@@ -179,30 +179,30 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 
         if (nElements)
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+            buf.append( "{ " );
             char * pElements = pSequence->elements;
             for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
             {
                 buf.append( val2str( pElements + (nElementSize * nPos), pElementTypeDescr->pWeakRef, mode ) );
                 if (nPos < (nElements -1))
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                    buf.append( ", " );
             }
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+            buf.append( " }" );
         }
         else
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{}") );
+            buf.append( "{}" );
         }
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
         break;
     }
     case typelib_TypeClass_ANY:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+        buf.append( "{ " );
         buf.append( val2str( ((uno_Any *)pVal)->pData,
                              ((uno_Any *)pVal)->pType ,
                              mode) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+        buf.append( " }" );
         break;
     case typelib_TypeClass_TYPE:
         buf.append( (*(typelib_TypeDescriptionReference **)pVal)->pTypeName );
@@ -234,9 +234,9 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     }
     case typelib_TypeClass_BOOLEAN:
         if (*(sal_Bool *)pVal)
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("true") );
+            buf.append( "true" );
         else
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("false") );
+            buf.append( "false" );
         break;
     case typelib_TypeClass_CHAR:
         buf.append( (sal_Unicode)'\'' );
@@ -250,28 +250,28 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         buf.append( *(double *)pVal );
         break;
     case typelib_TypeClass_BYTE:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int32)*(sal_Int8 *)pVal, 16 );
         break;
     case typelib_TypeClass_SHORT:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int32)*(sal_Int16 *)pVal, 16 );
         break;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int32)*(sal_uInt16 *)pVal, 16 );
         break;
     case typelib_TypeClass_LONG:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( *(sal_Int32 *)pVal, 16 );
         break;
     case typelib_TypeClass_UNSIGNED_LONG:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int64)*(sal_uInt32 *)pVal, 16 );
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
 #if defined(__GNUC__) && defined(SPARC)
 // I guess this really should check if there are strict alignment
 // requirements, not just "GCC on SPARC".
@@ -338,9 +338,9 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
             if (! me->members->xInvocation->hasMethod (attrName))
             {
                 OUStringBuffer buf;
-                buf.appendAscii( "Attribute " );
+                buf.append( "Attribute " );
                 buf.append( attrName );
-                buf.appendAscii( " unknown" );
+                buf.append( " unknown" );
                 throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
             }
             callable = PyUNO_callable_new (
