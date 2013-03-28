@@ -41,6 +41,7 @@
 
 #include "formula/errorcodes.hxx"
 #include "svl/intitem.hxx"
+#include "rtl/strbuf.hxx"
 
 #include <boost/bind.hpp>
 
