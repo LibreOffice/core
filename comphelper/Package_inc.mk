@@ -72,7 +72,6 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/streamsection.hx
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/accessibletexthelper.hxx,comphelper/accessibletexthelper.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/accessibleselectionhelper.hxx,comphelper/accessibleselectionhelper.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/serviceinfohelper.hxx,comphelper/serviceinfohelper.hxx))
-$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/locale.hxx,comphelper/locale.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/numberedcollection.hxx,comphelper/numberedcollection.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/ChainablePropertySet.hxx,comphelper/ChainablePropertySet.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/stl_types.hxx,comphelper/stl_types.hxx))

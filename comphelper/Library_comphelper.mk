@@ -90,7 +90,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/instancelocker \
     comphelper/source/misc/interaction \
     comphelper/source/misc/listenernotification \
-    comphelper/source/misc/locale \
     comphelper/source/misc/logging \
     comphelper/source/misc/mediadescriptor \
     comphelper/source/misc/mimeconfighelper \
