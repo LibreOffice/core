@@ -215,6 +215,8 @@ friend class ScAttrRectIterator;
 friend class ScDocShell;
 friend class ScDocRowHeightUpdater;
 friend class ScColumnTextWidthIterator;
+friend class ScFormulaCell;
+friend class ScTable;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:
@@ -743,9 +745,6 @@ public:
 
     SC_DLLPUBLIC void EnsureTable( SCTAB nTab );
 
-    SC_DLLPUBLIC void           PutCell( const ScAddress&, ScBaseCell* pCell, bool bForceTab = false );
-    SC_DLLPUBLIC void           PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
-                            sal_uLong nFormatIndex, bool bForceTab = false);
                     //  return TRUE = number format is set
     SC_DLLPUBLIC bool           SetString(
         SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rString,
@@ -853,8 +852,6 @@ public:
     SC_DLLPUBLIC void           GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula ) const;
     SC_DLLPUBLIC void           GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
     SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;
-    SC_DLLPUBLIC void           GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell ) const;
-    SC_DLLPUBLIC ScBaseCell*        GetCell( const ScAddress& rPos ) const;
 
     SC_DLLPUBLIC bool           HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC bool           HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
@@ -1975,6 +1972,9 @@ private: // CLOOK-Impl-methods
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs);
 
     bool    HasPartOfMerged( const ScRange& rRange );
+
+    void PutCell( const ScAddress&, ScBaseCell* pCell, bool bForceTab = false );
+    void PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, sal_uLong nFormatIndex, bool bForceTab = false );
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 

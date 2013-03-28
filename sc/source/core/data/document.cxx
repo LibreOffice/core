@@ -3090,49 +3090,52 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
     // ScInterpreter::GetCellString: always format values as numbers.
     // The return value is the error code.
 
-    sal_uInt16 nErr = 0;
-    String aStr;
-    ScBaseCell* pCell = GetCell( rPos );
-    if (pCell)
+    ScRefCellValue aCell;
+    aCell.assign(*this, rPos);
+    if (aCell.isEmpty())
     {
-        SvNumberFormatter* pFormatter = GetFormatTable();
-        switch (pCell->GetCellType())
+        rString = EMPTY_OUSTRING;
+        return 0;
+    }
+
+    sal_uInt16 nErr = 0;
+    OUString aStr;
+    SvNumberFormatter* pFormatter = GetFormatTable();
+    switch (aCell.meType)
+    {
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            aStr = aCell.getString();
+        break;
+        case CELLTYPE_FORMULA:
         {
-            case CELLTYPE_STRING:
-                aStr = static_cast<ScStringCell*>(pCell)->GetString();
-            break;
-            case CELLTYPE_EDIT:
-                aStr = static_cast<ScEditCell*>(pCell)->GetString();
-            break;
-            case CELLTYPE_FORMULA:
+            ScFormulaCell* pFCell = aCell.mpFormula;
+            nErr = pFCell->GetErrCode();
+            if (pFCell->IsValue())
             {
-                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                nErr = pFCell->GetErrCode();
-                if (pFCell->IsValue())
-                {
-                    double fVal = pFCell->GetValue();
-                    sal_uInt32 nIndex = pFormatter->GetStandardFormat(
-                                        NUMBERFORMAT_NUMBER,
-                                        ScGlobal::eLnge);
-                    pFormatter->GetInputLineString(fVal, nIndex, aStr);
-                }
-                else
-                    aStr = pFCell->GetString();
-            }
-            break;
-            case CELLTYPE_VALUE:
-            {
-                double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
+                double fVal = pFCell->GetValue();
                 sal_uInt32 nIndex = pFormatter->GetStandardFormat(
-                                        NUMBERFORMAT_NUMBER,
-                                        ScGlobal::eLnge);
+                                    NUMBERFORMAT_NUMBER,
+                                    ScGlobal::eLnge);
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);
             }
-            break;
-            default:
-                ;
+            else
+                aStr = pFCell->GetString();
         }
+        break;
+        case CELLTYPE_VALUE:
+        {
+            double fVal = aCell.mfValue;
+            sal_uInt32 nIndex = pFormatter->GetStandardFormat(
+                                    NUMBERFORMAT_NUMBER,
+                                    ScGlobal::eLnge);
+            pFormatter->GetInputLineString(fVal, nIndex, aStr);
+        }
+        break;
+        default:
+            ;
     }
+
     rString = aStr;
     return nErr;
 }
@@ -3303,30 +3306,6 @@ void ScDocument::GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab,
         rCellType = maTabs[nTab]->GetCellType( nCol, nRow );
     else
         rCellType = CELLTYPE_NONE;
-}
-
-
-void ScDocument::GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-        ScBaseCell*& rpCell ) const
-{
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        rpCell = maTabs[nTab]->GetCell( nCol, nRow );
-    else
-    {
-        OSL_FAIL("GetCell without a table");
-        rpCell = NULL;
-    }
-}
-
-
-ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
-{
-    SCTAB nTab = rPos.Tab();
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->GetCell( rPos );
-
-    OSL_FAIL("GetCell without a table");
-    return NULL;
 }
 
 bool ScDocument::HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
@@ -5004,44 +4983,50 @@ bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
 {
     //  if rCell is part of a matrix formula, return its complete range
 
-    bool bRet = false;
-    ScBaseCell* pCell = GetCell( rCellPos );
-    if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-    {
-        ScAddress aOrigin = rCellPos;
-        if ( ((ScFormulaCell*)pCell)->GetMatrixOrigin( aOrigin ) )
-        {
-            if ( aOrigin != rCellPos )
-                pCell = GetCell( aOrigin );
-            if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-            {
-                SCCOL nSizeX;
-                SCROW nSizeY;
-                ((ScFormulaCell*)pCell)->GetMatColsRows(nSizeX,nSizeY);
-                if ( !(nSizeX > 0 && nSizeY > 0) )
-                {
-                    // GetMatrixEdge computes also dimensions of the matrix
-                    // if not already done (may occur if document is loaded
-                    // from old file format).
-                    // Needs an "invalid" initialized address.
-                    aOrigin.SetInvalid();
-                    ((ScFormulaCell*)pCell)->GetMatrixEdge(aOrigin);
-                    ((ScFormulaCell*)pCell)->GetMatColsRows(nSizeX,nSizeY);
-                }
-                if ( nSizeX > 0 && nSizeY > 0 )
-                {
-                    ScAddress aEnd( aOrigin.Col() + nSizeX - 1,
-                                    aOrigin.Row() + nSizeY - 1,
-                                    aOrigin.Tab() );
+    ScFormulaCell* pFCell = GetFormulaCell(rCellPos);
+    if (!pFCell)
+        // not a formula cell.  Bail out.
+        return false;
 
-                    rMatrix.aStart = aOrigin;
-                    rMatrix.aEnd = aEnd;
-                    bRet = true;
-                }
-            }
-        }
+    ScAddress aOrigin = rCellPos;
+    if (!pFCell->GetMatrixOrigin(aOrigin))
+        // Failed to get the address of the matrix origin.
+        return false;
+
+    if (aOrigin != rCellPos)
+    {
+        pFCell = GetFormulaCell(aOrigin);
+        if (!pFCell)
+            // The matrix origin cell is not a formula cell !?  Something is up...
+            return false;
     }
-    return bRet;
+
+    SCCOL nSizeX;
+    SCROW nSizeY;
+    pFCell->GetMatColsRows(nSizeX, nSizeY);
+    if (nSizeX <= 0 || nSizeY <= 0)
+    {
+        // GetMatrixEdge computes also dimensions of the matrix
+        // if not already done (may occur if document is loaded
+        // from old file format).
+        // Needs an "invalid" initialized address.
+        aOrigin.SetInvalid();
+        pFCell->GetMatrixEdge(aOrigin);
+        pFCell->GetMatColsRows(nSizeX, nSizeY);
+    }
+
+    if (nSizeX <= 0 || nSizeY <= 0)
+        // Matrix size is still invalid. Give up.
+        return false;
+
+    ScAddress aEnd( aOrigin.Col() + nSizeX - 1,
+                    aOrigin.Row() + nSizeY - 1,
+                    aOrigin.Tab() );
+
+    rMatrix.aStart = aOrigin;
+    rMatrix.aEnd = aEnd;
+
+    return true;
 }
 
 

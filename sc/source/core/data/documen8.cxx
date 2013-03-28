@@ -96,6 +96,7 @@
 #define VSPL_START  0
 #define VSPL_DONE   1
 
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1613,14 +1614,15 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
             while (bFound)
             {
-                const ScBaseCell* pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
-                CellType eType = pCell ? pCell->GetCellType() : CELLTYPE_NONE;
+                ScRefCellValue aCell;
+                aCell.assign(*this, ScAddress(nCol, nRow, nTab));
+
                 // fdo#32786 TITLE_CASE/SENTENCE_CASE need the extra handling in EditEngine (loop over words/sentences).
                 // Still use TransliterationWrapper directly for text cells with other transliteration types,
                 // for performance reasons.
-                if ( eType == CELLTYPE_EDIT ||
-                     ( eType == CELLTYPE_STRING && ( nType == com::sun::star::i18n::TransliterationModulesExtra::SENTENCE_CASE ||
-                                                     nType == com::sun::star::i18n::TransliterationModulesExtra::TITLE_CASE ) ) )
+                if (aCell.meType == CELLTYPE_EDIT ||
+                    (aCell.meType == CELLTYPE_STRING &&
+                     ( nType == i18n::TransliterationModulesExtra::SENTENCE_CASE || nType == i18n::TransliterationModulesExtra::TITLE_CASE)))
                 {
                     if (!pEngine)
                         pEngine = new ScFieldEditEngine(this, GetEnginePool(), GetEditPool());
@@ -1631,13 +1633,11 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     pPattern->FillEditItemSet( pDefaults );
                     pEngine->SetDefaults( pDefaults, true );
 
-                    if ( eType == CELLTYPE_STRING )
-                        pEngine->SetText( static_cast<const ScStringCell*>(pCell)->GetString() );
-                    else
-                    {
-                        const EditTextObject* pData = static_cast<const ScEditCell*>(pCell)->GetData();
-                        pEngine->SetText( *pData );
-                    }
+                    if (aCell.meType == CELLTYPE_STRING)
+                        pEngine->SetText(*aCell.mpString);
+                    else if (aCell.mpEditText)
+                        pEngine->SetText(*aCell.mpEditText);
+
                     pEngine->ClearModifyFlag();
 
                     sal_uInt16 nLastPar = pEngine->GetParagraphCount();
@@ -1669,9 +1669,9 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     }
                 }
 
-                else if ( eType == CELLTYPE_STRING )
+                else if (aCell.meType == CELLTYPE_STRING)
                 {
-                    rtl::OUString aOldStr = ((const ScStringCell*)pCell)->GetString();
+                    OUString aOldStr = *aCell.mpString;
                     sal_Int32 nOldLen = aOldStr.getLength();
 
                     if ( bConsiderLanguage )
@@ -1683,7 +1683,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                         nLanguage = ((const SvxLanguageItem*)GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
                     }
 
-                    com::sun::star::uno::Sequence<sal_Int32> aOffsets;
+                    uno::Sequence<sal_Int32> aOffsets;
                     rtl::OUString aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
 
                     if ( aNewStr != aOldStr )
