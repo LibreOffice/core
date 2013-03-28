@@ -1120,6 +1120,11 @@ LanguageTag & LanguageTag::makeFallback()
 
 bool LanguageTag::equals( const LanguageTag & rLanguageTag, bool bResolveSystem ) const
 {
+    // If SYSTEM is not to be resolved or either both are SYSTEM or none, we
+    // can use the operator==() optimization.
+    if (!bResolveSystem || isSystemLocale() == rLanguageTag.isSystemLocale())
+        return operator==( rLanguageTag);
+
     // Compare full language tag strings.
     return getBcp47( bResolveSystem) == rLanguageTag.getBcp47( bResolveSystem);
 }
@@ -1127,6 +1132,16 @@ bool LanguageTag::equals( const LanguageTag & rLanguageTag, bool bResolveSystem 
 
 bool LanguageTag::operator==( const LanguageTag & rLanguageTag ) const
 {
+    if (isSystemLocale() && rLanguageTag.isSystemLocale())
+        return true;    // both SYSTEM
+
+    // No need to convert to BCP47 if both Lang-IDs are available.
+    if (mbInitializedLangID && rLanguageTag.mbInitializedLangID)
+    {
+        // Equal if same ID and no SYSTEM is involved or both are SYSTEM.
+        return mnLangID == rLanguageTag.mnLangID && isSystemLocale() == rLanguageTag.isSystemLocale();
+    }
+
     // Compare full language tag strings but SYSTEM unresolved.
     return getBcp47( false) == rLanguageTag.getBcp47( false);
 }
