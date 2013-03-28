@@ -11,8 +11,8 @@ $(eval $(call gb_Module_Module,ios))
 ifeq ($(OS),IOS)
 
 $(eval $(call gb_Module_add_targets,ios,\
-	Executable_Viewer \
-	CustomTarget_Viewer_app \
+	Executable_LibreOffice \
+	CustomTarget_LibreOffice_app \
 ))
 
 endif

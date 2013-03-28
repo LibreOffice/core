@@ -18,20 +18,22 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BE08805B16FDB784000CED5C /* LOViewerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOViewerWindow.h; sourceTree = "<group>"; };
-		BE08805C16FDB784000CED5C /* LOViewerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOViewerWindow.m; sourceTree = "<group>"; };
+		BE08805B16FDB784000CED5C /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
+		BE08805C16FDB784000CED5C /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
 		BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapdevice.cxx; path = ../../../../basebmp/source/bitmapdevice.cxx; sourceTree = "<group>"; };
 		BE4EEE9A16FF80B100D475B2 /* virdev.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = virdev.cxx; path = ../../../../vcl/source/gdi/virdev.cxx; sourceTree = "<group>"; };
-		BE5A22551664F87600CF01C9 /* Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Viewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE56CD651704A08E00CA5B15 /* lo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lo.h; sourceTree = "<group>"; };
+		BE56CD661704A08E00CA5B15 /* lo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lo.mm; sourceTree = "<group>"; };
+		BE5A22551664F87600CF01C9 /* LibreOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibreOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5A22591664F87600CF01C9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BE5A225B1664F87600CF01C9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE5A225D1664F87600CF01C9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		BE5A22611664F87600CF01C9 /* Viewer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Viewer-Info.plist"; sourceTree = "<group>"; };
+		BE5A22611664F87600CF01C9 /* LibreOffice-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LibreOffice-Info.plist"; sourceTree = "<group>"; };
 		BE5A22631664F87600CF01C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		BE5A22651664F87600CF01C9 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		BE5A22671664F87600CF01C9 /* Viewer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Viewer-Prefix.pch"; sourceTree = "<group>"; };
-		BE5A22681664F87600CF01C9 /* LOViewerAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LOViewerAppDelegate.h; sourceTree = "<group>"; };
-		BE5A22691664F87600CF01C9 /* LOViewerAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LOViewerAppDelegate.mm; sourceTree = "<group>"; };
+		BE5A22651664F87600CF01C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BE5A22671664F87600CF01C9 /* LibreOffice-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LibreOffice-Prefix.pch"; sourceTree = "<group>"; };
+		BE5A22681664F87600CF01C9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BE5A22691664F87600CF01C9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		BE5A226B1664F87600CF01C9 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		BE5A226D1664F87600CF01C9 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		BE5A226F1664F87600CF01C9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -40,6 +42,8 @@
 		BE69AD8A1695954D001BE1CD /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		BE69AD8B1695954D001BE1CD /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		BE69AD8C1695954D001BE1CD /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		BE7B7AFF170438D0002341F4 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BE7B7B00170438D0002341F4 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		BE9086F616FF02B2004400A1 /* headlessinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = headlessinst.cxx; path = ../../../../vcl/headless/headlessinst.cxx; sourceTree = "<group>"; };
 		BE9086F716FF02B2004400A1 /* svpbmp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpbmp.cxx; path = ../../../../vcl/headless/svpbmp.cxx; sourceTree = "<group>"; };
 		BE9086F816FF02B2004400A1 /* svpdata.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
@@ -72,7 +76,7 @@
 		BE5A224A1664F87600CF01C9 = {
 			isa = PBXGroup;
 			children = (
-				BE5A225F1664F87600CF01C9 /* Viewer */,
+				BE5A225F1664F87600CF01C9 /* LibreOffice */,
 				BE5A22581664F87600CF01C9 /* Frameworks */,
 				BE5A22561664F87600CF01C9 /* Products */,
 			);
@@ -81,7 +85,7 @@
 		BE5A22561664F87600CF01C9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BE5A22551664F87600CF01C9 /* Viewer.app */,
+				BE5A22551664F87600CF01C9 /* LibreOffice.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,17 +101,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		BE5A225F1664F87600CF01C9 /* Viewer */ = {
+		BE5A225F1664F87600CF01C9 /* LibreOffice */ = {
 			isa = PBXGroup;
 			children = (
 				BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */,
 				BEBF3E3C17002D4C00C454AC /* frame.cxx */,
 				BEBF3E3E17005E6B00C454AC /* frmload.cxx */,
 				BE9086F616FF02B2004400A1 /* headlessinst.cxx */,
-				BE5A22681664F87600CF01C9 /* LOViewerAppDelegate.h */,
-				BE5A22691664F87600CF01C9 /* LOViewerAppDelegate.mm */,
-				BE08805B16FDB784000CED5C /* LOViewerWindow.h */,
-				BE08805C16FDB784000CED5C /* LOViewerWindow.m */,
+				BE5A22681664F87600CF01C9 /* AppDelegate.h */,
+				BE5A22691664F87600CF01C9 /* AppDelegate.m */,
+				BE56CD651704A08E00CA5B15 /* lo.h */,
+				BE56CD661704A08E00CA5B15 /* lo.mm */,
+				BE7B7AFF170438D0002341F4 /* ViewController.h */,
+				BE7B7B00170438D0002341F4 /* ViewController.m */,
+				BE08805B16FDB784000CED5C /* View.h */,
+				BE08805C16FDB784000CED5C /* View.m */,
 				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
 				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
 				BE9086F716FF02B2004400A1 /* svpbmp.cxx */,
@@ -125,16 +133,16 @@
 				BE69AD3716958CA0001BE1CD /* Resources */,
 				BE5A22601664F87600CF01C9 /* Supporting Files */,
 			);
-			path = Viewer;
+			path = LibreOffice;
 			sourceTree = "<group>";
 		};
 		BE5A22601664F87600CF01C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				BE5A22611664F87600CF01C9 /* Viewer-Info.plist */,
+				BE5A22611664F87600CF01C9 /* LibreOffice-Info.plist */,
 				BE5A22621664F87600CF01C9 /* InfoPlist.strings */,
-				BE5A22651664F87600CF01C9 /* main.mm */,
-				BE5A22671664F87600CF01C9 /* Viewer-Prefix.pch */,
+				BE5A22651664F87600CF01C9 /* main.m */,
+				BE5A22671664F87600CF01C9 /* LibreOffice-Prefix.pch */,
 				BE5A226B1664F87600CF01C9 /* Default.png */,
 				BE5A226D1664F87600CF01C9 /* Default@2x.png */,
 				BE5A226F1664F87600CF01C9 /* Default-568h@2x.png */,
@@ -156,9 +164,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BE5A22541664F87600CF01C9 /* Viewer */ = {
+		BE5A22541664F87600CF01C9 /* LibreOffice */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BE5A22881664F87600CF01C9 /* Build configuration list for PBXNativeTarget "Viewer" */;
+			buildConfigurationList = BE5A22881664F87600CF01C9 /* Build configuration list for PBXNativeTarget "LibreOffice" */;
 			buildPhases = (
 				BE8B879916933FCD00F61E9F /* ShellScript */,
 				BE5A22531664F87600CF01C9 /* Resources */,
@@ -168,9 +176,9 @@
 			);
 			dependencies = (
 			);
-			name = Viewer;
-			productName = Viewer;
-			productReference = BE5A22551664F87600CF01C9 /* Viewer.app */;
+			name = LibreOffice;
+			productName = LibreOffice;
+			productReference = BE5A22551664F87600CF01C9 /* LibreOffice.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -179,11 +187,10 @@
 		BE5A224C1664F87600CF01C9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = LOViewer;
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Tor Lillqvist";
 			};
-			buildConfigurationList = BE5A224F1664F87600CF01C9 /* Build configuration list for PBXProject "Viewer" */;
+			buildConfigurationList = BE5A224F1664F87600CF01C9 /* Build configuration list for PBXProject "LibreOffice" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -195,7 +202,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BE5A22541664F87600CF01C9 /* Viewer */,
+				BE5A22541664F87600CF01C9 /* LibreOffice */,
 			);
 		};
 /* End PBXProject section */
@@ -293,8 +300,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Viewer/Viewer-Prefix.pch";
-				INFOPLIST_FILE = "Viewer/Viewer-Info.plist";
+				GCC_PREFIX_HEADER = "LibreOffice/LibreOffice-Prefix.pch";
+				INFOPLIST_FILE = "LibreOffice/LibreOffice-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = "../../../workdir/$(LO_INPATH)/LinkTarget/Library";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -306,8 +313,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Viewer/Viewer-Prefix.pch";
-				INFOPLIST_FILE = "Viewer/Viewer-Info.plist";
+				GCC_PREFIX_HEADER = "LibreOffice/LibreOffice-Prefix.pch";
+				INFOPLIST_FILE = "LibreOffice/LibreOffice-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = "../../../workdir/$(LO_INPATH)/LinkTarget/Library";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -318,7 +325,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BE5A224F1664F87600CF01C9 /* Build configuration list for PBXProject "Viewer" */ = {
+		BE5A224F1664F87600CF01C9 /* Build configuration list for PBXProject "LibreOffice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE5A22861664F87600CF01C9 /* Debug */,
@@ -327,7 +334,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BE5A22881664F87600CF01C9 /* Build configuration list for PBXNativeTarget "Viewer" */ = {
+		BE5A22881664F87600CF01C9 /* Build configuration list for PBXNativeTarget "LibreOffice" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BE5A22891664F87600CF01C9 /* Debug */,

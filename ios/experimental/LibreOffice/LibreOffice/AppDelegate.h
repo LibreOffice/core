@@ -5,13 +5,23 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
 
 #import <UIKit/UIKit.h>
 
-@interface LOViewerWindow : UIWindow
-@property CGRect bounds;
-@property char *pixelBuffer;
-@property CGImageRef image;
-- (void)drawRect:(CGRect)rect;
+#import "View.h"
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
+{
+  int nbytes;
+  char *pixelBuffer;
+  CGImageRef image;
+}
+
+@property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) View *view;
+
+- (void) threadMainMethod: (id) argument;
+
 @end
+
+// vim:set shiftwidth=4 softtabstop=4 expandtab:

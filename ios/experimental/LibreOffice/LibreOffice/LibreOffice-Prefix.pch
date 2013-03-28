@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'Viewer' target in the 'Viewer' project
+// Prefix header for all source files of the 'LibreOffice' target in the 'LibreOffice' project
 //
 
 #import <Availability.h>

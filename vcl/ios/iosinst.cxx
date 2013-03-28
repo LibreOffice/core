@@ -89,9 +89,10 @@ void IosSalInstance::RedrawWindows(char *pPixelBuffer,
     }
 }
 
-void IosSalInstance::damaged(IosSalFrame */* frame */)
+void IosSalInstance::damaged( IosSalFrame */* frame */,
+                              const basegfx::B2IBox& rDamageRect )
 {
-    lo_damaged();
+    lo_damaged( CGRectMake( rDamageRect.getMinX(), rDamageRect.getMinY(), rDamageRect.getWidth(), rDamageRect.getHeight() ));
 }
 
 void IosSalInstance::GetWorkArea( Rectangle& rRect )
@@ -188,14 +189,12 @@ public:
         IosSalInstance::getInstance()->GetWorkArea( rRect );
     }
 
-    virtual void damaged( const basegfx::B2IBox& rDamageRect)
+    virtual void damaged( const basegfx::B2IBox& rDamageRect )
     {
-        if (rDamageRect.getWidth() <= 0 ||
-            rDamageRect.getHeight() <= 0)
-        {
+        if (rDamageRect.isEmpty())
             return;
-        }
-        IosSalInstance::getInstance()->damaged( this );
+
+        IosSalInstance::getInstance()->damaged( this, rDamageRect );
     }
 
     virtual void UpdateSettings( AllSettings &rSettings )

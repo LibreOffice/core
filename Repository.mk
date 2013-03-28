@@ -204,7 +204,7 @@ endif
 ifeq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,NONE,\
-    Viewer \
+    LibreOffice \
 ))
 
 endif

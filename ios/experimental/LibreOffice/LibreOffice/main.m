@@ -1,4 +1,4 @@
-// -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+// -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //
 // This file is part of the LibreOffice project.
 //
@@ -6,12 +6,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#ifndef LO_VIEWER_H
-#define LO_VIEWER_H
+#import <UIKit/UIKit.h>
 
-void lo_initialize(void);
+#import "AppDelegate.h"
 
-#endif // LO_VIEWER_H
+int main(int argc, char *argv[])
+{
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+    }
+}
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
-

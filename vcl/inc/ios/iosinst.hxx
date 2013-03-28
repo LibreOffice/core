@@ -47,12 +47,13 @@ public:
 
     SalFrame *getFocusFrame() const;
 
-    void RedrawWindows(char *pPixelBuffer,
-                       int nPBWidth, int nPBHeight,
-                       int destX, int nDestY,
-                       int nDestWidth, int nDestHeight);
+    void RedrawWindows( char *pPixelBuffer,
+                        int nPBWidth, int nPBHeight,
+                        int destX, int nDestY,
+                        int nDestWidth, int nDestHeight);
 
-    void damaged(IosSalFrame *frame);
+    void damaged( IosSalFrame *frame,
+                  const basegfx::B2IBox& rDamageRect);
 };
 
 #endif // IOS_SALINST_H

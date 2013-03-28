@@ -6,32 +6,43 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <stdlib.h>
-
 #import <UIKit/UIKit.h>
 
 #include <osl/detail/ios-bootstrap.h>
 
-#import "LOViewerAppDelegate.h"
-#import "LOViewerWindow.h"
+#import "AppDelegate.h"
+#import "ViewController.h"
 
-#include "lo-viewer.h"
+#import "lo.h"
 
-static UIWindow *theWindow;
+static UIView *theView;
 
-@implementation LOViewerAppDelegate
+@implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     (void) application;
     (void) launchOptions;
 
-    CGRect bounds = [[UIScreen mainScreen] applicationFrame];
-    self.window = [[LOViewerWindow alloc] initWithFrame:bounds];
-
-    theWindow = self.window;
-
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    self.window = [[UIWindow alloc] initWithFrame:bounds];
     self.window.backgroundColor = [UIColor whiteColor];
+
+    ViewController *vc = [[ViewController alloc] init];
+    self.window.rootViewController = vc;
+
+    [self.window makeKeyAndVisible];
+    
+    CGRect r = [self.window frame];
+    r.origin = CGPointMake(0, 0);
+
+    self.view = [[View alloc] initWithFrame: r];
+    vc.view = self.view;
+    theView = self.view;
+
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(tapGesture:)];
+
+    [self.window addGestureRecognizer: tapRecognizer];
 
     nbytes = bounds.size.width * bounds.size.height * 4;
 
@@ -41,13 +52,10 @@ static UIWindow *theWindow;
     CGDataProviderRef provider = CGDataProviderCreateWithData( NULL, pixelBuffer, nbytes, NULL);
     image = CGImageCreate(bounds.size.width, bounds.size.height, 8, 32, bounds.size.width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast, provider, NULL, false, kCGRenderingIntentDefault);
 
-    self.window.bounds = bounds;
-    self.window.pixelBuffer = pixelBuffer;
-    self.window.image = image;
+    self.view.pixelBuffer = pixelBuffer;
+    self.view.image = image;
 
     lo_set_view_size(bounds.size.width, bounds.size.height);
-
-    [self.window makeKeyAndVisible];
 
     NSThread* thread = [[NSThread alloc] initWithTarget:self
                                                selector:@selector(threadMainMethod:)
@@ -70,45 +78,35 @@ static UIWindow *theWindow;
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     (void) application;
-
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     (void) application;
-
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     (void) application;
-
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     (void) application;
-
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     (void) application;
-
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 @end
 
-extern "C" void lo_damaged()
+void lo_damaged(CGRect rect)
 {
-    [theWindow performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:YES];
+    (void) rect;
+    [theView performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:NO];
+    // NSLog(@"lo_damaged: %dx%d@(%d,%d)", (int)rect.size.width, (int)rect.size.height, (int)rect.origin.x, (int)rect.origin.y);
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

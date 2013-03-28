@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_CustomTarget_CustomTarget,ios/Viewer_app))
+$(eval $(call gb_CustomTarget_CustomTarget,ios/LibreOffice_app))
 
 # We distinguish between builds for the simulator and device by
 # looking for the "iarmv7" or "i386" in the -arch option that is part
@@ -37,29 +37,29 @@ ifneq ($(SCRIPT_OUTPUT_FILE_0),)
 export CCACHE_CPP2=y
 
 ifneq ($(CURRENT_ARCH),$(xcode_arch))
-$(error Xcode platform (device or simulator) does not match that of this build tree)
+$(error Xcode platform ($(CURRENT_ARCH)) does not match that of this build tree ($(xcode_arch)))
 endif
 
 ifneq ($(CONFIGURATION),$(xcode_config))
-$(error Xcode configuration (release or debug) does not match that of this build tree)
+$(error Xcode configuration ($(CONFIGURATION)) does not match that of this build tree ($(xcode_config)))
 endif
 
 endif
 
 ifneq ($(SCRIPT_OUTPUT_FILE_0),)
-ifeq ($(EXECUTABLE_NAME),Viewer)
-# When run from Xcode, we move the Viewer executable from solver into
-# the Viewer.app directory that Xcode uses. We also set up/copy all
+ifeq ($(EXECUTABLE_NAME),LibreOffice)
+# When run from Xcode, we move the LibreOffice executable from solver into
+# the LibreOffice.app directory that Xcode uses. We also set up/copy all
 # the run-time configuration etc files that the app needs.
-$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(SCRIPT_OUTPUT_FILE_0)
+$(call gb_CustomTarget_get_target,ios/LibreOffice_app) : $(SCRIPT_OUTPUT_FILE_0)
 
 appdir=$(dir $(SCRIPT_OUTPUT_FILE_0))
 buildid=$(shell git log -1 --format=%H)
 
-$(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
+$(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
 	mkdir -p $(appdir)/ure
-	mv $(call gb_Executable_get_target,Viewer) $(SCRIPT_OUTPUT_FILE_0)
+	mv $(call gb_Executable_get_target,LibreOffice) $(SCRIPT_OUTPUT_FILE_0)
 #
 # Copy rdb files
 #
@@ -101,7 +101,7 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 	mv $(appdir)/share/registry/fcfg_langpack_en-US.xcd $(appdir)/share/registry/res
 	cp -R $(OUTDIR)/xml/registry/* $(appdir)/share/registry
 #
-# Set up rc, the "inifile". See getIniFileName_Impl(). 
+# Set up rc, the "inifile". See getIniFileName_Impl().
 #
 	( \
 		echo '[Bootstrap]' && \
@@ -130,7 +130,7 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 	( \
 		echo '[Bootstrap]' && \
 		echo 'InstallMode=<installmode>' && \
-		echo 'ProductKey=LibreOffice Viewer $(PRODUCTVERSION)' && \
+		echo 'ProductKey=LibreOffice $(PRODUCTVERSION)' && \
 		echo 'UserInstallation=file://$$APP_DATA_DIR/../Library/Application%20Support' && \
 	: ) > $(appdir)/program/bootstraprc
 #
@@ -154,15 +154,15 @@ else
 # copy or move the executable to. So do nothing. Except one trick:
 # Copy the Xcode project to BUILDDIR if SRCDIR!=BUILDDIR, so that one
 # can then open it from there in Xcode.
-$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(gb_Helper_PHONY)
+$(call gb_CustomTarget_get_target,ios/LibreOffice_app) : $(gb_Helper_PHONY)
 	if test $(SRCDIR) != $(BUILDDIR); then \
-		(cd $(SRCDIR) && tar cf - ios/experimental/Viewer/Viewer.xcodeproj/project.pbxproj) | (cd $(BUILDDIR) && tar xf -); \
+		(cd $(SRCDIR) && tar cf - ios/experimental/LibreOffice/LibreOffice.xcodeproj/project.pbxproj) | (cd $(BUILDDIR) && tar xf -); \
 	fi
 
-$(call gb_CustomTarget_get_clean_target,ios/Viewer_app) :
+$(call gb_CustomTarget_get_clean_target,ios/LibreOffice_app) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),APP,2)
 # Here we just assume that Xcode's settings are default, or something
-	rm -rf experimental/Viewer/build
+	rm -rf experimental/LibreOffice/build
 
 endif
 

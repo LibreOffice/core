@@ -1,19 +1,19 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
-$(eval $(call gb_Executable_Executable,Viewer))
+$(eval $(call gb_Executable_Executable,LibreOffice))
 
-$(eval $(call gb_Executable_use_api,Viewer,\
+$(eval $(call gb_Executable_use_api,LibreOffice,\
     udkapi \
     offapi \
 ))
 
-$(eval $(call gb_Executable_use_externals,Viewer,\
+$(eval $(call gb_Executable_use_externals,LibreOffice,\
     boost_headers \
     iconv \
     zlib \
 ))
 
-$(eval $(call gb_Executable_use_system_darwin_frameworks,Viewer,\
+$(eval $(call gb_Executable_use_system_darwin_frameworks,LibreOffice,\
     Foundation \
     CoreFoundation \
     CoreGraphics \
@@ -21,14 +21,15 @@ $(eval $(call gb_Executable_use_system_darwin_frameworks,Viewer,\
     UIKit \
 ))
 
-$(eval $(call gb_Executable_add_objcxxobjects,Viewer,\
-    ios/experimental/Viewer/Viewer/lo-viewer \
-    ios/experimental/Viewer/Viewer/LOViewerAppDelegate \
-    ios/experimental/Viewer/Viewer/main \
+$(eval $(call gb_Executable_add_objcxxobjects,LibreOffice,\
+    ios/experimental/LibreOffice/LibreOffice/lo \
 ))
 
-$(eval $(call gb_Executable_add_objcobjects,Viewer,\
-    ios/experimental/Viewer/Viewer/LOViewerWindow \
+$(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
+    ios/experimental/LibreOffice/LibreOffice/AppDelegate \
+    ios/experimental/LibreOffice/LibreOffice/main \
+    ios/experimental/LibreOffice/LibreOffice/View \
+    ios/experimental/LibreOffice/LibreOffice/ViewController \
 ))
 
 # The executables built for iOS link to all LO libs statically. The
@@ -38,7 +39,7 @@ $(eval $(call gb_Executable_add_objcobjects,Viewer,\
 # list a few libraries that are high in the dependency forest to make
 # it likely that all necessary libraries are built before this
 # executable is.
-$(eval $(call gb_Executable_use_libraries,Viewer,\
+$(eval $(call gb_Executable_use_libraries,LibreOffice,\
 	msword \
 	sal \
 	sc \
@@ -51,6 +52,6 @@ $(eval $(call gb_Executable_use_libraries,Viewer,\
 # rebuilt if any library has been rebuilt. Avoids need for "make
 # ios.clean".
 
-$(call gb_LinkTarget_get_target,Executable/Viewer) : $(wildcard $(OUTDIR)/lib/lib*.a)
+$(call gb_LinkTarget_get_target,Executable/LibreOffice) : $(wildcard $(OUTDIR)/lib/lib*.a)
 
 # vim: set ts=4 sw=4 et:

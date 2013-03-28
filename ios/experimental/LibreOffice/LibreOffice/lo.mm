@@ -129,10 +129,14 @@ lo_get_libmap(void)
     return map;
 }
 
+extern "C"
 void
 lo_initialize(void)
 {
-    setenv("SAL_LOG", "+WARN+INFO", 1);
+    if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]))
+        setenv("SAL_LOG", "+WARN+INFO.vcl.headless+INFO.vcl.ios", 1);
+    else
+        setenv("SAL_LOG", "-WARN-INFO", 1);
 
     const char *argv[] = {
         "placeholder-exe",

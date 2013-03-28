@@ -12,6 +12,8 @@
 
 #if defined(IOS)
 
+#include <CoreGraphics/CGGeometry.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -37,7 +39,7 @@ extern "C" {
 
 /* 1) */
 
-void lo_damaged();
+void lo_damaged(CGRect rect);
 
 /* 2) */
 
