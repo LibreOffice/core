@@ -198,11 +198,6 @@ bool ScInterpreter::HasCellValueData( const ScBaseCell* pCell )
     return pCell ? pCell->HasValueData() : false;
 }
 
-bool ScInterpreter::HasCellStringData( const ScBaseCell* pCell )
-{
-    return pCell ? pCell->HasStringData() : false;
-}
-
 /** Convert string content to numeric value.
 
     Converted are only integer numbers including exponent, and ISO 8601 dates

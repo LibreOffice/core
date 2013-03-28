@@ -2449,7 +2449,8 @@ void ScInterpreter::ScCell()
             PushIllegalParameter();
         else
         {
-            ScBaseCell*     pCell = GetCell( aCellPos );
+            ScRefCellValue aCell;
+            aCell.assign(*pDok, aCellPos);
 
             ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
 
@@ -2518,22 +2519,22 @@ void ScInterpreter::ScCell()
 // *** CELL PROPERTIES ***
             else if( aInfoType.EqualsAscii( "CONTENTS" ) )
             {   // contents of the cell, no formatting
-                if( pCell && pCell->HasStringData() )
+                if (aCell.hasString())
                 {
-                    String aStr;
-                    GetCellString( aStr, pCell );
+                    OUString aStr;
+                    GetCellString(aStr, aCell);
                     PushString( aStr );
                 }
                 else
-                    PushDouble( GetCellValue( aCellPos, pCell ) );
+                    PushDouble(GetCellValue(aCellPos, aCell));
             }
             else if( aInfoType.EqualsAscii( "TYPE" ) )
             {   // b = blank; l = string (label); v = otherwise (value)
                 sal_Unicode c;
-                if( HasCellStringData( pCell ) )
+                if (aCell.hasString())
                     c = 'l';
                 else
-                    c = HasCellValueData( pCell ) ? 'v' : 'b';
+                    c = aCell.hasNumeric() ? 'v' : 'b';
                 PushString( OUString(c) );
             }
             else if( aInfoType.EqualsAscii( "WIDTH" ) )
@@ -2556,7 +2557,7 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "PREFIX" ) )
             {   // ' = left; " = right; ^ = centered
                 sal_Unicode c = 0;
-                if( HasCellStringData( pCell ) )
+                if (aCell.hasString())
                 {
                     const SvxHorJustifyItem* pJustAttr = (const SvxHorJustifyItem*)
                         pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY );
@@ -3685,14 +3686,15 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
                 {
-                    nVal = GetCellValue( aAdr, pCell );
+                    nVal = GetCellValue(aAdr, aCell);
                     CurFmtToFuncFmt();
                     if (nMin > nVal) nMin = nVal;
                 }
-                else if ( bTextAsZero && HasCellStringData( pCell ) )
+                else if (bTextAsZero && aCell.hasString())
                 {
                     if ( nMin > 0.0 )
                         nMin = 0.0;
@@ -3808,14 +3810,15 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
                 {
-                    nVal = GetCellValue( aAdr, pCell );
+                    nVal = GetCellValue(aAdr, aCell);
                     CurFmtToFuncFmt();
                     if (nMax < nVal) nMax = nVal;
                 }
-                else if ( bTextAsZero && HasCellStringData( pCell ) )
+                else if (bTextAsZero && aCell.hasString())
                 {
                     if ( nMax < 0.0 )
                         nMax = 0.0;
@@ -4371,15 +4374,16 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasNumeric())
                 {
-                    fVal = GetCellValue( aAdr, pCell );
+                    fVal = GetCellValue(aAdr, aCell);
                     values.push_back(fVal);
                     fSum += fVal;
                     rValCount++;
                 }
-                else if ( bTextAsZero && HasCellStringData( pCell ) )
+                else if (bTextAsZero && aCell.hasString())
                 {
                     values.push_back(0.0);
                     rValCount++;
