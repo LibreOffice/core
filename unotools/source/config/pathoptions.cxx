@@ -472,6 +472,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Set language type!
+    /* FIXME-BCP47 */
     OUString aLocaleStr( ConfigManager::getLocale() );
     sal_Int32 nIndex = 0;
     m_aLocale.Language = aLocaleStr.getToken(0, '-', nIndex );
