@@ -682,6 +682,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
         // if the search view is hidden, hide the folder view and display search one
         if (!mpSearchView->IsVisible())
         {
+            mpCurView->deselectItems();
             mpSearchView->Show();
             mpCurView->Hide();
         }
