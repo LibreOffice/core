@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+L0\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4837,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-03-28T16:24:42Z",
+      "side": 1,
+      "message": "This is not right. Below lastIndexOf() searches from nSpacePos backwards, so with -1 it\u0027d never search anything. This needs to be length of the string.",
+      "revId": "a6e796a3d0eae706050d7d762b4aa1f598d8baee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
