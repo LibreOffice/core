@@ -1,0 +1,9 @@
+Code-Review+2: Petr Mladek <pmladek@suse.cz>
+Verified+1: Petr Mladek <pmladek@suse.cz>
+Code-Review+1: Christoph Brill <egore911@gmail.com>
+Code-Review+1: Thomas Arnhold <thomas@arnhold.org>
+Submitted-by: Petr Mladek <pmladek@suse.cz>
+Submitted-at: Thu, 28 Mar 2013 13:05:51 +0000
+Reviewed-on: https://gerrit.libreoffice.org/3048
+Project: core
+Branch: refs/heads/master
