@@ -521,15 +521,16 @@ ScMatrixRef ScInterpreter::GetMatrix()
             pMat = GetNewMat(1, 1);
             if (pMat)
             {
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellEmptyData(pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasEmptyValue())
                     pMat->PutEmpty(0, 0);
-                else if (HasCellValueData(pCell))
-                    pMat->PutDouble(GetCellValue(aAdr, pCell), 0);
+                else if (aCell.hasNumeric())
+                    pMat->PutDouble(GetCellValue(aAdr, aCell), 0);
                 else
                 {
-                    String aStr;
-                    GetCellString(aStr, pCell);
+                    OUString aStr;
+                    GetCellString(aStr, aCell);
                     pMat->PutString(aStr, 0);
                 }
             }

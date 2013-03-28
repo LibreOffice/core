@@ -196,7 +196,6 @@ ScBaseCell* GetCell( const ScAddress& rPos );
 void GetCellString( String& rStr, const ScBaseCell* pCell );
 void GetCellString( OUString& rStr, ScRefCellValue& rCell );
 sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
-bool HasCellEmptyData( const ScBaseCell* pCell );
 bool HasCellValueData( const ScBaseCell* pCell );
 bool HasCellStringData( const ScBaseCell* pCell );
 

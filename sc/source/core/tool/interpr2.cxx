@@ -793,10 +793,11 @@ void ScInterpreter::ScNPV()
                     {
                         ScAddress aAdr;
                         PopSingleRef( aAdr );
-                        ScBaseCell* pCell = GetCell( aAdr );
-                        if (!HasCellEmptyData(pCell) && HasCellValueData(pCell))
+                        ScRefCellValue aCell;
+                        aCell.assign(*pDok, aAdr);
+                        if (!aCell.hasEmptyValue() && aCell.hasNumeric())
                         {
-                            double nCellVal = GetCellValue( aAdr, pCell );
+                            double nCellVal = GetCellValue(aAdr, aCell);
                             nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
                             nCount++;
                         }

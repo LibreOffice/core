@@ -617,12 +617,13 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     }
                     else
                     {
-                        ScBaseCell* pCell = GetCell( aAdr );
-                        if (HasCellEmptyData( pCell))
+                        ScRefCellValue aCell;
+                        aCell.assign(*pDok, aAdr);
+                        if (aCell.hasEmptyValue())
                             pResMat->PutEmpty( nC, nR );
-                        else if (HasCellValueData( pCell))
+                        else if (aCell.hasNumeric())
                         {
-                            double fVal = GetCellValue( aAdr, pCell);
+                            double fVal = GetCellValue(aAdr, aCell);
                             if ( nGlobalError )
                             {
                                 fVal = CreateDoubleError(
@@ -633,8 +634,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         }
                         else
                         {
-                            String aStr;
-                            GetCellString( aStr, pCell );
+                            OUString aStr;
+                            GetCellString(aStr, aCell);
                             if ( nGlobalError )
                             {
                                 pResMat->PutDouble( CreateDoubleError(
@@ -684,12 +685,13 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 nRow = aRange.aStart.Row();
                             aAdr.SetCol( static_cast<SCCOL>(nCol) );
                             aAdr.SetRow( static_cast<SCROW>(nRow) );
-                            ScBaseCell* pCell = GetCell( aAdr );
-                            if (HasCellEmptyData( pCell))
+                            ScRefCellValue aCell;
+                            aCell.assign(*pDok, aAdr);
+                            if (aCell.hasEmptyValue())
                                 pResMat->PutEmpty( nC, nR );
-                            else if (HasCellValueData( pCell))
+                            else if (aCell.hasNumeric())
                               {
-                                double fCellVal = GetCellValue( aAdr, pCell);
+                                double fCellVal = GetCellValue(aAdr, aCell);
                                 if ( nGlobalError )
                                 {
                                     fCellVal = CreateDoubleError(
@@ -700,8 +702,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                               }
                               else
                             {
-                                String aStr;
-                                GetCellString( aStr, pCell );
+                                OUString aStr;
+                                GetCellString(aStr, aCell);
                                 if ( nGlobalError )
                                 {
                                     pResMat->PutDouble( CreateDoubleError(
@@ -1022,18 +1024,21 @@ double ScInterpreter::Compare()
                 ScAddress aAdr;
                 if ( !PopDoubleRefOrSingleRef( aAdr ) )
                     break;
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellEmptyData( pCell))
-                    aComp.bEmpty[ i ] = true;
-                else if (HasCellStringData( pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasEmptyValue())
+                    aComp.bEmpty[i] = true;
+                else if (aCell.hasString())
                 {
-                    GetCellString( *aComp.pVal[ i ], pCell);
-                    aComp.bVal[ i ] = false;
+                    OUString aStr;
+                    GetCellString(aStr, aCell);
+                    *aComp.pVal[i] = aStr;
+                    aComp.bVal[i] = false;
                 }
                 else
                 {
-                    aComp.nVal[ i ] = GetCellValue( aAdr, pCell );
-                    aComp.bVal[ i ] = true;
+                    aComp.nVal[i] = GetCellValue(aAdr, aCell);
+                    aComp.bVal[i] = true;
                 }
             }
             break;
@@ -1108,18 +1113,21 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
             case svSingleRef:
             {
                 PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellEmptyData( pCell))
-                    aComp.bEmpty[ i ] = true;
-                else if (HasCellStringData( pCell))
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (aCell.hasEmptyValue())
+                    aComp.bEmpty[i] = true;
+                else if (aCell.hasString())
                 {
-                    GetCellString( *aComp.pVal[ i ], pCell);
-                    aComp.bVal[ i ] = false;
+                    OUString aStr;
+                    GetCellString(aStr, aCell);
+                    *aComp.pVal[i] = aStr;
+                    aComp.bVal[i] = false;
                 }
                 else
                 {
-                    aComp.nVal[ i ] = GetCellValue( aAdr, pCell );
-                    aComp.bVal[ i ] = true;
+                    aComp.nVal[i] = GetCellValue(aAdr, aCell);
+                    aComp.bVal[i] = true;
                 }
             }
             break;
@@ -6521,7 +6529,7 @@ void ScInterpreter::ScLookup()
 
     // For double, string and single reference.
     double fDataVal = 0.0;
-    String aDataStr;
+    OUString aDataStr;
     ScAddress aDataAdr;
     bool bValueData = false;
 
@@ -6575,19 +6583,20 @@ void ScInterpreter::ScLookup()
         case svSingleRef:
         {
             PopSingleRef( aDataAdr );
-            const ScBaseCell* pDataCell = GetCell( aDataAdr );
-            if (HasCellEmptyData( pDataCell))
+            ScRefCellValue aCell;
+            aCell.assign(*pDok, aDataAdr);
+            if (aCell.hasEmptyValue())
             {
                 // Empty cells aren't found anywhere, bail out early.
                 SetError( NOTAVAILABLE);
             }
-            else if (HasCellValueData( pDataCell))
+            else if (aCell.hasNumeric())
             {
-                fDataVal = GetCellValue( aDataAdr, pDataCell );
+                fDataVal = GetCellValue(aDataAdr, aCell);
                 bValueData = true;
             }
             else
-                GetCellString( aDataStr, pDataCell );
+                GetCellString(aDataStr, aCell);
         }
         break;
         default:

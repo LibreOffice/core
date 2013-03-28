@@ -193,11 +193,6 @@ sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
     return rCell.meType == CELLTYPE_FORMULA ? rCell.mpFormula->GetErrorCode() : 0;
 }
 
-bool ScInterpreter::HasCellEmptyData( const ScBaseCell* pCell )
-{
-    return pCell ? pCell->HasEmptyData() : true;
-}
-
 bool ScInterpreter::HasCellValueData( const ScBaseCell* pCell )
 {
     return pCell ? pCell->HasValueData() : false;
