@@ -55,9 +55,6 @@ void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const
 
         long nSpace = (nDisplayHeight + nPadding - 2*aTextDev.getTextHeight()) / 3;
 
-        // Set title position
-        maTextPos.setY(maDrawArea.getY() + nThumbnailHeight + nPadding + nSpace + aTextDev.getTextHeight());
-
         // Set subtitle position
         maSubTitlePos.setY(maTextPos.getY() + nSpace + aTextDev.getTextHeight());
         maSubTitlePos.setX(maDrawArea.Left() +
