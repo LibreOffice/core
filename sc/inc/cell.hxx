@@ -117,7 +117,7 @@ private:
                     ScNoteCell( const ScNoteCell& );
 };
 
-class SC_DLLPUBLIC ScValueCell : public ScBaseCell
+class ScValueCell : public ScBaseCell
 {
 public:
 #ifdef USE_MEMPOOL
