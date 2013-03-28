@@ -46,6 +46,9 @@ public:
 
     sal_Int32 getMeasureValue() const;
 
+    sal_Int32 getValue() const { return m_nMeasureValue; }
+    sal_Int32 getUnit() const { return m_nUnit; }
+
     sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType;}
 };
 typedef boost::shared_ptr
