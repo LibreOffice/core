@@ -43,7 +43,6 @@
 #include "com/sun/star/util/XFlushable.hpp"
 #include "com/sun/star/util/XRefreshListener.hpp"
 #include "com/sun/star/util/XRefreshable.hpp"
-#include "comphelper/locale.hxx"
 #include "cppu/unotype.hxx"
 #include "cppuhelper/compbase5.hxx"
 #include "cppuhelper/factory.hxx"
