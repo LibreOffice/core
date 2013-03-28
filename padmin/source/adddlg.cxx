@@ -506,8 +506,8 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         rtl::OString aDriver(aValue.getToken(0, ' '));
         rtl::OString aPS( aValue.getToken(0, ',').getToken(1, ' ') );
         rtl::OString aNewDriver(aDriver);
-        if( aDriver.equalsL(RTL_CONSTASCII_STRINGPARAM("GENERIC")))
-            aNewDriver = rtl::OString(RTL_CONSTASCII_STRINGPARAM("SGENPRT"));
+        if( aDriver == "GENERIC")
+            aNewDriver = rtl::OString("SGENPRT");
 
         if( aPS != "PostScript" )
             continue;
@@ -547,7 +547,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
         // read the printer settings
         rtl::OStringBuffer aGroup(aDriver);
-        aGroup.append(RTL_CONSTASCII_STRINGPARAM(",PostScript,"));
+        aGroup.append(",PostScript,");
         aGroup.append(aPort);
         aConfig.SetGroup(aGroup.makeStringAndClear());
 
@@ -598,13 +598,12 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             // should never have been writte because they are defaults
             // PageRegion leads to problems in conjunction
             // with a not matching PageSize
-            if (aPPDKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")) &&
-                !aPPDKey.equalsL(RTL_CONSTASCII_STRINGPARAM("PPD_PageRegion")))
+            if (aPPDKey.match("PPD_") && aPPDKey != "PPD_PageRegion")
             {
                 aValue = aConfig.ReadKey( nPPDKey );
                 aPPDKey = aPPDKey.copy(4);
                 const PPDKey* pKey = aInfo.m_pParser->getKey( rtl::OStringToOUString(aPPDKey, RTL_TEXTENCODING_ISO_8859_1) );
-                const PPDValue* pValue = pKey ? ( aValue.equalsL(RTL_CONSTASCII_STRINGPARAM("*nil")) ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)) ) : NULL;
+                const PPDValue* pValue = pKey ? ( aValue == "*nil" ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)) ) : NULL;
                 if( pKey )
                     aInfo.m_aContext.setValue( pKey, pValue, true );
             }
@@ -1087,18 +1086,16 @@ String AddPrinterDialog::getOldPrinterLocation()
     if( pHome )
     {
         aFileName = rtl::OStringBuffer().append(pHome).
-            append(RTL_CONSTASCII_STRINGPARAM("/.Xpdefaults")).
-            makeStringAndClear();
+            append("/.Xpdefaults").makeStringAndClear();
         if (access(aFileName.getStr(), F_OK))
         {
             aFileName = rtl::OStringBuffer().append(pHome).
-                append(RTL_CONSTASCII_STRINGPARAM("/.sversionrc")).
-                makeStringAndClear();
+                append("/.sversionrc").makeStringAndClear();
             Config aSVer(rtl::OStringToOUString(aFileName, aEncoding));
             aSVer.SetGroup( "Versions" );
             aFileName = aSVer.ReadKey( "StarOffice 5.2" );
             if (!aFileName.isEmpty())
-                aFileName = aFileName + rtl::OString(RTL_CONSTASCII_STRINGPARAM("/share/xp3/Xpdefaults"));
+                aFileName = aFileName + rtl::OString("/share/xp3/Xpdefaults");
             else if(
                     (aFileName = aSVer.ReadKey( "StarOffice 5.1" ) ).getLength()
                     ||
@@ -1107,7 +1104,7 @@ String AddPrinterDialog::getOldPrinterLocation()
                     (aFileName = aSVer.ReadKey( "StarOffice 4.0" ) ).getLength()
                     )
             {
-                aFileName = aFileName + rtl::OString(RTL_CONSTASCII_STRINGPARAM("/xp3/Xpdefaults"));
+                aFileName = aFileName + rtl::OString("/xp3/Xpdefaults");
             }
             if (!aFileName.isEmpty() && access(aFileName.getStr(), F_OK))
                 aFileName = rtl::OString();

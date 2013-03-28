@@ -95,7 +95,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
     get(m_pTabControl, "notebook");
 
     String aTitle( GetText() );
-    aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), m_aJobData.m_aPrinterName );
+    aTitle.SearchAndReplace( String( "%s" ), m_aJobData.m_aPrinterName );
     SetText( aTitle );
 
     if( ! bAllPages )
@@ -259,7 +259,7 @@ void RTSPaperPage::update()
 
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "Duplex" ) )) )
     {
         m_pParent->insertAllPPDValues( *m_pDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -271,7 +271,7 @@ void RTSPaperPage::update()
 
     // paper
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "PageSize" ) )) )
     {
         m_pParent->insertAllPPDValues( *m_pPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -302,17 +302,17 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     if( pBox == m_pPaperBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "PageSize" ) );
     }
     else if( pBox == m_pDuplexBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "Duplex" ) );
     }
     else if( pBox == m_pSlotBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "InputSlot" ) );
     }
     else if( pBox == m_pOrientBox )
     {
@@ -800,7 +800,7 @@ RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, Wind
 {
     FreeResource();
     String aText( m_aText.GetText() );
-    aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), OStringToOUString( rServer, osl_getThreadTextEncoding() ) );
+    aText.SearchAndReplace( String( "%s" ), OStringToOUString( rServer, osl_getThreadTextEncoding() ) );
     m_aText.SetText( aText );
     m_aUserEdit.SetText( OStringToOUString( rUserName, osl_getThreadTextEncoding() ) );
 }

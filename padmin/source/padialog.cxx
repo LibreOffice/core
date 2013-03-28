@@ -408,7 +408,7 @@ void SpaPrinterController::printPage( int ) const
                                     Size( aPaperSize.Width()-600,
                                           aPaperSize.Height()-600 ) ) );
 
-    Font aFont( String( RTL_CONSTASCII_USTRINGPARAM( "Courier" ) ), Size( 0, 400 ) );
+    Font aFont( String( "Courier" ), Size( 0, 400 ) );
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetItalic( ITALIC_NONE );
     pPrinter->SetFont( aFont );
@@ -458,7 +458,7 @@ void SpaPrinterController::printPage( int ) const
     if( pPrintParser )
         aPrintText.append( pPrintParser->getPrinterName() );
     aPrintText.appendAscii( "\n: " );
-    INetURLObject aDriverPath( pPrintParser ? pPrintParser->getFilename() : String( RTL_CONSTASCII_USTRINGPARAM( "<undef>" ) ),
+    INetURLObject aDriverPath( pPrintParser ? pPrintParser->getFilename() : String( "<undef>" ),
                                INET_PROT_FILE, INetURLObject::ENCODE_ALL );
     aPrintText.append( aDriverPath.GetName() );
     aPrintText.appendAscii( "\n: " );
@@ -581,8 +581,7 @@ void PADialog::PrintTestPage()
 
     boost::shared_ptr<vcl::PrinterController> pController( new SpaPrinterController( pPrinter ) );
     JobSetup aJobSetup( pPrinter->GetJobSetup() );
-    aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
-                        String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+    aJobSetup.SetValue( "IsQuickJob", "true" );
     Printer::PrintJob( pController, aJobSetup );
 }
 
@@ -605,7 +604,7 @@ void PADialog::RemDevice()
     if( ! m_rPIManager.removePrinter( aPrinter ) )
     {
         String aText( PaResId( RID_ERR_PRINTERNOTREMOVEABLE ) );
-        aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), aPrinter );
+        aText.SearchAndReplace( String( "%s" ), aPrinter );
         ErrorBox aBox( this, WB_OK | WB_DEF_OK, aText );
         aBox.Execute();
         return;
