@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+P0\u003d",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-03-28T09:46:10Z",
+      "side": 1,
+      "message": "Hmm, defining a local constant here will lead to trouble in the long run.\nIts probably better to include:\nhttp://opengrok.libreoffice.org/xref/core/vcl/inc/vcl/msgbox.hxx\nfor the defines there.",
+      "revId": "c151ef578b476680a1bc21da6a5c64bcc4b183bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Pw\u003d",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-03-28T09:46:10Z",
+      "side": 1,
+      "message": "What does the dialog return when cancel is pressed? For this fix to make a difference in has to be a non-zero non-one value as the old version just checked for non-zero, and the new one check explicitly for \"1\".\n\nIf that is the case, shouldnt the dialog be fixed to return zero in the case of Cancel instead?",
+      "revId": "c151ef578b476680a1bc21da6a5c64bcc4b183bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
