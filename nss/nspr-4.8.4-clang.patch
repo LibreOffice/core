@@ -136,3 +136,59 @@
 -/ Magic indicating no need for an executable stack
 +/* Magic indicating no need for an executable stack */
  .section .note.GNU-stack, "", @progbits ; .previous
+--- misc/nss-3.12.6/mozilla/security/nss/lib/freebl/mpi/mp_comba.c	2008-03-09 07:06:27.000000000 +0100
++++ misc/build/nss-3.12.6/mozilla/security/nss/lib/freebl/mpi/mp_comba.c	2013-03-28 17:17:58.895379167 +0100
+@@ -49,7 +49,7 @@
+      "addq  %%rax,%0     \n\t"                            \
+      "adcq  %%rdx,%1     \n\t"                            \
+      "adcq  $0,%2        \n\t"                            \
+-     :"=r"(c0), "=r"(c1), "=r"(c2): "0"(c0), "1"(c1), "2"(c2), "g"(i), "g"(j)  :"%rax","%rdx","%cc");
++     :"=r"(c0), "=r"(c1), "=r"(c2): "0"(c0), "1"(c1), "2"(c2), "g"(i), "g"(j)  :"%rax","%rdx");
+ 
+ 
+ 
+@@ -76,7 +76,7 @@
+      "addq  %%rax,%0     \n\t"                            \
+      "adcq  %%rdx,%1     \n\t"                            \
+      "adcq  $0,%2        \n\t"                            \
+-     :"=r"(c0), "=r"(c1), "=r"(c2): "0"(c0), "1"(c1), "2"(c2), "g"(i) :"%rax","%rdx","%cc");
++     :"=r"(c0), "=r"(c1), "=r"(c2): "0"(c0), "1"(c1), "2"(c2), "g"(i) :"%rax","%rdx");
+ 
+ #define SQRADD2(i, j)                                     \
+ __asm__ (                                                     \
+@@ -88,7 +88,7 @@
+      "addq  %%rax,%0     \n\t"                            \
+      "adcq  %%rdx,%1     \n\t"                            \
+      "adcq  $0,%2        \n\t"                            \
+-     :"=r"(c0), "=r"(c1), "=r"(c2): "0"(c0), "1"(c1), "2"(c2), "g"(i), "g"(j)  :"%rax","%rdx","%cc");
++     :"=r"(c0), "=r"(c1), "=r"(c2): "0"(c0), "1"(c1), "2"(c2), "g"(i), "g"(j)  :"%rax","%rdx");
+ 
+ #define SQRADDSC(i, j)                                    \
+ __asm__ (                                                     \
+@@ -97,7 +97,7 @@
+      "movq  %%rax,%0     \n\t"                            \
+      "movq  %%rdx,%1     \n\t"                            \
+      "xorq  %2,%2        \n\t"                            \
+-     :"=r"(sc0), "=r"(sc1), "=r"(sc2): "g"(i), "g"(j) :"%rax","%rdx","%cc");
++     :"=r"(sc0), "=r"(sc1), "=r"(sc2): "g"(i), "g"(j) :"%rax","%rdx");
+ 
+ #define SQRADDAC(i, j)                                                         \
+ __asm__ (                                                     \
+@@ -106,7 +106,7 @@
+      "addq  %%rax,%0     \n\t"                            \
+      "adcq  %%rdx,%1     \n\t"                            \
+      "adcq  $0,%2        \n\t"                            \
+-     :"=r"(sc0), "=r"(sc1), "=r"(sc2): "0"(sc0), "1"(sc1), "2"(sc2), "g"(i), "g"(j) :"%rax","%rdx","%cc");
++     :"=r"(sc0), "=r"(sc1), "=r"(sc2): "0"(sc0), "1"(sc1), "2"(sc2), "g"(i), "g"(j) :"%rax","%rdx");
+ 
+ #define SQRADDDB                                                               \
+ __asm__ (                                                     \
+@@ -116,7 +116,7 @@
+      "addq %6,%0         \n\t"                            \
+      "adcq %7,%1         \n\t"                            \
+      "adcq %8,%2         \n\t"                            \
+-     :"=&r"(c0), "=&r"(c1), "=&r"(c2) : "0"(c0), "1"(c1), "2"(c2), "r"(sc0), "r"(sc1), "r"(sc2) : "%cc");
++     :"=&r"(c0), "=&r"(c1), "=&r"(c2) : "0"(c0), "1"(c1), "2"(c2), "r"(sc0), "r"(sc1), "r"(sc2));
+ 
+ 
+ 
