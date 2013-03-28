@@ -123,6 +123,7 @@ public:
     void testToolsLineNumbering();
     void testFdo60922();
     void testFdo59273();
+    void testTableWidth();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -197,6 +198,7 @@ void Test::run()
         {"tools-line-numbering.docx", &Test::testToolsLineNumbering},
         {"fdo60922.docx", &Test::testFdo60922},
         {"fdo59273.docx", &Test::testFdo59273},
+        {"table_width.docx", &Test::testTableWidth},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1298,6 +1300,14 @@ void Test::testFdo59273()
     uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
     // Was 9997, so the 4th column had ~zero width
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7499), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[2].Position);
+}
+
+void Test::testTableWidth()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // Relative width wasn't recognized during import.
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xTables->getByIndex(0), "IsWidthRelative")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
