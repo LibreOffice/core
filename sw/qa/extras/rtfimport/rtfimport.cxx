@@ -1000,7 +1000,7 @@ void Test::testFdo55525()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1877), getProperty<sal_Int32>(xTable, "LeftMargin"));
     // Cell width of A1 was 3332 (e.g. not set, 30% percent of total width)
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1016), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(896), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
 }
 
 void Test::testFdo57708()
@@ -1133,7 +1133,7 @@ void Test::testFdo59953()
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // Cell width of A1 was 4998 (e.g. not set / not wide enough, ~50% of total width)
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(7650), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7649), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
 }
 
 void Test::testFdo59638()
