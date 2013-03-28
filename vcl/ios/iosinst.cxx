@@ -304,11 +304,37 @@ void lo_set_view_size(int width, int height)
 }
 
 extern "C"
-void lo_render_windows(char *pixelBuffer, int width, int height)
+void lo_render_windows( CGContextRef context, CGRect rect )
 {
-    // Hack: assume so far that we are asked to redraw the whole pixel buffer
-    if (IosSalInstance::getInstance() != NULL)
-        IosSalInstance::getInstance()->RedrawWindows(pixelBuffer, width, height, 0, 0, width, height);
+    if( IosSalInstance::getInstance() != NULL ) {
+        int i = 0;
+        std::list< SalFrame* >::const_iterator it;
+        for( it = IosSalInstance::getInstance()->getFrames().begin(); it != IosSalInstance::getInstance()->getFrames().end(); i++, it++ ) {
+            SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
+            SalFrameGeometry aGeom = pFrame->GetGeometry();
+            CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
+            if ( pFrame->IsVisible() &&
+                 CGRectIntersectsRect( rect, bbox ) ) {
+
+                const basebmp::BitmapDeviceSharedPtr aDevice = pFrame->getDevice();
+                CGDataProviderRef provider =
+                    CGDataProviderCreateWithData( NULL,
+                                                  aDevice->getBuffer().get(),
+                                                  aDevice->getSize().getY() * aDevice->getScanlineStride(),
+                                                  NULL );
+                CGImage *image =
+                    CGImageCreate( aDevice->getSize().getX(), aDevice->getSize().getY(),
+                                   8, 32, aDevice->getScanlineStride(),
+                                   CGColorSpaceCreateDeviceRGB(),
+                                   kCGImageAlphaNoneSkipLast,
+                                   provider,
+                                   NULL,
+                                   false,
+                                   kCGRenderingIntentDefault );
+                CGContextDrawImage( context, bbox, image );
+            }
+        }
+    }
 }
 
 extern "C"

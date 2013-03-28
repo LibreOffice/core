@@ -44,17 +44,6 @@ static UIView *theView;
 
     [self.window addGestureRecognizer: tapRecognizer];
 
-    nbytes = bounds.size.width * bounds.size.height * 4;
-
-    pixelBuffer = (char *) malloc(nbytes);
-    memset(pixelBuffer, 0xFF, nbytes);
-
-    CGDataProviderRef provider = CGDataProviderCreateWithData( NULL, pixelBuffer, nbytes, NULL);
-    image = CGImageCreate(bounds.size.width, bounds.size.height, 8, 32, bounds.size.width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipLast, provider, NULL, false, kCGRenderingIntentDefault);
-
-    self.view.pixelBuffer = pixelBuffer;
-    self.view.image = image;
-
     lo_set_view_size(bounds.size.width, bounds.size.height);
 
     NSThread* thread = [[NSThread alloc] initWithTarget:self
@@ -105,7 +94,9 @@ static UIView *theView;
 void lo_damaged(CGRect rect)
 {
     (void) rect;
-    [theView performSelectorOnMainThread:@selector(setNeedsDisplay) withObject:nil waitUntilDone:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+            [theView setNeedsDisplayInRect:rect];
+        });
     // NSLog(@"lo_damaged: %dx%d@(%d,%d)", (int)rect.size.width, (int)rect.size.height, (int)rect.origin.x, (int)rect.origin.y);
 }
 

@@ -12,7 +12,7 @@
 
 #if defined(IOS)
 
-#include <CoreGraphics/CGGeometry.h>
+#include <CoreGraphics/CoreGraphics.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,7 +45,7 @@ void lo_damaged(CGRect rect);
 
 void lo_runMain();
 void lo_set_view_size(int width, int height);
-void lo_render_windows(char *pixelBuffer, int width, int height);
+void lo_render_windows(CGContextRef context, CGRect rect);
 void lo_tap(int x, int y);
 
 #ifdef __cplusplus

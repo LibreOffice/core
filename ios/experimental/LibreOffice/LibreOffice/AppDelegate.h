@@ -11,11 +11,6 @@
 #import "View.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-{
-  int nbytes;
-  char *pixelBuffer;
-  CGImageRef image;
-}
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) View *view;

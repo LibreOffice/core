@@ -11,9 +11,6 @@
 
 @interface View : UIView
 
-@property char *pixelBuffer;
-@property CGImageRef image;
-
 - (void)drawRect:(CGRect)rect;
 - (void)tapGesture:(UIGestureRecognizer *)gestureRecognizer;
 
