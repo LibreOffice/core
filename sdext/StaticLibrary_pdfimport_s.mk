@@ -32,8 +32,14 @@ $(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
     comphelper_inc \
     cppu_odk_headers \
     cppuhelper_odk_headers \
+	i18npool_inc \
     o3tl_inc \
+	rsc_inc \
+	sal_generated \
+	sal_odk_headers \
     tools_inc \
+	unotools_inc \
+	vcl_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_use_api,pdfimport_s,\
