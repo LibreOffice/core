@@ -55,6 +55,7 @@
 		BE9086FE16FF02B3004400A1 /* svpprn.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpprn.cxx; path = ../../../../vcl/headless/svpprn.cxx; sourceTree = "<group>"; };
 		BE9086FF16FF02B3004400A1 /* svptext.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svptext.cxx; path = ../../../../vcl/headless/svptext.cxx; sourceTree = "<group>"; };
 		BE90870016FF02B3004400A1 /* svpvd.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
+		BE954A2E1704F9500040D517 /* iosinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iosinst.cxx; path = ../../../../vcl/ios/iosinst.cxx; sourceTree = "<group>"; };
 		BEBF3E3A17002D0200C454AC /* svapp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
 		BEBF3E3B17002D0200C454AC /* svmain.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
 		BEBF3E3C17002D4C00C454AC /* frame.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = frame.cxx; path = ../../../../framework/source/services/frame.cxx; sourceTree = "<group>"; };
@@ -104,18 +105,15 @@
 		BE5A225F1664F87600CF01C9 /* LibreOffice */ = {
 			isa = PBXGroup;
 			children = (
+				BE5A22681664F87600CF01C9 /* AppDelegate.h */,
+				BE5A22691664F87600CF01C9 /* AppDelegate.m */,
 				BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */,
 				BEBF3E3C17002D4C00C454AC /* frame.cxx */,
 				BEBF3E3E17005E6B00C454AC /* frmload.cxx */,
 				BE9086F616FF02B2004400A1 /* headlessinst.cxx */,
-				BE5A22681664F87600CF01C9 /* AppDelegate.h */,
-				BE5A22691664F87600CF01C9 /* AppDelegate.m */,
+				BE954A2E1704F9500040D517 /* iosinst.cxx */,
 				BE56CD651704A08E00CA5B15 /* lo.h */,
 				BE56CD661704A08E00CA5B15 /* lo.mm */,
-				BE7B7AFF170438D0002341F4 /* ViewController.h */,
-				BE7B7B00170438D0002341F4 /* ViewController.m */,
-				BE08805B16FDB784000CED5C /* View.h */,
-				BE08805C16FDB784000CED5C /* View.m */,
 				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
 				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
 				BE9086F716FF02B2004400A1 /* svpbmp.cxx */,
@@ -128,6 +126,10 @@
 				BE9086FE16FF02B3004400A1 /* svpprn.cxx */,
 				BE9086FF16FF02B3004400A1 /* svptext.cxx */,
 				BE90870016FF02B3004400A1 /* svpvd.cxx */,
+				BE08805B16FDB784000CED5C /* View.h */,
+				BE08805C16FDB784000CED5C /* View.m */,
+				BE7B7AFF170438D0002341F4 /* ViewController.h */,
+				BE7B7B00170438D0002341F4 /* ViewController.m */,
 				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
 				BEBF3E3D17002D6900C454AC /* window.cxx */,
 				BE69AD3716958CA0001BE1CD /* Resources */,
