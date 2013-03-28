@@ -516,7 +516,7 @@ bool ModulWindow::SaveBasicSource()
                 bDone = true;
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_COULDNTWRITE) ) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId( RID_STR_COULDNTWRITE) ).Execute();
     }
 
     return bDone;
@@ -756,7 +756,7 @@ void ModulWindow::BasicAddWatch()
 
 
 
-void ModulWindow::EditMacro( const String& rMacroName )
+void ModulWindow::EditMacro( const OUString& rMacroName )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
@@ -1337,17 +1337,17 @@ void ModulWindow::BasicStopped()
 EntryDescriptor ModulWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
-    String aLibName( GetLibName() );
+    OUString aLibName( GetLibName() );
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
     OUString aModName( GetName() );
-    String aLibSubName;
+    OUString aLibSubName;
     if( xBasic.Is() && aDocument.isInVBAMode() && XModule().Is() )
     {
         switch( xModule->GetModuleType() )
         {
             case script::ModuleType::DOCUMENT:
             {
-                aLibSubName = String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) );
+                aLibSubName = OUString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) );
                 uno::Reference< container::XNameContainer > xLib = aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
                 if( xLib.is() )
                 {
@@ -1361,13 +1361,13 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
                 break;
             }
             case script::ModuleType::FORM:
-                aLibSubName = String( IDEResId( RID_STR_USERFORMS ) );
+                aLibSubName = OUString( IDEResId( RID_STR_USERFORMS ) );
                 break;
             case script::ModuleType::NORMAL:
-                aLibSubName = String( IDEResId( RID_STR_NORMAL_MODULES ) );
+                aLibSubName = OUString( IDEResId( RID_STR_NORMAL_MODULES ) );
                 break;
             case script::ModuleType::CLASS:
-                aLibSubName = String( IDEResId( RID_STR_CLASS_MODULES ) );
+                aLibSubName = OUString( IDEResId( RID_STR_CLASS_MODULES ) );
                 break;
         }
     }
@@ -1517,7 +1517,7 @@ void ModulWindowLayout::GetState (SfxItemSet &rSet, unsigned nWhich)
     }
 }
 
-void ModulWindowLayout::BasicAddWatch (String const& rWatchStr)
+void ModulWindowLayout::BasicAddWatch (OUString const& rWatchStr)
 {
     aWatchWindow.AddWatch(rWatchStr);
 }

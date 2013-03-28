@@ -266,7 +266,7 @@ EditorWindow::~EditorWindow()
     }
 }
 
-String EditorWindow::GetWordAtCursor()
+OUString EditorWindow::GetWordAtCursor()
 {
     String aWord;
 
@@ -944,7 +944,7 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
     }
 }
 
-void EditorWindow::CreateProgress( const String& rText, sal_uLong nRange )
+void EditorWindow::CreateProgress( const OUString& rText, sal_uLong nRange )
 {
     DBG_ASSERT( !pProgress, "ProgressInfo existiert schon" );
     pProgress.reset(new ProgressInfo(
@@ -1359,7 +1359,7 @@ SbxDimArray* WatchItem::GetRootArray( void )
     return pRet;
 }
 
-void WatchWindow::AddWatch( const String& rVName )
+void WatchWindow::AddWatch( const OUString& rVName )
 {
     String aVar, aIndex;
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
@@ -1928,7 +1928,7 @@ sal_Bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString&
     return aResult != aEditingRes && ImplBasicEntryEdited(pEntry, aResult);
 }
 
-bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const String& rResult )
+bool WatchTreeListBox::ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUString& rResult )
 {
     bool bArrayElement;
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
