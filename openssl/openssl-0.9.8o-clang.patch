@@ -1,0 +1,11 @@
+--- misc/openssl-0.9.8o/crypto/md32_common.h	2010-03-29 13:23:11.000000000 +0200
++++ misc/build/openssl-0.9.8o/crypto/md32_common.h	2013-03-28 15:47:56.541077176 +0100
+@@ -165,7 +165,7 @@
+ 				asm (			\
+ 				"roll %1,%0"		\
+ 				: "=r"(ret)		\
+-				: "I"(n), "0"(a)	\
++				: "I"(n), "0"((unsigned int)(a)) \
+ 				: "cc");		\
+ 			   ret;				\
+ 			})
