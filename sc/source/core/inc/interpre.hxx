@@ -150,7 +150,7 @@ private:
 
     const formula::FormulaToken*
                 pCur;                   // current token
-    String      aTempStr;               // for GetString()
+    OUString    aTempStr;               // for GetString()
     ScTokenStack* pStackObj;            // contains the stacks
     formula::FormulaToken**   pStack;   // the current stack
     sal_uInt16  nGlobalError;           // global (local to this formula expression) error
@@ -185,7 +185,7 @@ void PushNA();
 void ReplaceCell( ScAddress& );     // for TableOp
 void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
 bool IsTableOpInRange( const ScRange& );
-sal_uLong GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
+sal_uLong GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
 double ConvertStringToValue( const String& );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
 double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
@@ -195,8 +195,7 @@ double GetValueCellValue( const ScAddress&, const ScValueCell* );
 ScBaseCell* GetCell( const ScAddress& rPos );
 void GetCellString( String& rStr, const ScBaseCell* pCell );
 void GetCellString( OUString& rStr, ScRefCellValue& rCell );
-sal_uInt16 GetCellErrCode( const ScBaseCell* pCell );
-CellType GetCellType( const ScBaseCell* pCell );
+sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
 bool HasCellEmptyData( const ScBaseCell* pCell );
 bool HasCellValueData( const ScBaseCell* pCell );
 bool HasCellStringData( const ScBaseCell* pCell );
@@ -265,7 +264,7 @@ formula::FormulaTokenRef PopToken();
 void Pop();
 void PopError();
 double PopDouble();
-const String& PopString();
+const OUString& PopString();
 void ValidateRef( const ScSingleRefData & rRef );
 void ValidateRef( const ScComplexRefData & rRef );
 void ValidateRef( const ScRefList & rRefList );
@@ -339,10 +338,10 @@ double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
 bool GetBool() { return GetDouble() != 0.0; }
-const String& GetString();
-const String& GetStringFromMatrix(const ScMatrixRef& pMat);
+const OUString& GetString();
+const OUString& GetStringFromMatrix(const ScMatrixRef& pMat);
 // pop matrix and obtain one element, upper left or according to jump matrix
-ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, String& rString );
+ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, OUString& rString );
 ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );

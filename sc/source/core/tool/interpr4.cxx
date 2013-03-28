@@ -151,28 +151,27 @@ bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 }
 
 
-sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScBaseCell* pCell)
+sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetCellNumberFormat" );
     sal_uLong nFormat;
     sal_uInt16 nErr;
-    if ( pCell )
-    {
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-            nErr = ((ScFormulaCell*)pCell)->GetErrCode();
-        else
-            nErr = 0;
-        nFormat = pDok->GetNumberFormat( rPos );
-        if ( pCell->GetCellType() == CELLTYPE_FORMULA
-          && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) )
-            nFormat = ((ScFormulaCell*)pCell)->GetStandardFormat( *pFormatter,
-                nFormat );
-    }
-    else
+    if (rCell.isEmpty())
     {
         nFormat = pDok->GetNumberFormat( rPos );
         nErr = 0;
     }
+    else
+    {
+        if (rCell.meType == CELLTYPE_FORMULA)
+            nErr = rCell.mpFormula->GetErrCode();
+        else
+            nErr = 0;
+        nFormat = pDok->GetNumberFormat( rPos );
+        if (rCell.meType == CELLTYPE_FORMULA && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0))
+            nFormat = rCell.mpFormula->GetStandardFormat(*pFormatter, nFormat);
+    }
+
     SetError(nErr);
     return nFormat;
 }
@@ -191,14 +190,9 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, const ScValueCel
     return fVal;
 }
 
-sal_uInt16 ScInterpreter::GetCellErrCode( const ScBaseCell* pCell )
+sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
 {
-    return pCell ? pCell->GetErrorCode() : 0;
-}
-
-CellType ScInterpreter::GetCellType( const ScBaseCell* pCell )
-{
-    return pCell ? pCell->GetCellType() : CELLTYPE_NONE;
+    return rCell.meType == CELLTYPE_FORMULA ? rCell.mpFormula->GetErrorCode() : 0;
 }
 
 bool ScInterpreter::HasCellEmptyData( const ScBaseCell* pCell )
@@ -1136,13 +1130,14 @@ void ScInterpreter::PushTempToken( const FormulaToken& r )
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         const ScAddress & rAddress, short * pRetTypeExpr, sal_uLong * pRetIndexExpr )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushCellResultToken" );
+    ScRefCellValue aCell;
+    aCell.assign(*pDok, rAddress);
     ScBaseCell* pCell = pDok->GetCell( rAddress);
-    if (!pCell || pCell->HasEmptyData())
+    if (aCell.hasEmptyValue())
     {
         if (pRetTypeExpr && pRetIndexExpr)
             pDok->GetNumberFormatInfo( *pRetTypeExpr, *pRetIndexExpr, rAddress, pCell);
-        bool bInherited = (GetCellType( pCell) == CELLTYPE_FORMULA);
+        bool bInherited = (aCell.meType == CELLTYPE_FORMULA);
         PushTempToken( new ScEmptyCellToken( bInherited, bDisplayEmptyAsString));
         return;
     }
@@ -1251,7 +1246,7 @@ double ScInterpreter::PopDouble()
 }
 
 
-const String& ScInterpreter::PopString()
+const OUString& ScInterpreter::PopString()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopString" );
     nCurFmtType = NUMBERFORMAT_TEXT;
@@ -1266,17 +1261,18 @@ const String& ScInterpreter::PopString()
                 nGlobalError = p->GetError();
                 break;
             case svString:
-                return p->GetString();
+                aTempStr = p->GetString();
+                return aTempStr;
             case svEmptyCell:
             case svMissing:
-                return EMPTY_STRING;
+                return EMPTY_OUSTRING;
             default:
                 SetError( errIllegalArgument);
         }
     }
     else
         SetError( errUnknownStackVariable);
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 
@@ -2448,18 +2444,18 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 }
 
 
-const String& ScInterpreter::GetString()
+const OUString& ScInterpreter::GetString()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetString" );
     switch (GetRawStackType())
     {
         case svError:
             PopError();
-            return EMPTY_STRING;
+            return EMPTY_OUSTRING;
         case svMissing:
         case svEmptyCell:
             Pop();
-            return EMPTY_STRING;
+            return EMPTY_OUSTRING;
         case svDouble:
         {
             double fVal = PopDouble();
@@ -2477,12 +2473,13 @@ const String& ScInterpreter::GetString()
             PopSingleRef( aAdr );
             if (nGlobalError == 0)
             {
-                ScBaseCell* pCell = GetCell( aAdr );
-                GetCellString( aTempStr, pCell );
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                GetCellString(aTempStr, aCell);
                 return aTempStr;
             }
             else
-                return EMPTY_STRING;
+                return EMPTY_OUSTRING;
         }
         case svDoubleRef:
         {   // generate position dependent SingleRef
@@ -2491,18 +2488,23 @@ const String& ScInterpreter::GetString()
             ScAddress aAdr;
             if ( !nGlobalError && DoubleRefToPosSingleRef( aRange, aAdr ) )
             {
-                ScBaseCell* pCell = GetCell( aAdr );
-                GetCellString( aTempStr, pCell );
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                GetCellString(aTempStr, aCell);
                 return aTempStr;
             }
             else
-                return EMPTY_STRING;
+                return EMPTY_OUSTRING;
         }
         case svExternalSingleRef:
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
-            return nGlobalError ? EMPTY_STRING : pToken->GetString();
+            if (nGlobalError)
+                return EMPTY_OUSTRING;
+
+            aTempStr = pToken->GetString();
+            return aTempStr;
         }
         case svExternalDoubleRef:
         {
@@ -2520,10 +2522,10 @@ const String& ScInterpreter::GetString()
             PopError();
             SetError( errIllegalArgument);
     }
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
-const String& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
+const OUString& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
 {
     if ( !pMat )
         ;   // nothing
@@ -2545,16 +2547,16 @@ const String& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
         else
             SetError( errNoValue);
     }
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
-ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
-        String& rString )
+ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
+    double& rDouble, OUString& rString )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDoubleOrStringFromMatrix" );
 
     rDouble = 0.0;
-    rString.Erase();
+    rString = EMPTY_OUSTRING;
     ScMatValType nMatValType = SC_MATVAL_EMPTY;
 
     ScMatrixRef pMat;

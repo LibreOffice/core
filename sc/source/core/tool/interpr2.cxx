@@ -2705,7 +2705,7 @@ void ScInterpreter::ScHyperLink()
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         double fVal = 0.0;
-        String aStr;
+        OUString aStr;
         ScMatValType nResultType = SC_MATVAL_STRING;
 
         if ( nParamCount == 2 )
@@ -2725,21 +2725,23 @@ void ScInterpreter::ScHyperLink()
                     ScAddress aAdr;
                     if ( !PopDoubleRefOrSingleRef( aAdr ) )
                         break;
-                    ScBaseCell* pCell = GetCell( aAdr );
-                    if (HasCellEmptyData( pCell))
+
+                    ScRefCellValue aCell;
+                    aCell.assign(*pDok, aAdr);
+                    if (aCell.hasEmptyValue())
                         nResultType = SC_MATVAL_EMPTY;
                     else
                     {
-                        sal_uInt16 nErr = GetCellErrCode( pCell );
+                        sal_uInt16 nErr = GetCellErrCode(aCell);
                         if (nErr)
                             SetError( nErr);
-                        else if (HasCellValueData( pCell))
+                        else if (aCell.hasNumeric())
                         {
-                            fVal = GetCellValue( aAdr, pCell );
+                            fVal = GetCellValue(aAdr, aCell);
                             nResultType = SC_MATVAL_VALUE;
                         }
                         else
-                            GetCellString( aStr, pCell );
+                            GetCellString(aStr, aCell);
                     }
                 }
                 break;
