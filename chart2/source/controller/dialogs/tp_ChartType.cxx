@@ -438,14 +438,16 @@ public:
     virtual void StateChanged( StateChangedType nType );
 
 private:
-    DECL_LINK( SplineModeRadioHdl, void* );
+    DECL_LINK( SplineTypeListBoxHdl, void* );
 
     void adjustControlPositions();
     void adjustSize();
 
+    const sal_uInt16 CUBIC_SPLINE_POS = 0;
+    const sal_uInt16 B_SPLINE_POS = 1;
+
 private:
-    RadioButton* m_pRB_Splines_Cubic;
-    RadioButton* m_pRB_Splines_B;
+    ListBox* m_pLB_Spline_Type;
 
     NumericField* m_pMF_SplineResolution;
     FixedText*    m_pFT_SplineOrder;
@@ -455,16 +457,14 @@ private:
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
         : ModalDialog( pParent, "SmoothLinesDialog", "modules/chart2/ui/smoothlinesdlg.ui")
 {
-    get(m_pRB_Splines_Cubic, "CubicSplineRadioButton");
-    get(m_pRB_Splines_B, "BSplineRadioButton");
+    get(m_pLB_Spline_Type, "SplineTypeComboBox");
     get(m_pMF_SplineResolution, "ResolutionSpinbutton");
     get(m_pFT_SplineOrder, "PolynomialsLabel");
     get(m_pMF_SplineOrder, "PolynomialsSpinButton");
 
     this->SetText( String( SchResId( STR_DLG_SMOOTH_LINE_PROPERTIES ) ) );
 
-    m_pRB_Splines_Cubic->SetToggleHdl( LINK( this, SplinePropertiesDialog, SplineModeRadioHdl ) );
-    m_pRB_Splines_B->SetToggleHdl( LINK( this, SplinePropertiesDialog, SplineModeRadioHdl ) );
+    m_pLB_Spline_Type->SetSelectHdl( LINK (this, SplinePropertiesDialog, SplineTypeListBoxHdl ) );
 }
 
 SplinePropertiesDialog::~SplinePropertiesDialog()
@@ -474,95 +474,45 @@ SplinePropertiesDialog::~SplinePropertiesDialog()
 void SplinePropertiesDialog::StateChanged( StateChangedType nType )
 {
     Dialog::StateChanged( nType );
-
-    if( nType == STATE_CHANGE_INITSHOW )
-    {
-        adjustControlPositions();
-        adjustSize();
-    }
 }
 
-void SplinePropertiesDialog::adjustControlPositions()
-{
-///    //position of controls:
-///    //----------------
-///    //fixed line and Fixed texts as near as possible to radio controls
-///    long nRBWidth = ::std::max( m_pRB_Splines_Cubic->CalcMinimumSize().Width(), m_pRB_Splines_B->CalcMinimumSize().Width());
-///    long nFLXPos = m_pRB_Splines_Cubic->GetPosPixel().X()+nRBWidth+m_pFT_SplineOrder->LogicToPixel( Size(RSC_SP_CTRL_GROUP_X,0), MapMode(MAP_APPFONT) ).Width();
-///    long nFTXPos = nFLXPos + m_pFL_SplineSeparator->GetSizePixel().Width() + m_pFT_SplineOrder->LogicToPixel( Size(RSC_SP_CTRL_GROUP_X,0), MapMode(MAP_APPFONT) ).Width();
-///
-///    m_pRB_Splines_Cubic->SetSizePixel( Size( nRBWidth, m_pRB_Splines_Cubic->GetSizePixel().Height() ) );
-///    m_pRB_Splines_B->SetSizePixel( Size( nRBWidth, m_pRB_Splines_B->GetSizePixel().Height() ) );
-///
-///    m_pFL_SplineSeparator->SetPosPixel( Point( nFLXPos, m_pFL_SplineSeparator->GetPosPixel().Y() ) );
-///
-///    m_pFT_SplineOrder->SetPosPixel( Point( nFTXPos, m_pFT_SplineOrder->GetPosPixel().Y() ) );
-///    m_aFT_SplineResolution.SetPosPixel( Point( nFTXPos, m_aFT_SplineResolution.GetPosPixel().Y() ) );
-///
-///    //----------------
-///    //move metric controls as near to text as possible
-///    long nFTWidth = ::std::max( m_pFT_SplineOrder->CalcMinimumSize().Width(), m_aFT_SplineResolution.CalcMinimumSize().Width());
-///    long nMFXPos = m_pFT_SplineOrder->GetPosPixel().X()+nFTWidth+m_pFT_SplineOrder->LogicToPixel( Size(RSC_SP_CTRL_DESC_X,0), MapMode(MAP_APPFONT) ).Width();
-///
-///    m_pFT_SplineOrder->SetSizePixel( Size( nFTWidth, m_pFT_SplineOrder->GetSizePixel().Height() ) );
-///    m_aFT_SplineResolution.SetSizePixel( Size( nFTWidth, m_aFT_SplineResolution.GetSizePixel().Height() ) );
-///
-///    m_pMF_SplineOrder->SetPosPixel( Point( nMFXPos, m_pMF_SplineOrder->GetPosPixel().Y() ) );
-///    m_pMF_SplineResolution->SetPosPixel( Point( nMFXPos, m_pMF_SplineResolution->GetPosPixel().Y() ) );
-}
-
-void SplinePropertiesDialog::adjustSize()
-{
-///    Size aDlgSize( this->GetSizePixel() );
-///    long nBorder = m_pRB_Splines_Cubic->GetPosPixel().X();
-///    long nX = m_pMF_SplineOrder->GetPosPixel().X() + m_pMF_SplineOrder->GetSizePixel().Width();
-///    if(aDlgSize.Width()< (nX+nBorder) )
-///    {
-///        aDlgSize.Width() = (nX+nBorder);
-///        this->SetSizePixel(aDlgSize);
-///
-///        Size aLineSize( m_aFL_DialogButtons.GetSizePixel() );
-///        aLineSize.Width() = aDlgSize.Width();
-///        m_aFL_DialogButtons.SetSizePixel(aLineSize);
-///    }
-}
 void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter )
 {
     switch(rParameter.eCurveStyle)
     {
     case CurveStyle_CUBIC_SPLINES:
-        m_pRB_Splines_Cubic->Check();
+        m_pLB_Spline_Type->SelectEntryPos(CUBIC_SPLINE_POS);
         break;
     case CurveStyle_B_SPLINES:
-        m_pRB_Splines_B->Check();
+        m_pLB_Spline_Type->SelectEntryPos(B_SPLINE_POS);
         break;
     default:
-        m_pRB_Splines_Cubic->Check();
+        m_pLB_Spline_Type->SelectEntryPos(CUBIC_SPLINE_POS);
         break;
     }
     m_pMF_SplineOrder->SetValue( rParameter.nSplineOrder );
     m_pMF_SplineResolution->SetValue( rParameter.nCurveResolution );
 
     //dis/enabling
-    m_pFT_SplineOrder->Enable(m_pRB_Splines_B->IsChecked());
-    m_pMF_SplineOrder->Enable(m_pRB_Splines_B->IsChecked());
+    m_pFT_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
+    m_pMF_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
 }
 void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines )
 {
     if(!bSmoothLines)
         rParameter.eCurveStyle=CurveStyle_LINES;
-    else if(m_pRB_Splines_Cubic->IsChecked())
+    else if(CUBIC_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos())
         rParameter.eCurveStyle=CurveStyle_CUBIC_SPLINES;
-    else if(m_pRB_Splines_B->IsChecked())
+    else if(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos())
         rParameter.eCurveStyle=CurveStyle_B_SPLINES;
 
     rParameter.nCurveResolution = static_cast< sal_Int32 >( m_pMF_SplineResolution->GetValue());
     rParameter.nSplineOrder = static_cast< sal_Int32 >( m_pMF_SplineOrder->GetValue());
 }
-IMPL_LINK_NOARG(SplinePropertiesDialog, SplineModeRadioHdl)
+IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl)
 {
-    m_pFT_SplineOrder->Enable(m_pRB_Splines_B->IsChecked());
-    m_pMF_SplineOrder->Enable(m_pRB_Splines_B->IsChecked());
+    m_pFT_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
+    m_pMF_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
     return 0;
 }
 
