@@ -663,7 +663,7 @@ namespace comphelper
     void SAL_CALL OAccessibleContextWrapper::dispose() throw( RuntimeException )
     {
         // simply disambiguate
-        OComponentProxyAggregation_CBase::dispose();
+        WeakComponentImplHelperBase::dispose();
     }
 
 //.............................................................................

@@ -175,10 +175,8 @@ namespace comphelper
     //=========================================================================
     //= OComponentProxyAggregation
     //=========================================================================
-    typedef ::cppu::WeakComponentImplHelperBase OComponentProxyAggregation_CBase;
-
     class COMPHELPER_DLLPUBLIC OComponentProxyAggregation   :public OBaseMutex
-                                        ,public OComponentProxyAggregation_CBase
+                                        ,public cppu::WeakComponentImplHelperBase
                                         ,public OComponentProxyAggregationHelper
     {
     protected:

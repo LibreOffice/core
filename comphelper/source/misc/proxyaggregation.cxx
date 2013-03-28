@@ -191,7 +191,7 @@ namespace comphelper
     //-------------------------------------------------------------------------
     OComponentProxyAggregation::OComponentProxyAggregation( const Reference< XComponentContext >& _rxContext,
             const Reference< XComponent >& _rxComponent )
-        :OComponentProxyAggregation_CBase( m_aMutex )
+        :WeakComponentImplHelperBase( m_aMutex )
         ,OComponentProxyAggregationHelper( _rxContext, rBHelper )
     {
         OSL_ENSURE( _rxComponent.is(), "OComponentProxyAggregation::OComponentProxyAggregation: accessible is no XComponent!" );
@@ -206,7 +206,7 @@ namespace comphelper
     }
 
     //-------------------------------------------------------------------------
-    IMPLEMENT_FORWARD_XINTERFACE2( OComponentProxyAggregation, OComponentProxyAggregation_CBase, OComponentProxyAggregationHelper )
+    IMPLEMENT_FORWARD_XINTERFACE2( OComponentProxyAggregation, WeakComponentImplHelperBase, OComponentProxyAggregationHelper )
 
     //-------------------------------------------------------------------------
     IMPLEMENT_GET_IMPLEMENTATION_ID( OComponentProxyAggregation )
@@ -216,7 +216,7 @@ namespace comphelper
     {
         Sequence< Type > aTypes( OComponentProxyAggregationHelper::getTypes() );
 
-        // append XComponent, coming from OComponentProxyAggregation_CBase
+        // append XComponent, coming from WeakComponentImplHelperBase
         sal_Int32 nLen = aTypes.getLength();
         aTypes.realloc( nLen + 1 );
         aTypes[ nLen ] = ::getCppuType( static_cast< Reference< XComponent >* >( NULL ) );
@@ -256,7 +256,7 @@ namespace comphelper
     void SAL_CALL OComponentProxyAggregation::dispose() throw( RuntimeException )
     {
         // simply disambiguate
-        OComponentProxyAggregation_CBase::dispose();
+        WeakComponentImplHelperBase::dispose();
     }
 
 
