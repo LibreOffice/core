@@ -63,6 +63,10 @@ public:
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
                 uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False ) );
+                // Strange, shouldn't the Enumeration support match/share the
+                // iteration code? ( e.g. ScVbaCommandBars::Item(...) )
+                // and we at least should return here ( something ) it seems
+                return uno::makeAny( xCommandBar );
              }
              else
                 return nextElement();
