@@ -4093,6 +4093,7 @@ if test "$cross_compiling" = "yes"; then
         instsetoo_native/util/openoffice.lst.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
+    test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
     unset CC CXX SYSBASE CFLAGS
@@ -4139,9 +4140,9 @@ if test "$cross_compiling" = "yes"; then
         2>&1 | sed -e 's/^/    /'
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
-    cp config.log ../config.Build.log
+    mv config.log ../config.Build.log
     mkdir -p ../config_build
-    cp config_host/*.h ../config_build
+    mv config_host/*.h ../config_build
     . ./bin/get_config_variables OS PATH CC CXX INPATH SYSTEM_LIBXSLT OUTDIR WORKDIR
 
     for V in OS CC CXX INPATH SYSTEM_LIBXSLT; do
