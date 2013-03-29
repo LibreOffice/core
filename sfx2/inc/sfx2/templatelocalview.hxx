@@ -81,7 +81,7 @@ public:
                          com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                          const OUString &rName);
 
-    bool saveTemplateAs (const TemplateContainerItem *pDstItem,
+    bool saveTemplateAs (TemplateContainerItem *pDstItem,
                          com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                          const OUString &rName);
 
