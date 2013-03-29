@@ -204,8 +204,17 @@ void SAL_CALL ScVbaControl::setEnabled( sal_Bool bVisible ) throw (uno::RuntimeE
 sal_Bool SAL_CALL ScVbaControl::getVisible() throw (uno::RuntimeException)
 {
     sal_Bool bVisible( sal_True );
+    uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );
     m_xProps->getPropertyValue
             (rtl::OUString(  "EnableVisible"  )) >>= bVisible;
+    if ( xControlShape.is() )
+    {
+        bool bEnableVisible = bVisible;
+        uno::Reference< beans::XPropertySet > xProps( m_xControl, uno::UNO_QUERY_THROW );
+        xProps->getPropertyValue
+            (rtl::OUString(  "Visible"  )) >>= bVisible;
+        bVisible = bVisible && bEnableVisible;
+    }
     return bVisible;
 }
 
@@ -214,6 +223,13 @@ void SAL_CALL ScVbaControl::setVisible( sal_Bool bVisible ) throw (uno::RuntimeE
     uno::Any aValue( bVisible );
     m_xProps->setPropertyValue
             (rtl::OUString(  "EnableVisible"  ), aValue);
+    uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );
+    if ( xControlShape.is() )
+    {
+        uno::Reference< beans::XPropertySet > xProps( m_xControl, uno::UNO_QUERY_THROW );
+        xProps->setPropertyValue
+            (rtl::OUString(  "Visible"  ), aValue);
+    }
 }
 double SAL_CALL ScVbaControl::getHeight() throw (uno::RuntimeException)
 {
