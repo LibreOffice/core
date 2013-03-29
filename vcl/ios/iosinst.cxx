@@ -40,55 +40,6 @@ public:
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
 
-void IosSalInstance::BlitFrameToBuffer(char *pPixelBuffer,
-                                       int nPBWidth, int nPBHeight,
-                                       int nDestX, int nDestY,
-                                       int nDestWidth, int nDestHeight,
-                                       const basebmp::BitmapDeviceSharedPtr& aDev)
-{
-    // TODO: Cropping (taking all the parameters into account)
-    (void) nPBHeight;
-    (void) nDestWidth;
-    (void) nDestHeight;
-
-    basebmp::RawMemorySharedArray aSrcData = aDev->getBuffer();
-    const basegfx::B2IVector aDevSize = aDev->getSize();
-    const sal_Int32 nStride = aDev->getScanlineStride();
-    const unsigned char *pSrc = aSrcData.get();
-
-    if (aDev->getScanlineFormat() != basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA)
-    {
-        SAL_INFO( "vcl.ios", "BlitFrameToBuffer: format is not 32bpp RGBA but " << aDev->getScanlineFormat() );
-        return;
-    }
-
-    for (unsigned int y = 0; y < (unsigned int)aDevSize.getY(); y++)
-    {
-        const unsigned char *sp( pSrc + nStride * (aDevSize.getY() - 1 - y) );
-
-        unsigned char *dp( (unsigned char *)pPixelBuffer +
-                           nPBWidth * 4 * (y + nDestY) +
-                           nDestX * 4 );
-        memcpy(dp, sp, aDevSize.getX()*4);
-    }
-}
-
-void IosSalInstance::RedrawWindows(char *pPixelBuffer,
-                                   int nPBWidth, int nPBHeight,
-                                   int nDestX, int nDestY,
-                                   int nDestWidth, int nDestHeight)
-{
-    int i = 0;
-    std::list< SalFrame* >::const_iterator it;
-    for ( it = getFrames().begin(); it != getFrames().end(); i++, it++ )
-    {
-        SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
-
-        if (pFrame->IsVisible())
-            BlitFrameToBuffer( pPixelBuffer, nPBWidth, nPBHeight, nDestX, nDestY, nDestWidth, nDestHeight, pFrame->getDevice() );
-    }
-}
-
 void IosSalInstance::damaged( IosSalFrame */* frame */,
                               const basegfx::B2IBox& rDamageRect )
 {

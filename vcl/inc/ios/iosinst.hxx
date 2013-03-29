@@ -26,12 +26,6 @@
 class IosSalFrame;
 class IosSalInstance : public SvpSalInstance
 {
-    void BlitFrameToBuffer(char *pPixelBuffer,
-                           int nPBWidth, int nPBHeight,
-                           int destX, int nDestY,
-                           int nDestWidth, int nDestHeight,
-                           const basebmp::BitmapDeviceSharedPtr& aDev);
-
 public:
     IosSalInstance( SalYieldMutex *pMutex );
     virtual ~IosSalInstance();
@@ -46,11 +40,6 @@ public:
     virtual bool AnyInput( sal_uInt16 nType );
 
     SalFrame *getFocusFrame() const;
-
-    void RedrawWindows( char *pPixelBuffer,
-                        int nPBWidth, int nPBHeight,
-                        int destX, int nDestY,
-                        int nDestWidth, int nDestHeight);
 
     void damaged( IosSalFrame *frame,
                   const basegfx::B2IBox& rDamageRect);
