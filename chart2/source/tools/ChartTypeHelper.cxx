@@ -433,7 +433,7 @@ bool ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( const uno::Reference< c
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
-            return true;
+            return true;    // this 'true' here causes a 'default x-axis shift' in the above mentioned three charttypes.
     }
     return false;
 }

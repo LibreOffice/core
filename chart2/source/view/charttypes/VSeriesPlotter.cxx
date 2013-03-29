@@ -1017,7 +1017,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
             double fLogicY = aCalculatedPoints[nP].Y;
             double fLogicZ = 0.0;//dummy
 
-            m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
+            //m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );         --- this creates bug#51656
 
             if(    !::rtl::math::isNan(fLogicX) && !::rtl::math::isInf(fLogicX)
                     && !::rtl::math::isNan(fLogicY) && !::rtl::math::isInf(fLogicY)
