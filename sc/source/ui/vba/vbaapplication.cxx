@@ -1297,6 +1297,21 @@ ScVbaApplication::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
     return uno::Any( xMenuBars );
 }
 
+void SAL_CALL ScVbaApplication::OnKey( const ::rtl::OUString& Key, const uno::Any& Procedure ) throw (uno::RuntimeException)
+{
+    try
+    {
+        // Perhaps we can catch some excel specific
+        // related behaviour here
+        VbaApplicationBase::OnKey( Key, Procedure );
+    }
+    catch( container::NoSuchElementException& )
+    {
+        // #TODO special handling for unhandled
+        // bindings
+    }
+}
+
 rtl::OUString
 ScVbaApplication::getServiceImplName()
 {
