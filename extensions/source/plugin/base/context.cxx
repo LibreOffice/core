@@ -48,8 +48,8 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>
+#include <osl/file.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -203,7 +203,7 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
 
     if( file )
     {
-        String aFileName( (char*)buf.getConstArray(), m_aEncoding );
+        OUString aFileName( (char*)buf.getConstArray(), strlen((char*)buf.getConstArray()), m_aEncoding );
         INetURLObject aFilePath( aFileName );
         aFileName = aFilePath.PathToFileName();
         SvFileStream aStream( aFileName, STREAM_READ );
@@ -215,7 +215,8 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
             aStream.Seek( STREAM_SEEK_TO_BEGIN );
             aStream.Read( aBuf.getArray(), nBytes );
             aStream.Close();
-            DirEntry( aFileName ).Kill();
+            osl::FileBase::getFileURLFromSystemPath( aFileName, aFileName );
+            osl::File::remove( aFileName );
         }
     }
 
@@ -278,9 +279,8 @@ FileSink::FileSink( const Reference< ::com::sun::star::uno::XComponentContext > 
         m_aMIMEType( mimetype ),
         m_aTarget( target )
 {
-    DirEntry aEntry;
-    m_aFileName = aEntry.TempName().GetFull();
-    ::rtl::OString aFile = ::rtl::OUStringToOString( m_aFileName, osl_getThreadTextEncoding() );
+    osl::FileBase::createTempFile( 0, 0, &m_aFileName );
+    OString aFile = OUStringToOString( m_aFileName, osl_getThreadTextEncoding() );
     fp = fopen( aFile.getStr() , "wb" );
 
     Reference< ::com::sun::star::io::XActiveDataControl >  xControl( source, UNO_QUERY );
@@ -292,8 +292,7 @@ FileSink::FileSink( const Reference< ::com::sun::star::uno::XComponentContext > 
 
 FileSink::~FileSink()
 {
-    DirEntry aEntry( m_aFileName );
-    aEntry.Kill();
+    osl::File::remove( m_aFileName );
 }
 
 void FileSink::closeOutput() throw()

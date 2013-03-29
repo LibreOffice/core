@@ -45,7 +45,7 @@
 
 #include <cstdarg>
 
-#include <tools/fsys.hxx>
+#include <osl/file.hxx>
 #include <plugin/impl.hxx>
 
 PluginComm::PluginComm( const ::rtl::OString& rLibName, bool bReusable ) :
@@ -61,10 +61,10 @@ PluginComm::~PluginComm()
     PluginManager::get().getPluginComms().remove( this );
     while( m_aFilesToDelete.size() )
     {
-        String aFile = m_aFilesToDelete.front();
+        OUString aFile( m_aFilesToDelete.front() );
         m_aFilesToDelete.pop_front();
-        DirEntry aEntry( aFile );
-        aEntry.Kill();
+        osl::FileBase::getFileURLFromSystemPath( aFile, aFile );
+        osl::File::remove( aFile );
     }
 }
 
