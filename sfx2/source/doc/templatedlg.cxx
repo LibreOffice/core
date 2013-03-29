@@ -35,6 +35,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
@@ -57,6 +58,10 @@
 #include "templatedlg.hrc"
 
 #define PADDING_DLG_BORDER      10
+
+#define TM_SETTING_MANAGER "TemplateManager"
+#define TM_SETTING_LASTFOLDER "LastFolder"
+#define TM_SETTING_FILTER "SelectedFilter"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -251,16 +256,19 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     createDefaultTemplateMenu();
 
     maView->Populate();
-    maView->showRootRegion();
-    maView->Show();
-
     mpCurView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
+
+    readSettings();
+
+    maView->Show();
 
     FreeResource();
 }
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 {
+    writeSettings();
+
     // Synchronize the config before deleting it
     syncRepositories();
     for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
@@ -338,6 +346,81 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
         SearchUpdateHdl(NULL);
 
     return 0;
+}
+
+void SfxTemplateManagerDlg::readSettings ()
+{
+    OUString aLastFolder;
+    sal_uInt16 nPageId = FILTER_DOCS;
+    SvtViewOptions aViewSettings( E_DIALOG, TM_SETTING_MANAGER );
+
+    if ( aViewSettings.Exists() )
+    {
+        sal_uInt16 nFilter;
+        aViewSettings.GetUserItem(TM_SETTING_LASTFOLDER) >>= aLastFolder;
+        aViewSettings.GetUserItem(TM_SETTING_FILTER) >>= nFilter;
+
+        switch (nFilter)
+        {
+            case FILTER_APP_WRITER:
+                nPageId = FILTER_DOCS;
+                break;
+            case FILTER_APP_IMPRESS:
+                nPageId = FILTER_PRESENTATIONS;
+                break;
+            case FILTER_APP_CALC:
+                nPageId = FILTER_SHEETS;
+                break;
+            case FILTER_APP_DRAW:
+                nPageId = FILTER_DRAWS;
+                break;
+        }
+    }
+
+    if (!aLastFolder.getLength())
+        maView->showRootRegion();
+    else
+        maView->showRegion(aLastFolder);
+
+    maTabControl.SelectTabPage(nPageId);
+}
+
+void SfxTemplateManagerDlg::writeSettings ()
+{
+    Sequence< NamedValue > aSettings(2);
+
+    OUString aLastFolder;
+
+    if (mpCurView == maView && maView->getCurRegionId())
+        aLastFolder = maView->getRegionName(maView->getCurRegionId()-1);
+
+    // last folder
+    aSettings[0].Name = TM_SETTING_LASTFOLDER;
+    aSettings[0].Value  <<= aLastFolder;
+
+    sal_uInt16 nFilter = FILTER_APP_WRITER;
+    switch (maTabControl.GetCurPageId())
+    {
+        case FILTER_DOCS:
+            nFilter = FILTER_APP_WRITER;
+            break;
+        case FILTER_PRESENTATIONS:
+            nFilter = FILTER_APP_IMPRESS;
+            break;
+        case FILTER_SHEETS:
+            nFilter = FILTER_APP_CALC;
+            break;
+        case FILTER_DRAWS:
+            nFilter = FILTER_APP_DRAW;
+            break;
+    }
+
+    aSettings[1].Name = TM_SETTING_FILTER;
+    aSettings[1].Value <<= nFilter;
+
+    // write
+    SvtViewOptions aViewSettings( E_DIALOG, TM_SETTING_MANAGER );
+    aViewSettings.SetUserData( aSettings );
 }
 
 void SfxTemplateManagerDlg::Resize()

@@ -42,6 +42,8 @@ public:
 
     virtual void showRegion (ThumbnailViewItem *pItem);
 
+    void showRegion (const OUString &rName);
+
     sal_uInt16 getCurRegionItemId () const;
 
     sal_uInt16 getRegionId (size_t pos) const;

@@ -55,6 +55,10 @@ public:
 
 private:
 
+    void readSettings ();
+
+    void writeSettings ();
+
     virtual void Resize ();
 
     DECL_LINK(TBXViewHdl, void*);
