@@ -12,7 +12,9 @@
 
 #if defined(IOS)
 
+#include <premac.h>
 #include <CoreGraphics/CoreGraphics.h>
+#include <postmac.h>
 
 #ifdef __cplusplus
 extern "C" {
