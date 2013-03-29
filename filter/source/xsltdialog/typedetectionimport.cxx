@@ -135,13 +135,10 @@ static OUString getSubdata( int index, sal_Unicode delimeter, const OUString& rD
 Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
 {
     // now delete type nodes
-    NodeVector::iterator aIter = maTypeNodes.begin();
-    while( aIter != maTypeNodes.end() )
+    for (NodeVector::const_iterator aIter(maTypeNodes.begin()), aEnd(maTypeNodes.end()); aIter != aEnd; ++aIter)
     {
         if( (*aIter)->maName == rType )
             return (*aIter);
-
-        ++aIter;
     }
 
     return NULL;
