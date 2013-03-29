@@ -565,6 +565,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyFillAttrList;
+    /// Attributes of the next v:textbox element.
+    ::sax_fastparser::FastAttributeList *m_pTextboxAttrList;
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;

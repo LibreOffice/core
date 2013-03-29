@@ -85,6 +85,7 @@ public:
     void testCellBtlr();
     void testTableStylerPrSz();
     void testMathLiteral();
+    void testFdo48557();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -130,6 +131,7 @@ void Test::run()
         {"cell-btlr.docx", &Test::testCellBtlr},
         {"table-style-rPr-sz.docx", &Test::testTableStylerPrSz},
         {"math-literal.docx", &Test::testMathLiteral},
+        {"fdo48557.odt", &Test::testFdo48557},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -656,6 +658,18 @@ void Test::testMathLiteral()
 {
     CHECK_FORMULA( "iiint from {V} to <?> {\"div\" \"F\"}  dV= llint from {S} to <?> {\"F\" ∙ \"n \" dS}",
         getFormula( getRun( getParagraph( 1 ), 1 )));
+}
+
+void Test::testFdo48557()
+{
+    // Inner margins of the textframe wasn't exported.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "LeftBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "RightBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TopBorderDistance"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "BottomBorderDistance"));
 }
 
 

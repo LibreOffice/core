@@ -307,11 +307,14 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         m_bTextFrameSyntax = true;
         m_pFlyAttrList = m_pSerializer->createAttrList( );
+        m_pTextboxAttrList = m_pSerializer->createAttrList();
         m_aTextFrameStyle = "position:absolute";
         m_rExport.OutputFormat( pParentFrame->GetFrmFmt(), false, false, true );
         m_pFlyAttrList->add(XML_style, m_aTextFrameStyle.makeStringAndClear());
         XFastAttributeListRef xFlyAttrList( m_pFlyAttrList );
         m_pFlyAttrList = NULL;
+        XFastAttributeListRef xTextboxAttrList(m_pTextboxAttrList);
+        m_pTextboxAttrList = NULL;
         m_bTextFrameSyntax = false;
 
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
@@ -324,7 +327,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             m_pFlyFillAttrList = NULL;
             m_pSerializer->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
         }
-        m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
+        m_pSerializer->startElementNS( XML_v, XML_textbox, xTextboxAttrList );
         m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
         m_rExport.WriteText( );
         m_pSerializer->endElementNS( XML_w, XML_txbxContent );
@@ -4671,6 +4674,14 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             sal_Int32 nWidth = sal_Int32(fConverted / 20);
             m_pFlyAttrList->add(XML_strokeweight, OString::valueOf(nWidth) + "pt");
         }
+
+        // v:textbox's inset attribute: inner margin values for textbox text
+        OStringBuffer aInset;
+        aInset.append(OString::number(double(rBox.GetDistance(BOX_LINE_LEFT))/20) + "pt,");
+        aInset.append(OString::number(double(rBox.GetDistance(BOX_LINE_TOP))/20) + "pt,");
+        aInset.append(OString::number(double(rBox.GetDistance(BOX_LINE_RIGHT))/20) + "pt,");
+        aInset.append(OString::number(double(rBox.GetDistance(BOX_LINE_BOTTOM))/20) + "pt");
+        m_pTextboxAttrList->add(XML_inset, aInset.makeStringAndClear());
         return;
     }
 
@@ -4842,6 +4853,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pHyperlinkAttrList( NULL ),
       m_pFlyAttrList( NULL ),
       m_pFlyFillAttrList( NULL ),
+      m_pTextboxAttrList( NULL ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
@@ -4882,6 +4894,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
     delete m_pFlyAttrList, m_pFlyAttrList = NULL;
+    delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
 
     delete m_pFootnotesList, m_pFootnotesList = NULL;
     delete m_pEndnotesList, m_pEndnotesList = NULL;
