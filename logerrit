@@ -42,6 +42,8 @@ case "$1" in
     help|--help|"")
         echo "Usage: ./logerrit subcommand [options]"
         echo "simple and basic tool to interact with LibreOffice gerrit"
+        echo "see https://wiki.documentfoundation.org/Development/gerrit for details."
+        echo
         echo "subcommands:"
         echo "             setup                   walking you though your gerrit setup"
         echo "             test                    test your gerrit setup"
