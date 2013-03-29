@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,updatecheckui,\
 	cppuhelper \
 	cppu \
 	sal \
+	i18nisolang1 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,updatecheckui,\
