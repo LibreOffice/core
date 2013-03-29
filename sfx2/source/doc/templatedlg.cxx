@@ -364,11 +364,9 @@ void SfxTemplateManagerDlg::Resize()
     mpActionBar->SetPosSizePixel(aActionPos,aActionSize);
     mpTemplateBar->SetSizePixel(aTemplateSize);
 
-    // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
     aViewPos.setY(nToolbarsHeight);
     aViewPos.setX(0);
-    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
 
     // Set search box position and size
     Size aSearchSize = mpSearchEdit->CalcMinimumSize();
@@ -376,6 +374,12 @@ void SfxTemplateManagerDlg::Resize()
 
     mpSearchEdit->SetSizePixel(aSearchSize);
     mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aViewPos.Y()));
+
+    if (mpSearchEdit->IsVisible())
+        aViewPos.setY(aViewPos.getY() + mpSearchEdit->GetSizePixel().getHeight() );
+
+    // Set view position below toolbox and search box
+    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
 
     maView->SetPosSizePixel(aViewPos,aThumbSize);
     mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
