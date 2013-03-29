@@ -74,23 +74,15 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     JSAMPLE * range_limit;
     HPBYTE pScanLineBuffer = NULL;
     long nScanLineBufferComponents = 0;
-    // declare bDecompCreated volatile because of gcc
-    // warning: variable 'bDecompCreated' might be clobbered by `longjmp' or `vfork'
-    volatile long                   bDecompCreated = 0;
 
-    /* Falls der Stream nicht ausreicht (IO_PENDING)
-     wird ueber ein longjmp in der Schleife nach Exit
-     gesprungen, wir geben dann die Anzahl
-     der bisher bearbeiteten Scanlines zurueck*/
     if ( setjmp( jerr.setjmp_buffer ) )
-        goto Exit;
+        return;
 
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = my_error_exit;
     jerr.pub.output_message = my_output_message;
 
     jpeg_create_decompress( &cinfo );
-    bDecompCreated = 1;
     jpeg_svstream_src( &cinfo, pIStm );
     jpeg_read_header( &cinfo, sal_True );
 
@@ -207,10 +199,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
         pScanLineBuffer=NULL;
     }
 
-Exit:
-
-    if( bDecompCreated )
-        jpeg_destroy_decompress( &cinfo );
+    jpeg_destroy_decompress( &cinfo );
 }
 
 long WriteJPEG( void* pJPEGWriter, void* pOStm,
@@ -221,21 +210,15 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
     struct my_error_mgr         jerr;
     void*                       pScanline;
     long                        nY;
-    // declare bCompCreated, bRet volatile because of gcc
-    // warning: variable 'bCompCreated' might be clobbered by `longjmp' or `vfork'
-    volatile long               bCompCreated = 0;
-    volatile long               bRet = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
-        goto Exit;
+        return 0;
 
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = my_error_exit;
     jerr.pub.output_message = my_output_message;
 
     jpeg_create_compress( &cinfo );
-    bCompCreated = 1;
-
     jpeg_svstream_dest( &cinfo, pOStm );
 
     cinfo.image_width = (JDIMENSION) nWidth;
@@ -283,19 +266,16 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
             jpeg_write_scanlines( &cinfo, (JSAMPARRAY) &pScanline, 1 );
 
         if( JPEGCallback( pCallbackData, nY * 100L / nHeight ) )
-            goto Exit;
+        {
+            jpeg_destroy_compress( &cinfo );
+            return 0;
+        }
     }
 
-    bRet = 1;
-
     jpeg_finish_compress(&cinfo);
+    jpeg_destroy_compress( &cinfo );
 
-Exit:
-
-    if ( bCompCreated )
-        jpeg_destroy_compress( &cinfo );
-
-    return bRet;
+    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
