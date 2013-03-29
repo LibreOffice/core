@@ -20,12 +20,6 @@ xcode_sdk=iphoneos
 xcode_arch=armv7
 endif
 
-ifeq ($(debug),)
-xcode_config := Release
-else
-xcode_config := Debug
-endif
-
 # If run from Xcode, check that its configuration (device or
 # simulator) matches that of gbuild. We detect being run from Xcode by
 # looking for $(SCRIPT_OUTPUT_FILE_0). The Run Script build phase in
@@ -38,10 +32,6 @@ export CCACHE_CPP2=y
 
 ifneq ($(CURRENT_ARCH),$(xcode_arch))
 $(error Xcode platform ($(CURRENT_ARCH)) does not match that of this build tree ($(xcode_arch)))
-endif
-
-ifneq ($(CONFIGURATION),$(xcode_config))
-$(error Xcode configuration ($(CONFIGURATION)) does not match that of this build tree ($(xcode_config)))
 endif
 
 endif
