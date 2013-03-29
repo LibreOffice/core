@@ -453,7 +453,7 @@ String FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
 sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
 {
     CacheVector::const_iterator aIter, aEnd;
-    for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
+    for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sUIName.equalsIgnoreAsciiCase( rFormatName ) )
             break;
@@ -464,7 +464,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumber( const String& rFormatName )
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const String& rMediaType )
 {
     CacheVector::const_iterator aIter, aEnd;
-    for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
+    for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sMediaType.equalsIgnoreAsciiCase( rMediaType ) )
             break;
@@ -476,7 +476,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& r
 {
     CacheVector::const_iterator aEnd;
     CacheVector::iterator aIter;
-    for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
+    for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->GetShortName().EqualsIgnoreCaseAscii( rShortName ) )
             break;
@@ -487,7 +487,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& r
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const String& rType )
 {
     CacheVector::const_iterator aIter, aEnd;
-    for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
+    for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sType.equalsIgnoreAsciiCase( rType ) )
             break;
