@@ -146,7 +146,6 @@ struct SfxDispatcher_Impl
                                         // 2==ReadOnlyDoc overturned
     sal_uInt16           nFilterCount;  // Number of SIDs in pFilterSIDs
     const sal_uInt16*    pFilterSIDs;   // sorted Array of SIDs
-    std::vector<sal_uInt16>* pDisableList;
     sal_uInt32           nDisableFlags;
 };
 
@@ -307,7 +306,6 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 {
     pImp = new SfxDispatcher_Impl;
     bFlushed = sal_True;
-    SfxApplication *pSfxApp = SFX_APP();
 
     pImp->pCachedServ1 = 0;
     pImp->pCachedServ2 = 0;
@@ -324,7 +322,6 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     pImp->bFilterEnabling = sal_False;
     pImp->nFilterCount = 0;
     pImp->pFilterSIDs = 0;
-    pImp->pDisableList = pSfxApp->GetDisabledSlotList_Impl();
     pImp->nDisableFlags = 0;
 
     pImp->pParent = pParent;
@@ -1970,11 +1967,6 @@ sal_Bool SfxDispatcher::_FindServer
                 pSlot = 0;
         }
 
-        if ( pSlot && !IsAllowed( nSlot ) )
-        {
-            pSlot = NULL;
-        }
-
         if ( pSlot )
         {
             rServer.SetSlot(pSlot);
@@ -2311,63 +2303,6 @@ void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
         pImp->pCachedServ2 = 0;
         InvalidateBindings_Impl(sal_True);
     }
-}
-
-sal_Bool SfxDispatcher::IsAllowed
-(
-    sal_uInt16 nSlot
-) const
-/*
-    [Description]
-
-    The method checks whether the access is allowed on this interface.
- */
-{
-    if ( !pImp->pDisableList )
-    {
-        return sal_True;
-    }
-
-    // BinSearch in the disable list
-    std::vector<sal_uInt16>& rList = *pImp->pDisableList;
-    sal_uInt16 nCount = rList.size();
-    sal_uInt16 nLow = 0, nMid = 0, nHigh;
-    sal_Bool bFound = sal_False;
-    nHigh = nCount - 1;
-
-    while ( !bFound && nLow <= nHigh )
-    {
-        nMid = (nLow + nHigh) >> 1;
-        DBG_ASSERT( nMid < nCount, "bsearch is buggy" );
-
-        int nDiff = (int) nSlot - (int) rList[nMid];
-        if ( nDiff < 0)
-        {
-            if ( nMid == 0 )
-                break;
-            nHigh = nMid - 1;
-        }
-        else if ( nDiff > 0 )
-        {
-            nLow = nMid + 1;
-            if ( nLow == 0 )
-                break;
-        }
-        else
-            bFound = sal_True;
-    }
-
-#ifdef _DEBUG
-    // Slot found in the List?
-    sal_uInt16 nPos = bFound ? nMid : nLow;
-
-    DBG_ASSERT( nPos <= nCount, "" );
-    DBG_ASSERT( nPos == nCount || nSlot <= rList[nPos], "" );
-    DBG_ASSERT( nPos == 0 || nSlot > rList[nPos-1], "" );
-    DBG_ASSERT( ( (nPos+1) >= nCount ) || nSlot < rList[nPos+1], "" );
-#endif
-
-    return !bFound;
 }
 
 void SfxDispatcher::InvalidateBindings_Impl( sal_Bool bModify )
