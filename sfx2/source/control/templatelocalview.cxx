@@ -159,6 +159,18 @@ void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
     maOpenRegionHdl.Call(NULL);
 }
 
+void TemplateLocalView::showRegion(const OUString &rName)
+{
+    for (int i = 0, n = maRegions.size(); i < n; ++i)
+    {
+        if (maRegions[i]->maTitle == rName)
+        {
+            showRegion(maRegions[i]);
+            break;
+        }
+    }
+}
+
 sal_uInt16 TemplateLocalView::getCurRegionItemId() const
 {
     for (size_t i = 0; i < maRegions.size(); ++i)
