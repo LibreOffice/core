@@ -1274,8 +1274,6 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                 }
             }
 
-            maView->reload();
-
             if (!aFolderList.isEmpty())
             {
             }
