@@ -54,7 +54,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
     static ResMgr* pPaResMgr = NULL;
     if( ! pPaResMgr )
     {
-        ::com::sun::star::lang::Locale aLocale;
+        LanguageTag aLanguageTag( LANGUAGE_SYSTEM);
 
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
@@ -66,16 +66,12 @@ ResId padmin::PaResId( sal_uInt32 nId )
             Any aValue = aNode.getNodeValue( OUString("ooLocale") );
             if( aValue >>= aLoc )
             {
-                /* FIXME-BCP47: handle language tags! */
-                sal_Int32 nIndex = 0;
-                aLocale.Language = aLoc.getToken( 0, '-', nIndex );
-                aLocale.Country = aLoc.getToken( 0, '-', nIndex );
-                aLocale.Variant = aLoc.getToken( 0, '-', nIndex );
+                aLanguageTag.reset( aLoc);
             }
         }
-        pPaResMgr = ResMgr::SearchCreateResMgr( "spa", aLocale );
+        pPaResMgr = ResMgr::SearchCreateResMgr( "spa", aLanguageTag );
         AllSettings aSettings = Application::GetSettings();
-        aSettings.SetUILanguageTag( LanguageTag( aLocale) );
+        aSettings.SetUILanguageTag( aLanguageTag );
         Application::SetSettings( aSettings );
     }
     return ResId( nId, *pPaResMgr );

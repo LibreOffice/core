@@ -22,7 +22,7 @@
 
 #include "svl/svldllapi.h"
 #include <tools/inetmime.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+#include <i18npool/languagetag.hxx>
 
 //============================================================================
 /** Definitions for frequently used media type names.
@@ -259,7 +259,7 @@ public:
     static rtl::OUString GetContentType(INetContentType eTypeID);
 
     static OUString GetPresentation(INetContentType eTypeID,
-                                    const ::com::sun::star::lang::Locale& aLocale);
+                                    const LanguageTag& aLocale);
 
     static INetContentType GetContentType4Extension(OUString const & rExtension);
 

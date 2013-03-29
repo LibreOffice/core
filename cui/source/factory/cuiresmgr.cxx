@@ -28,7 +28,7 @@ ResMgr* CuiResMgr::GetResMgr()
 
     if ( !pResMgr )
     {
-        pResMgr = ResMgr::CreateResMgr("cui", Application::GetSettings().GetUILanguageTag().getLocale());
+        pResMgr = ResMgr::CreateResMgr("cui", Application::GetSettings().GetUILanguageTag());
     }
 
     return pResMgr;

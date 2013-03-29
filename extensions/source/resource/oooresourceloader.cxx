@@ -193,7 +193,8 @@ namespace extensions { namespace resource
         ,m_pResourceManager( NULL )
     {
         ::rtl::OUString sBaseName( _rBaseName );
-        m_pResourceManager = new SimpleResMgr( rtl::OUStringToOString( sBaseName, RTL_TEXTENCODING_UTF8 ).getStr(), m_aLocale );
+        m_pResourceManager = new SimpleResMgr( rtl::OUStringToOString( sBaseName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                LanguageTag( m_aLocale) );
 
         if ( !m_pResourceManager->IsValid() )
         {

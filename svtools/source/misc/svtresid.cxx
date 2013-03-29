@@ -25,7 +25,7 @@ static ResMgr* pMgr=NULL;
 
 namespace
 {
-    ResMgr* getResMgr(const ::com::sun::star::lang::Locale aLocale)
+    ResMgr* getResMgr(const LanguageTag& aLocale)
     {
         if (!pMgr)
             pMgr = ResMgr::CreateResMgr("svt", aLocale );
@@ -34,7 +34,7 @@ namespace
 
     ResMgr* getResMgr()
     {
-        return getResMgr(Application::GetSettings().GetUILanguageTag().getLocale());
+        return getResMgr(Application::GetSettings().GetUILanguageTag());
     }
 }
 

@@ -90,13 +90,13 @@ class InternalResMgr
     OUString                        aPrefix;
     OUString                        aResName;
     bool                            bSingular;
-    com::sun::star::lang::Locale    aLocale;
+    LanguageTag                     aLocale;
     boost::unordered_map<sal_uInt64, int>* pResUseDump;
 
                             InternalResMgr( const OUString& rFileURL,
                                             const OUString& aPrefix,
                                             const OUString& aResName,
-                                            const com::sun::star::lang::Locale& rLocale );
+                                            const LanguageTag& rLocale );
                             ~InternalResMgr();
     sal_Bool                Create();
 
@@ -126,9 +126,9 @@ class ResMgrContainer
     };
 
     boost::unordered_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
-    com::sun::star::lang::Locale                             m_aDefLocale;
+    LanguageTag     m_aDefLocale;
 
-    ResMgrContainer() { init(); }
+    ResMgrContainer() : m_aDefLocale( LANGUAGE_SYSTEM) { init(); }
     ~ResMgrContainer();
 
     void init();
@@ -138,16 +138,16 @@ public:
     static void release();
 
     InternalResMgr* getResMgr( const OUString& rPrefix,
-                               com::sun::star::lang::Locale& rLocale,
+                               LanguageTag& rLocale,
                                bool bForceNewInstance = false
                                );
     InternalResMgr* getNextFallback( InternalResMgr* pResMgr );
 
     void freeResMgr( InternalResMgr* pResMgr );
 
-    void setDefLocale( const com::sun::star::lang::Locale& rLocale )
+    void setDefLocale( const LanguageTag& rLocale )
     { m_aDefLocale = rLocale; }
-    const com::sun::star::lang::Locale& getDefLocale() const
+    const LanguageTag& getDefLocale() const
     { return m_aDefLocale; }
 };
 
@@ -216,52 +216,33 @@ void ResMgrContainer::init()
 
     // set default language
     LanguageType nLang = MsLangId::getSystemUILanguage();
-    m_aDefLocale = LanguageTag( nLang).getLocale();
+    m_aDefLocale.reset( nLang);
 }
 
 namespace
 {
-    bool isAlreadyPureenUS(const com::sun::star::lang::Locale &rLocale)
+    bool isAlreadyPureenUS(const LanguageTag &rLocale)
     {
-        return ( rLocale.Language == "en" && rLocale.Country == "US" && rLocale.Variant.isEmpty() );
+        return ( rLocale.getLanguageType() == LANGUAGE_ENGLISH_US );
     }
 }
 
 InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
-                                            com::sun::star::lang::Locale& rLocale,
+                                            LanguageTag& rLocale,
                                             bool bForceNewInstance
                                             )
 {
-    com::sun::star::lang::Locale aLocale( rLocale );
-    OUStringBuffer aSearch( rPrefix.getLength() + 16 );
+    LanguageTag aLocale( rLocale );
     boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
-    /* FIXME-BCP47: handle language tags! */
-    int nTries = 0;
-    if( !aLocale.Language.isEmpty() )
-        nTries = 1;
-    if( !aLocale.Country.isEmpty() )
-        nTries = 2;
-    if( !aLocale.Variant.isEmpty() )
-        nTries = 3;
-    while( nTries-- )
+    ::std::vector< OUString > aFallbacks( aLocale.getFallbackStrings());
+    if (!isAlreadyPureenUS( aLocale))
+        aFallbacks.push_back( "en-US");     // last resort if all fallbacks fail
+
+    for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
-        aSearch.append( rPrefix );
-        if( nTries > -1 )
-        {
-            aSearch.append( aLocale.Language );
-        }
-        if( nTries > 0 )
-        {
-            aSearch.append( sal_Unicode('-') );
-            aSearch.append( aLocale.Country );
-        }
-        if( nTries > 1 )
-        {
-            aSearch.append( sal_Unicode('-') );
-            aSearch.append( aLocale.Variant );
-        }
-        it = m_aResFiles.find( aSearch.makeStringAndClear() );
+        OUString aSearch( rPrefix + *fb );
+        it = m_aResFiles.find( aSearch );
         if( it != m_aResFiles.end() )
         {
             // ensure InternalResMgr existance
@@ -278,20 +259,11 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             }
             break;
         }
-        if( nTries == 0 && !isAlreadyPureenUS(aLocale) )
-        {
-            // locale fallback failed
-            // fallback to en-US locale
-            nTries = 2;
-            aLocale.Language = "en";
-            aLocale.Country  = "US";
-            aLocale.Variant = "";
-        }
     }
     // try if there is anything with this prefix at all
     if( it == m_aResFiles.end() )
     {
-        aLocale = com::sun::star::lang::Locale();
+        aLocale.reset( LANGUAGE_SYSTEM);
         it = m_aResFiles.find( rPrefix );
         if( it == m_aResFiles.end() )
         {
@@ -316,11 +288,13 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
                     }
                     // try to guess locale
                     sal_Int32 nIndex = rPrefix.getLength();
-                    aLocale.Language = it->first.getToken( 0, '-', nIndex );
-                    if( nIndex > 0 )
-                        aLocale.Country = it->first.getToken( 0, '-', nIndex );
-                    if( nIndex > 0 )
-                        aLocale.Variant = it->first.getToken( 0, '-', nIndex );
+                    if (nIndex < it->first.getLength())
+                        aLocale.reset( it->first.copy( nIndex));
+                    else
+                    {
+                        SAL_WARN( "tools.rc", "ResMgrContainer::getResMgr: it->first " <<
+                                it->first << " shorter than prefix " << rPrefix);
+                    }
                     break;
                 }
             }
@@ -329,20 +303,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     // give up
     if( it == m_aResFiles.end() )
     {
-        /* FIXME-BCP47: handle language tags! */
-        OUStringBuffer sKey = rPrefix;
-        sKey.append( rLocale.Language );
-        if( !rLocale.Country.isEmpty() )
-        {
-            sKey.append( sal_Unicode('-') );
-            sKey.append( rLocale.Country );
-        }
-        if( !rLocale.Variant.isEmpty() )
-        {
-            sKey.append( sal_Unicode('-') );
-            sKey.append( rLocale.Variant );
-        } // if( !aLocale.Variant.isEmpty() )
-        OUString sURL = sKey.makeStringAndClear() + ".res";
+        OUString sURL = rPrefix + rLocale.getBcp47() + ".res";
         if ( m_aResFiles.find(sURL) == m_aResFiles.end() )
         {
             m_aResFiles[ sURL ].aFileURL = sURL;
@@ -390,17 +351,18 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
 
 InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
 {
-    /* FIXME-BCP47: handle language tags! */
-    com::sun::star::lang::Locale aLocale = pMgr->aLocale;
-    if( !aLocale.Variant.isEmpty() )
-        aLocale.Variant = OUString();
-    else if( !aLocale.Country.isEmpty() )
-        aLocale.Country = OUString();
-    else if( !isAlreadyPureenUS(aLocale) )
-    {
-        aLocale.Language = "en";
-        aLocale.Country = "US";
-    }
+    /* TODO-BCP47: this is nasty, but the previous code simply stripped a
+     * locale's variant and country in subsequent calls to end up with language
+     * only and then fallback to en-US if all failed, so this is at least
+     * equivalent if not better. Maybe this method could be changed to get
+     * passed / remember a fallback list and an index within to pick the next.
+     * */
+
+    ::std::vector< OUString > aFallbacks( pMgr->aLocale.getFallbackStrings());
+    // The first is the locale itself, use next fallback or en-US.
+    /* TODO: what happens if the chain is "en-US", "en" -> "en-US", ...
+     * This was already an issue with the previous code. */
+    LanguageTag aLocale( ((aFallbacks.size() > 1) ? aFallbacks[1] : OUString( "en-US")));
     InternalResMgr* pNext = getResMgr( pMgr->aPrefix, aLocale, pMgr->bSingular );
     // prevent recursion
     if( pNext == pMgr || ( pNext && pNext->aResName.equals( pMgr->aResName ) ) )
@@ -459,7 +421,7 @@ static ResHookProc pImplResHookProc = 0;
 InternalResMgr::InternalResMgr( const OUString& rFileURL,
                                 const OUString& rPrefix,
                                 const OUString& rResName,
-                                const com::sun::star::lang::Locale& rLocale )
+                                const LanguageTag& rLocale )
     : pContent( NULL )
     , pStringBlock( NULL )
     , pStm( NULL )
@@ -1322,11 +1284,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             // check that the fallback locale is not already in the chain of
             // fallbacks - prevent fallback loops
             ResMgr* pResMgr = this;
-            while( pResMgr &&
-                   ( pResMgr->pImpRes->aLocale.Language != pRes->aLocale.Language ||
-                     pResMgr->pImpRes->aLocale.Country  != pRes->aLocale.Country  ||
-                     pResMgr->pImpRes->aLocale.Variant  != pRes->aLocale.Variant )
-                 )
+            while( pResMgr && (pResMgr->pImpRes->aLocale != pRes->aLocale))
             {
                 pResMgr = pResMgr->pOriginalResMgr;
             }
@@ -1556,14 +1514,13 @@ const char* ResMgr::GetLang( LanguageType& nType, sal_uInt16 nPrio )
 }
 
 ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
-                              com::sun::star::lang::Locale aLocale )
+                              LanguageTag aLocale )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
 
-    /* FIXME-BCP47: handle language tags! */
-    if( aLocale.Language.isEmpty() )
+    if( aLocale.isSystemLocale() )
         aLocale = ResMgrContainer::get().getDefLocale();
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, aLocale );
@@ -1572,14 +1529,13 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
 
 ResMgr* ResMgr::SearchCreateResMgr(
     const sal_Char* pPrefixName,
-    com::sun::star::lang::Locale& rLocale )
+    LanguageTag& rLocale )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
 
-    /* FIXME-BCP47: handle language tags! */
-    if( rLocale.Language.isEmpty() )
+    if( rLocale.isSystemLocale() )
         rLocale = ResMgrContainer::get().getDefLocale();
 
     InternalResMgr* pImp = ResMgrContainer::get().getResMgr( aPrefix, rLocale );
@@ -1770,7 +1726,7 @@ ResHookProc ResMgr::GetReadStringHook()
     return pImplResHookProc;
 }
 
-void ResMgr::SetDefaultLocale( const com::sun::star::lang::Locale& rLocale )
+void ResMgr::SetDefaultLocale( const LanguageTag& rLocale )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
     ResMgrContainer::get().setDefLocale( rLocale );
@@ -1782,14 +1738,13 @@ const OUString& ResMgr::GetFileName() const
 }
 
 SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
-                            const ::com::sun::star::lang::Locale& rLocale )
+                            const LanguageTag& rLocale )
 {
     OUString aPrefix( pPrefixName, strlen( pPrefixName ), osl_getThreadTextEncoding() );
-    com::sun::star::lang::Locale aLocale( rLocale );
+    LanguageTag aLocale( rLocale );
 
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    /* FIXME-BCP47: handle language tags! */
-    if( aLocale.Language.isEmpty() )
+    if( aLocale.isSystemLocale() )
         aLocale = ResMgrContainer::get().getDefLocale();
 
     m_pResImpl = ResMgrContainer::get().getResMgr( aPrefix, aLocale, true );
@@ -1801,7 +1756,7 @@ SimpleResMgr::~SimpleResMgr()
     delete m_pResImpl;
 }
 
-SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, com::sun::star::lang::Locale aLocale )
+SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, LanguageTag aLocale )
 {
     return new SimpleResMgr( pPrefixName, aLocale );
 }
@@ -1845,9 +1800,7 @@ rtl::OUString SimpleResMgr::ReadString( sal_uInt32 nId )
             if( pFallback )
             {
                 // handle possible recursion
-                if( pFallback->aLocale.Language != m_pResImpl->aLocale.Language ||
-                    pFallback->aLocale.Country  != m_pResImpl->aLocale.Country  ||
-                    pFallback->aLocale.Variant  != m_pResImpl->aLocale.Variant )
+                if( pFallback->aLocale != m_pResImpl->aLocale )
                 {
                     pResHeader = (RSHEADER_TYPE*)pFallback->LoadGlobalRes( RSC_STRING, nId, &pResHandle );
                 }

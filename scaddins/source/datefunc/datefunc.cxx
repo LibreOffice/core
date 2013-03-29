@@ -297,7 +297,7 @@ void ScaDateAddIn::InitData()
         delete pResMgr;
 
     OString aModName( "date" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
+    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( aFuncLoc) );
 
     if( pFuncDataList )
         delete pFuncDataList;

@@ -198,7 +198,7 @@ const String SgaObject::GetTitle() const
             {
                 rtl::OString aMgrName(rtl::OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
                 ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.getStr(),
-                            Application::GetSettings().GetUILanguageTag().getLocale() );
+                            Application::GetSettings().GetUILanguageTag() );
                 if ( pResMgr )
                 {
                     ResId aResId( (sal_uInt16)nResId, *pResMgr );

@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_libraries,forui,\
     tl \
     utl \
     vcl \
+	i18nisolang1 \
 	$(gb_UWINAPI) \
 ))
 

@@ -51,7 +51,7 @@ struct OfficeLocale :
 struct DeploymentResMgr : public rtl::StaticWithInit<
     ResMgr *, DeploymentResMgr> {
     ResMgr * operator () () {
-        return ResMgr::CreateResMgr( "deployment", getOfficeLocale() );
+        return ResMgr::CreateResMgr( "deployment", LanguageTag( OfficeLocale::get()) );
     }
 };
 

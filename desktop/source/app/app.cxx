@@ -340,9 +340,7 @@ ResMgr* Desktop::GetDesktopResManager()
             OUString aUILocaleString = LanguageSelection::getLanguageString();
             LanguageTag aLanguageTag( aUILocaleString);
             //! ResMgr may modify the Locale for fallback!
-            ::com::sun::star::lang::Locale aLocale( aLanguageTag.getLocale());
-            Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLocale);
-            aLanguageTag.reset( aLocale);
+            Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLanguageTag);
             AllSettings as = GetSettings();
             as.SetUILanguageTag(aLanguageTag);
             SetSettings(as);
@@ -1495,7 +1493,7 @@ int Desktop::Main()
         }
 
         // create title string
-        ::com::sun::star::lang::Locale aLocale;
+        LanguageTag aLocale( LANGUAGE_SYSTEM);
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "ofa", aLocale );
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;

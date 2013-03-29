@@ -199,8 +199,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
         if( !aTypeName.Len() && !aSourceName.Len() )
         {
-            com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-            ResMgr* pMgr = ResMgr::CreateResMgr( "svt", aLocale );
+            ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
             // global resource from svtools (former so3 resource)
             if( pMgr )
                 aSourceName = String( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );

@@ -127,8 +127,7 @@ Dll::Dll () :
     (void)pFact;
 
     ResMgr* pMgr = ResMgr::CreateResMgr(
-        "basctl", Application::GetSettings().GetUILanguageTag().getLocale()
-    );
+        "basctl", Application::GetSettings().GetUILanguageTag());
 
     Module::Get() = new Module( pMgr, &DocShell::Factory() );
 

@@ -737,7 +737,7 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 //============================================================================
 //static
 OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
-                                            const ::com::sun::star::lang::Locale& aLocale)
+                                            const LanguageTag& aLocale)
 {
     sal_uInt16 nResID = sal_uInt16();
     if (eTypeID <= CONTENT_TYPE_LAST)

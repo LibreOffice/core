@@ -882,7 +882,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if ( mxStatusIndicator.is() )
                 {
-                    ResMgr* pResMgr = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag().getLocale() );
+                    ResMgr* pResMgr = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag() );
                     if ( pResMgr )
                     {
                         sal_Int32 nTotalPageCount = aRangeEnum.size();

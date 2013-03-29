@@ -91,7 +91,7 @@ Reference< XInterface > SAL_CALL SWFDialog_createInstance( const Reference< XMul
 SWFDialog::SWFDialog( const Reference< XComponentContext> &rxContext ) :
     OGenericUnoDialog( rxContext )
 {
-    mpResMgr = ResMgr::CreateResMgr( "flash", Application::GetSettings().GetUILanguageTag().getLocale() );
+    mpResMgr = ResMgr::CreateResMgr( "flash", Application::GetSettings().GetUILanguageTag() );
 }
 
 // -----------------------------------------------------------------------------

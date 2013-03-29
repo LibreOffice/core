@@ -25,26 +25,17 @@
 #include "tools/resmgr.hxx"
 #include "rtl/ustring.hxx"
 #include "unotools/configmgr.hxx"
+#include <i18npool/languagetag.hxx>
 
 #define APP_NAME "unopkg"
 
 namespace unopkg {
 
-    inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
-    {
-        ::com::sun::star::lang::Locale locale;
-        sal_Int32 nIndex = 0;
-        locale.Language = slang.getToken( 0, '-', nIndex );
-        locale.Country = slang.getToken( 0, '-', nIndex );
-        locale.Variant = slang.getToken( 0, '-', nIndex );
-        return locale;
-    }
-
 struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMgr >
 {
     ResMgr * operator () () {
         return ResMgr::CreateResMgr(
-            "deployment", toLocale( utl::ConfigManager::getLocale() ) );
+            "deployment", LanguageTag( utl::ConfigManager::getLocale() ) );
     }
 };
 

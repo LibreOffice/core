@@ -175,7 +175,7 @@ ResMgr* ImplGetResMgr()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpResMgr )
     {
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+        LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
         pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), aLocale );
 
         static bool bMessageOnce = false;

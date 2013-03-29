@@ -1123,7 +1123,7 @@ void T602ImportFilterDialog::initLocale()
     rtl::OString aModName( "t602filter" );
     aModName += rtl::OString::valueOf( sal_Int32( SUPD ) );
 
-    mpResMgr = ResMgr::CreateResMgr( aModName.getStr(), meLocale );
+    mpResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( meLocale) );
 }
 
 ResMgr* T602ImportFilterDialog::getResMgr()

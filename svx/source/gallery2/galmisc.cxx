@@ -65,7 +65,7 @@ ResMgr* GetGalleryResMgr()
     if( !pGalleryResMgr )
     {
         pGalleryResMgr = ResMgr::CreateResMgr(
-            "gal", Application::GetSettings().GetUILanguageTag().getLocale() );
+            "gal", Application::GetSettings().GetUILanguageTag() );
     }
 
     return pGalleryResMgr;

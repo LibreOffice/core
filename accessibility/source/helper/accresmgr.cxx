@@ -43,9 +43,7 @@ void TkResMgr::ensureImplExists()
     if (m_pImpl)
         return;
 
-    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-
-    m_pImpl = SimpleResMgr::Create("acc", aLocale );
+    m_pImpl = SimpleResMgr::Create("acc", Application::GetSettings().GetUILanguageTag() );
 
     if (m_pImpl)
     {

@@ -32,7 +32,7 @@ namespace rtl { class OUString; }
 namespace svl {
 
 rtl::OUString getStringResource(
-    sal_uInt16 id, com::sun::star::lang::Locale const & locale);
+    sal_uInt16 id, LanguageTag const & locale);
 
 }
 

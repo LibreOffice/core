@@ -23,7 +23,7 @@
 
 #include "boost/noncopyable.hpp"
 #include "boost/scoped_ptr.hpp"
-#include "com/sun/star/lang/Locale.hpp"
+#include <i18npool/languagetag.hxx>
 #include "rtl/instance.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
@@ -39,7 +39,7 @@ class ResMgrMap: private boost::noncopyable {
 public:
     ~ResMgrMap();
 
-    SimpleResMgr * get(css::lang::Locale const & locale);
+    SimpleResMgr * get(LanguageTag const & locale);
 
 private:
     typedef std::map< rtl::OUString, SimpleResMgr * > Map;
@@ -58,11 +58,8 @@ ResMgrMap::~ResMgrMap() {
     }
 }
 
-SimpleResMgr * ResMgrMap::get(css::lang::Locale const & locale) {
-    rtl::OUStringBuffer buf(locale.Language);
-    buf.append(sal_Unicode('-'));
-    buf.append(locale.Country);
-    rtl::OUString code(buf.makeStringAndClear());
+SimpleResMgr * ResMgrMap::get(LanguageTag const & locale) {
+    OUString code( locale.getBcp47());
     Map::iterator i(map_.find(code));
     if (i == map_.end()) {
         boost::scoped_ptr< SimpleResMgr > mgr(
@@ -79,7 +76,7 @@ struct theResMgrMap: public rtl::Static< ResMgrMap, theResMgrMap > {};
 
 namespace svl {
 
-rtl::OUString getStringResource(sal_uInt16 id, css::lang::Locale const & locale)
+rtl::OUString getStringResource(sal_uInt16 id, LanguageTag const & locale)
 {
     return theResMgrMap::get().get(locale)->ReadString(id);
 }

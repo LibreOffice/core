@@ -656,8 +656,7 @@ ResMgr* implGetResMgr( void )
     static ResMgr* pResMgr = NULL;
     if( !pResMgr )
     {
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-        pResMgr = ResMgr::CreateResMgr("sb", aLocale );
+        pResMgr = ResMgr::CreateResMgr("sb", Application::GetSettings().GetUILanguageTag() );
     }
     return pResMgr;
 }

@@ -25,9 +25,8 @@
 
 #include <osl/mutex.hxx>
 #include <tools/resid.hxx>
-#include <i18npool/lang.h>
+#include <i18npool/languagetag.hxx>
 #include <tools/string.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 #include "tools/toolsdllapi.h"
 
 class InternalResMgr;
@@ -45,17 +44,15 @@ public:
                                     in ThreadTextEncoding
                                 @param rLocale
                                     denotes the locale of the resource file to
-                                    load. If empty, a default locale will be used.
+                                    load. If empty (SYSTEM), a default locale will be used.
                             */
                             SimpleResMgr( const sal_Char* pPrefixName,
-                                          const ::com::sun::star::lang::Locale& _rLocale);
+                                          const LanguageTag& rLocale);
 
     virtual                 ~SimpleResMgr();
 
     static SimpleResMgr*    Create( const sal_Char* pPrefixName,
-                                      ::com::sun::star::lang::Locale aLocale = ::com::sun::star::lang::Locale( rtl::OUString(),
-                                                                                                               rtl::OUString(),
-                                                                                                               rtl::OUString()));// only in VCL
+                                    LanguageTag aLocale = LanguageTag( LANGUAGE_SYSTEM) );// only in VCL
 
     bool                    IsValid() const { return m_pResImpl != NULL; }
 

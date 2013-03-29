@@ -70,8 +70,7 @@ using namespace ::com::sun::star::ui::dialogs;
 static String impl_getSvtResString( sal_uInt32 nId )
 {
     String aRet;
-    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-    ResMgr* pMgr = ResMgr::CreateResMgr( "svt", aLocale );
+    ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
     if( pMgr )
     {
         aRet = String( ResId( nId, *pMgr ) );

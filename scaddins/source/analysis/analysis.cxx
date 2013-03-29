@@ -138,7 +138,7 @@ void AnalysisAddIn::InitData( void )
         delete pResMgr;
 
     OString             aModName( "analysis" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
+    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( aFuncLoc) );
 
     if( pFD )
         delete pFD;

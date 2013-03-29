@@ -68,10 +68,10 @@ static void
 force_c_locale( void )
 {
     // force locale (and resource files loaded) to en-US
-    css::lang::Locale aLocale( "en", "US", "");
+    OUString aLangISO( "en-US" );
+    LanguageTag aLocale( aLangISO );
     ResMgr::SetDefaultLocale( aLocale );
     SvtSysLocaleOptions aLocalOptions;
-    OUString aLangISO( "en-US" );
     aLocalOptions.SetLocaleConfigString( aLangISO );
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 }

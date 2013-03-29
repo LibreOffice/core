@@ -20,10 +20,9 @@
 #define _TOOLS_RESMGR_HXX
 
 #include "tools/toolsdllapi.h"
-#include <i18npool/lang.h>
+#include <i18npool/languagetag.hxx>
 #include <tools/string.hxx>
 #include <tools/resid.hxx>
-#include <com/sun/star/lang/Locale.hpp>
 
 #include <vector>
 
@@ -136,11 +135,9 @@ public:
     /// Language-dependent resource library
     static const sal_Char*  GetLang( LanguageType& eLanguage, sal_uInt16 nPrio = 0 ); ///< @deprecated see "tools/source/rc/resmgr.cxx"
     static ResMgr*      SearchCreateResMgr( const sal_Char* pPrefixName,
-                                            com::sun::star::lang::Locale& rLocale );
+                                            LanguageTag& rLocale );
      static ResMgr*     CreateResMgr( const sal_Char* pPrefixName,
-                                      com::sun::star::lang::Locale aLocale = com::sun::star::lang::Locale( rtl::OUString(),
-                                                                                                           rtl::OUString(),
-                                                                                                           rtl::OUString()));
+                                      LanguageTag aLocale = LanguageTag( LANGUAGE_SYSTEM) );
 
     /// Test whether resource still exists
     void                TestStack( const Resource * );
@@ -198,7 +195,7 @@ public:
 
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();
-    static void         SetDefaultLocale( const com::sun::star::lang::Locale& rLocale );
+    static void         SetDefaultLocale( const LanguageTag& rLocale );
 };
 
 inline sal_uInt32 RSHEADER_TYPE::GetId()

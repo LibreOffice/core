@@ -29,7 +29,7 @@ ResMgr* GetResMgr()
 
     if( !pResMgr )
     {
-        pResMgr = ResMgr::CreateResMgr("avmedia", Application::GetSettings().GetUILanguageTag().getLocale());
+        pResMgr = ResMgr::CreateResMgr("avmedia", Application::GetSettings().GetUILanguageTag());
     }
 
     return pResMgr;

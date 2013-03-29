@@ -91,7 +91,7 @@ void ODocumentInfoPreview::fill(
         }
         else
         {
-            insertNonempty( DI_MIMETYPE, INetContentTypes::GetPresentation(eTypeID, m_aLocale));
+            insertNonempty( DI_MIMETYPE, INetContentTypes::GetPresentation(eTypeID, LanguageTag(m_aLocale)));
         }
     }
 

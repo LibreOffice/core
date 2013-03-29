@@ -220,21 +220,9 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aRet <<= sal_False;
             return aRet;
         }
-        // determine the filename of the license to show
-        AllSettings aSettings(Application::GetSettings());
-        ::com::sun::star::lang::Locale aLocale = aSettings.GetUILanguageTag().getLocale();
 
-        OUString aLangString = aLocale.Language;
-        if ( !aLocale.Country.isEmpty() )
-        {
-            aLangString += ::rtl::OUString("-");
-            aLangString += aLocale.Country;
-            if ( !aLocale.Variant.isEmpty() )
-            {
-                aLangString += ::rtl::OUString("-");
-                aLangString += aLocale.Variant;
-            }
-        }
+        // determine the filename of the license to show
+        OUString aLangString( Application::GetSettings().GetUILanguageTag().getBcp47());
 #if defined(WNT)
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
@@ -292,7 +280,8 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         }
         // prepare to show
         // display license dialog
-        boost::scoped_ptr<ResMgr> pResMgr(ResMgr::SearchCreateResMgr("fwe", aLocale));
+        LanguageTag aLanguageTag( Application::GetSettings().GetUILanguageTag());
+        boost::scoped_ptr<ResMgr> pResMgr( ResMgr::SearchCreateResMgr("fwe", aLanguageTag));
         boost::scoped_ptr<LicenseDialog> pDialog(new LicenseDialog(aLicensePath, pResMgr.get()));
         sal_Bool bAgreed = (pDialog->Execute() == 1);
 

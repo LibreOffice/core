@@ -50,9 +50,7 @@ namespace dbaccess
         if (m_pImpl)
             return;
 
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-
-        m_pImpl = ResMgr::CreateResMgr("dba", aLocale);
+        m_pImpl = ResMgr::CreateResMgr("dba", Application::GetSettings().GetUILanguageTag());
     }
 
     //------------------------------------------------------------------

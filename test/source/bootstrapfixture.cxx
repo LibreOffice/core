@@ -71,11 +71,10 @@ void test::BootstrapFixture::setUp()
 
     // force locale (and resource files loaded) to en-US
 
-    lang::Locale aLocale( "en", "US", "");
-    ResMgr::SetDefaultLocale( aLocale );
+    OUString aLangISO( "en-US" );
+    ResMgr::SetDefaultLocale( LanguageTag( aLangISO) );
 
     SvtSysLocaleOptions aLocalOptions;
-    OUString aLangISO( "en-US" );
     aLocalOptions.SetLocaleConfigString( aLangISO );
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 

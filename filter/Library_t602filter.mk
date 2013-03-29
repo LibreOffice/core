@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,t602filter,\
 	cppuhelper \
 	cppu \
 	sal \
+	i18nisolang1 \
 	$(gb_UWINAPI) \
 ))
 

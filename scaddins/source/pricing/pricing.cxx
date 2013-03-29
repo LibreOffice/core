@@ -301,7 +301,7 @@ void ScaPricingAddIn::InitData()
         delete pResMgr;
 
     OString aModName( "pricing" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), aFuncLoc );
+    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( aFuncLoc) );
 
     if( pFuncDataList )
         delete pFuncDataList;

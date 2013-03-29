@@ -54,9 +54,7 @@ namespace reportdesign
             // now that we have an impl class make sure it's deleted on unloading the library
             static ResourceManager::EnsureDelete    s_aDeleteTheImplClass;
 
-            ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-
-            m_pImpl = SimpleResMgr::Create("rpt", aLocale);
+            m_pImpl = SimpleResMgr::Create("rpt", Application::GetSettings().GetUILanguageTag());
         }
     }
 

@@ -47,9 +47,7 @@ namespace formula
         if (m_pImpl)
             return;
 
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-
-        m_pImpl = ResMgr::CreateResMgr("for", aLocale);
+        m_pImpl = ResMgr::CreateResMgr("for", Application::GetSettings().GetUILanguageTag());
     }
 
     //-------------------------------------------------------------------------
