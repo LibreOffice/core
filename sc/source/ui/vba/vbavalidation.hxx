@@ -51,6 +51,7 @@ public:
     virtual void SAL_CALL setErrorMessage( const ::rtl::OUString& _errormessage ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula1() throw (css::uno::RuntimeException) ;
     virtual ::rtl::OUString SAL_CALL getFormula2() throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
     // Methods
     virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& AlertStyle, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::uno::RuntimeException);

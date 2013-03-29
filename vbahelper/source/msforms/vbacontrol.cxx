@@ -56,6 +56,10 @@
 #include <vbahelper/helperdecl.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <svx/svdobj.hxx>
+
 using namespace com::sun::star;
 using namespace ooo::vba;
 
@@ -286,7 +290,7 @@ ScVbaControl::getControlSource() throw (uno::RuntimeException)
             table::CellAddress aAddress;
             xProps->getPropertyValue( "BoundCell" ) >>= aAddress;
             xConvertor->setPropertyValue( "Address" , uno::makeAny( aAddress ) );
-                    xConvertor->getPropertyValue( "XL_A1_Representation" ) >>= sControlSource;
+                    xConvertor->getPropertyValue( "XLA1Representation" ) >>= sControlSource;
         }
         catch(const uno::Exception&)
         {
@@ -299,7 +303,40 @@ void SAL_CALL
 ScVbaControl::setControlSource( const OUString& _controlsource ) throw (uno::RuntimeException)
 {
     OUString sEmpty;
-    svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, _controlsource, sEmpty );
+    // afaik this is only relevant for Excel documents ( and we need to set up a
+    // reference tab in case no Sheet is specified in "_controlsource"
+    // Can't use the active sheet either, code may of course access
+    uno::Reference< drawing::XDrawPagesSupplier > xSupplier( m_xModel, uno::UNO_QUERY_THROW );
+ uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+    sal_Int32 nLen = xIndex->getCount();
+    bool bMatched = false;
+    sal_Int16 nRefTab = 0;
+    for ( sal_Int32 index = 0; index < nLen; ++index )
+    {
+        try
+        {
+            uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex->getByIndex( index ), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+            // get the www-standard container
+            uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
+            sal_Int32 nCntrls = xFormControls->getCount();
+            for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
+            {
+                uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                bMatched = ( m_xProps == xControl );
+                if ( bMatched )
+                {
+                    nRefTab = index;
+                    break;
+                }
+            }
+        }
+        catch( uno::Exception& ) {}
+        if ( bMatched )
+            break;
+    }
+
+    svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, _controlsource, sEmpty, sal_uInt16( nRefTab ) );
 }
 
 OUString SAL_CALL
@@ -318,7 +355,7 @@ ScVbaControl::getRowSource() throw (uno::RuntimeException)
             table::CellRangeAddress aAddress;
             xProps->getPropertyValue( "CellRange" ) >>= aAddress;
             xConvertor->setPropertyValue( "Address" , uno::makeAny( aAddress ) );
-            xConvertor->getPropertyValue( "XL_A1_Representation" ) >>= sRowSource;
+            xConvertor->getPropertyValue( "XLA1Representation" ) >>= sRowSource;
         }
         catch(const uno::Exception&)
         {
@@ -683,12 +720,21 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeExcep
 
 sal_Bool ScVbaControl::getAutoSize() throw (uno::RuntimeException)
 {
-    return sal_False;
+    bool bIsResizeEnabled = false;
+    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_QUERY_THROW );
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xIf );
+    if ( pObj )
+        bIsResizeEnabled = !pObj->IsResizeProtect();
+    return bIsResizeEnabled;
 }
 
 // currently no implementation for this
-void ScVbaControl::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
+void ScVbaControl::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
 {
+    uno::Reference< uno::XInterface > xIf( m_xControl, uno::UNO_QUERY_THROW );
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape( xIf );
+    if ( pObj )
+        pObj->SetResizeProtect( !bAutoSize );
 }
 
 sal_Bool ScVbaControl::getLocked() throw (uno::RuntimeException)

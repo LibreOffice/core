@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_libraries,msforms,\
     svl \
     svt \
     svx \
+    svxcore \
     tk \
     tl \
     vbahelper \

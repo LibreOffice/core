@@ -44,6 +44,7 @@ interface XComboBox
     [attribute] boolean Locked;
     [attribute, readonly] long TextLength;
     [attribute, readonly] XNewFont Font;
+    [attribute] string  LinkedCell;
 
     void AddItem( [in] any pvargItem, [in] any pvargIndex );
     void removeItem( [in] any index );
