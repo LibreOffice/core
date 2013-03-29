@@ -179,8 +179,7 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
         // position of the first smart tag which coveres nValue
         if ( !maList[0].maType.isEmpty() || maList[0].mpSubList )
         {
-            std::vector<SwWrongArea>::const_iterator aIter = maList.begin();
-            while ( aIter != maList.end() )
+            for (std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end()); aIter != aEnd; ++aIter)
             {
                 const xub_StrLen nSTPos = (*aIter).mnPos;
                 const xub_StrLen nSTLen = (*aIter).mnLen;
@@ -189,7 +188,6 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
                 else if ( nSTPos > nValue )
                     break;
 
-                ++aIter;
                 ++nUnten;
             }
             return nUnten;
@@ -553,15 +551,15 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 void SwWrongList::RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
     sal_uInt16 nDelPos = 0;
     sal_uInt16 nDel = 0;
-    std::vector<SwWrongArea>::iterator aIter = maList.begin();
-    while( aIter != maList.end() && (*aIter).mnPos < nBegin )
+    std::vector<SwWrongArea>::const_iterator aIter(maList.begin()), aEnd(maList.end());
+    while( aIter != aEnd && (*aIter).mnPos < nBegin )
     {
         ++aIter;
         ++nDelPos;
     }
     if( WRONGLIST_GRAMMAR == GetWrongListType() )
     {
-        while( aIter != maList.end() && nBegin < nEnd && nEnd > (*aIter).mnPos )
+        while( aIter != aEnd && nBegin < nEnd && nEnd > (*aIter).mnPos )
         {
             ++aIter;
             ++nDel;
@@ -569,7 +567,7 @@ void SwWrongList::RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
     }
     else
     {
-        while( aIter != maList.end() && nBegin == (*aIter).mnPos && nEnd == (*aIter).mnPos +(*aIter).mnLen )
+        while( aIter != aEnd && nBegin == (*aIter).mnPos && nEnd == (*aIter).mnPos +(*aIter).mnLen )
         {
             ++aIter;
             ++nDel;
