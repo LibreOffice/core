@@ -54,27 +54,28 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     // Copy the list, because this can be destroyed when calling a Link...
     std::list<Link> aCopy( m_aListeners );
     std::list<Link>::iterator aIter( aCopy.begin() );
+    std::list<Link>::const_iterator aEnd( aCopy.end() );
     if( pEvent->IsA( VclWindowEvent::StaticType() ) )
     {
         VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(pEvent);
         ImplDelData aDel( pWinEvent->GetWindow() );
-        while ( aIter != aCopy.end() && ! aDel.IsDead() )
+        while ( aIter != aEnd && ! aDel.IsDead() )
         {
             Link &rLink = *aIter;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( pEvent );
-            aIter++;
+            ++aIter;
         }
     }
     else
     {
-        while ( aIter != aCopy.end() )
+        while ( aIter != aEnd )
         {
             Link &rLink = *aIter;
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
                 rLink.Call( pEvent );
-            aIter++;
+            ++aIter;
         }
     }
 }
@@ -88,14 +89,15 @@ sal_Bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
     // Copy the list, because this can be destroyed when calling a Link...
     std::list<Link> aCopy( m_aListeners );
     std::list<Link>::iterator aIter( aCopy.begin() );
-    while ( aIter != aCopy.end() )
+    std::list<Link>::const_iterator aEnd( aCopy.end() );
+    while ( aIter != aEnd )
     {
         if( (*aIter).Call( pEvent ) != 0 )
         {
             bProcessed = sal_True;
             break;
         }
-        aIter++;
+        ++aIter;
     }
     return bProcessed;
 }
