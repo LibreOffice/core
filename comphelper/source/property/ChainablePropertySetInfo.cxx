@@ -84,9 +84,7 @@ Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
         maProperties.realloc ( nSize );
         Property* pProperties = maProperties.getArray();
 
-        PropertyInfoHash::iterator aIter = maMap.begin();
-        const PropertyInfoHash::iterator aEnd = maMap.end();
-        for ( ; aIter != aEnd; ++aIter, ++pProperties)
+        for (PropertyInfoHash::const_iterator aIter(maMap.begin()), aEnd(maMap.end()); aIter != aEnd; ++aIter, ++pProperties)
         {
             PropertyInfo* pInfo = (*aIter).second;
 

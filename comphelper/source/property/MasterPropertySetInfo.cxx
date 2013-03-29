@@ -101,9 +101,7 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
         maProperties.realloc ( nSize );
         Property* pProperties = maProperties.getArray();
 
-        PropertyDataHash::iterator aIter = maMap.begin();
-        const PropertyDataHash::iterator aEnd = maMap.end();
-        for ( ; aIter != aEnd; ++aIter, ++pProperties)
+        for (PropertyDataHash::const_iterator aIter(maMap.begin()), aEnd(maMap.end()) ; aIter != aEnd; ++aIter, ++pProperties)
         {
             PropertyInfo* pInfo = (*aIter).second->mpInfo;
 
