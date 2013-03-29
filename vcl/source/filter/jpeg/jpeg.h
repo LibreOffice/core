@@ -49,7 +49,7 @@ void    JPEGFree( void *ptr );
 long    JPEGCallback( void* pCallbackData, long nPercent );
 
 long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight, long bGreyScale,
-                   long nQualityPercent, void* pCallbackData );
+                   long nQualityPercent, long aChromaSubsampling, void* pCallbackData );
 void*   GetScanline( void* pJPEGWriter, long nY );
 
 void    ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines );

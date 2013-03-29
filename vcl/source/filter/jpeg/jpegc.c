@@ -91,7 +91,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 
     jpeg_create_decompress( &cinfo );
     bDecompCreated = 1;
-        jpeg_svstream_src( &cinfo, pIStm );
+    jpeg_svstream_src( &cinfo, pIStm );
     jpeg_read_header( &cinfo, sal_True );
 
     cinfo.scale_num = 1;
@@ -215,7 +215,7 @@ Exit:
 
 long WriteJPEG( void* pJPEGWriter, void* pOStm,
                 long nWidth, long nHeight, long bGreys,
-                long nQualityPercent, void* pCallbackData )
+                long nQualityPercent, long aChromaSubsampling, void* pCallbackData )
 {
     struct jpeg_compress_struct cinfo;
     struct my_error_mgr         jerr;
@@ -256,6 +256,22 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
 
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
+
+    if (aChromaSubsampling == 1) // YUV 4:4:4
+    {
+        cinfo.comp_info[0].h_samp_factor = 1;
+        cinfo.comp_info[0].v_samp_factor = 1;
+    }
+    else if (aChromaSubsampling == 2) // YUV 4:2:2
+    {
+        cinfo.comp_info[0].h_samp_factor = 2;
+        cinfo.comp_info[0].v_samp_factor = 1;
+    }
+    else if (aChromaSubsampling == 3) // YUV 4:2:0
+    {
+        cinfo.comp_info[0].h_samp_factor = 2;
+        cinfo.comp_info[0].v_samp_factor = 2;
+    }
 
     jpeg_start_compress( &cinfo, sal_True );
 

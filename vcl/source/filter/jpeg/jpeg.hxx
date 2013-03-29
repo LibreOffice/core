@@ -71,11 +71,12 @@ class JPEGWriter
     SvStream&           rOStm;
     Bitmap              aBmp;
     BitmapReadAccess*   pAcc;
-    sal_uInt8*              pBuffer;
-    sal_Bool                bNative;
+    sal_uInt8*          pBuffer;
+    sal_Bool            bNative;
 
     sal_Bool            bGreys;
     sal_Int32           nQuality;
+    sal_Int32           aChromaSubsampling;
 
     bool*               pExpWasGrey;
 

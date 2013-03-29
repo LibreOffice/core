@@ -562,6 +562,7 @@ JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValu
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
     bGreys = aConfigItem.ReadInt32( "ColorMode", 0 ) != 0;
     nQuality = aConfigItem.ReadInt32( "Quality", 75 );
+    aChromaSubsampling = aConfigItem.ReadInt32( "ChromaSubsamplingMode", 0 );
 
     if ( pFilterData )
     {
@@ -676,7 +677,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
 
         JPEGCallbackStruct aCallbackData;
         aCallbackData.xStatusIndicator = xStatusIndicator;
-        bRet = (sal_Bool) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), bGreys, nQuality, &aCallbackData );
+        bRet = (sal_Bool) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), bGreys, nQuality, aChromaSubsampling, &aCallbackData );
 
         delete[] pBuffer;
         pBuffer = NULL;
