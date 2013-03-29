@@ -553,12 +553,12 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 
         // if it's a "default value" property of a control model, set the according "value" property
         static ::rtl::OUString pDefaultValueProperties[] = {
-            FM_PROP_DEFAULT_TEXT, FM_PROP_DEFAULTCHECKED, FM_PROP_DEFAULT_DATE, FM_PROP_DEFAULT_TIME,
-            FM_PROP_DEFAULT_VALUE, FM_PROP_DEFAULT_SELECT_SEQ, FM_PROP_EFFECTIVE_DEFAULT
+            OUString(FM_PROP_DEFAULT_TEXT), OUString(FM_PROP_DEFAULTCHECKED), OUString(FM_PROP_DEFAULT_DATE), OUString(FM_PROP_DEFAULT_TIME),
+            OUString(FM_PROP_DEFAULT_VALUE), OUString(FM_PROP_DEFAULT_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_DEFAULT)
         };
         const ::rtl::OUString aValueProperties[] = {
-            FM_PROP_TEXT, FM_PROP_STATE, FM_PROP_DATE, FM_PROP_TIME,
-            FM_PROP_VALUE, FM_PROP_SELECT_SEQ, FM_PROP_EFFECTIVE_VALUE
+            OUString(FM_PROP_TEXT), OUString(FM_PROP_STATE), OUString(FM_PROP_DATE), OUString(FM_PROP_TIME),
+            OUString(FM_PROP_VALUE), OUString(FM_PROP_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_VALUE)
         };
         sal_Int32 nDefaultValueProps = sizeof(pDefaultValueProperties)/sizeof(pDefaultValueProperties[0]);
         OSL_ENSURE(sizeof(aValueProperties)/sizeof(aValueProperties[0]) == nDefaultValueProps,
