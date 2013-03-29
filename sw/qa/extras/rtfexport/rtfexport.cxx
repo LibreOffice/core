@@ -72,6 +72,7 @@ public:
     void testFdo52286();
     void testFdo61507();
     void testFdo30983();
+    void testPlaceholder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -118,6 +119,7 @@ void Test::run()
         {"fdo52286.odt", &Test::testFdo52286},
         {"fdo61507.rtf", &Test::testFdo61507},
         {"fdo30983.rtf", &Test::testFdo30983},
+        {"placeholder.odt", &Test::testPlaceholder},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -493,6 +495,15 @@ void Test::testFdo30983()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "HoriOrientRelation"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(0), "VertOrientRelation"));
+}
+
+void Test::testPlaceholder()
+{
+    // Only the field text was exported, make sure we still have a field with the correct Hint text.
+    uno::Reference<text::XTextRange> xRun(getRun(getParagraph(1), 2));
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xRun, "TextPortionType"));
+    uno::Reference<beans::XPropertySet> xField = getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField");
+    CPPUNIT_ASSERT_EQUAL(OUString("place holder"), getProperty<OUString>(xField, "Hint"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

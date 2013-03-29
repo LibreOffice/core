@@ -3074,9 +3074,12 @@ bool RtfAttributeOutput::DropdownField( const SwField* /*pFld*/ )
     return true;
 }
 
-bool RtfAttributeOutput::PlaceholderField( const SwField* )
+bool RtfAttributeOutput::PlaceholderField( const SwField* pField)
 {
-    return true; // expand to text?
+    m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST " MACROBUTTON  None ");
+    RunText(pField->GetPar1());
+    m_aRunText->append("}}");
+    return false; // do not expand
 }
 
 RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
