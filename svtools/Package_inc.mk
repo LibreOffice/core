@@ -55,8 +55,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/embedtransfer.hxx,svto
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/extcolorcfg.hxx,svtools/extcolorcfg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/extensionlistbox.hxx,svtools/extensionlistbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filectrl.hxx,svtools/filectrl.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filedlg.hxx,svtools/filedlg.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filedlg2.hrc,svtools/filedlg2.hrc))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fileurlbox.hxx,svtools/fileurlbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fileview.hxx,svtools/fileview.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filechangedchecker.hxx,svtools/filechangedchecker.hxx))

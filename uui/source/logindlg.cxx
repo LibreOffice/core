@@ -18,23 +18,24 @@
  */
 
 #include <comphelper/string.hxx>
-#include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 #include "logindlg.hxx"
 
 #include "logindlg.hrc"
 #include "ids.hrc"
 #include <tools/resid.hxx>
+#include <osl/file.hxx>
 
 #ifdef UNX
 #include <limits.h>
 #define _MAX_PATH PATH_MAX
 #endif
 
-// LoginDialog -------------------------------------------------------
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <comphelper/processfactory.hxx>
 
-//............................................................................
-//............................................................................
+using namespace com::sun::star;
 
 static void lcl_Move( Window &rWin, long nOffset )
 {
@@ -184,7 +185,6 @@ void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
     }
 };
 
-// -----------------------------------------------------------------------
 void LoginDialog::EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled )
 {
     aErrorInfo.Enable( !bUseSysCredsEnabled );
@@ -201,8 +201,6 @@ void LoginDialog::EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled )
     aAccountED.Enable( !bUseSysCredsEnabled );
 }
 
-// -----------------------------------------------------------------------
-
 IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl)
 {
     // trim the strings
@@ -212,29 +210,35 @@ IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl)
     return 1;
 }
 
-// -----------------------------------------------------------------------
-
 IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl)
 {
-    PathDialog* pDlg = new PathDialog( this, WB_3DLOOK );
-    pDlg->SetPath( aPathED.GetText() );
+    try
+    {
+        uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
 
-    if ( pDlg->Execute() == RET_OK )
-        aPathED.SetText( pDlg->GetPath() );
+        OUString aPath( aPathED.GetText() );
+        osl::FileBase::getFileURLFromSystemPath( aPath, aPath );
+        xFolderPicker->setDisplayDirectory( aPath );
 
-    delete pDlg;
+        if (xFolderPicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
+        {
+            osl::FileBase::getSystemPathFromFileURL( xFolderPicker->getDirectory(), aPath );
+            aPathED.SetText( aPath );
+        }
+    }
+    catch (uno::Exception & e)
+    {
+        SAL_WARN("uui", "LoginDialog::PathHdl_Impl: caught UNO exception: " << e.Message);
+    }
+
     return 1;
 }
-
-// -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl)
 {
     EnableUseSysCredsControls_Impl( aUseSysCredsCB.IsChecked() );
     return 1;
 }
-
-// -----------------------------------------------------------------------
 
 LoginDialog::LoginDialog
 (
@@ -296,13 +300,9 @@ LoginDialog::LoginDialog
     HideControls_Impl( nFlags );
 };
 
-// -----------------------------------------------------------------------
-
 LoginDialog::~LoginDialog()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void LoginDialog::SetUseSystemCredentials( sal_Bool bUse )
 {
@@ -312,8 +312,6 @@ void LoginDialog::SetUseSystemCredentials( sal_Bool bUse )
         EnableUseSysCredsControls_Impl( bUse );
     }
 }
-
-// -----------------------------------------------------------------------
 
 void LoginDialog::ClearPassword()
 {
@@ -325,15 +323,10 @@ void LoginDialog::ClearPassword()
         aPasswordED.GrabFocus();
 };
 
-// -----------------------------------------------------------------------
-
 void LoginDialog::ClearAccount()
 {
     aAccountED.SetText( String() );
     aAccountED.GrabFocus();
 };
-
-//............................................................................
-//............................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

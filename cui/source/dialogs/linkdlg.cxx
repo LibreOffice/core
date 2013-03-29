@@ -23,7 +23,6 @@
 
 #include <tools/urlobj.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/filedlg.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -41,12 +40,17 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <comphelper/processfactory.hxx>
+
 #include <dialmgr.hxx>
 
 
 #define FILEOBJECT ( OBJECT_CLIENT_FILE & ~OBJECT_CLIENT_SO )
 
 using namespace sfx2;
+using namespace ::com::sun::star;
 
 class SvBaseLinkMemberList : private std::vector<SvBaseLink*> {
 public:
@@ -342,47 +346,55 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
     sal_uInt16 nSelectionCount = (sal_uInt16)Links().GetSelectionCount();
     if(nSelectionCount > 1)
     {
-        PathDialog aPathDlg( this );
-        String sType, sFile, sLinkName;
-        String  sFilter;
-        SvTreeListEntry* pEntry = Links().FirstSelected();
-        SvBaseLink* pLink = (SvBaseLink*)pEntry->GetUserData();
-        pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
-        INetURLObject aUrl(sFile);
-        if(aUrl.GetProtocol() == INET_PROT_FILE)
+        try
         {
-            rtl::OUString sOldPath(aUrl.PathToFileName());
-            sal_Int32 nLen = aUrl.GetName().getLength();
-            sOldPath = sOldPath.copy(0, sOldPath.getLength() - nLen);
-            aPathDlg.SetPath(sOldPath);
-        }
-        if(aPathDlg.Execute() == RET_OK)
-        {
-            OUString aPath = aPathDlg.GetPath();
+            uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
 
-            for( sal_uInt16 i = 0; i < nSelectionCount; i++)
+            String sType, sFile, sLinkName;
+            String  sFilter;
+            SvTreeListEntry* pEntry = Links().FirstSelected();
+            SvBaseLink* pLink = (SvBaseLink*)pEntry->GetUserData();
+            pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
+            INetURLObject aUrl(sFile);
+            if(aUrl.GetProtocol() == INET_PROT_FILE)
             {
-                pEntry = i==0 ?
-                        Links().FirstSelected() :
-                            Links().NextSelected( pEntry );
-                DBG_ASSERT(pEntry,"Wo ist der Entry");
-                pLink = (SvBaseLink*)pEntry->GetUserData();
-                DBG_ASSERT(pLink,"Wo ist der Link");
-                pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
-                INetURLObject aUrl_(sFile);
-                INetURLObject aUrl2(aPath, INET_PROT_FILE);
-                aUrl2.insertName( aUrl_.getName() );
-                String sNewLinkName;
-                MakeLnkName( sNewLinkName, 0 ,
-                        aUrl2.GetMainURL(INetURLObject::DECODE_TO_IURI), sLinkName, &sFilter);
-                pLink->SetLinkSourceName( sNewLinkName );
-                pLink->Update();
+                OUString sOldPath(aUrl.PathToFileName());
+                sal_Int32 nLen = aUrl.GetName().getLength();
+                sOldPath = sOldPath.copy(0, sOldPath.getLength() - nLen);
+                xFolderPicker->setDisplayDirectory(sOldPath);
             }
-            if( pLinkMgr->GetPersist() )
-                pLinkMgr->GetPersist()->SetModified();
-            LinkManager* pNewMgr = pLinkMgr;
-            pLinkMgr = 0;
-            SetManager( pNewMgr );
+            if (xFolderPicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
+            {
+                OUString aPath = xFolderPicker->getDirectory();
+
+                for( sal_uInt16 i = 0; i < nSelectionCount; i++)
+                {
+                    pEntry = i==0 ?
+                        Links().FirstSelected() :
+                        Links().NextSelected( pEntry );
+                    DBG_ASSERT(pEntry,"Where is the entry?");
+                    pLink = (SvBaseLink*)pEntry->GetUserData();
+                    DBG_ASSERT(pLink,"Where is the link?");
+                    pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, &sLinkName, &sFilter );
+                    INetURLObject aUrl_(sFile);
+                    INetURLObject aUrl2(aPath, INET_PROT_FILE);
+                    aUrl2.insertName( aUrl_.getName() );
+                    String sNewLinkName;
+                    MakeLnkName( sNewLinkName, 0 ,
+                            aUrl2.GetMainURL(INetURLObject::DECODE_TO_IURI), sLinkName, &sFilter);
+                    pLink->SetLinkSourceName( sNewLinkName );
+                    pLink->Update();
+                }
+                if( pLinkMgr->GetPersist() )
+                    pLinkMgr->GetPersist()->SetModified();
+                LinkManager* pNewMgr = pLinkMgr;
+                pLinkMgr = 0;
+                SetManager( pNewMgr );
+            }
+        }
+        catch (uno::Exception & e)
+        {
+            SAL_WARN("cui.dialogs", "SvBaseLinksDlg: caught UNO exception: " << e.Message);
         }
     }
     else
