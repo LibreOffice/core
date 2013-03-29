@@ -92,6 +92,8 @@ public:
     sal_Bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
     sal_Bool            InsertDir(const String &rText, sal_uInt16 nRegion);
 
+    sal_Bool InsertTemplate (sal_uInt16 nSourceRegion, sal_uInt16 nIdx, const OUString &rName, const OUString &rPath);
+
     /** Change the name of an entry or a directory
 
         \param rName

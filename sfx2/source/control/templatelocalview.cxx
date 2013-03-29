@@ -695,21 +695,50 @@ bool TemplateLocalView::saveTemplateAs (sal_uInt16 nItemId,
                                         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                                         const OUString &rName)
 {
-    bool bRet = false;
 
     for (size_t i = 0, n = maRegions.size(); i < n; ++i)
     {
         if (maRegions[i]->mnId == nItemId)
         {
-            bRet = saveTemplateAs((const TemplateContainerItem*)maRegions[i],rModel,rName);
-            break;
+            uno::Reference< frame::XStorable > xStorable(rModel, uno::UNO_QUERY_THROW );
+
+            uno::Reference< frame::XDocumentTemplates > xTemplates(
+                            frame::DocumentTemplates::create(comphelper::getProcessComponentContext()) );
+
+            if (!xTemplates->storeTemplate(mpDocTemplates->GetRegionName(maRegions[i]->mnRegionId),rName, xStorable ))
+                return false;
+
+            sal_uInt16 nDocId = maRegions[i]->maTemplates.size();
+
+            OUString aURL = mpDocTemplates->GetTemplateTargetURLFromComponent(mpDocTemplates->GetRegionName(maRegions[i]->mnRegionId),rName);
+
+            if(!mpDocTemplates->InsertTemplate(maRegions[i]->mnRegionId,nDocId,rName,aURL))
+                return false;
+
+
+            TemplateItemProperties aTemplate;
+            aTemplate.aIsFolder = false;
+            aTemplate.nId = getNextItemId();
+            aTemplate.nDocId = nDocId;
+            aTemplate.nRegionId = maRegions[i]->mnRegionId;
+            aTemplate.aName = rName;
+            aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,
+                                                                        TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                        TEMPLATE_THUMBNAIL_MAX_HEIGHT);
+            aTemplate.aPath = aURL;
+
+            maRegions[i]->maTemplates.push_back(aTemplate);
+
+            insertItem(aTemplate);
+
+            return true;
         }
     }
 
-    return bRet;
+    return false;
 }
 
-bool TemplateLocalView::saveTemplateAs(const TemplateContainerItem *pDstItem,
+bool TemplateLocalView::saveTemplateAs(TemplateContainerItem *pDstItem,
                                        com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
                                        const OUString &rName)
 {
@@ -720,6 +749,25 @@ bool TemplateLocalView::saveTemplateAs(const TemplateContainerItem *pDstItem,
 
     if (!xTemplates->storeTemplate(mpDocTemplates->GetRegionName(pDstItem->mnRegionId),rName, xStorable ))
         return false;
+
+    sal_uInt16 nDocId = pDstItem->maTemplates.size();
+    OUString aURL = mpDocTemplates->GetTemplateTargetURLFromComponent(mpDocTemplates->GetRegionName(pDstItem->mnRegionId),rName);
+
+    if(!mpDocTemplates->InsertTemplate(pDstItem->mnRegionId,nDocId,rName,aURL))
+        return false;
+
+    TemplateItemProperties aTemplate;
+    aTemplate.aIsFolder = false;
+    aTemplate.nId = pDstItem->maTemplates.empty() ? 1 : pDstItem->maTemplates.back().nId+1;
+    aTemplate.nDocId = nDocId;
+    aTemplate.nRegionId = pDstItem->mnRegionId;
+    aTemplate.aName = rName;
+    aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,
+                                                                TEMPLATE_THUMBNAIL_MAX_WIDTH,
+                                                                TEMPLATE_THUMBNAIL_MAX_HEIGHT);
+    aTemplate.aPath = aURL;
+
+    pDstItem->maTemplates.push_back(aTemplate);
 
     return true;
 }

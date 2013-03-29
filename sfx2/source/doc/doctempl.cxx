@@ -1037,6 +1037,24 @@ sal_Bool SfxDocumentTemplates::InsertDir
     return sal_False;
 }
 
+sal_Bool SfxDocumentTemplates::InsertTemplate(sal_uInt16 nSourceRegion, sal_uInt16 nIdx, const OUString &rName, const OUString &rPath)
+{
+    DocTemplLocker_Impl aLocker( *pImp );
+
+    if ( ! pImp->Construct() )
+        return sal_False;
+
+    RegionData_Impl *pRegion = pImp->GetRegion( nSourceRegion );
+
+    if ( !pRegion )
+        return sal_False;
+
+    size_t pos = nIdx;
+    pRegion->AddEntry( rName, rPath, &pos );
+
+    return sal_True;
+}
+
 sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, sal_uInt16 nIdx )
 
 {
