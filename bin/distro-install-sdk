@@ -83,6 +83,4 @@ if test -d $DESTDIR$INSTALLDIR/sdk ; then
 	echo $INSTALLDIR/sdk/$file >>$DESTDIR/gid_Module_Root_SDK
     done
 
-    # FIXME: I rather set this file to be non-world-writttable for now, i#64812
-    chmod go-w $DESTDIR$INSTALLDIR/sdk/settings/component.uno.map
 fi
