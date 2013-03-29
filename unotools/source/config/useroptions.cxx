@@ -43,10 +43,7 @@
 
 using namespace utl;
 using namespace com::sun::star;
-//using namespace com::sun::star::uno;
 using rtl::OUString;
-
-//namespace css = ::com::sun::star;
 
 namespace
 {

@@ -40,7 +40,7 @@ using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
 
 
-MacroWarning::MacroWarning( Window* _pParent, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, cssu::Reference< dcss::security::XCertificate >& _rxCert )
+MacroWarning::MacroWarning( Window* _pParent, uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, css::uno::Reference< css::security::XCertificate >& _rxCert )
     :ModalDialog        ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROWARN ) )
     ,maDocNameFI        ( this, ResId( FI_DOCNAME ) )
     ,maDescr1aFI        ( this, ResId( FI_DESCR1A ) )

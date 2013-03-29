@@ -363,7 +363,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException
     // Macro Security also has some options where no security environment is needed, so raise dialog anyway.
     // Later I should change the code so the Dialog creates the SecEnv on demand...
 
-    Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
+    Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
 
     XMLSignatureHelper aSignatureHelper( mxCtx );
     if ( aSignatureHelper.Init() )
@@ -418,7 +418,7 @@ void DocumentDigitalSignatures::showCertificate(
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate() throw (RuntimeException)
 {
-    Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
+    Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
 
     XMLSignatureHelper aSignatureHelper( mxCtx );
     if ( aSignatureHelper.Init() )
@@ -495,7 +495,7 @@ rtl::OUString DocumentDigitalSignatures::GetImplementationName() throw (RuntimeE
     return rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" );
 }
 
-Sequence< rtl::OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw (cssu::RuntimeException)
+Sequence< rtl::OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw (css::uno::RuntimeException)
 {
     Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();

@@ -48,7 +48,7 @@ sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
     return (sal_uInt16) nSel;
 }
 
-CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
+CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
     : ModalDialog(_pParent, "SelectCertificateDialog", "xmlsec/ui/selectcertificatedialog.ui")
     , maCertsToIgnore( _rCertsToIgnore )
 {
@@ -128,7 +128,7 @@ void CertificateChooser::ImplInitialize()
         {
         }
 
-        uno::Reference< dcss::security::XSerialNumberAdapter> xSerialNumberAdapter =
+        uno::Reference< css::security::XSerialNumberAdapter> xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
 
         sal_Int32 nCertificates = maCerts.getLength();
@@ -190,9 +190,9 @@ void CertificateChooser::ImplInitialize()
 }
 
 
-uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCertificate()
+uno::Reference< css::security::XCertificate > CertificateChooser::GetSelectedCertificate()
 {
-    uno::Reference< dcss::security::XCertificate > xCert;
+    uno::Reference< css::security::XCertificate > xCert;
     sal_uInt16  nSelected = GetSelectedEntryPos();
     if ( nSelected < maCerts.getLength() )
         xCert = maCerts[ nSelected ];
@@ -221,7 +221,7 @@ IMPL_LINK_NOARG(CertificateChooser, ViewButtonHdl)
 
 void CertificateChooser::ImplShowCertificateDetails()
 {
-    uno::Reference< dcss::security::XCertificate > xCert = GetSelectedCertificate();
+    uno::Reference< css::security::XCertificate > xCert = GetSelectedCertificate();
     if( xCert.is() )
     {
         CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, sal_True );

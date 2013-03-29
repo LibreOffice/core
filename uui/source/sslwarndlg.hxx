@@ -28,10 +28,6 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace cssu = com::sun::star::uno;
-namespace dcss = ::com::sun::star;
-
-
 using namespace com::sun::star;
 
 //=====================================================================
@@ -48,8 +44,8 @@ private:
     FixedImage      m_aWarnImage;
 
 
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& m_xContext;
-    const cssu::Reference< dcss::security::XCertificate >& m_rXCert;
+    const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
+    const css::uno::Reference< css::security::XCertificate >& m_rXCert;
     Window* m_pParent;
 
     DECL_LINK(OKHdl_Impl, void *);
@@ -57,11 +53,11 @@ private:
 
     public:
     SSLWarnDialog( Window* pParent,
-                       const cssu::Reference< dcss::security::XCertificate >& rXCert,
-                       const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
+                       const css::uno::Reference< css::security::XCertificate >& rXCert,
+                       const css::uno::Reference< css::uno::XComponentContext >& xContext,
                        ResMgr * pResMgr );
 
-    cssu::Reference< dcss::security::XCertificate > getCert() { return m_rXCert; };
+    css::uno::Reference< css::security::XCertificate > getCert() { return m_rXCert; };
 
     Window* getParent() { return m_pParent; };
 

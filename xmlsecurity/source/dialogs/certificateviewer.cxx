@@ -49,8 +49,8 @@ namespace
 
 CertificateViewer::CertificateViewer(
         Window* _pParent,
-        const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
-        const cssu::Reference< dcss::security::XCertificate >& _rXCert, bool bCheckForPrivateKey )
+        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
+        const css::uno::Reference< css::security::XCertificate >& _rXCert, bool bCheckForPrivateKey )
     :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTVIEWER ) )
     ,maTabCtrl      ( this, XMLSEC_RES( 1 ) )
     ,maOkBtn        ( this, XMLSEC_RES( BTN_OK ) )
@@ -139,7 +139,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     maValidDateFI.SetFont( aFnt );
 
     // insert data
-    cssu::Reference< dcss::security::XCertificate > xCert = mpDlg->mxCert;
+    css::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
 
     maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName() ) );
     maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName() ) );
@@ -355,11 +355,11 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
 
 struct CertPath_UserData
 {
-    cssu::Reference< dcss::security::XCertificate > mxCert;
+    css::uno::Reference< css::security::XCertificate > mxCert;
     OUString                                        maStatus;
     bool mbValid;
 
-    CertPath_UserData( cssu::Reference< dcss::security::XCertificate > xCert, bool bValid):
+    CertPath_UserData( css::uno::Reference< css::security::XCertificate > xCert, bool bValid):
         mxCert(xCert),
         mbValid(bValid)
     {
@@ -494,7 +494,7 @@ void CertificateViewerCertPathTP::Clear( void )
 }
 
 SvTreeListEntry* CertificateViewerCertPathTP::InsertCert(
-    SvTreeListEntry* _pParent, const OUString& _rName, cssu::Reference< dcss::security::XCertificate > rxCert,
+    SvTreeListEntry* _pParent, const OUString& _rName, css::uno::Reference< css::security::XCertificate > rxCert,
     bool bValid)
 {
     Image aImage = bValid ? maCertImage : maCertNotValidatedImage;

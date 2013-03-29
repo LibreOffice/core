@@ -279,7 +279,7 @@ void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference <
     m_manifest = xReader->readManifestSequence(xStream);
 }
 
-void DigitalSignaturesDialog::SetSignatureStream( const cssu::Reference < css::io::XStream >& rxStream )
+void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
 {
     mxSignatureStream = rxStream;
 }
@@ -744,7 +744,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         css::uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
         // Use Certificate from doc, not from key store
-        uno::Reference< dcss::security::XCertificate > xCert;
+        uno::Reference< css::security::XCertificate > xCert;
         if (!rInfo.ouX509Certificate.isEmpty())
             xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
         //fallback if no certificate is embedded, get if from store

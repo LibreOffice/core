@@ -37,9 +37,6 @@ namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
 
-namespace cssu = com::sun::star::uno;
-namespace dcss = ::com::sun::star;
-
 class MacroSecurityTP;
 
 class XmlReadOnlyImage : public FixedImage
@@ -62,8 +59,8 @@ private:
     OKButton*           m_pOkBtn;
     PushButton*         m_pResetBtn;
 
-    cssu::Reference< cssu::XComponentContext >  mxCtx;
-    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
+    css::uno::Reference< css::uno::XComponentContext >  mxCtx;
+    css::uno::Reference< css::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
     SvtSecurityOptions                                          maSecOptions;
 
     sal_uInt16 m_nSecLevelId;
@@ -75,8 +72,8 @@ private:
     DECL_LINK(          OkBtnHdl, void* );
 public:
     MacroSecurity(Window* pParent,
-        const cssu::Reference< cssu::XComponentContext>& rxCtx,
-        const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
+        const css::uno::Reference< css::uno::XComponentContext>& rxCtx,
+        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
     virtual ~MacroSecurity();
 
     inline void EnableReset(bool _bEnable = true)
@@ -133,7 +130,7 @@ private:
     PushButton*         m_pAddLocPB;
     PushButton*         m_pRemoveLocPB;
 
-    cssu::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
+    css::uno::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
 
     bool                mbAuthorsReadonly;
     bool                mbURLsReadonly;

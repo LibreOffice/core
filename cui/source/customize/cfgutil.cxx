@@ -65,7 +65,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
-namespace css = ::com::sun::star;
 
 static OUString SERVICE_UICATEGORYDESCRIPTION ("com.sun.star.ui.UICategoryDescription");
 

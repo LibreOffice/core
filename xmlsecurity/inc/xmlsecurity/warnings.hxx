@@ -37,19 +37,16 @@ namespace xml { namespace crypto {
 #include <com/sun/star/uno/Sequence.hxx>
 #include <xmlsecurity/sigstruct.hxx>
 
-namespace cssu = com::sun::star::uno;
-namespace dcss = ::com::sun::star;
-
 class HeaderBar;
 
 class MacroWarning : public ModalDialog
 {
 private:
     // XSecurityEnvironment is needed for building the certification path
-    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
+    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
 
-//  cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
-    cssu::Reference< dcss::security::XCertificate > mxCert;
+//  css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
+    css::uno::Reference< css::security::XCertificate > mxCert;
 
 //  FixedImage          maQuestionMarkFI;
     FixedInfo           maDocNameFI;
@@ -71,7 +68,7 @@ private:
 //  DECL_LINK(          DisableBtnHdl, void* );
 
 public:
-    MacroWarning( Window* pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, cssu::Reference< dcss::security::XCertificate >& _rxCert );
+    MacroWarning( Window* pParent, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, css::uno::Reference< css::security::XCertificate >& _rxCert );
     MacroWarning( Window* pParent );
     ~MacroWarning();
 };

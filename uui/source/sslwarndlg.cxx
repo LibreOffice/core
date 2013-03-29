@@ -52,7 +52,7 @@ IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl_Impl)
 SSLWarnDialog::SSLWarnDialog
 (
     Window*                                     pParent,
-    const cssu::Reference< dcss::security::XCertificate >& rXCert,
+    const css::uno::Reference< css::security::XCertificate >& rXCert,
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
     ResMgr*                                     pResMgr
 ) :

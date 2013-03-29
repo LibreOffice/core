@@ -323,9 +323,9 @@ void MacroWarning::FitControls()
     SetSizePixel( aNewSize );
 }
 
-void MacroWarning::SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore,
+void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
                                const ::rtl::OUString& aODFVersion,
-                               const cssu::Sequence< security::DocumentSignatureInformation >& rInfos )
+                               const css::uno::Sequence< security::DocumentSignatureInformation >& rInfos )
 {
     mxStore = rxStore;
     maODFVersion = aODFVersion;
@@ -348,7 +348,7 @@ void MacroWarning::SetStorage( const cssu::Reference < css::embed::XStorage >& r
     }
 }
 
-void MacroWarning::SetCertificate( const cssu::Reference< css::security::XCertificate >& _rxCert )
+void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert )
 {
     mxCert = _rxCert;
     if( mxCert.is() )

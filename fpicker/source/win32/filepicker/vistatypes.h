@@ -23,12 +23,6 @@
 #include "comptr.hxx"
 #include <shobjidl.h>
 
-#ifdef css
-    #error "Clash on using CSS as namespace define."
-#else
-    #define css ::com::sun::star
-#endif
-
 namespace fpicker{
 namespace win32{
 namespace vista{
@@ -46,8 +40,6 @@ typedef ComPtr< IFileDialogCustomize, IID_IFileDialogCustomize                  
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
-
-#undef css
 
 #endif // FPICKER_WIN32_VISTA_TYPES_HXX
 

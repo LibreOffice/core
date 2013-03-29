@@ -37,17 +37,14 @@ namespace xml { namespace crypto {
 #include <com/sun/star/uno/Sequence.hxx>
 #include <xmlsecurity/sigstruct.hxx>
 
-namespace cssu = com::sun::star::uno;
-namespace dcss = ::com::sun::star;
-
 class HeaderBar;
 
 class CertificateChooser : public ModalDialog
 {
 private:
-    cssu::Reference< cssu::XComponentContext > mxCtx;
-    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
-    cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
+    css::uno::Reference< css::uno::XComponentContext > mxCtx;
+    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
+    css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
     SignatureInformations maCertsToIgnore;
 
     SvxSimpleTable*     m_pCertLB;
@@ -65,12 +62,12 @@ private:
     void ImplInitialize();
 
 public:
-    CertificateChooser( Window* pParent, cssu::Reference< cssu::XComponentContext>& rxCtx, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
+    CertificateChooser( Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
     ~CertificateChooser();
 
     short Execute();
 
-    cssu::Reference< dcss::security::XCertificate > GetSelectedCertificate();
+    css::uno::Reference< css::security::XCertificate > GetSelectedCertificate();
 
 };
 

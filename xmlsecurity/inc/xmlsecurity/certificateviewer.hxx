@@ -39,9 +39,6 @@ namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
 }}}
 
-namespace cssu = com::sun::star::uno;
-namespace dcss = ::com::sun::star;
-
 class CertificateViewer : public TabDialog
 {
 private:
@@ -55,10 +52,10 @@ private:
 
     bool                mbCheckForPrivateKey;
 
-    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
-    cssu::Reference< dcss::security::XCertificate > mxCert;
+    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
+    css::uno::Reference< css::security::XCertificate > mxCert;
 public:
-    CertificateViewer( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cssu::Reference< dcss::security::XCertificate >& rXCert, bool bCheckForPrivateKey );
+    CertificateViewer( Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey );
     virtual             ~CertificateViewer();
 };
 
@@ -142,7 +139,7 @@ private:
     DECL_LINK(          CertSelectHdl, void* );
     void                Clear( void );
     SvTreeListEntry*        InsertCert( SvTreeListEntry* _pParent, const OUString& _rName,
-                                    cssu::Reference< dcss::security::XCertificate > rxCert,
+                                    css::uno::Reference< css::security::XCertificate > rxCert,
                                     bool bValid);
 
 public:

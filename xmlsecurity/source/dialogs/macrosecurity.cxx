@@ -64,8 +64,8 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl)
 }
 
 MacroSecurity::MacroSecurity( Window* _pParent,
-    const cssu::Reference< cssu::XComponentContext> &_rxCtx,
-    const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment)
+    const css::uno::Reference< css::uno::XComponentContext> &_rxCtx,
+    const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment)
     : TabDialog(_pParent, "MacroSecurityDialog", "xmlsec/ui/macrosecuritydialog.ui")
     , mxCtx(_rxCtx)
     , mxSecurityEnvironment(_rxSecurityEnvironment)
@@ -194,10 +194,10 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
     {
         sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( m_pTrustCertLB->FirstSelected()->GetUserData() ) );
 
-        uno::Reference< dcss::security::XSerialNumberAdapter > xSerialNumberAdapter =
+        uno::Reference< css::security::XSerialNumberAdapter > xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mpDlg->mxCtx);
 
-        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xSerialNumberAdapter->toSequence( maTrustedAuthors[nSelected][1] ) );
+        uno::Reference< css::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xSerialNumberAdapter->toSequence( maTrustedAuthors[nSelected][1] ) );
 
         // If we don't get it, create it from signature data:
         if ( !xCert.is() )
@@ -311,7 +311,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
     {
         for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
         {
-            cssu::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
+            css::uno::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
             uno::Reference< css::security::XCertificate >   xCert;
 
             // create from RawData
@@ -384,7 +384,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(Window* _pParent, M
 
     FillCertLB();
 
-    cssu::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
+    css::uno::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
     mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_SECUREURLS );
     m_pTrustFileROFI->Show( mbURLsReadonly );
     m_pTrustFileLocLB->Enable( !mbURLsReadonly );
@@ -415,7 +415,7 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     sal_uInt16  nEntryCnt = m_pTrustFileLocLB->GetEntryCount();
     if( nEntryCnt )
     {
-        cssu::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
+        css::uno::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
         for( sal_uInt16 i = 0 ; i < nEntryCnt ; ++i )
         {
             ::rtl::OUString aURL( m_pTrustFileLocLB->GetEntry( i ) );
@@ -428,7 +428,7 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     // Trusted Path could not be removed (#i33584#)
     // don't forget to remove the old saved SecureURLs
     else
-        mpDlg->maSecOptions.SetSecureURLs( cssu::Sequence< rtl::OUString >() );
+        mpDlg->maSecOptions.SetSecureURLs( css::uno::Sequence< rtl::OUString >() );
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }

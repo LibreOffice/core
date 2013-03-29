@@ -28,12 +28,6 @@
 
 #include <shobjidl.h>
 
-#ifdef css
-    #error "Clash on using CSS as namespace define."
-#else
-    #define css ::com::sun::star
-#endif
-
 namespace fpicker{
 namespace win32{
 namespace vista{
@@ -55,8 +49,6 @@ class IVistaFilePickerInternalNotify
 };
 
 }}}
-
-#undef css
 
 #endif // FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX
 
