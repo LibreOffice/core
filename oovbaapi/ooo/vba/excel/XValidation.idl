@@ -41,6 +41,7 @@ interface XValidation
     [attribute] string ErrorMessage;
     [attribute, readonly] string Formula1;
     [attribute, readonly] string Formula2;
+    [attribute, readonly] long Type;
     void Delete();
     void Add( [in] any Type, [in] any AlertStyle, [in] any Operator, [in] any Formula1, [in] any Formula2);
 };
