@@ -182,7 +182,6 @@ public:
     SfxItemState        QueryState( sal_uInt16 nSID, const SfxPoolItem* &rpState );
     SfxItemState        QueryState( sal_uInt16 nSID, ::com::sun::star::uno::Any& rAny );
 
-    sal_Bool                IsAllowed( sal_uInt16 nSlot ) const;
     ::com::sun::star::frame::XDispatch*          GetDispatchInterface( const String& );
     void                SetDisableFlags( sal_uInt32 nFlags );
     sal_uInt32              GetDisableFlags() const;
