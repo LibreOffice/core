@@ -122,10 +122,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
         OUString( "com.sun.star.document.TypeDetection" ), rxContext ), UNO_QUERY_THROW );
     Sequence< OUString > aTypeList( xFilters->getElementNames() );
 
-//  mxFilePicker->setDefaultName( );
-
-    std::vector< FilterEntry >::iterator aIter( aFilterEntryList.begin() );
-    while( aIter != aFilterEntryList.end() )
+    for( std::vector< FilterEntry >::const_iterator aIter(aFilterEntryList.begin()), aEnd(aFilterEntryList.end()); aIter != aEnd; ++aIter )
     {
         Sequence< PropertyValue > aTypeProperties;
         try
@@ -152,7 +149,6 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
         catch ( const Exception& )
         {
         }
-        aIter++;
     }
 }
 FileOpenDialog::~FileOpenDialog()
@@ -176,15 +172,13 @@ void FileOpenDialog::setDefaultName( const rtl::OUString& rDefaultName )
     rtl::OUString aFilterName;
     Reference< XFilterManager > xFilterManager( mxFilePicker, UNO_QUERY_THROW );
     rtl::OUString aUIName( xFilterManager->getCurrentFilter() );
-    std::vector< FilterEntry >::const_iterator aIter( aFilterEntryList.begin() );
-    while( aIter != aFilterEntryList.end() )
+    for( std::vector< FilterEntry >::const_iterator aIter(aFilterEntryList.begin()), aEnd(aFilterEntryList.end()); aIter != aEnd; ++aIter )
     {
         if ( aIter->maUIName == aUIName )
         {
             aFilterName = aIter->maName;
             break;
         }
-        aIter++;
     }
     return aFilterName;
 };
