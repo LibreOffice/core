@@ -107,7 +107,7 @@ namespace drawinglayer
             if(getPositions().size())
             {
                 // get the basic range from the position vector
-                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
+                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()), aEnd(getPositions().end()); aIter != aEnd; ++aIter)
                 {
                     aRetval.expand(*aIter);
                 }
