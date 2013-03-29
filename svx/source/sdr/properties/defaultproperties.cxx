@@ -168,10 +168,7 @@ namespace sdr
 
             if(bDidChange)
             {
-                std::vector< sal_uInt16 >::iterator aIter = aPostItemChangeList.begin();
-                const std::vector< sal_uInt16 >::iterator aEnd = aPostItemChangeList.end();
-
-                while(aIter != aEnd)
+                for (std::vector< sal_uInt16 >::const_iterator aIter(aPostItemChangeList.begin()), aEnd(aPostItemChangeList.end()); aIter != aEnd; ++aIter)
                 {
                     PostItemChange(*aIter);
                     ++aIter;
