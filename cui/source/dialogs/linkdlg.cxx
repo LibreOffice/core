@@ -358,7 +358,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
         }
         if(aPathDlg.Execute() == RET_OK)
         {
-            String aPath = aPathDlg.GetPath();
+            OUString aPath = aPathDlg.GetPath();
 
             for( sal_uInt16 i = 0; i < nSelectionCount; i++)
             {
