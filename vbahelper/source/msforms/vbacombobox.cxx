@@ -277,6 +277,16 @@ void SAL_CALL ScVbaComboBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeEx
     ScVbaControl::setLocked( bLocked );
 }
 
+rtl::OUString SAL_CALL ScVbaComboBox::getLinkedCell() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getControlSource();
+}
+
+void SAL_CALL ScVbaComboBox::setLinkedCell( const ::rtl::OUString& _linkedcell ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setControlSource( _linkedcell );
+}
+
 uno::Sequence< OUString >
 ScVbaComboBox::getServiceNames()
 {
