@@ -45,7 +45,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <plugin/impl.hxx>
-#include <tools/fsys.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
@@ -67,9 +66,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::plugin;
 using namespace osl;
-
-using ::rtl::OUString;
-using ::rtl::OString;
 
 class PluginDisposer : public salhelper::Timer
 {
@@ -99,8 +95,6 @@ void PluginDisposer::onShot()
     else
         release();
 }
-
-//==================================================================================================
 
 Any XPlugin_Impl::queryInterface( const Type& type ) throw( RuntimeException )
 {
@@ -964,20 +958,27 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
     m_pPlugin->getInputStreams().push_back( this );
-    DirEntry aEntry;
-    aEntry = aEntry.TempName();
+    OUString aTmpFile;
+    osl::FileBase::createTempFile( 0, 0, &aTmpFile );
 
     // set correct extension, some plugins need that
-    DirEntry aName( String( m_aNPStream.url, m_pPlugin->getTextEncoding() ) );
-    String aExtension = aName.GetExtension();
-    if( aExtension.Len() )
-        aEntry.SetExtension( aExtension );
-    m_aFileStream.Open( aEntry.GetFull(), STREAM_READ | STREAM_WRITE );
+    OUString aName( m_aNPStream.url, strlen( m_aNPStream.url ), m_pPlugin->getTextEncoding() );
+    OUString aExtension;
+    sal_Int32 nSepInd = aName.lastIndexOf(".");
+    if( nSepInd != -1 )
+    {
+       aExtension = aName.copy( nSepInd + 1, aName.getLength() - nSepInd - 1 );
+    }
+    if( !aExtension.isEmpty() )
+    {
+        aTmpFile += aExtension;
+    }
+    m_aFileStream.Open( aTmpFile, STREAM_READ | STREAM_WRITE );
     if( ! m_aFileStream.IsOpen() )
     {
-        // #74808# might be that the extension scrambled the whole filename
-        aEntry = aEntry.TempName();
-        m_aFileStream.Open( aEntry.GetFull(), STREAM_READ | STREAM_WRITE );
+        // might be that the extension scrambled the whole filename
+        osl::FileBase::createTempFile( 0, 0, &aTmpFile );
+        m_aFileStream.Open( aTmpFile, STREAM_READ | STREAM_WRITE );
     }
 }
 
@@ -987,12 +988,12 @@ PluginInputStream::~PluginInputStream()
 
     m_pPlugin->getInputStreams().remove( this );
 
-    String aFile( m_aFileStream.GetFileName() );
+    OUString aFile( m_aFileStream.GetFileName() );
 
     m_aFileStream.Close();
     if( m_pPlugin )
     {
-        rtl::OString aFileName(rtl::OUStringToOString(aFile, m_pPlugin->getTextEncoding()));
+        OString aFileName(OUStringToOString(aFile, m_pPlugin->getTextEncoding()));
         if( m_pPlugin->getPluginComm() && m_nMode != -1 )
             // mode -1 means either an error occurred,
             // or the plugin is already disposing
@@ -1009,10 +1010,10 @@ PluginInputStream::~PluginInputStream()
             m_pPlugin->getInputStreams().remove( this );
         }
         else
-            DirEntry( m_aFileStream.GetFileName() ).Kill();
+            osl::File::remove( aFile );
     }
     else
-        DirEntry( m_aFileStream.GetFileName() ).Kill();
+        osl::File::remove( aFile );
     if( m_pContent )
         delete m_pContent;
 }
