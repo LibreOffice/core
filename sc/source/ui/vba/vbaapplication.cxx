@@ -1870,6 +1870,21 @@ double SAL_CALL ScVbaApplication::InchesToPoints( double Inches ) throw (uno::Ru
     return MetricField::ConvertDoubleValue( Inches, 0, 0, FUNIT_INCH, FUNIT_POINT );
 }
 
+void SAL_CALL ScVbaApplication::OnKey( const ::rtl::OUString& Key, const uno::Any& Procedure ) throw (uno::RuntimeException)
+{
+    try
+    {
+        // Perhaps we can catch some excel specific
+        // related behaviour here
+        VbaApplicationBase::OnKey( Key, Procedure );
+    }
+    catch( container::NoSuchElementException& )
+    {
+        // #TODO special handling for unhandled
+        // bindings
+    }
+}
+
 rtl::OUString
 ScVbaApplication::getServiceImplName()
 {

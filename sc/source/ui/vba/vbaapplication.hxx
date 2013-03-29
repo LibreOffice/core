@@ -110,7 +110,7 @@ public:
 
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException);
-
+    virtual void SAL_CALL OnKey( const ::rtl::OUString& Key, const css::uno::Any& Procedure ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getIteration() throw (css::uno::RuntimeException);  // add the support of Iteration
     virtual void SAL_CALL setIteration( sal_Bool bIteration ) throw (css::uno::RuntimeException);  // add the support of Iteration
     virtual sal_Int32 SAL_CALL getEnableCancelKey() throw (css::uno::RuntimeException);  // add the support of EnableCancelKey
