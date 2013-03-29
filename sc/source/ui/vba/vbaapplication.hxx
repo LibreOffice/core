@@ -96,7 +96,7 @@ public:
     virtual void SAL_CALL setStatusBar( const css::uno::Any& _statusbar ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getCursor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) throw (css::uno::RuntimeException);
-
+    virtual void SAL_CALL OnKey( const ::rtl::OUString& Key, const css::uno::Any& Procedure ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getEnableEvents() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) throw (css::uno::RuntimeException);
 
