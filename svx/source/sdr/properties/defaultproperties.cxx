@@ -171,7 +171,6 @@ namespace sdr
                 for (std::vector< sal_uInt16 >::const_iterator aIter(aPostItemChangeList.begin()), aEnd(aPostItemChangeList.end()); aIter != aEnd; ++aIter)
                 {
                     PostItemChange(*aIter);
-                    ++aIter;
                 }
 
                 ItemSetChanged(aSet);
