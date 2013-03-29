@@ -38,6 +38,7 @@ interface XOLEObject
     [attribute] double  Top;
     [attribute] double  Height;
     [attribute] double  Width;
+    [attribute] string  LinkedCell;
 };
 
 //=============================================================================
