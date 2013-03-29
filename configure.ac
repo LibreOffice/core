@@ -9361,7 +9361,7 @@ if test  "$test_gtk" = "yes"; then
             fi
             ENABLE_GIO="TRUE"
             AC_MSG_RESULT([yes])
-            PKG_CHECK_MODULES( GIO, gio-2.0 )
+            PKG_CHECK_MODULES( GIO, gio-2.0 >= 2.24 )
         else
             AC_MSG_RESULT([no])
         fi
