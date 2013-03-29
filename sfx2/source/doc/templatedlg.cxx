@@ -356,7 +356,7 @@ void SfxTemplateManagerDlg::readSettings ()
 
     if ( aViewSettings.Exists() )
     {
-        sal_uInt16 nFilter;
+        sal_uInt16 nFilter = 0;
         aViewSettings.GetUserItem(TM_SETTING_LASTFOLDER) >>= aLastFolder;
         aViewSettings.GetUserItem(TM_SETTING_FILTER) >>= nFilter;
 
