@@ -144,7 +144,7 @@ class SvtListener;
 class ScNotes;
 class ScEditDataArray;
 class EditTextObject;
-class ScRefCellValue;
+struct ScRefCellValue;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -218,7 +218,7 @@ friend class ScDocRowHeightUpdater;
 friend class ScColumnTextWidthIterator;
 friend class ScFormulaCell;
 friend class ScTable;
-friend class ScRefCellValue;
+friend struct ScRefCellValue;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:
