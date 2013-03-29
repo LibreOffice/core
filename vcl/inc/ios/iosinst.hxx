@@ -20,6 +20,14 @@
 #ifndef IOS_SALINST_H
 #define IOS_SALINST_H
 
+#include <pthread.h>
+
+#include <premac.h>
+#include <CoreGraphics/CoreGraphics.h>
+#include <postmac.h>
+
+#include <tools/link.hxx>
+
 #include "headless/svpinst.hxx"
 #include "headless/svpframe.hxx"
 
@@ -37,12 +45,21 @@ public:
     SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
 
-    virtual bool AnyInput( sal_uInt16 nType );
+    // virtual bool AnyInput( sal_uInt16 nType );
 
     SalFrame *getFocusFrame() const;
 
     void damaged( IosSalFrame *frame,
                   const basegfx::B2IBox& rDamageRect);
+
+    typedef struct {
+        CGContextRef context;
+        CGRect rect;
+    } RenderWindowsArg;
+    DECL_LINK( RenderWindows, RenderWindowsArg* );
+
+    pthread_mutex_t m_aRenderMutex;
+    pthread_cond_t m_aRenderCond;
 };
 
 #endif // IOS_SALINST_H

@@ -87,12 +87,18 @@ IosSalInstance *IosSalInstance::getInstance()
 IosSalInstance::IosSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
 {
-
+    pthread_cond_init( &m_aRenderCond, NULL );
+    pthread_mutex_init( &m_aRenderMutex, NULL );
+    pthread_mutex_lock( &m_aRenderMutex );
 }
 
 IosSalInstance::~IosSalInstance()
 {
+    pthread_cond_destroy( &m_aRenderCond );
+    pthread_mutex_destroy( &m_aRenderMutex );
 }
+
+#if 0
 
 bool IosSalInstance::AnyInput( sal_uInt16 nType )
 {
@@ -103,6 +109,8 @@ bool IosSalInstance::AnyInput( sal_uInt16 nType )
     // input being queued. That information is too hidden, sigh.
     return SvpSalInstance::s_pDefaultInstance->PostedEventsInQueue();
 }
+
+#endif
 
 class IosSalSystem : public SvpSalSystem {
 public:
@@ -254,38 +262,48 @@ void lo_set_view_size(int width, int height)
     viewHeight = height;
 }
 
+IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
+{
+    int i = 0;
+    std::list< SalFrame* >::const_iterator it;
+    for( it = getFrames().begin(); it != getFrames().end(); i++, it++ ) {
+        SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
+        SalFrameGeometry aGeom = pFrame->GetGeometry();
+        CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
+        if ( pFrame->IsVisible() &&
+             CGRectIntersectsRect( arg->rect, bbox ) ) {
+
+            const basebmp::BitmapDeviceSharedPtr aDevice = pFrame->getDevice();
+            CGDataProviderRef provider =
+                CGDataProviderCreateWithData( NULL,
+                                              aDevice->getBuffer().get(),
+                                              aDevice->getSize().getY() * aDevice->getScanlineStride(),
+                                              NULL );
+            CGImage *image =
+                CGImageCreate( aDevice->getSize().getX(), aDevice->getSize().getY(),
+                               8, 32, aDevice->getScanlineStride(),
+                               CGColorSpaceCreateDeviceRGB(),
+                               kCGImageAlphaNoneSkipLast,
+                               provider,
+                               NULL,
+                               false,
+                               kCGRenderingIntentDefault );
+            CGContextDrawImage( arg->context, bbox, image );
+        }
+    }
+    pthread_cond_signal( &m_aRenderCond );
+    return 0;
+}
+
 extern "C"
 void lo_render_windows( CGContextRef context, CGRect rect )
 {
-    if( IosSalInstance::getInstance() != NULL ) {
-        int i = 0;
-        std::list< SalFrame* >::const_iterator it;
-        for( it = IosSalInstance::getInstance()->getFrames().begin(); it != IosSalInstance::getInstance()->getFrames().end(); i++, it++ ) {
-            SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
-            SalFrameGeometry aGeom = pFrame->GetGeometry();
-            CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
-            if ( pFrame->IsVisible() &&
-                 CGRectIntersectsRect( rect, bbox ) ) {
-
-                const basebmp::BitmapDeviceSharedPtr aDevice = pFrame->getDevice();
-                CGDataProviderRef provider =
-                    CGDataProviderCreateWithData( NULL,
-                                                  aDevice->getBuffer().get(),
-                                                  aDevice->getSize().getY() * aDevice->getScanlineStride(),
-                                                  NULL );
-                CGImage *image =
-                    CGImageCreate( aDevice->getSize().getX(), aDevice->getSize().getY(),
-                                   8, 32, aDevice->getScanlineStride(),
-                                   CGColorSpaceCreateDeviceRGB(),
-                                   kCGImageAlphaNoneSkipLast,
-                                   provider,
-                                   NULL,
-                                   false,
-                                   kCGRenderingIntentDefault );
-                CGContextDrawImage( context, bbox, image );
-            }
-        }
-    }
+    IosSalInstance *pInstance = IosSalInstance::getInstance();
+    if ( pInstance == NULL )
+        return;
+    IosSalInstance::RenderWindowsArg arg = { context, rect };
+    Application::PostUserEvent( LINK( pInstance, IosSalInstance, RenderWindows), &arg );
+    pthread_cond_wait( &pInstance->m_aRenderCond, &pInstance->m_aRenderMutex );
 }
 
 extern "C"
