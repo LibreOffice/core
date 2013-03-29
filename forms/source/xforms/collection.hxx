@@ -287,7 +287,7 @@ protected:
             com::sun::star::uno::Any() );
         for( Listeners_t::iterator aIter = maListeners.begin();
              aIter != maListeners.end();
-             aIter++ )
+             ++aIter )
         {
             (*aIter)->elementInserted( aEvent );
         }
@@ -302,7 +302,7 @@ protected:
             com::sun::star::uno::Any() );
         for( Listeners_t::iterator aIter = maListeners.begin();
              aIter != maListeners.end();
-             aIter++ )
+             ++aIter )
         {
             (*aIter)->elementRemoved( aEvent );
         }
@@ -318,7 +318,7 @@ protected:
             com::sun::star::uno::makeAny( aNew ) );
         for( Listeners_t::iterator aIter = maListeners.begin();
              aIter != maListeners.end();
-             aIter++ )
+             ++aIter )
         {
             (*aIter)->elementReplaced( aEvent );
         }
