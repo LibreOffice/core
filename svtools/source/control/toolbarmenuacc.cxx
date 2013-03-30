@@ -126,7 +126,6 @@ void ToolbarMenuAcc::FireAccessibleEvent( short nEventId, const Any& rOldValue, 
     if( nEventId )
     {
         EventListenerVector                  aTmpListeners( mxEventListeners );
-        EventListenerVector::const_iterator  aIter( aTmpListeners.begin() );
         AccessibleEventObject aEvtObject;
 
         aEvtObject.EventId = nEventId;
@@ -134,7 +133,8 @@ void ToolbarMenuAcc::FireAccessibleEvent( short nEventId, const Any& rOldValue, 
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        while( aIter != aTmpListeners.end() )
+        for (EventListenerVector::const_iterator aIter( aTmpListeners.begin() ), aEnd( aTmpListeners.end() );
+            aIter != aEnd ; ++aIter)
         {
             try
             {
@@ -143,8 +143,6 @@ void ToolbarMenuAcc::FireAccessibleEvent( short nEventId, const Any& rOldValue, 
             catch( Exception& )
             {
             }
-
-            aIter++;
         }
     }
 }
@@ -816,19 +814,14 @@ void SAL_CALL ToolbarMenuEntryAcc::addAccessibleEventListener( const Reference< 
 
     if( rxListener.is() )
     {
-           EventListenerVector::const_iterator aIter( mxEventListeners.begin() );
-        bool bFound = false;
-
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
+        for (EventListenerVector::const_iterator aIter( mxEventListeners.begin() ), aEnd( mxEventListeners.end() );
+            aIter != aEnd; ++aIter )
         {
             if( *aIter == rxListener )
-                bFound = true;
-            else
-                aIter++;
+                return;
         }
-
-        if (!bFound)
-            mxEventListeners.push_back( rxListener );
+        // listener not found so add it
+        mxEventListeners.push_back( rxListener );
     }
 }
 
