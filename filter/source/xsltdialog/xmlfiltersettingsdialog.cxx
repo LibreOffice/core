@@ -1317,16 +1317,14 @@ std::vector< application_info_impl* >& getApplicationInfos()
 const application_info_impl* getApplicationInfo( const OUString& rServiceName )
 {
     std::vector< application_info_impl* >& rInfos = getApplicationInfos();
-    std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );
-    while( aIter != rInfos.end() )
+    for (std::vector< application_info_impl* >::const_iterator aIter( rInfos.begin() ), aEnd( rInfos.end() );
+        aIter != aEnd ; ++aIter)
     {
-        // if( rServiceName == (*aIter)->maDocumentService )
         if( rServiceName == (*aIter)->maXMLExporter ||
             rServiceName == (*aIter)->maXMLImporter)
         {
             return (*aIter);
         }
-        ++aIter;
     }
     return NULL;
 }
