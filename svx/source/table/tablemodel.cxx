@@ -104,7 +104,7 @@ template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVec
             sal_Int32 nFind = nIndex;
             Iter aIter( rVector.begin() );
             while( nFind-- )
-                aIter++;
+                ++aIter;
 
             Entry aEmpty;
             rVector.insert( aIter, nCount, aEmpty );
