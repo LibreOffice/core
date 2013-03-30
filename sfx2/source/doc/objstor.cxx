@@ -3705,16 +3705,20 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
 
     try {
         uno::Reference< embed::XStorage > xThumbnailStor =
-                                        xStor->openStorageElement( ::rtl::OUString::createFromAscii( "Thumbnails" ),
+                                        xStor->openStorageElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Thumbnails")),
                                                                     embed::ElementModes::READWRITE );
         if ( xThumbnailStor.is() )
         {
             uno::Reference< io::XStream > xStream = xThumbnailStor->openStreamElement(
-                                                        ::rtl::OUString::createFromAscii( "thumbnail.png" ),
+                                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("thumbnail.png")),
                                                         embed::ElementModes::READWRITE );
 
             if ( xStream.is() && WriteThumbnail( bEncrypted, bSigned, bIsTemplate, xStream ) )
             {
+                uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
+                if ( xPropSet.is() )
+                    xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("MediaType")),
+                                                uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("image/png"))));
                 uno::Reference< embed::XTransactedObject > xTransact( xThumbnailStor, uno::UNO_QUERY_THROW );
                 xTransact->commit();
                 bResult = sal_True;
