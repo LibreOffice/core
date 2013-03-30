@@ -50,7 +50,7 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    long DefaultTextLayout::GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const
+    long DefaultTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         return m_rTargetDevice.GetTextWidth( _rText, _nStartIndex, _nLength );
     }
@@ -91,7 +91,7 @@ namespace vcl
         virtual ~ReferenceDeviceTextLayout();
 
         // ITextLayout
-        virtual long        GetTextWidth( const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const;
+        virtual long        GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, MetricVector* _pVector, OUString* _pDisplayText );
         virtual bool        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
         virtual xub_StrLen  GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
@@ -223,7 +223,7 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    long ReferenceDeviceTextLayout::GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const
+    long ReferenceDeviceTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         return GetTextArray( _rText, NULL, _nStartIndex, _nLength );
     }
