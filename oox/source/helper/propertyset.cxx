@@ -85,7 +85,7 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
     }
     catch( Exception& )
     {
-        OSL_FAIL( "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
+        SAL_WARN( "oox", "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
     }
 
     if( mxPropSet.is() )
@@ -120,8 +120,8 @@ bool PropertySet::implGetPropertyValue( Any& orValue, const OUString& rPropName 
     }
     catch( Exception& )
     {
-        OSL_FAIL( OStringBuffer( "PropertySet::implGetPropertyValue - cannot get property \"" ).
-            append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
+        SAL_WARN( "oox", "PropertySet::implGetPropertyValue - cannot get property \"" <<
+                  rPropName << '"' );
     }
     return false;
 }
@@ -135,8 +135,8 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
     }
     catch( Exception& )
     {
-        OSL_FAIL( OStringBuffer( "PropertySet::implSetPropertyValue - cannot set property \"" ).
-            append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
+        SAL_WARN( "oox", "PropertySet::implSetPropertyValue - cannot set property \"" <<
+                  rPropName << '"' );
     }
     return false;
 }

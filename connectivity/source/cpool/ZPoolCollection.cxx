@@ -366,24 +366,23 @@ Reference<XInterface> OPoolCollection::openNode(const ::rtl::OUString& _rPath,co
         if (xDirectAccess.is() && xDirectAccess->hasByName(_rPath))
         {
             if (!::cppu::extractInterface(xNode, xDirectAccess->getByName(_rPath)))
-                OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
+                SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: could not open the node!");
         }
         else if (xHierarchyAccess.is())
         {
             if (!::cppu::extractInterface(xNode, xHierarchyAccess->getByHierarchicalName(_rPath)))
-                OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
+                SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: could not open the node!");
         }
 
     }
     catch(const NoSuchElementException&)
     {
-        OSL_FAIL((::rtl::OString("::openNode: there is no element named ")
-                  +=  ::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
-                  +=  ::rtl::OString("!")).getStr());
+        SAL_WARN("connectivity.cpool", "::openNode: there is no element named " <<
+                 _rPath << "!");
     }
     catch(Exception&)
     {
-        OSL_FAIL("OConfigurationNode::openNode: caught an exception while retrieving the node!");
+        SAL_WARN("connectivity.cpool", "OConfigurationNode::openNode: caught an exception while retrieving the node!");
     }
     return xNode;
 }
@@ -406,10 +405,9 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
     }
     catch(NoSuchElementException& e)
     {
-        OSL_UNUSED( e );    // make compiler happy
-        OSL_FAIL((::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
-                  +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
-                  +=  ::rtl::OString("!")).getStr());
+        SAL_WARN("connectivity.cpool", "::getNodeValue: caught a " <<
+                 "NoSuchElementException while trying to open " <<
+                 e.Message << "!" );
     }
     return aReturn;
 }
@@ -446,7 +444,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (Run
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Exception caught");
+            SAL_WARN("connectivity.cpool", "Exception caught");
         }
     }
 }

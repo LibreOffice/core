@@ -567,7 +567,7 @@ namespace oox { namespace ppt {
         }
         catch( const Exception& e )
         {
-            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::setNode() - " << OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::setNode() - " << e.Message );
         }
     }
 

@@ -162,7 +162,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     SQLExceptionInfo aInfo;
     if ( !_xDataSource.is() )
     {
-        OSL_FAIL("createConnection: coult not retrieve the data source!");
+        SAL_WARN("dbaccess.ui", "createConnection: coult not retrieve the data source!");
         return aInfo;
     }
 
@@ -176,7 +176,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     }
     catch(const Exception&)
     {
-        OSL_FAIL("createConnection: error while retrieving data source properties!");
+        SAL_WARN("dbaccess.ui", "createConnection: error while retrieving data source properties!");
     }
 
 
@@ -187,7 +187,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
             {
-                OSL_FAIL("createConnection: missing an interface ... need an error message here!");
+                SAL_WARN("dbaccess.ui", "createConnection: missing an interface ... need an error message here!");
             }
             else
             {   // instantiate the default SDB interaction handler
@@ -208,7 +208,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     catch(const SQLContext& e) { aInfo = SQLExceptionInfo(e); }
     catch(const SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
     catch(const SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(const Exception&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
+    catch(const Exception&) { SAL_WARN("dbaccess.ui", "SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
     return aInfo;
 }
@@ -351,11 +351,9 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                 {
-                    OSL_FAIL((  ::rtl::OString("getTypeInfoFromType: assuming column type ")
-                        +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), osl_getThreadTextEncoding())
-                        +=  ::rtl::OString("\" (expected type name ")
-                        +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), osl_getThreadTextEncoding())
-                        +=  ::rtl::OString(" matches the type's local name).")).getStr());
+                    SAL_WARN("dbaccess.ui", "getTypeInfoFromType: assuming column type " <<
+                             aIter->second->aTypeName <<  "\" (expected type name " <<
+                             _sTypeName << " matches the type's local name).");
                     break;
                 }
             }
@@ -736,7 +734,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
         case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
         case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
         default:
-            OSL_FAIL("Invalid TextAlign!");
+            SAL_WARN("dbaccess.ui", "Invalid TextAlign!");
     }
     return nAlignment;
 }
@@ -750,7 +748,7 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
         case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
         case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
         default:
-            OSL_FAIL("Invalid TextAlign!");
+            SAL_WARN("dbaccess.ui", "Invalid TextAlign!");
     }
     return eJustify;
 }
@@ -778,7 +776,7 @@ float ConvertFontWeight( ::FontWeight eWeight )
     else if( eWeight == WEIGHT_BLACK )
         return ::com::sun::star::awt::FontWeight::BLACK;
 
-    OSL_FAIL("Unknown FontWeigth" );
+    SAL_WARN("dbaccess.ui", "Unknown FontWeigth" );
     return ::com::sun::star::awt::FontWeight::DONTKNOW;
 }
 // -----------------------------------------------------------------------------
@@ -805,7 +803,7 @@ float ConvertFontWidth( ::FontWidth eWidth )
     else if( eWidth == WIDTH_ULTRA_EXPANDED )
         return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
 
-    OSL_FAIL("Unknown FontWidth" );
+    SAL_WARN("dbaccess.ui", "Unknown FontWidth" );
     return ::com::sun::star::awt::FontWidth::DONTKNOW;
 }
 // -----------------------------------------------------------------------------

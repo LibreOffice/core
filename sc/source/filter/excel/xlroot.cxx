@@ -110,7 +110,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;
         case SCRIPTTYPE_ASIAN:      mnDefApiScript = ApiScriptType::ASIAN;      break;
         case SCRIPTTYPE_COMPLEX:    mnDefApiScript = ApiScriptType::COMPLEX;    break;
-        default:    OSL_FAIL( "XclRootData::XclRootData - unknown script type" );
+        default:    SAL_WARN( "sc", "XclRootData::XclRootData - unknown script type" );
     }
 
     // maximum cell position
@@ -151,11 +151,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
     catch( const Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        OSL_FAIL( rtl::OStringBuffer("XclRootData::XclRootData - cannot get output device info: ").append(rtl::OUStringToOString(e.Message,osl_getThreadTextEncoding())).getStr() );
-#else
-        (void)e;
-#endif
+        SAL_WARN( "sc", "XclRootData::XclRootData - cannot get output device info: " << e.Message );
     }
 }
 
@@ -220,7 +216,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     if( mrData.mnCharWidth <= 0 )
     {
         // #i48717# Win98 with HP LaserJet returns 0
-        OSL_FAIL( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
+        SAL_WARN( "sc", "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
     }
 }

@@ -2148,10 +2148,8 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
                 }
                 else
                 {
-                    OSL_FAIL(
-                        OString( ::rtl::OString( "Introspection: Property \"" ) +
-                        ::rtl::OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ) +
-                        ::rtl::OString( "\" found more than once in PropertySet" ) ).getStr() );
+                    SAL_WARN( "stoc", "Introspection: Property \"" <<
+                        aPropName << "\" found more than once in PropertySet" );
                 }
 
                 // Count pflegen
@@ -2798,7 +2796,7 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
         Reference<XIdlClass> xClassRef = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
         if( !xClassRef.is() )
         {
-            OSL_FAIL( "Can't get XIdlClass from Reflection" );
+            SAL_WARN( "stoc", "Can't get XIdlClass from Reflection" );
             return pAccess;
         }
 
