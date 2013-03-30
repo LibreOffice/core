@@ -423,7 +423,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
 
     TreeNodeVector::iterator aIter( maChildren.begin() );
     while( (nChildIndex-- > 0) && (aIter != maChildren.end()) )
-        aIter++;
+        ++aIter;
 
     maChildren.insert( aIter, xImpl );
     xImpl->setParent( this );
@@ -443,7 +443,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw
     {
         TreeNodeVector::iterator aIter( maChildren.begin() );
         while( nChildIndex-- && (aIter != maChildren.end()) )
-            aIter++;
+            ++aIter;
 
         if( aIter != maChildren.end() )
         {
