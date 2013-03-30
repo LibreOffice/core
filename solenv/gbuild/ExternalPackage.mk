@@ -68,12 +68,37 @@ gb_ExternalPackage_UNPACKED_$(1) := $(2)
 
 endef
 
+# Mark a source file to be used outside of this module
+#
+# This results in the timestamp of the file being updated, so a possible
+# change is recognized properly by other files depending on it.
+#
+# gb_ExternalPackage_mark_generated_file package file
+define gb_ExternalPackage_mark_generated_file
+$(call gb_UnpackedTarball_get_dir,$(gb_ExternalPackage_UNPACKED_$(1)))/$(2) : \
+		$(call gb_ExternalProject_get_target,$(gb_ExternalPackage_PROJECT_$(1)))
+$(if $(suffix $(2)),\
+	$(call gb_UnpackedTarbal__ensure_pattern_rule,$(gb_ExternalPackage_UNPACKED_$(1)),$(suffix $(2))),\
+	$(call gb_UnpackedTarbal__make_file_rule,$(gb_ExternalPackage_UNPACKED_$(1)),$(2)) \
+)
+
+endef
+
+# Mark several source files to be used outside of this module
+#
+# gb_ExternalProject_mark_generated_files package file(s)
+define gb_ExternalPackage_mark_generated_files
+$(foreach file,$(2),$(call gb_ExternalProject_mark_generated_file,$(1),$(file)))
+
+endef
+
 # Add a file
 #
 # See gb_Package_add_file for details.
 #
 # gb_ExternalPackage_add_file package dest src
 define gb_ExternalPackage_add_file
+$(call gb_ExternalPackage_mark_generated_file,$(1),$(3))
 $(call gb_Package_add_file,$(1),$(2),$(3))
 
 endef
@@ -84,6 +109,7 @@ endef
 #
 # gb_ExternalPackage_add_files package destdir file(s)
 define gb_ExternalPackage_add_files
+$(call gb_ExternalPackage_mark_generated_files,$(1),$(3))
 $(call gb_Package_add_files,$(1),$(2),$(3))
 
 endef
@@ -94,6 +120,7 @@ endef
 #
 # gb_ExternalPackage_add_files_with_dir package destdir file(s)
 define gb_ExternalPackage_add_files_with_dir
+$(call gb_ExternalPackage_mark_generated_files,$(1),$(3))
 $(call gb_Package_add_files_with_dir,$(1),$(2),$(3))
 
 endef
@@ -146,6 +173,8 @@ endef
 # gb_ExternalPackage_use_external_project package external
 define gb_ExternalPackage_use_external_project
 $(call gb_Package_use_external_project,$(1),$(2))
+$(if $(gb_ExternalPackage_PROJECT_$(1)),$(call gb_Output_error,gb_ExternalPackage_use_external_project: only one project allowed))
+gb_ExternalPackage_PROJECT_$(1) := $(2)
 
 endef
 
