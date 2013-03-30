@@ -118,7 +118,11 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 static DesktopType get_desktop_environment()
 {
     OUStringBuffer aModName( 128 );
-    aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
+    #ifdef LIBO_MERGELIBS
+        aModName.appendAscii( SAL_DLLPREFIX"merged" );
+    #else
+        aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
+    #endif
     aModName.appendAscii( SAL_DLLPOSTFIX );
     OUString aModule = aModName.makeStringAndClear();
 

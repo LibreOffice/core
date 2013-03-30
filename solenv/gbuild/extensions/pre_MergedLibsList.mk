@@ -129,7 +129,6 @@ gb_MERGEDLIBS := \
 	uui \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
-	$(if $(filter unx,$(GUIBASE)),vclplug_svp) \
 	$(if $(filter-out IOS,$(OS)),wpftdraw) \
 	$(if $(filter-out IOS,$(OS)),wpftwriter) \
 	writerfilter \

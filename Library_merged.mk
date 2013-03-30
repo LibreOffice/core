@@ -103,9 +103,6 @@ $(eval $(call gb_Library_add_libs,merged,\
 	-lSM \
 	-lICE \
 ))
-$(eval $(call gb_Library_use_static_libraries,merged,\
-	headless \
-))
 endif
 
 ifeq ($(OS),LINUX)
