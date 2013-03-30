@@ -2319,7 +2319,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
             }
             while ( pWindow );
         }
-        if ( !pWindow->mpWindowImpl->mbFrame )
+        if ( pWindow && !pWindow->mpWindowImpl->mbFrame )
         {
             aTempRegion = aRegion;
             aTempRegion.Exclude( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
