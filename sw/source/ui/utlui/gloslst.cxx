@@ -41,7 +41,7 @@
 
 
 #define STRING_DELIM (char)0x0A
-#define GLOS_TIMEOUT 30000   // alle 30 s updaten
+#define GLOS_TIMEOUT 30000   // update every 30 seconds
 #define FIND_MAX_GLOS 20
 
 
@@ -106,11 +106,9 @@ SwGlossaryList::~SwGlossaryList()
     ClearGroups();
 }
 
-/********************************************************************
- * Wenn der GroupName bereits bekannt ist, dann wird nur
- * rShortName gefuellt, sonst wird rGroupName ebenfals gesetzt und
- * bei Bedarf nach der richtigen Gruppe gefragt
-********************************************************************/
+// If the GroupName is already known, then only rShortName
+// will be filled. Otherwise also rGroupName will be set and
+// on demand asked for the right group.
 
 sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
                                 String& rShortName, String& rGroupName )
@@ -313,12 +311,12 @@ void SwGlossaryList::Update()
             sal_uInt16 nArrCount = aGroupArr.size();
             for( sal_uInt16 i = nArrCount; i; --i)
             {
-                // evtl. geloeschte Gruppen entfernen
+                // maybe remove deleted groups
                 AutoTextGroup* pGroup = aGroupArr[i - 1];
                 sal_uInt16 nGroupPath = (sal_uInt16)pGroup->sName.GetToken( 1,
                                                         GLOS_DELIM).ToInt32();
-                // nur die Gruppen werden geprueft, die fuer den
-                // aktuellen Teilpfad registriert sind
+                // Only the groups will be checked which are registered
+                // for the current subpath.
                 if( nGroupPath == static_cast<sal_uInt16>(nPath) )
                 {
                     bool bFound = false;
@@ -339,7 +337,7 @@ void SwGlossaryList::Update()
 
 void SwGlossaryList::Timeout()
 {
-    // nur, wenn eine SwView den Fokus hat, wird automatisch upgedated
+    // Only update automatically if a SwView has the focus.
     if(::GetActiveView())
         Update();
 }
@@ -373,10 +371,8 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     pGlossaries->PutGroupDoc(pBlock);
 }
 
-/********************************************************************
-    Alle (nicht mehr als FIND_MAX_GLOS) gefunden Bausteine mit
-    passendem Anfang zurueckgeben
-********************************************************************/
+// Give back all (not exceeding FIND_MAX_GLOS) found modules
+// with matching beginning.
 
 bool SwGlossaryList::HasLongName(const String& rBegin, std::vector<String> *pLongNames)
 {
