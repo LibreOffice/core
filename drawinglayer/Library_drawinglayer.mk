@@ -27,7 +27,9 @@
 
 $(eval $(call gb_Library_Library,drawinglayer))
 
-$(eval $(call gb_Library_use_package,drawinglayer,drawinglayer_inc))
+$(eval $(call gb_Library_use_package,drawinglayer,drawinglayer_inc,\
+    o3tl_inc \
+))
 
 $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \
