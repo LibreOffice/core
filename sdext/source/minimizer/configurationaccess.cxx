@@ -504,11 +504,11 @@ Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
 std::vector< OptimizerSettings >::iterator ConfigurationAccess::GetOptimizerSettingsByName( const rtl::OUString& rName )
 {
     std::vector< OptimizerSettings >::iterator aIter( maSettings.begin() + 1 );
-    while ( aIter != maSettings.end() )
+    const std::vector< OptimizerSettings >::const_iterator aEnd( maSettings.end() );
+    for ( ; aIter != aEnd; ++aIter )
     {
         if ( aIter->maName == rName )
             break;
-        aIter++;
     }
     return aIter;
 }
