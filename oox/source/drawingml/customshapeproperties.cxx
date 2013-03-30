@@ -169,8 +169,8 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                         uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
                         if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
                         {
-                            std::vector< CustomShapeGuide >::const_iterator aIter( maAdjustmentGuideList.begin() );
-                            while( aIter != maAdjustmentGuideList.end() )
+                            for (std::vector< CustomShapeGuide >::const_iterator aIter( maAdjustmentGuideList.begin() ), aEnd(maAdjustmentGuideList.end());
+                             aIter != aEnd; ++aIter)
                             {
                                 if ( (*aIter).maName.getLength() > 3 )
                                 {
@@ -190,7 +190,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                                     aAdjustmentVal.Name = (*aIter).maName;
                                     aAdjustmentSeq[ 0 ] = aAdjustmentVal;
                                 }
-                                aIter++;
                             }
                             aGeoPropSeq[ i ].Value <<= aAdjustmentSeq;
                             xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
