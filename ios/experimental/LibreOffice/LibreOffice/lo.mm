@@ -178,7 +178,9 @@ lo_initialize(void)
     argv[3] = [uno_services UTF8String];
 
     assert(strcmp(argv[4], "placeholder-document") == 0);
-    argv[4] = [[app_root_escaped stringByAppendingPathComponent: @"test1.odt"] UTF8String];
+    NSString *file = @"file://";
+    file = [file stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"test1.odt"]];
+    argv[4] = [file UTF8String];
 
     osl_setCommandArgs(argc, (char **) argv);
 }
