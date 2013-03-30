@@ -125,7 +125,7 @@ namespace dbaui
     {   \
         const sal_Char* pError = impl_CheckInvariants();    \
         if (pError) \
-            OSL_FAIL(rtl::OStringBuffer(methodname).append(": ").append(pError).makeStringAndClear().getStr());   \
+            SAL_WARN("dbaccess.ui", methodname << ": " << pError);   \
     }
 #else
 #define CHECK_INVARIANTS(methodname)

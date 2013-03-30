@@ -214,7 +214,7 @@ namespace dbtools
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "ParameterManager::collectInnerParameters: caught an exception!" );
+                SAL_WARN( "connectivity.commontools", "ParameterManager::collectInnerParameters: caught an exception!" );
             }
         }
     }
@@ -404,7 +404,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ParameterManager::analyzeFieldLinks: caught an exception!" );
+            SAL_WARN( "connectivity.commontools", "ParameterManager::analyzeFieldLinks: caught an exception!" );
         }
     }
 
@@ -560,7 +560,7 @@ namespace dbtools
                 // does the name denote a valid column in the parent?
                 if ( !_rxParentColumns->hasByName( *pMasterFields ) )
                 {
-                    OSL_FAIL( "ParameterManager::fillLinkedParameters: invalid master names should have been stripped long before!" );
+                    SAL_WARN( "connectivity.commontools", "ParameterManager::fillLinkedParameters: invalid master names should have been stripped long before!" );
                     continue;
                 }
 
@@ -570,7 +570,7 @@ namespace dbtools
                     || ( aParamInfo->second.aInnerIndexes.empty() )
                     )
                 {
-                    OSL_FAIL( "ParameterManager::fillLinkedParameters: nothing known about this detail field!" );
+                    SAL_WARN( "connectivity.commontools", "ParameterManager::fillLinkedParameters: nothing known about this detail field!" );
                     continue;
                 }
 
@@ -609,9 +609,8 @@ namespace dbtools
                     }
                     catch( const Exception& )
                     {
-                        OSL_FAIL( ( ::rtl::OString( "ParameterManager::fillLinkedParameters: master-detail parameter number " )
-                                    +=  ::rtl::OString::valueOf( sal_Int32( *aPosition + 1 ) )
-                                    +=  ::rtl::OString( " could not be filled!" ) ).getStr() );
+                        SAL_WARN( "connectivity.commontools", "ParameterManager::fillLinkedParameters: master-detail parameter number " <<
+                                  sal_Int32( *aPosition + 1 ) << " could not be filled!" );
                     }
                 }
             }
@@ -650,7 +649,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ParameterManager::completeParameters: caught an exception while calling the handler!" );
+            SAL_WARN( "connectivity.commontools", "ParameterManager::completeParameters: caught an exception while calling the handler!" );
         }
 
         if ( !pParams->wasSelected() )
@@ -680,7 +679,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ParameterManager::completeParameters: caught an exception while propagating the values!" );
+            SAL_WARN( "connectivity.commontools", "ParameterManager::completeParameters: caught an exception while propagating the values!" );
         }
         return true;
     }
@@ -751,7 +750,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ParameterManager::getConnection: could not retrieve the connection of the !" );
+            SAL_WARN( "connectivity.commontools", "ParameterManager::getConnection: could not retrieve the connection of the !" );
         }
         return _rxConnection.is();
     }
@@ -774,7 +773,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ParameterManager::cacheConnectionInfo: caught an exception!" );
+            SAL_WARN( "connectivity.commontools", "ParameterManager::cacheConnectionInfo: caught an exception!" );
         }
     }
 
@@ -830,7 +829,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ParameterManager::getParentColumns: caught an exception!" );
+            SAL_WARN( "connectivity.commontools", "ParameterManager::getParentColumns: caught an exception!" );
         }
         return _out_rxParentColumns.is();
     }
@@ -885,7 +884,7 @@ namespace dbtools
                 {
                     // if this name is unknown in the parent columns, then we don't have a source
                     // for copying the value to the detail columns
-                    OSL_FAIL( "ParameterManager::resetParameterValues: this should have been stripped long before!" );
+                    SAL_WARN( "connectivity.commontools", "ParameterManager::resetParameterValues: this should have been stripped long before!" );
                     continue;
                 }
 
@@ -897,7 +896,7 @@ namespace dbtools
                     || ( aParamInfo->second.aInnerIndexes.empty() )
                     )
                 {
-                    OSL_FAIL( "ParameterManager::resetParameterValues: nothing known about this detail field!" );
+                    SAL_WARN( "connectivity.commontools", "ParameterManager::resetParameterValues: nothing known about this detail field!" );
                     continue;
                 }
 
@@ -929,7 +928,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ParameterManager::resetParameterValues: caught an exception!" );
+            SAL_WARN( "connectivity.commontools", "ParameterManager::resetParameterValues: caught an exception!" );
         }
 
     }
