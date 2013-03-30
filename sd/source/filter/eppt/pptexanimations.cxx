@@ -411,30 +411,27 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
 
 bool AnimationExporter::isAfterEffectNode( const Reference< XAnimationNode >& xNode ) const
 {
-    std::list< AfterEffectNodePtr >::const_iterator aIter( maAfterEffectNodes.begin() );
     const std::list< AfterEffectNodePtr >::const_iterator aEnd( maAfterEffectNodes.end() );
-    while( aIter != aEnd )
+    for (std::list< AfterEffectNodePtr >::const_iterator aIter( maAfterEffectNodes.begin() );
+         aIter != aEnd ; ++aIter)
     {
         if( (*aIter)->mxNode == xNode )
             return true;
-        aIter++;
     }
-
     return false;
 }
 
 bool AnimationExporter::hasAfterEffectNode( const Reference< XAnimationNode >& xNode, Reference< XAnimationNode >& xAfterEffectNode ) const
 {
-    std::list< AfterEffectNodePtr >::const_iterator aIter( maAfterEffectNodes.begin() );
     const std::list< AfterEffectNodePtr >::const_iterator aEnd( maAfterEffectNodes.end() );
-    while( aIter != aEnd )
+    for (std::list< AfterEffectNodePtr >::const_iterator aIter( maAfterEffectNodes.begin() );
+        aIter != aEnd ; ++aIter)
     {
         if( (*aIter)->mxMaster == xNode )
         {
             xAfterEffectNode = (*aIter)->mxNode;
             return true;
         }
-        aIter++;
     }
 
     return false;
