@@ -337,7 +337,7 @@ sal_Bool SotStorageStream::Commit()
 
 sal_Bool SotStorageStream::Revert()
 {
-    if( !pOwnStm )
+    if( pOwnStm )
     {
         pOwnStm->Revert();
         SetError( pOwnStm->GetError() );
