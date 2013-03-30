@@ -35,13 +35,11 @@
 
 #include <unomid.h>
 
-/*--------------------------------------------------------------------
-    Beschreibung:   globale Pointer
- --------------------------------------------------------------------*/
+// Global Pointer
 
 SwGlossaries*       pGlossaries = 0;
 
-// Liefert alle benoetigten Pfade. Wird durch UI initialisiert
+// Provides all needed paths. Is initialized by UI.
 SwGlossaryList*     pGlossaryList = 0;
 
 String* pOldGrfCat = 0;
@@ -80,9 +78,7 @@ std::vector<String>* pDBNameList = 0;
 std::vector<String>*  pAuthFieldNameList = 0;
 std::vector<String>*  pAuthFieldTypeList = 0;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   UI beenden
- --------------------------------------------------------------------*/
+// Finish UI
 
 void _FinitUI()
 {
@@ -106,21 +102,17 @@ void _FinitUI()
     delete pAuthFieldNameList;
     delete pAuthFieldTypeList;
 
-
 }
-/*--------------------------------------------------------------------
-    Beschreibung:   Initialisierung
- --------------------------------------------------------------------*/
 
+// Initialise
 
 void _InitUI()
 {
-    // ShellResource gibt der CORE die Moeglichkeit mit Resourcen zu arbeiten
+    // ShellResource gives the CORE the possibility to work with resources.
     ViewShell::SetShellRes( new ShellResource );
     pDBNameList = new std::vector<String>;
     SwEditWin::_InitStaticData();
 }
-
 
 ShellResource::ShellResource()
     : Resource( SW_RES(RID_SW_SHELLRES) ),
@@ -244,13 +236,14 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<String>& rLst )
         if(STR_AUTOFMTREDL_TYPO == n)
         {
 #ifdef WNT
-            //fuer Windows Sonderbehandlung, da MS hier ein paar Zeichen im Dialogfont vergessen hat
+            // For Windows, a special treatment is necessary because MS has
+            // forgotten some characters in the dialog font here.
             p.SearchAndReplace(rtl::OUString("%1"), rtl::OUString(",,"));
             p.SearchAndReplace(rtl::OUString("%2"), rtl::OUString("''"));
 #else
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
-            //unter richtigen Betriebssystemen funktioniert es auch so
+            // With real operating systems it also works without special handling.
             p.SearchAndReplace(rtl::OUString("%1"), rLclD.getDoubleQuotationMarkStart());
             p.SearchAndReplace(rtl::OUString("%2"), rLclD.getDoubleQuotationMarkEnd());
 #endif

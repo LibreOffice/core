@@ -59,7 +59,7 @@
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-// Kontextmenue fuer GlobalTree
+// Context menu for GlobalTree
 #define CTX_INSERT_ANY_INDEX 10
 #define CTX_INSERT_FILE     11
 #define CTX_INSERT_NEW_FILE 12
@@ -78,7 +78,7 @@ using ::rtl::OUString;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
-// Flags fuer PopupMenu-enable/disable
+// Flags for PopupMenu-enable/disable
 #define ENABLE_INSERT_IDX   0x0001
 #define ENABLE_INSERT_FILE  0x0002
 #define ENABLE_INSERT_TEXT  0x0004
@@ -88,7 +88,7 @@ using ::rtl::OUString;
 #define ENABLE_UPDATE_SEL   0x0040
 #define ENABLE_EDIT_LINK    0x0080
 
-// TabPos nach links schieben
+// TabPos: push to left
 #define  GLBL_TABPOS_SUB 5
 
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
@@ -220,21 +220,20 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                     - 1;
             sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
 
-            // Daten holen
+            // Get data
             FileList aFileList;
             aData.GetFileList( FORMAT_FILE_LIST, aFileList );
             for ( sal_uInt16 n = (sal_uInt16)aFileList.Count(); n--; )
             {
                 sFileName = aFileList.GetFile(n);
                 InsertRegion(pCnt, &sFileName);
-                // nach dem Einfuegen muss die Liste der Contents neu
-                // geholt werden, um nicht auf einem alten Content zu
-                // arbeiten
+                // The list of contents must be newly fetched after inserting,
+                // to not work on an old content.
                 if(n)
                 {
                     pActiveShell->GetGlobalDocContent(*pTempContents);
-                    // wenn das file erfolgreich eingefuegt wurde,
-                    // dann muss auch der naechste Content geholt werden
+                    // If the file was successfully inserted,
+                    // then the next content must also be fetched.
                     if(nEntryCount < pTempContents->size())
                     {
                         nEntryCount++;
@@ -250,7 +249,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         {
             INetURLObject aTemp(sFileName);
             GraphicDescriptor aDesc(aTemp);
-            if( !aDesc.Detect() )   // keine Grafiken annehmen
+            if( !aDesc.Detect() )   // accept no graphics
             {
                 nRet = rEvt.mnAction;
                 InsertRegion(pCnt, &sFileName);
@@ -364,7 +363,7 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
         pPop->InsertItem(CTX_DELETE, aContextStrings[ST_DELETE - ST_GLOBAL_CONTEXT_FIRST]);
         pPop->SetHelpId(CTX_DELETE, aHelpForMenu[CTX_DELETE]);
 
-        //evtl. disablen
+        //disabling if applicable
         pSubPop1->EnableItem(CTX_INSERT_ANY_INDEX,  0 != (nEnableFlags & ENABLE_INSERT_IDX ));
         pSubPop1->EnableItem(CTX_INSERT_TEXT,       0 != (nEnableFlags & ENABLE_INSERT_TEXT));
         pSubPop1->EnableItem(CTX_INSERT_FILE,       0 != (nEnableFlags & ENABLE_INSERT_FILE));
@@ -578,10 +577,9 @@ void SwGlobalTree::DragFinished( sal_Int8 nAction )
     bIsInternalDrag = false;
 }
 
-/***************************************************************************
-    Beschreibung:   Wird ein Ctrl+DoubleClick in einen freien Bereich ausgefuehrt,
- *                  dann soll die Basisfunktion des Controls gerufen werden
-***************************************************************************/
+// If a Ctrl+DoubleClick is executed in an empty area,
+// then the base function of the control should be called.
+
 void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPos( rMEvt.GetPosPixel());
@@ -607,7 +605,7 @@ void     SwGlobalTree::KeyInput(const KeyEvent& rKEvt)
         switch(aCode.GetModifier())
         {
             case KEY_MOD2:
-                // Boxen umschalten
+                // Switch boxes
                 GetParentWindow()->ToggleTree();
             break;
         }
@@ -644,7 +642,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
     {
         SetUpdateMode( sal_False );
         SvTreeListEntry* pOldSelEntry = FirstSelected();
-        String sEntryName;  // Name des Eintrags
+        String sEntryName;  // Name of the entry
         sal_uInt16 nSelPos = USHRT_MAX;
         if(pOldSelEntry)
         {
@@ -773,9 +771,9 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 {
     SvTreeListEntry* pEntry = FirstSelected();
     SwGlblDocContent* pCont = pEntry ? (SwGlblDocContent*)pEntry->GetUserData() : 0;
-    // wird waehrend des Dialogs ein RequestHelp gerufen,
-    // dann geht der Content verloren. Deshalb wird hier eine
-    // Kopie angelegt, in der nur die DocPos richtig gesetzt ist.
+    // If a RequestHelp is called during the dialogue,
+    // then the content gets lost. Because of that a copy
+    // is created in which only the DocPos is set correctly.
     SwGlblDocContent* pContCopy = 0;
     if(pCont)
         pContCopy = new SwGlblDocContent(pCont->GetDocPos());
@@ -786,8 +784,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
     {
         case CTX_UPDATE_SEL:
         {
-            // zwei Durchlaeufe: zuerst die Bereiche, dann die Verzeichnisse
-            // aktualisieren
+            // Two passes: first update the areas, then the directories.
             SvTreeListEntry* pSelEntry = FirstSelected();
             while( pSelEntry )
             {
@@ -841,9 +838,9 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         break;
         case CTX_DELETE:
         {
-            // sind mehrere Eintraege selektiert, dann muss nach jedem delete
-            // das Array neu gefuellt werden. Damit man sich nichts merken muss,
-            // beginnt das Loeschen am Ende
+            // If several entries selected, then after each delete the array
+            // must be refilled. So you do not have to remember anything,
+            // deleting begins at the end.
             SvTreeListEntry* pSelEntry = LastSelected();
             SwGlblDocContents* pTempContents  = 0;
             pActiveShell->StartAction();
@@ -914,7 +911,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             SwGlobalFrameListener_Impl aFrmListener(*pGlobFrm);
 
             sal_uLong nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : (sal_uLong)-1;
-            // neues Dok anlegen
+            // Creating a new doc
             SfxStringItem aFactory(SID_NEWDOCDIRECT,
                             SwDocShell::Factory().GetFilterContainer()->GetName());
 
@@ -922,7 +919,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                             rDispatch.Execute(SID_NEWDOCDIRECT,
                                 SFX_CALLMODE_SYNCHRON, &aFactory, 0L);
 
-            // sichern unter
+            // save at
             SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
             SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
             if( pFrame )
@@ -933,13 +930,12 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 SfxObjectShell& rObj = *pFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
                 String sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
-                // Bereich mit dem Dok-Namen einfuegen
-                // eigenes Dok in den Vordergrund
-
+                // Insert the area with the Doc-Name
+                // Bring the own Doc in the foreground
                 if(aFrmListener.IsValid() && sNewFile.Len())
                 {
                     pGlobFrm->ToTop();
-                    // durch das Update sind die Eintraege invalid
+                    // Due to the update the entries are invalid
                     if(nEntryPos != (sal_uLong)-1)
                     {
                         Update( sal_False );
@@ -976,7 +972,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 pActiveShell->InsertGlobalDocContent(*pCont);
             else
             {
-                pActiveShell->SplitNode(); // leeres Dokument
+                pActiveShell->SplitNode(); // Empty document
                 pActiveShell->Up( sal_False, 1 );
             }
             pActiveShell->GetView().GetEditWin().GrabFocus();
@@ -986,7 +982,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             pCont = 0;
         break;
         default:;
-        // hier passiert nichts
+        // here nothing happens
     }
     if(pCont)
         GotoContent(pCont);
@@ -1044,7 +1040,7 @@ void    SwGlobalTree::HideTree()
 void    SwGlobalTree::ExecCommand(sal_uInt16 nCmd)
 {
     SvTreeListEntry* pEntry = FirstSelected();
-    OSL_ENSURE(pEntry, "gleich knallt's");
+    OSL_ENSURE(pEntry, "It explodes in the next moment");
     if(FN_GLOBAL_EDIT == nCmd)
     {
         const SwGlblDocContent* pCont = (const SwGlblDocContent*)
@@ -1155,7 +1151,7 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
         if(pSwGlblDocContents)
             pSwGlblDocContents->DeleteAndDestroyAll();
     }
-    // hier muss noch eine Veraenderungspruefung rein!
+    // FIXME: Implement a test for changes!
     return bRet;
 }
 
@@ -1218,7 +1214,7 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
         const OUString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
 {
-    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
+    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     SwLBoxString* pStr = new SwLBoxString( pEntry, 0, pCol->GetText() );
@@ -1309,7 +1305,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             String sTempSectionName(sSectionName);
             sal_uInt16 nAddNumber = 0;
             sal_uInt16 nCount = 0;
-            // evtl : und Index anhaengen, wenn der Bereichsname schon vergeben ist
+            // if applicable: add index if the range name is already in use.
             while ( nCount < nSectCount )
             {
                 const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);

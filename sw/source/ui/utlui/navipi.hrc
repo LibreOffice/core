@@ -25,8 +25,7 @@
 #define TL_GLOBAL           55
 #define TB_GLOBAL           56
 
-//-------------------------------------------------------------------
-// Strings fuer Kontextmenue des ContentTree
+// Strings for the context menu of the content tree
 #define ST_CONTEXT_FIRST        60
 #define ST_OUTLINE_LEVEL        ST_CONTEXT_FIRST
 #define ST_DRAGMODE                     (ST_CONTEXT_FIRST + 1)
