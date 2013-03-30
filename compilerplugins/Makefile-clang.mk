@@ -13,6 +13,8 @@
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
 CLANGCXXFLAGS=-O2 -Wall -Wextra -g
 
+QUIET=$(if $(VERBOSE)$(verbose),,@)
+
 # The uninteresting rest.
 
 # Clang headers require these.
@@ -67,7 +69,7 @@ CLANGOBJS=
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
-	$(CXX) $(CLANGCXXFLAGS) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -std=c++11 -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
+	$(QUIET)$(CXX) $(CLANGCXXFLAGS) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -std=c++11 -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
 
@@ -79,10 +81,10 @@ $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(s
 
 $(CLANGOUTDIR)/plugin.so: $(CLANGOBJS)
 	@echo [build LNK] $(subst $(BUILDDIR)/,,$@)
-	$(CXX) -shared $(CLANGOBJS) -o $@
+	$(QUIET)$(CXX) -shared $(CLANGOBJS) -o $@
 
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
 $(CLANGOUTDIR)/clang-timestamp: $(CLANGDIR)/bin/clang
-	touch $@
+	$(QUIET)touch $@
 
 # vim: set noet sw=4 ts=4:
