@@ -25,39 +25,34 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+$(dir $(call gb_InternalUnoApi_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $(@)))
+
+$(dir $(call gb_InternalUnoApi_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $(@)))
+
+$(call gb_InternalUnoApi_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),UNI,5) \
+	touch $@
+
 .PHONY : $(call gb_InternalUnoApi_get_clean_target,%)
 $(call gb_InternalUnoApi_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),UNI,5) \
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_InternalUnoApi_get_target,$*))
 
-# Note: The rdb root for the internal rdbs should be / . On the other
-# side, UnoApiHeadersTarget expects UCR and it is really not easy to
-# change, because the information would have to be duplicated at the
-# calling side. So we simply do both .-)
-# TODO: Should it come clear that these rdbs (installed into
-# solver/$INPATH/rdb) are actually not needed for anything, this could
-# be simplified.
-
 define gb_InternalUnoApi_InternalUnoApi
-$(call gb_UnoApiTarget_UnoApiTarget,$(1)_out)
 $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 
-$(call gb_UnoApiTarget_set_root,$(1)_out,/)
 $(call gb_UnoApiTarget_set_root,$(1),UCR)
-$(call gb_UnoApiTarget_merge_api,$(1),$(1)_out)
 
+$(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_InternalUnoApi_get_target,$(1)) :| $(dir $(call gb_InternalUnoApi_get_target,$(1))).dir
-$(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1)_out)
-$(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1)_out)
 $(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
-$(call gb_UnoApiTarget_get_headers_target,$(1)_out) : $(gb_Helper_MISCDUMMY)
-$(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(1)_out)
-$(call gb_UnoApiTarget_get_external_headers_target,$(1)_out) : $(gb_Helper_MISCDUMMY)
-$(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_external_headers_target,$(1)_out)
-
-$(call gb_Deliver_add_deliverable,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)_out),$(1))
+$(call gb_UnoApiTarget_get_headers_target,$(1)) : $(gb_Helper_MISCDUMMY)
+$(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(gb_Helper_MISCDUMMY)
 
 $$(eval $$(call gb_Module_register_target,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_InternalUnoApi_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),InternalUnoApi)
@@ -65,19 +60,19 @@ $(call gb_Helper_make_userfriendly_targets,$(1),InternalUnoApi)
 endef
 
 define gb_InternalUnoApi_add_idlfile
-$(call gb_UnoApiTarget_add_idlfile,$(1)_out,$(2),$(3))
+$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
 
 endef
 
 define gb_InternalUnoApi_add_idlfiles
-$(call gb_UnoApiTarget_add_idlfiles,$(1)_out,$(2),$(3))
+$(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
 
 endef
 
 define gb_InternalUnoApi__use_api
 $(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
-$(call gb_InternalUnoApi_get_target,$(1)_out) : $(call gb_UnoApiTarget_get_target,$(2))
-$(call gb_UnoApiTarget_get_external_headers_target,$(1)_out) : $(call gb_UnoApiTarget_get_headers_target,$(2))
+$(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
+$(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(2))
 
 endef
 
@@ -107,7 +102,7 @@ $(foreach dep,$(3),$(call gb_InternalUnoApi_define_api_dependency,$(1),$(2),$(de
 endef
 
 define gb_InternalUnoApi_set_include
-$(call gb_UnoApiTarget_set_include,$(1)_out,$(2))
+$(call gb_UnoApiTarget_set_include,$(1),$(2))
 
 endef
 

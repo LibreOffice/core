@@ -44,14 +44,12 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/lib \
 	$(OUTDIR)/par \
 	$(OUTDIR)/pck \
-	$(OUTDIR)/rdb \
 	$(OUTDIR)/res \
 	$(OUTDIR)/share \
 	$(OUTDIR)/unittest \
 	$(OUTDIR)/xml \
 
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
-gb_InternalUnoApi_get_target = $(OUTDIR)/rdb/$(1).rdb
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_Rdb_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/xml/$(1).rdb
@@ -140,6 +138,7 @@ gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1)
 gb_InstallModuleTarget_get_filelist = $(WORKDIR)/InstallModuleTarget/$(1).filelist
 gb_InstallModuleTarget_get_target = $(WORKDIR)/InstallModuleTarget/$(1).filelist
 gb_InstallScriptTarget_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScript_EXT)
+gb_InternalUnoApi_get_target = $(WORKDIR)/InternalUnoApi/$(1).done
 gb_Jar_get_target = $(WORKDIR)/Jar/$(1).jar
 gb_Jar_get_classsetname = Jar/$(1)
 gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
@@ -278,6 +277,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	InstallModule \
 	InstallModuleTarget \
 	InstallScriptTarget \
+	InternalUnoApi \
 	JavaClassSet \
 	Jar \
 	JunitTest \
@@ -330,7 +330,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Executable \
 	Extension \
 	InstallScript \
-	InternalUnoApi \
 	Library \
 	StaticLibrary \
 	UnoApi \
