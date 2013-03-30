@@ -148,6 +148,7 @@ gb_JavaClassSet_get_target = $(WORKDIR)/JavaClassSet/$(1)/done
 gb_JunitTest_get_classsetname = JunitTest/$(1)
 gb_JunitTest_get_target = $(WORKDIR)/JunitTest/$(1)/done
 gb_JunitTest_get_userdir = $(WORKDIR)/JunitTest/$(1)/user
+gb_PythonTest_get_target = $(WORKDIR)/PythonTest/$(1)/done
 gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
 gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
@@ -290,6 +291,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Pagein \
 	PrecompiledHeader \
 	Pyuno \
+	PythonTest \
 	Rdb \
 	ResTarget \
 	ScpMergeTarget \

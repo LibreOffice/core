@@ -75,5 +75,6 @@
 /solenv/gdb/libreoffice/*.pyo
 /solenv/gdb/libreoffice/util/*.pyo
 /moz/zipped/*.zip
+__pycache__
 
 
