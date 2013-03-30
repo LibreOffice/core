@@ -141,9 +141,8 @@ sal_Int32 GlobalSyncData::GetMappedStructId( sal_Int32 nStructId )
 
 void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
 {
-    std::deque< PDFExtOutDevDataSync::Action >::iterator aIter( mActions.begin() );
-    std::deque< PDFExtOutDevDataSync::Action >::iterator aEnd( mActions.end() );
-    while( aIter != aEnd )
+    for (std::deque< PDFExtOutDevDataSync::Action >::const_iterator aIter( mActions.begin() ), aEnd( mActions.end() ) ;
+         aIter != aEnd ; ++aIter)
     {
         switch( *aIter )
         {
@@ -283,7 +282,6 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             case PDFExtOutDevDataSync::EndGroupGfxLink:
                 break;
         }
-        aIter++;
     }
 }
 
