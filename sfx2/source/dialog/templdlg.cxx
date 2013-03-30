@@ -2674,7 +2674,7 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
         if ( pOldStyleSheetPool )
             EndListening(*pOldStyleSheetPool);
         if ( pStyleSheetPool )
-            StartListening(*pOldStyleSheetPool);
+            StartListening(*pStyleSheetPool);
     }
 
     bWaterDisabled = sal_False;
