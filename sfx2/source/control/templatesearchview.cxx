@@ -36,7 +36,7 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     pItem->setPath(rPath);
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
-    mItemList.push_back(pItem);
+    ThumbnailView::AppendItem(pItem);
 
     CalculateItemPositions();
 }
