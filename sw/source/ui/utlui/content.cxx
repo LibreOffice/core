@@ -2182,7 +2182,6 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
 {
     // No update while drag and drop.
     // Query view because the Navigator is cleared too late.
-Viewabfrage, da der Navigator zu spaet abgeraeumt wird
     SwView* pView = GetParentWindow()->GetCreateView();
     if( (!HasFocus() || bViewHasChanged) &&
          !bIsInDrag && !bIsInternalDrag && pView &&
