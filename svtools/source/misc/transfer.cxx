@@ -696,9 +696,8 @@ void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
 void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 {
     DataFlavorExVector::iterator aIter( mpFormats->begin() );
-    const DataFlavorExVector::const_iterator aEnd( mpFormats->end() );
 
-    while (aIter != aEnd)
+    while (aIter != mpFormats->end())
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
             aIter = mpFormats->erase( aIter );
