@@ -262,7 +262,7 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
     pItem->maTitle = aRegionName;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
-    mItemList.push_back(pItem);
+    AppendItem(pItem);
 
     CalculateItemPositions();
     Invalidate();

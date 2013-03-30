@@ -179,6 +179,8 @@ public:
 
     virtual ~ThumbnailView ();
 
+    void AppendItem (ThumbnailViewItem *pItem);
+
     void RemoveItem( sal_uInt16 nItemId );
 
     void Clear();

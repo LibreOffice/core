@@ -81,6 +81,14 @@ ThumbnailView::~ThumbnailView()
     ImplDeleteItems();
 }
 
+void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
+{
+    if (maFilterFunc(pItem))
+        mFilteredItemList.push_back(pItem);
+
+    mItemList.push_back(pItem);
+}
+
 void ThumbnailView::ImplInit()
 {
     mpScrBar            = NULL;
@@ -220,11 +228,9 @@ void ThumbnailView::CalculateItemPositions ()
         return;
 
     Size        aWinSize = GetOutputSizePixel();
-    size_t      nItemCount = mItemList.size();
+    size_t      nItemCount = mFilteredItemList.size();
     WinBits     nStyle = GetStyle();
     ScrollBar*  pDelScrBar = NULL;
-
-    mFilteredItemList.clear();
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
@@ -300,59 +306,35 @@ void ThumbnailView::CalculateItemPositions ()
     size_t nCurCount = 0;
     for ( size_t i = 0; i < nItemCount; i++ )
     {
-        ThumbnailViewItem *const pItem = mItemList[i];
+        ThumbnailViewItem *const pItem = mFilteredItemList[i];
 
-        if (maFilterFunc(pItem))
+        if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
         {
-            mFilteredItemList.push_back(pItem);
-            if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
+            if( !pItem->isVisible())
             {
-                if( !pItem->isVisible())
+                if ( ImplHasAccessibleListeners() )
                 {
-                    if ( ImplHasAccessibleListeners() )
-                    {
-                        ::com::sun::star::uno::Any aOldAny, aNewAny;
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
 
-                        aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
-                        ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
-                    }
-
-                    pItem->show(true);
-
-                    maItemStateHdl.Call(pItem);
+                    aNewAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
-                pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-                pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLenght,mpItemAttrs);
+                pItem->show(true);
 
-                if ( !((nCurCount+1) % mnCols) )
-                {
-                    x = nStartX;
-                    y += mnItemHeight+nVItemSpace;
-                }
-                else
-                    x += mnItemWidth+nHItemSpace;
+                maItemStateHdl.Call(pItem);
+            }
+
+            pItem->setDrawArea(Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
+            pItem->calculateItemsPosition(mnThumbnailHeight,mnDisplayHeight,mnItemPadding,mpItemAttrs->nMaxTextLenght,mpItemAttrs);
+
+            if ( !((nCurCount+1) % mnCols) )
+            {
+                x = nStartX;
+                y += mnItemHeight+nVItemSpace;
             }
             else
-            {
-                if( pItem->isVisible())
-                {
-                    if ( ImplHasAccessibleListeners() )
-                    {
-                        ::com::sun::star::uno::Any aOldAny, aNewAny;
-
-                        aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
-                        ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
-                    }
-
-                    pItem->show(false);
-
-                    maItemStateHdl.Call(pItem);
-                }
-
-            }
-
-            ++nCurCount;
+                x += mnItemWidth+nHItemSpace;
         }
         else
         {
@@ -370,7 +352,10 @@ void ThumbnailView::CalculateItemPositions ()
 
                 maItemStateHdl.Call(pItem);
             }
+
         }
+
+        ++nCurCount;
     }
 
     // arrange ScrollBar, set values and show it
@@ -866,9 +851,7 @@ void ThumbnailView::updateItems (const std::vector<ThumbnailViewItem*> &items)
 
     mItemList = items;
 
-    CalculateItemPositions();
-
-    Invalidate();
+    filterItems(maFilterFunc);
 }
 
 size_t ThumbnailView::GetItemPos( sal_uInt16 nItemId ) const
@@ -1048,6 +1031,34 @@ void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailView
 {
     mnFirstLine = 0;        // start at the top of the list instead of the current position
     maFilterFunc = func;
+    mFilteredItemList.clear();
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        ThumbnailViewItem *const pItem = mItemList[i];
+
+        if (maFilterFunc(pItem))
+        {
+            mFilteredItemList.push_back(pItem);
+        }
+        else
+        {
+            if( pItem->isVisible())
+            {
+                if ( ImplHasAccessibleListeners() )
+                {
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
+
+                    aOldAny <<= pItem->GetAccessible( mbIsTransientChildrenDisabled );
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
+                }
+
+                pItem->show(false);
+
+                maItemStateHdl.Call(pItem);
+            }
+        }
+    }
 
     CalculateItemPositions();
 

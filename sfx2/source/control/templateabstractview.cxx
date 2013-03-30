@@ -162,7 +162,7 @@ void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
 
     pChild->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
-    mItemList.push_back(pChild);
+    AppendItem(pChild);
 
     CalculateItemPositions();
     Invalidate();
