@@ -61,6 +61,7 @@
 #include "svx/svdpage.hxx"
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
+#include <vcl/msgbox.hxx>
 
 using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
@@ -736,7 +737,8 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
-        if( pDlg.get() && pDlg->Execute() )
+        // Even Cancel Button is returning positive(101) value,
+        if( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
         {
             SfxItemSet aNewSet( *(pDlg->GetOutputItemSet ()) );
 
