@@ -298,7 +298,6 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 
         // Get internal menu item values.
         String aText = pVCLMenu->GetItemText( nId );
-        rtl::OUString aCommand( pVCLMenu->GetItemCommand( nId ) );
         sal_Bool itemEnabled = pVCLMenu->IsItemEnabled( nId );
         KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
         sal_Bool itemChecked = pVCLMenu->IsItemChecked( nId );

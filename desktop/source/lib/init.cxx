@@ -91,7 +91,6 @@ initialize_uno( const rtl::OUString &aAppURL )
 {
     rtl::Bootstrap::setIniFilename( aAppURL + "/fundamentalrc" );
 
-    OUString aValue;
     rtl::Bootstrap::set( "CONFIGURATION_LAYERS",
                          "xcsxcu:${BRAND_BASE_DIR}/share/registry "
                          "res:${BRAND_BASE_DIR}/share/registry "

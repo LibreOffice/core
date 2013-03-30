@@ -47,6 +47,7 @@ certain functionality.
 @section chart2
 
 @li @c chart2
+@li @c chart2.areachart
 
 @section connectivity
 
@@ -256,6 +257,8 @@ certain functionality.
 @li @c vcl.scrollbar - Scroll Bars
 @li @c vcl.sm - Session Manager
 @li @c vcl.window
+@li @c vcl.unity
+@li @c vcl.virdev
 
 @section Writer
 
@@ -292,6 +295,11 @@ certain functionality.
 @li @c dbaccess
 @li @c dbaccess.ui
 
+@section svx
+
+@li @c svx
+@li @c svx.fmcmop
+
 @section other
 
 @li @c accessibility
@@ -314,9 +322,9 @@ certain functionality.
 @li @c shell
 @li @c stoc
 @li @c svg
-@li @c svx
 @li @c ucbhelper
 @li @c unoidl
+@li @c uui
 @li @c xmlhelp
 @li @c xmloff
 @li @c xmlreader

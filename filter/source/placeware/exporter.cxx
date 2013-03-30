@@ -313,7 +313,6 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 #ifndef PLACEWARE_DEBUG
     TempFile aTempFile( TempFile::createTempFileURL() );
     nRC = aTempFile.open( osl_File_OpenFlag_Write|osl_File_OpenFlag_Read );
-    OUString aURL( aTempFile.getFileURL() );
 #else
     OUString aURL("file:///e:/test.zip");
     osl::File::remove( aURL );

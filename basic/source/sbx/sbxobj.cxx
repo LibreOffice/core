@@ -571,6 +571,8 @@ void SbxObject::Remove( SbxVariable* pVar )
         }
         rtl::OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
         rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
+        DbgOutf( "SBX: Remove %s in %s",
+            aNameStr1.getStr(), aNameStr2.getStr() );
 #endif
         SbxVariableRef pVar_ = pArray->Get( nIdx );
         if( pVar_->IsBroadcaster() )
