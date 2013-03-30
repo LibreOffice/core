@@ -20,6 +20,8 @@
 /* Begin PBXFileReference section */
 		BE08805B16FDB784000CED5C /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		BE08805C16FDB784000CED5C /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
+		BE2F0A0A17077A040060FE0D /* typedescriptionprovider.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = typedescriptionprovider.cxx; path = ../../../../cppuhelper/source/typedescriptionprovider.cxx; sourceTree = "<group>"; };
+		BE2F0A121707809B0060FE0D /* unoidlprovider.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unoidlprovider.cxx; path = ../../../../unoidl/source/unoidlprovider.cxx; sourceTree = "<group>"; };
 		BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapdevice.cxx; path = ../../../../basebmp/source/bitmapdevice.cxx; sourceTree = "<group>"; };
 		BE4EEE9A16FF80B100D475B2 /* virdev.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = virdev.cxx; path = ../../../../vcl/source/gdi/virdev.cxx; sourceTree = "<group>"; };
 		BE56CD651704A08E00CA5B15 /* lo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lo.h; sourceTree = "<group>"; };
@@ -74,6 +76,76 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE2F0A0B17077A0F0060FE0D /* cppuhelper */ = {
+			isa = PBXGroup;
+			children = (
+				BE2F0A0A17077A040060FE0D /* typedescriptionprovider.cxx */,
+			);
+			name = cppuhelper;
+			sourceTree = "<group>";
+		};
+		BE2F0A0C17077A2F0060FE0D /* headless */ = {
+			isa = PBXGroup;
+			children = (
+				BE9086F616FF02B2004400A1 /* headlessinst.cxx */,
+				BE9086F716FF02B2004400A1 /* svpbmp.cxx */,
+				BE9086F816FF02B2004400A1 /* svpdata.cxx */,
+				BE9086F916FF02B2004400A1 /* svpdummies.cxx */,
+				BE9086FA16FF02B3004400A1 /* svpelement.cxx */,
+				BE9086FB16FF02B3004400A1 /* svpframe.cxx */,
+				BE9086FC16FF02B3004400A1 /* svpgdi.cxx */,
+				BE9086FD16FF02B3004400A1 /* svpinst.cxx */,
+				BE9086FE16FF02B3004400A1 /* svpprn.cxx */,
+				BE9086FF16FF02B3004400A1 /* svptext.cxx */,
+				BE90870016FF02B3004400A1 /* svpvd.cxx */,
+			);
+			name = headless;
+			sourceTree = "<group>";
+		};
+		BE2F0A0D17077A950060FE0D /* vcl */ = {
+			isa = PBXGroup;
+			children = (
+				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
+				BEBF3E3D17002D6900C454AC /* window.cxx */,
+				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
+				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
+				BE2F0A0C17077A2F0060FE0D /* headless */,
+			);
+			name = vcl;
+			sourceTree = "<group>";
+		};
+		BE2F0A0E17077AC40060FE0D /* framework */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E3C17002D4C00C454AC /* frame.cxx */,
+			);
+			name = framework;
+			sourceTree = "<group>";
+		};
+		BE2F0A0F17077B060060FE0D /* sfx2 */ = {
+			isa = PBXGroup;
+			children = (
+				BEBF3E3E17005E6B00C454AC /* frmload.cxx */,
+			);
+			name = sfx2;
+			sourceTree = "<group>";
+		};
+		BE2F0A1017077B560060FE0D /* basebmp */ = {
+			isa = PBXGroup;
+			children = (
+				BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */,
+			);
+			name = basebmp;
+			sourceTree = "<group>";
+		};
+		BE2F0A11170780620060FE0D /* unoidl */ = {
+			isa = PBXGroup;
+			children = (
+				BE2F0A121707809B0060FE0D /* unoidlprovider.cxx */,
+			);
+			name = unoidl;
+			sourceTree = "<group>";
+		};
 		BE5A224A1664F87600CF01C9 = {
 			isa = PBXGroup;
 			children = (
@@ -107,31 +179,19 @@
 			children = (
 				BE5A22681664F87600CF01C9 /* AppDelegate.h */,
 				BE5A22691664F87600CF01C9 /* AppDelegate.m */,
-				BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */,
-				BEBF3E3C17002D4C00C454AC /* frame.cxx */,
-				BEBF3E3E17005E6B00C454AC /* frmload.cxx */,
-				BE9086F616FF02B2004400A1 /* headlessinst.cxx */,
+				BE2F0A1017077B560060FE0D /* basebmp */,
+				BE2F0A0B17077A0F0060FE0D /* cppuhelper */,
+				BE2F0A0E17077AC40060FE0D /* framework */,
 				BE954A2E1704F9500040D517 /* iosinst.cxx */,
 				BE56CD651704A08E00CA5B15 /* lo.h */,
 				BE56CD661704A08E00CA5B15 /* lo.mm */,
-				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
-				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
-				BE9086F716FF02B2004400A1 /* svpbmp.cxx */,
-				BE9086F816FF02B2004400A1 /* svpdata.cxx */,
-				BE9086F916FF02B2004400A1 /* svpdummies.cxx */,
-				BE9086FA16FF02B3004400A1 /* svpelement.cxx */,
-				BE9086FB16FF02B3004400A1 /* svpframe.cxx */,
-				BE9086FC16FF02B3004400A1 /* svpgdi.cxx */,
-				BE9086FD16FF02B3004400A1 /* svpinst.cxx */,
-				BE9086FE16FF02B3004400A1 /* svpprn.cxx */,
-				BE9086FF16FF02B3004400A1 /* svptext.cxx */,
-				BE90870016FF02B3004400A1 /* svpvd.cxx */,
+				BE2F0A0F17077B060060FE0D /* sfx2 */,
+				BE2F0A11170780620060FE0D /* unoidl */,
+				BE2F0A0D17077A950060FE0D /* vcl */,
 				BE08805B16FDB784000CED5C /* View.h */,
 				BE08805C16FDB784000CED5C /* View.m */,
 				BE7B7AFF170438D0002341F4 /* ViewController.h */,
 				BE7B7B00170438D0002341F4 /* ViewController.m */,
-				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
-				BEBF3E3D17002D6900C454AC /* window.cxx */,
 				BE69AD3716958CA0001BE1CD /* Resources */,
 				BE5A22601664F87600CF01C9 /* Supporting Files */,
 			);
