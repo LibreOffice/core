@@ -40,7 +40,7 @@ namespace vcl
     class SAL_NO_VTABLE ITextLayout
     {
     public:
-        virtual long        GetTextWidth( const XubString& _rText, xub_StrLen _nStartIndex, xub_StrLen _nLength ) const = 0;
+        virtual long        GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength,
                                 MetricVector* _pVector, OUString* _pDisplayText ) = 0;
         virtual bool        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const = 0;
@@ -68,9 +68,9 @@ namespace vcl
 
         // ITextLayout overridables
         virtual long        GetTextWidth(
-                                const XubString& _rText,
-                                xub_StrLen _nStartIndex,
-                                xub_StrLen _nLength
+                                const OUString& _rText,
+                                sal_Int32 _nStartIndex,
+                                sal_Int32 _nLength
                             ) const;
         virtual void        DrawText(
                                 const Point& _rStartPoint,
