@@ -211,7 +211,7 @@ void SdrEditView::DeleteLayer(const XubString& rName)
         if( bUndo )
             BegUndo(ImpGetResStr(STR_UndoDelLayer));
 
-        sal_Bool bMaPg(sal_True);
+        bool bMaPg(true);
 
         for(sal_uInt16 nPageKind(0); nPageKind < 2; nPageKind++)
         {
@@ -263,7 +263,7 @@ void SdrEditView::DeleteLayer(const XubString& rName)
                     }
                 }
             }
-            bMaPg = sal_False;
+            bMaPg = false;
         }
 
         if( bUndo )
@@ -485,8 +485,8 @@ void SdrEditView::CheckPossibilities()
                 // still missing ...
                 const SdrObject* pObj=GetMarkedObjectByIndex(0);
                 //const SdrPathObj* pPath=PTR_CAST(SdrPathObj,pObj);
-                sal_Bool bGroup=pObj->GetSubList()!=NULL;
-                sal_Bool bHasText=pObj->GetOutlinerParaObject()!=NULL;
+                bool bGroup=pObj->GetSubList()!=NULL;
+                bool bHasText=pObj->GetOutlinerParaObject()!=NULL;
                 if (bGroup || bHasText) {
                     bCombinePossible=sal_True;
                 }
@@ -653,7 +653,7 @@ void SdrEditView::CheckPossibilities()
 
 void SdrEditView::ForceMarkedObjToAnotherPage()
 {
-    sal_Bool bFlg=sal_False;
+    bool bFlg=false;
     for (sal_uIntPtr nm=0; nm<GetMarkedObjectCount(); nm++) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -675,7 +675,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
                 pPV->GetObjList()->InsertObject(pObj,CONTAINER_APPEND,&aReason);
                 pM->SetPageView(pPV);
                 InvalidateAllWin(aObjRect);
-                bFlg=sal_True;
+                bFlg=true;
             }
         }
     }
