@@ -18,7 +18,7 @@
  */
 
 #include <premac.h>
-#include <CoreGraphics/CoreGraphics.h>
+#include <UIKit/UIKit.h>
 #include <postmac.h>
 
 #include <osl/detail/ios-bootstrap.h>
@@ -87,9 +87,26 @@ IosSalInstance *IosSalInstance::getInstance()
 IosSalInstance::IosSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
 {
-    pthread_cond_init( &m_aRenderCond, NULL );
-    pthread_mutex_init( &m_aRenderMutex, NULL );
-    pthread_mutex_lock( &m_aRenderMutex );
+    int rc;
+
+    rc = pthread_cond_init( &m_aRenderCond, NULL );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_init failed: " << strerror( rc ) );
+
+#if OSL_DEBUG_LEVEL > 0
+    pthread_mutexattr_t mutexattr;
+
+    rc = pthread_mutexattr_init( &mutexattr );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutexattr_init failed: " << strerror( rc ) );
+
+    rc = pthread_mutexattr_settype( &mutexattr, PTHREAD_MUTEX_ERRORCHECK );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutexattr_settype failed: " << strerror( rc ) );
+
+    rc = pthread_mutex_init( &m_aRenderMutex, &mutexattr );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_init failed: " << strerror( rc ) );
+#else
+    rc = pthread_mutex_init( &m_aRenderMutex, NULL );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_init failed: " << strerror( rc ) );
+#endif
 }
 
 IosSalInstance::~IosSalInstance()
@@ -264,9 +281,20 @@ void lo_set_view_size(int width, int height)
 
 IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
 {
-    int i = 0;
-    std::list< SalFrame* >::const_iterator it;
-    for( it = getFrames().begin(); it != getFrames().end(); i++, it++ ) {
+    int rc;
+
+    NSLog(@"RenderWindows: start");
+
+    rc = pthread_mutex_lock( &m_aRenderMutex );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_lock failed: " << strerror( rc ) );
+
+    NSLog(@"RenderWindows: mutex locked");
+
+    NSDate *a = [NSDate date];
+
+    for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
+         it != getFrames().end();
+         it++ ) {
         SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
         SalFrameGeometry aGeom = pFrame->GetGeometry();
         CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
@@ -291,19 +319,55 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
             CGContextDrawImage( arg->context, bbox, image );
         }
     }
-    pthread_cond_signal( &m_aRenderCond );
+
+    arg->done = true;
+
+    rc = pthread_cond_signal( &m_aRenderCond );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_signal failed:" << strerror( rc ) );
+
+    NSLog(@"RenderWindows: took %f s", [[NSDate date] timeIntervalSinceDate: a]);
+
+    rc = pthread_mutex_unlock( &m_aRenderMutex );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
+
+    NSLog(@"RenderWindows: mutex unlocked");
+
     return 0;
 }
 
 extern "C"
 void lo_render_windows( CGContextRef context, CGRect rect )
 {
+    int rc;
     IosSalInstance *pInstance = IosSalInstance::getInstance();
+
     if ( pInstance == NULL )
         return;
-    IosSalInstance::RenderWindowsArg arg = { context, rect };
+
+    NSLog(@"lo_render_windows: start");
+
+    rc = pthread_mutex_lock( &pInstance->m_aRenderMutex );
+    if (rc != 0) {
+        SAL_WARN( "vcl.ios", "pthread_mutex_lock failed: " << strerror( rc ) );
+        return;
+    }
+
+    NSLog(@"lo_render_windows: mutex locked");
+
+    IosSalInstance::RenderWindowsArg arg = { false, context, rect };
     Application::PostUserEvent( LINK( pInstance, IosSalInstance, RenderWindows), &arg );
-    pthread_cond_wait( &pInstance->m_aRenderCond, &pInstance->m_aRenderMutex );
+
+    while (!arg.done) {
+        rc = pthread_cond_wait( &pInstance->m_aRenderCond, &pInstance->m_aRenderMutex );
+        SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_wait failed: " << strerror( rc ) );
+    }
+
+    NSLog(@"lo_render_windows: mutex unlocked");
+
+    rc = pthread_mutex_unlock( &pInstance->m_aRenderMutex );
+    SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
+
+    NSLog(@"lo_render_windows: done");
 }
 
 extern "C"

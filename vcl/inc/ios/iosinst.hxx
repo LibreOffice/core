@@ -53,6 +53,7 @@ public:
                   const basegfx::B2IBox& rDamageRect);
 
     typedef struct {
+        bool done;
         CGContextRef context;
         CGRect rect;
     } RenderWindowsArg;
