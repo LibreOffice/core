@@ -40,7 +40,7 @@ define gb_Pagein__command
 $(call gb_Output_announce,$(2),$(true),PAG,5)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && rm -f $(1) \
-    touch $(1) \
+    && touch $(1) \
     $(foreach object,$(OBJECTS),&& echo $(call gb_Pagein__make_path,$(object)) >> $(1)))
 
 endef
