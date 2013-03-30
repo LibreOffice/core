@@ -134,15 +134,13 @@ OUString MyService2Impl::methodOne( OUString const & str )
     throw (RuntimeException)
 {
     m_sData = str;
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "called methodOne() of MyService2 implementation: ") ) + m_sData;
+    return OUString( "called methodOne() of MyService2 implementation: " ) + m_sData;
 }
 
 OUString MyService2Impl::methodTwo( )
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "called methodTwo() of MyService2 implementation: ") ) + m_sData;
+    return OUString( "called methodTwo() of MyService2 implementation: " ) + m_sData;
 }
 
 // XServiceInfo implementation

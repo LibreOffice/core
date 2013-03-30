@@ -189,15 +189,15 @@ void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-            if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Type" ) ) )
+            if ( pValue[i].Name == "Type" )
             {
                 pValue[i].Value >>= msFilterName;
             }
-            else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "UserData" ) ) )
+            else if ( pValue[i].Name == "UserData" )
             {
                 pValue[i].Value >>= msUserData;
             }
-            else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TemplateName" ) ) )
+            else if ( pValue[i].Name == "TemplateName" )
             {
                 pValue[i].Value>>=msTemplateName;
             }
@@ -224,7 +224,7 @@ Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
+    pArray[0] =  OUString ( SERVICE_NAME1 );
     return aRet;
 }
 #undef SERVICE_NAME1

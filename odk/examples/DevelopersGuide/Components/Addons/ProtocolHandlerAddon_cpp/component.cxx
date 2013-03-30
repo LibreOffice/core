@@ -112,7 +112,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_C
     {
         Reference< XSingleComponentFactory > xFactory( createSingleComponentFactory(
             Addon_createInstance,
-            OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) ),
+            OUString( IMPLEMENTATION_NAME ),
             Addon_getSupportedServiceNames() ) );
 
         if (xFactory.is())

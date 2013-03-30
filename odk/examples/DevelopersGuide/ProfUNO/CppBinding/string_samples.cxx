@@ -56,7 +56,7 @@ SAL_IMPLEMENT_MAIN()
     OUStringBuffer buf( 128 );
 
     // append an ascii string
-    buf.appendAscii( "pi ( here " );
+    buf.append( "pi ( here " );
 
     // numbers can be simply appended
     buf.append( pi );
@@ -64,11 +64,11 @@ SAL_IMPLEMENT_MAIN()
     // lets the compiler count the stringlength, so this is more efficient than
     // the above appendAscii call, where length of the string must be calculated at
     // runtime
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" ) multiplied with " ) );
+    buf.append( " ) multiplied with " );
     buf.append( n );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" gives ") );
+    buf.append( " gives " );
     buf.append( (double)( n * pi ) );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    buf.append( "." );
 
     // now transfer the buffer into the string.
     // afterwards buffer is empty and may be reused again !
