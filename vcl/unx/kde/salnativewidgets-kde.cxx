@@ -1800,18 +1800,14 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     else
         aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font name BEFORE system match: \"%s\"\n", OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+    SAL_INFO( "vcl.kde", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"" );
 
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rLocale );
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
-             aInfo.m_nID != 0 ? "succeeded" : "failed",
-             OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+    SAL_INFO( "vcl.kde", "font match " <<
+              (aInfo.m_nID != 0 ? "succeeded" : "failed") <<
+              ", name AFTER: \"" << aInfo.m_aFamilyName << "\"" );
 
     // font height
     int nPointHeight = qFontInfo.pointSize();
