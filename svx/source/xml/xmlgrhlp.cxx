@@ -594,16 +594,13 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
     ::rtl::OUString aPictureStorageName, aPictureStreamName;
     if( ( maURLSet.find( aURLString ) != maURLSet.end() ) )
     {
-        URLPairVector::iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
-        while( aIter != aEnd )
+        for (URLPairVector::const_iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() ); aIter != aEnd ; ++aIter)
         {
             if( aURLString == (*aIter).first )
             {
                 maGrfURLs[ nInsertPos ].second = (*aIter).second;
-                aIter = aEnd;
+                break;
             }
-            else
-                aIter++;
         }
     }
     else if( ImplGetStreamNames( aURLString, aPictureStorageName, aPictureStreamName ) )
@@ -700,12 +697,11 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                     aURLEntry += rRequestedFileName;
                     aURLEntry += aExtension;
 
-                    URLPairVector::iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
-                    while( aIter != aEnd )
+                    URLPairVector::const_iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
+                    for ( ; aIter != aEnd; ++aIter )
                     {
                         if( aURLEntry == (*aIter).second )
                             break;
-                        aIter++;
                     }
                     if ( aIter == aEnd )
                         aStreamName = rRequestedFileName;
