@@ -702,7 +702,7 @@ static BitmapEx readBitmapEx( const OUString& rPath )
 enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
 
 /** Update the setting of the Persona header / footer in ImplStyleData */
-static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap )
+static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, Color& maMenuBarTextColor )
 {
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     if ( !xContext.is() )
@@ -721,13 +721,20 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     rHeaderFooterBitmap = BitmapEx();
 
     // now read the new values and setup bitmaps
-    OUString aHeader, aFooter;
+    OUString aHeader, aFooter, aColor;
     if ( aPersona == "own" )
     {
         sal_Int32 nIndex = 0;
         aHeader = aPersonaSettings.getToken( 0, ';', nIndex );
         if ( nIndex > 0 )
             aFooter = aPersonaSettings.getToken( 0, ';', nIndex );
+
+        // change menu text color, advance nIndex to skip the '#'
+        if ( nIndex > 0 )
+        {
+            aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
+            maMenuBarTextColor = Color( aColor.toInt64( 16 ) );
+        }
     }
     else if ( aPersona == "default" )
     {
@@ -762,7 +769,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
 const BitmapEx StyleSettings::GetPersonaHeader() const
 {
-    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap );
+    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap, mpData->maMenuBarTextColor );
     return mpData->maPersonaHeaderBitmap;
 }
 
