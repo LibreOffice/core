@@ -369,13 +369,13 @@ void SvpSalInstance::StopTimer()
 
 void SvpSalInstance::StartTimer( sal_uLong nMS )
 {
-    timeval Timeout (m_aTimeout); // previous timeout.
+    timeval aPrevTimeout (m_aTimeout);
     gettimeofday (&m_aTimeout, 0);
 
     m_nTimeoutMS  = nMS;
     m_aTimeout    += m_nTimeoutMS;
 
-    if ((Timeout > m_aTimeout) || (Timeout.tv_sec == 0))
+    if ((aPrevTimeout > m_aTimeout) || (aPrevTimeout.tv_sec == 0))
     {
         // Wakeup from previous timeout (or stopped timer).
         Wakeup();
