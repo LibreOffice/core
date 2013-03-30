@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+I8\u003d",
+        "filename": "drawinglayer/Library_drawinglayer.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-03-30T17:32:53Z",
+      "side": 1,
+      "message": "This is:\n\n1. Wrong, because gb_Library_use_package only takes two arguments; o3tl_inc is passed as a third argument, therefore it is ignored. the function would have to be changed to gb_Library_use_packages (note the trailing \u0027s\u0027 in the function\u0027s name).\n\n2. Unnecessary, as drawinglayer links with basegfx, which already depends on o3tl_inc (see basegfx/Library_basegfx.mk).\n\nDoes this patch (try to) solve a real build problem?",
+      "revId": "353a7f8618383bb0605fb9659d26903d6e2a44fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
