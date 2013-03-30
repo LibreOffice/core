@@ -51,6 +51,8 @@ certain functionality.
 
 @section connectivity
 
+@li @c connectivity.cpool
+@li @c connectivity.commontools
 @li @c connectivity.mork
 @li @c connectivity.parse
 
@@ -98,9 +100,10 @@ certain functionality.
 
 @section extensions
 
+@li @c extensions.dbpilots
 @li @c extensions.plugin
-@li @c extensions.update
 @li @c extensions.scanner
+@li @c extensions.update
 
 @section Filter
 
@@ -159,11 +162,11 @@ certain functionality.
 @li @c sfx2.appl
 @li @c sfx2.bastyp
 @li @c sfx2.config
+@li @c sfx2.control
 @li @c sfx2.dialog
 @li @c sfx2.doc
 @li @c sfx2.notify
 @li @c sfx2.view
-@li @c sfx2.control
 
 @section slideshow
 

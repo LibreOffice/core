@@ -572,7 +572,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
         for( unsigned int i = 0; i < nElem; i++ )
             aTmp += "   " + OUString(typeid( *(aGrammar.m_aObjectStack[i]) ).name());
 
-        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - pBuffer << ", object stack: " << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - pBuffer << ", object stack: " << aTmp);
 #endif
     }
 
@@ -652,7 +652,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
                              strlen(typeid( *(aGrammar.m_aObjectStack[i]) ).name()),
                              RTL_TEXTENCODING_ASCII_US);
         }
-        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - file_start << ", object stack: " << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - file_start << ", object stack: " << aTmp);
 #endif
     }
 

@@ -175,11 +175,11 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                     aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
             }
             else
-                OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (").append(OUStringToOString(pArguments->Name, osl_getThreadTextEncoding())).append(") !").getStr());
+                SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (" << pArguments->Name << ") !");
         }
         if (sControlType.isEmpty())
         {
-            OSL_FAIL("SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
+            SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
             sControlType = OUString("TextField");
         }
         OSL_ENSURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
@@ -203,7 +203,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                 }
                 catch (const Exception&)
                 {
-                    OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch : could not set a column property (").append(OUStringToOString(pControlProps->Name, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
+                    SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch : could not set a column property (" << pControlProps->Name << ")!");
                 }
             }
         }
@@ -240,7 +240,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         }
         if (!xMasterForm.is())
         {
-            OSL_FAIL("SbaExternalSourceBrowser::dispatch(FormSlots/AttachToForm) : please specify a form to attach to as argument !");
+            SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(FormSlots/AttachToForm) : please specify a form to attach to as argument !");
             return;
         }
 
@@ -409,7 +409,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         }
         catch(Exception&)
         {
-            OSL_FAIL("SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
+            SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
         }
 
     }

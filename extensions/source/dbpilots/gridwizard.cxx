@@ -218,9 +218,9 @@ namespace dbp
                 }
                 catch(const Exception&)
                 {
-                    OSL_FAIL( ( ::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
-                            += ::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), osl_getThreadTextEncoding())
-                            += ::rtl::OString("!") ).getStr() );
+                    SAL_WARN( "extensions.dbpilots", "OGridWizard::implApplySettings: " <<
+                              "unexpected exception while creating the grid column for field " <<
+                              pFormFieldName->getStr() << "!" );
                 }
             }
         }
