@@ -17,7 +17,7 @@
  	fi ;;
 -*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
 +*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu|*-*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
- *-*-cygwin|*-*-mingw32)
+ *-*-cygwin|*-*-mingw32|*-*-mingw64)
  	if test "$GCC" = yes; then
  		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 @@ -6127,6 +6127,9 @@
@@ -52,15 +52,6 @@
  #else
  #   define U_HAVE_NL_LANGINFO_CODESET 1
  #endif
-@@ -114,6 +114,8 @@
- 
- #ifdef U_TIMEZONE
-     /* Use the predefined value. */
-+#elif defined(__ANDROID__)
-+#   define U_TIMEZONE timezone
- #elif U_PLATFORM_IS_LINUX_BASED
- #   define U_TIMEZONE __timezone
- #elif U_PLATFORM_USES_ONLY_WIN32_API
 --- misc/icu/source/common/unicode/platform.h
 +++ misc/build/icu/source/common/unicode/platform.h
 @@ -641,7 +641,7 @@
