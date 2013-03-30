@@ -61,9 +61,8 @@ extern "C" {
 #if QT_VERSION < 0x050000
         // Qt 4.x support needs >= 4.1.0
         rtl::OString aVersion( qVersion() );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "qt version string is \"%s\"\n", aVersion.getStr() );
-#endif
+        SAL_INFO( "vcl.kde4", "qt version string is " << aVersion );
+
         sal_Int32 nIndex = 0, nMajor = 0, nMinor = 0;
         nMajor = aVersion.getToken( 0, '.', nIndex ).toInt32();
         if( nIndex > 0 )
@@ -74,16 +73,14 @@ extern "C" {
             sal_Int32 nMicro = 0;
             if( nIndex > 0 )
                 nMicro = aVersion.getToken( 0, '.', nIndex ).toInt32();
-            fprintf( stderr, "unsuitable qt version %d.%d.%d\n", nMajor, nMinor, nMicro );
+            SAL_INFO( "vcl.kde4", "unsuitable qt version " << nMajor << "." << nMinor << "." << nMicro );
 #endif
             return NULL;
         }
 #endif
 
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "created KDESalInstance 0x%p\n", pInstance );
-#endif
+        SAL_INFO( "vcl.kde4", "created KDESalInstance " << &pInstance );
 
         // initialize SalData
         KDEData *salData = new KDEData( pInstance );

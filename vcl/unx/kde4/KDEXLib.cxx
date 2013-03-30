@@ -392,9 +392,7 @@ void KDEXLib::doStartup()
     {
         KStartupInfo::appStarted();
         m_bStartupDone = true;
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "called KStartupInfo::appStarted()\n" );
-        #endif
+        SAL_INFO( "vcl.kde4", "called KStartupInfo::appStarted()" );
     }
 }
 

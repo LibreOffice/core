@@ -179,9 +179,7 @@ void KDEXLib::doStartup()
     {
         KStartupInfo::appStarted();
         m_bStartupDone = true;
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "called KStartupInfo::appStarted()\n" );
-        #endif
+        SAL_INFO( "vcl.kde", "called KStartupInfo::appStarted()" );
     }
 }
 
@@ -217,9 +215,8 @@ extern "C" {
             XInitThreads();
 
         rtl::OString aVersion( qVersion() );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "qt version string is \"%s\"\n", aVersion.getStr() );
-#endif
+        SAL_INFO( "vcl.kde", "qt version string is \"" << aVersion << "\"" );
+
         sal_Int32 nIndex = 0, nMajor = 0, nMinor = 0, nMicro = 0;
         nMajor = aVersion.getToken( 0, '.', nIndex ).toInt32();
         if( nIndex > 0 )
@@ -228,16 +225,12 @@ extern "C" {
             nMicro = aVersion.getToken( 0, '.', nIndex ).toInt32();
         if( nMajor != 3 || nMinor < 2 || (nMinor == 2 && nMicro < 2) )
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "unsuitable qt version %d.%d.%d\n", (int)nMajor, (int)nMinor, (int)nMicro );
-#endif
+            SAL_INFO( "vcl.kde", "unsuitable qt version " << nMajor << "." << nMinor << "." << nMicro );
             return NULL;
         }
 
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "created KDESalInstance 0x%p\n", pInstance );
-#endif
+        SAL_INFO( "vcl.kde", "created KDESalInstance " << &pInstance );
 
         // initialize SalData
         KDEData *pSalData = new KDEData( pInstance );

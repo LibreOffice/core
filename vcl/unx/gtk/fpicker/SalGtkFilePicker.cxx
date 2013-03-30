@@ -1820,10 +1820,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
     if( !g_ascii_strcasecmp( pFilter, pExtn ) )
         bRetval = sal_True;
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "'%s' match extn '%s' vs '%s' yeilds %d\n",
-        filter_info->uri, pExtn, pFilter, bRetval );
-#endif
+    SAL_INFO( "vcl.gtk", "'" << filter_info->uri << "' match extn '" << pExtn << "' vs '" << pFilter << "' yeilds " << bRetval );
 
     return bRetval;
 }
