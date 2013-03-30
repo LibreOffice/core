@@ -1578,8 +1578,8 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
         }
     }
 
-    std::vector< SdrCustomShapeInteraction >::iterator aIter( aInteractionHandles.begin() );
-    while ( aIter != aInteractionHandles.end() )
+    for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() );
+         aIter != aEnd; ++aIter )
     {
         try
         {
@@ -1599,7 +1599,6 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
         catch ( const uno::RuntimeException& )
         {
         }
-        aIter++;
     }
     InvalidateRenderGeometry();
 }
@@ -2008,8 +2007,8 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
             pObj->NbcMirror( aLeft, aRight );
         }
 
-        std::vector< SdrCustomShapeInteraction >::iterator aIter( aInteractionHandles.begin() );
-        while ( aIter != aInteractionHandles.end() )
+        for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() );
+             aIter != aEnd ; ++aIter )
         {
             try
             {
@@ -2061,7 +2060,6 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
             catch ( const uno::RuntimeException& )
             {
             }
-            aIter++;
         }
     }
 }
@@ -2088,15 +2086,14 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination, const 
                     pObj->SetRectsDirty(sal_True);
                     pObj->InvalidateRenderGeometry();
 
-                    std::vector< SdrCustomShapeInteraction >::iterator aIter( aInteractionHandles.begin() );
-                    while ( aIter != aInteractionHandles.end() )
+                    for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() ) ;
+                      aIter != aEnd; ++aIter)
                     {
                         if ( aIter->nMode & CUSTOMSHAPE_HANDLE_RESIZE_FIXED )
                         {
                             if ( aIter->xInteraction.is() )
                                 aIter->xInteraction->setControllerPosition( aIter->aPosition );
                         }
-                        aIter++;
                     }
                 }
                 aInteractionHandle.xInteraction->setControllerPosition( aPt );
@@ -2177,8 +2174,8 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     aRect = aRect1;
     SetRectsDirty();
 
-    std::vector< SdrCustomShapeInteraction >::iterator aIter( aInteractionHandles.begin() );
-    while ( aIter != aInteractionHandles.end() )
+    for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() );
+        aIter != aEnd ; ++aIter)
     {
         try
         {
@@ -2188,7 +2185,6 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
         catch ( const uno::RuntimeException& )
         {
         }
-        aIter++;
     }
 
     SetBoundRectDirty();
@@ -2513,8 +2509,8 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         SetRectsDirty();
         SetChanged();
 
-        std::vector< SdrCustomShapeInteraction >::iterator aIter( aInteractionHandles.begin() );
-        while ( aIter != aInteractionHandles.end() )
+        for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd ( aInteractionHandles.end() );
+            aIter != aEnd ; ++aIter)
         {
             try
             {
@@ -2524,7 +2520,6 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
             catch ( const uno::RuntimeException& )
             {
             }
-            aIter++;
         }
         InvalidateRenderGeometry();
     }
@@ -2546,8 +2541,8 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         aRect = aNewTextRect;
         SetRectsDirty();
 
-        std::vector< SdrCustomShapeInteraction >::iterator aIter( aInteractionHandles.begin() );
-        while ( aIter != aInteractionHandles.end() )
+        for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() ) ;
+            aIter != aEnd ; ++aIter)
         {
             try
             {
@@ -2557,7 +2552,6 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
             catch ( const uno::RuntimeException& )
             {
             }
-            aIter++;
         }
 
         InvalidateRenderGeometry();
