@@ -22,6 +22,7 @@
 #include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/sound.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
@@ -4215,6 +4216,7 @@ RTLFUNC(Beep)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
+    Sound::Beep();
 }
 
 RTLFUNC(Load)

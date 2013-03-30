@@ -2955,6 +2955,14 @@ const SystemEnvData* WinSalFrame::GetSystemData() const
 
 // -----------------------------------------------------------------------
 
+void WinSalFrame::Beep()
+{
+    // a simple beep
+    MessageBeep( 0 );
+}
+
+// -----------------------------------------------------------------------
+
 SalFrame::SalPointerState WinSalFrame::GetPointerState()
 {
     SalPointerState aState;
