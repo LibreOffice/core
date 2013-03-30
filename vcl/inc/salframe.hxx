@@ -205,6 +205,8 @@ public:
 
     virtual void                UpdateSettings( AllSettings& rSettings ) = 0;
 
+    virtual void                Beep() = 0;
+
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
