@@ -482,7 +482,7 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
 sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor ) throw( RuntimeException )
 {
     const SolarMutexGuard aGuard;
-    sal_Bool            bRet = sal_False;
+    sal_Bool bRet = sal_False;
 
     try
     {
@@ -493,17 +493,13 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
     {
     }
 
-    DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-
-    while( aIter != aEnd )
+    for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
-            aIter = aEnd;
             bRet = sal_True;
+            break;
         }
-        else
-            aIter++;
     }
 
     return bRet;
@@ -632,10 +628,9 @@ void TransferableHelper::AddFormat( SotFormatStringId nFormat )
 
 void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 {
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bAdd = sal_True;
+    sal_Bool bAdd = sal_True;
 
-    while( aIter != aEnd )
+    for (DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
@@ -654,11 +649,9 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 #endif
             }
 
-            aIter = aEnd;
             bAdd = sal_False;
+            break;
         }
-        else
-            aIter++;
     }
 
     if( bAdd )
@@ -720,18 +713,15 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
 sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 {
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    sal_Bool bRet = sal_False;
 
-    while( aIter != aEnd )
+    for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
     {
         if( nFormat == (*aIter).mnSotId )
         {
-            aIter = aEnd;
             bRet = sal_True;
+            break;
         }
-        else
-            ++aIter;
     }
 
     return bRet;
@@ -1444,17 +1434,13 @@ void TransferableDataHelper::InitFormats()
     {
         TransferableDataHelper::FillDataFlavorExVector( mxTransfer->getTransferDataFlavors(), *mpFormats );
 
-        DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-
-        while( aIter != aEnd )
+        for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
         {
             if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == aIter->mnSotId )
             {
                 ImplSetParameterString( *mpObjDesc, *aIter );
-                aIter = aEnd;
+                break;
             }
-            else
-                ++aIter;
         }
     }
 }
@@ -1584,21 +1570,18 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
     {
         if( mxTransfer.is() )
         {
-            DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
             const SotFormatStringId         nRequestFormat = SotExchange::GetFormat( rFlavor );
 
             if( nRequestFormat )
             {
                 // try to get alien format first
-                while( aIter != aEnd )
+                for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
                 {
                     if( ( nRequestFormat == (*aIter).mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( (*aIter).MimeType ) )
                         aRet = mxTransfer->getTransferData( *aIter );
 
                     if( aRet.hasValue() )
-                        aIter = aEnd;
-                    else
-                        aIter++;
+                        break;
                 }
             }
 
