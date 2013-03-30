@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>  // fuer Pathfinder
+#include <swtypes.hxx>  // for pathfinder
 #include <navicfg.hxx>
 #include <swcont.hxx>
 #include <osl/diagnose.h>
