@@ -51,7 +51,6 @@ gb_SrsPartMergeTarget_TRANSEXDEPS := $(call gb_Executable_get_runtime_dependenci
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(call gb_Executable_get_command,transex3)
 
 define gb_SrsPartMergeTarget__command
-$(call gb_Output_announce,$(3),$(true),SRS,1)
 MERGEINPUT=`$(gb_MKTEMP)` && \
 echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
@@ -66,6 +65,7 @@ rm -rf $${MERGEINPUT}
 endef
 
 $(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)  $(gb_SrsPartMergeTarget_TRANSEXDEPS)
+	$(call gb_Output_announce,$*,$(true),SRS,1)
 	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\
 		$(call gb_SrsPartMergeTarget__command,$@,$*,$<),\
 		mkdir -p $(dir $@) && cp $< $@)
