@@ -1620,7 +1620,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
             if ( pOldStyleSheetPool )
                 EndListening(*pOldStyleSheetPool);
             if ( pStyleSheetPool )
-                StartListening(*pOldStyleSheetPool);
+                StartListening(*pStyleSheetPool);
         }
 
         UpdateStyles_Impl(UPDATE_FAMILY_LIST);
