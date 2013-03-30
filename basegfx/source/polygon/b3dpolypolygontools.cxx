@@ -222,9 +222,10 @@ namespace basegfx
             return aRetval;
         }
 
-        // helper for getting the 3D Point from given cartesian coordiantes. fVer is defined from
-        // [F_PI2 .. -F_PI2], fHor from [0.0 .. F_2PI]
-        inline B3DPoint getPointFromCartesian(double fVer, double fHor)
+        // helper for getting the 3D Point from given cartesian coordinates.
+        // fHor from [0.0 .. F_2PI]
+        // fVer is defined from [F_PI2 .. -F_PI2]
+        inline B3DPoint getPointFromCartesian(double fHor, double fVer)
         {
             const double fCosHor(cos(fHor));
             return B3DPoint(fCosHor * cos(fVer), sin(fHor), fCosHor * -sin(fVer));
