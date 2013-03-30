@@ -184,7 +184,7 @@ static bool CheckPlugin( const rtl::OString& rPath, list< PluginDescription* >& 
 
 union maxDirent
 {
-    char aBuffer[ sizeof( struct dirent ) + _PC_NAME_MAX +1 ];
+    char aBuffer[ sizeof( struct dirent ) + PATH_MAX +1 ];
     struct dirent asDirent;
 };
 
