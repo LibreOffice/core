@@ -4523,13 +4523,10 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
         else
             mpOutStrm->SeekRel( nSize );
     }
-    std::vector< sal_uInt32 >::iterator aIter( mOffsets.begin() );
-    std::vector< sal_uInt32 >::iterator aEnd( mOffsets.end() );
-    while( aIter != aEnd )
+    for (std::vector< sal_uInt32 >::iterator aIter( mOffsets.begin() ), aEnd( mOffsets.end() ); aIter != aEnd ; ++aIter)
     {
         if ( *aIter > nCurPos )
             *aIter += nBytes;
-        aIter++;
     }
     mpOutStrm->Seek( STREAM_SEEK_TO_END );
     nSource = mpOutStrm->Tell();
