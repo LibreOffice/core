@@ -94,7 +94,7 @@ void ScDPSaveGroupItem::RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimen
     // remove this group's elements from their groups in rDimension
     // (rDimension must be a different dimension from the one which contains this)
 
-    for ( std::vector<rtl::OUString>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
+    for ( std::vector<rtl::OUString>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); ++aIter )
         rDimension.RemoveFromGroups( *aIter );
 }
 

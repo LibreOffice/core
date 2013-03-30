@@ -113,15 +113,14 @@ void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::Property
     if ( !mpPicStrm )
         mpPicStrm = mrStg->OpenSotStream( rtl::OUString( "Pictures" ) );
 
-    std::vector< com::sun::star::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() );
-    while( aIter != rMediaData.end() )
+    for (std::vector< com::sun::star::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() ), aEnd( rMediaData.end() );
+        aIter != aEnd ; ++aIter)
     {
         if ( (*aIter).Name == "BaseURI" )
         {
             (*aIter).Value >>= maBaseURI;
             break;
         }
-        aIter++;
     }
     mpPptEscherEx = new PptEscherEx( *mpStrm, maBaseURI );
 }

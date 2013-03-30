@@ -887,7 +887,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 SymbolDescriptor * pDescriptor = aSequence.getArray();
 
                 vector < const SmSym * >::const_iterator aIter = aVector.begin(), aEnd = aVector.end();
-                for(; aIter != aEnd; pDescriptor++, aIter++)
+                for(; aIter != aEnd; pDescriptor++, ++aIter)
                 {
                     pDescriptor->sName = (*aIter)->GetName();
                     pDescriptor->sExportName = (*aIter)->GetExportName();
