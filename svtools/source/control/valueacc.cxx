@@ -91,7 +91,6 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
     if( nEventId )
     {
         ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator  aIter( aTmpListeners.begin() );
         accessibility::AccessibleEventObject                                                        aEvtObject;
 
         aEvtObject.EventId = nEventId;
@@ -99,7 +98,8 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        while( aIter != aTmpListeners.end() )
+        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
+            aIter != aTmpListeners.end() ; ++aIter)
         {
             try
             {
@@ -108,8 +108,6 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
             catch(const uno::Exception&)
             {
             }
-
-            aIter++;
         }
     }
 }
@@ -790,7 +788,6 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
     if( nEventId )
     {
         ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator  aIter( aTmpListeners.begin() );
         accessibility::AccessibleEventObject                                                        aEvtObject;
 
         aEvtObject.EventId = nEventId;
@@ -798,10 +795,10 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
         aEvtObject.NewValue = rNewValue;
         aEvtObject.OldValue = rOldValue;
 
-        while( aIter != aTmpListeners.end() )
+        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aIter( aTmpListeners.begin() );
+             aIter != aTmpListeners.end() ; ++aIter)
         {
             (*aIter)->notifyEvent( aEvtObject );
-            aIter++;
         }
     }
 }
