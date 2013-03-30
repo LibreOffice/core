@@ -642,8 +642,7 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
         aFileName = aPbmFile;
     else
     {
-        OSL_PRECOND( aToken.compareTo( aPpmMarker ) == 0,
-                     "Invalid bitmap format" );
+        SAL_WARN_IF(aToken.compareTo( aPpmMarker ),"sdext.pdfimport","Invalid bitmap format");
         aFileName = aPpmFile;
     }
 

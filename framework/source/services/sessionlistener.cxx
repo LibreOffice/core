@@ -150,8 +150,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         args[0] = PropertyValue(OUString("DispatchAsynchron"),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (const com::sun::star::uno::Exception& e) {
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN("fwk.session",e.Message);
         // save failed, but tell manager to go on if we havent yet dispatched the request
         // in case of synchronous saving the notification is done by the caller
         if ( bAsync && m_rSessionManager.is() )
@@ -179,8 +178,7 @@ void SessionListener::QuitSessionQuietly()
         args[0] = PropertyValue(OUString("DispatchAsynchron"),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (const com::sun::star::uno::Exception& e) {
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN("fwk.session",e.Message);
     }
 }
 
@@ -263,8 +261,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         m_bRestored = sal_True;
 
     } catch (const com::sun::star::uno::Exception& e) {
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN("fwk.session",e.Message);
     }
 
     return m_bRestored;

@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
@@ -47,10 +47,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::io;
-
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 #include "factreg.hxx"
 
@@ -137,8 +133,7 @@ void Pump::fireError( const  Any & exception )
         }
         catch ( const RuntimeException &e )
         {
-            OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
         }
     }
 }
@@ -166,8 +161,7 @@ void Pump::fireClose()
             }
             catch ( const RuntimeException &e )
             {
-                OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-                OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+                SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
             }
         }
     }
@@ -184,8 +178,7 @@ void Pump::fireStarted()
         }
         catch ( const RuntimeException &e )
         {
-            OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
         }
     }
 }
@@ -201,8 +194,7 @@ void Pump::fireTerminated()
         }
         catch ( const RuntimeException &e )
         {
-            OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
         }
     }
 }
@@ -308,8 +300,7 @@ void Pump::run()
     {
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes
-        OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
-        OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception", sMessage.getStr() );
+        SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
     }
 }
 

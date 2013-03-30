@@ -72,8 +72,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         }
         catch ( uno::Exception& )
         {
-            OUString aMsg = "SynchronousDispatch::dispatch() Error while dispatching! ";
-            OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+            SAL_WARN("comphelper","SynchronousDispatch::dispatch() Error while dispatching!");
         }
     }
 

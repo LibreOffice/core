@@ -137,6 +137,10 @@ certain functionality.
 
 @li @c i18n - module independent i18n related, e.g. language tag usage
 
+@section io
+
+@li @c io.streams
+
 @section jvmfwk
 
 @li @c jfw
