@@ -1637,7 +1637,7 @@ void PrintFontManager::initialize()
     CALLGRIND_ZERO_STATS();
     #endif
 
-    long aDirEntBuffer[ (sizeof(struct dirent)+_PC_NAME_MAX)+1 ];
+    long aDirEntBuffer[ (sizeof(struct dirent)+PATH_MAX)+1 ];
 
     if( ! m_pFontCache )
     {
