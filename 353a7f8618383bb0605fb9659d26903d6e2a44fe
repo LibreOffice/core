@@ -16,6 +16,24 @@
       "revId": "353a7f8618383bb0605fb9659d26903d6e2a44fe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+I0\u003d",
+        "filename": "drawinglayer/Library_drawinglayer.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-30T17:37:22Z",
+      "side": 1,
+      "message": "Ah ok. I thought if I use o3tl headers in a module where they were not used before I have to add this. So basegfx is doing that, ok. Thanks David!",
+      "parentUuid": "AAAAW3//+I8\u003d",
+      "revId": "353a7f8618383bb0605fb9659d26903d6e2a44fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
