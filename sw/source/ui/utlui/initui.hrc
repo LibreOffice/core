@@ -20,7 +20,7 @@
 #ifndef _INITUI_HRC
 #define _INITUI_HRC
 
-// lokale Resourcen fuer die Shells:
+// Local Resources for the shells:
 #define STR_POSTIT_PAGE              1
 #define STR_POSTIT_AUTHOR            2
 #define STR_CALC_SYNTAX              3
