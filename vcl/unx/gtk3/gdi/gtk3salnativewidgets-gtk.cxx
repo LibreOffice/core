@@ -623,7 +623,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
     {
         if ( !pSpinVal )
         {
-            fprintf( stderr, "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!\n" );
+            SAL_WARN( "vcl.gtk", "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!" );
             return;
         }
         areaRect = pSpinVal->maUpperRect;

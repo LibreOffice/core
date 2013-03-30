@@ -217,15 +217,12 @@ GtkSalDisplay::initScreen( SalX11Screen nXScreen ) const
         {
            pDefCol = gdk_x11_colormap_foreign_new( pVis, pSD->m_aColormap.GetXColormap() );
            gdk_screen_set_default_colormap( pScreen, pDefCol );
-           #if OSL_DEBUG_LEVEL > 1
-           fprintf( stderr, "set new gdk color map for screen %d\n", nXScreen.getXScreen() );
-           #endif
+           SAL_INFO( "vcl.gtk", "set new gdk color map for screen " << nXScreen.getXScreen() );
         }
     }
-    #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "not GdkVisual for visual id %d\n", (int)pSD->m_aVisual.visualid );
-    #endif
+        SAL_INFO( "vcl.gtk", "not GdkVisual for visual id " << pSD->m_aVisual.visualid );
+
     return pSD;
 }
 
@@ -463,7 +460,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( POINTER_PAINTBRUSH, paintbrush_ );
 
         default:
-            fprintf( stderr, "pointer %d not implemented", ePointerStyle );
+            SAL_WARN( "vcl.gtk", "pointer " << ePointerStyle << "not implemented" );
             break;
         }
         if( !pCursor )
@@ -609,9 +606,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 void GtkData::Init()
 {
     int i;
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "GtkMainloop::Init()\n" );
-#endif
+    SAL_INFO( "vcl.gtk", "GtkMainloop::Init()" );
     XrmInitialize();
 
 #if !GTK_CHECK_VERSION(3,0,0)
