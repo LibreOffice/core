@@ -2068,12 +2068,10 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
     // check that this function is not already in the menu
     SvxConfigEntry* pParent = GetTopLevelSelection();
 
-    SvxEntries::const_iterator iter = pParent->GetEntries()->begin();
-    SvxEntries::const_iterator end = pParent->GetEntries()->end();
-
     if ( !bAllowDuplicates )
     {
-        while ( iter != end )
+        for (SvxEntries::const_iterator iter(pParent->GetEntries()->begin()), end(pParent->GetEntries()->end());
+             iter != end ; ++iter)
         {
             SvxConfigEntry *pCurEntry = *iter;
 
@@ -2085,8 +2083,6 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
                 delete pNewEntryData;
                 return NULL;
             }
-
-            ++iter;
         }
     }
 
