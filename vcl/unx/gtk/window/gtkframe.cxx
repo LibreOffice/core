@@ -2651,6 +2651,11 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         ReleaseGraphics( pGraphics );
 }
 
+void GtkSalFrame::Beep()
+{
+    gdk_display_beep( getGdkDisplay() );
+}
+
 const SystemEnvData* GtkSalFrame::GetSystemData() const
 {
     return &m_aSystemData;

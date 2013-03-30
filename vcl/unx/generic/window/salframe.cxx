@@ -2522,6 +2522,12 @@ bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
     return true;
 }
 
+// Sound
+void X11SalFrame::Beep()
+{
+    GetDisplay()->Beep();
+}
+
 // Event Handling
 
 static sal_uInt16 sal_GetCode( int state )

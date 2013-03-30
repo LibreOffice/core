@@ -645,6 +645,12 @@ void SalX11Display::SetupInput( SalI18N_InputMethod *pInputMethod )
     SetKbdExtension( pKbdExtension );
 }
 
+// Sound
+void SalDisplay::Beep() const
+{
+    XBell( pDisp_, 100 );
+}
+
 // Keyboard
 
 namespace {
