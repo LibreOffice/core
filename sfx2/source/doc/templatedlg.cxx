@@ -716,7 +716,8 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl)
     maSelFolders.clear();
     maSelTemplates.clear();
 
-    mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT,mpCurView->isImportAllowed());
+    if (!mbIsSaveMode)
+        mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT,mpCurView->isImportAllowed());
 
     mpTemplateBar->Hide();
     mpViewBar->Show();
