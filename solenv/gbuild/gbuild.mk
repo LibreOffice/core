@@ -313,6 +313,7 @@ include $(foreach class, \
 	Pagein \
 	PrecompiledHeaders \
 	Pyuno \
+	PythonTest \
 	Rdb \
 	CppunitTest \
 	Jar \

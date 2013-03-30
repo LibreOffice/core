@@ -66,4 +66,13 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
 ))
 endif
 
+# TODO: FixMe restrict to system python
+ifneq ($(DISABLE_PYTHON),TRUE)
+ifeq ($(SYSTEM_PYTHON),YES)
+$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
+	PythonTest_sw_unoapi \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
