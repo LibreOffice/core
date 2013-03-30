@@ -301,14 +301,14 @@ void OHierarchyElement_Impl::RemoveElement( const ::rtl::Reference< OHierarchyEl
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        for ( OHierarchyElementList_Impl::iterator aIter = m_aChildren.begin();
-              aIter != m_aChildren.end(); /* increment is done in body */)
+        OHierarchyElementList_Impl::iterator aIter = m_aChildren.begin();
+        const OHierarchyElementList_Impl::const_iterator aEnd = m_aChildren.end();
+        while (aIter != aEnd)
         {
-            OHierarchyElementList_Impl::iterator aTmpIter = aIter;
-            ++aIter;
-
-            if ( aTmpIter->second == aRef )
-                m_aChildren.erase( aTmpIter );
+            if (aIter->second == aRef )
+                aIter = m_aChildren.erase(aIter);
+            else
+                ++aIter;
         }
     }
 
