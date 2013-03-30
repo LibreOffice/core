@@ -56,46 +56,6 @@ using namespace ::com::sun::star::registry;
 //#### EXPORTED ####################################################################################
 //##################################################################################################
 
-
-/**
- * This function creates an implementation section in the registry and another subkey
- *
- * for each supported service.
- * @param pServiceManager   the service manager
- * @param pRegistryKey      the registry key
- */
-// This method not longer necessary since OOo 3.4 where the component registration was
-// was changed to passive component registration. For more details see
-// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
-//
-// extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKey)
-// {
-//  sal_Bool result = sal_False;
-
-//  if (pRegistryKey)
-//  {
-//      try
-//      {
-//          Reference< XRegistryKey > xNewKey(
-//              reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-//                  OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLEMENTATION_NAME "/UNO/SERVICES") ) ) );
-
-//          const Sequence< OUString > & rSNL =
-//              Addon_getSupportedServiceNames();
-//          const OUString * pArray = rSNL.getConstArray();
-//          for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-//              xNewKey->createKey( pArray[nPos] );
-
-//          return sal_True;
-//      }
-//      catch (InvalidRegistryException &)
-//      {
-//          // we should not ignore exceptions
-//      }
-//  }
-//  return result;
-// }
-
 /**
  * This function is called to get service factories for an implementation.
  *
