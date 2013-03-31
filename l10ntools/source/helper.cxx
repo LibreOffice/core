@@ -11,45 +11,58 @@
 
 namespace helper {
 
-rtl::OString QuotHTML(const rtl::OString &rString)
+OString QuotHTML(const OString &rString)
 {
-    rtl::OStringBuffer sReturn;
-    for (sal_Int32 i = 0; i < rString.getLength(); ++i) {
-        switch (rString[i]) {
-        case '\\':
-            if (i < rString.getLength()) {
-                switch (rString[i + 1]) {
-                case '"':
-                case '<':
-                case '>':
-                case '\\':
-                    ++i;
-                    break;
-                }
-            }
-            // fall through
-        default:
-            sReturn.append(rString[i]);
-            break;
-
+    OStringBuffer sReturn;
+    for (sal_Int32 i = 0; i < rString.getLength(); ++i)
+    {
+        switch (rString[i])
+        {
         case '<':
             sReturn.append("&lt;");
             break;
-
         case '>':
             sReturn.append("&gt;");
             break;
-
         case '"':
             sReturn.append("&quot;");
             break;
-
         case '&':
             if (rString.match("&amp;", i))
                 sReturn.append('&');
             else
                 sReturn.append("&amp;");
             break;
+        default:
+            sReturn.append(rString[i]);
+            break;
+        }
+    }
+    return sReturn.makeStringAndClear();
+}
+
+OString UnQuotHTML( const OString& rString )
+{
+    OStringBuffer sReturn;
+    for (sal_Int32 i = 0; i != rString.getLength();) {
+        if (rString.match("&amp;", i)) {
+            sReturn.append('&');
+            i += RTL_CONSTASCII_LENGTH("&amp;");
+        } else if (rString.match("&lt;", i)) {
+            sReturn.append('<');
+            i += RTL_CONSTASCII_LENGTH("&lt;");
+        } else if (rString.match("&gt;", i)) {
+            sReturn.append('>');
+            i += RTL_CONSTASCII_LENGTH("&gt;");
+        } else if (rString.match("&quot;", i)) {
+            sReturn.append('"');
+            i += RTL_CONSTASCII_LENGTH("&quot;");
+        } else if (rString.match("&apos;", i)) {
+            sReturn.append('\'');
+            i += RTL_CONSTASCII_LENGTH("&apos;");
+        } else {
+            sReturn.append(rString[i]);
+            ++i;
         }
     }
     return sReturn.makeStringAndClear();

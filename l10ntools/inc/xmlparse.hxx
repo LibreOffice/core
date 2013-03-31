@@ -229,11 +229,11 @@ protected:
 class XMLUtil{
 
 public:
-    /// Quot the XML characters and replace \n \t
-    static void         QuotHTML( rtl::OUString &rString );
+    /// Quot the XML characters
+    static OUString QuotHTML( const OUString& rString );
 
-    /// UnQuot the XML characters and restore \n \t
-    static void         UnQuotHTML  ( rtl::OUString &rString );
+    /// UnQuot the XML characters
+    static OUString UnQuotHTML( const OUString &rString );
 };
 
 

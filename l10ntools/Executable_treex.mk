@@ -31,9 +31,6 @@ $(eval $(call gb_Executable_add_exception_objects,treex,\
 $(eval $(call gb_Executable_use_externals,treex,\
     boost_headers \
     libxml2 \
-    icuuc \
-    icui18n \
-    icu_headers \
 ))
 
 # vim: set noet sw=4 ts=4:

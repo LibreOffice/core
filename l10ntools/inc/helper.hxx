@@ -25,7 +25,8 @@
 
 namespace helper {
 
-OString QuotHTML(const rtl::OString &rString);
+OString QuotHTML( const OString &rString );
+OString UnQuotHTML( const OString& rString );
 
 bool isWellFormedXML( OString const & text );
 

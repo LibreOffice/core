@@ -27,6 +27,7 @@
 #include "boost/scoped_ptr.hpp"
 #include "rtl/strbuf.hxx"
 
+#include "helper.hxx"
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"
@@ -131,33 +132,6 @@ static OString lcl_QuoteHTML( const OString& rString )
                     sReturn.append(rString[i]);
                 break;
             }
-        }
-    }
-    return sReturn.makeStringAndClear();
-}
-
-static OString lcl_UnquoteHTML( const OString& rString )
-{
-    rtl::OStringBuffer sReturn;
-    for (sal_Int32 i = 0; i != rString.getLength();) {
-        if (rString.match("&amp;", i)) {
-            sReturn.append('&');
-            i += RTL_CONSTASCII_LENGTH("&amp;");
-        } else if (rString.match("&lt;", i)) {
-            sReturn.append('<');
-            i += RTL_CONSTASCII_LENGTH("&lt;");
-        } else if (rString.match("&gt;", i)) {
-            sReturn.append('>');
-            i += RTL_CONSTASCII_LENGTH("&gt;");
-        } else if (rString.match("&quot;", i)) {
-            sReturn.append('"');
-            i += RTL_CONSTASCII_LENGTH("&quot;");
-        } else if (rString.match("&apos;", i)) {
-            sReturn.append('\'');
-            i += RTL_CONSTASCII_LENGTH("&apos;");
-        } else {
-            sReturn.append(rString[i]);
-            ++i;
         }
     }
     return sReturn.makeStringAndClear();
@@ -489,7 +463,7 @@ void CfgExport::WorkOnResourceEnd()
                 if ( sText.isEmpty())
                     sText = sFallback;
 
-                sText = lcl_UnquoteHTML( sText );
+                sText = helper::UnQuotHTML( sText );
 
                 common::writePoEntry(
                     "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
@@ -504,7 +478,7 @@ void CfgExport::WorkOnText(
     const rtl::OString &rIsoLang
 )
 {
-    if( rIsoLang.getLength() ) rText = lcl_UnquoteHTML( rText );
+    if( rIsoLang.getLength() ) rText = helper::UnQuotHTML( rText );
 }
 
 

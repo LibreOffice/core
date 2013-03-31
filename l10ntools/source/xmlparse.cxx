@@ -20,6 +20,7 @@
 
 #include <iterator> /* std::iterator*/
 
+#include <cassert>
 #include <stdio.h>
 #include <sal/alloca.h>
 
@@ -32,7 +33,9 @@
 #include <osl/thread.hxx>
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>
+#include <unicode/regex.h>
 
+using namespace U_ICU_NAMESPACE;
 using namespace std;
 using namespace osl;
 
@@ -195,12 +198,10 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                     for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ) {
                         rStream << " ";
                         rtl::OUString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
-                        XMLUtil::QuotHTML( sData );
-                        WriteString( rStream , sData );
+                        WriteString( rStream , XMLUtil::QuotHTML( sData ) );
                         rStream << "=\"";
                         sData = (*pElement->GetAttributeList())[ j ]->GetValue();
-                        XMLUtil::QuotHTML( sData );
-                        WriteString( rStream , sData  );
+                        WriteString( rStream , XMLUtil::QuotHTML( sData )  );
                         rStream << "\"";
                     }
                 if ( !pElement->GetChildList())
@@ -218,8 +219,7 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
                 rtl::OUString sData( pData->GetData());
-                XMLUtil::QuotHTML( sData );
-                WriteString( rStream, sData );
+                WriteString( rStream, XMLUtil::QuotHTML( sData ) );
             }
             break;
             case XML_NODE_TYPE_COMMENT: {
@@ -717,7 +717,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
                 if( !pElement->GetName().equalsIgnoreAsciiCase("comment") ){
-                    buffer.append( OUString("\\<") );
+                    buffer.append( OUString("<") );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
                         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
@@ -727,24 +727,24 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                                 buffer.append( OUString(" ") );
                                 buffer.append( aAttrName );
                                 buffer.append( OUString("=") );
-                                buffer.append( OUString("\\\"") );
+                                buffer.append( OUString("\"") );
                                 buffer.append( (*pElement->GetAttributeList())[ j ]->GetValue() );
-                                buffer.append( OUString("\\\"") );
+                                buffer.append( OUString("\"") );
                             }
                         }
                     }
                     if ( !pElement->GetChildList())
-                        buffer.append( OUString("/\\>") );
+                        buffer.append( OUString("/>") );
                     else {
-                        buffer.append( OUString("\\>") );
+                        buffer.append( OUString(">") );
                         XMLChildNode* tmp=NULL;
                         for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ ){
                             tmp = (*pElement->GetChildList())[ k ];
                             Print( tmp, buffer , false);
                         }
-                        buffer.append( OUString("\\</") );
+                        buffer.append( OUString("</") );
                         buffer.append( pElement->GetName() );
-                        buffer.append( OUString("\\>") );
+                        buffer.append( OUString(">") );
                     }
                 }
             }
@@ -1172,41 +1172,114 @@ XMLFile *SimpleXMLParser::Execute( const rtl::OUString &rFileName, XMLFile* pXML
     return pXMLFile;
 }
 
-
-void XMLUtil::QuotHTML( OUString &rString )
+namespace
 {
-    const OString sString(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
-    rString = OStringToOUString(helper::QuotHTML( sString ), RTL_TEXTENCODING_UTF8);
-}
 
-void XMLUtil::UnQuotHTML( rtl::OUString &rString ){
-    rtl::OStringBuffer sReturn;
-    rtl::OString sString(rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
-    for (sal_Int32 i = 0; i != sString.getLength();) {
-        if (sString[i] == '\\') {
-            sReturn.append(RTL_CONSTASCII_STRINGPARAM("\\\\"));
-            ++i;
-        } else if (sString.match("&amp;", i)) {
-            sReturn.append('&');
-            i += RTL_CONSTASCII_LENGTH("&amp;");
-        } else if (sString.match("&lt;", i)) {
-            sReturn.append('<');
-            i += RTL_CONSTASCII_LENGTH("&lt;");
-        } else if (sString.match("&gt;", i)) {
-            sReturn.append('>');
-            i += RTL_CONSTASCII_LENGTH("&gt;");
-        } else if (sString.match("&quot;", i)) {
-            sReturn.append('"');
-            i += RTL_CONSTASCII_LENGTH("&quot;");
-        } else if (sString.match("&apos;", i)) {
-            sReturn.append('\'');
-            i += RTL_CONSTASCII_LENGTH("&apos;");
-        } else {
-            sReturn.append(sString[i]);
-            ++i;
+static icu::UnicodeString lcl_QuotRange(
+    const icu::UnicodeString& rString, const sal_Int32 nStart,
+    const sal_Int32 nEnd, bool bInsideTag = false )
+{
+    icu::UnicodeString sReturn;
+    assert( nStart > 0 && nStart < rString.length() );
+    assert( nEnd > 0 && nEnd < rString.length() );
+    for (sal_Int32 i = nStart; i <= nEnd; ++i)
+    {
+        switch (rString[i])
+        {
+            case '<':
+                sReturn.append("&lt;");
+                break;
+            case '>':
+                sReturn.append("&gt;");
+                break;
+            case '"':
+                if( !bInsideTag )
+                    sReturn.append("&quot;");
+                else
+                    sReturn.append(rString[i]);
+                break;
+            case '&':
+                if (rString.startsWith("&amp;", i, 5))
+                    sReturn.append('&');
+                else
+                    sReturn.append("&amp;");
+                break;
+            default:
+                sReturn.append(rString[i]);
+                break;
         }
     }
-    rString = rtl::OStringToOUString(sReturn.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+    return sReturn;
+}
+
+static bool lcl_isTag( const icu::UnicodeString& rString )
+{
+    const int nSize = 12;
+    static const icu::UnicodeString vTags[nSize] = {
+        "ahelp", "link", "item", "emph", "defaultinline",
+        "switchinline", "caseinline", "variable",
+        "bookmark_value", "image", "embedvar", "alt" };
+
+    for( int nIndex = 0; nIndex < nSize; ++nIndex )
+    {
+        if( rString.startsWith("<" + vTags[nIndex]) ||
+             rString == "</" + vTags[nIndex] + ">" )
+            return true;
+    }
+
+    return rString == "<br/>" || rString =="<help-id-missing/>";
+}
+
+} /// anonymous namespace
+
+OUString XMLUtil::QuotHTML( const OUString &rString )
+{
+    if( rString.trim().isEmpty() )
+        return rString;
+    UErrorCode nIcuErr = U_ZERO_ERROR;
+    static const sal_uInt32 nSearchFlags =
+        UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
+    static const OUString sPattern(
+        "<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
+    static const UnicodeString sSearchPat(
+        reinterpret_cast<const UChar*>(sPattern.getStr()),
+        sPattern.getLength() );
+
+    icu::UnicodeString sSource(
+        reinterpret_cast<const UChar*>(
+            rString.getStr()), rString.getLength() );
+
+    RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
+    aRegexMatcher.reset( sSource );
+
+    icu::UnicodeString sReturn;
+    int32_t nEndPos = 0;
+    int32_t nStartPos = 0;
+    while( aRegexMatcher.find(nStartPos, nIcuErr) && nIcuErr == U_ZERO_ERROR )
+    {
+        nStartPos = aRegexMatcher.start(nIcuErr);
+        sReturn.append(lcl_QuotRange(sSource, nEndPos, nStartPos-1));
+        nEndPos = aRegexMatcher.end(nIcuErr);
+        icu::UnicodeString sMatch = aRegexMatcher.group(nIcuErr);
+        if( lcl_isTag(sMatch) )
+        {
+            sReturn.append("<");
+            sReturn.append(lcl_QuotRange(sSource, nStartPos+1, nEndPos-2, true));
+            sReturn.append(">");
+        }
+        else
+            sReturn.append(lcl_QuotRange(sSource, nStartPos, nEndPos-1));
+        ++nStartPos;
+    }
+    sReturn.append(lcl_QuotRange(sSource, nEndPos, sSource.length()-1));
+    sReturn.append('\0');
+    return OUString(reinterpret_cast<const sal_Unicode*>(sReturn.getBuffer()));
+}
+
+OUString  XMLUtil::UnQuotHTML( const OUString& rString )
+{
+    const OString sString(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+    return OStringToOUString(helper::UnQuotHTML(sString), RTL_TEXTENCODING_UTF8);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

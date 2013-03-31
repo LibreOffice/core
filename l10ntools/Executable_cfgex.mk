@@ -49,8 +49,7 @@ $(eval $(call gb_Executable_add_exception_objects,cfgex,\
 
 $(eval $(call gb_Executable_use_externals,cfgex,\
     boost_headers \
-    icuuc \
-    icui18n \
+    libxml2 \
 ))
 
 # vim:set noet sw=4 ts=4:

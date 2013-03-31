@@ -39,7 +39,6 @@ $(eval $(call gb_StaticLibrary_set_include,transex,\
 
 $(eval $(call gb_StaticLibrary_use_externals,transex,\
 	boost_headers \
-	icu_headers \
 	libxml2 \
 ))
 

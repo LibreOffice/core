@@ -17,14 +17,11 @@
 #include <string>
 
 #include <boost/crc.hpp>
-#include <unicode/regex.h>
 
 #include "po.hxx"
 
 #define POESCAPED OString("\\n\\t\\r\\\\\\\"")
 #define POUNESCAPED OString("\n\t\r\\\"")
-
-using namespace U_ICU_NAMESPACE;
 
 /** Container of po entry
 
@@ -282,84 +279,9 @@ namespace
         const OString& rText,const bool bHelpText = false )
     {
         if ( bHelpText )
-            return lcl_UnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
+            return rText;
         else
             return lcl_UnEscapeText(rText,"\\n\\t\\r","\n\t\r");
-    }
-
-    //Find all special tag in a string using a regular expression
-    static void lcl_FindAllTag(
-        const OString& rText,std::vector<OString>& o_vFoundTags )
-    {
-
-        UErrorCode nIcuErr = U_ZERO_ERROR;
-        static const sal_uInt32 nSearchFlags =
-            UREGEX_DOTALL | UREGEX_CASE_INSENSITIVE;
-        OUString sLocaleText( OStringToOUString(rText,RTL_TEXTENCODING_UTF8) );
-        static const OUString sPattern(
-            "<[/]\?\?[a-z_-]+?(?:| +[a-z]+?=\".*?\") *[/]\?\?>");
-        static const UnicodeString sSearchPat(
-            reinterpret_cast<const UChar*>(sPattern.getStr()),
-            sPattern.getLength() );
-        UnicodeString sSource(
-            reinterpret_cast<const UChar*>(
-                sLocaleText.getStr()), sLocaleText.getLength() );
-
-        RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
-        aRegexMatcher.reset( sSource );
-        int64_t nStartPos = 0;
-        while( aRegexMatcher.find(nStartPos, nIcuErr) &&
-            nIcuErr == U_ZERO_ERROR )
-        {
-            UnicodeString sMatch =
-                aRegexMatcher.group(nIcuErr);
-            o_vFoundTags.push_back(
-                OUStringToOString(
-                    OUString(
-                        reinterpret_cast<const sal_Unicode*>(
-                            sMatch.getBuffer()),sMatch.length()),
-                    RTL_TEXTENCODING_UTF8));
-            nStartPos = aRegexMatcher.start(nIcuErr)+1;
-        }
-    }
-
-    //Escape special tags
-    static OString lcl_EscapeTags( const OString& rText )
-    {
-        typedef std::vector<OString> StrVec_t;
-        static const OString vInitializer[] = {
-            "ahelp", "link", "item", "emph", "defaultinline",
-            "switchinline", "caseinline", "variable",
-            "bookmark_value", "image", "embedvar", "alt" };
-        static const StrVec_t vTagsForEscape( vInitializer,
-            vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
-        StrVec_t vFoundTags;
-        lcl_FindAllTag(rText,vFoundTags);
-        OString sResult = rText;
-        for(StrVec_t::const_iterator pFound  = vFoundTags.begin();
-            pFound != vFoundTags.end(); ++pFound)
-        {
-            bool bEscapeThis = false;
-            for(StrVec_t::const_iterator pEscape = vTagsForEscape.begin();
-                pEscape != vTagsForEscape.end(); ++pEscape)
-            {
-                if (pFound->startsWith("<" + *pEscape) ||
-                    *pFound == "</" + *pEscape + ">")
-                {
-                    bEscapeThis = true;
-                    break;
-                }
-            }
-            if( bEscapeThis || *pFound=="<br/>" ||
-                *pFound =="<help-id-missing/>")
-            {
-                OString sToReplace = "\\<" +
-                    pFound->copy(1,pFound->getLength()-2).
-                        replaceAll("\"","\\\"") + "\\>";
-                sResult = sResult.replaceAll(*pFound, sToReplace);
-            }
-        }
-        return sResult;
     }
 
     //Escape to get merge string
@@ -367,7 +289,7 @@ namespace
         const OString& rText,const bool bHelpText = false )
     {
         if ( bHelpText )
-            return lcl_EscapeTags(rText.replaceAll("\\","\\\\"));
+            return rText;
         else
             return lcl_EscapeText(rText,"\n\t\r","\\n\\t\\r");
     }

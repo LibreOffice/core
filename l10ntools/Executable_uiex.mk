@@ -31,9 +31,6 @@ $(eval $(call gb_Executable_use_externals,uiex,\
     libxml2 \
     libxslt \
     boost_headers \
-    icuuc \
-    icui18n \
-    icu_headers \
 ))
 
 # vim: set noet sw=4 ts=4:

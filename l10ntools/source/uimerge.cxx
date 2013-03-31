@@ -64,7 +64,7 @@ int extractTranslations()
                     vIDs.push_back(helper::xmlStrToOString(content));
                     xmlFree(content);
                 }
-                OString sText = helper::xmlStrToOString(xmlNodeGetContent(nodeLevel2));
+                OString sText = helper::UnQuotHTML(helper::xmlStrToOString(xmlNodeGetContent(nodeLevel2)));
                 common::writePoEntry(
                     "Uiex", aPOStream, sInputFileName, vIDs[0],
                     (vIDs.size()>=2) ? vIDs[1] : OString(),
