@@ -52,12 +52,13 @@ public:
     void damaged( IosSalFrame *frame,
                   const basegfx::B2IBox& rDamageRect);
 
-    typedef struct {
-        bool done;
+    typedef enum { IDLE, PENDING, WAITING, GOAHEAD } eRenderWindowsState;
+    struct {
+        eRenderWindowsState state;
         CGContextRef context;
         CGRect rect;
-    } RenderWindowsArg;
-    DECL_LINK( RenderWindows, RenderWindowsArg* );
+    } m_aRenderWindowsState;
+    DECL_LINK( RenderWindows, void* );
 
     pthread_mutex_t m_aRenderMutex;
     pthread_cond_t m_aRenderCond;

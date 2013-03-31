@@ -107,6 +107,8 @@ IosSalInstance::IosSalInstance( SalYieldMutex *pMutex )
     rc = pthread_mutex_init( &m_aRenderMutex, NULL );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_init failed: " << strerror( rc ) );
 #endif
+
+    m_aRenderWindowsState.state = IDLE;
 }
 
 IosSalInstance::~IosSalInstance()
@@ -279,7 +281,7 @@ void lo_set_view_size(int width, int height)
     viewHeight = height;
 }
 
-IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
+IMPL_LINK_NOARG( IosSalInstance, RenderWindows )
 {
     int rc;
 
@@ -290,6 +292,19 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
 
     NSLog(@"RenderWindows: mutex locked");
 
+    m_aRenderWindowsState.state = WAITING;
+
+    /* We need to poke the UI thread to do drawRect() which calls
+     * lo_render_windows() which signals the condition so we can
+     * continue.
+     */
+    lo_damaged( m_aRenderWindowsState.rect );
+
+    while (m_aRenderWindowsState.state != GOAHEAD) {
+        rc = pthread_cond_wait( &m_aRenderCond, &m_aRenderMutex );
+        SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_wait failed: " << strerror( rc ) );
+    }
+
     NSDate *a = [NSDate date];
 
     for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
@@ -299,7 +314,7 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
         SalFrameGeometry aGeom = pFrame->GetGeometry();
         CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
         if ( pFrame->IsVisible() &&
-             CGRectIntersectsRect( arg->rect, bbox ) ) {
+             CGRectIntersectsRect( m_aRenderWindowsState.rect, bbox ) ) {
 
             const basebmp::BitmapDeviceSharedPtr aDevice = pFrame->getDevice();
             CGDataProviderRef provider =
@@ -316,11 +331,11 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
                                NULL,
                                false,
                                kCGRenderingIntentDefault );
-            CGContextDrawImage( arg->context, bbox, image );
+            CGContextDrawImage( m_aRenderWindowsState.context, bbox, image );
         }
     }
 
-    arg->done = true;
+    m_aRenderWindowsState.state = IDLE;
 
     rc = pthread_cond_signal( &m_aRenderCond );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_signal failed:" << strerror( rc ) );
@@ -354,16 +369,25 @@ void lo_render_windows( CGContextRef context, CGRect rect )
 
     NSLog(@"lo_render_windows: mutex locked");
 
-    IosSalInstance::RenderWindowsArg arg = { false, context, rect };
-    Application::PostUserEvent( LINK( pInstance, IosSalInstance, RenderWindows), &arg );
-
-    while (!arg.done) {
-        rc = pthread_cond_wait( &pInstance->m_aRenderCond, &pInstance->m_aRenderMutex );
-        SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_wait failed: " << strerror( rc ) );
+    if (pInstance->m_aRenderWindowsState.state == IosSalInstance::IDLE) {
+        pInstance->m_aRenderWindowsState.state = IosSalInstance::PENDING;
+        pInstance->m_aRenderWindowsState.context = context;
+        pInstance->m_aRenderWindowsState.rect = rect;
+        Application::PostUserEvent( LINK( pInstance, IosSalInstance, RenderWindows ) );
+    } else {
+        pInstance->m_aRenderWindowsState.context = context;
+        pInstance->m_aRenderWindowsState.rect = CGRectUnion( pInstance->m_aRenderWindowsState.rect, rect );
+        if (pInstance->m_aRenderWindowsState.state == IosSalInstance::WAITING) {
+            pInstance->m_aRenderWindowsState.state = IosSalInstance::GOAHEAD;
+            pthread_cond_signal( &pInstance->m_aRenderCond );
+            while (pInstance->m_aRenderWindowsState.state != IosSalInstance::IDLE) {
+                rc = pthread_cond_wait( &pInstance->m_aRenderCond, &pInstance->m_aRenderMutex );
+                SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_wait failed: " << strerror( rc ) );
+            }
+        }
     }
 
-    NSLog(@"lo_render_windows: mutex unlocked");
-
+    NSLog(@"lo_render_windows: unlocking mutex");
     rc = pthread_mutex_unlock( &pInstance->m_aRenderMutex );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
 
