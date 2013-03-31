@@ -25,7 +25,6 @@
 
 using namespace ::com::sun::star;
 
-
 SwShadowCursor::~SwShadowCursor()
 {
     if( USHRT_MAX != nOldMode )
@@ -53,10 +52,10 @@ void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, bool bLeft )
     long nLineDiff = ( nHeight / 2 );
     long nLineDiffHalf = nLineDiff / 2;
 
-    // Punkt oben
+    // Dot above
     Point aPt1( (bLeft ? rPt.X() - 3 : rPt.X() + 3),
                 rPt.Y() + nLineDiffHalf );
-    // Punkt unten
+    // Dot below
     Point aPt2( aPt1.X(), aPt1.Y() + nHeight - nLineDiff - 1 );
     long nDiff = bLeft ? -1 : 1;
     while( aPt1.Y() <= aPt2.Y() )
@@ -78,14 +77,14 @@ void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode 
 
     pWin->SetLineColor( Color( aCol.GetColor() ^ COL_WHITE ) );
 
-    // 1. der Strich:
+    // 1. The Line:
     pWin->DrawLine( Point( rPt.X(), rPt.Y() + 1),
               Point( rPt.X(), rPt.Y() - 2 + nHeight ));
 
-    // 2. das Dreieck
-    if( text::HoriOrientation::LEFT == nMode || text::HoriOrientation::CENTER == nMode )    // Pfeil nach rechts
+    // 2. The Triangle
+    if( text::HoriOrientation::LEFT == nMode || text::HoriOrientation::CENTER == nMode )    // Arrow to the right
         DrawTri( rPt, nHeight, false );
-    if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   // Pfeil nach links
+    if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   // Arrow to the left
         DrawTri( rPt, nHeight, true );
 
     pWin->Pop();
@@ -117,8 +116,5 @@ Rectangle SwShadowCursor::GetRect() const
 
     return pWin->PixelToLogic( Rectangle( aPt, aSz ) );
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

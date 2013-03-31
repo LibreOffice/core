@@ -38,31 +38,26 @@ SwPageFtnInfoItem::SwPageFtnInfoItem( const sal_uInt16 nId, SwPageFtnInfo& rInfo
 {
 }
 
-
 SwPageFtnInfoItem::SwPageFtnInfoItem( const SwPageFtnInfoItem& rItem ) :
     SfxPoolItem( rItem ),
     aFtnInfo(rItem.GetPageFtnInfo())
 {
 }
 
-
  SwPageFtnInfoItem::~SwPageFtnInfoItem()
 {
 }
-
 
 SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwPageFtnInfoItem( *this );
 }
 
-
 int  SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( Which() == rAttr.Which(), "keine gleichen Attribute" );
+    OSL_ENSURE( Which() == rAttr.Which(), "no equal attributes" );
     return ( aFtnInfo == ((SwPageFtnInfoItem&)rAttr).GetPageFtnInfo());
 }
-
 
 SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
 (
@@ -214,20 +209,14 @@ SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Copy-Konstruktor
- --------------------------------------------------------------------*/
-
+// Copy constructor
 
 SwPtrItem::SwPtrItem( const SwPtrItem& rItem ) : SfxPoolItem( rItem )
 {
     pMisc = rItem.pMisc;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Clonen
- --------------------------------------------------------------------*/
-
+// Cloning
 
 SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
@@ -241,10 +230,8 @@ int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
     return ( pMisc == rItem.pMisc );
 }
 
+// SwUINumRuleItem for the NumTabPages of the FormatNumRule/Styleists
 
-/*--------------------------------------------------------------
- SwUINumRuleItem fuer die NumTabPages der FormatNumRule/Stylisten
----------------------------------------------------------------*/
 SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const sal_uInt16 nId )
     : SfxPoolItem( nId ), pRule( new SwNumRule( rRul ) )
 {
@@ -260,7 +247,6 @@ SwUINumRuleItem::SwUINumRuleItem( const SwUINumRuleItem& rItem )
 {
     delete pRule;
 }
-
 
 SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
@@ -305,19 +291,16 @@ SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool * /*pPool*/ ) c
     return new SwBackgroundDestinationItem(Which(), GetValue());
 }
 
-
 SwPaMItem::SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM ) :
     SfxPoolItem( nId ),
     m_pPaM(pPaM)
 {
 }
 
-
 SwPaMItem::SwPaMItem( const SwPaMItem& rItem ) : SfxPoolItem( rItem )
 {
     m_pPaM = rItem.m_pPaM;
 }
-
 
 SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
@@ -330,6 +313,5 @@ int SwPaMItem::operator==( const SfxPoolItem& rAttr ) const
     const SwPaMItem& rItem = (SwPaMItem&)rAttr;
     return ( m_pPaM == rItem.m_pPaM );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

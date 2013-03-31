@@ -31,12 +31,7 @@
 #include "docsh.hxx"
 #include "tmplctrl.hxx"
 
-
-// STATIC DATA -----------------------------------------------------------
-
 SFX_IMPL_STATUSBAR_CONTROL( SwTemplateControl, SfxStringItem );
-
-// class SwTemplatePopup_Impl --------------------------------------------------
 
 class SwTemplatePopup_Impl : public PopupMenu
 {
@@ -62,7 +57,7 @@ void SwTemplatePopup_Impl::Select()
     nCurId = GetCurItemId();
 }
 
-// class SvxZoomStatusBarControl ------------------------------------------
+// class SvxZoomStatusBarControl
 
 SwTemplateControl::SwTemplateControl( sal_uInt16 _nSlotId,
                                       sal_uInt16 _nId,
@@ -125,7 +120,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                     sal_uInt16 nCurrId = aPop.GetCurId();
                     if( nCurrId != USHRT_MAX)
                     {
-                        // sieht etwas umstaendlich aus, anders geht's aber nicht
+                        // looks a bit awkward, but another way is not possible
                         pStyle = pPool->operator[]( nCurrId - 1 );
                         SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
                         pWrtShell->GetView().GetViewFrame()->GetDispatcher()->Execute(
@@ -139,7 +134,5 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
         ReleaseMouse();
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

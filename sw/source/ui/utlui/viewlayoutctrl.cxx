@@ -24,9 +24,7 @@
 #include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <utlui.hrc>
-#include <swtypes.hxx>  // fuer Pathfinder
-
-// STATIC DATA -----------------------------------------------------------
+#include <swtypes.hxx>  // for pathfinder
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
@@ -46,8 +44,6 @@ struct SwViewLayoutControl::SwViewLayoutControl_Impl
     Image       maImageBookMode;
     Image       maImageBookMode_Active;
 };
-
-// class SwViewLayoutControl ------------------------------------------
 
 SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),

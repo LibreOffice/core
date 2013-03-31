@@ -70,7 +70,4 @@ void SwZoomControl::Command( const CommandEvent& rCEvt )
         SvxZoomStatusBarControl::Command(rCEvt);
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
