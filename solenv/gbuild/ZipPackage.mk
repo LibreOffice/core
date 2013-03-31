@@ -17,7 +17,7 @@ gb_Zip_get_outdir_bin_target = $(OUTDIR)/bin/$(1).zip
 
 define gb_ZipPackage_ZipPackage
 $(call gb_Package_Package,$(1),$(2))
-$(call gb_Zip_Zip_internal,$(1),$(WORKDIR)/Zip/$(1))
+$(call gb_Zip_Zip_internal_nodeliver,$(1),$(WORKDIR)/Zip/$(1))
 $(call gb_Package_get_target,$(1)) : $(call gb_Zip_get_outdir_bin_target,$(1))
 $(call gb_Zip_get_outdir_bin_target,$(1)) : $(call gb_Zip_get_target,$(1))
 	cp $$< $$@
