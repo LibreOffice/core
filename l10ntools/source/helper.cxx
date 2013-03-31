@@ -27,6 +27,9 @@ OString QuotHTML(const OString &rString)
         case '"':
             sReturn.append("&quot;");
             break;
+        case '\'':
+            sReturn.append("&apos;");
+            break;
         case '&':
             if (rString.match("&amp;", i))
                 sReturn.append('&');

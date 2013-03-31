@@ -84,61 +84,6 @@ void workOnTokenSet(int nTyp, char * pTokenText) {
 
 }
 
-namespace
-{
-
-static OString lcl_QuoteHTML( const OString& rString )
-{
-    rtl::OStringBuffer sReturn;
-    for ( sal_Int32 i = 0; i < rString.getLength(); i++ ) {
-        rtl::OString sTemp = rString.copy( i );
-        if ( sTemp.match( "<Arg n=" ) ) {
-            while ( i < rString.getLength() && rString[i] != '>' ) {
-                 sReturn.append(rString[i]);
-                i++;
-            }
-            if ( rString[i] == '>' ) {
-                sReturn.append('>');
-                i++;
-            }
-        }
-        if ( i < rString.getLength()) {
-            switch ( rString[i]) {
-                case '<':
-                    sReturn.append("&lt;");
-                break;
-
-                case '>':
-                    sReturn.append("&gt;");
-                break;
-
-                case '\"':
-                    sReturn.append("&quot;");
-                break;
-
-                case '\'':
-                    sReturn.append("&apos;");
-                break;
-
-                case '&':
-                    if ((( i + 4 ) < rString.getLength()) &&
-                        ( rString.copy( i, 5 ) == "&amp;" ))
-                            sReturn.append(rString[i]);
-                    else
-                        sReturn.append("&amp;");
-                break;
-
-                default:
-                    sReturn.append(rString[i]);
-                break;
-            }
-        }
-    }
-    return sReturn.makeStringAndClear();
-}
-
-} // anonymous namespace
-
 //
 // class CfgStackData
 //
@@ -558,7 +503,7 @@ void CfgMerge::WorkOnText(rtl::OString &rText, const rtl::OString& rLangIndex)
             if ( !rLangIndex.equalsIgnoreAsciiCase("en-US") &&
                 ( sContent != "-" ) && !sContent.isEmpty())
             {
-                rText = lcl_QuoteHTML( rText );
+                rText = helper::QuotHTML( rText );
             }
         }
     }
@@ -590,7 +535,7 @@ void CfgMerge::WorkOnResourceEnd()
                     ( sContent != "-" ) && !sContent.isEmpty())
                 {
 
-                    rtl::OString sText = lcl_QuoteHTML( sContent);
+                    rtl::OString sText = helper::QuotHTML( sContent);
 
                     rtl::OString sAdditionalLine( "\t" );
 
