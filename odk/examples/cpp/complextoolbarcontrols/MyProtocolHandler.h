@@ -142,7 +142,7 @@ class WriterDispatch : public BaseDispatch
 public:
     WriterDispatch( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
-        : BaseDispatch( rxContext, xFrame, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument" ) ) )
+        : BaseDispatch( rxContext, xFrame, OUString( "com.sun.star.text.TextDocument" ) )
     {}
 };
 
@@ -151,7 +151,7 @@ class CalcDispatch : public BaseDispatch
 public:
     CalcDispatch( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
-        : BaseDispatch( rxContext, xFrame, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadSheetDocument" ) ) )
+        : BaseDispatch( rxContext, xFrame, OUString( "com.sun.star.sheet.SpreadSheetDocument" ) )
     {}
 };
 

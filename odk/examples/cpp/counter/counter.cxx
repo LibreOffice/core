@@ -117,7 +117,7 @@ public:
 OUString SAL_CALL MyCounterImpl::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return OUString( IMPLNAME );
 }
 
 //*************************************************************************
@@ -142,7 +142,7 @@ Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames(  )
 //*************************************************************************
 Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames_Static(  )
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
 
@@ -216,7 +216,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_C
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+            OUString( IMPLNAME ),
             MyCounterImpl_create,
             MyCounterImpl::getSupportedServiceNames_Static() ) );
 

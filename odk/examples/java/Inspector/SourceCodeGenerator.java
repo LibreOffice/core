@@ -1527,7 +1527,7 @@ class UnoObjectDefinition{
         public String getPropertyValueGetterSourceCode(String _sPropertyName, String _sReturnVariableName, String _sIncomingObjectName, TypeClass _aTypeClass, String _sTypeName){
             String sFirstLine = "\t";
             String sReturnVariableName = _sReturnVariableName;
-            // e.g. uno::Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) );
+            // e.g. uno::Any a = xPropSet->getPropertyValue( rtl::OUString( "DefaultContext" ) );
             String[] sVarDefinition = _sReturnVariableName.split("=");
             if (sVarDefinition.length > 0){
                 String sVariable = sVarDefinition[0];
@@ -1560,7 +1560,7 @@ class UnoObjectDefinition{
 
         public String getStringValue(String _sValue){
             bIncludeStringHeader = true;
-            return "OUString(RTL_CONSTASCII_USTRINGPARAM(\"" + _sValue + "\"))";
+            return "OUString(\"" + _sValue + "\")";
         }
 
 
