@@ -194,19 +194,19 @@ int main( int argc, char *argv[] )
 
         Reference < XBridgeFactory > rBridgeFactory ( createComponent(
             OUString("com.sun.star.bridge.BridgeFactory"),
-            OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION )),
+            OUString( "bridgefac.uno" SAL_DLLEXTENSION ),
             rSMgr ),
                                                      UNO_QUERY );
 
 
         createComponent( OUString("com.sun.star.bridge.Bridge.iiop"),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
+                         OUString( "remotebridge.uno" SAL_DLLEXTENSION),
                          rSMgr );
 
 
         Reference < XAcceptor > rAcceptor(
             createComponent( OUString("com.sun.star.connection.Acceptor"),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor.uno" SAL_DLLEXTENSION)),
+                             OUString( "acceptor.uno" SAL_DLLEXTENSION),
                              rSMgr ) ,
             UNO_QUERY );
 

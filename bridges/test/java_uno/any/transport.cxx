@@ -77,8 +77,8 @@ extern "C" JNIEXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_
         throw;
     }
     // create uno envs
-    OUString java_name( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_JAVA) );
-    OUString cpp_name( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    OUString java_name( UNO_LB_JAVA );
+    OUString cpp_name( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     Environment java_env, cpp_env;
     uno_getEnvironment( (uno_Environment **)&java_env, java_name.pData, vm.get() );
     OSL_ASSERT( java_env.is() );

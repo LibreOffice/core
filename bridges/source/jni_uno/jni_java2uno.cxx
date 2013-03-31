@@ -97,10 +97,9 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 #if OSL_DEBUG_LEVEL > 1
         {
         OUStringBuffer buf( 128 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("exception occurred java->uno: [") );
+        buf.append( "exception occurred java->uno: [" );
         buf.append( OUString::unacquired( &uno_exc->pType->pTypeName ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
+        buf.append( "] " );
         buf.append(
             reinterpret_cast< ::com::sun::star::uno::Exception const * >(
                 uno_exc->pData )->Message );
@@ -135,8 +134,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
                     jo_exc.get(), m_jni_info->m_method_Object_toString, 0 ) );
             jni.ensure_no_exception();
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                 "throwing java exception failed: ") );
+            buf.append( "throwing java exception failed: " );
             buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -401,9 +399,9 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
 #if OSL_DEBUG_LEVEL > 1
         {
         OUStringBuffer trace_buf( 64 );
-        trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("java->uno call: ") );
+        trace_buf.append( "java->uno call: " );
         trace_buf.append( method_name );
-        trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on oid ") );
+        trace_buf.append( " on oid " );
         JLocalAutoRef jo_oid(
             jni, jni->GetObjectField(
                 jo_proxy, jni_info->m_field_JNI_proxy_m_oid ) );
@@ -596,11 +594,10 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         }
         // the thing that should not be... no method info found!
         OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-            "calling undeclared function on interface ") );
+        buf.append( "calling undeclared function on interface " );
         buf.append( OUString::unacquired(
                         &((typelib_TypeDescription *)td)->pTypeName ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
+        buf.append( ": " );
         buf.append( method_name );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -608,11 +605,9 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     catch (const BridgeRuntimeError & err)
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("[jni_uno bridge error] "
-                                       "Java calling UNO method ") );
+        buf.append( "[jni_uno bridge error] " "Java calling UNO method " );
         buf.append( method_name );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
+        buf.append( ": " );
         buf.append( err.m_message );
         // notify RuntimeException
         OString cstr_msg(
@@ -629,9 +624,8 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     catch (const ::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         OString cstr_msg(
-            OString( RTL_CONSTASCII_STRINGPARAM(
-                "[jni_uno bridge error] "
-                "attaching current thread to java failed!") ) +
+            OString( "[jni_uno bridge error] "
+                "attaching current thread to java failed!" ) +
             OUStringToOString(
                 jni.get_stack_trace(), RTL_TEXTENCODING_JAVA_UTF8 ) );
         OSL_FAIL( cstr_msg.getStr() );
