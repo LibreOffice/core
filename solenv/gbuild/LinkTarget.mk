@@ -445,7 +445,7 @@ endef
 # If object files from this library are merged, create just empty file
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
 	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))), \
-		touch $@, $(call gb_LinkTarget__command,$@,$*))
+		echo > $@, $(call gb_LinkTarget__command,$@,$*))
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
