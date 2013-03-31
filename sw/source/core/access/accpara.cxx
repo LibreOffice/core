@@ -45,11 +45,10 @@
 #include <accpara.hxx>
 #include <access.hrc>
 #include <accportions.hxx>
-#include <sfx2/viewsh.hxx>      // for ExecuteAtViewShell(...)
-#include <sfx2/viewfrm.hxx>      // for ExecuteAtViewShell(...)
-#include <sfx2/dispatch.hxx>    // for ExecuteAtViewShell(...)
+#include <sfx2/viewsh.hxx>          // for ExecuteAtViewShell(...)
+#include <sfx2/viewfrm.hxx>         // for ExecuteAtViewShell(...)
+#include <sfx2/dispatch.hxx>        // for ExecuteAtViewShell(...)
 #include <unotools/charclass.hxx>   // for GetWordBoundary
-// for get/setCharacterAttribute(...)
 #include <unocrsr.hxx>
 #include <unoport.hxx>
 #include <doc.hxx>
@@ -433,7 +432,7 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
     Window *pWin = GetWindow();
     if( nOld != nNew )
     {
-        // The cursor's node position is sumilated by the focus!
+        // The cursor's node position is simulated by the focus!
         if( pWin && pWin->HasFocus() && -1 == nOld )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_True );
 
@@ -534,20 +533,20 @@ void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
     OSL_ENSURE( GetMap() != NULL, "no map?" );
     ViewShell* pViewShell = GetMap()->GetShell();
 
-    OSL_ENSURE( pViewShell != NULL, "View shell exptected!" );
+    OSL_ENSURE( pViewShell != NULL, "View shell expected!" );
     SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();
 
-    OSL_ENSURE( pSfxShell != NULL, "SfxViewShell shell exptected!" );
+    OSL_ENSURE( pSfxShell != NULL, "SfxViewShell shell expected!" );
     if( !pSfxShell )
         return;
 
     SfxViewFrame *pFrame = pSfxShell->GetViewFrame();
-    OSL_ENSURE( pFrame != NULL, "View frame exptected!" );
+    OSL_ENSURE( pFrame != NULL, "View frame expected!" );
     if( !pFrame )
         return;
 
     SfxDispatcher *pDispatcher = pFrame->GetDispatcher();
-    OSL_ENSURE( pDispatcher != NULL, "Dispatcher exptected!" );
+    OSL_ENSURE( pDispatcher != NULL, "Dispatcher expected!" );
     if( !pDispatcher )
         return;
 
@@ -1450,7 +1449,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
                      0 );
     // #i82637#
     // From the perspective of the a11y API the character attributes, which
-    // are set at the automatic paragraph style of the paragraph are treated
+    // are set at the automatic paragraph style of the paragraph, are treated
     // as run attributes.
     //    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, sal_True, sal_True );
     // get character attributes from automatic paragraph style and merge these into <aSet>
@@ -2254,13 +2253,11 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
 
     sal_Int32 nCount = 0;
     // #i77108# - provide hyperlinks also in editable documents.
-//    if( !IsEditableState() )
-    {
-        const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
-        SwHyperlinkIter_Impl aIter( pTxtFrm );
-        while( aIter.next() )
-            nCount++;
-    }
+
+    const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
+    SwHyperlinkIter_Impl aIter( pTxtFrm );
+    while( aIter.next() )
+        nCount++;
 
     return nCount;
 }

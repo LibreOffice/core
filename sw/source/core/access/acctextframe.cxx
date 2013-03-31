@@ -111,7 +111,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
                 break;
             }
         }
-        // intentional no break here
+        // intentionally no break here
         case RES_DESCRIPTION_CHANGED:
         {
             if ( pFlyFrm )
@@ -206,11 +206,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
 }
 
 
-//
 // XAccessibleRelationSet
-//
-
-
 SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
 {
     SwFlyFrm* pFlyFrm = NULL;

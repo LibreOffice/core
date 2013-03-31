@@ -216,7 +216,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(un
 
 /// XAccessibleImage
 /** implementation of the XAccessibleImage methods is a no-brainer, as
-    all releveant information is already accessible through other
+    all relevant information is already accessible through other
     methods. So we just delegate to those. */
 
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageDescription()

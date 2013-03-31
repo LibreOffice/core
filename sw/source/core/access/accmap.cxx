@@ -299,14 +299,14 @@ public:
                      INVALID_ATTR };
 
 private:
-    SwRect      maOldBox;               // the old bounds for CHILD_POS_CHANGED
-                                        // and POS_CHANGED
+    SwRect      maOldBox;                       // the old bounds for CHILD_POS_CHANGED
+                                                // and POS_CHANGED
     uno::WeakReference < XAccessible > mxAcc;   // The object that fires the event
     SwAccessibleChild   maFrmOrObj;             // the child for CHILD_POS_CHANGED and
-                                        // the same as xAcc for any other
-                                        // event type
-    EventType   meType;                 // The event type
-    tAccessibleStates mnStates;         // check states or update caret pos
+                                                // the same as xAcc for any other
+                                                // event type
+    EventType   meType;                         // The event type
+    tAccessibleStates mnStates;                 // check states or update caret pos
 
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
@@ -464,11 +464,11 @@ public:
 
 // The shape list is filled if an accessible shape is destroyed. It
 // simply keeps a reference to the accessible shape's XShape. These
-// references are destroyed within the EndAction when firing events,
-// There are twp reason for this. First of all, a new accessible shape
+// references are destroyed within the EndAction when firing events.
+// There are two reason for this. First of all, a new accessible shape
 // for the XShape might be created soon. It's then cheaper if the XShape
 // still exists. The other reason are situations where an accessible shape
-// is destroyed within an SwFrmFmt::Modify. In this case, destryoing
+// is destroyed within an SwFrmFmt::Modify. In this case, destroying
 // the XShape at the same time (indirectly by destroying the accessible
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.
@@ -870,7 +870,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // An INVALID_CONTENT event overwrites a CARET_OR_STATES
                 // event (but keeps its flags) and it is contained in a
                 // POS_CHANGED event.
-                // Therefor, the event's type has to be adapted and the event
+                // Therefore, the event's type has to be adapted and the event
                 // has to be put at the end.
                 //
                 // fdo#56031 An INVALID_CONTENT event overwrites a INVALID_ATTR
@@ -1417,13 +1417,13 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // If the new context has the focus, and if we know
                         // another context that had the focus, then the focus
                         // just moves from the old context to the new one. We
-                        // have to send a focus event and a caret event for
-                        // the old context then. We have to to that know,
+                        // then have to send a focus event and a caret event for
+                        // the old context. We have to to that now,
                         // because after we have left this method, anyone might
                         // call getStates for the new context and will get a
                         // focused state then. Sending the focus changes event
                         // after that seems to be strange. However, we cannot
-                        // send a focus event fo the new context now, because
+                        // send a focus event for the new context now, because
                         // noone except us knows it. In any case, we remember
                         // the new context as the one that has the focus
                         // currently.
@@ -1553,7 +1553,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
 
             // Remove reference to old caret object. Though mxCursorContext
             // is a weak reference and cleared automatically, clearing it
-            // directly makes sure to not keep a defunctional object.
+            // directly makes sure to not keep a non-functional object.
             uno::Reference < XAccessible > xOldAcc( mxCursorContext );
             if( xOldAcc.is() )
             {
@@ -2299,8 +2299,8 @@ Rectangle SwAccessibleMap::GetVisibleArea() const
     return OutputDevice::LogicToLogic( GetVisArea().SVRect(), aSrc, aDest );
 }
 
-// Convert a MM100 value realtive to the document root into a pixel value
-// realtive to the screen!
+// Convert a MM100 value relative to the document root into a pixel value
+// relative to the screen!
 Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 {
     MapMode aSrc( MAP_100TH_MM );
@@ -2400,12 +2400,12 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     if( !pObj )
         return sal_False;
 
-    uno::Reference < drawing::XShape > xShape( _rxShape ); //keep reference to shape, because
-                                             // we might be the only one that
-                                             // hold it.
+    uno::Reference < drawing::XShape > xShape( _rxShape );  // keep reference to shape, because
+                                                            // we might be the only one that
+                                                            // holds it.
     // Also get keep parent.
     uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
-    pCurrentChild = 0;  // well be realease by dispose
+    pCurrentChild = 0;  // will be released by dispose
     Dispose( 0, pObj, 0 );
 
     {
@@ -2547,7 +2547,7 @@ Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const
 
 /** method to build up a new data structure of the accessible pararaphs,
     which have a selection
-    Important note: method has to used inside a mutual exclusive section
+    Important note: method has to be used inside a mutual exclusive section
 */
 SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
 {
@@ -2586,7 +2586,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
     do {
 
         // for a selection the cursor has to have a mark.
-        // for savety reasons assure that point and mark are in text nodes
+        // for safety reasons assure that point and mark are in text nodes
         if ( pCrsr->HasMark() &&
              pCrsr->GetPoint()->nNode.GetNode().IsTxtNode() &&
              pCrsr->GetMark()->nNode.GetNode().IsTxtNode() )

@@ -176,7 +176,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                      rLower.AlwaysIncludeAsChild() )
             {
                 // This wouldn't be required if the SwAccessibleFrame,
-                // wouldn't know about the vis area.
+                // wouldn't know about the visible area.
                 eAction = SCROLLED;
             }
             if( NONE != eAction )
@@ -798,7 +798,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
 
    There are two modes.
 
-   - realative
+   - relative
 
      Return bounding box relative to parent if parent is no root
      frame. Otherwise return the absolute bounding box.
