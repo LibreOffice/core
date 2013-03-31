@@ -25,6 +25,7 @@ $(call gb_Zip_get_outdir_bin_target,$(1)) :| $(dir $(call gb_Zip_get_outdir_bin_
 $(call gb_Package_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,$(1))
 $(call gb_ZipPackage_get_target,$(1)) : $(call gb_Package_get_target,$(1))
 $(call gb_Helper_make_userfriendly_targets,$(1),ZipPackage)
+$(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_bin_target,$(1)),$(call gb_Zip_get_target,$(1)),$(1))
 
 endef
 

@@ -59,6 +59,7 @@ $(call gb_Pagein_get_target,$(1)) : OBJECTS :=
 $(call gb_Pagein_get_target,$(1)) : $(realpath $(lastword $(MAKEFILE_LIST)))
 $$(eval $$(call gb_Module_register_target,$(call gb_Pagein_get_outdir_target,$(1)),$(call gb_Pagein_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Pagein,$(call gb_Pagein_get_outdir_target,$(1)))
+$(call gb_Deliver_add_deliverable,$(call gb_Pagein_get_outdir_target,$(1)),$(call gb_Pagein_get_target,$(1)),$(1))
 $(call gb_Pagein_get_outdir_target,$(1)) : $(call gb_Pagein_get_target,$(1))
 $(call gb_Pagein_get_outdir_target,$(1)) :| $(dir $(call gb_Pagein_get_outdir_target,$(1))).dir
 
