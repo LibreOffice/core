@@ -72,8 +72,6 @@ protected:
 };
 
 
-//------------------------------------------------------------------------------
-
 class SwAccessibleTableData_Impl
 {
     SwAccessibleMap& mrAccMap;
@@ -479,8 +477,6 @@ void SwAccessibleTableData_Impl::GetRowColumnAndExtent(
          static_cast< sal_Int32 >( ::std::distance( aStt, aEnd ) );
 }
 
-//------------------------------------------------------------------------------
-
 class SwAccSingleTableSelHander_Impl : public SwAccTableSelHander_Impl
 {
     sal_Bool bSelected;
@@ -505,8 +501,6 @@ void SwAccSingleTableSelHander_Impl::Unselect( sal_Int32, sal_Int32 )
 {
     bSelected = sal_False;
 }
-
-//------------------------------------------------------------------------------
 
 class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
 
@@ -573,8 +567,6 @@ void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
         nRowOrCol++;
     }
 }
-
-//------------------------------------------------------------------------------
 
 const SwSelBoxes *SwAccessibleTable::GetSelBoxes() const
 {
@@ -785,7 +777,7 @@ uno::Any SwAccessibleTable::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-//====== XTypeProvider ====================================================
+// XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
     throw(uno::RuntimeException)
 {
@@ -1004,7 +996,7 @@ uno::Reference< XAccessibleTable > SAL_CALL
         SwAccessibleTable::getAccessibleColumnHeaders(  )
     throw (uno::RuntimeException)
 {
-    // #i87532# - assure that return accesible object is empty,
+    // #i87532# - assure that return accessible object is empty,
     // if no column header exists.
     SwAccessibleTableColHeaders* pTableColHeaders =
         new SwAccessibleTableColHeaders( GetMap(), static_cast< const SwTabFrm *>( GetFrm() ) );
@@ -1332,7 +1324,7 @@ void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
     }
 
     // There are two reason why this method has been called. The first one
-    // is there is no context for pFrm. The method is them called by
+    // is there is no context for pFrm. The method is then called by
     // the map, and we have to call our superclass.
     // The other situation is that we have been call by a call to get notified
     // about its change. We then must not call the superclass
@@ -1372,7 +1364,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
 }
 
 
-//=====  XAccessibleSelection =============================================
+// XAccessibleSelection
 
 void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     sal_Int32 nChildIndex )
@@ -1518,7 +1510,7 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChi
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
-    // paremter checking (part 1): index lower 0
+    // parameter checking (part 1): index lower 0
     if( nSelectedChildIndex < 0 )
         throw lang::IndexOutOfBoundsException();
 
@@ -1622,14 +1614,14 @@ void SwAccessibleTableColHeaders::Modify( const SfxPoolItem * /*pOld*/, const Sf
 {
 }
 
-//=====  XInterface  ======================================================
+// XInterface
 uno::Any SAL_CALL SwAccessibleTableColHeaders::queryInterface( const uno::Type& aType )
         throw (uno::RuntimeException)
 {
     return SwAccessibleTable::queryInterface( aType );
 }
 
-//=====  XAccessibleContext  ==============================================
+// XAccessibleContext
 sal_Int32 SAL_CALL SwAccessibleTableColHeaders::getAccessibleChildCount(void)
         throw (uno::RuntimeException)
 {
@@ -1679,7 +1671,7 @@ uno::Reference< XAccessible> SAL_CALL
     return SwAccessibleTable::getAccessibleChild( nIndex );
 }
 
-//=====  XAccessibleTable  ================================================
+// XAccessibleTable
 uno::Reference< XAccessibleTable >
         SAL_CALL SwAccessibleTableColHeaders::getAccessibleRowHeaders()
         throw (uno::RuntimeException)
@@ -1694,7 +1686,7 @@ uno::Reference< XAccessibleTable >
     return uno::Reference< XAccessibleTable >();
 }
 
-//=====  XServiceInfo  ====================================================
+// XServiceInfo
 
 OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName (void)
         throw (uno::RuntimeException)
