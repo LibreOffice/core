@@ -239,9 +239,9 @@ static void cpp_call(
             throw;
         } catch (const std::exception & e) {
             OUStringBuffer buf;
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("C++ code threw "));
+            buf.append("C++ code threw ");
             appendCString(buf, typeid(e).name());
-            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(": "));
+            buf.append(": ");
             appendCString(buf, e.what());
             throw RuntimeException(
                 buf.makeStringAndClear(), Reference< XInterface >());

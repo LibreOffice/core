@@ -136,7 +136,7 @@ namespace CPPU_CURRENT_NAMESPACE
         {
             // RTTI symbol
             OStringBuffer buf( 64 );
-            buf.append( RTL_CONSTASCII_STRINGPARAM("_ZTIN") );
+            buf.append( "_ZTIN" );
             sal_Int32 index = 0;
             do
             {

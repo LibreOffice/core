@@ -209,17 +209,17 @@ int main( int argc, char *argv[] )
 
         Reference < XConnector > rConnector(
             createComponent( OUString("com.sun.star.connection.Connector"),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("connector.uno" SAL_DLLEXTENSION)),
+                             OUString( "connector.uno" SAL_DLLEXTENSION),
                              rSMgr ),
             UNO_QUERY );
 
         createComponent( OUString("com.sun.star.bridge.Bridge.iiop"),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
+                         OUString( "remotebridge.uno" SAL_DLLEXTENSION),
                          rSMgr );
 
         Reference < XBridgeFactory > rFactory(
             createComponent( OUString("com.sun.star.bridge.BridgeFactory"),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION)),
+                             OUString( "bridgefac.uno" SAL_DLLEXTENSION),
                              rSMgr ),
             UNO_QUERY );
 
