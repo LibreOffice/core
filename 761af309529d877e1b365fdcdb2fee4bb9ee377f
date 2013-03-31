@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+F4\u003d",
+        "filename": "sw/source/ui/utlui/initui.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-31T15:52:36Z",
+      "side": 0,
+      "message": "nice one :D",
+      "revId": "761af309529d877e1b365fdcdb2fee4bb9ee377f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
