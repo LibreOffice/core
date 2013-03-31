@@ -63,36 +63,29 @@ private:
     void            ShowImage();
 
 private:
-    FixedLine       aFlPageDir;
-    RadioButton     aBtnTopDown;
-    RadioButton     aBtnLeftRight;
-    FixedImage      aBmpPageDir;
-    Image           aImgLeftRight;
-    Image           aImgTopDown;
-    CheckBox        aBtnPageNo;
-    NumericField    aEdPageNo;
+    RadioButton*     m_pBtnTopDown;
+    RadioButton*     m_pBtnLeftRight;
+    FixedImage*      m_pBmpPageDir;
+    CheckBox*        m_pBtnPageNo;
+    NumericField*    m_pEdPageNo;
 
-    FixedLine       aFlPrint;
-    CheckBox        aBtnHeaders;
-    CheckBox        aBtnGrid;
-    CheckBox        aBtnNotes;
-    CheckBox        aBtnObjects;
-    CheckBox        aBtnCharts;
-    CheckBox        aBtnDrawings;
-    CheckBox        aBtnFormulas;
-    CheckBox        aBtnNullVals;
+    CheckBox*        m_pBtnHeaders;
+    CheckBox*        m_pBtnGrid;
+    CheckBox*        m_pBtnNotes;
+    CheckBox*        m_pBtnObjects;
+    CheckBox*        m_pBtnCharts;
+    CheckBox*        m_pBtnDrawings;
+    CheckBox*        m_pBtnFormulas;
+    CheckBox*        m_pBtnNullVals;
 
-    FixedLine           aFlScale;
-    FixedText           aFtScaleMode;
-    ListBox             aLbScaleMode;
-    FixedText           aFtScaleAll;
-    MetricField         aEdScaleAll;
-    FixedText           aFtScalePageWidth;
-    EmptyNumericField   aEdScalePageWidth;
-    FixedText           aFtScalePageHeight;
-    EmptyNumericField   aEdScalePageHeight;
-    FixedText           aFtScalePageNum;
-    NumericField        aEdScalePageNum;
+    ListBox*             m_pLbScaleMode;
+    VclHBox*             m_pBxScaleAll;
+    MetricField*         m_pEdScaleAll;
+    VclGrid*             m_pGrHeightWidth;
+    NumericField*        m_pEdScalePageWidth;
+    NumericField*        m_pEdScalePageHeight;
+    VclHBox*             m_pBxScalePageNum;
+    NumericField*        m_pEdScalePageNum;
 
 private:
     //------------------------------------
