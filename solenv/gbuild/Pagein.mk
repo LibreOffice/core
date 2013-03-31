@@ -54,9 +54,6 @@ $(call gb_Pagein_get_clean_target,%) :
 $(call gb_Pagein_get_target,%) :
 	$(call gb_Pagein__command,$@,$*,$^)
 	
-$(call gb_Pagein_get_outdir_target,%) : $(call gb_Pagein_get_target,%)
-	$(call gb_Deliver_deliver,$<,$@)
-
 define gb_Pagein_Pagein
 $(call gb_Pagein_get_target,$(1)) : OBJECTS :=
 $(call gb_Pagein_get_target,$(1)) : $(realpath $(lastword $(MAKEFILE_LIST)))

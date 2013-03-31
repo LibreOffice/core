@@ -386,13 +386,6 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
 		$(gb_ResTarget_RSCCOMMAND) @$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
 
-$(call gb_ResTarget_get_outdir_target,%) :
-	$(call gb_Deliver_deliver,$<,$@)
-
-$(call gb_ResTarget_get_unittest_target,%) :
-	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@))
-	$(call gb_Deliver_deliver,$<,$@)
-
 define gb_ResTarget_ResTarget
 $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)
 $(call gb_ResTarget_get_target,$(1)) : LANGUAGE = $(3)
@@ -402,9 +395,11 @@ $(call gb_AllLangResTarget_get_clean_target,$(2)) : $(call gb_ResTarget_get_clea
 $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,$(1))
 
 $(call gb_ResTarget_get_outdir_target,$(1)) : $(call gb_ResTarget_get_target,$(1)) 
+$(call gb_ResTarget_get_outdir_target,$(1)) :| $(dir $(call gb_ResTarget_get_outdir_target,$(1))).dir
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_ResTarget_get_target,$(1)),$(1))
 
 $(call gb_ResTarget_get_unittest_target,$(1)) : $(call gb_ResTarget_get_target,$(1))
+$(call gb_ResTarget_get_unittest_target,$(1)) :| $(dir $(call gb_ResTarget_get_unittest_target,$(1))).dir
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_unittest_target,$(1)),$(call gb_ResTarget_get_target,$(1)),$(1))
 
 endef

@@ -60,13 +60,6 @@ $(call gb_ComponentTarget_get_target,%) : \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_ComponentTarget__command,$@,$<,$*)
 
-# the .dir is for make 3.81, which ignores trailing /
-$(dir $(call gb_ComponentTarget_get_outdir_target,))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_ComponentTarget_get_outdir_target,%) :
-	$(call gb_Deliver_deliver,$<,$@)
-
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
