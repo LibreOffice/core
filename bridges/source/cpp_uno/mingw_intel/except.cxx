@@ -130,7 +130,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     {
         // RTTI symbol
         OStringBuffer buf( 64 );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("__ZTIN") );
+        buf.append( "__ZTIN" );
         sal_Int32 index = 0;
         do
         {
