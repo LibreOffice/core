@@ -30,7 +30,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <vcl/toolbox.hxx>
-#include <swtypes.hxx>  // fuer Pathfinder
+#include <swtypes.hxx>  // for pathfinder
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <navicfg.hxx>
@@ -54,16 +54,14 @@
 
 #include <unomid.h>
 
-#define PAGE_CHANGE_TIMEOUT 1000 //Timeout fuer Seitenwechsel
+#define PAGE_CHANGE_TIMEOUT 1000
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
 SFX_IMPL_CHILDWINDOW_CONTEXT( SwNavigationChild, SID_NAVIGATOR, SwView )
 
-/*------------------------------------------------------------------------
-    Bechreibung: Steuerzeichen aus dem Outline-Entry filtern
-------------------------------------------------------------------------*/
+// Filter the control characters out of the Outline-Entry
 
 void SwNavigationPI::CleanEntry( String& rEntry )
 {
@@ -73,10 +71,8 @@ void SwNavigationPI::CleanEntry( String& rEntry )
             if( *pStr == 10 || *pStr == 9 )
                 *pStr = 0x20;
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Ausfuehrung der Drag-Operation
-                mit und ohne Children
-------------------------------------------------------------------------*/
+
+// Execution of the drag operation with and without the children.
 
 void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
                                                     bool bWithChildren)
@@ -92,7 +88,7 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
         rSh.GotoOutline(nSource);
         if (bWithChildren)
             rSh.MakeOutlineSel(nSource, nSource, sal_True);
-        // Die selektierten Children zaehlen bei der Bewegung vorwaerts nicht mit
+        // While moving, the selected children does not counting.
         sal_uInt16 nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
         if(bWithChildren && nMove > 1 &&
                 nLastOutlinePos < nTarget)
@@ -110,11 +106,7 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
 
 }
 
-
-/*------------------------------------------------------------------------
- Beschreibung:  Nach Goto einen Status Rahmenselektion aufheben
-------------------------------------------------------------------------*/
-
+// After goto cancel the status frame selection
 
 static void lcl_UnSelectFrm(SwWrtShell *pSh)
 {
@@ -125,10 +117,7 @@ static void lcl_UnSelectFrm(SwWrtShell *pSh)
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Select der Documentanzeige
-------------------------------------------------------------------------*/
-
+// Select the document view
 
 IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
 {
@@ -154,11 +143,8 @@ IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Fuellen der ListBox fuer Outline Sicht oder Dokumente
-                Der PI wird auf volle Groesse gesetzt
-------------------------------------------------------------------------*/
-
+// Filling of the list box for outline view or documents
+// The PI will be set to full size
 
 void SwNavigationPI::FillBox()
 {
@@ -185,7 +171,6 @@ void SwNavigationPI::FillBox()
     }
 }
 
-
 void SwNavigationPI::UsePage(SwWrtShell *pSh)
 {
     if (!pSh)
@@ -206,10 +191,7 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  SelectHandler der Toolboxen
-------------------------------------------------------------------------*/
-
+// Select handler of the toolboxes
 
 IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
 {
@@ -218,10 +200,10 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     if (!pView)
         return 1;
     SwWrtShell &rSh = pView->GetWrtShell();
-    //MouseModifier fuer Outline-Move besorgen
+    // Get MouseModifier for Outline-Move
 
-    //Standard: Unterebenen werden mitgenommen
-    // mit Ctrl Unterebenen nicht mitnehmen
+    // Standard: sublevels are taken
+    // do not take sublevels with Ctrl
     sal_Bool bOutlineWithChildren  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
     bool bFocusToDoc = false;
@@ -254,8 +236,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             }
         }
         return sal_True;
-        // Funktionen, die eine direkte Aktion ausloesen
-
+        // Functions that will trigger a direct action.
         case FN_SELECT_FOOTER:
         {
             rSh.MoveCrsr();
@@ -288,15 +269,15 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         {
             rSh.MoveCrsr();
             const sal_uInt16 eFrmType = rSh.GetFrmType(0,sal_False);
-                // aus Fussnote zum Anker springen
+                // Jump from the footnote to the anchor.
             if (eFrmType & FRMTYPE_FOOTNOTE)
             {
                 if (rSh.GotoFtnAnchor())
                     nFuncId = FN_FOOTNOTE_TO_ANCHOR;
             }
-                // andernfalls zuerst zum Fussnotentext springen; geht
-                // dies nicht, zur naechten Fussnote; geht auch dies
-                // nicht, zur vorhergehenden Fussnote
+                // Otherwise, jump to the first footnote text;
+                // go to the next footnote if this is not possible;
+                // if this is also not possible got to the footnote before.
             else
             {
                 if (rSh.GotoFtnTxt())
@@ -339,7 +320,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         }
         break;
     }
-
     if (nFuncId)
     {
         lcl_UnSelectFrm(&rSh);
@@ -348,10 +328,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         pView->GetEditWin().GrabFocus();
     return sal_True;
 }
-/*------------------------------------------------------------------------
- Beschreibung:  ClickHandler der Toolboxen
-------------------------------------------------------------------------*/
 
+// Click handler of the toolboxes
 
 IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
 {
@@ -430,7 +408,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
     return sal_True;
 }
 
-
 SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId) :
             SwHelpToolBox(pParent, rResId)
 {}
@@ -476,11 +453,8 @@ void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
     SwHelpToolBox::RequestHelp(rHEvt);
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Action-Handler Edit; wechselt auf die Seite, wenn
-                nicht Gliederungssicht angeschaltet ist.
-------------------------------------------------------------------------*/
-
+// Action-Handler Edit:
+// Switches to the page if the structure view is not turned on.
 
 IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
 {
@@ -496,11 +470,7 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Falls die Seite eingestellt werden kann, wird hier
-                das Maximum gesetzt.
-------------------------------------------------------------------------*/
-
+// If the page can be set here, the maximum is set.
 
 IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
 {
@@ -523,10 +493,7 @@ sal_Bool SwNavigationPI::Close()
     return sal_True;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Setzen einer automatischen Marke
-------------------------------------------------------------------------*/
-
+// Setting of an automatic mark
 
 void SwNavigationPI::MakeMark()
 {
@@ -591,7 +558,7 @@ void SwNavigationPI::_ZoomOut()
         }
         SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
-            aContentTree.Select(pFirst, sal_True); // toolbox enablen
+            aContentTree.Select(pFirst, sal_True); // Enable toolbox
         pConfig->SetSmall( sal_False );
         aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX);
     }
@@ -618,7 +585,7 @@ void SwNavigationPI::_ZoomIn()
         pFloat->SetOutputSizePixel(aSz);
         SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
-            aContentTree.Select(pFirst, sal_True); // toolbox enablen
+            aContentTree.Select(pFirst, sal_True); // Enable toolbox
         pConfig->SetSmall( sal_True );
         aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, sal_False);
     }
@@ -662,7 +629,7 @@ void SwNavigationPI::Resize()
         else
             aDocLBSz.Height() = nDocLBIniHeight;
         aContentTree.SetSizePixel(aNewSize);
-        // GlobalTree faengt weiter oben an und reicht bis ganz unten
+        // GlobalTree starts on to the top and goes all the way down.
         aNewSize.Height() += (nDist + nDocLBIniHeight + aPos.Y() - aGlobalTree.GetPosPixel().Y());
         aGlobalTree.SetSizePixel(aNewSize);
         aDocListBox.setPosSizePixel( aLBPos.X(), aLBPos.Y(),
@@ -718,7 +685,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     nDocLBIniHeight = aDocListBox.GetSizePixel().Height();
     nZoomOutInit = nZoomOut = Resource::ReadShortRes();
 
-    //NumericField in die Toolbox einfuegen
+    // Insert the numeric field in the toolbox.
     NumEditAction* pEdit = new NumEditAction(
                     &aContentToolBox, SW_RES(NF_PAGE ));
     pEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
@@ -729,8 +696,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     bPageCtrlsVisible = sal_True;
 
-    //doppelte Separatoren sind nicht erlaubt, also muss
-    //die passende Groesse anders ermittelt werden
+    // Double separators are not allowed, so you have to
+    // determine the suitable size differently.
     Rectangle aFirstRect = aContentToolBox.GetItemRect(FN_SELECT_FOOTNOTE);
     Rectangle aSecondRect = aContentToolBox.GetItemRect(FN_SELECT_HEADER);
     sal_uInt16 nWidth = sal_uInt16(aFirstRect.Left() - aSecondRect.Left());
@@ -763,7 +730,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     // position listbox below toolbar and add some space
     long nListboxYPos = aContentToolBox.GetPosPixel().Y() + aContentToolboxSize.Height() + 4;
 
-    //Der linke und rechte Rand um die Toolboxen soll gleich sein
+    // The left and right margins around the toolboxes should be equal.
     nWishWidth = aContentToolboxSize.Width();
     nWishWidth += 2 * aContentToolBox.GetPosPixel().X();
 
@@ -795,7 +762,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentTree.ShowTree();
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, sal_True);
 
-//  TreeListBox fuer Globaldokument
+//  TreeListBox for global document
     aGlobalTree.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aGlobalTree.SetSelectionMode( MULTIPLE_SELECTION );
     aGlobalTree.SetStyle( aGlobalTree.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
@@ -952,9 +919,7 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
     }
 }
 
-/*------------------------------------------------------------------------
-    Bechreibung: NumericField aus der Toolbox holen
-------------------------------------------------------------------------*/
+// Get the numeric field from the toolbox.
 
 NumEditAction& SwNavigationPI::GetPageEdit()
 {
@@ -1000,9 +965,7 @@ SfxChildAlignment eRetAlign;
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Benachrichtigung bei geaenderter DocInfo
- --------------------------------------------------------------------*/
+// Notification on modified DocInfo
 
 void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
@@ -1035,8 +998,8 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
                         if(aGlobalTree.Update( sal_False ))
                             aGlobalTree.Display();
                         else
-                        // wenn kein Update notwendig, dann zumindest painten
-                        // wg. der roten Eintraege fuer broken links
+                        // If no update is needed, then paint at least,
+                        // because of the red entries for the broken links.
                             aGlobalTree.Invalidate();
                     }
                 }
@@ -1098,7 +1061,7 @@ void SwNavigationPI::UpdateListBox()
         }
         pView = SwModule::GetNextView(pView);
     }
-    aDocListBox.InsertEntry(aStatusArr[3]); //"Aktives Fenster"
+    aDocListBox.InsertEntry(aStatusArr[3]); // "Active Window"
     nCount++;
 
     if(aContentTree.GetHiddenWrtShell())
@@ -1113,7 +1076,7 @@ void SwNavigationPI::UpdateListBox()
     }
     if(aContentTree.IsActiveView())
     {
-        //entweder den Namen des akt. Docs oder "Aktives Dokument"
+        //Either the name of the current Document or "Active Document".
         sal_uInt16 nTmp = pActView ? nAct : --nCount;
         aDocListBox.SelectEntryPos( nTmp );
     }
@@ -1207,7 +1170,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         INetURLObject aTemp( sFileName );
         GraphicDescriptor aDesc( aTemp );
-        if( !aDesc.Detect() )   // keine Grafiken annehmen
+        if( !aDesc.Detect() )   // accept no graphics
         {
             if( STRING_NOTFOUND == sFileName.Search('#')
                 && (!sContentFileName.Len() || sContentFileName != sFileName ))
@@ -1249,7 +1212,6 @@ void SwNavigationPI::SetRegionDropMode(sal_uInt16 nNewMode)
 
     aContentToolBox.SetItemImage( FN_DROP_REGION, rImgLst.GetImage(nDropId));
 }
-
 
 sal_Bool    SwNavigationPI::ToggleTree()
 {

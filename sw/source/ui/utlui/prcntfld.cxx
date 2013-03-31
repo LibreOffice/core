@@ -220,7 +220,7 @@ void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 
     else
     {
-        // Ausgangswert ueberschreiben, nicht spaeter restaurieren
+        // Overwrite output value, do not restore later
         sal_Int64 nPercent, nAktWidth;
         if(eInUnit == FUNIT_TWIP)
         {
@@ -242,7 +242,7 @@ void PercentFieldWrap::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
         m_pField->SetValue(Convert(nNewValue, eInUnit, m_pField->GetUnit()));
     else
     {
-        // Ausgangswert ueberschreiben, nicht spaeter restaurieren
+        // Overwrite output value, do not restore later
         sal_Int64 nPercent, nAktWidth;
         if(eInUnit == FUNIT_TWIP)
         {
@@ -265,7 +265,7 @@ void PercentField::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 
     else
     {
-        // Ausgangswert ueberschreiben, nicht spaeter restaurieren
+        // Overwrite output value, do not restore later
         sal_Int64 nPercent, nAktWidth;
         if(eInUnit == FUNIT_TWIP)
         {
@@ -450,10 +450,10 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
 
     if (eInUnit == FUNIT_CUSTOM)
     {
-        // Umrechnen in Metrik
+        // Convert to metric
         sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
 
-        if (eOutUnit == FUNIT_TWIP) // Nur wandeln, wenn unbedingt notwendig
+        if (eOutUnit == FUNIT_TWIP) // Only convert if necessary
             return NormalizePercent(nTwipValue);
         else
             return ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
@@ -461,11 +461,11 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
 
     if (eOutUnit == FUNIT_CUSTOM)
     {
-        // Umrechnen in Prozent
+        // Convert to percent
         sal_Int64 nAktWidth;
         nValue = DenormalizePercent(nValue);
 
-        if (eInUnit == FUNIT_TWIP)  // Nur wandeln, wenn unbedingt notwendig
+        if (eInUnit == FUNIT_TWIP)  // Only convert if necessary
             nAktWidth = nValue;
         else
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
@@ -485,10 +485,10 @@ sal_Int64 PercentFieldWrap::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUn
 
     if (eInUnit == FUNIT_CUSTOM)
     {
-        // Umrechnen in Metrik
+        // Convert to metric
         sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
 
-        if (eOutUnit == FUNIT_TWIP) // Nur wandeln, wenn unbedingt notwendig
+        if (eOutUnit == FUNIT_TWIP) // Only convert if necessary
             return NormalizePercent(nTwipValue);
         else
             return m_pField->ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
@@ -496,11 +496,11 @@ sal_Int64 PercentFieldWrap::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUn
 
     if (eOutUnit == FUNIT_CUSTOM)
     {
-        // Umrechnen in Prozent
+        // Convert to percent
         sal_Int64 nAktWidth;
         nValue = DenormalizePercent(nValue);
 
-        if (eInUnit == FUNIT_TWIP)  // Nur wandeln, wenn unbedingt notwendig
+        if (eInUnit == FUNIT_TWIP)  // Only convert if necessary
             nAktWidth = nValue;
         else
             nAktWidth = m_pField->ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
@@ -510,7 +510,5 @@ sal_Int64 PercentFieldWrap::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUn
 
     return m_pField->ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
