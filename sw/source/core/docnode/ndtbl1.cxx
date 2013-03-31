@@ -691,33 +691,70 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                     }
                 }
 
-                // Left Border
-                if ( bLeftOver )
+                // Fix fdo#62470 correct the input for RTL table
+                if (bRTL)
                 {
-                    if( bLeftValid )
+                        if( bLeftOver && bRightOver)
+                        {
+                            if ( bLeftOver ? bLeftValid : bVertValid )
+                                {
+                                    aBox.SetLine( bLeftOver ? pLeft : 0,
+                                                  BOX_LINE_RIGHT );
+                                    bVertValid ? nType |= 0x0020 : nType |= 0x0010;
+                                }
+                                if ( bRightOver ? bRightValid : bVertValid )
+                                {
+                                    aBox.SetLine( bRightOver ? pRight : pVert,
+                                                  BOX_LINE_LEFT );
+                                    bVertValid ? nType |= 0x0008 : nType |= 0x0004;
+                                }
+                        }
+                        else
+                        {
+                                if ( bRightOver ? bLeftValid : bVertValid )
+                                {
+                                    aBox.SetLine( bRightOver ? pLeft : 0,
+                                                  BOX_LINE_RIGHT );
+                                    bVertValid ? nType |= 0x0020 : nType |= 0x0010;
+                                }
+                                if ( bLeftOver ? bRightValid : bVertValid )
+                                {
+                                    aBox.SetLine( bLeftOver ? pRight : pVert,
+                                                  BOX_LINE_LEFT );
+                                    bVertValid ? nType |= 0x0008 : nType |= 0x0004;
+                                }
+                        }
+                }
+                else
+                {
+                    // Left Border
+                    if ( bLeftOver )
                     {
-                        aBox.SetLine( pLeft, BOX_LINE_LEFT );
-                        nType |= 0x0004;
+                        if( bLeftValid )
+                        {
+                            aBox.SetLine( pLeft, BOX_LINE_LEFT );
+                            nType |= 0x0004;
+                        }
                     }
-                }
-                else if( bVertValid )
-                {
-                    aBox.SetLine( pVert, BOX_LINE_LEFT );
-                    nType |= 0x0008;
-                }
+                    else if( bVertValid )
+                    {
+                        aBox.SetLine( pVert, BOX_LINE_LEFT );
+                        nType |= 0x0008;
+                    }
 
-                // Right Border
-                if( bRightValid )
-                {
-                    if ( bRightOver )
+                    // Right Border
+                    if( bRightValid )
                     {
-                        aBox.SetLine( pRight, BOX_LINE_RIGHT );
-                        nType |= 0x0010;
-                    }
-                    else if ( bVertValid )
-                    {
-                        aBox.SetLine( 0, BOX_LINE_RIGHT );
-                        nType |= 0x0020;
+                        if ( bRightOver )
+                        {
+                            aBox.SetLine( pRight, BOX_LINE_RIGHT );
+                            nType |= 0x0010;
+                        }
+                        else if ( bVertValid )
+                        {
+                            aBox.SetLine( 0, BOX_LINE_RIGHT );
+                            nType |= 0x0020;
+                        }
                     }
                 }
 
