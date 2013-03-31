@@ -37,7 +37,6 @@ static UIView *theView;
     r.origin = CGPointMake(0, 0);
 
     self.view = [[View alloc] initWithFrame: r];
-    self.view.clearsContextBeforeDrawing = NO;
     vc.view = self.view;
     theView = self.view;
 
