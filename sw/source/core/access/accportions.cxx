@@ -329,7 +329,7 @@ void SwAccessiblePortionData::GetLastLineBoundary(
 {
     OSL_ENSURE( aLineBreaks.size() >= 2, "need min + max value" );
 
-    // The last two positions except the two deleimiters are the ones
+    // The last two positions except the two delimiters are the ones
     // we are looking for, except for empty paragraphs (nBreaks==3)
     size_t nBreaks = aLineBreaks.size();
     FillBoundary( rBound, aLineBreaks, nBreaks <= 3 ? 0 : nBreaks-4 );

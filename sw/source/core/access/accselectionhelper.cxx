@@ -76,8 +76,7 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
 }
 
 
-//=====  XAccessibleSelection  ============================================
-
+// XAccessibleSelection
 void SwAccessibleSelectionHelper::selectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
@@ -309,7 +308,6 @@ void SwAccessibleSelectionHelper::deselectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
-    // return sal_False     // we can't deselect
     if( nChildIndex < 0 ||
         nChildIndex >= rContext.GetChildCount( *(rContext.GetMap()) ) )
         throwIndexOutOfBoundsException();
