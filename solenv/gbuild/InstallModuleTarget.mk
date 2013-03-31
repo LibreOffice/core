@@ -56,7 +56,9 @@ endef
 $(dir $(call gb_ScpTemplateTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpTemplateTarget_get_target,%) : $(gb_ScpTemplateTarget_TARGET)
+# depend on configure output to rebuild everything
+$(call gb_ScpTemplateTarget_get_target,%) : \
+		$(gb_ScpTemplateTarget_TARGET) $(BUILDDIR)/config_$(gb_Side).mk
 	$(call gb_ScpTemplateTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpTemplateTarget_get_clean_target,%)
@@ -93,7 +95,9 @@ endef
 $(dir $(call gb_ScpPreprocessTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_ScpPreprocessTarget_get_target,%) : $(gb_ScpPreprocessTarget_DEPS)
+# depend on configure output to rebuild everything
+$(call gb_ScpPreprocessTarget_get_target,%) : \
+		$(gb_ScpPreprocessTarget_DEPS) $(BUILDDIR)/config_$(gb_Side).mk
 	$(call gb_ScpPreprocessTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpPreprocessTarget_get_clean_target,%)
