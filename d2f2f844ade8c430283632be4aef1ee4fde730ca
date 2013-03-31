@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+Hc\u003d",
+        "filename": "unotest/source/python/org/libreoffice/unotest.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2013-03-31T10:17:50Z",
+      "side": 1,
+      "message": "It looks like some chars get lost here. Also ; are not that pythonic but that\u0027s nitpicking.",
+      "revId": "d2f2f844ade8c430283632be4aef1ee4fde730ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
