@@ -14,14 +14,10 @@
 
 define gb_ZipUnoApi_ZipUnoApi
 $(call gb_UnoApi_UnoApi,$(1),$(2))
-$(call gb_Zip_Zip_internal_nodeliver,$(1),$(WORKDIR)/Zip/$(1))
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_Zip_get_outdir_bin_target,$(1))
-$(call gb_Zip_get_outdir_bin_target,$(1)) : $(call gb_Zip_get_target,$(1))
-	cp $$< $$@
-$(call gb_Zip_get_outdir_bin_target,$(1)) :| $(dir $(call gb_Zip_get_outdir_bin_target,$(1))).dir
+$(call gb_Zip_Zip_internal,$(1),$(WORKDIR)/Zip/$(1))
+$(call gb_UnoApi_get_target,$(1)) : $(call gb_Zip_get_final_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,$(1))
 $(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_Zip_get_target,$(1))
-$(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_bin_target,$(1)),$(call gb_Zip_get_target,$(1)),$(1))
 
 endef
 

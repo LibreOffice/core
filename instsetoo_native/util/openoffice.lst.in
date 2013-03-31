@@ -179,7 +179,7 @@ LibreOffice_SDK
         active 1
         compression 5
         script sdkoo
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{solarenvpath}/{os}/MS
     }
 }
 
@@ -224,7 +224,7 @@ LibreOffice_Dev_SDK
         active 1
         compression 5
         script sdkoo
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{solarenvpath}/{os}/MS
     }
 }
 

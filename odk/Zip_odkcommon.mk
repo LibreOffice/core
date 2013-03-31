@@ -20,16 +20,4 @@ $(eval $(call gb_Zip_add_commandoptions,odkcommon,-r))
 # dependencies which custom targets need to be built.
 $(call gb_Zip_get_target,odkcommon) : $(odkcommon_ZIPDEPS)
 
-#FIXME: scp2 seems to require the zip to be in bin
-$(call gb_Zip_get_final_target,odkcommon) : $(OUTDIR)/bin/odkcommon.zip
-$(call gb_Zip_get_clean_target,odkcommon) : clean_odkcommon_zip
-
-$(OUTDIR)/bin/odkcommon.zip : $(call gb_Zip_get_target,odkcommon)
-	$(call gb_Deliver_deliver,$<,$@)
-
-.PHONY : clean_odkcommon_zip
-clean_odkcommon_zip:
-	rm -f $(OUTDIR)/bin/odkcommon.zip
-
-
 # vim: set noet sw=4 ts=4:

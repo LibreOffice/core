@@ -25,15 +25,4 @@ $(eval $(call gb_Zip_add_files,odkexamples,\
 	examples \
 ))
 
-#FIXME: scp2 seems to require the zip to be in bin
-$(call gb_Zip_get_final_target,odkexamples) : $(OUTDIR)/bin/odkexamples.zip | $(OUTDIR)/bin/.dir
-$(call gb_Zip_get_clean_target,odkexamples) : clean_odkexamples_zip
-
-$(OUTDIR)/bin/odkexamples.zip : $(call gb_Zip_get_target,odkexamples)
-	$(call gb_Deliver_deliver,$<,$@)
-
-.PHONY : clean_odkexamples_zip
-clean_odkexamples_zip:
-	rm -f $(OUTDIR)/bin/odkexamples.zip
-
 # vim: set noet sw=4 ts=4:
