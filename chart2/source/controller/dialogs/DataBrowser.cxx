@@ -160,7 +160,7 @@ public:
     void SetWidth( sal_Int32 nWidth );
     void SetChartType( const Reference< chart2::XChartType > & xChartType,
                        bool bSwapXAndYAxis );
-    void SetSeriesName( const String & rName );
+    void SetSeriesName( const OUString & rName );
     void SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol );
 
     void SetPixelPosX( sal_Int32 nPos );
@@ -309,7 +309,7 @@ void SeriesHeader::SetChartType(
     m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis ) );
 }
 
-void SeriesHeader::SetSeriesName( const String & rName )
+void SeriesHeader::SetSeriesName( const OUString & rName )
 {
     m_spSeriesName->SetText( rName );
 }
@@ -616,7 +616,7 @@ void DataBrowser::RenewTable()
             spHeader->SetColor( Color( nColor ));
         spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
-            String( DataSeriesHelper::getDataSeriesLabel(
+            OUString( DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,
                         (aIt->m_xChartType.is() ?
                          aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
@@ -635,22 +635,22 @@ void DataBrowser::RenewTable()
     Invalidate();
 }
 
-String DataBrowser::GetColString( sal_Int32 nColumnId ) const
+OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
 {
     OSL_ASSERT( m_apDataBrowserModel.get());
     if( nColumnId > 0 )
-        return String( m_apDataBrowserModel->getRoleOfColumn( static_cast< sal_Int32 >( nColumnId ) - 1 ));
-    return String();
+        return OUString( m_apDataBrowserModel->getRoleOfColumn( static_cast< sal_Int32 >( nColumnId ) - 1 ));
+    return OUString();
 }
 
-String DataBrowser::GetRowString( sal_Int32 nRow ) const
+OUString DataBrowser::GetRowString( sal_Int32 nRow ) const
 {
     return OUString::valueOf(nRow + 1);
 }
 
 String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
 {
-    String aResult;
+    OUString aResult;
 
     if( nColumnId == 0 )
     {
@@ -800,9 +800,9 @@ bool DataBrowser::IsDataValid()
     {
         sal_uInt32 nDummy = 0;
         double fDummy = 0.0;
-        String aText( m_aNumberEditField.GetText());
+        OUString aText( m_aNumberEditField.GetText());
 
-        if( aText.Len() > 0 &&
+        if( !aText.isEmpty() &&
             m_spNumberFormatterWrapper.get() &&
             m_spNumberFormatterWrapper->getSvNumberFormatter() &&
             ! m_spNumberFormatterWrapper->getSvNumberFormatter()->IsNumberFormat(
@@ -1082,9 +1082,9 @@ void DataBrowser::InitController(
 {
     if( rController == m_rTextEditController )
     {
-        String aText( GetCellText( nRow, nCol ) );
+        OUString aText( GetCellText( nRow, nCol ) );
         m_aTextEditField.SetText( aText );
-        m_aTextEditField.SetSelection( Selection( 0, aText.Len() ));
+        m_aTextEditField.SetSelection( Selection( 0, aText.getLength() ));
     }
     else if( rController == m_rNumberEditController )
     {
@@ -1094,8 +1094,8 @@ void DataBrowser::InitController(
             m_aNumberEditField.SetTextValue( String());
         else
             m_aNumberEditField.SetValue( GetCellNumber( nRow, nCol ) );
-        String aText( m_aNumberEditField.GetText());
-        m_aNumberEditField.SetSelection( Selection( 0, aText.Len()));
+        OUString aText( m_aNumberEditField.GetText());
+        m_aNumberEditField.SetSelection( Selection( 0, aText.getLength()));
     }
     else
     {
@@ -1153,10 +1153,10 @@ sal_Bool DataBrowser::SaveModified()
         {
             sal_uInt32 nDummy = 0;
             double fDummy = 0.0;
-            String aText( m_aNumberEditField.GetText());
+            OUString aText( m_aNumberEditField.GetText());
             // an empty string is valid, if no numberformatter exists, all
             // values are treated as valid
-            if( aText.Len() > 0 && pSvNumberFormatter &&
+            if( !aText.isEmpty() && pSvNumberFormatter &&
                 ! pSvNumberFormatter->IsNumberFormat( aText, nDummy, fDummy ) )
             {
                 bChangeValid = sal_False;

@@ -60,17 +60,17 @@ namespace
 
 const OUString lcl_aLabelRole( "label" );
 
-String lcl_GetRoleLBEntry(
+OUString lcl_GetRoleLBEntry(
     const OUString & rRole, const OUString & rRange )
 {
-    String aEntry( rRole );
-    aEntry += '\t';
-    aEntry += String(
-        ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole ));
-    aEntry += '\t';
-    aEntry += String( rRange );
+    OUStringBuffer aEntry( rRole );
+    aEntry.append( "\t" );
+    aEntry.append( OUString(
+        ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole )) );
+    aEntry.append( "\t" );
+    aEntry.append(OUString( rRange ));
 
-    return aEntry;
+    return aEntry.makeStringAndClear();
 }
 
 void lcl_UpdateCurrentRange(
@@ -91,10 +91,10 @@ bool lcl_UpdateCurrentSeriesName(
         pEntry->m_xDataSeries.is() &&
         pEntry->m_xChartType.is())
     {
-        String aLabel( ::chart::DataSeriesHelper::getDataSeriesLabel(
+        OUString aLabel( ::chart::DataSeriesHelper::getDataSeriesLabel(
                            pEntry->m_xDataSeries,
                            pEntry->m_xChartType->getRoleOfSequenceForSeriesLabel()));
-        if( aLabel.Len())
+        if( !aLabel.isEmpty())
         {
             rOutListBox.SetEntryText( pEntry, aLabel );
             bResult = true;
@@ -469,8 +469,8 @@ void DataSourceTabPage::fillSeriesListBox()
     for( ::std::vector< DialogModel::tSeriesWithChartTypeByName >::const_iterator aIt = aSeries.begin();
          aIt != aSeries.end(); ++aIt )
     {
-        String aLabel( (*aIt).first );
-        if( !aLabel.Len())
+        OUString aLabel( (*aIt).first );
+        if( aLabel.isEmpty())
         {
             if( nUnnamedSeriesIndex > 1 )
             {
@@ -480,11 +480,11 @@ void DataSourceTabPage::fillSeriesListBox()
                 const OUString aReplacementStr( "%NUMBER" );
                 sal_Int32 nIndex = aResString.indexOf( aReplacementStr );
                 if( nIndex != -1 )
-                    aLabel = String( aResString.replaceAt(
+                    aLabel = OUString( aResString.replaceAt(
                                          nIndex, aReplacementStr.getLength(),
                                          OUString::valueOf(nUnnamedSeriesIndex)));
             }
-            if( aLabel.Len() == 0 )
+            if( aLabel.isEmpty() )
                 aLabel = String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES ));
 
             ++nUnnamedSeriesIndex;

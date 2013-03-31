@@ -181,8 +181,8 @@ private:
     void RenewTable();
     void ImplAdjustHeaderControls();
 
-    String GetColString( sal_Int32 nColumnId ) const;
-    String GetRowString( sal_Int32 nRow ) const;
+    OUString GetColString( sal_Int32 nColumnId ) const;
+    OUString GetRowString( sal_Int32 nRow ) const;
 
     DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit* );
     DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit* );

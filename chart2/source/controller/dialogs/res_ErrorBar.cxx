@@ -268,7 +268,7 @@ void ErrorBarResources::UpdateControlStates()
         ( m_aRbFunction.IsChecked()) &&
         ( m_aLbFunction.GetSelectEntryPos() == CHART_LB_FUNCTION_ERROR_MARGIN ));
     bool bIsPercentage( m_aRbPercent.IsChecked() || bIsErrorMargin );
-    String aCustomUnit;
+    OUString aCustomUnit;
 
     if( bIsPercentage )
     {
@@ -602,7 +602,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     m_bRangePosUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
-        String sRangePositive = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
+        OUString sRangePositive = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
         m_aEdRangePositive.SetText( sRangePositive );
     }
 
@@ -610,11 +610,11 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     m_bRangeNegUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
-        String sRangeNegative = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
+        OUString sRangeNegative = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
         m_aEdRangeNegative.SetText( sRangeNegative );
         if( m_eErrorKind == CHERROR_RANGE &&
-            sRangeNegative.Len() > 0 &&
-            sRangeNegative.Equals( m_aEdRangePositive.GetText()))
+            !sRangeNegative.isEmpty() &&
+            sRangeNegative == m_aEdRangePositive.GetText() )
             m_aCbSyncPosNeg.Check();
     }
 
@@ -632,13 +632,13 @@ sal_Bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
     {
         if( m_eErrorKind == CHERROR_RANGE )
         {
-            String aPosRange;
-            String aNegRange;
+            OUString aPosRange;
+            OUString aNegRange;
             if( m_bHasInternalDataProvider )
             {
                 // the strings aPosRange/aNegRange have to be set to a non-empty
                 // arbitrary string to generate error-bar sequences
-                aPosRange.Assign( sal_Unicode('x'));
+                aPosRange = OUString("x");
                 aNegRange = aPosRange;
             }
             else
