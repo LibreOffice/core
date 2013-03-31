@@ -49,7 +49,6 @@ $(call gb_Rdb_get_clean_target,%) :
 
 define gb_Rdb_Rdb
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS :=
-$(call gb_Rdb_get_clean_target,$(1)) : COMPONENTS :=
 $(call gb_Rdb_get_outdir_target,$(1)) : $(call gb_Rdb_get_target,$(1)) \
 	| $(dir $(call gb_Rdb_get_outdir_target,$(1))).dir
 $(call gb_Deliver_add_deliverable,$(call gb_Rdb_get_outdir_target,$(1)),$(call gb_Rdb_get_target,$(1)),$(1))
@@ -61,7 +60,6 @@ endef
 define gb_Rdb_add_component
 $(call gb_Rdb_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS += $(2)
-$(call gb_Rdb_get_clean_target,$(1)) : COMPONENTS += $(2)
 
 endef
 
