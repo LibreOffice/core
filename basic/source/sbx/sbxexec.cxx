@@ -22,32 +22,29 @@
 #include <basic/sbx.hxx>
 
 
-class SbxSimpleCharClass
+
+static bool isAlpha( sal_Unicode c )
 {
-public:
-    bool isAlpha( sal_Unicode c ) const
-    {
-        bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-        return bRet;
-    }
+    bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    return bRet;
+}
 
-    bool isDigit( sal_Unicode c ) const
-    {
-        bool bRet = (c >= '0' && c <= '9');
-        return bRet;
-    }
+static bool isDigit( sal_Unicode c )
+{
+    bool bRet = (c >= '0' && c <= '9');
+    return bRet;
+}
 
-    bool isAlphaNumeric( sal_Unicode c ) const
-    {
-        bool bRet = isDigit( c ) || isAlpha( c );
-        return bRet;
-    }
-};
+static bool isAlphaNumeric( sal_Unicode c )
+{
+    bool bRet = isDigit( c ) || isAlpha( c );
+    return bRet;
+}
 
 
 static SbxVariable* Element
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
-      SbxClassType, const SbxSimpleCharClass& rCharClass );
+      SbxClassType );
 
 static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 {
@@ -59,7 +56,7 @@ static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 // Scanning of a symbol. The symbol were inserted in rSym, the return value
 // is the new scan position. The symbol is at errors empty.
 
-static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym, const SbxSimpleCharClass& rCharClass )
+static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym )
 {
     sal_uInt16 nLen = 0;
     // Did we have a nonstandard symbol?
@@ -75,7 +72,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym, const Sb
     else
     {
         // A symbol had to begin with a alphabetic character or an underline
-        if( !rCharClass.isAlpha( *p ) && *p != '_' )
+        if( !isAlpha( *p ) && *p != '_' )
         {
             SbxBase::SetError( SbxERR_SYNTAX );
         }
@@ -83,7 +80,7 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym, const Sb
         {
             rSym = p;
             // The it can contain alphabetic characters, numbers or underlines
-            while( *p && (rCharClass.isAlphaNumeric( *p ) || *p == '_') )
+            while( *p && (isAlphaNumeric( *p ) || *p == '_') )
             {
                 p++, nLen++;
             }
@@ -103,14 +100,13 @@ static const sal_Unicode* Symbol( const sal_Unicode* p, OUString& rSym, const Sb
 static SbxVariable* QualifiedName
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, SbxClassType t )
 {
-    static SbxSimpleCharClass aCharClass;
 
     SbxVariableRef refVar;
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
-    if( aCharClass.isAlpha( *p ) || *p == '_' || *p == '[' )
+    if( isAlpha( *p ) || *p == '_' || *p == '[' )
     {
         // Read in the element
-        refVar = Element( pObj, pGbl, &p, t, aCharClass );
+        refVar = Element( pObj, pGbl, &p, t );
         while( refVar.Is() && (*p == '.' || *p == '!') )
         {
             // It follows still an objectelement. The current element
@@ -124,7 +120,7 @@ static SbxVariable* QualifiedName
                 break;
             p++;
             // And the next element please
-            refVar = Element( pObj, pGbl, &p, t, aCharClass );
+            refVar = Element( pObj, pGbl, &p, t );
         }
     }
     else
@@ -141,12 +137,10 @@ static SbxVariable* QualifiedName
 static SbxVariable* Operand
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bVar )
 {
-    static SbxSimpleCharClass aCharClass;
-
     SbxVariableRef refVar( new SbxVariable );
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
-    if( !bVar && ( aCharClass.isDigit( *p )
-                   || ( *p == '.' && aCharClass.isDigit( *( p+1 ) ) )
+    if( !bVar && ( isDigit( *p )
+                   || ( *p == '.' && isDigit( *( p+1 ) ) )
                    || *p == '-'
                    || *p == '&' ) )
     {
@@ -306,10 +300,10 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode*
 
 static SbxVariable* Element
     ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
-      SbxClassType t, const SbxSimpleCharClass& rCharClass )
+      SbxClassType t )
 {
     OUString aSym;
-    const sal_Unicode* p = Symbol( *ppBuf, aSym, rCharClass );
+    const sal_Unicode* p = Symbol( *ppBuf, aSym );
     SbxVariableRef refVar;
     if( !aSym.isEmpty() )
     {
