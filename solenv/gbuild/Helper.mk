@@ -106,10 +106,13 @@ $$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$(1))
 endef
 
 # e.g. 'make CppunitTest_sw_macros_test'
+#
+# gb_Helper_make_userfriendly_targets target class build-target? clean-target?
 define gb_Helper_make_userfriendly_targets
 .PHONY: $(2)_$(1) $(2)_$(1).clean
-$(2)_$(1) : $(call gb_$(2)_get_target,$(1))
-$(2)_$(1).clean :  $(call gb_$(2)_get_clean_target,$(1))
+$(2)_$(1) : $(if $(3),$(3),$(call gb_$(2)_get_target,$(1)))
+$(2)_$(1).clean : $(if $(4),$(4),$(call gb_$(2)_get_clean_target,$(1)))
+
 endef
 
 define gb_Helper_init_registries

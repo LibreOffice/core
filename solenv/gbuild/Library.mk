@@ -73,7 +73,7 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 $$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),Library)
+$(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library__get_final_target,$(1)))
 $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
