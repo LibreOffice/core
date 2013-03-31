@@ -164,42 +164,6 @@ Reference< XInterface > SAL_CALL MyCounterImpl_create(
 //#### EXPORTED ###########################################################
 //#########################################################################
 
-
-/**
- * This function creates an implementation section in the registry and another subkey
- *
- * for each supported service.
- * @param pServiceManager   the service manager
- * @param pRegistryKey      the registry key
- */
-// extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKey)
-// {
-//  sal_Bool result = sal_False;
-
-//  if (pRegistryKey)
-//  {
-//      try
-//      {
-//          Reference< XRegistryKey > xNewKey(
-//              reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-//                  OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-
-//          const Sequence< OUString > & rSNL =
-//              MyCounterImpl::getSupportedServiceNames_Static();
-//          const OUString * pArray = rSNL.getConstArray();
-//          for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-//              xNewKey->createKey( pArray[nPos] );
-
-//          return sal_True;
-//      }
-//      catch (InvalidRegistryException &)
-//      {
-//          // we should not ignore exceptions
-//      }
-//  }
-//  return result;
-// }
-
 /**
  * This function is called to get service factories for an implementation.
  *

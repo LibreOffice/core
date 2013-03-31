@@ -92,7 +92,6 @@ public class SourceCodeGenerator {
                         if (oUnoMethodNode.isInvoked()){
                             UnoObjectDefinition oUnoReturnObjectDefinition = getUnoObjectDefinition(_xTreepathProvider, oUnoMethodNode, i);
                             if (!isVariableDeclared(oUnoReturnObjectDefinition, this.generateVariableNameFromMethod(oUnoMethodNode.getXIdlMethod()))){
-//                                sStatementCode += "\n";
                                 sStatementCode += "\n" + getMethodStatementSourceCode(oUnoMethodNode, sVariableName, oUnoReturnObjectDefinition);
                             }
                             sVariableName = oUnoReturnObjectDefinition.getVariableName();
@@ -103,7 +102,6 @@ public class SourceCodeGenerator {
                         Any oReturnObject = com.sun.star.uno.Any.complete(oUnoPropertyNode.getUnoReturnObject());
                         UnoObjectDefinition oUnoReturnObjectDefinition = new UnoObjectDefinition(oReturnObject);
                         if (!isVariableDeclared(oUnoReturnObjectDefinition, oUnoPropertyNode.getProperty().Name)){
-//                            sStatementCode += "\n";
                             sStatementCode += "\n" + getPropertyStatementSourceCode(oUnoPropertyNode, sVariableName, oUnoReturnObjectDefinition);
                         }
                         sVariableName = oUnoReturnObjectDefinition.getVariableName();
@@ -858,7 +856,6 @@ class UnoObjectDefinition{
     public class JavaCodeGenerator implements XLanguageSourceCodeGenerator{
         String sStatementsCode = "";
         boolean bAddAnyConverter = false;
-//        boolean bAddTypeImport = false;
         boolean bIsPropertyUnoObjectDefined = false;
 
         public JavaCodeGenerator(){
@@ -1549,12 +1546,7 @@ class UnoObjectDefinition{
 
 
         public String getConvertedSourceCodeValueOfObject(String _sReturnVariableName, String _sObjectDescription, TypeClass _aTypeClass, String _sTypeName){
-//            if (m_oIntrospector.isPrimitive(_aTypeClass)){
-                return _sObjectDescription + " >>= " + _sReturnVariableName;
-//            }
-//            else{
-//                return _sReturnVariableName + " = " + _sObjectDescription;
-//            }
+            return _sObjectDescription + " >>= " + _sReturnVariableName;
         }
 
 
