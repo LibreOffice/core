@@ -29,42 +29,8 @@
 //================================================
 // TabPage: Tabelle
 
-#define BTN_GRID            10
-#define BTN_HEADER          11
-#define BTN_NOTES           12
-#define BTN_CHARTS          13
-#define BTN_OBJECTS         14
-#define BTN_DRAWINGS        15
-#define BTN_FORMULAS        16
-#define BTN_NULLVALS        17
-#define FL_PRINT            19
-
-#define BTN_TOPDOWN         20
-#define BTN_LEFTRIGHT       21
-#define BMP_PAGEDIR         22
-#define IMG_LEFTRIGHT       23
-#define IMG_TOPDOWN         24
-#define BTN_PAGENO          25
-#define ED_PAGENO           26
-#define FL_PAGEDIR          29
-
-#define FT_SCALEMODE        30
-#define LB_SCALEMODE        31
-#define ED_SCALEALL         32
-#define ED_SCALEPAGENUM     34
-#define ED_SCALEPAGEWIDTH   35
-#define ED_SCALEPAGEHEIGHT  36
-#define FL_SCALE            39
-
-#define FT_SCALEFACTOR      51
-#define FT_SCALEPAGEWIDTH   52
-#define FT_SCALEPAGEHEIGHT  53
-#define FT_SCALEPAGENUM     54
-
-// List box entries "Scaling mode"
-#define SC_TPTABLE_SCALE_PERCENT    0
-#define SC_TPTABLE_SCALE_TO         1
-#define SC_TPTABLE_SCALE_TO_PAGES   2
+#define IMG_LEFTRIGHT       (SC_DIALOGS_START + 43 + 23)
+#define IMG_TOPDOWN         (SC_DIALOGS_START + 43 + 24)
 
 //================================================
 // Dialog: Druckbereiche
