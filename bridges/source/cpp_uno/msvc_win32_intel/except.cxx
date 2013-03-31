@@ -67,7 +67,7 @@ static inline OUString toUNOname( OUString const & rRTTIname ) throw ()
 static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 {
     OUStringBuffer aRet( 64 );
-    aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM(".?AV") ); // class ".?AV"; struct ".?AU"
+    aRet.appendAscii( ".?AV" ); // class ".?AV"; struct ".?AU"
     sal_Int32 nPos = rUNOname.getLength();
     while (nPos > 0)
     {
@@ -550,15 +550,13 @@ int msci_filterCppException(
                 if (pExcTypeDescr == 0)
                 {
                     OUStringBuffer buf;
-                    buf.appendAscii(
-                        RTL_CONSTASCII_STRINGPARAM(
+                    buf.append(
                             "[msci_uno bridge error] UNO type of "
-                            "C++ exception unknown: \"") );
+                            "C++ exception unknown: \"" );
                     buf.append( aUNOname );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                         "\", RTTI-name=\"") );
+                    buf.append( "\", RTTI-name=\"" );
                     buf.append( aRTTIname );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+                    buf.append( "\"!" );
                     RuntimeException exc(
                         buf.makeStringAndClear(), Reference< XInterface >() );
                     uno_type_any_constructAndConvert(
@@ -586,9 +584,8 @@ int msci_filterCppException(
     // though this unknown exception leaks now, no user-defined exception
     // is ever thrown thru the binary C-UNO dispatcher call stack.
     RuntimeException exc(
-        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                      "[msci_uno bridge error] unexpected "
-                      "C++ exception occurred!") ),
+        OUString( "[msci_uno bridge error] unexpected "
+                  "C++ exception occurred!" ),
         Reference< XInterface >() );
     uno_type_any_constructAndConvert(
         pUnoExc, &exc, ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );

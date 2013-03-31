@@ -279,25 +279,23 @@ inline void JNI_info::append_sig(
         break;
     case typelib_TypeClass_STRING:
         if ( use_slashes ) {
-            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;") );
+            buf->append( "Ljava/lang/String;" );
         } else {
-            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava.lang.String;") );
+            buf->append( "Ljava.lang.String;" );
         }
         break;
     case typelib_TypeClass_TYPE:
         if ( use_slashes ) {
-            buf->append(
-                RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;") );
+            buf->append( "Lcom/sun/star/uno/Type;" );
         } else {
-            buf->append(
-                RTL_CONSTASCII_STRINGPARAM("Lcom.sun.star.uno.Type;") );
+            buf->append( "Lcom.sun.star.uno.Type;" );
         }
         break;
     case typelib_TypeClass_ANY:
         if ( use_slashes ) {
-            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+            buf->append( "Ljava/lang/Object;" );
         } else {
-            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava.lang.Object;") );
+            buf->append( "Ljava.lang.Object;" );
         }
         break;
     case typelib_TypeClass_ENUM:
@@ -337,9 +335,9 @@ inline void JNI_info::append_sig(
         if (use_Object_for_type_XInterface && is_XInterface( type ))
         {
             if ( use_slashes ) {
-                buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+                buf->append( "Ljava/lang/Object;" );
             } else {
-                buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava.lang.Object;") );
+                buf->append( "Ljava.lang.Object;" );
             }
         }
         else

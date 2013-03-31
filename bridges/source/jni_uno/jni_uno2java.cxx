@@ -88,8 +88,7 @@ void Bridge::handle_java_exc(
                 jo_exc.get(), m_jni_info->m_method_Object_toString, 0 ) );
         jni.ensure_no_exception();
         OUStringBuffer buf( 128 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("non-UNO exception occurred: ") );
+        buf.append( "non-UNO exception occurred: " );
         buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
         buf.append( jni.get_stack_trace( jo_exc.get() ) );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -116,10 +115,9 @@ void Bridge::handle_java_exc(
 
 #if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 128 );
-    trace_buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("exception occurred uno->java: [") );
+    trace_buf.append( "exception occurred uno->java: [" );
     trace_buf.append( exc_name );
-    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
+    trace_buf.append( "] " );
     trace_buf.append(
         reinterpret_cast< ::com::sun::star::uno::Exception const * >(
             uno_exc->pData )->Message );
@@ -152,8 +150,7 @@ void Bridge::call_java(
         iface_holder.makeComplete();
         if (! iface_holder.get()->bComplete) {
             OUStringBuffer buf;
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("cannot make type complete: ") );
+            buf.append( "cannot make type complete: " );
             buf.append( OUString::unacquired(&iface_holder.get()->pTypeName) );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -226,7 +223,7 @@ void Bridge::call_java(
 
 #if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 128 );
-    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("calling ") );
+    trace_buf.append( "calling " );
     JLocalAutoRef jo_method(
         jni, jni->ToReflectedMethod( info->m_class, method_id, JNI_FALSE ) );
     jni.ensure_no_exception();
@@ -235,20 +232,20 @@ void Bridge::call_java(
             jo_method.get(), m_jni_info->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
     trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
-    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on ") );
+    trace_buf.append( " on " );
     jo_descr.reset(
         jni->CallObjectMethodA(
             javaI, m_jni_info->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
     trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
-    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (") );
+    trace_buf.append( " (" );
     JLocalAutoRef jo_class( jni, jni->GetObjectClass( javaI ) );
     jo_descr.reset(
         jni->CallObjectMethodA(
             jo_class.get(), m_jni_info->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
     trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
-    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(")") );
+    trace_buf.append( ")" );
     OString cstr_trace(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
@@ -612,9 +609,9 @@ void SAL_CALL UNO_proxy_dispatch(
 
 #if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 64 );
-    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno->java call: ") );
+    trace_buf.append( "uno->java call: " );
     trace_buf.append( OUString::unacquired( &member_td->pTypeName ) );
-    trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" on oid ") );
+    trace_buf.append( " on oid " );
     trace_buf.append( that->m_oid );
     OString cstr_msg(
         OUStringToOString(
@@ -815,9 +812,7 @@ void SAL_CALL UNO_proxy_dispatch(
     catch (BridgeRuntimeError & err)
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM(
-                "[jni_uno bridge error] UNO calling Java method ") );
+        buf.append( "[jni_uno bridge error] UNO calling Java method " );
         if (typelib_TypeClass_INTERFACE_METHOD == member_td->eTypeClass ||
             typelib_TypeClass_INTERFACE_ATTRIBUTE == member_td->eTypeClass)
         {
@@ -826,7 +821,7 @@ void SAL_CALL UNO_proxy_dispatch(
                             typelib_InterfaceMemberTypeDescription const * >(
                                 member_td )->pMemberName ) );
         }
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": ") );
+        buf.append( ": " );
         buf.append( err.m_message );
         // binary identical struct
         ::com::sun::star::uno::RuntimeException exc(

@@ -46,8 +46,7 @@ JNI_type_info::JNI_type_info(
     if (! m_td.get()->bComplete)
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("cannot make type complete: ") );
+        buf.append( "cannot make type complete: " );
         buf.append( OUString::unacquired( &m_td.get()->pTypeName ) );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -168,11 +167,11 @@ JNI_interface_type_info::JNI_interface_type_info(
                             &attribute_td->aBase.pMemberName );
 
                     // getter
-                    sig_buf.append( RTL_CONSTASCII_STRINGPARAM("()") );
+                    sig_buf.append( "()" );
                     sig_buf.append( type_sig );
                     OString method_signature( sig_buf.makeStringAndClear() );
                     OUStringBuffer name_buf( 3 + member_name.getLength() );
-                    name_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("get") );
+                    name_buf.append( "get" );
                     name_buf.append( member_name );
                     OString method_name(
                         OUStringToOString(
@@ -190,11 +189,10 @@ JNI_interface_type_info::JNI_interface_type_info(
                         sig_buf.ensureCapacity( 64 );
                         sig_buf.append( '(' );
                         sig_buf.append( type_sig );
-                        sig_buf.append( RTL_CONSTASCII_STRINGPARAM(")V") );
+                        sig_buf.append( ")V" );
                         method_signature = sig_buf.makeStringAndClear();
                         name_buf.ensureCapacity( 3 + member_name.getLength() );
-                        name_buf.appendAscii(
-                            RTL_CONSTASCII_STRINGPARAM("set") );
+                        name_buf.append( "set" );
                         name_buf.append( member_name );
                         method_name = OUStringToOString(
                             name_buf.makeStringAndClear(),
@@ -312,8 +310,7 @@ JNI_compound_type_info::JNI_compound_type_info(
                     && reinterpret_cast< typelib_StructTypeDescription * >(
                         td)->pParameterizedTypes[nPos])
                 {
-                    sig = OString(
-                        RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;"));
+                    sig = OString( "Ljava/lang/Object;" );
                 } else {
                     OStringBuffer sig_buf( 32 );
                     JNI_info::append_sig( &sig_buf, td->ppTypeRefs[ nPos ] );
@@ -366,8 +363,7 @@ JNI_type_info const * JNI_info::create_type_info(
     default:
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("type info not supported for ") );
+        buf.append( "type info not supported for " );
         buf.append( uno_name );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -466,8 +462,7 @@ JNI_type_info const * JNI_info::get_type_info(
         if (! td.is())
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("UNO type not found: ") );
+            buf.append( "UNO type not found: " );
             buf.append( uno_name );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -756,7 +751,7 @@ JNI_info::JNI_info(
     OSL_ASSERT( 0 != m_field_JNI_proxy_m_oid );
 
     // get java env
-    OUString java_env_type_name( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_JAVA) );
+    OUString java_env_type_name( UNO_LB_JAVA );
     JLocalAutoRef jo_java(
         jni, ustring_to_jstring( jni, java_env_type_name.pData ) );
     jvalue args[ 2 ];

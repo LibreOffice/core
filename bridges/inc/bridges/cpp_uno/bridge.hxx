@@ -399,7 +399,7 @@ inline const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
         if (! s_pStaticOidPart)
         {
             OUStringBuffer aRet( 64 );
-            aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM("];") );
+            aRet.append( "];" );
             // good guid
             sal_uInt8 ar[16];
             ::rtl_getGlobalProcessId( ar );

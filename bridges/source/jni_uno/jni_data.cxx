@@ -386,9 +386,9 @@ void Bridge::map_to_uno(
         if (0 == java_data.l)
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( "] null-ref given!" );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -411,9 +411,9 @@ void Bridge::map_to_uno(
         if (0 == java_data.l)
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( "] null-ref given!" );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -425,11 +425,10 @@ void Bridge::map_to_uno(
         if (! jo_type_name.is())
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("] incomplete type object: "
-                                           "no type name!") );
+            buf.append("] incomplete type object: "
+                       "no type name!" );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -439,10 +438,9 @@ void Bridge::map_to_uno(
         if (! td.is())
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
+            buf.append( "] UNO type not found: " );
             buf.append( type_name );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -489,11 +487,9 @@ void Bridge::map_to_uno(
             if (! jo_type.is())
             {
                 OUStringBuffer buf( 128 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                buf.append( "[map_to_uno():" );
                 buf.append( OUString::unacquired( &type->pTypeName ) );
-                buf.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("] no type set at "
-                                               "com.sun.star.uno.Any!") );
+                buf.append( "] no type set at " "com.sun.star.uno.Any!" );
                 buf.append( jni.get_stack_trace() );
                 throw BridgeRuntimeError( buf.makeStringAndClear() );
             }
@@ -532,10 +528,9 @@ void Bridge::map_to_uno(
         if (! value_td.is())
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
+            buf.append( "] UNO type not found: " );
             buf.append( type_name );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -684,11 +679,9 @@ void Bridge::map_to_uno(
             default:
             {
                 OUStringBuffer buf( 128 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                buf.append( "[map_to_uno():" );
                 buf.append( type_name );
-                buf.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("] unsupported value type "
-                                               "of any!") );
+                buf.append( "] unsupported value type " "of any!" );
                 buf.append( jni.get_stack_trace() );
                 throw BridgeRuntimeError( buf.makeStringAndClear() );
             }
@@ -720,9 +713,9 @@ void Bridge::map_to_uno(
         if (0 == java_data.l)
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( "] null-ref given!" );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -745,9 +738,9 @@ void Bridge::map_to_uno(
         if (0 == java_data.l)
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( "] null-ref given!" );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -1017,9 +1010,9 @@ void Bridge::map_to_uno(
         if (0 == java_data.l)
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            buf.append( "] null-ref given!" );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
@@ -1155,11 +1148,9 @@ void Bridge::map_to_uno(
         default:
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( "[map_to_uno():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("] unsupported sequence element"
-                                           " type: ") );
+            buf.append( "] unsupported sequence element" " type: " );
             buf.append( OUString::unacquired( &element_type->pTypeName ) );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -1212,9 +1203,9 @@ void Bridge::map_to_uno(
     default:
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+        buf.append( "[map_to_uno():" );
         buf.append( OUString::unacquired( &type->pTypeName ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+        buf.append( "] unsupported type!" );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
@@ -1878,7 +1869,7 @@ void Bridge::map_to_java(
         {
             // call static <enum_class>.fromInt( int )
             OStringBuffer sig_buf( 5 + class_name.getLength() );
-            sig_buf.append( RTL_CONSTASCII_STRINGPARAM("(I)L") );
+            sig_buf.append( "(I)L" );
             sig_buf.append( class_name.replace( '.', '/' ) );
             sig_buf.append( ';' );
             OString sig( sig_buf.makeStringAndClear() );
@@ -2367,7 +2358,7 @@ void Bridge::map_to_java(
             {
                 // call static <enum_class>.fromInt( int )
                 OStringBuffer sig_buf( 5 + class_name.getLength() );
-                sig_buf.append( RTL_CONSTASCII_STRINGPARAM("(I)L") );
+                sig_buf.append( "(I)L" );
                 sig_buf.append( class_name.replace( '.', '/' ) );
                 sig_buf.append( ';' );
                 OString sig( sig_buf.makeStringAndClear() );
@@ -2486,10 +2477,9 @@ void Bridge::map_to_java(
         default:
         {
             OUStringBuffer buf( 128 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_java():") );
+            buf.append( "[map_to_java():" );
             buf.append( OUString::unacquired( &type->pTypeName ) );
-            buf.appendAscii(
-                RTL_CONSTASCII_STRINGPARAM("] unsupported element type: ") );
+            buf.append( "] unsupported element type: " );
             buf.append( OUString::unacquired( &element_type->pTypeName ) );
             buf.append( jni.get_stack_trace() );
             throw BridgeRuntimeError( buf.makeStringAndClear() );
@@ -2568,9 +2558,9 @@ void Bridge::map_to_java(
     default:
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_java():") );
+        buf.append( "[map_to_java():" );
         buf.append( OUString::unacquired( &type->pTypeName ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+        buf.appendAscii( "] unsupported type!" );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
