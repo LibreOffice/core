@@ -24,10 +24,6 @@
 #include <tools/debug.hxx>
 
 
-// -------------------------------------------------------------------------
-// (+) class TextSelection
-// -------------------------------------------------------------------------
-
 TextSelection::TextSelection()
 {
 }
@@ -53,9 +49,6 @@ void TextSelection::Justify()
 }
 
 
-// -------------------------------------------------------------------------
-// (+) class TETextPortionList
-// -------------------------------------------------------------------------
 TETextPortionList::TETextPortionList()
 {
 }
@@ -82,7 +75,7 @@ void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
 
 sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion )
 {
-    // Bei nCharPos an Portion-Grenze wird die linke Portion gefunden
+    // find left portion at nCharPos at portion border
     sal_uInt16 nTmpPos = 0;
     for ( sal_uInt16 nPortion = 0; nPortion < size(); nPortion++ )
     {
@@ -103,9 +96,6 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
 }
 
 
-// -------------------------------------------------------------------------
-// (+) class TEParaPortion
-// -------------------------------------------------------------------------
 TEParaPortion::TEParaPortion( TextNode* pN )
 {
     mpNode = pN;
@@ -127,13 +117,13 @@ void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
     }
     else
     {
-        // Einfaches hintereinander tippen
+        // simple consecutive typing
         if ( ( nDiff > 0 ) && ( mnInvalidDiff > 0 ) &&
              ( ( mnInvalidPosStart+mnInvalidDiff ) == nStart ) )
         {
             mnInvalidDiff = mnInvalidDiff + nDiff;
         }
-        // Einfaches hintereinander loeschen
+        // simple consecutive deleting
         else if ( ( nDiff < 0 ) && ( mnInvalidDiff < 0 ) && ( mnInvalidPosStart == nStart ) )
         {
             mnInvalidPosStart = mnInvalidPosStart + nDiff;
@@ -202,12 +192,11 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
         const TextLine* pUnformatted = maLines[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
         short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
+        nTextDiff++;    // LastFormatted->GetEnd() was inclusive => subtracted one too much!
 
-        // Die erste unformatierte muss genau eine Portion hinter der letzten der
-        // formatierten beginnen:
-        // Wenn in der geaenderten Zeile eine Portion gesplittet wurde,
-        // kann nLastEnd > nNextStart sein!
+        // The first unformated one has to start exactly one portion past the last
+        // formated one.
+        // If a portion got split in the changed row, nLastEnd could be > nNextStart!
         short nPDiff = sal::static_int_cast< short >(-( nPortionDiff-1 ));
         short nTDiff = sal::static_int_cast< short >(-( nTextDiff-1 ));
         if ( nPDiff || nTDiff )
@@ -228,9 +217,6 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
     }
 }
 
-// -------------------------------------------------------------------------
-// (+) class TEParaPortions
-// -------------------------------------------------------------------------
 TEParaPortions::TEParaPortions()
 {
 }
@@ -248,9 +234,6 @@ void TEParaPortions::Reset()
     clear();
 }
 
-// -------------------------------------------------------------------------
-// (+) class IdleFormatter
-// -------------------------------------------------------------------------
 IdleFormatter::IdleFormatter()
 {
     mpView = 0;
