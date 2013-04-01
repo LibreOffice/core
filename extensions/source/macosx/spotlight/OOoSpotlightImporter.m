@@ -29,9 +29,6 @@ typedef int NSColorRenderingIntent;
 #import "OOoMetaDataParser.h"
 #import "OOoContentDataParser.h"
 
-#define CASESENSITIVITY (0)
-#define BUFFER_SIZE (4096)
-
 /* a dictionary to hold the UTIs */
 static NSDictionary *uti2kind;
 
