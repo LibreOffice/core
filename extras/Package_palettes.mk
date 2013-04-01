@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,palettes,$(SRCDIR)/extras/source/palettes))
+$(eval $(call gb_Package_Package,extras_palettes,$(SRCDIR)/extras/source/palettes))
 
-$(eval $(call gb_Zip_add_files,palettes,\
+$(eval $(call gb_Package_set_outdir,extras_palettes,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_palettes,presets/config,\
 	arrowhd.soe \
 	classic.sog \
 	cmyk.soc \
