@@ -279,12 +279,7 @@ public:
         if( m_nLevel > static_cast< sal_Int32 >(rVector.size()) )
             rVector.resize( m_nLevel );
 
-        vector< uno::Any >::iterator aIt( rVector.begin() );
-        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
-        {
-            if( nN==m_nLevel )
-                break;
-        }
+        vector< uno::Any >::iterator aIt = std::find(rVector.begin(), rVector.end(), m_nLevel);
         rVector.insert( aIt, uno::Any() );
     }
 
