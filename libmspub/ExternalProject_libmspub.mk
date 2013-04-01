@@ -28,8 +28,9 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& export ICU_LIBS=" " \
-		&& export ICU_CFLAGS="$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,icu)/source/common" \
+		&& export ICU_CFLAGS="$(if $(filter NO,$(SYSTEM_ICU)),\
+			-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+			-I$(call gb_UnpackedTarball_get_dir,icu)/source/common, )" \
 		&& export LIBMSPUB_CFLAGS="$(WPG_CFLAGS) $(WPD_CFLAGS)" \
 		&& export LIBMSPUB_LIBS="$(WPG_LIBS) $(WPD_LIBS)" \
 		&& ./configure \
