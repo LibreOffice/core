@@ -141,13 +141,13 @@ void TableRow::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         {
             CellVector::iterator aBegin( maCells.begin() );
             while( nIndex-- && (aBegin != maCells.end()) )
-                aBegin++;
+                ++aBegin;
 
             if( nCount > 1 )
             {
                 CellVector::iterator aEnd( aBegin );
                 while( nCount-- && (aEnd != maCells.end()) )
-                    aEnd++;
+                    ++aEnd;
                 maCells.erase( aBegin, aEnd );
             }
             else
