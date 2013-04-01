@@ -53,13 +53,6 @@ SdrPage* DlgEdModel::AllocPage(bool bMasterPage)
 
 //----------------------------------------------------------------------------
 
-Window* DlgEdModel::GetCurDocViewWin()
-{
-    return 0;
-}
-
-//----------------------------------------------------------------------------
-
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

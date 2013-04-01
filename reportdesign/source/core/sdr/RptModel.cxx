@@ -92,12 +92,6 @@ void OReportModel::SetChanged( sal_Bool bChanged )
 
 //----------------------------------------------------------------------------
 
-Window* OReportModel::GetCurDocViewWin()
-{
-    return 0;
-}
-
-//----------------------------------------------------------------------------
 OXUndoEnvironment&  OReportModel::GetUndoEnv()
 {
     return *m_pUndoEnv;

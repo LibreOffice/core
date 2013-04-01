@@ -103,8 +103,6 @@ public:
     virtual SdrModel* AllocModel() const;
     virtual void    SetChanged( sal_Bool bFlg = sal_True );
 
-    virtual Window* GetCurDocViewWin();
-
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
     sal_Bool            HasObjects() const;

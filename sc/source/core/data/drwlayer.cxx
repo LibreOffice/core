@@ -334,21 +334,6 @@ SdrModel* ScDrawLayer::AllocModel() const
     return new ScDrawLayer( NULL, aName );
 }
 
-Window* ScDrawLayer::GetCurDocViewWin()
-{
-    OSL_ENSURE( pDoc, "ScDrawLayer::GetCurDocViewWin without document" );
-    if ( !pDoc )
-        return NULL;
-
-    SfxViewShell* pViewSh = SfxViewShell::Current();
-    SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-
-    if (pViewSh && pViewSh->GetObjectShell() == pObjSh)
-        return pViewSh->GetWindow();
-
-    return NULL;
-}
-
 sal_Bool ScDrawLayer::ScAddPage( SCTAB nTab )
 {
     if (bDrawIsInUndo)

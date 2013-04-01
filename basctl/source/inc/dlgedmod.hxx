@@ -44,8 +44,6 @@ public:
     virtual ~DlgEdModel();
 
     virtual SdrPage*  AllocPage(bool bMasterPage);
-
-    virtual Window* GetCurDocViewWin();
 };
 
 } // namespace basctl
