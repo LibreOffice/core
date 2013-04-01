@@ -99,7 +99,7 @@ else #!SYSTEM_NPAPI_HEADERS
 define gb_LinkTarget__use_npapi_headers
 $(call gb_LinkTarget_use_package,$(1),npapi)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(OUTDIR)/inc/external/npsdk \
+	-I$(OUTDIR)/inc/external/npsdk \
 	$$(INCLUDE) \
 )
 
@@ -134,7 +134,7 @@ else
 define gb_LinkTarget__use_vigra_headers
 $(call gb_LinkTarget_use_unpacked,$(1),vigra)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,vigra/include) \
+	-I$(call gb_UnpackedTarball_get_dir,vigra/include) \
 	$$(INCLUDE) \
 )
 
@@ -151,7 +151,7 @@ else
 define gb_LinkTarget__use_mdds_headers
 $(call gb_LinkTarget_use_unpacked,$(1),mdds)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,mdds/include) \
+	-I$(call gb_UnpackedTarball_get_dir,mdds/include) \
 	$$(INCLUDE) \
 )
 
@@ -203,7 +203,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
     cppunit \
 )
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,cppunit/include)\
+	-I$(call gb_UnpackedTarball_get_dir,cppunit/include)\
 	$$(INCLUDE) \
 )
 
@@ -274,8 +274,8 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,mysqlcppconn) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,mysqlcppconn)/cppconn \
+	-I$(call gb_UnpackedTarball_get_dir,mysqlcppconn) \
+	-I$(call gb_UnpackedTarball_get_dir,mysqlcppconn)/cppconn \
 	$$(INCLUDE) \
 )
 
@@ -315,7 +315,7 @@ $(call gb_LinkTarget_use_packages,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(OUTDIR)/inc/external/zlib \
+	-I$(OUTDIR)/inc/external/zlib \
 	$$(INCLUDE) \
 )
 
@@ -363,7 +363,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(ISYSTEM)$(OUTDIR)/inc/external/jpeg \
+	-I$(OUTDIR)/inc/external/jpeg \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -430,7 +430,7 @@ define gb_LinkTarget__use_expat
 $(if $(2),,$(error gb_LinkTarget__use_expat needs additional parameter))
 
 $(call gb_LinkTarget_set_include,$(1),\
-    $(ISYSTEM)$(OUTDIR)/inc/external/expat \
+    -I$(OUTDIR)/inc/external/expat \
     $$(INCLUDE) \
 )
 
@@ -481,7 +481,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 define gb_LinkTarget__use_hyphen
 $(call gb_LinkTarget_use_unpacked,$(1),hyphen)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,hyphen)\
+	-I$(call gb_UnpackedTarball_get_dir,hyphen)\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -515,7 +515,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 $(call gb_LinkTarget_use_unpacked,$(1),hunspell)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,hunspell/src/hunspell)\
+	-I$(call gb_UnpackedTarball_get_dir,hunspell/src/hunspell)\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -592,7 +592,7 @@ endef
 define gb_LinkTarget__use_boost_headers
 $(call gb_LinkTarget_use_unpacked,$(1),boost)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,boost) \
+	-I$(call gb_UnpackedTarball_get_dir,boost) \
 	$$(INCLUDE) \
 )
 
@@ -673,7 +673,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,exttextcat/src) \
+	-I$(call gb_UnpackedTarball_get_dir,exttextcat/src) \
 	$$(INCLUDE) \
 )
 
@@ -710,7 +710,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 )
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,xml2)/include \
+	-I$(call gb_UnpackedTarball_get_dir,xml2)/include \
 )
 
 endef
@@ -754,7 +754,7 @@ define gb_LinkTarget__use_libxslt
 $(call gb_LinkTarget_use_package,$(1),xslt)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,xslt) \
+	-I$(call gb_UnpackedTarball_get_dir,xslt) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
 	xslt \
@@ -766,7 +766,7 @@ define gb_LinkTarget__use_libexslt
 $(call gb_LinkTarget_use_package,$(1),xslt)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,xslt) \
+	-I$(call gb_UnpackedTarball_get_dir,xslt) \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -804,7 +804,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 define gb_LinkTarget__use_liblangtag
 $(call gb_LinkTarget_use_unpacked,$(1),langtag)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,langtag) \
+	-I$(call gb_UnpackedTarball_get_dir,langtag) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -842,7 +842,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 define gb_LinkTarget__use_neon
 $(call gb_LinkTarget_use_unpacked,$(1),neon)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,neon/src) \
+	-I$(call gb_UnpackedTarball_get_dir,neon/src) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -878,7 +878,7 @@ else # !SYSTEM_REDLAND
 
 define gb_LinkTarget__use_redland_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,redland)/librdf \
+	-I$(call gb_UnpackedTarball_get_dir,redland)/librdf \
 	$$(INCLUDE) \
 )
 
@@ -886,7 +886,7 @@ endef
 
 define gb_LinkTarget__use_raptor_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,raptor)/src \
+	-I$(call gb_UnpackedTarball_get_dir,raptor)/src \
 	$$(INCLUDE) \
 )
 
@@ -894,7 +894,7 @@ endef
 
 define gb_LinkTarget__use_rasqal_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,rasqal)/src \
+	-I$(call gb_UnpackedTarball_get_dir,rasqal)/src \
 	$$(INCLUDE) \
 )
 
@@ -968,8 +968,8 @@ define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_use_package,$(1),cairo)
 $(call gb_LinkTarget_use_package,$(1),pixman)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,cairo) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,cairo)/src \
+	-I$(call gb_UnpackedTarball_get_dir,cairo) \
+	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
 	$(FREETYPE_CFLAGS) \
 	$$(INCLUDE) \
 )
@@ -1031,7 +1031,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 define gb_LinkTarget__use_graphite
 $(call gb_LinkTarget_use_unpacked,$(1),graphite)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,graphite/include) \
+	-I$(call gb_UnpackedTarball_get_dir,graphite/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -1083,9 +1083,9 @@ endif
 define gb_LinkTarget__use_icu_headers
 $(call gb_LinkTarget_use_unpacked,$(1),icu)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,icu)/source \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,icu)/source/common \
+	-I$(call gb_UnpackedTarball_get_dir,icu)/source \
+	-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+	-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 	$$(INCLUDE) \
 )
 
@@ -1205,7 +1205,7 @@ endef
 
 define gb_LinkTarget__use_openssl_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,openssl)/include \
+	-I$(call gb_UnpackedTarball_get_dir,openssl)/include \
 	$$(INCLUDE) \
 )
 
@@ -1489,7 +1489,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_use_package,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,lcms2/include) \
+	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -1507,7 +1507,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_use_package,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,lcms2/include) \
+	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -1542,7 +1542,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 	lpsolve55 \
 )
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,lpsolve) \
+	-I$(call gb_UnpackedTarball_get_dir,lpsolve) \
 	$$(INCLUDE) \
 )
 
@@ -1753,7 +1753,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 define gb_LinkTarget__use_curl
 $(call gb_LinkTarget_use_package,$(1),curl)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,curl/include) \
+	-I$(call gb_UnpackedTarball_get_dir,curl/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -1816,9 +1816,9 @@ define gb_LinkTarget__use_poppler
 $(call gb_LinkTarget_use_package,$(1),xpdf)
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,xpdf) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,xpdf)/xpdf \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,xpdf)/goo \
+	-I$(call gb_UnpackedTarball_get_dir,xpdf) \
+	-I$(call gb_UnpackedTarball_get_dir,xpdf)/xpdf \
+	-I$(call gb_UnpackedTarball_get_dir,xpdf)/goo \
 	$$(INCLUDE) \
 )
 
@@ -1929,7 +1929,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 define gb_LinkTarget__use_openldap
 $(call gb_LinkTarget_use_unpacked,$(1),openldap)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,openldap/include) \
+	-I$(call gb_UnpackedTarball_get_dir,openldap/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_package,$(1),openldap)
@@ -1975,7 +1975,7 @@ $(call gb_LinkTarget_use_packages,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(OUTDIR)/inc/postgresql \
+	-I$(OUTDIR)/inc/postgresql \
 	$$(INCLUDE) \
 )
 
@@ -2010,7 +2010,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(ISYSTEM)$(OUTDIR)/inc/mozilla \
+	-I$(OUTDIR)/inc/mozilla \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -2226,9 +2226,9 @@ define gb_LinkTarget__use_python_headers
 $(call gb_LinkTarget_use_package,$(1),python3)
 $(call gb_LinkTarget_use_external_project,$(1),python3)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,python3) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,python3)/PC \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,python3)/Include \
+	-I$(call gb_UnpackedTarball_get_dir,python3) \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/PC \
+	-I$(call gb_UnpackedTarball_get_dir,python3)/Include \
 	$$(INCLUDE) \
 )
 
@@ -2282,7 +2282,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_use_unpacked,$(1),orcus)
 $(call gb_LinkTarget_set_include,$(1),\
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,orcus/include) \
+	-I$(call gb_UnpackedTarball_get_dir,orcus/include) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),orcus)
@@ -2409,8 +2409,8 @@ define gb_LinkTarget__use_nss3
 $(call gb_LinkTarget_use_package,$(1),nss)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss \
-	$(ISYSTEM)$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss \
+	-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 )
 
 $(call gb_LinkTarget_use_libraries,$(1),\

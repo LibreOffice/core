@@ -2883,6 +2883,7 @@ fi
 AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 
 # Use -isystem (gcc) if possible, to avoid warnigs in 3rd party headers.
+# NOTE: must _not_ be used for bundled external libraries!
 ISYSTEM=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING( for -isystem )
@@ -3973,7 +3974,7 @@ else
     WORKDIR=${BUILDDIR}/workdir/${INPATH}
 fi
 OUTDIR="${SOLARVER}/${INPATH}"
-SOLARINC="-I. ${ISYSTEM}${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
+SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
 AC_SUBST(COM)
 AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
