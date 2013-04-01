@@ -65,9 +65,21 @@ struct ResIdToResName
 
 static const ResIdToResName pToolBarResToName[] =
 {
-    { 558,      "fullscreenbar"        },
-    { 560,      "standardbar",         },
-    { 18001,    "formsnavigationbar"   },
+    // OMG! hardcoded numbers that have nice (?) symbolic names
+    // elsewhere.
+    { 558,      "fullscreenbar"        }, // This 558 for instance equals RID_FULLSCREENTOOLBOX (in
+                                          // value, and presumably also in semantics) from app.hrc in
+                                          // this very same directory, so why RID_FULLSCREENTOOLBOX
+                                          // can't be used I have no idea.
+
+    { 560,      "standardbar",         }, // 560 is called RID_ENVTOOLBOX in app.hrc, still the same?
+
+    { 18001,    "formsnavigationbar"   }, // Probably the rest are defined in .hrc files that are higher
+                                          // up in the dependency chain and/or later in the build order,
+                                          // and that is the (bad) reason why their symbolic names are
+                                          // not available? Would it really be so owful to move the .hrc
+                                          // files in question out from the modules where they now are?
+
     { 18002,    "formsfilterbar"       },
     { 18003,    "formtextobjectbar"    },
     { 18004,    "formcontrols"         },
