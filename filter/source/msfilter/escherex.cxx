@@ -1455,33 +1455,27 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
             {
                 sal_Int32 nSizeX = 0,nSizeY = 0,nOffsetX = 0,nOffsetY = 0,nPosOffsetX = 0,nPosOffsetY = 0;
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapSizeX" ) ), sal_True ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBitmapSizeX", sal_True ) )
                 {
                     aAny >>= nSizeX;
                 }
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapSizeY" ) ), sal_True ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBitmapSizeY", sal_True ) )
                 {
                     aAny >>= nSizeY;
                 }
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapOffsetX" ) ), sal_True ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBitmapOffsetX", sal_True ) )
                 {
                     aAny >>= nOffsetX;
                 }
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapOffsetY" ) ), sal_True ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBitmapOffsetY", sal_True ) )
                 {
                     aAny >>= nOffsetY;
                 }
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapPositionOffsetX" ) ), sal_True ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBitmapPositionOffsetX", sal_True ) )
                 {
                     aAny >>= nPosOffsetX;
                 }
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapPositionOffsetY" ) ), sal_True ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBitmapPositionOffsetY", sal_True ) )
                 {
                     aAny >>= nPosOffsetY;
                 }
