@@ -41,9 +41,6 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
-#define NS_CSS com::sun::star
-#define NS_UNO com::sun::star::uno
-
 namespace desktop
 {
 
@@ -89,7 +86,7 @@ struct MigrationItem
     ::rtl::OUString m_sParentNodeName;
     ::rtl::OUString m_sPrevSibling;
     ::rtl::OUString m_sCommandURL;
-    NS_UNO::Reference< NS_CSS::container::XIndexContainer > m_xPopupMenu;
+    css::uno::Reference< css::container::XIndexContainer > m_xPopupMenu;
 
     MigrationItem()
         :m_xPopupMenu(0)
@@ -99,7 +96,7 @@ struct MigrationItem
     MigrationItem(const ::rtl::OUString& sParentNodeName,
         const ::rtl::OUString& sPrevSibling,
         const ::rtl::OUString& sCommandURL,
-        const NS_UNO::Reference< NS_CSS::container::XIndexContainer > xPopupMenu)
+        const css::uno::Reference< css::container::XIndexContainer > xPopupMenu)
     {
         m_sParentNodeName = sParentNodeName;
         m_sPrevSibling    = sPrevSibling;
@@ -167,16 +164,16 @@ class NewVersionUIInfo
 {
 public:
 
-    NS_UNO::Reference< NS_CSS::ui::XUIConfigurationManager > getConfigManager(const ::rtl::OUString& sModuleShortName) const;
-    NS_UNO::Reference< NS_CSS::container::XIndexContainer > getNewMenubarSettings(const ::rtl::OUString& sModuleShortName) const;
-    NS_UNO::Reference< NS_CSS::container::XIndexContainer > getNewToolbarSettings(const ::rtl::OUString& sModuleShortName, const ::rtl::OUString& sToolbarName) const;
+    css::uno::Reference< css::ui::XUIConfigurationManager > getConfigManager(const ::rtl::OUString& sModuleShortName) const;
+    css::uno::Reference< css::container::XIndexContainer > getNewMenubarSettings(const ::rtl::OUString& sModuleShortName) const;
+    css::uno::Reference< css::container::XIndexContainer > getNewToolbarSettings(const ::rtl::OUString& sModuleShortName, const ::rtl::OUString& sToolbarName) const;
     void init(const ::std::vector< MigrationModuleInfo >& vModulesInfo);
 
 private:
 
-    NS_UNO::Sequence< NS_CSS::beans::PropertyValue > m_lCfgManagerSeq;
-    NS_UNO::Sequence< NS_CSS::beans::PropertyValue > m_lNewVersionMenubarSettingsSeq;
-    NS_UNO::Sequence< NS_CSS::beans::PropertyValue > m_lNewVersionToolbarSettingsSeq;
+    css::uno::Sequence< css::beans::PropertyValue > m_lCfgManagerSeq;
+    css::uno::Sequence< css::beans::PropertyValue > m_lNewVersionMenubarSettingsSeq;
+    css::uno::Sequence< css::beans::PropertyValue > m_lNewVersionToolbarSettingsSeq;
 };
 
 class MigrationImpl
@@ -208,15 +205,15 @@ private:
     // helpers
     strings_vr getAllFiles(const rtl::OUString& baseURL) const;
     strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const;
-    NS_UNO::Reference< NS_CSS::container::XNameAccess > getConfigAccess(const sal_Char* path, sal_Bool rw=sal_False);
+    css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, sal_Bool rw=sal_False);
 
     ::std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;
     void compareOldAndNewConfig(const ::rtl::OUString& sParentNodeName,
-        const NS_UNO::Reference< NS_CSS::container::XIndexContainer >& xOldIndexContainer,
-        const NS_UNO::Reference< NS_CSS::container::XIndexContainer >& xNewIndexContainer,
+        const css::uno::Reference< css::container::XIndexContainer >& xOldIndexContainer,
+        const css::uno::Reference< css::container::XIndexContainer >& xNewIndexContainer,
         const ::rtl::OUString& sToolbarName);
-    void mergeOldToNewVersion(const NS_UNO::Reference< NS_CSS::ui::XUIConfigurationManager >& xCfgManager,
-        const NS_UNO::Reference< NS_CSS::container::XIndexContainer>& xIndexContainer,
+    void mergeOldToNewVersion(const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgManager,
+        const css::uno::Reference< css::container::XIndexContainer>& xIndexContainer,
         const ::rtl::OUString& sModuleIdentifier,
         const ::rtl::OUString& sResourceURL);
 
@@ -237,8 +234,6 @@ public:
     rtl::OUString getOldVersionName();
 };
 }
-#undef NS_CSS
-#undef NS_UNO
 
 #endif
 

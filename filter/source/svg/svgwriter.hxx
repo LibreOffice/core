@@ -71,15 +71,6 @@ using namespace ::com::sun::star::style;
 
 // -----------------------------------------------------------------------------
 
-#define NMSP_CPPU               cppu
-#define NMSP_UNO                com::sun::star::uno
-#define NMSP_LANG               com::sun::star::lang
-#define NMSP_SAX                com::sun::star::xml::sax
-#define NMSP_REGISTRY           com::sun::star::registry
-
-
-#define REF( _def_Obj )           NMSP_UNO::Reference< _def_Obj >
-#define SEQ( _def_Obj )           NMSP_UNO::Sequence< _def_Obj >
 #define SVG_DTD_STRING            OUString( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" )
 #define SVG_TINY_DTD_STRING       OUString( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG Tiny 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd\">" )
 

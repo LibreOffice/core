@@ -252,7 +252,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
         }
         else if ( rtl_str_compare( pImplName, "com.sun.star.drawing.EnhancedCustomShapeEngine" ) == 0 )
         {
-            xFactory = createSingleFactory( reinterpret_cast< NMSP_LANG::XMultiServiceFactory* >( pServiceManager ),
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                 EnhancedCustomShapeEngine_getImplementationName(),
                 create_EnhancedCustomShapeEngine,
                 EnhancedCustomShapeEngine_getSupportedServiceNames() );

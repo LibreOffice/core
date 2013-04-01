@@ -33,16 +33,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 
-// -----------------------------------------------------------------------------
-
-#define NMSP_UNO        com::sun::star::uno
-#define NMSP_BEANS      com::sun::star::beans
-#define NMSP_LANG       com::sun::star::lang
-
-
-#define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >
-#define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
-
 // ---------------------------
 // - EnhancedCustomShapeEngine -
 // ---------------------------
@@ -52,19 +42,19 @@ class SdrObject;
 class SdrObjCustomShape;
 class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
 <
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo,
-    com::sun::star::drawing::XCustomShapeEngine
+    css::lang::XInitialization,
+    css::lang::XServiceInfo,
+    css::drawing::XCustomShapeEngine
 >
 {
-    REF( NMSP_LANG::XMultiServiceFactory )      mxFact;
-    REF( com::sun::star::drawing::XShape )      mxShape;
+    css::uno::Reference< css::lang::XMultiServiceFactory >      mxFact;
+    css::uno::Reference< css::drawing::XShape >      mxShape;
     sal_Bool                                    mbForceGroupWithText;
 
     SdrObject* ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape );
 
 public:
-                            EnhancedCustomShapeEngine( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
+                            EnhancedCustomShapeEngine( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
     virtual                 ~EnhancedCustomShapeEngine();
 
     // XInterface
@@ -72,34 +62,34 @@ public:
     virtual void SAL_CALL   release() throw();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const SEQ( NMSP_UNO::Any )& aArguments )
-        throw ( NMSP_UNO::Exception, NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException );
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName()
-        throw ( NMSP_UNO::RuntimeException );
+        throw ( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& rServiceName )
-        throw ( NMSP_UNO::RuntimeException );
-    virtual SEQ( rtl::OUString ) SAL_CALL getSupportedServiceNames()
-        throw ( NMSP_UNO::RuntimeException );
+        throw ( css::uno::RuntimeException );
+    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+        throw ( css::uno::RuntimeException );
 
     // XCustomShapeEngine
-    virtual REF( com::sun::star::drawing::XShape ) SAL_CALL render()
-        throw ( NMSP_UNO::RuntimeException );
-    virtual com::sun::star::awt::Rectangle SAL_CALL getTextBounds()
-        throw ( NMSP_UNO::RuntimeException );
-    virtual com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL getLineGeometry()
-        throw ( NMSP_UNO::RuntimeException );
-    virtual SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL getInteraction()
-        throw ( NMSP_UNO::RuntimeException );
+    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL render()
+        throw ( css::uno::RuntimeException );
+    virtual css::awt::Rectangle SAL_CALL getTextBounds()
+        throw ( css::uno::RuntimeException );
+    virtual css::drawing::PolyPolygonBezierCoords SAL_CALL getLineGeometry()
+        throw ( css::uno::RuntimeException );
+    virtual css::uno::Sequence< css::uno::Reference< css::drawing::XCustomShapeHandle > > SAL_CALL getInteraction()
+        throw ( css::uno::RuntimeException );
 };
 
 rtl::OUString EnhancedCustomShapeEngine_getImplementationName()
-    throw ( NMSP_UNO::RuntimeException );
+    throw ( css::uno::RuntimeException );
 sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const rtl::OUString& rServiceName )
-    throw( NMSP_UNO::RuntimeException );
-SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
-    throw( NMSP_UNO::RuntimeException );
+    throw( css::uno::RuntimeException );
+css::uno::Sequence< rtl::OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
+    throw( css::uno::RuntimeException );
 
 #endif
 

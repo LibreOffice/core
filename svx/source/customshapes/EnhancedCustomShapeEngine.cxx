@@ -43,32 +43,35 @@
 #include <basegfx/tools/unotools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 
+using namespace css;
+using namespace css::uno;
+
 // ---------------------------
 // - EnhancedCustomShapeEngine -
 // ---------------------------
 
-rtl::OUString EnhancedCustomShapeEngine_getImplementationName()
-    throw( NMSP_UNO::RuntimeException )
+OUString EnhancedCustomShapeEngine_getImplementationName()
+    throw( RuntimeException )
 {
     return OUString( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
 }
-sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const rtl::OUString& ServiceName )
-    throw( NMSP_UNO::RuntimeException )
+sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const OUString& ServiceName )
+    throw( RuntimeException )
 {
     return ServiceName == "com.sun.star.drawing.CustomShapeEngine";
 }
-SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
-    throw( NMSP_UNO::RuntimeException )
+Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
+    throw( RuntimeException )
 {
-    SEQ( rtl::OUString ) aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
+    Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.drawing.CustomShapeEngine";
     return aRet;
 }
 
 // -----------------------------------------------------------------------------
 
-EnhancedCustomShapeEngine::EnhancedCustomShapeEngine( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) :
+EnhancedCustomShapeEngine::EnhancedCustomShapeEngine( const Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxFact                  ( rxMgr ),
     mbForceGroupWithText    ( sal_False )
 {
@@ -90,11 +93,11 @@ void SAL_CALL EnhancedCustomShapeEngine::release() throw()
 
 // XInitialization ------------------------------------------------------------
 
-void SAL_CALL EnhancedCustomShapeEngine::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
-    throw ( NMSP_UNO::Exception, NMSP_UNO::RuntimeException )
+void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArguments )
+    throw ( Exception, RuntimeException )
 {
     sal_Int32 i;
-    SEQ( NMSP_BEANS::PropertyValue ) aParameter;
+    Sequence< beans::PropertyValue > aParameter;
     for ( i = 0; i < aArguments.getLength(); i++ )
     {
         if ( aArguments[ i ] >>= aParameter )
@@ -102,7 +105,7 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const SEQ( NMSP_UNO::Any )&
     }
     for ( i = 0; i < aParameter.getLength(); i++ )
     {
-        const NMSP_BEANS::PropertyValue& rProp = aParameter[ i ];
+        const beans::PropertyValue& rProp = aParameter[ i ];
         if ( rProp.Name == "CustomShape" )
             rProp.Value >>= mxShape;
         else if ( rProp.Name == "ForceGroupWithText" )
@@ -112,18 +115,18 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const SEQ( NMSP_UNO::Any )&
 
 // XServiceInfo ---------------------------------------------------------------
 
-rtl::OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
-    throw( NMSP_UNO::RuntimeException )
+OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
+    throw( RuntimeException )
 {
     return EnhancedCustomShapeEngine_getImplementationName();
 }
-sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const rtl::OUString& rServiceName )
-    throw( NMSP_UNO::RuntimeException )
+sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
+    throw( RuntimeException )
 {
     return EnhancedCustomShapeEngine_supportsService( rServiceName );
 }
-SEQ( rtl::OUString ) SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
-    throw ( NMSP_UNO::RuntimeException )
+Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
+    throw ( RuntimeException )
 {
     return EnhancedCustomShapeEngine_getSupportedServiceNames();
 }
@@ -224,7 +227,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
     return pRenderedShape;
 }
 
-void SetTemporary( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
+void SetTemporary( uno::Reference< drawing::XShape >& xShape )
 {
     if ( xShape.is() )
     {
@@ -234,10 +237,10 @@ void SetTemporary( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::
     }
 }
 
-REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::render()
-    throw ( NMSP_UNO::RuntimeException )
+Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
+    throw ( RuntimeException )
 {
-    REF( com::sun::star::drawing::XShape ) xShape;
+    Reference< drawing::XShape > xShape;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
     if ( pSdrObjCustomShape )
     {
@@ -245,8 +248,8 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
             pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         sal_Bool bTextPathOn = sal_False;
-        const rtl::OUString sTextPath( "TextPath" );
-        com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+        const OUString sTextPath( "TextPath" );
+        uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
         if ( pAny )
             *pAny >>= bTextPathOn;
 
@@ -333,12 +336,12 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
     return xShape;
 }
 
-com::sun::star::awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
-    throw ( NMSP_UNO::RuntimeException )
+awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
+    throw ( RuntimeException )
 {
-    com::sun::star::awt::Rectangle aTextRect;
+    awt::Rectangle aTextRect;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XActionLockable > xLockable( mxShape, ::com::sun::star::uno::UNO_QUERY );
+    uno::Reference< document::XActionLockable > xLockable( mxShape, uno::UNO_QUERY );
     if ( pSdrObjCustomShape && pSdrObjCustomShape->GetModel() && xLockable.is() && !xLockable->isActionLocked() )
     {
         if ( pSdrObjCustomShape )
@@ -354,10 +357,10 @@ com::sun::star::awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds
     return aTextRect;
 }
 
-com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
-    throw ( NMSP_UNO::RuntimeException )
+drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
+    throw ( RuntimeException )
 {
-    com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
+    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
     if ( pSdrObjCustomShape )
     {
@@ -435,8 +438,8 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
     return aPolyPolygonBezierCoords;
 }
 
-SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL EnhancedCustomShapeEngine::getInteraction()
-    throw ( NMSP_UNO::RuntimeException )
+Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShapeEngine::getInteraction()
+    throw ( RuntimeException )
 {
     sal_uInt32 i, nHdlCount = 0;
     SdrObject* pSdrObjCustomShape = GetSdrObjectFromXShape( mxShape );
@@ -445,7 +448,7 @@ SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL EnhancedCusto
         EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
         nHdlCount = aCustomShape2d.GetHdlCount();
     }
-    SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) aSeq( nHdlCount );
+    Sequence< Reference< drawing::XCustomShapeHandle > > aSeq( nHdlCount );
     for ( i = 0; i < nHdlCount; i++ )
         aSeq[ i ] = new EnhancedCustomShapeHandle( mxShape, i );
     return aSeq;
