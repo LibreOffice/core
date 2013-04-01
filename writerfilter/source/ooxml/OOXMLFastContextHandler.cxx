@@ -2256,14 +2256,13 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     debug_logger->startElement("Wrapper-createChildContext");
     debug_logger->attribute("token", fastTokenToId(Element));
 
-    set<Id>::const_iterator aIt(mMyNamespaces.begin());
-    while (aIt != mMyNamespaces.end())
+    const set<Id>::const_iterator aEnd(mMyNamespaces.end());
+    for (set<Id>::const_iterator aIt(mMyNamespaces.begin());
+         aIt != aEnd; ++aIt)
     {
         debug_logger->startElement("namespace");
         debug_logger->attribute("id", fastTokenToId(*aIt));
         debug_logger->endElement();
-
-        aIt++;
     }
 
     debug_logger->endElement();

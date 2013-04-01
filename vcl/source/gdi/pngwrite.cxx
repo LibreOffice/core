@@ -258,7 +258,7 @@ sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
         if ( nDataSize )
             rOStm.Write( &aBeg->aData[ 0 ], nDataSize );
         rOStm << nCRC;
-        aBeg++;
+        ++aBeg;
     }
     rOStm.SetNumberFormatInt( nOldMode );
     return mbStatus;

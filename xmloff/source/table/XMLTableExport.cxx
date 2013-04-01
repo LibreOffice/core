@@ -120,7 +120,9 @@ void StringStatisticHelper::add( const OUString& rStyleName )
 sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 {
     sal_Int32 nMax = 0;
-    for( std::map< OUString, sal_Int32 >::iterator iter( begin() ); iter != end(); iter++ )
+    const std::map< OUString, sal_Int32 >::const_iterator aEnd( end() );
+    for( std::map< OUString, sal_Int32 >::iterator iter( begin() );
+        iter != aEnd; ++iter)
     {
         if( (*iter).second > nMax )
         {
