@@ -934,7 +934,8 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
              bRightSet    = sal_False,
              bHoriSet     = sal_False,
              bVertSet     = sal_False,
-             bDistanceSet = sal_False;
+             bDistanceSet = sal_False,
+             bRTLTab      = sal_False;
 
         aSetBoxInfo.ResetFlags();
 
@@ -954,7 +955,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
             {
                 SwCellFrm *pCell = aCellArr[j];
                 const sal_Bool bVert = pTab->IsVertical();
-                const sal_Bool bRTL = pTab->IsRightToLeft();
+                const sal_Bool bRTL = bRTLTab = pTab->IsRightToLeft();
                 sal_Bool bTopOver, bLeftOver, bRightOver, bBottomOver;
                 if ( bVert )
                 {
@@ -1115,6 +1116,22 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 }
             }
         }
+
+        // fdo#62470 fix the reading for table format.
+        if ( bRTLTab )
+        {
+            SvxBoxItem     aTempBox    ((const SvxBoxItem    &) rSet.Get(RES_BOX    ));
+            SvxBoxInfoItem aTempBoxInfo((const SvxBoxInfoItem&) rSet.Get(SID_ATTR_BORDER_INNER));
+
+            aTempBox.SetLine( aSetBox.GetRight(), BOX_LINE_RIGHT);
+            aSetBox.SetLine( aSetBox.GetLeft(), BOX_LINE_RIGHT);
+            aSetBox.SetLine( aTempBox.GetRight(), BOX_LINE_LEFT);
+
+            aTempBoxInfo.SetValid( VALID_LEFT, aSetBoxInfo.IsValid(VALID_LEFT) );
+            aSetBoxInfo.SetValid( VALID_LEFT, aSetBoxInfo.IsValid(VALID_RIGHT) );
+            aSetBoxInfo.SetValid( VALID_RIGHT, aTempBoxInfo.IsValid(VALID_LEFT) );
+        }
+
         rSet.Put( aSetBox );
         rSet.Put( aSetBoxInfo );
     }
