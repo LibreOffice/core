@@ -34,7 +34,7 @@ namespace frm
             extern const ConstAsciiString ident
     #else
         #define FORMS_CONSTASCII_STRING( ident, string )    \
-            extern const ConstAsciiString ident = {RTL_CONSTASCII_STRINGPARAM(string)}
+            extern const ConstAsciiString ident = {OString(string)}
     #endif
 
 //..............................................................................
