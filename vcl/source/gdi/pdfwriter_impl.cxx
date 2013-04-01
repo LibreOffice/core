@@ -8107,11 +8107,10 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
     Point       aPos            = rRect.TopLeft();
 
     long        nTextHeight     = m_pReferenceDevice->GetTextHeight();
-    xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
     String aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
-        aStr = m_pReferenceDevice->GetNonMnemonicString( aStr, nMnemonicPos );
+        aStr = m_pReferenceDevice->GetNonMnemonicString( aStr );
 
     // multiline text
     if ( nStyle & TEXT_DRAW_MULTILINE )

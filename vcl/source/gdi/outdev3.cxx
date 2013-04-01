@@ -6228,7 +6228,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
     long        nTextHeight     = rTargetDevice.GetTextHeight();
     TextAlign   eAlign          = rTargetDevice.GetTextAlign();
-    xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
+    sal_Int32   nMnemonicPos    = -1;
 
     String aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
@@ -6239,7 +6239,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
     // Mehrzeiligen Text behandeln wir anders
     if ( nStyle & TEXT_DRAW_MULTILINE )
     {
-
         XubString               aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
@@ -6392,7 +6391,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         long        nMnemonicX = 0;
         long        nMnemonicY = 0;
         long        nMnemonicWidth = 0;
-        if ( nMnemonicPos != STRING_NOTFOUND )
+        if ( nMnemonicPos != -1 )
         {
             sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
@@ -6412,7 +6411,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
             if ( bDrawMnemonics )
             {
-                if ( nMnemonicPos != STRING_NOTFOUND )
+                if ( nMnemonicPos != -1 )
                     rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
             rTargetDevice.Pop();
@@ -6422,7 +6421,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
             if ( bDrawMnemonics )
             {
-                if ( nMnemonicPos != STRING_NOTFOUND )
+                if ( nMnemonicPos != -1 )
                     rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
         }
@@ -6817,7 +6816,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         nLen = rStr.Len() - nIndex;
 
     XubString   aStr = rStr;
-    xub_StrLen  nMnemonicPos = STRING_NOTFOUND;
+    sal_Int32   nMnemonicPos = -1;
 
     long        nMnemonicX = 0;
     long        nMnemonicY = 0;
@@ -6825,7 +6824,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     if ( (nStyle & TEXT_DRAW_MNEMONIC) && nLen > 1 )
     {
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
-        if ( nMnemonicPos != STRING_NOTFOUND )
+        if ( nMnemonicPos != -1 )
         {
             if( nMnemonicPos < nIndex )
                 --nIndex;
@@ -6923,21 +6922,21 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
 }
 
-long OutputDevice::GetCtrlTextWidth( const String& rStr,
-                                     xub_StrLen nIndex, xub_StrLen nLen,
+long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
+                                     sal_Int32 nIndex, sal_Int32 nLen,
                                      sal_uInt16 nStyle ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( nStyle & TEXT_DRAW_MNEMONIC )
     {
-        xub_StrLen  nMnemonicPos;
-        XubString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
-        if ( nMnemonicPos != STRING_NOTFOUND )
+        sal_Int32  nMnemonicPos;
+        OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
+        if ( nMnemonicPos != -1 )
         {
             if ( nMnemonicPos < nIndex )
                 nIndex--;
-            else if ( (nLen < STRING_LEN) &&
+            else if ( (nLen < -1) &&
                       (nMnemonicPos >= nIndex) && (nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
                 nLen--;
         }
@@ -6947,27 +6946,27 @@ long OutputDevice::GetCtrlTextWidth( const String& rStr,
         return GetTextWidth( rStr, nIndex, nLen );
 }
 
-String OutputDevice::GetNonMnemonicString( const String& rStr, xub_StrLen& rMnemonicPos )
+OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )
 {
-    String   aStr    = rStr;
-    xub_StrLen  nLen    = aStr.Len();
-    xub_StrLen  i       = 0;
+    OUString    aStr    = rStr;
+    sal_Int32   nLen    = aStr.getLength();
+    sal_Int32   i       = 0;
 
-    rMnemonicPos = STRING_NOTFOUND;
+    rMnemonicPos = -1;
     while ( i < nLen )
     {
-        if ( aStr.GetChar( i ) == '~' )
+        if ( aStr[ i ] == '~' )
         {
-            if ( aStr.GetChar( i+1 ) != '~' )
+            if ( aStr[ i+1 ] != '~' )
             {
-                if ( rMnemonicPos == STRING_NOTFOUND )
+                if ( rMnemonicPos == -1 )
                     rMnemonicPos = i;
-                aStr.Erase( i, 1 );
+                aStr = aStr.replaceAt( i, 1, "" );
                 nLen--;
             }
             else
             {
-                aStr.Erase( i, 1 );
+                aStr = aStr.replaceAt( i, 1, "" );
                 nLen--;
                 i++;
             }

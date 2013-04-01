@@ -2595,11 +2595,11 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
 
 static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_nMaxWidth )
 {
-    xub_StrLen nPos = STRING_NOTFOUND;
+    sal_Int32 nPos = -1;
     String aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
     aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth, TEXT_DRAW_CENTERELLIPSIS );
     // re-insert mnemonic
-    if( nPos != STRING_NOTFOUND )
+    if( nPos != -1 )
     {
         if( nPos < aNonMnem.Len() && i_rLong.GetChar(nPos+1) == aNonMnem.GetChar(nPos) )
         {
