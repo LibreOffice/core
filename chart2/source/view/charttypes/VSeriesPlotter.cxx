@@ -1011,13 +1011,16 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
             xRegressionCurveCalculator->getCurveValues(
                 fMinX, fMaxX, nRegressionPointCount, xScalingX, xScalingY, bMaySkipPointsInRegressionCalculation ));
         nRegressionPointCount = aCalculatedPoints.getLength();
+        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
         for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++)
         {
             double fLogicX = aCalculatedPoints[nP].X;
             double fLogicY = aCalculatedPoints[nP].Y;
             double fLogicZ = 0.0;//dummy
 
-            m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
+            // fdo#51656: don't scale mean value lines
+            if(!bAverageLine)
+                m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
 
             if(    !::rtl::math::isNan(fLogicX) && !::rtl::math::isInf(fLogicX)
                     && !::rtl::math::isNan(fLogicY) && !::rtl::math::isInf(fLogicY)
@@ -1045,7 +1048,6 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
             aVLineProperties.initFromPropertySet( xCurveModelProp );
 
             //create an extra group shape for each curve for selection handling
-            bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
             uno::Reference< drawing::XShapes > xRegressionGroupShapes =
                 createGroupShape( xTarget, rVDataSeries.getDataCurveCID( nN, bAverageLine ) );
             uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
