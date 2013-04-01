@@ -281,7 +281,7 @@ public:
         aEnd += nCount;
         maVector.reserve(nCount);
 
-        for(; aStart != aEnd; aStart++)
+        for(; aStart != aEnd; ++aStart)
         {
             if(!aStart->equalZero())
                 mnUsedEntries++;
@@ -368,7 +368,7 @@ public:
             BColorDataVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
 
-            for(; aStart != aEnd; aStart++)
+            for(; aStart != aEnd; ++aStart)
             {
                 if(!aStart->equalZero())
                     mnUsedEntries++;
@@ -384,7 +384,7 @@ public:
             const BColorDataVector::iterator aDeleteEnd(aDeleteStart + nCount);
             BColorDataVector::const_iterator aStart(aDeleteStart);
 
-            for(; mnUsedEntries && aStart != aDeleteEnd; aStart++)
+            for(; mnUsedEntries && aStart != aDeleteEnd; ++aStart)
             {
                 if(!aStart->equalZero())
                     mnUsedEntries--;
@@ -406,8 +406,8 @@ public:
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
-                aStart++;
-                aEnd--;
+                ++aStart;
+                --aEnd;
             }
         }
     }
@@ -445,7 +445,7 @@ public:
         aEnd += nCount;
         maVector.reserve(nCount);
 
-        for(; aStart != aEnd; aStart++)
+        for(; aStart != aEnd; ++aStart)
         {
             if(!aStart->equalZero())
                 mnUsedEntries++;
@@ -532,7 +532,7 @@ public:
             NormalsData3DVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
 
-            for(; aStart != aEnd; aStart++)
+            for(; aStart != aEnd; ++aStart)
             {
                 if(!aStart->equalZero())
                     mnUsedEntries++;
@@ -548,7 +548,7 @@ public:
             const NormalsData3DVector::iterator aDeleteEnd(aDeleteStart + nCount);
             NormalsData3DVector::const_iterator aStart(aDeleteStart);
 
-            for(; mnUsedEntries && aStart != aDeleteEnd; aStart++)
+            for(; mnUsedEntries && aStart != aDeleteEnd; ++aStart)
             {
                 if(!aStart->equalZero())
                     mnUsedEntries--;
@@ -570,18 +570,17 @@ public:
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
-                aStart++;
-                aEnd--;
+                ++aStart;
+                --aEnd;
             }
         }
     }
 
     void transform(const basegfx::B3DHomMatrix& rMatrix)
     {
-        NormalsData3DVector::iterator aStart(maVector.begin());
-        NormalsData3DVector::iterator aEnd(maVector.end());
+        const NormalsData3DVector::const_iterator aEnd(maVector.end());
 
-        for(; aStart != aEnd; aStart++)
+        for(NormalsData3DVector::iterator aStart(maVector.begin()); aStart != aEnd; ++aStart)
         {
             (*aStart) *= rMatrix;
         }
@@ -620,7 +619,7 @@ public:
         aEnd += nCount;
         maVector.reserve(nCount);
 
-        for(; aStart != aEnd; aStart++)
+        for(; aStart != aEnd; ++aStart)
         {
             if(!aStart->equalZero())
                 mnUsedEntries++;
@@ -707,7 +706,7 @@ public:
             TextureData2DVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
 
-            for(; aStart != aEnd; aStart++)
+            for(; aStart != aEnd; ++aStart)
             {
                 if(!aStart->equalZero())
                     mnUsedEntries++;
@@ -723,7 +722,7 @@ public:
             const TextureData2DVector::iterator aDeleteEnd(aDeleteStart + nCount);
             TextureData2DVector::const_iterator aStart(aDeleteStart);
 
-            for(; mnUsedEntries && aStart != aDeleteEnd; aStart++)
+            for(; mnUsedEntries && aStart != aDeleteEnd; ++aStart)
             {
                 if(!aStart->equalZero())
                     mnUsedEntries--;
@@ -745,18 +744,17 @@ public:
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
-                aStart++;
-                aEnd--;
+                ++aStart;
+                --aEnd;
             }
         }
     }
 
     void transform(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        TextureData2DVector::iterator aStart(maVector.begin());
-        TextureData2DVector::iterator aEnd(maVector.end());
+        const TextureData2DVector::const_iterator aEnd(maVector.end());
 
-        for(; aStart != aEnd; aStart++)
+        for(TextureData2DVector::iterator aStart(maVector.begin()); aStart != aEnd; ++aStart)
         {
             (*aStart) *= rMatrix;
         }
