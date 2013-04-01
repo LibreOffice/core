@@ -336,8 +336,6 @@ inline void SfxShell::SetPool
 #define SFX_POSITION_MASK               0x000F
 #define SFX_VISIBILITY_MASK             0xFFF0
 #define SFX_VISIBILITY_UNVISIBLE        0x0000  // Never visible
-#define SFX_VISIBILITY_PLUGSERVER       0x0010
-#define SFX_VISIBILITY_PLUGCLIENT       0x0020
 #define SFX_VISIBILITY_VIEWER           0x0040
                                                 // One is still free!
 #define SFX_VISIBILITY_RECORDING        0x0200
