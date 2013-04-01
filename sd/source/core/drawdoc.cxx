@@ -959,7 +959,8 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAutho
     }
 
     sal_uInt16 idx = 0;
-    for( std::vector< OUString >::iterator iter( maAnnotationAuthors.begin() ); iter != maAnnotationAuthors.end(); iter++ )
+    const std::vector< OUString >::const_iterator aEnd( maAnnotationAuthors.end());
+    for( std::vector< OUString >::const_iterator iter( maAnnotationAuthors.begin() ); iter != aEnd; ++iter )
     {
         if( (*iter) == rAuthor )
         {
