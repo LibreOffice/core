@@ -23,51 +23,31 @@
 
 #include <svsys.h>
 #include "rtl/logfile.hxx"
-#include "rtl/tencinfo.h"
-#include "rtl/textcvt.h"
 #include "rtl/bootstrap.hxx"
 
 #include "i18npool/mslangid.hxx"
-#include "i18npool/languagetag.hxx"
 
-#include "osl/module.h"
 #include "osl/file.hxx"
-#include "osl/thread.hxx"
 #include "osl/process.h"
 
 #include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
 #include "basegfx/matrix/b2dhommatrixtools.hxx"
 
 #include "unotools/fontcfg.hxx" // for IMPL_FONT_ATTR_SYMBOL
 
-#include "vcl/font.hxx"
-#include "vcl/svapp.hxx"
-
-#include "tools/poly.hxx"
-#include "tools/debug.hxx"
 #include "tools/stream.hxx"
 #include "tools/helpers.hxx"
 
 #include <vcl/sysdata.hxx>
 
-#include "win/wincomp.hxx"
 #include "win/saldata.hxx"
 #include "win/salgdi.h"
 
-#include "outfont.hxx"
 #include "fontsubset.hxx"
-#include "sallayout.hxx"
 #include "outdev.h"         // for ImplGlyphFallbackFontSubstitution
 #include "sft.hxx"
 
 #include <algorithm>
-
-#include <config_graphite.h>
-#if ENABLE_GRAPHITE
-#include <graphite2/Font.h>
-#endif
 
 #include <vector>
 #include <set>
