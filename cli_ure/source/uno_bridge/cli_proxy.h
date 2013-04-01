@@ -199,7 +199,7 @@ struct CliProxy: public uno_Interface
         method within the UNO interface one can use the position to obtain the
         MethodInfo of the corresponding cli method. To obtain the index for the
         m_arMethodInfos array the function position has to be decreased by 3.
-        This is becaus, the cli interface does not contain the XInterface
+        This is because, the cli interface does not contain the XInterface
         methods.
     */
     gcroot<array<sr::MethodInfo^>^> m_arMethodInfos;

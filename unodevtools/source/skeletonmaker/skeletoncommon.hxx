@@ -136,7 +136,7 @@ void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
 
 /**
    checks if XComponent have to be supported, if yes it removes it from the
-   supported interfaces list becuase it becmoes implmented by the appropriate
+   supported interfaces list because it becomes implemented by the appropriate
    helper
 
    @param manager a type manager

@@ -99,7 +99,7 @@
 #define STR_AUTOFMTREDL_SET_NUMBULET            19
 #define STR_AUTOFMTREDL_DEL_MORELINES           20
 #define STR_AUTOFMTREDL_NON_BREAK_SPACE         21
-// !!!!!!!!!!!!!!!!!!!!!!!!!!  alwats set the correct end !!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!  always set the correct end !!!!!!!!!!!!
 #define STR_AUTOFMTREDL_END                     22
 
 
