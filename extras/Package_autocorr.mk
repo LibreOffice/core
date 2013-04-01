@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,autocorr,$(call gb_CustomTarget_get_workdir,extras/source/autotext)))
+$(eval $(call gb_Package_Package,extras_autocorr,$(call gb_CustomTarget_get_workdir,extras/source/autotext)))
 
-$(eval $(call gb_Zip_add_files,autocorr,\
+$(eval $(call gb_Package_add_files,extras_autocorr,files/share/autocorr,\
 	acor_af-ZA.dat \
 	acor_bg-BG.dat \
 	acor_cs-CZ.dat \
