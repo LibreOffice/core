@@ -106,7 +106,7 @@ namespace basegfx
                         }
                     }
 
-                    aCurrentEntry++;
+                    ++aCurrentEntry;
                 }
 
                 // sort current scanline using comparator. Only X is used there
