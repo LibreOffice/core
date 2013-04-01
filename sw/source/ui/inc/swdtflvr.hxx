@@ -52,7 +52,6 @@ namespace nsTransferBufferType
     const sal_uInt16 TRNSFR_DRAWING         = 0x0081;   // drawing is internal too!
 }
 
-#define DATA_FLAVOR     ::com::sun::star::datatransfer::DataFlavor
 
 class SwTransferable : public TransferableHelper
 {
@@ -78,7 +77,7 @@ class SwTransferable : public TransferableHelper
     sal_Bool bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
+    css::uno::Reference < css::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
     const Graphic* FindOLEReplacementGraphic() const;
     void DeleteSelection();
 
@@ -139,11 +138,11 @@ class SwTransferable : public TransferableHelper
 
 protected:
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const DATA_FLAVOR& rFlavor );
+    virtual sal_Bool    GetData( const css::datatransfer::DataFlavor& rFlavor );
     virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm,
                                         void* pUserObject,
                                         sal_uInt32 nUserObjectId,
-                                        const DATA_FLAVOR& rFlavor );
+                                        const css::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
@@ -205,9 +204,9 @@ public:
 
     // the related SwView is being closed and the SwTransferable is invalid now
     void    Invalidate() {pWrtShell = 0;}
-    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException );
 };
 
 

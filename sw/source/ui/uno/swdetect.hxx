@@ -55,16 +55,12 @@ namespace com
 class SfxMedium;
 class SfxFilter;
 
-#define REFERENCE ::com::sun::star::uno::Reference
-#define SEQUENCE ::com::sun::star::uno::Sequence
-#define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
-
-class SwFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
+class SwFilterDetect : public ::cppu::WeakImplHelper2< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
     static sal_uLong    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
     static sal_uLong    GlobDetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter );
 public:
-                            SwFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+                            SwFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SwFilterDetect();
 
     SFX_DECL_XSERVICEINFO_NOFACTORY
@@ -72,7 +68,7 @@ public:
     //----------------------------------------------------------------------------------
     // XExtendedFilterDetect
     //----------------------------------------------------------------------------------
-    virtual ::rtl::OUString SAL_CALL detect( SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( RUNTIME_EXCEPTION );
+    virtual ::rtl::OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException );
 };
 
 #endif

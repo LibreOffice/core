@@ -67,9 +67,8 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
-using ::rtl::OUString;
 
-SwFilterDetect::SwFilterDetect( const REFERENCE < lang::XMultiServiceFactory >& /*xFactory*/ )
+SwFilterDetect::SwFilterDetect( const Reference < XMultiServiceFactory >& /*xFactory*/ )
 {
 }
 
@@ -77,17 +76,17 @@ SwFilterDetect::~SwFilterDetect()
 {
 }
 
-::rtl::OUString SAL_CALL SwFilterDetect::detect( uno::Sequence< beans::PropertyValue >& lDescriptor ) throw( uno::RuntimeException )
+OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor ) throw( RuntimeException )
 {
-    REFERENCE< XInputStream > xStream;
-    REFERENCE< XContent > xContent;
-    REFERENCE< XInteractionHandler > xInteraction;
+    Reference< XInputStream > xStream;
+    Reference< XContent > xContent;
+    Reference< XInteractionHandler > xInteraction;
     String aURL;
-    ::rtl::OUString sTemp;
+    OUString sTemp;
     String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
-    ::rtl::OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; // interesting only if set in this method
 
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
@@ -166,13 +165,13 @@ SwFilterDetect::~SwFilterDetect()
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = rtl::OUString("private:factory/");
+    String aPrefix = OUString("private:factory/");
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         if( SvtModuleOptions().IsWriter() )
         {
             String aPattern( aPrefix );
-            aPattern += rtl::OUString("swriter");
+            aPattern += OUString("swriter");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
                 return aTypeName;
         }
@@ -193,24 +192,24 @@ SwFilterDetect::~SwFilterDetect()
             sal_Bool bIsStorage = aMedium.IsStorage();
             if ( bIsStorage )
             {
-                uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
+                Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since impossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( OSL_LOG_PREFIX  ) );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), OUString( OSL_LOG_PREFIX  ) );
                     if ( xInteraction.is() )
                     {
                         OUString empty;
                         try
                         {
                             InteractiveAppException xException( empty,
-                                                            REFERENCE< XInterface >(),
+                                                            Reference< XInterface >(),
                                                             InteractionClassification_ERROR,
                                                             aMedium.GetError() );
 
-                            REFERENCE< XInteractionRequest > xRequest(
+                            Reference< XInteractionRequest > xRequest(
                                 new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
                                                                       ucbhelper::CONTINUATION_APPROVE ) );
                             xInteraction->handle( xRequest );
@@ -228,9 +227,9 @@ SwFilterDetect::~SwFilterDetect()
                     {
                         const SfxFilter* pPreFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
-                                SfxFilterMatcher(rtl::OUString("swriter")).GetFilter4EA( aTypeName ) : 0;
+                                SfxFilterMatcher(OUString("swriter")).GetFilter4EA( aTypeName ) : 0;
                         if (!pPreFilter)
-                            pPreFilter = SfxFilterMatcher(rtl::OUString("sweb")).GetFilter4EA( aTypeName );
+                            pPreFilter = SfxFilterMatcher(OUString("sweb")).GetFilter4EA( aTypeName );
                         OUString aFilterName;
                         if ( pPreFilter )
                         {
@@ -240,7 +239,7 @@ SwFilterDetect::~SwFilterDetect()
 
                         aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
                     }
-                    catch (const lang::WrappedTargetException& aWrap)
+                    catch (const WrappedTargetException& aWrap)
                     {
                         if (!bDeepDetection)
                             // Bail out early unless it's a deep detection.
@@ -276,16 +275,16 @@ SwFilterDetect::~SwFilterDetect()
                                     NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
                                     xInteraction->handle( aNotifyRequest.GetRequest() );
 
-                                    rtl::Reference< ::comphelper::OIHWrapNoFilterDialog > xHandler = new ::comphelper::OIHWrapNoFilterDialog( xInteraction );
+                                    Reference< ::comphelper::OIHWrapNoFilterDialog > xHandler = new ::comphelper::OIHWrapNoFilterDialog( xInteraction );
                                     if ( nIndexOfInteractionHandler != -1 )
-                                        lDescriptor[nIndexOfInteractionHandler].Value <<= uno::Reference< XInteractionHandler >( static_cast< task::XInteractionHandler* >( xHandler.get() ) );
+                                        lDescriptor[nIndexOfInteractionHandler].Value <<= Reference< XInteractionHandler >( static_cast< XInteractionHandler* >( xHandler.get() ) );
 
-                                    aMedium.SetError( ERRCODE_ABORT, ::rtl::OUString( OSL_LOG_PREFIX  ) );
+                                    aMedium.SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX  ) );
                                 }
                             }
                             else
                                 // no interaction, error handling as usual
-                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( OSL_LOG_PREFIX  ) );
+                                aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, OUString( OSL_LOG_PREFIX  ) );
 
                             if ( !bRepairAllowed )
                             {
@@ -294,11 +293,11 @@ SwFilterDetect::~SwFilterDetect()
                             }
                         }
                     }
-                    catch (const uno::RuntimeException&)
+                    catch (const RuntimeException&)
                     {
                         throw;
                     }
-                    catch (const uno::Exception&)
+                    catch (const Exception&)
                     {
                         aTypeName.Erase();
                         aPreselectedFilterName.Erase();
@@ -352,7 +351,7 @@ SwFilterDetect::~SwFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString("InputStream");
+        lDescriptor[nPropertyCount].Name = OUString("InputStream");
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -361,7 +360,7 @@ SwFilterDetect::~SwFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString("UCBContent");
+        lDescriptor[nPropertyCount].Name = OUString("UCBContent");
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -371,7 +370,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString("ReadOnly");
+            lDescriptor[nPropertyCount].Name = OUString("ReadOnly");
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -382,7 +381,7 @@ SwFilterDetect::~SwFilterDetect()
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString("RepairPackage");
+        lDescriptor[nPropertyCount].Name = OUString("RepairPackage");
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
         bOpenAsTemplate = sal_True;
@@ -394,7 +393,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString("AsTemplate");
+            lDescriptor[nPropertyCount].Name = OUString("AsTemplate");
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -408,7 +407,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString("DocumentTitle");
+            lDescriptor[nPropertyCount].Name = OUString("DocumentTitle");
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -421,16 +420,16 @@ SwFilterDetect::~SwFilterDetect()
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SwFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
+OUString SAL_CALL SwFilterDetect::getImplementationName() throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 /* XServiceInfo */
-sal_Bool SAL_CALL SwFilterDetect::supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION )
+sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
-    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
+    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString*      pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -442,31 +441,31 @@ sal_Bool SAL_CALL SwFilterDetect::supportsService( const rtl::OUString& sService
 }
 
 /* XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
+Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SwFilterDetect::impl_getStaticSupportedServiceNames()
+Sequence< OUString > SwFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames( 3 );
-    seqServiceNames.getArray() [0] = ::rtl::OUString("com.sun.star.frame.ExtendedTypeDetection"  );
-    seqServiceNames.getArray() [1] = ::rtl::OUString("com.sun.star.text.FormatDetector"  );
-    seqServiceNames.getArray() [2] = ::rtl::OUString("com.sun.star.text.W4WFormatDetector"  );
+    Sequence< OUString > seqServiceNames( 3 );
+    seqServiceNames.getArray() [0] = OUString("com.sun.star.frame.ExtendedTypeDetection"  );
+    seqServiceNames.getArray() [1] = OUString("com.sun.star.text.FormatDetector"  );
+    seqServiceNames.getArray() [2] = OUString("com.sun.star.text.W4WFormatDetector"  );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-rtl::OUString SwFilterDetect::impl_getStaticImplementationName()
+OUString SwFilterDetect::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString("com.sun.star.comp.writer.FormatDetector" );
+    return OUString("com.sun.star.comp.writer.FormatDetector" );
 }
 
 /* Helper for registry */
-UNOREFERENCE< UNOXINTERFACE > SAL_CALL SwFilterDetect::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
+Reference< XInterface > SAL_CALL SwFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
 {
-    return UNOREFERENCE< UNOXINTERFACE >( *new SwFilterDetect( xServiceManager ) );
+    return Reference< XInterface >( *new SwFilterDetect( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

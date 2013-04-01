@@ -49,14 +49,9 @@
 #include "drpcps.hrc"
 
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-//using namespace i18n; !using this namespace leads to mysterious conflicts with ScriptType::...!
-//                                              so don't use this instead of the following defines!
-
-#define I18N                ::com::sun::star::i18n
-#define I18N_SCRIPTTYPE     ::com::sun::star::i18n::ScriptType
+using namespace css;
+using namespace css::uno;
+using namespace css::lang;
 
 // Globals ******************************************************************
 
@@ -95,7 +90,7 @@ class SwDropCapsPict : public Control
     SvxFont         maCJKFont;
     SvxFont         maCTLFont;
     Size            maTextSize;
-    Reference< I18N::XBreakIterator >   xBreak;
+    Reference< css::i18n::XBreakIterator >   xBreak;
 
     virtual void    Paint(const Rectangle &rRect);
     void            CheckScript( void );
@@ -200,7 +195,7 @@ void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, s
     if( maScriptChanges.empty() )
     {
         end = maText.Len();
-        scriptType = I18N_SCRIPTTYPE::LATIN;
+        scriptType = css::i18n::ScriptType::LATIN;
     }
     else
     {
@@ -380,7 +375,7 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     GetFirstScriptSegment(nStart, nEnd, nScript);
     do
     {
-        SvxFont&    rFnt = (nScript==I18N_SCRIPTTYPE::ASIAN) ? maCJKFont : ((nScript==I18N_SCRIPTTYPE::COMPLEX) ? maCTLFont : maFont);
+        SvxFont&    rFnt = (nScript==css::i18n::ScriptType::ASIAN) ? maCJKFont : ((nScript==css::i18n::ScriptType::COMPLEX) ? maCTLFont : maFont);
         mpPrinter->SetFont( rFnt );
 
         rFnt.DrawPrev( this, mpPrinter, aPt, maText, nStart, nEnd - nStart );
@@ -403,17 +398,17 @@ void SwDropCapsPict::CheckScript( void )
     if( !xBreak.is() )
     {
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        xBreak = I18N::BreakIterator::create(xContext);
+        xBreak = css::i18n::BreakIterator::create(xContext);
     }
     sal_uInt16 nScript = xBreak->getScriptType( maText, 0 );
     sal_uInt16 nChg = 0;
-    if( I18N_SCRIPTTYPE::WEAK == nScript )
+    if( css::i18n::ScriptType::WEAK == nScript )
     {
         nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
         if( nChg < maText.Len() )
             nScript = xBreak->getScriptType( maText, nChg );
         else
-            nScript = I18N_SCRIPTTYPE::LATIN;
+            nScript = css::i18n::ScriptType::LATIN;
     }
 
     do
@@ -446,8 +441,8 @@ Size SwDropCapsPict::CalcTextSize( void )
     long        nCTLAscent = 0;
     do
     {
-        SvxFont&    rFnt = ( nScript == I18N_SCRIPTTYPE::ASIAN )? maCJKFont :
-                                ( ( nScript == I18N_SCRIPTTYPE::COMPLEX )? maCTLFont : maFont );
+        SvxFont&    rFnt = ( nScript == css::i18n::ScriptType::ASIAN )? maCJKFont :
+                                ( ( nScript == css::i18n::ScriptType::COMPLEX )? maCTLFont : maFont );
         sal_uLong       nWidth = rFnt.GetTxtSize( mpPrinter, maText, nStart, nEnd-nStart ).Width();
 
         if( nIdx < maScriptChanges.size() )
@@ -455,10 +450,10 @@ Size SwDropCapsPict::CalcTextSize( void )
         nTxtWidth += nWidth;
         switch(nScript)
         {
-            case I18N_SCRIPTTYPE::ASIAN:
+            case css::i18n::ScriptType::ASIAN:
                 calcFontHeightAnyAscent( this, maCJKFont, nCJKHeight, nCJKAscent );
                 break;
-            case I18N_SCRIPTTYPE::COMPLEX:
+            case css::i18n::ScriptType::COMPLEX:
                 calcFontHeightAnyAscent( this, maCTLFont, nCTLHeight, nCTLAscent );
                 break;
             default:

@@ -131,7 +131,6 @@ extern bool bExecuteDrag;
 #define SWTRANSFER_GRAPHIC_INSERTED             0x00000040
 
 using namespace ::svx;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
@@ -370,7 +369,7 @@ namespace
     }
 }
 
-sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
+sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
 
@@ -574,7 +573,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
 sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                                     void* pObject, sal_uInt32 nObjectType,
-                                    const DATA_FLAVOR& /*rFlavor*/ )
+                                    const DataFlavor& /*rFlavor*/ )
 {
     sal_Bool bRet = sal_False;
     WriterRef xWrt;
@@ -1768,7 +1767,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             // insert replacement image ( if there is one ) into the object helper
             if ( nGrFormat )
             {
-                datatransfer::DataFlavor aDataFlavor;
+                DataFlavor aDataFlavor;
                 SotExchange::GetFormatDataFlavor( nGrFormat, aDataFlavor );
                    xObjRef.SetGraphic( aGraphic, aDataFlavor.MimeType );
             }
@@ -3383,8 +3382,7 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
 
      pNew->pCreatorView = _pCreatorView;
 
-    uno::Reference<
-            datatransfer::XTransferable > xRef( pNew );
+    uno::Reference< XTransferable > xRef( pNew );
     pMod->pXSelection = pNew;
     pNew->CopyToSelection( rSh.GetWin() );
 }

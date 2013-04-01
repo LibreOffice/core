@@ -29,17 +29,17 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace ::com::sun::star;
+using namespace css;
 
-::rtl::OUString SAL_CALL SwUnoModule_getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL SwUnoModule_getImplementationName() throw( uno::RuntimeException )
 {
-    return rtl::OUString( "com.sun.star.comp.Writer.WriterModule" );
+    return OUString( "com.sun.star.comp.Writer.WriterModule" );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString("com.sun.star.text.ModuleDispatcher");
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq[0] = OUString("com.sun.star.text.ModuleDispatcher");
     return aSeq;
 }
 
@@ -102,11 +102,11 @@ void SAL_CALL SwUnoModule::removeStatusListener(
 {
 }
 
-SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SwUnoModule::queryDispatches(
-    const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescripts ) throw( uno::RuntimeException )
+uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SwUnoModule::queryDispatches(
+    const uno::Sequence< frame::DispatchDescriptor >& seqDescripts ) throw( uno::RuntimeException )
 {
     sal_Int32 nCount = seqDescripts.getLength();
-    SEQUENCE< REFERENCE< XDISPATCH > > lDispatcher( nCount );
+    uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
 
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -119,31 +119,31 @@ SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SwUnoModule::queryDispatches(
 }
 
 // XDispatchProvider
-REFERENCE< XDISPATCH > SAL_CALL SwUnoModule::queryDispatch(
-    const UNOURL& aURL, const rtl::OUString& /*sTargetFrameName*/,
+uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
+    const util::URL& aURL, const OUString& /*sTargetFrameName*/,
     sal_Int32 /*eSearchFlags*/    ) throw( uno::RuntimeException )
 {
-    REFERENCE< XDISPATCH > xReturn;
+    uno::Reference< frame::XDispatch > xReturn;
 
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
     if ( pSlot )
-        xReturn = REFERENCE< XDISPATCH >(static_cast< XDISPATCH* >(this), uno::UNO_QUERY);
+        xReturn = uno::Reference< frame::XDispatch >(static_cast< frame::XDispatch* >(this), uno::UNO_QUERY);
 
     return xReturn;
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL SwUnoModule::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL SwUnoModule::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return SwUnoModule_getImplementationName();
 }
 
-sal_Bool SAL_CALL SwUnoModule::supportsService( const ::rtl::OUString& sServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName ) throw(uno::RuntimeException)
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
-    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
+    uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString*           pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -154,7 +154,7 @@ sal_Bool SAL_CALL SwUnoModule::supportsService( const ::rtl::OUString& sServiceN
     return sal_False ;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SwUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL SwUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return SwUnoModule_getSupportedServiceNames();
 }
