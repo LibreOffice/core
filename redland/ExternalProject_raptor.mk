@@ -25,10 +25,9 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
 		XSLTLIB="$(if $(filter YES,$(SYSTEM_LIBXSLT)),$(LIBXSLT_LIBS),-lxslt)" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
-		./configure --disable-static --enable-shared --disable-gtk-doc --with-openssl-digests \
-			--with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
-			--without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore \
-			--with-regex-library=posix --with-decimal=none --with-www=xml \
+		./configure --disable-static --enable-shared --disable-gtk-doc \
+			--enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
+			--with-www=xml \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --target=$(HOST_PLATFORM) \
 			lt_cv_cc_dll_switch="-shared" \
 		&& $(MAKE) \
@@ -40,13 +39,11 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		CFLAGS="$(if $(debug),-g,-O) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
 		$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
 		LDFLAGS="-L$(OUTDIR)/lib \
-		$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib" -Wl$(COMMA)-noinhibit-exec) \
+			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-rpath-link$(COMMA)$(OUTDIR)/lib -Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
 		$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		CPPFLAGS="-I$(OUTDIR)/inc/external $(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
-		./configure --disable-gtk-doc --with-threads --with-openssl-digests \
-			--with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
-			--without-bdb --without-sqlite --without-mysql --without-postgresql \
-			--without-threestone --with-regex-library=posix --with-decimal=none \
+		./configure --disable-gtk-doc \
+			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
 			--with-www=xml \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
@@ -57,4 +54,5 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		&& $(MAKE) \
 	)
 endif
+
 # vim: set noet sw=4 ts=4:

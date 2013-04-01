@@ -14,13 +14,11 @@ $(eval $(call gb_Library_use_unpacked,rdf,redland))
 $(eval $(call gb_Library_set_warnings_not_errors,rdf))
 
 $(eval $(call gb_Library_use_libraries,rdf,\
-	raptor \
+	raptor2 \
 	rasqal \
 ))
 
 $(eval $(call gb_Library_use_externals,rdf,\
-	openssl \
-	openssl_headers \
 	raptor_headers \
 	rasqal_headers \
 ))
@@ -39,39 +37,41 @@ $(eval $(call gb_Library_add_defs,rdf,\
 ))
 
 $(eval $(call gb_Library_add_generated_cobjects,rdf,\
-	UnpackedTarball/redland/librdf/rdf_concepts \
-	UnpackedTarball/redland/librdf/rdf_digest \
-	UnpackedTarball/redland/librdf/rdf_digest_md5 \
-	UnpackedTarball/redland/librdf/rdf_digest_openssl \
-	UnpackedTarball/redland/librdf/rdf_digest_sha1 \
-	UnpackedTarball/redland/librdf/rdf_files \
-	UnpackedTarball/redland/librdf/rdf_hash \
-	UnpackedTarball/redland/librdf/rdf_hash_cursor \
-	UnpackedTarball/redland/librdf/rdf_hash_memory \
-	UnpackedTarball/redland/librdf/rdf_heuristics \
-	UnpackedTarball/redland/librdf/rdf_init \
-	UnpackedTarball/redland/librdf/rdf_iterator \
-	UnpackedTarball/redland/librdf/rdf_list \
-	UnpackedTarball/redland/librdf/rdf_log \
-	UnpackedTarball/redland/librdf/rdf_model \
-	UnpackedTarball/redland/librdf/rdf_model_storage \
-	UnpackedTarball/redland/librdf/rdf_node \
-	UnpackedTarball/redland/librdf/rdf_parser \
-	UnpackedTarball/redland/librdf/rdf_parser_raptor \
-	UnpackedTarball/redland/librdf/rdf_query \
-	UnpackedTarball/redland/librdf/rdf_query_rasqal \
-	UnpackedTarball/redland/librdf/rdf_query_results \
-	UnpackedTarball/redland/librdf/rdf_query_triples \
-	UnpackedTarball/redland/librdf/rdf_serializer \
-	UnpackedTarball/redland/librdf/rdf_serializer_raptor \
-	UnpackedTarball/redland/librdf/rdf_statement \
-	UnpackedTarball/redland/librdf/rdf_storage \
-	UnpackedTarball/redland/librdf/rdf_storage_file \
-	UnpackedTarball/redland/librdf/rdf_storage_list \
-	UnpackedTarball/redland/librdf/rdf_storage_hashes \
-	UnpackedTarball/redland/librdf/rdf_stream \
-	UnpackedTarball/redland/librdf/rdf_uri \
-	UnpackedTarball/redland/librdf/rdf_utf8 \
+	UnpackedTarball/redland/src/rdf_concepts \
+	UnpackedTarball/redland/src/rdf_digest \
+	UnpackedTarball/redland/src/rdf_digest_md5 \
+	UnpackedTarball/redland/src/rdf_digest_sha1 \
+	UnpackedTarball/redland/src/rdf_files \
+	UnpackedTarball/redland/src/rdf_hash \
+	UnpackedTarball/redland/src/rdf_hash_cursor \
+	UnpackedTarball/redland/src/rdf_hash_memory \
+	UnpackedTarball/redland/src/rdf_heuristics \
+	UnpackedTarball/redland/src/rdf_init \
+	UnpackedTarball/redland/src/rdf_iterator \
+	UnpackedTarball/redland/src/rdf_list \
+	UnpackedTarball/redland/src/rdf_log \
+	UnpackedTarball/redland/src/rdf_model \
+	UnpackedTarball/redland/src/rdf_model_storage \
+	UnpackedTarball/redland/src/rdf_node \
+	UnpackedTarball/redland/src/rdf_node_common \
+	UnpackedTarball/redland/src/rdf_parser \
+	UnpackedTarball/redland/src/rdf_parser_raptor \
+	UnpackedTarball/redland/src/rdf_raptor \
+	UnpackedTarball/redland/src/rdf_query \
+	UnpackedTarball/redland/src/rdf_query_rasqal \
+	UnpackedTarball/redland/src/rdf_query_results \
+	UnpackedTarball/redland/src/rdf_serializer \
+	UnpackedTarball/redland/src/rdf_serializer_raptor \
+	UnpackedTarball/redland/src/rdf_statement \
+	UnpackedTarball/redland/src/rdf_statement_common \
+	UnpackedTarball/redland/src/rdf_storage \
+	UnpackedTarball/redland/src/rdf_storage_file \
+	UnpackedTarball/redland/src/rdf_storage_list \
+	UnpackedTarball/redland/src/rdf_storage_hashes \
+	UnpackedTarball/redland/src/rdf_storage_trees \
+	UnpackedTarball/redland/src/rdf_stream \
+	UnpackedTarball/redland/src/rdf_uri \
+	UnpackedTarball/redland/src/rdf_utf8 \
 ))
 
 # vim: set noet sw=4 ts=4:

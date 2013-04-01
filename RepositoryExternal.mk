@@ -878,7 +878,7 @@ else # !SYSTEM_REDLAND
 
 define gb_LinkTarget__use_redland_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,redland)/librdf \
+	-I$(call gb_UnpackedTarball_get_dir,redland)/src \
 	$$(INCLUDE) \
 )
 
@@ -913,7 +913,7 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 
 ifeq ($(OS),MACOSX)
 
-$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal-lo.1 libraptor-lo.1,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
+$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal-lo.$(RASQAL_MAJOR) libraptor2-lo.$(RAPTOR_MAJOR),-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
 
 endif
 
@@ -924,14 +924,14 @@ else # ANDROID
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	rdf \
 	rasqal \
-	raptor \
+	raptor2 \
 ))
 
 define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	rdf \
 	rasqal \
-	raptor \
+	raptor2 \
 	crypto \
 )
 

@@ -8581,8 +8581,8 @@ if test "$with_system_redland" = "yes"; then
     libo_MINGW_TRY_DLL([RASQAL], [librasqal])
     libo_MINGW_TRY_DLL([SQLITE3], [libsqlite3])
 else
-    RAPTOR_MAJOR="1"
-    RASQAL_MAJOR="1"
+    RAPTOR_MAJOR="0"
+    RASQAL_MAJOR="3"
     REDLAND_MAJOR="0"
 fi
 AC_SUBST(RAPTOR_MAJOR)
