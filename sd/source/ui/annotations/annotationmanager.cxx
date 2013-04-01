@@ -762,7 +762,9 @@ void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< 
 {
     mxSelectedAnnotation = xAnnotation;
 
-    for( AnnotationTagVector::iterator iter( maTagVector.begin() ); iter != maTagVector.end(); iter++ )
+    const AnnotationTagVector::const_iterator aEnd( maTagVector.end() );
+    for( AnnotationTagVector::const_iterator iter( maTagVector.begin() );
+        iter != aEnd; ++iter)
     {
         if( (*iter)->GetAnnotation() == xAnnotation )
         {

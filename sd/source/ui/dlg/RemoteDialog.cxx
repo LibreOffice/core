@@ -31,8 +31,10 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
 
     vector<ClientInfo*> aClients( RemoteServer::getClients() );
 
+    const vector<ClientInfo*>::const_iterator aEnd( aClients.end() );
+
     for ( vector<ClientInfo*>::const_iterator aIt( aClients.begin() );
-        aIt < aClients.end(); aIt++ )
+        aIt != aEnd; ++aIt )
     {
         mClientBox.addEntry( *aIt );
     }
