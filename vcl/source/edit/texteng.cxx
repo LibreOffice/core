@@ -477,7 +477,7 @@ void TextEngine::SetText( const OUString& rText )
     FormatAndUpdate();
 
     EnableUndo( bUndoCurrentlyEnabled );
-    DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "Undo nach SetText?" );
+    DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "SetText: Undo!" );
 }
 
 
@@ -491,7 +491,7 @@ void TextEngine::CursorMoved( sal_uLong nNode )
 
 void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndoAction* )
 {
-    DBG_ASSERT( nChars, "ImpRemoveChars - 0 Chars?!" );
+    DBG_ASSERT( nChars, "ImpRemoveChars: 0 Chars?!" );
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         // Attribute muessen hier vorm RemoveChars fuer UNDO gesichert werden!
@@ -518,7 +518,7 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
 
 TextPaM TextEngine::ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight )
 {
-    DBG_ASSERT( nLeft != nRight, "Den gleichen Absatz zusammenfuegen ?" );
+    DBG_ASSERT( nLeft != nRight, "ImpConnectParagraphs: connect the very same paragraph ?" );
 
     TextNode* pLeft = mpDoc->GetNodes().GetObject( nLeft );
     TextNode* pRight = mpDoc->GetNodes().GetObject( nRight );
@@ -529,8 +529,8 @@ TextPaM TextEngine::ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight )
     // Erstmal Portions suchen, da pRight nach ConnectParagraphs weg.
     TEParaPortion* pLeftPortion = mpTEParaPortions->GetObject( nLeft );
     TEParaPortion* pRightPortion = mpTEParaPortions->GetObject( nRight );
-    DBG_ASSERT( pLeft && pLeftPortion, "Blinde Portion in ImpConnectParagraphs(1)" );
-    DBG_ASSERT( pRight && pRightPortion, "Blinde Portion in ImpConnectParagraphs(2)" );
+    DBG_ASSERT( pLeft && pLeftPortion, "ImpConnectParagraphs(1): Hidden Portion" );
+    DBG_ASSERT( pRight && pRightPortion, "ImpConnectParagraphs(2): Hidden Portion" );
 
     TextPaM aPaM = mpDoc->ConnectParagraphs( pLeft, pRight );
     ImpParagraphRemoved( nRight );
@@ -557,8 +557,8 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     CursorMoved( aStartPaM.GetPara() ); // nur damit neu eingestellte Attribute verschwinden...
     CursorMoved( aEndPaM.GetPara() );   // nur damit neu eingestellte Attribute verschwinden...
 
-    DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "Index im Wald in ImpDeleteText" );
-    DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "Index im Wald in ImpDeleteText" );
+    DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "ImpDeleteText(1): bad Index" );
+    DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "ImpDeleteText(2): bad Index" );
 
     sal_uLong nStartNode = aStartPaM.GetPara();
     sal_uLong nEndNode = aEndPaM.GetPara();
@@ -579,7 +579,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
         {
             ImpRemoveChars( aStartPaM, nChars );
             TEParaPortion* pPortion = mpTEParaPortions->GetObject( nStartNode );
-            DBG_ASSERT( pPortion, "Blinde Portion in ImpDeleteText(3)" );
+            DBG_ASSERT( pPortion, "ImpDeleteText(3): bad Index" );
             pPortion->MarkSelectionInvalid( aStartPaM.GetIndex(), pLeft->GetText().Len() );
         }
 
@@ -592,7 +592,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             aEndPaM.GetIndex() = 0;
             ImpRemoveChars( aEndPaM, nChars );
             TEParaPortion* pPortion = mpTEParaPortions->GetObject( nEndNode );
-            DBG_ASSERT( pPortion, "Blinde Portion in ImpDeleteText(4)" );
+            DBG_ASSERT( pPortion, "ImpDeleteText(4): bad Index" );
             pPortion->MarkSelectionInvalid( 0, pPortion->GetNode()->GetText().Len() );
         }
 
@@ -605,7 +605,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
         nChars = aEndPaM.GetIndex() - aStartPaM.GetIndex();
         ImpRemoveChars( aStartPaM, nChars );
         TEParaPortion* pPortion = mpTEParaPortions->GetObject( nStartNode );
-        DBG_ASSERT( pPortion, "Blinde Portion in ImpDeleteText(5)" );
+        DBG_ASSERT( pPortion, "ImpDeleteText(5): bad Index" );
         pPortion->MarkInvalid( aEndPaM.GetIndex(), aStartPaM.GetIndex() - aEndPaM.GetIndex() );
     }
 
@@ -670,8 +670,8 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, sal_Unicode c, 
 
 TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, sal_Bool bOverwrite, sal_Bool bIsUserInput )
 {
-    DBG_ASSERT( c != '\n', "Zeilenumbruch bei InsertText ?" );
-    DBG_ASSERT( c != '\r', "Zeilenumbruch bei InsertText ?" );
+    DBG_ASSERT( c != '\n', "InsertText: NewLine!" );
+    DBG_ASSERT( c != '\r', "InsertText: NewLine!" );
 
     TextPaM aPaM( rCurSel.GetStart() );
     TextNode* pNode = mpDoc->GetNodes().GetObject( aPaM.GetPara() );
@@ -855,7 +855,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndin
     TextPaM aPaM( mpDoc->InsertParaBreak( rPaM, bKeepEndingAttribs ) );
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
-    DBG_ASSERT( pPortion, "Blinde Portion in ImpInsertParaBreak" );
+    DBG_ASSERT( pPortion, "ImpInsertParaBreak: Hidden Portion" );
     pPortion->MarkInvalid( rPaM.GetIndex(), 0 );
 
     TextNode* pNewNode = mpDoc->GetNodes().GetObject( aPaM.GetPara() );
@@ -874,7 +874,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndin
 
 Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, sal_Bool bSpecial )
 {
-    DBG_ASSERT( GetUpdateMode(), "Darf bei Update=sal_False nicht erreicht werden: PaMtoEditCursor" );
+    DBG_ASSERT( GetUpdateMode(), "PaMtoEditCursor: GetUpdateMode()" );
 
     Rectangle aEditCursor;
     long nY = 0;
@@ -936,7 +936,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, sal_Bool bSpecial, sal
     if ( !pLine )
     {
         // Cursor am Ende des Absatzes.
-        DBG_ASSERT( rPaM.GetIndex() == nCurIndex, "Index voll daneben in GetEditCursor!" );
+        DBG_ASSERT( rPaM.GetIndex() == nCurIndex, "GetEditCursor: Bad Index!" );
 
         pLine = pPortion->GetLines().back();
         nY -= mnCharHeight;
@@ -957,7 +957,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, sal_Bool bSpecial, sal
 
 long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_Bool bPreferPortionStart )
 {
-    DBG_ASSERT( ( nIndex >= pLine->GetStart() ) && ( nIndex <= pLine->GetEnd() ) , "ImpGetXPos muss richtig gerufen werden!" );
+    DBG_ASSERT( ( nIndex >= pLine->GetStart() ) && ( nIndex <= pLine->GetEnd() ) , "ImpGetXPos: Bad parameters!" );
 
     sal_Bool bDoPreferPortionStart = bPreferPortionStart;
     // Assure that the portion belongs to this line:
@@ -971,7 +971,7 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
     sal_uInt16 nTextPortionStart = 0;
     size_t nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
 
-    DBG_ASSERT( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line! " );
+    DBG_ASSERT( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line!" );
 
     TETextPortion* pPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
 
@@ -999,7 +999,7 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
                     {
 //                        nX += pNextPortion->GetWidth();
                         // End of the tab portion, use start of next for cursor pos
-                        DBG_ASSERT( !bPreferPortionStart, "ImpGetXPos - How can we this tab portion here???" );
+                        DBG_ASSERT( !bPreferPortionStart, "ImpGetXPos: How can we get here!" );
                         nX = ImpGetXPos( nPara, pLine, nIndex, sal_True );
                     }
 
@@ -1008,7 +1008,7 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
         }
         else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
         {
-            DBG_ASSERT( nIndex != pLine->GetStart(), "Strange behavior in new ImpGetXPos()" );
+            DBG_ASSERT( nIndex != pLine->GetStart(), "ImpGetXPos: Strange behavior" );
 
             long nPosInPortion = (long)CalcTextWidth( nPara, nTextPortionStart, nIndex-nTextPortionStart );
 
@@ -1067,7 +1067,7 @@ sal_Bool TextEngine::HasAttrib( sal_uInt16 nWhich ) const
 
 TextPaM TextEngine::GetPaM( const Point& rDocPos, sal_Bool bSmart )
 {
-    DBG_ASSERT( GetUpdateMode(), "Darf bei Update=sal_False nicht erreicht werden: GetPaM" );
+    DBG_ASSERT( GetUpdateMode(), "GetPaM: GetUpdateMode()" );
 
     long nY = 0;
     for ( sal_uLong nPortion = 0; nPortion < mpTEParaPortions->Count(); nPortion++ )
@@ -1095,7 +1095,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, sal_Bool bSmart )
 
 sal_uInt16 TextEngine::ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, sal_Bool bSmart )
 {
-    DBG_ASSERT( IsFormatted(), "GetPaM: Nicht formatiert" );
+    DBG_ASSERT( IsFormatted(), "GetPaM: Not formatted" );
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
 
     sal_uInt16 nCurIndex = 0;
@@ -1169,7 +1169,7 @@ sal_uInt16 TextEngine::GetCharPos( sal_uLong nPortion, sal_uInt16 nLine, long nX
 
 sal_uLong TextEngine::GetTextHeight() const
 {
-    DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=sal_False nicht verwendet werden: GetTextHeight" );
+    DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
 
     if ( !IsFormatted() && !IsFormatting() )
         ((TextEngine*)this)->FormatAndUpdate();
@@ -1179,7 +1179,7 @@ sal_uLong TextEngine::GetTextHeight() const
 
 sal_uLong TextEngine::GetTextHeight( sal_uLong nParagraph ) const
 {
-    DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=sal_False nicht verwendet werden: GetTextHeight" );
+    DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
 
       if ( !IsFormatted() && !IsFormatting() )
         ((TextEngine*)this)->FormatAndUpdate();
@@ -1226,7 +1226,7 @@ sal_uLong TextEngine::CalcTextWidth()
 
 sal_uLong TextEngine::CalcTextHeight()
 {
-    DBG_ASSERT( GetUpdateMode(), "Sollte bei Update=sal_False nicht verwendet werden: CalcTextHeight" );
+    DBG_ASSERT( GetUpdateMode(), "CalcTextHeight: GetUpdateMode()" );
 
     sal_uLong nY = 0;
     for ( sal_uLong nPortion = mpTEParaPortions->Count(); nPortion; )
@@ -1295,7 +1295,7 @@ sal_uLong TextEngine::CalcParaHeight( sal_uLong nParagraph ) const
     sal_uLong nHeight = 0;
 
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
-    DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetParaHeight" );
+    DBG_ASSERT( pPPortion, "GetParaHeight: paragraph not found" );
     if ( pPPortion )
         nHeight = pPPortion->GetLines().size() * mnCharHeight;
 
@@ -1374,7 +1374,7 @@ void TextEngine::UndoActionEnd()
 
 void TextEngine::InsertUndo( TextUndo* pUndo, sal_Bool bTryMerge )
 {
-    DBG_ASSERT( !IsInUndo(), "InsertUndo im Undomodus!" );
+    DBG_ASSERT( !IsInUndo(), "InsertUndo: in Undo mode!" );
     GetUndoManager().AddUndoAction( pUndo, bTryMerge );
 }
 
@@ -1386,8 +1386,8 @@ void TextEngine::ResetUndo()
 
 void TextEngine::InsertContent( TextNode* pNode, sal_uLong nPara )
 {
-    DBG_ASSERT( pNode, "NULL-Pointer in InsertContent! " );
-    DBG_ASSERT( IsInUndo(), "InsertContent nur fuer Undo()!" );
+    DBG_ASSERT( pNode, "InsertContent: NULL-Pointer!" );
+    DBG_ASSERT( IsInUndo(), "InsertContent: only in Undo()!" );
     TEParaPortion* pNew = new TEParaPortion( pNode );
     mpTEParaPortions->Insert( pNew, nPara );
     mpDoc->GetNodes().Insert( pNode, nPara );
@@ -1398,9 +1398,9 @@ TextPaM TextEngine::SplitContent( sal_uLong nNode, sal_uInt16 nSepPos )
 {
     #ifdef DBG_UTIL
     TextNode* pNode = mpDoc->GetNodes().GetObject( nNode );
-    DBG_ASSERT( pNode, "Ungueltiger Node in SplitContent" );
-    DBG_ASSERT( IsInUndo(), "SplitContent nur fuer Undo()!" );
-    DBG_ASSERT( nSepPos <= pNode->GetText().Len(), "Index im Wald: SplitContent" );
+    DBG_ASSERT( pNode, "SplitContent: Invalid Node!" );
+    DBG_ASSERT( IsInUndo(), "SplitContent: only in Undo()!" );
+    DBG_ASSERT( nSepPos <= pNode->GetText().Len(), "SplitContent: Bad index" );
     #endif
     TextPaM aPaM( nNode, nSepPos );
     return ImpInsertParaBreak( aPaM );
@@ -1408,7 +1408,7 @@ TextPaM TextEngine::SplitContent( sal_uLong nNode, sal_uInt16 nSepPos )
 
 TextPaM TextEngine::ConnectContents( sal_uLong nLeftNode )
 {
-    DBG_ASSERT( IsInUndo(), "ConnectContent nur fuer Undo()!" );
+    DBG_ASSERT( IsInUndo(), "ConnectContent: only in Undo()!" );
     return ImpConnectParagraphs( nLeftNode, nLeftNode+1 );
 }
 
@@ -1510,7 +1510,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
     if ( !GetUpdateMode() || IsFormatting() || maInvalidRect.IsEmpty() )
         return;
 
-    DBG_ASSERT( IsFormatted(), "UpdateViews: Doc nicht formatiert!" );
+    DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
 
     for ( sal_uInt16 nView = 0; nView < mpViews->size(); nView++ )
     {
@@ -1684,7 +1684,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uLong nPara )
         // -2: The new one is already inserted.
         OSL_ENSURE(
             pTEParaPortion->GetLines()[pTEParaPortion->GetLines().size()-2],
-            "Soft Break, no Line?!");
+            "CreateAndInsertEmptyLine: Soft Break, no Line?!");
         sal_uInt16 nPos = (sal_uInt16) pTEParaPortion->GetTextPortions().size() - 1 ;
         pTmpLine->SetStartPortion( nPos );
         pTmpLine->SetEndPortion( nPos );
@@ -1698,7 +1698,7 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
     // Font sollte noch eingestellt sein.
     sal_uInt16 nMaxBreakPos = mpRefDev->GetTextBreak( pNode->GetText(), nRemainingWidth, nPortionStart );
 
-    DBG_ASSERT( nMaxBreakPos < pNode->GetText().Len(), "Break?!" );
+    DBG_ASSERT( nMaxBreakPos < pNode->GetText().Len(), "ImpBreakLine: Break?!" );
 
     if ( nMaxBreakPos == STRING_LEN )   // GetTextBreak() ist anderer Auffassung als GetTextSize()
         nMaxBreakPos = pNode->GetText().Len() - 1;
@@ -1735,7 +1735,7 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
         // Blanks am Zeilenende generell unterdruecken...
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
         TETextPortion* pTP = pTEParaPortion->GetTextPortions()[ nEndPortion ];
-        DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion am Anfang der Zeile?" );
+        DBG_ASSERT( nBreakPos > pLine->GetStart(), "ImpBreakLine: SplitTextPortion at beginning of line?" );
         pTP->GetWidth() = (long)CalcTextWidth( nPara, nBreakPos-pTP->GetLen(), pTP->GetLen()-1 );
     }
     pLine->SetEndPortion( nEndPortion );
@@ -1767,7 +1767,7 @@ sal_uInt16 TextEngine::SplitTextPortion( sal_uLong nPara, sal_uInt16 nPos )
         }
     }
 
-    DBG_ASSERT( pTextPortion, "Position ausserhalb des Bereichs!" );
+    DBG_ASSERT( pTextPortion, "SplitTextPortion: position outside of region!" );
 
     sal_uInt16 nOverlapp = nTmpPos - nPos;
     pTextPortion->GetLen() = pTextPortion->GetLen() - nOverlapp;
@@ -1782,7 +1782,7 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
 {
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
     TextNode* pNode = pTEParaPortion->GetNode();
-    DBG_ASSERT( pNode->GetText().Len(), "CreateTextPortions sollte nicht fuer leere Absaetze verwendet werden!" );
+    DBG_ASSERT( pNode->GetText().Len(), "CreateTextPortions: should not be used for empty paragraphs!" );
 
     std::set<sal_uInt16> aPositions;
     std::set<sal_uInt16>::iterator aPositionsIt;
@@ -1842,7 +1842,7 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     }
     OSL_ENSURE(nP < pTEParaPortion->GetTextPortions().size()
             || pTEParaPortion->GetTextPortions().empty(),
-            "Nothing to delete: CreateTextPortions");
+            "CreateTextPortions: Nothing to delete!");
     if ( nInvPortion && ( nPortionStart+pTEParaPortion->GetTextPortions()[nInvPortion]->GetLen() > nStartPos ) )
     {
         // lieber eine davor...
@@ -1857,7 +1857,7 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     aPositions.insert( nPortionStart );
 
     aPositionsIt = aPositions.find( nPortionStart );
-    DBG_ASSERT( aPositionsIt != aPositions.end(), "nPortionStart not found" );
+    DBG_ASSERT( aPositionsIt != aPositions.end(), "CreateTextPortions: nPortionStart not found" );
 
     if ( aPositionsIt != aPositions.end() )
     {
@@ -1868,14 +1868,14 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
             pTEParaPortion->GetTextPortions().push_back( pNew );
         }
     }
-    OSL_ENSURE(pTEParaPortion->GetTextPortions().size(), "No Portions?!");
+    OSL_ENSURE(pTEParaPortion->GetTextPortions().size(), "CreateTextPortions: No Portions?!");
 }
 
 void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars )
 {
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-    OSL_ENSURE(pTEParaPortion->GetTextPortions().size(), "no Portions!");
-    OSL_ENSURE(nNewChars, "RecalcTextPortion with Diff == 0");
+    OSL_ENSURE(pTEParaPortion->GetTextPortions().size(), "RecalcTextPortion: no Portions!");
+    OSL_ENSURE(nNewChars, "RecalcTextPortion: Diff == 0");
 
     TextNode* const pNode = pTEParaPortion->GetNode();
     if ( nNewChars > 0 )
@@ -1915,7 +1915,7 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
             const sal_uInt16 nTP = pTEParaPortion->GetTextPortions().
                 FindPortion( nStartPos, nPortionStart );
             TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
-            DBG_ASSERT( pTP, "RecalcTextPortion: Portion nicht gefunden"  );
+            DBG_ASSERT( pTP, "RecalcTextPortion: Portion not found!"  );
             pTP->GetLen() = pTP->GetLen() + nNewChars;
             pTP->GetWidth() = (-1);
         }
@@ -1938,13 +1938,13 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
             pTP = pTEParaPortion->GetTextPortions()[ nPortion ];
             if ( ( nPos+pTP->GetLen() ) > nStartPos )
             {
-                DBG_ASSERT( nPos <= nStartPos, "Start falsch!" );
-                DBG_ASSERT( nPos+pTP->GetLen() >= nEnd, "End falsch!" );
+                DBG_ASSERT( nPos <= nStartPos, "RecalcTextPortion: Bad Start!" );
+                DBG_ASSERT( nPos+pTP->GetLen() >= nEnd, "RecalcTextPortion: Bad End!" );
                 break;
             }
             nPos = nPos + pTP->GetLen();
         }
-        DBG_ASSERT( pTP, "RecalcTextPortion: Portion nicht gefunden" );
+        DBG_ASSERT( pTP, "RecalcTextPortion: Portion not found!" );
         if ( ( nPos == nStartPos ) && ( (nPos+pTP->GetLen()) == nEnd ) )
         {
             // Portion entfernen;
@@ -1953,11 +1953,11 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
         }
         else
         {
-            DBG_ASSERT( pTP->GetLen() > (-nNewChars), "Portion zu klein zum schrumpfen!" );
+            DBG_ASSERT( pTP->GetLen() > (-nNewChars), "RecalcTextPortion: Portion too small to shrink!" );
             pTP->GetLen() = pTP->GetLen() + nNewChars;
         }
         OSL_ENSURE( pTEParaPortion->GetTextPortions().size(),
-                "RecalcTextPortions: none are left!" );
+                "RecalcTextPortion: none are left!" );
     }
 }
 
@@ -2022,9 +2022,9 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         OSL_ENSURE(pPortion->GetTextPortions().size(),
-                                "Line without Textportion in Paint!");
+                                "ImpPaint: Line without Textportion!");
                         TETextPortion* pTextPortion = pPortion->GetTextPortions()[ y ];
-                        DBG_ASSERT( pTextPortion, "NULL-Pointer im Portioniterator in UpdateViews" );
+                        DBG_ASSERT( pTextPortion, "ImpPaint: Bad pTextPortion!" );
 
                         ImpInitLayoutMode( pOutDev /*, pTextPortion->IsRightToLeft() */);
 
@@ -2181,7 +2181,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
 
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-    DBG_ASSERT( pTEParaPortion->IsInvalid(), "CreateLines: Portion nicht invalid!" );
+    DBG_ASSERT( pTEParaPortion->IsInvalid(), "CreateLines: Portion not invalid!" );
 
     sal_uInt16 nOldLineCount = pTEParaPortion->GetLines().size();
 
@@ -2315,7 +2315,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         {
             nPortionStart = nTmpPos;
             pPortion = pTEParaPortion->GetTextPortions()[ nTmpPortion ];
-            DBG_ASSERT( pPortion->GetLen(), "Leere Portion in CreateLines ?!" );
+            DBG_ASSERT( pPortion->GetLen(), "CreateLines: Empty Portion!" );
             if ( pNode->GetText().GetChar( nTmpPos ) == '\t' )
             {
                 long nCurPos = nTmpWidth-mpDoc->GetLeftMargin();
@@ -2371,7 +2371,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
             bEOL = sal_True;
             pLine->SetEnd( nPortionEnd );
             OSL_ENSURE(pTEParaPortion->GetTextPortions().size(),
-                    "No TextPortions?");
+                    "CreateLines: No TextPortions?");
             pLine->SetEndPortion( (sal_uInt16)pTEParaPortion->GetTextPortions().size() - 1 );
         }
 
@@ -2387,7 +2387,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         }
         else if ( !bEOL )
         {
-            DBG_ASSERT( (nPortionEnd-nPortionStart) == pPortion->GetLen(), "Doch eine andere Portion?!" );
+            DBG_ASSERT( (nPortionEnd-nPortionStart) == pPortion->GetLen(), "CreateLines: There is a Portion after all?!" );
             long nRemainingWidth = mnMaxTextWidth - nTmpWidth;
             ImpBreakLine( nPara, pLine, pPortion, nPortionStart, nRemainingWidth );
         }
@@ -2509,7 +2509,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
                                           pTEParaPortion->GetLines().end() );
     }
 
-    DBG_ASSERT( pTEParaPortion->GetLines().size(), "Keine Zeile nach CreateLines!" );
+    DBG_ASSERT( pTEParaPortion->GetLines().size(), "CreateLines: No Line!" );
 
     if ( bLineBreak == sal_True )
         CreateAndInsertEmptyLine( nPara );
@@ -2941,7 +2941,7 @@ uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )
         mxBreakIterator = vcl::unohelper::CreateBreakIterator();
-    DBG_ASSERT( mxBreakIterator.is(), "Could not create BreakIterator" );
+    DBG_ASSERT( mxBreakIterator.is(), "BreakIterator: Failed to create!" );
     return mxBreakIterator;
 }
 
@@ -2956,7 +2956,7 @@ void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
     if ( maLocale.Language.isEmpty() )
     {
-        maLocale = Application::GetSettings().GetUILanguageTag().getLocale();   // XXX why UI locale?
+        maLocale = Application::GetSettings().GetUILanguageTag().getLocale();   // TODO: why UI locale?
     }
     return maLocale;
 }
