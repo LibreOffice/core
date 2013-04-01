@@ -41,6 +41,7 @@ use installer::download;
 use installer::environment;
 use installer::epmfile;
 use installer::files;
+use installer::filelists;
 use installer::globals;
 use installer::helppack;
 use installer::languagepack;
@@ -616,6 +617,14 @@ sub run {
         {
             installer::scriptitems::quoting_illegal_filenames($filesinproductlanguageresolvedarrayref);
         }
+
+        ######################################################################################
+        # Processing files with flag FILELIST and putting listed files into the file list
+        ######################################################################################
+
+        installer::logger::print_message( "... analyzing files with flag FILELIST ...\n" );
+
+        $filesinproductlanguageresolvedarrayref = installer::filelists::resolve_filelist_flag($filesinproductlanguageresolvedarrayref, $ENV{'INSTDIR'});
 
         #####################################
         # Files with flag SUBST_FILENAME

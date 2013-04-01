@@ -425,6 +425,12 @@ End
 #define SCP2_URE_JDL_NORMAL(n) SCP2_URE_DL_NORMAL(n)
 #endif
 
+#if defined MACOSX
+#define FILELIST_DIR gid_Dir_Bundle_Contents
+#else
+#define FILELIST_DIR gid_Dir_Brand_Root
+#endif
+
 #include <langmacros.inc>
 
 

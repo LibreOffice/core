@@ -280,6 +280,7 @@ sub check_system_environment
         OUTPATH
         LOCAL_OUT
         LOCAL_COMMON_OUT
+        WORKDIR
     );
 
     for my $key ( @environmentvariables )

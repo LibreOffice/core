@@ -67,6 +67,9 @@ sub create_pathvariables
     my $platformname  = $environment->{'OUTPATH'};
     $variables{'platformname'} = $platformname;
 
+    my $filelistpath = $environment->{'WORKDIR'} . $installer::globals::separator . 'Package';
+    $variables{'filelistpath'} = $filelistpath;
+
     return \%variables;
 }
 
