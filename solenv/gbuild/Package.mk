@@ -68,12 +68,15 @@ $(call gb_Package_get_preparation_target,%) :
 
 $(call gb_Package_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PKG,2)
-	mkdir -p $(dir $@) && touch $@
+	rm -f $@ && \
+	mkdir -p $(dir $@) && \
+	mv $(call var2file,$@.tmp,100,$(FILES)) $@
 
 # for other targets that want to create Packages, does not register at Module
 define gb_Package_Package_internal
 gb_Package_SOURCEDIR_$(1) := $(2)
 gb_Package_OUTDIR_$(1) := $(OUTDIR)
+$(call gb_Package_get_target,$(1)) : FILES :=
 $(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1)) $(call gb_Package_get_preparation_target,$(1))
 $(call gb_Package_get_target,$(1)) : $(call gb_Package_get_preparation_target,$(1))
 
@@ -99,6 +102,7 @@ endef
 
 define gb_Package_add_file
 $(call gb_Package_get_target,$(1)) : $$(gb_Package_OUTDIR_$(1))/$(2)
+$(call gb_Package_get_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
 $(call gb_PackagePart_PackagePart,$(2),$$(gb_Package_SOURCEDIR_$(1))/$(3),$(call gb_Package_get_preparation_target,$(1)),$$(gb_Package_OUTDIR_$(1)))
 
