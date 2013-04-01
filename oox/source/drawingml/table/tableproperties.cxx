@@ -139,12 +139,14 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
 
     const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase ) );
     sal_Int32 nRow = 0;
-    std::vector< TableRow >::iterator aTableRowIter( mvTableRows.begin() );
-    while( aTableRowIter != mvTableRows.end() )
+    const std::vector< TableRow >::const_iterator aTableRowEnd( mvTableRows.end() );
+    for (std::vector< TableRow >::iterator aTableRowIter( mvTableRows.begin() );
+         aTableRowIter != aTableRowEnd ; ++aTableRowIter, ++nRow)
     {
         sal_Int32 nColumn = 0;
-        std::vector< TableCell >::iterator aTableCellIter( aTableRowIter->getTableCells().begin() );
-        while( aTableCellIter != aTableRowIter->getTableCells().end() )
+        const std::vector< TableCell >::const_iterator aTableCellEnd( aTableRowIter->getTableCells().end() );
+        for (std::vector< TableCell >::iterator aTableCellIter( aTableRowIter->getTableCells().begin() );
+            aTableCellIter != aTableCellEnd ; ++aTableCellIter, ++nColumn)
         {
             TableCell& rTableCell( *aTableCellIter );
             if ( !rTableCell.getvMerge() && !rTableCell.gethMerge() )
@@ -157,11 +159,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
                 rTableCell.pushToXCell( rFilterBase, pMasterTextListStyle, xCellRange->getCellByPosition( nColumn, nRow ), *this, rTableStyle,
                     nColumn, aTableRowIter->getTableCells().size(), nRow, mvTableRows.size() );
             }
-            nColumn++;
-            aTableCellIter++;
         }
-        nRow++;
-        aTableRowIter++;
     }
 }
 

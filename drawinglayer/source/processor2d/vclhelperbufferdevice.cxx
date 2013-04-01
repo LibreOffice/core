@@ -89,7 +89,7 @@ namespace
             bool bOkay(false);
             aBuffers::iterator aFound(maFreeBuffers.end());
 
-            for(aBuffers::iterator a(maFreeBuffers.begin()); a != maFreeBuffers.end(); a++)
+            for(aBuffers::iterator a(maFreeBuffers.begin()); a != maFreeBuffers.end(); ++a)
             {
                 OSL_ENSURE(*a, "Empty pointer in VDevBuffer (!)");
 
