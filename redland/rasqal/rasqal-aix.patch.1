@@ -1,0 +1,25 @@
+--- a/src/rasqal_literal.c	2013-03-29 21:22:57.413852072 +0100
++++ b/src/rasqal_literal.c	2013-03-29 21:23:34.092851757 +0100
+@@ -46,10 +46,22 @@
+ #include <stddef.h>
+ #endif
+ #include <stdarg.h>
++#ifdef _AIX
++#  ifndef isnan
++#   define isnan(x) \
++      (sizeof (x) == sizeof (long double) ? isnan_ld (x) \
++       : sizeof (x) == sizeof (double) ? isnan_d (x) \
++       : isnan_f (x))
++  static inline int isnan_f  (float       x) { return x != x; }
++  static inline int isnan_d  (double      x) { return x != x; }
++  static inline int isnan_ld (long double x) { return x != x; }
++#  endif
++#else
+ /* for isnan() */
+ #ifdef HAVE_MATH_H
+ #include <math.h>
+ #endif
++#endif
+ /* for INT_MIN and INT_MAX */
+ #ifdef HAVE_LIMITS_H
+ #include <limits.h>

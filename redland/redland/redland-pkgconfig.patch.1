@@ -1,0 +1,619 @@
+--- a/configure.ac	2013-03-30 19:17:11.040959896 +0100
++++ b/configure.ac	2013-03-30 19:47:16.304944385 +0100
+@@ -122,7 +122,7 @@
+ 
+ AC_CHECK_PROGS(PERL, perl)
+ # Gnome
+-AC_CHECK_PROGS(PKG_CONFIG, pkg-config)
++PKG_PROG_PKG_CONFIG
+ 
+ 
+ AM_MISSING_PROG(ACLOCAL, aclocal, $missing_dir)
+@@ -520,62 +520,39 @@
+ 
+ # Check for rasqal before raptor so that we can see if rasqal was already
+ # built with raptor2 and can then enforce raptor2 is required
+-AC_MSG_CHECKING(for rasqal)
+ 
+ RASQAL_MIN_VERSION=0.9.25
+ RASQAL_MAX_VERSION=0.9.99
+ AC_SUBST(RASQAL_MIN_VERSION)
+ AC_SUBST(RASQAL_MAX_VERSION)
+-if $PKG_CONFIG rasqal --exists; then
+-  :
+-else
++PKG_CHECK_MODULES([RASQAL],[rasqal >= $RASQAL_MIN_VERSION rasqal <= $RASQAL_MAX_VERSION],[
++  RASQAL_VERSION=`$PKG_CONFIG rasqal --modversion 2>/dev/null`
++],[
+   AC_MSG_ERROR(Rasqal is not installed - see http://librdf.org/rasqal/ to get a version in range $RASQAL_MIN_VERSION to $RASQAL_MAX_VERSION)
+-fi
+-
+-RASQAL_VERSION=`$PKG_CONFIG rasqal --modversion 2>/dev/null`
+-
+-if $PKG_CONFIG rasqal --atleast-version=$RASQAL_MIN_VERSION --max-version=$RASQAL_MAX_VERSION; then
+-  :
+-else
+-  AC_MSG_ERROR(Installed rasqal $RASQAL_VERSION is not in range $RASQAL_MIN_VERSION to $RASQAL_MAX_VERSION)
+-fi
++])
+ 
+-LIBRDF_EXTERNAL_CPPFLAGS="`$PKG_CONFIG rasqal --cflags` $LIBRDF_EXTERNAL_CPPFLAGS"
+-LIBRDF_EXTERNAL_LIBS="`$PKG_CONFIG rasqal --libs` $LIBRDF_EXTERNAL_LIBS"
++LIBRDF_EXTERNAL_CPPFLAGS="$RASQAL_CFLAGS $LIBRDF_EXTERNAL_CPPFLAGS"
++LIBRDF_EXTERNAL_LIBS="$RASQAL_LIBS $LIBRDF_EXTERNAL_LIBS"
+ 
+ rdf_query="rasqal(system $RASQAL_VERSION)"
+-AC_MSG_RESULT(system $RASQAL_VERSION)
+ 
+ 
+ # Check for raptor
+ RAPTOR_MIN_VERSION=2.0.7
+ 
+-
+-
+-AC_MSG_CHECKING(for raptor)
+-
+-if $PKG_CONFIG raptor2 --exists; then
+-  :
+-else
++PKG_CHECK_MODULES([RAPTOR2],[raptor2 >= $RAPTOR_MIN_VERSION],[
++  RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`
++],[
+   AC_MSG_ERROR(Raptor2 is not installed - see http://librdf.org/raptor/ to get a version newer than $RAPTOR_MIN_VERSION)
+-fi
+-
+-RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`
+-
+-if $PKG_CONFIG raptor2 --atleast-version=$RAPTOR_MIN_VERSION; then
+-  :
+-else
+-  AC_MSG_ERROR(Installed raptor $RAPTOR_VERSION is too old - need $RAPTOR_MIN_VERSION)
+-fi
++])
+ 
+-LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS `$PKG_CONFIG raptor2 --libs`"
+-LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS `$PKG_CONFIG rasqal --libs`"
++LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS $RAPTOR2_LIBS"
++LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS $RASQAL_LIBS"
+ 
+-LIBRDF_EXTERNAL_CPPFLAGS="`$PKG_CONFIG raptor2 --cflags` $LIBRDF_EXTERNAL_CPPFLAGS"
++LIBRDF_EXTERNAL_CPPFLAGS="$RAPTOR2_CFLAGS $LIBRDF_EXTERNAL_CPPFLAGS"
+ LIBRDF_EXTERNAL_LIBS="$LIBRDF_DIRECT_LIBS $LIBRDF_EXTERNAL_LIBS"
+ 
+ rdf_parsers_available="$parser_available raptor(system $RAPTOR_VERSION)"
+-AC_MSG_RESULT(system $RAPTOR_VERSION)
+ 
+ AC_SUBST(RAPTOR_MIN_VERSION)
+ 
+--- a/configure	2013-03-30 19:51:46.680942062 +0100
++++ b/configure	2013-03-30 19:48:15.487943876 +0100
+@@ -660,8 +660,6 @@
+ GTKDOC_MKPDF
+ GTKDOC_REBASE
+ GTKDOC_CHECK
+-PKG_CONFIG_LIBDIR
+-PKG_CONFIG_PATH
+ AM_BACKSLASH
+ AM_DEFAULT_VERBOSITY
+ AM_DEFAULT_V
+@@ -725,6 +723,10 @@
+ HASH_OBJS
+ HAVE_RAPTOR2_API
+ RAPTOR_MIN_VERSION
++RAPTOR2_LIBS
++RAPTOR2_CFLAGS
++RASQAL_LIBS
++RASQAL_CFLAGS
+ RASQAL_MAX_VERSION
+ RASQAL_MIN_VERSION
+ GETOPT_FALSE
+@@ -732,6 +734,8 @@
+ MEMCMP_FALSE
+ MEMCMP_TRUE
+ RECHO
++PKG_CONFIG_LIBDIR
++PKG_CONFIG_PATH
+ PKG_CONFIG
+ PERL
+ TAR
+@@ -930,6 +934,10 @@
+ PKG_CONFIG
+ PKG_CONFIG_PATH
+ PKG_CONFIG_LIBDIR
++RASQAL_CFLAGS
++RASQAL_LIBS
++RAPTOR2_CFLAGS
++RAPTOR2_LIBS
+ GTKDOC_DEPS_CFLAGS
+ GTKDOC_DEPS_LIBS'
+ ac_subdirs_all='libltdl'
+@@ -1631,6 +1639,13 @@
+               directories to add to pkg-config's search path
+   PKG_CONFIG_LIBDIR
+               path overriding pkg-config's built-in search path
++  RASQAL_CFLAGS
++              C compiler flags for RASQAL, overriding pkg-config
++  RASQAL_LIBS linker flags for RASQAL, overriding pkg-config
++  RAPTOR2_CFLAGS
++              C compiler flags for RAPTOR2, overriding pkg-config
++  RAPTOR2_LIBS
++              linker flags for RAPTOR2, overriding pkg-config
+   GTKDOC_DEPS_CFLAGS
+               C compiler flags for GTKDOC_DEPS, overriding pkg-config
+   GTKDOC_DEPS_LIBS
+@@ -14088,26 +14103,35 @@
+ done
+ 
+ # Gnome
+-for ac_prog in pkg-config
+-do
+-  # Extract the first word of "$ac_prog", so it can be a program name with args.
+-set dummy $ac_prog; ac_word=$2
++
++
++
++
++
++
++
++if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
++	if test -n "$ac_tool_prefix"; then
++  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
++set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+ $as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_PKG_CONFIG+:} false; then :
++if ${ac_cv_path_PKG_CONFIG+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+-  if test -n "$PKG_CONFIG"; then
+-  ac_cv_prog_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++  case $PKG_CONFIG in
++  [\\/]* | ?:[\\/]*)
++  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
++  ;;
++  *)
++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+ for as_dir in $PATH
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+     for ac_exec_ext in '' $ac_executable_extensions; do
+   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_PKG_CONFIG="$ac_prog"
++    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+     break 2
+   fi
+@@ -14115,9 +14139,10 @@
+   done
+ IFS=$as_save_IFS
+ 
++  ;;
++esac
+ fi
+-fi
+-PKG_CONFIG=$ac_cv_prog_PKG_CONFIG
++PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+ if test -n "$PKG_CONFIG"; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+ $as_echo "$PKG_CONFIG" >&6; }
+@@ -14127,9 +14152,77 @@
+ fi
+ 
+ 
+-  test -n "$PKG_CONFIG" && break
++fi
++if test -z "$ac_cv_path_PKG_CONFIG"; then
++  ac_pt_PKG_CONFIG=$PKG_CONFIG
++  # Extract the first word of "pkg-config", so it can be a program name with args.
++set dummy pkg-config; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  case $ac_pt_PKG_CONFIG in
++  [\\/]* | ?:[\\/]*)
++  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
++  ;;
++  *)
++  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_exec_ext in '' $ac_executable_extensions; do
++  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
++    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
++  fi
+ done
++  done
++IFS=$as_save_IFS
+ 
++  ;;
++esac
++fi
++ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
++if test -n "$ac_pt_PKG_CONFIG"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
++$as_echo "$ac_pt_PKG_CONFIG" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
++
++  if test "x$ac_pt_PKG_CONFIG" = x; then
++    PKG_CONFIG=""
++  else
++    case $cross_compiling:$ac_tool_warned in
++yes:)
++{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
++$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
++ac_tool_warned=yes ;;
++esac
++    PKG_CONFIG=$ac_pt_PKG_CONFIG
++  fi
++else
++  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
++fi
++
++fi
++if test -n "$PKG_CONFIG"; then
++	_pkg_min_version=0.9.0
++	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
++$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
++	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
++		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++	else
++		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++		PKG_CONFIG=""
++	fi
++fi
+ 
+ 
+ 
+@@ -15525,66 +15618,183 @@
+ 
+ # Check for rasqal before raptor so that we can see if rasqal was already
+ # built with raptor2 and can then enforce raptor2 is required
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rasqal" >&5
+-$as_echo_n "checking for rasqal... " >&6; }
+ 
+ RASQAL_MIN_VERSION=0.9.25
+ RASQAL_MAX_VERSION=0.9.99
+ 
+ 
+-if $PKG_CONFIG rasqal --exists; then
+-  :
++
++pkg_failed=no
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for RASQAL" >&5
++$as_echo_n "checking for RASQAL... " >&6; }
++
++if test -n "$RASQAL_CFLAGS"; then
++    pkg_cv_RASQAL_CFLAGS="$RASQAL_CFLAGS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"rasqal >= \$RASQAL_MIN_VERSION rasqal <= \$RASQAL_MAX_VERSION\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "rasqal >= $RASQAL_MIN_VERSION rasqal <= $RASQAL_MAX_VERSION") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_RASQAL_CFLAGS=`$PKG_CONFIG --cflags "rasqal >= $RASQAL_MIN_VERSION rasqal <= $RASQAL_MAX_VERSION" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+-  as_fn_error $? "Rasqal is not installed - see http://librdf.org/rasqal/ to get a version in range $RASQAL_MIN_VERSION to $RASQAL_MAX_VERSION" "$LINENO" 5
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++if test -n "$RASQAL_LIBS"; then
++    pkg_cv_RASQAL_LIBS="$RASQAL_LIBS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"rasqal >= \$RASQAL_MIN_VERSION rasqal <= \$RASQAL_MAX_VERSION\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "rasqal >= $RASQAL_MIN_VERSION rasqal <= $RASQAL_MAX_VERSION") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_RASQAL_LIBS=`$PKG_CONFIG --libs "rasqal >= $RASQAL_MIN_VERSION rasqal <= $RASQAL_MAX_VERSION" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
+ fi
+ 
+-RASQAL_VERSION=`$PKG_CONFIG rasqal --modversion 2>/dev/null`
+ 
+-if $PKG_CONFIG rasqal --atleast-version=$RASQAL_MIN_VERSION --max-version=$RASQAL_MAX_VERSION; then
+-  :
++
++if test $pkg_failed = yes; then
++   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
+ else
+-  as_fn_error $? "Installed rasqal $RASQAL_VERSION is not in range $RASQAL_MIN_VERSION to $RASQAL_MAX_VERSION" "$LINENO" 5
++        _pkg_short_errors_supported=no
+ fi
++        if test $_pkg_short_errors_supported = yes; then
++	        RASQAL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "rasqal >= $RASQAL_MIN_VERSION rasqal <= $RASQAL_MAX_VERSION" 2>&1`
++        else
++	        RASQAL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "rasqal >= $RASQAL_MIN_VERSION rasqal <= $RASQAL_MAX_VERSION" 2>&1`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$RASQAL_PKG_ERRORS" >&5
+ 
+-LIBRDF_EXTERNAL_CPPFLAGS="`$PKG_CONFIG rasqal --cflags` $LIBRDF_EXTERNAL_CPPFLAGS"
+-LIBRDF_EXTERNAL_LIBS="`$PKG_CONFIG rasqal --libs` $LIBRDF_EXTERNAL_LIBS"
++
++  as_fn_error $? "Rasqal is not installed - see http://librdf.org/rasqal/ to get a version in range $RASQAL_MIN_VERSION to $RASQAL_MAX_VERSION" "$LINENO" 5
++
++elif test $pkg_failed = untried; then
++     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++
++  as_fn_error $? "Rasqal is not installed - see http://librdf.org/rasqal/ to get a version in range $RASQAL_MIN_VERSION to $RASQAL_MAX_VERSION" "$LINENO" 5
++
++else
++	RASQAL_CFLAGS=$pkg_cv_RASQAL_CFLAGS
++	RASQAL_LIBS=$pkg_cv_RASQAL_LIBS
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++
++  RASQAL_VERSION=`$PKG_CONFIG rasqal --modversion 2>/dev/null`
++
++fi
++
++LIBRDF_EXTERNAL_CPPFLAGS="$RASQAL_CFLAGS $LIBRDF_EXTERNAL_CPPFLAGS"
++LIBRDF_EXTERNAL_LIBS="$RASQAL_LIBS $LIBRDF_EXTERNAL_LIBS"
+ 
+ rdf_query="rasqal(system $RASQAL_VERSION)"
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: system $RASQAL_VERSION" >&5
+-$as_echo "system $RASQAL_VERSION" >&6; }
+ 
+ 
+ # Check for raptor
+ RAPTOR_MIN_VERSION=2.0.7
+ 
+ 
++pkg_failed=no
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for RAPTOR2" >&5
++$as_echo_n "checking for RAPTOR2... " >&6; }
++
++if test -n "$RAPTOR2_CFLAGS"; then
++    pkg_cv_RAPTOR2_CFLAGS="$RAPTOR2_CFLAGS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"raptor2 >= \$RAPTOR_MIN_VERSION\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "raptor2 >= $RAPTOR_MIN_VERSION") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_RAPTOR2_CFLAGS=`$PKG_CONFIG --cflags "raptor2 >= $RAPTOR_MIN_VERSION" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++if test -n "$RAPTOR2_LIBS"; then
++    pkg_cv_RAPTOR2_LIBS="$RAPTOR2_LIBS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"raptor2 >= \$RAPTOR_MIN_VERSION\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "raptor2 >= $RAPTOR_MIN_VERSION") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_RAPTOR2_LIBS=`$PKG_CONFIG --libs "raptor2 >= $RAPTOR_MIN_VERSION" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++
++
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for raptor" >&5
+-$as_echo_n "checking for raptor... " >&6; }
++if test $pkg_failed = yes; then
++   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
+ 
+-if $PKG_CONFIG raptor2 --exists; then
+-  :
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
+ else
+-  as_fn_error $? "Raptor2 is not installed - see http://librdf.org/raptor/ to get a version newer than $RAPTOR_MIN_VERSION" "$LINENO" 5
++        _pkg_short_errors_supported=no
+ fi
++        if test $_pkg_short_errors_supported = yes; then
++	        RAPTOR2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "raptor2 >= $RAPTOR_MIN_VERSION" 2>&1`
++        else
++	        RAPTOR2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "raptor2 >= $RAPTOR_MIN_VERSION" 2>&1`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$RAPTOR2_PKG_ERRORS" >&5
+ 
+-RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`
+ 
+-if $PKG_CONFIG raptor2 --atleast-version=$RAPTOR_MIN_VERSION; then
+-  :
++  as_fn_error $? "Raptor2 is not installed - see http://librdf.org/raptor/ to get a version newer than $RAPTOR_MIN_VERSION" "$LINENO" 5
++
++elif test $pkg_failed = untried; then
++     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++
++  as_fn_error $? "Raptor2 is not installed - see http://librdf.org/raptor/ to get a version newer than $RAPTOR_MIN_VERSION" "$LINENO" 5
++
+ else
+-  as_fn_error $? "Installed raptor $RAPTOR_VERSION is too old - need $RAPTOR_MIN_VERSION" "$LINENO" 5
++	RAPTOR2_CFLAGS=$pkg_cv_RAPTOR2_CFLAGS
++	RAPTOR2_LIBS=$pkg_cv_RAPTOR2_LIBS
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++
++  RAPTOR_VERSION=`$PKG_CONFIG raptor2 --modversion 2>/dev/null`
++
+ fi
+ 
+-LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS `$PKG_CONFIG raptor2 --libs`"
+-LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS `$PKG_CONFIG rasqal --libs`"
++LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS $RAPTOR2_LIBS"
++LIBRDF_DIRECT_LIBS="$LIBRDF_DIRECT_LIBS $RASQAL_LIBS"
+ 
+-LIBRDF_EXTERNAL_CPPFLAGS="`$PKG_CONFIG raptor2 --cflags` $LIBRDF_EXTERNAL_CPPFLAGS"
++LIBRDF_EXTERNAL_CPPFLAGS="$RAPTOR2_CFLAGS $LIBRDF_EXTERNAL_CPPFLAGS"
+ LIBRDF_EXTERNAL_LIBS="$LIBRDF_DIRECT_LIBS $LIBRDF_EXTERNAL_LIBS"
+ 
+ rdf_parsers_available="$parser_available raptor(system $RAPTOR_VERSION)"
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: system $RAPTOR_VERSION" >&5
+-$as_echo "system $RAPTOR_VERSION" >&6; }
+ 
+ 
+ 
+@@ -17014,126 +17224,6 @@
+ 
+ 
+ 
+-
+-
+-
+-
+-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+-	if test -n "$ac_tool_prefix"; then
+-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_path_PKG_CONFIG+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  case $PKG_CONFIG in
+-  [\\/]* | ?:[\\/]*)
+-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+-  ;;
+-  *)
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-  ;;
+-esac
+-fi
+-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+-if test -n "$PKG_CONFIG"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+-$as_echo "$PKG_CONFIG" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-fi
+-if test -z "$ac_cv_path_PKG_CONFIG"; then
+-  ac_pt_PKG_CONFIG=$PKG_CONFIG
+-  # Extract the first word of "pkg-config", so it can be a program name with args.
+-set dummy pkg-config; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  case $ac_pt_PKG_CONFIG in
+-  [\\/]* | ?:[\\/]*)
+-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+-  ;;
+-  *)
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-  ;;
+-esac
+-fi
+-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+-if test -n "$ac_pt_PKG_CONFIG"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
+-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-  if test "x$ac_pt_PKG_CONFIG" = x; then
+-    PKG_CONFIG=""
+-  else
+-    case $cross_compiling:$ac_tool_warned in
+-yes:)
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+-ac_tool_warned=yes ;;
+-esac
+-    PKG_CONFIG=$ac_pt_PKG_CONFIG
+-  fi
+-else
+-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+-fi
+-
+-fi
+-if test -n "$PKG_CONFIG"; then
+-	_pkg_min_version=0.9.0
+-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
+-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-	else
+-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-		PKG_CONFIG=""
+-	fi
+-fi
+-
+-
+-
+     # Extract the first word of "gtkdoc-check", so it can be a program name with args.
+ set dummy gtkdoc-check; ac_word=$2
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5

@@ -11,15 +11,16 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,redland))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,redland,$(REDLAND_TARBALL)))
 
+# configure generated files for MSVC
+$(eval $(call gb_UnpackedTarball_add_file,redland,src/librdf.h,redland/redland/librdf.h))
+
 $(eval $(call gb_UnpackedTarball_add_patches,redland,\
-	redland/redland/redland-1.0.8.legal.patch \
-	redland/redland/redland-1.0.8.autotools.patch \
-	redland/redland/redland-1.0.8.ooo_build.patch \
-	redland/redland/redland-1.0.8.win32.patch \
-	redland/redland/redland-1.0.8.aix.patch \
-	$(if $(filter-out WNT,$(OS)),redland/redland/redland-1.0.8.bundled-soname.patch) \
-	$(if $(filter ANDROID,$(OS)),redland/redland/redland-1.0.8.no-soname.patch) \
-	$(if $(filter WNTGCC,$(OS)$(COM)),redland/redland/redland-1.0.8.mingw.patch) \
+	redland/redland/redland-pkgconfig.patch.1 \
+	redland/redland/redland-freebsd.patch.1 \
+	redland/redland/redland-msvc.patch.1 \
+	$(if $(filter-out WNT,$(OS)),redland/redland/redland-bundled-soname.patch.1) \
+	$(if $(filter ANDROID,$(OS)),redland/redland/redland-android.patch.1) \
+	$(if $(filter WNTGCC,$(OS)$(COM)),redland/redland/redland-mingw.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:

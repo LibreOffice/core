@@ -11,21 +11,15 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,raptor))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,raptor,$(RAPTOR_TARBALL)))
 
+# configure generated files for MSVC
+$(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor2.h,redland/raptor/raptor2.h))
+$(eval $(call gb_UnpackedTarball_add_file,raptor,src/raptor_config.h,redland/raptor/raptor_config.h))
+
 $(eval $(call gb_UnpackedTarball_add_patches,raptor,\
-	redland/raptor/raptor-1.4.18.legal.patch \
-	redland/raptor/raptor-1.4.18.autotools.patch \
-	redland/raptor/raptor-1.4.18.ooo_build.patch \
-	redland/raptor/raptor-1.4.18.win32.patch \
-	redland/raptor/raptor-1.4.18.fixes.patch \
-	redland/raptor/raptor-1.4.18.rindex.patch \
-	redland/raptor/raptor-1.4.18.aix.patch \
-	redland/raptor/raptor-1.4.18.entities.patch \
-	$(if $(filter-out WNT,$(OS)),redland/raptor/raptor-1.4.18.bundled-soname.patch) \
-	$(if $(filter YES,$(CROSS_COMPILING)),redland/raptor/raptor-1.4.18.cross.patch) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),redland/raptor/raptor-1.4.18.libxml.patch) \
-	$(if $(filter YES,$(SYSTEM_LIBXSLT)),redland/raptor/raptor-1.4.18.libxslt.patch) \
-	$(if $(filter ANDROID,$(OS)),redland/raptor/raptor-1.4.18.no-soname.patch) \
-	$(if $(filter WNTGCC,$(OS)$(COM)),redland/raptor/raptor-1.4.18.mingw.patch) \
+	redland/raptor/raptor-freebsd.patch.1 \
+	$(if $(filter WNTGCC,$(OS)$(COM)),redland/raptor/raptor-mingw.patch.1) \
+	$(if $(filter-out WNT,$(OS)),redland/raptor/raptor-bundled-soname.patch.1) \
+	$(if $(filter ANDROID,$(OS)),redland/raptor/raptor-android.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:

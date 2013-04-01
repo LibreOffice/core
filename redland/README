@@ -3,7 +3,6 @@ Redland RDF library (librdf) from [http://librdf.org/]
 == License ==
 [git:redland/LICENSE.txt]
 Triple-licensed: LGPL v2+/GPL v2+/Apache v2
-Note that Sun distributes this software only under LGPL v2
 
 == Description ==
 This module contains the third-party Redland RDF / librdf library, which

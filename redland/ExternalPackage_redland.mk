@@ -12,19 +12,19 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,redland,redland))
 $(eval $(call gb_ExternalPackage_use_external_project,redland,redland))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf-lo.0.dylib,librdf/.libs/librdf-lo.0.dylib))
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.dylib,librdf/.libs/librdf-lo.0.dylib))
+$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf-lo.$(REDLAND_MAJOR).dylib,src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib))
+$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.dylib,src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib))
 else ifneq ($(filter IOS ANDROID,$(OS)),)
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.a,librdf/.libs/librdf.a))
+$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.a,src/.libs/librdf.a))
 else ifneq ($(filter WNTGCC,$(OS)$(COM)),)
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.dll.a,librdf/.libs/librdf.dll.a))
-$(eval $(call gb_ExternalPackage_add_file,redland,bin/librdf-0.dll,librdf/.libs/librdf-0.dll))
+$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.dll.a,src/.libs/librdf.dll.a))
+$(eval $(call gb_ExternalPackage_add_file,redland,bin/librdf-$(REDLAND_MAJOR).dll,src/.libs/librdf-$(REDLAND_MAJOR).dll))
 else ifneq ($(filter WNT,$(OS)),)
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.a,librdf/.libs/librdf.a))
-$(eval $(call gb_ExternalPackage_add_file,redland,bin/librdf.dll,librdf/.libs/librdf.dll))
+$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.a,src/.libs/librdf.a))
+$(eval $(call gb_ExternalPackage_add_file,redland,bin/librdf.dll,src/.libs/librdf.dll))
 else
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf-lo.so.0,librdf/.libs/librdf-lo.so.0.0.0))
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.so,librdf/.libs/librdf-lo.so.0.0.0))
+$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf-lo.so.$(REDLAND_MAJOR),src/.libs/librdf-lo.so.$(REDLAND_MAJOR).0.0))
+$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.so,src/.libs/librdf-lo.so.$(REDLAND_MAJOR).0.0))
 endif
 
 # vim: set noet sw=4 ts=4:
