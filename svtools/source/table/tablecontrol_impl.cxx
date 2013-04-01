@@ -2127,7 +2127,14 @@ namespace svt { namespace table
             impl_getCellRect( m_nCurColumn, _nPrevRow, aCellRect );
             aInvalidateRect.Bottom() = aCellRect.Bottom();
         }
-        m_pDataWindow->Invalidate( aInvalidateRect );
+
+        invalidateRect(aInvalidateRect);
+    }
+
+    void TableControl_Impl::invalidateRect(const Rectangle &rInvalidateRect)
+    {
+        m_pDataWindow->Invalidate( rInvalidateRect,
+            m_pDataWindow->GetControlBackground().GetTransparency() ? INVALIDATE_TRANSPARENT : 0 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -2162,8 +2169,7 @@ namespace svt { namespace table
         if ( i_lastRow == ROW_INVALID )
             aInvalidateRect.Bottom() = m_pDataWindow->GetOutputSizePixel().Height();
 
-        m_pDataWindow->Invalidate( aInvalidateRect,
-            m_pDataWindow->GetControlBackground().GetTransparency() ? INVALIDATE_TRANSPARENT : 0 );
+        invalidateRect(aInvalidateRect);
     }
 
     //------------------------------------------------------------------------------

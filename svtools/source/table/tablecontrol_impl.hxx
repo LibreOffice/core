@@ -215,6 +215,8 @@ namespace svt { namespace table
         /** returns the position of the current row in the selection vector */
         int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
+        void invalidateRect(const Rectangle &rInvalidateRect);
+
         /** ??? */
         void    invalidateSelectedRegion( RowPos _nPrevRow, RowPos _nCurRow );
 
