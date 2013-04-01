@@ -535,7 +535,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     propertyhdl \
     propertyhdl_x64 \
     qslnkmsi \
-    raptor \
+    raptor2 \
     rasqal \
     reg4allmsdoc \
     regactivex \

@@ -1515,15 +1515,15 @@ File gid_File_Lib_Raptor
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT4(libraptor-lo,.,RAPTOR_MAJOR,UNXSUFFIX));
+       Name = STRING(CONCAT4(libraptor2-lo,.,RAPTOR_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT4(libraptor-lo,UNXSUFFIX,.,RAPTOR_MAJOR));
+       Name = STRING(CONCAT4(libraptor2-lo,UNXSUFFIX,.,RAPTOR_MAJOR));
     #endif
   #else
    #ifdef _gcc3
-    Name = "libraptor-1.dll";
+    Name = "libraptor2-1.dll";
    #else
-    Name = "raptor.dll";
+    Name = "raptor2.dll";
    #endif
   #endif
 End

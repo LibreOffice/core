@@ -1,0 +1,87 @@
+--- a/src/win32_rasqal_config.h	Fri Jun 27 04:02:09 2008
++++ b/src/win32_rasqal_config.h	Thu Nov  6 12:07:06 2008
+@@ -31,6 +31,7 @@
+ #endif
+ 
+ #define WIN32_LEAN_AND_MEAN 1
++#include <windows.h>
+ 
+ /* getopt is not in standard win32 C library - define if we have it */
+ /* #define HAVE_GETOPT_H 1 */
+@@ -37,10 +37,13 @@
+ 
+ #define HAVE_STDLIB_H 1
+ 
++#define HAVE_ERRNO_H 1
++
+ #define HAVE_STRICMP 1
+ 
+ /* MS names for these functions */
+-#define vsnprintf _vsnprintf
++// next line breaks build on wntmsci12
++//#define vsnprintf _vsnprintf
+ #define snprintf _snprintf
+ #define access _access
+ #define stricmp _stricmp
+@@ -101,7 +102,6 @@
+  * Defines that come from config.h
+  */
+ 
+-#include <windows.h>
+ #include <io.h>
+ #include <memory.h>
+ 
+@@ -116,8 +122,16 @@
+ /* #define RAPTOR_TRIPLES_SOURCE_REDLAND 1 */
+ 
+ /* Use PCRE regex library */
+-#define RASQAL_REGEX_PCRE 1
++//#define RASQAL_REGEX_PCRE 1
+ 
++#define HAVE_LIBXML_SCHEMASINTERNALS_H 1
++#define HAVE_LIBXML_XMLSCHEMASTYPES_H 1
++#define HAVE_LIBXML_XMLSCHEMAS_H 1
++
++#define RASQAL_DECIMAL_NONE 1
++#define RASQAL_UUID_INTERNAL 1
++#define RASQAL_DIGEST_INTERNAL 1
++
+ #ifdef _DEBUG
+ #define RASQAL_DEBUG 1
+ #endif
+--- a/src/rasqal_digest_md5.c	2013-04-01 00:18:47.913835564 +0200
++++ b/src/rasqal_digest_md5.c	2013-04-01 00:18:52.657835523 +0200
+@@ -50,7 +50,6 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
+-#include <stdint.h>
+ #include <stdarg.h>
+ 
+ #include "rasqal.h"
+--- a/src/rasqal_digest_sha1.c	2013-04-01 00:19:04.655835420 +0200
++++ b/src/rasqal_digest_sha1.c	2013-04-01 00:19:10.448835370 +0200
+@@ -93,7 +93,6 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdarg.h>
+-#include <stdint.h>
+ 
+ #include "rasqal.h"
+ #include "rasqal_internal.h"
+--- a/src/rasqal_internal.h	2013-04-01 00:18:11.090835880 +0200
++++ b/src/rasqal_internal.h	2013-04-01 00:18:13.610835859 +0200
+@@ -26,6 +26,13 @@
+ #ifndef RASQAL_INTERNAL_H
+ #define RASQAL_INTERNAL_H
+ 
++#if defined(_MSC_VER) && _MSC_VER < 1600
++typedef unsigned __int32 uint32_t;
++typedef __int16 int16_t;
++#else
++#include <stdint.h>
++#endif
++
+ #ifdef __cplusplus
+ extern "C" {
+ #define RASQAL_EXTERN_C extern "C"

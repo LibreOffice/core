@@ -1,0 +1,13 @@
+rhbz#809466 change soname of bundled redland libs
+
+--- a/src/Makefile.in	2013-03-30 17:43:48.127008037 +0100
++++ b/src/Makefile.in	2013-03-30 17:44:19.294007769 +0100
+@@ -625,7 +625,7 @@
+ rdf_parser_raptor.c
+ 
+ EXTRA_DIST = redland.spec redland.spec.in mysql-v1.ttl mysql-v2.ttl
+-librdf_la_LDFLAGS = -version-info @LIBRDF_LIBTOOL_VERSION@ \
++librdf_la_LDFLAGS = -version-info @LIBRDF_LIBTOOL_VERSION@ -release lo \
+ @LIBRDF_LDFLAGS@ @LIBRDF_EXTERNAL_LIBS@
+ 
+ pkgdata_DATA = $(am__append_13)
