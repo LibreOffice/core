@@ -366,44 +366,6 @@ public:
     }
 
     /**
-        Returns the character at a specific index in this string buffer.
-
-        The first character of a string buffer is at index
-        <code>0</code>, the next at index <code>1</code>, and so on, for
-        array indexing.
-        <p>
-        The index argument must be greater than or equal to
-        <code>0</code>, and less than the length of this string buffer.
-
-        @param      index   the index of the desired character.
-        @return     the character at the specified index of this string buffer.
-    */
-    SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
-    sal_Char charAt( sal_Int32 index )
-    {
-        assert(index >= 0 && index < pData->length);
-        return pData->buffer[ index ];
-    }
-
-    /**
-        The character at the specified index of this string buffer is set
-        to <code>ch</code>.
-
-        The index argument must be greater than or equal to
-        <code>0</code>, and less than the length of this string buffer.
-
-        @param      index   the index of the character to modify.
-        @param      ch      the new character.
-     */
-    SAL_DEPRECATED("use rtl::OStringBuffer::operator [] instead")
-    OStringBuffer & setCharAt(sal_Int32 index, sal_Char ch)
-    {
-        assert(index >= 0 && index < pData->length);
-        pData->buffer[ index ] = ch;
-        return *this;
-    }
-
-    /**
         Return a null terminated character array.
      */
     const sal_Char* getStr() const { return pData->buffer; }
