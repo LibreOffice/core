@@ -276,16 +276,14 @@ public:
 
     void operator() ( vector< uno::Any >& rVector )
     {
-        if( m_nLevel > static_cast< sal_Int32 >(rVector.size()) )
-            rVector.resize( m_nLevel );
-
-        vector< uno::Any >::iterator aIt( rVector.begin() );
-        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        if( m_nLevel >= static_cast< sal_Int32 >(rVector.size()) )
         {
-            if( nN==m_nLevel )
-                break;
+            rVector.resize( m_nLevel + 1 );
         }
-        rVector.insert( aIt, uno::Any() );
+        else
+        {
+            rVector.insert( rVector.begin() + m_nLevel, uno::Any() );
+        }
     }
 
 private:
@@ -301,14 +299,9 @@ public:
 
     void operator() ( vector< uno::Any >& rVector )
     {
-        vector< uno::Any >::iterator aIt( rVector.begin() );
-        for( sal_Int32 nN=0; aIt<rVector.end(); aIt++, nN++)
+        if( m_nLevel < static_cast<sal_Int32>(rVector.size()) )
         {
-            if( nN==m_nLevel )
-            {
-                rVector.erase( aIt );
-                break;
-            }
+            rVector.erase(rVector.begin() + m_nLevel);
         }
     }
 
