@@ -650,7 +650,7 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
         fValue = - fValue;
     }
 
-    rBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM( "PT" ));
+    rBuffer.append( "PT" );
     fValue *= 24;
     double fHoursValue = ::rtl::math::approxFloor (fValue);
     fValue -= fHoursValue;

@@ -336,15 +336,15 @@ OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex 
 
 OUString ScaDateAddIn::getImplementationName_Static()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( MY_IMPLNAME ));
+    return OUString( MY_IMPLNAME );
 }
 
 uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aRet( 2 );
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( ADDIN_SERVICE ));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( MY_SERVICE ));
+    pArray[0] = OUString( ADDIN_SERVICE );
+    pArray[1] = OUString( MY_SERVICE );
     return aRet;
 }
 
@@ -353,7 +353,7 @@ uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
 OUString SAL_CALL ScaDateAddIn::getServiceName() throw( uno::RuntimeException )
 {
     // name of specific AddIn service
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( MY_SERVICE ));
+    return OUString( MY_SERVICE );
 }
 
 // XServiceInfo

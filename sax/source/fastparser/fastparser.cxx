@@ -631,11 +631,11 @@ OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int3
 
     OUStringBuffer aBuffer( sal_Unicode( '[' ) );
     aBuffer.append( sSystemId );
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " line " ) );
+    aBuffer.append( " line " );
     aBuffer.append( nLine );
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "]: " ) );
-    aBuffer.appendAscii( pMessage );
-    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " error" ) );
+    aBuffer.append( "]: " );
+    aBuffer.append( pMessage );
+    aBuffer.append( " error" );
     return aBuffer.makeStringAndClear();
 }
 
