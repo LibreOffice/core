@@ -1,0 +1,11 @@
+--- a/src/hunspell/hunvisapi.h.in	2013-04-01 14:41:16.507546705 +0200
++++ b/src/hunspell/hunvisapi.h.in	2013-04-01 14:41:24.537547190 +0200
+@@ -9,7 +9,7 @@
+ #  else
+ #    define LIBHUNSPELL_DLL_EXPORTED __declspec(dllimport)
+ #  endif
+-#elif BUILDING_LIBHUNSPELL && @HAVE_VISIBILITY@
++#elif defined(BUILDING_LIBHUNSPELL) && @HAVE_VISIBILITY@
+ #  define LIBHUNSPELL_DLL_EXPORTED __attribute__((__visibility__("default")))
+ #else
+ #  define LIBHUNSPELL_DLL_EXPORTED
