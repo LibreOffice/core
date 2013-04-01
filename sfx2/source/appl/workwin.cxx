@@ -1225,8 +1225,6 @@ sal_Bool SfxWorkWindow::IsVisible_Impl( sal_uInt16 nMode ) const
             return sal_True;
         case SFX_VISIBILITY_UNVISIBLE:
             return sal_False;
-        case SFX_VISIBILITY_PLUGSERVER:
-        case SFX_VISIBILITY_PLUGCLIENT:
         case SFX_VISIBILITY_CLIENT:
         case SFX_VISIBILITY_SERVER:
             return !!(nMode & nUpdateMode);
