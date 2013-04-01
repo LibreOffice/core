@@ -228,7 +228,7 @@ namespace FORMS_MODULE_NAMESPACE
         } \
         \
         ::rtl::OUString SAL_CALL classname::getImplementationName_Static() \
-        { return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms."#classname ) ); } \
+        { return ::rtl::OUString( "com.sun.star.comp.forms."#classname ); } \
         \
         Reference< XInterface > SAL_CALL classname::Create( const Reference< XMultiServiceFactory >& _rxFactory ) \
         { return static_cast< XServiceInfo* >( new classname( _rxFactory ) ); } \

@@ -59,7 +59,7 @@ namespace frm
 
         // defaults
         Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
-        aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );
+        aFont.SetName( String( "Times New Roman" ) );
         pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
 
         // 12 pt font size
