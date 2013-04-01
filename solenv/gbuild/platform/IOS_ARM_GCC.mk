@@ -283,6 +283,9 @@ else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
+# Package class
+gb_Package_SDKDIRNAME := sdk
+
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
