@@ -210,6 +210,15 @@ class WWD_Events(WWD_Startup):
     '''
 
     '''
+    A method used by the UnoDataAware attached
+    to the Documents listbox.
+    See the concept of the DataAware objects to undestand
+    why it is there...
+    '''
+    def getSelectedDoc(self):
+        return self.selectedDoc
+
+    '''
     when the user clicks another document
     in the listbox, this method is called,
     and couses the display in
@@ -230,7 +239,7 @@ class WWD_Events(WWD_Startup):
             print ("DEBUG !!! setSelectedDoc -- oddDoc is None.")
             self.fillExportList(self.settings.getExporters(doc.appType))
 
-        self.selectedDoc = s
+        self.selectedDoc = list(s)
         if (doc is not None):
             self.mountList(doc, self.docAware)
             self.disableDocUpDown()

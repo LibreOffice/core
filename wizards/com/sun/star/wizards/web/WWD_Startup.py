@@ -379,7 +379,7 @@ class WWD_Startup(WWD_General):
 
         #page 2 : document properties
         self.docListDA = UnoDataAware.attachListBox(
-            self, "selectedDoc", self.lstDocuments, False)
+            self, "SelectedDoc", self.lstDocuments, False)
         self.docListDA.disableObjects = \
             [self.lnDocsInfo, self.btnRemoveDoc, self.lblDocTitle,
                 self.txtDocTitle, self.lblDocInfo, self.txtDocInfo,

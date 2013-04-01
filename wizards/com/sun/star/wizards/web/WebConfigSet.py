@@ -54,21 +54,20 @@ class WebConfigSet(ConfigGroup):
             print ("DEBUG !!! WebConfigSet.add -- name IS an integer.")
             self.childrenList.insert(i, o)
             self.fireListDataListenerIntervalAdded(i, i);
-        except Exception:
+        except ValueError:
             print ("DEBUG !!! WebConfigSet.add -- name IS NOT an integer.")
-            try:
+            if (hasattr(o, "cp_Index")):
                 i = o.cp_Index
                 print ("DEBUG !!! WebConfigSet.add -- index: ", i)
                 oldSize = self.getSize()
                 print ("DEBUG !!! WebConfigSet.add -- oldSize: ", oldSize)
-                if oldSize <= i:
-                    newSize = i - oldSize
-                    self.childrenList += [None] * newSize
+                while (self.getSize() <= i):
+                    self.childrenList.append(None)
                 self.childrenList[i] = o
                 if oldSize > i:
                     oldSize = i
                 self.fireListDataListenerIntervalAdded(oldSize, i);
-            except Exception:
+            else:
                 if (oldO is not None):
                     print ("DEBUG !!! WebConfigSet.add -- No cp_Index attribute, but element already present, so replace it.")
                     i = self.childrenList.index(oldO)

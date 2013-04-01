@@ -16,6 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+from abc import abstractmethod
+
 from .ListDataListener import ListDataListener
 
 class ListModelBinder(ListDataListener):
@@ -25,6 +27,7 @@ class ListModelBinder(ListDataListener):
         self.unoListModel = unoListBox.Model
         self.listModel = None
         self.setListModel(listModel_)
+        self.renderer = self.Renderer()
 
     def setListModel(self, newListModel):
         if self.listModel is not None:
@@ -53,9 +56,9 @@ class ListModelBinder(ListDataListener):
         self.unoList.addItem(self.getItemString(i), i)
 
     def getItemString(self, i):
-        return self.getItemString(self.listModel.getElementAt(i))
+        return self.getItemString1(self.listModel.getElementAt(i))
 
-    def getItemString(self, item):
+    def getItemString1(self, item):
         return self.renderer.render(item)
 
     def getSelectedItems(self):
@@ -66,12 +69,25 @@ class ListModelBinder(ListDataListener):
 
     def intervalAdded(self, lde):
         print ("DEBUG !!! intervalAdded -- lde: ", lde)
-        for i in range(lde.getIndex0(), lde.getIndex1()):
+        i = lde.getIndex0()
+        while (i <= lde.getIndex1()):
             self.insert(i)
+            i += 1
 
     def intervalRemoved(self, lde):
         print ("DEBUG !!! intervalRemoved -- lde: ", lde)
         self.remove(lde.getIndex0(), lde.getIndex1())
+
+    class Renderer:
+
+        @abstractmethod
+        def render(self, item):
+            if (item is None):
+                return ""
+            elif (isinstance(item, int)):
+                return str(item)
+            else:
+                return item.toString()
 
     @classmethod
     def fillList(self, xlist, items, renderer):

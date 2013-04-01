@@ -42,8 +42,9 @@ class UnoDataAware(DataAware):
         self.isShort = isShort
 
     def enableControls(self, value):
+        print ("DEBUG !!! enableControls -- value: ", value)
         for i in self.disableObjects:
-            i.Model.Enabled = bool(value)
+            i.Model.Enabled = self.getBoolean(value)
 
     def setToUI(self, value):
         if (isinstance(value, list)):
@@ -52,13 +53,34 @@ class UnoDataAware(DataAware):
             value = tuple(value)
         elif self.isShort:
             print ("DEBUG !!! value is sort: ", value)
-            value = uno.Any("[]short", (value,))
+            value = uno.Any("[]short", value)
         if (hasattr(self.unoModel, self.unoPropName)):
             setattr(self.unoModel, self.unoPropName, value)
         else:
             print ("DEBUG !!! UnoDataAware.setToUI -- dataObject hasn't the attribute, su using the 'setter' method.")
             uno.invoke(self.unoModel, "set" + self.unoPropName, (ui,))
 
+    # Try to get from an arbitrary object a boolean value.
+    # Null returns Boolean.FALSE;
+    # A Boolean object returns itself.
+    # An Array returns true if it not empty.
+    # An Empty String returns Boolean.FALSE.
+    # everything else returns a Boolean.TRUE.
+    # @param value
+    # @return
+    def getBoolean(self, value):
+        if (value is None):
+            return False
+        elif (isinstance(value, bool)):
+            return bool(value)
+        elif (isinstance(value, list)):
+            return True if (len(value) is not 0) else False
+        elif (value is ""):
+            return False
+        elif (isinstance(value, int)):
+            return True if (value == 0) else False
+        else:
+            return True
 
     def getFromUI(self):
         return getattr(self.unoModel, self.unoPropName)

@@ -124,9 +124,9 @@ class DataAware(object):
             ui = self.getFromUI()
             print ("DEBUG !!! DataAware.updateData -- ui: ", ui)
             if data is not ui:
-                if isinstance(ui,tuple):
+                #if isinstance(ui,tuple):
                     #Selected Element listbox
-                    ui = ui[0]
+                #    ui = ui[0]
                 if useUno:
                     uno.invoke(self._dataObject, "set" + self._field, (ui,))
                 else:
