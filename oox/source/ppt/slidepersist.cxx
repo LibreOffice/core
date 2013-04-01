@@ -124,12 +124,14 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
     Reference< XShapes > xShapes( getPage(), UNO_QUERY );
 
     std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
-    std::vector< oox::drawingml::ShapePtr >::iterator aShapesIter( rShapes.begin() );
-    while( aShapesIter != rShapes.end() )
+    const std::vector< oox::drawingml::ShapePtr >::const_iterator aShapesEnd( rShapes.end() );
+    for (std::vector< oox::drawingml::ShapePtr >::const_iterator aShapesIter( rShapes.begin() );
+         aShapesIter != aShapesEnd ; ++aShapesIter)
     {
-        std::vector< oox::drawingml::ShapePtr >& rChildren( (*aShapesIter++)->getChildren() );
-        std::vector< oox::drawingml::ShapePtr >::iterator aChildIter( rChildren.begin() );
-        while( aChildIter != rChildren.end() )
+        std::vector< oox::drawingml::ShapePtr >& rChildren( (*aShapesIter)->getChildren() );
+        const std::vector< oox::drawingml::ShapePtr >::const_iterator aChildEnd( rChildren.end() );
+        for (std::vector< oox::drawingml::ShapePtr >::const_iterator aChildIter( rChildren.begin() );
+             aChildIter != aChildEnd ; ++aChildIter)
         {
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter).get() );
             basegfx::B2DHomMatrix aTransformation;
@@ -137,7 +139,6 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
                 pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, 0, &getShapeMap() );
             else
                 (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), 0, &getShapeMap() );
-            aChildIter++;
         }
     }
 
