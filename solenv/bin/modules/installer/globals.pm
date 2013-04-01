@@ -300,6 +300,8 @@ BEGIN
         $iswin = 0;
     }
 
+    $filesdir = "files"; # base dir for files specified by FILELISTs
+
 }
 
 1;
