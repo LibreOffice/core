@@ -22,17 +22,12 @@
 #include <stdlib.h>
 
 
-
-// Vergleichmethode wird von QuickSort gerufen...
-
+// compare function called by QuickSort
 static bool CompareStart( const TextCharAttrib* pFirst, const TextCharAttrib* pSecond )
 {
     return pFirst->GetStart() < pSecond->GetStart();
 }
 
-// -------------------------------------------------------------------------
-// (+) class TextCharAttrib
-// -------------------------------------------------------------------------
 TextCharAttrib::TextCharAttrib( const TextAttrib& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     mpAttr = rAttr.Clone();
@@ -51,10 +46,6 @@ TextCharAttrib::~TextCharAttrib()
 {
     delete mpAttr;
 }
-
-// -------------------------------------------------------------------------
-// (+) class TextCharAttribList
-// -------------------------------------------------------------------------
 
 TextCharAttribList::TextCharAttribList()
 {
@@ -81,7 +72,7 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
         mbHasEmptyAttribs = sal_True;
 
     const sal_uInt16 nCount = size();
-    const sal_uInt16 nStart = pAttrib->GetStart(); // vielleicht besser fuer Comp.Opt.
+    const sal_uInt16 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
     sal_Bool bInserted = sal_False;
     for ( sal_uInt16 x = 0; x < nCount; x++ )
     {
@@ -105,9 +96,8 @@ void TextCharAttribList::ResortAttribs()
 
 TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
 {
-    // Rueckwaerts, falls eins dort endet, das naechste startet.
-    // => Das startende gilt...
-
+    // backwards; if one ends there and the next starts there
+    // ==> the starting one counts
     for ( sal_uInt16 nAttr = size(); nAttr; )
     {
         TextCharAttrib* pAttr = GetAttrib( --nAttr );
@@ -149,8 +139,8 @@ sal_Bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 
 sal_Bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
 {
-    // Rueckwaerts, falls eins dort endet, das naechste startet.
-    // => Das startende gilt...
+    // backwards; if one ends there and the next starts there
+    // ==> the starting one counts
     for ( sal_uInt16 nAttr = size(); nAttr; )
     {
         TextCharAttrib* pAttr = GetAttrib( --nAttr );
@@ -197,10 +187,6 @@ void TextCharAttribList::DeleteEmptyAttribs()
     mbHasEmptyAttribs = sal_False;
 }
 
-// -------------------------------------------------------------------------
-// (+) class TextNode
-// -------------------------------------------------------------------------
-
 TextNode::TextNode( const String& rText ) :
     maText( rText )
 {
@@ -218,27 +204,25 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
         TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
         if ( pAttrib->GetEnd() >= nIndex )
         {
-            // Alle Attribute hinter der Einfuegeposition verschieben...
+            // move all attributes that are behind the cursor
             if ( pAttrib->GetStart() > nIndex )
             {
                 pAttrib->MoveForward( nNew );
             }
-            // 0: Leeres Attribut expandieren, wenn an Einfuegestelle
+            // 0: expand empty attribute, if at cursor
             else if ( pAttrib->IsEmpty() )
             {
-                // Index nicht pruefen, leeres durfte nur dort liegen.
-                // Wenn spaeter doch Ueberpruefung:
-                //   Spezialfall: Start == 0; AbsLen == 1, nNew = 1 => Expand, weil durch Absatzumbruch!
+                // Do not check the index; empty one may only be here.
+                // If checking later anyway, special case:
+                // Start == 0; AbsLen == 1, nNew = 1 => Expand due to new paragraph!
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
-//              if ( pAttrib->GetStart() == nIndex )
-                    pAttrib->Expand( nNew );
+                pAttrib->Expand( nNew );
             }
-            // 1: Attribut startet davor, geht bis Index...
-            else if ( pAttrib->GetEnd() == nIndex ) // Start muss davor liegen
+            // 1: attribute starts before and reaches up to index
+            else if ( pAttrib->GetEnd() == nIndex ) // start must be before
             {
-                // Nur expandieren, wenn kein Feature,
-                // und wenn nicht in ExcludeListe!
-                // Sonst geht z.B. ein UL bis zum neuen ULDB, beide expandieren
+                // Only expand if no feature and not in Exclude list!
+                // Otherwise e.g. an UL would go until the new ULDB, thus expand both.
                 if ( !maCharAttribs.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
                 {
                     pAttrib->Expand( nNew );
@@ -246,18 +230,17 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
                 else
                     bResort = sal_True;
             }
-            // 2: Attribut startet davor, geht hinter Index...
+            // 2: attribute starts before and reaches past the index
             else if ( ( pAttrib->GetStart() < nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
                 pAttrib->Expand( nNew );
             }
-            // 3: Attribut startet auf Index...
+            // 3: attribute starts at Index
             else if ( pAttrib->GetStart() == nIndex )
             {
                 if ( nIndex == 0 )
                 {
                     pAttrib->Expand( nNew );
-//                  bResort = sal_True;     // es gibt ja keine Features mehr...
                 }
                 else
                     pAttrib->MoveForward( nNew );
@@ -287,33 +270,33 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
         sal_Bool bDelAttr = sal_False;
         if ( pAttrib->GetEnd() >= nIndex )
         {
-            // Alles Attribute hinter der Einfuegeposition verschieben...
+            // move all attributes that are behind the cursor
             if ( pAttrib->GetStart() >= nEndChanges )
             {
                 pAttrib->MoveBackward( nDeleted );
             }
-            // 1. Innenliegende Attribute loeschen...
+            // 1. delete inner attributes
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() <= nEndChanges ) )
             {
-                // Spezialfall: Attrubt deckt genau den Bereich ab
-                // => als leeres Attribut behalten.
+                // special case: attribute covers the region exactly
+                // => keep as an empty attribute
                 if ( ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
-                    pAttrib->GetEnd() = nIndex; // leer
+                    pAttrib->GetEnd() = nIndex; // empty
                 else
                     bDelAttr = sal_True;
             }
-            // 2. Attribut beginnt davor, endet drinnen oder dahinter...
+            // 2. attribute starts before, ends inside or after
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
-                if ( pAttrib->GetEnd() <= nEndChanges ) // endet drinnen
+                if ( pAttrib->GetEnd() <= nEndChanges ) // ends inside
                     pAttrib->GetEnd() = nIndex;
                 else
-                    pAttrib->Collaps( nDeleted );       // endet dahinter
+                    pAttrib->Collaps( nDeleted );       // ends after
             }
-            // 3. Attribut beginnt drinnen, endet dahinter...
+            // 3. attribute starts inside, ends after
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() > nEndChanges ) )
             {
-                // Features duerfen nicht expandieren!
+                // features are not allowed to expand!
                 pAttrib->GetStart() = nEndChanges;
                 pAttrib->MoveBackward( nDeleted );
             }
@@ -369,13 +352,13 @@ TextNode* TextNode::Split( sal_uInt16 nPos, sal_Bool bKeepEndingAttribs )
         TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
         if ( pAttrib->GetEnd() < nPos )
         {
-            // bleiben unveraendert....
+            // no change
             ;
         }
         else if ( pAttrib->GetEnd() == nPos )
         {
-            // muessen als leeres Attribut kopiert werden.
-            // !FindAttrib nur sinnvoll, wenn Rueckwaerts durch Liste!
+            // must be copied as an empty attribute
+            // !FindAttrib only sensible if traversing backwards through the list!
             if ( bKeepEndingAttribs && !pNew->maCharAttribs.FindAttrib( pAttrib->Which(), 0 ) )
             {
                 TextCharAttrib* pNewAttrib = new TextCharAttrib( *pAttrib );
@@ -386,20 +369,20 @@ TextNode* TextNode::Split( sal_uInt16 nPos, sal_Bool bKeepEndingAttribs )
         }
         else if ( pAttrib->IsInside( nPos ) || ( !nPos && !pAttrib->GetStart() ) )
         {
-            // Wenn ganz vorne gecuttet wird, muss das Attribut erhalten bleiben!
-            // muessen kopiert und geaendert werden
+            // If cutting at the very beginning, the attribute has to be
+            // copied and changed
             TextCharAttrib* pNewAttrib = new TextCharAttrib( *pAttrib );
             pNewAttrib->GetStart() = 0;
             pNewAttrib->GetEnd() = pAttrib->GetEnd()-nPos;
             pNew->maCharAttribs.InsertAttrib( pNewAttrib );
-            // stutzen:
+            // trim
             pAttrib->GetEnd() = nPos;
         }
         else
         {
             DBG_ASSERT( pAttrib->GetStart() >= nPos, "Start < nPos!" );
             DBG_ASSERT( pAttrib->GetEnd() >= nPos, "End < nPos!" );
-            // alle dahinter verschieben in den neuen Node (this)
+            // move all into the new node (this)
             maCharAttribs.RemoveAttrib( nAttr );
             pNew->maCharAttribs.InsertAttrib( pAttrib );
             pAttrib->GetStart() = pAttrib->GetStart() - nPos;
@@ -423,7 +406,7 @@ void TextNode::Append( const TextNode& rNode )
         sal_Bool bMelted = sal_False;
         if ( pAttrib->GetStart() == 0 )
         {
-            // Evtl koennen Attribute zusammengefasst werden:
+            // potentially merge attributes
             sal_uInt16 nTmpAttribs = maCharAttribs.Count();
             for ( sal_uInt16 nTmpAttr = 0; nTmpAttr < nTmpAttribs; nTmpAttr++ )
             {
@@ -437,7 +420,7 @@ void TextNode::Append( const TextNode& rNode )
                         pTmpAttrib->GetEnd() =
                             pTmpAttrib->GetEnd() + pAttrib->GetLen();
                         bMelted = sal_True;
-                        break;  // es kann nur eins von der Sorte an der Stelle geben
+                        break;  // there can be only one of this type at this position
                     }
                 }
             }
@@ -452,10 +435,6 @@ void TextNode::Append( const TextNode& rNode )
         }
     }
 }
-
-// -------------------------------------------------------------------------
-// (+) class TextDoc
-// -------------------------------------------------------------------------
 
 TextDoc::TextDoc()
 {
@@ -590,7 +569,7 @@ TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
     sal_uInt16 nPrevLen = pLeft->GetText().Len();
     pLeft->Append( *pRight );
 
-    // der rechte verschwindet.
+    // the paragraph on the right vanishes
     sal_uLong nRight = maTextNodes.GetPos( pRight );
     maTextNodes.Remove( nRight );
     delete pRight;
