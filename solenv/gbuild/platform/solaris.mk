@@ -409,6 +409,9 @@ else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
+# Package class
+gb_Package_SDKDIRNAME := sdk
+
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 

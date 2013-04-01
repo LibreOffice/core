@@ -427,8 +427,14 @@ End
 
 #if defined MACOSX
 #define FILELIST_DIR gid_Dir_Bundle_Contents
+#define FILELIST_SDK_DIR PREDEFINED_PROGDIR
 #else
 #define FILELIST_DIR gid_Dir_Brand_Root
+#if defined WNT
+#define FILELIST_SDK_DIR gid_Dir_Sdkoo_Root
+#else
+#define FILELIST_SDK_DIR PREDEFINED_PROGDIR
+#endif
 #endif
 
 #include <langmacros.inc>
