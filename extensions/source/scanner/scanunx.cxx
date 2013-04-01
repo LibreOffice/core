@@ -42,20 +42,20 @@ BitmapTransporter::~BitmapTransporter()
 
 // -----------------------------------------------------------------------------
 
-ANY SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( RuntimeException )
+Any SAL_CALL BitmapTransporter::queryInterface( const Type& rType ) throw( RuntimeException )
 {
-    const ANY aRet( cppu::queryInterface( rType, static_cast< AWT::XBitmap* >( this ) ) );
+    const Any aRet( cppu::queryInterface( rType, static_cast< css::awt::XBitmap* >( this ) ) );
 
     return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
 }
 
 // -----------------------------------------------------------------------------
 
-AWT::Size BitmapTransporter::getSize() throw()
+css::awt::Size BitmapTransporter::getSize() throw()
 {
     osl::MutexGuard aGuard( m_aProtector );
     int         nPreviousPos = m_aStream.Tell();
-    AWT::Size   aRet;
+    css::awt::Size   aRet;
 
     // ensure that there is at least a header
     m_aStream.Seek( STREAM_SEEK_TO_END );
@@ -75,7 +75,7 @@ AWT::Size BitmapTransporter::getSize() throw()
 
 // -----------------------------------------------------------------------------
 
-SEQ( sal_Int8 ) BitmapTransporter::getDIB() throw()
+Sequence< sal_Int8 > BitmapTransporter::getDIB() throw()
 {
     osl::MutexGuard aGuard( m_aProtector );
     int         nPreviousPos = m_aStream.Tell();
@@ -85,7 +85,7 @@ SEQ( sal_Int8 ) BitmapTransporter::getDIB() throw()
     int nBytes = m_aStream.Tell();
     m_aStream.Seek( 0 );
 
-    SEQ( sal_Int8 ) aValue( nBytes );
+    Sequence< sal_Int8 > aValue( nBytes );
     m_aStream.Read( aValue.getArray(), nBytes );
     m_aStream.Seek( nPreviousPos );
 
@@ -99,7 +99,7 @@ SEQ( sal_Int8 ) BitmapTransporter::getDIB() throw()
 struct SaneHolder
 {
     Sane                m_aSane;
-    REF( AWT::XBitmap ) m_xBitmap;
+    Reference< css::awt::XBitmap > m_xBitmap;
     osl::Mutex          m_aProtector;
     ScanError           m_nError;
     bool                m_bBusy;
@@ -146,7 +146,7 @@ namespace
 class ScannerThread : public osl::Thread
 {
     boost::shared_ptr<SaneHolder>               m_pHolder;
-    REF( com::sun::star::lang::XEventListener ) m_xListener;
+    Reference< com::sun::star::lang::XEventListener > m_xListener;
     ScannerManager*                             m_pManager; // just for the disposing call
 
 public:
@@ -154,7 +154,7 @@ public:
     virtual void onTerminated() { delete this; }
 public:
     ScannerThread( boost::shared_ptr<SaneHolder> pHolder,
-                   const REF( com::sun::star::lang::XEventListener )& listener,
+                   const Reference< com::sun::star::lang::XEventListener >& listener,
                    ScannerManager* pManager );
     virtual ~ScannerThread();
 };
@@ -163,7 +163,7 @@ public:
 
 ScannerThread::ScannerThread(
                              boost::shared_ptr<SaneHolder> pHolder,
-                             const REF( com::sun::star::lang::XEventListener )& listener,
+                             const Reference< com::sun::star::lang::XEventListener >& listener,
                              ScannerManager* pManager )
         : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
 {
@@ -183,9 +183,9 @@ void ScannerThread::run()
 {
     osl::MutexGuard         aGuard( m_pHolder->m_aProtector );
     BitmapTransporter*  pTransporter = new BitmapTransporter;
-    REF( XInterface )   aIf( static_cast< OWeakObject* >( pTransporter ) );
+    Reference< XInterface >   aIf( static_cast< OWeakObject* >( pTransporter ) );
 
-    m_pHolder->m_xBitmap = REF( AWT::XBitmap )( aIf, UNO_QUERY );
+    m_pHolder->m_xBitmap = Reference< css::awt::XBitmap >( aIf, UNO_QUERY );
 
     m_pHolder->m_bBusy = true;
     if( m_pHolder->m_aSane.IsOpen() )
@@ -202,7 +202,7 @@ void ScannerThread::run()
         m_pHolder->m_nError = ScanError_ScannerNotAvailable;
 
 
-    REF( XInterface ) xXInterface( static_cast< OWeakObject* >( m_pManager ) );
+    Reference< XInterface > xXInterface( static_cast< OWeakObject* >( m_pManager ) );
     m_xListener->disposing( com::sun::star::lang::EventObject(xXInterface) );
     m_pHolder->m_bBusy = false;
 }
@@ -225,23 +225,23 @@ void ScannerManager::ReleaseData()
 
 // -----------------------------------------------------------------------------
 
-AWT::Size ScannerManager::getSize() throw()
+css::awt::Size ScannerManager::getSize() throw()
 {
-    AWT::Size aRet;
+    css::awt::Size aRet;
     aRet.Width = aRet.Height = 0;
     return aRet;
 }
 
 // -----------------------------------------------------------------------------
 
-SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
+Sequence< sal_Int8 > ScannerManager::getDIB() throw()
 {
-    return SEQ( sal_Int8 )();
+    return Sequence< sal_Int8 >();
 }
 
 // -----------------------------------------------------------------------------
 
-SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
+Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw()
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
@@ -255,19 +255,19 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 
     if( Sane::IsSane() )
     {
-        SEQ( ScannerContext ) aRet(1);
+        Sequence< ScannerContext > aRet(1);
         aRet.getArray()[0].ScannerName      = ::rtl::OUString("SANE");
         aRet.getArray()[0].InternalData     = 0;
         return aRet;
     }
 
-    return SEQ( ScannerContext )();
+    return Sequence< ScannerContext >();
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
-					   const REF( com::sun::star::lang::XEventListener )& listener ) throw( ScannerException )
+                                                  const Reference< com::sun::star::lang::XEventListener >& listener ) throw( ScannerException )
 {
     bool bRet;
     bool bScan;
@@ -282,7 +282,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
         if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
             throw ScannerException(
                 ::rtl::OUString("Scanner does not exist"),
-                REF( XScannerManager )( this ),
+                Reference< XScannerManager >( this ),
                 ScanError_InvalidContext
             );
 
@@ -290,7 +290,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
         if( pHolder->m_bBusy )
             throw ScannerException(
                 ::rtl::OUString("Scanner is busy"),
-                REF( XScannerManager )( this ),
+                Reference< XScannerManager >( this ),
                 ScanError_ScanInProgress
             );
 
@@ -309,7 +309,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
 // -----------------------------------------------------------------------------
 
 void ScannerManager::startScan( const ScannerContext& scanner_context,
-                                const REF( com::sun::star::lang::XEventListener )& listener ) throw( ScannerException )
+                                const Reference< com::sun::star::lang::XEventListener >& listener ) throw( ScannerException )
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
@@ -321,14 +321,14 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString("Scanner does not exist"),
-            REF( XScannerManager )( this ),
+            Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );
     boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
             ::rtl::OUString("Scanner is busy"),
-            REF( XScannerManager )( this ),
+            Reference< XScannerManager >( this ),
             ScanError_ScanInProgress
             );
     pHolder->m_bBusy = true;
@@ -347,7 +347,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString("Scanner does not exist"),
-            REF( XScannerManager )( this ),
+            Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );
 
@@ -358,7 +358,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
 
 // -----------------------------------------------------------------------------
 
-REF( AWT::XBitmap ) ScannerManager::getBitmap( const ScannerContext& scanner_context ) throw( ScannerException )
+Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& scanner_context ) throw( ScannerException )
 {
     osl::MutexGuard aGuard( theSaneProtector::get() );
     sanevec &rSanes = theSanes::get().m_aSanes;
@@ -366,15 +366,15 @@ REF( AWT::XBitmap ) ScannerManager::getBitmap( const ScannerContext& scanner_con
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString("Scanner does not exist"),
-            REF( XScannerManager )( this ),
+            Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );
     boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
 
     osl::MutexGuard aProtGuard( pHolder->m_aProtector );
 
-    REF( AWT::XBitmap ) xRet( pHolder->m_xBitmap );
-    pHolder->m_xBitmap = REF( AWT::XBitmap )();
+    Reference< css::awt::XBitmap > xRet( pHolder->m_xBitmap );
+    pHolder->m_xBitmap = Reference< css::awt::XBitmap >();
 
     return xRet;
 }

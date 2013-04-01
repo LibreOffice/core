@@ -30,7 +30,7 @@
 // - BitmapTransporter -
 // ---------------------
 
-class BitmapTransporter : public OWeakObject, AWT::XBitmap
+class BitmapTransporter : public OWeakObject, css::awt::XBitmap
 {
     SvMemoryStream                      m_aStream;
     osl::Mutex                          m_aProtector;
@@ -42,13 +42,13 @@ public:
 
 
     // XInterface
-    virtual ANY SAL_CALL                queryInterface( const Type & rType ) throw( RuntimeException );
+    virtual Any SAL_CALL                queryInterface( const Type & rType ) throw( RuntimeException );
     virtual void SAL_CALL               acquire() throw() { OWeakObject::acquire(); }
     virtual void SAL_CALL               release() throw() { OWeakObject::release(); }
 
-    virtual AWT::Size SAL_CALL          getSize() throw();
-    virtual SEQ( sal_Int8 ) SAL_CALL    getDIB() throw();
-    virtual SEQ( sal_Int8 ) SAL_CALL    getMaskDIB() throw() { return SEQ( sal_Int8 )(); }
+    virtual css::awt::Size SAL_CALL          getSize() throw();
+    virtual Sequence< sal_Int8 > SAL_CALL    getDIB() throw();
+    virtual Sequence< sal_Int8 > SAL_CALL    getMaskDIB() throw() { return Sequence< sal_Int8 >(); }
 
     // Misc
     void                                lock() { m_aProtector.acquire(); }

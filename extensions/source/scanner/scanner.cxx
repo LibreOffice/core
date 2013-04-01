@@ -23,7 +23,7 @@
 // - ScannerManager -
 // ------------------
 
-REF( XInterface ) SAL_CALL ScannerManager_CreateInstance( const REF( com::sun::star::lang::XMultiServiceFactory )& /*rxFactory*/ ) throw ( Exception )
+Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >& /*rxFactory*/ ) throw ( Exception )
 {
     return *( new ScannerManager() );
 }
@@ -45,11 +45,11 @@ ScannerManager::~ScannerManager()
 
 // -----------------------------------------------------------------------------
 
-ANY SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException )
+Any SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException )
 {
-    const ANY aRet( cppu::queryInterface( rType,
+    const Any aRet( cppu::queryInterface( rType,
                                           static_cast< XScannerManager2* >( this ),
-                                          static_cast< AWT::XBitmap* >( this ) ) );
+                                          static_cast< css::awt::XBitmap* >( this ) ) );
 
     return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
 }
@@ -70,9 +70,9 @@ void SAL_CALL ScannerManager::release() throw()
 
 // -----------------------------------------------------------------------------
 
-SEQ( sal_Int8 ) SAL_CALL ScannerManager::getMaskDIB() throw()
+Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB() throw()
 {
-    return SEQ( sal_Int8 )();
+    return Sequence< sal_Int8 >();
 }
 
 // -----------------------------------------------------------------------------
@@ -84,9 +84,9 @@ OUString ScannerManager::getImplementationName_Static() throw()
 
 // -----------------------------------------------------------------------------
 
-SEQ( OUString ) ScannerManager::getSupportedServiceNames_Static() throw ()
+Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
 {
-    SEQ( OUString ) aSNS( 1 );
+    Sequence< OUString > aSNS( 1 );
 
     aSNS.getArray()[0] = ::rtl::OUString( "com.sun.star.scanner.ScannerManager" );
 

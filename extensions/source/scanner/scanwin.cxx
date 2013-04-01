@@ -779,9 +779,9 @@ void ScannerManager::ReleaseData()
     }
 }
 
-AWT::Size ScannerManager::getSize() throw()
+awt::Size ScannerManager::getSize() throw()
 {
-    AWT::Size   aRet;
+    awt::Size   aRet;
     HGLOBAL     hDIB = (HGLOBAL)(long) mpData;
 
     if( hDIB )
@@ -804,9 +804,9 @@ AWT::Size ScannerManager::getSize() throw()
     return aRet;
 }
 
-SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
+uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw()
 {
-    SEQ( sal_Int8 ) aRet;
+    uno::Sequence< sal_Int8 > aRet;
 
     if( mpData )
     {
@@ -845,7 +845,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
                 break;
             }
 
-            aRet = SEQ( sal_Int8 )( sizeof( BITMAPFILEHEADER ) + nDIBSize );
+            aRet = uno::Sequence< sal_Int8 >( sizeof( BITMAPFILEHEADER ) + nDIBSize );
 
             sal_Int8*       pBuf = aRet.getArray();
             SvMemoryStream* pMemStm = new SvMemoryStream( (char*) pBuf, sizeof( BITMAPFILEHEADER ), STREAM_WRITE );
@@ -864,10 +864,10 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
     return aRet;
 }
 
-SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
+uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners() throw()
 {
     osl::MutexGuard aGuard( maProtector );
-    SEQ( ScannerContext )   aRet( 1 );
+    uno::Sequence< ScannerContext >   aRet( 1 );
 
     aRet.getArray()[0].ScannerName = ::rtl::OUString( "TWAIN"  );
     aRet.getArray()[0].InternalData = 0;
