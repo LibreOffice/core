@@ -40,6 +40,8 @@ gb_HelpTarget_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(OUTDIR)/bin \
+	$(OUTDIR)/files \
+	$(OUTDIR)/filelists \
 	$(OUTDIR)/inc \
 	$(OUTDIR)/lib \
 	$(OUTDIR)/par \
@@ -50,6 +52,8 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/xml \
 
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
+gb_Package_get_target = $(OUTDIR)/filelists/$(1).filelist
+gb_Package_get_target_for_build = $(OUTDIR_FOR_BUILD)/filelists/$(1).filelist
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_Rdb_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/xml/$(1).rdb
@@ -162,8 +166,6 @@ gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Pagein_get_target = $(WORKDIR)/Pagein/$(1)
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
-gb_Package_get_target = $(WORKDIR)/Package/$(1)
-gb_Package_get_target_for_build = $(WORKDIR_FOR_BUILD)/Package/$(1)
 gb_Postprocess_get_target = $(WORKDIR)/Postprocess/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.gch.d
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.gch
@@ -285,7 +287,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Module \
 	NoexPrecompiledHeader \
 	PackagePart \
-	Package \
 	Pagein \
 	PrecompiledHeader \
 	Pyuno \
@@ -331,6 +332,7 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Extension \
 	InstallScript \
 	Library \
+	Package \
 	StaticLibrary \
 	UnoApi \
 	UnoApiMerge \
