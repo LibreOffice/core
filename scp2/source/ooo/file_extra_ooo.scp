@@ -28,10 +28,10 @@
 #include "macros.inc"
 
 File gid_File_Extra_Autocorr
-    Dir = gid_Dir_Share_Autocorr;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE);
-    Name = "autocorr.zip";
+    Styles = (FILELIST);
+    Name = "extras_autocorr.filelist";
 End
 
 File gid_File_Extra_Autotextshare_Lang
