@@ -19,65 +19,17 @@
 
 #include <svtools/filedlg2.hrc>
 
-String STR_FILEDLG_SELECT
-{
-    Text [ en-US ] = "Select Directory" ;
-};
-String STR_FILEDLG_CANTCHDIR
-{
-    Text [ en-US ] = "Cannot change to directory" ;
-};
 String STR_FILEDLG_OPEN
 {
     Text [ en-US ] = "Open" ;
-};
-String STR_FILEDLG_FILE
-{
-    Text [ en-US ] = "~File" ;
-};
-String STR_FILEDLG_DIR
-{
-    Text [ en-US ] = "~Directory" ;
 };
 String STR_FILEDLG_TYPE
 {
     Text [ en-US ] = "File ~type" ;
 };
-String STR_FILEDLG_CANTOPENFILE
-{
-    Text [ en-US ] = "Can't open file" ;
-};
-String STR_FILEDLG_CANTOPENDIR
-{
-    Text [ en-US ] = "Can't open directory" ;
-};
-String STR_FILEDLG_OVERWRITE
-{
-    Text [ en-US ] = "This file already exists. \nOverwrite ?" ;
-};
-String STR_FILEDLG_GOUP
-{
-    Text [ en-US ] = "Up One Level" ;
-};
 String STR_FILEDLG_SAVE
 {
     Text [ en-US ] = "Save" ;
-};
-String STR_FILEDLG_DRIVES
-{
-    Text [ en-US ] = "D~rive" ;
-};
-String STR_FILEDLG_HOME
-{
-    Text [ en-US ] = "User Directory" ;
-};
-String STR_FILEDLG_NEWDIR
-{
-    Text [ en-US ] = "Create Directory" ;
-};
-String STR_FILEDLG_ASKNEWDIR
-{
-    Text [ en-US ] = "Do you want the directory %s to be created ?" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
