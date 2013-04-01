@@ -278,6 +278,7 @@ public:
         BColorDataVector::const_iterator aStart(rOriginal.maVector.begin());
         aStart += nIndex;
         BColorDataVector::const_iterator aEnd(aStart);
+        assert(nCount <= rOriginal.maVector.size());
         aEnd += nCount;
         maVector.reserve(nCount);
 
