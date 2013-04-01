@@ -460,6 +460,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <config_features.h>
 #include <config_graphite.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>

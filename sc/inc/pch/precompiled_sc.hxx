@@ -482,6 +482,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <config_features.h>
 #include <config_telepathy.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
@@ -491,7 +492,6 @@
 #include <cstdio>
 #include <cstring>
 #include <ctype.h>
-#include <deque>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
@@ -929,7 +929,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/mapmod.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/morebtn.hxx>

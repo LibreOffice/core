@@ -179,6 +179,7 @@
 #include <com/sun/star/sdb/application/CopyTableWizard.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
+#include <com/sun/star/sdb/application/MacroMigrationWizard.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
@@ -458,6 +459,7 @@
 #include <unotools/viewoptions.hxx>
 #include <utility>
 #include <vcl/accel.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>

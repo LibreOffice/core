@@ -97,6 +97,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -208,6 +209,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -316,7 +319,6 @@
 #include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
-#include <osl/security.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/crc.h>
 #include <rtl/instance.hxx>
@@ -450,7 +452,6 @@
 #include <vcl/imagerepository.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>

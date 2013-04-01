@@ -16,8 +16,6 @@
 
 #include "boost/scoped_ptr.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
-#include "com/sun/star/system/SystemShellExecute.hpp"
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "cppuhelper/factory.hxx"
 #include "editeng/AccessibleStringWrap.hxx"
 #include "editeng/borderline.hxx"
@@ -199,8 +197,10 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
+#include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -235,6 +235,8 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -249,6 +251,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>

@@ -79,13 +79,11 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XNamingService.hpp"
-#include "com/sun/star/util/XStringMapping.hpp"
 #include "com/sun/star/view/DuplexMode.hpp"
 #include "comphelper/processfactory.hxx"
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase2.hxx"
 #include "i18npool/languagetag.hxx"
 #include "i18npool/mslangid.hxx"
 #include "i18nutil/unicode.hxx"
@@ -162,6 +160,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <cmath>
@@ -227,7 +226,6 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/java/JavaVirtualMachine.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -275,6 +273,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/string.hxx>
+#include <config_features.h>
 #include <config_graphite.h>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/factory.hxx>
@@ -293,7 +292,6 @@
 #include <iostream>
 #include <jerror.h>
 #include <jpeglib.h>
-#include <jvmaccess/virtualmachine.hxx>
 #include <lcms2.h>
 #include <limits.h>
 #include <limits>
