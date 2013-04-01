@@ -832,7 +832,7 @@ lcl_TableData lcl_getDataForLocalTable(
         if( nCategoriesLength > nMaxSequenceLength )
         {
             aSimpleCategories.realloc(nMaxSequenceLength);//#i110617#
-            nCategoriesLength = nMaxSequenceLength;
+            nMaxSequenceLength = nCategoriesLength;
         }
         size_t nNumColumns( bSeriesFromColumns ? nNumSequences : nMaxSequenceLength );
         size_t nNumRows( bSeriesFromColumns ? nMaxSequenceLength : nNumSequences );
