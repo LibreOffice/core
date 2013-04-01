@@ -123,14 +123,14 @@ void SAL_CALL SIDEModel::store() throw (io::IOException, uno::RuntimeException)
     notImplemented();
 }
 
-void SAL_CALL SIDEModel::storeAsURL( const ::rtl::OUString&, const uno::Sequence< PROPERTYVALUE >& )
+void SAL_CALL SIDEModel::storeAsURL( const ::rtl::OUString&, const uno::Sequence< beans::PropertyValue >& )
         throw (io::IOException, uno::RuntimeException)
 {
     notImplemented();
 }
 
 void SAL_CALL SIDEModel::storeToURL( const ::rtl::OUString&,
-        const uno::Sequence< PROPERTYVALUE >& )
+        const uno::Sequence< beans::PropertyValue >& )
         throw (io::IOException, uno::RuntimeException)
 {
     notImplemented();

@@ -36,9 +36,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
-
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -83,10 +81,8 @@
 
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-//________________________________________________________________________________________________________
 #ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
@@ -95,76 +91,6 @@
 
 #include <svl/lstner.hxx>
 
-// Some defines to write better code :-)
-#define XCHILD                  ::com::sun::star::container::XChild
-#define XNAMECONTAINER          ::com::sun::star::container::XNameContainer
-#define XCONTROLLER             ::com::sun::star::frame::XController
-#define XEVENTLISTENER          ::com::sun::star::lang::XEventListener
-#define XINTERFACE              ::com::sun::star::uno::XInterface
-#define XCOMPONENT              ::com::sun::star::lang::XComponent
-#define XMODEL                  ::com::sun::star::frame::XModel
-#define XMODEL2                 ::com::sun::star::frame::XModel2
-#define XMODIFIABLE2            ::com::sun::star::util::XModifiable2
-#define XMODIFYBROADCASTER      ::com::sun::star::util::XModifyBroadcaster
-#define XMODIFYLISTENER         ::com::sun::star::util::XModifyListener
-#define XCLOSEABLE              ::com::sun::star::util::XCloseable
-#define XCLOSEBROADCASTER       ::com::sun::star::util::XCloseBroadcaster
-#define XCLOSELISTENER          ::com::sun::star::util::XCloseListener
-#define XPRINTABLE              ::com::sun::star::view::XPrintable
-#define XPRINTJOBBROADCASTER    ::com::sun::star::view::XPrintJobBroadcaster
-#define XSTORABLE               ::com::sun::star::frame::XStorable
-#define XSTORABLE2              ::com::sun::star::frame::XStorable2
-#define XLOADABLE               ::com::sun::star::frame::XLoadable
-#define XTYPEPROVIDER           ::com::sun::star::lang::XTypeProvider
-#define XSTARBASICACCESS        ::com::sun::star::script::XStarBasicAccess
-#define NOSUCHELEMENTEXCEPTION  ::com::sun::star::container::NoSuchElementException
-#define ELEMENTEXISTEXCEPTION   ::com::sun::star::container::ElementExistException
-#define XNAMEREPLACE            ::com::sun::star::container::XNameReplace
-#define DOCEVENTOBJECT          ::com::sun::star::document::EventObject
-#define XDOCEVENTLISTENER       ::com::sun::star::document::XEventListener
-#define XEVENTBROADCASTER       ::com::sun::star::document::XEventBroadcaster
-#define XDOCUMENTEVENTBROADCASTER   ::com::sun::star::document::XDocumentEventBroadcaster
-#define XEVENTSSUPPLIER         ::com::sun::star::document::XEventsSupplier
-#define XEMBEDDEDSCRIPTS        ::com::sun::star::document::XEmbeddedScripts
-#define XSCRIPTINVOCATIONCONTEXT    ::com::sun::star::document::XScriptInvocationContext
-
-#define NOSUPPORTEXCEPTION      ::com::sun::star::lang::NoSupportException
-#define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
-#define CLOSEVETOEXCEPTION      ::com::sun::star::util::CloseVetoException
-#define ILLEGALARGUMENTEXCEPTION ::com::sun::star::lang::IllegalArgumentException
-#define IOEXCEPTION             ::com::sun::star::io::IOException
-#define EXCEPTION               ::com::sun::star::uno::Exception
-
-#define ANY                     ::com::sun::star::uno::Any
-#define EVENTOBJECT             ::com::sun::star::lang::EventObject
-#define PROPERTYVALUE           ::com::sun::star::beans::PropertyValue
-#define REFERENCE               ::com::sun::star::uno::Reference
-#define MUTEX                   ::osl::Mutex
-#define UNOTYPE                 ::com::sun::star::uno::Type
-#define XVIEWDATASUPPLIER       ::com::sun::star::document::XViewDataSupplier
-#define XTRANSFERABLE           ::com::sun::star::datatransfer::XTransferable
-#define DATAFLAVOR              ::com::sun::star::datatransfer::DataFlavor
-
-#define XUNOTUNNEL              ::com::sun::star::lang::XUnoTunnel
-
-#define XDOCUMENTSUBSTORAGESUPPLIER  ::com::sun::star::document::XDocumentSubStorageSupplier
-#define XSTORAGEBASEDDOCUMENT   ::com::sun::star::document::XStorageBasedDocument
-#define XSTORAGE                ::com::sun::star::embed::XStorage
-#define XVISUALOBJECT           ::com::sun::star::embed::XVisualObject
-
-#define XSCRIPTPROVIDERSUPPLIER ::com::sun::star::script::provider::XScriptProviderSupplier
-#define XSCRIPTPROVIDER         ::com::sun::star::script::provider::XScriptProvider
-
-#define XUICONFIGURATIONMANAGERSUPPLIER ::com::sun::star::ui::XUIConfigurationManagerSupplier
-#define XUICONFIGURATIONMANAGER ::com::sun::star::ui::XUIConfigurationManager
-#define XMODULE ::com::sun::star::frame::XModule
-#define XTITLE ::com::sun::star::frame::XTitle
-#define XTITLECHANGEBROADCASTER ::com::sun::star::frame::XTitleChangeBroadcaster
-#define XUNTITLEDNUMBERS ::com::sun::star::frame::XUntitledNumbers
-
-//________________________________________________________________________________________________________
-//  forwards
-//________________________________________________________________________________________________________
 class   SfxPrinter;
 class   SfxViewShell;
 class   SfxObjectShell                      ;
@@ -204,38 +130,38 @@ namespace sfx { namespace intern {
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper32  <   XCHILD
-                                        ,   ::com::sun::star::document::XDocumentPropertiesSupplier
-                                        ,   ::com::sun::star::document::XCmisDocument
-                                        ,   ::com::sun::star::rdf::XDocumentMetadataAccess
-                                        ,   ::com::sun::star::document::XDocumentRecovery
-                                        ,   ::com::sun::star::document::XUndoManagerSupplier
-                                        ,   XEVENTBROADCASTER
-                                        ,   XDOCUMENTEVENTBROADCASTER
-                                        ,   XEVENTLISTENER
-                                        ,   XEVENTSSUPPLIER
-                                        ,   XEMBEDDEDSCRIPTS
-                                        ,   XSCRIPTINVOCATIONCONTEXT
-                                        ,   XMODEL2
-                                        ,   XMODIFIABLE2
-                                        ,   XPRINTABLE
-                                        ,   XPRINTJOBBROADCASTER
-                                        ,   XSTORABLE2
-                                        ,   XLOADABLE
-                                        ,   XSTARBASICACCESS
-                                        ,   XVIEWDATASUPPLIER
-                                        ,   XCLOSEABLE           // => XCLOSEBROADCASTER
-                                        ,   XTRANSFERABLE
-                                        ,   XDOCUMENTSUBSTORAGESUPPLIER
-                                        ,   XSTORAGEBASEDDOCUMENT
-                                        ,   XSCRIPTPROVIDERSUPPLIER
-                                        ,   XUICONFIGURATIONMANAGERSUPPLIER
-                                        ,   XVISUALOBJECT
-                                        ,   XUNOTUNNEL
-                                        ,   XMODULE
-                                        ,   XTITLE
-                                        ,   XTITLECHANGEBROADCASTER
-                                        ,   XUNTITLEDNUMBERS
+typedef ::comphelper::WeakImplHelper32  <   css::container::XChild
+                                        ,   css::document::XDocumentPropertiesSupplier
+                                        ,   css::document::XCmisDocument
+                                        ,   css::rdf::XDocumentMetadataAccess
+                                        ,   css::document::XDocumentRecovery
+                                        ,   css::document::XUndoManagerSupplier
+                                        ,   css::document::XEventBroadcaster
+                                        ,   css::document::XDocumentEventBroadcaster
+                                        ,   css::lang::XEventListener
+                                        ,   css::document::XEventsSupplier
+                                        ,   css::document::XEmbeddedScripts
+                                        ,   css::document::XScriptInvocationContext
+                                        ,   css::frame::XModel2
+                                        ,   css::util::XModifiable2
+                                        ,   css::view::XPrintable
+                                        ,   css::view::XPrintJobBroadcaster
+                                        ,   css::frame::XStorable2
+                                        ,   css::frame::XLoadable
+                                        ,   css::script::XStarBasicAccess
+                                        ,   css::document::XViewDataSupplier
+                                        ,   css::util::XCloseable           // => css::util::XCloseBroadcaster
+                                        ,   css::datatransfer::XTransferable
+                                        ,   css::document::XDocumentSubStorageSupplier
+                                        ,   css::document::XStorageBasedDocument
+                                        ,   css::script::provider::XScriptProviderSupplier
+                                        ,   css::ui::XUIConfigurationManagerSupplier
+                                        ,   css::embed::XVisualObject
+                                        ,   css::lang::XUnoTunnel
+                                        ,   css::frame::XModule
+                                        ,   css::frame::XTitle
+                                        ,   css::frame::XTitleChangeBroadcaster
+                                        ,   css::frame::XUntitledNumbers
                                         >   SfxBaseModel_Base;
 
 class SFX2_DLLPUBLIC SfxBaseModel   :   protected ::cppu::BaseMutex
@@ -300,7 +226,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual ANY SAL_CALL queryInterface( const UNOTYPE& rType ) throw( RUNTIMEEXCEPTION ) ;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      increment refcount
@@ -351,7 +277,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual ::com::sun::star::uno::Sequence< UNOTYPE > SAL_CALL getTypes() throw( RUNTIMEEXCEPTION ) ;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      get implementation id
@@ -367,7 +293,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( RUNTIMEEXCEPTION ) ;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( css::uno::RuntimeException ) ;
 
 
     //____________________________________________________________________________________________________
@@ -377,28 +303,28 @@ public:
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
-    virtual REFERENCE< XNAMECONTAINER > SAL_CALL getLibraryContainer() throw( RUNTIMEEXCEPTION );
+    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getLibraryContainer() throw( css::uno::RuntimeException );
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
     virtual void SAL_CALL createLibrary( const ::rtl::OUString& LibName, const ::rtl::OUString& Password,
         const ::rtl::OUString& ExternalSourceURL, const ::rtl::OUString& LinkTargetURL )
-            throw(ELEMENTEXISTEXCEPTION, RUNTIMEEXCEPTION);
+            throw(css::container::ElementExistException, css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
     virtual void SAL_CALL addModule( const ::rtl::OUString& LibraryName, const ::rtl::OUString& ModuleName,
         const ::rtl::OUString& Language, const ::rtl::OUString& Source )
-            throw( NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION);
+            throw( css::container::NoSuchElementException, css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
     virtual void SAL_CALL addDialog( const ::rtl::OUString& LibraryName, const ::rtl::OUString& DialogName,
-        const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
-            throw(NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION);
+        const css::uno::Sequence< sal_Int8 >& Data )
+            throw(css::container::NoSuchElementException, css::uno::RuntimeException);
 
 
     //____________________________________________________________________________________________________
@@ -418,7 +344,7 @@ public:
         @onerror    -
     */
 
-    virtual REFERENCE< XINTERFACE > SAL_CALL getParent() throw( RUNTIMEEXCEPTION ) ;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent() throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -433,8 +359,8 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setParent( const REFERENCE< XINTERFACE >& xParent ) throw(    NOSUPPORTEXCEPTION  ,
-                                                                                        RUNTIMEEXCEPTION    ) ;
+    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) throw(css::lang::NoSupportException,
+                                                                                        css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XComponent
@@ -453,7 +379,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -468,7 +394,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL addEventListener(const REFERENCE< XEVENTLISTENER >& aListener) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener >& aListener) throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -483,12 +409,12 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL removeEventListener(const REFERENCE< XEVENTLISTENER >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException);
 
     // XDocumentPropertiesSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >
+    virtual css::uno::Reference< css::document::XDocumentProperties >
         SAL_CALL getDocumentProperties()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XEventListener
@@ -507,7 +433,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XModel
@@ -526,9 +452,9 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL attachResource(   const   ::rtl::OUString& sURL,
-                                                const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   aArgs   )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL attachResource(const ::rtl::OUString& sURL,
+                                             const css::uno::Sequence< css::beans::PropertyValue >& aArgs)
+        throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -543,7 +469,7 @@ public:
         @onerror    -
     */
 
-    virtual ::rtl::OUString SAL_CALL getURL() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -558,7 +484,7 @@ public:
         @onerror    -
     */
 
-    virtual ::com::sun::star::uno::Sequence< PROPERTYVALUE > SAL_CALL getArgs() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -573,7 +499,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL connectController( const REFERENCE< XCONTROLLER >& xController ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -588,7 +514,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL disconnectController( const REFERENCE< XCONTROLLER >& xController ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -603,7 +529,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL lockControllers() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL lockControllers() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -618,7 +544,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL unlockControllers() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL unlockControllers() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -633,7 +559,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL hasControllersLocked() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasControllersLocked() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -648,7 +574,7 @@ public:
         @onerror    -
     */
 
-    virtual REFERENCE< XCONTROLLER > SAL_CALL getCurrentController() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -663,8 +589,8 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setCurrentController( const REFERENCE< XCONTROLLER >& xController )
-        throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController )
+        throw (css::container::NoSuchElementException, css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -679,7 +605,7 @@ public:
         @onerror    -
     */
 
-    virtual REFERENCE< XINTERFACE > SAL_CALL getCurrentSelection() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection() throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XModel2
@@ -706,9 +632,9 @@ public:
     //  XModifiable2
     //____________________________________________________________________________________________________
 
-    virtual ::sal_Bool SAL_CALL disableSetModified(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL enableSetModified(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isSetModifiedEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL disableSetModified(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL enableSetModified(  ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isSetModifiedEnabled(  ) throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -723,7 +649,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL isModified() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isModified() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -739,7 +665,7 @@ public:
     */
 
     virtual void SAL_CALL setModified( sal_Bool bModified )
-        throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
+        throw (css::beans::PropertyVetoException, css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -754,7 +680,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL addModifyListener( const REFERENCE< XMODIFYLISTENER >& xListener ) throw( RUNTIMEEXCEPTION ) ;
+    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& xListener ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -769,27 +695,27 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL removeModifyListener(const REFERENCE< XMODIFYLISTENER > & xListener) throw( RUNTIMEEXCEPTION ) ;
+    virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & xListener) throw( css::uno::RuntimeException ) ;
 
     //____________________________________________________________________________________________________
     //  XCloseable
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw (CLOSEVETOEXCEPTION, RUNTIMEEXCEPTION);
+    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw (css::util::CloseVetoException, css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XCloseBroadcaster
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL addCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION);
-    virtual void SAL_CALL removeCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION);
+    virtual void SAL_CALL addCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XPrintJobBroadcaster
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XPrintable
@@ -808,7 +734,7 @@ public:
         @onerror    -
     */
 
-    virtual ::com::sun::star::uno::Sequence< PROPERTYVALUE > SAL_CALL getPrinter() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -823,8 +749,8 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& seqPrinter )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPrinter( const css::uno::Sequence< css::beans::PropertyValue >& seqPrinter )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     /**___________________________________________________________________________________________________
         @short      -
         @descr      -
@@ -838,15 +764,15 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL print( const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& seqOptions )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL print( const css::uno::Sequence< css::beans::PropertyValue >& seqOptions )
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XStorable2
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL storeSelf( const  ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL storeSelf( const  css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
+        throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XStorable
@@ -865,7 +791,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL hasLocation() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasLocation() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -880,7 +806,7 @@ public:
         @onerror    -
     */
 
-    virtual ::rtl::OUString SAL_CALL getLocation() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLocation() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -895,7 +821,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL isReadonly() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isReadonly() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -910,7 +836,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL store() throw (css::io::IOException, css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -926,8 +852,8 @@ public:
     */
 
     virtual void SAL_CALL storeAsURL(   const   ::rtl::OUString& sURL,
-                                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
-        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
+                                        const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
+        throw (css::io::IOException, css::uno::RuntimeException) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -943,8 +869,8 @@ public:
     */
 
     virtual void SAL_CALL storeToURL(   const   ::rtl::OUString& sURL,
-                                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    )
-        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+                                        const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
+        throw (css::io::IOException, css::uno::RuntimeException);
 
 
 
@@ -966,10 +892,10 @@ public:
     */
 
     virtual void SAL_CALL initNew()
-        throw (::com::sun::star::frame::DoubleInitializationException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception);
+        throw (css::frame::DoubleInitializationException,
+               css::io::IOException,
+               css::uno::RuntimeException,
+               css::uno::Exception);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -984,96 +910,96 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL load( const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments )
-        throw (::com::sun::star::frame::DoubleInitializationException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception);
+    virtual void SAL_CALL load( const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments )
+        throw (css::frame::DoubleInitializationException,
+               css::io::IOException,
+               css::uno::RuntimeException,
+               css::uno::Exception);
 
     //____________________________________________________________________________________________________
     //  XDocumentSubStorageSupplier
     //____________________________________________________________________________________________________
 
-    virtual REFERENCE< XSTORAGE > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
-        throw ( RUNTIMEEXCEPTION );
+    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
+        throw ( css::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames()
-        throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames()
+        throw ( css::io::IOException, css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  XStorageBasedDocument
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL loadFromStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                            const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& aMediaDescriptor )
-        throw ( ILLEGALARGUMENTEXCEPTION,
+    virtual void SAL_CALL loadFromStorage( const css::uno::Reference< css::embed::XStorage >& xStorage,
+                                            const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor )
+        throw ( css::lang::IllegalArgumentException,
                 com::sun::star::frame::DoubleInitializationException,
-                IOEXCEPTION,
-                EXCEPTION,
-                RUNTIMEEXCEPTION );
+                css::io::IOException,
+                css::uno::Exception,
+                css::uno::RuntimeException );
 
-    virtual void SAL_CALL storeToStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                            const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& aMediaDescriptor )
-        throw ( ILLEGALARGUMENTEXCEPTION,
-                IOEXCEPTION,
-                EXCEPTION,
-                RUNTIMEEXCEPTION );
+    virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage,
+                                            const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor )
+        throw ( css::lang::IllegalArgumentException,
+                css::io::IOException,
+                css::uno::Exception,
+                css::uno::RuntimeException );
 
-    virtual void SAL_CALL switchToStorage( const REFERENCE< XSTORAGE >& xStorage )
-        throw ( ILLEGALARGUMENTEXCEPTION,
-                IOEXCEPTION,
-                EXCEPTION,
-                RUNTIMEEXCEPTION );
+    virtual void SAL_CALL switchToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage )
+        throw ( css::lang::IllegalArgumentException,
+                css::io::IOException,
+                css::uno::Exception,
+                css::uno::RuntimeException );
 
-    virtual REFERENCE< XSTORAGE > SAL_CALL getDocumentStorage()
-        throw ( IOEXCEPTION,
-                EXCEPTION,
-                RUNTIMEEXCEPTION );
+    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentStorage()
+        throw ( css::io::IOException,
+                css::uno::Exception,
+                css::uno::RuntimeException );
 
     virtual void SAL_CALL addStorageChangeListener(
-            const REFERENCE< ::com::sun::star::document::XStorageChangeListener >& xListener )
-        throw ( RUNTIMEEXCEPTION );
+            const css::uno::Reference< css::document::XStorageChangeListener >& xListener )
+        throw ( css::uno::RuntimeException );
 
     virtual void SAL_CALL removeStorageChangeListener(
-            const REFERENCE< ::com::sun::star::document::XStorageChangeListener >& xListener )
-        throw ( RUNTIMEEXCEPTION );
+            const css::uno::Reference< css::document::XStorageChangeListener >& xListener )
+        throw ( css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  XVisualObject
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const css::awt::Size& aSize )
+        throw ( css::lang::IllegalArgumentException,
+                css::embed::WrongStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException );
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+    virtual css::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
+        throw ( css::lang::IllegalArgumentException,
+                css::embed::WrongStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException );
 
-    virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+    virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
+        throw ( css::lang::IllegalArgumentException,
+                css::embed::WrongStateException,
+                css::uno::Exception,
+                css::uno::RuntimeException );
 
     virtual sal_Int32 SAL_CALL getMapUnit( sal_Int64 nAspect )
-        throw ( ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
+        throw ( css::uno::Exception,
+                css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  XScriptProviderSupplier
     //____________________________________________________________________________________________________
 
-    virtual REFERENCE< XSCRIPTPROVIDER > SAL_CALL getScriptProvider() throw ( RUNTIMEEXCEPTION );
+    virtual css::uno::Reference< css::script::provider::XScriptProvider > SAL_CALL getScriptProvider() throw ( css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  XUIConfigurationManagerSupplier
     //____________________________________________________________________________________________________
-    virtual REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL getUIConfigurationManager() throw ( RUNTIMEEXCEPTION );
+    virtual css::uno::Reference< css::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager() throw ( css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  XTransferable
@@ -1092,10 +1018,10 @@ public:
         @onerror    -
     */
 
-    virtual ANY SAL_CALL getTransferData( const DATAFLAVOR& aFlavor )
-        throw (::com::sun::star::datatransfer::UnsupportedFlavorException,
-               ::com::sun::star::io::IOException,
-               ::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor )
+        throw (css::datatransfer::UnsupportedFlavorException,
+               css::io::IOException,
+               css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1111,8 +1037,8 @@ public:
     */
 
 
-    virtual ::com::sun::star::uno::Sequence< DATAFLAVOR > SAL_CALL getTransferDataFlavors()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors()
+        throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1127,8 +1053,8 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DATAFLAVOR& aFlavor )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor )
+        throw (css::uno::RuntimeException);
 
 
     //____________________________________________________________________________________________________
@@ -1148,22 +1074,22 @@ public:
         @onerror    -
     */
 
-    virtual REFERENCE< XNAMEREPLACE > SAL_CALL getEvents() throw( RUNTIMEEXCEPTION );
+    virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents() throw( css::uno::RuntimeException );
 
 
     //____________________________________________________________________________________________________
     //  XEmbeddedScripts
     //____________________________________________________________________________________________________
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL getAllowMacroExecution() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getAllowMacroExecution() throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XScriptInvocationContext
     //____________________________________________________________________________________________________
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XEventBroadcaster
@@ -1182,7 +1108,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL addEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) throw( css::uno::RuntimeException );
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1197,21 +1123,21 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) throw( css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  XDocumentEventBroadcaster
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XUnoTunnel
     //____________________________________________________________________________________________________
 
-    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
 
     // css.frame.XModule
     virtual void SAL_CALL setIdentifier(const ::rtl::OUString& sIdentifier)
@@ -1258,154 +1184,154 @@ public:
 
     // css.document.XDocumentRecovery
     virtual ::sal_Bool SAL_CALL wasModifiedSinceLastSave()
-        throw ( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
-        throw ( ::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::lang::WrappedTargetException );
-    virtual void SAL_CALL recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor )
-        throw ( ::com::sun::star::uno::RuntimeException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::lang::WrappedTargetException );
+        throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor )
+        throw ( css::uno::RuntimeException,
+                css::io::IOException,
+                css::lang::WrappedTargetException );
+    virtual void SAL_CALL recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor )
+        throw ( css::uno::RuntimeException,
+                css::io::IOException,
+                css::lang::WrappedTargetException );
 
     // css.document.XUndoManagerSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
 
-    // ::com::sun::star::rdf::XNode:
+    // css::rdf::XNode:
     virtual ::rtl::OUString SAL_CALL getStringValue()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    // ::com::sun::star::rdf::XURI:
+    // css::rdf::XURI:
     virtual ::rtl::OUString SAL_CALL getNamespace()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getLocalName()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    // ::com::sun::star::rdf::XRepositorySupplier:
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::rdf::XRepository > SAL_CALL getRDFRepository()
-        throw (::com::sun::star::uno::RuntimeException);
+    // css::rdf::XRepositorySupplier:
+    virtual css::uno::Reference<
+        css::rdf::XRepository > SAL_CALL getRDFRepository()
+        throw (css::uno::RuntimeException);
 
-    // ::com::sun::star::rdf::XDocumentMetadataAccess:
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XMetadatable > SAL_CALL
+    // css::rdf::XDocumentMetadataAccess:
+    virtual css::uno::Reference<
+                css::rdf::XMetadatable > SAL_CALL
         getElementByMetadataReference(
-            const ::com::sun::star::beans::StringPair & i_rReference)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XMetadatable > SAL_CALL
-        getElementByURI(const ::com::sun::star::uno::Reference<
-            ::com::sun::star::rdf::XURI > & i_xURI)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-            ::com::sun::star::rdf::XURI > > SAL_CALL getMetadataGraphsWithType(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XURI > & i_xType)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException);
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XURI> SAL_CALL
+            const css::beans::StringPair & i_rReference)
+        throw (css::uno::RuntimeException);
+    virtual css::uno::Reference<
+                css::rdf::XMetadatable > SAL_CALL
+        getElementByURI(const css::uno::Reference<
+            css::rdf::XURI > & i_xURI)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException);
+    virtual css::uno::Sequence< css::uno::Reference<
+            css::rdf::XURI > > SAL_CALL getMetadataGraphsWithType(
+            const css::uno::Reference<
+                css::rdf::XURI > & i_xType)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException);
+    virtual css::uno::Reference<
+                css::rdf::XURI> SAL_CALL
         addMetadataFile(const ::rtl::OUString & i_rFileName,
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XURI >
+            const css::uno::Sequence<
+                css::uno::Reference< css::rdf::XURI >
                 > & i_rTypes)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::container::ElementExistException);
-    virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XURI> SAL_CALL
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::container::ElementExistException);
+    virtual css::uno::Reference<
+                css::rdf::XURI> SAL_CALL
         importMetadataFile(::sal_Int16 i_Format,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::io::XInputStream > & i_xInStream,
+            const css::uno::Reference<
+                css::io::XInputStream > & i_xInStream,
             const ::rtl::OUString & i_rFileName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XURI > & i_xBaseURI,
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XURI >
+            const css::uno::Reference<
+                css::rdf::XURI > & i_xBaseURI,
+            const css::uno::Sequence<
+                css::uno::Reference< css::rdf::XURI >
                 > & i_rTypes)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::datatransfer::UnsupportedFlavorException,
-            ::com::sun::star::container::ElementExistException,
-            ::com::sun::star::rdf::ParseException,
-            ::com::sun::star::io::IOException);
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::datatransfer::UnsupportedFlavorException,
+            css::container::ElementExistException,
+            css::rdf::ParseException,
+            css::io::IOException);
     virtual void SAL_CALL removeMetadataFile(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XURI > & i_xGraphName)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::container::NoSuchElementException);
+            const css::uno::Reference<
+                css::rdf::XURI > & i_xGraphName)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::container::NoSuchElementException);
     virtual void SAL_CALL addContentOrStylesFile(
             const ::rtl::OUString & i_rFileName)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::container::ElementExistException);
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::container::ElementExistException);
     virtual void SAL_CALL removeContentOrStylesFile(
             const ::rtl::OUString & i_rFileName)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::container::NoSuchElementException);
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::container::NoSuchElementException);
 
     virtual void SAL_CALL loadMetadataFromStorage(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::embed::XStorage > & i_xStorage,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::rdf::XURI > & i_xBaseURI,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::task::XInteractionHandler> & i_xHandler)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::lang::WrappedTargetException);
+            const css::uno::Reference<
+                css::embed::XStorage > & i_xStorage,
+            const css::uno::Reference<
+                css::rdf::XURI > & i_xBaseURI,
+            const css::uno::Reference<
+                css::task::XInteractionHandler> & i_xHandler)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException);
     virtual void SAL_CALL storeMetadataToStorage(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::embed::XStorage > & i_xStorage)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::lang::WrappedTargetException);
+            const css::uno::Reference<
+                css::embed::XStorage > & i_xStorage)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException);
     virtual void SAL_CALL loadMetadataFromMedium(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue > & i_rMedium)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::lang::WrappedTargetException);
+            const css::uno::Sequence<
+                css::beans::PropertyValue > & i_rMedium)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException);
     virtual void SAL_CALL storeMetadataToMedium(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue > & i_rMedium)
-        throw (::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::lang::WrappedTargetException);
+            const css::uno::Sequence<
+                css::beans::PropertyValue > & i_rMedium)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException);
 
     // XCmisDocument
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    virtual css::uno::Sequence< css::beans::PropertyValue >
             SAL_CALL getCmisPropertiesValues()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCmisPropertiesValues(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue >& _cmispropertiesvalues )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+            const css::uno::Sequence<
+                css::beans::PropertyValue >& _cmispropertiesvalues )
+        throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::beans::PropertyValue >
             SAL_CALL getCmisPropertiesDisplayNames()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCmisPropertiesDisplayNames(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue >& _cmispropertiesdisplaynames )
-        throw (::com::sun::star::uno::RuntimeException);
+            const css::uno::Sequence<
+                css::beans::PropertyValue >& _cmispropertiesdisplaynames )
+        throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL checkOut(  ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL cancelCheckOut(  ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL checkOut(  ) throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL cancelCheckOut(  ) throw ( css::uno::RuntimeException );
     virtual void SAL_CALL checkIn( sal_Bool bIsMajor, const rtl::OUString & rMessage  )
-        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( css::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL isVersionable( ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL canCheckOut( ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL canCancelCheckOut( ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL canCheckIn( ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL isVersionable( ) throw ( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL canCheckOut( ) throw ( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL canCancelCheckOut( ) throw ( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL canCheckIn( ) throw ( css::uno::RuntimeException );
 
-    sal_Bool getBoolPropertyValue( const rtl::OUString& rName ) throw ( ::com::sun::star::uno::RuntimeException );
+    sal_Bool getBoolPropertyValue( const rtl::OUString& rName ) throw ( css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  SfxListener
@@ -1467,11 +1393,11 @@ public:
     void MethodEntryCheck( const bool i_mustBeInitialized ) const;
     ::osl::Mutex& getMutex() const { return m_aMutex; }
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL getViewData() throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData ) throw (::com::sun::star::uno::RuntimeException);
+    css::uno::Reference < css::container::XIndexAccess > SAL_CALL getViewData() throw (css::uno::RuntimeException);
+    void SAL_CALL setViewData( const css::uno::Reference < css::container::XIndexAccess >& aData ) throw (css::uno::RuntimeException);
 
     /** calls all XEventListeners */
-    void notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) const;
+    void notifyEvent( const css::document::EventObject& aEvent ) const;
 
     /** returns true if someone added a XEventListener to this XEventBroadcaster */
     sal_Bool hasEventListeners() const;
@@ -1504,16 +1430,16 @@ private:
         @onerror    -
     */
 
-    css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw ( RUNTIMEEXCEPTION );
+    css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw ( css::uno::RuntimeException );
     bool impl_getPrintHelper();
-    SAL_DLLPRIVATE void ListenForStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );
     SAL_DLLPRIVATE ::rtl::OUString GetMediumFilterName_Impl();
 
     SAL_DLLPRIVATE void impl_store( const ::rtl::OUString& sURL,
-                        const   ::com::sun::star::uno::Sequence< PROPERTYVALUE >&   seqArguments    ,
+                        const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ,
                                 sal_Bool                    bSaveTo         ) ;
 
-    SAL_DLLPRIVATE void postEvent_Impl( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >() );
+    SAL_DLLPRIVATE void postEvent_Impl( const ::rtl::OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >() );
 
     SAL_DLLPRIVATE String getEventName_Impl( long nID );
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );
@@ -1522,7 +1448,7 @@ private:
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XUntitledNumbers > impl_getUntitledHelper ();
 
     SAL_DLLPRIVATE SfxViewFrame* FindOrCreateViewFrame_Impl(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
+                        const css::uno::Reference< css::frame::XFrame >& i_rFrame,
                         ::sfx::intern::ViewCreationGuard& i_rGuard
                     ) const;
 
