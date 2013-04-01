@@ -485,15 +485,16 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
     //Fix border incorrect for RTL fdo#62399
     if( pDoc->IsLayoutRTL( GetViewData()->GetTabNo() ) )
     {
-        SvxBoxItem aNewFrame( aLineOuter );
+        SvxBoxItem     aNewFrame( aLineOuter );
+        SvxBoxInfoItem aTempInfo( aLineInner );
+
         if ( aLineInner.IsValid(VALID_LEFT) )
             aNewFrame.SetLine( aLineOuter.GetLeft(), BOX_LINE_RIGHT );
         if ( aLineInner.IsValid(VALID_RIGHT) )
             aNewFrame.SetLine( aLineOuter.GetRight(), BOX_LINE_LEFT );
-        if ( aLineInner.IsValid(VALID_TOP) )
-            aNewFrame.SetLine( aLineOuter.GetTop(), BOX_LINE_TOP );
-        if ( aLineInner.IsValid(VALID_BOTTOM) )
-            aNewFrame.SetLine( aLineOuter.GetBottom() , BOX_LINE_BOTTOM );
+
+        aLineInner.SetValid( VALID_LEFT, aTempInfo.IsValid(VALID_RIGHT));
+        aLineInner.SetValid( VALID_RIGHT, aTempInfo.IsValid(VALID_LEFT));
 
         pOldSet->Put( aNewFrame );
     }
