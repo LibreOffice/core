@@ -11,15 +11,17 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,rasqal))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,rasqal,$(RASQAL_TARBALL)))
 
+# configure generated files for MSVC
+$(eval $(call gb_UnpackedTarball_add_file,rasqal,src/rasqal.h,redland/rasqal/rasqal.h))
+
 $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
-	redland/rasqal/rasqal-0.9.16.legal.patch \
-	redland/rasqal/rasqal-0.9.16.autotools.patch \
-	redland/rasqal/rasqal-0.9.16.ooo_build.patch \
-	redland/rasqal/rasqal-0.9.16.win32.patch \
-	redland/rasqal/rasqal-0.9.16.aix.patch \
-	$(if $(filter-out WNT,$(OS)),redland/rasqal/rasqal-0.9.16.bundled-soname.patch) \
-	$(if $(filter ANDROID,$(OS)),redland/rasqal/rasqal-0.9.16.no-soname.patch) \
-	$(if $(filter WNTGCC,$(OS)$(COM)),redland/rasqal/rasqal-0.9.16.mingw.patch) \
+	redland/rasqal/rasqal-pkgconfig.patch.1 \
+	redland/rasqal/rasqal-freebsd.patch.1 \
+	redland/rasqal/rasqal-msvc.patch.1 \
+	redland/rasqal/rasqal-aix.patch.1 \
+	$(if $(filter-out WNT,$(OS)),redland/rasqal/rasqal-bundled-soname.patch.1) \
+	$(if $(filter ANDROID,$(OS)),redland/rasqal/rasqal-android.patch.1) \
+	$(if $(filter WNTGCC,$(OS)$(COM)),redland/rasqal/rasqal-mingw.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:

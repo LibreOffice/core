@@ -22,50 +22,56 @@ $(eval $(call gb_ExternalProject_register_targets,redland,\
 	build \
 ))
 
+# note: this can intentionally only build against internal raptor/rasqal
+
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,redland,build):
 	$(call gb_ExternalProject_run,build,\
-		PATH="$(OUTDIR)/bin:$$PATH" \
 		CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 		CPPFLAGS="-I$(OUTDIR)/inc/external" \
 		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols -L$(OUTDIR)/lib" \
-		LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
-		XSLTLIB="$(if $(filter YES,$(SYSTEM_LIBXSLT)),$(LIBXSLT_LIBS),-lxslt)" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
-		./configure --disable-static --disable-gtk-doc --with-openssl-digests \
-			--with-xml-parser=libxml --with-raptor=system --with-rasqal=system \
-			--without-bdb --without-sqlite --without-mysql --without-postgresql \
-			--without-threestore --with-regex-library=posix --with-decimal=none \
-			--with-www=xml --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
+		PKG_CONFIG="" \
+		RAPTOR2_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2  $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
+		RASQAL_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RASQAL_LIBS="-L$(OUTDIR)/lib -lrasqal" \
+		./configure --disable-static --disable-gtk-doc \
+			--disable-modular \
+			--without-bdb --without-sqlite --without-mysql \
+			--without-postgresql --without-threestore --without-virtuoso \
+			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			lt_cv_cc_dll_switch="-shared" \
-		&& cd librdf \
 		&& $(MAKE) \
 	)
 else
 $(call gb_ExternalProject_get_state_target,redland,build):
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
-		PATH="$(OUTDIR)/bin:$$PATH" \
 		LDFLAGS="-L$(OUTDIR)/lib \
-		$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib" -Wl$(COMMA)-noinhibit-exec) \
+		$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
 		$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)) \
-		$(if $(filter MACOSX,$(OS)), -Wl$(COMMA)-dylib_file$(COMMA)@loader_path/libraptor-lo.1.dylib:$(OUTDIR)/lib/libraptor-lo.1.dylib \
+		$(if $(filter MACOSX,$(OS)), -Wl$(COMMA)-dylib_file$(COMMA)@loader_path/libraptor-lo.$(RAPTOR_MAJOR).dylib:$(OUTDIR)/lib/libraptor-lo.$(RAPTOR_MAJOR).dylib \
 		$(if $(filter NO,$(SYSTEM_LIBXML)),-Wl$(COMMA)-dylib_file$(COMMA)@loader_path/../ure-link/lib/libxml2.2.dylib:$(OUTDIR)/lib/libxml2.2.dylib))" \
 		CPPFLAGS="-I$(OUTDIR)/inc/external $(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
-		./configure --disable-gtk-doc --with-openssl-digests \
-			--with-xml-parser=libxml --with-raptor=system --with-rasqal=system \
-			--without-bdb --without-sqlite --without-mysql --without-postgresql \
-			--without-threestone --with-regex-library=posix --with-decimal=none \
-			--with-www=xml \
+		PKG_CONFIG="" \
+		RAPTOR2_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2  $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
+		RASQAL_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RASQAL_LIBS="-L$(OUTDIR)/lib -lrasqal" \
+		./configure --disable-gtk-doc \
+			--disable-modular \
+			--without-bdb --without-sqlite --without-mysql \
+			--without-postgresql --without-threestone --without-virtuoso \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 			$(if $(filter-out ANDROID,$(OS)),--with-threads) \
-		&& cd librdf \
 		&& $(MAKE) \
-			$(if $(filter MACOSX,$(OS)),&& $(PERL) \
-            $(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
-            $(gb_Package_SOURCEDIR_redland)/librdf/.libs/librdf-lo.0.dylib) \
+		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
+			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(gb_Package_SOURCEDIR_redland)/librdf/.libs/librdf-lo.$(RASQAL_MAJOR).dylib) \
 	)
 endif
+
 # vim: set noet sw=4 ts=4:
