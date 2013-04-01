@@ -66,9 +66,8 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
-using namespace ::rtl;
 
-SmFilterDetect::SmFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& /*xFactory*/ )
+SmFilterDetect::SmFilterDetect( const Reference < XMultiServiceFactory >& /*xFactory*/ )
 {
 }
 
@@ -76,17 +75,17 @@ SmFilterDetect::~SmFilterDetect()
 {
 }
 
-::rtl::OUString SAL_CALL SmFilterDetect::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
+OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor ) throw( RuntimeException )
 {
-    REFERENCE< XInputStream > xStream;
-    REFERENCE< XContent > xContent;
-    REFERENCE< XInteractionHandler > xInteraction;
+    Reference< XInputStream > xStream;
+    Reference< XContent > xContent;
+    Reference< XInteractionHandler > xInteraction;
     String aURL;
-    ::rtl::OUString sTemp;
+    OUString sTemp;
     String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
-    ::rtl::OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; // interesting only if set in this method
 
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
@@ -159,12 +158,12 @@ SmFilterDetect::~SmFilterDetect()
     bWasReadOnly = pItem && pItem->GetValue();
 
     String aFilterName;
-    String aPrefix = rtl::OUString( "private:factory/" );
+    String aPrefix = OUString( "private:factory/" );
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         const SfxFilter* pFilter = 0;
         String aPattern( aPrefix );
-        aPattern += rtl::OUString("smath");
+        aPattern += OUString("smath");
         if ( aURL.Match( aPattern ) >= aPattern.Len() )
         {
             pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
@@ -190,7 +189,7 @@ SmFilterDetect::~SmFilterDetect()
             if ( bIsStorage )
             {
                 //TODO/LATER: factor this out!
-                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
+                Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
@@ -203,11 +202,11 @@ SmFilterDetect::~SmFilterDetect()
                         try
                         {
                             InteractiveAppException xException( empty,
-                                                            REFERENCE< XInterface >(),
+                                                            Reference< XInterface >(),
                                                             InteractionClassification_ERROR,
                                                             aMedium.GetError() );
 
-                            REFERENCE< XInteractionRequest > xRequest(
+                            Reference< XInteractionRequest > xRequest(
                                 new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
                                                                       ucbhelper::CONTINUATION_APPROVE ) );
                             xInteraction->handle( xRequest );
@@ -223,13 +222,13 @@ SmFilterDetect::~SmFilterDetect()
                     {
                         const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
-                                SfxFilterMatcher(rtl::OUString("smath")).GetFilter4EA( aTypeName ) : 0;
+                                SfxFilterMatcher(OUString("smath")).GetFilter4EA( aTypeName ) : 0;
                         OUString aTmpFilterName;
                         if ( pFilter )
                             aTmpFilterName = pFilter->GetName();
                         aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : sal_False, &aTmpFilterName );
                     }
-                    catch( const lang::WrappedTargetException& aWrap )
+                    catch( const WrappedTargetException& aWrap )
                     {
                         packages::zip::ZipIOException aZipException;
 
@@ -264,11 +263,11 @@ SmFilterDetect::~SmFilterDetect()
                                 aTypeName.Erase();
                         }
                     }
-                    catch( uno::RuntimeException& )
+                    catch( RuntimeException& )
                     {
                         throw;
                     }
-                    catch( uno::Exception& )
+                    catch( Exception& )
                     {
                         aTypeName.Erase();
                     }
@@ -276,7 +275,7 @@ SmFilterDetect::~SmFilterDetect()
                        if ( aTypeName.Len() )
                     {
                            const SfxFilter* pFilter =
-                                    SfxFilterMatcher( rtl::OUString("smath") ).GetFilter4EA( aTypeName );
+                                    SfxFilterMatcher( OUString("smath") ).GetFilter4EA( aTypeName );
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
                     }
@@ -294,7 +293,7 @@ SmFilterDetect::~SmFilterDetect()
                     SotStorageRef aStorage = new SotStorage ( pStrm, sal_False );
                     if ( !aStorage->GetError() )
                     {
-                        if (aStorage->IsStream(rtl::OUString("Equation Native")))
+                        if (aStorage->IsStream(OUString("Equation Native")))
                         {
                             sal_uInt8 nVersion;
                             if (GetMathTypeVersion( aStorage, nVersion ) && nVersion <=3)
@@ -332,7 +331,7 @@ SmFilterDetect::~SmFilterDetect()
 
                     if ( aTypeName.Len() )
                     {
-                        const SfxFilter* pFilt = SfxFilterMatcher( rtl::OUString("smath") ).GetFilter4EA( aTypeName );
+                        const SfxFilter* pFilt = SfxFilterMatcher( OUString("smath") ).GetFilter4EA( aTypeName );
                         if ( pFilt )
                             aFilterName = pFilt->GetName();
                     }
@@ -418,16 +417,16 @@ SmFilterDetect::~SmFilterDetect()
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SmFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
+OUString SAL_CALL SmFilterDetect::getImplementationName() throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 /* XServiceInfo */
-sal_Bool SAL_CALL SmFilterDetect::supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION )
+sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
-    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
+    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString*      pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -439,29 +438,29 @@ sal_Bool SAL_CALL SmFilterDetect::supportsService( const rtl::OUString& sService
 }
 
 /* XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
+Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SmFilterDetect::impl_getStaticSupportedServiceNames()
+Sequence< OUString > SmFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
+    Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection";
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-rtl::OUString SmFilterDetect::impl_getStaticImplementationName()
+OUString SmFilterDetect::impl_getStaticImplementationName()
 {
-    return rtl::OUString("com.sun.star.comp.math.FormatDetector");
+    return OUString("com.sun.star.comp.math.FormatDetector");
 }
 
 /* Helper for registry */
-UNOREFERENCE< UNOXINTERFACE > SAL_CALL SmFilterDetect::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
+Reference< XInterface > SAL_CALL SmFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
 {
-    return UNOREFERENCE< UNOXINTERFACE >( *new SmFilterDetect( xServiceManager ) );
+    return Reference< XInterface >( *new SmFilterDetect( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
