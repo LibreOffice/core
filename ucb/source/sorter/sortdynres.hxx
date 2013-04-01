@@ -41,20 +41,6 @@ namespace cppu {
 
 //-----------------------------------------------------------------------------
 
-#define NUMBERED_SORTINGINFO        com::sun::star::ucb::NumberedSortingInfo
-#define RUNTIMEEXCEPTION            com::sun::star::uno::RuntimeException
-#define REFERENCE                   com::sun::star::uno::Reference
-#define SEQUENCE                    com::sun::star::uno::Sequence
-#define EVENTOBJECT                 com::sun::star::lang::EventObject
-#define XEVENTLISTENER              com::sun::star::lang::XEventListener
-#define XCOMPONENTCONTEXT           com::sun::star::uno::XComponentContext
-#define XRESULTSET                  com::sun::star::sdbc::XResultSet
-#define SQLEXCEPTION                com::sun::star::sdbc::SQLException
-#define XANYCOMPAREFACTORY          com::sun::star::ucb::XAnyCompareFactory
-#define XDYNAMICRESULTSET           com::sun::star::ucb::XDynamicResultSet
-#define XDYNAMICRESULTSETLISTENER   com::sun::star::ucb::XDynamicResultSetListener
-#define LISTENERALREADYSETEXCEPTION com::sun::star::ucb::ListenerAlreadySetException
-
 #define DYNAMIC_RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedDynamicResultSet"
 #define DYNAMIC_RESULTSET_FACTORY_NAME  "com.sun.star.ucb.SortedDynamicResultSetFactory"
 
@@ -63,21 +49,21 @@ class SortedDynamicResultSetListener;
 
 class SortedDynamicResultSet:
                 public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::ucb::XDynamicResultSet
+                public css::lang::XTypeProvider,
+                public css::lang::XServiceInfo,
+                public css::ucb::XDynamicResultSet
 {
     cppu::OInterfaceContainerHelper *mpDisposeEventListeners;
 
-    REFERENCE < XDYNAMICRESULTSETLISTENER > mxListener;
-    REFERENCE < XDYNAMICRESULTSETLISTENER > mxOwnListener;
+    css::uno::Reference < css::ucb::XDynamicResultSetListener > mxListener;
+    css::uno::Reference < css::ucb::XDynamicResultSetListener > mxOwnListener;
 
-    REFERENCE < XRESULTSET >            mxOne;
-    REFERENCE < XRESULTSET >            mxTwo;
-    REFERENCE < XDYNAMICRESULTSET >     mxOriginal;
-    SEQUENCE  < NUMBERED_SORTINGINFO >  maOptions;
-    REFERENCE < XANYCOMPAREFACTORY >    mxCompFac;
-    REFERENCE < XCOMPONENTCONTEXT >     m_xContext;
+    css::uno::Reference < css::sdbc::XResultSet >            mxOne;
+    css::uno::Reference < css::sdbc::XResultSet >            mxTwo;
+    css::uno::Reference < css::ucb::XDynamicResultSet >      mxOriginal;
+    css::uno::Sequence  < css::ucb::NumberedSortingInfo >    maOptions;
+    css::uno::Reference < css::ucb::XAnyCompareFactory >     mxCompFac;
+    css::uno::Reference < css::uno::XComponentContext >      m_xContext;
 
     SortedResultSet*                    mpOne;
     SortedResultSet*                    mpTwo;
@@ -94,10 +80,10 @@ private:
     void                SendNotify();
 
 public:
-    SortedDynamicResultSet( const REFERENCE < XDYNAMICRESULTSET >    &xOriginal,
-                            const SEQUENCE  < NUMBERED_SORTINGINFO > &aOptions,
-                            const REFERENCE < XANYCOMPAREFACTORY >   &xCompFac,
-                            const REFERENCE < XCOMPONENTCONTEXT >    &rxContext );
+    SortedDynamicResultSet( const css::uno::Reference < css::ucb::XDynamicResultSet >    &xOriginal,
+                            const css::uno::Sequence  < css::ucb::NumberedSortingInfo >  &aOptions,
+                            const css::uno::Reference < css::ucb::XAnyCompareFactory >   &xCompFac,
+                            const css::uno::Reference < css::uno::XComponentContext >    &rxContext );
 
     ~SortedDynamicResultSet();
 
@@ -120,55 +106,55 @@ public:
     // XComponent
     //-----------------------------------------------------------------
     virtual void SAL_CALL
-    dispose() throw( RUNTIME_EXCEPTION );
+    dispose() throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    addEventListener( const REFERENCE< XEVENTLISTENER >& Listener )
-        throw( RUNTIME_EXCEPTION );
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removeEventListener( const REFERENCE< XEVENTLISTENER >& Listener )
-        throw( RUNTIME_EXCEPTION );
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException );
 
     //-----------------------------------------------------------------
     // XDynamicResultSet
     //-----------------------------------------------------------------
-    virtual REFERENCE< XRESULTSET > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     getStaticResultSet(  )
-        throw( LISTENERALREADYSETEXCEPTION, RUNTIMEEXCEPTION );
+        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    setListener( const REFERENCE< XDYNAMICRESULTSETLISTENER >& Listener )
-        throw( LISTENERALREADYSETEXCEPTION, RUNTIMEEXCEPTION );
+    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener )
+        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    connectToCache( const REFERENCE< XDYNAMICRESULTSET > & xCache )
-        throw( LISTENERALREADYSETEXCEPTION,
-               com::sun::star::ucb::AlreadyInitializedException,
-               com::sun::star::ucb::ServiceNotFoundException,
-               RUNTIMEEXCEPTION );
+    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache )
+        throw( css::ucb::ListenerAlreadySetException,
+               css::ucb::AlreadyInitializedException,
+               css::ucb::ServiceNotFoundException,
+               css::uno::RuntimeException );
 
     virtual sal_Int16 SAL_CALL
     getCapabilities()
-        throw( RUNTIMEEXCEPTION );
+        throw( css::uno::RuntimeException );
 
     //-----------------------------------------------------------------
     // own methods:
     //-----------------------------------------------------------------
     virtual void SAL_CALL
-    impl_disposing( const EVENTOBJECT& Source )
-        throw( RUNTIMEEXCEPTION );
+    impl_disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    impl_notify( const ::com::sun::star::ucb::ListEvent& Changes )
-        throw( RUNTIMEEXCEPTION );
+    impl_notify( const ::css::ucb::ListEvent& Changes )
+        throw( css::uno::RuntimeException );
 };
 
 //-----------------------------------------------------------------------------
 
 class SortedDynamicResultSetListener:
                 public cppu::OWeakObject,
-                public com::sun::star::ucb::XDynamicResultSetListener
+                public css::ucb::XDynamicResultSetListener
 {
     SortedDynamicResultSet  *mpOwner;
     osl::Mutex              maMutex;
@@ -186,15 +172,15 @@ public:
     // XEventListener ( base of XDynamicResultSetListener )
     //-----------------------------------------------------------------
     virtual void SAL_CALL
-    disposing( const EVENTOBJECT& Source )
-        throw( RUNTIMEEXCEPTION );
+    disposing( const css::lang::EventObject& Source )
+        throw( css::uno::RuntimeException );
 
     //-----------------------------------------------------------------
     // XDynamicResultSetListener
     //-----------------------------------------------------------------
     virtual void SAL_CALL
-    notify( const ::com::sun::star::ucb::ListEvent& Changes )
-        throw( RUNTIMEEXCEPTION );
+    notify( const ::css::ucb::ListEvent& Changes )
+        throw( css::uno::RuntimeException );
 
     //-----------------------------------------------------------------
     // own methods:
@@ -206,17 +192,17 @@ public:
 
 class SortedDynamicResultSetFactory:
                 public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::ucb::XSortedDynamicResultSetFactory
+                public css::lang::XTypeProvider,
+                public css::lang::XServiceInfo,
+                public css::ucb::XSortedDynamicResultSetFactory
 {
 
-    REFERENCE< XCOMPONENTCONTEXT >   m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >   m_xContext;
 
 public:
 
     SortedDynamicResultSetFactory(
-        const REFERENCE< XCOMPONENTCONTEXT > & rxContext);
+        const css::uno::Reference< css::uno::XComponentContext > & rxContext);
 
     ~SortedDynamicResultSetFactory();
 
@@ -238,12 +224,12 @@ public:
     //-----------------------------------------------------------------
     // XSortedDynamicResultSetFactory
 
-    virtual REFERENCE< XDYNAMICRESULTSET > SAL_CALL
+    virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
     createSortedDynamicResultSet(
-                const REFERENCE< XDYNAMICRESULTSET > & Source,
-                const SEQUENCE< NUMBERED_SORTINGINFO > & Info,
-                const REFERENCE< XANYCOMPAREFACTORY > & CompareFactory )
-        throw( RUNTIMEEXCEPTION );
+                const css::uno::Reference< css::ucb::XDynamicResultSet > & Source,
+                const css::uno::Sequence< css::ucb::NumberedSortingInfo > & Info,
+                const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory )
+        throw( css::uno::RuntimeException );
 };
 
 #endif

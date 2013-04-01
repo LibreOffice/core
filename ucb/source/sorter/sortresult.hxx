@@ -70,11 +70,10 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-#define LISTACTION  com::sun::star::ucb::ListAction
 
 class EventList
 {
-    std::deque < LISTACTION* > maData;
+    std::deque < css::ucb::ListAction* > maData;
 
 public:
                      EventList(){}
@@ -83,9 +82,9 @@ public:
     sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
 
     void            AddEvent( long nType, long nPos, long nCount );
-    void            Insert( LISTACTION *pAction ) { maData.push_back( pAction ); }
+    void            Insert( css::ucb::ListAction *pAction ) { maData.push_back( pAction ); }
     void            Clear();
-    LISTACTION*     GetAction( long nIndex ) { return maData[ nIndex ]; }
+    css::ucb::ListAction*     GetAction( long nIndex ) { return maData[ nIndex ]; }
 };
 
 //-----------------------------------------------------------------------------
@@ -113,39 +112,28 @@ public:
 
 //-----------------------------------------------------------------------------
 
-#define PROPERTYCHANGEEVENT     com::sun::star::beans::PropertyChangeEvent
-#define RUNTIME_EXCEPTION       com::sun::star::uno::RuntimeException
-#define REFERENCE               com::sun::star::uno::Reference
-#define SEQUENCE                com::sun::star::uno::Sequence
-#define XEVENTLISTENER          com::sun::star::lang::XEventListener
-#define XRESULTSET              com::sun::star::sdbc::XResultSet
-#define SQLEXCEPTION            com::sun::star::sdbc::SQLException
-#define XRESULTSETMETADATA      com::sun::star::sdbc::XResultSetMetaData
-#define NUMBERED_SORTINGINFO    com::sun::star::ucb::NumberedSortingInfo
-#define XANYCOMPAREFACTORY      com::sun::star::ucb::XAnyCompareFactory
-
 #define RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedResultSet"
 
 //-----------------------------------------------------------------------------
 
 class SortedResultSet:
                 public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::lang::XComponent,
-                public com::sun::star::ucb::XContentAccess,
-                public XRESULTSET,
-                public com::sun::star::sdbc::XRow,
-                public com::sun::star::sdbc::XCloseable,
-                public com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                public com::sun::star::beans::XPropertySet
+                public css::lang::XTypeProvider,
+                public css::lang::XServiceInfo,
+                public css::lang::XComponent,
+                public css::ucb::XContentAccess,
+                public css::sdbc::XResultSet,
+                public css::sdbc::XRow,
+                public css::sdbc::XCloseable,
+                public css::sdbc::XResultSetMetaDataSupplier,
+                public css::beans::XPropertySet
 {
     cppu::OInterfaceContainerHelper *mpDisposeEventListeners;
     PropertyChangeListeners_Impl    *mpPropChangeListeners;
     PropertyChangeListeners_Impl    *mpVetoChangeListeners;
 
-    REFERENCE < XRESULTSET >            mxOriginal;
-    REFERENCE < XRESULTSET >            mxOther;
+    css::uno::Reference < css::sdbc::XResultSet >            mxOriginal;
+    css::uno::Reference < css::sdbc::XResultSet >            mxOther;
 
     SRSPropertySetInfo* mpPropSetInfo;
     SortInfo*           mpSortInfo;
@@ -162,37 +150,37 @@ class SortedResultSet:
 private:
 
     long                FindPos( SortListData *pEntry, long nStart, long nEnd )
-                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+                            throw( css::sdbc::SQLException, css::uno::RuntimeException );
     long                Compare( SortListData *pOne,
                                  SortListData *pTwo )
-                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    void                BuildSortInfo( REFERENCE< XRESULTSET > aResult,
-                                       const SEQUENCE < NUMBERED_SORTINGINFO > &xSortInfo,
-                                       const REFERENCE< XANYCOMPAREFACTORY > &xCompFac );
-    long                CompareImpl( REFERENCE < XRESULTSET > xResultOne,
-                                     REFERENCE < XRESULTSET > xResultTwo,
+                            throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    void                BuildSortInfo( css::uno::Reference< css::sdbc::XResultSet > aResult,
+                                       const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
+                                       const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
+    long                CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
+                                     css::uno::Reference < css::sdbc::XResultSet > xResultTwo,
                                      long nIndexOne, long nIndexTwo,
                                      SortInfo* pSortInfo )
-                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    long                CompareImpl( REFERENCE < XRESULTSET > xResultOne,
-                                     REFERENCE < XRESULTSET > xResultTwo,
+                            throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    long                CompareImpl( css::uno::Reference < css::sdbc::XResultSet > xResultOne,
+                                     css::uno::Reference < css::sdbc::XResultSet > xResultTwo,
                                      long nIndexOne, long nIndexTwo )
-                            throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    void                PropertyChanged( const PROPERTYCHANGEEVENT& rEvt );
+                            throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    void                PropertyChanged( const css::beans::PropertyChangeEvent& rEvt );
 
 public:
-                        SortedResultSet( REFERENCE< XRESULTSET > aResult );
+                        SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > aResult );
                         ~SortedResultSet();
 
     const SortedEntryList*      GetS2OList() const { return &maS2O; }
     const SimpleList*           GetO2SList() const { return &maO2S; }
-    REFERENCE < XRESULTSET >    GetResultSet() const { return mxOriginal; }
+    css::uno::Reference < css::sdbc::XResultSet >    GetResultSet() const { return mxOriginal; }
     SortInfo*                   GetSortInfo() const { return mpSortInfo; }
     long                        GetCount() const { return mnCount; }
 
     void                CopyData( SortedResultSet* pSource );
-    void                Initialize( const SEQUENCE < NUMBERED_SORTINGINFO > &xSortInfo,
-                                    const REFERENCE< XANYCOMPAREFACTORY > &xCompFac );
+    void                Initialize( const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
+                                    const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     void                CheckProperties( long nOldCount, sal_Bool bWasFinal );
 
     void                InsertNew( long nPos, long nCount );
@@ -214,233 +202,233 @@ public:
 
     // XComponent
     virtual void SAL_CALL
-    dispose() throw( RUNTIME_EXCEPTION );
+    dispose() throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    addEventListener( const REFERENCE< XEVENTLISTENER >& Listener )
-        throw( RUNTIME_EXCEPTION );
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removeEventListener( const REFERENCE< XEVENTLISTENER >& Listener )
-        throw( RUNTIME_EXCEPTION );
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+        throw( css::uno::RuntimeException );
 
     // XContentAccess
     virtual rtl::OUString SAL_CALL
     queryContentIdentifierString()
-        throw( RUNTIME_EXCEPTION );
-    virtual REFERENCE<
-                com::sun::star::ucb::XContentIdentifier > SAL_CALL
+        throw( css::uno::RuntimeException );
+    virtual css::uno::Reference<
+                css::ucb::XContentIdentifier > SAL_CALL
     queryContentIdentifier()
-        throw( RUNTIME_EXCEPTION );
-    virtual REFERENCE<
-                com::sun::star::ucb::XContent > SAL_CALL
+        throw( css::uno::RuntimeException );
+    virtual css::uno::Reference<
+                css::ucb::XContent > SAL_CALL
     queryContent()
-        throw( RUNTIME_EXCEPTION );
+        throw( css::uno::RuntimeException );
 
     // XResultSet
     virtual sal_Bool SAL_CALL
     next()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     isBeforeFirst()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     isAfterLast()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     isFirst()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     isLast()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual void SAL_CALL
     beforeFirst()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual void SAL_CALL
     afterLast()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     first()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     last()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Int32 SAL_CALL
     getRow()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     absolute( sal_Int32 row )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     relative( sal_Int32 rows )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     previous()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual void SAL_CALL
     refreshRow()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     rowUpdated()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     rowInserted()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     rowDeleted()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    virtual REFERENCE<
-                com::sun::star::uno::XInterface > SAL_CALL
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    virtual css::uno::Reference<
+                css::uno::XInterface > SAL_CALL
     getStatement()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     // XRow
     virtual sal_Bool SAL_CALL
-    wasNull() throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+    wasNull() throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual rtl::OUString SAL_CALL
     getString( sal_Int32 columnIndex )
-    throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+    throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL
     getBoolean( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual sal_Int8 SAL_CALL
     getByte( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual sal_Int16 SAL_CALL
     getShort( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual sal_Int32 SAL_CALL
     getInt( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual sal_Int64 SAL_CALL
     getLong( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual float SAL_CALL
     getFloat( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     virtual double SAL_CALL
     getDouble( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
     getBytes( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual com::sun::star::util::Date SAL_CALL
+    virtual css::util::Date SAL_CALL
     getDate( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual com::sun::star::util::Time SAL_CALL
+    virtual css::util::Time SAL_CALL
     getTime( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual com::sun::star::util::DateTime SAL_CALL
+    virtual css::util::DateTime SAL_CALL
     getTimestamp( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual REFERENCE<
-                com::sun::star::io::XInputStream > SAL_CALL
+    virtual css::uno::Reference<
+                css::io::XInputStream > SAL_CALL
     getBinaryStream( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual REFERENCE<
-                com::sun::star::io::XInputStream > SAL_CALL
+    virtual css::uno::Reference<
+                css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
-               const REFERENCE<
-                   com::sun::star::container::XNameAccess >& typeMap )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    virtual REFERENCE<
-                com::sun::star::sdbc::XRef > SAL_CALL
+               const css::uno::Reference<
+                   css::container::XNameAccess >& typeMap )
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    virtual css::uno::Reference<
+                css::sdbc::XRef > SAL_CALL
     getRef( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    virtual REFERENCE<
-                com::sun::star::sdbc::XBlob > SAL_CALL
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    virtual css::uno::Reference<
+                css::sdbc::XBlob > SAL_CALL
     getBlob( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    virtual REFERENCE<
-                com::sun::star::sdbc::XClob > SAL_CALL
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    virtual css::uno::Reference<
+                css::sdbc::XClob > SAL_CALL
     getClob( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
-    virtual REFERENCE<
-                com::sun::star::sdbc::XArray > SAL_CALL
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
+    virtual css::uno::Reference<
+                css::sdbc::XArray > SAL_CALL
     getArray( sal_Int32 columnIndex )
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     // XCloseable
     virtual void SAL_CALL
     close()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
     // XResultSetMetaDataSupplier
-    virtual REFERENCE< XRESULTSETMETADATA > SAL_CALL
+    virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
     getMetaData()
-        throw( SQLEXCEPTION, RUNTIME_EXCEPTION );
+        throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
 
     // XPropertySet
-    virtual REFERENCE<
-                com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference<
+                css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo()
-        throw( RUNTIME_EXCEPTION );
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
     setPropertyValue( const rtl::OUString& PropertyName,
-                      const com::sun::star::uno::Any& Value )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::beans::PropertyVetoException,
-               com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::lang::WrappedTargetException,
-               RUNTIME_EXCEPTION );
+                      const css::uno::Any& Value )
+        throw( css::beans::UnknownPropertyException,
+               css::beans::PropertyVetoException,
+               css::lang::IllegalArgumentException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Any SAL_CALL
+    virtual css::uno::Any SAL_CALL
     getPropertyValue( const rtl::OUString& PropertyName )
-        throw( com::sun::star::beans::UnknownPropertyException,
-        com::sun::star::lang::WrappedTargetException,
-        RUNTIME_EXCEPTION );
+        throw( css::beans::UnknownPropertyException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException );
 
     virtual void SAL_CALL
     addPropertyChangeListener( const rtl::OUString& PropertyName,
-                               const REFERENCE<
-                                       com::sun::star::beans::XPropertyChangeListener >& Listener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               RUNTIME_EXCEPTION );
+                               const css::uno::Reference<
+                                       css::beans::XPropertyChangeListener >& Listener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException );
 
     virtual void SAL_CALL
     removePropertyChangeListener( const rtl::OUString& PropertyName,
-                                  const REFERENCE<
-                                      com::sun::star::beans::XPropertyChangeListener >& Listener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               RUNTIME_EXCEPTION );
+                                  const css::uno::Reference<
+                                      css::beans::XPropertyChangeListener >& Listener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException );
 
     virtual void SAL_CALL
     addVetoableChangeListener( const rtl::OUString& PropertyName,
-                               const REFERENCE<
-                                       com::sun::star::beans::XVetoableChangeListener >& Listener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               RUNTIME_EXCEPTION );
+                               const css::uno::Reference<
+                                       css::beans::XVetoableChangeListener >& Listener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException );
 
     virtual void SAL_CALL
     removeVetoableChangeListener( const rtl::OUString& PropertyName,
-                                  const REFERENCE<
-                                      com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw( com::sun::star::beans::UnknownPropertyException,
-               com::sun::star::lang::WrappedTargetException,
-               RUNTIME_EXCEPTION );
+                                  const css::uno::Reference<
+                                      css::beans::XVetoableChangeListener >& aListener )
+        throw( css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException );
 };
 
 #endif
