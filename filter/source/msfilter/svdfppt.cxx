@@ -7275,8 +7275,8 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         //set textHorizontalAdjust and TextWritingMode attr
         const sal_Int32 eHA(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
         const SvxFrameDirection eDirection = (const SvxFrameDirection)((( const SvxFrameDirectionItem&)pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
-        static const rtl::OUString  sHorizontalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) );
-        static const rtl::OUString  sWritingMode( RTL_CONSTASCII_USTRINGPARAM("TextWritingMode") );
+        static const rtl::OUString  sHorizontalAdjust( "TextHorizontalAdjust" );
+        static const rtl::OUString  sWritingMode( "TextWritingMode" );
         xPropSet->setPropertyValue(  sHorizontalAdjust , Any( eHA ) );
         if ( eDirection == FRMDIR_VERT_TOP_RIGHT )
         {//vertical writing
