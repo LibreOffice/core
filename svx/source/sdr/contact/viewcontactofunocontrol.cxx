@@ -40,7 +40,6 @@
 namespace sdr { namespace contact {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::awt::XControlContainer;
@@ -48,7 +47,6 @@ namespace sdr { namespace contact {
     using ::com::sun::star::awt::XWindow2;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ViewContactOfUnoControl

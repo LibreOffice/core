@@ -43,8 +43,6 @@ namespace chart
 {
 namespace impl
 {
-
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -63,7 +61,6 @@ namespace impl
     using ::com::sun::star::view::XSelectionSupplier;
     using ::com::sun::star::chart2::XChartDocument;
     using ::com::sun::star::document::UndoFailedException;
-    /** === end UNO using === **/
 
 // ---------------------------------------------------------------------------------------------------------------------
 UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const ::boost::shared_ptr< ChartModelClone >& i_modelClone )

@@ -77,7 +77,6 @@ namespace svxform
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::awt::TextEvent;
@@ -107,7 +106,6 @@ namespace svxform
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::awt::XTextComponent;
     using ::com::sun::star::uno::Sequence;
-    /** === end UNO using === **/
 
 //========================================================================
 OFilterItemExchange::OFilterItemExchange()

@@ -24,10 +24,8 @@ namespace dbaccess
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::RuntimeException;
-    /** === end UNO using === **/
 
     //====================================================================
     //= Veto

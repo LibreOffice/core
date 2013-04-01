@@ -39,7 +39,6 @@ namespace svt { namespace uno
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -64,7 +63,7 @@ namespace svt { namespace uno
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::util::InvalidStateException;
     using ::com::sun::star::awt::XWindow;
-    /** === end UNO using === **/
+
     namespace WizardButton = ::com::sun::star::ui::dialogs::WizardButton;
 
     //------------------------------------------------------------------------------------------------------------------

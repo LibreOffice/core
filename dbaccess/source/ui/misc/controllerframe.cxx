@@ -39,7 +39,6 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -67,7 +66,6 @@ namespace dbaui
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     using ::com::sun::star::awt::XWindow;
-    /** === end UNO using === **/
 
     //====================================================================
     //= FrameWindowActivationListener

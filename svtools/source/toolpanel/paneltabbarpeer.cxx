@@ -31,7 +31,6 @@ namespace svt
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -45,7 +44,6 @@ namespace svt
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::accessibility::XAccessibleContext;
     using ::com::sun::star::lang::DisposedException;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= PanelTabBarPeer

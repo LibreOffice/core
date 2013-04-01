@@ -44,7 +44,6 @@ namespace sd { namespace toolpanel
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -66,7 +65,6 @@ namespace sd { namespace toolpanel
     using ::com::sun::star::lang::XInitialization;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::awt::XWindow;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= ToolPanelFactory

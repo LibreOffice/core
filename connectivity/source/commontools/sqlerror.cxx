@@ -33,7 +33,6 @@ namespace connectivity
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -45,7 +44,6 @@ namespace connectivity
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::uno::Type;
-    /** === end UNO using === **/
 
     //using SQLError::ParamValue; // GCC (unxlngi6) does not like this
     namespace

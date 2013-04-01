@@ -27,7 +27,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::EventObject;
@@ -36,7 +35,6 @@ namespace pcr
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
-    /** === end UNO using === **/
 
     //====================================================================
     //= PropertyEventTranslation

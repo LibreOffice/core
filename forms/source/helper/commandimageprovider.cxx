@@ -33,7 +33,6 @@ namespace frm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -54,7 +53,7 @@ namespace frm
     using ::com::sun::star::frame::ModuleManager;
     using ::com::sun::star::frame::XModuleManager2;
     using ::com::sun::star::graphic::XGraphic;
-    /** === end UNO using === **/
+
     namespace ImageType = ::com::sun::star::ui::ImageType;
 
     //====================================================================

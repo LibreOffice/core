@@ -35,7 +35,6 @@
 namespace basctl { namespace docs {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -54,7 +53,7 @@ namespace basctl { namespace docs {
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::frame::XFrame;
-    /** === end UNO using === **/
+
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
 
     //====================================================================

@@ -41,7 +41,6 @@ namespace sfx2
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -69,7 +68,6 @@ namespace sfx2
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::frame::XModel;
-    /** === end UNO using === **/
 
     using ::svl::IUndoManager;
 

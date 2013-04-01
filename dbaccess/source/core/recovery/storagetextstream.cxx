@@ -29,7 +29,6 @@ namespace dbaccess
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -46,7 +45,6 @@ namespace dbaccess
     using ::com::sun::star::io::TextOutputStream;
     using ::com::sun::star::io::XTextOutputStream2;
     using ::com::sun::star::io::XActiveDataSource;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= StorageTextOutputStream_Data

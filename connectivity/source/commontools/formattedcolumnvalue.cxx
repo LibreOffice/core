@@ -41,7 +41,6 @@ namespace dbtools
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -63,7 +62,7 @@ namespace dbtools
     using ::com::sun::star::sdb::XColumn;
     using ::com::sun::star::sdb::XColumnUpdate;
     using ::com::sun::star::lang::XComponent;
-    /** === end UNO using === **/
+
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 

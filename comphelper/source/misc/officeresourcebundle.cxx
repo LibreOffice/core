@@ -31,7 +31,6 @@ namespace comphelper
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using com::sun::star::resource::XResourceBundle;
     using com::sun::star::resource::XResourceBundleLoader;
@@ -41,7 +40,6 @@ namespace comphelper
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ResourceBundle_Impl

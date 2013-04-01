@@ -79,7 +79,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;
@@ -134,7 +133,7 @@ namespace pcr
     using com::sun::star::uri::XUriReferenceFactory;
     using com::sun::star::uri::XVndSunStarScriptUrlReference;
     using ::com::sun::star::lang::XEventListener;
-    /** === end UNO using === **/
+
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;

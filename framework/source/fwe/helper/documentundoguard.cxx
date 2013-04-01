@@ -31,7 +31,6 @@ namespace framework
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -47,7 +46,6 @@ namespace framework
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::document::UndoManagerEvent;
     using ::com::sun::star::lang::EventObject;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= UndoManagerContextListener

@@ -36,7 +36,6 @@ namespace dbtools
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdb::XSingleSelectQueryComposer;
@@ -50,7 +49,7 @@ namespace dbtools
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::sdbc::SQLException;
-    /** === end UNO using === **/
+
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
     //====================================================================

@@ -28,7 +28,6 @@ namespace rptui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::report::XReportControlModel;
@@ -36,7 +35,6 @@ namespace rptui
     using ::com::sun::star::report::XFormatCondition;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ConditionUpdater

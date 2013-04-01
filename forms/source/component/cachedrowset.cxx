@@ -34,7 +34,6 @@ namespace frm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -51,7 +50,7 @@ namespace frm
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::sdbc::XStatement;
-    /** === end UNO using === **/
+
     namespace ResultSetType = ::com::sun::star::sdbc::ResultSetType;
 
     //====================================================================

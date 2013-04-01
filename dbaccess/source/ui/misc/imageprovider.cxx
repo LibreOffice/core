@@ -36,7 +36,6 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::uno::Exception;
@@ -48,7 +47,7 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::sdbcx::XViewsSupplier;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    /** === end UNO using === **/
+
     namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
     //====================================================================

@@ -46,7 +46,6 @@ namespace svx
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -62,7 +61,6 @@ namespace svx
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::XPropertySet;
-    /** === end UNO using === **/
 
     typedef ::boost::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
 

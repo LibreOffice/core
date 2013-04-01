@@ -38,7 +38,6 @@ namespace sdbtools
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::uno::Reference;
@@ -53,7 +52,6 @@ namespace sdbtools
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::XComponentContext;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ConnectionTools

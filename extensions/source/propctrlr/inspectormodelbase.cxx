@@ -34,7 +34,6 @@ namespace pcr
 #define MODEL_PROPERTY_ID_MAX_HELP_TEXT_LINES   2002
 #define MODEL_PROPERTY_ID_IS_READ_ONLY          2003
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
@@ -46,7 +45,7 @@ namespace pcr
     using ::com::sun::star::inspection::PropertyCategoryDescriptor;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::beans::Property;
-    /** === end UNO using === **/
+
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
     //====================================================================

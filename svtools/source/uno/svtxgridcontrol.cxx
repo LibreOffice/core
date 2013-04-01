@@ -40,7 +40,6 @@
 
 #include <vcl/svapp.hxx>
 
-/** === begin UNO using === **/
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
@@ -68,7 +67,6 @@ using ::com::sun::star::container::ContainerEvent;
 using ::com::sun::star::awt::grid::GridDataEvent;
 using ::com::sun::star::awt::grid::GridInvalidModelException;
 using ::com::sun::star::util::VetoException;
-/** === end UNO using === **/
 
 namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;

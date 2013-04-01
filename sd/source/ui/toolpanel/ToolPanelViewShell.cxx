@@ -83,7 +83,6 @@ using namespace ::sd::toolpanel;
 #define ToolPanelViewShell
 #include "sdslots.hxx"
 
-/** === begin UNO using === **/
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -110,7 +109,6 @@ using ::com::sun::star::drawing::framework::AnchorBindingMode_DIRECT;
 using ::com::sun::star::ui::XUIElement;
 using ::com::sun::star::ui::XToolPanel;
 using ::com::sun::star::drawing::framework::ResourceActivationMode_REPLACE;
-/** === end UNO using === **/
 
 using ::sd::framework::FrameworkHelper;
 

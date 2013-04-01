@@ -43,7 +43,6 @@ namespace dbaui
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -70,7 +69,6 @@ namespace dbaui
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::PropertyChangeEvent;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= helper structs

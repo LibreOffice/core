@@ -28,12 +28,10 @@ namespace comphelper
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::lang::NotInitializedException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ComponentBase

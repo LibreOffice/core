@@ -30,7 +30,6 @@
 namespace dbaccess
 {
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -46,7 +45,7 @@ namespace dbaccess
     using ::com::sun::star::document::XDocumentEventListener;
     using ::com::sun::star::document::DocumentEvent;
     using ::com::sun::star::frame::XController2;
-    /** === end UNO using === **/
+
     using namespace ::com::sun::star;
 
     //==================================================================

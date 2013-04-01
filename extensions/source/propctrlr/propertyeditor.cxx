@@ -33,11 +33,9 @@ namespace pcr
     #define LAYOUT_BORDER_RIGHT     3
     #define LAYOUT_BORDER_BOTTOM    3
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::Reference;
-    /** === end UNO using === **/
 
     //==================================================================
     // class OPropertyEditor

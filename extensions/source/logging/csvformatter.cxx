@@ -39,7 +39,6 @@
 namespace logging
 {
 
-    /** === begin UNO using === **/
     using ::com::sun::star::logging::XCsvLogFormatter;
     using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::uno::XComponentContext;
@@ -49,7 +48,6 @@ namespace logging
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
-    /** === end UNO using === **/
 
     //= CsvFormatter - declaration
     //= formats for csv files as defined by RFC4180

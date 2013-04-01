@@ -105,7 +105,6 @@ using namespace ::connectivity::simple;
 namespace svxform
 {
 
-    /** === begin UNO using === **/
     using ::com::sun::star::sdb::XColumn;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::awt::XTabController;
@@ -200,7 +199,7 @@ namespace svxform
     using ::com::sun::star::form::runtime::FormOperations;
     using ::com::sun::star::container::XContainer;
     using ::com::sun::star::sdbc::SQLWarning;
-    /** === end UNO using === **/
+
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace FocusChangeReason = ::com::sun::star::awt::FocusChangeReason;

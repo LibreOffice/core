@@ -92,7 +92,6 @@ using namespace ::svx;
 using namespace ::svxform;
 
     using namespace ::com::sun::star;
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XInterface;
@@ -147,7 +146,7 @@ using namespace ::svxform;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::XNumberFormats;
     using ::com::sun::star::beans::XPropertySetInfo;
-    /** === end UNO using === **/
+
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
     namespace DataType = ::com::sun::star::sdbc::DataType;

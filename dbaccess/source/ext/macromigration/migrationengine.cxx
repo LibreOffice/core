@@ -80,7 +80,6 @@ namespace dbmm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -134,7 +133,7 @@ namespace dbmm
     using ::com::sun::star::script::XScriptEventsSupplier;
     using ::com::sun::star::io::XInputStreamProvider;
     using ::com::sun::star::io::XInputStream;
-    /** === end UNO using === **/
+
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
 // migration phases whose progresses are to be mixed into one progress

@@ -34,7 +34,6 @@ namespace logging
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Any;
@@ -45,7 +44,7 @@ namespace logging
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::logging::PlainTextFormatter;
-    /** === end UNO using === **/
+
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
     //====================================================================

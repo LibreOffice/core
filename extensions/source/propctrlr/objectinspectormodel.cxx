@@ -34,7 +34,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::inspection::XObjectInspectorModel;
     using ::com::sun::star::lang::XInitialization;
     using ::com::sun::star::lang::XServiceInfo;
@@ -50,7 +49,6 @@ namespace pcr
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::makeAny;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ObjectInspectorModel

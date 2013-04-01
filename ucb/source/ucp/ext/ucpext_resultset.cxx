@@ -29,7 +29,6 @@ namespace ucb { namespace ucp { namespace ext
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -46,7 +45,6 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::ucb::OpenCommandArgument2;
     using ::com::sun::star::ucb::XCommandEnvironment;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= ResultSet

@@ -41,7 +41,6 @@ namespace basctl
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::document::XEventBroadcaster;
     using ::com::sun::star::document::XEventListener;
     using ::com::sun::star::document::EventObject;
@@ -53,7 +52,7 @@ namespace basctl
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::GlobalEventBroadcaster;
     using ::com::sun::star::uno::UNO_QUERY;
-    /** === end UNO using === **/
+
     namespace csslang = ::com::sun::star::lang;
 
     //====================================================================

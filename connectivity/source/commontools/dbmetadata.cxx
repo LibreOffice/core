@@ -49,7 +49,6 @@ namespace dbtools
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XDatabaseMetaData;
@@ -70,7 +69,7 @@ namespace dbtools
     using ::com::sun::star::sdbc::DriverManager;
     using ::com::sun::star::sdbc::XDriverManager2;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    /** === end UNO using === **/
+
     namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 
     //====================================================================

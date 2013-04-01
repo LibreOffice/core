@@ -30,7 +30,6 @@ namespace comphelper
 //........................................................................
 
     using namespace ::cppu;
-    /** === being UNO using === **/
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Reference;
@@ -38,7 +37,6 @@ namespace comphelper
     using ::com::sun::star::registry::XRegistryKey;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::XInterface;
-    /** === end UNO using === **/
 
     typedef ::std::vector< ComponentDescription >   ComponentDescriptions;
 

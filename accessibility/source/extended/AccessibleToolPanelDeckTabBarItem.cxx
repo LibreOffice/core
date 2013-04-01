@@ -41,7 +41,6 @@ namespace accessibility
     typedef ::com::sun::star::awt::Rectangle    UnoRectangle;
     typedef ::com::sun::star::awt::Point        UnoPoint;
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -61,7 +60,6 @@ namespace accessibility
     using ::com::sun::star::accessibility::XAccessibleComponent;
     using ::com::sun::star::accessibility::XAccessibleExtendedComponent;
     using ::com::sun::star::awt::XFont;
-    /** === end UNO using === **/
 
     namespace AccessibleRole = ::com::sun::star::accessibility::AccessibleRole;
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;

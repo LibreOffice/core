@@ -32,7 +32,6 @@ namespace svt { namespace uno
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -48,7 +47,7 @@ namespace svt { namespace uno
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::awt::XControl;
-    /** === end UNO using === **/
+
     using namespace ::com::sun::star;
 
     //==================================================================================================================

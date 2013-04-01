@@ -41,7 +41,6 @@ namespace frm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::Property;
@@ -56,7 +55,7 @@ namespace frm
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::beans::NotRemoveableException;
     using ::com::sun::star::beans::UnknownPropertyException;
-    /** === end UNO using === **/
+
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
     //====================================================================

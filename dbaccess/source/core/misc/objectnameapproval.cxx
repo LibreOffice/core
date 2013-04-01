@@ -33,7 +33,6 @@ namespace dbaccess
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::uno::WeakReference;
     using ::com::sun::star::uno::Reference;
@@ -43,7 +42,6 @@ namespace dbaccess
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::sdbc::SQLException;
-    /** === end UNO using === **/
 
     namespace CommandType = com::sun::star::sdb::CommandType;
 

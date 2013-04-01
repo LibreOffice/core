@@ -32,7 +32,6 @@ namespace chart
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -57,7 +56,6 @@ namespace chart
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::util::XModifyListener;
     using ::com::sun::star::frame::XModel;
-    /** === end UNO using === **/
 
     namespace impl
     {

@@ -30,7 +30,6 @@ namespace dbaccess
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,7 +50,6 @@ namespace dbaccess
     using ::com::sun::star::ucb::XCommandProcessor;
     using ::com::sun::star::frame::XController2;
     using ::com::sun::star::lang::XComponent;
-    /** === end UNO using === **/
 
     //====================================================================
     //= SubComponentLoader

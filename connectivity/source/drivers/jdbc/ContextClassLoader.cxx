@@ -25,10 +25,8 @@ namespace connectivity { namespace jdbc
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
-    /** === end UNO using === **/
 
     using ::connectivity::java_lang_Object;
 

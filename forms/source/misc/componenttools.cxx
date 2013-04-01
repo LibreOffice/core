@@ -29,13 +29,11 @@ namespace frm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::container::XChild;
-    /** === end UNO using === **/
 
     //====================================================================
     //= TypeBag

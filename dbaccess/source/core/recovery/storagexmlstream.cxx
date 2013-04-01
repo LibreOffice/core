@@ -37,7 +37,6 @@ namespace dbaccess
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -61,7 +60,6 @@ namespace dbaccess
     using ::com::sun::star::xml::sax::Parser;
     using ::com::sun::star::xml::sax::XParser;
     using ::com::sun::star::xml::sax::InputSource;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= StorageXMLOutputStream_Data

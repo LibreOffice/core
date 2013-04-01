@@ -44,7 +44,6 @@ namespace sfx2
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::uno::Any;
@@ -66,7 +65,7 @@ namespace sfx2
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_QUERY;
-    /** === end UNO using === **/
+
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 
     //====================================================================

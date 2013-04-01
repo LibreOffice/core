@@ -26,9 +26,7 @@ namespace rptui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
-    /** === end UNO using === **/
 
     namespace
     {

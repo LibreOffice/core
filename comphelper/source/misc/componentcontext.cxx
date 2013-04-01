@@ -28,7 +28,6 @@ namespace comphelper
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::NullPointerException;
@@ -42,7 +41,6 @@ namespace comphelper
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ComponentContext

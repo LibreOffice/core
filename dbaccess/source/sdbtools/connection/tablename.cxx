@@ -36,7 +36,6 @@ namespace sdbtools
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::NullPointerException;
@@ -52,7 +51,6 @@ namespace sdbtools
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::XComponentContext;
-    /** === end UNO using === **/
 
     namespace CompositionType = ::com::sun::star::sdb::tools::CompositionType;
 

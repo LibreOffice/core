@@ -88,7 +88,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-/** === begin UNO using === **/
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
@@ -106,7 +105,6 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::task::XInteractionRequest;
 using ::com::sun::star::lang::XMultiServiceFactory;
-/** === end UNO using === **/
 
 using namespace ::com::sun::star;
 

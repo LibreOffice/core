@@ -25,7 +25,6 @@
 
 namespace comphelper
 {
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -57,7 +56,6 @@ namespace comphelper
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= DatePredicateLess

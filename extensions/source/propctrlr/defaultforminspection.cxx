@@ -42,7 +42,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Any;
@@ -55,7 +54,6 @@ namespace pcr
     using ::com::sun::star::beans::UnknownPropertyException;
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
-    /** === end UNO using === **/
 
     //====================================================================
     //= DefaultFormComponentInspectorModel

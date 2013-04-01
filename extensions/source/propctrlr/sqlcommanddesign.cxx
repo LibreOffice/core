@@ -49,7 +49,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiComponentFactory;
     using ::com::sun::star::beans::PropertyChangeEvent;
@@ -83,7 +82,7 @@ namespace pcr
     using ::com::sun::star::frame::Desktop;
     using ::com::sun::star::frame::XDesktop2;
     using ::com::sun::star::uno::Any;
-    /** === end UNO using === **/
+
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 

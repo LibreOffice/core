@@ -55,7 +55,6 @@ namespace ucb { namespace ucp { namespace ext
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -93,7 +92,7 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::ucb::CommandInfo;
     using ::com::sun::star::deployment::PackageInformationProvider;
     using ::com::sun::star::deployment::XPackageInformationProvider;
-    /** === end UNO using === **/
+
     namespace OpenMode = ::com::sun::star::ucb::OpenMode;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 

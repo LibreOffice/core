@@ -39,7 +39,6 @@ namespace framework
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -64,7 +63,6 @@ namespace framework
     using ::com::sun::star::util::InvalidStateException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::util::XModifyListener;
-    /** === end UNO using === **/
     using ::svl::IUndoManager;
 
     //==================================================================================================================

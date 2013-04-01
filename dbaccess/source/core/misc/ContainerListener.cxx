@@ -25,7 +25,6 @@ namespace dbaccess
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::uno::RuntimeException;
@@ -34,7 +33,6 @@ namespace dbaccess
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::util::XVeto;
     using ::com::sun::star::uno::Reference;
-    /** === end UNO using === **/
 
     //====================================================================
     //= OContainerListener

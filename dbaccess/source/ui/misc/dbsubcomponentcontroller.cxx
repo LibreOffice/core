@@ -53,7 +53,6 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySet;
@@ -85,7 +84,6 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::frame::XUntitledNumbers;
     using ::com::sun::star::beans::PropertyVetoException;
-    /** === end UNO using === **/
 
     class DataSourceHolder
     {

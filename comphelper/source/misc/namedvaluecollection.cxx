@@ -44,7 +44,6 @@ namespace comphelper
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
@@ -55,7 +54,6 @@ namespace comphelper
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
-    /** === end UNO using === **/
 
     //====================================================================
     //= NamedValueCollection_Impl

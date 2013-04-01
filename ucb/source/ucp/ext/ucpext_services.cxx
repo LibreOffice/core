@@ -26,7 +26,6 @@ namespace ucb { namespace ucp { namespace ext
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -39,7 +38,6 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::lang::XSingleComponentFactory;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= descriptors for the services implemented in this component

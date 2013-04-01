@@ -29,13 +29,11 @@ namespace sdbtools
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XComponentContext;
-    /** === end UNO using === **/
 
     //====================================================================
     //= DataSourceMetaData_Impl

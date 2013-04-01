@@ -31,7 +31,6 @@ namespace dbaui
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -54,7 +53,6 @@ namespace dbaui
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::util::NotLockedException;
     using ::com::sun::star::lang::NoSupportException;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= UndoManager_Impl

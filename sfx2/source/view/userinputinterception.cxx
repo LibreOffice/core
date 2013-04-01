@@ -33,7 +33,6 @@ namespace sfx2
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -49,7 +48,7 @@ namespace sfx2
     using ::com::sun::star::awt::XKeyHandler;
     using ::com::sun::star::awt::XMouseClickHandler;
     using ::com::sun::star::lang::DisposedException;
-    /** === end UNO using === **/
+
     namespace MouseButton = ::com::sun::star::awt::MouseButton;
     namespace KeyModifier = ::com::sun::star::awt::KeyModifier;
 

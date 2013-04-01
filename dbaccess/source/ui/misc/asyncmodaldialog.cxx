@@ -30,12 +30,10 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::ui::dialogs::XExecutableDialog;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
-    /** === end UNO using === **/
 
     //====================================================================
     //= AsyncDialogExecutor

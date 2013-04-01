@@ -43,7 +43,6 @@ namespace svx
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::form::runtime::XFormController;
@@ -62,7 +61,7 @@ namespace svx
     using ::com::sun::star::sdb::XSQLErrorBroadcaster;
     using ::com::sun::star::sdb::SQLErrorEvent;
     using ::com::sun::star::lang::EventObject;
-    /** === end UNO using === **/
+
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
     //====================================================================

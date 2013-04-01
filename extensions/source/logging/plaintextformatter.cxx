@@ -39,7 +39,6 @@ namespace logging
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Reference;
@@ -48,7 +47,6 @@ namespace logging
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
-    /** === end UNO using === **/
 
     //====================================================================
     //= PlainTextFormatter - declaration

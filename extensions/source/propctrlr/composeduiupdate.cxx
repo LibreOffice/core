@@ -32,7 +32,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
@@ -43,7 +42,6 @@ namespace pcr
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::inspection::XPropertyControlObserver;
-    /** === end UNO using === **/
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 

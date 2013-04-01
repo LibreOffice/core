@@ -35,7 +35,6 @@ namespace rptui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::report::XReportDefinition;
     using ::com::sun::star::report::XFormattedField;
@@ -51,7 +50,6 @@ namespace rptui
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::XNumberFormatTypes;
     using ::com::sun::star::uno::makeAny;
-    /** === end UNO using === **/
 
     //====================================================================
     //= FormatNormalizer

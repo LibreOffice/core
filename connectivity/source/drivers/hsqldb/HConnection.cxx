@@ -45,7 +45,6 @@
 #include "resource/sharedresources.hxx"
 #include "resource/hsqldb_res.hrc"
 
-/** === begin UNO using === **/
 using ::com::sun::star::util::XFlushListener;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::uno::Reference;
@@ -79,7 +78,7 @@ using ::com::sun::star::sdbc::XDatabaseMetaData2;
 using ::com::sun::star::sdbc::XRow;
 using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 using ::com::sun::star::beans::PropertyValue;
-/** === end UNO using === **/
+
 namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
 namespace connectivity { namespace hsqldb

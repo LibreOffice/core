@@ -46,7 +46,6 @@ namespace dbaccess
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -74,7 +73,6 @@ namespace dbaccess
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::util::XModifiable;
     using ::com::sun::star::beans::XPropertySet;
-    /** === end UNO using === **/
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 

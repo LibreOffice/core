@@ -59,7 +59,6 @@ namespace sfx2
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::XInterface;
@@ -87,7 +86,7 @@ namespace sfx2
     using ::com::sun::star::graphic::XGraphic;
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::awt::XControl;
-    /** === end UNO using === **/
+
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
     //==================================================================================================================

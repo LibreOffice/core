@@ -35,7 +35,6 @@ namespace svt
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -48,7 +47,7 @@ namespace svt
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::accessibility::XAccessibleContext;
-    /** === end UNO using === **/
+
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 

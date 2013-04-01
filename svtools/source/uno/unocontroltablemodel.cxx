@@ -41,7 +41,6 @@ namespace svt { namespace table
 {
 // .....................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
@@ -64,7 +63,6 @@ namespace svt { namespace table
     using ::com::sun::star::awt::grid::GridDataEvent;
     using ::com::sun::star::awt::grid::XSortableGridData;
     using ::com::sun::star::beans::Pair;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= UnoControlTableModel_Impl

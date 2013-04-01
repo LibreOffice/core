@@ -33,7 +33,6 @@ namespace toolkit
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -58,7 +57,7 @@ namespace toolkit
     using ::com::sun::star::util::XModifyListener;
     using ::com::sun::star::awt::XToolkit;
     using ::com::sun::star::lang::XMultiServiceFactory;
-    /** === end UNO using === **/
+
     namespace VisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 

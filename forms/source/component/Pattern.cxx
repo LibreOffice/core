@@ -24,7 +24,6 @@ namespace frm
 {
 //.........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Sequence;
@@ -36,7 +35,7 @@ namespace frm
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::uno::UNO_QUERY;
-    /** === end UNO using === **/
+
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
 //==================================================================

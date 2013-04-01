@@ -32,7 +32,6 @@ namespace toolkit
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -46,7 +45,6 @@ namespace toolkit
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::XComponentContext;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= SpinningProgressControlModel

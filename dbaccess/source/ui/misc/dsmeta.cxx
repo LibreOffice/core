@@ -30,10 +30,8 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using namespace dbaccess;
     using namespace ::com::sun::star;
-    /** === end UNO using === **/
 
     struct FeatureSupport
     {

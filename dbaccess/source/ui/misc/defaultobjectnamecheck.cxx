@@ -47,7 +47,6 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::lang::IllegalArgumentException;
@@ -63,7 +62,6 @@ namespace dbaui
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::sdb::tools::XConnectionTools;
     using ::com::sun::star::uno::UNO_QUERY;
-    /** === end UNO using === **/
 
     using namespace dbtools;
 

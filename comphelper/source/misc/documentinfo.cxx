@@ -38,7 +38,6 @@
 namespace comphelper {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -54,7 +53,6 @@ namespace comphelper {
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::frame::XFrame;
-    /** === end UNO using === **/
 
     //====================================================================
     //= helper

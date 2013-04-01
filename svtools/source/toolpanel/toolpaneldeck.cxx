@@ -38,12 +38,11 @@ namespace svt
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::uno::UNO_SET_THROW;
-    /** === end UNO using === **/
+
     namespace AccessibleRole = ::com::sun::star::accessibility::AccessibleRole;
 
     enum DeckAction

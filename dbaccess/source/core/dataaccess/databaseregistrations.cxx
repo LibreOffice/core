@@ -30,7 +30,6 @@
 
 namespace dbaccess
 {
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,7 +50,6 @@ namespace dbaccess
     using ::com::sun::star::sdb::XDatabaseRegistrationsListener;
     using ::com::sun::star::sdb::DatabaseRegistrationEvent;
     using ::com::sun::star::uno::XAggregation;
-    /** === end UNO using === **/
 
     static const OUString& getConfigurationRootPath()
     {

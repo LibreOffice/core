@@ -46,7 +46,6 @@ namespace logging
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::logging::XLogger;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -66,7 +65,7 @@ namespace logging
     using ::com::sun::star::logging::XLogFormatter;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::XComponentContext;
-    /** === end UNO using === **/
+
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
     namespace

@@ -32,7 +32,6 @@ namespace comphelper
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::TypeClass_VOID;
@@ -42,7 +41,7 @@ namespace comphelper
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::beans::NotRemoveableException;
     using ::com::sun::star::beans::UnknownPropertyException;
-    /** === end UNO using === **/
+
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
     //====================================================================

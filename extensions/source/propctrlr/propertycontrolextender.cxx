@@ -29,7 +29,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -46,7 +45,7 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::inspection::XPropertyControlContext;
-    /** === end UNO using === **/
+
     namespace KeyFunction = ::com::sun::star::awt::KeyFunction;
 
     //====================================================================

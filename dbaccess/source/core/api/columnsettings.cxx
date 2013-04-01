@@ -33,7 +33,6 @@ namespace dbaccess
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -48,7 +47,7 @@ namespace dbaccess
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
-    /** === end UNO using === **/
+
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
     //==============================================================================

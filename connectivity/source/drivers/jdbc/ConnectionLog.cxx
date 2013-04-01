@@ -30,10 +30,8 @@
 namespace connectivity { namespace java { namespace sql {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
-    /** === end UNO using === **/
 
     //--------------------------------------------------------------------
     namespace
@@ -78,13 +76,11 @@ namespace comphelper { namespace log { namespace convert
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
-    /** === end UNO using === **/
 
     //--------------------------------------------------------------------
     ::rtl::OUString convertLogArgToString( const Date& _rDate )

@@ -30,7 +30,6 @@ namespace frm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::awt::XWindowListener2;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::awt::XWindow2;
@@ -41,7 +40,6 @@ namespace frm
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
-    /** === end UNO using === **/
 
     //====================================================================
     //= WindowStateGuard_Impl

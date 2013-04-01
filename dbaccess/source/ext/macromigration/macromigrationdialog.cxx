@@ -60,7 +60,6 @@ namespace dbmm
 
 #define PATH_DEFAULT            1
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::XInterface;
@@ -92,7 +91,6 @@ namespace dbmm
     using ::com::sun::star::ucb::XCommandEnvironment;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XContentIdentifier;
-    /** === end UNO using === **/
 
     //====================================================================
     //= helper

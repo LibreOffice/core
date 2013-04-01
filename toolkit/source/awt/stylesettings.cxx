@@ -35,7 +35,6 @@ namespace toolkit
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,7 +50,6 @@ namespace toolkit
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::awt::FontDescriptor;
     using ::com::sun::star::awt::XStyleChangeListener;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= WindowStyleSettings_Data

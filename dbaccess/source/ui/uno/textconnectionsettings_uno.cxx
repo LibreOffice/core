@@ -39,7 +39,6 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -53,7 +52,7 @@ namespace dbaui
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::lang::IllegalArgumentException;
-    /** === end UNO using === **/
+
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
     //====================================================================

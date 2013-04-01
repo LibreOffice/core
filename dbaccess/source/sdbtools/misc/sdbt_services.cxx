@@ -20,13 +20,11 @@
 
 #include "module_sdbt.hxx"
 
-/** === begin UNO using === **/
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::registry::InvalidRegistryException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
-/** === end UNO using === **/
 
 extern "C" void SAL_CALL createRegistryInfo_ConnectionTools();
 

@@ -41,7 +41,6 @@ namespace chart
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -64,7 +63,6 @@ namespace chart
     using ::com::sun::star::util::XModifiable;
     using ::com::sun::star::chart2::data::XDataSource;
     using ::com::sun::star::chart2::data::XLabeledDataSequence;
-    /** === end UNO using === **/
 
     // =================================================================================================================
     // = helper

@@ -48,7 +48,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -90,7 +89,7 @@ namespace pcr
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::form::XGridColumnFactory;
-    /** === end UNO using === **/
+
     namespace MeasureUnit = ::com::sun::star::util::MeasureUnit;
 
     typedef ::com::sun::star::awt::Point    AwtPoint;

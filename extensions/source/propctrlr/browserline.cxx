@@ -37,7 +37,6 @@ namespace pcr
 {
 //............................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
@@ -49,7 +48,6 @@ namespace pcr
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::graphic::XGraphic;
-    /** === end UNO using === **/
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 

@@ -54,7 +54,6 @@ namespace svxform
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -84,7 +83,7 @@ namespace svxform
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::container::XNameAccess;
-    /** === end UNO using === **/
+
     namespace FormComponentType = ::com::sun::star::form::FormComponentType;
     namespace ScrollBarOrientation = ::com::sun::star::awt::ScrollBarOrientation;
     namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;

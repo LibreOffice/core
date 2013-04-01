@@ -87,10 +87,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 
-/** === begin UNO using === **/
 using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::ui::XContextMenuInterceptor;
-/** === end UNO using === **/
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;

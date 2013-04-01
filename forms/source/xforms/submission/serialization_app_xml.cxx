@@ -21,7 +21,6 @@
 #include "serialization.hxx"
 #include "serialization_app_xml.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -35,7 +34,6 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-/** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
@@ -43,7 +41,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <limits>
 
-/** === begin UNO using === **/
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Sequence;
@@ -62,7 +59,6 @@ using ::com::sun::star::xml::dom::NodeType_ELEMENT_NODE;
 using ::com::sun::star::xml::dom::XDocumentBuilder;
 using ::com::sun::star::xml::sax::Writer;
 using ::com::sun::star::xml::sax::XDocumentHandler;
-/** === end UNO using === **/
 
 CSerializationAppXML::CSerializationAppXML()
     : m_xBuffer(CSS::io::Pipe::create(comphelper::getProcessComponentContext()))

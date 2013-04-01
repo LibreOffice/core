@@ -28,10 +28,8 @@ namespace logging
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::util::DateTime;
-    /** === end UNO using === **/
 
     //====================================================================
     //= helper

@@ -33,7 +33,6 @@ namespace svxform
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -52,7 +51,6 @@ namespace svxform
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::form::runtime::FormController;
-    /** === end UNO using === **/
 
     using namespace ::com::sun::star;
 

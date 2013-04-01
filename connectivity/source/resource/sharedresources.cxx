@@ -32,11 +32,9 @@ namespace connectivity
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Exception;
-    /** === end UNO using === **/
 
     //====================================================================
     //= SharedResources_Impl

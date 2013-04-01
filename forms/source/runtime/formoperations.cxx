@@ -71,7 +71,6 @@ namespace frm
 //........................................................................
 
     using ::dbtools::SQLExceptionInfo;
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::RuntimeException;
@@ -113,10 +112,9 @@ namespace frm
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::ui::dialogs::XExecutableDialog;
     using ::com::sun::star::beans::NamedValue;
-
     using ::com::sun::star::util::XRefreshable;
     using ::com::sun::star::awt::XControlModel;
-    /** === end UNO using === **/
+
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
 

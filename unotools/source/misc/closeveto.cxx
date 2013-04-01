@@ -30,7 +30,6 @@ namespace utl
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -46,7 +45,6 @@ namespace utl
     using ::com::sun::star::util::XCloseListener;
     using ::com::sun::star::util::CloseVetoException;
     using ::com::sun::star::lang::EventObject;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= CloseListener_Impl

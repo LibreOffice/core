@@ -45,7 +45,6 @@ namespace accessibility
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -61,7 +60,6 @@ namespace accessibility
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
     using ::com::sun::star::accessibility::XAccessibleContext;
-    /** === end UNO using === **/
 
     namespace AccessibleRole = ::com::sun::star::accessibility::AccessibleRole;
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;

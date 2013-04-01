@@ -38,7 +38,6 @@ namespace svt { namespace table
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -53,7 +52,6 @@ namespace svt { namespace table
     using ::com::sun::star::style::VerticalAlignment_TOP;
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::style::VerticalAlignment_BOTTOM;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= CachedSortIndicator

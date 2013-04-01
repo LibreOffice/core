@@ -39,7 +39,6 @@ namespace toolkit
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::TypeClass;
     using ::com::sun::star::uno::TypeClass_VOID;
     using ::com::sun::star::uno::Reference;
@@ -65,7 +64,6 @@ namespace toolkit
     using ::com::sun::star::awt::grid::GridDataEvent;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::ucb::AlreadyInitializedException;
-    /** === end UNO using === **/
 
 #ifdef DBG_UTIL
     const char* SortableGridDataModel_checkInvariants( const void* _pInstance )

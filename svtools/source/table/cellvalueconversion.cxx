@@ -43,7 +43,6 @@ namespace svt
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::util::XNumberFormatter2;
@@ -54,7 +53,7 @@ namespace svt
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::util::DateTime;
     using ::com::sun::star::util::XNumberFormatTypes;
-    /** === end UNO using === **/
+
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
     typedef ::com::sun::star::util::Time UnoTime;

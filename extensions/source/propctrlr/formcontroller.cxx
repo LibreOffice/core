@@ -42,7 +42,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::TypeClass_INTERFACE;
     using ::com::sun::star::uno::TypeClass_STRING;
@@ -67,7 +66,6 @@ namespace pcr
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::awt::XWindow;
-    /** === end UNO using === **/
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 

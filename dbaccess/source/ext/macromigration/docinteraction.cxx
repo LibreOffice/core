@@ -34,7 +34,6 @@ namespace dbmm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,7 +50,6 @@ namespace dbmm
     using ::com::sun::star::task::InteractionClassification_QUERY;
     using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
     using ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER;
-    /** === end UNO using === **/
 
     //====================================================================
     //= InteractionHandler_Data

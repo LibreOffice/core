@@ -40,7 +40,6 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Any;
@@ -49,7 +48,6 @@ namespace dbaui
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XDriver;
-    /** === end UNO using === **/
 
     //========================================================================
     //= SpecialSettingsPage

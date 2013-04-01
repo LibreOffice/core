@@ -33,8 +33,6 @@
 //........................................................................
 namespace rptui
 {
-//........................................................................
-    //------------------------------------------------------------------------
     ::rtl::OUString HelpIdUrl::getHelpURL( const rtl::OString& sHelpId )
     {
         ::rtl::OUStringBuffer aBuffer;
@@ -45,11 +43,9 @@ namespace rptui
         return aBuffer.makeStringAndClear();
     }
 
-    /** === begin UNO using === **/
     using namespace com::sun::star::uno;
     using namespace com::sun::star;
     using com::sun::star::inspection::PropertyCategoryDescriptor;
-    /** === end UNO using === **/
 
     //====================================================================
     //= DefaultComponentInspectorModel

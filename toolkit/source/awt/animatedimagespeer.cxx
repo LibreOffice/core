@@ -45,7 +45,6 @@ namespace toolkit
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -66,7 +65,7 @@ namespace toolkit
     using ::com::sun::star::graphic::XGraphicProvider;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::graphic::XGraphic;
-    /** === end UNO using === **/
+
     namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
     //==================================================================================================================

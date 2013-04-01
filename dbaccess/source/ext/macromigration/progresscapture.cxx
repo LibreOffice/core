@@ -28,7 +28,6 @@ namespace dbmm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -38,7 +37,6 @@ namespace dbmm
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ProgressCapture_Data

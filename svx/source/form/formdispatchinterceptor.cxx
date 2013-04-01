@@ -26,7 +26,6 @@ namespace svxform
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -46,7 +45,6 @@ namespace svxform
     using ::com::sun::star::frame::DispatchDescriptor;
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::lang::EventObject;
-    /** === end UNO using === **/
 
     //========================================================================
     //= DispatchInterceptionMultiplexer

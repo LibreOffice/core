@@ -39,7 +39,6 @@ namespace connectivity { namespace hsqldb
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -55,7 +54,6 @@ namespace connectivity { namespace hsqldb
     using ::com::sun::star::sdbc::XStatement;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
-    /** === end UNO using === **/
 
     //====================================================================
     //= HView

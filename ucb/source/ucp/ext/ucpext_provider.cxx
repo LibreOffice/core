@@ -31,7 +31,6 @@ namespace ucb { namespace ucp { namespace ext
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -48,7 +47,6 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::ucb::IllegalIdentifierException;
     using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::uno::XComponentContext;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= ContentProvider

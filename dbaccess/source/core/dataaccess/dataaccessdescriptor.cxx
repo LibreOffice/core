@@ -40,7 +40,6 @@ namespace dbaccess
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -61,7 +60,6 @@ namespace dbaccess
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::PropertyValue;
-    /** === end UNO using === **/
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace CommandType = ::com::sun::star::sdb::CommandType;

@@ -48,13 +48,12 @@ namespace svt { namespace table
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::accessibility::AccessibleTableModelChange;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::uno::Reference;
-    /** === end UNO using === **/
+
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleTableModelChangeType = ::com::sun::star::accessibility::AccessibleTableModelChangeType;
 

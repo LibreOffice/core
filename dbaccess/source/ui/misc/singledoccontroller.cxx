@@ -34,7 +34,6 @@ namespace dbaui
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,7 +50,6 @@ namespace dbaui
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::EventObject;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= OSingleDocumentController_Data

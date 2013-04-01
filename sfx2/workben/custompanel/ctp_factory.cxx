@@ -30,7 +30,6 @@ namespace sd { namespace colortoolpanel
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -50,7 +49,6 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::awt::XWindow;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= ToolPanelFactory

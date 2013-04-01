@@ -49,7 +49,6 @@ namespace rptui
 {
 // .............................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -58,7 +57,7 @@ namespace rptui
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::uno::Any;
-    /** === end UNO using === **/
+
     using namespace ::com::sun::star::report;
 
     //========================================================================

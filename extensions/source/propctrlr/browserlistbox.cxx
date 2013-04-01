@@ -44,7 +44,6 @@ namespace pcr
         // browser environment
     #define LAYOUT_HELP_WINDOW_DISTANCE_APPFONT 3
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControlContext;
@@ -55,7 +54,7 @@ namespace pcr
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::graphic::XGraphic;
-    /** === end UNO using === **/
+
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
 
     //==================================================================

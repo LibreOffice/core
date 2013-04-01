@@ -31,7 +31,6 @@ namespace sd { namespace toolpanel
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -47,7 +46,7 @@ namespace sd { namespace toolpanel
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::ui::XToolPanel;
     using ::com::sun::star::lang::DisposedException;
-    /** === end UNO using === **/
+
     namespace UIElementType = ::com::sun::star::ui::UIElementType;
 
     typedef MethodGuard< ToolPanelUIElement > UIElementMethodGuard;

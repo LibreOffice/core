@@ -35,7 +35,6 @@
 namespace dbaccess
 {
 
-    /** === begin UNO using === **/
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::sdbc::SQLException;
@@ -46,7 +45,6 @@ namespace dbaccess
     using ::com::sun::star::sdbc::XStatement;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
-    /** === end UNO using === **/
 
     ::rtl::OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::rtl::OUString& i_sSetting)
     {

@@ -34,7 +34,6 @@
 namespace toolkit
 //......................................................................................................................
 {
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -52,7 +51,6 @@ namespace toolkit
     using ::com::sun::star::lang::IndexOutOfBoundsException;
     using ::com::sun::star::util::XCloneable;
     using ::com::sun::star::lang::IllegalArgumentException;
-    /** === end UNO using === **/
 
     //==================================================================================================================
     //= DefaultGridColumnModel

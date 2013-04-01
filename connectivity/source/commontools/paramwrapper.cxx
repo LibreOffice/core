@@ -36,7 +36,6 @@ namespace param
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XParameters;
     using ::com::sun::star::uno::Sequence;
@@ -59,7 +58,7 @@ namespace param
     using ::com::sun::star::sdb::XSingleSelectQueryAnalyzer;
     using ::com::sun::star::sdb::XParametersSupplier;
     using ::com::sun::star::lang::DisposedException;
-    /** === end UNO using === **/
+
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace DataType = ::com::sun::star::sdbc::DataType;
 

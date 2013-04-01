@@ -49,7 +49,6 @@ namespace logging
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::RuntimeException;
@@ -68,7 +67,6 @@ namespace logging
     using ::com::sun::star::util::PathSubstitution;
     using ::com::sun::star::util::XStringSubstitution;
     using ::com::sun::star::beans::NamedValue;
-    /** === end UNO using === **/
 
     //====================================================================
     //= FileHandler - declaration

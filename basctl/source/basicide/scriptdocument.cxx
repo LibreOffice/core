@@ -118,7 +118,7 @@ namespace basctl
     using ::com::sun::star::script::ModuleInfo;
     using ::com::sun::star::script::vba::XVBACompatibility;
     using ::com::sun::star::script::vba::XVBAModuleInfo;
-    /** === end UNO using === **/
+
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
 

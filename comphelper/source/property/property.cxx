@@ -40,7 +40,6 @@
 namespace comphelper
 {
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
@@ -56,7 +55,7 @@ namespace comphelper
     using ::com::sun::star::lang::XServiceInfo;
 #endif
     using ::com::sun::star::uno::UNO_QUERY;
-    /** === end UNO using === **/
+
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
 //------------------------------------------------------------------

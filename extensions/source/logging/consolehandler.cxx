@@ -42,7 +42,6 @@ namespace logging
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::logging::XConsoleHandler;
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::Reference;
@@ -59,7 +58,7 @@ namespace logging
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::NamedValue;
-    /** === end UNO using === **/
+
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
     //====================================================================

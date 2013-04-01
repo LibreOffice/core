@@ -33,7 +33,6 @@ namespace comphelper
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::logging::XLoggerPool;
@@ -44,7 +43,7 @@ namespace comphelper
     using ::com::sun::star::logging::XLogHandler;
     using ::com::sun::star::resource::XResourceBundle;
     using ::com::sun::star::resource::XResourceBundleLoader;
-    /** === end UNO using === **/
+
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
     //====================================================================

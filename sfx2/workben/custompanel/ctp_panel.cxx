@@ -37,7 +37,6 @@ namespace sd { namespace colortoolpanel
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -64,7 +63,7 @@ namespace sd { namespace colortoolpanel
     using ::com::sun::star::awt::XGraphics;
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::frame::XFrame;
-    /** === end UNO using === **/
+
     namespace WindowAttribute = ::com::sun::star::awt::WindowAttribute;
     namespace PosSize = ::com::sun::star::awt::PosSize;
     namespace UIElementType = ::com::sun::star::ui::UIElementType;

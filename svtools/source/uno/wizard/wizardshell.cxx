@@ -32,7 +32,6 @@ namespace svt { namespace uno
 {
 //......................................................................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -47,7 +46,7 @@ namespace svt { namespace uno
     using ::com::sun::star::ui::dialogs::XWizardController;
     using ::com::sun::star::ui::dialogs::XWizard;
     using ::com::sun::star::ui::dialogs::XWizardPage;
-    /** === end UNO using === **/
+
     namespace WizardTravelType = ::com::sun::star::ui::dialogs::WizardTravelType;
 
     //==================================================================================================================

@@ -107,7 +107,6 @@ form controls being in redlining or in hidden section are visible in alive-mode
 namespace sdr { namespace contact {
 //........................................................................
 
-    /** === begin UNO using === **/
     using namespace ::com::sun::star::awt::InvalidateStyle;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -141,7 +140,6 @@ namespace sdr { namespace contact {
     using ::com::sun::star::container::XContainer;
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::uno::Any;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ControlHolder

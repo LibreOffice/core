@@ -33,7 +33,6 @@ namespace dbmm
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,7 +50,6 @@ namespace dbmm
     using ::com::sun::star::sdb::XOfficeDatabaseDocument;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::frame::XStorable;
-    /** === end UNO using === **/
 
     //====================================================================
     //= MacroMigrationDialogService

@@ -42,13 +42,12 @@ namespace svx
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
-    /** === end UNO using === **/
+
     namespace TemplateDescription = ::com::sun::star::ui::dialogs::TemplateDescription;
 
     //====================================================================

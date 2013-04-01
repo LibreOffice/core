@@ -76,7 +76,6 @@ namespace dbaui
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -134,7 +133,7 @@ namespace dbaui
     using ::com::sun::star::sdbc::XDriverManager;
     using ::com::sun::star::sdbc::DriverManager;
     using ::com::sun::star::beans::PropertyValue;
-    /** === end UNO using === **/
+
     namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
     namespace CopyTableContinuation = ::com::sun::star::sdb::application::CopyTableContinuation;
     namespace CommandType = ::com::sun::star::sdb::CommandType;

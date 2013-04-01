@@ -46,7 +46,6 @@ namespace svxform
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::script::XEventAttacherManager;
     using ::com::sun::star::lang::IllegalArgumentException;
@@ -65,7 +64,6 @@ namespace svxform
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::beans::XPropertySet;
-    /** === end UNO using === **/
 
     class FormScriptingEnvironment;
 

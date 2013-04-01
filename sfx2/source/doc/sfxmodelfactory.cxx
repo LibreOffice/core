@@ -34,7 +34,6 @@ namespace sfx2
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -51,7 +50,6 @@ namespace sfx2
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::XInitialization;
-    /** === end UNO using === **/
 
     //====================================================================
     //= SfxModelFactory - declaration

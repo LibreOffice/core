@@ -41,7 +41,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
@@ -57,7 +56,6 @@ namespace pcr
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::awt::XVclWindowPeer;
-    /** === end UNO using === **/
 
     //====================================================================
     //= DefaultHelpProvider

@@ -51,7 +51,6 @@ namespace basic
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
@@ -68,7 +67,6 @@ namespace basic
     using ::com::sun::star::document::XStorageBasedDocument;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::document::XEmbeddedScripts;
-    /** === end UNO using === **/
 
     typedef BasicManager*   BasicManagerPointer;
     typedef ::std::map< Reference< XInterface >, BasicManagerPointer, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;

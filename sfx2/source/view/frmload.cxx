@@ -66,7 +66,6 @@
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <osl/mutex.hxx>
 
-/** === begin UNO using === **/
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XContainerQuery;
 using ::com::sun::star::container::XEnumeration;
@@ -95,7 +94,6 @@ using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::frame::XController2;
 using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XModel2;
-/** === end UNO using === **/
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference< XComponentContext >& _rxContext )
     :m_aContext( _rxContext )

@@ -28,7 +28,6 @@ namespace pcr
 {
 //........................................................................
 
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::NullPointerException;
@@ -41,7 +40,6 @@ namespace pcr
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::RuntimeException;
-    /** === end UNO using === **/
 
     //====================================================================
     //= ComponentContext

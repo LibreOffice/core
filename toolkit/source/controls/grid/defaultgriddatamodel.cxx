@@ -34,7 +34,6 @@
 namespace toolkit
 //......................................................................................................................
 {
-    /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
@@ -45,7 +44,6 @@ namespace toolkit
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::util::XCloneable;
-    /** === end UNO using === **/
 
     using ::comphelper::stl_begin;
     using ::comphelper::stl_end;
