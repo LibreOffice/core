@@ -297,10 +297,10 @@ File gid_File_Extra_Index_Pl
 End
 
 File gid_File_Extra_Palettes
-    Dir = gid_Dir_User_Config;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    Name = "palettes.zip";
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "extras_palettes.filelist";
     Patchfiles = ();
 End
 

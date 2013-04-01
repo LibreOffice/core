@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_glade \
 	Package_labels \
 	Package_newfiles \
+	Package_palettes \
 	Package_wordbook \
 	Zip_autocorr \
 	Zip_autotextuser \
@@ -33,7 +34,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Zip_gallsystem \
 	Zip_gallwwwback \
 	Zip_gallwwwgraf \
-	Zip_palettes \
 	Zip_tpllayoutimpr \
 	Zip_tplwizagenda \
 	Zip_tplwizbitmap \
