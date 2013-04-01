@@ -33,6 +33,8 @@ $(call gb_UnoApi_get_clean_target,%) :
 define gb_UnoApi_UnoApi
 $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
+$(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
+$(call gb_Package_set_outdir,$(1)_idl,$(INSTDIR))
 $(call gb_Package_Package_internal,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_dir,$(1)))
 
 $(call gb_UnoApiTarget_set_root,$(1),UCR)
@@ -44,12 +46,27 @@ $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_targe
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_inc)
 
+$(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
 $(call gb_Package_get_preparation_target,$(1)_inc) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApi_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UnoApi)
+
+endef
+
+# Create a package of IDL files for putting into SDK.
+#
+# gb_UnoApi_package_idlfiles api
+define gb_UnoApi_package_idlfiles
+$(call gb_UnoApi_get_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
+$(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_idl)
+
+endef
+
+define gb_UnoApi__add_idlfile
+$(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,$(gb_Package_SDKDIRNAME)/idl/%,$(2)),$(2))
 
 endef
 
@@ -66,7 +83,13 @@ $(call gb_UnoApi__add_headerfile_impl,$(1),$(2),$(subst $() $(),/,$(wordlist 2,$
 
 endef
 
+define gb_UnoApi__add_idlfile_noheader
+$(call gb_UnoApi__add_idlfile,$(1),$(2).idl)
+
+endef
+
 define gb_UnoApi__add_idlfile_nohdl
+$(call gb_UnoApi__add_idlfile_noheader,$(1),$(2))
 $(call gb_UnoApi__add_headerfile,$(1),$(2).hpp)
 
 endef
@@ -106,11 +129,13 @@ endef
 # for old-style services and modules
 define gb_UnoApi_add_idlfile_noheader
 $(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
+$(call gb_UnoApi__add_idlfile_noheader,$(1),$(2)/$(3))
 
 endef
 
 define gb_UnoApi_add_idlfiles_noheader
 $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
+$(foreach idl,$(3),$(call gb_UnoApi__add_idlfile_noheader,$(1),$(2)/$(idl)))
 
 endef
 

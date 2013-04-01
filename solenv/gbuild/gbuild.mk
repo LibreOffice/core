@@ -333,7 +333,6 @@ include $(foreach class, \
 	CliUnoApi \
 	Zip \
 	ZipPackage \
-	ZipUnoApi \
 	AllLangZip \
 	Configuration \
 	HelpTarget \

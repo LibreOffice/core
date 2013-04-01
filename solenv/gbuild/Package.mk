@@ -56,6 +56,9 @@ endef
 
 # Package class
 
+# defined by platform
+#  gb_Package_SDKDIRNAME
+
 .PHONY : $(call gb_Package_get_clean_target,%)
 $(call gb_Package_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PKG,2)
