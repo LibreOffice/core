@@ -536,7 +536,9 @@ Any SAL_CALL TableDesignFamily::getByName( const OUString& rName ) throw(NoSuchE
 {
     SolarMutexGuard aGuard;
 
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
+    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
+    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
+        iter != aEnd; ++iter)
     {
         if( (*iter)->getName() == rName )
             return Any( (*iter) );
@@ -554,7 +556,9 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames() throw(Runtime
     Sequence< OUString > aRet( maDesigns.size() );
     OUString* pNames = aRet.getArray();
 
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
+    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
+    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
+         iter != aEnd; ++iter)
         *pNames++ = (*iter)->getName();
 
     return aRet;
@@ -566,7 +570,9 @@ sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName ) throw(Ru
 {
     SolarMutexGuard aGuard;
 
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
+    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
+    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
+        iter != aEnd; ++iter)
         if( (*iter)->getName() == aName )
             return sal_True;
 
@@ -627,7 +633,9 @@ void SAL_CALL TableDesignFamily::insertByName( const OUString& rName, const Any&
         throw IllegalArgumentException();
 
     xStyle->setName( rName );
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
+    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
+    for( TableDesignStyleVector::const_iterator iter( maDesigns.begin() );
+        iter != aEnd; ++iter)
         if( (*iter)->getName() == rName )
             throw ElementExistException();
 
@@ -640,7 +648,9 @@ void SAL_CALL TableDesignFamily::removeByName( const OUString& rName ) throw(NoS
 {
     SolarMutexGuard aGuard;
 
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
+    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
+    for( TableDesignStyleVector::iterator iter( maDesigns.begin() );
+        iter != aEnd; ++iter)
     {
         if( (*iter)->getName() == rName )
         {
@@ -665,7 +675,9 @@ void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any
     if( !xStyle.is() )
         throw IllegalArgumentException();
 
-    for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
+    const TableDesignStyleVector::const_iterator aEnd( maDesigns.end() );
+    for( TableDesignStyleVector::iterator iter( maDesigns.begin() );
+        iter != aEnd; ++iter)
     {
         if( (*iter)->getName() == rName )
         {
