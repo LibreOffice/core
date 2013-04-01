@@ -499,7 +499,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aAttribs.insert( aAttribs.end(), nE++ );
                 pUShorts += 2;
             }
-
+            // we don't want to change writing direction and text alignment.
+            aAttribs.erase( RES_FRAMEDIR );
+            aAttribs.erase( RES_PARATR_ADJUST );
             rWrtSh.ResetAttr( aAttribs );
             rReq.Done();
             break;
