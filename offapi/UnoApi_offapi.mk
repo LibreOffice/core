@@ -17,7 +17,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_ZipUnoApi_ZipUnoApi,offapi))
+$(eval $(call gb_UnoApi_UnoApi,offapi))
+
+$(eval $(call gb_UnoApi_package_idlfiles,offapi))
 
 $(eval $(call gb_UnoApi_use_api,offapi,\
     udkapi \
@@ -30,18 +32,18 @@ $(eval $(call gb_UnoApi_set_include,offapi,\
 ))
 
 
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/accessibility,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/accessibility,\
 	AccessBridge \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
 	SequenceTimeContainer \
 	TargetPropertiesCreator \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/auth,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/auth,\
 	SSOManagerFactory \
 	SSOPasswordCache \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	AsyncCallback \
 	ContainerWindowProvider \
 	DialogProvider \
@@ -52,55 +54,55 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	Toolkit \
 	UnoControlDialogModelProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/grid,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/grid,\
 	DefaultGridDataModel \
 	SortableGridDataModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tab,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tab,\
 	UnoControlTabPageModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
 	DefaultTreeDataModel \
 	MutableTreeDataModel \
 	MutableTreeNode \
 	TreeControl \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
 	DatabaseDataProvider \
     LabeledDataSequence \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configuration,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configuration,\
     ReadOnlyAccess \
     ReadWriteAccess \
 	Update \
     theDefaultProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/cui,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/cui,\
     ColorPicker \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer,\
 	DataFormatTranslator \
 	MimeContentTypeFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer/clipboard,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer/clipboard,\
 	SystemClipboard \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment,\
 	ExtensionManager \
 	PackageInformationProvider \
 	PackageRegistryBackend \
 	UpdateInformationProvider \
 	thePackageManagerFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment/test,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment/test,\
 	SmoketestCommandEnvironment \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment/ui,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment/ui,\
 	LicenseDialog \
 	PackageManagerDialog \
 	UpdateRequiredDialog \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	DocumentProperties \
 	DocumentRevisionListPersistence \
 	IndexedPropertyValues \
@@ -113,14 +115,14 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/documen
 	XMLOasisBasicExporter \
 	XMLOasisBasicImporter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
 	GraphicExportFilter \
 	ModuleDispatcher \
 	ShapeCollection \
 	SlideRenderer \
 	SlideSorter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing/framework,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing/framework,\
 	BasicPaneFactory \
 	BasicToolBarFactory \
 	BasicViewFactory \
@@ -129,7 +131,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing
 	ModuleController \
 	ResourceId \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
 	DocumentCloser \
 	EmbeddedObjectCreator \
 	FileSystemStorageFactory \
@@ -140,17 +142,17 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/embed,\
 	OOoEmbeddedObjectFactory \
 	StorageFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/control,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/control,\
 	FilterControl \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/inspection,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/inspection,\
 	DefaultFormComponentInspectorModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/runtime,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/runtime,\
 	FormController \
 	FormOperations \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	AutoRecovery \
 	Bibliography \
 	Desktop \
@@ -168,18 +170,18 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
     TaskCreator \
 	UICommandDescription \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/graphic,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/graphic,\
 	GraphicObject \
 	GraphicProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/inspection,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/inspection,\
 	DefaultHelpProvider \
 	GenericPropertyHandler \
 	ObjectInspector \
 	ObjectInspectorModel \
 	StringRepresentation \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
 	BreakIterator \
 	CharacterClassification \
 	Collator \
@@ -193,7 +195,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
 	TextConversion \
 	Transliteration \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic2,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic2,\
 	ConversionDictionaryList \
 	DictionaryList \
 	LanguageGuessing \
@@ -201,7 +203,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguis
 	Proofreader \
 	ProofreadingIterator \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/logging,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/logging,\
 	ConsoleHandler \
 	CsvLogFormatter \
 	DocumentIOLogRing \
@@ -210,39 +212,39 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/logging
 	PlainTextFormatter \
 	SimpleLogRing \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mail,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mail,\
 	MailMessage \
 	MailServiceProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/media,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/media,\
 	Manager \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mozilla,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mozilla,\
 	MozillaBootstrap \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/packages/manifest,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/packages/manifest,\
 	ManifestReader \
 	ManifestWriter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/plugin,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/plugin,\
 	PluginManager \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/presentation,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/presentation,\
 	SlideShow \
 	TransitionFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/rdf,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/rdf,\
 	BlankNode \
 	Literal \
 	Repository \
 	URI \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/rendering,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/rendering,\
 	Canvas \
 	CanvasFactory \
 	MtfRenderer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/report,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/report,\
 	FixedLine \
 	FixedText \
 	FormatCondition \
@@ -258,32 +260,32 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/report,
 	Section \
 	Shape \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/report/inspection,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/report/inspection,\
 	DefaultComponentInspectorModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/resource,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/resource,\
 	OfficeResourceLoader \
 	StringResource \
 	StringResourceWithLocation \
 	StringResourceWithStorage \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/scanner,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/scanner,\
 	ScannerManager \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script,\
 	DocumentDialogLibraryContainer \
 	DocumentScriptLibraryContainer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/provider,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/provider,\
 	theMasterScriptProviderFactory \
 	MasterScriptProviderFactory \
 	ScriptURIHelper \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/vba,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/vba,\
 	VBAEventProcessor \
 	VBAMacroResolver \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 	CommandDefinition \
 	DataAccessDescriptorFactory \
 	DatabaseContext \
@@ -296,23 +298,23 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 	TableDefinition \
 	TextConnectionSettings \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/application,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/application,\
 	CopyTableWizard \
 	MacroMigrationWizard \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdbc,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdbc,\
 	ConnectionPool \
 	DriverManager \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/security,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/security,\
 	CertificateContainer \
 	DocumentDigitalSignatures \
 	SerialNumberAdapter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/setup,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/setup,\
 	UpdateCheckConfig \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sheet,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sheet,\
 	ExternalDocLink \
 	ExternalDocLinks \
 	ExternalSheetCache \
@@ -321,16 +323,16 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sheet,\
 	RecentFunctions \
 	Solver \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/smarttags,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/smarttags,\
 	SmartTagAction \
 	SmartTagRecognizer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/system,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/system,\
 	SimpleCommandMail \
 	SimpleSystemMail \
 	SystemShellExecute \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
 	InteractionHandler \
 	InteractionRequestStringResolver \
 	JobExecutor \
@@ -339,11 +341,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
 	PasswordContainerInteractionHandler \
 	StatusIndicatorFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/text,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/text,\
 	AutoTextContainer \
 	DefaultNumberingProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 	AnyCompareFactory \
 	CachedContentResultSetFactory \
 	CachedContentResultSetStubFactory \
@@ -357,7 +359,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 	Store \
 	UniversalContentBroker \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
     AddressBookSourceDialog \
 	GlobalAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
@@ -367,14 +369,14 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
     WindowContentFactoryManager \
 	WindowStateConfiguration \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
 	AddressBookSourcePilot \
 	FilePicker \
 	FolderPicker \
 	Wizard \
 	XSLTFilterDialog \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	JobManager \
 	NumberFormatter \
 	NumberFormatsSupplier \
@@ -384,41 +386,41 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	UriAbbreviation \
 	URLTransformer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xforms,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xforms,\
 	Model \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/crypto,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/crypto,\
 	NSSInitializer \
 	SEInitializer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
 	DocumentBuilder \
 	SAXDocumentBuilder \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
 	FastTokenHandler \
 	Parser \
     Writer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xpath,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xpath,\
 	XPathAPI \
 	XPathExtension \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xslt,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xslt,\
 	XSLTTransformer \
 	XSLT2Transformer \
 ))
 
 
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star,\
 	modules \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/accessibility,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/accessibility,\
 	Accessible \
 	AccessibleContext \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	AccessibleButton \
 	AccessibleCheckBox \
 	AccessibleComboBox \
@@ -513,21 +515,21 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,
 	UnoControlTimeField \
 	UnoControlTimeFieldModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/grid,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/grid,\
 	DefaultGridColumnModel \
 	GridColumn \
 	UnoControlGrid \
 	UnoControlGridModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/tab,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/tab,\
 	UnoControlTabPage \
 	UnoControlTabPageContainer \
 	UnoControlTabPageContainerModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/tree,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/tree,\
 	TreeControlModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart,\
 	AccessibleChartDocumentView \
 	AccessibleChartElement \
 	AreaDiagram \
@@ -564,7 +566,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/char
 	StockDiagram \
 	XYDiagram \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2,\
 	Axis \
 	CandleStickChartType \
 	ChartDocument \
@@ -594,7 +596,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/char
 	StandardDiagramCreationParameters \
 	Title \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2/data,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2/data,\
 	DataFilter \
 	DataProvider \
 	DataSequence \
@@ -604,7 +606,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/char
 	RangeHighlightListener \
 	TabularDataProviderArguments \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration,\
 	AccessRootElement \
 	AdministrationProvider \
 	ConfigurationAccess \
@@ -625,7 +627,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/conf
 	SimpleSetUpdate \
 	UpdateRootElement \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/backend,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/backend,\
 	Backend \
 	BackendAdapter \
 	CopyImporter \
@@ -660,25 +662,25 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/conf
 	SystemIntegration \
 	UpdatableLayer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/backend/xml,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/backend/xml,\
 	LayerParser \
 	LayerWriter \
 	SchemaParser \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/bootstrap,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/configuration/bootstrap,\
 	BootstrapContext \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/clipboard,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/clipboard,\
 	ClipboardManager \
 	GenericClipboard \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/dnd,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/datatransfer/dnd,\
 	OleDragSource \
 	OleDropTarget \
 	X11DragSource \
 	X11DropTarget \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/document,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/document,\
 	EventDescriptor \
 	Events \
 	ExportFilter \
@@ -697,7 +699,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/docu
 	TypeDetection \
 	XMLBasicImporter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing,\
 	AccessibleDrawDocumentView \
 	AccessibleGraphControl \
 	AccessibleGraphicShape \
@@ -766,14 +768,14 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/draw
 	TransparencyGradientTable \
 	modules \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/embed,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/embed,\
 	BaseStorage \
 	EmbeddedObjectDescriptor \
 	FileSystemStorage \
 	Storage \
 	StorageStream \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form,\
 	DataAwareControlModel \
 	FormComponent \
 	FormComponents \
@@ -784,7 +786,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form
 	PropertyBrowserController \
 	modules \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/binding,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/binding,\
 	BindableControlModel \
 	BindableDataAwareControlModel \
 	BindableDatabaseCheckBox \
@@ -800,7 +802,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form
 	ListEntrySource \
 	ValueBinding \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/component,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/component,\
 	CheckBox \
 	ComboBox \
 	CommandButton \
@@ -840,7 +842,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form
 	TextField \
 	TimeField \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/control,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/control,\
 	CheckBox \
 	ComboBox \
 	CommandButton \
@@ -861,7 +863,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form
 	TextField \
 	TimeField \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/inspection,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/inspection,\
 	ButtonNavigationHandler \
 	CellBindingPropertyHandler \
 	EditPropertyHandler \
@@ -871,16 +873,16 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form
 	XMLFormsPropertyHandler \
 	XSDValidationPropertyHandler \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/validation,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/validation,\
 	ValidatableBindableControlModel \
 	ValidatableControlModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/formula,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/formula,\
 	AccessibleFormulaText \
 	AccessibleFormulaView \
 	FormulaProperties \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	Components \
 	ContentHandler \
 	ContentHandlerFactory \
@@ -906,29 +908,29 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/fram
 	ToolbarController \
 	TransientDocumentsDocumentContentFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/gallery,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/gallery,\
 	GalleryItem \
 	GalleryTheme \
 	GalleryThemeProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/graphic,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/graphic,\
 	Graphic \
 	GraphicDescriptor \
 	GraphicRasterizer \
 	GraphicRendererVCL \
 	MediaProperties \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
 	ChapterCollator \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/image,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/image,\
 	ImageMap \
 	ImageMapCircleObject \
 	ImageMapObject \
 	ImageMapPolygonObject \
 	ImageMapRectangleObject \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/linguistic2,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/linguistic2,\
 	ConversionDictionary \
 	Dictionary \
 	HangulHanjaConversionDictionary \
@@ -937,20 +939,20 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ling
 	SpellChecker \
 	Thesaurus \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/mozilla,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/mozilla,\
 	MenuProxy \
 	MenuProxyListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/packages,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/packages,\
 	Package \
 	PackageFolder \
 	PackageFolderEnumeration \
 	PackageStream \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/packages/zip,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/packages/zip,\
 	ZipFileAccess \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/presentation,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/presentation,\
 	ChartShape \
 	CustomPresentation \
 	CustomPresentationAccess \
@@ -979,26 +981,26 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/pres
 	SubtitleShape \
 	TitleTextShape \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/presentation/textfield,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/presentation/textfield,\
 	DateTime \
 	Footer \
 	Header \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/rendering,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/rendering,\
 	BitmapCanvas \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report,\
 	modules \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report/inspection,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report/inspection,\
 	DataProviderHandler \
 	ReportComponentHandler \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/browse,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/browse,\
 	BrowseNode \
 	BrowseNodeFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/provider,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/provider,\
 	LanguageScriptProvider \
 	MasterScriptProvider \
 	ScriptProvider \
@@ -1007,11 +1009,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/scri
 	ScriptProviderForJava \
 	ScriptProviderForJavaScript \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/vba,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/vba,\
 	VBASpreadsheetEventProcessor \
 	VBATextEventProcessor \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb,\
 	CallableStatement \
 	Column \
 	ColumnDescriptorControl \
@@ -1057,10 +1059,10 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb,
 	TableDescriptor \
 	TableDesign \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb/application,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdb/application,\
 	DefaultViewController \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbc,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbc,\
 	CallableStatement \
 	Connection \
 	ConnectionProperties \
@@ -1075,7 +1077,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbc
 	RowSet \
 	Statement \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbcx,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbcx,\
 	Column \
 	ColumnDescriptor \
 	Container \
@@ -1103,7 +1105,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sdbc
 	View \
 	ViewDescriptor \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet,\
 	AccessibleCell \
 	AccessibleCsvCell \
 	AccessibleCsvRuler \
@@ -1215,7 +1217,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/shee
 	UniqueCellFormatRangesEnumeration \
 	VolatileResult \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/style,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/style,\
 	CellStyle \
 	CharacterProperties \
 	CharacterPropertiesAsian \
@@ -1234,7 +1236,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/styl
 	StyleFamilies \
 	StyleFamily \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/table,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/table,\
 	AccessibleCellView \
 	AccessibleTableView \
 	Cell \
@@ -1256,11 +1258,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/tabl
 	TableSortDescriptor \
 	TableSortDescriptor2 \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/task,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/task,\
 	AsyncJob \
 	Job \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
 	AccessibleEndnoteView \
 	AccessibleFootnoteView \
 	AccessibleHeaderFooterView \
@@ -1365,14 +1367,14 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text
 	ViewSettings \
 	WebDocument \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/fieldmaster,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/fieldmaster,\
 	Bibliography \
 	DDE \
 	Database \
 	SetExpression \
 	User \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/textfield,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/textfield,\
 	Annotation \
 	Author \
 	Bibliography \
@@ -1415,10 +1417,10 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text
 	User \
 	WordCount \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/text/textfield,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text/textfield,\
 	Type \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/textfield/docinfo,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text/textfield/docinfo,\
 	ChangeAuthor \
 	ChangeDateTime \
 	CreateAuthor \
@@ -1433,7 +1435,8 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text
 	Subject \
 	Title \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ucb,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ucb,\
+	AnyCompareFactory \
 	CachedContentResultSet \
 	CachedContentResultSetStub \
 	CachedDynamicResultSet \
@@ -1483,7 +1486,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ucb,
 	WebDAVDocumentContent \
 	WebDAVFolderContent \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	ActionTrigger \
 	ActionTriggerContainer \
 	ActionTriggerSeparator \
@@ -1498,10 +1501,10 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	UIElementFactory \
 	UIElementSettings \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui/dialogs,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui/dialogs,\
 	FilterOptionsDialog \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
 	NumberFormatProperties \
 	NumberFormatSettings \
 	NumberFormats \
@@ -1513,7 +1516,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util
 	SortDescriptor2 \
 	Sortable \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/view,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/view,\
 	OfficeDocumentView \
 	PrintOptions \
 	PrintSettings \
@@ -1522,10 +1525,10 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/view
 	RenderOptions \
 	ViewSettings \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xforms,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xforms,\
 	Binding \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml,\
 	AttributeContainer \
 	ExportFilter \
 	ImportFilter \
@@ -1536,7 +1539,8 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml,
 	XMLExportFilter \
 	XMLImportFilter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/crypto,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/crypto,\
+	SEInitializer \
 	SecurityEnvironment \
 	XMLEncryption \
 	XMLEncryptionTemplate \
@@ -1544,21 +1548,21 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/
 	XMLSignature \
 	XMLSignatureTemplate \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/crypto/sax,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/crypto/sax,\
 	Decryptor \
 	Encryptor \
 	SAXEventKeeper \
 	SignatureCreator \
 	SignatureVerifier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/input,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/input,\
 	SaxDocumentHandler \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/wrapper,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/wrapper,\
 	XMLDocumentWrapper \
 	XMLElementWrapper \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xsd,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xsd,\
 	Boolean \
 	Date \
 	DateTime \
@@ -1571,7 +1575,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xsd,
 ))
 
 
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/accessibility,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/accessibility,\
 	AccessibleEventId \
 	AccessibleEventObject \
 	AccessibleRelation \
@@ -1605,7 +1609,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/accessibility
 	XAccessibleTextMarkup \
 	XAccessibleValue \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/animations,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/animations,\
 	AnimationAdditiveMode \
 	AnimationCalcMode \
 	AnimationColorSpace \
@@ -1638,7 +1642,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/animations,\
 	XTimeContainer \
 	XTransitionFilter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/auth,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/auth,\
 	AuthenticationFailedException \
 	InvalidArgumentException \
 	InvalidContextException \
@@ -1653,7 +1657,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/auth,\
 	XSSOManagerFactory \
 	XSSOPasswordCache \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	ActionEvent \
 	AdjustmentEvent \
 	AdjustmentType \
@@ -1852,7 +1856,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XWindowListener2 \
 	XWindowPeer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/grid,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/grid,\
 	GridColumnEvent \
 	GridDataEvent \
 	GridInvalidDataException \
@@ -1867,10 +1871,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/grid,\
 	XGridRowSelection \
 	XGridSelectionListener \
 	XMutableGridDataModel \
+	XMutableGridDataModel \
 	XSortableGridData \
 	XSortableMutableGridDataModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/tab,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/tab,\
 	TabPageActivatedEvent \
 	XTabPage \
 	XTabPageContainer \
@@ -1878,7 +1883,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/tab,\
 	XTabPageContainerModel \
 	XTabPageModel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/tree,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/tree,\
 	ExpandVetoException \
 	TreeDataModelEvent \
 	TreeExpansionEvent \
@@ -1891,7 +1896,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt/tree,\
 	XTreeExpansionListener \
 	XTreeNode \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart,\
 	ChartAxisArrangeOrderType \
 	ChartAxisAssign \
 	ChartAxisLabelPosition \
@@ -1940,7 +1945,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart,\
 	XTwoAxisXSupplier \
 	XTwoAxisYSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2,\
 	AxisOrientation \
 	AxisType \
 	CoordinateSystemTypeID \
@@ -1993,7 +1998,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2,\
 	XTitled \
 	XTransformation \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2/data,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2/data,\
 	DataSequenceRole \
 	HighlightedRange \
 	LabelOrigin \
@@ -2011,7 +2016,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2/data,\
 	XSheetDataProvider \
 	XTextualDataSequence \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/configuration,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/configuration,\
 	CannotLoadConfigurationException \
 	CorruptedConfigurationException \
 	CorruptedUIConfigurationException \
@@ -2023,7 +2028,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/configuration
 	XTemplateInstance \
 	XUpdate \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/configuration/backend,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/configuration/backend,\
 	AuthenticationFailedException \
 	BackendAccessException \
 	BackendSetupException \
@@ -2057,7 +2062,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/configuration
 	XUpdateHandler \
 	XVersionedSchemaSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer,\
 	DataFlavor \
 	UnsupportedFlavorException \
 	XDataFormatTranslator \
@@ -2070,7 +2075,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer,
 	XTransferableSource \
 	XTransferableSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/clipboard,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/clipboard,\
 	ClipboardEvent \
 	RenderingCapabilities \
 	XClipboard \
@@ -2083,7 +2088,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/
 	XFlushableClipboard \
 	XSystemClipboard \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/dnd,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/dnd,\
 	DNDConstants \
 	DragGestureEvent \
 	DragSourceDragEvent \
@@ -2105,7 +2110,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/datatransfer/
 	XDropTargetDropContext \
 	XDropTargetListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/deployment,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/deployment,\
 	DependencyException \
 	DeploymentException \
 	ExtensionRemovedException \
@@ -2125,7 +2130,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/deployment,\
 	XPackageTypeInfo \
 	XUpdateInformationProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	AmbigousFilterRequest \
 	BrokenPackageRequest \
 	ChangedByOthersRequest \
@@ -2192,7 +2197,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	XXMLBasicExporter \
 	XXMLOasisBasicImporter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
 	Alignment \
 	Arrangement \
 	BezierPoint \
@@ -2311,7 +2316,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
 	XSlideSorterBase \
 	XUniversalShapeDescriptor \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing/framework,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing/framework,\
 	AnchorBindingMode \
 	BorderType \
 	ConfigurationChangeEvent \
@@ -2337,7 +2342,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing/frame
 	XToolBar \
 	XView \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/embed,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/embed,\
 	Actions \
 	Aspects \
 	ElementModes \
@@ -2405,7 +2410,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/embed,\
 	XVisualObject \
 	XWindowSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/form,\
 	DataSelectionType \
 	DatabaseDeleteEvent \
 	DatabaseParameterEvent \
@@ -2456,7 +2461,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form,\
 	XUpdateBroadcaster \
 	XUpdateListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/binding,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/binding,\
 	IncompatibleTypesException \
 	InvalidBindingStateException \
 	ListEntryEvent \
@@ -2466,7 +2471,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/binding,
 	XListEntrySource \
 	XValueBinding \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/runtime,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/runtime,\
 	FeatureState \
 	FilterEvent \
 	FormFeature \
@@ -2477,22 +2482,22 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/runtime,
 	XFormControllerContext \
 	XFormOperations \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/submission,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/submission,\
 	XSubmission \
 	XSubmissionSupplier \
 	XSubmissionVetoListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/validation,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/form/validation,\
 	XFormComponentValidityListener \
 	XValidatable \
 	XValidatableFormComponent \
 	XValidator \
 	XValidityConstraintListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/formula,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/formula,\
 	SymbolDescriptor \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	BorderWidths \
 	CommandGroup \
 	ControlCommand \
@@ -2588,7 +2593,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XUrlList \
 	XWindowArranger \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame/status,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame/status,\
 	ClipboardFormats \
 	FontHeight \
 	ItemState \
@@ -2600,13 +2605,13 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame/status,
 	Verb \
 	Visibility \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/gallery,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/gallery,\
 	GalleryItemType \
 	XGalleryItem \
 	XGalleryTheme \
 	XGalleryThemeProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/geometry,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/geometry,\
 	AffineMatrix2D \
 	AffineMatrix3D \
 	EllipticalArc \
@@ -2622,7 +2627,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/geometry,\
 	RealSize2D \
 	XMapping2D \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/graphic,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/graphic,\
 	GraphicColorMode \
 	GraphicType \
 	PrimitiveFactory2D \
@@ -2639,7 +2644,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/graphic,\
 	XPrimitiveFactory2D \
 	XSvgParser \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	AmPmValue \
 	Boundary \
 	BreakType \
@@ -2653,6 +2658,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	CalendarItem2 \
 	CharType \
 	CharacterIteratorMode \
+	Collator \
 	CollatorOptions \
 	Currency \
 	Currency2 \
@@ -2717,7 +2723,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/i18n,\
 	XTransliteration \
 	reservedWords \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/inspection,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/inspection,\
 	InteractiveSelectionResult \
 	LineDescriptor \
 	PropertyCategoryDescriptor \
@@ -2736,11 +2742,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/inspection,\
 	XStringListControl \
 	XStringRepresentation \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/ldap,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ldap,\
 	LdapConnectionException \
 	LdapGenericException \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/linguistic2,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/linguistic2,\
 	ConversionDictionaryType \
 	ConversionDirection \
 	ConversionPropertyType \
@@ -2785,7 +2791,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/linguistic2,\
 	XSupportedLocales \
 	XThesaurus \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/logging,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/logging,\
 	LogLevel \
 	LogRecord \
 	XConsoleHandler \
@@ -2796,7 +2802,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/logging,\
 	XLoggerPool \
 	XSimpleLogRing \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/mail,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/mail,\
 	MailAttachment \
 	MailException \
 	MailServiceType \
@@ -2810,14 +2816,14 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/mail,\
 	XMailServiceProvider \
 	XSmtpService \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/media,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/media,\
 	XFrameGrabber \
 	XManager \
 	XPlayer \
 	XPlayerWindow \
 	ZoomLevel \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/mozilla,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/mozilla,\
 	MenuMultipleChange \
 	MenuSingleChange \
 	MozillaProductType \
@@ -2836,30 +2842,30 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/mozilla,\
 	XProxyRunner \
 	XRemoteServiceManagerProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/office,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/office,\
 	XAnnotation \
 	XAnnotationAccess \
 	XAnnotationEnumeration \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages,\
 	EncryptionNotAllowedException \
 	NoEncryptionException \
 	NoRawFormatException \
 	WrongPasswordException \
 	XDataSinkEncrSupport \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages/manifest,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages/manifest,\
 	XManifestReader \
 	XManifestWriter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages/zip,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages/zip,\
 	XZipFileAccess \
 	ZipConstants \
 	ZipEntry \
 	ZipException \
 	ZipIOException \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/plugin,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/plugin,\
 	PluginDescription \
 	PluginException \
 	PluginMode \
@@ -2868,7 +2874,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/plugin,\
 	XPluginContext \
 	XPluginManager \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/presentation,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/presentation,\
 	AnimationEffect \
 	AnimationSpeed \
 	ClickAction \
@@ -2894,10 +2900,10 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/presentation,
 	XTransition \
 	XTransitionFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/qa,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/qa,\
 	XDumper \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/rdf,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/rdf,\
 	FileFormat \
 	ParseException \
 	QueryException \
@@ -2918,7 +2924,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/rdf,\
 	XResource \
 	XURI \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/rendering,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/rendering,\
 	ARGBColor \
 	AnimationAttributes \
 	AnimationRepeat \
@@ -2996,7 +3002,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/rendering,\
 	XTextLayout \
 	XVolatileBitmap \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/report,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/report,\
 	Calculation \
 	ForceNewPage \
 	GroupKeepTogether \
@@ -3022,13 +3028,13 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/report,\
 	XSection \
 	XShape \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/report/meta,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/report/meta,\
 	XFormulaParser \
 	XFunctionCategory \
 	XFunctionDescription \
 	XFunctionManager \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/resource,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/resource,\
 	MissingResourceException \
 	XLocale \
 	XResourceBundle \
@@ -3040,14 +3046,14 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/resource,\
 	XStringResourceWithLocation \
 	XStringResourceWithStorage \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/scanner,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/scanner,\
 	ScanError \
 	ScannerContext \
 	ScannerException \
 	XScannerManager \
 	XScannerManager2 \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/script,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/script,\
 	LibraryNotLoadedException \
 	ModuleInfo \
 	ModuleSizeExceededRequest \
@@ -3062,13 +3068,13 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/script,\
 	XPersistentLibraryContainer \
 	XStorageBasedLibraryContainer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/browse,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/browse,\
 	BrowseNodeFactoryViewTypes \
 	BrowseNodeTypes \
 	XBrowseNode \
 	XBrowseNodeFactory \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/provider,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/provider,\
 	ScriptErrorRaisedException \
 	ScriptExceptionRaisedException \
 	ScriptFrameworkErrorException \
@@ -3080,7 +3086,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/provid
 	XScriptProviderSupplier \
 	XScriptURIHelper \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/vba,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/vba,\
 	VBAEventId \
 	VBAScriptEvent \
 	VBAScriptEventId \
@@ -3090,7 +3096,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/script/vba,\
 	XVBAModuleInfo \
 	XVBAScriptListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb,\
 	BooleanComparisonMode \
 	CommandType \
 	DatabaseRegistrationEvent \
@@ -3144,7 +3150,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb,\
 	XSubDocument \
 	XTextConnectionSettings \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb/application,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb/application,\
 	CopyTableContinuation \
 	CopyTableOperation \
 	CopyTableRowEvent \
@@ -3156,7 +3162,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb/applicati
 	XDatabaseDocumentUI \
 	XTableUIProvider \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb/tools,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb/tools,\
 	CompositionType \
 	XConnectionSupplier \
 	XConnectionTools \
@@ -3169,7 +3175,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdb/tools,\
 	XTableRename \
 	XViewAccess \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbc,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbc,\
 	BatchUpdateException \
 	BestRowScope \
 	BestRowType \
@@ -3231,7 +3237,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbc,\
 	XStruct \
 	XWarningsSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbcx,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbcx,\
 	CheckOption \
 	CompareBookmark \
 	KeyType \
@@ -3258,7 +3264,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sdbcx,\
 	XUsersSupplier \
 	XViewsSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/security,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/security,\
 	CertAltNameEntry \
 	CertificateCharacters \
 	CertificateContainerStatus \
@@ -3280,7 +3286,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/security,\
 	XSanExtension \
 	XSerialNumberAdapter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	ActivationEvent \
 	AddressConvention \
 	Border \
@@ -3479,12 +3485,12 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	XVolatileResult \
 	_NamedRange \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/smarttags,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/smarttags,\
 	SmartTagRecognizerMode \
 	XSmartTagAction \
 	XSmartTagRecognizer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/style,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/style,\
 	BreakType \
 	CaseMap \
 	DropCapFormat \
@@ -3511,11 +3517,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/style,\
 	XStyleLoader \
 	XStyleSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/svg,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/svg,\
 	XSVGPrinter \
 	XSVGWriter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/system,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/system,\
 	SimpleMailClientFlags \
 	SystemShellExecuteException \
 	SystemShellExecuteFlags \
@@ -3524,7 +3530,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/system,\
 	XSimpleMailMessage \
 	XSystemShellExecute \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/table,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/table,\
 	BorderLine \
 	BorderLine2 \
 	BorderLineStyle \
@@ -3559,7 +3565,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/table,\
 	XTableColumns \
 	XTableRows \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/task,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/task,\
 	ClassifiedInteractionRequest \
 	DocumentMSPasswordRequest \
 	DocumentMSPasswordRequest2 \
@@ -3599,7 +3605,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/task,\
 	XStatusIndicatorSupplier \
 	XUrlContainer \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	AuthorDisplayFormat \
 	BibliographyDataField \
 	BibliographyDataType \
@@ -3724,7 +3730,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	XTextViewCursorSupplier \
 	XWordCursor \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	AlreadyInitializedException \
 	AuthenticationRequest \
 	CheckinArgument \
@@ -3895,7 +3901,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	XUniversalContentBroker \
 	XWebDAVCommandEnvironment \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
 	ActionTriggerSeparatorType \
 	ConfigurationEvent \
 	ContextMenuExecuteEvent \
@@ -3927,7 +3933,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
 	XUIElementSettings \
 	XUIFunctionListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui/dialogs,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui/dialogs,\
 	CommonFilePickerElementIds \
 	ControlActions \
 	DialogClosedEvent \
@@ -3960,7 +3966,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui/dialogs,\
 	XWizardController \
 	XWizardPage \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	AliasProgrammaticPair \
 	AtomClassRequest \
 	AtomDescription \
@@ -4054,7 +4060,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	XUniqueIDFactory \
 	XUpdatable \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/view,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/view,\
 	DocumentZoomType \
 	DuplexMode \
 	PaperFormat \
@@ -4081,7 +4087,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/view,\
 	XViewCursor \
 	XViewSettingsSupplier \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xforms,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xforms,\
 	InvalidDataOnSubmitException \
 	XDataTypeRepository \
 	XFormsEvent \
@@ -4091,14 +4097,14 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xforms,\
 	XModel2 \
 	XSubmission \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml,\
 	Attribute \
 	AttributeData \
 	FastAttribute \
 	XExportFilter \
 	XImportFilter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto,\
 	CipherID \
 	DigestID \
 	SecurityOperationStatus \
@@ -4119,7 +4125,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto,\
 	XXMLSignature \
 	XXMLSignatureTemplate \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto/sax,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto/sax,\
 	ConstOfSecurityId \
 	ElementMarkPriority \
 	ElementMarkType \
@@ -4145,11 +4151,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto/sa
 	XSignatureVerifyResultBroadcaster \
 	XSignatureVerifyResultListener \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/csax,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/csax,\
 	XCompressedDocumentHandler \
 	XMLAttribute \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom,\
 	DOMException \
 	DOMExceptionType \
 	NodeType \
@@ -4175,7 +4181,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom,\
 	XSAXDocumentBuilder2 \
 	XText \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom/events,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom/events,\
 	AttrChangeType \
 	EventException \
 	EventType \
@@ -4188,17 +4194,17 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom/event
 	XMutationEvent \
 	XUIEvent \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom/views,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/dom/views,\
 	XAbstractView \
 	XDocumentView \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/input,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/input,\
 	XAttributes \
 	XElement \
 	XNamespaceMapping \
 	XRoot \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/sax,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/sax,\
 	FastToken \
 	InputSource \
 	SAXException \
@@ -4222,11 +4228,11 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/sax,\
 	XSAXSerializable \
 	XWriter \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/wrapper,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/wrapper,\
 	XXMLDocumentWrapper \
 	XXMLElementWrapper \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xpath,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xpath,\
 	Libxml2ExtensionHandle \
 	XPathException \
 	XPathObjectType \
@@ -4235,22 +4241,22 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xpath,\
 	XXPathObject \
 ))
 
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xslt,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/xslt,\
 	XXSLTTransformer \
 ))
 
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/xsd,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xsd,\
 	DataTypeClass \
 	WhiteSpaceTreatment \
 	XDataType \
 ))
 
-$(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/org/freedesktop/PackageKit,\
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/org/freedesktop/PackageKit,\
     XSyncDbusSessionHelper \
     XModify \
     XQuery \
 ))
-$(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/org/freedesktop/PackageKit,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/org/freedesktop/PackageKit,\
     SyncDbusSessionHelper \
 ))
 
