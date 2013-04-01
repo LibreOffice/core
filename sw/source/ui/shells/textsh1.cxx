@@ -495,10 +495,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 sal_uInt16 nL = pUShorts[1] - pUShorts[0] + 1;
                 sal_uInt16 nE = pUShorts[0];
                 for (sal_uInt16 i = 0; i < nL; ++i)
-                    aAttribs.insert( aAttribs.end(), nE++ );
+                        aAttribs.insert( aAttribs.end(), nE++ );
                 pUShorts += 2;
             }
-
+            // we don't want to change writing direction and text alignment.
+            aAttribs.erase( RES_FRAMEDIR );
+            aAttribs.erase( RES_PARATR_ADJUST );
             rWrtSh.ResetAttr( aAttribs );
             rReq.Done();
             break;
