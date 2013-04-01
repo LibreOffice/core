@@ -49,6 +49,7 @@ namespace dbtools
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::Reference;
     using ::com::sun::star::i18n::LocaleData;
     using ::com::sun::star::i18n::XLocaleData;
     using ::com::sun::star::i18n::LocaleDataItem;
@@ -57,8 +58,6 @@ namespace dbtools
     using namespace ::connectivity;
 
     using ::connectivity::OSQLParseNode;
-
-    #define Reference ::com::sun::star::uno::Reference
 
     //=====================================================================
     //---------------------------------------------------------------------
