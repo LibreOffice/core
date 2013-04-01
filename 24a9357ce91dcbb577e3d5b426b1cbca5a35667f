@@ -1,0 +1,548 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//+C0\u003d",
+        "filename": "chart2/source/controller/dialogs/DataBrowser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Why do we need this OUString constructor.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+C4\u003d",
+        "filename": "chart2/source/controller/dialogs/DataBrowser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Why do we need this OUString constructor.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+C8\u003d",
+        "filename": "chart2/source/controller/dialogs/DataBrowser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Why is here a c style cast?",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Cw\u003d",
+        "filename": "chart2/source/controller/dialogs/DataBrowser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Please use isEmpty",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Cs\u003d",
+        "filename": "chart2/source/controller/dialogs/DataBrowser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Please use isEmpty",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Co\u003d",
+        "filename": "chart2/source/controller/dialogs/DataBrowser.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Why do we need the explicit constructor here?",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+DE\u003d",
+        "filename": "chart2/source/controller/dialogs/res_ErrorBar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+DA\u003d",
+        "filename": "chart2/source/controller/dialogs/res_ErrorBar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Please use !sRangeNegative.isEmpty() here",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+DU\u003d",
+        "filename": "chart2/source/controller/dialogs/tp_DataSource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Please use an OUStringBuffer here.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+DQ\u003d",
+        "filename": "chart2/source/controller/dialogs/tp_DataSource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "Please use if( !aLabel.isEmpty() ) here",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+DM\u003d",
+        "filename": "chart2/source/controller/dialogs/tp_DataSource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+DI\u003d",
+        "filename": "chart2/source/controller/dialogs/tp_DataSource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Dw\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment about OUString together with ScResId. Just as short explanation:\n\nThe current code creates a SchResId object which has an operator OUString which is called here. Then the OUString copy c\u0027tor is called to generate a copy from the returned OUString.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Ds\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Do\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Dk\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Dg\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Dc\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+DY\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See other comment",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Ek\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "The temporary OUString object should be unnecessary as ResId has an operator OUString. If that does not work it makes more sense to use the getString method on SchResId which returns the necessary OUString and prevents one temporary object.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Eg\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+Ec\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+EY\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+EU\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+EQ\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+EM\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+EE\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "In a follow-up patch you can also remove these hacks for gcc 3.3. Our baseline is 4.2 nowadays.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+EI\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+EA\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+D8\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above. The double OUString is unnecessary in all cases.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+D4\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//+D0\u003d",
+        "filename": "chart2/source/controller/main/ChartController_Tools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-04-01T01:35:30Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "24a9357ce91dcbb577e3d5b426b1cbca5a35667f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
