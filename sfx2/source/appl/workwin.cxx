@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <stdio.h>
 #include <boost/unordered_map.hpp>
@@ -582,8 +583,13 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     bDockingAllowed(sal_True),
     bInternalDockingAllowed(sal_True),
     bAllChildrenVisible(sal_True),
+#if HAVE_FEATURE_DESKTOP
     bIsFullScreen( sal_False ),
     bShowStatusBar( sal_True ),
+#else
+    bIsFullScreen( sal_True ),
+    bShowStatusBar( sal_False ),
+#endif
     m_nLock( 0 ),
     m_aStatusBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" )),
     m_aLayoutManagerPropName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )),
