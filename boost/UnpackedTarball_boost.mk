@@ -34,6 +34,7 @@ boost_patches += boost.6940.glibc.patch
 boost_patches += boost.7774.warnings.patch.1
 #https://svn.boost.org/trac/boost/ticket/6142
 boost_patches += boost.6142.warnings.patch.1
+boost_patches += boost.wundef.patch.1
 
 boost_patches += boost.windows.patch
 boost_patches += boost.vc2012.patch

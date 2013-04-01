@@ -1,0 +1,11 @@
+--- a/boost/multi_array/base.hpp	2013-04-01 13:53:59.565375431 +0200
++++ b/boost/multi_array/base.hpp	2013-04-01 13:54:03.230375652 +0200
+@@ -65,7 +65,7 @@
+ // object creation in small-memory environments.  Thus, the objects
+ // can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS 
+ // before loading multi_array.hpp.
+-#if !BOOST_MULTI_ARRAY_NO_GENERATORS
++#ifndef BOOST_MULTI_ARRAY_NO_GENERATORS
+ namespace {
+   multi_array_types::extent_gen extents;
+   multi_array_types::index_gen indices;
