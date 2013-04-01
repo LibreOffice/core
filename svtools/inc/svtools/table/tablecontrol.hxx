@@ -150,8 +150,8 @@ namespace svt { namespace table
         virtual void        StateChanged( StateChangedType i_nStateChange );
 
         /** Creates and returns the accessible object of the whole GridControl. */
-        SVT_DLLPRIVATE virtual XACC CreateAccessible();
-        SVT_DLLPRIVATE virtual XACC CreateAccessibleControl( sal_Int32 _nIndex );
+        SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
+        SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex );
         SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
         SVT_DLLPRIVATE virtual sal_Bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
         SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
@@ -161,14 +161,14 @@ namespace svt { namespace table
         // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
         // firing those events should be an implementation internal to the TableControl resp. TableControl_Impl,
         // instead of something triggered externally.
-        void commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const ::com::sun::star::uno::Any& i_newValue, const ::com::sun::star::uno::Any& i_oldValue );
-        void commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const ::com::sun::star::uno::Any& i_newValue, const ::com::sun::star::uno::Any& i_oldValue );
+        void commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
+        void commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
 
         // .............................................................................................................
         // IAccessibleTable
         virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
         virtual void GrabFocus();
-        virtual XACC GetAccessible( sal_Bool bCreate = sal_True );
+        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
         virtual Window* GetAccessibleParentWindow() const;
         virtual Window* GetWindowInstance();
         virtual sal_Int32 GetAccessibleControlCount() const;
@@ -188,7 +188,7 @@ namespace svt { namespace table
         virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const;
         virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const;
         virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const;
-        virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
+        virtual css::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         virtual sal_Bool HasRowHeader();
         virtual sal_Bool HasColHeader();
         virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;

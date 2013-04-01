@@ -126,7 +126,7 @@ namespace svt {
 class SVT_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public svt::IAccessibleTableProvider
 {
 private:
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
+    typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     sal_Bool                        m_bFirstPaint;
     ::svt::SvHeaderTabListBoxImpl*  m_pImpl;
@@ -201,8 +201,8 @@ public:
     /** @return  <TRUE/>, if the row is selected. */
     virtual bool                    IsRowSelected( long _nRow ) const;
     virtual sal_Bool                IsColumnSelected( long _nColumn ) const;
-    virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const;
-    virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const;
+    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const;
+    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const;
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
@@ -212,12 +212,12 @@ public:
     virtual Rectangle               calcTableRect( sal_Bool _bOnScreen = sal_True );
     virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True );
 
-    virtual XACC                    CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
-    virtual XACC                    CreateAccessibleRowHeader( sal_Int32 _nRow );
-    virtual XACC                    CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos );
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow );
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos );
 
     virtual sal_Int32               GetAccessibleControlCount() const;
-    virtual XACC                    CreateAccessibleControl( sal_Int32 _nIndex );
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex );
     virtual sal_Bool                ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
 
     virtual sal_Bool                ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint );
@@ -234,16 +234,16 @@ public:
     virtual void                    GrabTableFocus();
 
     // OutputDevice
-    virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
+    virtual sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
-    virtual XACC                    GetAccessible( sal_Bool bCreate = sal_True );
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
     virtual Window*                 GetAccessibleParentWindow() const;
 
     /** Creates and returns the accessible object of the whole BrowseBox. */
-    virtual XACC                    CreateAccessible();
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
 
     virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);

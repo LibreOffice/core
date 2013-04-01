@@ -24,14 +24,12 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-// ============================================================================
 
 namespace svt{ namespace table
 {
 
 typedef sal_Int32   RowPos;
 
-// ============================================================================
 
 enum AccessibleTableType
 {
@@ -54,9 +52,6 @@ enum AccessibleTableControlObjType
     TCTYPE_COLUMNHEADERCELL,    /// A cell of the column header bar.
 };
 
-// ============================================================================
-
-#define XACC ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
 
 /** This abstract class provides methods to implement an accessible table object.
 */
@@ -68,8 +63,8 @@ public:
     /** @return  The position of the current column. */
     virtual sal_Int32               GetCurrentColumn() const = 0;
     /** Creates and returns the accessible object of the whole GridControl. */
-    virtual XACC CreateAccessible()= 0;
-    virtual XACC CreateAccessibleControl( sal_Int32 _nIndex )= 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible()= 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex )= 0;
     virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const= 0;
     virtual sal_Bool    GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow )= 0;
     virtual sal_Bool    HasColHeader() = 0;
@@ -93,7 +88,7 @@ public:
     // Window
     virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
-    virtual XACC GetAccessible( sal_Bool bCreate = sal_True )= 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True )= 0;
     virtual Window* GetAccessibleParentWindow() const= 0;
     virtual Window* GetWindowInstance()= 0;
     virtual sal_Int32 GetAccessibleControlCount() const = 0;
@@ -113,7 +108,7 @@ public:
     virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const = 0;
     virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
     virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
-    virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
+    virtual css::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
     virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
 
     virtual sal_Int32 GetSelectedRowCount() const = 0;
@@ -126,7 +121,6 @@ protected:
     ~IAccessibleTable() {}
 };
 
-// ----------------------------------------------------------------------------
 
 /** interface for an implementation of a table control's Accesible component
 */
@@ -140,7 +134,7 @@ public:
 
         The returned reference is guaranteed to not be <NULL/>.
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getMyself() = 0;
 
     /** disposes the accessible implementation, so that it becomes defunc
@@ -154,12 +148,12 @@ public:
 
     /** returns the accessible object for the row or the column header bar
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getTableHeader( ::svt::table::AccessibleTableControlObjType _eObjType ) = 0;
 
     /** returns the accessible object for the table representation
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getTable() = 0;
 
     /** commits the event at all listeners of the cell
@@ -172,8 +166,8 @@ public:
       */
      virtual void commitCellEvent(
          sal_Int16 nEventId,
-         const ::com::sun::star::uno::Any& rNewValue,
-         const ::com::sun::star::uno::Any& rOldValue
+         const css::uno::Any& rNewValue,
+         const css::uno::Any& rOldValue
      ) = 0;
     /** commits the event at all listeners of the table
          @param nEventId
@@ -185,28 +179,24 @@ public:
       */
      virtual void commitTableEvent(
          sal_Int16 nEventId,
-         const ::com::sun::star::uno::Any& rNewValue,
-         const ::com::sun::star::uno::Any& rOldValue
+         const css::uno::Any& rNewValue,
+         const css::uno::Any& rOldValue
      ) = 0;
 
     ///** Commits an event to all listeners. */
     virtual void commitEvent(
         sal_Int16 nEventId,
-        const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue
+        const css::uno::Any& rNewValue,
+        const css::uno::Any& rOldValue
     ) = 0;
 
 protected:
     ~IAccessibleTableControl() {}
 };
 
-// ----------------------------------------------------------------------------
 
-// ============================================================================
 } // namespace table
 } // namespace svt
-
-// ============================================================================
 
 #endif // _SVTOOLS_ACCESSIBLETABLE_HXX
 

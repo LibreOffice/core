@@ -25,17 +25,12 @@
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-// ============================================================================
 
 namespace svt
 {
 
-// ============================================================================
-
 #define OFFSET_DEFAULT  ((sal_Int32)-1)
 #define OFFSET_NONE     ((sal_Int32)0)
-
-// ============================================================================
 
 enum AccessibleTableChildIndex
 {
@@ -49,9 +44,6 @@ enum AccessibleTableChildIndex
     BBINDEX_FIRSTCONTROL    = 3
 };
 
-// ============================================================================
-
-#define XACC ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
 
 /** This abstract class provides methods to implement an accessible table object.
 */
@@ -90,8 +82,8 @@ public:
     /** @return  <TRUE/>, if the row is selected. */
     virtual bool                    IsRowSelected( long _nRow ) const = 0;
     virtual sal_Bool                IsColumnSelected( long _nColumnPos ) const = 0;
-    virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
-    virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
+    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
+    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
@@ -101,12 +93,12 @@ public:
     virtual Rectangle               calcTableRect( sal_Bool _bOnScreen = sal_True ) = 0;
     virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True ) = 0;
 
-    virtual XACC                    CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
-    virtual XACC                    CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
-    virtual XACC                    CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
 
     virtual sal_Int32               GetAccessibleControlCount() const = 0;
-    virtual XACC                    CreateAccessibleControl( sal_Int32 _nIndex ) = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible >                    CreateAccessibleControl( sal_Int32 _nIndex ) = 0;
     virtual sal_Bool                ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) = 0;
 
     virtual sal_Bool                ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
@@ -121,12 +113,12 @@ public:
     virtual void                    GrabTableFocus() = 0;
 
     // OutputDevice
-    virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
+    virtual sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void                    GrabFocus() = 0;
-    virtual XACC                    GetAccessible( sal_Bool bCreate = sal_True ) = 0;
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True ) = 0;
     virtual Window*                 GetAccessibleParentWindow() const = 0;
     virtual Window*                 GetWindowInstance() = 0;
 
@@ -137,7 +129,6 @@ protected:
     ~IAccessibleTableProvider() {}
 };
 
-// ----------------------------------------------------------------------------
 
 /** interface for an implementation of a table control's Accesible component
 */
@@ -151,16 +142,16 @@ public:
 
         The returned reference is guaranteed to not be <NULL/>.
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getMyself() = 0;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleChild( sal_Int32 nChildIndex )
-            throw ( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException ) = 0;
+            throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException ) = 0;
 
     /** returns the accessible object for the row or the column header bar
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) = 0;
 
 protected:
@@ -179,7 +170,7 @@ public:
 
         The returned reference is guaranteed to not be <NULL/>.
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getMyself() = 0;
 
     /** disposes the accessible implementation, so that it becomes defunc
@@ -193,12 +184,12 @@ public:
 
     /** returns the accessible object for the row or the column header bar
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) = 0;
 
     /** returns the accessible object for the table representation
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getTable() = 0;
 
     /** commits the event at all listeners of the column/row header bar
@@ -211,8 +202,8 @@ public:
     */
     virtual void commitHeaderBarEvent(
         sal_Int16 nEventId,
-        const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue,
+        const css::uno::Any& rNewValue,
+        const css::uno::Any& rOldValue,
         sal_Bool _bColumnHeaderBar
     ) = 0;
 
@@ -226,28 +217,24 @@ public:
     */
     virtual void commitTableEvent(
         sal_Int16 nEventId,
-        const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue
+        const css::uno::Any& rNewValue,
+        const css::uno::Any& rOldValue
     ) = 0;
 
     /** Commits an event to all listeners. */
     virtual void commitEvent(
         sal_Int16 nEventId,
-        const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue
+        const css::uno::Any& rNewValue,
+        const css::uno::Any& rOldValue
     ) = 0;
 
 protected:
     ~IAccessibleBrowseBox() {}
 };
 
-// ----------------------------------------------------------------------------
-
-// ============================================================================
 
 } // namespace svt
 
-// ============================================================================
 
 #endif // _SVTOOLS_ACCESSIBLETABLEPROVIDER_HXX
 

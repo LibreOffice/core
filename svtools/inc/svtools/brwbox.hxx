@@ -304,7 +304,6 @@ private:
     DECL_DLLPRIVATE_LINK(       StartDragHdl, HeaderBar * );
 
     SVT_DLLPRIVATE long            GetFrozenWidth() const;
-//#endif
 
     sal_Bool            GoToRow(long nRow, sal_Bool bRowColMove, sal_Bool bDoNotModifySelection = sal_False );
 
@@ -394,8 +393,8 @@ protected:
     sal_Bool        IsDropFormatSupported( SotFormatStringId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
     sal_Bool        IsDropFormatSupported( SotFormatStringId nFormat ) const;
 
-    sal_Bool        IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
-    sal_Bool        IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& _rFlavor ) const;
+    sal_Bool        IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
+    sal_Bool        IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor ) const;
 
 private:
     void*           implGetDataFlavors() const;
@@ -608,8 +607,8 @@ public:
             the old value
     */
     void commitBrowseBoxEvent(sal_Int16 nEventId,
-            const ::com::sun::star::uno::Any& rNewValue,
-            const ::com::sun::star::uno::Any& rOldValue);
+            const css::uno::Any& rNewValue,
+            const css::uno::Any& rOldValue);
 
     /** commitTableEvent commit the event at all listeners of the table
         @param nEventId
@@ -620,8 +619,8 @@ public:
             the old value
     */
     void commitTableEvent(sal_Int16 nEventId,
-            const ::com::sun::star::uno::Any& rNewValue,
-            const ::com::sun::star::uno::Any& rOldValue);
+            const css::uno::Any& rNewValue,
+            const css::uno::Any& rOldValue);
 
     /** fires an AccessibleEvent relative to a header bar AccessibleContext
 
@@ -633,8 +632,8 @@ public:
             the old value
     */
     void commitHeaderBarEvent(sal_Int16 nEventId,
-            const ::com::sun::star::uno::Any& rNewValue,
-            const ::com::sun::star::uno::Any& rOldValue,
+            const css::uno::Any& rNewValue,
+            const css::uno::Any& rOldValue,
             sal_Bool _bColumnHeaderBar
          );
 
@@ -674,8 +673,8 @@ public:
     // ACCESSIBILITY ==========================================================
 public:
     /** Creates and returns the accessible object of the whole BrowseBox. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible > CreateAccessible();
 
     // Children ---------------------------------------------------------------
 
@@ -683,22 +682,22 @@ public:
         @param nRow  The row index of the cell.
         @param nColumnId  The column pos of the cell.
         @return  The XAccessible interface of the specified cell. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible >
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnPos );
 
     /** Creates the accessible object of a row header.
         @param nRow  The row index of the header.
         @return  The XAccessible interface of the specified row header. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible >
     CreateAccessibleRowHeader( sal_Int32 nRow );
 
     /** Creates the accessible object of a column header.
         @param nColumnId  The column ID of the header.
         @return  The XAccessible interface of the specified column header. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible >
     CreateAccessibleColumnHeader( sal_uInt16 nColumnPos );
 
     /** @return  The count of additional controls of the control area. */
@@ -707,8 +706,8 @@ public:
     /** Creates the accessible object of an additional control.
         @param nIndex  The 0-based index of the control.
         @return  The XAccessible interface of the specified control. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible >
     CreateAccessibleControl( sal_Int32 nIndex );
 
     // Conversions ------------------------------------------------------------
@@ -795,14 +794,14 @@ public:
     virtual sal_Bool                IsColumnSelected( long _nColumn ) const;
     virtual sal_Int32               GetSelectedRowCount() const;
     virtual sal_Int32               GetSelectedColumnCount() const;
-    virtual void                    GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& _rRows ) const;
-    virtual void                    GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int32 >& _rColumns ) const;
+    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const;
+    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const;
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
     virtual String                  GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const;
     virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
-    virtual XACC                    GetAccessible( sal_Bool bCreate = sal_True );
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
     virtual Window*                 GetAccessibleParentWindow() const;
     virtual Window*                 GetWindowInstance();
 
