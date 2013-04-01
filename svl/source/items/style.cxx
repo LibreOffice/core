@@ -341,7 +341,7 @@ XubString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
                 eMetric, aItemPresentation, &aIntlWrapper ) )
         {
             if ( aDesc.Len() && !aItemPresentation.isEmpty() )
-                aDesc.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" + "));
+                aDesc.AppendAscii(" + ");
             if ( !aItemPresentation.isEmpty() )
                 aDesc += aItemPresentation;
         }

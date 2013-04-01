@@ -2677,7 +2677,7 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
         const rtl::OUString &name = Properties[i].Name;
         const uno::Any &value = Properties[i].Value;
 
-        if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")))
+        if (name == "Title")
         {
             rtl::OUString title = value.get<rtl::OUString>();
             pTabControl->SetPageText( sal::static_int_cast< sal_uInt16 >( ID ), title );
@@ -2695,7 +2695,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
 
 #define ADD_PROP( seq, i, name, val ) {                                \
         beans::NamedValue value;                                                  \
-        value.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( name ) ); \
+        value.Name = rtl::OUString( name ); \
         value.Value = uno::makeAny( val );                                      \
         seq[i] = value;                                                    \
     }

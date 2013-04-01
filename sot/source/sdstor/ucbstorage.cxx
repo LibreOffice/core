@@ -3166,7 +3166,7 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
     if( nBytes == 0x04034b50 )
     {
         rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
-        if (aTmp.matchL(RTL_CONSTASCII_STRINGPARAM("ContentURL=")))
+        if (aTmp.match("ContentURL="))
         {
             aString = rtl::OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);
         }

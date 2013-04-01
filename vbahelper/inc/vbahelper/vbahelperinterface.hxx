@@ -138,7 +138,7 @@ public:
 #define VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
 OUString classname::getServiceImplName() \
 { \
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
+    return OUString( #classname ); \
 }
 
 // ----------------------------------------------------------------------------

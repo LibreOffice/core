@@ -1312,7 +1312,7 @@ static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >*
                                 if( pFDesc->cItems )
                                 {
                                     rtl::OString sDesc( pFDesc->fgd[ 0 ].cFileName );
-                                    bRet = 4 < sDesc.getLength() && sDesc.copy(sDesc.getLength()-4).equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM(".URL"));
+                                    bRet = 4 < sDesc.getLength() && sDesc.copy(sDesc.getLength()-4).equalsIgnoreAsciiCase(".URL");
                                 }
                             }
                         }

@@ -124,7 +124,7 @@ Content::Content(
 {
     assert(m_identifier.is());
     rtl::OUString uri(m_identifier->getContentIdentifier());
-    if (!uri.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(m_prefix))
+    if (!uri.matchIgnoreAsciiCase(m_prefix)
         || uri.indexOf('#', RTL_CONSTASCII_LENGTH(m_prefix)) != -1)
     {
         throw css::ucb::IllegalIdentifierException();
@@ -269,9 +269,9 @@ void Test::testNormalizedMakeRelative() {
             rtl::OStringBuffer buf;
             buf.append('<');
             buf.append(tests[i].base);
-            buf.append(RTL_CONSTASCII_STRINGPARAM(">, <"));
+            buf.append(">, <");
             buf.append(tests[i].absolute);
-            buf.append(RTL_CONSTASCII_STRINGPARAM(">: "));
+            buf.append(">: ");
             if (ref.is()) {
                 buf.append('<');
                 buf.append(
@@ -279,11 +279,11 @@ void Test::testNormalizedMakeRelative() {
                         ref->getUriReference(), RTL_TEXTENCODING_UTF8));
                 buf.append('>');
             } else {
-                buf.append(RTL_CONSTASCII_STRINGPARAM("none"));
+                buf.append("none");
             }
-            buf.append(RTL_CONSTASCII_STRINGPARAM(" instead of "));
+            buf.append(" instead of ");
             if (tests[i].relative == 0) {
-                buf.append(RTL_CONSTASCII_STRINGPARAM("none"));
+                buf.append("none");
             } else {
                 buf.append('<');
                 buf.append(tests[i].relative);
@@ -401,18 +401,18 @@ void Test::testFindFirstURLInText() {
             rtl::OStringBuffer buf;
             buf.append('"');
             buf.append(tests[i].input);
-            buf.append(RTL_CONSTASCII_STRINGPARAM("\" -> "));
+            buf.append("\" -> ");
             buf.append(tests[i].result == 0 ? "none" : tests[i].result);
-            buf.append(RTL_CONSTASCII_STRINGPARAM(" ("));
+            buf.append(" (");
             buf.append(static_cast< sal_Int32 >(tests[i].begin));
-            buf.append(RTL_CONSTASCII_STRINGPARAM(", "));
+            buf.append(", ");
             buf.append(static_cast< sal_Int32 >(tests[i].end));
             buf.append(')');
-            buf.append(RTL_CONSTASCII_STRINGPARAM(" != "));
+            buf.append(" != ");
             buf.append(rtl::OUStringToOString(result, RTL_TEXTENCODING_UTF8));
-            buf.append(RTL_CONSTASCII_STRINGPARAM(" ("));
+            buf.append(" (");
             buf.append(static_cast< sal_Int32 >(begin));
-            buf.append(RTL_CONSTASCII_STRINGPARAM(", "));
+            buf.append(", ");
             buf.append(static_cast< sal_Int32 >(end));
             buf.append(')');
             msg = buf.makeStringAndClear();

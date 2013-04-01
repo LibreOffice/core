@@ -2102,7 +2102,7 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
         rSeq[0].Code = OUStringBuffer().
             append('0').
             append(GetNumDecimalSep()).
-            appendAscii(RTL_CONSTASCII_STRINGPARAM("############")).
+            append("############").
             makeStringAndClear();
     }
     return 0;
@@ -2137,7 +2137,7 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
                 nLong = nElem;
                 break;
             default:
-                aMsg.append(RTL_CONSTASCII_STRINGPARAM("unknown type"));
+                aMsg.append("unknown type");
             }
             if ( pFormatArr[nElem].Default )
             {
@@ -2145,25 +2145,25 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
                 {
                 case i18n::KNumberFormatType::SHORT :
                     if ( nShortDef != -1 )
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("dupe short type default"));
+                        aMsg.append("dupe short type default");
                     nShortDef = nElem;
                     break;
                 case i18n::KNumberFormatType::MEDIUM :
                     if ( nMediumDef != -1 )
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("dupe medium type default"));
+                        aMsg.append("dupe medium type default");
                     nMediumDef = nElem;
                     break;
                 case i18n::KNumberFormatType::LONG :
                     if ( nLongDef != -1 )
-                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("dupe long type default"));
+                        aMsg.append("dupe long type default");
                     nLongDef = nElem;
                     break;
                 }
             }
             if (aMsg.getLength())
             {
-                aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM("SvNumberFormatter::ImpAdjustFormatCodeDefault: "));
-                aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nXML locale data FormatElement formatindex: "));
+                aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
+                aMsg.append("\nXML locale data FormatElement formatindex: ");
                 aMsg.append(static_cast<sal_Int32>(pFormatArr[nElem].Index));
                 OUString aUMsg(OStringToOUString(aMsg.makeStringAndClear(),
                     RTL_TEXTENCODING_ASCII_US));
@@ -2171,15 +2171,15 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
             }
         }
         if ( nShort != -1 && nShortDef == -1 )
-            aMsg.append(RTL_CONSTASCII_STRINGPARAM("no short type default  "));
+            aMsg.append("no short type default  ");
         if ( nMedium != -1 && nMediumDef == -1 )
-            aMsg.append(RTL_CONSTASCII_STRINGPARAM("no medium type default  "));
+            aMsg.append("no medium type default  ");
         if ( nLong != -1 && nLongDef == -1 )
-            aMsg.append(RTL_CONSTASCII_STRINGPARAM("no long type default  "));
+            aMsg.append("no long type default  ");
         if (aMsg.getLength())
         {
-            aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM("SvNumberFormatter::ImpAdjustFormatCodeDefault: "));
-            aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nXML locale data FormatElement group of: "));
+            aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
+            aMsg.append("\nXML locale data FormatElement group of: ");
             OUString aUMsg(OStringToOUString(aMsg.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
             LocaleDataWrapper::outputCheckMessage(
                 xLocaleData->appendLocaleInfo(aUMsg + pFormatArr[0].NameID));

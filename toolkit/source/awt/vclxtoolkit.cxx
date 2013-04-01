@@ -582,12 +582,12 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     Window* pNewWindow = NULL;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
     bool bFrameControl = false;
-    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("frame") ) )
+    if ( aServiceName == String( "frame" ) )
         bFrameControl = true;
-    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("tabcontrolnotabs") ) )
+    if ( aServiceName == String( "tabcontrolnotabs" ) )
     {
         nWinBits |= WB_NOBORDER;
-        nType = ImplGetComponentType( String( RTL_CONSTASCII_USTRINGPARAM("tabcontrol") ) );
+        nType = ImplGetComponentType( String( "tabcontrol" ) );
     }
     if ( !pParent )
     {
