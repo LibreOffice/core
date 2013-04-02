@@ -26,6 +26,7 @@ MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.o
 Name=%PRODUCTNAME Impress
 GenericName=Presentation
 Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
+StartupNotify=true
 Keywords=Slideshow;Slides;OpenDocument Presentation;Microsoft PowerPoint;Microsoft Works;OpenOffice Impress;odp;ppt;pptx;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New

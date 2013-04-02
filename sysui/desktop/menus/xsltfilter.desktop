@@ -7,3 +7,4 @@ MimeType=application/vnd.oasis.opendocument.text-flat-xml;application/vnd.oasis.
 Name=%PRODUCTNAME XSLT based filters
 GenericName=XSLT based filters
 NoDisplay=true
+StartupNotify=true
