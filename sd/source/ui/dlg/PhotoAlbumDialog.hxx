@@ -23,9 +23,18 @@
 #include <vcl/graphicfilter.hxx>
 #include <svx/svdotext.hxx>
 
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+
 class SdrTextObj;
 class SdDrawDocument;
 class SdPage;
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
 
 namespace sd
 {
@@ -49,7 +58,9 @@ private:
     ListBox*        pImagesLst;
     FixedImage*     pImg;
 
-    ListBox*   pInsTypeCombo;
+    ListBox*    pInsTypeCombo;
+
+    CheckBox*   pASRCheck;
 
     SdDrawDocument* pDoc;
     GraphicFilter* mpGraphicFilter;
@@ -66,6 +77,18 @@ private:
     DECL_LINK(SelectHdl, void*);
 
     void setFirstSlide(SdPage* pFirstSlide);
+
+    Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
+        Reference< drawing::XDrawPages > xDrawPages);
+
+    awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
+
+    Reference< drawing::XShape > createXShapeFromUrl(const OUString& sUrl,
+        Reference< lang::XMultiServiceFactory > xShapeFactory,
+        Reference< graphic::XGraphicProvider> xProvider);
+
+    Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
+        Reference< graphic::XGraphicProvider> xProvider);
 };
 
 }
