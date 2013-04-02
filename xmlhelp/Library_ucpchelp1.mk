@@ -72,6 +72,7 @@ $(eval $(call gb_Library_use_libraries,ucpchelp1,\
 	ucbhelper \
 	utl \
 	i18nisolang1 \
+	vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpchelp1,\

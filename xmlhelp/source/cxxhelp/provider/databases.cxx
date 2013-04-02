@@ -61,6 +61,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 
+#include <vcl/svapp.hxx>
+
 #include "databases.hxx"
 #include "urlparameter.hxx"
 
@@ -135,7 +137,7 @@ Databases::Databases( sal_Bool showBasic,
       vendVersion( rtl::OUString( "%VENDORVERSION" ) ),
       vendShort( rtl::OUString( "%VENDORSHORT" ) ),
       m_aImagesZipPaths( imagesZipPaths ),
-      m_nSymbolsStyle( 0 )
+      m_aSymbolsStyleName( "" )
 {
     m_xSMgr = Reference< XMultiComponentFactory >( m_xContext->getServiceManager(), UNO_QUERY );
 
@@ -235,8 +237,7 @@ static bool impl_getZipFile(
 
 rtl::OString Databases::getImagesZipFileURL()
 {
-    //sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
-    sal_Int16 nSymbolsStyle = 0;
+    OUString aSymbolsStyleName;
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
@@ -256,22 +257,31 @@ rtl::OString Databases::getImagesZipFileURL()
 
         bool bChanged = false;
         uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
-        uno::Any aResult = xAccess->getByHierarchicalName(::rtl::OUString("Misc/SymbolSet"));
-        if ( (aResult >>= nSymbolsStyle) && m_nSymbolsStyle != nSymbolsStyle )
+        uno::Any aResult = xAccess->getByHierarchicalName(::rtl::OUString("Misc/SymbolStyle"));
+        if ( (aResult >>= aSymbolsStyleName) && m_aSymbolsStyleName != aSymbolsStyleName )
         {
-            m_nSymbolsStyle = nSymbolsStyle;
+            m_aSymbolsStyleName = aSymbolsStyleName;
             bChanged = true;
         }
 
         if ( m_aImagesZipFileURL.isEmpty() || bChanged )
         {
-            rtl::OUString aImageZip, aSymbolsStyleName;
-            aResult = xAccess->getByHierarchicalName(::rtl::OUString("Misc/SymbolStyle"));
-            aResult >>= aSymbolsStyleName;
-
+            rtl::OUString aImageZip;
             bool bFound = false;
+
             if ( !aSymbolsStyleName.isEmpty() )
             {
+                if ( aSymbolsStyleName.equalsAscii("auto") )
+                {
+                    OUString const & env = Application::GetDesktopEnvironment();
+                    if ( env.equalsIgnoreAsciiCase("tde") ||
+                         env.equalsIgnoreAsciiCase("kde") )
+                        aSymbolsStyleName = "crystal";
+                    else if ( env.equalsIgnoreAsciiCase("kde4") )
+                        aSymbolsStyleName = "oxygen";
+                    else
+                        aSymbolsStyleName = "tango";
+                }
                 rtl::OUString aZipName = rtl::OUString( "images_" );
                 aZipName += aSymbolsStyleName;
                 aZipName += rtl::OUString( ".zip" );

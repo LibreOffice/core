@@ -314,7 +314,7 @@ namespace chelp {
         rtl::OUString          m_aInstallDirectory;                // Installation directory
         com::sun::star::uno::Sequence< rtl::OUString > m_aImagesZipPaths;
         rtl::OString           m_aImagesZipFileURL;
-        sal_Int16              m_nSymbolsStyle;
+        rtl::OUString          m_aSymbolsStyleName;
 
         std::vector< rtl::OUString >    m_avModules;
 
