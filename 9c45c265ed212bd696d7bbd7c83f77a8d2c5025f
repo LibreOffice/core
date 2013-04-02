@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//980\u003d",
+        "filename": "unodevtools/source/skeletonmaker/skeletoncommon.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-04-02T06:51:57Z",
+      "side": 1,
+      "message": "implmented -\u003e implemented",
+      "revId": "9c45c265ed212bd696d7bbd7c83f77a8d2c5025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
