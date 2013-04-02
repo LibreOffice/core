@@ -1,0 +1,10 @@
+--- misc/build/boost/boost/detail/container_fwd.hpp	2013-04-02 19:13:58.744000000 -0400
++++ misc/build/boost/boost/detail/container_fwd.hpp	2013-04-02 19:23:13.504000000 -0400
+@@ -17,6 +17,7 @@
+     || ((defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
+         && (defined(_GLIBCXX_DEBUG) || defined(_GLIBCXX_PARALLEL))) \
+     || BOOST_WORKAROUND(__BORLANDC__, > 0x551) \
++    || __GLIBCXX__ >= 20070513 \
+     || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x842)) \
+     || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+ 
