@@ -40,7 +40,9 @@
 #define ScChartShell
 #include "scslots.hxx"
 
-using namespace ::css::uno;
+using namespace css::uno;
+
+namespace drawing = com::sun::star::drawing;
 
 SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL) )
 {
@@ -90,7 +92,7 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
 
         if( pObject && pObject->ISA( SdrOle2Obj ) )
         {
-            Reference< XShape > xSourceDoc = Reference< XShape >( pObject->getUnoShape(), UNO_QUERY_THROW );
+            Reference< drawing::XShape > xSourceDoc = Reference< drawing::XShape >( pObject->getUnoShape(), UNO_QUERY_THROW );
             GraphicHelper::SaveShapeAsGraphic( xSourceDoc );
         }
     }
