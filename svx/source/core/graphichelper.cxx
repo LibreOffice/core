@@ -56,6 +56,8 @@ using namespace css::ui::dialogs;
 
 using namespace sfx2;
 
+namespace drawing = com::sun::star::drawing;
+
 void GraphicHelper::GetPreferedExtension( OUString& rExtension, const Graphic& rGraphic )
 {
     OUString aExtension = "png";
@@ -196,7 +198,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     return OUString();
 }
 
-void GraphicHelper::SaveShapeAsGraphic( const Reference< XShape >& xShape )
+void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xShape )
 {
     try
     {
