@@ -3694,21 +3694,6 @@
         </group>
       </group>
     </group>
-    <group oor:name="WorkingSet">
-      <info>
-        <deprecated/>
-        <desc>Lists open documents or windows.</desc>
-      </info>
-      <prop oor:name="WindowList" oor:type="oor:string-list">
-        <!-- OldPath: SavedWorkingSet -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: Tools  Options - General  Save -->
-        <info>
-          <deprecated/>
-          <desc>Lists open documents or windows.</desc>
-        </info>
-      </prop>
-    </group>
     <group oor:name="AddXMLToStorage">
       <info>
         <desc>Contains settings specifying if a XML package is added to the

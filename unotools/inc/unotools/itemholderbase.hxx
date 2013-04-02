@@ -33,7 +33,6 @@ struct ItemHolderMutexBase
 
 enum EItem
 {
-    E_ACCELCFG                      ,   //
     E_ACCESSIBILITYOPTIONS          ,   // 2
     E_ADDXMLTOSTORAGEOPTIONS        ,   //
     E_APEARCFG                      ,   // 2
@@ -56,8 +55,6 @@ enum EItem
 
     E_HELPOPTIONS                   ,   // 2
     E_HISTORYOPTIONS                ,   //
-
-    E_JAVAOPTIONS                   ,   //
 
     E_LANGUAGEOPTIONS               ,   // 2
     E_LINGUCFG                      ,   //
@@ -87,11 +84,7 @@ enum EItem
     E_VIEWOPTIONS_DIALOG            ,   //
     E_VIEWOPTIONS_TABDIALOG         ,   //
     E_VIEWOPTIONS_TABPAGE           ,   //
-    E_VIEWOPTIONS_WINDOW            ,   //
-
-    E_WORKINGSETOPTIONS             ,   //
-
-    E_XMLACCELCFG                       //
+    E_VIEWOPTIONS_WINDOW                //
 };
 
 struct TItemInfo

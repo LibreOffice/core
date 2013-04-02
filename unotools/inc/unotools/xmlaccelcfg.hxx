@@ -23,7 +23,16 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/weak.hxx>
 
-#include <unotools/accelcfg.hxx>
+struct SvtAcceleratorConfigItem
+{
+    sal_uInt16      nCode;
+    sal_uInt16      nModifier;
+    OUString        aCommand;
+};
+
+#include <list>
+typedef ::std::list < SvtAcceleratorConfigItem > SvtAcceleratorItemList;
+
 
 class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocumentHandler,
                                       public ::cppu::OWeakObject

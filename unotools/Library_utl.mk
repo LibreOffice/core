@@ -71,7 +71,6 @@ $(eval $(call gb_Library_use_libraries,utl,\
 $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/accessibility/accessiblerelationsethelper \
     unotools/source/accessibility/accessiblestatesethelper \
-    unotools/source/config/accelcfg \
     unotools/source/config/bootstrap \
     unotools/source/config/cmdoptions \
     unotools/source/config/compatibility \
@@ -104,7 +103,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/syslocaleoptions \
     unotools/source/config/useroptions \
     unotools/source/config/viewoptions \
-    unotools/source/config/workingsetoptions \
     unotools/source/config/xmlaccelcfg \
     unotools/source/i18n/calendarwrapper \
     unotools/source/i18n/caserotate \
