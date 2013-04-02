@@ -334,6 +334,7 @@ certain functionality.
 @li @c ucbhelper
 @li @c unoidl
 @li @c uui
+@li @c vbahelper
 @li @c xmlhelp
 @li @c xmloff
 @li @c xmlreader

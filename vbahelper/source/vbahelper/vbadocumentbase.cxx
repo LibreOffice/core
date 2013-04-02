@@ -188,7 +188,7 @@ VbaDocumentBase::Protect( const uno::Any &aPassword ) throw (uno::RuntimeExcepti
 {
     OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
-    OSL_TRACE("Workbook::Protect stub");
+    SAL_INFO("vbahelper", "Workbook::Protect stub");
     if(  aPassword >>= rPassword )
         xProt->protect( rPassword );
     else

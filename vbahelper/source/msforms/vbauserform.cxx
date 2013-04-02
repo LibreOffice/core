@@ -59,7 +59,7 @@ ScVbaUserForm::~ScVbaUserForm()
 void SAL_CALL
 ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 {
-    OSL_TRACE("ScVbaUserForm::Show(  )");
+    SAL_INFO("vbahelper", "ScVbaUserForm::Show(  )");
     short aRet = 0;
     mbDispose = true;
 
@@ -83,7 +83,7 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 
         aRet = m_xDialog->execute();
     }
-    OSL_TRACE("ScVbaUserForm::Show() execute returned %d", aRet);
+    SAL_INFO("vbahelper", "ScVbaUserForm::Show() execute returned " << aRet);
     if ( mbDispose )
     {
         try
@@ -276,7 +276,7 @@ ScVbaUserForm::hasProperty( const OUString& aName ) throw (uno::RuntimeException
 {
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY );
 
-    OSL_TRACE("ScVbaUserForm::hasProperty(%s) %d", OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), xControl.is() );
+    SAL_INFO("vbahelper", "ScVbaUserForm::hasProperty(" << aName << ") " << xControl.is() );
     if ( xControl.is() )
     {
         uno::Reference< beans::XPropertySet > xDlgProps( xControl->getModel(), uno::UNO_QUERY );
@@ -284,7 +284,7 @@ ScVbaUserForm::hasProperty( const OUString& aName ) throw (uno::RuntimeException
         {
             uno::Reference< container::XNameContainer > xAllChildren( xDlgProps->getPropertyValue( "AllDialogChildren" ), uno::UNO_QUERY_THROW );
             sal_Bool bRes =  xAllChildren->hasByName( aName );
-            OSL_TRACE("ScVbaUserForm::hasProperty(%s) %d ---> %d", OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), xAllChildren.is(), bRes );
+            SAL_INFO("vbahelper", "ScVbaUserForm::hasProperty(" << aName << ") " << xAllChildren.is() << " ---> " << bRes );
             return bRes;
         }
     }

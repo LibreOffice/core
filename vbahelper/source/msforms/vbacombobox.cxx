@@ -104,13 +104,13 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
         {
             if ( sItems[ index ].equals( sText ) )
             {
-                OSL_TRACE("getListIndex returning %d", index );
+                SAL_INFO("vbahelper", "getListIndex returning " << index );
                 return uno::makeAny( index );
             }
 
         }
      }
-    OSL_TRACE("getListIndex returning %d", -1 );
+    SAL_INFO("vbahelper", "getListIndex returning -1" );
     return uno::makeAny( sal_Int32( -1 ) );
 }
 

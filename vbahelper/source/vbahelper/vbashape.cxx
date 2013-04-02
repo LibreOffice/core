@@ -116,7 +116,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     OUString sShapeType;
     uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor( xShape, uno::UNO_QUERY_THROW );
     sShapeType = xShapeDescriptor->getShapeType();
-    OSL_TRACE("ScVbaShape::getType: %s", OUStringToOString( sShapeType, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("vbahelper", "ScVbaShape::getType: " << sShapeType);
     // office::MsoShapeType::msoDiagram to "com.sun.star.drawing.GroupShape"
     if( sShapeType == "com.sun.star.drawing.GroupShape" )
         return office::MsoShapeType::msoGroup;

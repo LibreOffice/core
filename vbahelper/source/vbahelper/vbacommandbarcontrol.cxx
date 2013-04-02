@@ -69,7 +69,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction ) throw (uno::Run
     if ( aResolvedMacro.mbFound )
     {
         OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
-        OSL_TRACE(" ScVbaCommandBarControl::setOnAction: %s", OUStringToOString( aCommandURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("vbahelper", "ScVbaCommandBarControl::setOnAction: " << aCommandURL);
         setPropertyValue( m_aPropertyValues, "CommandURL" , uno::makeAny( aCommandURL ) );
         ApplyChange();
     }
