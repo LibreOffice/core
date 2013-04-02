@@ -448,12 +448,12 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         }
         case SID_ACTIVATE_STYLE_APPLY:
         {
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+            uno::Reference< frame::XFrame > xFrame(
                 GetViewFrame()->GetFrame().GetFrameInterface(),
-                com::sun::star::uno::UNO_QUERY);
+                uno::UNO_QUERY);
 
-            Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-            Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            Reference< beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+            Reference< frame::XLayoutManager > xLayoutManager;
             if ( xPropSet.is() )
             {
                 try
@@ -705,7 +705,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 {
                     xStorable->storeToURL( aFileURL, aArgs );
                 }
-                catch (const com::sun::star::io::IOException&)
+                catch (const io::IOException&)
                 {
                     rReq.Done(sal_False);
                     return;
@@ -1497,11 +1497,11 @@ void SfxViewShell::ReadUserData(const String&, sal_Bool )
 {
 }
 
-void SfxViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool )
+void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >&, sal_Bool )
 {
 }
 
-void SfxViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool )
+void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >&, sal_Bool )
 {
 }
 
@@ -1929,12 +1929,12 @@ SfxBaseController* SfxViewShell::GetBaseController_Impl() const
     return pImp->m_pController.get();
 }
 
-void SfxViewShell::AddContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+void SfxViewShell::AddContextMenuInterceptor_Impl( const uno::Reference< ui::XContextMenuInterceptor >& xInterceptor )
 {
     pImp->aInterceptorContainer.addInterface( xInterceptor );
 }
 
-void SfxViewShell::RemoveContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+void SfxViewShell::RemoveContextMenuInterceptor_Impl( const uno::Reference< ui::XContextMenuInterceptor >& xInterceptor )
 {
     pImp->aInterceptorContainer.removeInterface( xInterceptor );
 }

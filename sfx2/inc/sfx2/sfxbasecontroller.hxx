@@ -50,24 +50,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
 
-// Some defines to write better code :-)
-#define REFERENCE               ::com::sun::star::uno::Reference
-#define ANY                     ::com::sun::star::uno::Any
-#define XDISPATCH               ::com::sun::star::frame::XDispatch
-#define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
-#define XMODEL                  ::com::sun::star::frame::XModel
-#define XFRAME                  ::com::sun::star::frame::XFrame
-#define XEVENTLISTENER          ::com::sun::star::lang::XEventListener
-#define MUTEX                   ::osl::Mutex
-#define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
-#define UNOTYPE                 ::com::sun::star::uno::Type
-#define UNOURL                  ::com::sun::star::util::URL
-#define XCONTEXTMENUINTERCEPTOR ::com::sun::star::ui::XContextMenuInterceptor
-
-//________________________________________________________________________________________________________
-//  forwards
-//________________________________________________________________________________________________________
-
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController
 
 class SfxViewFrame;
@@ -78,15 +60,15 @@ sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID );
 //  class declarations
 //________________________________________________________________________________________________________
 
-typedef ::cppu::WeakImplHelper9 <   ::com::sun::star::frame::XController2
-                                ,   ::com::sun::star::frame::XControllerBorder
-                                ,   ::com::sun::star::frame::XDispatchProvider
-                                ,   ::com::sun::star::task::XStatusIndicatorSupplier
-                                ,   ::com::sun::star::ui::XContextMenuInterception
-                                ,   ::com::sun::star::awt::XUserInputInterception
-                                ,   ::com::sun::star::frame::XDispatchInformationProvider
-                                ,   ::com::sun::star::frame::XTitle
-                                ,   ::com::sun::star::frame::XTitleChangeBroadcaster
+typedef ::cppu::WeakImplHelper9 <   css::frame::XController2
+                                ,   css::frame::XControllerBorder
+                                ,   css::frame::XDispatchProvider
+                                ,   css::task::XStatusIndicatorSupplier
+                                ,   css::ui::XContextMenuInterception
+                                ,   css::awt::XUserInputInterception
+                                ,   css::frame::XDispatchInformationProvider
+                                ,   css::frame::XTitle
+                                ,   css::frame::XTitleChangeBroadcaster
                                 >   SfxBaseController_Base;
 
 class SFX2_DLLPUBLIC SfxBaseController  :public SfxBaseController_Base
@@ -135,14 +117,14 @@ public:
     SAL_DLLPRIVATE void ReleaseShell_Impl();
     SAL_DLLPRIVATE void BorderWidthsChanged_Impl();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) throw (::com::sun::star::uno::RuntimeException);
+    css::uno::Reference< css::task::XStatusIndicator > SAL_CALL getStatusIndicator(  ) throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XController2
     //____________________________________________________________________________________________________
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCreationArguments() throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XController
@@ -161,7 +143,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL attachFrame( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION ) ;
+    virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -176,7 +158,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL attachModel( const REFERENCE< XMODEL >& xModel ) throw( RUNTIMEEXCEPTION ) ;
+    virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -191,7 +173,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw( RUNTIMEEXCEPTION ) ;
+    virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -206,7 +188,7 @@ public:
         @onerror    -
     */
 
-    ANY SAL_CALL getViewData() throw( RUNTIMEEXCEPTION ) ;
+    css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -221,7 +203,7 @@ public:
         @onerror    -
     */
 
-    void SAL_CALL restoreViewData( const ANY& aValue ) throw( RUNTIMEEXCEPTION ) ;
+    void SAL_CALL restoreViewData( const css::uno::Any& aValue ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -236,7 +218,7 @@ public:
         @onerror    -
     */
 
-    REFERENCE< XFRAME > SAL_CALL getFrame() throw( RUNTIMEEXCEPTION ) ;
+    css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -251,7 +233,7 @@ public:
         @onerror    -
     */
 
-    REFERENCE< XMODEL > SAL_CALL getModel() throw( RUNTIMEEXCEPTION ) ;
+    css::uno::Reference< css::frame::XModel > SAL_CALL getModel() throw( css::uno::RuntimeException ) ;
 
     //____________________________________________________________________________________________________
     //  XDispatchProvider
@@ -270,9 +252,9 @@ public:
         @onerror    -
     */
 
-    virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL &            aURL            ,
-                                                            const   ::rtl::OUString &   sTargetFrameName,
-                                                                    FrameSearchFlags    eSearchFlags    ) throw( RUNTIMEEXCEPTION ) ;
+    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &    aURL            ,
+                                                                                  const   ::rtl::OUString &   sTargetFrameName,
+                                                                                  FrameSearchFlags            eSearchFlags    ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -287,16 +269,16 @@ public:
         @onerror    -
     */
 
-    virtual ::com::sun::star::uno::Sequence< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
+    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException ) ;
 
     //____________________________________________________________________________________________________
     //  XControllerBorder
     //____________________________________________________________________________________________________
 
-    virtual ::com::sun::star::frame::BorderWidths SAL_CALL getBorder() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addBorderResizeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XBorderResizeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeBorderResizeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XBorderResizeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL queryBorderedArea( const ::com::sun::star::awt::Rectangle& aPreliminaryRectangle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::frame::BorderWidths SAL_CALL getBorder() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) throw (css::uno::RuntimeException);
+    virtual css::awt::Rectangle SAL_CALL queryBorderedArea( const css::awt::Rectangle& aPreliminaryRectangle ) throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XComponent
@@ -315,7 +297,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL dispose() throw( RUNTIMEEXCEPTION ) ;
+    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -330,7 +312,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL addEventListener( const REFERENCE< XEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION ) ;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -345,28 +327,28 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL removeEventListener( const REFERENCE< XEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION ) ;
-    virtual void SAL_CALL registerContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor ) throw( RUNTIMEEXCEPTION );
-    virtual void SAL_CALL releaseContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor ) throw( RUNTIMEEXCEPTION );
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw( css::uno::RuntimeException ) ;
+    virtual void SAL_CALL registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
+    virtual void SAL_CALL releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
 
-    virtual void SAL_CALL addKeyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeKeyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XDispatchInformationProvider
     //____________________________________________________________________________________________________
-    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException);
 
     // css::frame::XTitle
-    virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (css::uno::RuntimeException);
 
     // css::frame::XTitleChangeBroadcaster
-    virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener )     throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )     throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) throw (css::uno::RuntimeException);
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
@@ -374,8 +356,8 @@ public:
     SAL_DLLPRIVATE sal_Bool HandleEvent_Impl( NotifyEvent& rEvent );
     SAL_DLLPRIVATE sal_Bool HasKeyListeners_Impl();
     SAL_DLLPRIVATE sal_Bool HasMouseClickListeners_Impl();
-    SAL_DLLPRIVATE void SetCreationArguments_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs );
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
+    SAL_DLLPRIVATE void SetCreationArguments_Impl( const css::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs );
+    SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
 private:
     enum ConnectSfxFrame
     {

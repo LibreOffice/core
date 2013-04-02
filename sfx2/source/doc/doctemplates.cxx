@@ -114,7 +114,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
-using namespace ::rtl;
 using namespace ::ucbhelper;
 using namespace ::comphelper;
 
@@ -278,7 +277,7 @@ public:
 
     sal_Bool                    storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
-                                               const uno::Reference< XSTORABLE >& rStorable );
+                                               const uno::Reference< frame::XStorable >& rStorable );
 
     sal_Bool                    addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
@@ -1754,7 +1753,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
 //-----------------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
                                                const OUString& rTemplateName,
-                                               const uno::Reference< XSTORABLE >& rStorable )
+                                               const uno::Reference< frame::XStorable >& rStorable )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -2224,7 +2223,7 @@ SfxDocTplService::~SfxDocTplService()
 //-----------------------------------------------------------------------------
 
 Locale SAL_CALL SfxDocTplService::getLocale()
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     return pImp->getLocale();
 }
@@ -2232,7 +2231,7 @@ Locale SAL_CALL SfxDocTplService::getLocale()
 //-----------------------------------------------------------------------------
 
 void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     pImp->setLocale( rLocale );
 }
@@ -2240,8 +2239,8 @@ void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
 //-----------------------------------------------------------------------------
 //--- XDocumentTemplates ---
 //-----------------------------------------------------------------------------
-uno::Reference< XCONTENT > SAL_CALL SfxDocTplService::getContent()
-    throw( RUNTIMEEXCEPTION )
+uno::Reference< ucb::XContent > SAL_CALL SfxDocTplService::getContent()
+    throw( uno::RuntimeException )
 {
     if ( pImp->init() )
         return pImp->getContent().get();
@@ -2252,8 +2251,8 @@ uno::Reference< XCONTENT > SAL_CALL SfxDocTplService::getContent()
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
-                                                   const uno::Reference< XSTORABLE >& Storable )
-    throw( RUNTIMEEXCEPTION )
+                                                   const uno::Reference< frame::XStorable >& Storable )
+    throw( uno::RuntimeException )
 {
     if ( pImp->init() )
         return pImp->storeTemplate( GroupName, TemplateName, Storable );
@@ -2265,7 +2264,7 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
 sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
                                                  const OUString& rTemplateName,
                                                  const OUString& rSourceURL )
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     if ( pImp->init() )
         return pImp->addTemplate( rGroupName, rTemplateName, rSourceURL );
@@ -2276,7 +2275,7 @@ sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
                                                     const OUString& rTemplateName )
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     if ( pImp->init() )
         return pImp->removeTemplate( rGroupName, rTemplateName );
@@ -2288,7 +2287,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
 sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
                                                     const OUString& rOldName,
                                                     const OUString& rNewName )
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     if ( rOldName == rNewName )
         return sal_True;
@@ -2301,7 +2300,7 @@ sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
 
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     if ( pImp->init() )
         return pImp->addGroup( rGroupName );
@@ -2311,7 +2310,7 @@ sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
 
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     if ( pImp->init() )
         return pImp->removeGroup( rGroupName );
@@ -2322,7 +2321,7 @@ sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
                                                  const OUString& rNewName )
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     if ( rOldName == rNewName )
         return sal_True;
@@ -2335,7 +2334,7 @@ sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
 
 //-----------------------------------------------------------------------------
 void SAL_CALL SfxDocTplService::update()
-    throw( RUNTIMEEXCEPTION )
+    throw( uno::RuntimeException )
 {
     if ( pImp->init() )
         pImp->update( sal_True );

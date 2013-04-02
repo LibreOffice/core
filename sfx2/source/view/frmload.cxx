@@ -659,7 +659,7 @@ rtl::OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName() throw( Runti
 /* XServiceInfo */
 sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const rtl::OUString& sServiceName ) throw( RuntimeException )
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
+    Sequence< rtl::OUString > seqServiceNames = getSupportedServiceNames();
     const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
@@ -672,16 +672,16 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const rtl::OUString& sSe
 }
 
 /* XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() throw( RuntimeException )
+Sequence< rtl::OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames()
+Sequence< rtl::OUString > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames()
 {
-    UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
-    UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    Sequence< rtl::OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = ::rtl::OUString( "com.sun.star.frame.SynchronousFrameLoader" );
     return seqServiceNames ;
 }
@@ -693,9 +693,9 @@ rtl::OUString SfxFrameLoader_Impl::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-Reference< UNOXINTERFACE > SAL_CALL SfxFrameLoader_Impl::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( UNOEXCEPTION )
+Reference< css::uno::XInterface > SAL_CALL SfxFrameLoader_Impl::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
 {
-    return Reference< XInterface >( *new SfxFrameLoader_Impl( comphelper::getComponentContext(xServiceManager) ) );
+    return Reference< css::uno::XInterface >( *new SfxFrameLoader_Impl( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

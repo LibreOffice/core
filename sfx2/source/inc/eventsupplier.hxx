@@ -50,36 +50,16 @@ namespace comphelper
     class NamedValueCollection;
 }
 
-//--------------------------------------------------------------------------------------------------------
-
-#define NOSUCHELEMENTEXCEPTION      ::com::sun::star::container::NoSuchElementException
-#define XNAMEREPLACE                ::com::sun::star::container::XNameReplace
-#define DOCEVENTOBJECT              ::com::sun::star::document::EventObject
-#define XEVENTBROADCASTER           ::com::sun::star::document::XEventBroadcaster
-#define XDOCEVENTLISTENER           ::com::sun::star::document::XEventListener
-#define XEVENTSSUPPLIER             ::com::sun::star::document::XEventsSupplier
-#define EVENTOBJECT                 ::com::sun::star::lang::EventObject
-#define ILLEGALARGUMENTEXCEPTION    ::com::sun::star::lang::IllegalArgumentException
-#define WRAPPEDTARGETEXCEPTION      ::com::sun::star::lang::WrappedTargetException
-#define ANY                         ::com::sun::star::uno::Any
-#define REFERENCE                   ::com::sun::star::uno::Reference
-#define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
-#define SEQUENCE                    ::com::sun::star::uno::Sequence
-#define UNOTYPE                     ::com::sun::star::uno::Type
-#define OINTERFACECONTAINERHELPER   ::cppu::OInterfaceContainerHelper
-
-//--------------------------------------------------------------------------------------------------------
-
 class SfxObjectShell;
 class SvxMacro;
 
 //--------------------------------------------------------------------------------------------------------
 
-class SfxEvents_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameReplace, ::com::sun::star::document::XEventListener  >
+class SfxEvents_Impl : public ::cppu::WeakImplHelper2< css::container::XNameReplace, css::document::XEventListener  >
 {
-    SEQUENCE< ::rtl::OUString >     maEventNames;
-    SEQUENCE< ANY >                 maEventData;
-    REFERENCE< XEVENTBROADCASTER >  mxBroadcaster;
+    css::uno::Sequence< ::rtl::OUString >     maEventNames;
+    css::uno::Sequence< css::uno::Any >                 maEventData;
+    css::uno::Reference< css::document::XEventBroadcaster >  mxBroadcaster;
     ::osl::Mutex                    maMutex;
     SfxObjectShell                 *mpObjShell;
 
@@ -87,35 +67,35 @@ class SfxEvents_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::contain
 
 public:
                                 SfxEvents_Impl( SfxObjectShell* pShell,
-                                                REFERENCE< XEVENTBROADCASTER > xBroadcaster );
+                                                css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster );
                                ~SfxEvents_Impl();
 
     //  --- XNameReplace ---
-    virtual void SAL_CALL       replaceByName( const ::rtl::OUString & aName, const ANY & aElement )
-                                    throw( ILLEGALARGUMENTEXCEPTION, NOSUCHELEMENTEXCEPTION,
-                                           WRAPPEDTARGETEXCEPTION, RUNTIMEEXCEPTION );
+    virtual void SAL_CALL       replaceByName( const ::rtl::OUString & aName, const css::uno::Any & aElement )
+                                    throw( css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+                                           css::lang::WrappedTargetException, css::uno::RuntimeException );
 
     //  --- XNameAccess ( parent of XNameReplace ) ---
-    virtual ANY SAL_CALL        getByName( const ::rtl::OUString& aName )
-                                    throw( NOSUCHELEMENTEXCEPTION, WRAPPEDTARGETEXCEPTION,
-                                           RUNTIMEEXCEPTION );
-    virtual SEQUENCE< ::rtl::OUString > SAL_CALL getElementNames() throw ( RUNTIMEEXCEPTION );
-    virtual sal_Bool SAL_CALL   hasByName( const ::rtl::OUString& aName ) throw ( RUNTIMEEXCEPTION );
+    virtual css::uno::Any SAL_CALL        getByName( const ::rtl::OUString& aName )
+                                    throw( css::container::NoSuchElementException, css::lang::WrappedTargetException,
+                                           css::uno::RuntimeException );
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw ( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL   hasByName( const ::rtl::OUString& aName ) throw ( css::uno::RuntimeException );
 
     //  --- XElementAccess ( parent of XNameAccess ) ---
-    virtual UNOTYPE SAL_CALL    getElementType() throw ( RUNTIMEEXCEPTION );
-    virtual sal_Bool SAL_CALL   hasElements() throw ( RUNTIMEEXCEPTION );
+    virtual css::uno::Type SAL_CALL    getElementType() throw ( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL   hasElements() throw ( css::uno::RuntimeException );
 
     // --- ::document::XEventListener ---
-    virtual void SAL_CALL       notifyEvent( const DOCEVENTOBJECT& aEvent )
-                                    throw( RUNTIMEEXCEPTION );
+    virtual void SAL_CALL       notifyEvent( const css::document::EventObject& aEvent )
+                                    throw( css::uno::RuntimeException );
 
     // --- ::lang::XEventListener ---
-    virtual void SAL_CALL       disposing( const EVENTOBJECT& Source )
-                                    throw( RUNTIMEEXCEPTION );
+    virtual void SAL_CALL       disposing( const css::lang::EventObject& Source )
+                                    throw( css::uno::RuntimeException );
 
-    static SvxMacro*            ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc, sal_Bool bNormalizeMacro );
-    static void                 NormalizeMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
+    static SvxMacro*            ConvertToMacro( const css::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bNormalizeMacro );
+    static void                 NormalizeMacro( const css::uno::Any& rIn, css::uno::Any& rOut, SfxObjectShell* pDoc );
     static void                 NormalizeMacro(
                                     const ::comphelper::NamedValueCollection& i_eventDescriptor,
                                     ::comphelper::NamedValueCollection& o_normalizedDescriptor,
@@ -130,11 +110,11 @@ struct ModelCollectionMutexBase
 };
 
 //=============================================================================
-typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > > TModelList;
+typedef ::std::vector< css::uno::Reference< css::frame::XModel > > TModelList;
 
 //=============================================================================
 class ModelCollectionEnumeration : public ModelCollectionMutexBase
-                                 , public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumeration >
+                                 , public ::cppu::WeakImplHelper1< css::container::XEnumeration >
 {
 
     //-------------------------------------------------------------------------
@@ -159,95 +139,95 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
 
         // css.container.XEnumeration
         virtual sal_Bool SAL_CALL hasMoreElements()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
-            throw(::com::sun::star::container::NoSuchElementException,
-                  ::com::sun::star::lang::WrappedTargetException     ,
-                  ::com::sun::star::uno::RuntimeException            );
+        virtual css::uno::Any SAL_CALL nextElement()
+            throw(css::container::NoSuchElementException,
+                  css::lang::WrappedTargetException     ,
+                  css::uno::RuntimeException            );
 };
 
 //=============================================================================
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
-                           , public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo
-                                                           , ::com::sun::star::frame::XGlobalEventBroadcaster
-                                                           , ::com::sun::star::document::XEventListener
+                           , public ::cppu::WeakImplHelper3< css::lang::XServiceInfo
+                                                           , css::frame::XGlobalEventBroadcaster
+                                                           , css::document::XEventListener
                                                             >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xEvents;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener > m_xJobExecutorListener;
-    OINTERFACECONTAINERHELPER m_aLegacyListeners;
-    OINTERFACECONTAINERHELPER m_aDocumentListeners;
+    css::uno::Reference< css::container::XNameReplace > m_xEvents;
+    css::uno::Reference< css::document::XEventListener > m_xJobExecutorListener;
+    ::cppu::OInterfaceContainerHelper m_aLegacyListeners;
+    ::cppu::OInterfaceContainerHelper m_aDocumentListeners;
     TModelList m_lModels;
     GlobalEventConfig* pImp;
 
 public:
-    SfxGlobalEvents_Impl(const com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >& rxContext);
+    SfxGlobalEvents_Impl(const css::uno::Reference < css::uno::XComponentContext >& rxContext);
     virtual ~SfxGlobalEvents_Impl();
 
     SFX_DECL_XSERVICEINFO
 
     // css.document.XEventBroadcaster
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents()
+        throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& xListener)
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener(const css::uno::Reference< css::document::XEventListener >& xListener)
+        throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& xListener)
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener)
+        throw(css::uno::RuntimeException);
 
     // css.document.XDocumentEventBroadcaster
-    virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException);
 
     // css.document.XEventListener
-    virtual void SAL_CALL notifyEvent(const ::com::sun::star::document::EventObject& aEvent)
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
+        throw(css::uno::RuntimeException);
 
     // css.document.XDocumentEventListener
-    virtual void SAL_CALL documentEventOccured( const ::com::sun::star::document::DocumentEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw (css::uno::RuntimeException);
 
     // css.container.XSet
-    virtual sal_Bool SAL_CALL has(const ::com::sun::star::uno::Any& aElement)
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL has(const css::uno::Any& aElement)
+        throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL insert(const ::com::sun::star::uno::Any& aElement)
-        throw(::com::sun::star::lang::IllegalArgumentException  ,
-              ::com::sun::star::container::ElementExistException,
-              ::com::sun::star::uno::RuntimeException           );
+    virtual void SAL_CALL insert(const css::uno::Any& aElement)
+        throw(css::lang::IllegalArgumentException  ,
+              css::container::ElementExistException,
+              css::uno::RuntimeException           );
 
-    virtual void SAL_CALL remove(const ::com::sun::star::uno::Any& aElement)
-        throw(::com::sun::star::lang::IllegalArgumentException   ,
-              ::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::uno::RuntimeException            );
+    virtual void SAL_CALL remove(const css::uno::Any& aElement)
+        throw(css::lang::IllegalArgumentException   ,
+              css::container::NoSuchElementException,
+              css::uno::RuntimeException            );
 
     // css.container.XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration()
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration()
+        throw(css::uno::RuntimeException);
 
     // css.container.XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     // css.lang.XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& aEvent)
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
+        throw(css::uno::RuntimeException);
 
 private:
 
     // threadsafe
-    void implts_notifyJobExecution(const ::com::sun::star::document::EventObject& aEvent);
-    void implts_checkAndExecuteEventBindings(const ::com::sun::star::document::DocumentEvent& aEvent);
-    void implts_notifyListener(const ::com::sun::star::document::DocumentEvent& aEvent);
+    void implts_notifyJobExecution(const css::document::EventObject& aEvent);
+    void implts_checkAndExecuteEventBindings(const css::document::DocumentEvent& aEvent);
+    void implts_notifyListener(const css::document::DocumentEvent& aEvent);
 
     // not threadsafe
-    TModelList::iterator impl_searchDoc(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
+    TModelList::iterator impl_searchDoc(const css::uno::Reference< css::frame::XModel >& xModel);
 };
 
 #endif
