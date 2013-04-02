@@ -443,9 +443,6 @@ private:
     void adjustControlPositions();
     void adjustSize();
 
-    const sal_uInt16 CUBIC_SPLINE_POS = 0;
-    const sal_uInt16 B_SPLINE_POS = 1;
-
 private:
     ListBox* m_pLB_Spline_Type;
 
@@ -453,6 +450,9 @@ private:
     FixedText*    m_pFT_SplineOrder;
     NumericField* m_pMF_SplineOrder;
 };
+
+const sal_uInt16 CUBIC_SPLINE_POS = 0;
+const sal_uInt16 B_SPLINE_POS = 1;
 
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
         : ModalDialog( pParent, "SmoothLinesDialog", "modules/schart/ui/smoothlinesdlg.ui")
