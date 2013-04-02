@@ -54,7 +54,6 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/internaloptions.hxx>
 
 
 using namespace desktop;
@@ -277,20 +276,10 @@ void Desktop::CreateTemporaryDirectory()
         throw;
     }
 
-    // remove possible old directory and base directory
-    SvtInternalOptions  aInternalOpt;
-
     // set temp base directory
     sal_Int32 nLength = aTempBaseURL.getLength();
     if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
         aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
-
-    String aOldTempURL = aInternalOpt.GetCurrentTempURL();
-    if ( aOldTempURL.Len() > 0 )
-    {
-        // remove old temporary directory
-        ::utl::UCBContentHelper::Kill( aOldTempURL );
-    }
 
     ::rtl::OUString aRet;
     ::rtl::OUString aTempPath( aTempBaseURL );
@@ -314,7 +303,6 @@ void Desktop::CreateTemporaryDirectory()
 
     // set new current temporary directory
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempPath, aRet );
-    aInternalOpt.SetCurrentTempURL( aRet );
     CurrentTempURL::get() = aRet;
 }
 
@@ -326,8 +314,7 @@ void Desktop::RemoveTemporaryDirectory()
     String &rCurrentTempURL = CurrentTempURL::get();
     if ( rCurrentTempURL.Len() > 0 )
     {
-        if ( ::utl::UCBContentHelper::Kill( rCurrentTempURL ) )
-            SvtInternalOptions().SetCurrentTempURL( String() );
+        ::utl::UCBContentHelper::Kill( rCurrentTempURL );
     }
 }
 

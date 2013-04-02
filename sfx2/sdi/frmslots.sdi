@@ -61,11 +61,6 @@ interface Window
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
     ]
-    SID_MAIL_CHILDWIN // ole(no) api()
-    [
-        ExecMethod = ChildWindowExecute ;
-        StateMethod = ChildWindowState ;
-    ]
     SID_TIPWINDOW
     [
         ExecMethod = ChildWindowExecute ;

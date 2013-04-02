@@ -83,7 +83,6 @@
 #include <osl/process.h>
 #include <rtl/uri.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/internaloptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svl/folderrestriction.hxx>

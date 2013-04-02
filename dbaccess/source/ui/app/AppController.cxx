@@ -89,7 +89,6 @@
 #include <unotools/closeveto.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
-#include <unotools/internaloptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/historyoptions.hxx>
 

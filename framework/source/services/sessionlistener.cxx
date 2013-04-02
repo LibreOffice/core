@@ -50,7 +50,6 @@
 #include <osl/time.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/internaloptions.hxx>
 #include <stdio.h>
 
 #include <com/sun/star/uno/Any.hxx>

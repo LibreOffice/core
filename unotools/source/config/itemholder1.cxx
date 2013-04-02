@@ -36,7 +36,6 @@
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontoptions.hxx>
 #include <unotools/historyoptions.hxx>
-#include <unotools/internaloptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -185,10 +184,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_HISTORYOPTIONS :
             rItem.pItem = new SvtHistoryOptions();
-            break;
-
-        case E_INTERNALOPTIONS :
-            rItem.pItem = new SvtInternalOptions();
             break;
 
         case E_JAVAOPTIONS :

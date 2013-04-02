@@ -25,7 +25,6 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <unotools/internaloptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>

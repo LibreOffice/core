@@ -2299,32 +2299,6 @@
         <desc>Contains settings which are used during the Office startup to
         check for unfinished work.</desc>
       </info>
-      <prop oor:name="SendCrashMail" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Common/SendCrashMail -->
-        <!-- OldLocation: soffice.ini -->
-        <info>
-          <deprecated/>
-          <desc>Sends a mail that includes the stack trace after a crash.</desc>
-        </info>
-        <value>false</value>
-      </prop>
-      <prop oor:name="UseMailUI" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <deprecated/>
-          <desc>Enables UI for sending document as e-mail</desc>
-        </info>
-        <value>false</value>
-      </prop>
-      <prop oor:name="Slot" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: Common/Slots -->
-        <!-- OldLocation: soffice.ini -->
-        <info>
-          <deprecated/>
-          <desc>Enables mechanism for centralized disabling of
-          functionality</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop
           oor:name="DevelopmentChart" oor:type="xs:boolean"
           oor:nillable="false">
@@ -2336,15 +2310,6 @@
           will be removed when the new library is in a stable state.</desc>
         </info>
         <value>false</value>
-      </prop>
-      <prop oor:name="CurrentTempURL" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Specifies the current or last temp directory. This directory
-          will be removed during shutdown or next office start.</desc>
-        </info>
-        <value/>
-        <!-- JB: Empty default inserted into empty property node. Remove if NIL
-             was intended -->
       </prop>
       <set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
         <info>
