@@ -242,7 +242,7 @@ double AnalysisAddIn::FactDouble( sal_Int32 nNum ) throw( uno::RuntimeException,
 
 OUString AnalysisAddIn::getImplementationName_Static()
 {
-    return STRFROMASCII( MY_IMPLNAME );
+    return OUString( MY_IMPLNAME );
 }
 
 
@@ -250,8 +250,8 @@ uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString >   aRet(2);
     OUString*         pArray = aRet.getArray();
-    pArray[0] = STRFROMASCII( ADDIN_SERVICE );
-    pArray[1] = STRFROMASCII( MY_SERVICE );
+    pArray[0] = OUString( ADDIN_SERVICE );
+    pArray[1] = OUString( MY_SERVICE );
     return aRet;
 }
 
@@ -269,7 +269,7 @@ uno::Reference< uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance(
 OUString SAL_CALL AnalysisAddIn::getServiceName() throw( uno::RuntimeException )
 {
     // name of specific AddIn service
-    return STRFROMASCII( MY_SERVICE );
+    return OUString( MY_SERVICE );
 }
 
 
@@ -328,12 +328,11 @@ OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgra
     {
         aRet = GetDisplFuncStr( p->GetUINameID() );
         if( p->IsDouble() )
-            aRet += STRFROMANSI( "_ADD" );
+            aRet += "_ADD";
     }
     else
     {
-        aRet = STRFROMANSI( "UNKNOWNFUNC_" );
-        aRet += aProgrammaticName;
+        aRet = "UNKNOWNFUNC_" + aProgrammaticName;
     }
 
     return aRet;
@@ -363,7 +362,7 @@ OUString SAL_CALL AnalysisAddIn::getDisplayArgumentName( const OUString& aName, 
         if( nStr )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr );
         else
-            aRet = STRFROMANSI( "internal" );
+            aRet = "internal";
     }
 
     return aRet;
@@ -381,41 +380,37 @@ OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, 
         if( nStr )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr + 1 );
         else
-            aRet = STRFROMANSI( "for internal use only" );
+            aRet = "for internal use only";
     }
 
     return aRet;
 }
 
 
-static const char*  pDefCatName = "Add-In";
+static const OUString pDefCatName("Add-In");
 
 
 OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName ) throw( uno::RuntimeException )
 {
     //  return non-translated strings
-//  return STRFROMASCII( "Add-In" );
+//  return OUString( "Add-In" );
     const FuncData*     p = pFD->Get( aName );
     OUString              aRet;
     if( p )
     {
-        const sal_Char* pStr;
-
         switch( p->GetCategory() )
         {
-            case FDCat_DateTime:    pStr = "Date&Time";         break;
-            case FDCat_Finance:     pStr = "Financial";         break;
-            case FDCat_Inf:         pStr = "Information";       break;
-            case FDCat_Math:        pStr = "Mathematical";      break;
-            case FDCat_Tech:        pStr = "Technical";         break;
+            case FDCat_DateTime:    aRet = "Date&Time";         break;
+            case FDCat_Finance:     aRet = "Financial";         break;
+            case FDCat_Inf:         aRet = "Information";       break;
+            case FDCat_Math:        aRet = "Mathematical";      break;
+            case FDCat_Tech:        aRet = "Technical";         break;
             default:
-                                    pStr = pDefCatName;         break;
+                                    aRet = pDefCatName;         break;
         }
-
-        aRet = STRFROMASCII( pStr );
     }
     else
-        aRet = STRFROMASCII( pDefCatName );
+        aRet = pDefCatName;
 
     return aRet;
 }
@@ -424,28 +419,24 @@ OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aN
 OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) throw( uno::RuntimeException )
 {
     //  return translated strings, not used for predefined categories
-//  return STRFROMASCII( "Add-In" );
+//  return OUString( "Add-In" );
     const FuncData*     p = pFD->Get( aProgrammaticFunctionName );
     OUString              aRet;
     if( p )
     {
-        const sal_Char* pStr;
-
         switch( p->GetCategory() )
         {
-            case FDCat_DateTime:    pStr = "Date&Time";         break;
-            case FDCat_Finance:     pStr = "Financial";         break;
-            case FDCat_Inf:         pStr = "Information";       break;
-            case FDCat_Math:        pStr = "Mathematical";      break;
-            case FDCat_Tech:        pStr = "Technical";         break;
+            case FDCat_DateTime:    aRet = "Date&Time";         break;
+            case FDCat_Finance:     aRet = "Financial";         break;
+            case FDCat_Inf:         aRet = "Information";       break;
+            case FDCat_Math:        aRet = "Mathematical";      break;
+            case FDCat_Tech:        aRet = "Technical";         break;
             default:
-                                    pStr = pDefCatName;         break;
+                                    aRet = pDefCatName;         break;
         }
-
-        aRet = STRFROMASCII( pStr );
     }
     else
-        aRet = STRFROMASCII( pDefCatName );
+        aRet = pDefCatName;
 
     return aRet;
 }

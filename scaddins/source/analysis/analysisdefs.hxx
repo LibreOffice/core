@@ -20,9 +20,6 @@
 #ifndef ANALYSISDEFS_HXX
 #define ANALYSISDEFS_HXX
 
-#define STRFROMASCII(s)     OUString::createFromAscii( s )
-#define STRFROMANSI(s)      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
-
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
 #define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) throw css::lang::IllegalArgumentException()
 #define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
