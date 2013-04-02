@@ -363,9 +363,8 @@ bool FormCellBindingHelper::isCellRangeListSource( const Reference< XListEntrySo
 //------------------------------------------------------------------------
 bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const ::rtl::OUString& _rService ) const
 {
-    bool bDoes = false;
     Reference< XServiceInfo > xSI( _rxComponent, UNO_QUERY );
-    bDoes = xSI.is() && xSI->supportsService( _rService );
+    bool bDoes = xSI.is() && xSI->supportsService( _rService );
     return bDoes;
 }
 

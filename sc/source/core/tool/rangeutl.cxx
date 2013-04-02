@@ -188,11 +188,10 @@ sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
                              ScRefAddress*  pEndPos,
                              ScAddress::Details const & rDetails ) const
 {
-    sal_Bool        bIsAbsArea = false;
     ScRefAddress    startPos;
     ScRefAddress    endPos;
 
-    bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos, rDetails );
+    sal_Bool bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos, rDetails );
 
     if ( bIsAbsArea )
     {
@@ -229,10 +228,9 @@ sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
                             ScRefAddress*   pPosTripel,
                             ScAddress::Details const & rDetails ) const
 {
-    sal_Bool        bIsAbsPos = false;
     ScRefAddress    thePos;
 
-    bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails );
+    sal_Bool bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos, rDetails );
     thePos.SetRelCol( false );
     thePos.SetRelRow( false );
     thePos.SetRelTab( false );

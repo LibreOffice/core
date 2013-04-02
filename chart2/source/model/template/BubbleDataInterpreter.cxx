@@ -69,10 +69,9 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
     bool bHasCategories = HasCategories( aArguments, aData );
     bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
-    bool bSetXValues = false;
     sal_Int32 nDataSeqCount = aData.getLength();
 
-    bSetXValues = bHasCategories ? ( (nDataSeqCount-1) > 2 && (nDataSeqCount-1) % 2 != 0 )
+    bool bSetXValues = bHasCategories ? ( (nDataSeqCount-1) > 2 && (nDataSeqCount-1) % 2 != 0 )
                                  :( nDataSeqCount > 2 && nDataSeqCount % 2 != 0 );
 
     bool bCategoriesUsed = false;

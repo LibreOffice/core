@@ -1969,9 +1969,8 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
     if ( !IsFormatted() )
         FormatDoc();
 
-    bool bTransparent = false;
     Window* pOutWin = dynamic_cast<Window*>(pOutDev);
-    bTransparent = (pOutWin && pOutWin->IsPaintTransparent());
+    bool bTransparent = (pOutWin && pOutWin->IsPaintTransparent());
 
     long nY = rStartPos.Y();
 
