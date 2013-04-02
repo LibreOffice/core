@@ -272,7 +272,10 @@ namespace
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_FAIL( ( ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) ).getStr() );
+                rtl::OUStringBuffer aBuf;
+                aBuf.append( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " );
+                aBuf.append( sSymbolName );
+                OSL_FAIL( aBuf.makeStringAndClear().getStr() );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
             }
