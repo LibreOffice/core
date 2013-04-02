@@ -1180,8 +1180,8 @@ static icu::UnicodeString lcl_QuotRange(
     const sal_Int32 nEnd, bool bInsideTag = false )
 {
     icu::UnicodeString sReturn;
-    assert( nStart > 0 && nStart < rString.length() );
-    assert( nEnd > 0 && nEnd < rString.length() );
+    assert( nStart >= 0 );
+    assert( nEnd < rString.length() );
     for (sal_Int32 i = nStart; i <= nEnd; ++i)
     {
         switch (rString[i])
