@@ -476,38 +476,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         aNewAttr.Put( aItem );
                     }
                     break;
-
-                    // attributes for TextObjectBar
-                    case SID_ATTR_CHAR_FONT:
-                    {
-                        if( pArgs )
-                        {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTINFO, sal_True, &pPoolItem ) )
-                                aNewAttr.Put( *pPoolItem );
-                        }
-                        else
-                            mpViewShell->GetViewFrame()->GetDispatcher()->
-                            Execute( SID_CHAR_DLG, SFX_CALLMODE_ASYNCHRON );
-                    }
-                    break;
-                    case SID_ATTR_CHAR_FONTHEIGHT:
-                    {
-                        if( pArgs )
-                        {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTHEIGHT, sal_True, &pPoolItem ) )
-                                aNewAttr.Put( *pPoolItem );
-                        }
-                        else
-                            mpViewShell->GetViewFrame()->GetDispatcher()->
-                            Execute( SID_CHAR_DLG, SFX_CALLMODE_ASYNCHRON );
-                    }
-                    break;
-                    case SID_ATTR_CHAR_COLOR:
-                    {
-                        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_COLOR, sal_True, &pPoolItem ) )
-                            aNewAttr.Put( *pPoolItem );
-                    }
-                    break;
 // #i35937# removed need for FN_NUM_BULLET_ON handling
                 }
 
