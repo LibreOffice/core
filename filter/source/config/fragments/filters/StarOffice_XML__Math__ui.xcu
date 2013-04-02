@@ -18,6 +18,5 @@
     <node oor:name="StarOffice XML (Math)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% Formula</value>
-                        <value xml:lang="x-translate">%productname% %formatversion% Formula</value>
         </prop>
     </node>

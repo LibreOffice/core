@@ -18,6 +18,5 @@
     <node oor:name="impress_StarOffice_XML_Draw">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% Drawing (Impress)</value>
-            <value xml:lang="x-translate">%productname% %formatversion% Drawing (Impress)</value>
         </prop>
     </node>

@@ -18,6 +18,5 @@
     <node oor:name="impress_StarOffice_XML_Impress_Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% Presentation Template</value>
-                        <value xml:lang="x-translate">%productname% %formatversion% Presentation Template</value>
         </prop>
     </node>

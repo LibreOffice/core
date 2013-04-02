@@ -18,6 +18,5 @@
     <node oor:name="Text (encoded) (StarWriter/GlobalDocument)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Text Encoded (Master Document)</value>
-            <value xml:lang="x-translate">Text Encoded (Master Document)</value>
         </prop>
     </node>

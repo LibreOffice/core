@@ -18,6 +18,5 @@
     <node oor:name="calc_StarOffice_XML_Calc_Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% Spreadsheet Template</value>
-                        <value xml:lang="x-translate">%productname% %formatversion% Spreadsheet Template</value>
         </prop>
     </node>

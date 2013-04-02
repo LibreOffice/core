@@ -18,6 +18,5 @@
     <node oor:name="MS Word 95 Vorlage">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Microsoft Word 95 Template</value>
-                        <value xml:lang="x-translate">Microsoft Word 95 Template</value>
         </prop>
     </node>

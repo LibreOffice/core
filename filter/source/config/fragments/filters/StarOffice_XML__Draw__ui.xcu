@@ -18,6 +18,5 @@
     <node oor:name="StarOffice XML (Draw)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% Drawing</value>
-                        <value xml:lang="x-translate">%productname% %formatversion% Drawing</value>
         </prop>
     </node>

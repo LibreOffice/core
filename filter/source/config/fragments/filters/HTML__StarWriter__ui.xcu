@@ -18,6 +18,5 @@
     <node oor:name="HTML (StarWriter)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (Writer)</value>
-            <value xml:lang="x-translate">HTML Document (Writer)</value>
         </prop>
     </node>

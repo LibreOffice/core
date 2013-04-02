@@ -18,6 +18,5 @@
     <node oor:name="MS Excel 4.0 Vorlage/Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Microsoft Excel 4.0 Template</value>
-                        <value xml:lang="x-translate">Microsoft Excel 4.0 Template</value>
         </prop>
     </node>

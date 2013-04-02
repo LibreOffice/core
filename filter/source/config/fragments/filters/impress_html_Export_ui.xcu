@@ -18,6 +18,5 @@
     <node oor:name="impress_html_Export">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (Impress)</value>
-            <value xml:lang="x-translate">HTML Document (Impress)</value>
         </prop>
     </node>

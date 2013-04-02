@@ -18,6 +18,5 @@
     <node oor:name="HTML (StarCalc)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (Calc)</value>
-            <value xml:lang="x-translate">HTML Document (Calc)</value>
         </prop>
     </node>

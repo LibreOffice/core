@@ -18,6 +18,5 @@
     <node oor:name="Text - txt - csv (StarCalc)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Text CSV</value>
-                        <value xml:lang="x-translate">Text CSV</value>
         </prop>
     </node>

@@ -18,6 +18,5 @@
     <node oor:name="writer_web_StarOffice_XML_Writer_Web_Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% HTML Template</value>
-                        <value xml:lang="x-translate">%productname% %formatversion% HTML Template</value>
         </prop>
     </node>
