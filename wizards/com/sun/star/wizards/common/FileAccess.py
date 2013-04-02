@@ -249,8 +249,9 @@ class FileAccess(object):
         return None
 
     def delete(self, filename):
+        print ("DEBUG !!! FileAccess.delete -- filename: ", filename)
         try:
-            #self.xInterface.kill(filename)
+            self.xInterface.kill(filename)
             return True
         except Exception:
             traceback.print_exc()

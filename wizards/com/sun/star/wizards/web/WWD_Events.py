@@ -529,9 +529,9 @@ class WWD_Events(WWD_Startup):
         result = True
         # 1. check local publish target
         p = self.getPublisher(LOCAL_PUBLISHER)
+        fileAccess = self.getFileAccess()
         # should publish ?
         if (p.cp_Publish):
-            fileAccess = self.getFileAccess()
             path = fileAccess.getPath(p.url, None)
             # target exists?
             if fileAccess.exists(p.url, False):
@@ -824,17 +824,22 @@ class WWD_Events(WWD_Startup):
         zip publisher is using another url form...
         '''
         p = self.getPublisher(ZIP_PUBLISHER)
+        print ("DEBUG !!! finishWizard2 - zip URL: ", p.cp_URL)
+        #remove the 'file://' prefix
+        url1 = p.cp_URL.replace("file://", "")
         #replace the '%' with '%25'
-        url1 = p.cp_URL.replace("%25", "%")
+        url1 = url1.replace("%", "%25")
         #replace all '/' with '%2F'
-        url1 = url1.replace("%F", "/")
-        p.url = "vnd.sun.star.zip://" + url1 + "/";
+        url1 = url1.replace("/", "%2F")
+
+        p.url = "vnd.sun.star.zip://" + url1 + "/"
+        print ("DEBUG !!! finishWizard2 - zip url: ", p.url)
 
         '''
         and now ftp...
         '''
         p = self.getPublisher(FTP_PUBLISHER)
-        p.url = FTPDialog.getFullURL1(p);
+        p.url = FTPDialog.getFullURL1(p)
 
         ''' first we check the publishing targets. If they exist we warn and
         ask what to do. a False here means the user said "cancel"
