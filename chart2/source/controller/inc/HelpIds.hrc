@@ -53,7 +53,6 @@
 
 #define HID_SCH_CHART_AUTO_FORMAT                           "CHART2_HID_SCH_CHART_AUTO_FORMAT"
 #define HID_SCH_LB_BAR_GEOMETRY                             "CHART2_HID_SCH_LB_BAR_GEOMETRY"
-#define HID_SCH_DLG_SPLINE_PROPERTIES                       "CHART2_HID_SCH_DLG_SPLINE_PROPERTIES"
 #define HID_SCH_DLG_RANGES                                  "CHART2_HID_SCH_DLG_RANGES"
 
 #define HID_SCH_CB_XAXIS                                    "CHART2_HID_SCH_CB_XAXIS"
