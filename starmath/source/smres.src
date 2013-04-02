@@ -283,7 +283,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text [ en-US ] = "~Default" ;
     };
 };
-
+/*
 ModalDialog RID_FONTTYPEDIALOG
 {
     OutputSize = TRUE ;
@@ -292,19 +292,19 @@ ModalDialog RID_FONTTYPEDIALOG
     Size = MAP_APPFONT ( 282 , 153 ) ;
     Text [ en-US ] = "Fonts" ;
     Moveable = TRUE ;
-    FixedLine 1
+//    FixedLine 1
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 207 , 8 ) ;
         Text [ en-US ] = "Formula fonts" ;
     };
-    FixedLine 2
+//    FixedLine 2
     {
         Pos = MAP_APPFONT ( 6 , 84 ) ;
         Size = MAP_APPFONT ( 207 , 8 ) ;
         Text [ en-US ] = "Custom fonts" ;
     };
-    FixedText 1
+//    FixedText 1
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 18 ) ;
@@ -320,7 +320,7 @@ ModalDialog RID_FONTTYPEDIALOG
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    FixedText 2
+//    FixedText 2
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 33 ) ;
@@ -336,7 +336,7 @@ ModalDialog RID_FONTTYPEDIALOG
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    FixedText 3
+//    FixedText 3
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 51 ) ;
@@ -352,7 +352,7 @@ ModalDialog RID_FONTTYPEDIALOG
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    FixedText 4
+//    FixedText 4
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 66 ) ;
@@ -368,7 +368,7 @@ ModalDialog RID_FONTTYPEDIALOG
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    FixedText 5
+//    FixedText 5
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 97 ) ;
@@ -384,7 +384,7 @@ ModalDialog RID_FONTTYPEDIALOG
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    FixedText 6
+//    FixedText 6
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 112 ) ;
@@ -400,7 +400,7 @@ ModalDialog RID_FONTTYPEDIALOG
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
-    FixedText 7
+//    FixedText 7
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 127 ) ;
@@ -454,7 +454,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
-};
+};*/
 
 ModalDialog RID_DISTANCEDIALOG
 {

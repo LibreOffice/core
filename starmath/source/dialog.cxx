@@ -511,13 +511,13 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
     bool bHideCheckboxes = false;
     switch (pMenu->GetCurItemId())
     {
-        case 1: pActiveListBox = &aVariableFont; break;
-        case 2: pActiveListBox = &aFunctionFont; break;
-        case 3: pActiveListBox = &aNumberFont;   break;
-        case 4: pActiveListBox = &aTextFont;     break;
-        case 5: pActiveListBox = &aSerifFont; bHideCheckboxes = true;   break;
-        case 6: pActiveListBox = &aSansFont;  bHideCheckboxes = true;   break;
-        case 7: pActiveListBox = &aFixedFont; bHideCheckboxes = true;   break;
+        case 1: pActiveListBox = &m_pLB_VariableFont; break;
+        case 2: pActiveListBox = &m_pLB_FunctionFont; break;
+        case 3: pActiveListBox = &m_pLB_NumberFont;   break;
+        case 4: pActiveListBox = &m_pLB_TextFont;     break;
+        case 5: pActiveListBox = &m_pLB_SerifFont ; bHideCheckboxes = true;   break;
+        case 6: pActiveListBox = &m_pLB_SansFont;  bHideCheckboxes = true;   break;
+        case 7: pActiveListBox = &m_pLB_FixedFont; bHideCheckboxes = true;   break;
         default:pActiveListBox = NULL;
     }
 
@@ -550,8 +550,8 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTY
 }
 IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton )
 
-IMPL_LINK( SmFontTypeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
-{
+//IMPL_LINK( SmFontTypeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+/*{
     // start help system
     Help* pHelp = Application::GetHelp();
     if( pHelp )
@@ -559,61 +559,68 @@ IMPL_LINK( SmFontTypeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
         pHelp->Start( rtl::OUString( "HID_SMA_FONTTYPEDIALOG" ), &aHelpButton1 );
     }
     return 0;
-}
+}*/
 
-SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevice, bool bFreeRes)
-    : ModalDialog(pParent, SmResId(RID_FONTTYPEDIALOG)),
-    aFixedText1    (this, SmResId(1)),
-    aVariableFont  (this, SmResId(1)),
-    aFixedText2    (this, SmResId(2)),
-    aFunctionFont  (this, SmResId(2)),
-    aFixedText3    (this, SmResId(3)),
-    aNumberFont    (this, SmResId(3)),
-    aFixedText4    (this, SmResId(4)),
-    aTextFont      (this, SmResId(4)),
-    aFixedText5    (this, SmResId(5)),
-    aSerifFont     (this, SmResId(5)),
-    aFixedText6    (this, SmResId(6)),
-    aSansFont      (this, SmResId(6)),
-    aFixedText7    (this, SmResId(7)),
-    aFixedFont     (this, SmResId(7)),
-    aFixedLine1    (this, SmResId(1)),
-    aFixedLine2    (this, SmResId(2)),
-    aOKButton1     (this, SmResId(1)),
-    aHelpButton1   (this, SmResId(1)),
-    aCancelButton1 (this, SmResId(1)),
-    aMenuButton    (this, SmResId(1)),
-    aDefaultButton (this, SmResId(2)),
+SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevice/*, bool bFreeRes*/)
+    : ModalDialog(pParent, "FontsTypeDialog", "starmath/uiconfig/smath/ui/fontstypedialog.ui"),
+//    aFixedText1    (this, SmResId(1)),
+//    aVariableFont  (this, SmResId(1)),
+//    aFixedText2    (this, SmResId(2)),
+//    aFunctionFont  (this, SmResId(2)),
+//    aFixedText3    (this, SmResId(3)),
+//    aNumberFont    (this, SmResId(3)),
+//    aFixedText4    (this, SmResId(4)),
+//    aTextFont      (this, SmResId(4)),
+//    aFixedText5    (this, SmResId(5)),
+//    aSerifFont     (this, SmResId(5)),
+//    aFixedText6    (this, SmResId(6)),
+//    aSansFont      (this, SmResId(6)),
+//    aFixedText7    (this, SmResId(7)),
+//    aFixedFont     (this, SmResId(7)),
+//    aFixedLine1    (this, SmResId(1)),
+//    aFixedLine2    (this, SmResId(2)),
+//    aOKButton1     (this, SmResId(1)),
+//    aHelpButton1   (this, SmResId(1)),
+//    aCancelButton1 (this, SmResId(1)),
+//    aMenuButton    (this, SmResId(1)),
+//    aDefaultButton (this, SmResId(2)),
     pFontListDev    (pFntListDevice)
 {
-    if (bFreeRes)
-        FreeResource();
+    get(m_pBP_OK, "ok");
+    get(m_pLB_VariableFont, "variablefont");
+    get(m_pLB_FunctionFont, "functionfont");
+    get(m_pLB_NumberFont, "numberfont");
+    get(m_pLB_TextFont, "textfont");
+    get(m_pLB_SerifFont, "seriffont");
+    get(m_pLB_SansFont, "sansfont");
+    get(m_pLB_FixedFont, "fixedfont");
 
-    aDefaultButton.SetClickHdl(LINK(this, SmFontTypeDialog, DefaultButtonClickHdl));
-    aHelpButton1.SetClickHdl(LINK(this, SmFontTypeDialog, HelpButtonClickHdl));
+    m_pBP_DefaultButton->SetClickHdl(LINK(this, SmFontTypeDialog, DefaultButtonClickHdl));
+    m_pBP_HelpButton1->SetClickHdl(LINK(this, SmFontTypeDialog, HelpButtonClickHdl));
 
-    aMenuButton.GetPopupMenu()->SetSelectHdl(LINK(this, SmFontTypeDialog, MenuSelectHdl));
+    m_pBP_MenuButton->GetPopupMenu()->SetSelectHdl(LINK(this, SmFontTypeDialog, MenuSelectHdl));
+    m_pBP_OK->SetClickHdl( LINK( this, SmFontTypeDialog, OkHdl ) );
 }
 
 void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
 {
     SmModule *pp = SM_MOD();
 
-    aVariableFont = pp->GetConfig()->GetFontPickList(FNT_VARIABLE);
-    aFunctionFont = pp->GetConfig()->GetFontPickList(FNT_FUNCTION);
-    aNumberFont   = pp->GetConfig()->GetFontPickList(FNT_NUMBER);
-    aTextFont     = pp->GetConfig()->GetFontPickList(FNT_TEXT);
-    aSerifFont    = pp->GetConfig()->GetFontPickList(FNT_SERIF);
-    aSansFont     = pp->GetConfig()->GetFontPickList(FNT_SANS);
-    aFixedFont    = pp->GetConfig()->GetFontPickList(FNT_FIXED);
+    m_pLB_VariableFont = pp->GetConfig()->GetFontPickList(FNT_VARIABLE);
+    m_pLB_FunctionFont = pp->GetConfig()->GetFontPickList(FNT_FUNCTION);
+    m_pLB_NumberFont   = pp->GetConfig()->GetFontPickList(FNT_NUMBER);
+    m_pLB_TextFont     = pp->GetConfig()->GetFontPickList(FNT_TEXT);
+    m_pLB_SerifFont    = pp->GetConfig()->GetFontPickList(FNT_SERIF);
+    m_pLB_SansFont     = pp->GetConfig()->GetFontPickList(FNT_SANS);
+    m_pLB_FixedFont    = pp->GetConfig()->GetFontPickList(FNT_FIXED);
 
-    aVariableFont.Insert( rFormat.GetFont(FNT_VARIABLE) );
-    aFunctionFont.Insert( rFormat.GetFont(FNT_FUNCTION) );
-    aNumberFont  .Insert( rFormat.GetFont(FNT_NUMBER) );
-    aTextFont    .Insert( rFormat.GetFont(FNT_TEXT) );
-    aSerifFont   .Insert( rFormat.GetFont(FNT_SERIF) );
-    aSansFont    .Insert( rFormat.GetFont(FNT_SANS) );
-    aFixedFont   .Insert( rFormat.GetFont(FNT_FIXED) );
+    m_pLB_VariableFont->Insert( rFormat.GetFont(FNT_VARIABLE) );
+    m_pLB_FunctionFont->Insert( rFormat.GetFont(FNT_FUNCTION) );
+    m_pLB_NumberFont  ->Insert( rFormat.GetFont(FNT_NUMBER) );
+    m_pLB_TextFont    ->Insert( rFormat.GetFont(FNT_TEXT) );
+    m_pLB_SerifFont   ->Insert( rFormat.GetFont(FNT_SERIF) );
+    m_pLB_SansFont    ->Insert( rFormat.GetFont(FNT_SANS) );
+    m_pLB_FixedFont   ->Insert( rFormat.GetFont(FNT_FIXED) );
 }
 
 
@@ -621,21 +628,21 @@ void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
 {
     SmModule *pp = SM_MOD();
 
-    pp->GetConfig()->GetFontPickList(FNT_VARIABLE) = aVariableFont;
-    pp->GetConfig()->GetFontPickList(FNT_FUNCTION) = aFunctionFont;
-    pp->GetConfig()->GetFontPickList(FNT_NUMBER)   = aNumberFont;
-    pp->GetConfig()->GetFontPickList(FNT_TEXT)     = aTextFont;
-    pp->GetConfig()->GetFontPickList(FNT_SERIF)    = aSerifFont;
-    pp->GetConfig()->GetFontPickList(FNT_SANS)     = aSansFont;
-    pp->GetConfig()->GetFontPickList(FNT_FIXED)    = aFixedFont;
+    pp->GetConfig()->GetFontPickList(FNT_VARIABLE) = m_pLB_VariableFont;
+    pp->GetConfig()->GetFontPickList(FNT_FUNCTION) = m_pLB_FunctionFont;
+    pp->GetConfig()->GetFontPickList(FNT_NUMBER)   = m_pLB_NumberFont;
+    pp->GetConfig()->GetFontPickList(FNT_TEXT)     = m_pLB_TextFont;
+    pp->GetConfig()->GetFontPickList(FNT_SERIF)    = m_pLB_SerifFont;
+    pp->GetConfig()->GetFontPickList(FNT_SANS)     = m_pLB_SansFont;
+    pp->GetConfig()->GetFontPickList(FNT_FIXED)    = m_pLB_FixedFont;
 
-    rFormat.SetFont( FNT_VARIABLE, aVariableFont.Get(0) );
-    rFormat.SetFont( FNT_FUNCTION, aFunctionFont.Get(0) );
-    rFormat.SetFont( FNT_NUMBER,   aNumberFont  .Get(0) );
-    rFormat.SetFont( FNT_TEXT,     aTextFont    .Get(0) );
-    rFormat.SetFont( FNT_SERIF,    aSerifFont   .Get(0) );
-    rFormat.SetFont( FNT_SANS,     aSansFont    .Get(0) );
-    rFormat.SetFont( FNT_FIXED,    aFixedFont   .Get(0) );
+    rFormat.SetFont( FNT_VARIABLE, m_pLB_VariableFont->Get(0) );
+    rFormat.SetFont( FNT_FUNCTION, m_pLB_FunctionFont->Get(0) );
+    rFormat.SetFont( FNT_NUMBER,   m_pLB_NumberFont  ->Get(0) );
+    rFormat.SetFont( FNT_TEXT,     m_pLB_TextFont    ->Get(0) );
+    rFormat.SetFont( FNT_SERIF,    m_pLB_SerifFont   ->Get(0) );
+    rFormat.SetFont( FNT_SANS,     m_pLB_SansFont    ->Get(0) );
+    rFormat.SetFont( FNT_FIXED,    m_pLB_FixedFont   ->Get(0) );
 
     rFormat.RequestApplyChanges();
 }

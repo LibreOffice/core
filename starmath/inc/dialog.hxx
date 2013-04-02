@@ -155,27 +155,27 @@ public:
 
 class SmFontTypeDialog : public ModalDialog
 {
-    FixedText           aFixedText1;
-    SmFontPickListBox   aVariableFont;
-    FixedText           aFixedText2;
-    SmFontPickListBox   aFunctionFont;
-    FixedText           aFixedText3;
-    SmFontPickListBox   aNumberFont;
-    FixedText           aFixedText4;
-    SmFontPickListBox   aTextFont;
-    FixedText           aFixedText5;
-    SmFontPickListBox   aSerifFont;
-    FixedText           aFixedText6;
-    SmFontPickListBox   aSansFont;
-    FixedText           aFixedText7;
-    SmFontPickListBox   aFixedFont;
-    FixedLine           aFixedLine1;
-    FixedLine           aFixedLine2;
-    OKButton            aOKButton1;
-    HelpButton          aHelpButton1;
-    CancelButton        aCancelButton1;
-    MenuButton          aMenuButton;
-    PushButton          aDefaultButton;
+//    FixedText           aFixedText1;
+//    SmFontPickListBox   aVariableFont;
+//    FixedText           aFixedText2;
+//    SmFontPickListBox   aFunctionFont;
+//    FixedText           aFixedText3;
+//    SmFontPickListBox   aNumberFont;
+//    FixedText           aFixedText4;
+//    SmFontPickListBox   aTextFont;
+//    FixedText           aFixedText5;
+//    SmFontPickListBox   aSerifFont;
+//    FixedText           aFixedText6;
+//    SmFontPickListBox   aSansFont;
+//    FixedText           aFixedText7;
+//    SmFontPickListBox   aFixedFont;
+//    FixedLine           aFixedLine1;
+//    FixedLine           aFixedLine2;
+    OKButton*            m_pBP_OK;
+//    HelpButton          aHelpButton1;
+//    CancelButton        aCancelButton1;
+    MenuButton*          m_pBP_MenuButton;
+    PushButton*          m_pBP_DefaultButton;
 
     OutputDevice       *pFontListDev;
 
@@ -184,7 +184,7 @@ class SmFontTypeDialog : public ModalDialog
     DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
-    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice, bool bFreeRes = true);
+    SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice/*, bool bFreeRes = true*/);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;

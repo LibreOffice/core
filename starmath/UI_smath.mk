@@ -10,6 +10,7 @@
 $(eval $(call gb_UI_UI,modules/smath))
 
 $(eval $(call gb_UI_add_uifiles,modules/smath,\
+	starmath/uiconfig/smath/ui/fontstypedialog \
 	starmath/uiconfig/smath/ui/printeroptions \
 ))
 

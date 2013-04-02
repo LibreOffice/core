@@ -81,7 +81,6 @@
 
 #define RID_FONTDIALOG              (RID_APP_START + 2)
 #define RID_FONTSIZEDIALOG          (RID_APP_START + 3)
-#define RID_FONTTYPEDIALOG          (RID_APP_START + 4)
 #define RID_DISTANCEDIALOG          (RID_APP_START + 5)
 #define RID_ALIGNDIALOG             (RID_APP_START + 6)
 #define RID_PRINTOPTIONPAGE         (RID_APP_START + 7)
