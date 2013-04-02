@@ -28,7 +28,6 @@
 #include "analysishelper.hxx"
 #include "analysis.hrc"
 
-using namespace                 ::rtl;
 using namespace                 ::com::sun::star;
 
 
@@ -248,13 +247,13 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
  *
  */
 
-sal_Int32 GetNullDate( constREFXPS& xOpt ) THROWDEF_RTE
+sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt ) throw( uno::RuntimeException )
 {
     if( xOpt.is() )
     {
         try
         {
-            ANY aAny = xOpt->getPropertyValue( STRFROMASCII( "NullDate" ) );
+            uno::Any aAny = xOpt->getPropertyValue( STRFROMASCII( "NullDate" ) );
             util::Date  aDate;
             if( aAny >>= aDate )
                 return DateToDays( aDate.Day, aDate.Month, aDate.Year );
@@ -334,7 +333,7 @@ sal_Int32 GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 )
 
 
 void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-    sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) THROWDEF_RTE_IAE
+    sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nStartDate > nEndDate )
     {
@@ -396,7 +395,7 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
             nDayDiff %= nDaysInYear;
             break;
         default:
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
     }
 
     rYears = nYears;
@@ -406,7 +405,7 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
 
 
 sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-    sal_Int32* pOptDaysIn1stYear ) THROWDEF_RTE_IAE
+    sal_Int32* pOptDaysIn1stYear ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Bool    bNeg = nStartDate > nEndDate;
 
@@ -470,14 +469,14 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
                 *pOptDaysIn1stYear = 365;
             break;
         default:
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
     }
 
     return bNeg? -nRet : nRet;
 }
 
 
-double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32   nDays1stYear;
     sal_Int32   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate, nMode, &nDays1stYear );
@@ -486,7 +485,7 @@ double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
 }
 
 
-sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     switch( nMode )
     {
@@ -504,12 +503,12 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
         case 3:         //3=exact/365
             return 365;
         default:
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
     }
 }
 
 
-double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nStartDate == nEndDate )
         return 0.0;     // nothing to do...
@@ -562,14 +561,14 @@ double GetGcd( double f1, double f2 )
 }
 
 
-double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE
+double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( nBase < 2 || nBase > 36 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     sal_uInt32      nStrLen = aStr.getLength();
     if( nStrLen > nCharLim )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
     else if( !nStrLen )
         return 0.0;
 
@@ -605,7 +604,7 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
         }
         else
             // illegal char!
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
 
         p++;
 
@@ -629,14 +628,14 @@ static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 
 
 OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
-    sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) THROWDEF_RTE_IAE
+    sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     fNum = ::rtl::math::approxFloor( fNum );
     fMin = ::rtl::math::approxFloor( fMin );
     fMax = ::rtl::math::approxFloor( fMax );
 
     if( fNum < fMin || fNum > fMax || ( bUsePlaces && ( nPlaces <= 0 || nPlaces > nMaxPlaces ) ) )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     sal_Int64 nNum = static_cast< sal_Int64 >( fNum );
     sal_Bool        bNeg = nNum < 0;
@@ -651,7 +650,7 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
         sal_Int32 nLen = aRet.getLength();
         if( !bNeg && nLen > nPlaces )
         {
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         }
         else if( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) )
         {
@@ -892,10 +891,10 @@ OUString GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
 
 
 double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
-    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE
+    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nBase == 2 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     sal_uInt32  nPer = sal_uInt32( fPer );
     double      fUsePer = 1.0 / fRate;
@@ -940,10 +939,10 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
 
 
 double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
-    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE
+    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nBase == 2 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     sal_uInt32  nPer = sal_uInt32( fPer );
     double      fOneRate = fCost * fRate;
@@ -963,7 +962,7 @@ double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int3
 
 
 double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
-    double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+    double fYield, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double          fYearfrac = GetYearFrac( nNullDate, nSettle, nMat, nBase );
     double          fNumOfCoups = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
@@ -996,7 +995,7 @@ double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, doub
 
 
 double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
-    double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE
+    double fRate, double fPrice, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double      fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );
     double      fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );
@@ -1013,14 +1012,14 @@ double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 
 double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /*nMat*/, sal_Int32 /*nIssue*/,
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fYield*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
-    sal_Int32 /*nBase*/ ) THROWDEF_RTE_IAE
+    sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    THROW_RTE;  // #87380#
+    throw uno::RuntimeException();  // #87380#
 }
 
 
 double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
-                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double      fRate = fCoup;
     double      fPriceN = 0.0;
@@ -1065,14 +1064,14 @@ double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
     }
 
     if( fabs( fPrice - fPriceN ) > fPrice / 100.0 )
-        THROW_IAE;      // result not precise enough
+        throw lang::IllegalArgumentException();      // result not precise enough
 
     return fYieldN;
 }
 
 
 double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
-                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double      fFreq = nFreq;
 
@@ -1096,14 +1095,14 @@ double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
 
 double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /*nMat*/, sal_Int32 /*nIssue*/,
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fPrice*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
-    sal_Int32 /*nBase*/ ) THROWDEF_RTE_IAE
+    sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    THROW_RTE;  // #87380#
+    throw uno::RuntimeException();  // #87380#
 }
 
 
 double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
-    double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+    double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double      fFreq = double( nFreq );
     double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
@@ -1119,7 +1118,7 @@ double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 
 
 double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
-    double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
+    double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double      fFreq = double( nFreq );
     double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
@@ -1189,10 +1188,10 @@ static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDat
 }
 
 double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
+    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     ScaDate aDate;
     lcl_GetCouppcd( aDate, ScaDate( nNullDate, nSettle, nBase ), ScaDate( nNullDate, nMat, nBase ), nFreq );
@@ -1214,10 +1213,10 @@ static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDat
 }
 
 double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
+    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     ScaDate aDate;
     lcl_GetCoupncd( aDate, ScaDate( nNullDate, nSettle, nBase ), ScaDate( nNullDate, nMat, nBase ), nFreq );
@@ -1228,10 +1227,10 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 //-------
 // COUPDAYBS: get day count: coupon date before settlement <-> settlement
 double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
+    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     ScaDate aSettle( nNullDate, nSettle, nBase );
     ScaDate aDate;
@@ -1243,10 +1242,10 @@ double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 //-------
 // COUPDAYSNC: get day count: settlement <-> coupon date after settlement
 double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
+    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     if( (nBase != 0) && (nBase != 4) )
     {
@@ -1262,10 +1261,10 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
 //-------
 // COUPDAYS: get day count: coupon date before settlement <-> coupon date after settlement
 double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
+    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     if( nBase == 1 )
     {
@@ -1282,10 +1281,10 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 //-------
 // COUPNUM: get count of coupon dates
 double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    THROWDEF_RTE_IAE
+    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     ScaDate aMat( nNullDate, nMat, nBase );
     ScaDate aDate;
@@ -1695,10 +1694,10 @@ sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 //-----------------------------------------------------------------------------
 
-Complex::Complex( const OUString& rStr ) THROWDEF_RTE_IAE
+Complex::Complex( const OUString& rStr ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !ParseString( rStr, *this ) )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 }
 
 
@@ -1776,7 +1775,7 @@ sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 }
 
 
-OUString Complex::GetString() const THROWDEF_RTE_IAE
+OUString Complex::GetString() const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     CHK_FINITE(r);
     CHK_FINITE(i);
@@ -1805,10 +1804,10 @@ OUString Complex::GetString() const THROWDEF_RTE_IAE
 }
 
 
-double Complex::Arg( void ) const THROWDEF_RTE_IAE
+double Complex::Arg( void ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( r == 0.0 && i == 0.0 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     double  phi = acos( r / Abs() );
 
@@ -1819,7 +1818,7 @@ double Complex::Arg( void ) const THROWDEF_RTE_IAE
 }
 
 
-void Complex::Power( double fPower ) THROWDEF_RTE_IAE
+void Complex::Power( double fPower ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( r == 0.0 && i == 0.0 )
     {
@@ -1829,7 +1828,7 @@ void Complex::Power( double fPower ) THROWDEF_RTE_IAE
             return;
         }
         else
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
     }
 
     double      p, phi;
@@ -1859,10 +1858,10 @@ void Complex::Sqrt( void )
 }
 
 
-void Complex::Sin( void ) THROWDEF_RTE_IAE
+void Complex::Sin( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !::rtl::math::isValidArcArg( r ) )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     if( i )
     {
@@ -1877,10 +1876,10 @@ void Complex::Sin( void ) THROWDEF_RTE_IAE
 }
 
 
-void Complex::Cos( void ) THROWDEF_RTE_IAE
+void Complex::Cos( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
 	if( !::rtl::math::isValidArcArg( r ) )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     if( i )
     {
@@ -1895,10 +1894,10 @@ void Complex::Cos( void ) THROWDEF_RTE_IAE
 }
 
 
-void Complex::Div( const Complex& z ) THROWDEF_RTE_IAE
+void Complex::Div( const Complex& z ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( z.r == 0 && z.i == 0 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     double  a1 = r;
     double  a2 = z.r;
@@ -1922,10 +1921,10 @@ void Complex::Exp( void )
 }
 
 
-void Complex::Ln( void ) THROWDEF_RTE_IAE
+void Complex::Ln( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( r == 0.0 && i == 0.0 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     double      fAbs = Abs();
     sal_Bool    bNegi = i < 0.0;
@@ -1939,26 +1938,26 @@ void Complex::Ln( void ) THROWDEF_RTE_IAE
 }
 
 
-void Complex::Log10( void ) THROWDEF_RTE_IAE
+void Complex::Log10( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Ln();
     Mult( 0.434294481903251828 );   // * log10( e )
 }
 
 
-void Complex::Log2( void ) THROWDEF_RTE_IAE
+void Complex::Log2( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Ln();
     Mult( 1.442695040888963407 );   // * log2( e )
 }
 
 
-void Complex::Tan(void) THROWDEF_RTE_IAE
+void Complex::Tan(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cos( 2.0 * r ) + cosh( 2.0 * i ));
         r = sin( 2.0 * r ) * fScale;
         i = sinh( 2.0 * i ) * fScale;
@@ -1966,18 +1965,18 @@ void Complex::Tan(void) THROWDEF_RTE_IAE
     else
     {
         if( !::rtl::math::isValidArcArg( r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         r = tan( r );
     }
 }
 
 
-void Complex::Sec( void ) THROWDEF_RTE_IAE
+void Complex::Sec( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( i )
     {
         if( !::rtl::math::isValidArcArg( 2 * r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         double fScale = 1.0 / (cosh( 2.0 * i) + cos ( 2.0 * r));
         double  r_;
         r_ = 2.0 * cos( r ) * cosh( i ) * fScale;
@@ -1987,18 +1986,18 @@ void Complex::Sec( void ) THROWDEF_RTE_IAE
     else
     {
         if( !::rtl::math::isValidArcArg( r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         r = 1.0 / cos( r );
     }
 }
 
 
-void Complex::Csc( void ) THROWDEF_RTE_IAE
+void Complex::Csc( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( i )
     {
         if( !::rtl::math::isValidArcArg( 2 * r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         double fScale = 1.0 / (cosh( 2.0 * i) - cos ( 2.0 * r));
         double  r_;
         r_ = 2.0 * sin( r ) * cosh( i ) * fScale;
@@ -2008,18 +2007,18 @@ void Complex::Csc( void ) THROWDEF_RTE_IAE
     else
     {
         if( !::rtl::math::isValidArcArg( r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         r = 1.0 / sin( r );
     }
 }
 
 
-void Complex::Cot(void) THROWDEF_RTE_IAE
+void Complex::Cot(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cosh( 2.0 * i ) - cos( 2.0 * r ) );
         r = sin( 2.0 * r ) * fScale;
         i = - ( sinh( 2.0 * i ) * fScale );
@@ -2027,16 +2026,16 @@ void Complex::Cot(void) THROWDEF_RTE_IAE
     else
     {
         if( !::rtl::math::isValidArcArg( r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         r = 1.0 / tan( r );
     }
 }
 
 
-void Complex::Sinh( void ) THROWDEF_RTE_IAE
+void Complex::Sinh( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !::rtl::math::isValidArcArg( r ) )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     if( i )
     {
@@ -2050,10 +2049,10 @@ void Complex::Sinh( void ) THROWDEF_RTE_IAE
 }
 
 
-void Complex::Cosh( void ) THROWDEF_RTE_IAE
+void Complex::Cosh( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !::rtl::math::isValidArcArg( r ) )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     if( i )
     {
@@ -2067,12 +2066,12 @@ void Complex::Cosh( void ) THROWDEF_RTE_IAE
 }
 
 
-void Complex::Sech(void) THROWDEF_RTE_IAE
+void Complex::Sech(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cosh( 2.0 * r ) + cos( 2.0 * i ));
         double r_;
         r_ = 2.0 * cosh( r ) * cos( i ) * fScale;
@@ -2082,18 +2081,18 @@ void Complex::Sech(void) THROWDEF_RTE_IAE
     else
     {
         if( !::rtl::math::isValidArcArg( r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         r = 1.0 / cosh( r );
     }
 }
 
 
-void Complex::Csch(void) THROWDEF_RTE_IAE
+void Complex::Csch(void) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if ( i )
     {
         if( !::rtl::math::isValidArcArg( 2.0 * r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cosh( 2.0 * r ) - cos( 2.0 * i ));
         double r_;
         r_ = 2.0 * sinh( r ) * cos( i ) * fScale;
@@ -2103,7 +2102,7 @@ void Complex::Csch(void) THROWDEF_RTE_IAE
     else
     {
         if( !::rtl::math::isValidArcArg( r ) )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
         r = 1.0 / sinh( r );
     }
 }
@@ -2116,7 +2115,7 @@ ComplexList::~ComplexList()
 }
 
 
-void ComplexList::Append( const SEQSEQ( OUString )& r, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
+void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, ComplListAppendHandl eAH ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32   n1, n2;
     sal_Int32   nE1 = r.getLength();
@@ -2126,7 +2125,7 @@ void ComplexList::Append( const SEQSEQ( OUString )& r, ComplListAppendHandl eAH 
 
     for( n1 = 0 ; n1 < nE1 ; n1++ )
     {
-        const SEQ( OUString )&    rList = r[ n1 ];
+        const uno::Sequence< OUString >&    rList = r[ n1 ];
         nE2 = rList.getLength();
 
         for( n2 = 0 ; n2 < nE2 ; n2++ )
@@ -2138,13 +2137,13 @@ void ComplexList::Append( const SEQSEQ( OUString )& r, ComplListAppendHandl eAH 
             else if( bEmpty0 )
                 Append( new Complex( 0.0 ) );
             else if( bErrOnEmpty )
-                THROW_IAE;
+                throw lang::IllegalArgumentException();
         }
     }
 }
 
 
-void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
+void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListAppendHandl eAH ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32       nEle = aMultPars.getLength();
     sal_Bool        bEmpty0 = eAH == AH_EmpyAs0;
@@ -2152,7 +2151,7 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH 
 
     for( sal_Int32 i = 0 ; i < nEle ; i++ )
     {
-        const ANY&  r = aMultPars[ i ];
+        const uno::Any&  r = aMultPars[ i ];
         switch( r.getValueTypeClass() )
         {
             case uno::TypeClass_VOID:       break;
@@ -2165,7 +2164,7 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH 
                 else if( bEmpty0 )
                     Append( new Complex( 0.0 ) );
                 else if( bErrOnEmpty )
-                    THROW_IAE;
+                    throw lang::IllegalArgumentException();
                 }
                 break;
             case uno::TypeClass_DOUBLE:
@@ -2173,20 +2172,20 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH 
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
-                SEQSEQ( ANY )           aValArr;
+                uno::Sequence< uno::Sequence< uno::Any > >           aValArr;
                 if( r >>= aValArr )
                 {
                     sal_Int32           nE = aValArr.getLength();
-                    const SEQ( ANY )*   pArr = aValArr.getConstArray();
+                    const uno::Sequence< uno::Any >*   pArr = aValArr.getConstArray();
                     for( sal_Int32 n = 0 ; n < nE ; n++ )
                         Append( pArr[ n ], eAH );
                 }
                 else
-                    THROW_IAE;
+                    throw lang::IllegalArgumentException();
                 }
                 break;
             default:
-                THROW_IAE;
+                throw lang::IllegalArgumentException();
         }
     }
 }
@@ -2310,10 +2309,10 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
 
 
 double ConvertData::Convert(
-    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const THROWDEF_RTE_IAE
+    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( Class() != r.Class() )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     sal_Bool bBinFromLev = ( nLevFrom > 0 && ( nLevFrom % 10 ) == 0 );
     sal_Bool bBinToLev   = ( nLevTo > 0 && ( nLevTo % 10 ) == 0 );
@@ -2363,10 +2362,10 @@ ConvertDataLinear::~ConvertDataLinear()
 }
 
 double ConvertDataLinear::Convert(
-    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const THROWDEF_RTE_IAE
+    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( Class() != r.Class() )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
     return r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo );
 }
 
@@ -2584,7 +2583,7 @@ ConvertDataList::~ConvertDataList()
 }
 
 
-double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo ) THROWDEF_RTE_IAE
+double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     ConvertData*    pFrom = NULL;
     ConvertData*    pTo = NULL;
@@ -2640,7 +2639,7 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
     if( pFrom && pTo )
         return pFrom->Convert( fVal, *pTo, nLevelFrom, nLevelTo );
     else
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 }
 
 

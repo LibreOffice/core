@@ -20,25 +20,12 @@
 #ifndef ANALYSISDEFS_HXX
 #define ANALYSISDEFS_HXX
 
-#define XPROPSET            ::com::sun::star::beans::XPropertySet
-#define REF(c)              ::com::sun::star::uno::Reference< c >
-#define constREFXPS         const REF(XPROPSET)
-#define SEQ(c)              ::com::sun::star::uno::Sequence< c >
-#define SEQSEQ(c)           ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< c > >
-#define SEQofLocName        SEQ( ::com::sun::star::sheet::LocalizedName )
-#define ANY                 ::com::sun::star::uno::Any
-#define SEQ_ANY             SEQ(ANY)
 #define STRFROMASCII(s)     OUString::createFromAscii( s )
 #define STRFROMANSI(s)      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
-#define THROWDEF_RTE        throw(::com::sun::star::uno::RuntimeException)
-#define THROW_RTE           throw ::com::sun::star::uno::RuntimeException()
-#define THROWDEF_RTE_IAE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException)
-#define THROW_IAE           throw ::com::sun::star::lang::IllegalArgumentException()
-#define THROWDEF_RTE_IAE_NCE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException,::com::sun::star::sheet::NoConvergenceException)
 
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
-#define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) THROW_IAE
-#define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else THROW_IAE
+#define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) throw css::lang::IllegalArgumentException()
+#define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
 
 #endif
 

@@ -36,7 +36,6 @@
 #define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
 #define MY_IMPLNAME                 "com.sun.star.sheet.addin.AnalysisImpl"
 
-using namespace                 ::rtl;
 using namespace                 ::com::sun::star;
 
 
@@ -47,7 +46,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
 
     if( pServiceManager && OUString::createFromAscii( pImplName ) == AnalysisAddIn::getImplementationName_Static() )
     {
-        REF( lang::XSingleServiceFactory )  xFactory( cppu::createOneInstanceFactory(
+        uno::Reference< lang::XSingleServiceFactory >  xFactory( cppu::createOneInstanceFactory(
                 reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
                 AnalysisAddIn::getImplementationName_Static(),
                 AnalysisAddIn_CreateInstance,
@@ -71,21 +70,21 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
 //------------------------------------------------------------------------
 
 
-ResMgr& AnalysisAddIn::GetResMgr( void ) THROWDEF_RTE
+ResMgr& AnalysisAddIn::GetResMgr( void ) throw( uno::RuntimeException )
 {
     if( !pResMgr )
     {
         InitData();     // try to get resource manager
 
         if( !pResMgr )
-            THROW_RTE;
+            throw uno::RuntimeException();
     }
 
     return *pResMgr;
 }
 
 
-OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE
+OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::RuntimeException )
 {
     return String( AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, nFuncNum, GetResMgr() ).GetString() );
 }
@@ -115,7 +114,7 @@ AnalysisFuncRes::AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd,
 }
 
 
-OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE
+OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException )
 {
     OUString                      aRet;
     AnalysisResourcePublisher   aResPubl( AnalysisResId( RID_ANALYSIS_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
@@ -200,10 +199,10 @@ sal_Int32 AnalysisAddIn::getDateMode(
 
 #define MAXFACTDOUBLE   300
 
-double AnalysisAddIn::FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE
+double AnalysisAddIn::FactDouble( sal_Int32 nNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nNum < 0 || nNum > MAXFACTDOUBLE )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     if( !pFactDoubles )
     {
@@ -247,9 +246,9 @@ OUString AnalysisAddIn::getImplementationName_Static()
 }
 
 
-SEQ( OUString ) AnalysisAddIn::getSupportedServiceNames_Static()
+uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
 {
-    SEQ( OUString )   aRet(2);
+    uno::Sequence< OUString >   aRet(2);
     OUString*         pArray = aRet.getArray();
     pArray[0] = STRFROMASCII( ADDIN_SERVICE );
     pArray[1] = STRFROMASCII( MY_SERVICE );
@@ -257,7 +256,7 @@ SEQ( OUString ) AnalysisAddIn::getSupportedServiceNames_Static()
 }
 
 
-REF( uno::XInterface ) SAL_CALL AnalysisAddIn_CreateInstance(
+uno::Reference< uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& xServiceFact )
 {
     static uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*) new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) );
@@ -267,7 +266,7 @@ REF( uno::XInterface ) SAL_CALL AnalysisAddIn_CreateInstance(
 
 // XServiceName
 
-OUString SAL_CALL AnalysisAddIn::getServiceName() THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getServiceName() throw( uno::RuntimeException )
 {
     // name of specific AddIn service
     return STRFROMASCII( MY_SERVICE );
@@ -276,19 +275,19 @@ OUString SAL_CALL AnalysisAddIn::getServiceName() THROWDEF_RTE
 
 // XServiceInfo
 
-OUString SAL_CALL AnalysisAddIn::getImplementationName() THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 
-sal_Bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName ) THROWDEF_RTE
+sal_Bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName ) throw( uno::RuntimeException )
 {
     return aName.compareToAscii( ADDIN_SERVICE ) == 0 || aName.compareToAscii( MY_SERVICE ) == 0;
 }
 
 
-SEQ( OUString ) SAL_CALL AnalysisAddIn::getSupportedServiceNames() THROWDEF_RTE
+uno::Sequence< OUString > SAL_CALL AnalysisAddIn::getSupportedServiceNames() throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
@@ -296,14 +295,14 @@ SEQ( OUString ) SAL_CALL AnalysisAddIn::getSupportedServiceNames() THROWDEF_RTE
 
 // XLocalizable
 
-void SAL_CALL AnalysisAddIn::setLocale( const lang::Locale& eLocale ) THROWDEF_RTE
+void SAL_CALL AnalysisAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException )
 {
     aFuncLoc = eLocale;
 
     InitData();     // change of locale invalidates resources!
 }
 
-lang::Locale SAL_CALL AnalysisAddIn::getLocale() THROWDEF_RTE
+lang::Locale SAL_CALL AnalysisAddIn::getLocale() throw( uno::RuntimeException )
 {
     return aFuncLoc;
 }
@@ -311,7 +310,7 @@ lang::Locale SAL_CALL AnalysisAddIn::getLocale() THROWDEF_RTE
 
 // XAddIn
 
-OUString SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const OUString& ) THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)
@@ -320,7 +319,7 @@ OUString SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const OUString& ) T
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgrammaticName ) THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgrammaticName ) throw( uno::RuntimeException )
 {
     OUString          aRet;
 
@@ -341,7 +340,7 @@ OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgra
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getFunctionDescription( const OUString& aProgrammaticName ) THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getFunctionDescription( const OUString& aProgrammaticName ) throw( uno::RuntimeException )
 {
     OUString          aRet;
 
@@ -353,7 +352,7 @@ OUString SAL_CALL AnalysisAddIn::getFunctionDescription( const OUString& aProgra
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getDisplayArgumentName( const OUString& aName, sal_Int32 nArg ) THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getDisplayArgumentName( const OUString& aName, sal_Int32 nArg ) throw( uno::RuntimeException )
 {
     OUString          aRet;
 
@@ -371,7 +370,7 @@ OUString SAL_CALL AnalysisAddIn::getDisplayArgumentName( const OUString& aName, 
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, sal_Int32 nArg ) THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, sal_Int32 nArg ) throw( uno::RuntimeException )
 {
     OUString          aRet;
 
@@ -392,7 +391,7 @@ OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, 
 static const char*  pDefCatName = "Add-In";
 
 
-OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName ) THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName ) throw( uno::RuntimeException )
 {
     //  return non-translated strings
 //  return STRFROMASCII( "Add-In" );
@@ -422,7 +421,7 @@ OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aN
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) THROWDEF_RTE
+OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) throw( uno::RuntimeException )
 {
     //  return translated strings, not used for predefined categories
 //  return STRFROMASCII( "Add-In" );
@@ -459,7 +458,7 @@ static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
 
 void AnalysisAddIn::InitDefLocales( void )
 {
-    pDefLocales = new ::com::sun::star::lang::Locale[ nNumOfLoc ];
+    pDefLocales = new lang::Locale[ nNumOfLoc ];
 
     for( sal_uInt32 n = 0 ; n < nNumOfLoc ; n++ )
     {
@@ -469,7 +468,7 @@ void AnalysisAddIn::InitDefLocales( void )
 }
 
 
-inline const ::com::sun::star::lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
+inline const lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
 {
     if( !pDefLocales )
         InitDefLocales();
@@ -481,23 +480,23 @@ inline const ::com::sun::star::lang::Locale& AnalysisAddIn::GetLocale( sal_uInt3
 }
 
 
-SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const OUString& aProgrammaticName ) THROWDEF_RTE
+uno::Sequence< sheet::LocalizedName > SAL_CALL AnalysisAddIn::getCompatibilityNames( const OUString& aProgrammaticName ) throw( uno::RuntimeException )
 {
     const FuncData*             p = pFD->Get( aProgrammaticName );
 
     if( !p )
-        return SEQofLocName( 0 );
+        return uno::Sequence< sheet::LocalizedName >( 0 );
 
     const StringList&           r = p->GetCompNameList();
     sal_uInt32                  nCount = r.Count();
 
-    SEQofLocName                aRet( nCount );
+    uno::Sequence< sheet::LocalizedName >                aRet( nCount );
 
-    ::com::sun::star::sheet::LocalizedName*  pArray = aRet.getArray();
+    sheet::LocalizedName*  pArray = aRet.getArray();
 
     for( sal_uInt32 n = 0 ; n < nCount ; n++ )
     {
-        pArray[ n ] = ::com::sun::star::sheet::LocalizedName( GetLocale( n ), *r.Get( n ) );
+        pArray[ n ] = sheet::LocalizedName( GetLocale( n ), *r.Get( n ) );
     }
 
     return aRet;
@@ -510,8 +509,8 @@ SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const OUString& aPro
  * Workday
  */
 
-sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
-    sal_Int32 nDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( const uno::Reference< beans::XPropertySet >& xOptions,
+    sal_Int32 nDate, sal_Int32 nDays, const uno::Any& aHDay ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !nDays )
         return nDate;
@@ -571,15 +570,15 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
  * Yearfrac
  */
 
-double SAL_CALL AnalysisAddIn::getYearfrac( constREFXPS& xOpt,
-    sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& rMode ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getYearfrac( const uno::Reference< beans::XPropertySet >& xOpt,
+    sal_Int32 nStartDate, sal_Int32 nEndDate, const uno::Any& rMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = GetYearFrac( xOpt, nStartDate, nEndDate, getDateMode( xOpt, rMode ) );
     RETURN_FINITE( fRet );
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getEdate( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getEdate( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nMonths ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nNullDate = GetNullDate( xOpt );
     ScaDate aDate( nNullDate, nStartDate, 5 );
@@ -588,7 +587,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEdate( constREFXPS& xOpt, sal_Int32 nStartD
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( constREFXPS& xOpt, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     nDate += GetNullDate( xOpt );
 
@@ -602,7 +601,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( constREFXPS& xOpt, sal_Int32 nDate
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nDate, sal_Int32 nMonths ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32   nNullDate = GetNullDate( xOpt );
     nDate += nNullDate;
@@ -629,8 +628,8 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( constREFXPS& xOpt,
-        sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( const uno::Reference< beans::XPropertySet >& xOpt,
+        sal_Int32 nStartDate, sal_Int32 nEndDate, const uno::Any& aHDay ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32                   nNullDate = GetNullDate( xOpt );
 
@@ -667,20 +666,20 @@ sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( constREFXPS& xOpt,
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getIseven( sal_Int32 nVal ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getIseven( sal_Int32 nVal ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     return ( nVal & 0x00000001 )? 0 : 1;
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( sal_Int32 nVal ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( sal_Int32 nVal ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     return ( nVal & 0x00000001 )? 1 : 0;
 }
 
 double SAL_CALL
-AnalysisAddIn::getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVLst,
-                               const SEQ( uno::Any )& aOptVLst ) THROWDEF_RTE_IAE
+AnalysisAddIn::getMultinomial( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< sal_Int32 > >& aVLst,
+                               const uno::Sequence< uno::Any >& aOptVLst ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     ScaDoubleListGE0 aValList;
 
@@ -697,7 +696,7 @@ AnalysisAddIn::getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVL
     {
         double n = (*p >= 0.0) ? rtl::math::approxFloor( *p ) : rtl::math::approxCeil( *p );
         if ( n < 0.0 )
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
 
         if( n > 0.0 )
         {
@@ -709,13 +708,13 @@ AnalysisAddIn::getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVL
 }
 
 
-double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const uno::Sequence< uno::Sequence< double > >& aCoeffList ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double                          fRet = 0.0;
 
     // #i32269# 0^0 is undefined, Excel returns #NUM! error
     if( fX == 0.0 && fN == 0 )
-        THROW_RTE;
+        throw uno::RuntimeException();
 
     if( fX != 0.0 )
     {
@@ -725,7 +724,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 
         for( n1 = 0 ; n1 < nE1 ; n1++ )
         {
-            const SEQ( double )&    rList = aCoeffList[ n1 ];
+            const uno::Sequence< double >&    rList = aCoeffList[ n1 ];
             nE2 = rList.getLength();
             const double*           pList = rList.getConstArray();
 
@@ -742,7 +741,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 }
 
 
-double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenom ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenom ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet;
     if( (fNum < 0) != (fDenom < 0) )
@@ -753,7 +752,7 @@ double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenom ) THROWDE
 }
 
 
-double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( fMult == 0.0 )
         return fMult;
@@ -763,19 +762,19 @@ double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_R
 }
 
 
-double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = sqrt( fNum * PI );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     fMin = ::rtl::math::round( fMin, 0, rtl_math_RoundingMode_Up );
     fMax = ::rtl::math::round( fMax, 0, rtl_math_RoundingMode_Up );
     if( fMin > fMax )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     // fMax -> range
     double fRet = fMax - fMin + 1.0;
@@ -787,7 +786,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWD
 }
 
 
-double SAL_CALL AnalysisAddIn::getGcd( constREFXPS& xOpt, const SEQSEQ( double )& aVLst, const SEQ( uno::Any )& aOptVLst ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getGcd( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< double > >& aVLst, const uno::Sequence< uno::Any >& aOptVLst ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     ScaDoubleListGT0 aValList;
 
@@ -812,7 +811,7 @@ double SAL_CALL AnalysisAddIn::getGcd( constREFXPS& xOpt, const SEQSEQ( double )
 }
 
 
-double SAL_CALL AnalysisAddIn::getLcm( constREFXPS& xOpt, const SEQSEQ( double )& aVLst, const SEQ( uno::Any )& aOptVLst ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getLcm( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< double > >& aVLst, const uno::Sequence< uno::Any >& aOptVLst ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     ScaDoubleListGE0 aValList;
 
@@ -844,34 +843,34 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS& xOpt, const SEQSEQ( double )
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
+double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) throw( uno::RuntimeException, lang::IllegalArgumentException, sheet::NoConvergenceException )
 {
     double fRet = sca::analysis::BesselI( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
+double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) throw( uno::RuntimeException, lang::IllegalArgumentException, sheet::NoConvergenceException )
 {
     double fRet = sca::analysis::BesselJ( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
+double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) throw( uno::RuntimeException, lang::IllegalArgumentException, sheet::NoConvergenceException )
 {
     if( nOrder < 0 || fNum <= 0.0 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     double fRet = sca::analysis::BesselK( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
+double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) throw( uno::RuntimeException, lang::IllegalArgumentException, sheet::NoConvergenceException )
 {
     if( nOrder < 0 || fNum <= 0.0 )
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
 
     double fRet = sca::analysis::BesselY( fNum, nOrder );
     RETURN_FINITE( fRet );
@@ -887,7 +886,7 @@ const double    SCA_MIN16       = -SCA_MAX16-1.0;   // min. val for hexadecimal 
 const sal_Int32 SCA_MAXPLACES   = 10;               // max. number of places
 
 
-OUString SAL_CALL AnalysisAddIn::getBin2Oct( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getBin2Oct( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fVal = ConvertToDec( aNum, 2, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
@@ -896,14 +895,14 @@ OUString SAL_CALL AnalysisAddIn::getBin2Oct( constREFXPS& xOpt, const OUString& 
 }
 
 
-double SAL_CALL AnalysisAddIn::getBin2Dec( const OUString& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBin2Dec( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = ConvertToDec( aNum, 2, SCA_MAXPLACES );
     RETURN_FINITE( fRet );
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getBin2Hex( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getBin2Hex( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fVal = ConvertToDec( aNum, 2, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
@@ -912,7 +911,7 @@ OUString SAL_CALL AnalysisAddIn::getBin2Hex( constREFXPS& xOpt, const OUString& 
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getOct2Bin( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getOct2Bin( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fVal = ConvertToDec( aNum, 8, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
@@ -921,14 +920,14 @@ OUString SAL_CALL AnalysisAddIn::getOct2Bin( constREFXPS& xOpt, const OUString& 
 }
 
 
-double SAL_CALL AnalysisAddIn::getOct2Dec( const OUString& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getOct2Dec( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = ConvertToDec( aNum, 8, SCA_MAXPLACES );
     RETURN_FINITE( fRet );
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getOct2Hex( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getOct2Hex( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fVal = ConvertToDec( aNum, 8, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
@@ -937,7 +936,7 @@ OUString SAL_CALL AnalysisAddIn::getOct2Hex( constREFXPS& xOpt, const OUString& 
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getDec2Bin( constREFXPS& xOpt, sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getDec2Bin( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nPlaces = 0;
     sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
@@ -945,7 +944,7 @@ OUString SAL_CALL AnalysisAddIn::getDec2Bin( constREFXPS& xOpt, sal_Int32 nNum, 
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getDec2Oct( constREFXPS& xOpt, sal_Int32 nNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getDec2Oct( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nPlaces = 0;
     sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
@@ -953,7 +952,7 @@ OUString SAL_CALL AnalysisAddIn::getDec2Oct( constREFXPS& xOpt, sal_Int32 nNum, 
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getDec2Hex( constREFXPS& xOpt, double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getDec2Hex( const uno::Reference< beans::XPropertySet >& xOpt, double fNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Int32 nPlaces = 0;
     sal_Bool bUsePlaces = aAnyConv.getInt32( nPlaces, xOpt, rPlaces );
@@ -961,7 +960,7 @@ OUString SAL_CALL AnalysisAddIn::getDec2Hex( constREFXPS& xOpt, double fNum, con
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getHex2Bin( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getHex2Bin( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fVal = ConvertToDec( aNum, 16, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
@@ -970,14 +969,14 @@ OUString SAL_CALL AnalysisAddIn::getHex2Bin( constREFXPS& xOpt, const OUString& 
 }
 
 
-double SAL_CALL AnalysisAddIn::getHex2Dec( const OUString& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getHex2Dec( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = ConvertToDec( aNum, 16, SCA_MAXPLACES );
     RETURN_FINITE( fRet );
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getHex2Oct( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getHex2Oct( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fVal = ConvertToDec( aNum, 16, SCA_MAXPLACES );
     sal_Int32 nPlaces = 0;
@@ -986,13 +985,13 @@ OUString SAL_CALL AnalysisAddIn::getHex2Oct( constREFXPS& xOpt, const OUString& 
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getDelta( constREFXPS& xOpt, double fNum1, const ANY& rNum2 ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getDelta( const uno::Reference< beans::XPropertySet >& xOpt, double fNum1, const uno::Any& rNum2 ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     return fNum1 == aAnyConv.getDouble( xOpt, rNum2, 0.0 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getErf( constREFXPS& xOpt, double fLL, const ANY& rUL ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getErf( const uno::Reference< beans::XPropertySet >& xOpt, double fLL, const uno::Any& rUL ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fUL, fRet;
     sal_Bool bContainsValue = aAnyConv.getDouble( fUL, xOpt, rUL );
@@ -1002,41 +1001,41 @@ double SAL_CALL AnalysisAddIn::getErf( constREFXPS& xOpt, double fLL, const ANY&
 }
 
 
-double SAL_CALL AnalysisAddIn::getErfc( double f ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getErfc( double f ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = Erfc( f );
     RETURN_FINITE( fRet );
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getGestep( constREFXPS& xOpt, double fNum, const ANY& rStep ) THROWDEF_RTE_IAE
+sal_Int32 SAL_CALL AnalysisAddIn::getGestep( const uno::Reference< beans::XPropertySet >& xOpt, double fNum, const uno::Any& rStep ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     return fNum >= aAnyConv.getDouble( xOpt, rStep, 0.0 );
 }
 
 
-double SAL_CALL AnalysisAddIn::getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getFactdouble( sal_Int32 nNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = FactDouble( nNum );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getImabs( const OUString& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImabs( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = Complex( aNum ).Abs();
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getImaginary( const OUString& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImaginary( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = Complex( aNum ).Imag();
     RETURN_FINITE( fRet );
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImpower( const OUString& aNum, double f ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImpower( const OUString& aNum, double f ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1046,14 +1045,14 @@ OUString SAL_CALL AnalysisAddIn::getImpower( const OUString& aNum, double f ) TH
 }
 
 
-double SAL_CALL AnalysisAddIn::getImargument( const OUString& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImargument( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = Complex( aNum ).Arg();
     RETURN_FINITE( fRet );
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImcos( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImcos( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1063,7 +1062,7 @@ OUString SAL_CALL AnalysisAddIn::getImcos( const OUString& aNum ) THROWDEF_RTE_I
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImdiv( const OUString& aDivid, const OUString& aDivis ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImdiv( const OUString& aDivid, const OUString& aDivis ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aDivid );
 
@@ -1073,7 +1072,7 @@ OUString SAL_CALL AnalysisAddIn::getImdiv( const OUString& aDivid, const OUStrin
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImexp( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImexp( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1083,7 +1082,7 @@ OUString SAL_CALL AnalysisAddIn::getImexp( const OUString& aNum ) THROWDEF_RTE_I
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImconjugate( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImconjugate( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1093,7 +1092,7 @@ OUString SAL_CALL AnalysisAddIn::getImconjugate( const OUString& aNum ) THROWDEF
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImln( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImln( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1103,7 +1102,7 @@ OUString SAL_CALL AnalysisAddIn::getImln( const OUString& aNum ) THROWDEF_RTE_IA
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImlog10( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImlog10( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1113,7 +1112,7 @@ OUString SAL_CALL AnalysisAddIn::getImlog10( const OUString& aNum ) THROWDEF_RTE
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImlog2( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImlog2( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1123,7 +1122,7 @@ OUString SAL_CALL AnalysisAddIn::getImlog2( const OUString& aNum ) THROWDEF_RTE_
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImproduct( constREFXPS&, const SEQSEQ( OUString )& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImproduct( const uno::Reference< beans::XPropertySet >&, const uno::Sequence< uno::Sequence< OUString > >& aNum1, const uno::Sequence< uno::Any >& aNL ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     ComplexList     z_list;
 
@@ -1144,14 +1143,14 @@ OUString SAL_CALL AnalysisAddIn::getImproduct( constREFXPS&, const SEQSEQ( OUStr
 }
 
 
-double SAL_CALL AnalysisAddIn::getImreal( const OUString& aNum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getImreal( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     double fRet = Complex( aNum ).Real();
     RETURN_FINITE( fRet );
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImsin( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImsin( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1161,7 +1160,7 @@ OUString SAL_CALL AnalysisAddIn::getImsin( const OUString& aNum ) THROWDEF_RTE_I
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImsub( const OUString& aNum1, const OUString& aNum2 ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImsub( const OUString& aNum1, const OUString& aNum2 ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum1 );
 
@@ -1171,7 +1170,7 @@ OUString SAL_CALL AnalysisAddIn::getImsub( const OUString& aNum1, const OUString
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const SEQSEQ( OUString )& aNum1, const SEQ( ::com::sun::star::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImsum( const uno::Reference< beans::XPropertySet >&, const uno::Sequence< uno::Sequence< OUString > >& aNum1, const uno::Sequence< uno::Any >& aFollowingPars ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     ComplexList     z_list;
 
@@ -1192,7 +1191,7 @@ OUString SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const SEQSEQ( OUString 
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImsqrt( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImsqrt( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1202,7 +1201,7 @@ OUString SAL_CALL AnalysisAddIn::getImsqrt( const OUString& aNum ) THROWDEF_RTE_
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImtan( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImtan( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1212,7 +1211,7 @@ OUString SAL_CALL AnalysisAddIn::getImtan( const OUString& aNum ) THROWDEF_RTE_I
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImsec( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImsec( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1222,7 +1221,7 @@ OUString SAL_CALL AnalysisAddIn::getImsec( const OUString& aNum ) THROWDEF_RTE_I
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImcsc( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImcsc( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1232,7 +1231,7 @@ OUString SAL_CALL AnalysisAddIn::getImcsc( const OUString& aNum ) THROWDEF_RTE_I
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImcot( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImcot( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1242,7 +1241,7 @@ OUString SAL_CALL AnalysisAddIn::getImcot( const OUString& aNum ) THROWDEF_RTE_I
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImsinh( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImsinh( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1252,7 +1251,7 @@ OUString SAL_CALL AnalysisAddIn::getImsinh( const OUString& aNum ) THROWDEF_RTE_
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImcosh( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImcosh( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1262,7 +1261,7 @@ OUString SAL_CALL AnalysisAddIn::getImcosh( const OUString& aNum ) THROWDEF_RTE_
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImsech( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImsech( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1272,7 +1271,7 @@ OUString SAL_CALL AnalysisAddIn::getImsech( const OUString& aNum ) THROWDEF_RTE_
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getImcsch( const OUString& aNum ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getImcsch( const OUString& aNum ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Complex     z( aNum );
 
@@ -1282,7 +1281,7 @@ OUString SAL_CALL AnalysisAddIn::getImcsch( const OUString& aNum ) THROWDEF_RTE_
 }
 
 
-OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const ANY& rSuff ) THROWDEF_RTE_IAE
+OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::Any& rSuff ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     sal_Bool    bi;
 
@@ -1296,18 +1295,18 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const ANY& rS
             const OUString*   pSuff = ( const OUString* ) rSuff.getValue();
             bi = pSuff->compareToAscii( "i" ) == 0 || pSuff->isEmpty();
             if( !bi && pSuff->compareToAscii( "j" ) != 0 )
-                THROW_IAE;
+                throw lang::IllegalArgumentException();
             }
             break;
         default:
-            THROW_IAE;
+            throw lang::IllegalArgumentException();
     }
 
     return Complex( fR, fI, bi ? 'i' : 'j' ).GetString();
 }
 
 
-double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const OUString& aTU ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const OUString& aTU ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( !pCDL )
         pCDL = new ConvertDataList();

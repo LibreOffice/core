@@ -68,39 +68,39 @@ inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
 
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
 sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
-void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( ::com::sun::star::lang::IllegalArgumentException );
-sal_Int32           GetNullDate( const REF( ::com::sun::star::beans::XPropertySet )& xOptions ) THROWDEF_RTE;
+void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( css::lang::IllegalArgumentException );
+sal_Int32           GetNullDate( const css::uno::Reference< css::beans::XPropertySet >& xOptions ) throw( css::uno::RuntimeException );
 sal_Int32           GetDiffDate360(
                         sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
                         sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
                         sal_Bool bUSAMethod );
-inline sal_Int32    GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
+inline sal_Int32    GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
 sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod );
 
 sal_Int32           GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
 inline sal_Int16    GetDayOfWeek( sal_Int32 nDate );
 void                GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-                        sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) THROWDEF_RTE_IAE;
+                        sal_uInt16& rYears, sal_Int32& rDayDiffPart, sal_Int32& rDaysInYear ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
                         // rYears = full num of years
                         // rDayDiffPart = num of days for last year
                         // rDaysInYear = num of days in first year
 sal_Int32           GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-                                sal_Int32* pOptDaysIn1stYear = NULL ) THROWDEF_RTE_IAE;
+                                sal_Int32* pOptDaysIn1stYear = NULL ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
-                                THROWDEF_RTE_IAE;
-sal_Int32           GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+sal_Int32           GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
-                        THROWDEF_RTE_IAE;
-inline double       GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
-                        THROWDEF_RTE_IAE;
+                        throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+inline double       GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+                        throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 inline void         AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 
 double              BinomialCoefficient( double n, double k );
 double              GetGcd( double f1, double f2 );
-double              ConvertToDec( const OUString& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
+double              ConvertToDec( const OUString& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 OUString              ConvertFromDec(
                         double fNum, double fMin, double fMax, sal_uInt16 nBase,
-                        sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) THROWDEF_RTE_IAE;
+                        sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              Erf( double fX );
 double              Erfc( double fX );
 sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
@@ -108,43 +108,43 @@ OUString              GetString( double fNumber, sal_Bool bLeadingSign = sal_Fal
 inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
 
 double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
-                                double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
-                                double fRestVal, double fPer, double fRate, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
-                                double fYield, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fYield, sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
-                                double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fRate, double fPrice, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
                                 sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp,
-                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
-                                double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
-                                double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
                                 sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp,
-                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
-                                double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
-                                double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF );
 double              GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF );
 
 double              GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 double              GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat,
-                                sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nFreq, sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
-                                sal_Int32 nBase ) THROWDEF_RTE_IAE;
+                                sal_Int32 nBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 
 
@@ -328,15 +328,15 @@ protected:
     void                        Insert( sal_Int32 nDay );
     void                        Insert( sal_Int32 nDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend );
     void                        Insert( double fDay, sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
-                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
     void                        InsertHolidayList(
                                     const ScaAnyConverter& rAnyConv,
-                                    const ::com::sun::star::uno::Any& rHolAny,
+                                    const css::uno::Any& rHolAny,
                                     sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    sal_Bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 public:
                                 SortedIndividualInt32List();
@@ -355,10 +355,10 @@ public:
                                     @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
     void                        InsertHolidayList(
                                     ScaAnyConverter& rAnyConv,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOptions,
-                                    const ::com::sun::star::uno::Any& rHolAny,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const css::uno::Any& rHolAny,
                                     sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    sal_Bool bInsertOnWeekend ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 
@@ -370,29 +370,29 @@ protected:
     inline void                 ListAppend( double fValue ) { MyList::Append( new double( fValue ) ); }
 
     using MyList::Append;
-    inline void                 Append( double fValue ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException )
+    inline void                 Append( double fValue ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException )
                                     { if( CheckInsert( fValue ) ) ListAppend( fValue ); }
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const ::com::sun::star::uno::Any& rAny,
-                                    sal_Bool bIgnoreEmpty ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Any& rAny,
+                                    sal_Bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Sequence< css::uno::Any >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 public:
     virtual                     ~ScaDoubleList();
@@ -404,21 +404,21 @@ public:
     inline const double*        First() { return static_cast< const double* >( MyList::First() ); }
     inline const double*        Next()  { return static_cast< const double* >( MyList::Next() ); }
 
-    void                        Append( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& rValueArr )
-                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
-    void                        Append( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > >& rValueArr )
-                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+    void                        Append( const css::uno::Sequence< css::uno::Sequence< double > >& rValueArr )
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                        Append( const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rValueArr )
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xOpt,
-                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty = sal_True ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+                                    const css::uno::Sequence< css::uno::Any >& rAnySeq,
+                                    sal_Bool bIgnoreEmpty = sal_True ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     virtual sal_Bool            CheckInsert( double fValue ) const
-                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 
@@ -429,7 +429,7 @@ class ScaDoubleListGT0 : public ScaDoubleList
 {
 public:
     virtual sal_Bool            CheckInsert( double fValue ) const
-                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 
@@ -440,7 +440,7 @@ class ScaDoubleListGE0 : public ScaDoubleList
 {
 public:
     virtual sal_Bool            CheckInsert( double fValue ) const
-                                    throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 
@@ -454,41 +454,41 @@ class Complex
 
 public:
     inline                  Complex( double fReal, double fImag = 0.0, sal_Unicode cC = '\0' );
-                            Complex( const OUString& rComplexAsString ) THROWDEF_RTE_IAE;
+                            Complex( const OUString& rComplexAsString ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     inline static sal_Bool  IsImagUnit( sal_Unicode c );
     static sal_Bool         ParseString( const OUString& rComplexAsString, Complex& rReturn );
-    OUString                  GetString() const THROWDEF_RTE_IAE;
+    OUString                  GetString() const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     inline double           Real( void ) const;
     inline double           Imag( void ) const;
 
-    double                  Arg( void ) const THROWDEF_RTE_IAE;
+    double                  Arg( void ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     inline double           Abs( void ) const;
 
     // following functions change the complex number itself to avoid unnecessary copy actions!
-    void                    Power( double fPower ) THROWDEF_RTE_IAE;
+    void                    Power( double fPower ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     void                    Sqrt( void );
-    void                    Sin( void ) THROWDEF_RTE_IAE;
-    void                    Cos( void ) THROWDEF_RTE_IAE;
-    void                    Div( const Complex& rDivisor ) THROWDEF_RTE_IAE;
+    void                    Sin( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Cos( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Div( const Complex& rDivisor ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     void                    Exp( void );
     inline void             Conjugate( void );
-    void                    Ln( void ) THROWDEF_RTE_IAE;
-    void                    Log10( void ) THROWDEF_RTE_IAE;
-    void                    Log2( void ) THROWDEF_RTE_IAE;
+    void                    Ln( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Log10( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Log2( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
     inline void             Mult( double fFact );
     inline void             Mult( const Complex& rMult );
     inline void             Sub( const Complex& rMult );
     inline void             Add( const Complex& rAdd );
-    void                    Tan( void ) THROWDEF_RTE_IAE;
-    void                    Sec( void ) THROWDEF_RTE_IAE;
-    void                    Csc( void ) THROWDEF_RTE_IAE;
-    void                    Cot( void ) THROWDEF_RTE_IAE;
-    void                    Sinh( void ) THROWDEF_RTE_IAE;
-    void                    Cosh( void ) THROWDEF_RTE_IAE;
-    void                    Sech( void ) THROWDEF_RTE_IAE;
-    void                    Csch( void ) THROWDEF_RTE_IAE;
+    void                    Tan( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Sec( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Csc( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Cot( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Sinh( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Cosh( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Sech( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Csch( void ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 };
 
@@ -516,8 +516,8 @@ public:
 
     using MyList::Append;
     inline void             Append( Complex* pNew );
-    void                    Append( const SEQSEQ( OUString )& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
-    void                    Append( const SEQ( ANY )& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
+    void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    void                    Append( const css::uno::Sequence< css::uno::Any >& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 
@@ -562,7 +562,7 @@ public:
                                     //  rest gives power for 10 represented by the prefix (e.g. 3 for k or -9 for n
 
     virtual double          Convert( double fVal, const ConvertData& rTo,
-                                sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const THROWDEF_RTE_IAE;
+                                sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
                                     // converts fVal from this unit to rFrom unit
                                     // throws exception if not from same class
                                     // this implementation is for proportional cases only
@@ -591,7 +591,7 @@ public:
     virtual                 ~ConvertDataLinear();
 
     virtual double          Convert( double fVal, const ConvertData& rTo,
-                                sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const THROWDEF_RTE_IAE;
+                                sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
                                     // for cases where f(x) = a + bx applies (e.g. Temperatures)
 
     virtual double          ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
@@ -611,7 +611,7 @@ public:
                             ConvertDataList( void );
     virtual                 ~ConvertDataList();
 
-    double                  Convert( double fVal, const OUString& rFrom, const OUString& rTo ) THROWDEF_RTE_IAE;
+    double                  Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 
@@ -623,7 +623,7 @@ inline sal_Bool IsLeapYear( sal_uInt16 n )
 }
 
 
-inline sal_Int32 GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod )
+inline sal_Int32 GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, sal_Bool bUSAMethod )
 {
     return GetDiffDate360( GetNullDate( xOpt ), nDate1, nDate2, bUSAMethod );
 }
@@ -635,7 +635,7 @@ inline sal_Int16 GetDayOfWeek( sal_Int32 n )
 }
 
 
-inline double GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
+inline double GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException )
 {
     return GetYearFrac( GetNullDate( xOpt ), nStartDate, nEndDate, nMode );
 }
@@ -962,7 +962,7 @@ private:
     sal_Int32                   getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
 
                                 /// Adds/subtracts the given count of years, does not adjust day.
-    void                        doAddYears( sal_Int32 nYearCount ) throw( ::com::sun::star::lang::IllegalArgumentException );
+    void                        doAddYears( sal_Int32 nYearCount ) throw( css::lang::IllegalArgumentException );
 
 public:
                                 ScaDate();
@@ -984,17 +984,17 @@ public:
     inline sal_uInt16           getYear() const     { return nYear; };
 
                                 /// adds/subtracts the given count of months, adjusts day
-    void                        addMonths( sal_Int32 nMonthCount ) throw( ::com::sun::star::lang::IllegalArgumentException );
+    void                        addMonths( sal_Int32 nMonthCount ) throw( css::lang::IllegalArgumentException );
 
                                 /// sets the given year, adjusts day
     inline void                 setYear( sal_uInt16 nNewYear );
                                 /// adds/subtracts the given count of years, adjusts day
-    inline void                 addYears( sal_Int32 nYearCount ) throw( ::com::sun::star::lang::IllegalArgumentException );
+    inline void                 addYears( sal_Int32 nYearCount ) throw( css::lang::IllegalArgumentException );
 
                                 /// @return  the internal number of the current date
     sal_Int32                   getDate( sal_Int32 nNullDate ) const;
                                 /// @return  the number of days between the two dates
-    static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( ::com::sun::star::lang::IllegalArgumentException );
+    static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( css::lang::IllegalArgumentException );
 
     sal_Bool                    operator<( const ScaDate& rCmp ) const;
     inline sal_Bool             operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
@@ -1018,7 +1018,7 @@ inline void ScaDate::setYear( sal_uInt16 nNewYear )
     setDay();
 }
 
-inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( ::com::sun::star::lang::IllegalArgumentException )
+inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( css::lang::IllegalArgumentException )
 {
     doAddYears( nYearCount );
     setDay();
@@ -1031,7 +1031,7 @@ inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( ::com::sun::star::l
 class ScaAnyConverter
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter2 > xFormatter;
+    css::uno::Reference< css::util::XNumberFormatter2 > xFormatter;
     sal_Int32                   nDefaultFormat;
     sal_Bool                    bHasValidFormat;
 
@@ -1042,17 +1042,17 @@ private:
                                     @return  the converted double value. */
     double                      convertToDouble(
                                     const ::rtl::OUString& rString ) const
-                                throw( ::com::sun::star::lang::IllegalArgumentException );
+                                throw( css::lang::IllegalArgumentException );
 
 public:
                                 ScaAnyConverter(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+                                    const css::uno::Reference< css::uno::XComponentContext >& xContext );
                                 ~ScaAnyConverter();
 
                                 /// Initializing with current language settings
     void                        init(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet )
-                                throw( ::com::sun::star::uno::RuntimeException );
+                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
+                                throw( css::uno::RuntimeException );
 
                                 /** Converts an Any to double (without initialization).
                                     The Any can be empty or contain a double or string.
@@ -1062,8 +1062,8 @@ public:
                                              sal_False if the Any is empty or the string is empty */
     sal_Bool                    getDouble(
                                     double& rfResult,
-                                    const ::com::sun::star::uno::Any& rAny ) const
-                                throw( ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Any& rAny ) const
+                                throw( css::lang::IllegalArgumentException );
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1073,9 +1073,9 @@ public:
                                              sal_False if the Any is empty or the string is empty */
     sal_Bool                    getDouble(
                                     double& rfResult,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
-                                    const ::com::sun::star::uno::Any& rAny )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const css::uno::Any& rAny )
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** Converts an Any to double (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1083,10 +1083,10 @@ public:
                                         on other Any types or on invalid strings.
                                     @return  the value of the double or string or fDefault if the Any or string is empty */
     double                      getDouble(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
-                                    const ::com::sun::star::uno::Any& rAny,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const css::uno::Any& rAny,
                                     double fDefault )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** Converts an Any to sal_Int32 (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1096,9 +1096,9 @@ public:
                                              sal_False if the Any is empty or the string is empty */
     sal_Bool                    getInt32(
                                     sal_Int32& rnResult,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
-                                    const ::com::sun::star::uno::Any& rAny )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const css::uno::Any& rAny )
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
                                 /** Converts an Any to sal_Int32 (with initialization).
                                     The Any can be empty or contain a double or string.
@@ -1106,10 +1106,10 @@ public:
                                         on other Any types or on invalid values or strings.
                                     @return  the truncated value of the double or string or nDefault if the Any or string is empty */
     sal_Int32                   getInt32(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
-                                    const ::com::sun::star::uno::Any& rAny,
+                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const css::uno::Any& rAny,
                                     sal_Int32 nDefault )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 

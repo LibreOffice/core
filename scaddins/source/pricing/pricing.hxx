@@ -43,10 +43,7 @@
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
-#define ANY                 ::com::sun::star::uno::Any
-#define THROWDEF_RTE_IAE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException)
-#define THROW_IAE           throw ::com::sun::star::lang::IllegalArgumentException()
-#define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else THROW_IAE
+#define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
 
 
 
@@ -325,64 +322,64 @@ inline ScaFuncData* ScaFuncDataList::Next()
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
 
 // AddIn class for pricing functions
 
 class ScaPricingAddIn : public ::cppu::WeakImplHelper5<
-                                ::com::sun::star::sheet::XAddIn,
-                                ::com::sun::star::sheet::XCompatibilityNames,
-                                ::com::sun::star::sheet::addin::XPricingFunctions,
-                                ::com::sun::star::lang::XServiceName,
-                                ::com::sun::star::lang::XServiceInfo >
+                                css::sheet::XAddIn,
+                                css::sheet::XCompatibilityNames,
+                                css::sheet::addin::XPricingFunctions,
+                                css::lang::XServiceName,
+                                css::lang::XServiceInfo >
 {
 private:
-    ::com::sun::star::lang::Locale  aFuncLoc;
-    ::com::sun::star::lang::Locale* pDefLocales;
+    css::lang::Locale  aFuncLoc;
+    css::lang::Locale* pDefLocales;
     ResMgr*                     pResMgr;
     sca::pricing::ScaFuncDataList*            pFuncDataList;
 
 
     void                        InitDefLocales();
-    const ::com::sun::star::lang::Locale& GetLocale( sal_uInt32 nIndex );
-    ResMgr&                     GetResMgr() throw( ::com::sun::star::uno::RuntimeException );
+    const css::lang::Locale& GetLocale( sal_uInt32 nIndex );
+    ResMgr&                     GetResMgr() throw( css::uno::RuntimeException );
     void                        InitData();
 
-    ::rtl::OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException );
-    ::rtl::OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( ::com::sun::star::uno::RuntimeException );
+    ::rtl::OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( css::uno::RuntimeException );
+    ::rtl::OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException );
 
 public:
                                 ScaPricingAddIn();
     virtual                     ~ScaPricingAddIn();
 
     static ::rtl::OUString      getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
+    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
 
                                 // XAddIn
-    virtual ::rtl::OUString SAL_CALL getProgrammaticFuntionName( const ::rtl::OUString& aDisplayName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getDisplayFunctionName( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getFunctionDescription( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getDisplayArgumentName( const ::rtl::OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getArgumentDescription( const ::rtl::OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getProgrammaticCategoryName( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getDisplayCategoryName( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getProgrammaticFuntionName( const ::rtl::OUString& aDisplayName ) throw( css::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getDisplayFunctionName( const ::rtl::OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getFunctionDescription( const ::rtl::OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getDisplayArgumentName( const ::rtl::OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getArgumentDescription( const ::rtl::OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getProgrammaticCategoryName( const ::rtl::OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getDisplayCategoryName( const ::rtl::OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
 
                                 // XCompatibilityNames
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const ::rtl::OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const ::com::sun::star::lang::Locale& eLocale ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) throw( css::uno::RuntimeException );
+    virtual css::lang::Locale SAL_CALL getLocale() throw( css::uno::RuntimeException );
 
                                 // XServiceName
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw( css::uno::RuntimeException );
 
                                 // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL   supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL   supportsService( const ::rtl::OUString& ServiceName ) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
 
     // ----------------------------------------
     //  methods from own interfaces start here
@@ -392,22 +389,22 @@ public:
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
-            const OUString& continuous, const ANY& greek ) THROWDEF_RTE_IAE;
+            const OUString& continuous, const css::uno::Any& greek ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
    virtual double SAL_CALL getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
-            const OUString& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE;
+            const OUString& barriercont, const css::uno::Any& greekstr ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
    virtual double SAL_CALL getOptProbHit( double spot, double vol,
             double mu, double T,
-            double barrier_low, double barrier_up ) THROWDEF_RTE_IAE;
+            double barrier_low, double barrier_up ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
    virtual double SAL_CALL getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
-            const ANY& strikeval, const ANY& put_call ) THROWDEF_RTE_IAE;
+            const css::uno::Any& strikeval, const css::uno::Any& put_call ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 };
 //------------------------------------------------------------------

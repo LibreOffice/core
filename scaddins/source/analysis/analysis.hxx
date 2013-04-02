@@ -41,19 +41,19 @@ class ConvertDataList;
 class ResMgr;
 
 
-REF( ::com::sun::star::uno::XInterface ) SAL_CALL AnalysisAddIn_CreateInstance( const REF( ::com::sun::star::lang::XMultiServiceFactory )& );
+css::uno::Reference< css::uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
 
 class AnalysisAddIn : public cppu::WeakImplHelper5<
-                            ::com::sun::star::sheet::XAddIn,
-                            ::com::sun::star::sheet::XCompatibilityNames,
-                            ::com::sun::star::sheet::addin::XAnalysis,
-                            ::com::sun::star::lang::XServiceName,
-                            ::com::sun::star::lang::XServiceInfo >
+                            css::sheet::XAddIn,
+                            css::sheet::XCompatibilityNames,
+                            css::sheet::addin::XAnalysis,
+                            css::lang::XServiceName,
+                            css::lang::XServiceInfo >
 {
 private:
-    ::com::sun::star::lang::Locale           aFuncLoc;
-    ::com::sun::star::lang::Locale*          pDefLocales;
+    css::lang::Locale           aFuncLoc;
+    css::lang::Locale*          pDefLocales;
     FuncDataList*               pFD;
     double*                     pFactDoubles;
     ConvertDataList*            pCDL;
@@ -61,177 +61,177 @@ private:
 
     ScaAnyConverter             aAnyConv;
 
-    ResMgr&                     GetResMgr( void ) THROWDEF_RTE;
-    OUString                      GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE;
-    OUString                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE;
+    ResMgr&                     GetResMgr( void ) throw( css::uno::RuntimeException );
+    OUString                      GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( css::uno::RuntimeException );
+    OUString                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException );
     void                        InitDefLocales( void );
-    inline const ::com::sun::star::lang::Locale& GetLocale( sal_uInt32 nInd );
+    inline const css::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData( void );
 
                                 /// Converts an Any to sal_Int32 in the range from 0 to 4 (date calculation mode).
     sal_Int32                   getDateMode(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropSet,
-                                    const ::com::sun::star::uno::Any& rAny )
-                                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const css::uno::Any& rAny )
+                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
 public:
                                 AnalysisAddIn(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+                                    const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual                     ~AnalysisAddIn();
 
-    double                      FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
+    double                      FactDouble( sal_Int32 nNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     static OUString               getImplementationName_Static();
-    static SEQ( OUString )        getSupportedServiceNames_Static();
+    static css::uno::Sequence< OUString >        getSupportedServiceNames_Static();
 
                                 // XAddIn
-    virtual OUString SAL_CALL     getProgrammaticFuntionName( const OUString& aDisplayName ) THROWDEF_RTE;
-    virtual OUString SAL_CALL     getDisplayFunctionName( const OUString& aProgrammaticName ) THROWDEF_RTE;
-    virtual OUString SAL_CALL     getFunctionDescription( const OUString& aProgrammaticName ) THROWDEF_RTE;
-    virtual OUString SAL_CALL     getDisplayArgumentName( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
-    virtual OUString SAL_CALL     getArgumentDescription( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
-    virtual OUString SAL_CALL     getProgrammaticCategoryName( const OUString& aProgrammaticFunctionName ) THROWDEF_RTE;
-    virtual OUString SAL_CALL     getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getProgrammaticFuntionName( const OUString& aDisplayName ) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL     getDisplayFunctionName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL     getFunctionDescription( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL     getDisplayArgumentName( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL     getArgumentDescription( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL     getProgrammaticCategoryName( const OUString& aProgrammaticFunctionName ) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL     getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) throw( css::uno::RuntimeException );
 
                                 // XCompatibilityNames
-    virtual SEQofLocName SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) THROWDEF_RTE;
+    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException );
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const ::com::sun::star::lang::Locale& eLocale ) THROWDEF_RTE;
-    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) THROWDEF_RTE;
+    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) throw( css::uno::RuntimeException );
+    virtual css::lang::Locale SAL_CALL getLocale(  ) throw( css::uno::RuntimeException );
 
                                 // XServiceName
-    virtual OUString SAL_CALL     getServiceName(  ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getServiceName(  ) throw( css::uno::RuntimeException );
 
                                 // XServiceInfo
-    virtual OUString SAL_CALL     getImplementationName(  ) THROWDEF_RTE;
-    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) THROWDEF_RTE;
-    virtual SEQ( OUString ) SAL_CALL  getSupportedServiceNames(  ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getImplementationName(  ) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL  getSupportedServiceNames(  ) throw( css::uno::RuntimeException );
 
     //  methods from own interfaces start here
 
                             // XAnalysis
-//    virtual double SAL_CALL       get_Test( constREFXPS&, sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE;
+//    virtual double SAL_CALL       get_Test( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nMode, double f1, double f2, double f3 ) throw( css::uno::RuntimeException );
 
-    virtual sal_Int32 SAL_CALL  getWorkday( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getYearfrac( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aMode ) THROWDEF_RTE_IAE;
-    virtual sal_Int32 SAL_CALL  getEdate( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE;
-    virtual sal_Int32 SAL_CALL  getWeeknum( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
-    virtual sal_Int32 SAL_CALL  getEomonth( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE;
-    virtual sal_Int32 SAL_CALL  getNetworkdays( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getWorkday( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nDays, const css::uno::Any& aHDay ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getYearfrac( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nEndDate, const css::uno::Any& aMode ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual sal_Int32 SAL_CALL  getEdate( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMonths ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual sal_Int32 SAL_CALL  getWeeknum( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMode ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual sal_Int32 SAL_CALL  getEomonth( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMonths ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual sal_Int32 SAL_CALL  getNetworkdays( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nEndDate, const css::uno::Any& aHDay ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) THROWDEF_RTE_IAE;
-    virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVLst, const SEQ( com::sun::star::uno::Any )& aOptVLst ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getQuotient( double fNum, double fDenum ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getMultinomial( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& aVLst, const css::uno::Sequence< com::sun::star::uno::Any >& aOptVLst ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const css::uno::Sequence< css::uno::Sequence< double > >& aCoeffList ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getQuotient( double fNum, double fDenum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getMround( double fNum, double fMult ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getSqrtpi( double fNum ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getMround( double fNum, double fMult ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getSqrtpi( double fNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getRandbetween( double fMin, double fMax ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getGcd( constREFXPS& xOpt, const SEQSEQ( double )& aVLst, const SEQ( ANY )& aOptVLst ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getLcm( constREFXPS& xOpt, const SEQSEQ( double )& aVLst, const SEQ( ANY )& aOptVLst ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getGcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& aVLst, const css::uno::Sequence< css::uno::Any >& aOptVLst ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getLcm( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& aVLst, const css::uno::Sequence< css::uno::Any >& aOptVLst ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE;
-    virtual double SAL_CALL     getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE;
-    virtual double SAL_CALL     getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE;
-    virtual double SAL_CALL     getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE;
+    virtual double SAL_CALL     getBesseli( double fNum, sal_Int32 nOrder ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
+    virtual double SAL_CALL     getBesselj( double fNum, sal_Int32 nOrder ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
+    virtual double SAL_CALL     getBesselk( double fNum, sal_Int32 nOrder ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
+    virtual double SAL_CALL     getBessely( double fNum, sal_Int32 nOrder ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, css::sheet::NoConvergenceException );
 
-    virtual OUString SAL_CALL     getBin2Oct( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getBin2Dec( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getBin2Hex( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getBin2Oct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getBin2Dec( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getBin2Hex( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual OUString SAL_CALL     getOct2Bin( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getOct2Dec( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getOct2Hex( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getOct2Bin( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getOct2Dec( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getOct2Hex( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual OUString SAL_CALL     getDec2Bin( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getDec2Oct( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getDec2Hex( constREFXPS& xOpt, double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getDec2Bin( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 fNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getDec2Oct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 fNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getDec2Hex( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual OUString SAL_CALL     getHex2Bin( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getHex2Dec( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getHex2Oct( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getHex2Bin( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getHex2Dec( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getHex2Oct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const css::uno::Any& rPlaces ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual sal_Int32 SAL_CALL  getDelta( constREFXPS& xOpt, double fNum1, const ANY& rNum2 ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getDelta( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum1, const css::uno::Any& rNum2 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getErf( constREFXPS& xOpt, double fLowerLimit, const ANY& rUpperLimit ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getErfc( double fLowerLimit ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getErf( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fLowerLimit, const css::uno::Any& rUpperLimit ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getErfc( double fLowerLimit ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual sal_Int32 SAL_CALL  getGestep( constREFXPS& xOpt, double fNum, const ANY& rStep ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getGestep( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum, const css::uno::Any& rStep ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getFactdouble( sal_Int32 nNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getImabs( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getImaginary( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImpower( const OUString& aNum, double fPower ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getImargument( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImcos( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImdiv( const OUString& aDivident, const OUString& aDivisor ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImexp( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImconjugate( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImln( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImlog10( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImlog2( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImproduct( constREFXPS& xOpt, const SEQSEQ( OUString )& aNum1, const SEQ_ANY& aNumList ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getImreal( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImsin( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImsub( const OUString& aNum1, const OUString& aNum2 ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImsum( constREFXPS& xOpt, const SEQSEQ( OUString )& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getImabs( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getImaginary( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImpower( const OUString& aNum, double fPower ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getImargument( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImcos( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImdiv( const OUString& aDivident, const OUString& aDivisor ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImexp( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImconjugate( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImln( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImlog10( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImlog2( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImproduct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< OUString > >& aNum1, const css::uno::Sequence< css::uno::Any >& aNumList ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getImreal( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImsin( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImsub( const OUString& aNum1, const OUString& aNum2 ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImsum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< OUString > >& aNum1, const css::uno::Sequence< css::uno::Any >& aFollowingPars ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual OUString SAL_CALL     getImsqrt( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImtan( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImsec( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImcsc( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImcot( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImsinh( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImcosh( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImsech( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getImcsch( const OUString& aNum ) THROWDEF_RTE_IAE;
-    virtual OUString SAL_CALL     getComplex( double fReal, double fImaginary, const ANY& rSuffix ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsqrt( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImtan( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImsec( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImcsc( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImcot( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImsinh( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImcosh( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImsech( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getImcsch( const OUString& aNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual OUString SAL_CALL     getComplex( double fReal, double fImaginary, const css::uno::Any& rSuffix ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getConvert( double fVal, const OUString& aFromUnit, const OUString& aToUnit ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getConvert( double fVal, const OUString& aFromUnit, const OUString& aToUnit ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
-    virtual double SAL_CALL     getAmordegrc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getAmorlinc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getAccrint( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nFirstInter, sal_Int32 nSettle, double fRate, const ANY& rVal, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getAccrintm( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const ANY& rVal, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getReceived( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getDisc( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getDuration( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getEffect( double fNominal, sal_Int32 nPeriods ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCumprinc( double fRate, sal_Int32 nNumPeriods, double fVal, sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCumipmt( double fRate, sal_Int32 nNumPeriods, double fVal, sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getPrice( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getPricedisc( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getPricemat( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fYield, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getMduration( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getNominal( double fRate, sal_Int32 nPeriods ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getDollarfr( double fDollarDec, sal_Int32 nFrac ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getDollarde( double fDollarFrac, sal_Int32 nFrac ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getYielddisc( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getYieldmat( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fPrice, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getTbilleq( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getTbillprice( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getTbillyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getOddfprice( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getOddfyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getOddlprice( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getOddlyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getXirr( constREFXPS& xOpt, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getXnpv( double fRate, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getIntrate( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCoupncd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCoupdays( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCoupdaysnc( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCoupdaybs( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCouppcd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getCoupnum( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getFvschedule( double fPrinc, const SEQSEQ( double )& rSchedule ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getAmordegrc( const css::uno::Reference< css::beans::XPropertySet >&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getAmorlinc( const css::uno::Reference< css::beans::XPropertySet >&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getAccrint( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nIssue, sal_Int32 nFirstInter, sal_Int32 nSettle, double fRate, const css::uno::Any& rVal, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getAccrintm( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const css::uno::Any& rVal, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getReceived( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getDisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getDuration( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getEffect( double fNominal, sal_Int32 nPeriods ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCumprinc( double fRate, sal_Int32 nNumPeriods, double fVal, sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCumipmt( double fRate, sal_Int32 nNumPeriods, double fVal, sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getPrice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getPricedisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc, double fRedemp, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getPricemat( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fYield, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getMduration( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getNominal( double fRate, sal_Int32 nPeriods ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getDollarfr( double fDollarDec, sal_Int32 nFrac ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getDollarde( double fDollarFrac, sal_Int32 nFrac ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getYield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getYielddisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getYieldmat( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fPrice, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getTbilleq( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getTbillprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getTbillyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getOddfprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getOddfyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getOddlprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getOddlyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const css::uno::Any& rOptBase) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getXirr( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates, const css::uno::Any& rGuess ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getXnpv( double fRate, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getIntrate( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCoupncd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCoupdays( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCoupdaysnc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCoupdaybs( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCouppcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getCoupnum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOptBase ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
+    virtual double SAL_CALL     getFvschedule( double fPrinc, const css::uno::Sequence< css::uno::Sequence< double > >& rSchedule ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
 //------------------------------------------------------------------

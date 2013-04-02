@@ -546,11 +546,11 @@ bool getinput_putcall(bs::types::PutCall& pc, const OUString& str) {
     return true;
 }
 
-bool getinput_putcall(bs::types::PutCall& pc, const ANY& anyval) {
+bool getinput_putcall(bs::types::PutCall& pc, const uno::Any& anyval) {
     OUString str;
-    if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) {
+    if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
         anyval >>= str;
-    } else if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_VOID) {
+    } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
         str="c";        // call as default
     } else {
         return false;
@@ -558,10 +558,10 @@ bool getinput_putcall(bs::types::PutCall& pc, const ANY& anyval) {
     return getinput_putcall(pc, str);
 }
 
-bool getinput_strike(double& strike, const ANY& anyval) {
-    if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE) {
+bool getinput_strike(double& strike, const uno::Any& anyval) {
+    if(anyval.getValueTypeClass() == uno::TypeClass_DOUBLE) {
         anyval >>= strike;
-    } else if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_VOID) {
+    } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
         strike=-1.0;        // -1 as default (means not set)
     } else {
         return false;
@@ -602,11 +602,11 @@ bool getinput_fordom(bs::types::ForDom& fd, const OUString& str) {
     return true;
 }
 
-bool getinput_greek(bs::types::Greeks& greek, const ANY& anyval) {
+bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
     OUString str;
-    if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) {
+    if(anyval.getValueTypeClass() == uno::TypeClass_STRING) {
         anyval >>= str;
-    } else if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_VOID) {
+    } else if(anyval.getValueTypeClass() == uno::TypeClass_VOID) {
         str="value";
     } else {
         return false;
@@ -645,7 +645,7 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
-            const OUString& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE
+            const OUString& barriercont, const uno::Any& greekstr ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     bs::types::PutCall pc;
     bs::types::BarrierKIO kio;
@@ -657,7 +657,7 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
                 !getinput_inout(kio,in_out) ||
                 !getinput_barrier(bcont,barriercont) ||
                 !getinput_greek(greek,greekstr) ){
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
     }
 
     double fRet=bs::barrier(spot,vol,r,rf,T,strike, barrier_low,barrier_up,
@@ -671,7 +671,7 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
-            const OUString& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE
+            const OUString& barriercont, const uno::Any& greekstr ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     bs::types::ForDom fd;
     bs::types::BarrierKIO kio;
@@ -683,7 +683,7 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
                 !getinput_inout(kio,in_out) ||
                 !getinput_barrier(bcont,barriercont) ||
                 !getinput_greek(greek,greekstr) ){
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
     }
 
     double fRet=bs::touch(spot,vol,r,rf,T,barrier_low,barrier_up,
@@ -695,11 +695,11 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
 // OPT_PRB_HIT(...)
 double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
             double mu, double T,
-            double barrier_low, double barrier_up ) THROWDEF_RTE_IAE
+            double barrier_low, double barrier_up ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     // read and check input values
     if( spot<=0.0 || vol<=0.0 || T<0.0 ) {
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
     }
 
     double fRet=bs::prob_hit(spot,vol,mu,T,barrier_low,barrier_up);
@@ -711,7 +711,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
 double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
-            const ANY& strikeval, const ANY& put_call ) THROWDEF_RTE_IAE
+            const uno::Any& strikeval, const uno::Any& put_call ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     bs::types::PutCall pc=bs::types::Call;
     double  K;
@@ -720,7 +720,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
     if( spot<=0.0 || vol<=0.0 || T<0.0 ||
             !getinput_putcall(pc,put_call) ||
             !getinput_strike(K,strikeval) ) {
-        THROW_IAE;
+        throw lang::IllegalArgumentException();
     }
 
     double fRet=bs::prob_in_money(spot,vol,mu,T,K,barrier_low,barrier_up,pc);
