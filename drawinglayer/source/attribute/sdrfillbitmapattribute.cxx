@@ -19,6 +19,7 @@
 
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <rtl/instance.hxx>
 #include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -30,9 +31,6 @@ namespace drawinglayer
         class ImpSdrFillBitmapAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // data definitions
             BitmapEx                                maBitmapEx;
             basegfx::B2DVector                      maSize;
@@ -54,8 +52,7 @@ namespace drawinglayer
                 bool bTiling,
                 bool bStretch,
                 bool bLogSize)
-            :   mnRefCount(0),
-                maBitmapEx(rBitmapEx),
+            :   maBitmapEx(rBitmapEx),
                 maSize(rSize),
                 maOffset(rOffset),
                 maOffsetPosition(rOffsetPosition),
@@ -63,6 +60,18 @@ namespace drawinglayer
                 mbTiling(bTiling),
                 mbStretch(bStretch),
                 mbLogSize(bLogSize)
+            {
+            }
+
+            ImpSdrFillBitmapAttribute()
+            :   maBitmapEx(BitmapEx()),
+                maSize(basegfx::B2DVector()),
+                maOffset(basegfx::B2DVector()),
+                maOffsetPosition(basegfx::B2DVector()),
+                maRectPoint(basegfx::B2DVector()),
+                mbTiling(false),
+                mbStretch(false),
+                mbLogSize(false)
             {
             }
 
@@ -87,30 +96,13 @@ namespace drawinglayer
                     && getStretch() == rCandidate.getStretch()
                     && getLogSize() == rCandidate.getLogSize());
             }
-
-            static ImpSdrFillBitmapAttribute* get_global_default()
-            {
-                static ImpSdrFillBitmapAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrFillBitmapAttribute(
-                        BitmapEx(),
-                        basegfx::B2DVector(),
-                        basegfx::B2DVector(),
-                        basegfx::B2DVector(),
-                        basegfx::B2DVector(),
-                        false,
-                        false,
-                        false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrFillBitmapAttribute::ImplType, theGlobalDefault > {};
+        }
 
         SdrFillBitmapAttribute::SdrFillBitmapAttribute(
             const BitmapEx& rBitmapEx,
@@ -122,7 +114,7 @@ namespace drawinglayer
             bool bStretch,
             bool bLogSize)
         :   mpSdrFillBitmapAttribute(
-                new ImpSdrFillBitmapAttribute(
+                ImpSdrFillBitmapAttribute(
                     rBitmapEx,
                     rSize,
                     rOffset,
@@ -135,67 +127,33 @@ namespace drawinglayer
         }
 
         SdrFillBitmapAttribute::SdrFillBitmapAttribute()
-        :   mpSdrFillBitmapAttribute(ImpSdrFillBitmapAttribute::get_global_default())
+        :   mpSdrFillBitmapAttribute(theGlobalDefault::get())
         {
-            mpSdrFillBitmapAttribute->mnRefCount++;
         }
 
         SdrFillBitmapAttribute::SdrFillBitmapAttribute(const SdrFillBitmapAttribute& rCandidate)
         :   mpSdrFillBitmapAttribute(rCandidate.mpSdrFillBitmapAttribute)
         {
-            mpSdrFillBitmapAttribute->mnRefCount++;
         }
 
         SdrFillBitmapAttribute::~SdrFillBitmapAttribute()
         {
-            if(mpSdrFillBitmapAttribute->mnRefCount)
-            {
-                mpSdrFillBitmapAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrFillBitmapAttribute;
-            }
         }
 
         bool SdrFillBitmapAttribute::isDefault() const
         {
-            return mpSdrFillBitmapAttribute == ImpSdrFillBitmapAttribute::get_global_default();
+            return mpSdrFillBitmapAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrFillBitmapAttribute& SdrFillBitmapAttribute::operator=(const SdrFillBitmapAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrFillBitmapAttribute != mpSdrFillBitmapAttribute)
-            {
-                if(mpSdrFillBitmapAttribute->mnRefCount)
-                {
-                    mpSdrFillBitmapAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrFillBitmapAttribute;
-                }
-
-                mpSdrFillBitmapAttribute = rCandidate.mpSdrFillBitmapAttribute;
-                mpSdrFillBitmapAttribute->mnRefCount++;
-            }
-
+            mpSdrFillBitmapAttribute = rCandidate.mpSdrFillBitmapAttribute;
             return *this;
         }
 
         bool SdrFillBitmapAttribute::operator==(const SdrFillBitmapAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrFillBitmapAttribute == mpSdrFillBitmapAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpSdrFillBitmapAttribute == *mpSdrFillBitmapAttribute);
+            return rCandidate.mpSdrFillBitmapAttribute == mpSdrFillBitmapAttribute;
         }
 
         const BitmapEx& SdrFillBitmapAttribute::getBitmapEx() const
