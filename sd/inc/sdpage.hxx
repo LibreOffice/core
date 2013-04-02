@@ -115,7 +115,7 @@ protected:
     sd::ScopeLock maLockAutoLayoutArrangement;
     sal_Bool    mbSelected;               ///< selection identifier
     PresChange  mePresChange;             ///< manual / automatic / semi automatic
-    sal_uInt32  mnTime;                   ///< Display time in seconds
+    double      mfTime;                   ///< Display time in seconds
     sal_Bool    mbSoundOn;                ///< with / without sound.
     sal_Bool    mbExcluded;               ///< will (not) be displayed during show.
     OUString    maLayoutName;             ///< Name of the layout
@@ -223,8 +223,8 @@ public:
     void        SetPresChange(PresChange eChange)    { mePresChange = eChange; }
     PresChange  GetPresChange() const                { return mePresChange; }
 
-    void        SetTime(sal_uInt32 nNewTime)             { mnTime = nNewTime; }
-    sal_uInt32      GetTime() const                      { return mnTime; }
+    void        SetTime(double fNewTime)             { mfTime = fNewTime; }
+    double      GetTime() const                      { return mfTime; }
 
     void        SetSound(sal_Bool bNewSoundOn)           { mbSoundOn = bNewSoundOn; }
     sal_Bool        IsSoundOn() const                    { return mbSoundOn; }

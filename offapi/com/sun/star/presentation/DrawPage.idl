@@ -136,6 +136,11 @@ published service DrawPage
         this page. This is only used if <code>IsDateTimeFixed</code> is <false/>.
     */
     [optional, property] long DateTimeFormat;
+
+    /** time in seconds the page is shown, allow sub-second.
+     */
+    [optional, property] double HighResDuration;
+
 };
 
 
