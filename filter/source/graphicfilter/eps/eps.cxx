@@ -90,19 +90,19 @@ struct StackMember
 struct PSLZWCTreeNode
 {
 
-    PSLZWCTreeNode*     pBrother;       // naechster Knoten, der den selben Vater hat
-    PSLZWCTreeNode*     pFirstChild;    // erster Sohn
-    sal_uInt16              nCode;          // Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
-    sal_uInt16              nValue;         // Der Pixelwert
+    PSLZWCTreeNode*     pBrother;       // next node who has the same father
+    PSLZWCTreeNode*     pFirstChild;    // first son
+    sal_uInt16          nCode;          // The code for the string of pixel values, which arises if... <missing comment>
+    sal_uInt16          nValue;         // the pixel value
 };
 
 class PSWriter
 {
 private:
-    sal_Bool                mbStatus;
-    sal_uLong               mnLevelWarning;     // number of embedded eps files which was not exported
-    sal_uLong               mnLastPercent;      // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
-    sal_uInt32              mnLatestPush;       // offset auf streamposition, an der zuletzt gepusht wurde
+    sal_Bool            mbStatus;
+    sal_uLong           mnLevelWarning;     // number of embedded eps files which was not exported
+    sal_uLong           mnLastPercent;      // the number with which pCallback was called the last time
+    sal_uInt32          mnLatestPush;       // offset to streamposition, where last push was done
 
     long                mnLevel;            // dialog options
     sal_Bool            mbGrayScale;
@@ -121,17 +121,17 @@ private:
     double              nBoundingY2;
                                             //
     StackMember*        pGDIStack;
-    sal_uLong               mnCursorPos;        // aktuelle Cursorposition im Output
-    Color               aColor;             // aktuelle Farbe die fuer den Output benutzt wird
-    sal_Bool                bLineColor;
-    Color               aLineColor;         // aktuelle GDIMetafile Farbeinstellungen
-    sal_Bool                bFillColor;         //
+    sal_uLong           mnCursorPos;        // current cursor position in output
+    Color               aColor;             // current color which is used for output
+    sal_Bool            bLineColor;
+    Color               aLineColor;         // current GDIMetafile color settings
+    sal_Bool            bFillColor;         //
     Color               aFillColor;         //
     Color               aTextColor;         //
-    sal_Bool                bTextFillColor;     //
+    sal_Bool            bTextFillColor;     //
     Color               aTextFillColor;     //
     Color               aBackgroundColor;   //
-    sal_Bool                bRegionChanged;
+    sal_Bool            bRegionChanged;
     TextAlign           eTextAlign;         //
 
     double                      fLineWidth;
@@ -142,19 +142,19 @@ private:
 
     Font                maFont;
     Font                maLastFont;
-    sal_uInt8               nChrSet;
-    ChrSet*             pChrSetList;        // Liste der Character-Sets
-    sal_uInt8               nNextChrSetId;      // die erste unbenutzte ChrSet-Id
+    sal_uInt8           nChrSet;
+    ChrSet*             pChrSetList;        // list of character sets
+    sal_uInt8           nNextChrSetId;      // first unused ChrSet-Id
 
     PSLZWCTreeNode*     pTable;             // LZW compression data
     PSLZWCTreeNode*     pPrefix;            // the compression is as same as the TIFF compression
-    sal_uInt16              nDataSize;
-    sal_uInt16              nClearCode;
-    sal_uInt16              nEOICode;
-    sal_uInt16              nTableSize;
-    sal_uInt16              nCodeSize;
-    sal_uLong               nOffset;
-    sal_uLong               dwShift;
+    sal_uInt16          nDataSize;
+    sal_uInt16          nClearCode;
+    sal_uInt16          nEOICode;
+    sal_uInt16          nTableSize;
+    sal_uInt16          nCodeSize;
+    sal_uLong           nOffset;
+    sal_uLong           dwShift;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
@@ -225,8 +225,8 @@ private:
 
     double              ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
-    sal_Bool                ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
-    sal_uInt8*              ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize );
+    sal_Bool            ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
+    sal_uInt8*          ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize );
                         // LZW methods
     void                StartCompression();
     void                Compress( sal_uInt8 nSrc );
@@ -234,7 +234,7 @@ private:
     inline void         WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen );
 
 public:
-    sal_Bool                WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* );
+    sal_Bool            WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* );
     PSWriter();
     ~PSWriter();
 };
@@ -538,7 +538,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "0 setgray 0 setlinecap 1 setlinewidth 0 setlinejoin 10 setmiterlimit[] 0 setdash newpath" );
     ImplWriteLine( "/languagelevel where {pop languagelevel 1 ne {false setstrokeadjust false setoverprint} if} if" );
 
-    ImplWriteLine( "/bdef {bind def} bind def" );       // der neue operator bdef wird erzeugt
+    ImplWriteLine( "/bdef {bind def} bind def" );       // the new operator bdef is created
     if ( mbGrayScale )
         ImplWriteLine( "/c {setgray} bdef" );
     else
@@ -2117,9 +2117,9 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     }
     if ( eTextAlign != ALIGN_BASELINE )
     {                                                       // PostScript kennt kein FontAlignment
-        if ( eTextAlign == ALIGN_TOP )                      // -> ich gehe daher davon aus, dass
-            aPoint.Y() += ( aSize.Height() * 4 / 5 );       // der Bereich unter der Baseline
-        else if ( eTextAlign == ALIGN_BOTTOM )              // in etwa 20% der Fontsize ausmacht
+        if ( eTextAlign == ALIGN_TOP )                      // -> so I assume that
+            aPoint.Y() += ( aSize.Height() * 4 / 5 );       // the area under the baseline
+        else if ( eTextAlign == ALIGN_BOTTOM )              // is about 20% of the font size
             aPoint.Y() -= ( aSize.Height() / 5 );
     }
     ImplMoveTo( aPoint );
@@ -2582,7 +2582,7 @@ void PSWriter::StartCompression()
     nTableSize = nEOICode + 1;
     nCodeSize = nDataSize + 1;
 
-    nOffset = 32;                       // anzahl freier bits in dwShift
+    nOffset = 32;                       // number of free unused in dwShift
     dwShift = 0;
 
     pTable = new PSLZWCTreeNode[ 4096 ];

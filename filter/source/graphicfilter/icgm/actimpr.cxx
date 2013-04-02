@@ -396,7 +396,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
 
 void CGMImpressOutAct::InsertPage()
 {
-    if ( mnCurrentPage )    // eine seite ist immer vorhanden, deshalb wird die erste Seite ausgelassen
+    if ( mnCurrentPage )    // one side is always existing, therefore the first side will be left out
     {
         uno::Reference< drawing::XDrawPage > xPage( maXDrawPages->insertNewByIndex( 0xffff ), uno::UNO_QUERY );
         maXDrawPage = xPage;
@@ -487,7 +487,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
         uno::Any aAny( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
         maXPropSet->setPropertyValue( "CircleKind", aAny );
 
-        long nXSize = (long)( rSize.X * 2.0 );      // Merkwuerdigkes Verhalten bei einer awt::Size von 0
+        long nXSize = (long)( rSize.X * 2.0 );      // strange behaviour with a awt::Size of 0
         long nYSize = (long)( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
@@ -515,7 +515,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
         drawing::CircleKind eCircleKind;
 
 
-        long nXSize = (long)( rSize.X * 2.0 );      // Merkwuerdigkes Verhalten bei einer awt::Size von 0
+        long nXSize = (long)( rSize.X * 2.0 );      // strange behaviour with a awt::Size of 0
         long nYSize = (long)( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
@@ -628,16 +628,16 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
     {
         drawing::PointSequenceSequence aRetval;
 
-        // Polygone innerhalb vrobereiten
+        // prepare inside polygons
         aRetval.realloc( 1 );
 
-        // Zeiger auf aeussere Arrays holen
+        // get pointer to outside arrays
         drawing::PointSequence* pOuterSequence = aRetval.getArray();
 
-        // Platz in Arrays schaffen
+        // make room in arrays
         pOuterSequence->realloc((sal_Int32)nPoints);
 
-        // Pointer auf arrays holen
+        // get pointer to arrays
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
         for( sal_uInt16 n = 0; n < nPoints; n++ )
@@ -661,16 +661,16 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
     {
         drawing::PointSequenceSequence aRetval;
 
-        // Polygone innerhalb vrobereiten
+        // prepare inside polygons
         aRetval.realloc( 1 );
 
-        // Zeiger auf aeussere Arrays holen
+        // get pointer to outside arrays
         drawing::PointSequence* pOuterSequence = aRetval.getArray();
 
-        // Platz in Arrays schaffen
+        // make room in arrays
         pOuterSequence->realloc((sal_Int32)nPoints);
 
-        // Pointer auf arrays holen
+        // get pointer to arrays
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
         for( sal_uInt16 n = 0; n < nPoints; n++ )
@@ -695,11 +695,11 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
         aRetval.Coordinates.realloc( 1 );
         aRetval.Flags.realloc( 1 );
 
-        // Zeiger auf aeussere Arrays holen
+        // get pointer to outside arrays
         drawing::PointSequence* pOuterSequence = aRetval.Coordinates.getArray();
         drawing::FlagSequence* pOuterFlags = aRetval.Flags.getArray();
 
-        // Platz in Arrays schaffen
+        // make room in arrays
         pOuterSequence->realloc( nPoints );
         pOuterFlags->realloc( nPoints );
 
@@ -727,11 +727,11 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
     {
         drawing::PolyPolygonBezierCoords aRetval;
 
-        // Polygone innerhalb vrobereiten
+        // prepare inside polygons
         aRetval.Coordinates.realloc((sal_Int32)nNumPolys);
         aRetval.Flags.realloc((sal_Int32)nNumPolys);
 
-        // Zeiger auf aeussere Arrays holen
+        // get pointer to outside arrays
         drawing::PointSequence* pOuterSequence = aRetval.Coordinates.getArray();
         drawing::FlagSequence* pOuterFlags = aRetval.Flags.getArray();
 
@@ -740,11 +740,11 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
             Polygon aPolygon( rPolyPolygon.GetObject( a ) );
             sal_uInt32 nNumPoints = aPolygon.GetSize();
 
-            // Platz in Arrays schaffen
+            // make room in arrays
             pOuterSequence->realloc((sal_Int32)nNumPoints);
             pOuterFlags->realloc((sal_Int32)nNumPoints);
 
-            // Pointer auf arrays holen
+            // get pointer to arrays
             awt::Point* pInnerSequence = pOuterSequence->getArray();
             drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
 

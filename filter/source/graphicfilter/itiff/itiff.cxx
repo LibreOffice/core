@@ -46,22 +46,22 @@ class TIFFReader
 private:
 
     sal_Bool                bStatus;                    // Whether until now no error occurred
-    Animation           aAnimation;
+    Animation               aAnimation;
     sal_uLong               nLastPercent;
 
-    SvStream*           pTIFF;                      // the TIFF file that should be read
-    Bitmap              aBitmap;
-    BitmapWriteAccess*  pAcc;
+    SvStream*               pTIFF;                      // the TIFF file that should be read
+    Bitmap                  aBitmap;
+    BitmapWriteAccess*      pAcc;
     sal_uInt16              nDstBitsPerPixel;
-    AlphaMask*          pAlphaMask;
-    BitmapWriteAccess*  pMaskAcc;
+    AlphaMask*              pAlphaMask;
+    BitmapWriteAccess*      pMaskAcc;
 
     sal_uLong               nOrigPos;                   // start position in pTIFF
     sal_uInt16              nOrigNumberFormat;          // number format of pTIFF at the beginning
 
 
     sal_uInt16              nDataType;
-    // Daten, die aus dem TIFF-Tags entnommen werden:
+    // Data taken from the TIFF tags:
     sal_Bool                bByteSwap;                  // sal_True if bits 0..7 -> 7..0 should get converted ( FILLORDER = 2 );
     sal_uInt8               nByte1;                     // 'I', if the format is LittleEndian
 
@@ -76,7 +76,7 @@ private:
     sal_uLong               nCellWidth;                 //
     sal_uLong               nCellLength;                //
     sal_uLong               nFillOrder;                 //
-    sal_uLong*              pStripOffsets;              // Feld von Offsets zu den Bitmap-Daten-"Strips"
+    sal_uLong*              pStripOffsets;              // Fiels of offsets to the Bitmap-Data-"Strips"
     sal_uLong               nNumStripOffsets;           // size of the field above
     sal_uLong               nOrientation;               //
     sal_uLong               nSamplesPerPixel;           // number of layers
@@ -85,8 +85,8 @@ private:
     sal_uLong               nNumStripByteCounts;        // number of entries in the field above
     sal_uLong               nMinSampleValue;            //
     sal_uLong               nMaxSampleValue;            //
-    double              fXResolution;                  // X-resolution or 0.0
-    double              fYResolution;                  // Y-resolution or 0.0
+    double                  fXResolution;               // X-resolution or 0.0
+    double                  fYResolution;               // Y-resolution or 0.0
     sal_uLong               nPlanarConfiguration;       //
     sal_uLong               nGroup3Options;             //
     sal_uLong               nGroup4Options;             //
@@ -97,7 +97,7 @@ private:
 
     sal_uLong               nPlanes;                    // number of layers within the Tiff file
     sal_uLong               nStripsPerPlane;            // number of Strips per layer
-    sal_uLong               nBytesPerRow;               // Bytes pro Zeile pro Ebene in der Tiff-Datei ( unkomprimiert )
+    sal_uLong               nBytesPerRow;               // Bytes per line per Layer in the Tiff file ( uncompressed )
     sal_uInt8*              pMap[ 4 ];                  // temporary Scanline
 
 
@@ -111,14 +111,15 @@ private:
     void    ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen );
 
     sal_Bool    ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent );
-        // Liesst/dekomprimert die Bitmap-Daten, und fuellt pMap
+        // reads/decompresses the bitmap data and fills pMap
 
     sal_uLong   GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_uLong nBitsCount );
-        // Holt nBitsCount Bits aus pSrc[..] an der Bit-Position nBitsPos
+        // fetches BitsCount bits from pSrc[..] at the position nBitsPos
 
     void    MakePalCol( void );
-        // Erzeugt die Bitmap aus der temporaeren Bitmap pMap
-        // und loescht dabei pMap teilweise
+        // Create the bitmap from the temporary bitmap pMap
+        // and partly deletes pMap while doing this.
+
     sal_Bool    ConvertScanline( sal_uLong nY );
         // converts a Scanline to the Windows-BMP format
 
@@ -376,7 +377,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             sal_uLong nOldNumSBC, i, * pOldSBC;
             pOldSBC = pStripByteCounts;
             if ( pOldSBC == NULL )
-                nNumStripByteCounts = 0; // Sicherheitshalber
+                nNumStripByteCounts = 0; // to be on the safe side
             nOldNumSBC = nNumStripByteCounts;
             nDataLen += nOldNumSBC;
             if ( ( nDataLen > nOldNumSBC ) && ( nDataLen < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) )
@@ -1363,7 +1364,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 }
 
 
-//================== GraphicImport - the exported Function ================
+//================== GraphicImport - the exported function ================
 
 #ifdef DISABLE_DYNLOADING
 #define GraphicImport itiGraphicImport

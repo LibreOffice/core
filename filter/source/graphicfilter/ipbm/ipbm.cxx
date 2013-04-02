@@ -29,20 +29,20 @@ class PBMReader {
 
 private:
 
-    SvStream&           mrPBM;          // Die einzulesende PBM-Datei
+    SvStream&           mrPBM;              // the PBM file to read
 
-    sal_Bool                mbStatus;
-    sal_Bool                mbRemark;       // sal_False wenn sich stream in einem Kommentar befindet
-    sal_Bool                mbRaw;          // RAW/ASCII MODE
-    sal_uLong               mnMode;         // 0->PBM, 1->PGM, 2->PPM
+    sal_Bool            mbStatus;
+    sal_Bool            mbRemark;           // sal_False if the stream is in a comment
+    sal_Bool            mbRaw;              // RAW/ASCII MODE
+    sal_uLong           mnMode;             // 0->PBM, 1->PGM, 2->PPM
     Bitmap              maBmp;
     BitmapWriteAccess*  mpAcc;
-    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
-    sal_uLong               mnCol;
-    sal_uLong               mnMaxVal;           // maximaler wert in den
-    sal_Bool                ImplCallback( sal_uInt16 nPercent );
-    sal_Bool                ImplReadBody();
-    sal_Bool                ImplReadHeader();
+    sal_uLong           mnWidth, mnHeight;  // dimensions in pixel
+    sal_uLong           mnCol;
+    sal_uLong           mnMaxVal;           // max value in the <missing comment>
+    sal_Bool            ImplCallback( sal_uInt16 nPercent );
+    sal_Bool            ImplReadBody();
+    sal_Bool            ImplReadHeader();
 
 public:
                         PBMReader(SvStream & rPBM);
@@ -50,7 +50,7 @@ public:
     sal_Bool                ReadPBM(Graphic & rGraphic );
 };
 
-//=================== Methoden von PBMReader ==============================
+//=================== Methods of PBMReader ==============================
 
 PBMReader::PBMReader(SvStream & rPBM)
     : mrPBM( rPBM )
@@ -89,7 +89,7 @@ sal_Bool PBMReader::ReadPBM(Graphic & rGraphic )
 
     mrPBM.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    // Kopf einlesen:
+    // read header:
 
     if ( ( mbStatus = ImplReadHeader() ) == sal_False )
         return sal_False;
@@ -137,7 +137,7 @@ sal_Bool PBMReader::ReadPBM(Graphic & rGraphic )
             break;
     }
 
-    // Bitmap-Daten einlesen
+    // read bitmap data
     mbStatus = ImplReadBody();
 
     if ( mpAcc )
@@ -518,7 +518,7 @@ sal_Bool PBMReader::ImplReadBody()
     return mbStatus;
 }
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 #ifdef DISABLE_DYNLOADING
 #define GraphicImport ipbGraphicImport

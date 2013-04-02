@@ -23,22 +23,21 @@
 #include <tools/stream.hxx>
 
 
-#define CCI_OPTION_2D               1       // 2D-Komprimierung (statt 1D)
-#define CCI_OPTION_EOL              2       // EOL-Codes am Ende jeder Zeile vorhanden
-#define CCI_OPTION_BYTEALIGNEOL     4       // Fuellbits vor jedem EOL-Code, so dass
-                                            // Ende von EOL auf Bytes aligend
-#define CCI_OPTION_BYTEALIGNROW     8       // Rows beginnen immer auf Byte-Grenze
+#define CCI_OPTION_2D               1       // 2D compression (instead of 1D)
+#define CCI_OPTION_EOL              2       // There are EOL-Codes at the end of each line.
+#define CCI_OPTION_BYTEALIGNEOL     4       // Filling bits before each EOL-Code, so that
+                                            // the end of EOL is bytes aligend
+#define CCI_OPTION_BYTEALIGNROW     8       // Rows always start byte aligned
 #define CCI_OPTION_INVERSEBITORDER  16
 
-// Eintrag in eine Huffman-Tabelle:
+// Entry in the Huffman table:
 struct CCIHuffmanTableEntry {
-    sal_uInt16 nValue;    // Der Daten-Wert.
-    sal_uInt16 nCode;     // Der Code durch den der Daten-Wert repraesentiert wird.
-    sal_uInt16 nCodeBits; // Laenge des Codes in Bits.
+    sal_uInt16 nValue;    // The data vlaue.
+    sal_uInt16 nCode;     // The code through which the data value is represented.
+    sal_uInt16 nCodeBits; // Size of the code in bits.
 };
 
-
-// Eintrag in eine Hash-Tabelle zur schnellen Dekodierung
+// Entry in a hash table for daft decoding.
 struct CCILookUpTableEntry {
     sal_uInt16 nValue;
     sal_uInt16 nCodeBits;

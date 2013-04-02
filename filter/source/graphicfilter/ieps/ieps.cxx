@@ -43,11 +43,10 @@ class FilterConfigItem;
 |*
 |*    ImpSearchEntry()
 |*
-|*    Beschreibung      Prueft ob im Speicherbereich pSource der nComp Bytes
-|*                      gross ist eine Zeichenkette(pDest) mit der l�nge nSize
-|*                      liegt. Geprueft wird NON-CASE-SENSITIVE und der Rueck-
-|*                      gabewert ist die Adresse an der die Zeichekette gefunden
-|*                      wurde oder NULL
+|*    Description       Checks if there is a string(pDest) of length nSize
+|*                      inside the memory area pSource which is nComp bytes long.
+|*                      Check is NON-CASE-SENSITIVE. The return value ist the
+|*                      address where the string is found or NULL
 |*
 *************************************************************************/
 
@@ -474,7 +473,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 }
 
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 #ifdef DISABLE_DYNLOADING
 #define GraphicImport ipsGraphicImport

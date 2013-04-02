@@ -165,8 +165,8 @@ void Impl_OlePres::Write( SvStream & rStm )
 
     if( GetFormat() == FORMAT_GDIMETAFILE && pMtf )
     {
-        // Immer auf 1/100 mm, bis Mtf-Loesung gefunden
-        // Annahme (keine Skalierung, keine Org-Verschiebung)
+        // Always to 1/100 mm, until Mtf-Solution found
+        // Assumption (no scaling, no origin translation)
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == Fraction( 1, 1 ),
                     "X-Skalierung im Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == Fraction( 1, 1 ),
@@ -2591,7 +2591,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType ) );
         if( eShadowType != mso_shadowOffset )
         {
-            rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm Schattendistanz
+            rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm shadow distance
             rSet.Put( SdrShadowYDistItem( 35 ) );
         }
     }
@@ -3030,8 +3030,8 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
     pSdrModel = pModel;
     if( pModel && (0 < nApplicationScale) )
     {
-        // PPT arbeitet nur mit Einheiten zu 576DPI
-        // WW hingegen verwendet twips, i.e. 1440DPI.
+        // PPT works in units of 576DPI
+        // WW on the other side uses twips, i.e. 1440DPI.
         MapUnit eMap = pSdrModel->GetScaleUnit();
         Fraction aFact( GetMapFactor(MAP_INCH, eMap).X() );
         long nMul=aFact.GetNumerator();
@@ -3155,7 +3155,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
 bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
     bool bRet = sal_False;
-    sal_uLong nFPosMerk = rStCtrl.Tell();   // FilePos merken fuer ggf. spaetere Restauration
+    sal_uLong nFPosMerk = rStCtrl.Tell();   // remember FilePos for conditionally later restauration
     DffRecordHeader aHd;
     do
     {
@@ -3185,8 +3185,8 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
 
 bool SvxMSDffManager::GetColorFromPalette( sal_uInt16 /* nNum */, Color& rColor ) const
 {
-    // diese Methode ist in der zum Excel-Import
-    // abgeleiteten Klasse zu ueberschreiben...
+    // This method has to be overwritten in the class
+    // derived for the excel export
     rColor.SetColor( COL_WHITE );
     return sal_True;
 }
@@ -3435,7 +3435,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     {   // case of nUpper == 4 powerpoint takes this as agrument for a colorschemecolor
         GetColorFromPalette( nUpper, aColor );
     }
-    else    // hart attributiert, eventuell mit Hinweis auf SYSTEMRGB
+    else    // attributed hard, maybe with hint to SYSTEMRGB
         aColor = Color( (sal_uInt8)nColorCode, (sal_uInt8)( nColorCode >> 8 ), (sal_uInt8)( nColorCode >> 16 ) );
     return aColor;
 }
@@ -5632,12 +5632,12 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
 
     if( !nLenBStoreCont ) return;
 
-    // Im BStore Container alle Header der Container und Atome auslesen und die
-    // relevanten Daten aller enthaltenen FBSEs in unserem Pointer Array ablegen.
-    // Dabei zaehlen wir die gefundenen FBSEs im Member nBLIPCount mit.
+    // Read all atoms of the containers from the BStore container and store all
+    // relevant data of all contained FBSEs in out pointer array.
+    // We also count all found FBSEs in member nBLIPCount.
 
-    const sal_uLong nSkipBLIPLen = 20;  // bis zu nBLIPLen zu ueberspringende Bytes
-    const sal_uLong nSkipBLIPPos =  4;  // dahinter bis zu nBLIPPos zu skippen
+    const sal_uLong nSkipBLIPLen = 20;  // skip to get to the nBLIPLen
+    const sal_uLong nSkipBLIPPos =  4;  // thereafter skip up to nBLIPPos
 
     sal_uInt32 nBLIPLen = 0, nBLIPPos = 0;
 
@@ -5665,14 +5665,14 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
 
             if( bOk )
             {
-                // Besonderheit:
-                // Falls nBLIPLen kleiner ist als nLenFBSE UND nBLIPPos Null ist,
-                // nehmen wir an, dass das Bild IM FBSE drin steht!
+                // specialty:
+                // If nBLIPLen is less than nLenFBSE AND nBLIPPos is NULL,
+                // then we assume, that the image is in FBSE!
                 if( (!nBLIPPos) && (nBLIPLen < nLenFBSE) )
                     nBLIPPos = rSt.Tell() + 4;
 
                 // That worked great!
-                // Wir merken uns, dass wir einen FBSE mehr im Pointer Array haben.
+                // We store, that we do have one FBSE more in the pointer array.
                 nBLIPPos = Calc_nBLIPPos(nBLIPPos, rSt.Tell());
 
                 if( USHRT_MAX == nBLIPCount )
@@ -5690,7 +5690,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
 }
 
 
-// ab hier: Drawing Container  d.h. Seiten (Blatt, Dia) - weit gueltige Daten
+// from now on: Drawing Container  which means Pages (Sheet, Slide) - wide valid data
 //                      =================               ======
 //
 void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
@@ -5700,19 +5700,18 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
 
     sal_uLong nReadDg = 0;
 
-    // Wir stehen in einem Drawing Container (je einer pro Seite)
-    // und muessen nun
-    // alle enthaltenen Shape Group Container abklappern
+    // We are now in a drawing container (one per each page) and
+    // we now have to iterate through all contained shape group containers
     do
     {
         if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
         nReadDg += DFF_COMMON_RECORD_HEADER_SIZE;
-        // Patriarch gefunden (der oberste Shape Group Container) ?
+        // Patriarch found (the upmost shape group container) ?
         if( DFF_msofbtSpgrContainer == nFbt )
         {
             if(!this->GetShapeGroupContainerData( rSt, nLength, sal_True, nDrawingContainerId )) return;
         }
-        // blanker Shape Container ? (ausserhalb vom Shape Group Container)
+        // empty Shape Container ? (outside of shape group container)
         else if( DFF_msofbtSpContainer == nFbt )
         {
             if(!this->GetShapeContainerData( rSt, nLength, ULONG_MAX, nDrawingContainerId )) return;
@@ -5731,9 +5730,8 @@ sal_Bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
     long nStartShapeGroupCont = rSt.Tell();
-    // Wir stehen in einem Shape Group Container (ggfs. mehrere pro Seite)
-    // und muessen nun
-    // alle enthaltenen Shape Container abklappern
+    // We are now in a shape group container (conditionally mulitple per page)
+    // an we now have to iterate through all contained shape containers
     sal_Bool  bFirst = !bPatriarch;
     sal_uLong nReadSpGrCont = 0;
     do
@@ -5749,7 +5747,7 @@ sal_Bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                 return sal_False;
             bFirst = sal_False;
         }
-        // eingeschachtelter Shape Group Container ?
+        // nested shape group container ?
         else if( DFF_msofbtSpgrContainer == nFbt )
         {
             if ( !this->GetShapeGroupContainerData( rSt, nLength, sal_False, nDrawingContainerId ) )
@@ -5760,7 +5758,7 @@ sal_Bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
         nReadSpGrCont += nLength;
     }
     while( nReadSpGrCont < nLenShapeGroupCont );
-    // den Stream wieder korrekt positionieren
+    // possition the steam correctly
     rSt.Seek( nStartShapeGroupCont + nLenShapeGroupCont );
     return sal_True;
 }
@@ -5772,22 +5770,20 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
     long  nStartShapeCont = rSt.Tell();
-    // Wir stehen in einem Shape Container (ggfs. mehrere pro Sh. Group)
-    // und muessen nun
-    // die Shape Id und File-Pos (fuer spaetere, erneute Zugriffe)
-    // und den ersten BStore Verweis (falls vorhanden) entnehmen
+
+    // We are in a shape container (possibly more than one per shape group) and we now
+    // have to fetch the shape id and file position (to be able to access them again later)
+    // and the first BStore reference (if present).
     sal_uLong nLenShapePropTbl = 0;
     sal_uLong nReadSpCont = 0;
 
-    // File Offset des Shape-Containers bzw. der Gruppe(!) vermerken
-    //
+    // Store file offset of the shape containers or respectivly the group(!).
     sal_uLong nStartOffs = (ULONG_MAX > nPosGroup) ?
                             nPosGroup : nStartShapeCont - DFF_COMMON_RECORD_HEADER_SIZE;
     SvxMSDffShapeInfo aInfo( nStartOffs );
 
-    // duerfte das Shape durch einen Rahmen ersetzt werden ?
-    // (vorausgesetzt, es zeigt sich, dass es eine TextBox ist,
-    //  und der Text nicht gedreht ist)
+    // Can the shape be replaced with a frame?
+    // (provided that it is a TextBox and the text is not rotated)
     sal_Bool bCanBeReplaced = (ULONG_MAX > nPosGroup) ? sal_False : sal_True;
 
     // we don't know yet whether it's a TextBox
@@ -5888,9 +5884,8 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                         else if( 0x8000 & nPropId )
                         {
                             // complex Prop found:
-                            // Laenge ist immer 6, nur die Laenge der nach der
-                            // eigentlichen Prop-Table anhaengenden Extra-Daten
-                            // ist unterschiedlich
+                            // Length is always 6. The length of the appended extra data
+                            // after the actual prop table is of different size.
                             nPropVal = 6;
                         }
                     }
@@ -5921,11 +5916,11 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     while( nReadSpCont < nLenShapeCont );
 
     //
-    // Jetzt ggfs. die Infos fuer spaetere Zugriffe auf das Shape speichern
+    // Now possibly store the information for subsequent accesses to the shape
     //
     if( aInfo.nShapeId )
     {
-        // fuer Textboxen ggfs. ersetzen durch Rahmen erlauben
+        // Possibly allow replacement of textboxes with frames
         if(     bCanBeReplaced
              && aInfo.nTxBxComp
              && (
@@ -5965,13 +5960,13 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         m_pShapeInfosById->find(pTmpRec);
     if (it != m_pShapeInfosById->end())
     {
-        // eventuell altes Errorflag loeschen
+        // Possibly delete old error flag.
         if( rStCtrl.GetError() )
             rStCtrl.ResetError();
-        // FilePos des/der Stream(s) merken
+        // store FilePos of the stream(s)
         sal_uLong nOldPosCtrl = rStCtrl.Tell();
         sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
-        // das Shape im Steuer Stream anspringen
+        // jump to the shape in the control stream
         sal_uLong const nFilePos((*it)->nFilePos);
         bool bSeeked = (nFilePos == rStCtrl.Seek(nFilePos));
 
@@ -6022,7 +6017,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             sal_uInt16 nIdx = sal_uInt16( nIdx_ );
             if( !nIdx || (pBLIPInfos->size() < nIdx) ) return sal_False;
 
-            // eventuell alte(s) Errorflag(s) loeschen
+            // possibly delete old error flag(s)
             if( rStCtrl.GetError() )
                 rStCtrl.ResetError();
             if(    ( &rStCtrl != pStData )
@@ -6033,25 +6028,25 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             sal_uLong nOldPosCtrl = rStCtrl.Tell();
             sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
 
-            // passende Info-Struct aus unserem Pointer Array nehmen
+            // fetch matching info struct out of the pointer array
             SvxMSDffBLIPInfo& rInfo = (*pBLIPInfos)[ nIdx-1 ];
-            // das BLIP Atom im Daten Stream anspringen
+            // jump to the BLIP atom in the data stream
             pStData->Seek( rInfo.nFilePos );
-            // ggfs. Fehlerstatus zuruecksetzen
+            // possibly reset error status
             if( pStData->GetError() )
                 pStData->ResetError();
             else
                 bOk = GetBLIPDirect( *pStData, rData, pVisArea );
             if( pStData2 && !bOk )
             {
-                // Fehler, aber zweite Chance: es gibt noch einen zweiten
-                //         Datenstream, in dem die Grafik liegen koennte!
+                // Error, but the is a second chance: There is a second
+                //         data stream in which the graphic could be stored!
                 if( pStData2->GetError() )
                     pStData2->ResetError();
                 sal_uLong nOldPosData2 = pStData2->Tell();
-                // das BLIP Atom im zweiten Daten Stream anspringen
+                // jump to the BLIP atom in the second data stream
                 pStData2->Seek( rInfo.nFilePos );
-                // ggfs. Fehlerstatus zuruecksetzen
+                // reset error status if necessary
                 if( pStData2->GetError() )
                     pStData2->ResetError();
                 else
@@ -6059,7 +6054,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
                 // restore olf FilePos of the second data stream
                 pStData2->Seek( nOldPosData2 );
             }
-            // alte FilePos des/der Stream(s) restaurieren
+            // restore old FilePos of the stream(s)
             rStCtrl.Seek( nOldPosCtrl );
             if( &rStCtrl != pStData )
               pStData->Seek( nOldPosData );
@@ -6242,14 +6237,14 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
                 }
             }
         }
-        // ggfs. Fehlerstatus zuruecksetzen
+        // reset error status if necessary
         if ( ERRCODE_IO_PENDING == pGrStream->GetError() )
           pGrStream->ResetError();
         delete pOut;
     }
     rBLIPStream.Seek( nOldPos );    // restore old FilePos of the strem
 
-    return ( GRFILTER_OK == nRes ); // Ergebniss melden
+    return ( GRFILTER_OK == nRes ); // return result
 }
 
 /* also static */
@@ -6294,7 +6289,7 @@ sal_Bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLe
 
 void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader& /* rHd */ , void* /* pData */, DffObjData& /* rObj */ )
 {
-    return;  // wird von SJ im Draw ueberladen
+    return;  // will be overloaded by SJ in Draw
 }
 
 sal_uLong SvxMSDffManager::Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong /* nStreamPos */ ) const
@@ -6342,9 +6337,9 @@ sal_Bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFi
     sal_uLong nAdviseModes = 2;
 
     Impl_OlePres aEle( FORMAT_GDIMETAFILE );
-    // Die Groesse in 1/100 mm umrechnen
-    // Falls eine nicht anwendbare MapUnit (Device abhaengig) verwendet wird,
-    // versucht SV einen BestMatchden richtigen Wert zu raten.
+    // Convert the size in 1/100 mm
+    // If a not applicable MapUnit (device dependend) is used,
+    // SV tries to guess a best match for the right value
     Size aSize = rMtf.GetPrefSize();
     MapMode aMMSrc = rMtf.GetPrefMapMode();
     MapMode aMMDst( MAP_100TH_MM );

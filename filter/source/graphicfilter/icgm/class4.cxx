@@ -109,10 +109,10 @@ void CGM::ImplDoClass4()
     if ( mbFirstOutPut )
         mpOutAct->FirstOutPut();
 
-    if ( mpBitmapInUse && ( mnElementID != 9 ) )    // vorhandene grafik verarbeiten,
-    {                                               // da jetzt nicht bitmap actions anstehen
+    if ( mpBitmapInUse && ( mnElementID != 9 ) )    // process existend graphic
+    {                                               // because there are now no pending bitmap actions
         CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
-        // irgendetwas mit der Bitmap anfangen
+        // do anything with the bitmap
         mpOutAct->DrawBitmap( pBmpDesc );
         delete mpBitmapInUse;
         mpBitmapInUse = NULL;
@@ -304,8 +304,8 @@ void CGM::ImplDoClass4()
                 if ( mpBitmapInUse )
                 {
                     CGMBitmap* pBmpDesc = mpBitmapInUse->GetNext();
-                    if ( pBmpDesc ) // eventuell bekommen wir eine bitmap zurück, die nicht
-                    {               // zur vorherigen paßt -> diese müssen wir dann auch löschen
+                    if ( pBmpDesc ) // we possibly get a bitmap back which does not fit to
+                    {               // to the previous -> we need to delete this one too
                         mpOutAct->DrawBitmap( pBmpDesc->GetBitmap() );
                         delete pBmpDesc;
                     }

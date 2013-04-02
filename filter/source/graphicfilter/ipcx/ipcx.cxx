@@ -29,25 +29,25 @@ class PCXReader {
 
 private:
 
-    SvStream& m_rPCX;               // Die einzulesende PCX-Datei
+    SvStream& m_rPCX;               // the PCX file to read
 
     Bitmap              aBmp;
     BitmapWriteAccess*  pAcc;
-    sal_uInt8               nVersion;           // PCX-Version
-    sal_uInt8               nEncoding;          // Art der Komprimierung
-    sal_uLong               nBitsPerPlanePix;   // Bits Pro Ebene pro Pixel
-    sal_uLong               nPlanes;            // Anzahl Ebenen
-    sal_uLong               nBytesPerPlaneLin;  // Bytes in einer Ebenen pro Zeile
-    sal_uInt16              nPaletteInfo;
+    sal_uInt8           nVersion;           // PCX-Version
+    sal_uInt8           nEncoding;          // compression type
+    sal_uLong           nBitsPerPlanePix;   // bits per plane per pixel
+    sal_uLong           nPlanes;            // no of planes
+    sal_uLong           nBytesPerPlaneLin;  // bytes per plane line
+    sal_uInt16          nPaletteInfo;
 
-    sal_uLong               nWidth, nHeight;    // Bildausmass in Pixeln
-    sal_uInt16              nResX, nResY;       // Aufloesung in Pixel pro Inch oder 0,0
-    sal_uInt16              nDestBitsPerPixel;  // Bits pro Pixel der Zielbitmap 1,4,8 oder 24
-    sal_uInt8*              pPalette;           //
-    sal_Bool                nStatus;            // status nun nicht mehr am stream abfragen ( SJ )
+    sal_uLong           nWidth, nHeight;    // dimension in pixel
+    sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
+    sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
+    sal_uInt8*          pPalette;           //
+    sal_Bool            nStatus;            // from now on do not read status from stream ( SJ )
 
 
-    sal_Bool                Callback( sal_uInt16 nPercent );
+    sal_Bool            Callback( sal_uInt16 nPercent );
     void                ImplReadBody();
     void                ImplReadPalette( sal_uLong nCol );
     void                ImplReadHeader();
@@ -56,10 +56,10 @@ public:
                         PCXReader(SvStream &rStream);
                         ~PCXReader();
     sal_Bool                ReadPCX(Graphic & rGraphic );
-                        // Liesst aus dem Stream eine PCX-Datei und fuellt das GDIMetaFile
+                        // Reads a PCX file from the stream and fills the GDIMetaFile
 };
 
-//=================== Methoden von PCXReader ==============================
+//=================== methods of PCXReader ==============================
 
 PCXReader::PCXReader(SvStream &rStream)
     : m_rPCX(rStream)
@@ -83,21 +83,20 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
     if ( m_rPCX.GetError() )
         return sal_False;
 
-    sal_uLong*  pDummy = new sal_uLong; delete pDummy; // damit unter OS/2
-                                               // das richtige (Tools-)new
-                                               // verwendet wird, da es sonst
-                                               // in dieser DLL nur Vector-news
-                                               // gibt;
+    sal_uLong*  pDummy = new sal_uLong; delete pDummy; // to achive that under OS/2
+                                               // the right (Tools-) new is used
+                                               // otherwise there are only Vector-news
+                                               // in this DLL
 
     m_rPCX.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
-    // Kopf einlesen:
+    // read header:
 
     nStatus = sal_True;
 
     ImplReadHeader();
 
-    // BMP-Header und ggf. (eventuell zunaechst ungueltige) Farbpalette schreiben:
+    // Write BMP header and conditionally (maybe invalid for now) color palette:
     if ( nStatus )
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
@@ -114,11 +113,11 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
                 pAcc->SetPaletteColor( i, BitmapColor ( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] ) );
             }
         }
-        // Bitmap-Daten einlesen
+        // read bitmap data
         ImplReadBody();
 
-        // Wenn erweiterte Farbpalette am Ende von PCX, dann diese einlesen, und nochmals
-        // in Palette schreiben:
+        // If an extended color palette exists at the end of the file, then read it and
+        // and write again in palette:
         if ( nDestBitsPerPixel == 8 && nStatus )
         {
             sal_uInt8* pPal = pPalette;
@@ -131,7 +130,7 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
             }
         }
     /*
-        // Aufloesung einstellen:
+        // set resolution:
         if (nResX!=0 && nResY!=0) {
             MapMode aMapMode(MAP_INCH,Point(0,0),Fraction(1,nResX),Fraction(1,nResY));
             rBitmap.SetPrefMapMode(aMapMode);
@@ -196,8 +195,8 @@ void PCXReader::ImplReadHeader()
         return;
     }
 
-    // Wenn das Bild nur 2 Farben hat, ist die Palette zumeist ungueltig, und es handelt sich
-    // immer (?) um ein schwarz-weiss-Bild:
+    // If the bitmap has only 2 colors, the palatte is most often invalid and it is always(?)
+    // a black and white image:
     if ( nPlanes == 1 && nBitsPerPlanePix == 1 )
     {
         pPalette[ 0 ] = pPalette[ 1 ] = pPalette[ 2 ] = 0x00;
@@ -398,7 +397,7 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
     }
 }
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 #ifdef DISABLE_DYNLOADING
 #define GraphicImport ipxGraphicImport

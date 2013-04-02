@@ -31,9 +31,9 @@ class DXFBlock : public DXFEntities {
 public:
 
     DXFBlock * pSucc;
-        // Zeiger auf naechsten Block in der Liste DXFBlocks::pFirst
+        // pointer to the nex block in the list DXFBlocks::pFirst
 
-    // Eigenschaften des Blocks, durch Gruppencodes kommentiert:
+    // properties of blocks; commented with group codes:
     char sName[DXF_MAX_STRING_LEN+1];     //  2
     char sAlsoName[DXF_MAX_STRING_LEN+1]; //  3
     long nFlags;                          // 70
@@ -44,8 +44,8 @@ public:
     ~DXFBlock();
 
     void Read(DXFGroupReader & rDGR);
-        // Liest den Block (einschliesslich der Entities) per rGDR
-        // aus einer DXF-Datei bis zu einem ENDBLK, ENDSEC oder EOF.
+        // reads the block (including entities) from a dxf file
+        // by rGDR until a ENDBLK, ENDSEC oder EOF.
 };
 
 
@@ -58,19 +58,19 @@ class DXFBlocks {
 public:
 
     DXFBlock * pFirst;
-        // Liste der Bloecke, READ ONLY!
+        // list of blocks, READ ONLY!
 
     DXFBlocks();
     ~DXFBlocks();
 
     void Read(DXFGroupReader & rDGR);
-        // Liesst alle Bloecke per rDGR bis zu einem ENDSEC oder EOF.
+        // reads all block per rDGR until a ENDSEC oder EOF.
 
     DXFBlock * Search(const char * sName) const;
-        // Sucht einen Block mit dem Namen, liefert NULL bei Misserfolg.
+        // looks for a block with the name, return NULL if not successful
 
     void Clear();
-        // Loescht alle Bloecke;
+        // deletes all blocks
 
 };
 

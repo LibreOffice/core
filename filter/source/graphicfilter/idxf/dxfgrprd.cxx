@@ -39,9 +39,8 @@ rtl::OString DXFReadLine(SvStream& rIStm)
 
     rtl::OStringBuffer aBuf;
 
-    while( !bEnd && !rIStm.GetError() )   // !!! nicht auf EOF testen,
-                                          // !!! weil wir blockweise
-                                          // !!! lesen
+    while( !bEnd && !rIStm.GetError() )   // !!! do not check for EOF
+                                          // !!! because we read blockwise
     {
         sal_uInt16 nLen = (sal_uInt16)rIStm.Read( buf, sizeof(buf)-1 );
         if( !nLen )
@@ -75,9 +74,9 @@ rtl::OString DXFReadLine(SvStream& rIStm)
     nOldFilePos += aBuf.getLength();
     if( rIStm.Tell() > nOldFilePos )
         nOldFilePos++;
-    rIStm.Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
+    rIStm.Seek( nOldFilePos );  // seek because of BlockRead above!
 
-    if( bEnd && (c=='\r' || c=='\n'))  // Sonderbehandlung DOS-Dateien
+    if( bEnd && (c=='\r' || c=='\n'))  // special treatment of DOS files
     {
         char cTemp(0);
         rIStm.Read(&cTemp, 1);

@@ -1013,7 +1013,7 @@ void XMLFilterSettingsDialog::onClose()
 
 long XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
 {
-    // Zuerst Basisklasse rufen wegen TabSteuerung
+    // Because of of tab control first call the base class.
     long nRet = ModelessDialog::Notify( rNEvt );
     if ( !nRet )
     {
