@@ -33,7 +33,6 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/io/SequenceInputStream.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
-#include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -725,20 +724,24 @@ DescriptionInfoset::getLocalizedChild( const ::rtl::OUString & sParent) const
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
     if (xParent.is())
     {
-        const ::rtl::OUString sLocale = getOfficeLocaleString();
-        nodeMatch = matchFullLocale(xParent, sLocale);
+        nodeMatch = matchLanguageTag(xParent, getOfficeLanguageTag().getBcp47());
 
         //office: en-DE, en, en-DE-altmark
         if (! nodeMatch.is())
         {
-            const css::lang::Locale officeLocale = getOfficeLocale();
-            nodeMatch = matchCountryAndLanguage(xParent, officeLocale);
-            if ( ! nodeMatch.is())
+            const ::std::vector< OUString > aFallbacks = getOfficeLanguageTag().getFallbackStrings();
+            // Already tried full tag, continue with first fallback.
+            ::std::vector< OUString >::const_iterator it( aFallbacks.begin());
+            if (it != aFallbacks.end())
+                ++it;
+            for ( ; it != aFallbacks.end(); ++it)
             {
-                nodeMatch = matchLanguage(xParent, officeLocale);
-                if (! nodeMatch.is())
-                    nodeMatch = getChildWithDefaultLocale(xParent);
+                nodeMatch = matchLanguageTag(xParent, *it);
+                if (nodeMatch.is())
+                    break;
             }
+            if (! nodeMatch.is())
+                nodeMatch = getChildWithDefaultLocale(xParent);
         }
     }
 
@@ -746,79 +749,26 @@ DescriptionInfoset::getLocalizedChild( const ::rtl::OUString & sParent) const
 }
 
 css::uno::Reference<css::xml::dom::XNode>
-DescriptionInfoset::matchFullLocale(css::uno::Reference< css::xml::dom::XNode >
-                                    const & xParent, ::rtl::OUString const & sLocale) const
-{
-    OSL_ASSERT(xParent.is());
-    const ::rtl::OUString exp1("*[@lang=\"" + sLocale + "\"]");
-    try {
-        return m_xpath->selectSingleNode(xParent, exp1);
-    } catch (const css::xml::xpath::XPathException &) {
-        // ignore
-        return 0;
-    }
-}
-
-css::uno::Reference<css::xml::dom::XNode>
-DescriptionInfoset::matchCountryAndLanguage(
-    css::uno::Reference< css::xml::dom::XNode > const & xParent, css::lang::Locale const & officeLocale) const
-{
-    OSL_ASSERT(xParent.is());
-    css::uno::Reference<css::xml::dom::XNode> nodeMatch;
-
-    if (!officeLocale.Country.isEmpty())
-    {
-        const ::rtl::OUString sLangCountry(officeLocale.Language +
-            "-" + officeLocale.Country);
-        //first try exact match for lang-country
-        const ::rtl::OUString exp1(
-            "*[@lang=\"" + sLangCountry +"\"]");
-        try {
-            nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
-        } catch (const css::xml::xpath::XPathException &) {
-            // ignore
-        }
-
-        //try to match in strings that also have a variant, for example en-US matches in
-        //en-US-montana
-        if (!nodeMatch.is())
-        {
-            const ::rtl::OUString exp2(
-                "*[starts-with(@lang,\"" + sLangCountry + "-\")]");
-            try {
-                nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
-            } catch (const css::xml::xpath::XPathException &) {
-                // ignore
-            }
-        }
-    }
-
-    return nodeMatch;
-}
-
-
-css::uno::Reference<css::xml::dom::XNode>
-DescriptionInfoset::matchLanguage(
-    css::uno::Reference< css::xml::dom::XNode > const & xParent, css::lang::Locale const & officeLocale) const
+DescriptionInfoset::matchLanguageTag(
+    css::uno::Reference< css::xml::dom::XNode > const & xParent, OUString const & rTag) const
 {
     OSL_ASSERT(xParent.is());
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
     //first try exact match for lang
-    const ::rtl::OUString exp1("*[@lang=\"" + officeLocale.Language
-        + "\"]");
+    const ::rtl::OUString exp1("*[@lang=\"" + rTag + "\"]");
     try {
         nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
     } catch (const css::xml::xpath::XPathException &) {
         // ignore
     }
 
-    //try to match in strings that also have a country and/orvariant, for example en  matches in
-    //en-US-montana, en-US, en-montana
+    //try to match in strings that also have a country and/or variant, for
+    //example en  matches in en-US-montana, en-US, en-montana
     if (!nodeMatch.is())
     {
         const ::rtl::OUString exp2(
-            "*[starts-with(@lang,\"" + officeLocale.Language + "-\")]");
+            "*[starts-with(@lang,\"" + rTag + "-\")]");
         try {
             nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
         } catch (const css::xml::xpath::XPathException &) {

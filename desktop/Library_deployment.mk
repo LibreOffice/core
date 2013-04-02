@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,deployment,\
     ucbhelper \
     utl \
     xmlscript \
+    i18nisolang1 \
 	$(gb_UWINAPI) \
 ))
 

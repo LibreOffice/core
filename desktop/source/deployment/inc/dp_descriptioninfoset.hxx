@@ -31,7 +31,6 @@
 /// @HTML
 
 namespace com { namespace sun { namespace star {
-    namespace lang { struct Locale; }
     namespace uno { class XComponentContext; }
     namespace xml {
         namespace dom {
@@ -230,16 +229,9 @@ private:
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode >
         getLocalizedChild( ::rtl::OUString const & sParent) const;
     SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
-        matchFullLocale(::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XNode > const & xParent, ::rtl::OUString const & sLocale) const;
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
-        matchCountryAndLanguage(::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XNode > const & xParent,
-        ::com::sun::star::lang::Locale const & officeLocale) const;
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
-        matchLanguage(
+        matchLanguageTag(
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent,
-        ::com::sun::star::lang::Locale const & officeLocale) const;
+        OUString const & rTag) const;
 
     /** If there is no child element with a locale matching the office locale, then we use
         the first child. In the case of the simple-license we also use the former default locale, which
@@ -257,9 +249,6 @@ private:
     */
     SAL_DLLPRIVATE ::rtl::OUString getLocalizedHREFAttrFromChild(
         ::rtl::OUString const & sXPathParent, bool * out_bParentExists) const;
-
-    static SAL_DLLPRIVATE ::rtl::OUString
-        localeToString(::com::sun::star::lang::Locale const & locale);
 
     /** Gets the node value for a given expression. The expression is used in
         m_xpath-selectSingleNode. The value of the returned node is return value

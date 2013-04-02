@@ -22,7 +22,7 @@
 
 #include "tools/string.hxx"
 #include "tools/resid.hxx"
-#include "com/sun/star/lang/Locale.hpp"
+#include <i18npool/languagetag.hxx>
 #include "dp_misc.h"
 #include <memory>
 #include "dp_misc_api.hxx"
@@ -43,15 +43,7 @@ struct StaticResourceString :
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang );
-
-//==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::com::sun::star::lang::Locale getOfficeLocale();
-
-//==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString getOfficeLocaleString();
+const LanguageTag & getOfficeLanguageTag();
 
 }
 

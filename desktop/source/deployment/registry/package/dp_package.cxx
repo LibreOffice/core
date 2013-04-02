@@ -1419,9 +1419,11 @@ void BackendImpl::PackageImpl::scanBundle(
     }
 
 
-    const lang::Locale officeLocale = getOfficeLocale();
+    const LanguageTag& officeLocale = getOfficeLanguageTag();
+    const ::std::vector< OUString > officeFallbacks( officeLocale.getFallbackStrings());
+    const size_t nPenaltyMax = ::std::numeric_limits<size_t>::max();
+    size_t descrPenalty = nPenaltyMax;
     OUString descrFile;
-    lang::Locale descrFileLocale;
 
     const Reference<XComponentContext> xContext(
         getMyBackend()->getComponentContext() );
@@ -1469,18 +1471,33 @@ void BackendImpl::PackageImpl::scanBundle(
             }
             else {
                 // match best locale:
-                lang::Locale locale( toLocale(param->m_sValue) );
-                if (locale.Language == officeLocale.Language)
+                LanguageTag descrTag( param->m_sValue);
+                if (officeLocale.getLanguage() == descrTag.getLanguage())
                 {
-                    if (descrFileLocale.Country == officeLocale.Country
-                        && locale.Country != officeLocale.Country)
-                        continue;
-                    if (descrFileLocale.Variant == officeLocale.Variant
-                        && locale.Variant != officeLocale.Variant)
-                        continue;
-                    descrFile = url;
-                    descrFileLocale = locale;
+                    size_t nPenalty = nPenaltyMax;
+                    const ::std::vector< OUString > descrFallbacks( descrTag.getFallbackStrings());
+                    for (size_t o=0; o < officeFallbacks.size() && nPenalty == nPenaltyMax; ++o)
+                    {
+                        for (size_t d=0; d < descrFallbacks.size() && nPenalty == nPenaltyMax; ++d)
+                        {
+                            if (officeFallbacks[o] == descrFallbacks[d])
+                            {
+                                // The last fallbacks are always language-only
+                                // fallbacks, so we _will_ have _some_ match if
+                                // we ever entered the overall if() condition.
+                                nPenalty = o * 1000 + d;
+                                if (descrPenalty > nPenalty)
+                                {
+                                    descrPenalty = nPenalty;
+                                    descrFile = url;
+                                }
+                            }
+                        }
+                    }
                 }
+                // TODO: we could break here if descrPenalty==0 for an exact
+                // match of officeLocale, but the previous code didn't; are
+                // there side effects?
             }
             continue;
         }

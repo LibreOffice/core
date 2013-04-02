@@ -37,21 +37,21 @@ namespace dp_misc {
 namespace {
 
 struct OfficeLocale :
-        public rtl::StaticWithInit<OUString, OfficeLocale> {
-    const OUString operator () () {
+        public rtl::StaticWithInit<LanguageTag, OfficeLocale> {
+    const LanguageTag operator () () {
         OUString slang(utl::ConfigManager::getLocale());
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
         if (slang.isEmpty())
             slang = "en-US";
-        return slang;
+        return LanguageTag( slang);
     }
 };
 
 struct DeploymentResMgr : public rtl::StaticWithInit<
     ResMgr *, DeploymentResMgr> {
     ResMgr * operator () () {
-        return ResMgr::CreateResMgr( "deployment", LanguageTag( OfficeLocale::get()) );
+        return ResMgr::CreateResMgr( "deployment", OfficeLocale::get() );
     }
 };
 
@@ -76,19 +76,8 @@ String getResourceString( sal_uInt16 id )
     return ret;
 }
 
-//=============================================================================
-::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
-{
-    return LanguageTag( slang).getLocale();
-}
-
 //==============================================================================
-lang::Locale getOfficeLocale()
-{
-    return toLocale(OfficeLocale::get());
-}
-
-::rtl::OUString getOfficeLocaleString()
+const LanguageTag & getOfficeLanguageTag()
 {
     return OfficeLocale::get();
 }
