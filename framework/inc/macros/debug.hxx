@@ -70,7 +70,6 @@
     #undef  ENABLE_WARNINGS
     #undef  ENABLE_EVENTDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
-    #undef  ENABLE_TARGETINGDEBUG
     #undef  ENABLE_MUTEXDEBUG
 //    #undef  ENABLE_TIMEMEASURE
     #undef  ENABLE_MEMORYMEASURE
@@ -98,11 +97,6 @@
 //  special macros to debug service registration
 //*****************************************************************************************************************
 #include <macros/debug/registration.hxx>
-
-//*****************************************************************************************************************
-//  special macros to debug targeting of frames
-//*****************************************************************************************************************
-#include <macros/debug/targeting.hxx>
 
 //*****************************************************************************************************************
 //  special macros to debug threading mechanism
