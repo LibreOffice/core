@@ -26,7 +26,6 @@
 
 #include <unotools/misccfg.hxx>
 #include <unotools/useroptions.hxx>
-#include <unotools/accelcfg.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/defaultoptions.hxx>
@@ -46,7 +45,6 @@
 #include <unotools/searchopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <unotools/workingsetoptions.hxx>
 #include <unotools/xmlaccelcfg.hxx>
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -146,10 +144,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case E_ACCELCFG :
-            rItem.pItem = new SvtAcceleratorConfiguration();
-            break;
-
         case E_CMDOPTIONS :
             rItem.pItem = new SvtCommandOptions();
             break;
@@ -184,10 +178,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_HISTORYOPTIONS :
             rItem.pItem = new SvtHistoryOptions();
-            break;
-
-        case E_JAVAOPTIONS :
-// no ref count            rItem.pItem = new SvtJavaOptions();
             break;
 
         case E_LINGUCFG :
@@ -244,14 +234,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_VIEWOPTIONS_WINDOW :
             rItem.pItem = new SvtViewOptions(E_WINDOW, ::rtl::OUString());
-            break;
-
-        case E_WORKINGSETOPTIONS :
-            rItem.pItem = new SvtWorkingSetOptions();
-            break;
-
-        case E_XMLACCELCFG :
-            // ??? TODO
             break;
 
         case E_USEROPTIONS :

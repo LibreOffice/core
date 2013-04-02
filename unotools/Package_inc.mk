@@ -27,7 +27,6 @@
 
 $(eval $(call gb_Package_Package,unotools_inc,$(SRCDIR)/unotools/inc))
 
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/accelcfg.hxx,unotools/accelcfg.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/accessiblerelationsethelper.hxx,unotools/accessiblerelationsethelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/accessiblestatesethelper.hxx,unotools/accessiblestatesethelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/atom.hxx,unotools/atom.hxx))
@@ -96,7 +95,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/ucbstreamhelper.hxx,
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/unotoolsdllapi.h,unotools/unotoolsdllapi.h))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/useroptions.hxx,unotools/useroptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/viewoptions.hxx,unotools/viewoptions.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/workingsetoptions.hxx,unotools/workingsetoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/xmlaccelcfg.hxx,unotools/xmlaccelcfg.hxx))
 
 # vim: set noet sw=4 ts=4:
