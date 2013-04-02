@@ -27,12 +27,14 @@
 
 $(eval $(call gb_Module_Module,unotest))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,unotest,\
 	Library_unobootstrapprotector \
 	Library_unoexceptionprotector \
 	Library_unotest \
     Package_inc \
 ))
+endif
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,unotest,\

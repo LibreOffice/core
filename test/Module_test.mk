@@ -27,11 +27,15 @@
 
 $(eval $(call gb_Module_Module,test))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,test,\
     Library_test \
     Library_subsequenttest \
     Package_inc \
     Package_unittest \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

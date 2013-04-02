@@ -9,12 +9,16 @@
 
 $(eval $(call gb_Module_Module,cppunit))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 ifeq ($(SYSTEM_CPPUNIT),NO)
 $(eval $(call gb_Module_add_targets,cppunit,\
 	UnpackedTarball_cppunit \
 	ExternalPackage_cppunit \
 	ExternalProject_cppunit \
 ))
+endif
+
 endif
 
 # vim: set noet sw=4 ts=4:
