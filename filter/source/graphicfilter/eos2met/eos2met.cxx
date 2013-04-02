@@ -1115,12 +1115,11 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 
 void METWriter::WillWriteOrder(sal_uLong nNextOrderMaximumLength)
 {
-    // Die Parameter eines 'Graphics Data Fields' duerfen (laut OS2-Doku)
-    // hoechstens 32759 Bytes umfassen. Gemeint ist die Laenge des Feldes minus
-    // dem 'Structured Field Introducer' (groesse: 8). Also darf die Groesse
-    // des ganzen Fields hoechstens 8+32759=32767=0x7fff sein.
-    // Zur Sicherheit nehmen wir lieber 30000 als Grenze.
-
+    // The parameters of a 'Graphics Data Fields' can be (according to OS2
+    // documentation) at most 32759 bytes long. Meant by this is the size
+    // of the field minus the 'Structured Field Introducer' (size 8).
+    // So the size of the whole field can be at most 8+32759=32767=0x7fff.
+    // To be on the safe side whe use 30000 as the limit.
     if (pMET->Tell()-nActualFieldStartPos+nNextOrderMaximumLength>30000)
     {
         UpdateFieldSize();
@@ -2346,7 +2345,7 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
     *pMET << (sal_uInt8)0x06 << (sal_uInt8)0x20;
     *pMET << (sal_uInt8)0x03 << (sal_uInt8)0x97 << (sal_uInt8)0x01 << (sal_uInt8)0xb5;
 
-    //--- Die weiteren Felder 'Map Coded Font':
+    //--- The additional Fields 'Map Coded Font':
     CreateChrSets(pMTF);
     WriteChrSets();
 

@@ -104,7 +104,7 @@ public:
         void setGlobalLineTypeScale(double fGlobalLineTypeScale);
 
     sal_Bool Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
-        // Liesst die komplette DXF-Datei ein.
+        // Reads complete DXF file.
 
 private:
 

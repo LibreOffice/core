@@ -86,7 +86,7 @@ namespace PictReaderInternal {
     sal_uLong nHiBytes, nLoBytes;
     isColor = false;
 
-    // Anzahl der Bits im Pattern zaehlen, die auf 1 gesetzt sind:
+    // count the no of bits in pattern which are set to 1:
     nBitCount=0;
     for (ny=0; ny<8; ny++) {
       stream >> ((char&)nbyte[ny]);
@@ -95,7 +95,7 @@ namespace PictReaderInternal {
       }
     }
 
-    // Pattern in 2 Langworten unterbringen:
+    // store pattern in 2 long words:
     nHiBytes=(((((((sal_uLong)nbyte[0])<<8)|
          (sal_uLong)nbyte[1])<<8)|
            (sal_uLong)nbyte[2])<<8)|
@@ -105,14 +105,14 @@ namespace PictReaderInternal {
            (sal_uLong)nbyte[6])<<8)|
       (sal_uLong)nbyte[7];
 
-    // Einen PenStyle machen:
+    // create a PenStyle:
     if      (nBitCount<=0)  penStyle=PEN_NULL;
     else if (nBitCount<=16) penStyle=PEN_DOT;
     else if (nBitCount<=32) penStyle=PEN_DASHDOT;
     else if (nBitCount<=48) penStyle=PEN_DASH;
     else                    penStyle=PEN_SOLID;
 
-    // Einen BrushStyle machen:
+    // create a BrushStyle:
     if      (nHiBytes==0xffffffff && nLoBytes==0xffffffff) brushStyle=BRUSH_SOLID;
     else if (nHiBytes==0xff000000 && nLoBytes==0x00000000) brushStyle=BRUSH_HORZ;
     else if (nHiBytes==0x80808080 && nLoBytes==0x80808080) brushStyle=BRUSH_VERT;
@@ -142,14 +142,14 @@ class PictReader {
   typedef class PictReaderInternal::Pattern Pattern;
 private:
 
-    SvStream    * pPict;             // Die einzulesende Pict-Datei
-    VirtualDevice * pVirDev;         // Hier werden die Drawing-Methoden aufgerufen.
-                                     // Dabei findet ein Recording in das GDIMetaFile
-                                     // statt.
-    sal_uLong         nOrigPos;          // Anfaengliche Position in pPict
-    sal_uInt16        nOrigNumberFormat; // Anfaengliches Nummern-Format von pPict
-    sal_Bool          IsVersion2;        // Ob es ein Version 2 Pictfile ist.
-    Rectangle     aBoundingRect;     // Min/Max-Rechteck fuer die ganze Zeichnung
+    SvStream    * pPict;             // The Pict file to read.
+    VirtualDevice * pVirDev;         // Here the drawing methos will be called.
+                                     // A recording into the GDIMetaFile will take place.
+
+    sal_uLong     nOrigPos;          // Initial position in pPict.
+    sal_uInt16    nOrigNumberFormat; // Initial number format von pPict.
+    sal_Bool      IsVersion2;        // If it is a version 2 Pictfile.
+    Rectangle     aBoundingRect;     // Min/Max-Rectangle for the whole drawing.
 
     Point         aPenPosition;
     Point         aTextPosition;
@@ -228,12 +228,12 @@ private:
                         sal_Bool bMode, sal_Bool bMaskRgn);
 
     void ReadHeader();
-        // Liesst den Kopf der Pict-Datei, setzt IsVersion2 und aBoundingRect
+        // Reads the header of the Pict file, set IsVersion and aBoundingRect
 
     sal_uLong ReadData(sal_uInt16 nOpcode);
-        // Liesst die Daten eines Opcodes ein und fuehrt die Operation aus.
-        // Auf jeden Fall wird die Anzahl der Datenbytes zu dem Opcode
-        // zurueckgeliefert.
+        // Reads the date of anOopcode and executes the operation.
+        // The number of data bytes belonging to the opcode will be returned
+        // in any case.
 
     void SetLineColor( const Color& rColor );
     void SetFillColor( const Color& rColor );
@@ -245,7 +245,7 @@ public:
   PictReader() { aActFont.SetCharSet(GetTextEncoding()); }
 
     void ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile );
-        // Liesst aus dem Stream eine Pict-Datei und fuellt das GDIMetaFile
+        // reads a pict file from the stream and fills the GDIMetaFile
 
 };
 
@@ -301,7 +301,7 @@ public:
     return 0xffffffff;                                  \
 }
 
-//=================== Methoden von PictReader ==============================
+//=================== methods of PictReader ==============================
 rtl_TextEncoding PictReader::GetTextEncoding (sal_uInt16 fId) {
   static bool first = true;
   static rtl_TextEncoding enc = RTL_TEXTENCODING_APPLE_ROMAN;
@@ -466,10 +466,10 @@ sal_uLong PictReader::ReadPolygon(Polygon & rPoly)
 
 sal_uLong PictReader::ReadPixPattern(PictReader::Pattern &pattern)
 {
-    // Keine Ahnung, ob dies richtig ist, weil kein Bild gefunden, das
-    // PixPatterns enthaelt. Auch hier nur der Versuch, die Groesse der Daten zu
-    // ermitteln, und einfache StarView-Styles daraus zu machen. Gluecklicherweise
-    // enthaelt ein PixPattern immer auch ein normales Pattern.
+    // Don't know if this is correct because no picture which contains PixPatterns found.
+    // Here again the attempt to calculate the size of the date to create simple StarView-Styles
+    // from them. Luckily a PixPattern always contains a normal pattern.
+
 
     sal_uLong nDataSize;
     sal_uInt16 nPatType;
@@ -682,7 +682,7 @@ sal_uLong PictReader::ReadAndDrawText()
     if (IsInvisible(PDM_TEXT)) return nDataLen;
     DrawingMethod(PDM_TEXT);
 
-    // Stoerende Steuerzeuichen wegnehmen:
+    // remove annoying control characters:
     while ( nLen > 0 && ( (unsigned char)sText[ nLen - 1 ] ) < 32 )
             nLen--;
     sText[ nLen ] = 0;
@@ -704,17 +704,17 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
     sal_uInt8               nDat, nRed, nGreen, nBlue, nDummy;
     sal_uLong               i, nDataSize = 0;
 
-    // In nDataSize wird mitgerechnet, wie gross die gesammten Daten sind.
+    // The calculation of nDataSize is considering the size of the whole data.
     nDataSize = 0;
 
-    // ggf. BaseAddr ueberlesen
+    // condionally skip BaseAddr
     if ( bBaseAddr )
     {
         pPict->SeekRel( 4 );
         nDataSize += 4;
     }
 
-    // PixMap oder Bitmap-Struktur einlesen;
+    // Read PixMap or Bitmap structure;
     *pPict >> nRowBytes >> nBndY >> nBndX >> nHeight >> nWidth;
     nHeight = nHeight - nBndY;
     nWidth = nWidth - nBndX;
@@ -774,7 +774,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
         pAcc->SetPaletteColor( 1, BitmapColor( 0, 0, 0 ) );
     }
 
-    // ggf. Quell-Rechteck einlesen:
+    // conditionally read source rectangle:
     if ( pSrcRect != 0)
     {
         sal_uInt16  nTop, nLeft, nBottom, nRight;
@@ -783,7 +783,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
         nDataSize += 8;
     }
 
-    // ggf. Ziel-Rechteck einlesen:
+    // conditionally read destination rectangle:
     if ( pDestRect != 0 )
     {
         Point aTL, aBR;
@@ -793,14 +793,14 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
         nDataSize += 8;
     }
 
-    // ggf. Modus einlesen (bzw. ueberspringen):
+    // conditionally read mode (or skip it):
     if ( bMode )
     {
         pPict->SeekRel(2);
         nDataSize += 2;
     }
 
-    // ggf. Region einlesen (bzw. ueberspringen):
+    // conditionally read region (or skip it):
     if ( bMaskRgn )
     {
         sal_uInt16 nSize;
@@ -811,7 +811,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bo
 
 //  aSMem << (nHRes/1665L) << (nVRes/1665L) << ((sal_uLong)0) << ((sal_uLong)0);
 
-    // Lese und Schreibe Bitmap-Bits:
+    // read and write Bitmap bits:
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
         sal_uInt8   nByteCountAsByte, nFlagCounterByte;
@@ -1115,7 +1115,7 @@ void PictReader::ReadHeader()
 
         // 2 bytes to store size ( version 1 ) ignored
         pPict->SeekRel( 2 );
-        *pPict >> y1 >> x1 >> y2 >> x2; // Rahmen-Rechteck des Bildes
+        *pPict >> y1 >> x1 >> y2 >> x2; // frame rectangle of the picture
         if (x1 > x2 || y1 > y2) continue; // bad bdbox
         if (x1 < -2048 || x2 > 2048 || y1 < -2048 || y2 > 2048 || // origin|dest is very small|large
         (x1 == x2 && y1 == y2) ) // 1 pixel pict is dubious
@@ -1743,7 +1743,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         pPict->SeekRel(2); *pPict >> nUSHORT; nDataSize=4+nUSHORT;
         break;
 
-    default: // 0x00a2 bis 0xffff (zumeist Reserved)
+    default: // 0x00a2 bis 0xffff (most times reserved)
         if      (nOpcode<=0x00af) { *pPict >> nUSHORT; nDataSize=2+nUSHORT; }
         else if (nOpcode<=0x00cf) { nDataSize=0; }
         else if (nOpcode<=0x00fe) { sal_uInt32 nTemp; *pPict >> nTemp ; nDataSize = nTemp; nDataSize+=4; }
@@ -1862,7 +1862,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     if (pPict->GetError()) pPict->Seek(nOrigPos);
 }
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 #ifdef DISABLE_DYNLOADING
 #define GraphicImport iptGraphicImport

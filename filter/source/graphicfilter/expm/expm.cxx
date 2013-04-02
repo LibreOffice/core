@@ -28,18 +28,18 @@ class XPMWriter {
 
 private:
 
-    SvStream&           m_rOStm;            // Die auszugebende XPM-Datei
+    SvStream&           m_rOStm;            // the output XPM file
 
-    sal_Bool                mbStatus;
-    sal_Bool                mbTrans;
+    sal_Bool            mbStatus;
+    sal_Bool            mbTrans;
     BitmapReadAccess*   mpAcc;
-    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
-    sal_uInt16              mnColors;
+    sal_uLong           mnWidth, mnHeight;  // size in Pixel
+    sal_uInt16          mnColors;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uInt16 nPercent );
-    sal_Bool                ImplWriteHeader();
+    sal_Bool            ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplWriteColor( sal_uInt16 );
     void                ImplWriteBody();
@@ -50,7 +50,7 @@ public:
     XPMWriter(SvStream& rOStm);
     ~XPMWriter();
 
-    sal_Bool                WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    sal_Bool            WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von XPMWriter ==============================
@@ -99,10 +99,10 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
     aBmp = aBmpEx.GetBitmap();
 
-    if ( rGraphic.IsTransparent() )                 // event. transparente Farbe erzeugen
+    if ( rGraphic.IsTransparent() )                 // possibly create transparent color
     {
         mbTrans = sal_True;
-        if ( aBmp.GetBitCount() >= 8 )              // wenn noetig Bild auf 8 bit konvertieren
+        if ( aBmp.GetBitCount() >= 8 )              // if necessary convert image to 8 bit
             aBmp.Convert( BMP_CONVERSION_8BIT_TRANS );
         else
             aBmp.Convert( BMP_CONVERSION_4BIT_TRANS );
@@ -110,7 +110,7 @@ sal_Bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilter
     }
     else
     {
-        if ( aBmp.GetBitCount() > 8 )               // wenn noetig Bild auf 8 bit konvertieren
+        if ( aBmp.GetBitCount() > 8 )               // if necessary convert image to 8 bit
             aBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
     }
     mpAcc = aBmp.AcquireReadAccess();
@@ -203,7 +203,7 @@ void XPMWriter::ImplWriteBody()
 }
 
 // ------------------------------------------------------------------------
-// eine Dezimalzahl im ASCII format wird in den Stream geschrieben
+// write a decimal number in ascii format into the stream
 
 void XPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
@@ -226,13 +226,13 @@ void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
 }
 
 // ------------------------------------------------------------------------
-// ein Farbwert wird im Hexadezimalzahlformat in den Stream geschrieben
+// write a color value in hex format into the stream
 void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
 {
     sal_uLong   nTmp;
     sal_uInt8   j;
 
-    m_rOStm << "c #";   // # zeigt einen folgenden Hexwert an
+    m_rOStm << "c #";   // # indicates a following hex value
     const BitmapColor& rColor = mpAcc->GetPaletteColor( nNumber );
     nTmp = ( rColor.GetRed() << 16 ) | ( rColor.GetGreen() << 8 ) | rColor.GetBlue();
     for ( signed char i = 20; i >= 0 ; i-=4 )

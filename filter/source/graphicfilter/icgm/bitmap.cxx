@@ -184,7 +184,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                 if ( nY > 0 )
                     fAngle = 360 - fAngle;
 
-                if ( fAngle > 180 )                 // wird das bild nach oben oder unten aufgebaut ?
+                if ( fAngle > 180 )                 // is the picture build upwards or downwards ?
                 {
                     rDesc.mnOrigin = rDesc.mnP;
                 }
@@ -332,7 +332,7 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
     if ( ( rSource.mnR.Y == rDest.mnQ.Y ) && ( rSource.mnR.X == rDest.mnQ.X ) )
     {   // Insert on Bottom
         if ( mpCGM->mnVDCYmul == -1 )
-            rDest.mnOrigin = rSource.mnOrigin;          // neuer origin
+            rDest.mnOrigin = rSource.mnOrigin;          // new origin
         rDest.mpBitmap->Expand( 0, rSource.mnY );
         rDest.mpBitmap->CopyPixel( Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );
@@ -347,7 +347,7 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
     else
     {   // Insert on Top
         if ( mpCGM->mnVDCYmul == 1 )
-            rDest.mnOrigin = rSource.mnOrigin;          // neuer origin
+            rDest.mnOrigin = rSource.mnOrigin;          // new origin
         rDest.mpBitmap->Expand( 0, rSource.mnY );
         rDest.mpBitmap->CopyPixel( Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
             Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mpBitmap );

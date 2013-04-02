@@ -59,7 +59,7 @@ public:
 //------------------------------------------------------------------------------
 //---------------------------- DXFVector ---------------------------------------
 //------------------------------------------------------------------------------
-// Allgemeiner 3D-Vektor mit double
+// common 3D vector with doubles
 
 class DXFVector {
 
@@ -70,29 +70,29 @@ public:
     inline DXFVector(double fX=0.0, double fY=0.0, double fZ=0.0);
     inline DXFVector(const DXFVector & rV);
 
-    // Addition/Subtraktion:
+    // summation/subtraktion:
     DXFVector & operator += (const DXFVector & rV);
     DXFVector   operator +  (const DXFVector & rV) const;
     DXFVector & operator -= (const DXFVector & rV);
     DXFVector   operator -  (const DXFVector & rV) const;
 
-    // Vektorprodukt
+    // vector product
     DXFVector   operator *  (const DXFVector & rV) const;
 
-    // Skalarprodukt:
+    // skalar product:
     double SProd(const DXFVector & rV) const;
 
-    // Multiplikation mit Skalar:
+    // multiplication with scalar:
     DXFVector & operator *= (double fs);
     DXFVector   operator *  (double fs) const;
 
     // length:
     double Abs() const;
 
-    // Vektor gleicher Richtung und der Laenge 1:
+    // vector with same direction and a length of 1:
     DXFVector Unit() const;
 
-    // Aequivalenz oder nicht:
+    // equivalence or net:
     sal_Bool operator == (const DXFVector & rV) const;
     sal_Bool operator != (const DXFVector & rV) const;
 };
@@ -100,62 +100,62 @@ public:
 //------------------------------------------------------------------------------
 //---------------------------- DXFTransform ------------------------------------
 //------------------------------------------------------------------------------
-// Eine Transformationsmatrix, spezialisiert auf unser Problem
+// a transformation matrice specialized for our problem
 
 class DXFTransform {
 
 public:
 
     DXFTransform();
-        // Zielkoordinate = Quellkoordinate
+        // destination coordinate = source coordinate
 
     DXFTransform(double fScaleX, double fScaleY, double fScaleZ,
                  const DXFVector & rShift);
-        // Zielkoordinate = Verschoben(Skaliert(Quellkoorinate))
+        // dest coordinate = translate(scale(source coordinate))
 
     DXFTransform(double fScaleX, double fScaleY, double fScaleZ,
                  double fRotAngle,
                  const DXFVector & rShift);
-        // Zielkoordinate = Verschoben(Gedreht(Skaliert(Quellkoorinate)))
-        // Drehung geshieht um die Z-Achse, fRotAngle in Grad.
+        // dest coordinate = translate(rotate(scale(source coordinate)))
+        // rotation around z-axis, fRotAngle in degrees.
 
     DXFTransform(const DXFVector & rExtrusion);
-        // Transformation "ECS->WCS" per "Entity Extrusion Direction"
-        // und dem "Arbitrary Axis Algorithm"
-        // (Siehe DXF-Docu von AutoDesk)
+        // Transformation "ECS->WCS" via "Entity Extrusion Direction"
+        // ant the "Arbitrary Axis Algorithm"
+        // (See DXF-Docu from AutoDesk)
 
     DXFTransform(const DXFVector & rViewDir, const DXFVector & rViewTarget);
-        // Transformation Objektraum->Bildraum anhand von Richtung und
-        // Zielpunkt eines ViewPort.
-        // (siehe DXF-Docu von AutoDesk: VPORT)
+        // Transformation object space->picture space on the basis of direction
+        // destination point of a viewport
+        // (See DXF-Docu from AutoDesk: VPORT)
 
     DXFTransform(const DXFTransform & rT1, const DXFTransform & rT2);
-        // Zielkoordinate = rT2(rT1(Quellkoorinate))
+        // destination coordinate = rT2(rT1(source coordinate))
 
 
     void Transform(const DXFVector & rSrc, DXFVector & rTgt) const;
-        // Transformation DXFVector nach DXFVector
+        // Transformation from DXFVector to DXFVector
 
     void Transform(const DXFVector & rSrc, Point & rTgt) const;
-        // Transformation DXFVector nach SvPoint
+        // Transformation from DXFVector to SvPoint
 
     void TransDir(const DXFVector & rSrc, DXFVector & rTgt) const;
-        // Transformation eines relativen Vektors (also kein Verschiebung)
+        // Transformation of a relative vector (so no translation)
 
     sal_Bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
-        // Versucht, einen Kreis (in der XY-Ebene) zu transformieren, so dass eine
-        // ausgerichtete Ellipse entsteht. Wenn das nicht geht, weil Ellipse
-        // in belibieger Lage entstehen wuerde, wird sal_False geliefert.
-        // (Der Mittelpunkt wird hiermit nicht transformiert, nehme Transform(..))
+        // Attemp to transform a circle (in xy plane) so that it results
+        // in an aligned ellipse. If the does not work because a ellipse of
+        // arbitrary position would be created, sal_False is returned.
+        // (The center point will not be transformed, use Transform(..))
 
     sal_uLong TransLineWidth(double fW) const;
-        // Transformiert die Liniendicke (so gut es geht)
+        // Transforms the thickness of a line (as good as possible)
 
     double CalcRotAngle() const;
-        // Ermittelt den Rotationswinkel um die Z-Achse (in Grad)
+        // Calculates the rotation angle around z-axis (in degrees)
 
     sal_Bool Mirror() const;
-        // Liefert sal_True, wenn die Matrix ein Linkssystem bildet
+        // Returns sal_True, if the matrice represents a left-handed coordinate system
 
     LineInfo Transform(const DXFLineInfo& aDXFLineInfo) const;
         // Transform to LineInfo

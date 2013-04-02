@@ -241,13 +241,11 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
         nSize2=aPoly2.GetSize();
 
         // At first we look for a point in aPoly1 (referenced by nBestIdx1) and a
-        // point in aPoly2 (referenced by nBestid2), which
-        // Zunaechst werden ein Punkt in aPoly1 (referenziert durch nBestIdx1) und ein
-        // Punkt in aPoly2 (referenziert durch nBestIdx2) gesucht, die moeglichst dicht
-        // beieinander liegen. Da dies mit quadratischem Aufwand einher geht, und somit
-        // manche Bilder Ewigkeiten benoetigen, um exportiert zu werden, begrenzen wir
-        // die Anzahl der Tests auf 1000, und brechen die Suche ggf. schon vorher ab.
-        // Dadruch wird das Ergebnis nicht falsch, sondern eventuell nicht so schoen.
+        // point in aPoly2 (referenced by nBestid2), which are as close together as
+        // possible. Because this is following square complexity and therefore some
+        // pictures would need infinite time to export, we limit the the number of test
+        // by the number of 1000 and cancel the search if necessary preliminarily.
+        // The result of this will not be wrong but rather not so beautiful.
         nCountdownTests=1000;
         nBestDistSqr=0x7fffffff;
         nBestIdx1=0;
@@ -907,18 +905,17 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     // If 24-Bit, then create the Opcode 'DirectBitsRect':
     if ( nBitsPerPixel == 24 )
     {
-        // Anzahl Bytes einer (ungepackten) Zeile in Quelle und Ziel berechnen:
+        // Calculate the number of bytes of an (uncompressed) line of source and destination.
         nSrcRowBytes =( ( 3 * nWidth ) + 0x0003 ) & 0xfffc;
         nDstRowBytes = nWidth * 4;
 
         // writing Opcode and BaseAddr (?):
         *pPict << (sal_uInt16)0x009a << (sal_uInt32)0x000000ff;
 
-        // Normalerweise wollen wir den Packing-Type 4 (Run length encoding
-        // for 32-Bit Pixels) erzeugen. Wenn aber RowBytes<8 gilt, sind die Daten
-        // grundsaetzlich ungepackt, auch wenn der Packing-Type 4 angegeben ist,
-        // was etwas komisch erscheint. Daher wollen wir in so einem Fall lieber
-        // gleich den Packing-Type 1 (ungepackt) angeben:
+        // Normally we want to produce packing type 4 (run length encoding
+        // for 32-bit pixels). But if RowBytes<8 is true, generally all data is
+        // unpacked even if packing type 4 is specified, which seems a little bit
+        // strange. Hence we want to specify packing type 1 (no packing) in these cases:
 
         if ( nDstRowBytes < 8 )
             nPackType = 1;
@@ -975,14 +972,14 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         }
         else    // packing ( PackType == 4 )
         {
-            // Speicher fuer Zeilen-Zwischen-Datenstruktur allozieren:
+            // allocate memory for lines-intermediate-data-structure
             for ( nc = 0; nc < 4; nc++ )
                 pComp[ nc ] = new sal_uInt8[ nWidth ];
 
             // loop trough rows:
             for ( ny = 0; ny < nHeight; ny++ )
             {
-                // Zeil ny der Quelle in die Zwischen-Datenstrktur einlesen:
+                // read line ny of source into the intermediate data structure
 
                 for ( nx = 0; nx < nWidth; nx++ )
                 {
@@ -1025,7 +1022,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                             nEqu3++;
                         }
 
-                        // Die Daten von nx bis nEqu3 unkomprimiert schreiben (ggf. in mehreren Records):
+                        // write the data from nx to nEqu3 uncompressed (into multiple records if necessarcy);
                         while ( nEqu3 > nx )
                         {
                             nCount = nEqu3 - nx;
@@ -1041,8 +1038,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                             while ( nCount > 0 );
                         }
 
-                        // Jetzt einen Komprimierungs-Record erzeugen (falls oben mindestens 3
-                        // gleiche Bytes gefunden):
+                        // now create a compression record (if at least 3 identical bytes were found above)
                         if ( nx < nWidth )
                         {               // Hint: Then one has nx==nEqu3 (hopefully)
                             nCount=3;   // Three bytes are equal, as we found out above
@@ -1070,7 +1066,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 pPict->Seek( nPos );
 
                 // count percentages, Callback, check errors:
-                nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% machten schon das Schreiben der Win-BMP-Datei aus)
+                nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% already added up to the writing of the Win-BMP file)
                 MayCallback();
             }
             // clean up:
@@ -1081,8 +1077,8 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     else
     {   // don't generate 24-bit i.e. Opcode 'PackBitsRect':
 
-        // Bei 1-Bit-Bildern ignorieren manche Import-Filter die Palette und nehmen statt
-        // dessen die Vorder- und Hintergrundfarbe:
+        // Some input filters are ignoring the palette of 1-bit images and are using
+        // the foreground and the background color instead.
         if ( nBitsPerPixel == 1 )
         {
             WriteOpcode_RGBBkCol( pAcc->GetPaletteColor( 0 ) );
@@ -1094,18 +1090,17 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             WriteOpcode_RGBFgCol( Color( COL_WHITE ) );
         }
 
-        // Anzahl Bytes einer (ungepackten) Zeile in Ziel und Quelle berechnen:
+        // Calculate the number of bytes of an (unpacked) line of source an destination.
         nDstRowBytes = ( nWidth * nBitsPerPixel + 7 ) >> 3;
         nSrcRowBytes = ( nDstRowBytes + 3 ) & 0xfffffffc;
 
         // writing Opcode:
         *pPict << (sal_uInt16)0x0098;
 
-        // Normalerweise wollen wir den Packing-Type 0 (default Packing) erzeugen.
-        // Wenn aber RowBytes<8 gilt, sind die Daten grundsaetzlich ungepackt,
-        // auch wenn der Packing-Type 0 angegeben ist, was etwas komisch erscheint.
-        // Daher wollen wir in so einem Fall lieber gleich den Packing-Type 1 (ungepackt)
-        // angeben:
+        // Normally we want to produce packing type 0 (default packing).
+        // But if RowBytes<8 is true, generally all data is unpacked even if packing
+        // type 0 is specified, which seems a little bit strange. Hence we want to
+        // specify packing type 1 (no packing) in these cases.
         if ( nDstRowBytes < 8 )
             nPackType = 1;
         else
@@ -1162,8 +1157,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         for ( ny = 0; ny < nHeight; ny++ )
         {
 
-            // Zeile ny der Quelle in den Zwischenspeicher einlesen:
-
+            // read line ny of source into the buffer:
             switch ( nBitsPerPixel )
             {
                 case 1 :
@@ -1194,7 +1188,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 // remember start of the row in the target:
                 nDstRowPos = pPict->Tell();
 
-                // ByteCount (das ist die Groesse der gepackten Zeile) zunaechst 0 (wird spaeter berichtigt):
+                // ByteCount (this is the size of the packed line) initialized with 0 (will be corrected later):
                 if ( nDstRowBytes > 250 )
                     *pPict << (sal_uInt16)0;
                 else
@@ -1204,9 +1198,9 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 nx=0;
                 while ( nx < nDstRowBytes && bStatus )
                 {
-                    // Die Position von 3 gleichen Bytes suchen und in nEqu3 merken.
-                    // wenn nicht gefunden, dann nEqu3=nDstRowBytes setzten.
-                    // Wenn doch gefunden, dann in nEquData den Wert der Bytes merken.
+                    // Look for the position of three identical bytes and remember it in nEqu3.
+                    // Set nEqu3=nDstRowBytes if not found.
+                    // Else remember the value of these bytes in nEquData.
                     nEqu3 = nx;
                     for (;;)
                     {
@@ -1221,7 +1215,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                         nEqu3++;
                     }
 
-                    // Die Daten von nx bis nEqu3 unkomprimiert schreiben (ggf. in mehreren Records):
+                    // Write the data unpacked from nx to nEqu3 (in multiple records if necessary):
                     while ( nEqu3 > nx )
                     {
                         nCount = nEqu3 - nx;
@@ -1236,19 +1230,18 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                         } while ( nCount > 0 );
                     }
 
-                    // Jetzt einen Komprimierungs-Record erzeugen (falls oben mindestens 3
-                    // gleiche Bytes gefunden):
+                    // Now create a compression record (if at least 3 identical bytes were found above):
                     if ( nx < nDstRowBytes )
-                    {   // Hinweis: es gilt nx==nEqu3 (hoffentlich)
-                        nCount = 3; // Drei Bytes sind gleich, wie weiter oben herausgefunden.
-                        // Pruefen, ob es weitere gleiche Bytes gibts (dabei Max.-Record-Groesse beachten):
+                    {   // Note: it is imperative nx==nEqu3 (hopefully)
+                        nCount = 3; // three bytes are identically, as identified above
+                        // Check if more identical bytes exist. (in doing so, consider max record size):
                         while ( nx + nCount < nDstRowBytes && nCount < 128 )
                         {
                             if ( nEquData != pPix[ nx + nCount ] )
                                 break;
                             nCount++;
                         }
-                        // nCount gleiche Bytes komprimiert schreiben:
+                        // write nCount identical bytes unpacked:
                         nFlagCounterByte = (sal_uInt8)( 1 - (long)nCount );
                         *pPict << nFlagCounterByte << nEquData;
                         nx += nCount;
@@ -1266,7 +1259,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             }
 
             // count percentages, Callback, check errors:
-            nActBitmapPercent =( ny * 70 / nHeight ) + 30; // (30% machten schon das Schreiben der Win-BMP-Datei aus)
+            nActBitmapPercent =( ny * 70 / nHeight ) + 30; // (30% already added up to the writing of the Win-BMP file)
             MayCallback();
             if ( pPict->GetError() )
                 bStatus = sal_False;

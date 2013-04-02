@@ -32,15 +32,15 @@ class PGMWriter {
 
 private:
 
-    SvStream& m_rOStm;          // Die auszugebende PGM-Datei
-    sal_uInt16              mpOStmOldModus;
+    SvStream&           m_rOStm;            // the output PGM file
+    sal_uInt16          mpOStmOldModus;
 
-    sal_Bool                mbStatus;
-    sal_uInt32              mnMode;
+    sal_Bool            mbStatus;
+    sal_uInt32          mnMode;
     BitmapReadAccess*   mpAcc;
-    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    sal_uLong           mnWidth, mnHeight;  // image size in pixeln
 
-    sal_Bool                ImplWriteHeader();
+    sal_Bool            ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -200,8 +200,7 @@ void PGMWriter::ImplWriteBody()
 }
 
 // ------------------------------------------------------------------------
-// eine Dezimalzahl im ASCII format wird in den Stream geschrieben
-
+// write a decimal number in ascii format into the stream
 void PGMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
     const rtl::OString aNum(rtl::OString::valueOf(nNumber));

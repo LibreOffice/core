@@ -28,7 +28,7 @@
 typedef std::deque< Point > DXFPointArray;
 
 //------------------------------------------------------------------------------
-//------------------------- Art eines Entity -----------------------------------
+//----------------------------- entity kind ------------------------------------
 //------------------------------------------------------------------------------
 
 enum DXFEntityType {
@@ -53,7 +53,7 @@ enum DXFEntityType {
 };
 
 //------------------------------------------------------------------------------
-//---------------------- Basisklasse fuer ein Entity ---------------------------
+//------------------------ base class of an entity -----------------------------
 //------------------------------------------------------------------------------
 
 class DXFBasicEntity {
@@ -61,13 +61,13 @@ class DXFBasicEntity {
 public:
 
     DXFBasicEntity * pSucc;
-        // Zeiger auf naechstes Entity (in der Liste DXFEntities.pFirst)
+        // pointer to next entity (in the list of DXFEntities.pFirst)
 
     DXFEntityType eType;
-        // Art des Entitys (Linie oder Kreis oder was)
+        // entity kind (line or circle or what)
 
-    // Eigenschaftenm, die alle Entities besitzen, jeweils
-    // durch den Gruppencode kommentiert:
+    // properties that all entities have, each
+    // commented with group codes:
     char sLayer[DXF_MAX_STRING_LEN+1];    //  8
     char sLineType[DXF_MAX_STRING_LEN+1]; //  6
     double fElevation;                    // 38
@@ -79,26 +79,26 @@ public:
 protected:
 
     DXFBasicEntity(DXFEntityType eThisType);
-        // Konstruktoren der Entities initialiseren immer mit Defaultwerten.
+        // always initialize the constructors of entities with default values
 
 public:
 
     virtual ~DXFBasicEntity();
     virtual void Read(DXFGroupReader & rDGR);
-        // Liest die Prameter ein, bis zur naechten 0-Gruppe
+        // Reads a parameter till the next 0-group
 
 protected:
 
     virtual void EvaluateGroup(DXFGroupReader & rDGR);
-        // Diese Methode wird durch Read() fuer jeden Parameter (bzw. fuer jede
-        // Gruppe) aufgerufen.
-        // Sofern der Gruppencode dem Entity bekannt ist, wird der entsprechende
-        // Parameter geholt.
+        // This method will be called by Read() for every parameter (respectively
+        // for every group).
+        // As far as the group code of the entity is known, the corresponding
+        // parameter is fetched.
 
 };
 
 //------------------------------------------------------------------------------
-//---------------- die verschiedenen Arten von Entyties ------------------------
+//------------------- the different kinds of entities --------------------------
 //------------------------------------------------------------------------------
 
 //--------------------------Line------------------------------------------------
@@ -495,8 +495,8 @@ class DXFVertexEntity : public DXFBasicEntity {
 public:
 
     DXFVector aP0;     // 10,20,30
-    double fSWidth;    // 40 (Wenn <0.0, dann gilt DXFPolyLine::fSWidth)
-    double fEWidth;    // 41 (Wenn <0.0, dann gilt DXFPolyLine::fEWidth)
+    double fSWidth;    // 40 (if <0.0, then one has DXFPolyLine::fSWidth)
+    double fEWidth;    // 41 (if <0.0, then one has DXFPolyLine::fEWidth)
     double fBulge;     // 42
     long nFlags;       // 70
     double fCFTDir;    // 50
@@ -552,7 +552,7 @@ protected:
 };
 
 //------------------------------------------------------------------------------
-//----------- Eine Menge von Entities lesen und repraesentieren ----------------
+//----------------- read and represent the set of entities ---------------------
 //------------------------------------------------------------------------------
 
 class DXFEntities {
@@ -562,15 +562,15 @@ public:
     DXFEntities();
     ~DXFEntities();
 
-    DXFBasicEntity * pFirst; // Liste von Entities, READ ONLY!
+    DXFBasicEntity * pFirst; // list of entities, READ ONLY!
 
     void Read(DXFGroupReader & rDGR);
-        // Liest Entitis per rGDR aus einer DXF-Datei bis zu
-        // einem ENDBLK, ENDSEC oder EOF (der Gruppe 0).
-        // (Alle unbekannten Dinge werden uebersprungen)
+        // read entities per rGDR of a DXF file untill a
+        // ENDBLK, ENDSEC oder EOF (of group 0).
+        // (all unknown thing will be skipped)
 
     void Clear();
-        // Loescht alle Entities
+        // deletes all entities
 };
 
 //------------------------------------------------------------------------------

@@ -697,7 +697,7 @@ void CGM::ImplDefaultReplacement()
                 if ( mnElementSize & 1 )
                     nCount++;
                 nCount += mnElementSize;
-                if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // rekursion hier nicht moeglich!!
+                if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // recursion is not possible here!!
                     ImplDoClass();
             }
         }
@@ -760,7 +760,7 @@ SvStream& operator>>( SvStream& rOStm, CGM& /*rCGM*/ )
 
 
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL
 ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )

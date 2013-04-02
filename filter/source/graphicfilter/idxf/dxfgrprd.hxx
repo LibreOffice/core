@@ -32,8 +32,8 @@ class DXFGroupReader
 
 public:
 
-    // Anmerkkung:
-    // sizeof(DXFGroupReader) ist gross, also nur dynamisch anlegen!
+    // note:
+    // sizeof(DXFGroupReader) is big, so only create dynamically
 
     DXFGroupReader( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent );
 
@@ -42,41 +42,42 @@ public:
     void SetError();
 
     sal_uInt16 Read();
-        // Liesst die naechste Gruppe ein und liefert den Gruppencode zurueck.
-        // Im Falle eines Fehlers liefert GetStatus() sal_False, Gruppencode wird 0
-        // gesetzt, und es wird SetS(0,"EOF") ausgefuehrt.
+        // Reads next group and returns the group code.
+        // In case of an error GetStatus() returns sal_False, group code will be set
+        // to 0 and SetS(0,"EOF") will be executed.
 
     sal_uInt16 GetG() const;
-        // Liefert den letzten Gruppencode (also was Read() zuletzt lieferte)
+        // Return the last group code (the one the last Read() did return).
 
     long   GetI() const;
-        // Liefert den Integer-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
-        // Dabei muss es sich um einen Gruppencode fuer den Datentyp Integer
-        // gehandelt haben, wenn nicht, wird 0 gelieferet.
+        // Returns the integer value of the group which was read earlier with Read().
+        // This read must have returned a group code for datatype Integer.
+        // If not 0 is returend
 
     double GetF() const;
-        // Liefert den Floatingpoint-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
-        // Dabei muss es sich um einen Gruppencode fuer den Datentyp Floatingpoint
-        // gehandelt haben, wenn nicht, wird 0 geliefert.
+        // Returns the floating point value of the group which was read earlier with Read().
+        // This read must have returned a group code for datatype Floatingpoint.
+        // If not 0 is returend
 
     const char * GetS() const;
-        // Liefert den String zur Gruppe, die vorher mit Read() gelesen wurde.
-        // Dabei muss es sich um einen Gruppencode fuer den Datentyp String
-        // gehandelt haben, wenn nicht, wird NULL geliefert.
+        // Returns the string of the group which was read earlier with Read().
+        // This read must have returned a group code for datatype String.
+        // If not NULL is returend
 
-    // Folgende drei Methoden arbeiten wie die obigen, nur kann auch ein anderer als der
-    // aktuelle Gruppencode angegeben werden. (DXFGroupReader speichert die Parameter
-    // zu allen Gruppencodes. Dadurch ist es moeglich, dass zunaechst mit Read() einige
-    // verschiedene Gruppen eingelesen werden, bevor sie ausgewertet werden.)
+    // The following three methods work like the above execp that a different than the
+    // current group code can bet set. (DXFGroupReader stroes the parameters of all
+    // group codes. Therefore it is possible to first Read() some groups and then analyze
+    // them afterwards.)
+
     long         GetI(sal_uInt16 nG) const;
     double       GetF(sal_uInt16 nG) const;
     const char * GetS(sal_uInt16 nG) const;
 
-    // Mit folgenden Methoden koennen die aktuell gespeicherten Werte zu den
-    // Gruppencodes veraendert werden. (z.B. um Defaultwerte zu setzen, bevor
-    // 'blind' eine Menge von Gruppen eingelesen wird.)
+    // The following methods can change the current values of group codes
+    // (e.g. to set default values, before 'blindly' reading lots of groups)
+
     void SetF(sal_uInt16 nG, double fF);
-    void SetS(sal_uInt16 nG, const char * sS); // (wird kopiert)
+    void SetS(sal_uInt16 nG, const char * sS); // (will be copied)
 
 private:
 
@@ -96,18 +97,18 @@ private:
     sal_uLong nLastPercent;
     sal_uLong nFileSize;
 
-    char   S0_9      [10][DXF_MAX_STRING_LEN+1]; // Strings  Gruppencodes 0..9
-    double F10_59    [50];      // Floats   Gruppencodes 10..59
-    long   I60_79    [20];      // Integers Gruppencodes 60..79
+    char   S0_9      [10][DXF_MAX_STRING_LEN+1]; // Strings  group codes  0..9
+    double F10_59    [50];      // Floats   group codes 10..59
+    long   I60_79    [20];      // Integers group codes 60..79
     long   I90_99    [10];
     char   S100      [DXF_MAX_STRING_LEN+1];
     char   S102      [DXF_MAX_STRING_LEN+1];
-    double F140_147  [ 8];      // Floats   Gruppencodes 140..147
-    long   I170_175  [ 6];      // Integers Gruppencodes 170..175
-    double F210_239  [30];      // Floats   Gruppencodes 210..239
-    char   S999_1009 [11][DXF_MAX_STRING_LEN+1]; // Strings  Gruppencodes 999..1009
-    double F1010_1059[50];      // Floats   Gruppencodes 1010..1059
-    long   I1060_1079[20];      // Integers Gruppencodes 1060..1079
+    double F140_147  [ 8];      // Floats   group codes 140..147
+    long   I170_175  [ 6];      // Integers group codes 170..175
+    double F210_239  [30];      // Floats   group codes 210..239
+    char   S999_1009 [11][DXF_MAX_STRING_LEN+1]; // Strings  group codes 999..1009
+    double F1010_1059[50];      // Floats   group codes 1010..1059
+    long   I1060_1079[20];      // Integers group codes 1060..1079
 
 };
 

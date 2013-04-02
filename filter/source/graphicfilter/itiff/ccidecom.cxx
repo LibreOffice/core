@@ -633,9 +633,9 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
     if ( bStatus == sal_False )
         return sal_False;
 
-    // Wenn EOL-Codes vorhanden sind, steht der EOL-Code auch vor der ersten Zeile.
-    // (und ich dachte EOL heisst 'End Of Line'...)
-    // Daher lesen wir den EOL-Code immer vor jeder Zeile als erstes ein:
+    // If EOL-Codes exist, the EOL-Code also appeared in front of the first line.
+    // (and I thought it means 'End of Line'...)
+    // Therefore we read the EOL-Code always at the beginning of each line first:
     if ( nOptions & CCI_OPTION_EOL )
     {
         if ( bFirstEOL )
@@ -677,7 +677,7 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
             for ( i = 0; i < nLastLineSize; i++ ) *( pDst++ ) = 0x00;
         }
     }
-    // ggf. Zeilen-Anfang auf naechste Byte-Grenze runden:
+    // conditionally align start of line to next byte:
     if ( nOptions & CCI_OPTION_BYTEALIGNROW )
         nInputBitsBufSize &= 0xfff8;
 
@@ -760,12 +760,11 @@ sal_Bool CCIDecompressor::ReadEOL( sal_uInt32 /*nMaxFillBits*/ )
     sal_uInt8   nByte;
 
     // if (nOptions&CCI_OPTION_BYTEALIGNEOL) nMaxFillBits=7; else nMaxFillBits=0;
-    // Buuuh: Entweder wird die Option in itiff.cxx nicht richtig gesetzt (-> Fehler in Doku)
-    // oder es gibt tatsaechlich gemeine Export-Filter, die immer ein Align machen.
-    // Ausserdem wurden Dateien gefunden, in denen mehr als die maximal 7 noetigen
-    // Fuellbits vor dem EOL-Code stehen. Daher akzeptieren wir nun grundsaetzlich
-    // bis zu 32-nonsense-Bits vor dem EOL-Code:
-    // und ich habe eine Datei gefunden in der bis zu ??? Bloedsinn Bits stehen, zudem ist dort die Bit Reihenfolge verdreht (SJ);
+    // D'oh: Either the option in itiff.cxx is not set correctly (-> error in documentation)
+    // or there exist some nasty export filter who always do align.
+    // In addition files were found in which more than the necessary maximum of 7 filling
+    // bits were found. Therefore we now generally accept up to 32 nonsense bits in front of the EOL-Code:
+    // And I found a file in which up to ??? nonsense bits are written. Furthemore the byte order is switched in it. (SJ)
 
     sal_uInt32 nMaxPos = pIStream->Tell();
     nMaxPos += nWidth >> 3;
@@ -927,8 +926,8 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
     // loop through codes from the input stream:
     do {
 
-        // die naechsten 13 Bits nach nCode holen, aber noch nicht
-        // aus dem Eingabe-Buffer loeschen:
+        // fetch next 13 bits into nCodem but dont remove them from
+        // the input buffer:
         while (nInputBitsBufSize<13) {
             *pIStream >> nByte;
             if ( nOptions & CCI_OPTION_INVERSEBITORDER )
@@ -954,13 +953,13 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
         }
         if ( nCodeBits == 0 )
         {
-            return;             // das koennen sich jetzt um FuellBits handeln
+            return;             // could be filling bits now
         }
         nEOLCount = 0;
         // too much data?
         if (nDataBits>nTargetBits) {
-            // Ja, koennte ein Folge-Fehler durch ungueltigen Code sein,
-            // daher irdenwie weitermachen:
+            // Yes, could be a subsequent error cause by an invalid code
+            // Thefore continue anyhow:
             nDataBits=nTargetBits;
         }
 

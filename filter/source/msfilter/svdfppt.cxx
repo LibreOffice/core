@@ -2479,8 +2479,8 @@ Size SdrPowerPointImport::GetPageSize() const
 {
     Size aRet( IsNoteOrHandout( nAktPageNum, eAktPageKind ) ? aDocAtom.GetNotesPageSize() : aDocAtom.GetSlidesPageSize() );
     Scale( aRet );
-    // PPT arbeitet nur mit Einheiten zu 576DPI. Um Ungenauigkeiten zu
-    // vermeiden runde ich die letzte Nachkommastelle metrisch weg.
+    // PPT works with units of 576 dpi in any case. To avoid inacurracies
+    // I do round the last decimal digit away.
     if ( nMapMul > 2 * nMapDiv )
     {
         MapUnit eMap = pSdrModel->GetScaleUnit();
@@ -5647,7 +5647,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
     }
     else
     {
-        if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nDestinationInstance ) )  // Textfarbe (4Byte-Arg)
+        if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nDestinationInstance ) )  // text color (4Byte-Arg)
         {
             Color aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
             rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
@@ -5663,7 +5663,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
         }
     }
 
-    if ( GetAttrib( PPT_CharAttr_Escapement, nVal, nDestinationInstance ) ) // Hoch/Tiefstellung in %
+    if ( GetAttrib( PPT_CharAttr_Escapement, nVal, nDestinationInstance ) ) // super-/subscript in %
     {
         sal_uInt16  nEsc = 0;
         sal_uInt8   nProp = 100;
@@ -6099,7 +6099,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     if ( GetAttrib( PPT_ParaAttr_Adjust, nVal, nDestinationInstance ) )
     {
         if ( nVal <= 3 )
-        {   // Absatzausrichtung
+        {   // paragraph adjustment
             static SvxAdjust const aAdj[ 4 ] = { SVX_ADJUST_LEFT, SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK };
             rSet.Put( SvxAdjustItem( aAdj[ nVal ], EE_PARA_JUST ) );
         }
@@ -6273,7 +6273,7 @@ void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateForm
 {
     eDateFormat = SVXDATEFORMAT_APPDEFAULT;
     eTimeFormat = SVXTIMEFORMAT_APPDEFAULT;
-    // ID auswerten
+    // evaluate ID
     switch( nVal )
     {
         case 0:
