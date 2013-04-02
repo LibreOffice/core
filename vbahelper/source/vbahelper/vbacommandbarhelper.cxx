@@ -247,7 +247,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
             aBuffer.append( sLabel.copy( index + 1 ) );
         }
         OUString sNewLabel = aBuffer.makeStringAndClear();
-        OSL_TRACE("VbaCommandBarHelper::findControlByName, control name: %s", OUStringToOString( sNewLabel, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("vbahelper", "VbaCommandBarHelper::findControlByName, control name: " << sNewLabel);
         if( sName.equalsIgnoreAsciiCase( sNewLabel ) )
             return i;
     }

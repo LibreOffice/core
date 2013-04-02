@@ -29,13 +29,13 @@ const static OUString TOGGLE( "Toggle" );
 const static OUString STATE( "State" );
 ScVbaToggleButton::ScVbaToggleButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper ) : ToggleButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
-    OSL_TRACE("ScVbaToggleButton(ctor)");
+    SAL_INFO("vbahelper", "ScVbaToggleButton(ctor)");
     m_xProps->setPropertyValue( TOGGLE, uno::makeAny( sal_True ) );
 }
 
 ScVbaToggleButton::~ScVbaToggleButton()
 {
-    OSL_TRACE("~ScVbaToggleButton(dtor)");
+    SAL_INFO("vbahelper", "~ScVbaToggleButton(dtor)");
 }
 
 // Attributes
@@ -67,9 +67,9 @@ ScVbaToggleButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExcepti
 {
     sal_Int16 nState = 0;
     _value >>= nState;
-    OSL_TRACE( "nState - %d", nState );
+    SAL_INFO("vbahelper", "nState - " << nState );
     nState = ( nState == -1 ) ?  1 : 0;
-    OSL_TRACE( "nState - %d", nState );
+    SAL_INFO("vbahelper", "nState - " << nState );
     m_xProps->setPropertyValue( STATE, uno::makeAny(  nState ) );
 }
 

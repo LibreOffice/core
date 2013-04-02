@@ -48,7 +48,7 @@ VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs
 
 VbaEventsHelperBase::~VbaEventsHelperBase()
 {
-    OSL_ENSURE( mbDisposed, "VbaEventsHelperBase::~VbaEventsHelperBase - missing disposing notification" );
+    SAL_WARN_IF( !mbDisposed, "vbahelper", "VbaEventsHelperBase::~VbaEventsHelperBase - missing disposing notification" );
 }
 
 sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
@@ -93,7 +93,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
         const EventHandlerInfo& rInfo = getEventHandlerInfo( aEventQueue.front().mnEventId );
         uno::Sequence< uno::Any > aEventArgs = aEventQueue.front().maArgs;
         aEventQueue.pop_front();
-        OSL_TRACE( "VbaEventsHelperBase::processVbaEvent( \"%s\" )", OUStringToOString( rInfo.maMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("vbahelper", "VbaEventsHelperBase::processVbaEvent( \"" << rInfo.maMacroName << "\" )");
 
         /*  Let derived classes prepare the event, they may add new events for
             next iteration. If false is returned, the event handler must not be
@@ -140,7 +140,7 @@ sal_Bool SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, cons
 
 void SAL_CALL VbaEventsHelperBase::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
 {
-    OSL_TRACE( "VbaEventsHelperBase::notifyEvent( \"%s\" )", OUStringToOString( rEvent.EventName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("vbahelper", "VbaEventsHelperBase::notifyEvent( \"" << rEvent.EventName << "\" )");
     if( rEvent.EventName == GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ) )
         stopListening();
 }

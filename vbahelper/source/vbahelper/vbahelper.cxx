@@ -193,7 +193,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
     SbxObject* basicChosen =  pBasic ;
     if ( basicChosen == NULL)
     {
-        OSL_TRACE("getModelFromBasic() StarBASIC* is NULL" );
+        SAL_INFO("vbahelper", "getModelFromBasic() StarBASIC* is NULL" );
         return xModel;
     }
     SbxObject* p = pBasic;
@@ -224,14 +224,12 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
         }
         else
         {
-            OSL_TRACE("Have model points to url %s",
-                OUStringToOString( xModel->getURL(),
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("vbahelper", "Have model points to url " << xModel->getURL());
         }
     }
     else
     {
-        OSL_TRACE("Failed to get %s", OUStringToOString( sKey, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("vbahelper", "Failed to get " << sKey);
         throw uno::RuntimeException(
             "Can't determine the currently selected document" ,
             uno::Reference< uno::XInterface >() );
@@ -740,7 +738,7 @@ void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Point
         const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),    uno::UNO_SET_THROW   );
 
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        OSL_ENSURE( pWindow, "ScVbaApplication::setCursor: no window!" );
+        SAL_WARN_IF( !pWindow, "vbahelper", "ScVbaApplication::setCursor: no window!" );
         if ( !pWindow )
             continue;
 

@@ -46,10 +46,10 @@ extern "C"
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
-        OSL_TRACE("In component_getFactory for %s", pImplName );
+        SAL_INFO("vbahelper", "In component_getFactory for " << pImplName );
     void* pRet =  component_getFactoryHelper(
             pImplName, pServiceManager, pRegistryKey, controlprovider::serviceDecl, userform::serviceDecl );
-    OSL_TRACE("Ret is 0x%x", pRet);
+    SAL_INFO("vbahelper", "Ret is 0x" << std::hex << pRet);
     return pRet;
     }
 }
