@@ -194,6 +194,7 @@
             <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertGraphic"/>
+                    <menu:menuitem menu:id=".uno:PhotoAlbumDialog"/>
                     <menu:menu menu:id=".uno:Scan">
                         <menu:menupopup>
                             <menu:menuitem menu:id=".uno:TwainSelect"/>
@@ -215,8 +216,6 @@
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ImportFromFile"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PhotoAlbumDialog"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:FormatMenu">
