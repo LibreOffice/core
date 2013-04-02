@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//92k\u003d",
+        "filename": "starmath/source/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-04-02T22:13:18Z",
+      "side": 1,
+      "message": "Can I delete this completely (as I did by commenting it out for now)?",
+      "revId": "8ee9e75f6efa895fa7a5cd298525b860aa974d23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

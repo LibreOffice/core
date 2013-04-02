@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//92o\u003d",
+        "filename": "starmath/inc/dialog.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-04-02T22:13:18Z",
+      "side": 0,
+      "message": "Do I need to convert this one too? In what?",
+      "revId": "67e5e3763f31fdc906c8e9b3239b636bce3139ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
