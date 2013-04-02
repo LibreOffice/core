@@ -9,3 +9,46 @@
  namespace {
    multi_array_types::extent_gen extents;
    multi_array_types::index_gen indices;
+--- a/boost/interprocess/detail/workaround.hpp
++++ a/boost/interprocess/detail/workaround.hpp
+@@ -29,19 +29,19 @@
+ 
+    #include <unistd.h>
+ 
+-   #if ((_POSIX_THREAD_PROCESS_SHARED - 0) > 0)
++   #if defined(_POSIX_THREAD_PROCESS_SHARED) && ((_POSIX_THREAD_PROCESS_SHARED - 0) > 0)
+    //Cygwin defines _POSIX_THREAD_PROCESS_SHARED but does not implement it.
+    //Mac Os X >= Leopard defines _POSIX_THREAD_PROCESS_SHARED but does not seems to work.
+    #  if !defined(__CYGWIN__) && !defined(__APPLE__)
+    #  define BOOST_INTERPROCESS_POSIX_PROCESS_SHARED
+    #  endif
+    #endif
+    
+-   #if ((_POSIX_BARRIERS - 0) > 0)
++   #if defined(_POSIX_BARRIERS) && ((_POSIX_BARRIERS - 0) > 0)
+    # define BOOST_INTERPROCESS_POSIX_BARRIERS
+    # endif
+ 
+-   #if ((_POSIX_SEMAPHORES - 0) > 0)
++   #if defined(_POSIX_SEMAPHORES) && ((_POSIX_SEMAPHORES - 0) > 0)
+    # define BOOST_INTERPROCESS_POSIX_NAMED_SEMAPHORES
+    #  if defined(__CYGWIN__)
+       #define BOOST_INTERPROCESS_POSIX_SEMAPHORES_NO_UNLINK
+@@ -67,7 +67,7 @@
+    # define BOOST_INTERPROCESS_XSI_SHARED_MEMORY_OBJECTS
+    #endif
+ 
+-   #if ((_POSIX_SHARED_MEMORY_OBJECTS - 0) > 0)
++   #if defined(_POSIX_SHARED_MEMORY_OBJECTS) && ((_POSIX_SHARED_MEMORY_OBJECTS - 0) > 0)
+    # define BOOST_INTERPROCESS_POSIX_SHARED_MEMORY_OBJECTS
+    #else
+    //VMS and MACOS don't define it but the have shm_open/close interface
+@@ -88,7 +88,7 @@
+    //#  define BOOST_INTERPROCESS_XSI_SHARED_MEMORY_OBJECTS_ONLY
+    #endif
+ 
+-   #if ((_POSIX_TIMEOUTS - 0) > 0)
++   #if defined(_POSIX_TIMEOUTS) && ((_POSIX_TIMEOUTS - 0) > 0)
+    # define BOOST_INTERPROCESS_POSIX_TIMEOUTS
+    #endif 
+ 
