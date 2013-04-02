@@ -455,7 +455,7 @@ private:
 };
 
 SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
-        : ModalDialog( pParent, "SmoothLinesDialog", "modules/chart2/ui/smoothlinesdlg.ui")
+        : ModalDialog( pParent, "SmoothLinesDialog", "modules/schart/ui/smoothlinesdlg.ui")
 {
     get(m_pLB_Spline_Type, "SplineTypeComboBox");
     get(m_pMF_SplineResolution, "ResolutionSpinbutton");

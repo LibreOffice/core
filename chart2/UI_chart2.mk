@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,modules/chart2))
+$(eval $(call gb_UI_UI,modules/schart))
 
-$(eval $(call gb_UI_add_uifiles,modules/chart2,\
+$(eval $(call gb_UI_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/smoothlinesdlg \
 ))
 
