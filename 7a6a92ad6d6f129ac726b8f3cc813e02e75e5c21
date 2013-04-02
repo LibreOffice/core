@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//998\u003d",
+        "filename": "vcl/source/edit/textdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-02T05:26:38Z",
+      "side": 1,
+      "message": "border",
+      "revId": "7a6a92ad6d6f129ac726b8f3cc813e02e75e5c21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//994\u003d",
+        "filename": "vcl/source/edit/textdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-02T05:26:38Z",
+      "side": 1,
+      "message": "because it\u0027s unused ;) you could remove it.\n\nTo look into the history do a\ngit blame vcl/source/edit/textdoc.cxx",
+      "revId": "7a6a92ad6d6f129ac726b8f3cc813e02e75e5c21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//990\u003d",
+        "filename": "vcl/source/edit/textdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-02T05:26:38Z",
+      "side": 1,
+      "message": "you could remove it",
+      "revId": "7a6a92ad6d6f129ac726b8f3cc813e02e75e5c21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//99w\u003d",
+        "filename": "vcl/source/edit/textdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-02T05:26:38Z",
+      "side": 1,
+      "message": "the paragraph on the right vanishes",
+      "revId": "7a6a92ad6d6f129ac726b8f3cc813e02e75e5c21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
