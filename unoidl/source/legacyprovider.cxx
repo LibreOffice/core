@@ -551,7 +551,7 @@ rtl::Reference< Entity > readEntity(
                 std::vector< SingleInterfaceBasedServiceEntity::Constructor >
                     ctors;
                 sal_uInt16 n = reader.getMethodCount();
-                if (n == 1 && reader.getMethodFlags(0) == 0
+                if (n == 1 && reader.getMethodFlags(0) == RT_MODE_TWOWAY
                     && reader.getMethodName(0).isEmpty()
                     && reader.getMethodReturnTypeName(0) == "void"
                     && reader.getMethodParameterCount(0) == 0
