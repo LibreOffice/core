@@ -25,7 +25,7 @@
 
 
 //----------------------------------------------------------------------------
-//------------------ Linien-Typ ----------------------------------------------
+//------------------- Line Type ----------------------------------------------
 //----------------------------------------------------------------------------
 
 #define DXF_MAX_DASH_COUNT 32
@@ -149,21 +149,21 @@ class DXFTables {
 
 public:
 
-    DXFLType * pLTypes; // Liste der Linientypen
-    DXFLayer * pLayers; // Liste der Layers
-    DXFStyle * pStyles; // Liste der Styles
-    DXFVPort * pVPorts; // Liste der Viewports
+    DXFLType * pLTypes; // list of line types
+    DXFLayer * pLayers; // list of layers
+    DXFStyle * pStyles; // list of styles
+    DXFVPort * pVPorts; // list of viewports
 
     DXFTables();
     ~DXFTables();
 
     void Read(DXFGroupReader & rDGR);
-        // Liest die Tabellen ein bis zu einem ENDSEC oder EOF
-        // (unbekannte Dinge/Tabellen werden uebersprungen)
+        // Reads the table until a ENDSEC oder EOF
+        // (Unknown things/tables will be skipped)
 
     void Clear();
 
-    // Suche nach Tabelleneintraegen:
+    // look for table entries:
     DXFLType * SearchLType(const char * pName) const;
     DXFLayer * SearchLayer(const char * pName) const;
     DXFVPort * SearchVPort(const char * pName) const;

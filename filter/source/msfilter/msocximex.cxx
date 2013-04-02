@@ -102,8 +102,8 @@ const uno::Reference< container::XIndexContainer >&
             uno::Reference< container::XNameContainer >  xNameCont =
                 xFormsSupplier->getForms();
 
-            // Das Formular bekommt einen Namen wie "WW-Standard[n]" und
-            // wird in jedem Fall neu angelegt.
+            // The form gets a new name like "WW-Standard[n]" and will
+            // created new in any case.
             OUString sName( sWW8_form );
             sal_uInt16 n = 0;
 

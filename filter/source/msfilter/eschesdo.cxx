@@ -114,7 +114,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
 
     nAngle *= 655;
     nAngle += 0x8000;
-    nAngle &=~0xffff;                                   // nAngle auf volle Gradzahl runden
+    nAngle &=~0xffff;                                   // nAngle round to full degrees
     rPropOpt.AddOpt( ESCHER_Prop_Rotation, nAngle );
 
     rObj.SetAngle( nAngle );
@@ -286,7 +286,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     nLenght = rObj.GetRect().GetHeight();
                 nLenght >>= 1;
                 if ( nRadius >= nLenght )
-                    nRadius = 0x2a30;                           // 0x2a30 ist PPTs maximum radius
+                    nRadius = 0x2a30;                           // 0x2a30 is PPTs maximum radius
                 else
                     nRadius = ( 0x2a30 * nRadius ) / nLenght;
                 aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );
@@ -731,7 +731,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 
             nAngle *= 655;
             nAngle += 0x8000;
-            nAngle &=~0xffff;   // nAngle auf volle Gradzahl runden
+            nAngle &=~0xffff;   // nAngle round to full degrees
             aPropOpt.AddOpt( ESCHER_Prop_Rotation, nAngle );
             mpEscherEx->SetGroupSnapRect( mpEscherEx->GetGroupLevel(),
                                             rObj.GetRect() );
@@ -782,9 +782,9 @@ sal_uInt32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShap
 sal_Bool ImplEESdrWriter::ImplInitPageValues()
 {
     mnIndices = 0;
-    mnOutlinerCount = 0;                // die gliederungsobjekte muessen dem layout entsprechen,
+    mnOutlinerCount = 0;                // die outline objects must be in accordance with the layout.
     mnEffectCount = 0;
-    mbIsTitlePossible = sal_True;           // bei mehr als einem title geht powerpoint in die knie
+    mbIsTitlePossible = sal_True;       // With more than one title PowerPoint will fail.
 
     return sal_True;
 }

@@ -49,10 +49,10 @@
 struct TIFFLZWCTreeNode
 {
 
-    TIFFLZWCTreeNode*   pBrother;       // naechster Knoten, der den selben Vater hat
-    TIFFLZWCTreeNode*   pFirstChild;    // erster Sohn
-    sal_uInt16              nCode;          // Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
-    sal_uInt16              nValue;         // Der Pixelwert
+    TIFFLZWCTreeNode*       pBrother;       // next node with the same father
+    TIFFLZWCTreeNode*       pFirstChild;    // first son
+    sal_uInt16              nCode;          // The code for the string of pixel values, which arises if... <missing comment>
+    sal_uInt16              nValue;         // pixel value
 };
 
 class TIFFWriter
@@ -63,7 +63,7 @@ private:
     sal_uInt32              mnStreamOfs;
 
     sal_Bool                mbStatus;
-    BitmapReadAccess*   mpAcc;
+    BitmapReadAccess*       mpAcc;
 
     sal_uInt32              mnWidth, mnHeight, mnColors;
     sal_uInt32              mnCurAllPictHeight;
@@ -74,7 +74,7 @@ private:
     sal_uInt32              mnLatestIfdPos;
     sal_uInt16              mnTagCount;                 // number of tags already written
     sal_uInt32              mnCurrentTagCountPos;       // offset to the position where the current
-                                                    // tag count is to insert
+                                                        // tag count is to insert
 
     sal_uInt32              mnXResPos;                  // if != 0 this DWORDs stores the
     sal_uInt32              mnYResPos;                  // actual streamposition of the
@@ -82,8 +82,8 @@ private:
     sal_uInt32              mnBitmapPos;
     sal_uInt32              mnStripByteCountPos;
 
-    TIFFLZWCTreeNode*   pTable;
-    TIFFLZWCTreeNode*   pPrefix;
+    TIFFLZWCTreeNode*       pTable;
+    TIFFLZWCTreeNode*       pPrefix;
     sal_uInt16              nDataSize;
     sal_uInt16              nClearCode;
     sal_uInt16              nEOICode;
@@ -95,9 +95,9 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplCallback( sal_uInt32 nPercent );
-    sal_Bool                ImplWriteHeader( sal_Bool bMultiPage );
+    sal_Bool            ImplWriteHeader( sal_Bool bMultiPage );
     void                ImplWritePalette();
-    sal_Bool                ImplWriteBody();
+    sal_Bool            ImplWriteBody();
     void                ImplWriteTag( sal_uInt16 TagID, sal_uInt16 DataType, sal_uInt32 NumberOfItems, sal_uInt32 Value);
     void                ImplWriteResolution( sal_uLong nStreamPos, sal_uInt32 nResolutionUnit );
     void                StartCompression();
@@ -139,12 +139,10 @@ TIFFWriter::~TIFFWriter()
 
 sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
-    sal_uLong*  pDummy = new sal_uLong; delete pDummy; // damit unter OS/2
-                                               // das richtige (Tools-)new
-                                               // verwendet wird, da es sonst
-                                               // in dieser DLL nur Vector-news
-                                               // gibt;
-
+    sal_uLong*  pDummy = new sal_uLong; delete pDummy; // So that under OS/2
+                                               // the right (tools-)new
+                                               // is used. Otherwise only vector
+                                               // exist within this dll.
     if ( pFilterConfigItem )
     {
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
@@ -512,7 +510,7 @@ void TIFFWriter::StartCompression()
     nTableSize = nEOICode + 1;
     nCodeSize = nDataSize + 1;
 
-    nOffset = 32;                       // anzahl freier bits in dwShift
+    nOffset = 32;                       // number of free bits in dwShift
     dwShift = 0;
 
     pTable = new TIFFLZWCTreeNode[ 4096 ];

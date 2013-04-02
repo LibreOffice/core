@@ -1588,7 +1588,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
             = (::com::sun::star::drawing::PolyPolygonBezierCoords*)rAny.getValue();
         sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->Coordinates.getLength();
 
-        // Zeiger auf innere sequences holen
+        // get pointer of inner sequences
         ::com::sun::star::drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
         ::com::sun::star::drawing::FlagSequence*  pOuterFlags = pSourcePolyPolygon->Flags.getArray();
 
@@ -1598,7 +1598,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
             sal_uInt16  a, b, nInnerSequenceCount;
             ::com::sun::star::awt::Point* pArray;
 
-            // dies wird ein Polygon set
+            // this will be a polygon set
             for ( a = 0; a < nOuterSequenceCount; a++ )
             {
                 ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
@@ -1607,7 +1607,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
                 bNoError = pInnerSequence && pInnerFlags;
                 if  ( bNoError )
                 {
-                    // Zeiger auf Arrays holen
+                    // get pointer to arrays
                     pArray = pInnerSequence->getArray();
                     ::com::sun::star::drawing::PolygonFlags* pFlags = pInnerFlags->getArray();
 
@@ -1637,21 +1637,21 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
             = (::com::sun::star::drawing::PointSequenceSequence*)rAny.getValue();
         sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->getLength();
 
-        // Zeiger auf innere sequences holen
+        // get pointer to inner sequences
         ::com::sun::star::drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
         bNoError = pOuterSequence != NULL;
         if ( bNoError )
         {
             sal_uInt16 a, b, nInnerSequenceCount;
 
-            // dies wird ein Polygon set
+            // this will be a polygon set
             for( a = 0; a < nOuterSequenceCount; a++ )
             {
                 ::com::sun::star::drawing::PointSequence* pInnerSequence = pOuterSequence++;
                 bNoError = pInnerSequence != NULL;
                 if ( bNoError )
                 {
-                    // Zeiger auf Arrays holen
+                    // get pointer to arrays
                     ::com::sun::star::awt::Point* pArray =
                           pInnerSequence->getArray();
                     if ( pArray != NULL )
@@ -1679,7 +1679,7 @@ PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno
         {
             sal_uInt16 a, nInnerSequenceCount;
 
-            // Zeiger auf Arrays holen
+            // get pointer to arrays
             ::com::sun::star::awt::Point* pArray = pInnerSequence->getArray();
             if ( pArray != NULL )
             {
@@ -4524,7 +4524,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     sal_uInt32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
     sal_uInt8*  pBuf;
 
-    // Persist table anpassen
+    // adjust persist table
     for( size_t i = 0, n = maPersistTable.size(); i < n; ++i ) {
         EscherPersistEntry* pPtr = maPersistTable[ i ];
         sal_uInt32 nOfs = pPtr->mnOffset;

@@ -38,9 +38,8 @@ public:
     void StartDecompression(SvStream & rIStream);
 
     sal_uLong Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount);
-        // Liefert die Anzahl der geschriebenen Bytes, wenn < nMaxCount,
-        // sind keine weiteren Daten zu entpacken, oder es ist ein
-        // Fehler aufgetreten.
+        // Returns the number of written bytes. If < nMaxCount there is
+        // no more data to be unpacked or an error occurred.
 
 private:
 

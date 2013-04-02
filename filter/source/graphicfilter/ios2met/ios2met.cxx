@@ -321,15 +321,15 @@ private:
 
     long ErrorCode;
 
-    SvStream    * pOS2MET;             // Die einzulesende OS2MET-Datei
-    VirtualDevice * pVirDev;         // here the drawing methods are being called
-                                     // Dabei findet ein Recording in das GDIMetaFile
-                                     // statt.
-    sal_uLong         nOrigPos;          // Anfaengliche Position in pOS2MET
-    sal_uInt16        nOrigNumberFormat; // Anfaengliches Nummern-Format von pOS2MET
-    Rectangle aBoundingRect; // Boundingrectangle wie in Datei angegeben
-    Rectangle aCalcBndRect;  // selbst ermitteltes Boundingrectangle
-    MapMode aGlobMapMode;    // resolution of the picture
+    SvStream    * pOS2MET;               // the OS2MET file to be read
+    VirtualDevice * pVirDev;             // here the drawing methods are being called
+                                         // While doing this a recording in the GDIMetaFile
+                                         // will take place.
+    sal_uLong         nOrigPos;          // initial position  in pOS2MET
+    sal_uInt16        nOrigNumberFormat; // initial number format of pOS2MET
+    Rectangle aBoundingRect;             // bounding rectangle as stored in the file
+    Rectangle aCalcBndRect;              // bounding rectangle calculated on our own
+    MapMode aGlobMapMode;                // resolution of the picture
     sal_Bool bCoord32;
 
     OSPalette  * pPaletteStack;
@@ -1013,17 +1013,17 @@ void OS2METReader::ReadArc(sal_Bool bGivenPos)
     aAttr.aCurPos=aP3;
     SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
     SetRasterOp(aAttr.eLinMix);
-    // OK, gegeben sind 3 Punkte der Ellipse, und das Verhaeltnis
-    // Breite zu Hoehe (als p zu q):
+    // Ok, given are 3 point of the ellipse, and the relation
+    // of width and height (as p to q):
     x1=aP1.X(); y1=aP1.Y();
     x2=aP2.X(); y2=aP2.Y();
     x3=aP3.X(); y3=aP3.Y();
     p=aAttr.nArcP;q=aAttr.nArcQ;
-    // Berechnet wird der Mittelpunkt cx,cy der Ellipse:
+    // Calculation of the center point cx, cy of the ellipse:
     ncy=2*p*p*((y3-y1)*(x2-x1)-(y1-y2)*(x1-x3));
     ncx=2*q*q*(x2-x1);
     if ( (ncx<0.001 && ncx>-0.001) || (ncy<0.001 && ncy>-0.001) ) {
-        // Berechnung nicht moeglich, Punkte liegen auf einer Linie
+        // Calculation impossible, points are all on the same straight line
         pVirDev->DrawLine(aP1,aP2);
         pVirDev->DrawLine(aP2,aP3);
         return;
@@ -1034,9 +1034,8 @@ void OS2METReader::ReadArc(sal_Bool bGivenPos)
     // now we still need the radius in x and y direction:
     r=sqrt(q*q*(x1-cx)*(x1-cx)+p*p*(y1-cy)*(y1-cy));
     rx=r/q; ry=r/p;
-    // Jetzt stellt sich "nur noch" die Frage, wie Start- und Endpunkt
-    // gewaehlt werden muessen, damit Punkt Nr. 2 innerhalb des
-    // gezeichneten Bogens liegt:
+    // We now have to find out how the the starting and the end point
+    // have to be choosen so that point no. 2 lies inside the drawn arc:
     w1=fmod((atan2(x1-cx,y1-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w1<0) w1+=6.28318530718;
     w3=fmod((atan2(x3-cx,y3-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w3<0) w3+=6.28318530718;
     if (w3<w1) {
@@ -2158,8 +2157,8 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             break;
 
         case 0xfe92: { // Image Data
-            // Spaetestens jetzt brauchen wir die temporaere BMP-Datei
-            // und darin mindestens den Header + Palette.
+            // At the latest we now need the temprary BMP file and
+            // inside this file we need the header and the palette.
             if (p->pBMP==NULL) {
                 p->pBMP=new SvMemoryStream();
                 p->pBMP->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
@@ -2179,8 +2178,8 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     for (i=0; i<nColTabSize; i++) *(p->pBMP) << GetPalette0RGB(i);
                 }
             }
-            // OK, nun werden die Map-Daten ruebergeschoben. Leider haben OS2 und
-            // BMP eine unterschiedliche Reihenfolge von RGB bei 24-Bit.
+            // OK, now the map data is beeing pushed. Unfortunatly OS2 and BMP
+            // do habe a different RGB ordering when using 24-bit
             sal_uInt8 * pBuf=new sal_uInt8[nDataLen];
             pOS2MET->Read(pBuf,nDataLen);
             if (p->nBitsPerPixel==24) {
@@ -2334,7 +2333,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
         case MapColAtrMagic:
             break;
         case BegImgObjMagic: {
-            // neue Bitmap schonmal herstellen: (wird spaeter gefuellt)
+            // create new bitmap by now: (will be filled later)
             OSBitmap * pB=new OSBitmap;
             pB->pSucc=pBitmapList; pBitmapList=pB;
             pB->pBMP=NULL; pB->nWidth=0; pB->nHeight=0; pB->nBitsPerPixel=0;
@@ -2347,14 +2346,14 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 nbyte=((nbyte-0x30)<<4)|(nbyte2-0x30);
                 pB->nID=(pB->nID>>8)|(((sal_uLong)nbyte)<<24);
             }
-            // neue Palette auf den Paletten-Stack bringen: (wird spaeter gefuellt)
+            // put new palette on the palette stack: (will be filled later)
             OSPalette * pP=new OSPalette;
             pP->pSucc=pPaletteStack; pPaletteStack=pP;
             pP->p0RGB=NULL; pP->nSize=0;
             break;
         }
         case EndImgObjMagic: {
-            // Temporaere Windows-BMP-Datei auslesen:
+            // read temporary Windows BMP file:
             if (pBitmapList==NULL || pBitmapList->pBMP==NULL ||
                 pBitmapList->pBMP->GetError()!=0) {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
@@ -2421,11 +2420,11 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
 
             if (pOrdFile==NULL) break;
 
-            // in pOrdFile wurden alle "DatGrfObj"-Felder gesammelt, so
-            // dass die darin enthaltnen "Orders" zusammenhangend und nicht durch
-            // "Fields" segmentiert sind. Um sie aus dem MemoryStream auszulesen,
-            // ohne grosse Umstaende deswegen zu haben (frueher wurden die "Orders"
-            // direkt aus pOS2MET gelesen), hier ein kleiner Trick:
+            // In pOrdFile all "DatGrfObj" fields were collected so that the
+            // thererin contained "Orders" are continuous and not segmented by fields.
+            // To read them from the memory stream without having any trouble,
+            // we use a  little trick:
+
             pSave=pOS2MET;
             pOS2MET=pOrdFile; //(!)
             nMaxPos=pOS2MET->Tell();
@@ -2446,11 +2445,11 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                     nOrderID=(nOrderID << 8) | (((sal_uInt16)nbyte) & 0x00ff);
                 }
                 if (nOrderID>0x00ff || nOrderID==GOrdPolygn) {
-                    // ooo: Laut OS2-Doku sollte die Orderlaenge nun als Big-Endian-Word
-                    // gegeben sein (Zitat: "Highorder byte precedes loworder byte").
-                    // Tatsaechlich gibt es aber Dateien, die die Laenge als
-                    // Little-Endian-Word angeben (zu mindestens fuer nOrderID==GOrdPolygn).
-                    // Also werfen wir eine Muenze oder was ?
+                    // ooo: As written in OS2 documentation, the order length should now
+                    // be written as big endian word. (Quote: "Highorder byte precedes loworder byte").
+                    // In reality there are files in which the length is stored as little endian word
+                    // (at least for nOrderID==GOrdPolygn)
+                    // So we throw a coin or what else can we do?
                     *pOS2MET >> nbyte; nOrderLen=(sal_uInt16)nbyte&0x00ff;
                     *pOS2MET >> nbyte; if (nbyte!=0) nOrderLen=nOrderLen<<8|(((sal_uInt16)nbyte)&0x00ff);
                 }
@@ -2703,7 +2702,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     }
 }
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 #ifdef DISABLE_DYNLOADING
 #define GraphicImport imeGraphicImport

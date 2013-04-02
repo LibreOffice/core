@@ -311,7 +311,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
                                ( (long)pCrN[ nXPair ] ) + ( (long)pCrN[ nXPair + 1 ] ) ) >> 2;
                     }
                 }
-                // Umwandlung von nL,nCb,nCr in nRed,nGreen,nBlue:
+                // conversion of nL,nCb,nCr in nRed,nGreen,nBlue:
                 nL *= 89024L;
                 nCb -= 156;
                 nCr -= 137;

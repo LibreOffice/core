@@ -32,15 +32,15 @@ class PBMWriter {
 
 private:
 
-    SvStream& m_rOStm;          // Die auszugebende PBM-Datei
-    sal_uInt16              mpOStmOldModus;
+    SvStream&           m_rOStm;            // the output PBM file
+    sal_uInt16          mpOStmOldModus;
 
-    sal_Bool                mbStatus;
+    sal_Bool            mbStatus;
     sal_Int32           mnMode;             // 0 -> raw, 1-> ascii
     BitmapReadAccess*   mpAcc;
-    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    sal_uLong           mnWidth, mnHeight;  // size in pixel
 
-    sal_Bool                ImplWriteHeader();
+    sal_Bool            ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -53,7 +53,7 @@ public:
     sal_Bool WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
-//=================== Methoden von PBMWriter ==============================
+//=================== Methods of PBMWriter ==============================
 
 PBMWriter::PBMWriter(SvStream &rPBM)
     : m_rOStm(rPBM)
@@ -175,7 +175,7 @@ void PBMWriter::ImplWriteBody()
 }
 
 // ------------------------------------------------------------------------
-// eine Dezimalzahl im ASCII format wird in den Stream geschrieben
+// A decimal number in ascii format is written in the stream.
 
 void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {

@@ -862,9 +862,8 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
     if ( bStatus==sal_True )
     {
         rMTF.SetPrefSize( aPrefSize );
-
-        // MapMode einfach, falls Grafik dann nicht zu klein wird (<0,5cm),
-        // auf 1/100-mm (1/10-mm) setzen
+        // simply set map mode to 1/100-mm (1/10-mm) if the graphic
+        // does not get not too small (<0.5cm)
         if( ( aPrefSize.Width() < 500 ) && ( aPrefSize.Height() < 500 ) )
             rMTF.SetPrefMapMode( MapMode( MAP_10TH_MM ) );
         else

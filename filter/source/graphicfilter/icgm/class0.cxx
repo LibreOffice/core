@@ -34,10 +34,10 @@ void CGM::ImplDoClass0()
         break;
         case 0x02 : /*End MetaFile*/
         {
-            if ( mpBitmapInUse )                            // vorhandene grafik verarbeiten,
+            if ( mpBitmapInUse )                            // process existend graphic
             {
                 CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
-                // irgendetwas mit der Bitmap anfangen
+                // do anything with the bitmap
                 mpOutAct->DrawBitmap( pBmpDesc );
                 delete mpBitmapInUse;
                 mpBitmapInUse = NULL;
@@ -71,16 +71,16 @@ void CGM::ImplDoClass0()
         {
             if ( mbPicture )
             {
-                if ( mpBitmapInUse )                            // vorhandene grafik verarbeiten,
+                if ( mpBitmapInUse )                            // process existend graphic
                 {
                     CGMBitmapDescriptor* pBmpDesc = mpBitmapInUse->GetBitmap();
-                    // irgendetwas mit der Bitmap anfangen
+                    // do anything with the bitmap
                     mpOutAct->DrawBitmap( pBmpDesc );
                     delete mpBitmapInUse;
                     mpBitmapInUse = NULL;
                 }
-                mpOutAct->EndFigure();                          // eventuelle figuren schliessen
-                mpOutAct->EndGrouping();                        // eventuelle gruppierungen noch abschliessen
+                mpOutAct->EndFigure();                          // close potential figures
+                mpOutAct->EndGrouping();                        // finish potential groups
                 *pElement = *pCopyOfE;
                 mbFigure = mbFirstOutPut = mbPicture = mbPictureBody = sal_False;
             }
