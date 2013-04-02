@@ -37,8 +37,6 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#define ERROR ::com::sun::star::uno::RuntimeException()
-
 
 BreakIterator_Unicode::BreakIterator_Unicode() :
     cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" ),    // implementation name
@@ -111,7 +109,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
 
             status = U_ZERO_ERROR;
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);
-            if ( !U_SUCCESS(status) ) throw ERROR;
+            if ( !U_SUCCESS(status) ) throw uno::RuntimeException();
 
             OOoRuleBasedBreakIterator *rbi = NULL;
 
@@ -172,14 +170,14 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             }
             if ( !U_SUCCESS(status) ) {
                 icuBI->aBreakIterator=NULL;
-                throw ERROR;
+                throw uno::RuntimeException();
             }
         }
         if (icuBI->aBreakIterator) {
             icuBI->maLocale=rLocale;
             newBreak=sal_True;
         } else {
-            throw ERROR;
+            throw uno::RuntimeException();
         }
     }
 
@@ -191,12 +189,12 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         icuBI->ut = utext_openUChars(icuBI->ut, pText, rText.getLength(), &status);
 
         if (!U_SUCCESS(status))
-            throw ERROR;
+            throw uno::RuntimeException();
 
         icuBI->aBreakIterator->setText(icuBI->ut, status);
 
         if (!U_SUCCESS(status))
-            throw ERROR;
+            throw uno::RuntimeException();
 
         icuBI->aICUText = rText;
     }
