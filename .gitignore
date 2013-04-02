@@ -54,6 +54,7 @@
 /config.log
 /config.status
 /config.parms
+/config/config_version.h
 /config_host.mk
 /config_host.mk.last
 /config_host.mk.stamp
