@@ -53,6 +53,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_bOOXML( bOOXML ),
     m_bPushCurrentWidth(false),
     m_bRowSizeTypeInserted(false),
+    m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
@@ -132,6 +133,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
                         }
+                        m_bTableSizeTypeInserted = true;
                     }
 #ifdef DEBUG_DOMAINMAPPER
                     pPropMap->dumpXml( dmapper_logger );
@@ -493,6 +495,13 @@ void DomainMapperTableManager::endOfRowAction()
              m_nTableWidth += *aCellIter++;
         }
 
+        if (m_nTableWidth > 0 && !m_bTableSizeTypeInserted)
+        {
+            TablePropertyMapPtr pPropMap( new TablePropertyMap );
+            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
+            insertTableProps(pPropMap);
+        }
+
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->endElement();
 #endif
@@ -610,6 +619,7 @@ void DomainMapperTableManager::endOfRowAction()
 
     m_nGridBefore = m_nGridAfter = 0;
     m_bRowSizeTypeInserted = false;
+    m_bTableSizeTypeInserted = false;
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();

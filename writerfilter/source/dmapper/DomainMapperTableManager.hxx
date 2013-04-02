@@ -56,6 +56,8 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     ::std::vector< IntVectorPtr >  m_aCellWidths;
     /// Remember if a cell already set this, then it should not be set at a row level.
     bool m_bRowSizeTypeInserted;
+    /// Remember if table width was already set, when we lack a w:tblW, it should be set manually at the end.
+    bool m_bTableSizeTypeInserted;
     /// Table layout algorithm, IOW if we should consider fixed column width or not.
     sal_uInt32 m_nLayoutType;
 
@@ -126,6 +128,11 @@ public:
     bool IsRowSizeTypeInserted() const
     {
         return m_bRowSizeTypeInserted;
+    }
+
+    bool IsTableSizeTypeInserted() const
+    {
+        return m_bTableSizeTypeInserted;
     }
 
     void SetLayoutType(sal_uInt32 nLayoutType)
