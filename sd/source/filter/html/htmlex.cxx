@@ -584,7 +584,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if ( pParams->Name == "KioskSlideDuration" )
         {
-            sal_Int32 temp = sal_False;
+            double temp = sal_False;
             pParams->Value >>= temp;
             mnSlideDuration = temp;
             mbAutoSlide = true;
@@ -1521,7 +1521,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         pPage = maPages[ nSdPage ];
         if( meMode == PUBLISH_KIOSK )
         {
-            sal_uLong nSecs = 0;
+            double nSecs = 0;
             bool bEndless = false;
             if( !mbAutoSlide )
             {

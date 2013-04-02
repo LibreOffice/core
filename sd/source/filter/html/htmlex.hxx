@@ -114,7 +114,7 @@ class HtmlExport
     bool mbDownload;
 
     bool mbAutoSlide;
-    sal_uInt32  mnSlideDuration;
+    double  mnSlideDuration;
     bool mbSlideSound;
     bool mbHiddenSlides;
     bool mbEndless;

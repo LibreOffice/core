@@ -119,7 +119,7 @@ struct TransitionEffect
     void init()
     {
         mfDuration = 2.0;
-        mnTime = 0;
+        mnTime = 1.0;
         mePresChange = PRESCHANGE_MANUAL;
         mbSoundOn = sal_False;
         mbLoopSound = sal_False;
@@ -217,7 +217,7 @@ struct TransitionEffect
 
     // other settings
     double      mfDuration;
-    sal_uLong       mnTime;
+    double       mnTime;
     PresChange  mePresChange;
     sal_Bool        mbSoundOn;
     String      maSound;
@@ -859,7 +859,7 @@ void SlideTransitionPane::updateControls()
     {
         maRB_ADVANCE_ON_MOUSE.Check( aEffect.mePresChange == PRESCHANGE_MANUAL );
         maRB_ADVANCE_AUTO.Check( aEffect.mePresChange == PRESCHANGE_AUTO );
-        maMF_ADVANCE_AUTO_AFTER.SetValue( aEffect.mnTime );
+        maMF_ADVANCE_AUTO_AFTER.SetValue( aEffect.mnTime * 100.0);
     }
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
@@ -1026,7 +1026,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             aResult.mePresChange = PRESCHANGE_AUTO;
             if( maMF_ADVANCE_AUTO_AFTER.IsEnabled())
             {
-                aResult.mnTime = static_cast<long>(maMF_ADVANCE_AUTO_AFTER.GetValue());
+                aResult.mnTime = static_cast<double>(maMF_ADVANCE_AUTO_AFTER.GetValue() ) / 100.0 ;
                 aResult.mbTimeAmbiguous = false;
             }
         }

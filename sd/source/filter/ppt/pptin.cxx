@@ -1757,7 +1757,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                 if ( nBuildFlags & 0x400 )                      // slidechange by time
                                 {   // time to show (in Ticks)
                                     pPage->SetPresChange( PRESCHANGE_AUTO );
-                                    pPage->SetTime( nSlideTime / 1000 );
+                                    pPage->SetTime( nSlideTime / 1000.0 );
                                 }
                                 else
                                     pPage->SetPresChange( mePresChange );
