@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -44,8 +45,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC SdrFillAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrFillAttribute > ImplType;
+
         private:
-            ImpSdrFillAttribute*            mpSdrFillAttribute;
+            ImplType mpSdrFillAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor

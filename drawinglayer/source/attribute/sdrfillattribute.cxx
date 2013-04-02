@@ -22,6 +22,7 @@
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -32,9 +33,6 @@ namespace drawinglayer
         class ImpSdrFillAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                          mnRefCount;
-
             // fill definitions
             double                              mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
             basegfx::BColor                     maColor;            // fill color
@@ -49,12 +47,20 @@ namespace drawinglayer
                 const FillGradientAttribute& rGradient,
                 const FillHatchAttribute& rHatch,
                 const SdrFillBitmapAttribute& rBitmap)
-            :   mnRefCount(0),
-                mfTransparence(fTransparence),
+            :   mfTransparence(fTransparence),
                 maColor(rColor),
                 maGradient(rGradient),
                 maHatch(rHatch),
                 maBitmap(rBitmap)
+            {
+            }
+
+            ImpSdrFillAttribute()
+            :   mfTransparence(0.0),
+                maColor(basegfx::BColor()),
+                maGradient(FillGradientAttribute()),
+                maHatch(FillHatchAttribute()),
+                maBitmap(SdrFillBitmapAttribute())
             {
             }
 
@@ -74,27 +80,13 @@ namespace drawinglayer
                     && getHatch() == rCandidate.getHatch()
                     && getBitmap() == rCandidate.getBitmap());
             }
-
-            static ImpSdrFillAttribute* get_global_default()
-            {
-                static ImpSdrFillAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrFillAttribute(
-                        0.0,
-                        basegfx::BColor(),
-                        FillGradientAttribute(),
-                        FillHatchAttribute(),
-                        SdrFillBitmapAttribute());
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrFillAttribute::ImplType, theGlobalDefault > {};
+        }
 
         SdrFillAttribute::SdrFillAttribute(
             double fTransparence,
@@ -102,73 +94,39 @@ namespace drawinglayer
             const FillGradientAttribute& rGradient,
             const FillHatchAttribute& rHatch,
             const SdrFillBitmapAttribute& rBitmap)
-        :   mpSdrFillAttribute(new ImpSdrFillAttribute(
+        :   mpSdrFillAttribute(ImpSdrFillAttribute(
                 fTransparence, rColor, rGradient, rHatch, rBitmap))
         {
         }
 
         SdrFillAttribute::SdrFillAttribute()
-        :   mpSdrFillAttribute(ImpSdrFillAttribute::get_global_default())
+        :   mpSdrFillAttribute(theGlobalDefault::get())
         {
-            mpSdrFillAttribute->mnRefCount++;
         }
 
         SdrFillAttribute::SdrFillAttribute(const SdrFillAttribute& rCandidate)
         :   mpSdrFillAttribute(rCandidate.mpSdrFillAttribute)
         {
-            mpSdrFillAttribute->mnRefCount++;
         }
 
         SdrFillAttribute::~SdrFillAttribute()
         {
-            if(mpSdrFillAttribute->mnRefCount)
-            {
-                mpSdrFillAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrFillAttribute;
-            }
         }
 
         bool SdrFillAttribute::isDefault() const
         {
-            return mpSdrFillAttribute == ImpSdrFillAttribute::get_global_default();
+            return mpSdrFillAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrFillAttribute& SdrFillAttribute::operator=(const SdrFillAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrFillAttribute != mpSdrFillAttribute)
-            {
-                if(mpSdrFillAttribute->mnRefCount)
-                {
-                    mpSdrFillAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrFillAttribute;
-                }
-
-                mpSdrFillAttribute = rCandidate.mpSdrFillAttribute;
-                mpSdrFillAttribute->mnRefCount++;
-            }
-
+            mpSdrFillAttribute = rCandidate.mpSdrFillAttribute;
             return *this;
         }
 
         bool SdrFillAttribute::operator==(const SdrFillAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrFillAttribute == mpSdrFillAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpSdrFillAttribute == *mpSdrFillAttribute);
+            return rCandidate.mpSdrFillAttribute == mpSdrFillAttribute;
         }
 
         double SdrFillAttribute::getTransparence() const
