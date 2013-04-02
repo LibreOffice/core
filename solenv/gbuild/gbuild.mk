@@ -171,16 +171,6 @@ else
 gb_QUIET_EXTERNAL := $(true)
 endif
 
-# save user-supplied flags for latter use
-# TODO remove after the old build system is abolished
-ifneq ($(strip $(ENVCFLAGS)),)
-gb__ENV_CFLAGS := $(ENVCFLAGS)
-endif
-# TODO remove after the old build system is abolished
-ifneq ($(strip $(ENVCFLAGSCXX)),)
-gb__ENV_CXXFLAGS := $(ENVCFLAGSCXX)
-endif
-
 include $(GBUILDDIR)/ExternalExecutable.mk
 include $(GBUILDDIR)/TargetLocations.mk
 include $(GBUILDDIR)/Tempfile.mk
@@ -199,14 +189,6 @@ include $(SRCDIR)/RepositoryFixes.mk
 
 # after platform; at least currently python depends on variable set in platform
 $(eval $(call gb_ExternalExecutable_collect_registrations))
-
-# add user-supplied flags
-ifneq ($(strip gb__ENV_CFLAGS),)
-gb_LinkTarget_CFLAGS += $(gb__ENV_CFLAGS)
-endif
-ifneq ($(strip gb__ENV_CXXFLAGS),)
-gb_LinkTarget_CXXFLAGS += $(gb__ENV_CXXFLAGS)
-endif
 
 gb_CPUDEFS += -D$(CPUNAME)
 
