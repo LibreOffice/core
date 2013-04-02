@@ -21,7 +21,7 @@
     <version value="2.0" />
     <identifier value="org.openoffice/framework/desktop/test/deployment/update/website_update/web7"/>
     <display-name>
-      <name lang="en-US">web-based update test 1</name>
+      <name>web-based update test 1</name>
     </display-name>
 
     <publisher>
