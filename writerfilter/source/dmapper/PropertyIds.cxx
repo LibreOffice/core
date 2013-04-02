@@ -279,7 +279,8 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_SOURCE_NAME:    sName = "SourceName"; break;
             case PROP_REFERENCE_FIELD_SOURCE :    sName = "ReferenceFieldSource"; break;
             case PROP_WIDTH_TYPE :    sName = "WidthType"; break;
-            case  PROP_TEXT_RANGE:    sName = "TextRange"; break;
+            case PROP_TBL_LOOK : sName = "TblLook"; break;
+            case PROP_TEXT_RANGE:    sName = "TextRange"; break;
             case PROP_SERVICE_CHAR_STYLE       :    sName = "com.sun.star.style.CharacterStyle"; break;
             case PROP_SERVICE_PARA_STYLE       :    sName = "com.sun.star.style.ParagraphStyle"; break;
             case PROP_CHARACTER_STYLES :    sName = "CharacterStyles"; break;
@@ -302,7 +303,6 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_BITMAP :    sName = "Bitmap"; break;
             case PROP_IS_DATE :   sName = "IsDate"; break;
             case PROP_TAB_STOP_DISTANCE :    sName = "TabStopDistance"; break;
-            case PROP_CNF_STYLE  :    sName = "CnfStyle"; break;
             case PROP_INDENT_AT :    sName = "IndentAt"; break;
             case PROP_FIRST_LINE_INDENT :    sName = "FirstLineIndent"; break;
             case PROP_NUMBERING_STYLE_NAME  :    sName = "NumberingStyleName"; break;
