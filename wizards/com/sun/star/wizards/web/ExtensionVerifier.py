@@ -33,6 +33,6 @@ class ExtensionVerifier(UCB.Verifier):
     # a String which does not end with the
     # given extension.
     def verify(self, obj):
-        if (isinstance(obj, str())):
-            return not obj.endsWith(extension)
+        if (isinstance(obj, str)):
+            return not obj.endswith(self.extension)
         return False

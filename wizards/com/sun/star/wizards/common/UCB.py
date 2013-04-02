@@ -30,13 +30,6 @@ from com.sun.star.ucb.NameClash import OVERWRITE
 from com.sun.star.ucb import OpenCommandArgument2
 from com.sun.star.ucb.OpenMode import ALL
 from com.sun.star.ucb.TransferCommandOperation import COPY
-#from com.sun.star.ucb import XCommandProcessor
-#from com.sun.star.ucb import XContentAccess
-#from com.sun.star.ucb import XContentIdentifier
-from com.sun.star.ucb import XContentIdentifierFactory
-from com.sun.star.ucb import XContentProvider
-#from com.sun.star.ucb import XDynamicResultSet
-#from com.sun.star.uno import UnoRuntime
 
 
 # This class is used to copy the content of a folder to
@@ -69,14 +62,15 @@ class UCB(object):
         self.copy1(sourceDir,targetDir, None)
 
     def copy1(self, sourceDir, targetDir, verifier):
+        print ("DEBUG !!! copy1 - sourcedir, targetDir, verifier :", sourceDir, targetDir, verifier)
         files = self.listFiles(sourceDir, verifier)
+        print ("DEBUG !!! copy1 - num files: ", len(files))
         for i in range(len(files)):
-          self.copy2(sourceDir, files[i], targetDir)
+          self.copy3(sourceDir, files[i], targetDir)
 
     def copy2(self, sourceDir, filename, targetDir, targetName):
-        #sourceDir = "file:///home/javi/intel-libreoffice/install/share/config/" + sourceDir[7:]
-        print ("WARNING !!! copy2 - sourcedir, filenName :", sourceDir, filename)
-        print ("WARNING !!! copy2 - targetDir, targetName :", targetDir, targetName)
+        print ("DEBUG !!! copy2 - sourcedir, filenName :", sourceDir, filename)
+        print ("DEBUG !!! copy2 - targetDir, targetName :", targetDir, targetName)
         if (not self.fa.exists(targetDir, True)):
           self.fa.xInterface.createFolder(targetDir)
         self.executeCommand(self.ucb, "globalTransfer", self.copyArg(sourceDir, filename, targetDir, targetName))
@@ -113,6 +107,7 @@ class UCB(object):
         return xContent.execute(aCommand, 0, None)
 
     def listFiles(self, path, verifier):
+        print ("DEBUG !!! listFiles - path: ", path)
         xContent = self.getContent(path)
 
         aArg = OpenCommandArgument2()
@@ -137,7 +132,8 @@ class UCB(object):
                 # Obtain URL of child.
                 aId = xResultSet.queryContentIdentifierString()
                 # First column: Title (column numbers are 1-based!)
-                aTitle = xResultSet.getString(1)
+                #aTitle = xResultSet.getString(1)
+                aTitle = FileAccess.getFilename(aId)
                 if (len(aTitle) == 0 and xResultSet.wasNull()):
                     # ignore
                     pass
@@ -172,16 +168,9 @@ class UCB(object):
 
     def getContent(self, path):
         try:
-            print ("WARNING !!! getContent - path: ", path)
-            #if (path.startswith("/")):
-            #    s = "file://" + path
-            #elif (path.startswith("file://")):
-            #    s = path
-            #else:
-            #    s = "file:///home/javi/intel-libreoffice/install/share/config/" + path[7:]
-            #ident = self.ucb.createContentIdentifier(s)
+            print ("DEBUG !!! getContent - path: ", path)
             ident = self.ucb.createContentIdentifier(path)
-            print ("WARNING !!! getContent - ident: ", ident.getContentIdentifier())
+            print ("DEBUG !!! getContent - ident: ", ident.getContentIdentifier())
             return self.ucb.queryContent(ident)
         except Exception:
             traceback.print_exc()
