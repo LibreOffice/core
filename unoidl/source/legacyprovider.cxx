@@ -591,7 +591,7 @@ rtl::Reference< Entity > readEntity(
                             if ((mode & RT_PARAM_REST) != 0
                                 && !(m == 1
                                      && ((reader.getMethodParameterTypeName(
-                                              j, 1))
+                                              j, 0))
                                          == "any")))
                             {
                                 throw FileFormatException(
