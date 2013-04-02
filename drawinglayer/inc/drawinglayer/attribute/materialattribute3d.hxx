@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -41,8 +42,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC MaterialAttribute3D
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpMaterialAttribute3D > ImplType;
+
         private:
-            ImpMaterialAttribute3D*                             mpMaterialAttribute3D;
+            ImplType mpMaterialAttribute3D;
 
         public:
             // constructors/destructor
