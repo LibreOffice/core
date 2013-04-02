@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//94I\u003d",
+        "filename": "sd/source/ui/unoidl/unopage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-04-02T18:33:58Z",
+      "side": 1,
+      "message": "This unfortunately breaks existing API - the Duration property is said to have integer values, and e.g. the odf import/export expects it like that.",
+      "revId": "81a660dd33def34adfa631afb530f619cac9a060",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
