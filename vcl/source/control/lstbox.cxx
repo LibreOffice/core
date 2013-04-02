@@ -1197,7 +1197,7 @@ void ListBox::EnableMultiSelection( sal_Bool bMulti, sal_Bool bStackSelection )
 
     // WB_SIMPLEMODE:
     // The MultiListBox behaves just like a normal ListBox
-    // MultiSelection is possible via corresponding addtional keys
+    // MultiSelection is possible via corresponding additional keys
     sal_Bool bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? sal_True : sal_False;
     mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
 
