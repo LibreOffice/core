@@ -22,10 +22,10 @@
 
 #include "sal/config.h"
 
+#include <map>
+
 #include "rtl/ref.hxx"
 #include "rtl/string.hxx"
-
-#include <boost/unordered_map.hpp>
 
 namespace rtl { class OUString; }
 class TypeManager;
@@ -47,7 +47,7 @@ public:
      */
     enum Kind { KIND_NO_BASE, KIND_BASE };
 
-    typedef boost::unordered_map< rtl::OString, Kind, rtl::OStringHash > Map;
+    typedef std::map< rtl::OString, Kind > Map;
 
     /**
        Constructs the dependencies for a given type.
