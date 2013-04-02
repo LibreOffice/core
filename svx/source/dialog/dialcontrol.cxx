@@ -40,7 +40,8 @@ class DialControlBmp : public VirtualDevice
 public:
     explicit            DialControlBmp( Window& rParent );
 
-    void                InitBitmap( const Size& rSize, const Font& rFont );
+    void                InitBitmap(const Font& rFont);
+    void                SetSize(const Size& rSize);
     void                CopyBackground( const DialControlBmp& rSrc );
     void                DrawBackground( const Size& rSize, bool bEnabled );
     void                DrawElements( const String& rText, sal_Int32 nAngle );
@@ -52,7 +53,7 @@ private:
     const Color&        GetButtonLineColor() const;
     const Color&        GetButtonFillColor( bool bMain ) const;
 
-    void                Init( const Size& rSize );
+    void                Init();
     void                DrawBackground();
 
     Window&             mrParent;
@@ -74,15 +75,16 @@ DialControlBmp::DialControlBmp( Window& rParent ) :
     EnableRTL( sal_False );
 }
 
-void DialControlBmp::InitBitmap( const Size& rSize, const Font& rFont )
+void DialControlBmp::InitBitmap(const Font& rFont)
 {
-    Init( rSize );
-    SetFont( rFont );
+    Init();
+    SetFont(rFont);
 }
 
 void DialControlBmp::CopyBackground( const DialControlBmp& rSrc )
 {
-    Init( rSrc.maRect.GetSize() );
+    Init();
+    SetSize(rSrc.maRect.GetSize());
     mbEnabled = rSrc.mbEnabled;
     Point aPos;
     DrawBitmapEx( aPos, rSrc.GetBitmapEx( aPos, maRect.GetSize() ) );
@@ -90,7 +92,8 @@ void DialControlBmp::CopyBackground( const DialControlBmp& rSrc )
 
 void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
 {
-    Init( rSize );
+    Init();
+    SetSize(rSize);
     mbEnabled = bEnabled;
     DrawBackground();
 }
@@ -157,15 +160,19 @@ const Color& DialControlBmp::GetButtonFillColor( bool bMain ) const
     return mbEnabled ? (bMain ? rSett.GetMenuColor() : rSett.GetHighlightColor()) : rSett.GetDisableColor();
 }
 
-void DialControlBmp::Init( const Size& rSize )
+void DialControlBmp::Init()
 {
-    SetSettings( mrParent.GetSettings() );
+    SetSettings(mrParent.GetSettings());
+    SetBackground();
+}
+
+void DialControlBmp::SetSize( const Size& rSize )
+{
     maRect.SetPos( Point( 0, 0 ) );
     maRect.SetSize( rSize );
     mnCenterX = rSize.Width() / 2;
     mnCenterY = rSize.Height() / 2;
     SetOutputSize( rSize );
-    SetBackground();
 }
 
 void DialControlBmp::DrawBackground()
@@ -249,6 +256,7 @@ struct DialControl_Impl
 
     explicit            DialControl_Impl( Window& rParent );
     void                Init( const Size& rWinSize, const Font& rWinFont );
+    void                SetSize( const Size& rWinSize );
 };
 
 // ----------------------------------------------------------------------------
@@ -268,17 +276,23 @@ DialControl_Impl::DialControl_Impl( Window& rParent ) :
 
 void DialControl_Impl::Init( const Size& rWinSize, const Font& rWinFont )
 {
+    maWinFont = rWinFont;
+    maWinFont.SetTransparent(true);
+    maBmpBuffered.InitBitmap(maWinFont);
+    SetSize(rWinSize);
+}
+
+void DialControl_Impl::SetSize( const Size& rWinSize )
+{
     // "(x - 1) | 1" creates odd value <= x, to have a well-defined center pixel position
     maWinSize = Size( (rWinSize.Width() - 1) | 1, (rWinSize.Height() - 1) | 1 );
-    maWinFont = rWinFont;
 
     mnCenterX = maWinSize.Width() / 2;
     mnCenterY = maWinSize.Height() / 2;
-    maWinFont.SetTransparent( sal_True );
 
     maBmpEnabled.DrawBackground( maWinSize, true );
     maBmpDisabled.DrawBackground( maWinSize, false );
-    maBmpBuffered.InitBitmap( maWinSize, maWinFont );
+    maBmpBuffered.SetSize( maWinSize );
 }
 
 // ============================================================================
@@ -303,7 +317,13 @@ DialControl::~DialControl()
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDialControl(Window *pParent, VclBuilder::stringmap &)
 {
- return new DialControl(pParent, WB_BORDER | WB_TABSTOP);
+    return new DialControl(pParent, WB_TABSTOP);
+}
+
+void DialControl::Resize()
+{
+    mpImpl->SetSize(GetOutputSizePixel());
+    InvalidateControl();
 }
 
 void DialControl::Paint( const Rectangle&  )
@@ -406,6 +426,11 @@ void DialControl::SetNoRotation()
 sal_Int32 DialControl::GetRotation() const
 {
     return mpImpl->mnAngle;
+}
+
+Size DialControl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(42 , 43), MAP_APPFONT);
 }
 
 void DialControl::SetRotation( sal_Int32 nAngle )

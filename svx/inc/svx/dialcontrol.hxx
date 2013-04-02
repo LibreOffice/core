@@ -66,6 +66,9 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        LoseFocus();
 
+    virtual Size        GetOptimalSize() const;
+    virtual void        Resize();
+
     /** Returns true, if the control is not in "don't care" state. */
     bool                HasRotation() const;
     /** Sets the control to "don't care" state. */
