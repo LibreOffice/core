@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase3.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -276,6 +277,10 @@ Reference<XInterface> CanvasFactory::use(
     try {
         return m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             serviceName, args, xContext);
+    }
+    catch (css::lang::IllegalArgumentException &)
+    {
+        return Reference<XInterface>();
     }
     catch (const RuntimeException &)
     {
