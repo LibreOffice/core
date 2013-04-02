@@ -296,7 +296,7 @@ public:
         try
         {
             // Characters, ParagraphCount & WordCount are available from
-            // the model ( and addtionally these also update the statics object )
+            // the model ( and additionally these also update the statics object )
             return mxModelProps->getPropertyValue( rPropName );
         }
         catch (const uno::Exception&)

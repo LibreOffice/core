@@ -1684,7 +1684,7 @@
                 <xsl:number from="/w:wordDocument/w:body" level="any" count="v:textpath" format="1"/>
             </xsl:variable>
             <xsl:variable name="font-family">
-                <!--  we need remove the addtional  &quot; from font-family -->
+                <!--  we need remove the additional  &quot; from font-family -->
                 <xsl:value-of select="translate(substring-before(substring-after(@style,'font-family:'),';'), '&quot;' ,'')"/>
             </xsl:variable>
             <xsl:variable name="font-size">
