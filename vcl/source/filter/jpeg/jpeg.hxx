@@ -56,9 +56,6 @@ public:
     void*               CreateBitmap( void* JPEGCreateBitmapParam );
 
 public:
-
-
-
                         JPEGReader( SvStream& rStm, void* pCallData, sal_Bool bSetLogSize );
     virtual             ~JPEGReader();
 
@@ -84,24 +81,25 @@ class JPEGWriter
 
 public:
 
-    void*               GetScanline( long nY );
+    void*       GetScanline( long nY );
 
-                        JPEGWriter( SvStream& rOStm, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
-                                    bool* pExportWasGrey = NULL );
-                        ~JPEGWriter() {};
+                JPEGWriter( SvStream& rOStm,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
+                            bool* pExportWasGrey = NULL );
 
-    sal_Bool                Write( const Graphic& rGraphic );
+                ~JPEGWriter() {};
+
+    sal_Bool    Write( const Graphic& rGraphic );
 };
 
 #endif // _JPEGPRIVATE
 
 sal_Bool ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 
-sal_Bool ExportJPEG( SvStream& rStream,
-                 const Graphic& rGraphic,
-                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
-                 bool* pExportWasGrey = NULL
-                );
+sal_Bool ExportJPEG(SvStream& rStream,
+                    const Graphic& rGraphic,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
+                    bool* pExportWasGrey = NULL);
 
 #endif // _JPEG_HXX
 

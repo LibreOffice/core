@@ -73,7 +73,7 @@ typedef struct
   JOCTET * buffer;                  /* start of buffer */
 } my_destination_mgr;
 
-typedef my_destination_mgr * my_dest_ptr;
+typedef my_destination_mgr* my_dest_ptr;
 
 extern "C" void init_destination (j_compress_ptr cinfo)
 {
@@ -281,7 +281,7 @@ JPEGReader::JPEGReader( SvStream& rStm, void* /*pCallData*/, sal_Bool bSetLS ) :
         nLastLines      ( 0 ),
         bSetLogSize     ( bSetLS )
 {
-    maUpperName = rtl::OUString("SVIJPEG");
+    maUpperName = OUString("SVIJPEG");
     nFormerPos = nLastPos;
 }
 
@@ -483,10 +483,10 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     long        nEndPos;
     long        nLines;
     ReadState   eReadState;
-    sal_Bool        bRet = sal_False;
-    sal_uInt8       cDummy;
+    sal_Bool    bRet = sal_False;
+    sal_uInt8   cDummy;
 
-#if 1 // TODO: is it possible to get rid of this seek to the end?
+    // TODO: is it possible to get rid of this seek to the end?
     // check if the stream's end is already available
     rIStm.Seek( STREAM_SEEK_TO_END );
     rIStm >> cDummy;
@@ -505,7 +505,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 
     // seek back to the original position
     rIStm.Seek( nLastPos );
-#endif
+
 
     Size aPreviewSize = GetPreviewSize();
     SetJpegPreviewSizeHint( aPreviewSize.Width(), aPreviewSize.Height() );
@@ -526,16 +526,20 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         pAcc = NULL;
 
         if( rIStm.GetError() == ERRCODE_IO_PENDING )
+        {
             rGraphic = CreateIntermediateGraphic( aBmp, nLines );
+        }
         else
+        {
             rGraphic = aBmp;
+        }
 
         bRet = sal_True;
     }
     else if( rIStm.GetError() == ERRCODE_IO_PENDING )
         bRet = sal_True;
 
-    // Status setzen ( Pending hat immer Vorrang )
+    // Set status ( Pending has priority )
     if( rIStm.GetError() == ERRCODE_IO_PENDING )
     {
         eReadState = JPEGREAD_NEED_MORE;
@@ -553,13 +557,13 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     return eReadState;
 }
 
-JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
-        rOStm       ( rStm ),
+JPEGWriter::JPEGWriter( SvStream& rStream, const uno::Sequence< beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
+        rOStm       ( rStream ),
         pAcc        ( NULL ),
         pBuffer     ( NULL ),
         pExpWasGrey ( pExportWasGrey )
 {
-    FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
+    FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*) pFilterData );
     bGreys = aConfigItem.ReadInt32( "ColorMode", 0 ) != 0;
     nQuality = aConfigItem.ReadInt32( "Quality", 75 );
     aChromaSubsampling = aConfigItem.ReadInt32( "ChromaSubsamplingMode", 0 );
@@ -586,12 +590,14 @@ void* JPEGWriter::GetScanline( long nY )
     if( pAcc )
     {
         if( bNative )
+        {
             pScanline = pAcc->GetScanline( nY );
+        }
         else if( pBuffer )
         {
             BitmapColor aColor;
             long        nWidth = pAcc->Width();
-            sal_uInt8*      pTmp = pBuffer;
+            sal_uInt8*  pTmp = pBuffer;
 
             if( pAcc->HasPalette() )
             {
@@ -599,10 +605,11 @@ void* JPEGWriter::GetScanline( long nY )
                 {
                     aColor = pAcc->GetPaletteColor( (sal_uInt8) pAcc->GetPixel( nY, nX ) );
                     *pTmp++ = aColor.GetRed();
-                    if ( bGreys )
-                        continue;
-                    *pTmp++ = aColor.GetGreen();
-                    *pTmp++ = aColor.GetBlue();
+                    if ( !bGreys )
+                    {
+                        *pTmp++ = aColor.GetGreen();
+                        *pTmp++ = aColor.GetBlue();
+                    }
                 }
             }
             else
@@ -611,10 +618,11 @@ void* JPEGWriter::GetScanline( long nY )
                 {
                     aColor = pAcc->GetPixel( nY, nX );
                     *pTmp++ = aColor.GetRed();
-                    if ( bGreys )
-                        continue;
-                    *pTmp++ = aColor.GetGreen();
-                    *pTmp++ = aColor.GetBlue();
+                    if ( !bGreys )
+                    {
+                        *pTmp++ = aColor.GetGreen();
+                        *pTmp++ = aColor.GetBlue();
+                    }
                 }
             }
 
@@ -631,7 +639,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
 
     if ( xStatusIndicator.is() )
     {
-        rtl::OUString aMsg;
+        OUString aMsg;
         xStatusIndicator->start( aMsg, 100 );
     }
 

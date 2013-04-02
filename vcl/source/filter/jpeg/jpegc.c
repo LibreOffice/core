@@ -35,8 +35,7 @@ struct my_error_mgr
 void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 
-METHODDEF( void )
-my_error_exit (j_common_ptr cinfo)
+METHODDEF( void ) my_error_exit (j_common_ptr cinfo)
 {
     my_error_ptr myerr = (my_error_ptr) cinfo->err;
     (*cinfo->err->output_message) (cinfo);
@@ -44,8 +43,7 @@ my_error_exit (j_common_ptr cinfo)
 }
 
 
-METHODDEF( void )
-my_output_message (j_common_ptr cinfo)
+METHODDEF( void ) my_output_message (j_common_ptr cinfo)
 {
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message) (cinfo, buffer);
@@ -76,7 +74,10 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     long nScanLineBufferComponents = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
+    {
+        jpeg_destroy_decompress( &cinfo );
         return;
+    }
 
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = my_error_exit;
@@ -144,7 +145,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
 
     if ( cinfo.out_color_space == JCS_CMYK )
     {
-            nScanLineBufferComponents = cinfo.output_width * 4;
+        nScanLineBufferComponents = cinfo.output_width * 4;
         pScanLineBuffer = rtl_allocateMemory( nScanLineBufferComponents );
     }
 
@@ -187,14 +188,12 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     }
 
     if ( pDIB )
-    {
         jpeg_finish_decompress( &cinfo );
-    }
     else
-    {
         jpeg_abort_decompress( &cinfo );
-    }
-    if (pScanLineBuffer!=NULL) {
+
+    if (pScanLineBuffer!=NULL)
+    {
         rtl_freeMemory( pScanLineBuffer );
         pScanLineBuffer=NULL;
     }
@@ -212,7 +211,10 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
     long                        nY;
 
     if ( setjmp( jerr.setjmp_buffer ) )
+    {
+        jpeg_destroy_compress( &cinfo );
         return 0;
+    }
 
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = my_error_exit;
