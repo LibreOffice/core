@@ -73,6 +73,7 @@ public:
     void testFdo61507();
     void testFdo30983();
     void testPlaceholder();
+    void testMnor();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -120,6 +121,7 @@ void Test::run()
         {"fdo61507.rtf", &Test::testFdo61507},
         {"fdo30983.rtf", &Test::testFdo30983},
         {"placeholder.odt", &Test::testPlaceholder},
+        {"mnor.rtf", &Test::testMnor},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -504,6 +506,14 @@ void Test::testPlaceholder()
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xRun, "TextPortionType"));
     uno::Reference<beans::XPropertySet> xField = getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("place holder"), getProperty<OUString>(xField, "Hint"));
+}
+
+void Test::testMnor()
+{
+    // \mnor wasn't handled, leading to missing quotes around "divF" and so on.
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" ∙ \"n\" dS}", 74, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

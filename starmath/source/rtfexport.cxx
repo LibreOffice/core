@@ -71,6 +71,9 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
 {
     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MR " ");
 
+    if( pNode->GetToken().eType == TTEXT ) // literal text
+        m_pBuffer->append(LO_STRING_SVTOOLS_RTF_MNOR " ");
+
     SmTextNode* pTemp=(SmTextNode* )pNode;
     SAL_INFO("starmath.rtf", "Text: " << pTemp->GetText());
     for (sal_Int32 i = 0; i < pTemp->GetText().getLength(); i++)

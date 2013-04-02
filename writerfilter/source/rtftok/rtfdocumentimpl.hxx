@@ -590,6 +590,8 @@ namespace writerfilter {
                 rtl::OStringBuffer m_aHexBuffer;
                 /// Formula import.
                 oox::formulaimport::XmlStreamBuilder m_aMathBuffer;
+                /// Normal text property, that is math italic and math spacing are not applied to the current run.
+                bool m_bMathNor;
                 /// If the next continous section break should be ignored.
                 bool m_bIgnoreNextContSectBreak;
                 /// If a section break is needed before the end of the doc (false right after a section break).

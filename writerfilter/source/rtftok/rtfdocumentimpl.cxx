@@ -215,12 +215,20 @@ static util::DateTime lcl_getDateTime(RTFParserState& aState)
             aState.nDay, aState.nMonth, aState.nYear);
 }
 
-static void lcl_DestinationToMath(OUStringBuffer& rDestinationText, oox::formulaimport::XmlStreamBuilder& rMathBuffer)
+static void lcl_DestinationToMath(OUStringBuffer& rDestinationText, oox::formulaimport::XmlStreamBuilder& rMathBuffer, bool& rMathNor)
 {
     OUString aStr = rDestinationText.makeStringAndClear();
     if (!aStr.isEmpty())
     {
         rMathBuffer.appendOpeningTag(M_TOKEN(r));
+        if (rMathNor)
+        {
+            rMathBuffer.appendOpeningTag(M_TOKEN(rPr));
+            rMathBuffer.appendOpeningTag(M_TOKEN(nor));
+            rMathBuffer.appendClosingTag(M_TOKEN(nor));
+            rMathBuffer.appendClosingTag(M_TOKEN(rPr));
+            rMathNor = false;
+        }
         rMathBuffer.appendOpeningTag(M_TOKEN(t));
         rMathBuffer.appendCharacters(aStr);
         rMathBuffer.appendClosingTag(M_TOKEN(t));
@@ -275,6 +283,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bIsInFrame(false),
     m_aUnicodeBuffer(),
     m_aHexBuffer(),
+    m_bMathNor(false),
     m_bIgnoreNextContSectBreak(false),
     m_bNeedSect(true),
     m_bWasInFrame(false),
@@ -2651,6 +2660,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_NOWRAP:
                 m_aStates.top().aFrame.setSprm(NS_sprm::LN_PWr, NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside);
                 break;
+        case RTF_MNOR:
+                m_bMathNor = true;
+                break;
         default:
                 {
                     SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
@@ -3667,7 +3679,7 @@ int RTFDocumentImpl::pushState()
     else
     {
         if (m_aStates.top().nDestinationState == DESTINATION_MR)
-            lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer);
+            lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer, m_bMathNor);
         m_aStates.push(m_aStates.top());
     }
     m_aStates.top().aDestinationText.setLength(0);
@@ -4151,7 +4163,7 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_MR:
-            lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer);
+            lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer, m_bMathNor);
             break;
         case DESTINATION_MF:
             m_aMathBuffer.appendClosingTag(M_TOKEN(f));

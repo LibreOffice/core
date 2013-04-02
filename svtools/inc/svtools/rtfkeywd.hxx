@@ -1203,6 +1203,7 @@
 #define LO_STRING_SVTOOLS_RTF_MVERTJC "\\mvertJc"
 #define LO_STRING_SVTOOLS_RTF_MMATH "\\mmath"
 #define LO_STRING_SVTOOLS_RTF_MMATHPICT "\\mmathPict"
+#define LO_STRING_SVTOOLS_RTF_MNOR "\\mnor"
 
 #endif // _RTFKEYWD_HXX
 
