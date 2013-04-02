@@ -19,6 +19,7 @@
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -29,9 +30,6 @@ namespace drawinglayer
         class ImpLineAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // data definitions
             basegfx::BColor                         maColor;                // color
             double                                  mfWidth;                // absolute line width
@@ -43,11 +41,18 @@ namespace drawinglayer
                 double fWidth,
                 basegfx::B2DLineJoin aB2DLineJoin,
                 com::sun::star::drawing::LineCap aLineCap)
-            :   mnRefCount(0),
-                maColor(rColor),
+            :   maColor(rColor),
                 mfWidth(fWidth),
                 meLineJoin(aB2DLineJoin),
                 meLineCap(aLineCap)
+            {
+            }
+
+            ImpLineAttribute()
+            :   maColor(basegfx::BColor()),
+                mfWidth(0.0),
+                meLineJoin(basegfx::B2DLINEJOIN_ROUND),
+                meLineCap(com::sun::star::drawing::LineCap_BUTT)
             {
             }
 
@@ -64,26 +69,13 @@ namespace drawinglayer
                     && getLineJoin() == rCandidate.getLineJoin()
                     && getLineCap() == rCandidate.getLineCap());
             }
-
-            static ImpLineAttribute* get_global_default()
-            {
-                static ImpLineAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpLineAttribute(
-                        basegfx::BColor(),
-                        0.0,
-                        basegfx::B2DLINEJOIN_ROUND,
-                        com::sun::star::drawing::LineCap_BUTT);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< LineAttribute::ImplType, theGlobalDefault > {};
+        }
 
         LineAttribute::LineAttribute(
             const basegfx::BColor& rColor,
@@ -91,7 +83,7 @@ namespace drawinglayer
             basegfx::B2DLineJoin aB2DLineJoin,
             com::sun::star::drawing::LineCap aLineCap)
         :   mpLineAttribute(
-                new ImpLineAttribute(
+                ImpLineAttribute(
                     rColor,
                     fWidth,
                     aB2DLineJoin,
@@ -100,67 +92,33 @@ namespace drawinglayer
         }
 
         LineAttribute::LineAttribute()
-        :   mpLineAttribute(ImpLineAttribute::get_global_default())
+        :   mpLineAttribute(theGlobalDefault::get())
         {
-            mpLineAttribute->mnRefCount++;
         }
 
         LineAttribute::LineAttribute(const LineAttribute& rCandidate)
         :   mpLineAttribute(rCandidate.mpLineAttribute)
         {
-            mpLineAttribute->mnRefCount++;
         }
 
         LineAttribute::~LineAttribute()
         {
-            if(mpLineAttribute->mnRefCount)
-            {
-                mpLineAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpLineAttribute;
-            }
         }
 
         bool LineAttribute::isDefault() const
         {
-            return mpLineAttribute == ImpLineAttribute::get_global_default();
+            return mpLineAttribute.same_object(theGlobalDefault::get());
         }
 
         LineAttribute& LineAttribute::operator=(const LineAttribute& rCandidate)
         {
-            if(rCandidate.mpLineAttribute != mpLineAttribute)
-            {
-                if(mpLineAttribute->mnRefCount)
-                {
-                    mpLineAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpLineAttribute;
-                }
-
-                mpLineAttribute = rCandidate.mpLineAttribute;
-                mpLineAttribute->mnRefCount++;
-            }
-
+            mpLineAttribute = rCandidate.mpLineAttribute;
             return *this;
         }
 
         bool LineAttribute::operator==(const LineAttribute& rCandidate) const
         {
-            if(rCandidate.mpLineAttribute == mpLineAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpLineAttribute == *mpLineAttribute);
+            return rCandidate.mpLineAttribute == mpLineAttribute;
         }
 
         const basegfx::BColor& LineAttribute::getColor() const

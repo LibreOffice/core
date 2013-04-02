@@ -24,6 +24,7 @@
 
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -44,8 +45,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC LineAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpLineAttribute > ImplType;
+
         private:
-            ImpLineAttribute*                           mpLineAttribute;
+            ImplType  mpLineAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
