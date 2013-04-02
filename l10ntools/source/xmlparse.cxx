@@ -1180,9 +1180,10 @@ static icu::UnicodeString lcl_QuotRange(
     const sal_Int32 nEnd, bool bInsideTag = false )
 {
     icu::UnicodeString sReturn;
+    assert( nStart < nEnd );
     assert( nStart >= 0 );
-    assert( nEnd < rString.length() );
-    for (sal_Int32 i = nStart; i <= nEnd; ++i)
+    assert( nEnd <= rString.length() );
+    for (sal_Int32 i = nStart; i < nEnd; ++i)
     {
         switch (rString[i])
         {
@@ -1258,20 +1259,22 @@ OUString XMLUtil::QuotHTML( const OUString &rString )
     while( aRegexMatcher.find(nStartPos, nIcuErr) && nIcuErr == U_ZERO_ERROR )
     {
         nStartPos = aRegexMatcher.start(nIcuErr);
-        sReturn.append(lcl_QuotRange(sSource, nEndPos, nStartPos-1));
+        if ( nEndPos < nStartPos )
+            sReturn.append(lcl_QuotRange(sSource, nEndPos, nStartPos));
         nEndPos = aRegexMatcher.end(nIcuErr);
         icu::UnicodeString sMatch = aRegexMatcher.group(nIcuErr);
         if( lcl_isTag(sMatch) )
         {
             sReturn.append("<");
-            sReturn.append(lcl_QuotRange(sSource, nStartPos+1, nEndPos-2, true));
+            sReturn.append(lcl_QuotRange(sSource, nStartPos+1, nEndPos-1, true));
             sReturn.append(">");
         }
         else
-            sReturn.append(lcl_QuotRange(sSource, nStartPos, nEndPos-1));
+            sReturn.append(lcl_QuotRange(sSource, nStartPos, nEndPos));
         ++nStartPos;
     }
-    sReturn.append(lcl_QuotRange(sSource, nEndPos, sSource.length()-1));
+    if( nEndPos < sSource.length() )
+        sReturn.append(lcl_QuotRange(sSource, nEndPos, sSource.length()));
     sReturn.append('\0');
     return OUString(reinterpret_cast<const sal_Unicode*>(sReturn.getBuffer()));
 }
