@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//95I\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6662,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-02T16:38:19Z",
+      "side": 1,
+      "message": "STRING_LEN should be replaced with -1",
+      "revId": "b3de1fb89a508fb30e87812855bd38690b5aa99c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//95E\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6668,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-02T16:38:19Z",
+      "side": 1,
+      "message": "this will remove 1 char, whether it fits in the given width or not; the old code did nothing if it fits.",
+      "revId": "b3de1fb89a508fb30e87812855bd38690b5aa99c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//94w\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6779,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-02T16:38:19Z",
+      "side": 1,
+      "message": "this would copy aStr.getLength() chars from aStr starting at non-0 pos.: doesn\u0027t make sense",
+      "revId": "b3de1fb89a508fb30e87812855bd38690b5aa99c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
