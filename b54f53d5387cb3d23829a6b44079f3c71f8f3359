@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//964\u003d",
+        "filename": "connectivity/source/drivers/postgresql/pq_baseresultset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-04-02T13:20:37Z",
+      "side": 1,
+      "message": "The 128 argument is the default buffer size to be pre-allocated. If the string is still constructed in several steps, this usually avoids reallocations.",
+      "revId": "b54f53d5387cb3d23829a6b44079f3c71f8f3359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
