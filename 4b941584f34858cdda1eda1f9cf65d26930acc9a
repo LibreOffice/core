@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3//95o\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6941,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-04-02T15:44:39Z",
+      "side": 1,
+      "message": "STRING_LEN is not -1, but it is (presumably) some large value meaning maximum string length. The same in the default argument for this function. Possibly the condition here has to be !\u003d -1 to rule out the default value, but that depends on finding out what nLen is actually used for exactly.",
+      "revId": "4b941584f34858cdda1eda1f9cf65d26930acc9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
