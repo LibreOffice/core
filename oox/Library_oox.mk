@@ -81,11 +81,27 @@ $(eval $(call gb_Library_use_libraries,oox,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(TLS),OPENSSL)
 $(eval $(call gb_Library_use_externals,oox,\
 	boost_headers \
 	openssl \
 	openssl_headers \
 ))
+$(eval $(call gb_Library_add_defs,oox,\
+    -DTLS_OPENSSL \
+))
+else
+ifeq ($(TLS),NSS)
+$(eval $(call gb_Library_use_externals,oox,\
+       boost_headers \
+       plc4 \
+       nss3 \
+))
+$(eval $(call gb_Library_add_defs,oox,\
+    -DTLS_NSS \
+))
+endif
+endif
 
 $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))
 

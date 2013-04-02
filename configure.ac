@@ -1271,6 +1271,17 @@ AC_ARG_WITH(package-format,
           installed, msi. Example: --with-package-format="deb dmg"]),
 ,)
 
+AC_ARG_WITH(tls,
+    AS_HELP_STRING([--with-tls],
+        [Decides which TLS/SSL and cryptographic implementations to use for
+         LibreOffice's code. Notice that this doesn't apply for depending
+         libraries like "neon", for example. Default is to use OpenSSL
+         although NSS is also possible. Notice that selecting NSS restricts
+         the usage of OpenSSL in LO's code but selecting OpenSSL doesn't
+         restrict by now the usage of NSS in LO's code. Possible values:
+         openssl, nss. Example: --with-tls="nss"]),
+,)
+
 AC_ARG_WITH(system-libs,
     AS_HELP_STRING([--with-system-libs],
         [Use libraries already on system -- enables all --with-system-* flags.]),
@@ -8149,6 +8160,31 @@ fi
 AC_SUBST(WITH_MOZAB4WIN)
 AC_SUBST(MSVC80_DLLS)
 AC_SUBST(MSVC80_DLL_PATH)
+
+dnl ===================================================================
+dnl Check for TLS/SSL and cryptographic implementation to use
+dnl ===================================================================
+AC_MSG_CHECKING([which TLS/SSL and cryptographic implementation to use])
+if test -n "$with_tls"; then
+    case $with_tls in
+    openssl)
+        TLS=OPENSSL
+        ;;
+    nss)
+        TLS=NSS
+        ;;
+    *)
+        AC_MSG_ERROR([unsupported implementation $with_tls. Supported are:
+openssl - OpenSSL
+nss - Mozilla's Network Security Services (NSS)
+    ])
+        ;;
+    esac
+else
+    TLS=OPENSSL
+fi
+AC_MSG_RESULT([$TLS])
+AC_SUBST(TLS)
 
 dnl ===================================================================
 dnl Check for system NSS
