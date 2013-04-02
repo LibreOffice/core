@@ -10,7 +10,7 @@
 share_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/share)
 share_SRCDIR := $(SRCDIR)/sysui/desktop
 
-LAUNCHERLIST_APPS := writer calc draw impress math base printeradmin startcenter
+LAUNCHERLIST_APPS := writer calc draw impress math base startcenter
 LAUNCHERLIST := $(LAUNCHERLIST_APPS) qstart xsltfilter
 LAUNCHERS := $(foreach launcher,$(LAUNCHERLIST),$(share_SRCDIR)/menus/$(launcher).desktop)
 
@@ -98,9 +98,7 @@ MIMEDESKTOPS := $(foreach mime,$(MIMELIST),$(share_SRCDIR)/mimetypes/$(mime).des
 ULFS := documents.ulf \
 	launcher_comment.ulf \
 	launcher_genericname.ulf \
-	launcher_unityquicklist.ulf \
-	launcher_name.ulf
-
+	launcher_unityquicklist.ulf
 
 PRODUCTLIST := libreoffice libreofficedev oxygenoffice
 PKGVERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)
@@ -201,8 +199,6 @@ $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(PERL) $(share_SRCDIR)/share/brand.pl -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -u '$$(UNIXPRODUCTNAME)$$(BRANDPACKAGEVERSION)' \
 		--iconprefix '$$(UNIXBASISROOTNAME)' $^ $(share_WORKDIR)/$*
-	$(PERL) $(share_SRCDIR)/share/translate.pl -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
-		--ext "desktop" --key "Name" $(share_WORKDIR)/launcher_name.ulf
 	$(PERL) $(share_SRCDIR)/share/translate.pl -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
 		--ext "desktop" --key "Comment" $(share_WORKDIR)/launcher_comment.ulf
 	$(PERL) $(share_SRCDIR)/share/translate.pl -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \

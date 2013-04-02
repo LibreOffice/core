@@ -29,7 +29,6 @@ s none usr/share/applications/%PREFIX-draw.desktop=../../../opt/%PREFIX/share/xd
 s none usr/share/applications/%PREFIX-impress.desktop=../../../opt/%PREFIX/share/xdg/impress.desktop
 s none usr/share/applications/%PREFIX-math.desktop=../../../opt/%PREFIX/share/xdg/math.desktop
 s none usr/share/applications/%PREFIX-base.desktop=../../../opt/%PREFIX/share/xdg/base.desktop
-s none usr/share/applications/%PREFIX-printeradmin.desktop=../../../opt/%PREFIX/share/xdg/printeradmin.desktop
 f none usr/share/mime-info/%PREFIX.keys=%SOURCE/openoffice.keys
 f none usr/share/mime-info/%PREFIX.mime=%SOURCE/openoffice.mime
 f none usr/share/pixmaps/%ICONPREFIX-writer.png=../icons/hicolor/48x48/apps/writer.png

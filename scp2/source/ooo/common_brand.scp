@@ -78,7 +78,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_Extension,
              gid_Brand_File_Share_Xdg_Impress,
              gid_Brand_File_Share_Xdg_Math,
-             gid_Brand_File_Share_Xdg_Printeradmin,
              gid_Brand_File_Share_Xdg_QStart,
              gid_Brand_File_Share_Xdg_StartCenter,
              gid_Brand_File_Share_Xdg_Writer,
@@ -693,15 +692,6 @@ File gid_Brand_File_Share_Xdg_Math
     Dir = gid_Brand_Dir_Share_Xdg;
     Name = "math.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Printeradmin
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "printeradmin.desktop";
 End
 #endif
 

@@ -399,7 +399,6 @@ done
 /usr/share/applications/%unixfilename-draw.desktop
 /usr/share/applications/%unixfilename-impress.desktop
 /usr/share/applications/%unixfilename-math.desktop
-/usr/share/applications/%unixfilename-printeradmin.desktop
 /usr/share/applications/%unixfilename-writer.desktop
 /usr/share/applications/%unixfilename-startcenter.desktop
 /usr/share/applications/%unixfilename-xsltfilter.desktop

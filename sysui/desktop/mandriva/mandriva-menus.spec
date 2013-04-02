@@ -305,16 +305,6 @@ GenerateMenu "%unixfilename --math" \
 	"math" \
 	"application/vnd.oasis.opendocument.formula,application/vnd.sun.xml.math,application/vnd.stardivision.math"
 
-#
-# FIXME: Is there a better group than System/Configuration/Printing? I think no ...
-#
-GenerateMenu "%unixfilename-printeradmin" \
-    "System/Configuration/Printing" \
-    "printeradmin" \
-    "%productname %{menuversion} Printeradmin" \
-    "%productname %{menuversion} Printer Administration" \
-	"core02"
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -351,7 +341,6 @@ fi
 /usr/share/applications/%unixfilename-impress.desktop
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
-/usr/share/applications/%unixfilename-printeradmin.desktop
 /usr/share/applications/%unixfilename-startcenter.desktop
 /usr/share/mime-info/*.keys
 /usr/share/mime-info/*.mime

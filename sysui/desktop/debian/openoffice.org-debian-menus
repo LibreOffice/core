@@ -32,11 +32,3 @@
   kderemove="y"\
   icon="/usr/share/icons/hicolor/32x32/apps/%ICONPREFIX-base.png"\
   icon16x16="/usr/share/icons/hicolor/16x16/apps/%ICONPREFIX-base.png"
-
-?package(libreoffice-core02):needs="X11" section="Apps/System"\
-  title="%PRODUCTNAME Printer Administration"\
-  command="%PREFIX-printeradmin"\
-  hints="Setup,Printer,Config"\
-  kderemove="y"\
-  icon="/usr/share/icons/hicolor/32x32/apps/%ICONPREFIX-printeradmin.png"\
-  icon16x16="/usr/share/icons/hicolor/16x16/apps/%ICONPREFIX-printeradmin.png"
