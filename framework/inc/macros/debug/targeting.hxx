@@ -144,11 +144,11 @@
                     sBufferParam.append( "::findFrame() at \""  );                                                      \
                     sBufferParam.append( U2B( SFRAMENAME )      );                                                      \
                     sBufferParam.append( "\" "                  );                                                      \
-                    if( XFRAME.is() == sal_True )                                                                       \
+                    if( css::frame::XFRAME.is() == sal_True )                                                                       \
                     {                                                                                                   \
                         sBufferParam.append( "return with valid frame.\n"       );                                      \
                         sBufferSteps.append( "OK ["                             );                                      \
-                        sBufferSteps.append( U2B( XFRAME->getName() )           );                                      \
+                        sBufferSteps.append( U2B( css::frame::XFRAME->getName() )           );                                      \
                         sBufferSteps.append( "]\n"                              );                                      \
                     }                                                                                                   \
                     else                                                                                                \

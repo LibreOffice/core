@@ -63,8 +63,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-
-class StringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
+class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
 {
     public:
         StringLength() {}
@@ -72,7 +71,7 @@ class StringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XSt
 
         // XStringWidth
         sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
-            throw (::com::sun::star::uno::RuntimeException)
+            throw (RuntimeException)
         {
             return aString.getLength();
         }
@@ -105,8 +104,8 @@ namespace framework
 const char UNO_COMMAND[] = ".uno:";
 
 MenuManager::MenuManager(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-    REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+    const Reference< XComponentContext >& rxContext,
+    Reference< XFrame >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     m_xContext(rxContext)
@@ -253,7 +252,7 @@ MenuManager::MenuManager(
                     }
                 }
 
-                REFERENCE< XDISPATCH > aXDispatchRef;
+                Reference< XDispatch > aXDispatchRef;
                 m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, aXDispatchRef ));
 
             }
@@ -285,7 +284,7 @@ MenuManager::~MenuManager()
         MenuItemHandler* pItemHandler = *p;
         pItemHandler->xMenuItemDispatch.clear();
         if ( pItemHandler->pSubMenuManager )
-            (static_cast< ::com::sun::star::uno::XInterface* >((OWeakObject*)pItemHandler->pSubMenuManager))->release();
+            (static_cast< XInterface* >((OWeakObject*)pItemHandler->pSubMenuManager))->release();
         delete pItemHandler;
     }
 
@@ -310,7 +309,7 @@ MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemI
 }
 
 
-void SAL_CALL MenuManager::statusChanged( const FEATURSTATEEVENT& Event )
+void SAL_CALL MenuManager::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
     OUString aFeatureURL = Event.FeatureURL.Complete;
@@ -358,15 +357,15 @@ throw ( RuntimeException )
 
             m_xURLTransformer->parseStrict( aTargetURL );
 
-            REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
-            REFERENCE< XDISPATCH > xMenuItemDispatch = xDispatchProvider->queryDispatch(
+            Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+            Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch(
                                                             aTargetURL, OUString(), 0 );
 
             if ( xMenuItemDispatch.is() )
             {
                 pStatusChangedMenu->xMenuItemDispatch   = xMenuItemDispatch;
                 pStatusChangedMenu->aMenuItemURL        = aTargetURL.Complete;
-                xMenuItemDispatch->addStatusListener( (static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
+                xMenuItemDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
             }
         }
     }
@@ -379,7 +378,7 @@ void MenuManager::RemoveListener()
     ClearMenuDispatch();
 }
 
-void MenuManager::ClearMenuDispatch(const EVENTOBJECT& Source,bool _bRemoveOnly)
+void MenuManager::ClearMenuDispatch(const EventObject& Source,bool _bRemoveOnly)
 {
     // disposing called from parent dispatcher
     // remove all listener to prepare shutdown
@@ -395,7 +394,7 @@ void MenuManager::ClearMenuDispatch(const EVENTOBJECT& Source,bool _bRemoveOnly)
             m_xURLTransformer->parseStrict( aTargetURL );
 
             pItemHandler->xMenuItemDispatch->removeStatusListener(
-                (static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
+                (static_cast< XStatusListener* >(this)), aTargetURL );
         }
 
         pItemHandler->xMenuItemDispatch.clear();
@@ -410,7 +409,7 @@ void MenuManager::ClearMenuDispatch(const EVENTOBJECT& Source,bool _bRemoveOnly)
 }
 
 
-void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIMEEXCEPTION )
+void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( RuntimeException )
 {
     if ( Source.Source == m_xFrame )
     {
@@ -443,7 +442,7 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
 
                 m_xURLTransformer->parseStrict( aTargetURL );
 
-                pMenuItemDisposing->xMenuItemDispatch->removeStatusListener((static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
+                pMenuItemDisposing->xMenuItemDispatch->removeStatusListener((static_cast< XStatusListener* >(this)), aTargetURL );
                 pMenuItemDisposing->xMenuItemDispatch.clear();
             }
         }
@@ -466,7 +465,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     {
         Sequence< PropertyValue > aPickListEntry = aHistoryList[i];
 
-        REFERENCE< XDISPATCH > aXDispatchRef;
+        Reference< XDispatch > aXDispatchRef;
         MenuItemHandler* pNewMenuItemHandler = new MenuItemHandler(
                                                     nPickItemId++,
                                                     NULL,
@@ -492,9 +491,9 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     if ( !aNewPickVector.empty() )
     {
         URL aTargetURL;
-        REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-        REFERENCE< XDISPATCH > xMenuItemDispatch;
+        Reference< XDispatch > xMenuItemDispatch;
 
         static const OUString s_sDefault("_default");
         // query for dispatcher
@@ -776,7 +775,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 
             ResetableGuard aGuard( m_aLock );
 
-            REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
+            Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( xDispatchProvider.is() )
             {
                 std::vector< MenuItemHandler* >::iterator p;
@@ -805,7 +804,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 
                             m_xURLTransformer->parseStrict( aTargetURL );
 
-                            REFERENCE< XDISPATCH > xMenuItemDispatch;
+                            Reference< XDispatch > xMenuItemDispatch;
                             if ( m_bIsBookmarkMenu )
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
                             else
@@ -815,7 +814,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                             {
                                 pMenuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
                                 pMenuItemHandler->aMenuItemURL      = aTargetURL.Complete;
-                                xMenuItemDispatch->addStatusListener( (static_cast< XSTATUSLISTENER* >(this)), aTargetURL );
+                                xMenuItemDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
                             }
                             else
                                 pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );
@@ -843,7 +842,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 {
     URL                     aTargetURL;
     Sequence<PropertyValue> aArgs;
-    REFERENCE< XDISPATCH >  xDispatch;
+    Reference< XDispatch >  xDispatch;
 
     {
         ResetableGuard aGuard( m_aLock );
@@ -918,7 +917,7 @@ IMPL_LINK_NOARG(MenuManager, Highlight)
     return 0;
 }
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& MenuManager::getContext()
+const Reference< XComponentContext >& MenuManager::getContext()
 {
     return m_xContext;
 }
@@ -930,7 +929,7 @@ void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,s
     // store menu item command as we later have to know which menu is active (see Activate handler)
     pSubMenuManager->m_aMenuItemCommand = _sItemCommand;
 
-    REFERENCE< XDISPATCH > aXDispatchRef;
+    Reference< XDispatch > aXDispatchRef;
     MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                 _nItemId,
                                                 pSubMenuManager,

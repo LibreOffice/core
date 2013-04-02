@@ -193,7 +193,7 @@ class MenuDispatcher   :   // interfaces
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw( css::uno::RuntimeException );
+        void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods

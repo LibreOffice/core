@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_CLASSES_MENUMANAGER_HXX_
 #define __FRAMEWORK_CLASSES_MENUMANAGER_HXX_
 
-/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
-               with solaris headers ...
-*/
 #include <vector>
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -38,16 +35,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 
-#define REFERENCE                                       ::com::sun::star::uno::Reference
-#define XFRAME                                          ::com::sun::star::frame::XFrame
-#define XDISPATCH                                       ::com::sun::star::frame::XDispatch
-#define XDISPATCHPROVIDER                               ::com::sun::star::frame::XDispatchProvider
-#define XSTATUSLISTENER                                 ::com::sun::star::frame::XStatusListener
-#define XEVENTLISTENER                                  ::com::sun::star::lang::XEventListener
-#define FEATURSTATEEVENT                                ::com::sun::star::frame::FeatureStateEvent
-#define RUNTIMEEXCEPTION                                ::com::sun::star::uno::RuntimeException
-#define EVENTOBJECT                                     ::com::sun::star::lang::EventObject
-
 namespace framework
 {
 
@@ -55,12 +42,12 @@ class BmkMenu;
 class AddonMenu;
 class AddonPopupMenu;
 class MenuManager : public ThreadHelpBase           ,
-                    public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
+                    public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {
     public:
         MenuManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            REFERENCE< XFRAME >& rFrame,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            css::uno::Reference< css::frame::XFrame >& rFrame,
             Menu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
@@ -68,10 +55,10 @@ class MenuManager : public ThreadHelpBase           ,
         virtual ~MenuManager();
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const FEATURSTATEEVENT& Event ) throw ( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException );
 
         // XEventListener
-        virtual void SAL_CALL disposing( const EVENTOBJECT& Source ) throw ( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException );
 
         DECL_LINK( Select, Menu * );
 
@@ -79,11 +66,11 @@ class MenuManager : public ThreadHelpBase           ,
 
         void    RemoveListener();
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext();
+        const css::uno::Reference< css::uno::XComponentContext >& getContext();
 
-        static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,IMutex& _rMutex);
+        static void UpdateSpecialWindowMenu( Menu* pMenu ,const css::uno::Reference< css::uno::XComponentContext >& xContext,IMutex& _rMutex);
         static void FillMenuImages(
-            ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,
+            css::uno::Reference< css::frame::XFrame >& xFrame,
             Menu* _pMenu,
             sal_Bool bShowMenuImages
         );
@@ -96,7 +83,7 @@ class MenuManager : public ThreadHelpBase           ,
     private:
         void UpdateSpecialFileMenu( Menu* pMenu );
         void UpdateSpecialWindowMenu( Menu* pMenu );
-        void ClearMenuDispatch(const EVENTOBJECT& Source = EVENTOBJECT(),bool _bRemoveOnly = true);
+        void ClearMenuDispatch(const css::lang::EventObject& Source = css::lang::EventObject(),bool _bRemoveOnly = true);
         void SetHdl();
         void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
         sal_uInt16 FillItemCommand(::rtl::OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
@@ -104,7 +91,7 @@ class MenuManager : public ThreadHelpBase           ,
 
         struct MenuItemHandler
         {
-            MenuItemHandler( sal_uInt16 aItemId, MenuManager* pManager, REFERENCE< XDISPATCH >& rDispatch ) :
+            MenuItemHandler( sal_uInt16 aItemId, MenuManager* pManager, css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
                 nItemId( aItemId ), pSubMenuManager( pManager ), xMenuItemDispatch( rDispatch ) {}
 
             sal_uInt16                  nItemId;
@@ -114,11 +101,11 @@ class MenuManager : public ThreadHelpBase           ,
             ::rtl::OUString         aPassword;
             ::rtl::OUString         aTitle;
             MenuManager*            pSubMenuManager;
-            REFERENCE< XDISPATCH >  xMenuItemDispatch;
+            css::uno::Reference< css::frame::XDispatch >  xMenuItemDispatch;
         };
 
         void             CreatePicklistArguments(
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
+                            css::uno::Sequence< css::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
 
         MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
@@ -131,11 +118,11 @@ class MenuManager : public ThreadHelpBase           ,
         sal_Bool                            m_bShowMenuImages;
         ::rtl::OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;
-        REFERENCE< XFRAME >                 m_xFrame;
+        css::uno::Reference< css::frame::XFrame >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >       m_xURLTransformer;
+        css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+        css::uno::Reference< css::util::XURLTransformer >       m_xURLTransformer;
 };
 
 } // namespace
