@@ -297,6 +297,7 @@ interface SlideSorterView
     SID_PHOTOALBUM
     [
         ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
     ]
 }
 

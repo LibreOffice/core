@@ -529,7 +529,8 @@ interface OutlineView
     ]
     SID_PHOTOALBUM
     [
-        ExecMethod = FuTemporary;
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
     ]
 }
 
