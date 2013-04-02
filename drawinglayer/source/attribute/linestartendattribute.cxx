@@ -20,6 +20,7 @@
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -30,9 +31,6 @@ namespace drawinglayer
         class ImpLineStartEndAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // data definitions
             double                                  mfWidth;                // absolute line StartEndGeometry base width
             basegfx::B2DPolyPolygon                 maPolyPolygon;          // the StartEndGeometry PolyPolygon
@@ -44,10 +42,16 @@ namespace drawinglayer
                 double fWidth,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 bool bCentered)
-            :   mnRefCount(0),
-                mfWidth(fWidth),
+            :   mfWidth(fWidth),
                 maPolyPolygon(rPolyPolygon),
                 mbCentered(bCentered)
+            {
+            }
+
+            ImpLineStartEndAttribute()
+            :   mfWidth(0.0),
+                maPolyPolygon(basegfx::B2DPolyPolygon()),
+                mbCentered(false)
             {
             }
 
@@ -62,97 +66,51 @@ namespace drawinglayer
                     && getB2DPolyPolygon() == rCandidate.getB2DPolyPolygon()
                     && isCentered() == rCandidate.isCentered());
             }
-
-            static ImpLineStartEndAttribute* get_global_default()
-            {
-                static ImpLineStartEndAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpLineStartEndAttribute(
-                        0.0,
-                        basegfx::B2DPolyPolygon(),
-                        false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< LineStartEndAttribute::ImplType, theGlobalDefault > {};
+        }
 
         LineStartEndAttribute::LineStartEndAttribute(
             double fWidth,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             bool bCentered)
-        :   mpLineStartEndAttribute(new ImpLineStartEndAttribute(
+        :   mpLineStartEndAttribute(ImpLineStartEndAttribute(
                 fWidth, rPolyPolygon, bCentered))
         {
         }
 
         LineStartEndAttribute::LineStartEndAttribute()
-        :   mpLineStartEndAttribute(ImpLineStartEndAttribute::get_global_default())
+        :   mpLineStartEndAttribute(theGlobalDefault::get())
         {
-            mpLineStartEndAttribute->mnRefCount++;
         }
 
         LineStartEndAttribute::LineStartEndAttribute(const LineStartEndAttribute& rCandidate)
         :   mpLineStartEndAttribute(rCandidate.mpLineStartEndAttribute)
         {
-            mpLineStartEndAttribute->mnRefCount++;
         }
 
         LineStartEndAttribute::~LineStartEndAttribute()
         {
-            if(mpLineStartEndAttribute->mnRefCount)
-            {
-                mpLineStartEndAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpLineStartEndAttribute;
-            }
         }
 
         bool LineStartEndAttribute::isDefault() const
         {
-            return mpLineStartEndAttribute == ImpLineStartEndAttribute::get_global_default();
+            return mpLineStartEndAttribute.same_object(theGlobalDefault::get());
         }
 
         LineStartEndAttribute& LineStartEndAttribute::operator=(const LineStartEndAttribute& rCandidate)
         {
-            if(rCandidate.mpLineStartEndAttribute != mpLineStartEndAttribute)
-            {
-                if(mpLineStartEndAttribute->mnRefCount)
-                {
-                    mpLineStartEndAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpLineStartEndAttribute;
-                }
-
-                mpLineStartEndAttribute = rCandidate.mpLineStartEndAttribute;
-                mpLineStartEndAttribute->mnRefCount++;
-            }
-
+            mpLineStartEndAttribute = rCandidate.mpLineStartEndAttribute;
             return *this;
         }
 
         bool LineStartEndAttribute::operator==(const LineStartEndAttribute& rCandidate) const
         {
-            if(rCandidate.mpLineStartEndAttribute == mpLineStartEndAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpLineStartEndAttribute == *mpLineStartEndAttribute);
+            return rCandidate.mpLineStartEndAttribute == mpLineStartEndAttribute;
         }
 
         double LineStartEndAttribute::getWidth() const

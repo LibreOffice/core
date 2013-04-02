@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -41,8 +42,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC LineStartEndAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpLineStartEndAttribute > ImplType;
+
         private:
-            ImpLineStartEndAttribute*               mpLineStartEndAttribute;
+            ImplType mpLineStartEndAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
