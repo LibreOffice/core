@@ -390,7 +390,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mnTransitionFadeColor = rSrcPage.mnTransitionFadeColor;
     mfTransitionDuration = rSrcPage.mfTransitionDuration;
     mePresChange            = rSrcPage.mePresChange;
-    mnTime               = rSrcPage.mnTime;
+    mfTime               = rSrcPage.mfTime;
     mbSoundOn            = rSrcPage.mbSoundOn;
     mbExcluded           = rSrcPage.mbExcluded;
 

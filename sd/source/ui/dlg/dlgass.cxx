@@ -1036,7 +1036,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     {
         const sal_uInt16 nPageCount = pDoc->GetSdPageCount(PK_STANDARD);
         sal_Bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
-        sal_uInt32 nNewTime = (sal_uInt32)mpPage3PresTimeTMF->GetTime().GetMSFromTime() / 1000;
+        double fNewTime = (double)mpPage3PresTimeTMF->GetTime().GetMSFromTime() / 1000.0;
         if(bKiosk)
         {
             PresentationSettings& rSettings = pDoc->getPresentationSettings();
@@ -1058,7 +1058,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
                 if(bKiosk)
                 {
                     pPage->SetPresChange( PRESCHANGE_AUTO );
-                    pPage->SetTime(nNewTime);
+                    pPage->SetTime(fNewTime);
                 }
                 nPgRelNum++;
             }

@@ -56,9 +56,9 @@ sal_Bool XMLDurationPropertyHdl::importXML(
     util::Duration aDuration;
     ::sax::Converter::convertDuration(aDuration,  rStrImpValue);
 
-    const sal_Int32 nSeconds = ((aDuration.Days * 24 + aDuration.Hours) * 60
-            + aDuration.Minutes) * 60 + aDuration.Seconds;
-    rValue <<= nSeconds;
+    const double fSeconds = ((aDuration.Days * 24 + aDuration.Hours) * 60
+            + aDuration.Minutes) * 60 + aDuration.Seconds + aDuration.MilliSeconds / 1000.0;
+    rValue <<= fSeconds;
 
     return sal_True;
 }
@@ -68,12 +68,13 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    sal_Int32 nVal = 0;
+    double nVal = 0;
 
     if(rValue >>= nVal)
     {
         util::Duration aDuration;
         aDuration.Seconds = static_cast<sal_uInt16>(nVal);
+        aDuration.MilliSeconds = static_cast<sal_uInt32>(nVal * 1000.0) % 1000 ;
 
         OUStringBuffer aOut;
         ::sax::Converter::convertDuration(aOut, aDuration);

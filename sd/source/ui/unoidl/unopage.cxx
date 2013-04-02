@@ -92,7 +92,7 @@ enum WID_PAGE
 {
     WID_PAGE_LEFT, WID_PAGE_RIGHT, WID_PAGE_TOP, WID_PAGE_BOTTOM, WID_PAGE_WIDTH,
     WID_PAGE_HEIGHT, WID_PAGE_EFFECT, WID_PAGE_CHANGE, WID_PAGE_SPEED, WID_PAGE_NUMBER,
-    WID_PAGE_ORIENT, WID_PAGE_LAYOUT, WID_PAGE_DURATION, WID_PAGE_LDNAME, WID_PAGE_LDBITMAP,
+    WID_PAGE_ORIENT, WID_PAGE_LAYOUT, WID_PAGE_DURATION, WID_PAGE_HIGHRESDURATION, WID_PAGE_LDNAME, WID_PAGE_LDBITMAP,
     WID_PAGE_BACK, WID_PAGE_PREVIEW, WID_PAGE_PREVIEWBITMAP, WID_PAGE_VISIBLE, WID_PAGE_SOUNDFILE, WID_PAGE_BACKFULL,
     WID_PAGE_BACKVIS, WID_PAGE_BACKOBJVIS, WID_PAGE_USERATTRIBS, WID_PAGE_BOOKMARK, WID_PAGE_ISDARK,
     WID_PAGE_HEADERVISIBLE, WID_PAGE_HEADERTEXT, WID_PAGE_FOOTERVISIBLE, WID_PAGE_FOOTERTEXT,
@@ -141,6 +141,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundObjectsVisible),   WID_PAGE_BACKOBJVIS,    &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
         { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
+        { MAP_CHAR_LEN("HighResDuration"),              WID_PAGE_HIGHRESDURATION,  &::getCppuType((const double*)0),            0,  0},
         { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN("IsFooterVisible"),              WID_PAGE_FOOTERVISIBLE, &::getBooleanCppuType(),                    0, 0},
         { MAP_CHAR_LEN("FooterText"),                   WID_PAGE_FOOTERTEXT, &::getCppuType((const OUString*)0),                0,  0},
@@ -612,9 +613,18 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 GetPage()->SetAutoLayout( (AutoLayout)nValue, sal_True );
                 break;
             case WID_PAGE_DURATION:
-                GetPage()->SetTime((sal_uInt32)nValue);
+                GetPage()->SetTime((sal_Int32)nValue);
                 break;
             }
+            break;
+        }
+        case WID_PAGE_HIGHRESDURATION:
+        {
+            double fValue = 0;
+            if(!(aValue >>= fValue))
+                throw lang::IllegalArgumentException();
+
+            GetPage()->SetTime(fValue);
             break;
         }
         case WID_PAGE_WIDTH:
@@ -1033,7 +1043,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         }
         break;
     case WID_PAGE_DURATION:
-        aAny <<= (sal_Int32)(GetPage()->GetTime());
+        aAny <<= (sal_Int32)( GetPage()->GetTime() + .5 );
+        break;
+    case WID_PAGE_HIGHRESDURATION:
+        aAny <<= (double)( GetPage()->GetTime() );
         break;
     case WID_PAGE_LDNAME:
     {

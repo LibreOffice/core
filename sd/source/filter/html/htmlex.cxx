@@ -584,9 +584,9 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if ( pParams->Name == "KioskSlideDuration" )
         {
-            sal_Int32 temp = sal_False;
+            double temp = 0.0;
             pParams->Value >>= temp;
-            mnSlideDuration = temp;
+            mfSlideDuration = temp;
             mbAutoSlide = true;
         }
         else if ( pParams->Name == "KioskEndless" )
@@ -1521,28 +1521,28 @@ bool HtmlExport::CreateHtmlForPresPages()
         pPage = maPages[ nSdPage ];
         if( meMode == PUBLISH_KIOSK )
         {
-            sal_uLong nSecs = 0;
+            double fSecs = 0;
             bool bEndless = false;
             if( !mbAutoSlide )
             {
                 if( pPage->GetPresChange() != PRESCHANGE_MANUAL )
                 {
-                    nSecs = pPage->GetTime();
+                    fSecs = pPage->GetTime();
                     bEndless = mpDoc->getPresentationSettings().mbEndless;
                 }
             }
             else
             {
-                nSecs = mnSlideDuration;
+                fSecs = mfSlideDuration;
                 bEndless = mbEndless;
             }
 
-            if( nSecs != 0 )
+            if( fSecs != 0 )
             {
                 if( nSdPage < (mnSdPageCount-1) || bEndless )
                 {
                     aStr.AppendAscii( "<meta http-equiv=\"refresh\" content=\"" );
-                    aStr += OUString::number(nSecs);
+                    aStr += OUString::number(fSecs);
                     aStr.AppendAscii( "; URL=" );
 
                     int nPage = nSdPage + 1;
