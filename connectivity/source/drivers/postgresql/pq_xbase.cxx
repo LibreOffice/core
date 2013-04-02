@@ -120,12 +120,8 @@ void ReflectionBase::setPropertyValue_NoBroadcast_public(
     sal_Int32 nHandle = m_propsDesc.getHandleByName( name );
     if( -1 == nHandle  )
     {
-        rtl::OUStringBuffer buf(128);
-        buf.appendAscii( "Unknown property '" );
-        buf.append( name );
-        buf.appendAscii( "' in " );
-        buf.append( m_implName );
-        throw com::sun::star::uno::RuntimeException( buf.makeStringAndClear() , *this );
+        throw com::sun::star::uno::RuntimeException( "Unknown property '" + name + "' in " + m_implName
+                                                   , *this );
     }
     setFastPropertyValue_NoBroadcast( nHandle , value );
 }
@@ -135,23 +131,15 @@ void ReflectionBase::setFastPropertyValue_NoBroadcast(
     const ::com::sun::star::uno::Any& rValue )
     throw (::com::sun::star::uno::Exception)
 {
-//     rtl::OUString s;
-//     rValue >>= s;
-//     printf( "setting value (handle %d):%s\n" ,
-//             nHandle, rtl::OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
     m_values[nHandle] = rValue;
 }
 
 void ReflectionBase::getFastPropertyValue(
     ::com::sun::star::uno::Any& rValue,
     sal_Int32 nHandle ) const
+
 {
     rValue = m_values[nHandle];
-//     rtl::OUString s;
-//     rValue >>= s;
-//     printf( "getting value (handle %d):%s\n" ,
-//             nHandle, rtl::OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
-
 }
 
 Reference < ::com::sun::star::beans::XPropertySetInfo >  ReflectionBase::getPropertySetInfo()

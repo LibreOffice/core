@@ -137,16 +137,10 @@ void Array::checkRange( sal_Int32 index, sal_Int32 count )
 {
     if( index >= 1 && index -1 + count <= m_data.getLength() )
         return;
-    rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Array::getArrayAtIndex(): allowed range for index + count " ) );
-    buf.append( m_data.getLength() );
-    buf.appendAscii( ", got " );
-    buf.append( index );
-    buf.appendAscii( " + " );
-    buf.append( count );
+    OUString buf( "Array::getArrayAtIndex(): allowed range for index + count " + OUString::number( m_data.getLength() ) +
+                  ", got " + OUString::number( index ) + " + " + OUString::number( count ));
 
-    throw SQLException( buf.makeStringAndClear() , *this, rtl::OUString(), 1, Any());
-
+    throw SQLException( buf, *this, "", 1, Any());
 }
 
 }

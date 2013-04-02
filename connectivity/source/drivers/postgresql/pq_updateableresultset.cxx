@@ -72,11 +72,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OStringBuffer;
-using rtl::OString;
-
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Sequence;
@@ -209,15 +204,14 @@ OUString UpdateableResultSet::buildWhereClause()
     OUString ret;
     if( m_primaryKey.getLength() )
     {
-        OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " WHERE " ) );
+        OUStringBuffer buf( " WHERE " );
         for( int i = 0 ; i < m_primaryKey.getLength() ; i ++ )
         {
             if( i > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " AND " ) );
+                buf.append( " AND " );
             sal_Int32 index = findColumn( m_primaryKey[i] );
             bufferQuoteIdentifier( buf, m_primaryKey[i], *m_ppSettings );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
+            buf.append( " = " );
             bufferQuoteConstant( buf, getString( index ), *m_ppSettings );
         }
         ret = buf.makeStringAndClear();
@@ -238,10 +232,9 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
             "pq_resultset.insertRow: moveToInsertRow has not been called !",
             *this, OUString(), 1, Any() );
 
-    OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "INSERT INTO " ) );
+    OUStringBuffer buf( "INSERT INTO " );
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ) );
+    buf.append( " ( " );
 
     int columns = 0;
     for( UpdateableFieldVector::size_type i = 0 ; i < m_updateableField.size() ; i++ )
@@ -249,12 +242,12 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
         if( m_updateableField[i].isTouched )
         {
             if( columns > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                buf.append( ", " );
             columns ++;
             bufferQuoteIdentifier( buf, m_columnNames[i], *m_ppSettings);
         }
     }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ) VALUES ( " ) );
+    buf.append( " ) VALUES ( " );
 
     columns = 0;
     for( UpdateableFieldVector::size_type i = 0 ; i < m_updateableField.size() ; i ++ )
@@ -262,18 +255,13 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
         if( m_updateableField[i].isTouched )
         {
             if( columns > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " , " ) );
+                buf.append( " , " );
             columns ++;
             bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
-
-//             OUString val;
-//             m_updateableField[i].value >>= val;
-//             buf.append( val );
-//                 rtl::OStringToOUString(val, (*m_ppSettings)->encoding ) );
         }
     }
 
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ) );
+    buf.append( " )" );
 
     Reference< XStatement > stmt =
         extractConnectionFromStatement(m_owner)->createStatement();
@@ -332,10 +320,9 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
             "pq_resultset.updateRow: moveToCurrentRow has not been called !",
             *this, OUString(), 1, Any() );
 
-    OUStringBuffer buf( 128 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "UPDATE " ) );
+    OUStringBuffer buf( "UPDATE " );
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET " ) );
+    buf.append( "SET " );
 
     int columns = 0;
     for( UpdateableFieldVector::size_type i = 0; i < m_updateableField.size() ; i ++ )
@@ -343,16 +330,11 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
         if( m_updateableField[i].isTouched )
         {
             if( columns > 0 )
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                buf.append( ", " );
             columns ++;
 
-            buf.append( m_columnNames[i] );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = " ) );
+            buf.append( m_columnNames[i] + " = " );
             bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
-//             OUString val;
-//             m_updateableField[i].value >>= val;
-//             bufferQuoteConstant( buf, val ):
-//             buf.append( val );
         }
     }
     buf.append( buildWhereClause() );
@@ -383,19 +365,15 @@ void UpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException)
 
     if( m_row < 0 || m_row >= m_rowCount )
     {
-        OUStringBuffer buf( 128 );
-        buf.appendAscii( "deleteRow cannot be called on invalid row (" );
-        buf.append( m_row );
-        buf.appendAscii( ")" );
-        throw SQLException( buf.makeStringAndClear() , *this, OUString(), 0, Any() );
+        throw SQLException( "deleteRow cannot be called on invalid row (" + OUString::number( m_row ) + ")"
+                          , *this, OUString(), 0, Any() );
     }
 
     Reference< XStatement > stmt = extractConnectionFromStatement(m_owner)->createStatement();
     DisposeGuard dispGuard( stmt );
-    OUStringBuffer buf( 128 );
-    buf.appendAscii( "DELETE FROM " );
+    OUStringBuffer buf( "DELETE FROM " );
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
-    buf.appendAscii( " " );
+    buf.append( " " );
     buf.append( buildWhereClause() );
 
     stmt->executeUpdate( buf.makeStringAndClear() );
@@ -465,12 +443,6 @@ void UpdateableResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
 void UpdateableResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw (SQLException, RuntimeException)
 {
     updateLong( columnIndex, x );
-//     MutexGuard guard( m_refMutex->mutex );
-//     checkClosed();
-//     checkUpdate( columnIndex );
-
-//     m_updateableField[columnIndex-1].value <<= OUString::valueOf( x );
-
 }
 
 void UpdateableResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw (SQLException, RuntimeException)
@@ -479,10 +451,6 @@ void UpdateableResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw
     checkClosed();
     checkUpdate( columnIndex );
 
-//     OStringBuffer buf( 20 );
-//     buf.append( "'" );
-//     buf.append( (sal_Int64) x );
-//     buf.append( "'" );
     m_updateableField[columnIndex-1].value <<= OUString::valueOf( x );
 }
 
@@ -529,7 +497,6 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::
             "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
             *this, OUString(), 1, Any() );
     }
-//     buf.append( (const sal_Char *)escapedString, len -1 );
 
     m_updateableField[columnIndex-1].value <<=
         OUString( (sal_Char*) escapedString, len, RTL_TEXTENCODING_ASCII_US );

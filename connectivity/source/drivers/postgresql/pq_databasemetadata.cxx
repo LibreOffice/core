@@ -1182,12 +1182,8 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getTables got called with " );
-        buf.append( schemaPattern );
-        buf.appendAscii( "." );
-        buf.append( tableNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getTables got called with " + schemaPattern +
+                                          "." + tableNamePattern );
     }
     // ignore catalog, as a single pq connection does not support multiple catalogs
 
@@ -1466,8 +1462,7 @@ static void columnMetaData2DatabaseTypeDescription(
 {
     Reference< XRow > row( rs, UNO_QUERY_THROW );
     int domains = 0;
-    rtl::OUStringBuffer queryBuf(128);
-    queryBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " ) );
+    OUStringBuffer queryBuf( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " );
     while( rs->next() )
     {
         if( row->getString( 9 ) == "d" && oidMap.find( row->getInt( 12 ) ) == oidMap.end() )
@@ -1475,7 +1470,7 @@ static void columnMetaData2DatabaseTypeDescription(
             oidMap[row->getInt(12)] = DatabaseTypeDescription();
             if( domains )
                 queryBuf.appendAscii( " OR " );
-            queryBuf.appendAscii( "oid = " );
+            queryBuf.append( "oid = " );
             queryBuf.append( row->getInt(12 ), 10 );
             domains ++;
         }
@@ -1513,14 +1508,8 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getColumns got called with " );
-        buf.append( schemaPattern );
-        buf.appendAscii( "." );
-        buf.append( tableNamePattern );
-        buf.appendAscii( "." );
-        buf.append( columnNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getColumns got called with " +
+                                          schemaPattern + "." + tableNamePattern + "." + columnNamePattern );
     }
 
     // ignore catalog, as a single pq connection
@@ -1697,14 +1686,8 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getColumnPrivileges got called with " );
-        buf.append( schema );
-        buf.appendAscii( "." );
-        buf.append( table );
-        buf.appendAscii( "." );
-        buf.append( columnNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getColumnPrivileges got called with " +
+                                          schema + "." + table + "." + columnNamePattern );
     }
 
     Reference< XParameters > parameters( m_getColumnPrivs_stmt, UNO_QUERY_THROW );
@@ -1728,12 +1711,8 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getTablePrivileges got called with " );
-        buf.append( schemaPattern );
-        buf.appendAscii( "." );
-        buf.append( tableNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getTablePrivileges got called with " +
+                                          schemaPattern + "." + tableNamePattern );
     }
 
     Reference< XParameters > parameters( m_getTablePrivs_stmt, UNO_QUERY_THROW );
@@ -1792,12 +1771,8 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getPrimaryKeys got called with " );
-        buf.append( schema );
-        buf.appendAscii( "." );
-        buf.append( table );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getPrimaryKeys got called with " +
+                                          schema + "." + table );
     }
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(

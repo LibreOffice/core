@@ -242,15 +242,10 @@ void PreparedStatement::checkColumnIndex( sal_Int32 parameterIndex )
 {
     if( parameterIndex < 1 || parameterIndex > (sal_Int32) m_vars.size() )
     {
-        OUStringBuffer buf( 128 );
-        buf.appendAscii( "pq_preparedstatement: parameter index out of range (expected 1 to " );
-        buf.append( (sal_Int32 ) m_vars.size() );
-        buf.appendAscii( ", got " );
-        buf.append( parameterIndex );
-        buf.appendAscii( ", statement '" );
-        buf.append( OStringToOUString( m_stmt, m_pSettings->encoding ) );
-        buf.appendAscii( "')" );
-        throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
+        throw SQLException( "pq_preparedstatement: parameter index out of range (expected 1 to " +
+                            OUString::number( m_vars.size() ) + ", got " + OUString::number( parameterIndex ) +
+                            ", statement '" + OStringToOUString( m_stmt, m_pSettings->encoding ) + "')"
+                           , *this, "", 1, Any () );
     }
 }
 void PreparedStatement::checkClosed() throw (SQLException, RuntimeException )
@@ -345,22 +340,20 @@ void PreparedStatement::raiseSQLException(
     const char * errorMsg, const char *errorType )
     throw( SQLException )
 {
-    OUStringBuffer buf(128);
-    buf.appendAscii( "pq_driver: ");
-    if( errorType )
-    {
-        buf.appendAscii( "[" );
-        buf.appendAscii( errorType );
-        buf.appendAscii( "]" );
+    OUStringBuffer buf( "pq_driver: ");
+    if( errorType ) {
+        buf.append( "[" );
+        buf.append( errorType );
+        buf.append( "]" );
     }
-    buf.append(
-        rtl::OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
-    buf.appendAscii( " (caused by statement '" );
-    buf.appendAscii( m_executedStatement.getStr() );
-    buf.appendAscii( "')" );
+
+    buf.append( OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) +
+                " (caused by statement '" );
+    buf.append( m_executedStatement.getStr() );
+    buf.append( "')" );
     OUString error = buf.makeStringAndClear();
     log( m_pSettings, LogLevel::ERROR, error );
-    throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any() );
+    throw SQLException( error, *this, OUString(), 1, Any() );
 }
 
 Reference< XResultSet > PreparedStatement::executeQuery( )
@@ -528,15 +521,10 @@ void PreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x )
 void PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
     throw (SQLException, RuntimeException)
 {
-//     printf( "setString %d %d\n ",  parameterIndex, x);
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( (sal_Int32) x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number( x ) + "'";
 }
 
 void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
@@ -545,11 +533,7 @@ void PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( (sal_Int64) x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number( x ) + "'";
 }
 
 void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
@@ -558,11 +542,7 @@ void PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number( x ) + "'";
 }
 
 void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
@@ -571,18 +551,12 @@ void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
-    OStringBuffer buf( 20 );
-    buf.append( "'" );
-    buf.append( x );
-    buf.append( "'" );
-    m_vars[parameterIndex-1] = buf.makeStringAndClear();
+    m_vars[parameterIndex-1] = "'" + OString::number( x ) + "'";
 }
 
 void PreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x )
     throw (SQLException, RuntimeException)
 {
-//     printf( "setString %d %s\n ", parameterIndex,
-//             OUStringToOString( x , RTL_TEXTENCODING_ASCII_US ).getStr());
     MutexGuard guard(m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( parameterIndex );
@@ -669,10 +643,8 @@ void PreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
 {
     if( ! implSetObject( this, parameterIndex, x ))
     {
-        OUStringBuffer buf;
-        buf.append( "pq_preparedstatement::setObject: can't convert value of type " );
-        buf.append( x.getValueTypeName() );
-        throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
+        throw SQLException( "pq_preparedstatement::setObject: can't convert value of type " + x.getValueTypeName()
+                          , *this, "", 1, Any () );
     }
 }
 
@@ -699,16 +671,13 @@ void PreparedStatement::setObjectWithInfo(
         }
         if( !myString.isEmpty() )
         {
-//              printf( "setObjectWithInfo %s\n", OUStringToOString(myString,RTL_TEXTENCODING_ASCII_US).getStr());
             setString( parameterIndex, myString );
         }
         else
         {
-            OUStringBuffer buf;
-            buf.append( "pq_preparedstatement::setObjectWithInfo: can't convert value of type " );
-            buf.append( x.getValueTypeName() );
-            buf.append( " to type DECIMAL or NUMERIC" );
-            throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
+            throw SQLException( "pq_preparedstatement::setObjectWithInfo: can't convert value of type " +
+                                x.getValueTypeName() + " to type DECIMAL or NUMERIC"
+                               , *this, "", 1, Any () );
         }
     }
     else
@@ -830,11 +799,8 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
     }
     default:
     {
-        OUStringBuffer buf(128);
-        buf.appendAscii( "pq_statement: Invalid property handle (" );
-        buf.append( nHandle );
-        buf.appendAscii( ")" );
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 2 );
+        throw IllegalArgumentException( "pq_statement: Invalid property handle (" + OUString::number( nHandle ) + ")"
+                                      , *this, 2 );
     }
     }
     return bRet;

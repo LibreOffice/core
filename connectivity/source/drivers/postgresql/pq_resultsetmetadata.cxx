@@ -71,10 +71,6 @@
 using osl::Mutex;
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OString;
-
 using com::sun::star::uno::Any;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Exception;
@@ -184,14 +180,13 @@ void ResultSetMetaData::checkForTypes()
         Reference< XStatement > stmt =
             extractConnectionFromStatement( m_origin->getStatement() )->createStatement();
         DisposeGuard guard( stmt );
-        OUStringBuffer buf(128);
-        buf.appendAscii( "SELECT oid, typname, typtype FROM pg_type WHERE ");
+        OUStringBuffer buf("SELECT oid, typname, typtype FROM pg_type WHERE ");
         for( int i  = 0 ; i < m_colCount ; i ++ )
         {
             if( i > 0 )
-                buf.appendAscii( " OR " );
+                buf.append( " OR " );
             int oid = m_colDesc[i].typeOid;
-            buf.appendAscii( "oid=" );
+            buf.append( "oid=" );
             buf.append( (sal_Int32) oid, 10 );
         }
         Reference< XResultSet > rs = stmt->executeQuery( buf.makeStringAndClear() );
@@ -238,7 +233,6 @@ void ResultSetMetaData::checkTable()
             if( tables.is() )
             {
                 OUString name = getTableName( 1 );
-//                 if( tables->hasByName( name ) )
                 tables->getByName( name ) >>= m_table;
             }
         }
@@ -400,21 +394,15 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
     return m_colDesc[column-1].scale;
 }
 
-::rtl::OUString ResultSetMetaData::getTableName( sal_Int32 column )
+OUString ResultSetMetaData::getTableName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     (void) column;
 // LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
-    rtl::OUString ret;
     if( m_tableName.getLength() )
-    {
-        OUStringBuffer buf( 128 );
-        buf.append( m_schemaName );
-        buf.appendAscii( "." );
-        buf.append( m_tableName );
-        ret = buf.makeStringAndClear();
-    }
-    return ret;
+        return m_schemaName + "." + m_tableName;
+
+    return OUString();
 }
 
 ::rtl::OUString ResultSetMetaData::getCatalogName( sal_Int32 column )
@@ -501,14 +489,9 @@ void ResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 {
     if( columnIndex < 1 || columnIndex > m_colCount )
     {
-        OUStringBuffer buf(128);
-
-        buf.appendAscii( "pq_resultsetmetadata: index out of range (expected 1 to " );
-        buf.append( m_colCount );
-        buf.appendAscii( ", got " );
-        buf.append( columnIndex );
-        throw SQLException(
-            buf.makeStringAndClear(), *this, OUString(), 1, Any() );
+        throw SQLException("pq_resultsetmetadata: index out of range (expected 1 to " +
+                           OUString::number( m_colCount ) + ", got " + OUString::number( columnIndex )
+                           , *this, OUString(), 1, Any() );
     }
 }
 

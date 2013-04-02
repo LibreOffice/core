@@ -72,10 +72,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
-
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertyChangeListener;
 using com::sun::star::beans::PropertyChangeEvent;
@@ -110,28 +106,9 @@ static Any isCurrency( const rtl::OUString & typeName )
     return Any( &b, getBooleanCppuType() );
 }
 
-// static sal_Bool isAutoIncrement8( const rtl::OUString & typeName )
-// {
-//     return typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("serial8")) ||
-//         typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bigserial"));
-// }
-
 static Any isAutoIncrement( const rtl::OUString & defaultValue )
 {
     sal_Bool ret = defaultValue.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "nextval(" ) );
-//     printf( "%s %d\n",
-//             OUStringToOString(defaultValue, RTL_TEXTENCODING_ASCII_US).getStr(),
-//             ret );
-//     {
-//     static const char  * const serials[] =
-//         {
-//             "serial", "serial4", "serial8", "bigserial", 0
-//         };
-// s    sal_Bool b = sal_False;
-//     for( int i = 0; !b && serials[i] ; i ++ )
-//     {
-//         b = b || typeName.equalsIgnoreAsciiCaseAscii( serials[i] );
-//     }
     return Any ( &ret, getBooleanCppuType() );
 }
 
@@ -255,59 +232,6 @@ rtl::OUString columnMetaData2SDBCX(
     return name;
 }
 
-
-// class CommentChanger : public cppu::WeakImplHelper1< XPropertyChangeListener >
-// {
-//     ::rtl::Reference< RefCountedMutex > m_refMutex;
-//     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_connection;
-//     ConnectionSettings *m_pSettings;
-//     rtl::OUString m_schema;
-//     rtl::OUString m_table;
-//     rtl::OUString m_column;
-
-// public:
-//     CommentChanger(
-//         const ::rtl::Reference< RefCountedMutex > & refMutex,
-//         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
-//         ConnectionSettings *pSettings,
-//         const rtl::OUString & schema,
-//         const rtl::OUString & table,
-//         const rtl::OUString & column ) :
-//         m_refMutex( refMutex ),
-//         m_connection( connection ),
-//         m_pSettings( pSettings ),
-//         m_schema ( schema ),
-//         m_table ( table ),
-//         m_column ( column )
-//     {}
-
-
-//     // Methods
-//     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
-//     {
-//         osl::MutexGuard guard( m_refMutex->mutex );
-//         m_connection.clear();
-//     }
-//         // Methods
-//     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
-//     {
-//         osl::MutexGuard guard( m_refMutex->mutex );
-//         OUStringBuffer buf( 128 );
-//         OUString comment;
-//         evt.NewValue >>= comment;
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON COLUMN" ) );
-//         bufferQuoteQualifiedIdentifier( buf, m_schema, m_table , m_column );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
-//         bufferQuoteConstant( buf, comment,m_pSettings->encoding);
-
-//         printf( "changing comment of column %s to %s\n",
-//                 OUStringToOString( m_column, RTL_TEXTENCODING_ASCII_US ).getStr(),
-//                 OUStringToOString( comment, RTL_TEXTENCODING_ASCII_US ).getStr() );
-
-//         m_connection->createStatement()->executeUpdate( buf.makeStringAndClear() );
-//     }
-// };
-
 void Columns::refresh()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -344,15 +268,6 @@ void Columns::refresh()
             Reference< com::sun::star::beans::XPropertySet > prop = pColumn;
 
             OUString name = columnMetaData2SDBCX( pColumn, xRow );
-//             pColumn->addPropertyChangeListener(
-//                 st.HELP_TEXT,
-//                 new CommentChanger(
-//                     m_refMutex,
-//                     m_origin,
-//                     m_pSettings,
-//                     m_schemaName,
-//                     m_tableName,
-//                     name ) );
 
             {
                 const int currentColumnIndex = columnIndex++;
@@ -382,21 +297,6 @@ void alterColumnByDescriptor(
 {
     Statics & st  = getStatics();
 
-//     if( past->getPropertyValue( st.TABLE_NAME ) != future->getPropertyValue( st.TABLE_NAME ) ||
-//         past->getPropertyValue( st.SCHEMA_NAME ) != future->getPropertyValue( st.SCHEMA_NAME ))
-//     {
-//         OUStringBuffer buf(128);
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Can't move column " ) );
-//         buf.append( extractStringProperty( past, st.COLUMN_NAME ) );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " from table " ) );
-//         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
-//         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " to table " ) );
-//         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
-//         throw SQLException( buf.makeStringAndClear(), Reference< XInterface > () );
-//     }
-
-//     OUString tableName = extractStringProperty( past, st.TABLE_NAME );
-//     OUString schemaName = extractStringProperty( past, st.SCHEMA_NAME );
     OUString pastColumnName = extractStringProperty( past, st.NAME );
     OUString futureColumnName = extractStringProperty( future, st.NAME );
     OUString pastTypeName = sqltype2string( past );
@@ -475,11 +375,6 @@ void alterColumnByDescriptor(
         transaction.executeUpdate( buf.makeStringAndClear() );
     }
 
-//     OUString futureComment = extractStringProperty( future, st.HELP_TEXT );
-//     OUString pastComment = extractStringProperty( past, st.HELP_TEXT );
-//     printf( "past Comment %s, futureComment %s\n",
-//             OUStringToOString( pastComment, RTL_TEXTENCODING_ASCII_US ).getStr(),
-//             OUStringToOString( futureComment, RTL_TEXTENCODING_ASCII_US ).getStr() );
     OUString futureComment = extractStringProperty( future, st.DESCRIPTION );
     OUString pastComment = extractStringProperty( past, st.DESCRIPTION );
 
@@ -510,28 +405,6 @@ void Columns::appendByDescriptor(
 
     refresh();
 }
-
-// void Columns::dropByName( const ::rtl::OUString& elementName )
-//     throw (::com::sun::star::sdbc::SQLException,
-//            ::com::sun::star::container::NoSuchElementException,
-//            ::com::sun::star::uno::RuntimeException)
-// {
-//     String2IntMap::const_iterator ii = m_name2index.find( elementName );
-//     if( ii == m_name2index.end() )
-//     {
-//         OUStringBuffer buf( 128 );
-//         buf.appendAscii( "Column " );
-//         buf.append( elementName );
-//         buf.appendAscii( " is unknown in table " );
-//         buf.append( m_schemaName );
-//         buf.appendAscii( "." );
-//         buf.append( m_tableName );
-//         buf.appendAscii( ", so it can't be dropped" );
-//         throw com::sun::star::container::NoSuchElementException(
-//             buf.makeStringAndClear(), *this );
-//     }
-//     dropByIndex( ii->second );
-// }
 
 void Columns::dropByIndex( sal_Int32 index )
     throw (::com::sun::star::sdbc::SQLException,
@@ -592,8 +465,6 @@ Reference< com::sun::star::container::XNameAccess > Columns::create(
     return ret;
 }
 
-
-//_____________________________________________________________________________________
 ColumnDescriptors::ColumnDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,

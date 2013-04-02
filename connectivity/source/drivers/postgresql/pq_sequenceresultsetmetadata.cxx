@@ -59,8 +59,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-using rtl::OUStringBuffer;
-using rtl::OUString;
 using com::sun::star::uno::Any;
 
 using com::sun::star::uno::RuntimeException;
@@ -223,16 +221,10 @@ void SequenceResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 {
     if( columnIndex < 1 || columnIndex > m_colCount )
     {
-        OUStringBuffer buf(128);
-
-        buf.appendAscii( "pq_sequenceresultsetmetadata: index out of range (expected 1 to " );
-        buf.append( m_colCount );
-        buf.appendAscii( ", got " );
-        buf.append( columnIndex );
-        throw SQLException(
-            buf.makeStringAndClear(), *this, OUString(), 1, Any() );
+        throw SQLException( "pq_sequenceresultsetmetadata: index out of range (expected 1 to " +
+                            OUString::number( m_colCount ) + ", got " + OUString::number( columnIndex )
+                            , *this, OUString(), 1, Any() );
     }
 }
-
 
 }
