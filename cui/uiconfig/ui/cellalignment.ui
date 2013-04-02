@@ -34,8 +34,9 @@
               <object class="GtkGrid" id="grid10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="column_spacing">24</property>
                 <child>
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
@@ -115,6 +116,8 @@
                   <object class="svxlo-DialControl" id="dialcontrol">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="active">True</property>
                   </object>
                   <packing>
@@ -154,7 +157,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="margin_left">25</property>
+                        <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0.5</property>
                         <property name="inconsistent">True</property>
@@ -214,6 +217,7 @@
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_bottom">1</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
@@ -260,7 +264,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="margin_left">25</property>
+                    <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="inconsistent">True</property>
@@ -269,6 +273,45 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="boxDirection">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="LabelTxtDir">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Te_xt direction</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">comboTextDirBox</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="svxlo-FrameDirectionListBox" id="comboTextDirBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -311,6 +354,7 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="border_width">6</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
@@ -382,6 +426,7 @@
                   <object class="GtkComboBox" id="comboboxHorzAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="model">liststoreHorzAlign</property>
                   </object>
                   <packing>
@@ -395,6 +440,7 @@
                   <object class="GtkComboBox" id="comboboxVertAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="model">liststoreVertAlign</property>
                   </object>
                   <packing>
@@ -422,46 +468,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkHBox" id="boxDirection">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">6</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel" id="LabelTxtDir">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Te_xt direction</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">comboTextDirBox</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="svxlo-FrameDirectionListBox" id="comboTextDirBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -518,7 +524,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
+        <property name="top_attach">3</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -595,34 +601,5 @@
         <col id="1">5</col>
       </row>
     </data>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">both</property>
-    <property name="ignore_hidden">True</property>
-    <widgets>
-      <widget name="spinIndentFrom:0.00pt"/>
-      <widget name="labelHorzAlign"/>
-      <widget name="labelVertAlign"/>
-      <widget name="labelIndent"/>
-      <widget name="comboboxHorzAlign"/>
-      <widget name="comboboxVertAlign"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
-    <property name="ignore_hidden">True</property>
-    <widgets>
-      <widget name="checkWrapTextAuto"/>
-      <widget name="checkShrinkFitCellSize"/>
-      <widget name="checkHyphActive"/>
-      <widget name="LabelTxtDir"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup3">
-    <widgets>
-      <widget name="orientation"/>
-      <widget name="properties"/>
-      <widget name="alignment"/>
-      <widget name="boxDirection"/>
-    </widgets>
   </object>
 </interface>
