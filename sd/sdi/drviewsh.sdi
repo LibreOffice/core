@@ -216,6 +216,7 @@ interface ImpressEditView : DrawView
     SID_PHOTOALBUM
     [
         ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
     ]
 }
 
