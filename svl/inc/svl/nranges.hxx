@@ -24,6 +24,7 @@
 #endif
 
 #ifndef _SFXNRANGES_HXX
+#define _SFXNRANGES_HXX
 
 #include <tools/solar.h>
 
