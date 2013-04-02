@@ -449,7 +449,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/historyoptions.hxx>
-#include <unotools/internaloptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>

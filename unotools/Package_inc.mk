@@ -61,7 +61,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/fontdefs.hxx,unotool
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/fontoptions.hxx,unotools/fontoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/historyoptions.hxx,unotools/historyoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/idhelper.hxx,unotools/idhelper.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/internaloptions.hxx,unotools/internaloptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/intlwrapper.hxx,unotools/intlwrapper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/itemholderbase.hxx,unotools/itemholderbase.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/lingucfg.hxx,unotools/lingucfg.hxx))

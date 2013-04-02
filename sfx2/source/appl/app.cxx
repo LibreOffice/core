@@ -113,7 +113,6 @@
 #include <unotools/securityoptions.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <unotools/fontoptions.hxx>
-#include <unotools/internaloptions.hxx>
 #include <unotools/workingsetoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/syslocale.hxx>

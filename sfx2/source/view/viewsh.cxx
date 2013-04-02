@@ -43,7 +43,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/soerr.hxx>
-#include <unotools/internaloptions.hxx>
 
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
@@ -296,7 +295,6 @@ SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 //=========================================================================
 SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_MAIL_CHILDWIN );
 }
 
 TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
@@ -518,11 +516,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                              WhenSaving, &GetViewFrame()->GetWindow() ) != RET_YES )
                 break;
 
-            if ( SvtInternalOptions().MailUIEnabled() )
-            {
-                GetViewFrame()->SetChildWindow( SID_MAIL_CHILDWIN, sal_True );
-            }
-            else
+
             {
                 SfxMailModel  aModel;
                 rtl::OUString aDocType;
@@ -834,17 +828,6 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                     }
                     bEnabled = !pPrinter || !pPrinter->IsPrinting();
                 }
-                break;
-            }
-
-            // Mail functions
-            case SID_MAIL_SENDDOCASPDF:
-            case SID_MAIL_SENDDOC:
-            case SID_MAIL_SENDDOCASFORMAT:
-            {
-                sal_Bool bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
-                if ( !bEnable )
-                    rSet.DisableItem( nSID );
                 break;
             }
 

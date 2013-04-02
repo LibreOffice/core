@@ -3850,33 +3850,6 @@ SfxUInt16Item MailReceipt SID_MAIL_NOTIFY
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem MailWindow SID_MAIL_CHILDWIN
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
 ()
 [

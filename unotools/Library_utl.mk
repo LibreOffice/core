@@ -89,7 +89,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/fontcfg \
     unotools/source/config/fontoptions \
     unotools/source/config/historyoptions \
-    unotools/source/config/internaloptions \
     unotools/source/config/itemholder1 \
     unotools/source/config/lingucfg \
     unotools/source/config/localisationoptions \
