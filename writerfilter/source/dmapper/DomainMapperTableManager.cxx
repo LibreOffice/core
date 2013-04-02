@@ -267,7 +267,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             }
             break;
             case NS_ooxml::LN_CT_TblPrBase_tblLook:
-                break; //todo: table look specifier
+            {
+                TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                pPropMap->Insert( PROP_TBL_LOOK, false, uno::makeAny( nIntValue ));
+                insertTableProps(pPropMap);
+            }
+            break;
             case NS_ooxml::LN_CT_TcPrBase_textDirection:
             {
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
@@ -328,22 +333,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
                 break;
             case NS_ooxml::LN_CT_TrPrBase_cnfStyle:
-                {
-                    TablePropertyMapPtr pProps( new TablePropertyMap );
-                    pProps->Insert( PROP_CNF_STYLE, true, uno::makeAny( pValue->getString( ) ) );
-                    insertRowProps( pProps );
-                }
-                break;
+                break;  // the cnfStyle doesn't matter, instead the tblLook property is used to specify conditional styles that are to be used
             case NS_ooxml::LN_CT_PPrBase_cnfStyle:
                 // TODO cnfStyle on a paragraph
                 break;
             case NS_ooxml::LN_CT_TcPrBase_cnfStyle:
-                {
-                    TablePropertyMapPtr pProps( new TablePropertyMap );
-                    pProps->Insert( PROP_CNF_STYLE, true, uno::makeAny( pValue->getString( ) ) );
-                    cellProps( pProps );
-                }
-                break;
+                break;  // the cnfStyle doesn't matter, instead the tblLook property is used to specify conditional styles that are to be used
             case NS_ooxml::LN_CT_TblPrBase_tblpPr:
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

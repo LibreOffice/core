@@ -263,6 +263,7 @@ struct WRITERFILTER_DLLPRIVATE TableInfo
     sal_Int32 nRightBorderDistance;
     sal_Int32 nTopBorderDistance;
     sal_Int32 nBottomBorderDistance;
+    sal_Int32 nTblLook;
     sal_Int32 nNestLevel;
     PropertyMapPtr pTableDefaults;
     PropertyMapPtr pTableBorders;
@@ -274,6 +275,7 @@ struct WRITERFILTER_DLLPRIVATE TableInfo
     , nRightBorderDistance(DEF_BORDER_DIST)
     , nTopBorderDistance(0)
     , nBottomBorderDistance(0)
+    , nTblLook(0x4a0)
     , nNestLevel(0)
     , pTableDefaults(new PropertyMap)
     , pTableBorders(new PropertyMap)
@@ -358,6 +360,14 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 dmapper_logger->endElement();
 #endif
             }
+        }
+
+        PropertyMap::iterator aTblLookIter =
+        aTblLookIter = m_aTableProperties->find( PropertyDefinition( PROP_TBL_LOOK, false ) );
+        if(aTblLookIter != m_aTableProperties->end())
+        {
+            aTblLookIter->second >>= rInfo.nTblLook;
+            m_aTableProperties->erase( aTblLookIter );
         }
 
         // Set the table default attributes for the cells
@@ -494,6 +504,19 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
     return pTableStyle;
 }
 
+#define CNF_FIRST_ROW               0x800
+#define CNF_LAST_ROW                0x400
+#define CNF_FIRST_COLUMN            0x200
+#define CNF_LAST_COLUMN             0x100
+#define CNF_ODD_VBAND               0x080
+#define CNF_EVEN_VBAND              0x040
+#define CNF_ODD_HBAND               0x020
+#define CNF_EVEN_HBAND              0x010
+#define CNF_FIRST_ROW_LAST_COLUMN   0x008
+#define CNF_FIRST_ROW_FIRST_COLUMN  0x004
+#define CNF_LAST_ROW_LAST_COLUMN    0x002
+#define CNF_LAST_ROW_FIRST_COLUMN   0x001
+
 CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(TableInfo & rInfo)
 {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
@@ -523,21 +546,30 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
         PropertyMapVector1::const_iterator aCellIterator = aRowOfCellsIterator->begin();
         PropertyMapVector1::const_iterator aCellIteratorEnd = aRowOfCellsIterator->end();
 
-        // Get the row style properties
-        sal_Int32 nRowStyleMask = sal_Int32( 0 );
-        PropertyMapPtr pRowProps = m_aRowProperties[nRow];
-        if ( pRowProps.get( ) )
+        sal_Int32 nRowStyleMask = 0;
+
+        if (aRowOfCellsIterator==m_aCellProperties.begin())
         {
-            PropertyMap::iterator pTcCnfStyleIt = pRowProps->find( PropertyDefinition( PROP_CNF_STYLE, true ) );
-            if ( pTcCnfStyleIt != pRowProps->end( ) )
-            {
-                if ( rInfo.pTableStyle )
-                {
-                    OUString sMask;
-                    pTcCnfStyleIt->second >>= sMask;
-                    nRowStyleMask = sMask.toInt32( 2 );
-                }
-                pRowProps->erase( pTcCnfStyleIt );
+            if(rInfo.nTblLook&0x20)
+                nRowStyleMask |= CNF_FIRST_ROW;     // first row style used
+        }
+        else if (aRowOfCellsIterator==aLastRowIterator)
+        {
+            if(rInfo.nTblLook&0x40)
+                nRowStyleMask |= CNF_LAST_ROW;      // last row style used
+        }
+        if(!nRowStyleMask)                          // if no row style used yet
+        {
+            // banding used only if not first and or last row style used
+            if(!(rInfo.nTblLook&0x200))
+            {   // hbanding used
+                int n = nRow + 1;
+                if(rInfo.nTblLook&0x20)
+                    n++;
+                if(n & 1)
+                    nRowStyleMask = CNF_ODD_HBAND;
+                else
+                    nRowStyleMask = CNF_EVEN_HBAND;
             }
         }
 
@@ -558,24 +590,44 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 if ( rInfo.pTableDefaults->size( ) )
                     pAllCellProps->InsertProps(rInfo.pTableDefaults);
 
-                // Fill the cell properties with the ones of the style
                 sal_Int32 nCellStyleMask = 0;
-                const PropertyMap::iterator aCnfStyleIter =
-                    aCellIterator->get()->find( PropertyDefinition( PROP_CNF_STYLE, false ) );
-                if ( aCnfStyleIter != aCellIterator->get( )->end( ) )
+                if (aCellIterator==aRowOfCellsIterator->begin())
                 {
-                    if ( rInfo.pTableStyle ) {
-                        OUString sMask;
-                        aCnfStyleIter->second >>= sMask;
-                        nCellStyleMask = sMask.toInt32( 2 );
-                    }
-                    aCellIterator->get( )->erase( aCnfStyleIter );
+                    if(rInfo.nTblLook&0x80)
+                        nCellStyleMask = CNF_FIRST_COLUMN;      // first col style used
                 }
+                else if (bIsEndCol)
+                {
+                    if(rInfo.nTblLook&0x100)
+                        nCellStyleMask = CNF_LAST_COLUMN;       // last col style used
+                }
+                if(!nCellStyleMask)                 // if no cell style is used yet
+                {
+                    if(!(rInfo.nTblLook&0x400))
+                    {   // vbanding used
+                        int n = nCell + 1;
+                        if(rInfo.nTblLook&0x80)
+                            n++;
+                        if(n & 1)
+                            nCellStyleMask = CNF_ODD_VBAND;
+                        else
+                            nCellStyleMask = CNF_EVEN_VBAND;
+                    }
+                }
+                sal_Int32 nCnfStyleMask = nCellStyleMask + nRowStyleMask;
+                if(nCnfStyleMask == CNF_FIRST_COLUMN + CNF_FIRST_ROW)
+                    nCnfStyleMask |= CNF_FIRST_ROW_FIRST_COLUMN;
+                else if(nCnfStyleMask == CNF_FIRST_COLUMN + CNF_LAST_ROW)
+                    nCnfStyleMask |= CNF_LAST_ROW_FIRST_COLUMN;
+                else if(nCnfStyleMask == CNF_LAST_COLUMN + CNF_FIRST_ROW)
+                    nCnfStyleMask |= CNF_FIRST_ROW_LAST_COLUMN;
+                else if(nCnfStyleMask == CNF_LAST_COLUMN + CNF_LAST_ROW)
+                    nCnfStyleMask |= CNF_LAST_ROW_LAST_COLUMN;
 
                 if ( rInfo.pTableStyle )
                 {
-                    PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCellStyleMask + nRowStyleMask );
-                    pAllCellProps->InsertProps(pStyleProps);
+                    PropertyMapPtr pStyleProps = rInfo.pTableStyle->GetProperties( nCnfStyleMask );
+                    pAllCellProps->InsertProps( pStyleProps );
                 }
 
                 // Remove properties from style/row that aren't allowed in cells

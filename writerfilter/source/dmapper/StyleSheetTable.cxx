@@ -217,40 +217,35 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
 PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask )
 {
     // Order from right to left
-    static const TblStyleType aBitsOrder[] =
+    struct TblStyleTypeAndMask {
+        sal_Int32       mask;
+        TblStyleType    type;
+    };
+
+    static const TblStyleTypeAndMask aOrderedStyleTable[] =
     {
-        TBL_STYLE_SWCELL,
-        TBL_STYLE_SECELL,
-        TBL_STYLE_NWCELL,
-        TBL_STYLE_NECELL,
-        TBL_STYLE_BAND2HORZ,
-        TBL_STYLE_BAND1HORZ,
-        TBL_STYLE_BAND2VERT,
-        TBL_STYLE_BAND1VERT,
-        TBL_STYLE_LASTCOL,
-        TBL_STYLE_FIRSTCOL,
-        TBL_STYLE_LASTROW,
-        TBL_STYLE_FIRSTROW,
-        TBL_STYLE_UNKNOWN
+        { 0x010, TBL_STYLE_BAND2HORZ },
+        { 0x020, TBL_STYLE_BAND1HORZ },
+        { 0x040, TBL_STYLE_BAND2VERT },
+        { 0x080, TBL_STYLE_BAND1VERT },
+        { 0x100, TBL_STYLE_LASTCOL  },
+        { 0x200, TBL_STYLE_FIRSTCOL },
+        { 0x400, TBL_STYLE_LASTROW  },
+        { 0x800, TBL_STYLE_FIRSTROW },
+        { 0x001, TBL_STYLE_SWCELL },
+        { 0x002, TBL_STYLE_SECELL },
+        { 0x004, TBL_STYLE_NWCELL },
+        { 0x008, TBL_STYLE_NECELL }
     };
 
     // Get the properties applying according to the mask
     PropertyMapPtr pProps( new PropertyMap( ) );
-    short nBit = 0;
-    do
+    for( int i = 0; i < sizeof( aOrderedStyleTable ); i++ )
     {
-        TblStyleType nStyleId = aBitsOrder[nBit];
-        TblStylePrs::iterator pIt = m_aStyles.find( nStyleId );
-
-        short nTestBit = 1 << nBit;
-        sal_Int32 nBitMask = sal_Int32( nTestBit );
-        if ( ( nMask & nBitMask ) && ( pIt != m_aStyles.end( ) ) )
-            lcl_mergeProps( pProps, pIt->second, nStyleId );
-
-        nBit++;
+        TblStylePrs::iterator pIt = m_aStyles.find( aOrderedStyleTable[ i ].type );
+        if ( ( nMask & aOrderedStyleTable[ i ].mask ) && ( pIt != m_aStyles.end( ) ) )
+            lcl_mergeProps( pProps, pIt->second, aOrderedStyleTable[ i ].type );
     }
-    while ( nBit < 13 );
-
     return pProps;
 }
 
