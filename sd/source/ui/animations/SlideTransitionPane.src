@@ -142,11 +142,11 @@ Control DLG_SLIDE_TRANSITION_PANE
         Repeat = TRUE ;
         Spin = TRUE ;
         Minimum = 0 ;
-        Maximum = 999 ;
-        // decimal digits should be 1, but for now the model only supports whole seconds
-        DecimalDigits = 0 ;
-        // spin size (increment value) should be 5 if digits are 1
-        SpinSize = 1 ;
+        Maximum = 9999 ;
+        // fdo#59071, enable slide auto transition of 0.25 second
+        DecimalDigits = 2 ;
+        // spin size (increment value), each 0.25 second
+        SpinSize = 25 ;
 
         Unit = FUNIT_CUSTOM ;
         CustomUnitText [ en-US ] = "sec";
