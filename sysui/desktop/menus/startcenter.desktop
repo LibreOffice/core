@@ -18,6 +18,7 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
+NoDisplay=true
 Icon=startcenter
 Type=Application
 Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Other;
