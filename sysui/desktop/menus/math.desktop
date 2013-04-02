@@ -28,6 +28,7 @@ Name=%PRODUCTNAME Math
 GenericName=Formula Editor
 Comment=Create and edit scientific formulas and equations by using Math.
 StartupNotify=true
+X-GIO-NoFuse=true
 Keywords=Equation;OpenDocument Formula;Formula;odf;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New

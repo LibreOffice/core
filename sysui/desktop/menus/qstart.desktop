@@ -24,3 +24,4 @@ Exec=${UNIXBASISROOTNAME} --quickstart --nologo --nodefault
 NoDisplay=true
 Name=%PRODUCTNAME Quickstarter
 Comment=Hook for quickstarter startup
+X-GIO-NoFuse=true

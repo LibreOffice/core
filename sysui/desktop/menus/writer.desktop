@@ -27,6 +27,7 @@ Name=%PRODUCTNAME Writer
 GenericName=Word Processor
 Comment=Create and edit text and graphics in letters, reports, documents and Web pages by using Writer.
 StartupNotify=true
+X-GIO-NoFuse=true
 Keywords=Text;Letter;Fax;Document;OpenDocument Text;Microsoft Word;Microsoft Works;Lotus WordPro;OpenOffice Writer;CV;odt;doc;docx;rtf;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New

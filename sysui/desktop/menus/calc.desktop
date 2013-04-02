@@ -27,6 +27,7 @@ Name=%PRODUCTNAME Calc
 GenericName=Spreadsheet
 Comment=Perform calculations, analyze information and manage lists in spreadsheets by using Calc.
 StartupNotify=true
+X-GIO-NoFuse=true
 Keywords=Accounting;Stats;OpenDocument Spreadsheet;Chart;Microsoft Excel;Microsoft Works;OpenOffice Calc;ods;xls;xlsx;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New

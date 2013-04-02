@@ -8,3 +8,4 @@ Name=%PRODUCTNAME XSLT based filters
 GenericName=XSLT based filters
 NoDisplay=true
 StartupNotify=true
+X-GIO-NoFuse=true

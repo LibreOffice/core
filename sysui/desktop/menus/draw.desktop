@@ -27,6 +27,7 @@ Name=%PRODUCTNAME Draw
 GenericName=Drawing Program
 Comment=Create and edit drawings, flow charts and logos by using Draw.
 StartupNotify=true
+X-GIO-NoFuse=true
 Keywords=Vector;Schema;Diagram;Layout;OpenDocument Graphics;Microsoft Publisher;Corel Draw;cdr;odg;svg;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New

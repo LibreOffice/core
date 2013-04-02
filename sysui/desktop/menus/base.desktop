@@ -27,6 +27,7 @@ Name=%PRODUCTNAME Base
 GenericName=Database Development
 Comment=Manage databases, create queries and reports to track and manage your information by using Base.
 StartupNotify=true
+X-GIO-NoFuse=true
 Keywords=Data;SQL;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
