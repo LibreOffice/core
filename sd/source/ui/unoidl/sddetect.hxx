@@ -50,14 +50,10 @@ namespace com
 
 #include <sfx2/sfxuno.hxx>
 
-#define REFERENCE ::com::sun::star::uno::Reference
-#define SEQUENCE ::com::sun::star::uno::Sequence
-#define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
-
-class SdFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
+class SdFilterDetect : public ::cppu::WeakImplHelper2< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
-                            SdFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+                            SdFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SdFilterDetect();
 
     SFX_DECL_XSERVICEINFO_NOFACTORY
@@ -65,7 +61,7 @@ public:
     //----------------------------------------------------------------------------------
     // XExtendedFilterDetect
     //----------------------------------------------------------------------------------
-    virtual ::rtl::OUString SAL_CALL detect( SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( RUNTIME_EXCEPTION );
+    virtual ::rtl::OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException );
 };
 
 #endif

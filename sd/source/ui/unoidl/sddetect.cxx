@@ -72,7 +72,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
-using namespace ::rtl;
 
 namespace {
 
@@ -95,7 +94,7 @@ bool isZipStorageType(const OUString& rTypeName)
 
 }
 
-SdFilterDetect::SdFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >&  )
+SdFilterDetect::SdFilterDetect( const Reference < XMultiServiceFactory >&  )
 {
 }
 
@@ -103,17 +102,17 @@ SdFilterDetect::~SdFilterDetect()
 {
 }
 
-::rtl::OUString SAL_CALL SdFilterDetect::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
+OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDescriptor ) throw( RuntimeException )
 {
-    REFERENCE< XInputStream > xStream;
-    REFERENCE< XContent > xContent;
-    REFERENCE< XInteractionHandler > xInteraction;
+    Reference< XInputStream > xStream;
+    Reference< XContent > xContent;
+    Reference< XInteractionHandler > xInteraction;
     String aURL;
-    ::rtl::OUString sTemp;
+    OUString sTemp;
     OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
-    ::rtl::OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; // interesting only if set in this method
 
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
@@ -190,13 +189,13 @@ SdFilterDetect::~SdFilterDetect()
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = rtl::OUString("private:factory/");
+    String aPrefix = OUString("private:factory/");
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         if( SvtModuleOptions().IsImpress() )
         {
             String aPattern( aPrefix );
-            aPattern += rtl::OUString("simpress");
+            aPattern += OUString("simpress");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
         }
@@ -204,7 +203,7 @@ SdFilterDetect::~SdFilterDetect()
         if( !pFilter && SvtModuleOptions().IsDraw() )
         {
             String aPattern( aPrefix );
-            aPattern += rtl::OUString("sdraw");
+            aPattern += OUString("sdraw");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
         }
@@ -237,7 +236,7 @@ SdFilterDetect::~SdFilterDetect()
                 {
                     // PowerPoint needs to be detected via StreamName, all other storage based formats are our own and can
                     // be detected by the ClipboardId, so except for the PPT filter all filters must have a ClipboardId set
-                    uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
+                    Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
 
                     //TODO/LATER: move error handling to central place! (maybe even complete own filters)
                     if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
@@ -252,11 +251,11 @@ SdFilterDetect::~SdFilterDetect()
                             try
                             {
                                 InteractiveAppException xException( empty,
-                                                                REFERENCE< XInterface >(),
+                                                                Reference< XInterface >(),
                                                                 InteractionClassification_ERROR,
                                                                 aMedium.GetError() );
 
-                                REFERENCE< XInteractionRequest > xRequest(
+                                Reference< XInteractionRequest > xRequest(
                                     new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
                                                                           ucbhelper::CONTINUATION_APPROVE ) );
                                 xInteraction->handle( xRequest );
@@ -279,7 +278,7 @@ SdFilterDetect::~SdFilterDetect()
                                 sFilterName = pFilter->GetName();
                             aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &sFilterName );
                         }
-                        catch( const lang::WrappedTargetException& aWrap )
+                        catch( const WrappedTargetException& aWrap )
                         {
                             if (!bDeepDetection)
                                 // Bail out early unless it's a deep detection.
@@ -319,11 +318,11 @@ SdFilterDetect::~SdFilterDetect()
                                 }
                             }
                         }
-                        catch( uno::RuntimeException& )
+                        catch( RuntimeException& )
                         {
                             throw;
                         }
-                        catch( uno::Exception& )
+                        catch( Exception& )
                         {
                             aTypeName = OUString();
                             pFilter = 0;
@@ -334,9 +333,9 @@ SdFilterDetect::~SdFilterDetect()
                             //TODO/LATER: using this method impress is always preferred if no flat detecion has been made
                             // this should been discussed!
                             if ( SvtModuleOptions().IsImpress() )
-                                pFilter = SfxFilterMatcher( rtl::OUString("simpress") ).GetFilter4EA( aTypeName );
+                                pFilter = SfxFilterMatcher( OUString("simpress") ).GetFilter4EA( aTypeName );
                             else if ( SvtModuleOptions().IsDraw() )
-                                pFilter = SfxFilterMatcher( rtl::OUString("sdraw") ).GetFilter4EA( aTypeName );
+                                pFilter = SfxFilterMatcher( OUString("sdraw") ).GetFilter4EA( aTypeName );
                         }
                     }
                 }
@@ -359,7 +358,7 @@ SdFilterDetect::~SdFilterDetect()
                         SotStorageRef aStorage = new SotStorage ( pStm, sal_False );
                         if ( !aStorage->GetError() )
                         {
-                            rtl::OUString aStreamName("PowerPoint Document");
+                            OUString aStreamName("PowerPoint Document");
                             if ( aStorage->IsStream( aStreamName ) && SvtModuleOptions().IsImpress() )
                             {
                                 String aFileName(aMedium.GetName());
@@ -393,8 +392,8 @@ SdFilterDetect::~SdFilterDetect()
                                         *pStm >> n8;
                                         if ( ( n8 & 0xf0 ) == 0 )       // we are supporting binary cgm format only, so
                                         {                               // this is a small test to exclude cgm text
-                                            SfxFilterMatcher aMatch(rtl::OUString("simpress"));
-                                            pFilter = aMatch.GetFilter4FilterName(rtl::OUString("CGM - Computer Graphics Metafile"));
+                                            SfxFilterMatcher aMatch(OUString("simpress"));
+                                            pFilter = aMatch.GetFilter4FilterName(OUString("CGM - Computer Graphics Metafile"));
                                         }
                                     }
                                 }
@@ -417,7 +416,7 @@ SdFilterDetect::~SdFilterDetect()
                                     aFilterConfigItem.WriteInt32( "Resolution" , nBase );
                                 }
 
-                                SfxFilterMatcher aMatch(rtl::OUString("sdraw"));
+                                SfxFilterMatcher aMatch(OUString("sdraw"));
                                 pFilter = aMatch.GetFilter4FilterName( aName );
                             }
                         }
@@ -506,16 +505,16 @@ SdFilterDetect::~SdFilterDetect()
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SdFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
+OUString SAL_CALL SdFilterDetect::getImplementationName() throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
                                                                                                                                 \
 /* XServiceInfo */
-sal_Bool SAL_CALL SdFilterDetect::supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION )
+sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames = getSupportedServiceNames();
-    const rtl::OUString*         pArray          = seqServiceNames.getConstArray();
+    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString*         pArray          = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[nCounter] == sServiceName )
@@ -527,27 +526,27 @@ sal_Bool SAL_CALL SdFilterDetect::supportsService( const rtl::OUString& sService
 }
 
 /* XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
+Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-UNOSEQUENCE< rtl::OUString > SdFilterDetect::impl_getStaticSupportedServiceNames()
+Sequence< OUString > SdFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
+    Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection"  ;
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-rtl::OUString SdFilterDetect::impl_getStaticImplementationName()
+OUString SdFilterDetect::impl_getStaticImplementationName()
 {
-    return rtl::OUString( "com.sun.star.comp.draw.FormatDetector" );
+    return OUString( "com.sun.star.comp.draw.FormatDetector" );
 }
 
 /* Helper for registry */
-UNOREFERENCE< UNOXINTERFACE > SAL_CALL SdFilterDetect::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
+Reference< XInterface > SAL_CALL SdFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
 {
     return static_cast< cppu::OWeakObject * >(
         new SdFilterDetect( xServiceManager ) );
