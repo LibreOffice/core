@@ -28,6 +28,7 @@
 #include "generic/gendata.hxx"
 #include "unx/desktops.hxx"
 #include "vcl/printerinfomanager.hxx"
+#include <config_vclplug.h>
 
 #include <cstdio>
 #include <unistd.h>
@@ -151,12 +152,25 @@ static SalInstance* autodetect_plugin()
 {
     static const char* pTDEFallbackList[] =
     {
-        "tde", "kde4", "kde", "gtk3", "gtk", "gen", 0
+        "tde",
+#if ENABLE_KDE4
+        "kde4",
+#endif
+#if ENABLE_KDE
+        "kde",
+#endif
+        "gtk3", "gtk", "gen", 0
     };
 
     static const char* pKDEFallbackList[] =
     {
-        "kde4", "kde", "gtk3", "gtk", "gen", 0
+#if ENABLE_KDE4
+        "kde4",
+#endif
+#if ENABLE_KDE
+        "kde",
+#endif
+        "gtk3", "gtk", "gen", 0
     };
 
     static const char* pStandardFallbackList[] =
