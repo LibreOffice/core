@@ -105,19 +105,19 @@ public:
     inline ParagraphInfo(::sal_Int32 nHeight): m_nHeight(nHeight) {}
 
     inline
-    ::css::uno::WeakReference< ::css::accessibility::XAccessible > const &
+    css::uno::WeakReference< css::accessibility::XAccessible > const &
     getParagraph() const { return m_xParagraph; }
 
     inline ::sal_Int32 getHeight() const { return m_nHeight; }
 
     inline void setParagraph(
-        ::css::uno::Reference< ::css::accessibility::XAccessible > const &
+        css::uno::Reference< css::accessibility::XAccessible > const &
         rParagraph) { m_xParagraph = rParagraph; }
 
     inline void changeHeight(::sal_Int32 nHeight) { m_nHeight = nHeight; }
 
 private:
-    ::css::uno::WeakReference< ::css::accessibility::XAccessible >
+    css::uno::WeakReference< css::accessibility::XAccessible >
     m_xParagraph;
     ::sal_Int32 m_nHeight;
 };
@@ -125,13 +125,13 @@ private:
 typedef ::std::vector< ParagraphInfo > Paragraphs;
 
 typedef ::cppu::WeakAggComponentImplHelper7<
-    ::css::accessibility::XAccessible,
-    ::css::accessibility::XAccessibleContext,
-    ::css::accessibility::XAccessibleComponent,
-    ::css::accessibility::XAccessibleEditableText,
-    ::css::accessibility::XAccessibleMultiLineText,
-    ::css::accessibility::XAccessibleTextAttributes,
-    ::css::accessibility::XAccessibleEventBroadcaster > ParagraphBase;
+    css::accessibility::XAccessible,
+    css::accessibility::XAccessibleContext,
+    css::accessibility::XAccessibleComponent,
+    css::accessibility::XAccessibleEditableText,
+    css::accessibility::XAccessibleMultiLineText,
+    css::accessibility::XAccessibleTextAttributes,
+    css::accessibility::XAccessibleEventBroadcaster > ParagraphBase;
 
 // The Paragraph's number is the absolute position within the text engine (from
 // 0 to N - 1), whereas the Paragraph's index is the position within the text
@@ -154,134 +154,134 @@ public:
     void textChanged();
 
     // Thread-safe.
-    void notifyEvent(::sal_Int16 nEventId, ::css::uno::Any const & rOldValue,
-                     ::css::uno::Any const & rNewValue);
+    void notifyEvent(::sal_Int16 nEventId, css::uno::Any const & rOldValue,
+                     css::uno::Any const & rNewValue);
 
 protected:
     // OCommonAccessibleText
-    virtual void implGetParagraphBoundary( ::css::i18n::Boundary& rBoundary,
+    virtual void implGetParagraphBoundary( css::i18n::Boundary& rBoundary,
                                            ::sal_Int32 nIndex );
-    virtual void implGetLineBoundary( ::css::i18n::Boundary& rBoundary,
+    virtual void implGetLineBoundary( css::i18n::Boundary& rBoundary,
                                       ::sal_Int32 nIndex );
 
 private:
-    virtual ::css::uno::Reference< ::css::accessibility::XAccessibleContext >
-    SAL_CALL getAccessibleContext() throw (::css::uno::RuntimeException);
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+    SAL_CALL getAccessibleContext() throw (css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::uno::Reference< ::css::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild(::sal_Int32 i)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
-    virtual ::css::uno::Reference< ::css::accessibility::XAccessible > SAL_CALL
-    getAccessibleParent() throw (::css::uno::RuntimeException);
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    getAccessibleParent() throw (css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::sal_Int16 SAL_CALL getAccessibleRole()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getAccessibleDescription()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getAccessibleName()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual
-    ::css::uno::Reference< ::css::accessibility::XAccessibleRelationSet >
-    SAL_CALL getAccessibleRelationSet() throw (::css::uno::RuntimeException);
+    css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+    SAL_CALL getAccessibleRelationSet() throw (css::uno::RuntimeException);
 
     virtual
-    ::css::uno::Reference< ::css::accessibility::XAccessibleStateSet > SAL_CALL
-    getAccessibleStateSet() throw (::css::uno::RuntimeException);
+    css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
+    getAccessibleStateSet() throw (css::uno::RuntimeException);
 
-    virtual ::css::lang::Locale SAL_CALL getLocale()
-        throw (::css::accessibility::IllegalAccessibleComponentStateException,
-               ::css::uno::RuntimeException);
+    virtual css::lang::Locale SAL_CALL getLocale()
+        throw (css::accessibility::IllegalAccessibleComponentStateException,
+               css::uno::RuntimeException);
 
-    virtual ::sal_Bool SAL_CALL containsPoint(::css::awt::Point const & rPoint)
-        throw (::css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL containsPoint(css::awt::Point const & rPoint)
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::uno::Reference< ::css::accessibility::XAccessible > SAL_CALL
-    getAccessibleAtPoint(::css::awt::Point const & rPoint)
-        throw (::css::uno::RuntimeException);
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    getAccessibleAtPoint(css::awt::Point const & rPoint)
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::awt::Rectangle SAL_CALL getBounds()
-        throw (::css::uno::RuntimeException);
+    virtual css::awt::Rectangle SAL_CALL getBounds()
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::awt::Point SAL_CALL getLocation()
-        throw (::css::uno::RuntimeException);
+    virtual css::awt::Point SAL_CALL getLocation()
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::awt::Point SAL_CALL getLocationOnScreen()
-        throw (::css::uno::RuntimeException);
+    virtual css::awt::Point SAL_CALL getLocationOnScreen()
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::awt::Size SAL_CALL getSize()
-        throw (::css::uno::RuntimeException);
+    virtual css::awt::Size SAL_CALL getSize()
+        throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL grabFocus() throw (::css::uno::RuntimeException);
+    virtual void SAL_CALL grabFocus() throw (css::uno::RuntimeException);
 
-    virtual ::css::uno::Any SAL_CALL getAccessibleKeyBinding()
-        throw (::css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getAccessibleKeyBinding()
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::util::Color SAL_CALL getForeground()
-        throw (::css::uno::RuntimeException);
+    virtual css::util::Color SAL_CALL getForeground()
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::util::Color SAL_CALL getBackground()
-        throw (::css::uno::RuntimeException);
+    virtual css::util::Color SAL_CALL getBackground()
+        throw (css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL getCaretPosition()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL setCaretPosition(::sal_Int32 nIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Unicode SAL_CALL getCharacter(::sal_Int32 nIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
-    virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
     getCharacterAttributes(::sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes )
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
-    virtual ::css::awt::Rectangle SAL_CALL
+    virtual css::awt::Rectangle SAL_CALL
     getCharacterBounds(::sal_Int32 nIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL getCharacterCount()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL
-    getIndexAtPoint(::css::awt::Point const & rPoint)
-        throw (::css::uno::RuntimeException);
+    getIndexAtPoint(css::awt::Point const & rPoint)
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getSelectedText()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL getSelectionStart()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL getSelectionEnd()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL setSelection(::sal_Int32 nStartIndex,
                                              ::sal_Int32 nEndIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getText()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual OUString SAL_CALL getTextRange(::sal_Int32 nStartIndex,
                                                   ::sal_Int32 nEndIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -289,52 +289,52 @@ private:
 
     virtual ::sal_Bool SAL_CALL copyText(::sal_Int32 nStartIndex,
                                          ::sal_Int32 nEndIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL cutText(::sal_Int32 nStartIndex,
                                         ::sal_Int32 nEndIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL pasteText(::sal_Int32 nIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL deleteText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL insertText(OUString const & rText,
                                            ::sal_Int32 nIndex)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL replaceText(
         ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
         OUString const & rReplacement)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL setAttributes(
         ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
-        ::css::uno::Sequence< ::css::beans::PropertyValue > const &
+        css::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL setText(OUString const & rText)
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL
-    getDefaultAttributes(const ::css::uno::Sequence< OUString >& RequestedAttributes)
-        throw (::css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    getDefaultAttributes(const css::uno::Sequence< OUString >& RequestedAttributes)
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL
-    getRunAttributes(::sal_Int32 Index, const ::css::uno::Sequence< OUString >& RequestedAttributes)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes)
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Int32 SAL_CALL getLineNumberAtIndex( ::sal_Int32 nIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
@@ -351,25 +351,25 @@ private:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL addAccessibleEventListener(
-        ::css::uno::Reference<
-        ::css::accessibility::XAccessibleEventListener > const & rListener)
-        throw (::css::uno::RuntimeException);
+        css::uno::Reference<
+        css::accessibility::XAccessibleEventListener > const & rListener)
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL removeAccessibleEventListener(
-        ::css::uno::Reference<
-        ::css::accessibility::XAccessibleEventListener > const & rListener)
-        throw (::css::uno::RuntimeException);
+        css::uno::Reference<
+        css::accessibility::XAccessibleEventListener > const & rListener)
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL disposing();
 
     virtual OUString implGetText();
 
-    virtual ::css::lang::Locale implGetLocale();
+    virtual css::lang::Locale implGetLocale();
 
     virtual void implGetSelection(::sal_Int32 & rStartIndex,
                                   ::sal_Int32 & rEndIndex);
 
-    // Throws ::css::lang::DisposedException:
+    // Throws css::lang::DisposedException:
     void checkDisposed();
 
     ::rtl::Reference< Document > m_xDocument;
@@ -384,7 +384,7 @@ private:
 
 
 typedef ::boost::unordered_map< OUString,
-                         ::css::beans::PropertyValue,
+                         css::beans::PropertyValue,
                          OUStringHash,
                          ::std::equal_to< OUString > > tPropValMap;
 
@@ -394,11 +394,11 @@ public:
     Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
              ::TextView & rView, bool bCompoundControlChild);
 
-    inline ::css::uno::Reference< ::css::accessibility::XAccessible >
+    inline css::uno::Reference< css::accessibility::XAccessible >
     getAccessible() { return m_xAccessible; }
 
     // Must be called only after init has been called.
-    ::css::lang::Locale retrieveLocale();
+    css::lang::Locale retrieveLocale();
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
@@ -419,7 +419,7 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    ::css::awt::Rectangle
+    css::awt::Rectangle
     retrieveParagraphBounds(ParagraphImpl const * pParagraph, bool bAbsolute);
 
     // Must be called only after init has been called.
@@ -449,8 +449,8 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    // Throws ::css::lang::IndexOutOfBoundsException.
-    ::css::awt::Rectangle
+    // Throws css::lang::IndexOutOfBoundsException.
+    css::awt::Rectangle
     retrieveCharacterBounds(ParagraphImpl const * pParagraph,
                             ::sal_Int32 nIndex);
 
@@ -460,36 +460,36 @@ public:
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
     ::sal_Int32 retrieveCharacterIndex(ParagraphImpl const * pParagraph,
-                                       ::css::awt::Point const & rPoint);
+                                       css::awt::Point const & rPoint);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    // Throws ::css::lang::IndexOutOfBoundsException.
-    ::css::uno::Sequence< ::css::beans::PropertyValue > retrieveCharacterAttributes(
+    // Throws css::lang::IndexOutOfBoundsException.
+    css::uno::Sequence< css::beans::PropertyValue > retrieveCharacterAttributes(
         ParagraphImpl const * pParagraph, ::sal_Int32 nIndex,
-        const ::css::uno::Sequence< OUString >& aRequestedAttributes);
+        const css::uno::Sequence< OUString >& aRequestedAttributes);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    ::css::uno::Sequence< ::css::beans::PropertyValue > retrieveDefaultAttributes(
+    css::uno::Sequence< css::beans::PropertyValue > retrieveDefaultAttributes(
         ParagraphImpl const * pParagraph,
-        const ::css::uno::Sequence< OUString >& RequestedAttributes);
+        const css::uno::Sequence< OUString >& RequestedAttributes);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    // Throws ::css::lang::IndexOutOfBoundsException.
-    ::css::uno::Sequence< ::css::beans::PropertyValue > retrieveRunAttributes(
+    // Throws css::lang::IndexOutOfBoundsException.
+    css::uno::Sequence< css::beans::PropertyValue > retrieveRunAttributes(
         ParagraphImpl const * pParagraph, ::sal_Int32 Index,
-        const ::css::uno::Sequence< OUString >& RequestedAttributes);
+        const css::uno::Sequence< OUString >& RequestedAttributes);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
@@ -504,7 +504,7 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    // Throws ::css::lang::IndexOutOfBoundsException.
+    // Throws css::lang::IndexOutOfBoundsException.
     void changeParagraphText(ParagraphImpl * pParagraph, ::sal_Int32 nBegin,
                              ::sal_Int32 nEnd, bool bCut, bool bPaste,
                              OUString const & rText);
@@ -514,7 +514,7 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    // Throws ::css::lang::IndexOutOfBoundsException.
+    // Throws css::lang::IndexOutOfBoundsException.
     void copyParagraphText(ParagraphImpl const * pParagraph,
                            ::sal_Int32 nBegin, ::sal_Int32 nEnd);
 
@@ -523,10 +523,10 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    // Throws ::css::lang::IndexOutOfBoundsException.
+    // Throws css::lang::IndexOutOfBoundsException.
     void changeParagraphAttributes(
         ParagraphImpl * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
-        ::css::uno::Sequence< ::css::beans::PropertyValue > const &
+        css::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet);
 
     // Must be called only after init has been called.
@@ -534,21 +534,21 @@ public:
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "ParagraphImpl const &" instead of a
     // "::rtl::Reference< ParagraphImpl > const &".
-    // Throws ::css::lang::IndexOutOfBoundsException.
+    // Throws css::lang::IndexOutOfBoundsException.
     void changeParagraphSelection(ParagraphImpl * pParagraph,
                                   ::sal_Int32 nBegin, ::sal_Int32 nEnd);
 
-    ::css::i18n::Boundary
+    css::i18n::Boundary
     retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
                                    ::sal_Int32 nIndex, ::sal_Int32 *pLineNo = NULL);
 
-    ::css::i18n::Boundary
+    css::i18n::Boundary
     retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
                                      ::sal_Int32 nIndex );
 
     sal_Int32 retrieveParagraphLineWithCursor( ParagraphImpl const * pParagraph );
 
-    ::css::uno::Reference< ::css::accessibility::XAccessibleRelationSet >
+    css::uno::Reference< css::accessibility::XAccessibleRelationSet >
     retrieveParagraphRelationSet( ParagraphImpl const * pParagraph );
 
 protected:
@@ -557,19 +557,19 @@ protected:
 
 private:
     virtual ::sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::uno::Reference< ::css::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
     SAL_CALL getAccessibleChild(::sal_Int32 i)
-        throw (::css::lang::IndexOutOfBoundsException,
-               ::css::uno::RuntimeException);
+        throw (css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException);
 
     virtual ::sal_Int16 SAL_CALL getAccessibleRole()
-        throw (::css::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual ::css::uno::Reference< ::css::accessibility::XAccessible >
-    SAL_CALL getAccessibleAtPoint(::css::awt::Point const & rPoint)
-        throw (::css::uno::RuntimeException);
+    virtual css::uno::Reference< css::accessibility::XAccessible >
+    SAL_CALL getAccessibleAtPoint(css::awt::Point const & rPoint)
+        throw (css::uno::RuntimeException);
 
     // ??? Will be called with both the external (Solar) and internal mutex
     // locked:
@@ -595,8 +595,8 @@ private:
 
     // Must be called with both the external (Solar) and internal mutex
     // locked, and after init has been called.
-    // Throws ::css::uno::RuntimeException.
-    ::css::uno::Reference< ::css::accessibility::XAccessible >
+    // Throws css::uno::RuntimeException.
+    css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild(Paragraphs::iterator const & rIt);
 
     // Must be called with both the external (Solar) and internal mutex
@@ -627,28 +627,28 @@ private:
 
     void disposeParagraphs();
 
-    static ::css::uno::Any mapFontColor(::Color const & rColor);
+    static css::uno::Any mapFontColor(::Color const & rColor);
 
-    static ::Color mapFontColor(::css::uno::Any const & rColor);
+    static ::Color mapFontColor(css::uno::Any const & rColor);
 
-    static ::css::uno::Any mapFontWeight(::FontWeight nWeight);
+    static css::uno::Any mapFontWeight(::FontWeight nWeight);
 
-    static ::FontWeight mapFontWeight(::css::uno::Any const & rWeight);
+    static ::FontWeight mapFontWeight(css::uno::Any const & rWeight);
 
     void retrieveDefaultAttributesImpl(
         ParagraphImpl const * pParagraph,
-        const ::css::uno::Sequence< OUString >& RequestedAttributes,
+        const css::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rDefAttrSeq);
 
     void retrieveRunAttributesImpl(
         ParagraphImpl const * pParagraph, ::sal_Int32 Index,
-        const ::css::uno::Sequence< OUString >& RequestedAttributes,
+        const css::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rRunAttrSeq);
 
-    static ::css::uno::Sequence< ::css::beans::PropertyValue >
+    static css::uno::Sequence< css::beans::PropertyValue >
     convertHashMapToSequence(tPropValMap& rAttrSeq);
 
-    ::css::uno::Reference< ::css::accessibility::XAccessible > m_xAccessible;
+    css::uno::Reference< css::accessibility::XAccessible > m_xAccessible;
     ::TextEngine & m_rEngine;
     ::TextView & m_rView;
 

@@ -46,7 +46,7 @@ public:
     Service() {}
 
     virtual ::test::types::Data SAL_CALL getData()
-        throw (::css::uno::RuntimeException)
+        throw (css::uno::RuntimeException)
     {
         return ::test::types::Data(OUString("Hello"), 42);
     }
@@ -60,16 +60,16 @@ private:
 
 namespace CppServer {
 
-::css::uno::Reference< ::css::uno::XInterface > create(
-    ::css::uno::Reference< ::css::uno::XComponentContext > const &)
-    SAL_THROW((::css::uno::Exception))
+css::uno::Reference< css::uno::XInterface > create(
+    css::uno::Reference< css::uno::XComponentContext > const &)
+    SAL_THROW((css::uno::Exception))
 {
     try {
         return static_cast< ::cppu::OWeakObject * >(new Service);
     } catch (::std::bad_alloc &) {
-        throw ::css::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             OUString("std::bad_alloc"),
-            ::css::uno::Reference< ::css::uno::XInterface >());
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
@@ -77,8 +77,8 @@ OUString getImplementationName() {
     return OUString("test.cpp.cppserver.Component");
 }
 
-::css::uno::Sequence< OUString > getSupportedServiceNames() {
-    return ::css::uno::Sequence< OUString >();
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    return css::uno::Sequence< OUString >();
 }
 
 }

@@ -80,7 +80,7 @@ public:
         (when the sd modules is unloaded) is done by a) calling dispose()
         when the XComponent is supported and by b) releasing the reference.
     */
-    void AddResource (const ::css::uno::Reference<css::uno::XInterface>& rxResource);
+    void AddResource (const css::uno::Reference<css::uno::XInterface>& rxResource);
 
 protected:
     friend class ::SdModule;

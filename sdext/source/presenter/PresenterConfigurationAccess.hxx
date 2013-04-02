@@ -126,7 +126,7 @@ public:
         const ::std::vector<css::uno::Any>&) > ItemProcessor;
     typedef ::boost::function<void(
         const ::rtl::OUString&,
-        const ::css::uno::Reference<css::beans::XPropertySet>&) > PropertySetProcessor;
+        const css::uno::Reference<css::beans::XPropertySet>&) > PropertySetProcessor;
 
     /** Execute a functor for all elements of the given container.
         @param rxContainer

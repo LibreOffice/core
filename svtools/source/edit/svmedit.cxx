@@ -34,10 +34,10 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
 }
 
 // virtual
-::css::uno::Reference< ::css::awt::XWindowPeer >
+css::uno::Reference< css::awt::XWindowPeer >
 MultiLineEdit::GetComponentInterface(sal_Bool bCreate)
 {
-    ::css::uno::Reference< ::css::awt::XWindowPeer > xPeer(
+    css::uno::Reference< css::awt::XWindowPeer > xPeer(
         VclMultiLineEdit::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {

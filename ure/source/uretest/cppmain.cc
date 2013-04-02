@@ -55,15 +55,15 @@
 
 namespace {
 
-class Service: public ::cppu::WeakImplHelper1< ::css::lang::XMain > {
+class Service: public ::cppu::WeakImplHelper1< css::lang::XMain > {
 public:
     explicit Service(
-        ::css::uno::Reference< ::css::uno::XComponentContext > const & context):
+        css::uno::Reference< css::uno::XComponentContext > const & context):
         context_(context) {}
 
     virtual ::sal_Int32 SAL_CALL run(
-        ::css::uno::Sequence< ::rtl::OUString > const &)
-        throw (::css::uno::RuntimeException);
+        css::uno::Sequence< ::rtl::OUString > const &)
+        throw (css::uno::RuntimeException);
 
 private:
     Service(Service &); // not defined
@@ -72,14 +72,14 @@ private:
     virtual ~Service() {}
 
     void test(
-        ::css::uno::Reference< test::types::XTest > const & test,
+        css::uno::Reference< test::types::XTest > const & test,
         ::rtl::OUString const & name);
 
-    ::css::uno::Reference< ::css::uno::XComponentContext > context_;
+    css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-::sal_Int32 Service::run(::css::uno::Sequence< ::rtl::OUString > const &)
-    throw (::css::uno::RuntimeException)
+::sal_Int32 Service::run(css::uno::Sequence< ::rtl::OUString > const &)
+    throw (css::uno::RuntimeException)
 {
     osl_getThreadIdentifier(0); // check for sal
     (new salhelper::SimpleReferenceObject)->release(); // check for salhelper
@@ -129,19 +129,19 @@ private:
     };
     for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
         ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
-        ::css::uno::Reference< ::css::uno::XInterface > instance;
+        css::uno::Reference< css::uno::XInterface > instance;
         try {
             instance = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);
-        } catch (::css::uno::RuntimeException &) {
+        } catch (css::uno::RuntimeException &) {
             throw;
-        } catch (::css::uno::Exception &) {
-            throw ::css::uno::RuntimeException(
+        } catch (css::uno::Exception &) {
+            throw css::uno::RuntimeException(
                 ::rtl::OUString("error creating instance"),
                 static_cast< ::cppu::OWeakObject * >(this));
         }
         if (!instance.is()) {
-            throw ::css::uno::RuntimeException(
+            throw css::uno::RuntimeException(
                 "no instance: " + name,
                 static_cast< ::cppu::OWeakObject * >(this));
         }
@@ -153,9 +153,9 @@ private:
         ::rtl::OUStringBuffer b;
         b.append("/singletons/");
         b.append(singletons[i]);
-        ::css::uno::Reference< ::css::uno::XInterface > instance(
+        css::uno::Reference< css::uno::XInterface > instance(
             context_->getValueByName(b.makeStringAndClear()),
-            ::css::uno::UNO_QUERY_THROW);
+            css::uno::UNO_QUERY_THROW);
     }
     test(
         ::test::types::CppTest::create(context_),
@@ -167,7 +167,7 @@ private:
 }
 
 void Service::test(
-    ::css::uno::Reference< test::types::XTest > const & test,
+    css::uno::Reference< test::types::XTest > const & test,
     ::rtl::OUString const & name)
 {
     bool ok = false;
@@ -177,7 +177,7 @@ void Service::test(
         ok = true;
     }
     if (!ok) {
-        throw ::css::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             (name
              + ::rtl::OUString(".throwException failed")),
             static_cast< ::cppu::OWeakObject * >(this));
@@ -186,16 +186,16 @@ void Service::test(
 
 namespace CppMain {
 
-::css::uno::Reference< ::css::uno::XInterface > create(
-    ::css::uno::Reference< ::css::uno::XComponentContext > const & context)
-    SAL_THROW((::css::uno::Exception))
+css::uno::Reference< css::uno::XInterface > create(
+    css::uno::Reference< css::uno::XComponentContext > const & context)
+    SAL_THROW((css::uno::Exception))
 {
     try {
         return static_cast< ::cppu::OWeakObject * >(new Service(context));
     } catch (::std::bad_alloc &) {
-        throw ::css::uno::RuntimeException(
+        throw css::uno::RuntimeException(
             ::rtl::OUString("std::bad_alloc"),
-            ::css::uno::Reference< ::css::uno::XInterface >());
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
@@ -203,8 +203,8 @@ OUString getImplementationName() {
     return OUString("test.cpp.cppmain.Component");
 }
 
-::css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
-    return ::css::uno::Sequence< ::rtl::OUString >();
+css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
+    return css::uno::Sequence< ::rtl::OUString >();
 }
 
 }

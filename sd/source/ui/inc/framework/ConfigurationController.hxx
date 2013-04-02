@@ -42,8 +42,8 @@
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper2 <
-    ::css::drawing::framework::XConfigurationController,
-    ::css::lang::XInitialization
+    css::drawing::framework::XConfigurationController,
+    css::lang::XInitialization
     > ConfigurationControllerInterfaceBase;
 
 } // end of anonymous namespace.

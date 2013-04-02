@@ -64,7 +64,7 @@ namespace sdext { namespace presenter {
 PresenterTextView::PresenterTextView (
     const Reference<XComponentContext>& rxContext,
     const Reference<rendering::XCanvas>& rxCanvas,
-    const ::boost::function<void(const ::css::awt::Rectangle&)>& rInvalidator)
+    const ::boost::function<void(const css::awt::Rectangle&)>& rInvalidator)
     : mxCanvas(rxCanvas),
       mbDoOuput(true),
       mxBreakIterator(),

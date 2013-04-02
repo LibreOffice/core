@@ -248,7 +248,7 @@ public:
     virtual void SAL_CALL AutoFill( const css::uno::Reference< ov::excel::XRange >& Destination, const css::uno::Any& Type ) throw (css::uno::RuntimeException) ;
      void SAL_CALL Calculate(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL AutoOutline(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Item( const ::css::uno::Any& row, const css::uno::Any& column ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Item( const css::uno::Any& row, const css::uno::Any& column ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL ClearOutline(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL Ungroup(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL Group(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

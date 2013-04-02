@@ -32,7 +32,7 @@
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper1 <
-    ::css::drawing::framework::XConfigurationChangeListener
+    css::drawing::framework::XConfigurationChangeListener
     > ViewTabBarModuleInterfaceBase;
 
 } // end of anonymous namespace.

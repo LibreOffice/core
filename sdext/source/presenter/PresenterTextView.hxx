@@ -222,7 +222,7 @@ public:
     PresenterTextView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const ::boost::function<void(const ::css::awt::Rectangle&)>& rInvalidator);
+        const ::boost::function<void(const css::awt::Rectangle&)>& rInvalidator);
     void SetText (const css::uno::Reference<css::text::XText>& rxText);
     void SetTextChangeBroadcaster (const ::boost::function<void(void)>& rBroadcaster);
 
@@ -267,7 +267,7 @@ private:
     SharedPresenterTextCaret mpCaret;
     double mnLeftOffset;
     double mnTopOffset;
-    const ::boost::function<void(const ::css::awt::Rectangle&)> maInvalidator;
+    const ::boost::function<void(const css::awt::Rectangle&)> maInvalidator;
     bool mbIsFormatPending;
     sal_Int32 mnCharacterCount;
     ::boost::function<void(void)> maTextChangeBroadcaster;

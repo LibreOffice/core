@@ -202,7 +202,7 @@ public:
 
 private:
     OUString m_sUserDir;
-    css::uno::Reference< ::css::configuration::backend::XLayer> m_xLayer;
+    css::uno::Reference< css::configuration::backend::XLayer> m_xLayer;
 
     void migrateJavarc();
     typedef ::std::pair< ::rtl::OUString,   sal_Int16>  TElementType;

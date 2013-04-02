@@ -61,16 +61,16 @@ public:
     // XSlideRenderer
 
     virtual css::uno::Reference<css::awt::XBitmap> SAL_CALL createPreview (
-        const ::css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor)
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL createPreviewForCanvas (
-        const ::css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor,
-        const ::css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
         throw (css::uno::RuntimeException);
 
     virtual css::awt::Size SAL_CALL calculatePreviewSize (
@@ -82,7 +82,7 @@ private:
     PreviewRenderer maPreviewRenderer;
 
     BitmapEx CreatePreview (
-        const ::css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor)
         throw (css::uno::RuntimeException);

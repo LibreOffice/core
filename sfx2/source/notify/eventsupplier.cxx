@@ -625,8 +625,8 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const css::document::EventObject
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const ::css::document::DocumentEvent& _Event )
-    throw (::css::uno::RuntimeException)
+void SAL_CALL SfxGlobalEvents_Impl::documentEventOccured( const css::document::DocumentEvent& _Event )
+    throw (css::uno::RuntimeException)
 {
     implts_notifyJobExecution(css::document::EventObject(_Event.Source, _Event.EventName));
     implts_checkAndExecuteEventBindings(_Event);

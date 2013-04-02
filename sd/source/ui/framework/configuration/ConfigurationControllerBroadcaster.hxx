@@ -97,8 +97,8 @@ public:
     */
     void NotifyListeners (
         const ::rtl::OUString& rsEventType,
-        const ::css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-        const ::css::uno::Reference<css::drawing::framework::XResource>& rxResourceObject);
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const css::uno::Reference<css::drawing::framework::XResource>& rxResourceObject);
 
     /** Call all listeners and inform them that the
         ConfigurationController is being disposed.  When this method returns

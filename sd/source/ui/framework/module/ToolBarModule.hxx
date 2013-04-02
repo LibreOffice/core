@@ -40,7 +40,7 @@ namespace sd { namespace framework {
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper1 <
-        ::css::drawing::framework::XConfigurationChangeListener
+        css::drawing::framework::XConfigurationChangeListener
         > ToolBarModuleInterfaceBase;
 }
 

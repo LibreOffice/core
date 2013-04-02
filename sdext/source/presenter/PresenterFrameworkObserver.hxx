@@ -58,7 +58,7 @@ public:
 
 private:
     ::rtl::OUString msEventType;
-    ::css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
+    css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
     Predicate maPredicate;
     Action maAction;
 

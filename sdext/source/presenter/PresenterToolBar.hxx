@@ -211,7 +211,7 @@ private:
         const bool bMouseDown=false);
 
     void ProcessEntry (
-        const ::css::uno::Reference<css::beans::XPropertySet>& rProperties,
+        const css::uno::Reference<css::beans::XPropertySet>& rProperties,
         Context& rContext);
 
     /** This method throws a DisposedException when the object has already been

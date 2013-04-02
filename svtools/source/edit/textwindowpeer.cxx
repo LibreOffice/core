@@ -36,7 +36,7 @@ namespace svt
     {
     }
 
-    ::css::uno::Reference< ::css::accessibility::XAccessibleContext > TextWindowPeer::CreateAccessibleContext()
+    css::uno::Reference< css::accessibility::XAccessibleContext > TextWindowPeer::CreateAccessibleContext()
     {
         return m_pFactoryAccess->getFactory().createAccessibleTextWindowContext(
             this, m_rEngine, m_rView, m_bCompoundControlChild

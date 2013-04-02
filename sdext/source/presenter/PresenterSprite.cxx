@@ -54,7 +54,7 @@ PresenterSprite::~PresenterSprite (void)
 }
 
 void PresenterSprite::SetFactory (
-    const ::css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory)
+    const css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory)
 {
     if (mxSpriteFactory != rxSpriteFactory)
     {
@@ -65,7 +65,7 @@ void PresenterSprite::SetFactory (
     }
 }
 
-::css::uno::Reference<css::rendering::XCanvas> PresenterSprite::GetCanvas (void)
+css::uno::Reference<css::rendering::XCanvas> PresenterSprite::GetCanvas (void)
 {
     ProvideSprite();
     if (mxSprite.is())

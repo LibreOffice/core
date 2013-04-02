@@ -45,9 +45,9 @@ public:
         It is also used to call updateScreen() at (wrapped by the Update() method).
     */
     void SetFactory (
-        const ::css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory);
+        const css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory);
 
-    ::css::uno::Reference<css::rendering::XCanvas> GetCanvas (void);
+    css::uno::Reference<css::rendering::XCanvas> GetCanvas (void);
 
     void Show (void);
     void Hide (void);
@@ -58,8 +58,8 @@ public:
     void Update (void);
 
 private:
-    ::css::uno::Reference<css::rendering::XSpriteCanvas> mxSpriteFactory;
-    ::css::uno::Reference<css::rendering::XCustomSprite> mxSprite;
+    css::uno::Reference<css::rendering::XSpriteCanvas> mxSpriteFactory;
+    css::uno::Reference<css::rendering::XCustomSprite> mxSprite;
     css::geometry::RealSize2D maSize;
     css::geometry::RealPoint2D maLocation;
     bool mbIsVisible;

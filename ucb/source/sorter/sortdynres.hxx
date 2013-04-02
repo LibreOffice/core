@@ -146,7 +146,7 @@ public:
         throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    impl_notify( const ::css::ucb::ListEvent& Changes )
+    impl_notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException );
 };
 
@@ -179,7 +179,7 @@ public:
     // XDynamicResultSetListener
     //-----------------------------------------------------------------
     virtual void SAL_CALL
-    notify( const ::css::ucb::ListEvent& Changes )
+    notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException );
 
     //-----------------------------------------------------------------

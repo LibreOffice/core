@@ -117,7 +117,7 @@ namespace javaunohelper {
 }
 
 css::uno::Reference< css::uno::XComponentContext > install_vm_singleton(
-    css::uno::Reference< ::css::uno::XComponentContext > const & xContext,
+    css::uno::Reference< css::uno::XComponentContext > const & xContext,
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
 {
     css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
