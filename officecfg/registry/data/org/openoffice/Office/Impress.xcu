@@ -195,4 +195,9 @@
       <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions-ogl.xml</value>
     </prop>
   </node>
+  <node oor:name="Pictures" oor:op="fuse" oor:mandatory="true">
+    <prop oor:name="Path">
+      <value>$(work)</value>
+    </prop>
+  </node>
 </oor:component-data>

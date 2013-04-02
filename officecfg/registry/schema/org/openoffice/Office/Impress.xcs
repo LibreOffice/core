@@ -1594,5 +1594,22 @@
         </group>
       </group>
     </group>
+    <group oor:name="Pictures">
+        <info>
+            <desc>
+            Contains configuration items form Impress Photo Album function.
+            </desc>
+        </info>
+        <prop oor:name="Path" oor:type="xs:string" oor:nillable="false">
+        <info>
+        <author>GM</author>
+        <desc>
+            Access path, where images were loaded last time.
+            The default is work directory.
+        </desc>
+        </info>
+        <value>$(work)</value>
+        </prop>
+    </group>
   </component>
 </oor:component-schema>

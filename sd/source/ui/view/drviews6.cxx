@@ -687,14 +687,18 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
        case SID_PHOTOALBUM:
        {
-                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(GetActiveWindow(),
-                    GetDoc()
-                ) : 0;
-                if (pDlg)
-                {
-                    pDlg->Execute();
-                }
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(
+                GetActiveWindow(),
+                GetDoc()) : 0;
+
+            if (pDlg)
+            {
+                pDlg->Execute();
+                delete pDlg;
+            }
+            Cancel();
+            rReq.Ignore ();
         }
         break;
 

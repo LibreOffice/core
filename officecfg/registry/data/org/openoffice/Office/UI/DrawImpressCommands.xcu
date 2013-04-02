@@ -55,7 +55,7 @@
       </node>
      <node oor:name=".uno:PhotoAlbumDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Create Photo Album</value>
+          <value xml:lang="en-US">Photo Album</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
