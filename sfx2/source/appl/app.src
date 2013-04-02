@@ -331,11 +331,6 @@ String RID_ENVTOOLBOX
     Text [ en-US ] = "Function Bar" ;
 };
 
-String RID_SPECIALCONFIG_ERROR
-{
-    Text [ en-US ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
-};
-
 String STR_QUICKSTART_EXIT
 {
     Text [ en-US ] = "Exit Quickstarter" ;

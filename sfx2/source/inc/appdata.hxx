@@ -102,7 +102,6 @@ public:
 
     // global pointers
     SfxItemPool*                        pPool;
-    std::vector<sal_uInt16>*            pDisabledSlotList;
     SvtSaveOptions*                     pSaveOptions;
     SvtHelpOptions*                     pHelpOptions;
 

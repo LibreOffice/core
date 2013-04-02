@@ -38,7 +38,6 @@
 #define RID_STR_HELP                            (RID_SFX_APP_START+79)
 #define RID_STR_NOAUTOSTARTHELPAGENT            (RID_SFX_APP_START+80)
 #define RID_HELPBAR                             (RID_SFX_APP_START+81)
-#define RID_SPECIALCONFIG_ERROR                 (RID_SFX_APP_START+82)
 
 #define CONFIG_PATH_START               (RID_SFX_APP_START+98)
 
