@@ -19,11 +19,18 @@
 
 #include "oox/core/filterdetect.hxx"
 
+#include <config_oox.h>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#if USE_TLS_OPENSSL
 #include <openssl/evp.h>
+#endif // USE_TLS_OPENSSL
+#if USE_TLS_NSS
+#include <nss.h>
+#include <pk11pub.h>
+#endif // USE_TLS_NSS
 #include <rtl/digest.h>
 #include "oox/core/fastparser.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -373,6 +380,7 @@ bool lclCheckEncryptionData( const sal_uInt8* pnKey, sal_uInt32 nKeySize, const 
     if ( nKeySize == 16 && nVerifierSize == 16 && nVerifierHashSize == 32 )
     {
         // check password
+#if USE_TLS_OPENSSL
         EVP_CIPHER_CTX aes_ctx;
         EVP_CIPHER_CTX_init( &aes_ctx );
         EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
@@ -392,6 +400,37 @@ bool lclCheckEncryptionData( const sal_uInt8* pnKey, sal_uInt32 nKeySize, const 
 
         /*int*/ EVP_DecryptUpdate( &aes_ctx, pnTmpVerifierHash, &nOutLen, pnVerifierHash, nVerifierHashSize );
         EVP_CIPHER_CTX_cleanup( &aes_ctx );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+        PK11SlotInfo *aSlot( PK11_GetBestSlot( CKM_AES_ECB, NULL ) );
+        sal_uInt8 *key( new sal_uInt8[ nKeySize ] );
+        (void) memcpy( key, pnKey, nKeySize * sizeof(sal_uInt8) );
+
+        SECItem keyItem;
+        keyItem.type = siBuffer;
+        keyItem.data = key;
+        keyItem.len  = nKeySize;
+
+        PK11SymKey *symKey( PK11_ImportSymKey( aSlot, CKM_AES_ECB, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL ) );
+        SECItem *secParam( PK11_ParamFromIV( CKM_AES_ECB, NULL ) );
+        PK11Context *encContext( PK11_CreateContextBySymKey( CKM_AES_ECB, CKA_DECRYPT, symKey, secParam ) );
+
+        int nOutLen(0);
+        sal_uInt8 pnTmpVerifier[ 16 ];
+        (void) memset( pnTmpVerifier, 0, sizeof(pnTmpVerifier) );
+
+        PK11_CipherOp( encContext, pnTmpVerifier, &nOutLen, sizeof(pnTmpVerifier), const_cast<sal_uInt8*>(pnVerifier), nVerifierSize );
+
+        sal_uInt8 pnTmpVerifierHash[ 32 ];
+        (void) memset( pnTmpVerifierHash, 0, sizeof(pnTmpVerifierHash) );
+        PK11_CipherOp( encContext, pnTmpVerifierHash, &nOutLen, sizeof(pnTmpVerifierHash), const_cast<sal_uInt8*>(pnVerifierHash), nVerifierHashSize );
+
+        PK11_DestroyContext( encContext, PR_TRUE );
+        PK11_FreeSymKey( symKey );
+        SECITEM_FreeItem( secParam, PR_TRUE );
+        delete[] key;
+#endif // USE_TLS_NSS
 
         rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
         rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
@@ -552,6 +591,11 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
 
         if( bImplemented )
         {
+#if USE_TLS_NSS
+            // Initialize NSS, database functions are not needed
+            NSS_NoDB_Init( NULL );
+#endif // USE_TLS_NSS
+
             /*  "VelvetSweatshop" is the built-in default encryption
                 password used by MS Excel for the "workbook protection"
                 feature with password. Try this first before prompting the
@@ -579,10 +623,31 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
                 BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
 
+#if USE_TLS_OPENSSL
                 EVP_CIPHER_CTX aes_ctx;
                 EVP_CIPHER_CTX_init( &aes_ctx );
                 EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, aVerifier.getKey(), 0 );
                 EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+                // Retrieve the valid key so we can get its size later
+                SequenceAsHashMap aHashData( aEncryptionData );
+                Sequence<sal_Int8> validKey( aHashData.getUnpackedValueOrDefault( OUString("AES128EncryptionKey"), Sequence<sal_Int8>() ) );
+
+                PK11SlotInfo *aSlot( PK11_GetBestSlot( CKM_AES_ECB, NULL ) );
+                sal_uInt8 *key = new sal_uInt8[ validKey.getLength() ];
+                (void) memcpy( key, aVerifier.getKey(), validKey.getLength() );
+
+                SECItem keyItem;
+                keyItem.type = siBuffer;
+                keyItem.data = key;
+                keyItem.len  = validKey.getLength();
+
+                PK11SymKey *symKey( PK11_ImportSymKey( aSlot, CKM_AES_ECB, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, NULL ) );
+                SECItem *secParam( PK11_ParamFromIV( CKM_AES_ECB, NULL ) );
+                PK11Context *encContext( PK11_CreateContextBySymKey( CKM_AES_ECB, CKA_DECRYPT, symKey, secParam ) );
+#endif // USE_TLS_NSS
 
                 sal_uInt8 pnInBuffer[ 1024 ];
                 sal_uInt8 pnOutBuffer[ 1024 ];
@@ -591,13 +656,36 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 aEncryptedPackage.skip( 8 ); // decrypted size
                 while( (nInLen = aEncryptedPackage.readMemory( pnInBuffer, sizeof( pnInBuffer ) )) > 0 )
                 {
+#if USE_TLS_OPENSSL
                     EVP_DecryptUpdate( &aes_ctx, pnOutBuffer, &nOutLen, pnInBuffer, nInLen );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+                    PK11_CipherOp( encContext, pnOutBuffer, &nOutLen, sizeof(pnOutBuffer), pnInBuffer, nInLen );
+#endif // USE_TLS_NSS
                     aDecryptedPackage.writeMemory( pnOutBuffer, nOutLen );
                 }
+#if USE_TLS_OPENSSL
                 EVP_DecryptFinal_ex( &aes_ctx, pnOutBuffer, &nOutLen );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+                uint final;
+                PK11_DigestFinal( encContext, pnOutBuffer, &final, nInLen - nOutLen );
+                nOutLen = final;
+#endif // USE_TLS_NSS
                 aDecryptedPackage.writeMemory( pnOutBuffer, nOutLen );
 
+#if USE_TLS_OPENSSL
                 EVP_CIPHER_CTX_cleanup( &aes_ctx );
+#endif // USE_TLS_OPENSSL
+
+#if USE_TLS_NSS
+                PK11_DestroyContext( encContext, PR_TRUE );
+                PK11_FreeSymKey( symKey );
+                SECITEM_FreeItem( secParam, PR_TRUE );
+                delete[] key;
+#endif // USE_TLS_NSS
                 xDecryptedPackage->flush();
                 aDecryptedPackage.seekToStart();
 

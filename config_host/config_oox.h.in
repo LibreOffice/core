@@ -1,0 +1,13 @@
+#ifndef CONFIG_OOX_H
+#define CONFIG_OOX_H
+
+/*
+
+Which TLS backend to use for cryptographic operations.
+
+*/
+
+#define USE_TLS_OPENSSL 0
+#define USE_TLS_NSS 0
+
+#endif
