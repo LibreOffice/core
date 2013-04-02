@@ -172,11 +172,9 @@ gb_QUIET_EXTERNAL := $(true)
 endif
 
 # save user-supplied flags for latter use
-# TODO remove after the old build system is abolished
 ifneq ($(strip $(ENVCFLAGS)),)
 gb__ENV_CFLAGS := $(ENVCFLAGS)
 endif
-# TODO remove after the old build system is abolished
 ifneq ($(strip $(ENVCFLAGSCXX)),)
 gb__ENV_CXXFLAGS := $(ENVCFLAGSCXX)
 endif
