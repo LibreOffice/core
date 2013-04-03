@@ -20,6 +20,7 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/vector/b3dvector.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -30,9 +31,6 @@ namespace drawinglayer
         class ImpSdr3DLightAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // 3D light attribute definitions
             basegfx::BColor                         maColor;
             basegfx::B3DVector                      maDirection;
@@ -44,10 +42,16 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 const basegfx::B3DVector& rDirection,
                 bool bSpecular)
-            :   mnRefCount(0),
-                maColor(rColor),
+            :   maColor(rColor),
                 maDirection(rDirection),
                 mbSpecular(bSpecular)
+            {
+            }
+
+            ImpSdr3DLightAttribute()
+            :   maColor(basegfx::BColor()),
+                maDirection(basegfx::B3DVector()),
+                mbSpecular(false)
             {
             }
 
@@ -62,31 +66,19 @@ namespace drawinglayer
                     && getDirection() == rCandidate.getDirection()
                     && getSpecular() == rCandidate.getSpecular());
             }
-
-            static ImpSdr3DLightAttribute* get_global_default()
-            {
-                static ImpSdr3DLightAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdr3DLightAttribute(
-                        basegfx::BColor(),
-                        basegfx::B3DVector(),
-                        false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< Sdr3DLightAttribute::ImplType, theGlobalDefault > {};
+        }
 
         Sdr3DLightAttribute::Sdr3DLightAttribute(
             const basegfx::BColor& rColor,
             const basegfx::B3DVector& rDirection,
             bool bSpecular)
-        :   mpSdr3DLightAttribute(new ImpSdr3DLightAttribute(
+        :   mpSdr3DLightAttribute(ImpSdr3DLightAttribute(
                 rColor, rDirection, bSpecular))
         {
         }
@@ -94,59 +86,26 @@ namespace drawinglayer
         Sdr3DLightAttribute::Sdr3DLightAttribute(const Sdr3DLightAttribute& rCandidate)
         :   mpSdr3DLightAttribute(rCandidate.mpSdr3DLightAttribute)
         {
-            mpSdr3DLightAttribute->mnRefCount++;
         }
 
         Sdr3DLightAttribute::~Sdr3DLightAttribute()
         {
-            if(mpSdr3DLightAttribute->mnRefCount)
-            {
-                mpSdr3DLightAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdr3DLightAttribute;
-            }
         }
 
         bool Sdr3DLightAttribute::isDefault() const
         {
-            return mpSdr3DLightAttribute == ImpSdr3DLightAttribute::get_global_default();
+            return mpSdr3DLightAttribute.same_object(theGlobalDefault::get());
         }
 
         Sdr3DLightAttribute& Sdr3DLightAttribute::operator=(const Sdr3DLightAttribute& rCandidate)
         {
-            if(rCandidate.mpSdr3DLightAttribute != mpSdr3DLightAttribute)
-            {
-                if(mpSdr3DLightAttribute->mnRefCount)
-                {
-                    mpSdr3DLightAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdr3DLightAttribute;
-                }
-
-                mpSdr3DLightAttribute = rCandidate.mpSdr3DLightAttribute;
-                mpSdr3DLightAttribute->mnRefCount++;
-            }
-
+            mpSdr3DLightAttribute = rCandidate.mpSdr3DLightAttribute;
             return *this;
         }
 
         bool Sdr3DLightAttribute::operator==(const Sdr3DLightAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdr3DLightAttribute == mpSdr3DLightAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpSdr3DLightAttribute == *mpSdr3DLightAttribute);
+            return rCandidate.mpSdr3DLightAttribute == mpSdr3DLightAttribute;
         }
 
         const basegfx::BColor& Sdr3DLightAttribute::getColor() const
