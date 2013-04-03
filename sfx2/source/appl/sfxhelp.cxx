@@ -216,18 +216,9 @@ public:
 
 static Sequence< OUString > GetPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "HelpAgentStarterList",
-    };
-
-    const int nCount = sizeof( aPropNames ) / sizeof( const char* );
-    Sequence< OUString > aNames( nCount );
+    Sequence< OUString > aNames( 1 );
     OUString* pNames = aNames.getArray();
-    OUString* pEnd   = pNames + aNames.getLength();
-    int i = 0;
-    for ( ; pNames != pEnd; ++pNames )
-        *pNames = OUString::createFromAscii( aPropNames[i++] );
+    pNames[0] = OUString( "HelpAgentStarterList" );
 
     return aNames;
 }
