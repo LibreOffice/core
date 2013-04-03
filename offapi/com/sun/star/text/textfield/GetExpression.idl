@@ -42,10 +42,7 @@ published service GetExpression
         @see com::sun::star::util::NumberFormatter
     */
     [property]long NumberFormat;
-    /** specifies the type of the numbering as
-        <type scope="com::sun::star::style">NumberingType</type>
-     */
-    [property]short NumberingType;
+
     /** determines whether the content is displayed or evaluated.
      */
     [property]boolean IsShowFormula;
@@ -55,7 +52,8 @@ published service GetExpression
     [property]short SubType;
     /** contains the numerical value of the field.
      */
-    [property]double Value;
+    [property, readonly] double Value;
+
     /** deprecated
      */
     [property]short VariableSubtype;
