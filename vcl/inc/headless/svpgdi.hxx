@@ -45,12 +45,16 @@ class SvpSalGraphics : public SalGraphics
     basebmp::Color                       m_aLineColor;
     bool                                 m_bUseFillColor;
     basebmp::Color                       m_aFillColor;
-    basebmp::Color                       m_aTextColor;
 
     basebmp::DrawMode                    m_aDrawMode;
 
+#ifndef IOS
+    // These fields are used only when we use FreeType to draw into a
+    // headless backend, i.e. not on iOS.
+    basebmp::Color                       m_aTextColor;
     ServerFont*                          m_pServerFont[ MAX_FALLBACK ];
     sal_uInt32                           m_eTextFmt;
+#endif
 
     basebmp::BitmapDeviceSharedPtr       m_aClipMap;
 

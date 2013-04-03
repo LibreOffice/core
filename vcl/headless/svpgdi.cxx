@@ -80,14 +80,17 @@ SvpSalGraphics::SvpSalGraphics() :
     m_aLineColor( COL_BLACK ),
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
-    m_aTextColor( COL_BLACK ),
     m_aDrawMode( basebmp::DrawMode_PAINT ),
+#ifndef IOS
+    m_aTextColor( COL_BLACK ),
     m_eTextFmt( basebmp::Format::EIGHT_BIT_GREY ),
+#endif
     m_bClipSetup( false )
 {
+#ifndef IOS
     for( int i = 0; i < MAX_FALLBACK; ++i )
         m_pServerFont[i] = NULL;
-#ifdef IOS
+#else
     mrContext = nil;
     mfFakeDPIScale = 1.0;
     m_style = new CoreTextStyleInfo();
@@ -115,6 +118,7 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
     m_aOrigDevice = rDevice;
     ResetClipRegion();
 
+#ifndef IOS
     // determine matching bitmap format for masks
     sal_uInt32 nDeviceFmt = m_aDevice->getScanlineFormat();
     DBG_ASSERT( (nDeviceFmt <= (sal_uInt32)basebmp::Format::MAX), "SVP::setDevice() with invalid bitmap format" );
@@ -134,6 +138,7 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
             m_eTextFmt = basebmp::Format::ONE_BIT_LSB_GREY;
             break;
     }
+#endif
 }
 
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
@@ -551,6 +556,9 @@ void SvpSalGraphics::copyArea( long nDestX,
 void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
                                SalGraphics*      pSrcGraphics )
 {
+    if( !m_aDevice.get() )
+        return;
+
     SvpSalGraphics* pSrc = pSrcGraphics ?
         static_cast<SvpSalGraphics*>(pSrcGraphics) : this;
     basegfx::B2IBox aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
