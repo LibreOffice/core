@@ -58,8 +58,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 			$(if $(filter NO,$(SYSTEM_NSS))$(filter MACOSX,$(OS)),--disable-pkgconfig) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include" \
-			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),,-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib),\
-			$(if $(filter-out MACOSX,$(OS)),,LDFLAGS="-Wl$(COMMA)-dylib_file$(COMMA)@executable_path/libnssutil3.dylib:$(OUTDIR)/lib/libnssutil3.dylib")) \
+			LDFLAGS="-L$(SYSBASE)/usr/lib $(if $(filter-out LINUX FREEBSD,$(OS)),,-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib)) \
 		&& $(MAKE) \
 	)
 

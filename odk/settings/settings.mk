@@ -436,13 +436,6 @@ SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
-SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_sal.dylib'
-CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_cppu.dylib'
-CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper'$(COMID).dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
-SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
-REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libreg.dylib'
-STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libstore.dylib'
-
 INSTALL_NAME_URELIBS=$(XCRUN) install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/urelibs/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/urelibs/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/urelibs/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/urelibs/libstore.dylib.3
 
 INSTALL_NAME_URELIBS_BIN=$(XCRUN) install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 libstore.dylib.3
