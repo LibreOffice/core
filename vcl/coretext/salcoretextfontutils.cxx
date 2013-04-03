@@ -166,44 +166,40 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     }
 
     CFStringRef string_ref = (CFStringRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontStyleNameAttribute);
-    rtl::OUString font_name = GetOUString(string_ref);
-    rtl::OUString font_name_lc(font_name.toAsciiLowerCase());
+    rtl::OUString style(GetOUString(string_ref).toAsciiLowerCase());
     CFRelease(string_ref);
 
     // heuristics to adjust font slant
-    if( (font_name_lc.indexOf("oblique") != -1) ||
-        (font_name_lc.indexOf("inclined") != -1) ||
-        (font_name_lc.indexOf("slanted") != -1) )
+    if( (style.indexOf("oblique") != -1) ||
+        (style.indexOf("inclined") != -1) ||
+        (style.indexOf("slanted") != -1) )
     {
         rDFA.SetItalic( ITALIC_OBLIQUE );
     }
 
     // heuristics to adjust font width
-    if (font_name_lc.indexOf("narrow") != -1)
+    if (style.indexOf("narrow") != -1)
     {
         rDFA.SetWidthType( WIDTH_SEMI_CONDENSED );
     }
 
     // heuristics for font family type
-    if( (font_name_lc.indexOf("script") != -1) ||
-        (font_name_lc.indexOf("chancery") != -1) ||
-        (font_name_lc.indexOf("zapfino") != -1))
+    if( (style.indexOf("script") != -1) ||
+        (style.indexOf("chancery") != -1) )
     {
         rDFA.SetFamilyType( FAMILY_SCRIPT );
     }
-    else if( (font_name_lc.indexOf("comic") != -1) ||
-             (font_name_lc.indexOf("outline") != -1) ||
-             (font_name_lc.indexOf("pinpoint") != -1) )
+    else if( (style.indexOf("comic") != -1) ||
+             (style.indexOf("outline") != -1) ||
+             (style.indexOf("pinpoint") != -1) )
     {
         rDFA.SetFamilyType( FAMILY_DECORATIVE );
     }
-    else if( (font_name_lc.indexOf("sans") != -1) ||
-             (font_name_lc.indexOf("arial") != -1) )
+    else if( (style.indexOf("sans") != -1) )
     {
         rDFA.SetFamilyType( FAMILY_SWISS );
     }
-    else if( (font_name_lc.indexOf("roman") != -1) ||
-             (font_name_lc.indexOf("times") != -1) )
+    else if( (style.indexOf("roman") != -1) )
     {
         rDFA.SetFamilyType( FAMILY_ROMAN );
     }
