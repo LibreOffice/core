@@ -83,9 +83,9 @@ void RscLangEnum::Init( RscNameTable& rNames )
     while ( NULL != ( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
     {
 #if OSL_DEBUG_LEVEL > 2
-        fprintf( stderr, "ISO Language in : %d\n",
+        fprintf( stderr, "ISO Language in : %d, 0x%04x, %s\n",
                  (int)nIndex,
-                 pLangEntry->mnLang,
+                 (unsigned)pLangEntry->mnLang,
                  OUStringToOString( LanguageTag( pLangEntry->mnLang ).getBcp47(), RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif
         rtl::OString aLang(pLangEntry->maLangStr, strlen(pLangEntry->maLangStr));
