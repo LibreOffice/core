@@ -24,6 +24,7 @@
 
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -40,8 +41,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC SdrSceneAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrSceneAttribute > ImplType;
+
         private:
-            ImpSdrSceneAttribute*               mpSdrSceneAttribute;
+            ImplType mpSdrSceneAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor

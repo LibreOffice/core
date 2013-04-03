@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -28,9 +29,6 @@ namespace drawinglayer
         class ImpSdrSceneAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // 3D scene attribute definitions
             double                                      mfDistance;
             double                                      mfShadowSlant;
@@ -47,12 +45,20 @@ namespace drawinglayer
                 ::com::sun::star::drawing::ProjectionMode aProjectionMode,
                 ::com::sun::star::drawing::ShadeMode aShadeMode,
                 bool bTwoSidedLighting)
-            :   mnRefCount(0),
-                mfDistance(fDistance),
+            :   mfDistance(fDistance),
                 mfShadowSlant(fShadowSlant),
                 maProjectionMode(aProjectionMode),
                 maShadeMode(aShadeMode),
                 mbTwoSidedLighting(bTwoSidedLighting)
+            {
+            }
+
+            ImpSdrSceneAttribute()
+            :   mfDistance(0.0),
+                mfShadowSlant(0.0),
+                maProjectionMode(::com::sun::star::drawing::ProjectionMode_PARALLEL),
+                maShadeMode(::com::sun::star::drawing::ShadeMode_FLAT),
+                mbTwoSidedLighting(false)
             {
             }
 
@@ -71,26 +77,13 @@ namespace drawinglayer
                     && getShadeMode() == rCandidate.getShadeMode()
                     && getTwoSidedLighting() == rCandidate.getTwoSidedLighting());
             }
-
-            static ImpSdrSceneAttribute* get_global_default()
-            {
-                static ImpSdrSceneAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrSceneAttribute(
-                        0.0, 0.0,
-                        ::com::sun::star::drawing::ProjectionMode_PARALLEL,
-                        ::com::sun::star::drawing::ShadeMode_FLAT,
-                        false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrSceneAttribute::ImplType, theGlobalDefault > {};
+        }
 
         SdrSceneAttribute::SdrSceneAttribute(
             double fDistance,
@@ -98,73 +91,39 @@ namespace drawinglayer
             ::com::sun::star::drawing::ProjectionMode aProjectionMode,
             ::com::sun::star::drawing::ShadeMode aShadeMode,
             bool bTwoSidedLighting)
-        :   mpSdrSceneAttribute(new ImpSdrSceneAttribute(
+        :   mpSdrSceneAttribute(ImpSdrSceneAttribute(
                 fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting))
         {
         }
 
         SdrSceneAttribute::SdrSceneAttribute()
-        :   mpSdrSceneAttribute(ImpSdrSceneAttribute::get_global_default())
+        :   mpSdrSceneAttribute(theGlobalDefault::get())
         {
-            mpSdrSceneAttribute->mnRefCount++;
         }
 
         SdrSceneAttribute::SdrSceneAttribute(const SdrSceneAttribute& rCandidate)
         :   mpSdrSceneAttribute(rCandidate.mpSdrSceneAttribute)
         {
-            mpSdrSceneAttribute->mnRefCount++;
         }
 
         SdrSceneAttribute::~SdrSceneAttribute()
         {
-            if(mpSdrSceneAttribute->mnRefCount)
-            {
-                mpSdrSceneAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrSceneAttribute;
-            }
         }
 
         bool SdrSceneAttribute::isDefault() const
         {
-            return mpSdrSceneAttribute == ImpSdrSceneAttribute::get_global_default();
+            return mpSdrSceneAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrSceneAttribute& SdrSceneAttribute::operator=(const SdrSceneAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrSceneAttribute != mpSdrSceneAttribute)
-            {
-                if(mpSdrSceneAttribute->mnRefCount)
-                {
-                    mpSdrSceneAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrSceneAttribute;
-                }
-
-                mpSdrSceneAttribute = rCandidate.mpSdrSceneAttribute;
-                mpSdrSceneAttribute->mnRefCount++;
-            }
-
+            mpSdrSceneAttribute = rCandidate.mpSdrSceneAttribute;
             return *this;
         }
 
         bool SdrSceneAttribute::operator==(const SdrSceneAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrSceneAttribute == mpSdrSceneAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpSdrSceneAttribute == *mpSdrSceneAttribute);
+            return rCandidate.mpSdrSceneAttribute == mpSdrSceneAttribute;
         }
 
         double SdrSceneAttribute::getShadowSlant() const
