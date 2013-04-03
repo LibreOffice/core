@@ -25,19 +25,19 @@
 #include <tools/string.hxx>
 #include <tools/errcode.hxx>
 
+#include <vector>
+
 // class SfxContentHelper ------------------------------------------------
 
 class SfxContentHelper
 {
 public:
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                                GetResultSet( const String& rURL );
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                                GetHelpTreeViewContents( const String& rURL );
+    static std::vector< OUString > GetResultSet( const OUString& rURL );
+    static std::vector< OUString > GetHelpTreeViewContents( const OUString& rURL );
     static OUString GetActiveHelpString( const OUString& rURL );
     static bool IsHelpErrorDocument( const OUString& rURL );
 
-    static sal_Int64 GetSize( const String& rContent );
+    static sal_Int64 GetSize( const OUString& rContent );
 };
 
 #endif // #ifndef _SFX_HELPER_HXX

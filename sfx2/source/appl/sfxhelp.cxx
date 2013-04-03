@@ -639,9 +639,9 @@ static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
     AppendConfigToken(aHelpRootURL, sal_True, rLang);
-    Sequence< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
+    std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
 
-    return ( aFactories.getLength() != 0   );
+    return !aFactories.empty();
 }
 
 sal_Bool SfxHelp::SearchKeyword( const OUString& rKeyword )
@@ -681,7 +681,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
     AppendConfigToken(aHelpRootURL, sal_True);
-    Sequence< OUString > aFactories = SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
+    SfxContentHelper::GetResultSet(aHelpRootURL.makeStringAndClear());
 
     /* rURL may be
         - a "real" URL

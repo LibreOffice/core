@@ -104,6 +104,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 
+#include <vector>
+
 using namespace ::ucbhelper;
 using namespace ::com::sun::star::ucb;
 
@@ -309,21 +311,18 @@ ContentListBox_Impl::~ContentListBox_Impl()
 
 void ContentListBox_Impl::InitRoot()
 {
-    String aHelpTreeviewURL( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
+    OUString aHelpTreeviewURL( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
+    std::vector< OUString > aList =
         SfxContentHelper::GetHelpTreeViewContents( aHelpTreeviewURL );
 
-    const ::rtl::OUString* pEntries  = aList.getConstArray();
-    sal_uInt32 i, nCount = aList.getLength();
-    for ( i = 0; i < nCount; ++i )
+    for(size_t i = 0, n = aList.size(); i < n; ++i )
     {
-        String aRow( pEntries[i] );
-        String aTitle, aURL;
+        const OUString& aRow = aList[i];
         sal_Int32 nIdx = 0;
-        aTitle = aRow.GetToken( 0, '\t', nIdx );
-        aURL = aRow.GetToken( 0, '\t', nIdx );
-        sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
-        sal_Bool bIsFolder = ( '1' == cFolder );
+        OUString aTitle = aRow.getToken( 0, '\t', nIdx );
+        OUString aURL = aRow.getToken( 0, '\t', nIdx );
+        sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
+        bool bIsFolder = ( '1' == cFolder );
         SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, sal_True );
         if ( bIsFolder )
             pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
@@ -354,20 +353,17 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
             if ( pParent->GetUserData() )
             {
                 String aTmpURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
-                ::com::sun::star::uno::Sequence< ::rtl::OUString > aList =
+                std::vector<OUString > aList =
                     SfxContentHelper::GetHelpTreeViewContents( aTmpURL );
 
-                const ::rtl::OUString* pEntries  = aList.getConstArray();
-                sal_uInt32 i, nCount = aList.getLength();
-                for ( i = 0; i < nCount; ++i )
+                for (size_t i = 0,n = aList.size(); i < n; ++i )
                 {
-                    String aRow( pEntries[i] );
-                    String aTitle, aURL;
+                    const OUString& aRow = aList[i];
                     sal_Int32 nIdx = 0;
-                    aTitle = aRow.GetToken( 0, '\t', nIdx );
-                    aURL = aRow.GetToken( 0, '\t', nIdx );
-                    sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
-                    sal_Bool bIsFolder = ( '1' == cFolder );
+                    OUString aTitle = aRow.getToken( 0, '\t', nIdx );
+                    OUString aURL = aRow.getToken( 0, '\t', nIdx );
+                    sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
+                    bool bIsFolder = ( '1' == cFolder );
                     SvTreeListEntry* pEntry = NULL;
                     if ( bIsFolder )
                     {
@@ -379,7 +375,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                         pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
                         Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String("TargetURL"  ) ) );
                         rtl::OUString aTargetURL;
-                        if ( aAny >>=  aTargetURL )
+                        if ( aAny >>= aTargetURL )
                             pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
                     }
                 }
@@ -1074,23 +1070,20 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
         AppendConfigToken(aSearchURL, sal_False);
         if ( aScopeCB.IsChecked() )
             aSearchURL.append("&Scope=Heading");
-        Sequence< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
-        const OUString* pFacs  = aFactories.getConstArray();
-        sal_uInt32 i, nCount = aFactories.getLength();
-        for ( i = 0; i < nCount; ++i )
+        std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
+        for (size_t i = 0, n = aFactories.size(); i < n; ++i )
         {
-            String aRow( pFacs[i] );
-            String aTitle, aType;
+            const OUString& rRow = aFactories[i];
             sal_Int32 nIdx = 0;
-            aTitle = aRow.GetToken( 0, '\t', nIdx );
-            aType = aRow.GetToken( 0, '\t', nIdx );
-            String* pURL = new String( aRow.GetToken( 0, '\t', nIdx ) );
+            OUString aTitle = rRow.getToken( 0, '\t', nIdx );
+            nIdx = 0;
+            String* pURL = new String( rRow.getToken( 2, '\t', nIdx ) );
             sal_uInt16 nPos = aResultsLB.InsertEntry( aTitle );
             aResultsLB.SetEntryData( nPos, (void*)(sal_uIntPtr)pURL );
         }
         LeaveWait();
 
-        if ( !nCount )
+        if ( aFactories.empty() )
         {
             InfoBox aBox( this, SfxResId( RID_INFO_NOSEARCHRESULTS ) );
             aBox.SetText( SfxResId( STR_HELP_WINDOW_TITLE ).toString() );
@@ -1593,23 +1586,20 @@ void SfxHelpIndexWindow_Impl::Initialize()
 {
     OUStringBuffer aHelpURL(HELP_URL);
     AppendConfigToken(aHelpURL, sal_True);
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet(aHelpURL.makeStringAndClear());
-    const ::rtl::OUString* pFacs  = aFactories.getConstArray();
-    sal_uInt32 i, nCount = aFactories.getLength();
-    for ( i = 0; i < nCount; ++i )
+    std::vector<OUString> aFactories = SfxContentHelper::GetResultSet(aHelpURL.makeStringAndClear());
+    for (size_t i = 0, n = aFactories.size(); i < n; ++i )
     {
-        String aRow( pFacs[i] );
-        String aTitle, aType, aURL;
+        const OUString& rRow = aFactories[i];
         sal_Int32 nIdx = 0;
-        aTitle = aRow.GetToken( 0, '\t', nIdx );
-        aType = aRow.GetToken( 0, '\t', nIdx );
-        aURL = aRow.GetToken( 0, '\t', nIdx );
+        OUString aTitle = rRow.getToken( 0, '\t', nIdx );
+        nIdx = 0;
+        OUString aURL = rRow.getToken( 2, '\t', nIdx );
         String* pFactory = new String( INetURLObject( aURL ).GetHost() );
         sal_uInt16 nPos = aActiveLB.InsertEntry( aTitle );
         aActiveLB.SetEntryData( nPos, (void*)(sal_uIntPtr)pFactory );
     }
 
-    aActiveLB.SetDropDownLineCount( (sal_uInt16)nCount );
+    aActiveLB.SetDropDownLineCount( (sal_uInt16)aFactories.size() );
     if ( aActiveLB.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         SetActiveFactory();
 }

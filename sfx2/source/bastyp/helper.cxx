@@ -54,8 +54,6 @@ using namespace osl;
 
 using ::std::vector;
 
-using ::rtl::OUString;
-using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 
 namespace {
@@ -70,7 +68,7 @@ DateTime convertDateTime( const util::DateTime& rUnoDT )
 
 // -----------------------------------------------------------------------
 
-uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
+std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
 {
     vector<OUString> aList;
     try
@@ -134,19 +132,12 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         SAL_WARN( "sfx2.bastyp", "GetResultSet: Any other exception: " << e.Message );
     }
 
-    size_t nCount = aList.size();
-    uno::Sequence < OUString > aRet( nCount );
-    OUString* pRet = aRet.getArray();
-    for ( size_t i = 0; i < nCount; ++i )
-    {
-        pRet[i] = aList[0];
-    }
-    return aRet;
+    return aList;
 }
 
 // -----------------------------------------------------------------------
 
-uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rURL )
+std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUString& rURL )
 {
     vector< OUString > aProperties;
     try
@@ -207,14 +198,7 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
     {
     }
 
-    size_t nCount = aProperties.size();
-    uno::Sequence < OUString > aRet( nCount );
-    OUString* pRet = aRet.getArray();
-    for(size_t i = 0; i < nCount; ++i)
-    {
-        pRet[i] = aProperties[i];
-    }
-    return aRet;
+    return aProperties;
 }
 
 // -----------------------------------------------------------------------
@@ -273,7 +257,7 @@ bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
 
 // -----------------------------------------------------------------------
 
-sal_Int64 SfxContentHelper::GetSize( const String& rContent )
+sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
 {
     sal_Int64 nSize = 0;
     INetURLObject aObj( rContent );
