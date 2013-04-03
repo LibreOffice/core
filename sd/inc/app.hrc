@@ -74,6 +74,7 @@
 #define SID_DIAMODE                         (SID_SD_START+11)
 #define SID_INSERTPAGE                      (SID_SD_START+14)
 #define SID_INSERTFILE                      (SID_SD_START+15)
+#define SID_INSERTDRAWFILE                  (SID_SD_START+150)
 #define SID_INSERTSYMBOL                    (SID_SD_START+16)
 #define SID_ZOOM_PANNING                    (SID_SD_START+17)
 #define SID_PRESENTATION_END                (SID_SD_START+18)

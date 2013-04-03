@@ -3317,6 +3317,29 @@ SfxVoidItem ImportFromFile SID_INSERTFILE
     ToolBoxConfig = TRUE,
     GroupId = GID_INSERT;
 ]
+SfxVoidItem ImportFromDrawFile SID_INSERTDRAWFILE
+(SfxStringItem FileName ID_VAL_DUMMY1,SfxStringItem FilterName ID_VAL_DUMMY2)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertAuthorField SID_INSERT_FLD_AUTHOR

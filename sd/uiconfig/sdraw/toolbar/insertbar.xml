@@ -22,7 +22,7 @@
  <toolbar:toolbarseparator/>
     <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:helpid="helpid:5563"  toolbar:visible="false" />
     <toolbar:toolbarseparator/>
-    <toolbar:toolbaritem xlink:href=".uno:ImportFromFile" toolbar:helpid="helpid:27015"  toolbar:visible="false" />
+    <toolbar:toolbaritem xlink:href=".uno:ImportFromDrawFile" toolbar:helpid="helpid:27015"  toolbar:visible="false" />
     <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="helpid:10141"  />
     <toolbar:toolbarseparator/>
     <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="helpid:10241"  />

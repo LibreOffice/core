@@ -1334,6 +1334,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_INSERTDRAWFILE // ole : no, status : todo
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_STYLE_FAMILY2 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

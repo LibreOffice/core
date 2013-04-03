@@ -225,6 +225,18 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         }
         break;
 
+        case SID_INSERTDRAWFILE:  
+        {
+            Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
+            SetCurrentFunction( FuInsertFile::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
+            Cancel();
+            rReq.Done ();
+
+            Invalidate(SID_DRAWTBX_INSERT);
+        }
+        break;
+
         case SID_SELECT_BACKGROUND:
         case SID_PAGESETUP:  // BASIC ??
         {
