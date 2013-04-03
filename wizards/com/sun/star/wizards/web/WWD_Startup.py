@@ -107,7 +107,7 @@ class WWD_Startup(WWD_General):
     def __init__(self, xmsf):
         super(WWD_Startup, self).__init__(xmsf)
         self.selectedDoc = []
-        self.ftp = False
+        self.ftp = True
         self.sda = None
         self.docAware = []
         self.designAware = []
@@ -305,7 +305,7 @@ class WWD_Startup(WWD_General):
             #self.settings.cp_Styles.sort(None)
             self.prepareSessionLists()
             if self.proxies:
-                self.__ftp = self.getPublisher(FTP_PUBLISHER).cp_Publish
+                self.ftp = self.getPublisher(FTP_PUBLISHER).cp_Publish
                 self.getPublisher(FTP_PUBLISHER).cp_Publish = False
 
         except Exception:

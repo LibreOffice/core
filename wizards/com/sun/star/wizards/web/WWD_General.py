@@ -40,16 +40,16 @@ This class implements general methods, used by different sub-classes
 
 class WWD_General(WebWizardDialog):
 
-    settings = None
-    folderDialog = None
-    ftpDialog = None
-    zipDialog = None
-    docAddDialog = None
-    fileAccess = None
-
     def __init__(self, xmsf):
         super(WWD_General, self).__init__(xmsf)
         self.xStringSubstitution = SystemDialog.createStringSubstitution(xmsf)
+        self.settings = None
+        self.folderDialog = None
+        self.ftpDialog = None
+        self.zipDialog = None
+        self.docAddDialog = None
+        self.fileAccess = None
+        self.proxies = None
 
     def getStatusDialog(self):
         statusDialog = StatusDialog(

@@ -100,6 +100,9 @@ class UCB(object):
         return aArg
 
     def executeCommand(self, xContent, aCommandName, aArgument):
+        print ("DEBUG !!! executeCommand -- xContent: ", xContent)
+        print ("DEBUG !!! executeCommand -- aCommandName: ", aCommandName)
+        print ("DEBUG !!! executeCommand -- aArgument: ", aArgument)
         aCommand  = Command()
         aCommand.Name     = aCommandName
         aCommand.Handle   = -1 # not available
@@ -107,7 +110,7 @@ class UCB(object):
         return xContent.execute(aCommand, 0, None)
 
     def listFiles(self, path, verifier):
-        print ("DEBUG !!! listFiles - path: ", path)
+        print ("DEBUG !!! listFiles -- path: ", path)
         xContent = self.getContent(path)
 
         aArg = OpenCommandArgument2()
@@ -121,8 +124,10 @@ class UCB(object):
         aArg.Properties[0].Handle = -1
 
         xSet = self.executeCommand(xContent, "open", aArg)
+        print ("DEBUG !!! listFiles -- xSet:  ", xSet)
 
         xResultSet = xSet.getStaticResultSet()
+        print ("DEBUG !!! listFiles -- xResultSet: ", xResultSet)
 
         files = []
 
@@ -130,11 +135,16 @@ class UCB(object):
             # obtain XContentAccess interface for child content access and XRow for properties
             while (True):
                 # Obtain URL of child.
-                aId = xResultSet.queryContentIdentifierString()
-                # First column: Title (column numbers are 1-based!)
-                #aTitle = xResultSet.getString(1)
-                aTitle = FileAccess.getFilename(aId)
-                if (len(aTitle) == 0 and xResultSet.wasNull()):
+                if (hasattr(xResultSet, "queryContentIdentifierString")):
+                    aId = xResultSet.queryContentIdentifierString()
+                    aTitle = FileAccess.getFilename(aId)
+                elif (hasattr(xResultSet, "getString")):
+                    # First column: Title (column numbers are 1-based!)
+                    aTitle = xResultSet.getString(1)
+                else:
+                    aTitle = ""
+                #if (len(aTitle) == 0 and xResultSet.wasNull()):
+                if (len(aTitle) == 0):
                     # ignore
                     pass
                 else:
@@ -149,12 +159,11 @@ class UCB(object):
         return files
 
     def getContentProperty(self, content, propName, classType):
-        pv = []
-        pv[0] = Property()
+        pv = [Property()]
         pv[0].Name = propName
         pv[0].Handle = -1
 
-        row = self.executeCommand(content, "getPropertyValues", pv)
+        row = self.executeCommand(content, "getPropertyValues", tuple(pv))
         if (isinstance(classType, str)):
            return row.getString(1)
         elif (isinstance(classType, bool)):

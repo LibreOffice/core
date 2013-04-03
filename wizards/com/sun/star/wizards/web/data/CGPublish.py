@@ -46,8 +46,3 @@ class CGPublish(ConfigGroup):
         except Exception as e:
             e.printStackTrace()
             return ""
-
-    def ftpURL(self):
-        pass
-        #COMMENTED
-        #return "ftp://" + self.cp_Username + ((self.password != None and self.password.length() > 0) ? ":" + self.password : "") + "@" + self.cp_URL.substring(7)
