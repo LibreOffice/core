@@ -32,7 +32,7 @@ Globals
             CREATE_MSP_INSTALLSET 1
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
-            WINDOWSPATCHLEVEL 16
+            WINDOWSPATCHLEVEL 17
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
             BUILDIDCWS {buildidcws}
@@ -57,7 +57,7 @@ LibreOffice
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
             ABOUTBOXPRODUCTVERSION 3.6
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-516
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-517
             BASEPRODUCTVERSION 3.6
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
@@ -110,7 +110,7 @@ LibreOffice_Dev
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
             ABOUTBOXPRODUCTVERSION 3.6
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-516
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-517
             BASEPRODUCTVERSION 3.6
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX lodevbasis
@@ -380,7 +380,7 @@ OxygenOffice
             BRANDPACKAGEVERSION 3.6
             USERDIRPRODUCTVERSION 3
             ABOUTBOXPRODUCTVERSION 3.6
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-516
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-517
             BASEPRODUCTVERSION 3.6
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
