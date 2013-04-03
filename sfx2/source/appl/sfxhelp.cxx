@@ -299,7 +299,6 @@ class SfxHelp_Impl
 {
 private:
     SfxHelpOptions_Impl*                m_pOpt;         // the options
-    ::std::vector< OUString >    m_aModulesList; // list of all installed modules
 
 public:
     SfxHelp_Impl();
