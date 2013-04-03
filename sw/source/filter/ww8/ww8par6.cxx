@@ -1398,9 +1398,7 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
     if (bRet)
     {
         rShadow.SetColor(Color(COL_BLACK));
-    //i120718
-        short nVal = pbrc[WW8_RIGHT].DetermineBorderProperties(bVer67);
-    //End
+        short nVal = pSizeArray[WW8_RIGHT];
         if (nVal < 0x10)
             nVal = 0x10;
         rShadow.SetWidth(nVal);
