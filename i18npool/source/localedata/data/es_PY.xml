@@ -31,7 +31,7 @@
       <PlatformID>generic</PlatformID>
     </Platform>
   </LC_INFO>
-  <LC_CTYPE ref="es_PE"/>
+  <LC_CTYPE ref="es_AR"/>
   <LC_FORMAT ref="es_AR" replaceTo="[$G-3C0A]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
