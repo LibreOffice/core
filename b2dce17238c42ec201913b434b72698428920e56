@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///7k\u003d",
+        "filename": "solenv/gbuild/PythonTest.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-03T22:12:59Z",
+      "side": 1,
+      "message": "T_CP is a copy/paste error?",
+      "revId": "b2dce17238c42ec201913b434b72698428920e56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///7Y\u003d",
+        "filename": "solenv/gbuild/PythonTest.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-03T22:12:59Z",
+      "side": 1,
+      "message": "don\u0027t think we need that - who generates python files?",
+      "revId": "b2dce17238c42ec201913b434b72698428920e56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///7g\u003d",
+        "filename": "solenv/gbuild/PythonTest.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-03T22:12:59Z",
+      "side": 1,
+      "message": "more copypaste error :)",
+      "revId": "b2dce17238c42ec201913b434b72698428920e56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///7s\u003d",
+        "filename": "unotest/source/python/org/libreoffice/unotest.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-03T22:12:59Z",
+      "side": 1,
+      "message": "hmm... this allows only starting a new soffice but not connecting to an existing one... for out-of-process tests connecting to an existing soffice is useful for debugging because you don\u0027t have to start gdb each time which take a long time\n\nbut if i forgot to do that in convwatch.py it\u0027s a future  enhancement :)",
+      "revId": "b2dce17238c42ec201913b434b72698428920e56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
