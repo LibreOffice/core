@@ -264,10 +264,8 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
         sal_Int32 nRead = xStream->readBytes( lData, 1024 );
         while ( nRead > 0 )
         {
-            OStringBuffer sBuffer( nRead );
-            for( sal_Int32 i = 0; i < nRead; ++i )
-                sBuffer.append( (sal_Char)lData[i] );
-            OUString sString = OStringToOUString( sBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+            OString sOldString( (sal_Char*)lData.getConstArray(), nRead );
+            OUString sString = OStringToOUString( sOldString, RTL_TEXTENCODING_UTF8 );
             aRet.append( sString );
 
             nRead = xStream->readBytes( lData, 1024 );
