@@ -21,7 +21,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"
-#include "optupdt.hrc"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <comphelper/componentcontext.hxx>
@@ -43,27 +42,24 @@ using namespace ::com::sun::star;
 
 // class SvxOnlineUpdateTabPage --------------------------------------------------
 
-SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_ONLINEUPDATE ), rSet ),
-        m_aOptionsLine( this, CUI_RES( FL_OPTIONS ) ),
-        m_aAutoCheckCheckBox( this, CUI_RES( CB_AUTOCHECK ) ),
-        m_aEveryDayButton( this, CUI_RES( RB_EVERYDAY ) ),
-        m_aEveryWeekButton( this, CUI_RES( RB_EVERYWEEK ) ),
-        m_aEveryMonthButton( this, CUI_RES( RB_EVERYMONTH ) ),
-        m_aCheckNowButton( this, CUI_RES( PB_CHECKNOW ) ),
-        m_aAutoDownloadCheckBox( this, CUI_RES( CB_AUTODOWNLOAD ) ),
-        m_aDestPathLabel( this, CUI_RES( FT_DESTPATHLABEL ) ),
-        m_aDestPath( this, CUI_RES( FT_DESTPATH ) ),
-        m_aChangePathButton( this, CUI_RES( PB_CHANGEPATH ) ),
-        m_aLastChecked( this, CUI_RES( FT_LASTCHECKED ) )
+SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptOnlineUpdatePage", "cui/ui/optonlineupdatepage.ui", rSet)
 {
-    m_aNeverChecked = String( CUI_RES( STR_NEVERCHECKED ) );
-    FreeResource();
+    m_aNeverChecked = get<FixedText>("neverchecked")->GetText();
+    get(m_pAutoCheckCheckBox, "autocheck");
+    get(m_pEveryDayButton, "everyday");
+    get(m_pEveryWeekButton, "everyweek");
+    get(m_pEveryMonthButton, "everymonth");
+    get(m_pCheckNowButton, "checknow");
+    get(m_pAutoDownloadCheckBox, "autodownload");
+    get(m_pDestPathLabel, "destpathlabel");
+    get(m_pDestPath, "destpath");
+    get(m_pChangePathButton, "changepath");
+    get(m_pLastChecked, "lastchecked");
 
-    m_aAutoCheckCheckBox.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
-    m_aCheckNowButton.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
-    m_aChangePathButton.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
+    m_pAutoCheckCheckBox->SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
+    m_pCheckNowButton->SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
+    m_pChangePathButton->SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
 
     uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
@@ -72,19 +68,16 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
     sal_Bool bDownloadSupported = sal_False;
     m_xUpdateAccess->getByName( "DownloadSupported" ) >>= bDownloadSupported;
 
-    WinBits nStyle = m_aDestPath.GetStyle();
+    WinBits nStyle = m_pDestPath->GetStyle();
     nStyle |= WB_PATHELLIPSIS;
-    m_aDestPath.SetStyle(nStyle);
+    m_pDestPath->SetStyle(nStyle);
 
-    m_aAutoDownloadCheckBox.Show(bDownloadSupported);
-    m_aDestPathLabel.Show(bDownloadSupported);
-    m_aDestPath.Show(bDownloadSupported);
-    m_aChangePathButton.Show(bDownloadSupported);
+    m_pAutoDownloadCheckBox->Show(bDownloadSupported);
+    m_pDestPathLabel->Show(bDownloadSupported);
+    m_pDestPath->Show(bDownloadSupported);
+    m_pChangePathButton->Show(bDownloadSupported);
 
-    // dynamical length of the PushButtons
-    CalcButtonWidth();
-
-    m_aLastCheckedTemplate = m_aLastChecked.GetText();
+    m_aLastCheckedTemplate = m_pLastChecked->GetText();
 
     UpdateLastCheckedText();
 }
@@ -153,7 +146,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
             aText = aText.replaceAt( nIndex, 6, aTimeStr );
     }
 
-    m_aLastChecked.SetText( aText );
+    m_pLastChecked->SetText( aText );
 }
 
 // -----------------------------------------------------------------------
@@ -174,27 +167,27 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bValue;
     sal_Int64 nValue;
 
-    if( m_aAutoCheckCheckBox.GetSavedValue() != m_aAutoCheckCheckBox.IsChecked() )
+    if( m_pAutoCheckCheckBox->GetSavedValue() != m_pAutoCheckCheckBox->IsChecked() )
     {
-        bValue = (sal_True == m_aAutoCheckCheckBox.IsChecked());
+        bValue = (sal_True == m_pAutoCheckCheckBox->IsChecked());
         m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::makeAny( bValue ) );
         bModified = sal_True;
     }
 
     nValue = 0;
-    if( sal_True == m_aEveryDayButton.IsChecked() )
+    if( sal_True == m_pEveryDayButton->IsChecked() )
     {
-        if( sal_False == m_aEveryDayButton.GetSavedValue() )
+        if( sal_False == m_pEveryDayButton->GetSavedValue() )
             nValue = 86400;
     }
-    else if( sal_True == m_aEveryWeekButton.IsChecked() )
+    else if( sal_True == m_pEveryWeekButton->IsChecked() )
     {
-        if( sal_False == m_aEveryWeekButton.GetSavedValue() )
+        if( sal_False == m_pEveryWeekButton->GetSavedValue() )
             nValue = 604800;
     }
-    else if( sal_True == m_aEveryMonthButton.IsChecked() )
+    else if( sal_True == m_pEveryMonthButton->IsChecked() )
     {
-        if( sal_False == m_aEveryMonthButton.GetSavedValue() )
+        if( sal_False == m_pEveryMonthButton->GetSavedValue() )
             nValue = 2592000;
     }
 
@@ -204,9 +197,9 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
         bModified = sal_True;
     }
 
-    if( m_aAutoDownloadCheckBox.GetSavedValue() != m_aAutoDownloadCheckBox.IsChecked() )
+    if( m_pAutoDownloadCheckBox->GetSavedValue() != m_pAutoDownloadCheckBox->IsChecked() )
     {
-        bValue = (sal_True == m_aAutoDownloadCheckBox.IsChecked());
+        bValue = (sal_True == m_pAutoDownloadCheckBox->IsChecked());
         m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::makeAny( bValue ) );
         bModified = sal_True;
     }
@@ -214,7 +207,7 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     rtl::OUString sValue, aURL;
     m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
 
-    if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_aDestPath.GetText(), aURL) ) &&
+    if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_pDestPath->GetText(), aURL) ) &&
         ( ! aURL.equals( sValue ) ) )
     {
         m_xUpdateAccess->replaceByName( "DownloadDestination", uno::makeAny( aURL ) );
@@ -235,39 +228,39 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
     sal_Bool bValue = sal_Bool();
     m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;
 
-    m_aAutoCheckCheckBox.Check(bValue);
-    m_aEveryDayButton.Enable(bValue);
-    m_aEveryWeekButton.Enable(bValue);
-    m_aEveryMonthButton.Enable(bValue);
+    m_pAutoCheckCheckBox->Check(bValue);
+    m_pEveryDayButton->Enable(bValue);
+    m_pEveryWeekButton->Enable(bValue);
+    m_pEveryMonthButton->Enable(bValue);
 
     sal_Int64 nValue = 0;
     m_xUpdateAccess->getByName( "CheckInterval" ) >>= nValue;
 
     if( nValue == 86400 )
-        m_aEveryDayButton.Check();
+        m_pEveryDayButton->Check();
     else if( nValue == 604800 )
-        m_aEveryWeekButton.Check();
+        m_pEveryWeekButton->Check();
     else
-        m_aEveryMonthButton.Check();
+        m_pEveryMonthButton->Check();
 
-    m_aAutoCheckCheckBox.SaveValue();
-    m_aEveryDayButton.SaveValue();
-    m_aEveryWeekButton.SaveValue();
-    m_aEveryMonthButton.SaveValue();
+    m_pAutoCheckCheckBox->SaveValue();
+    m_pEveryDayButton->SaveValue();
+    m_pEveryWeekButton->SaveValue();
+    m_pEveryMonthButton->SaveValue();
 
     m_xUpdateAccess->getByName( "AutoDownloadEnabled" ) >>= bValue;
-    m_aAutoDownloadCheckBox.Check(bValue);
-    m_aDestPathLabel.Enable(sal_True);
-    m_aDestPath.Enable(sal_True);
-    m_aChangePathButton.Enable(sal_True);
+    m_pAutoDownloadCheckBox->Check(bValue);
+    m_pDestPathLabel->Enable(sal_True);
+    m_pDestPath->Enable(sal_True);
+    m_pChangePathButton->Enable(sal_True);
 
     rtl::OUString sValue, aPath;
     m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
 
     if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
-        m_aDestPath.SetText(aPath);
+        m_pDestPath->SetText(aPath);
 
-    m_aAutoDownloadCheckBox.SaveValue();
+    m_pAutoDownloadCheckBox->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -282,9 +275,9 @@ IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
 {
     sal_Bool bEnabled = pBox->IsChecked();
 
-    m_aEveryDayButton.Enable(bEnabled);
-    m_aEveryWeekButton.Enable(bEnabled);
-    m_aEveryMonthButton.Enable(bEnabled);
+    m_pEveryDayButton->Enable(bEnabled);
+    m_pEveryWeekButton->Enable(bEnabled);
+    m_pEveryMonthButton->Enable(bEnabled);
 
     return 0;
 }
@@ -297,7 +290,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
     uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
 
     rtl::OUString aURL;
-    if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath(m_aDestPath.GetText(), aURL) )
+    if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath(m_pDestPath->GetText(), aURL) )
         osl::Security().getHomeDir(aURL);
 
     xFolderPicker->setDisplayDirectory( aURL );
@@ -307,7 +300,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
     {
         rtl::OUString aFolder;
         if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(xFolderPicker->getDirectory(), aFolder))
-            m_aDestPath.SetText( aFolder );
+            m_pDestPath->SetText( aFolder );
     }
 
     return 0;
@@ -363,24 +356,6 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
     }
 
     return 0;
-}
-
-void SvxOnlineUpdateTabPage::CalcButtonWidth()
-{
-    // detect the longest button text
-    long nTxtWidth = ::std::max( m_aCheckNowButton.GetCtrlTextWidth( m_aCheckNowButton.GetText() ),
-                                 m_aCheckNowButton.GetCtrlTextWidth( m_aChangePathButton.GetText() ) );
-    // add a little offset
-    nTxtWidth = nTxtWidth + 12;
-    // compare with the button width
-    Size aSize = m_aCheckNowButton.GetSizePixel();
-    // and change it if it's necessary
-    if ( nTxtWidth > aSize.Width() )
-    {
-        aSize.Width() = nTxtWidth;
-        m_aCheckNowButton.SetSizePixel( aSize );
-        m_aChangePathButton.SetSizePixel( aSize );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

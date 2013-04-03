@@ -92,7 +92,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optlingu.src \
     cui/source/options/optpath.src \
     cui/source/options/optsave.src \
-    cui/source/options/optupdt.src \
     cui/source/options/readonlyimage.src \
     cui/source/options/treeopt.src \
     cui/source/tabpages/align.src \

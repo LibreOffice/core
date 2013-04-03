@@ -29,25 +29,22 @@
 class SvxOnlineUpdateTabPage : public SfxTabPage
 {
 private:
-    FixedLine           m_aOptionsLine;
-    CheckBox            m_aAutoCheckCheckBox;
-    RadioButton         m_aEveryDayButton;
-    RadioButton         m_aEveryWeekButton;
-    RadioButton         m_aEveryMonthButton;
-    PushButton          m_aCheckNowButton;
-    CheckBox            m_aAutoDownloadCheckBox;
-    FixedText           m_aDestPathLabel;
-    FixedText           m_aDestPath;
-    PushButton          m_aChangePathButton;
-    FixedText           m_aLastChecked;
+    CheckBox*           m_pAutoCheckCheckBox;
+    RadioButton*        m_pEveryDayButton;
+    RadioButton*        m_pEveryWeekButton;
+    RadioButton*        m_pEveryMonthButton;
+    PushButton*         m_pCheckNowButton;
+    CheckBox*           m_pAutoDownloadCheckBox;
+    FixedText*          m_pDestPathLabel;
+    FixedText*          m_pDestPath;
+    PushButton*         m_pChangePathButton;
+    FixedText*          m_pLastChecked;
     rtl::OUString       m_aNeverChecked;
     rtl::OUString       m_aLastCheckedTemplate;
 
     DECL_LINK(FileDialogHdl_Impl, void *) ;
     DECL_LINK(CheckNowHdl_Impl, void *) ;
     DECL_LINK(  AutoCheckHdl_Impl, CheckBox* ) ;
-
-    void        CalcButtonWidth();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xUpdateAccess;
 
