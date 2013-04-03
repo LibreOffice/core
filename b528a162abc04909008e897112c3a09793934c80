@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAW3//92A\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-03T04:54:08Z",
+      "side": 1,
+      "message": "Right, this is a LO installation. (Only containing data for the moment, of course.) I was hoping this was going to be the first step to \"runnable solver\".\n\nNew toplevel dir makes sense, thanks for the suggestion.",
+      "parentUuid": "AAAAW3//94A\u003d",
+      "revId": "b528a162abc04909008e897112c3a09793934c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAW3//938\u003d",
         "filename": "solenv/gbuild/TargetLocations.mk",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2013-04-02T18:46:41Z",
       "side": 1,
       "message": "any particular reason why this is in OUTDIR and not WORKDIR?",
+      "revId": "b528a162abc04909008e897112c3a09793934c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3//918\u003d",
+        "filename": "solenv/gbuild/TargetLocations.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-03T04:54:08Z",
+      "side": 1,
+      "message": "Two reasons, both rather weak :-)\n\n1. Tradition. All files used for installation are in $OUTDIR.\n\n2. Laziness. I do not know how to put $WORKDIR into the search paths in instsetoo_native/util/openoffice.lst.in . It employs some sort of variable substitution and I have no idea where the definitions are coming from. But wait... since the file is processed by configure, I could just use @WORKDIR@, could I not?",
+      "parentUuid": "AAAAW3//938\u003d",
       "revId": "b528a162abc04909008e897112c3a09793934c80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
