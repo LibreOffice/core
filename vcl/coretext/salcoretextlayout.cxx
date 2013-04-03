@@ -301,11 +301,14 @@ long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 
 bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
-
     SAL_INFO( "vcl.coretext.layout", "GetBoundRect(" << this << ")" );
 
+    QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
+
+    if( !gr.CheckContext() )
+        return false;
+
     if ( !mbHasBoundRectangle ) {
-        QuartzSalGraphics& gr = static_cast<QuartzSalGraphics&>(rGraphics);
         CGRect bound_rect = CTLineGetImageBounds( mpLine, gr.mrContext );
         if ( !CGRectIsNull( bound_rect ) ) {
             maBoundRectangle = Rectangle(
@@ -464,7 +467,12 @@ int CoreTextLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
 
 long CoreTextLayout::GetTextWidth() const
 {
-    CGRect bound_rect = CTLineGetImageBounds(mpLine, mpGraphics->GetContext());
+    CGContextRef context = mpGraphics->GetContext();
+    if (!context) {
+        SAL_INFO( "vcl.coretext.layout", "GetTextWidth(): no context!?");
+        return 0;
+    }
+    CGRect bound_rect = CTLineGetImageBounds(mpLine, context);
     long w = round_to_long(bound_rect.size.width * mpStyle->GetFontStretchFactor());
 
     SAL_INFO( "vcl.coretext.layout", "GetTextWidth(" << this << ") returning " << w );
