@@ -240,7 +240,7 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
     // Get the properties applying according to the mask
     PropertyMapPtr pProps( new PropertyMap( ) );
-    for( int i = 0; i < sizeof( aOrderedStyleTable ); i++ )
+    for (size_t i = 0; i < sizeof(aOrderedStyleTable); ++i)
     {
         TblStylePrs::iterator pIt = m_aStyles.find( aOrderedStyleTable[ i ].type );
         if ( ( nMask & aOrderedStyleTable[ i ].mask ) && ( pIt != m_aStyles.end( ) ) )
