@@ -38,7 +38,6 @@ $(call gb_ExternalProject_get_state_target,xpdf,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(SYSBASE),CFLAGS="-I$(SYSBASE)/usr/include") \
-			$(if $(filter MACOSXP,$(OS)$(CPU)),CXXFLAGS="-malign-natural") \
 			&& MAKEFLAGS="$(subst r,,$(MAKEFLAGS))" $(MAKE) \
 	)
 

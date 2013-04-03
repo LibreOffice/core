@@ -390,9 +390,6 @@ else
 ifeq "$(PROCTYPE)" "x86_64"
 UNOPKG_PLATFORM=MacOSX_x86
 JAVA_PROC_TYPE=x86
-else
-UNOPKG_PLATFORM=MacOSX_PowerPC
-JAVA_PROC_TYPE=ppc
 endif
 endif
 JAVABIN=Commands

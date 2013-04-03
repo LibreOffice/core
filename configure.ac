@@ -2353,10 +2353,7 @@ dnl Check / find MacOSX SDK and compiler, version checks
 dnl ===================================================================
 if test "$_os" = "Darwin"; then
 
-    if test "$build_cpu" = i386 -a "$host_cpu" = powerpc; then
-        # Cross-compiling for PPC from Intel
-        arch='-arch ppc'
-    elif test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
+    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         bitness=-m32
     else
         bitness=-m64
@@ -3434,13 +3431,6 @@ darwin*)
         PLATFORMID=macosx_arm_eabi
         OUTPATH=unxiosr
         OS=IOS
-        ;;
-    powerpc*)
-        CPU=P
-        CPUNAME=POWERPC
-        RTL_ARCH=PowerPC
-        PLATFORMID=macosx_powerpc
-        OUTPATH=unxmacxp
         ;;
     i*86)
         if test "$BITNESS_OVERRIDE" = 64; then
@@ -5078,12 +5068,6 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
         ],
         [
             case "$_os-$host_cpu" in
-            Darwin-powerpc)
-                test -z "$ac_cv_alignof_short" && ac_cv_alignof_short=1
-                test -z "$ac_cv_alignof_int" && ac_cv_alignof_int=1
-                test -z "$ac_cv_alignof_long" && ac_cv_alignof_long=1
-                test -z "$ac_cv_alignof_double" && ac_cv_alignof_double=1
-                ;;
             Linux-i686)
                 test -z "$ac_cv_alignof_short" && ac_cv_alignof_short=2
                 test -z "$ac_cv_alignof_int" && ac_cv_alignof_int=4

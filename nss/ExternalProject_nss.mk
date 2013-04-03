@@ -75,7 +75,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(if $(filter 1060 1070 1080,$(MAC_OS_X_VERSION_MIN_REQUIRED)),NSS_USE_SYSTEM_SQLITE=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(filter YES,$(CROSS_COMPILING)),\
-		$(if $(filter MACOSXP,$(OS)$(CPU)),CPU_ARCH=ppc) \
 		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py") \
 		NSDISTMODE=copy \
 		$(MAKE) -j1 nss_build_all \

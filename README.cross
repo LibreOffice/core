@@ -2,7 +2,7 @@ Cross-compiling LibreOffice
 ***************************
 
 Cross-compilation works, to various degree, to the following
-platforms: Windows, iOS, Android, PowerPC Mac OS X, Raspbian.
+platforms: Windows, iOS, Android, and Raspbian.
 
 
 General
@@ -389,25 +389,6 @@ an "adb logcat" running in another window.
 
 To debug, do manually what "make run" would do and when the app has
 started, run ndk-gdb.
-
-
-PowerPC Mac OS X
-****************
-
-Cross-compiling for PowerPC Mac OS X from Intel Mac OS X is easy in
-theory. The APIs available should after all be closely identical to
-those on a corrersponding (obsolete) version of Mac OS X for Intel,
-and LibreOffice builds fine natively on PowerPC Mac already. Only a
-little experimenting has been done with it, and it seems that nobody
-actually is interested in it. An autogen.lastrun looked like this when
-last tried:
-
-CC=ccache /Xcode3/usr/bin/gcc-4.0 -arch ppc
-CXX=ccache /Xcode3/usr/bin/g++-4.0 -arch ppc
-CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
-CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
---build=i386-apple-darwin10.7.0
---host=powerpc-apple-darwin10
 
 
 Raspbian

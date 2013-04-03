@@ -68,15 +68,8 @@ $(eval $(call gb_Library_add_exception_objects,helplinker,\
     helpcompiler/source/BasCodeTagger \
 ))
 
-ifeq ($(strip $(OS)$(CPU)$(COM)),MACOSXPGCC)
-$(eval $(call gb_Library_add_cxxobjects,helplinker,\
-    helpcompiler/source/HelpLinker \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
 $(eval $(call gb_Library_add_exception_objects,helplinker,\
     helpcompiler/source/HelpLinker \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:

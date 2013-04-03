@@ -42,10 +42,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
 ))
 endif
 
-ifeq ($(OS)$(CPU),MACOSXP)
-$(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
-	libxmlsec/xmlsec1-1.2.14_old_automake.patch \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

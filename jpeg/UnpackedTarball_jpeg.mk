@@ -17,10 +17,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,jpeg,\
     jpeg/patches/jpeg-8c-jmorecfg.patch \
 ))
 
-ifeq ($(OS)$(CPU),MACOSXP)
-$(eval $(call gb_UnpackedTarball_add_patches,jpeg,\
-    jpeg/patches/struct_alignment.patch \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
