@@ -145,6 +145,7 @@ SfxFormalArgument aFormalArgs[] = {
 //    SFX_ARGUMENT(SID_TEMPLATE_NAME,"Name",SfxStringItem),
     SFX_ARGUMENT(SID_UNPACK,"Unpacked",SfxBoolItem),
     SFX_ARGUMENT(SID_VERSION,"Version",SfxInt16Item),
+    SFX_ARGUMENT(SID_SAVEACOPYITEM,"SaveACopy",SfxBoolItem),
 };
 
 static sal_uInt16 nMediaArgsCount = sizeof(aFormalArgs) / sizeof (SfxFormalArgument);
@@ -210,7 +211,8 @@ static bool isMediaDescriptor( sal_uInt16 nSlotId )
     return ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC ||
              nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVEDOC ||
              nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF ||
-             nSlotId == SID_DIRECTEXPORTDOCASPDF );
+             nSlotId == SID_DIRECTEXPORTDOCASPDF || nSlotId == SID_SAVEACOPY ||
+             nSlotId == SID_SAVEACOPYITEM);
 }
 
 void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
@@ -1293,6 +1295,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     // used only internally
                     if ( nId == SID_SAVETO )
                         continue;
+                    if ( nId == SID_SAVEACOPYITEM )
+                        continue;
                      if ( nId == SID_MODIFYPASSWORDINFO )
                         continue;
                      if ( nId == SID_SUGGESTEDSAVEASDIR )
@@ -1424,7 +1428,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     }
 
     if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
-         nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
+         nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF ||
+         nSlotId == SID_SAVEACOPY )
     {
         const SfxPoolItem *pItem=0;
         if ( rSet.GetItemState( SID_COMPONENTDATA, sal_False, &pItem ) == SFX_ITEM_SET )

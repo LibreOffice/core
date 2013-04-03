@@ -507,7 +507,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
                 }
             break;
         }
-        mxImpl->finalizeFilter();
+        mxImpl->mxModel->unlockControllers();
     }
     return bRet;
 }

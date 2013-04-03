@@ -121,7 +121,7 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
     // dialogs do not need parameters in SidSet representation any more
 
     sal_uInt16 nResult = 0;
-    if ( nStoreMode == EXPORT_REQUESTED )
+    if ( nStoreMode == EXPORT_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | SAVEACOPY_REQUESTED | WIDEEXPORT_REQUESTED ) )
         nResult = SID_EXPORTDOC;
     else if ( nStoreMode == ( EXPORT_REQUESTED | PDFEXPORT_REQUESTED ) )
         nResult = SID_EXPORTDOCASPDF;
@@ -129,8 +129,6 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
         nResult = SID_DIRECTEXPORTDOCASPDF;
     else if ( nStoreMode == SAVEAS_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
         nResult = SID_SAVEASDOC;
-    else if ( nStoreMode == SAVEACOPY_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
-        nResult = SID_SAVEACOPY;
     else {
         DBG_ASSERT( sal_False, "Unacceptable slot name is provided!\n" );
     }
@@ -152,8 +150,6 @@ static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
         nResult = SAVE_REQUESTED;
     else if ( aSlotName == "SaveAs" )
         nResult = SAVEAS_REQUESTED;
-    else if ( aSlotName == "SaveACopy" )
-        nResult = SAVEACOPY_REQUESTED;
     else
         throw task::ErrorCodeIOException( OUString(),
                                             uno::Reference< uno::XInterface >(),
@@ -927,7 +923,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         aDialogFlags = SFXWB_EXPORT;
     }
 
-    if ( nStoreMode & SAVEACOPY_REQUESTED)
+    if( ( nStoreMode & EXPORT_REQUESTED ) && ( nStoreMode & SAVEACOPY_REQUESTED ) && ( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         aDialogFlags = SFXWB_SAVEACOPY;
     }
@@ -1377,6 +1373,15 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
     sal_Int8 nStoreMode = getStoreModeFromSlotName( aSlotName );
     sal_Int8 nStatusSave = STATUS_NO_ACTION;
 
+    ::comphelper::SequenceAsHashMap::const_iterator aSaveACopyIter =
+                        aModelData.GetMediaDescr().find( ::rtl::OUString("SaveACopy") );
+    if ( aSaveACopyIter != aModelData.GetMediaDescr().end() )
+    {
+        sal_Bool bSaveACopy = sal_False;
+        aSaveACopyIter->second >>= bSaveACopy;
+        if ( bSaveACopy )
+            nStoreMode = EXPORT_REQUESTED | SAVEACOPY_REQUESTED | WIDEEXPORT_REQUESTED;
+    }
     // handle the special cases
     if ( nStoreMode & SAVEAS_REQUESTED )
     {
@@ -1672,21 +1677,21 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
         try {
             // Document properties can contain streams that should be freed before storing
             aModelData.FreeDocumentProps();
-            if ( ( (nStoreMode & EXPORT_REQUESTED) || (nStoreMode & SAVEACOPY_REQUESTED) ) )
+            if ( nStoreMode & EXPORT_REQUESTED )
                 aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
             else
                 aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
         }
         catch( const uno::Exception& )
         {
-            if ( ( nStoreMode & EXPORT_REQUESTED ) )
+            if ( nStoreMode & EXPORT_REQUESTED )
             {
                 SetDocInfoState(aModelData.GetModel(), xOldDocProps, sal_True);
             }
             throw;
         }
 
-        if ( ( nStoreMode & EXPORT_REQUESTED ) )
+        if ( nStoreMode & EXPORT_REQUESTED )
         {
             SetDocInfoState(aModelData.GetModel(), xOldDocProps, sal_True);
         }
@@ -1698,7 +1703,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
 
         // this is actually a save operation with different parameters
         // so storeTo or storeAs without DocInfo operations are used
-        if ( ( nStoreMode & EXPORT_REQUESTED ) || ( nStoreMode & SAVEACOPY_REQUESTED ) )
+        if ( nStoreMode & EXPORT_REQUESTED )
             aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
         else
             aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aArgsSequence );
