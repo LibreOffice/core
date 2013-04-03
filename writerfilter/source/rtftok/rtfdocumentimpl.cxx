@@ -1294,7 +1294,11 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_NESTTABLEPROPS:
-            m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
+            // Don't try to support nested tables having table styles for now.
+            if (!m_aStates.top().bHasTableStyle)
+                m_aStates.top().nDestinationState = DESTINATION_NESTEDTABLEPROPERTIES;
+            else
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_HEADER:
         case RTF_FOOTER:
@@ -3444,6 +3448,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterAttributes.set(NS_rtf::LN_WR, RTFValue::Pointer_t(new RTFValue(3)));
             }
             break;
+        case RTF_TS:
+            m_aStates.top().bHasTableStyle = true;
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3813,11 +3820,14 @@ int RTFDocumentImpl::popState()
         // extract default text
         nLength = aStr.toChar();
         aStr = aStr.copy(1);
-        OString aDefaultText = aStr.copy(0, nLength);
         RTFValue::Pointer_t pNValue(new RTFValue(OStringToOUString(aName, m_aStates.top().nCurrentEncoding)));
         m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
-        RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
-        m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
+        if (nLength > 0)
+        {
+            OString aDefaultText = aStr.copy(0, nLength);
+            RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
+            m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
+        }
 
         m_bFormField = false;
     }
@@ -4407,7 +4417,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     nHour(0),
     nMinute(0),
     nCurrentStyleIndex(-1),
-    pCurrentBuffer(0)
+    pCurrentBuffer(0),
+    bHasTableStyle(false)
 {
 }
 
