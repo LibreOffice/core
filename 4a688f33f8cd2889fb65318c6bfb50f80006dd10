@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH///8k\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6673,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-04-03T20:14:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH///9k\u003d",
+      "revId": "4a688f33f8cd2889fb65318c6bfb50f80006dd10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH///9g\u003d",
         "filename": "vcl/source/gdi/outdev3.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-04-03T16:51:13Z",
       "side": 1,
       "message": "this is right, but since i\u0027m already complaining about the loop above :)\n\none-parameter copy would do the same thing simpler here.",
+      "revId": "4a688f33f8cd2889fb65318c6bfb50f80006dd10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///8g\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6779,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-04-03T20:14:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH///9g\u003d",
       "revId": "4a688f33f8cd2889fb65318c6bfb50f80006dd10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
