@@ -1707,7 +1707,7 @@ service_export :
 				pDecl = pScope->lookupByName(*iter);
 				if ( pDecl && (pDecl->getNodeType() == NT_service) )
 				{
-					if ( pScope->getScopeNodeType() == NT_singleton && pScope->nMembers() > 0 )
+					if ( static_cast< AstService * >(pDecl)->isSingleInterfaceBasedService() || pScope->getScopeNodeType() == NT_singleton && pScope->nMembers() > 0 )
 						idlc()->error()->error0(EIDL_ILLEGAL_ADD);										
                     else if ( idlc()->error()->checkPublished(pDecl) )
                     {
@@ -1907,6 +1907,7 @@ service_interface_dfn:
     {
         AstService * s = static_cast< AstService * >(idlc()->scopes()->top());
         if (s != 0) {
+            s->setSingleInterfaceBasedService();
             s->setDefaultConstructor(!$4);
         }
     }

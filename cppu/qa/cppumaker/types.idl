@@ -181,7 +181,7 @@ service S2: XTest;
 
 service S3 { interface XTest; };
 
-singleton S4 { service S2; };
+singleton S4 { service S3; };
 
 module services {
 

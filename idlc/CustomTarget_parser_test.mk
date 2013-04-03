@@ -51,6 +51,11 @@ $(call gb_CustomTarget_get_target,idlc/parser_test) : \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) \
                 -stdin && \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
+                $(SRCDIR)/idlc/test/parser/oldstyle.tests \
+                $(call gb_Executable_get_command,idlc) \
+                -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) \
+                -stdin && \
+            $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/polystruct.tests \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) \

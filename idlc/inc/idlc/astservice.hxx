@@ -29,22 +29,31 @@ public:
     AstService(const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(NT_service, name, pScope)
         , AstScope(NT_service)
+        , m_singleInterfaceBasedService(false)
         , m_defaultConstructor(false)
         {}
     AstService(const NodeType type, const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(type, name, pScope)
         , AstScope(type)
+        , m_singleInterfaceBasedService(false)
         , m_defaultConstructor(false)
         {}
     virtual ~AstService() {}
 
     virtual sal_Bool dump(RegistryKey& rKey);
 
+    void setSingleInterfaceBasedService()
+    { m_singleInterfaceBasedService = true; }
+
     void setDefaultConstructor(bool b) { m_defaultConstructor = b; }
+
+    bool isSingleInterfaceBasedService() const
+    { return m_singleInterfaceBasedService; }
 
     bool checkLastConstructor() const;
 
 private:
+    bool m_singleInterfaceBasedService;
     bool m_defaultConstructor;
 };
 

@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_script_vba_VBASpreadsheetEventProcessor_idl__
 #define __com_sun_star_script_vba_VBASpreadsheetEventProcessor_idl__
 
-#include <com/sun/star/script/vba/VBAEventProcessor.idl>
+#include <com/sun/star/script/vba/XVBAEventProcessor.idl>
 
 
 module com {  module sun {  module star { module script { module vba {
@@ -28,7 +28,7 @@ module com {  module sun {  module star { module script { module vba {
 
 service VBASpreadsheetEventProcessor
 {
-    service VBAEventProcessor;
+    interface XVBAEventProcessor;
 };
 
 

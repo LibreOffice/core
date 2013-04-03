@@ -29,7 +29,7 @@
 
 #include <com/sun/star/sdb/DataSettings.idl>
 
-#include <com/sun/star/sdb/QueryDefinition.idl>
+#include <com/sun/star/sdb/XQueryDefinition.idl>
 
  module com {  module sun {  module star {  module sdb {
 
@@ -47,7 +47,7 @@ published service Query
 
     /** defines the command of the query.
      */
-    service com::sun::star::sdb::QueryDefinition;
+    interface com::sun::star::sdb::XQueryDefinition;
 
 
     /** is used for customization of data appearance.

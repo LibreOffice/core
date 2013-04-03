@@ -19,8 +19,7 @@
 #ifndef __com_sun_star_loader_Java2_idl__
 #define __com_sun_star_loader_Java2_idl__
 
-#include <com/sun/star/loader/Java.idl>
-
+#include <com/sun/star/loader/XImplementationLoader.idl>
 
 module com {  module sun {  module star {  module loader {
 /**the same as <type scope="com::sun::star::loader">Java</type>.
@@ -28,11 +27,12 @@ module com {  module sun {  module star {  module loader {
 <type scope="com::sun::star::loader">Java</type> service was intended for
 UNO 2 components. Since UNO 2 is not supported anymore, the service
 name is reused again.
+
+  @deprecated
 */
 published service Java2
 {
-    service Java;
-
+    interface XImplementationLoader;
 };
 
 
