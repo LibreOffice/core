@@ -21,6 +21,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -31,9 +32,6 @@ namespace drawinglayer
         class ImpSdrLightingAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // 3D light attribute definitions
             basegfx::BColor                         maAmbientLight;
             ::std::vector< Sdr3DLightAttribute >    maLightVector;
@@ -41,9 +39,14 @@ namespace drawinglayer
             ImpSdrLightingAttribute(
                 const basegfx::BColor& rAmbientLight,
                 const ::std::vector< Sdr3DLightAttribute >& rLightVector)
-            :   mnRefCount(0),
-                maAmbientLight(rAmbientLight),
+            :   maAmbientLight(rAmbientLight),
                 maLightVector(rLightVector)
+            {
+            }
+
+            ImpSdrLightingAttribute()
+            :   maAmbientLight(basegfx::BColor()),
+                maLightVector(std::vector< Sdr3DLightAttribute >())
             {
             }
 
@@ -56,95 +59,50 @@ namespace drawinglayer
                 return (getAmbientLight() == rCandidate.getAmbientLight()
                     && getLightVector() == rCandidate.getLightVector());
             }
-
-            static ImpSdrLightingAttribute* get_global_default()
-            {
-                static ImpSdrLightingAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrLightingAttribute(
-                        basegfx::BColor(),
-                        std::vector< Sdr3DLightAttribute >());
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrLightingAttribute::ImplType, theGlobalDefault > {};
+        }
 
         SdrLightingAttribute::SdrLightingAttribute(
             const basegfx::BColor& rAmbientLight,
             const ::std::vector< Sdr3DLightAttribute >& rLightVector)
-        :   mpSdrLightingAttribute(new ImpSdrLightingAttribute(
+        :   mpSdrLightingAttribute(ImpSdrLightingAttribute(
                 rAmbientLight, rLightVector))
         {
         }
 
         SdrLightingAttribute::SdrLightingAttribute()
-        :   mpSdrLightingAttribute(ImpSdrLightingAttribute::get_global_default())
+        :   mpSdrLightingAttribute(theGlobalDefault::get())
         {
-            mpSdrLightingAttribute->mnRefCount++;
         }
 
         SdrLightingAttribute::SdrLightingAttribute(const SdrLightingAttribute& rCandidate)
         :   mpSdrLightingAttribute(rCandidate.mpSdrLightingAttribute)
         {
-            mpSdrLightingAttribute->mnRefCount++;
         }
 
         SdrLightingAttribute::~SdrLightingAttribute()
         {
-            if(mpSdrLightingAttribute->mnRefCount)
-            {
-                mpSdrLightingAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrLightingAttribute;
-            }
         }
 
         bool SdrLightingAttribute::isDefault() const
         {
-            return mpSdrLightingAttribute == ImpSdrLightingAttribute::get_global_default();
+            return mpSdrLightingAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrLightingAttribute& SdrLightingAttribute::operator=(const SdrLightingAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrLightingAttribute != mpSdrLightingAttribute)
-            {
-                if(mpSdrLightingAttribute->mnRefCount)
-                {
-                    mpSdrLightingAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrLightingAttribute;
-                }
-
-                mpSdrLightingAttribute = rCandidate.mpSdrLightingAttribute;
-                mpSdrLightingAttribute->mnRefCount++;
-            }
-
+            mpSdrLightingAttribute = rCandidate.mpSdrLightingAttribute;
             return *this;
         }
 
         bool SdrLightingAttribute::operator==(const SdrLightingAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrLightingAttribute == mpSdrLightingAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpSdrLightingAttribute == *mpSdrLightingAttribute);
+            return rCandidate.mpSdrLightingAttribute == mpSdrLightingAttribute;
         }
 
         const ::std::vector< Sdr3DLightAttribute >& SdrLightingAttribute::getLightVector() const

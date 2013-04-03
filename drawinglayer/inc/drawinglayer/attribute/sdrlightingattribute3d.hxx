@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLIGHTINGATTRIBUTE3D_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 #include <vector>
 
@@ -45,8 +46,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC SdrLightingAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrLightingAttribute > ImplType;
+
         private:
-            ImpSdrLightingAttribute*            mpSdrLightingAttribute;
+            ImplType mpSdrLightingAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
