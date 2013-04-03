@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///+k\u003d",
+        "filename": "vbahelper/source/msforms/service.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-03T15:06:37Z",
+      "side": 1,
+      "message": "SAL_INFO(\"vbahelper\", \"Ret is 0x\" \u003c\u003c std::hex \u003c\u003c pRet);",
+      "revId": "06bda477e733f3785d251b2dd3e02d1761ab0405",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///+w\u003d",
+        "filename": "vbahelper/source/msforms/vbacombobox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-03T15:06:37Z",
+      "side": 1,
+      "message": "this could be easier: \"getListIndex returning -1\"",
+      "revId": "06bda477e733f3785d251b2dd3e02d1761ab0405",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///+s\u003d",
+        "filename": "vbahelper/source/vbahelper/vbacommandbarcontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-03T15:06:37Z",
+      "side": 1,
+      "message": "\"ScVbaCommandBarControl::setOnAction: \" without the leading whitespace",
+      "revId": "06bda477e733f3785d251b2dd3e02d1761ab0405",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///+o\u003d",
+        "filename": "vbahelper/source/vbahelper/vbahelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-03T15:06:37Z",
+      "side": 1,
+      "message": "SAL_INFO(\"vbahelper\",\"Have model points to url \" \u003c\u003c xModel-\u003egetURL() );",
+      "revId": "06bda477e733f3785d251b2dd3e02d1761ab0405",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
