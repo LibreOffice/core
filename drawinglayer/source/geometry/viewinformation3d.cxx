@@ -23,6 +23,7 @@
 #include <com/sun/star/geometry/AffineMatrix3D.hpp>
 #include <com/sun/star/geometry/RealRectangle3D.hpp>
 #include <basegfx/tools/canvastools.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -42,9 +43,6 @@ namespace drawinglayer
             // ViewInformation3D implementation can change refcount, so we have only
             // two memory regions for pairs of ViewInformation3D/ImpViewInformation3D
             friend class ::drawinglayer::geometry::ViewInformation3D;
-
-            // the refcounter. 0 means exclusively used
-            sal_uInt32                                  mnRefCount;
 
             // the 3D transformations
             // Object to World. This may change and being adapted when entering 3D transformation
@@ -351,8 +349,7 @@ namespace drawinglayer
                 const basegfx::B3DHomMatrix& rDeviceToView,
                 double fViewTime,
                 const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-            :   mnRefCount(0),
-                maObjectTransformation(rObjectTransformation),
+            :   maObjectTransformation(rObjectTransformation),
                 maOrientation(rOrientation),
                 maProjection(rProjection),
                 maDeviceToView(rDeviceToView),
@@ -364,8 +361,7 @@ namespace drawinglayer
             }
 
             explicit ImpViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-            :   mnRefCount(0),
-                maObjectTransformation(),
+            :   maObjectTransformation(),
                 maOrientation(),
                 maProjection(),
                 maDeviceToView(),
@@ -377,8 +373,7 @@ namespace drawinglayer
             }
 
             ImpViewInformation3D()
-            :   mnRefCount(0),
-                maObjectTransformation(),
+            :   maObjectTransformation(),
                 maOrientation(),
                 maProjection(),
                 maDeviceToView(),
@@ -433,21 +428,6 @@ namespace drawinglayer
                     && mfViewTime == rCandidate.mfViewTime
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
-
-            static ImpViewInformation3D* get_global_default()
-            {
-                static ImpViewInformation3D* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpViewInformation3D();
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -458,6 +438,12 @@ namespace drawinglayer
 {
     namespace geometry
     {
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< ViewInformation3D::ImplType, theGlobalDefault > {};
+        }
+
         ViewInformation3D::ViewInformation3D(
             const basegfx::B3DHomMatrix& rObjectObjectTransformation,
             const basegfx::B3DHomMatrix& rOrientation,
@@ -465,81 +451,45 @@ namespace drawinglayer
             const basegfx::B3DHomMatrix& rDeviceToView,
             double fViewTime,
             const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-        :   mpViewInformation3D(new ImpViewInformation3D(
+        :   mpViewInformation3D(ImpViewInformation3D(
                 rObjectObjectTransformation, rOrientation, rProjection,
                 rDeviceToView, fViewTime, rExtendedParameters))
         {
         }
 
         ViewInformation3D::ViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-        :   mpViewInformation3D(new ImpViewInformation3D(rViewParameters))
+        :   mpViewInformation3D(ImpViewInformation3D(rViewParameters))
         {
         }
 
         ViewInformation3D::ViewInformation3D()
-        :   mpViewInformation3D(ImpViewInformation3D::get_global_default())
+        :   mpViewInformation3D(theGlobalDefault::get())
         {
-            mpViewInformation3D->mnRefCount++;
         }
 
         ViewInformation3D::ViewInformation3D(const ViewInformation3D& rCandidate)
         :   mpViewInformation3D(rCandidate.mpViewInformation3D)
         {
-            ::osl::Mutex m_mutex;
-            mpViewInformation3D->mnRefCount++;
         }
 
         ViewInformation3D::~ViewInformation3D()
         {
-            ::osl::Mutex m_mutex;
-
-            if(mpViewInformation3D->mnRefCount)
-            {
-                mpViewInformation3D->mnRefCount--;
-            }
-            else
-            {
-                delete mpViewInformation3D;
-            }
         }
 
         bool ViewInformation3D::isDefault() const
         {
-            return mpViewInformation3D == ImpViewInformation3D::get_global_default();
+            return mpViewInformation3D.same_object(theGlobalDefault::get());
         }
 
         ViewInformation3D& ViewInformation3D::operator=(const ViewInformation3D& rCandidate)
         {
-            ::osl::Mutex m_mutex;
-
-            if(mpViewInformation3D->mnRefCount)
-            {
-                mpViewInformation3D->mnRefCount--;
-            }
-            else
-            {
-                delete mpViewInformation3D;
-            }
-
             mpViewInformation3D = rCandidate.mpViewInformation3D;
-            mpViewInformation3D->mnRefCount++;
-
             return *this;
         }
 
         bool ViewInformation3D::operator==(const ViewInformation3D& rCandidate) const
         {
-            if(rCandidate.mpViewInformation3D == mpViewInformation3D)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpViewInformation3D == *mpViewInformation3D);
+            return rCandidate.mpViewInformation3D == mpViewInformation3D;
         }
 
         const basegfx::B3DHomMatrix& ViewInformation3D::getObjectTransformation() const
