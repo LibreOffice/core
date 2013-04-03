@@ -17,7 +17,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -69,7 +69,6 @@
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_bottom">18</property>
             <property name="hexpand">True</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">6</property>
@@ -195,7 +194,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button1</action-widget>
+      <action-widget response="0">help</action-widget>
       <action-widget response="0">hyphall</action-widget>
       <action-widget response="0">close</action-widget>
     </action-widgets>
